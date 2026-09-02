@@ -1,0 +1,277 @@
+.aznet-theme-profile-surface {
+    display: grid;
+    gap: var(--aznet-theme-space-6);
+    width: min(100%, var(--aznet-theme-container-shell));
+    margin-inline: auto;
+    color: var(--aznet-theme-text);
+}
+
+.aznet-theme-profile-surface__hero {
+    padding: clamp(var(--aznet-theme-space-4), 4vw, var(--aznet-theme-space-section));
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-surface-inverse);
+    color: var(--aznet-theme-on-inverse);
+}
+
+.aznet-theme-profile-surface__identity {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--aznet-theme-space-4);
+    align-items: start;
+}
+
+.aznet-theme-profile-surface__portrait {
+    display: block;
+    width: clamp(5.5rem, 12vw, 8.5rem);
+    height: clamp(5.5rem, 12vw, 8.5rem);
+    object-fit: cover;
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-surface);
+}
+
+.aznet-theme-profile-surface--organization .aznet-theme-profile-surface__portrait {
+    object-fit: contain;
+    padding: var(--aznet-theme-space-2);
+}
+
+.aznet-theme-profile-surface__eyebrow,
+.aznet-theme-profile-surface__subtitle,
+.aznet-theme-profile-surface__context,
+.aznet-theme-profile-surface__summary,
+.aznet-theme-profile-surface__note,
+.aznet-theme-profile-surface__card-copy {
+    margin-block: 0;
+}
+
+.aznet-theme-profile-surface__eyebrow {
+    margin-block-end: var(--aznet-theme-space-2);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--aznet-theme-on-inverse) 72%, transparent);
+}
+
+.aznet-theme-profile-surface__title {
+    margin: 0;
+    color: var(--aznet-theme-on-inverse);
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+}
+
+.aznet-theme-profile-surface__subtitle,
+.aznet-theme-profile-surface__context,
+.aznet-theme-profile-surface__summary {
+    max-width: 50rem;
+    margin-block-start: var(--aznet-theme-space-2);
+    color: color-mix(in srgb, var(--aznet-theme-on-inverse) 78%, transparent);
+    line-height: 1.65;
+}
+
+.aznet-theme-profile-surface__context a,
+.aznet-theme-profile-surface__hero a {
+    color: var(--aznet-theme-on-inverse);
+    font-weight: 650;
+}
+
+.aznet-theme-profile-surface__nav {
+    position: sticky;
+    top: var(--aznet-theme-header-height, 0px);
+    z-index: 5;
+    overflow-x: auto;
+    padding: var(--aznet-theme-space-2);
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-surface);
+}
+
+.aznet-theme-profile-surface__nav ul {
+    display: flex;
+    gap: var(--aznet-theme-space-1);
+    width: max-content;
+    min-width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.aznet-theme-profile-surface__nav a {
+    display: inline-flex;
+    padding: var(--aznet-theme-space-2) var(--aznet-theme-space-3);
+    border-radius: var(--aznet-theme-radius-pill);
+    color: var(--aznet-theme-text);
+    font-size: 0.9rem;
+    font-weight: 650;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.aznet-theme-profile-surface__nav a:hover {
+    background: color-mix(in srgb, var(--aznet-theme-accent) 10%, transparent);
+    color: var(--aznet-theme-accent);
+}
+
+.aznet-theme-profile-surface a:focus-visible {
+    outline: 2px solid var(--aznet-theme-focus);
+    outline-offset: 3px;
+    border-radius: calc(var(--aznet-theme-radius-card) / 2);
+}
+
+.aznet-theme-profile-surface__sections {
+    display: grid;
+    gap: var(--aznet-theme-space-section);
+}
+
+.aznet-theme-profile-surface__section {
+    min-width: 0;
+    scroll-margin-top: calc(var(--aznet-theme-header-height, 0px) + var(--aznet-theme-space-6));
+}
+
+.aznet-theme-profile-surface__section-title {
+    margin-block: 0 var(--aznet-theme-space-4);
+    color: var(--aznet-theme-text);
+    font-size: clamp(1.45rem, 2.5vw, 2rem);
+    line-height: 1.2;
+}
+
+.aznet-theme-profile-surface__section-body,
+.aznet-theme-profile-surface__rich-text {
+    min-width: 0;
+}
+
+.aznet-theme-profile-surface__rich-text {
+    max-width: var(--aznet-theme-container-content);
+    line-height: 1.75;
+}
+
+.aznet-theme-profile-surface__rich-text > :first-child {
+    margin-block-start: 0;
+}
+
+.aznet-theme-profile-surface__rich-text > :last-child {
+    margin-block-end: 0;
+}
+
+.aznet-theme-profile-surface__tags,
+.aznet-theme-profile-surface__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--aznet-theme-space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.aznet-theme-profile-surface__tags li,
+.aznet-theme-profile-surface__links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    padding: var(--aznet-theme-space-1) var(--aznet-theme-space-3);
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-pill);
+    background: var(--aznet-theme-surface);
+}
+
+.aznet-theme-profile-surface__links a {
+    color: var(--aznet-theme-accent);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.aznet-theme-profile-surface__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    gap: var(--aznet-theme-space-4);
+}
+
+.aznet-theme-profile-surface__card {
+    min-width: 0;
+    padding: var(--aznet-theme-space-4);
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-surface);
+}
+
+.aznet-theme-profile-surface__card-image {
+    display: block;
+    width: 4rem;
+    height: 4rem;
+    margin-block-end: var(--aznet-theme-space-3);
+    object-fit: cover;
+    border-radius: var(--aznet-theme-radius-card);
+}
+
+.aznet-theme-profile-surface__card-title {
+    margin-block: 0 var(--aznet-theme-space-2);
+    font-size: 1rem;
+    line-height: 1.35;
+}
+
+.aznet-theme-profile-surface__card-title a,
+.aznet-theme-profile-surface__section-body a {
+    color: var(--aznet-theme-accent);
+}
+
+.aznet-theme-profile-surface__card-copy,
+.aznet-theme-profile-surface__note {
+    color: var(--aznet-theme-muted);
+    line-height: 1.6;
+}
+
+.aznet-theme-profile-surface__facts,
+.aznet-theme-profile-surface__hours {
+    display: grid;
+    max-width: var(--aznet-theme-container-content);
+    gap: 0;
+    margin: 0 0 var(--aznet-theme-space-4);
+}
+
+.aznet-theme-profile-surface__facts > div,
+.aznet-theme-profile-surface__hours > div {
+    display: grid;
+    grid-template-columns: minmax(8rem, 0.35fr) minmax(0, 1fr);
+    gap: var(--aznet-theme-space-3);
+    padding-block: var(--aznet-theme-space-2);
+    border-bottom: 1px solid var(--aznet-theme-border);
+}
+
+.aznet-theme-profile-surface__facts dt,
+.aznet-theme-profile-surface__hours dt {
+    color: var(--aznet-theme-muted);
+    font-weight: 650;
+}
+
+.aznet-theme-profile-surface__facts dd,
+.aznet-theme-profile-surface__hours dd {
+    min-width: 0;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 47.999rem) {
+    .aznet-theme-profile-surface {
+        gap: var(--aznet-theme-space-4);
+    }
+
+    .aznet-theme-profile-surface__identity {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .aznet-theme-profile-surface__portrait {
+        width: 5.5rem;
+        height: 5.5rem;
+    }
+
+    .aznet-theme-profile-surface__nav {
+        margin-inline: calc(var(--aznet-theme-gutter) * -0.35);
+    }
+
+    .aznet-theme-profile-surface__facts > div,
+    .aznet-theme-profile-surface__hours > div {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--aznet-theme-space-1);
+    }
+}

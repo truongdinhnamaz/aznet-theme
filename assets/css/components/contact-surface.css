@@ -1,0 +1,241 @@
+.aznet-theme-contact-surface {
+    display: grid;
+    gap: var(--aznet-theme-space-6);
+    width: min(100%, var(--aznet-theme-container-shell));
+    margin-inline: auto;
+    color: var(--aznet-theme-text);
+}
+
+.aznet-theme-contact-surface__hero {
+    padding: clamp(var(--aznet-theme-space-4), 4vw, var(--aznet-theme-space-section));
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-surface-inverse);
+    color: var(--aznet-theme-on-inverse);
+}
+
+.aznet-theme-contact-surface__identity {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--aznet-theme-space-4);
+    align-items: start;
+}
+
+.aznet-theme-contact-surface__logo {
+    display: block;
+    width: clamp(4.5rem, 10vw, 7rem);
+    height: clamp(4.5rem, 10vw, 7rem);
+    object-fit: contain;
+    padding: var(--aznet-theme-space-2);
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-surface);
+}
+
+.aznet-theme-contact-surface__eyebrow,
+.aznet-theme-contact-surface__legal-name,
+.aznet-theme-contact-surface__summary,
+.aznet-theme-contact-surface__detail,
+.aznet-theme-contact-surface__person p {
+    margin-block: 0;
+}
+
+.aznet-theme-contact-surface__eyebrow {
+    margin-block-end: var(--aznet-theme-space-2);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--aznet-theme-on-inverse) 72%, transparent);
+}
+
+.aznet-theme-contact-surface__title {
+    margin: 0;
+    color: var(--aznet-theme-on-inverse);
+    font-size: clamp(1.9rem, 4vw, 3rem);
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+}
+
+.aznet-theme-contact-surface__legal-name,
+.aznet-theme-contact-surface__summary {
+    max-width: 46rem;
+    margin-block-start: var(--aznet-theme-space-2);
+    color: color-mix(in srgb, var(--aznet-theme-on-inverse) 76%, transparent);
+    line-height: 1.65;
+}
+
+.aznet-theme-contact-surface__profile-link {
+    display: inline-flex;
+    margin-block-start: var(--aznet-theme-space-3);
+    color: var(--aznet-theme-on-inverse);
+    font-weight: 700;
+    text-underline-offset: 0.2em;
+}
+
+.aznet-theme-contact-surface__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--aznet-theme-space-4);
+}
+
+.aznet-theme-contact-surface__card {
+    min-width: 0;
+    padding: var(--aznet-theme-space-4);
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-surface);
+}
+
+.aznet-theme-contact-surface__card--wide {
+    grid-column: 1 / -1;
+}
+
+.aznet-theme-contact-surface__card h3,
+.aznet-theme-contact-surface__card h4 {
+    margin-block-start: 0;
+    color: var(--aznet-theme-text);
+}
+
+.aznet-theme-contact-surface__card h3 {
+    margin-block-end: var(--aznet-theme-space-3);
+    font-size: 1.05rem;
+}
+
+.aznet-theme-contact-surface__card h4 {
+    margin-block-end: var(--aznet-theme-space-1);
+    font-size: 1rem;
+}
+
+.aznet-theme-contact-surface__list,
+.aznet-theme-contact-surface__link-list {
+    display: grid;
+    gap: var(--aznet-theme-space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.aznet-theme-contact-surface__item,
+.aznet-theme-contact-surface__detail {
+    display: grid;
+    gap: var(--aznet-theme-space-1);
+    min-width: 0;
+}
+
+.aznet-theme-contact-surface__item + .aznet-theme-contact-surface__item,
+.aznet-theme-contact-surface__detail + .aznet-theme-contact-surface__detail {
+    padding-block-start: var(--aznet-theme-space-3);
+    border-top: 1px solid var(--aznet-theme-border);
+}
+
+.aznet-theme-contact-surface__label {
+    color: var(--aznet-theme-muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+
+.aznet-theme-contact-surface a {
+    color: var(--aznet-theme-accent);
+    overflow-wrap: anywhere;
+}
+
+.aznet-theme-contact-surface a:hover {
+    text-decoration-thickness: 0.12em;
+    text-underline-offset: 0.18em;
+}
+
+.aznet-theme-contact-surface a:focus-visible {
+    outline: 2px solid var(--aznet-theme-focus);
+    outline-offset: 3px;
+    border-radius: calc(var(--aznet-theme-radius-card) / 2);
+}
+
+.aznet-theme-contact-surface__hours {
+    display: grid;
+    gap: var(--aznet-theme-space-2);
+    margin: 0;
+}
+
+.aznet-theme-contact-surface__hours > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--aznet-theme-space-3);
+    padding-block: var(--aznet-theme-space-2);
+    border-bottom: 1px solid var(--aznet-theme-border);
+}
+
+.aznet-theme-contact-surface__hours > div:last-child {
+    border-bottom: 0;
+}
+
+.aznet-theme-contact-surface__hours dt {
+    color: var(--aznet-theme-text);
+    font-weight: 600;
+}
+
+.aznet-theme-contact-surface__hours dd {
+    margin: 0;
+    color: var(--aznet-theme-muted);
+    text-align: right;
+}
+
+.aznet-theme-contact-surface__people {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: var(--aznet-theme-space-3);
+}
+
+.aznet-theme-contact-surface__person {
+    min-width: 0;
+    padding: var(--aznet-theme-space-3);
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+}
+
+.aznet-theme-contact-surface__person p {
+    margin-block-start: var(--aznet-theme-space-1);
+    color: var(--aznet-theme-muted);
+    line-height: 1.55;
+}
+
+.aznet-theme-contact-surface__person a {
+    display: inline-flex;
+    margin-block-start: var(--aznet-theme-space-2);
+    font-weight: 600;
+}
+
+.aznet-theme-contact-surface__link-list--inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--aznet-theme-space-2) var(--aznet-theme-space-4);
+}
+
+@media (max-width: 47.999rem) {
+    .aznet-theme-contact-surface {
+        gap: var(--aznet-theme-space-4);
+    }
+
+    .aznet-theme-contact-surface__identity,
+    .aznet-theme-contact-surface__grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .aznet-theme-contact-surface__logo {
+        width: 4.5rem;
+        height: 4.5rem;
+    }
+
+    .aznet-theme-contact-surface__card--wide {
+        grid-column: auto;
+    }
+
+    .aznet-theme-contact-surface__hours > div {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--aznet-theme-space-1);
+    }
+
+    .aznet-theme-contact-surface__hours dd {
+        text-align: left;
+    }
+}
