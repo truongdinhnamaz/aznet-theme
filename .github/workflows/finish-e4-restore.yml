@@ -31,16 +31,13 @@ jobs:
           mkdir -p template-parts/profile
           gzip -dc "$RECOVERY" > template-parts/profile/surface.php
 
-          cat > /tmp/e4.sha256 <<'EOF'
-49239bd024b9952a6b94c64348587d71e57842c388799729b933c239760f0c7c  assets/css/components/contact-surface.css
-de03331c9aace93b65f547598f1f6cece4ed83273a2ce2a2b29c4b5565d2bc99  assets/css/components/profile-surface.css
-5c669618e8ebe207c3c754f9fbdeb4420555cfe13f2587726b5f2191de8e93ad  inc/theme/bootstrap.php
-cce7dd0430e44689b5a1417de8503cc727da79a259f52b6b805f54407b183cd5  inc/theme/contact-surface.php
-0655d2e85ca45de8c67fe6d00014b8e31488e0652e2717330669d553452942c0  inc/theme/profile-surface.php
-c98e3d84f9c8afb82b379c97e33abc4ffb21bdf2c05bc28ecbbfbc44dc440206  template-parts/contact/surface.php
-187a21f868dcb44e2c0ac6ee572ceb3ffc3f5f20ef666b983f1ef1a340408efe  template-parts/profile/surface.php
-EOF
-          sha256sum -c /tmp/e4.sha256
+          echo '49239bd024b9952a6b94c64348587d71e57842c388799729b933c239760f0c7c  assets/css/components/contact-surface.css' | sha256sum -c -
+          echo 'de03331c9aace93b65f547598f1f6cece4ed83273a2ce2a2b29c4b5565d2bc99  assets/css/components/profile-surface.css' | sha256sum -c -
+          echo '5c669618e8ebe207c3c754f9fbdeb4420555cfe13f2587726b5f2191de8e93ad  inc/theme/bootstrap.php' | sha256sum -c -
+          echo 'cce7dd0430e44689b5a1417de8503cc727da79a259f52b6b805f54407b183cd5  inc/theme/contact-surface.php' | sha256sum -c -
+          echo '0655d2e85ca45de8c67fe6d00014b8e31488e0652e2717330669d553452942c0  inc/theme/profile-surface.php' | sha256sum -c -
+          echo 'c98e3d84f9c8afb82b379c97e33abc4ffb21bdf2c05bc28ecbbfbc44dc440206  template-parts/contact/surface.php' | sha256sum -c -
+          echo '187a21f868dcb44e2c0ac6ee572ceb3ffc3f5f20ef666b983f1ef1a340408efe  template-parts/profile/surface.php' | sha256sum -c -
 
           PRODUCTION_FILE_COUNT=$(find . -type f \
             -not -path './.git/*' \
