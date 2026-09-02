@@ -14,9 +14,11 @@ Adopt a new RootProfile-owned, public, same-process, versioned request-context c
 
 The contract answers one bounded question only:
 
-> On this frontend request, does RootProfile recognize a public presentation surface that AZnet Theme may render, and if so, what normalized public-safe presentation payload belongs to that surface?
+> On this frontend request, does RootProfile recognize a public presentation surface, and if so, what normalized public-safe presentation payload belongs to that surface?
 
-RootProfile remains the only owner of routing, URL/canonical resolution, mapped Page resolution, public eligibility, Entity resolution and authoritative profile/contact semantics. AZnet Theme receives only the resolved public presentation context and renders it. The Theme must not re-resolve RootProfile routes, inspect RootProfile storage, infer surfaces from slugs/titles, or call RootProfile private/internal classes.
+The contract reports **context, not production-render authorization**. A valid current-surface payload never means AZnet Theme may silently replace the current renderer. Production takeover remains a separate, explicit, later gate.
+
+RootProfile remains the only owner of routing, URL/canonical resolution, mapped Page resolution, public eligibility, Entity resolution and authoritative profile/contact semantics. AZnet Theme receives only the resolved public presentation context. The Theme must not re-resolve RootProfile routes, inspect RootProfile storage, infer surfaces from slugs/titles, or call RootProfile private/internal classes.
 
 This contract is additive. Existing presentation provider v1 and v2 contracts remain unchanged.
 
@@ -79,6 +81,8 @@ AZnet Theme must not:
 - derive Person entity IDs from `/ho-so/{slug}` itself;
 - detect Contact by page slug/title/content similarity;
 - infer Organization canonical identity from Contact Surface;
+- treat current-surface availability as takeover authorization;
+- reinterpret RootProfile `none|external|studio` storage values inside Theme;
 - mutate RootProfile presentation owner, mapping, Page content, slug/title, builder metadata or canonical state merely to render;
 - create parallel RootProfile identity/contact/profile storage.
 
@@ -138,19 +142,33 @@ No RootProfile internal entity ID, post ID, mapped Page ID, query-var value, opt
 
 Return `null` when:
 
-- the request is not a RootProfile-owned presentation surface;
+- the request is not a RootProfile-recognized public presentation surface;
 - the surface is not publicly eligible for the current request context;
 - provider projection fails;
 - required public projection is malformed/unavailable;
 - an internal exception occurs.
 
-`null` means **no Theme takeover claim**. It never means the Theme should reverse-engineer a fallback RootProfile identity.
+`null` means **no authoritative RootProfile current-surface context**. It never means the Theme should reverse-engineer a fallback RootProfile identity.
+
+### 4.5 Context is not authorization
+
+A non-null result means only that RootProfile recognizes the current request and can supply its public presentation model.
+
+It does **not** mean:
+
+- RootProfile has switched production presentation owner;
+- AZnet Theme may replace Page content or RootProfile fallback output;
+- an existing `external` Page should be silently converted into Theme-composed RootProfile presentation;
+- an existing `studio` renderer should be bypassed;
+- canonical routing or redirect behavior changes.
+
+Any later production takeover mechanism must be specified and activated separately. E5-A/E5-B must not invent that mechanism.
 
 ## 5. RootProfile resolution behavior
 
 The contract implementation may reuse RootProfile internals because it is implemented inside RootProfile. It must preserve current route/canonical behavior rather than duplicate it.
 
-Resolution order must prevent overlapping claims and preserve current product semantics:
+Resolution order must prevent overlapping contexts and preserve current product semantics:
 
 1. **Person Profile**
    - recognize only when RootProfile's existing request resolver says a Person Profile is the current valid/public surface;
@@ -163,10 +181,12 @@ Resolution order must prevent overlapping claims and preserve current product se
    - preserve canonical/profile URL ownership in RootProfile.
 
 3. **Contact Surface**
-   - recognize only the explicit RootProfile mapped Contact Page under current Contact Surface eligibility rules;
+   - recognize only the explicit RootProfile mapped Contact Page under current Contact Surface mapping/public-projection rules;
    - project with provider v1 `contact`;
    - never treat Contact as canonical Organization Profile;
    - never auto-map by slug, title or content similarity.
+
+Current-surface recognition is independent from whether RootProfile currently renders that surface through `external` or `studio` presentation. Those values remain RootProfile compatibility/presentation state and do not cross the new contract.
 
 The implementation must use one RootProfile-owned request-context resolver/adaptor rather than asking AZnet Theme to understand the three internal routing systems.
 
@@ -176,24 +196,37 @@ The implementation must use one RootProfile-owned request-context resolver/adapt
 
 Adding the current-surface contract does **not** by itself transfer production rendering to AZnet Theme.
 
-The contract is a read-only integration capability. Existing RootProfile fallback/current rendering remains valid until the LIVE WordPress UAT and destination-rendering gates pass.
+The contract is a read-only integration capability. Existing RootProfile/WordPress fallback/current rendering remains valid until the LIVE WordPress UAT, destination-rendering and explicit activation design/gates pass.
 
 ### 6.2 E5 staged activation
 
-E5 should be implemented in two distinct layers:
+E5 is divided into bounded checkpoints:
 
-**Layer A — Contract + consumer compatibility**
+**E5-A — RootProfile current-surface contract**
 
 - RootProfile publishes current-surface context.
-- AZnet Theme can consume and validate it.
-- No production takeover is enabled solely by this layer.
-- Existing RootProfile rendering remains the production fallback/reference path.
+- Existing provider v1/v2 and rendering behavior remain unchanged.
+- No Theme runtime takeover claim is introduced.
 
-**Layer B — runtime presentation takeover**
+**E5-B — AZnet Theme consumer + dormant dispatcher compatibility**
 
-Only after UAT evidence passes may RootProfile allow the resolved surface to use the AZnet Theme presentation path while retaining RootProfile fallback/rollback.
+- AZnet Theme can consume and validate current-surface context.
+- Existing E2/E3/E4 renderers can be dispatched from an explicit function/test call.
+- The dispatcher is not wired to `template_include`, `the_content` or another automatic production interception point.
+- Generic Page/Post behavior remains unchanged.
 
-Do not infer Layer B PASS from Layer A PASS.
+**E5-C — LIVE database-backed UAT**
+
+- verify three-way compatibility and destination rendering using explicit test wiring/preview where appropriate;
+- collect canonical/schema/theme-switch/accessibility/rollback evidence.
+
+**E5-D — production presentation takeover**
+
+- requires its own explicit activation design based on E5-C evidence;
+- must preserve RootProfile fallback/rollback;
+- must not silently reinterpret existing presentation-owner state.
+
+Do not infer E5-D PASS from E5-A, E5-B or E5-C.
 
 ## 7. AZnet Theme consumer design
 
@@ -216,13 +249,13 @@ Validation rules:
 
 The adapter should return a presentation-safe Theme context, not raw unvalidated input.
 
-Suggested render dispatcher, kept separate from route ownership:
+Suggested dormant render dispatcher, kept separate from route ownership and production interception:
 
 ```php
 render_current_rootprofile_surface(array $context): bool
 ```
 
-Behavior:
+Behavior when called explicitly:
 
 - `person_profile` → existing Theme Profile Surface renderer;
 - `organization_profile` → existing Theme Profile Surface renderer;
@@ -230,20 +263,20 @@ Behavior:
 - unsupported/malformed context → render nothing and return `false`;
 - enqueue only the assets needed for the recognized surface.
 
-The dispatcher does not inspect WordPress slug/query vars to identify RootProfile surfaces.
+The dispatcher does not inspect WordPress slug/query vars to identify RootProfile surfaces and is not auto-invoked during E5-B.
 
 ## 8. Fail-soft and error handling
 
 All integration boundaries fail soft:
 
 - RootProfile absent → Theme remains a valid WordPress theme;
-- current-surface hook absent → no Theme RootProfile takeover claim;
+- current-surface hook absent → no authoritative current-surface context;
 - provider v1/v2 absent or unsupported → no authoritative Theme fallback from RootProfile storage;
 - provider/current-surface exception → return `null` and preserve existing request behavior;
 - malformed payload → reject; do not partially render authoritative identity;
 - Theme absent → RootProfile current/fallback renderer remains usable;
 - generic theme → RootProfile remains usable;
-- runtime presentation failure after activation must have an explicit rollback/fallback path; it must not corrupt mapping or authoritative state.
+- runtime presentation failure after any future takeover activation must have an explicit rollback/fallback path; it must not corrupt mapping or authoritative state.
 
 ## 9. Compatibility requirements
 
@@ -262,7 +295,8 @@ The contract must preserve the following combinations:
 11. mapped Person Profile Page where supported by current RootProfile behavior;
 12. author-archive Person surface where supported by current RootProfile behavior;
 13. explicit mapped Contact Surface Page;
-14. non-mapped normal WordPress Page whose slug/title resembles Contact/Profile.
+14. non-mapped normal WordPress Page whose slug/title resembles Contact/Profile;
+15. current RootProfile `external` and `studio` presentation states remain behavior-compatible during E5-A/E5-B.
 
 ## 10. Security and privacy constraints
 
@@ -308,6 +342,7 @@ Verify:
 - no surface is inferred by slug/title similarity;
 - invalid/private/non-public requests return `null`;
 - current canonical/redirect behavior remains owned by RootProfile;
+- current `external|studio` runtime presentation behavior is unchanged;
 - v1 and v2 existing providers remain behavior-compatible.
 
 ### 11.3 AZnet Theme RED/GREEN tests
@@ -318,7 +353,8 @@ Verify:
 - Theme rejects wrong contract/version;
 - Theme rejects unsupported surface;
 - Theme rejects malformed nested provider payload;
-- Theme accepts each valid surface and dispatches to the correct existing renderer;
+- Theme accepts each valid surface and explicit dormant dispatch selects the correct existing renderer;
+- no production interception hook is added in E5-B;
 - Theme never calls RootProfile internal classes/storage;
 - Theme with no RootProfile remains non-fatal;
 - generic Page/Post behavior remains unchanged.
@@ -340,38 +376,41 @@ Production takeover remains **UNKNOWN/PENDING** until database-backed WordPress 
 - provider failure/contract failure fail-soft;
 - documented rollback.
 
+Passing this UAT establishes evidence for a later E5-D activation decision; it still does not silently activate production takeover.
+
 ## 12. Implementation boundaries
 
-Expected RootProfile change is intentionally small and adapter-oriented:
+Expected RootProfile E5-A change is intentionally small and adapter-oriented:
 
 - one current-surface public contract/provider class;
 - registration in RootProfile bootstrap/plugin wiring;
 - focused contract tests;
 - reuse of existing `Router`/surface resolvers and PresentationProvider v1/v2 projection, without moving domain ownership.
 
-Expected AZnet Theme change is intentionally small:
+Expected AZnet Theme E5-B change is intentionally small:
 
 - current-surface consumer/validator in `inc/integrations/rootprofile.php` or one focused adjacent integration file;
-- one presentation dispatcher/wiring unit;
+- one dormant presentation dispatcher;
 - focused tests/verification;
+- no automatic route/content interception;
 - no rewrite of E2/E3/E4 renderers.
 
-If implementation reveals that production takeover requires changing canonical routing, RootProfile storage vocabulary, Profile Provider v2 schema, or Contact mapping semantics, stop and reclassify the change as a new architectural decision. Those changes are outside this E5 contract.
+If implementation reveals that E5-A/E5-B requires changing canonical routing, RootProfile storage vocabulary, Profile Provider v2 schema, Contact mapping semantics, or production presentation-owner activation, stop and reclassify that work as a later architectural decision. Those changes are outside E5-A/E5-B.
 
 ## 13. Recovery checkpoints
 
 Execution must preserve recoverability:
 
-1. **Checkpoint E5-A:** RootProfile current-surface contract tests PASS; no Theme runtime takeover claim yet.
-2. **Checkpoint E5-B:** AZnet Theme consumer/dispatcher compatibility tests PASS; generic Theme behavior unchanged.
-3. **Checkpoint E5-C:** database-backed three-way UAT PASS.
-4. **Checkpoint E5-D:** runtime presentation takeover enabled only after E5-C, with rollback evidence.
+1. **Checkpoint E5-A:** RootProfile current-surface contract tests PASS; no Theme runtime takeover claim.
+2. **Checkpoint E5-B:** AZnet Theme consumer/dormant-dispatcher compatibility tests PASS; generic Theme behavior unchanged.
+3. **Checkpoint E5-C:** database-backed three-way UAT evidence recorded; production takeover still not inferred.
+4. **Checkpoint E5-D:** production presentation takeover is a separately approved/verified activation slice with rollback evidence.
 
-Do not mark E5 as globally PASS when only E5-A or E5-B passes.
+Do not mark E5 as globally PASS when only an earlier checkpoint passes.
 
 ## 14. Explicit non-goals
 
-E5 does not:
+E5-A/E5-B does not:
 
 - redesign Profile/Contact visuals;
 - change the 17 Business Profile Core Sections;
@@ -382,7 +421,8 @@ E5 does not:
 - replace provider v1/v2;
 - add a Theme-side RootProfile database adapter;
 - remove RootProfile fallback rendering;
-- activate presentation takeover before UAT evidence.
+- reinterpret `none|external|studio` in Theme;
+- activate presentation takeover before later evidence and approval.
 
 ## 15. Acceptance criteria for the design
 
@@ -392,8 +432,10 @@ The design is ready for implementation planning when all of the following are ag
 - the public hook is `rootprofile/presentation/current-surface/v1`;
 - contract is `rootprofile.current_surface`, version `1`;
 - payload carries `surface` plus an already normalized existing-provider `presentation` payload;
-- no internal IDs/mapping/storage details cross the boundary;
+- no internal IDs/mapping/storage/presentation-owner details cross the boundary;
 - Theme uses no slug/title heuristic and no RootProfile private class;
-- contract availability and production takeover are separate gates;
-- RootProfile fallback remains until UAT/rollback PASS;
+- current-surface context is explicitly not takeover authorization;
+- E5-B dispatcher remains dormant/not auto-wired;
+- RootProfile/WordPress existing presentation behavior remains unchanged through E5-A/E5-B;
+- RootProfile fallback remains until a later takeover/rollback gate passes;
 - E5 is executed as bounded checkpoints, not one inferred global PASS.
