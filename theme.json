@@ -1,0 +1,20 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "appearanceTools": false,
+    "layout": {
+      "contentSize": "var(--aznet-theme-container-content)",
+      "wideSize": "var(--aznet-theme-container-wide)"
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "var(--aznet-theme-surface)",
+      "text": "var(--aznet-theme-text)"
+    },
+    "spacing": {
+      "blockGap": "var(--aznet-theme-space-4)"
+    }
+  }
+}

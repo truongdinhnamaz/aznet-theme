@@ -1,0 +1,34 @@
+/*
+Theme Name: AZnet Theme
+Theme URI: https://aznet.vn/
+Author: AZnet
+Description: House/reference WordPress theme for AZnet sites. Presentation-only foundation with contract-based integrations.
+Version: 0.1.0-alpha.7
+Requires at least: 6.9
+Requires PHP: 8.1
+Text Domain: aznet-theme
+*/
+
+html {
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+body {
+    margin: 0;
+}
+
+.aznet-theme-site {
+    min-height: 100vh;
+}
+
+.aznet-theme-main {
+    width: min(calc(100% - (var(--aznet-theme-space-3) * 2)), var(--aznet-theme-container-wide));
+    margin-inline: auto;
+    padding-block: var(--aznet-theme-space-4);
+}

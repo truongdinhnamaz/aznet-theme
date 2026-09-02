@@ -1,0 +1,26 @@
+:root {
+    --aznet-theme-surface: #ffffff;
+    --aznet-theme-text: #17181b;
+    --aznet-theme-muted: #626873;
+    --aznet-theme-border: #d9dde4;
+    --aznet-theme-accent: #175cd3;
+    --aznet-theme-focus: #175cd3;
+    --aznet-theme-surface-inverse: #111722;
+    --aznet-theme-on-inverse: #f7f8fa;
+    --aznet-theme-container-content: 45rem;
+    --aznet-theme-container-wide: 72rem;
+    --aznet-theme-container-shell: 77.5rem;
+    --aznet-theme-gutter: 2.5rem;
+    --aznet-theme-gutter-mobile: 1.125rem;
+    --aznet-theme-space-1: 0.25rem;
+    --aznet-theme-space-2: 0.5rem;
+    --aznet-theme-space-3: 1rem;
+    --aznet-theme-space-4: 1.5rem;
+    --aznet-theme-space-6: 2.625rem;
+    --aznet-theme-space-section: 3.25rem;
+    --aznet-theme-radius-pill: 999px;
+    --aznet-theme-radius-card: 0.875rem;
+    --aznet-theme-shadow-float: 0 1.125rem 2.8125rem rgba(0, 0, 0, 0.22);
+    --aznet-theme-header-height: 4.75rem;
+    --aznet-theme-header-height-compact: 3.875rem;
+}
