@@ -22,6 +22,13 @@ function enqueue_assets(): void {
     );
 
     wp_enqueue_style(
+        'aznet-theme-convertflow-contract',
+        get_theme_file_uri( '/assets/css/integrations/convertflow.css' ),
+        [ 'aznet-theme-tokens' ],
+        $version
+    );
+
+    wp_enqueue_style(
         'aznet-theme-style',
         get_stylesheet_uri(),
         [ 'aznet-theme-tokens' ],
