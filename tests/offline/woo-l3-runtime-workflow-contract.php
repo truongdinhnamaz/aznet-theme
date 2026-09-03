@@ -39,6 +39,11 @@ foreach (['WC_Product_Simple', 'woocommerce_shop_page_id', 'woocommerce_cart_pag
 }
 
 $smokeCode = file_get_contents($smoke);
+if (false === strpos($smokeCode, 'add-to-cart=$PRODUCT_ID') || false === strpos($smokeCode, '--cookie')) {
+    fwrite(STDERR, "checkout smoke must establish a real Woo cart session\n");
+    exit(4);
+}
+
 if (false === strpos($smokeCode, '$BASE_URL/?page_id=$SHOP_PAGE_ID')) {
     fwrite(STDERR, "archive smoke must use registered Woo Shop page ID\n");
     exit(4);
