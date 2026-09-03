@@ -197,6 +197,16 @@ jobs:
           COOKIE_JAR="$U0_L3_STATE_DIR/admin-cookies.txt"
 
           wp plugin activate woocommerce --path="$WP_ROOT"
+
+          # A fresh WooCommerce install owns an activation redirect on the first
+          # administrator request. Exercise that public HTTP behavior once rather
+          # than reading/deleting Woo private/transient state from the Theme test.
+          curl --fail --silent --show-error \
+            --cookie "$COOKIE_JAR" \
+            --dump-header "$U0_L3_STATE_DIR/html/woo-activation-request.headers" \
+            "$U0_L3_BASE_URL/wp-admin/" \
+            -o "$U0_L3_STATE_DIR/html/woo-activation-request.html"
+
           curl --fail --silent --show-error \
             --cookie "$COOKIE_JAR" \
             "$U0_L3_BASE_URL/wp-admin/admin.php?page=aznet-theme" \
