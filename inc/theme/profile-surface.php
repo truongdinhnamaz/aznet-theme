@@ -47,6 +47,20 @@ function profile_surface_model( string $resource, int $entity_id = 0 ): ?array {
         return null;
     }
 
+    return profile_surface_model_from_payload( $resource, $payload );
+}
+
+/**
+ * Build a presentation-only Profile Surface model from an already validated Provider v2 payload.
+ *
+ * @param array<string,mixed> $payload Provider v2 payload.
+ * @return array<string,mixed>|null
+ */
+function profile_surface_model_from_payload( string $resource, array $payload ): ?array {
+    if ( ! in_array( $resource, [ 'person_profile', 'organization_profile' ], true ) ) {
+        return null;
+    }
+
     $entity = is_array( $payload['entity'] ?? null ) ? $payload['entity'] : [];
     $uuid = trim( (string) ( $entity['uuid'] ?? '' ) );
     $display_name = trim( (string) ( $entity['display_name'] ?? '' ) );

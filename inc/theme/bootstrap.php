@@ -17,6 +17,7 @@ require_once __DIR__ . '/assets.php';
 require_once __DIR__ . '/../integrations/rootprofile.php';
 require_once __DIR__ . '/contact-surface.php';
 require_once __DIR__ . '/profile-surface.php';
+require_once __DIR__ . '/rootprofile-current-surface.php';
 
 add_action( 'after_setup_theme', __NAMESPACE__ . '\\setup' );
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_assets' );
