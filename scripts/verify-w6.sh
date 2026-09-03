@@ -10,10 +10,13 @@ php tests/offline/w6-account-ownership-static-contract.php
 
 echo 'PASS: W6 offline contracts'
 
+php tests/offline/w2-product-asset-scope-contract.php
+php tests/offline/w3-archive-asset-scope-contract.php
+php tests/offline/w4-cart-asset-scope-contract.php
 php tests/offline/w5-checkout-asset-scope-contract.php
 php tests/offline/w5-checkout-ownership-static-contract.php
 
-echo 'PASS: retained W5 invalidated regression subset'
+echo 'PASS: retained W2-W5 invalidated asset regression chain'
 
 php -l inc/theme/woocommerce-account.php >/dev/null
 php -l inc/theme/assets.php >/dev/null
