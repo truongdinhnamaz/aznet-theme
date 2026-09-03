@@ -1,0 +1,258 @@
+name: U0 Final Candidate Verification
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  WP_CLI_ALLOW_ROOT: '1'
+  WP_ROOT: /tmp/aznet-wordpress
+  U0_FINAL_STATE_DIR: /tmp/u0-final
+  U0_FINAL_BASE_URL: http://127.0.0.1:8080
+  U0_FINAL_CANDIDATE_SHA: bedc61af6401cb1ed387be3c242139d585b0800b
+  ALPHA7_SHA: 540669b440e7d36c1f2a6f33bef2fec80cc60fff
+
+jobs:
+  u0-final-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=12
+
+    steps:
+      - name: Checkout final U0 candidate plus verification harness
+        uses: actions/checkout@v4
+
+      - name: Checkout prior alpha.7 source
+        uses: actions/checkout@v4
+        with:
+          ref: 540669b440e7d36c1f2a6f33bef2fec80cc60fff
+          path: prior-source
+          fetch-depth: 1
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run U0 L1-L2 and invalidated regression closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          php tests/offline/u0-settings-contract.php
+          php tests/offline/u0-admin-control-center-contract.php
+          php tests/offline/u0-admin-write-security-contract.php
+          php tests/offline/u0-admin-asset-scope-contract.php
+          php tests/offline/u0-ownership-static-contract.php
+          php tests/offline/u0-custom-logo-support-contract.php
+          php tests/offline/w1-woocommerce-absent-contract.php
+          php tests/offline/w1-woocommerce-surface-contract.php
+          php tests/offline/w1-woocommerce-asset-scope-contract.php
+          php tests/offline/e5-no-takeover-static-contract.php
+
+          for file in \
+            inc/theme/settings.php \
+            inc/theme/setup.php \
+            inc/theme/bootstrap.php \
+            inc/admin/bootstrap.php \
+            inc/admin/control-center.php \
+            inc/admin/settings.php; do
+            php -l "$file"
+          done
+
+          node --check tests/browser/u0-final-control-center.mjs
+
+      - name: Install WP-CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location \
+            https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+            -o /usr/local/bin/wp
+          chmod +x /usr/local/bin/wp
+          wp --info
+
+      - name: Build WordPress with prior alpha.7
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$WP_ROOT" "$U0_FINAL_STATE_DIR"
+
+          wp core download --path="$WP_ROOT" --force
+          WP_VERSION="$(wp core version --path="$WP_ROOT")"
+          php -r 'exit(version_compare($argv[1], "6.9", ">=") ? 0 : 1);' "$WP_VERSION"
+
+          wp config create \
+            --path="$WP_ROOT" \
+            --dbname=wordpress \
+            --dbuser=root \
+            --dbpass=root \
+            --dbhost=127.0.0.1:3306 \
+            --skip-check
+          wp config set WP_DEBUG true --raw --path="$WP_ROOT"
+          wp config set WP_DEBUG_DISPLAY false --raw --path="$WP_ROOT"
+          wp config set WP_DEBUG_LOG "$U0_FINAL_STATE_DIR/php-error.log" --path="$WP_ROOT"
+
+          wp core install \
+            --path="$WP_ROOT" \
+            --url="$U0_FINAL_BASE_URL" \
+            --title="AZnet Theme U0 Final" \
+            --admin_user=aznet-runtime \
+            --admin_password='aznet-runtime-pass' \
+            --admin_email=runtime@example.test \
+            --skip-email
+
+          wp plugin install woocommerce --path="$WP_ROOT"
+
+          THEME_DIR="$WP_ROOT/wp-content/themes/aznet-theme"
+          mkdir -p "$THEME_DIR"
+          rsync -a "$GITHUB_WORKSPACE/prior-source/" "$THEME_DIR/" \
+            --exclude=.git \
+            --exclude=.github \
+            --exclude=docs \
+            --exclude=tests \
+            --exclude=scripts
+
+          wp theme activate aznet-theme --path="$WP_ROOT"
+          wp theme is-active aznet-theme --path="$WP_ROOT"
+          PRIOR_VERSION="$(wp theme get aznet-theme --field=version --path="$WP_ROOT")"
+          test "$PRIOR_VERSION" = '0.1.0-alpha.7'
+
+          MENU_ID="$(wp menu create 'Primary Continuity' --porcelain --path="$WP_ROOT")"
+          wp menu location assign "$MENU_ID" primary --path="$WP_ROOT"
+
+          wp eval 'set_theme_mod("custom_logo", 4242); set_theme_mod("aznet_theme_settings", ["schema_version"=>1,"preset"=>"continuity-preset","design"=>[],"header"=>[],"footer"=>[],"content"=>[],"woocommerce"=>[]]); update_option("aznet_test_external_sentinel", ["owner"=>"external-test-sentinel","value"=>"keep-me"]);' --path="$WP_ROOT"
+
+          {
+            echo "FinalCandidate=$U0_FINAL_CANDIDATE_SHA"
+            echo "PriorAlpha7=$ALPHA7_SHA"
+            echo "WordPress=$WP_VERSION"
+            echo "PHP=$(php -r 'echo PHP_VERSION;')"
+            echo "PriorTheme=$PRIOR_VERSION"
+            echo "MenuID=$MENU_ID"
+            echo "BEFORE custom_logo=$(wp eval 'echo (int) get_theme_mod("custom_logo",0);' --path="$WP_ROOT")"
+            echo "BEFORE preset=$(wp eval '$s=get_theme_mod("aznet_theme_settings",[]); echo (string)($s["preset"]??"");' --path="$WP_ROOT")"
+          } | tee "$U0_FINAL_STATE_DIR/upgrade-report.txt"
+
+      - name: Replace alpha.7 in-place with U0 candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          THEME_DIR="$WP_ROOT/wp-content/themes/aznet-theme"
+
+          rsync -a --delete --delete-excluded "$GITHUB_WORKSPACE/" "$THEME_DIR/" \
+            --exclude=.git \
+            --exclude=.github \
+            --exclude=docs \
+            --exclude=tests \
+            --exclude=scripts \
+            --exclude=prior-source
+
+          wp theme is-active aznet-theme --path="$WP_ROOT"
+          wp eval 'if (!current_theme_supports("custom-logo")) { fwrite(STDERR,"custom-logo support missing\n"); exit(1); }' --path="$WP_ROOT"
+
+          wp eval '$logo=(int)get_theme_mod("custom_logo",0); if ($logo!==4242) { exit(1); } $locations=get_nav_menu_locations(); if (empty($locations["primary"])) { exit(1); } $raw=get_theme_mod("aznet_theme_settings",[]); if (($raw["preset"]??"")!=="continuity-preset") { exit(1); } $effective=\AZnet\Theme\Settings\get(); if (($effective["preset"]??"")!=="continuity-preset") { exit(1); } $sentinel=get_option("aznet_test_external_sentinel"); if (!is_array($sentinel) || ($sentinel["value"]??"")!=="keep-me") { exit(1); }' --path="$WP_ROOT"
+
+          echo 'PASS in-place-directory=aznet-theme' | tee -a "$U0_FINAL_STATE_DIR/upgrade-report.txt"
+          echo 'PASS custom-logo-support' | tee -a "$U0_FINAL_STATE_DIR/upgrade-report.txt"
+          echo 'PASS custom-logo-preserved' | tee -a "$U0_FINAL_STATE_DIR/upgrade-report.txt"
+          echo 'PASS primary-menu-location-preserved' | tee -a "$U0_FINAL_STATE_DIR/upgrade-report.txt"
+          echo 'PASS aznet-theme-settings-preserved' | tee -a "$U0_FINAL_STATE_DIR/upgrade-report.txt"
+          echo 'PASS unrelated-db-sentinel-preserved' | tee -a "$U0_FINAL_STATE_DIR/upgrade-report.txt"
+
+          wp eval 'if (\AZnet\Theme\Integrations\WooCommerce\available()) { exit(1); }' --path="$WP_ROOT"
+          echo 'PASS woo-unavailable' | tee -a "$U0_FINAL_STATE_DIR/upgrade-report.txt"
+          wp plugin activate woocommerce --path="$WP_ROOT"
+          wp eval 'if (!\AZnet\Theme\Integrations\WooCommerce\available()) { exit(1); }' --path="$WP_ROOT"
+          echo 'PASS woo-available' | tee -a "$U0_FINAL_STATE_DIR/upgrade-report.txt"
+          wp plugin deactivate woocommerce --path="$WP_ROOT"
+
+          CURRENT_HEADER_VERSION="$(wp eval 'echo AZNET_THEME_VERSION;' --path="$WP_ROOT")"
+          CURRENT_STYLE_VERSION="$(wp theme get aznet-theme --field=version --path="$WP_ROOT")"
+          test "$CURRENT_HEADER_VERSION" = "$CURRENT_STYLE_VERSION"
+          {
+            echo "CandidateTheme=$CURRENT_STYLE_VERSION"
+            echo "AFTER custom_logo=$(wp eval 'echo (int) get_theme_mod("custom_logo",0);' --path="$WP_ROOT")"
+            echo "AFTER preset=$(wp eval '$s=\AZnet\Theme\Settings\get(); echo (string)($s["preset"]??"");' --path="$WP_ROOT")"
+          } | tee -a "$U0_FINAL_STATE_DIR/upgrade-report.txt"
+
+          while IFS= read -r -d '' php_file; do php -l "$php_file"; done < <(find "$THEME_DIR" -type f -name '*.php' -print0)
+
+          cd "$WP_ROOT/wp-content"
+          zip -qr "$U0_FINAL_STATE_DIR/u0-candidate-package.zip" aznet-theme
+          unzip -Z1 "$U0_FINAL_STATE_DIR/u0-candidate-package.zip" > "$U0_FINAL_STATE_DIR/package-files.txt"
+          if grep -Ev '^aznet-theme/' "$U0_FINAL_STATE_DIR/package-files.txt" | grep -q .; then
+            echo 'package contains non-aznet-theme root' >&2
+            exit 1
+          fi
+          if grep -E '^aznet-theme/(\.git|\.github|docs|tests|scripts)(/|$)' "$U0_FINAL_STATE_DIR/package-files.txt"; then
+            echo 'package contains excluded development path' >&2
+            exit 1
+          fi
+          echo 'PASS candidate-package-root=aznet-theme/' | tee -a "$U0_FINAL_STATE_DIR/upgrade-report.txt"
+
+      - name: Start WordPress HTTP runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$WP_ROOT"
+          nohup wp server --host=127.0.0.1 --port=8080 >"$U0_FINAL_STATE_DIR/wp-server.log" 2>&1 &
+          echo $! > "$U0_FINAL_STATE_DIR/wp-server.pid"
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent "$U0_FINAL_BASE_URL/" >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat "$U0_FINAL_STATE_DIR/wp-server.log" >&2 || true
+          exit 1
+
+      - name: Install Playwright and axe
+        shell: bash
+        run: |
+          npm install --no-save --package-lock=false \
+            playwright@1.55.0 \
+            @axe-core/playwright@4.10.2
+          npx playwright install chromium --with-deps
+
+      - name: Run final Control Center browser visual a11y verification
+        run: node tests/browser/u0-final-control-center.mjs
+
+      - name: Reject runtime fatals and warnings
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          touch "$U0_FINAL_STATE_DIR/php-error.log"
+          if grep -E 'PHP (Fatal error|Warning)|Uncaught' "$U0_FINAL_STATE_DIR/php-error.log"; then
+            echo 'Unexpected PHP runtime error detected' >&2
+            exit 1
+          fi
+          echo 'PASS php-error-log-clean' | tee -a "$U0_FINAL_STATE_DIR/upgrade-report.txt"
+
+      - name: Upload final U0 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: u0-final-candidate-evidence
+          path: /tmp/u0-final
+          if-no-files-found: error
