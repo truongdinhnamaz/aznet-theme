@@ -20,6 +20,7 @@ namespace {
     $root = dirname(__DIR__, 2);
     if (!is_file($root . '/inc/theme/woocommerce-checkout.php')) { fwrite(STDERR, "missing checkout helper\n"); exit(1); }
     require $root . '/inc/theme/woocommerce-checkout.php';
+    require $root . '/inc/theme/woocommerce-account.php';
     require $root . '/inc/theme/assets.php';
 
     $cases = ['checkout' => true, 'cart' => false, 'product' => false, 'archive' => false, 'account' => false, '' => false];
