@@ -31,6 +31,10 @@ function content_shell_classes( bool $with_navigation = false ): array {
  * Whether the current WordPress request uses a generic content surface.
  */
 function should_enqueue_generic_content_assets(): bool {
+    if ( null !== \AZnet\Theme\Integrations\WooCommerce\current_surface() ) {
+        return false;
+    }
+
     return is_page()
         || is_singular( 'post' )
         || is_archive()
