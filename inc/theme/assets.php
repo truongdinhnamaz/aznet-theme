@@ -59,4 +59,13 @@ function enqueue_assets(): void {
             $version
         );
     }
+
+    if ( should_enqueue_woocommerce_archive_assets() ) {
+        wp_enqueue_style(
+            'aznet-theme-woocommerce-archive',
+            get_theme_file_uri( '/assets/css/components/woocommerce-archive.css' ),
+            [ 'aznet-theme-tokens' ],
+            $version
+        );
+    }
 }

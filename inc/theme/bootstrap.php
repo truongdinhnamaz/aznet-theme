@@ -14,6 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once __DIR__ . '/setup.php';
 require_once __DIR__ . '/../integrations/woocommerce.php';
 require_once __DIR__ . '/woocommerce-product.php';
+require_once __DIR__ . '/woocommerce-archive.php';
 require_once __DIR__ . '/content-shell.php';
 require_once __DIR__ . '/assets.php';
 require_once __DIR__ . '/../integrations/rootprofile.php';
