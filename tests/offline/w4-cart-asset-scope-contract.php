@@ -19,6 +19,7 @@ namespace {
     $root = dirname(__DIR__, 2);
     if (!is_file($root . '/inc/theme/woocommerce-cart.php')) { fwrite(STDERR, "missing cart helper\n"); exit(1); }
     require $root . '/inc/theme/woocommerce-cart.php';
+    require $root . '/inc/theme/woocommerce-checkout.php';
     require $root . '/inc/theme/assets.php';
 
     $cases = ['cart' => true, 'product' => false, 'archive' => false, 'checkout' => false, 'account' => false, '' => false];
