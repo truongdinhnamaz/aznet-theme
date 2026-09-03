@@ -1,0 +1,114 @@
+/*
+ * AZnet Theme — WooCommerce Cart presentation.
+ * WooCommerce keeps cart state, calculations and behavior; this file styles native classic/Block markup only.
+ */
+
+.woocommerce-cart .woocommerce-cart-form,
+.woocommerce-cart .cart-collaterals,
+.wp-block-woocommerce-cart {
+    width: min(100%, var(--aznet-theme-container-wide, 72rem));
+    margin-inline: auto;
+}
+
+.woocommerce-cart .shop_table,
+.wp-block-woocommerce-cart .wc-block-cart-items {
+    width: 100%;
+    border: 1px solid var(--aznet-theme-border, #d9dde4);
+    border-radius: var(--aznet-theme-radius-card, 0.875rem);
+    background: var(--aznet-theme-surface, #ffffff);
+}
+
+.woocommerce-cart .shop_table th,
+.woocommerce-cart .shop_table td,
+.wp-block-woocommerce-cart .wc-block-cart-items th,
+.wp-block-woocommerce-cart .wc-block-cart-items td {
+    padding: var(--aznet-theme-space-3, 1rem);
+    vertical-align: middle;
+}
+
+.woocommerce-cart .shop_table .product-name,
+.wp-block-woocommerce-cart .wc-block-cart-item__product {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.woocommerce-cart .coupon {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--aznet-theme-space-2, 0.5rem);
+    align-items: center;
+}
+
+.woocommerce-cart .coupon input,
+.woocommerce-cart .quantity input,
+.wp-block-woocommerce-cart .wc-block-components-quantity-selector input {
+    max-width: 100%;
+    min-height: 2.75rem;
+}
+
+.woocommerce-cart .cart-collaterals .cart_totals {
+    float: none;
+    width: min(100%, 30rem);
+    margin: var(--aznet-theme-space-6, 2.625rem) 0 0 auto;
+    padding: var(--aznet-theme-space-4, 1.5rem);
+    border: 1px solid var(--aznet-theme-border, #d9dde4);
+    border-radius: var(--aznet-theme-radius-card, 0.875rem);
+    background: var(--aznet-theme-surface, #ffffff);
+}
+
+.woocommerce-cart .cart_totals h2,
+.wp-block-woocommerce-cart .wc-block-cart__totals-title {
+    margin-top: 0;
+    color: var(--aznet-theme-text, #17181b);
+}
+
+.woocommerce-cart .checkout-button,
+.wp-block-woocommerce-cart .wc-block-cart__submit-button {
+    min-height: 2.875rem;
+}
+
+.wp-block-woocommerce-cart .wc-block-cart-items,
+.wp-block-woocommerce-cart .wc-block-components-quantity-selector,
+.wp-block-woocommerce-cart .wc-block-cart__submit-button {
+    max-width: 100%;
+}
+
+.woocommerce-cart :is(a, button, input, select, textarea):focus-visible,
+.wp-block-woocommerce-cart :is(a, button, input, select, textarea):focus-visible {
+    outline: 3px solid var(--aznet-theme-focus, #175cd3);
+    outline-offset: 3px;
+}
+
+@media (max-width: 767px) {
+    .woocommerce-cart .woocommerce-cart-form,
+    .woocommerce-cart .cart-collaterals,
+    .wp-block-woocommerce-cart {
+        width: 100%;
+    }
+
+    .woocommerce-cart .shop_table th,
+    .woocommerce-cart .shop_table td,
+    .wp-block-woocommerce-cart .wc-block-cart-items th,
+    .wp-block-woocommerce-cart .wc-block-cart-items td {
+        padding: var(--aznet-theme-space-2, 0.5rem);
+        overflow-wrap: anywhere;
+    }
+
+    .woocommerce-cart .coupon {
+        align-items: stretch;
+    }
+
+    .woocommerce-cart .coupon input,
+    .woocommerce-cart .coupon button,
+    .woocommerce-cart .actions button,
+    .woocommerce-cart .checkout-button,
+    .wp-block-woocommerce-cart .wc-block-cart__submit-button {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .woocommerce-cart .cart-collaterals .cart_totals {
+        width: 100%;
+        margin-inline: 0;
+    }
+}
