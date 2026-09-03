@@ -86,4 +86,13 @@ function enqueue_assets(): void {
             $version
         );
     }
+
+    if ( should_enqueue_woocommerce_account_assets() ) {
+        wp_enqueue_style(
+            'aznet-theme-woocommerce-account',
+            get_theme_file_uri( '/assets/css/components/woocommerce-account.css' ),
+            [ 'aznet-theme-tokens' ],
+            $version
+        );
+    }
 }
