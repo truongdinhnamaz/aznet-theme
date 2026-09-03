@@ -120,6 +120,37 @@ function render_overview(): void {
                 <p class="aznet-theme-control-center__status"><?php echo esc_html( availability_text( (bool) $status['woocommerce']['available'] ) ); ?></p>
             </section>
         </div>
+
+        <?php
+        $notice = isset( $_GET['aznet_theme_notice'] )
+            ? sanitize_key( wp_unslash( $_GET['aznet_theme_notice'] ) )
+            : '';
+        if ( 'saved' === $notice ) :
+            ?>
+            <div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Đã lưu thiết lập nền AZnet Theme.', 'aznet-theme' ); ?></p></div>
+        <?php elseif ( 'reset' === $notice ) : ?>
+            <div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Đã đặt lại thiết lập AZnet Theme.', 'aznet-theme' ); ?></p></div>
+        <?php elseif ( 'confirm-reset' === $notice ) : ?>
+            <div class="notice notice-warning"><p><?php esc_html_e( 'Cần xác nhận trước khi đặt lại thiết lập Theme.', 'aznet-theme' ); ?></p></div>
+        <?php endif; ?>
+
+        <div class="aznet-theme-control-center__actions">
+            <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+                <input type="hidden" name="action" value="aznet_theme_save_u0_settings">
+                <?php wp_nonce_field( 'aznet_theme_save_u0_settings' ); ?>
+                <?php submit_button( __( 'Lưu thiết lập nền', 'aznet-theme' ), 'primary', 'submit', false ); ?>
+            </form>
+
+            <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+                <input type="hidden" name="action" value="aznet_theme_reset_settings">
+                <?php wp_nonce_field( 'aznet_theme_reset_settings' ); ?>
+                <label>
+                    <input type="checkbox" name="confirm_reset" value="1" required>
+                    <?php esc_html_e( 'Tôi xác nhận đặt lại thiết lập presentation của AZnet Theme.', 'aznet-theme' ); ?>
+                </label>
+                <?php submit_button( __( 'Đặt lại thiết lập AZnet Theme', 'aznet-theme' ), 'delete', 'submit', false ); ?>
+            </form>
+        </div>
     </div>
     <?php
 }
