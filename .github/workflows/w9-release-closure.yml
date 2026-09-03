@@ -1,0 +1,131 @@
+name: W9 Release Closure
+
+on:
+  push:
+    branches:
+      - test/w9-release-closure
+  workflow_dispatch:
+
+jobs:
+  w9-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout W8 candidate
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Run retained contract suites
+        run: |
+          set -euo pipefail
+          bash scripts/verify-e5b.sh
+          bash scripts/verify-w1.sh
+          bash scripts/verify-w2.sh
+          bash scripts/verify-w3.sh
+          bash scripts/verify-w4.sh
+          bash scripts/verify-w5.sh
+          bash scripts/verify-w6.sh
+          php tests/offline/w8-convertflow-theme-contract.php
+          php tests/offline/w2-product-ownership-static-contract.php
+          php tests/offline/w3-archive-ownership-static-contract.php
+          php tests/offline/w4-cart-ownership-static-contract.php
+          php tests/offline/w5-checkout-ownership-static-contract.php
+          php tests/offline/w6-account-ownership-static-contract.php
+
+      - name: Lint complete production PHP tree
+        run: |
+          set -euo pipefail
+          mapfile -d '' files < <(find . -type f -name '*.php' \
+            -not -path './tests/*' \
+            -not -path './docs/*' \
+            -not -path './scripts/*' \
+            -not -path './.github/*' -print0)
+          printf 'Production PHP files: %s\n' "${#files[@]}"
+          for file in "${files[@]}"; do php -l "$file"; done
+
+      - name: Build deterministic package twice
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile, ZipInfo, ZIP_DEFLATED
+          import hashlib
+
+          root = Path('.')
+          excluded = {'.git', '.github', 'docs', 'scripts', 'tests'}
+          files = sorted(
+              p for p in root.rglob('*')
+              if p.is_file() and not any(part in excluded for part in p.parts)
+          )
+          assert files, 'no production files found'
+
+          def build(target):
+              with ZipFile(target, 'w', compression=ZIP_DEFLATED, compresslevel=9) as zf:
+                  for p in files:
+                      rel = p.as_posix().lstrip('./')
+                      info = ZipInfo(f'aznet-theme/{rel}', (2020, 1, 1, 0, 0, 0))
+                      info.compress_type = ZIP_DEFLATED
+                      info.external_attr = 0o100644 << 16
+                      zf.writestr(info, p.read_bytes())
+
+          build('aznet-theme-w9-a.zip')
+          build('aznet-theme-w9-b.zip')
+          a = Path('aznet-theme-w9-a.zip').read_bytes()
+          b = Path('aznet-theme-w9-b.zip').read_bytes()
+          assert a == b, 'package rebuild is not byte-identical'
+          digest = hashlib.sha256(a).hexdigest()
+          Path('AZNET_THEME_W9_SHA256.txt').write_text(digest + '  aznet-theme-w9.zip\n')
+          Path('AZNET_THEME_W9_FILE_COUNT.txt').write_text(str(len(files)) + '\n')
+          Path('aznet-theme-w9.zip').write_bytes(a)
+          print('PACKAGE_FILE_COUNT=' + str(len(files)))
+          print('PACKAGE_SHA256=' + digest)
+          PY
+
+      - name: Unzip and exact-byte reverify package
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/aznet-theme-w9
+          mkdir -p /tmp/aznet-theme-w9
+          unzip -q aznet-theme-w9.zip -d /tmp/aznet-theme-w9
+          test -f /tmp/aznet-theme-w9/aznet-theme/style.css
+          test -f /tmp/aznet-theme-w9/aznet-theme/assets/css/integrations/convertflow.css
+          test ! -e /tmp/aznet-theme-w9/aznet-theme/tests
+          test ! -e /tmp/aznet-theme-w9/aznet-theme/docs
+          test ! -e /tmp/aznet-theme-w9/aznet-theme/scripts
+          test ! -e /tmp/aznet-theme-w9/aznet-theme/.github
+          while IFS= read -r -d '' src; do
+            rel="${src#./}"
+            cmp "$src" "/tmp/aznet-theme-w9/aznet-theme/$rel"
+          done < <(find . -type f \
+            -not -path './.git/*' \
+            -not -path './.github/*' \
+            -not -path './docs/*' \
+            -not -path './scripts/*' \
+            -not -path './tests/*' \
+            -not -name 'aznet-theme-w9-a.zip' \
+            -not -name 'aznet-theme-w9-b.zip' \
+            -not -name 'aznet-theme-w9.zip' \
+            -not -name 'AZNET_THEME_W9_SHA256.txt' \
+            -not -name 'AZNET_THEME_W9_FILE_COUNT.txt' -print0)
+          echo 'PASS: W9 package exact-byte unzip reverify'
+
+      - name: Verify package theme header and integration bytes
+        run: |
+          set -euo pipefail
+          grep -F 'Version: 0.1.0-alpha.7' /tmp/aznet-theme-w9/aznet-theme/style.css
+          git hash-object /tmp/aznet-theme-w9/aznet-theme/inc/theme/assets.php | grep -Fx 'f19e134137412fa79a4865824c89a76c5024ce8a'
+          git hash-object /tmp/aznet-theme-w9/aznet-theme/assets/css/integrations/convertflow.css | grep -Fx '39115a63f00a369be72b40dd01dbd988e1d55cc5'
+
+      - name: Upload W9 package evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: aznet-theme-w9-release-candidate
+          path: |
+            aznet-theme-w9.zip
+            AZNET_THEME_W9_SHA256.txt
+            AZNET_THEME_W9_FILE_COUNT.txt
+          if-no-files-found: error
