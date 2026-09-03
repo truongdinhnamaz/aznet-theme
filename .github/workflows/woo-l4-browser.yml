@@ -1,0 +1,146 @@
+name: Woo L4 Browser Visual A11y
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  WP_CLI_ALLOW_ROOT: '1'
+  WP_ROOT: /tmp/aznet-wordpress
+  WOO_L3_STATE_DIR: /tmp/woo-l3
+  WOO_L3_BASE_URL: http://127.0.0.1:8080
+  WOO_L4_STATE_DIR: /tmp/woo-l4
+
+jobs:
+  woo-l4-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=12
+
+    steps:
+      - name: Checkout AZnet Theme
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify L4 workflow contract
+        run: php tests/offline/woo-l4-browser-workflow-contract.php
+
+      - name: Install WP-CLI
+        run: |
+          curl --fail --silent --show-error --location \
+            https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+            -o /usr/local/bin/wp
+          chmod +x /usr/local/bin/wp
+          wp --info
+
+      - name: Build isolated WordPress and WooCommerce runtime
+        run: |
+          set -euo pipefail
+          mkdir -p "$WP_ROOT" "$WOO_L3_STATE_DIR" "$WOO_L4_STATE_DIR"
+
+          wp core download --path="$WP_ROOT" --force
+          WP_VERSION="$(wp core version --path="$WP_ROOT")"
+          php -r 'exit(version_compare($argv[1], "6.9", ">=") ? 0 : 1);' "$WP_VERSION"
+
+          wp config create \
+            --path="$WP_ROOT" \
+            --dbname=wordpress \
+            --dbuser=root \
+            --dbpass=root \
+            --dbhost=127.0.0.1:3306 \
+            --skip-check
+
+          wp core install \
+            --path="$WP_ROOT" \
+            --url="$WOO_L3_BASE_URL" \
+            --title="AZnet Theme L4 Browser" \
+            --admin_user=aznet-runtime \
+            --admin_password='aznet-runtime-pass' \
+            --admin_email=runtime@example.test \
+            --skip-email
+
+          wp plugin install woocommerce --activate --path="$WP_ROOT"
+
+          mkdir -p "$WP_ROOT/wp-content/themes/aznet-theme"
+          rsync -a "$GITHUB_WORKSPACE/" "$WP_ROOT/wp-content/themes/aznet-theme/" \
+            --exclude=.git \
+            --exclude=.github
+
+          wp theme activate aznet-theme --path="$WP_ROOT"
+          wp theme is-active aznet-theme --path="$WP_ROOT"
+          wp plugin is-active woocommerce --path="$WP_ROOT"
+
+          wp eval-file "$GITHUB_WORKSPACE/tests/runtime/woo-l3-fixtures.php" --path="$WP_ROOT"
+
+          WOO_VERSION="$(wp plugin get woocommerce --field=version --path="$WP_ROOT")"
+          THEME_VERSION="$(wp theme get aznet-theme --field=version --path="$WP_ROOT")"
+          {
+            echo "WordPress=$WP_VERSION"
+            echo "PHP=$(php -r 'echo PHP_VERSION;')"
+            echo "WooCommerce=$WOO_VERSION"
+            echo "Theme=$THEME_VERSION"
+            echo "Node=$(node --version)"
+          } | tee "$WOO_L4_STATE_DIR/runtime-report.txt"
+
+      - name: Start WordPress HTTP runtime
+        run: |
+          set -euo pipefail
+          cd "$WP_ROOT"
+          nohup wp server --host=127.0.0.1 --port=8080 >"$WOO_L4_STATE_DIR/wp-server.log" 2>&1 &
+          echo $! > "$WOO_L4_STATE_DIR/wp-server.pid"
+
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent "$WOO_L3_BASE_URL/" >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+
+          cat "$WOO_L4_STATE_DIR/wp-server.log" >&2 || true
+          exit 1
+
+      - name: Install Playwright and axe
+        run: |
+          npm install --no-save --package-lock=false \
+            playwright@1.55.0 \
+            @axe-core/playwright@4.10.2
+          npx playwright install chromium --with-deps
+
+      - name: Run Woo L4 browser visual a11y verification
+        run: node tests/browser/woo-l4-browser.mjs
+
+      - name: Upload L4 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: woo-l4-browser-evidence
+          path: |
+            /tmp/woo-l4
+            /tmp/woo-l3/runtime-ids.env
+          if-no-files-found: error
