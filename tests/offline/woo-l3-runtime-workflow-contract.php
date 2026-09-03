@@ -30,6 +30,24 @@ foreach ($requiredWorkflow as $needle) {
     }
 }
 
+$reportWorkflow = [
+    'WOO_VERSION="$(wp plugin get woocommerce --field=version --path="$WP_ROOT")"',
+    'THEME_VERSION="$(wp theme get aznet-theme --field=version --path="$WP_ROOT")"',
+    'echo "WooCommerce=$WOO_VERSION"',
+    'echo "Theme=$THEME_VERSION"',
+];
+foreach ($reportWorkflow as $needle) {
+    if (false === strpos($yaml, $needle)) {
+        fwrite(STDERR, "runtime report missing safe version capture: {$needle}\n");
+        exit(6);
+    }
+}
+
+if (false !== strpos($yaml, '--path=\\"$WP_ROOT\\"')) {
+    fwrite(STDERR, "runtime report must not pass literal quotes in WP-CLI --path\n");
+    exit(7);
+}
+
 $fixtureCode = file_get_contents($fixture);
 foreach (['WC_Product_Simple', 'woocommerce_shop_page_id', 'woocommerce_cart_page_id', 'woocommerce_checkout_page_id', 'woocommerce_myaccount_page_id'] as $needle) {
     if (false === strpos($fixtureCode, $needle)) {
