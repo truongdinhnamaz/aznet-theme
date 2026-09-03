@@ -4,6 +4,7 @@ if ( ! is_file( $path ) ) { fwrite( STDERR, "missing product CSS\n" ); exit( 1 )
 $css = file_get_contents( $path );
 $required = [
     '.single-product',
+    '.aznet-theme-main',
     '.woocommerce-product-gallery',
     '.summary',
     '.woocommerce-tabs',
@@ -18,7 +19,7 @@ $required = [
 foreach ( $required as $needle ) {
     if ( false === strpos( $css, $needle ) ) { fwrite( STDERR, "missing: {$needle}\n" ); exit( 2 ); }
 }
-$forbidden = [ 'position: sticky', 'display: none !important' ];
+$forbidden = [ 'position: sticky', 'display: none !important', '.site-main' ];
 foreach ( $forbidden as $needle ) {
     if ( false !== strpos( $css, $needle ) ) { fwrite( STDERR, "forbidden: {$needle}\n" ); exit( 3 ); }
 }
