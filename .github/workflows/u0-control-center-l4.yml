@@ -132,9 +132,11 @@ jobs:
             playwright@1.55.0 \
             @axe-core/playwright@4.10.2
           npx playwright install chromium --with-deps
+          PLAYWRIGHT_VERSION="$(node -p 'require("playwright/package.json").version')"
+          AXE_VERSION="$(node -p 'require("@axe-core/playwright/package.json").version')"
           {
-            echo "Playwright=$(node -p \"require('playwright/package.json').version\")"
-            echo "AxePlaywright=$(node -p \"require('@axe-core/playwright/package.json').version\")"
+            printf 'Playwright=%s\n' "$PLAYWRIGHT_VERSION"
+            printf 'AxePlaywright=%s\n' "$AXE_VERSION"
           } | tee -a "$U0_L4_STATE_DIR/runtime-report.txt"
 
       - name: Run Control Center browser and a11y verification
