@@ -1,0 +1,140 @@
+/*
+ * AZnet Theme — WooCommerce My Account presentation.
+ * WooCommerce keeps account/auth/data/endpoint semantics; this file styles native markup only.
+ */
+
+.woocommerce-account .woocommerce {
+    display: grid;
+    grid-template-columns: minmax(12rem, 0.32fr) minmax(0, 0.68fr);
+    gap: var(--aznet-theme-space-6, 2.625rem);
+    align-items: start;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation,
+.woocommerce-account .woocommerce-MyAccount-content {
+    float: none;
+    width: 100%;
+    min-width: 0;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation ul {
+    margin: 0;
+    padding: var(--aznet-theme-space-3, 1rem);
+    list-style: none;
+    border: 1px solid var(--aznet-theme-border, #d9dde4);
+    border-radius: var(--aznet-theme-radius-card, 0.875rem);
+    background: var(--aznet-theme-surface, #ffffff);
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation li + li {
+    margin-top: var(--aznet-theme-space-1, 0.25rem);
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation a {
+    display: block;
+    padding: var(--aznet-theme-space-2, 0.5rem) var(--aznet-theme-space-3, 1rem);
+    border-radius: calc(var(--aznet-theme-radius-card, 0.875rem) * 0.75);
+    color: var(--aznet-theme-text, #17181b);
+    text-decoration: none;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation .is-active > a {
+    background: var(--aznet-theme-surface-inverse, #111722);
+    color: var(--aznet-theme-on-inverse, #f7f8fa);
+}
+
+.woocommerce-account .woocommerce-MyAccount-content {
+    padding: var(--aznet-theme-space-4, 1.5rem);
+    border: 1px solid var(--aznet-theme-border, #d9dde4);
+    border-radius: var(--aznet-theme-radius-card, 0.875rem);
+    background: var(--aznet-theme-surface, #ffffff);
+}
+
+.woocommerce-account .woocommerce-orders-table,
+.woocommerce-account .woocommerce-table,
+.woocommerce-account .woocommerce-Addresses {
+    width: 100%;
+    max-width: 100%;
+}
+
+.woocommerce-account .woocommerce-orders-table,
+.woocommerce-account .woocommerce-table {
+    border-collapse: collapse;
+}
+
+.woocommerce-account .woocommerce-orders-table th,
+.woocommerce-account .woocommerce-orders-table td,
+.woocommerce-account .woocommerce-table th,
+.woocommerce-account .woocommerce-table td {
+    padding: var(--aznet-theme-space-2, 0.5rem) var(--aznet-theme-space-3, 1rem);
+    border-bottom: 1px solid var(--aznet-theme-border, #d9dde4);
+    text-align: start;
+    vertical-align: top;
+    overflow-wrap: anywhere;
+}
+
+.woocommerce-account .woocommerce-Addresses {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--aznet-theme-space-4, 1.5rem);
+}
+
+.woocommerce-account .woocommerce-Address {
+    margin: 0;
+    padding: var(--aznet-theme-space-3, 1rem);
+    border: 1px solid var(--aznet-theme-border, #d9dde4);
+    border-radius: var(--aznet-theme-radius-card, 0.875rem);
+}
+
+.woocommerce-account .woocommerce-EditAccountForm,
+.woocommerce-account form.login,
+.woocommerce-account form.register {
+    max-width: 100%;
+}
+
+.woocommerce-account .woocommerce-EditAccountForm input,
+.woocommerce-account .woocommerce-EditAccountForm select,
+.woocommerce-account .woocommerce-EditAccountForm textarea,
+.woocommerce-account form.login input,
+.woocommerce-account form.register input {
+    max-width: 100%;
+    min-height: 2.75rem;
+}
+
+.woocommerce-account .woocommerce-error,
+.woocommerce-account .woocommerce-info,
+.woocommerce-account .woocommerce-message {
+    border-radius: var(--aznet-theme-radius-card, 0.875rem);
+}
+
+.woocommerce-account :is(a, button, input, select, textarea):focus-visible {
+    outline: 3px solid var(--aznet-theme-focus, #175cd3);
+    outline-offset: 3px;
+}
+
+@media (max-width: 767px) {
+    .woocommerce-account .woocommerce {
+        grid-template-columns: 1fr;
+        gap: var(--aznet-theme-space-4, 1.5rem);
+    }
+
+    .woocommerce-account .woocommerce-MyAccount-navigation ul {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .woocommerce-account .woocommerce-MyAccount-content {
+        padding: var(--aznet-theme-space-3, 1rem);
+    }
+
+    .woocommerce-account .woocommerce-Addresses {
+        grid-template-columns: 1fr;
+    }
+
+    .woocommerce-account .woocommerce-orders-table th,
+    .woocommerce-account .woocommerce-orders-table td,
+    .woocommerce-account .woocommerce-table th,
+    .woocommerce-account .woocommerce-table td {
+        padding-inline: var(--aznet-theme-space-2, 0.5rem);
+    }
+}
