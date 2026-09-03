@@ -33,6 +33,19 @@ function is_control_center_screen( ?string $hook_suffix ): bool {
     return 'toplevel_page_' . MENU_SLUG === $hook_suffix;
 }
 
+function enqueue_assets( string $hook_suffix ): void {
+    if ( ! is_control_center_screen( $hook_suffix ) ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'aznet-theme-control-center',
+        get_template_directory_uri() . '/assets/css/admin/control-center.css',
+        [],
+        AZNET_THEME_VERSION
+    );
+}
+
 /** @return array<string,array<string,mixed>> */
 function overview_status(): array {
     $settings = \AZnet\Theme\Settings\get();
