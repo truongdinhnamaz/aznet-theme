@@ -112,7 +112,7 @@ jobs:
           wp eval '$s=\AZnet\Theme\Settings\get(); if (($s["schema_version"] ?? 0) !== 1 || ($s["preset"] ?? null) !== "") { exit(1); }' --path="$WP_ROOT"
           echo 'PASS settings-defaults' | tee -a "$U0_L3_STATE_DIR/runtime-report.txt"
 
-          wp eval '\AZnet\Theme\Settings\save(["schema_version"=>999,"preset"=>"BAD VALUE","unknown"=>"drop"]); $s=\AZnet\Theme\Settings\get(); if (($s["schema_version"] ?? 0) !== 1 || ($s["preset"] ?? "") !== "bad-value" || array_key_exists("unknown", $s)) { exit(1); }' --path="$WP_ROOT"
+          wp eval '\AZnet\Theme\Settings\save(["schema_version"=>999,"preset"=>"BAD VALUE","unknown"=>"drop"]); $s=\AZnet\Theme\Settings\get(); if (($s["schema_version"] ?? 0) !== 1 || ($s["preset"] ?? "") !== "badvalue" || array_key_exists("unknown", $s)) { exit(1); }' --path="$WP_ROOT"
           echo 'PASS settings-normalize-save' | tee -a "$U0_L3_STATE_DIR/runtime-report.txt"
 
           wp eval '\AZnet\Theme\Settings\reset(); $s=\AZnet\Theme\Settings\get(); if (($s["preset"] ?? null) !== "") { exit(1); }' --path="$WP_ROOT"
