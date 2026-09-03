@@ -10,25 +10,23 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout exact head without external action
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm -rf .git
+          git init
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch --depth=1 origin "$GITHUB_SHA"
+          git checkout --detach FETCH_HEAD
       - name: PHP version
         run: php -v
-      - name: Run W2 verifier
-        id: verify
-        shell: bash
-        run: |
-          set +e
-          bash scripts/verify-w2.sh > w2-verify.log 2>&1
-          code=$?
-          cat w2-verify.log
-          echo "$code" > w2-verify.exit
-          exit "$code"
-      - name: Upload verifier diagnostics
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: w2-verifier-diagnostics
-          path: |
-            w2-verify.log
-            w2-verify.exit
+      - name: W2 product asset scope
+        run: php tests/offline/w2-product-asset-scope-contract.php
+      - name: W2 product CSS contract
+        run: php tests/offline/w2-product-css-contract.php
+      - name: W2 ownership no-override contract
+        run: php tests/offline/w2-product-ownership-static-contract.php
+      - name: Retained W1 E5B lint chain
+        run: bash scripts/verify-w1.sh
