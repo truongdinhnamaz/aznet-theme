@@ -50,4 +50,13 @@ function enqueue_assets(): void {
             $version
         );
     }
+
+    if ( should_enqueue_woocommerce_product_assets() ) {
+        wp_enqueue_style(
+            'aznet-theme-woocommerce-product',
+            get_theme_file_uri( '/assets/css/components/woocommerce-product.css' ),
+            [ 'aznet-theme-tokens' ],
+            $version
+        );
+    }
 }
