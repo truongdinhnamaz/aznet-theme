@@ -92,11 +92,13 @@ jobs:
 
           wp eval-file "$GITHUB_WORKSPACE/tests/runtime/woo-l3-fixtures.php" --path="$WP_ROOT"
 
+          WOO_VERSION="$(wp plugin get woocommerce --field=version --path="$WP_ROOT")"
+          THEME_VERSION="$(wp theme get aznet-theme --field=version --path="$WP_ROOT")"
           {
             echo "WordPress=$WP_VERSION"
             echo "PHP=$(php -r 'echo PHP_VERSION;')"
-            echo "WooCommerce=$(wp plugin get woocommerce --field=version --path=\"$WP_ROOT\")"
-            echo "Theme=$(wp theme get aznet-theme --field=version --path=\"$WP_ROOT\")"
+            echo "WooCommerce=$WOO_VERSION"
+            echo "Theme=$THEME_VERSION"
           } | tee "$WOO_L3_STATE_DIR/runtime-report.txt"
 
       - name: Start WordPress HTTP runtime
