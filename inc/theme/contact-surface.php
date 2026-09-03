@@ -22,16 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return array<string,mixed>|null
  */
-function contact_surface_model(): ?array {
-    if ( ! \AZnet\Theme\Integrations\RootProfile\provider_available() ) {
-        return null;
-    }
-
-    $contact_payload = \AZnet\Theme\Integrations\RootProfile\contact();
-    if ( ! is_array( $contact_payload ) ) {
-        return null;
-    }
-
+function contact_surface_model_from_payload( array $contact_payload, ?array $organization_payload = null ): ?array {
     $contact_entity = is_array( $contact_payload['entity'] ?? null )
         ? $contact_payload['entity']
         : [];
@@ -42,7 +33,7 @@ function contact_surface_model(): ?array {
         return null;
     }
 
-    $organization_payload = \AZnet\Theme\Integrations\RootProfile\organization();
+    $organization_payload = is_array( $organization_payload ) ? $organization_payload : [];
     $organization_entity = is_array( $organization_payload['entity'] ?? null )
         ? $organization_payload['entity']
         : [];
@@ -107,6 +98,29 @@ function contact_surface_model(): ?array {
         'responsible_people' => $responsible_people,
         'signals' => is_array( $contact_payload['signals'] ?? null ) ? $contact_payload['signals'] : [],
     ];
+}
+
+/**
+ * Build a presentation-only Contact Surface model from RootProfile Provider v1.
+ *
+ * @return array<string,mixed>|null
+ */
+function contact_surface_model(): ?array {
+    if ( ! \AZnet\Theme\Integrations\RootProfile\provider_available() ) {
+        return null;
+    }
+
+    $contact_payload = \AZnet\Theme\Integrations\RootProfile\contact();
+    if ( ! is_array( $contact_payload ) ) {
+        return null;
+    }
+
+    $organization_payload = \AZnet\Theme\Integrations\RootProfile\organization();
+
+    return contact_surface_model_from_payload(
+        $contact_payload,
+        is_array( $organization_payload ) ? $organization_payload : null
+    );
 }
 
 /**
