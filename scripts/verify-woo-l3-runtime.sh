@@ -4,6 +4,7 @@ set -euo pipefail
 STATE_DIR="${WOO_L3_STATE_DIR:-/tmp/woo-l3}"
 BASE_URL="${WOO_L3_BASE_URL:-http://127.0.0.1:8080}"
 STATE_FILE="$STATE_DIR/runtime-ids.env"
+COOKIE_JAR="$STATE_DIR/woocommerce-cookies.txt"
 
 if [ ! -f "$STATE_FILE" ]; then
     echo "missing runtime state: $STATE_FILE" >&2
@@ -13,6 +14,7 @@ fi
 # shellcheck disable=SC1090
 source "$STATE_FILE"
 mkdir -p "$STATE_DIR/html"
+touch "$COOKIE_JAR"
 
 WOO_HANDLES=(
     aznet-theme-woocommerce-product-css
@@ -27,7 +29,7 @@ fetch_surface() {
     local label="$1"
     local url="$2"
     local output="$STATE_DIR/html/$label.html"
-    curl --fail --silent --show-error --location --max-time 30 "$url" -o "$output"
+    curl --fail --silent --show-error --location --max-time 30 --cookie "$COOKIE_JAR" --cookie-jar "$COOKIE_JAR" "$url" -o "$output"
     grep -q '<body' "$output" || {
         echo "surface $label did not render a body" >&2
         exit 2
@@ -87,6 +89,12 @@ assert_woo_surface \
     cart \
     "$BASE_URL/?page_id=$CART_PAGE_ID" \
     aznet-theme-woocommerce-cart-css
+
+curl --fail --silent --show-error --location --max-time 30 \
+    --cookie "$COOKIE_JAR" \
+    --cookie-jar "$COOKIE_JAR" \
+    "$BASE_URL/?add-to-cart=$PRODUCT_ID" \
+    -o "$STATE_DIR/html/add-to-cart.html"
 
 assert_woo_surface \
     checkout \
