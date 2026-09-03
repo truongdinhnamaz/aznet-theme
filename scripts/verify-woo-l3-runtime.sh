@@ -80,7 +80,7 @@ assert_woo_surface \
 
 assert_woo_surface \
     archive \
-    "$BASE_URL/?post_type=product" \
+    "$BASE_URL/?page_id=$SHOP_PAGE_ID" \
     aznet-theme-woocommerce-archive-css
 
 assert_woo_surface \
