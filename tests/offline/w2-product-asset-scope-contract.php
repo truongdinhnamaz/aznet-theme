@@ -18,6 +18,9 @@ namespace {
     require __DIR__ . '/../../inc/theme/content-shell.php';
     require __DIR__ . '/../../inc/theme/woocommerce-product.php';
     require __DIR__ . '/../../inc/theme/woocommerce-archive.php';
+    require __DIR__ . '/../../inc/theme/woocommerce-cart.php';
+    require __DIR__ . '/../../inc/theme/woocommerce-checkout.php';
+    require __DIR__ . '/../../inc/theme/woocommerce-account.php';
     require __DIR__ . '/../../inc/theme/assets.php';
 
     $cases = [ 'product' => true, 'archive' => false, 'cart' => false, 'checkout' => false, 'account' => false, '' => false ];
