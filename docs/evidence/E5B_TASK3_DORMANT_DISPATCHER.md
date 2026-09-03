@@ -57,7 +57,7 @@ Dormant wiring scan also passed:
 - Modified `inc/theme/bootstrap.php` only to require the dispatcher module
 - Added source-only `tests/offline/e5-current-surface-dispatcher-contract.php`
 
-Task 3 production/test commit: `16e36bda878fb0583a5da83c72496a4704c1f4f6`
+Task 3 production/test commit on the active branch: `953bc6a6f32727ea283c1f0496dc25211d9d758e`
 
 ## Verified behavior
 
