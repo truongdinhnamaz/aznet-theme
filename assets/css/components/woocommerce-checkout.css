@@ -1,0 +1,121 @@
+/*
+ * AZnet Theme — WooCommerce Checkout presentation.
+ * WooCommerce keeps checkout, payment and order semantics; this file styles native markup only.
+ */
+
+.woocommerce form.checkout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(20rem, 0.75fr);
+    gap: var(--aznet-theme-space-6, 2.625rem);
+    align-items: start;
+}
+
+.woocommerce form.checkout #customer_details {
+    grid-column: 1;
+    min-width: 0;
+}
+
+.woocommerce form.checkout #order_review_heading,
+.woocommerce form.checkout #order_review {
+    grid-column: 2;
+    min-width: 0;
+}
+
+.woocommerce form.checkout #order_review_heading {
+    margin: 0;
+}
+
+.woocommerce form.checkout #order_review,
+.woocommerce-checkout #payment,
+.wc-block-checkout .wc-block-components-sidebar,
+.wc-block-checkout .wc-block-components-main {
+    border: 1px solid var(--aznet-theme-border, #d9dde4);
+    border-radius: var(--aznet-theme-radius-card, 0.875rem);
+    background: var(--aznet-theme-surface, #ffffff);
+}
+
+.woocommerce form.checkout #order_review,
+.woocommerce-checkout #payment,
+.wc-block-checkout .wc-block-components-sidebar,
+.wc-block-checkout .wc-block-components-main {
+    padding: var(--aznet-theme-space-4, 1.5rem);
+}
+
+.woocommerce form.checkout .form-row,
+.wc-block-checkout .wc-block-components-text-input {
+    margin-bottom: var(--aznet-theme-space-3, 1rem);
+}
+
+.woocommerce form.checkout input.input-text,
+.woocommerce form.checkout textarea,
+.woocommerce form.checkout select,
+.wc-block-checkout .wc-block-components-text-input input,
+.wc-block-checkout .wc-block-components-combobox .wc-block-components-combobox-control input {
+    max-width: 100%;
+    min-height: 2.75rem;
+    border: 1px solid var(--aznet-theme-border, #d9dde4);
+    border-radius: calc(var(--aznet-theme-radius-card, 0.875rem) * 0.75);
+    background: var(--aznet-theme-surface, #ffffff);
+    color: var(--aznet-theme-text, #17181b);
+}
+
+.woocommerce form.checkout textarea {
+    min-height: 7rem;
+    resize: vertical;
+}
+
+.woocommerce-checkout #payment ul.payment_methods,
+.woocommerce-checkout #payment .place-order {
+    margin: 0;
+    padding: 0;
+}
+
+.woocommerce-checkout #payment .place-order,
+.wc-block-checkout .wc-block-components-checkout-place-order-button {
+    margin-top: var(--aznet-theme-space-3, 1rem);
+    width: 100%;
+    max-width: 100%;
+}
+
+.woocommerce-error,
+.woocommerce-info,
+.woocommerce-message,
+.wc-block-checkout .wc-block-components-notice-banner {
+    border-radius: var(--aznet-theme-radius-card, 0.875rem);
+}
+
+.woocommerce-checkout :is(a, button, input, select, textarea):focus-visible,
+.wc-block-checkout :is(a, button, input, select, textarea):focus-visible {
+    outline: 3px solid var(--aznet-theme-focus, #175cd3);
+    outline-offset: 3px;
+}
+
+.wc-block-checkout {
+    color: var(--aznet-theme-text, #17181b);
+}
+
+.wc-block-checkout .wc-block-components-text-input,
+.wc-block-checkout .wc-block-components-checkout-place-order-button,
+.wc-block-checkout .wc-block-components-notice-banner {
+    max-width: 100%;
+}
+
+@media (max-width: 767px) {
+    .woocommerce form.checkout {
+        grid-template-columns: 1fr;
+        gap: var(--aznet-theme-space-4, 1.5rem);
+    }
+
+    .woocommerce form.checkout #customer_details,
+    .woocommerce form.checkout #order_review_heading,
+    .woocommerce form.checkout #order_review {
+        grid-column: 1;
+    }
+
+    .woocommerce form.checkout #order_review,
+    .woocommerce-checkout #payment,
+    .wc-block-checkout .wc-block-components-sidebar,
+    .wc-block-checkout .wc-block-components-main {
+        padding: var(--aznet-theme-space-3, 1rem);
+    }
+}
