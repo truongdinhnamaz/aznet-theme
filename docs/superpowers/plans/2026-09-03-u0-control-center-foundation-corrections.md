@@ -94,6 +94,58 @@ WooCommerce
 
 This is the authoritative runtime proof for Task 2 admin wiring.
 
+## Correction 4 — Each bounded U0 commit must remain runtime-loadable
+
+The original plan made Task 2 `inc/admin/bootstrap.php` require `inc/admin/settings.php` and register admin-post callbacks before Task 3 created that handler file. It also registered the admin asset callback before Task 4 created `enqueue_assets()`. That would make intermediate bounded commits unsafe in real admin requests.
+
+Use this sequencing instead.
+
+### Task 2 admin bootstrap
+
+Task 2 creates `inc/admin/bootstrap.php` with only the Control Center module and menu hook:
+
+```php
+<?php
+namespace AZnet\Theme\Admin;
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+require_once __DIR__ . '/control-center.php';
+
+function bootstrap(): void {
+    add_action( 'admin_menu', '\\AZnet\\Theme\\Admin\\ControlCenter\\register_menu' );
+}
+```
+
+Task 2 must not yet require `inc/admin/settings.php`, register `admin_post_*` callbacks, or register `admin_enqueue_scripts`.
+
+### Task 3 extends admin bootstrap
+
+After `inc/admin/settings.php` exists, Task 3 modifies `inc/admin/bootstrap.php` to:
+
+```php
+require_once __DIR__ . '/control-center.php';
+require_once __DIR__ . '/settings.php';
+
+function bootstrap(): void {
+    add_action( 'admin_menu', '\\AZnet\\Theme\\Admin\\ControlCenter\\register_menu' );
+    add_action( 'admin_post_aznet_theme_save_u0_settings', '\\AZnet\\Theme\\Admin\\Settings\\handle_save' );
+    add_action( 'admin_post_aznet_theme_reset_settings', '\\AZnet\\Theme\\Admin\\Settings\\handle_reset' );
+}
+```
+
+### Task 4 extends admin bootstrap again
+
+Only after `AZnet\Theme\Admin\ControlCenter\enqueue_assets(string $hook_suffix): void` exists does Task 4 add:
+
+```php
+add_action( 'admin_enqueue_scripts', '\\AZnet\\Theme\\Admin\\ControlCenter\\enqueue_assets' );
+```
+
+This ordering preserves the bounded-commit rule: every Task 1–4 commit is independently loadable and rollback-safe.
+
 ## Unchanged constraints
 
 - Theme presentation/settings only.
