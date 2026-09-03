@@ -1,0 +1,49 @@
+name: U0 L1 L2 Closure
+
+on:
+  pull_request:
+    paths:
+      - 'inc/**'
+      - 'assets/**'
+      - 'tests/**'
+      - '.github/workflows/u0-l1-l2-closure.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-u0-l1-l2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Run U0 and invalidated regression contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          php tests/offline/u0-settings-contract.php
+          php tests/offline/u0-admin-control-center-contract.php
+          php tests/offline/u0-admin-write-security-contract.php
+          php tests/offline/u0-admin-asset-scope-contract.php
+          php tests/offline/u0-ownership-static-contract.php
+          php tests/offline/w1-woocommerce-absent-contract.php
+          php tests/offline/w1-woocommerce-surface-contract.php
+          php tests/offline/w1-woocommerce-asset-scope-contract.php
+          php tests/offline/e5-no-takeover-static-contract.php
+
+      - name: Lint changed production PHP
+        shell: bash
+        run: |
+          set -euo pipefail
+          php -l inc/theme/settings.php
+          php -l inc/admin/bootstrap.php
+          php -l inc/admin/control-center.php
+          php -l inc/admin/settings.php
+          php -l inc/theme/bootstrap.php
