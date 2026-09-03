@@ -3,7 +3,7 @@
  * WooCommerce keeps product and commerce semantics; this file only composes native markup.
  */
 
-.single-product .site-main .product {
+.single-product .aznet-theme-main .product {
     display: grid;
     grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
     gap: var(--aznet-theme-space-6, 2.625rem);
@@ -12,94 +12,94 @@
     margin-inline: auto;
 }
 
-.single-product .site-main .woocommerce-product-gallery,
-.single-product .site-main .summary {
+.single-product .aznet-theme-main .woocommerce-product-gallery,
+.single-product .aznet-theme-main .summary {
     float: none;
     min-width: 0;
     width: 100%;
     margin: 0;
 }
 
-.single-product .site-main .summary {
+.single-product .aznet-theme-main .summary {
     display: flex;
     flex-direction: column;
     gap: var(--aznet-theme-space-3, 1rem);
 }
 
-.single-product .site-main .summary > * {
+.single-product .aznet-theme-main .summary > * {
     margin-block: 0;
 }
 
-.single-product .site-main .product_title {
+.single-product .aznet-theme-main .product_title {
     color: var(--aznet-theme-text, #17181b);
     line-height: 1.15;
 }
 
-.single-product .site-main .price {
+.single-product .aznet-theme-main .price {
     color: var(--aznet-theme-text, #17181b);
     font-weight: 700;
 }
 
-.single-product .site-main .woocommerce-product-details__short-description,
-.single-product .site-main .product_meta {
+.single-product .aznet-theme-main .woocommerce-product-details__short-description,
+.single-product .aznet-theme-main .product_meta {
     color: var(--aznet-theme-muted, #626873);
 }
 
-.single-product .site-main form.cart,
-.single-product .site-main .variations_form {
+.single-product .aznet-theme-main form.cart,
+.single-product .aznet-theme-main .variations_form {
     display: flex;
     flex-wrap: wrap;
     gap: var(--aznet-theme-space-2, 0.5rem);
     align-items: center;
 }
 
-.single-product .site-main form.cart :is(input, select, button),
-.single-product .site-main .variations_form :is(input, select, button) {
+.single-product .aznet-theme-main form.cart :is(input, select, button),
+.single-product .aznet-theme-main .variations_form :is(input, select, button) {
     max-width: 100%;
 }
 
-.single-product .site-main :is(a, button, input, select, textarea):focus-visible {
+.single-product .aznet-theme-main :is(a, button, input, select, textarea):focus-visible {
     outline: 3px solid var(--aznet-theme-focus, #175cd3);
     outline-offset: 3px;
 }
 
-.single-product .site-main .woocommerce-tabs,
-.single-product .site-main .related,
-.single-product .site-main .upsells {
+.single-product .aznet-theme-main .woocommerce-tabs,
+.single-product .aznet-theme-main .related,
+.single-product .aznet-theme-main .upsells {
     grid-column: 1 / -1;
     min-width: 0;
     width: 100%;
 }
 
-.single-product .site-main .woocommerce-tabs {
+.single-product .aznet-theme-main .woocommerce-tabs {
     margin-top: var(--aznet-theme-space-4, 1.5rem);
     padding-top: var(--aznet-theme-space-4, 1.5rem);
     border-top: 1px solid var(--aznet-theme-border, #d9dde4);
 }
 
-.single-product .site-main .woocommerce-error,
-.single-product .site-main .woocommerce-info,
-.single-product .site-main .woocommerce-message {
+.single-product .aznet-theme-main .woocommerce-error,
+.single-product .aznet-theme-main .woocommerce-info,
+.single-product .aznet-theme-main .woocommerce-message {
     grid-column: 1 / -1;
     margin-block: 0 var(--aznet-theme-space-3, 1rem);
 }
 
 @media (max-width: 767px) {
-    .single-product .site-main .product {
+    .single-product .aznet-theme-main .product {
         grid-template-columns: 1fr;
         gap: var(--aznet-theme-space-4, 1.5rem);
     }
 
-    .single-product .site-main .woocommerce-product-gallery,
-    .single-product .site-main .summary,
-    .single-product .site-main .woocommerce-tabs,
-    .single-product .site-main .related,
-    .single-product .site-main .upsells {
+    .single-product .aznet-theme-main .woocommerce-product-gallery,
+    .single-product .aznet-theme-main .summary,
+    .single-product .aznet-theme-main .woocommerce-tabs,
+    .single-product .aznet-theme-main .related,
+    .single-product .aznet-theme-main .upsells {
         grid-column: 1;
     }
 
-    .single-product .site-main form.cart,
-    .single-product .site-main .variations_form {
+    .single-product .aznet-theme-main form.cart,
+    .single-product .aznet-theme-main .variations_form {
         align-items: stretch;
     }
 }
