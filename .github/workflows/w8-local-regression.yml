@@ -1,0 +1,50 @@
+name: W8 ConvertFlow Local Regression
+
+on:
+  push:
+    branches:
+      - test/w8-convertflow-coexistence-v2
+  workflow_dispatch:
+
+jobs:
+  w8-local:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout W8 candidate
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Run W8 public theme contract
+        run: php tests/offline/w8-convertflow-theme-contract.php
+
+      - name: Run retained Woo regression chain
+        run: bash scripts/verify-w6.sh
+
+      - name: Run retained W2-W5 ownership gates
+        run: |
+          php tests/offline/w2-product-ownership-static-contract.php
+          php tests/offline/w3-archive-ownership-static-contract.php
+          php tests/offline/w4-cart-ownership-static-contract.php
+          php tests/offline/w5-checkout-ownership-static-contract.php
+
+      - name: Lint W8 integration harness
+        run: php -l tests/integration/w8-convertflow-coexistence.php
+
+      - name: Reject private ConvertFlow coupling in W8 production files
+        run: |
+          if grep -R -n -E 'ChoiceGuide\\|CHOICEGUIDE_|choiceguide-theme-integration|get_option\(|get_post_meta\(|\$wpdb' assets/css/integrations/convertflow.css inc/theme/assets.php; then
+            echo 'Forbidden ConvertFlow private/runtime coupling found.' >&2
+            exit 1
+          fi
+
+      - name: Verify Theme does not target ConvertFlow-owned DOM
+        run: |
+          if grep -n -E '\.choiceguide[-_]' assets/css/integrations/convertflow.css; then
+            echo 'Theme must not target ConvertFlow-owned DOM selectors.' >&2
+            exit 1
+          fi
