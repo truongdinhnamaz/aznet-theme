@@ -15,4 +15,20 @@ jobs:
       - name: PHP version
         run: php -v
       - name: Run W2 verifier
-        run: bash scripts/verify-w2.sh
+        id: verify
+        shell: bash
+        run: |
+          set +e
+          bash scripts/verify-w2.sh > w2-verify.log 2>&1
+          code=$?
+          cat w2-verify.log
+          echo "$code" > w2-verify.exit
+          exit "$code"
+      - name: Upload verifier diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w2-verifier-diagnostics
+          path: |
+            w2-verify.log
+            w2-verify.exit
