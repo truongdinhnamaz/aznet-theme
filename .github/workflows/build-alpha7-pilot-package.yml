@@ -1,0 +1,77 @@
+name: Build Alpha 7 Pilot Package
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-pilot-package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout AZnet Theme
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Build installable update package
+        run: |
+          set -euo pipefail
+
+          VERSION='0.1.0-alpha.7'
+          PACKAGE="aznet-theme-${VERSION}-pilot.zip"
+
+          grep -q '^Version: 0.1.0-alpha.7$' style.css
+
+          rm -rf dist
+          mkdir -p dist/aznet-theme
+
+          rsync -a ./ dist/aznet-theme/ \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='docs' \
+            --exclude='tests' \
+            --exclude='scripts' \
+            --exclude='dist'
+
+          test -f dist/aznet-theme/style.css
+          test -f dist/aznet-theme/functions.php
+          test -f dist/aznet-theme/theme.json
+          test -d dist/aznet-theme/assets
+          test -d dist/aznet-theme/inc
+          test -d dist/aznet-theme/template-parts
+          test ! -e dist/aznet-theme/docs
+          test ! -e dist/aznet-theme/tests
+          test ! -e dist/aznet-theme/scripts
+          test ! -e dist/aznet-theme/.github
+
+          while IFS= read -r -d '' file; do
+            php -l "$file" >/dev/null
+          done < <(find dist/aznet-theme -type f -name '*.php' -print0)
+
+          cd dist
+          zip -qr "$PACKAGE" aznet-theme
+          unzip -l "$PACKAGE" | grep -q 'aznet-theme/style.css'
+          if unzip -Z1 "$PACKAGE" | grep -Eq '^aznet-theme-[^/]+/'; then
+            echo 'ERROR: package root is not stable aznet-theme/' >&2
+            exit 1
+          fi
+          sha256sum "$PACKAGE" > "$PACKAGE.sha256"
+          cat "$PACKAGE.sha256"
+
+      - name: Upload installable package
+        uses: actions/upload-artifact@v4
+        with:
+          name: aznet-theme-0.1.0-alpha.7-pilot
+          path: |
+            dist/aznet-theme-0.1.0-alpha.7-pilot.zip
+            dist/aznet-theme-0.1.0-alpha.7-pilot.zip.sha256
+          if-no-files-found: error
