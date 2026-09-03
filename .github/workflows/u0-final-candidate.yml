@@ -199,7 +199,7 @@ jobs:
 
           while IFS= read -r -d '' php_file; do php -l "$php_file"; done < <(find "$THEME_DIR" -type f -name '*.php' -print0)
 
-          cd "$WP_ROOT/wp-content"
+          cd "$WP_ROOT/wp-content/themes"
           zip -qr "$U0_FINAL_STATE_DIR/u0-candidate-package.zip" aznet-theme
           unzip -Z1 "$U0_FINAL_STATE_DIR/u0-candidate-package.zip" > "$U0_FINAL_STATE_DIR/package-files.txt"
           if grep -Ev '^aznet-theme/' "$U0_FINAL_STATE_DIR/package-files.txt" | grep -q .; then
