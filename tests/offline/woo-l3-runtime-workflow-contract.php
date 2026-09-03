@@ -39,6 +39,11 @@ foreach (['WC_Product_Simple', 'woocommerce_shop_page_id', 'woocommerce_cart_pag
 }
 
 $smokeCode = file_get_contents($smoke);
+if (false === strpos($smokeCode, '$BASE_URL/?page_id=$SHOP_PAGE_ID')) {
+    fwrite(STDERR, "archive smoke must use registered Woo Shop page ID\n");
+    exit(4);
+}
+
 foreach (['aznet-theme-woocommerce-product-css', 'aznet-theme-woocommerce-archive-css', 'aznet-theme-woocommerce-cart-css', 'aznet-theme-woocommerce-checkout-css', 'aznet-theme-woocommerce-account-css', 'aznet-theme-generic-content-css'] as $needle) {
     if (false === strpos($smokeCode, $needle)) {
         fwrite(STDERR, "smoke missing asset assertion: {$needle}\n");
