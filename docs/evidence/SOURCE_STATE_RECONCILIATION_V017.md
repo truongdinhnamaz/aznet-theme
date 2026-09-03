@@ -9,7 +9,7 @@ Scope: documentation/state reconciliation only; no production Theme code mutatio
 
 Reconcile the authoritative AZnet Theme working documents with the newer canonical GitHub implementation/evidence state that superseded the earlier W1 checkpoint.
 
-The ownership rule remains unchanged:
+The governing ownership rule remains unchanged:
 
 > SOURCE OWNS DATA. THEME OWNS PRESENTATION. INTEGRATION CONTRACTS CONNECT THEM.
 
@@ -17,22 +17,19 @@ No RootProfile, ConvertFlow, WooCommerce, or WordPress domain ownership is trans
 
 ## Reconciled source artifacts
 
-The following DOCX artifacts were updated outside the repository and visually re-rendered/inspected before this evidence checkpoint:
+The following DOCX artifacts were finalized outside the repository and rendered/visually inspected before this evidence update:
 
 - `03_Current_Baseline_va_Code_Provenance_v0.13.docx`
   - SHA-256: `21caa9a4067a7cab67d32216cd74d1d4732fc26acf7108236a9ca73bd512489e`
+  - visual QA: 12 rendered pages
 - `04_Roadmap_QA_va_Decision_Log_v0.17.docx`
-  - SHA-256: `ac46d0e9c127cd04b14e5c876face084f42d986271f4dc563b628556d84311a6`
+  - SHA-256: `eb69c9279af3b003863b7dfb6a5b5795da4333c91f40cbd3fb28fe1f3f15a69f`
+  - visual QA: 17 rendered pages
 - `AZnet_Theme_Implementation_Slice_Map_v0.9.docx`
-  - SHA-256: `7a0208f57c1c926b73cb232a0c3f3d1f9a642cfa20de75b440027bd4d07f651e`
+  - SHA-256: `f707973f7ae73fd3212cfd546866fab2c45bfa2866728daf46a39d33e5f96a23`
+  - visual QA: 17 rendered pages
 
-DOCX visual QA page counts:
-
-- AZT-03 v0.13: 12 rendered pages inspected.
-- AZT-04 v0.17: 17 rendered pages inspected.
-- Slice Map v0.9: 17 rendered pages inspected.
-
-## Canonical GitHub state used for reconciliation
+## Canonical GitHub state
 
 Main was freshly verified immediately before this checkpoint at:
 
@@ -48,16 +45,16 @@ Woo implementation evidence superseding the old W1 state:
 - PR #9: My Account presentation merged.
 - PR #12: Product CSS runtime selector root-cause fix merged.
 
-Fresh/deep Woo QA evidence already present in GitHub:
+Deep Woo QA evidence already present in GitHub:
 
 - Woo L3 Runtime Smoke run `33731145442`: success.
 - Woo post-merge L4 Browser Visual A11y run `33737399721`: success.
 
-These prove Woo runtime/browser depth only. They do **not** imply L5 ConvertFlow coexistence/integration or L6 release closure.
+These prove Woo runtime/browser depth only. They do not imply L5 ConvertFlow coexistence/integration or L6 release closure.
 
 ## Current Woo execution numbering
 
-To remove collision between the old derived Slice Map labels and the implementation labels actually used in GitHub, current execution numbering is:
+The current execution labels are:
 
 - W0 — Woo override policy.
 - W1 — Woo capability + surface-aware asset boundary.
@@ -93,14 +90,14 @@ A Control Center U0 candidate exists outside main:
 - U0 L3 runtime run `33754062627`: success
 - U0 L4 browser/a11y run `33752848579`: success
 
-However, design PR #16 remains draft/open and the U0 production candidate is not merged to main. Therefore U0 is recorded as `PROPOSED / unmerged candidate`, not as an Accepted roadmap milestone.
+Design PR #16 remains draft/open and the U0 production candidate is not merged to main. Therefore U0 is recorded as `PROPOSED / unmerged candidate`, not as an Accepted roadmap milestone.
 
 ## PASS / BLOCKED / UNKNOWN
 
 ### PASS
 
 - Source-state reconciliation against canonical GitHub main at the SHA above.
-- Woo W0-W6 implementation present in main; W7 evidence through L4 exists and succeeded.
+- Woo W0-W6 implementation present in main; W7 evidence through L4 succeeded.
 - Updated DOCX artifacts rendered and visually inspected.
 
 ### BLOCKED
