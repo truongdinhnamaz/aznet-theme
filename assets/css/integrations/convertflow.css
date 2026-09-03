@@ -1,0 +1,47 @@
+/*
+ * ConvertFlow Theme Integration Contract v1 provider bridge.
+ * AZnet Theme exposes presentation values only. ConvertFlow remains the owner
+ * of Journey, Filter, Fit and conversion semantics and consumes these values
+ * only inside its own surfaces.
+ */
+:root {
+    --convertflow-theme-font-heading: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --convertflow-theme-font-body: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --convertflow-theme-heading-weight: 700;
+    --convertflow-theme-heading-line-height: 1.2;
+    --convertflow-theme-body-line-height: 1.6;
+
+    --convertflow-theme-color-primary: var(--aznet-theme-accent);
+    --convertflow-theme-color-accent: var(--aznet-theme-accent);
+    --convertflow-theme-color-text: var(--aznet-theme-text);
+    --convertflow-theme-color-muted: var(--aznet-theme-muted);
+    --convertflow-theme-color-surface: var(--aznet-theme-surface);
+    --convertflow-theme-color-surface-soft: color-mix(in srgb, var(--aznet-theme-surface) 96%, var(--aznet-theme-text));
+    --convertflow-theme-color-surface-inverse: var(--aznet-theme-surface-inverse);
+    --convertflow-theme-color-on-inverse: var(--aznet-theme-on-inverse);
+    --convertflow-theme-color-border: var(--aznet-theme-border);
+
+    --convertflow-theme-radius-card: var(--aznet-theme-radius-card);
+    --convertflow-theme-radius-control: 0.625rem;
+    --convertflow-theme-radius-button: var(--aznet-theme-radius-card);
+    --convertflow-theme-shadow-card: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+    --convertflow-theme-shadow-float: var(--aznet-theme-shadow-float);
+
+    --convertflow-theme-space-xs: var(--aznet-theme-space-1);
+    --convertflow-theme-space-sm: var(--aznet-theme-space-2);
+    --convertflow-theme-space-md: var(--aznet-theme-space-3);
+    --convertflow-theme-space-lg: var(--aznet-theme-space-4);
+    --convertflow-theme-space-xl: var(--aznet-theme-space-6);
+    --convertflow-theme-section-space: var(--aznet-theme-space-section);
+
+    --convertflow-theme-button-padding-x: var(--aznet-theme-space-4);
+    --convertflow-theme-button-weight: 700;
+
+    --convertflow-theme-container-max: var(--aznet-theme-container-shell);
+    --convertflow-theme-container-gutter: var(--aznet-theme-gutter);
+    --convertflow-theme-container-gutter-mobile: var(--aznet-theme-gutter-mobile);
+
+    --convertflow-theme-motion-fast: 120ms;
+    --convertflow-theme-motion-base: 200ms;
+    --convertflow-theme-focus-ring: 2px solid var(--aznet-theme-focus);
+}
