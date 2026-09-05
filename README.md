@@ -1,3 +1,5 @@
+![AZnet Theme preview](./aznet-preview.png)
+
 # AZnet Theme
 
 AZnet Theme là một WordPress theme presentation-first được phát triển cho AZnet. Theme sử dụng hệ token CSS và `theme.json` (Full Site Editing) để cung cấp một nền tảng linh hoạt, dễ tùy chỉnh và tương thích tốt với WooCommerce.
@@ -56,6 +58,9 @@ License
 - Đây là một theme GPL-compatible. File LICENSE có chi tiết.
 
 Ghi chú nhanh (todo)
-- Thêm screenshot.png kích thước 1200×900 để hiển thị trên WordPress.org/GitHub
+- Thêm screenshot.png kích thước 1200×900 để hiển thị trên WordPress.org/GitHub (hiện ảnh gốc đã upload là `aznet-preview.png`)
 - Tạo demo site công khai và import starter content
 - Hoàn thiện README với link demo và hướng dẫn nâng cao
+
+Ghi chú thêm
+- Mình đã nhúng ảnh gốc bạn upload (`aznet-preview.png`) vào README để làm preview. Nếu bạn muốn mình tạo bản `screenshot.png` chuẩn 1200×900 và bản `screenshot.webp` tối ưu, hãy xác nhận — mình sẽ tạo mockup (SVG → PNG) hoặc hướng dẫn bạn upload phiên bản đã crop.
