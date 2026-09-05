@@ -20,7 +20,7 @@ $shell_classes = \AZnet\Theme\content_shell_classes( false );
             <div class="<?php echo esc_attr( implode( ' ', $shell_classes ) ); ?>">
                 <article id="post-<?php the_ID(); ?>" <?php post_class( 'aznet-theme-entry aznet-theme-entry--page' ); ?>>
                     <header class="aznet-theme-entry__header">
-                        <h1 class="aznet-theme-entry__title"><?php the_title(); ?></h1>
+                        <h1 class="aznet-theme-entry__title"><?php echo esc_html( get_the_title() ); ?></h1>
                     </header>
                     <div class="aznet-theme-entry__content">
                         <?php the_content(); ?>
