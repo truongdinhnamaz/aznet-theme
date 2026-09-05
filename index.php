@@ -17,9 +17,9 @@ get_header();
             <?php the_post(); ?>
             <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
                 <?php if ( is_singular() ) : ?>
-                    <h1><?php the_title(); ?></h1>
+                    <h1><?php echo esc_html( get_the_title() ); ?></h1>
                 <?php else : ?>
-                    <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                    <h2><a href="<?php echo esc_url( get_permalink() ); ?>"><?php echo esc_html( get_the_title() ); ?></a></h2>
                 <?php endif; ?>
                 <?php the_content(); ?>
             </article>
