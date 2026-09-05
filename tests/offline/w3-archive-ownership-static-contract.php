@@ -22,7 +22,6 @@ $forbidden = [
     'query_posts(',
     'Automattic\\WooCommerce\\Internal',
     'choiceguide_',
-    'convertflow',
     'position: sticky',
 ];
 
@@ -44,6 +43,14 @@ foreach ($paths as $relative) {
     if (preg_match("/['\"]_woocommerce_[^'\"]*['\"]/i", $contents)) {
         fwrite(STDERR, "forbidden Woo storage-key literal in {$relative}\n");
         exit(4);
+    }
+}
+
+foreach (['inc/theme/woocommerce-archive.php', 'assets/css/components/woocommerce-archive.css'] as $relative) {
+    $contents = file_get_contents($root . '/' . $relative);
+    if (false !== stripos($contents, 'convertflow')) {
+        fwrite(STDERR, "W3 archive presentation must not couple to ConvertFlow in {$relative}\n");
+        exit(9);
     }
 }
 
