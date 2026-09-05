@@ -1,0 +1,11 @@
+file,path,line,pattern,severity,suggestion
+index.php,<?php the_permalink(); ?> at article link,22,the_permalink() used in link,high,Replace with <?php echo esc_url( get_permalink() ); ?> and wrap title with esc_html( get_the_title() );
+index.php,<?php the_title(); ?> in heading,20,the_title() output unescaped,high,Replace with <?php echo esc_html( get_the_title() ); ?>
+page.php,<?php the_title(); ?> in heading,23,the_title() output unescaped,high,Replace with <?php echo esc_html( get_the_title() ); ?>
+single.php,<?php the_title(); ?> in heading,23,the_title() output unescaped,high,Replace with <?php echo esc_html( get_the_title() ); ?>
+template-parts/content/card.php,<?php the_permalink(); ?> and <?php the_title(); ?>,14,the_permalink()/the_title() used,high,Replace permalink with esc_url( get_permalink() ) and title with esc_html( get_the_title() );
+template-parts/header/site-header.php,$logo_html echo and wp_nav_menu outputs,75,echo $logo_html and echo $primary_menu (phpcs:ignore),medium,Ensure $logo_html originates from wp_get_attachment_image()/wp_get_custom_logo(); keep phpcs:ignore or replace with wp_kses_post() if necessary.
+template-parts/footer/site-footer.php,echo $primary_menu / $social_menu,67,echo $primary_menu with phpcs:ignore,medium,wp_nav_menu outputs are usually safe; keep phpcs:ignore or sanitize if menus include untrusted HTML.
+template-parts/profile/surface.php,multiple echo with esc_* and wp_kses_post,58,echo usage with esc_url/esc_html/wp_kses_post,low,Reviewed: usages apply proper escaping; no automatic fix needed.
+404.php,home_url echo,21,echo esc_url( home_url( '/' ) ),low,Already escaped (esc_url) — OK.
+
