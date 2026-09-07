@@ -113,6 +113,7 @@ async function inspectFrontend(browser, viewportName, viewport) {
     stylesheets: [],
     focus: null,
     reducedMotion: false,
+    motionTokens: {},
     error: null,
   };
   try {
@@ -156,8 +157,17 @@ async function inspectFrontend(browser, viewportName, viewport) {
     if (! visibleFocus) throw new Error(`fixture button lacks visible keyboard focus: ${JSON.stringify(result.focus)}`);
 
     result.reducedMotion = await page.evaluate(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-    if (viewport.width <= 390 && ! result.reducedMotion) {
-      throw new Error('reduced-motion preference was not active in the mobile test context');
+    if (viewport.width <= 390) {
+      if (! result.reducedMotion) throw new Error('reduced-motion preference was not active in the mobile test context');
+      result.motionTokens = await cssVariables(body, ['--aznet-theme-motion-fast', '--aznet-theme-motion-base']);
+      verifyVariables(
+        result.motionTokens,
+        {
+          '--aznet-theme-motion-fast': '0ms',
+          '--aznet-theme-motion-base': '0ms',
+        },
+        `frontend ${viewportName} reduced motion`,
+      );
     }
 
     const axeResults = await new AxeBuilder({ page }).analyze();
