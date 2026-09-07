@@ -58,7 +58,20 @@ try {
     };
   });
 
-  console.log(`R4_GALLERY_DIAGNOSTIC=${JSON.stringify({ diagnostic, consoleErrors, pageErrors })}`);
+  const evidence = { diagnostic, consoleErrors, pageErrors };
+  console.log(`R4_GALLERY_DIAGNOSTIC=${JSON.stringify(evidence)}`);
+
+  if (
+    diagnostic.rootOpacity === '0' ||
+    !diagnostic.productGalleryDataPresent ||
+    !diagnostic.wrapperBox ||
+    diagnostic.wrapperBox.width <= 0 ||
+    diagnostic.wrapperBox.height <= 0 ||
+    consoleErrors.length > 0 ||
+    pageErrors.length > 0
+  ) {
+    throw new Error(`R4 native Woo gallery initialization incomplete: ${JSON.stringify(evidence)}`);
+  }
 } finally {
   await context.close();
   await browser.close();
