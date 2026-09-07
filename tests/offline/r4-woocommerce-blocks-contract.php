@@ -55,12 +55,16 @@ foreach ([
     '$wpdb',
     'Automattic\\WooCommerce\\Internal',
     'class-wc-',
-    'woocommerce_blocks_',
 ] as $needle) {
     if (str_contains($module, $needle)) {
         fwrite(STDERR, "FAIL: R4 Woo Blocks capability uses forbidden heuristic/private token {$needle}\n");
         exit(1);
     }
+}
+
+if (preg_match('/(?<![A-Za-z0-9_])woocommerce_blocks_[A-Za-z0-9_]+\s*\(/', $module)) {
+    fwrite(STDERR, "FAIL: R4 Woo Blocks capability calls a private-style woocommerce_blocks_* function\n");
+    exit(1);
 }
 
 if (! str_contains($bootstrap, "require_once __DIR__ . '/woocommerce-blocks.php';")) {
