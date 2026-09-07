@@ -154,14 +154,25 @@ async function inspectCase(browser, routeName, route, viewportName, viewport) {
       result.primaryNavKeyboardReachable = await keyboardReachPrimaryNav(page);
       if (!result.primaryNavKeyboardReachable) throw new Error('primary navigation was not reachable by Tab keyboard navigation');
     } else {
-      const summaryControl = page.locator('.aznet-theme-site-header__mobile > summary');
-      await summaryControl.waitFor({ state: 'visible' });
-      await summaryControl.focus();
+      const trigger = page.locator('[data-aznet-theme-nav-trigger]');
+      const panel = page.locator('[data-aznet-theme-nav-panel]');
+      await trigger.waitFor({ state: 'visible' });
+      await trigger.focus();
       await page.keyboard.press('Enter');
-      await page.locator('.aznet-theme-site-header__mobile-panel').waitFor({ state: 'visible' });
-      await page.locator('.aznet-theme-site-header__mobile-panel nav a').first().waitFor({ state: 'visible' });
+      await panel.waitFor({ state: 'visible' });
+      const expanded = await trigger.getAttribute('aria-expanded');
+      if (expanded !== 'true') throw new Error(`mobile menu aria-expanded expected true, got ${expanded}`);
+      await panel.locator('nav a').first().waitFor({ state: 'visible' });
+      const focusedInside = await page.evaluate(() => Boolean(document.activeElement?.closest?.('[data-aznet-theme-nav-panel]')));
+      if (!focusedInside) throw new Error('mobile menu did not move keyboard focus into the panel');
       const openOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       if (openOverflow > 1) throw new Error(`mobile menu caused horizontal overflow: ${openOverflow}px`);
+      await page.keyboard.press('Escape');
+      await panel.waitFor({ state: 'hidden' });
+      const collapsed = await trigger.getAttribute('aria-expanded');
+      if (collapsed !== 'false') throw new Error(`mobile menu aria-expanded expected false after Escape, got ${collapsed}`);
+      const focusReturned = await page.evaluate(() => document.activeElement === document.querySelector('[data-aznet-theme-nav-trigger]'));
+      if (!focusReturned) throw new Error('mobile menu Escape did not return focus to the trigger');
       result.primaryNavKeyboardReachable = true;
     }
 

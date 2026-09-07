@@ -107,13 +107,22 @@ async function inspectViewport(browser, name, viewport) {
     }
 
     if (viewport.width <= 390) {
-      const mobileSummary = page.locator('.aznet-theme-site-header__mobile > summary');
-      await mobileSummary.waitFor({ state: 'visible' });
-      await mobileSummary.click();
-      const mobilePanel = page.locator('.aznet-theme-site-header__mobile-panel');
-      await mobilePanel.waitFor({ state: 'visible' });
+      const trigger = page.locator('[data-aznet-theme-nav-trigger]');
+      const panel = page.locator('[data-aznet-theme-nav-panel]');
+      await trigger.waitFor({ state: 'visible' });
+      await trigger.focus();
+      await page.keyboard.press('Enter');
+      await panel.waitFor({ state: 'visible' });
+      const expanded = await trigger.getAttribute('aria-expanded');
+      if (expanded !== 'true') throw new Error(`mobile menu aria-expanded expected true, got ${expanded}`);
       const openOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       if (openOverflow > 1) throw new Error(`mobile menu caused horizontal overflow: ${openOverflow}px`);
+      await page.keyboard.press('Escape');
+      await panel.waitFor({ state: 'hidden' });
+      const collapsed = await trigger.getAttribute('aria-expanded');
+      if (collapsed !== 'false') throw new Error(`mobile menu aria-expanded expected false after Escape, got ${collapsed}`);
+      const focusReturned = await page.evaluate(() => document.activeElement === document.querySelector('[data-aznet-theme-nav-trigger]'));
+      if (!focusReturned) throw new Error('mobile menu Escape did not return focus to the trigger');
     }
 
     const axeResults = await new AxeBuilder({ page }).analyze();

@@ -18,8 +18,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function settings_defaults(): array {
     return [
-        'schema_version' => 1,
-        'visual_preset'  => 'default',
+        'schema_version'   => 1,
+        'visual_preset'    => 'default',
+        'header_preset'    => 'standard',
+        'header_sticky'    => 'sticky',
+        'header_search'    => true,
+        'header_utilities' => true,
     ];
 }
 
@@ -34,9 +38,39 @@ function normalize_settings( array $raw ): array {
         ? (string) $raw['visual_preset']
         : 'default';
 
+    $header_preset = isset( $raw['header_preset'] ) && in_array( $raw['header_preset'], [ 'standard', 'compact', 'commerce', 'overlay' ], true )
+        ? (string) $raw['header_preset']
+        : 'standard';
+
+    $header_sticky = isset( $raw['header_sticky'] ) && in_array( $raw['header_sticky'], [ 'off', 'sticky', 'sticky-compact' ], true )
+        ? (string) $raw['header_sticky']
+        : 'sticky';
+
+    $normalize_boolean = static function ( string $key, bool $default ) use ( $raw ): bool {
+        if ( ! array_key_exists( $key, $raw ) ) {
+            return $default;
+        }
+
+        $value = $raw[ $key ];
+
+        if ( is_bool( $value ) ) {
+            return $value;
+        }
+
+        if ( is_int( $value ) && ( 0 === $value || 1 === $value ) ) {
+            return 1 === $value;
+        }
+
+        return $default;
+    };
+
     return [
-        'schema_version' => 1,
-        'visual_preset'  => $preset,
+        'schema_version'   => 1,
+        'visual_preset'    => $preset,
+        'header_preset'    => $header_preset,
+        'header_sticky'    => $header_sticky,
+        'header_search'    => $normalize_boolean( 'header_search', true ),
+        'header_utilities' => $normalize_boolean( 'header_utilities', true ),
     ];
 }
 
