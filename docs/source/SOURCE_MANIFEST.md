@@ -1,6 +1,6 @@
 # AZnet Theme Source Manifest
 
-Canonical implementation baseline reconciled by branch `docs/v1.1-r0-source-reconciliation` from `main@f8e1a95c903c3f246528368ae9878eba780539ff`.
+Canonical implementation baseline reconciled by branch `docs/v1.1-r0-source-reconciliation` / PR #36 from `main@f8e1a95c903c3f246528368ae9878eba780539ff`.
 
 | Source | Semantic version | Role |
 | --- | --- | --- |
@@ -16,4 +16,4 @@ Current implementation baseline represented by this reconciliation: `main@f8e1a9
 
 V1.0 publication is a live GitHub fact separate from implementation metadata. At the R0 checkpoint there is no Git tag and no GitHub Release, therefore publication is `PUBLICATION_PENDING`.
 
-Derived DOCX source set produced before GitHub canonical-medium migration remains archival/export evidence only. From AZT-00 v0.4 onward, canonical source changes occur in `docs/source/` on `main` through reviewed Git history. This manifest becomes canonical only when its source PR is approved and merged to `main`.
+Derived DOCX source set produced before GitHub canonical-medium migration remains archival/export evidence only. From AZT-00 v0.4 onward, canonical source changes occur in `docs/source/` on `main` through reviewed Git history. This manifest becomes canonical only when PR #36 is explicitly approved and merged to `main`.
