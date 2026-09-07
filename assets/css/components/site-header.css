@@ -210,20 +210,18 @@
     margin-left: auto;
 }
 
-.aznet-theme-site-header__mobile > summary {
+.aznet-theme-site-header__mobile-trigger {
     display: inline-flex;
     align-items: center;
     min-height: 42px;
     padding: 0 14px;
     border: 1px solid var(--aznet-theme-header-border);
     border-radius: var(--aznet-theme-radius-pill);
+    background: transparent;
+    color: inherit;
+    font: inherit;
     font-weight: 700;
-    list-style: none;
     cursor: pointer;
-}
-
-.aznet-theme-site-header__mobile > summary::-webkit-details-marker {
-    display: none;
 }
 
 .aznet-theme-site-header__mobile-panel {

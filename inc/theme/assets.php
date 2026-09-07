@@ -31,6 +31,25 @@ function enqueue_visual_preset_asset( ?string $version = null ): void {
     );
 }
 
+/**
+ * Enqueue mobile Header navigation enhancement only when its panel renders.
+ *
+ * @param string|null $version Asset version.
+ */
+function enqueue_header_navigation_asset( ?string $version = null ): void {
+    if ( ! function_exists( __NAMESPACE__ . '\\header_mobile_panel_enabled' ) || ! header_mobile_panel_enabled() ) {
+        return;
+    }
+
+    wp_enqueue_script(
+        'aznet-theme-header-navigation',
+        get_theme_file_uri( '/assets/js/header-navigation.js' ),
+        [],
+        $version,
+        true
+    );
+}
+
 function enqueue_assets(): void {
     $version = defined( 'AZNET_THEME_VERSION' ) ? AZNET_THEME_VERSION : null;
 
@@ -63,6 +82,8 @@ function enqueue_assets(): void {
         [ 'aznet-theme-tokens' ],
         $version
     );
+
+    enqueue_header_navigation_asset( $version );
 
     wp_enqueue_style(
         'aznet-theme-site-footer',

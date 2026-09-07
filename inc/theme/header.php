@@ -47,6 +47,39 @@ function header_sticky_mode(): string {
 }
 
 /**
+ * Whether the Header has useful content for the mobile panel.
+ */
+function header_mobile_panel_enabled(): bool {
+    if ( true === setting( 'header_search', true ) ) {
+        return true;
+    }
+
+    if ( function_exists( 'has_nav_menu' ) && has_nav_menu( 'primary' ) ) {
+        return true;
+    }
+
+    if ( true !== setting( 'header_utilities', true ) ) {
+        return false;
+    }
+
+    if ( function_exists( 'wc_get_page_permalink' ) ) {
+        $account_url = wc_get_page_permalink( 'myaccount' );
+        if ( is_string( $account_url ) && '' !== trim( $account_url ) ) {
+            return true;
+        }
+    }
+
+    if ( function_exists( 'wc_get_cart_url' ) ) {
+        $cart_url = wc_get_cart_url();
+        if ( is_string( $cart_url ) && '' !== trim( $cart_url ) ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
  * Build presentation context from WordPress-native state and public Woo URLs.
  *
  * @return array<string, mixed>

@@ -39,6 +39,8 @@ $header_classes   = [
             </div>
         <?php endif; ?>
 
-        <?php get_template_part( 'template-parts/header/mobile-panel', null, $context ); ?>
+        <?php if ( \AZnet\Theme\header_mobile_panel_enabled() ) : ?>
+            <?php get_template_part( 'template-parts/header/mobile-panel', null, $context ); ?>
+        <?php endif; ?>
     </div>
 </header>
