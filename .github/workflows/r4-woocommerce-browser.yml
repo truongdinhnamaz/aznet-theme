@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/r4-woocommerce-browser.yml'
       - 'tests/browser/r4-woocommerce-l4.mjs'
+      - 'tests/browser/r4-gallery-diagnostic.mjs'
       - 'tests/fixtures/r4-woocommerce-setup.php'
       - 'inc/theme/settings.php'
       - 'inc/theme/woocommerce-*.php'
@@ -118,6 +119,11 @@ jobs:
           curl -fsS http://127.0.0.1:8080/shop/ >/tmp/r4-woocommerce/shop-smoke.html
           curl -fsS http://127.0.0.1:8080/product/r4-variable-product/ >/tmp/r4-woocommerce/product-smoke.html
           grep -F 'R4 Variable Product' /tmp/r4-woocommerce/product-smoke.html
+
+      - name: Diagnose native Woo product gallery initialization
+        env:
+          R4_BASE_URL: http://127.0.0.1:8080
+        run: node tests/browser/r4-gallery-diagnostic.mjs
 
       - name: Verify Grid + Classic full surface matrix
         env:
