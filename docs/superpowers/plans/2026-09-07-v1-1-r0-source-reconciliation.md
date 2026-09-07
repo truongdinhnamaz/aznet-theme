@@ -12,7 +12,8 @@
 
 ## Global Constraints
 
-- Baseline to revalidate at execution start: canonical `main@f8e1a95c903c3f246528368ae9878eba780539ff` unless superseded by a later valid `main` commit.
+- Known baseline at plan time: canonical `main@f8e1a95c903c3f246528368ae9878eba780539ff`.
+- At execution start, set `R0_BASE_SHA="$(git rev-parse origin/main)"`; if it differs from the known baseline, revalidate the superseding main commit before editing source and use the literal resolved SHA in all current-state source facts.
 - AZT-05 v1.0 must remain byte-unchanged unless a new owner decision explicitly changes the constitution.
 - Record v1.0 truth precisely: production metadata is `1.0.0`; core code is merged; release publication/tag may still be pending and must not be falsely recorded as published.
 - RootProfile E5-C/E5-D and ConvertFlow F8 remain optional compatibility tracks; do not turn them into core-v1.1 ownership.
@@ -36,46 +37,49 @@
 - Read: `docs/evidence/G7_CORE_RELEASE_CANDIDATE.md`
 - Read: GitHub PR #34 and exact final PR-head workflow runs
 - Read: GitHub tags/releases collections
+- Create: `docs/evidence/R0_V1_SOURCE_RECONCILIATION_20260907.md`
 
 **Interfaces:**
 - Consumes: current GitHub state/evidence.
-- Produces: a factual reconciliation note used verbatim by Tasks 2-5.
+- Produces: exact `R0_BASE_SHA`, publication classification and factual reconciliation used by Tasks 2-5.
 
 - [ ] **Step 1: Capture canonical main and version metadata**
 
 Run:
 ```bash
-git rev-parse HEAD
-git show HEAD:style.css | grep -E '^Version:|^Requires at least:|^Requires PHP:'
-git show HEAD:functions.php | grep 'AZNET_THEME_VERSION'
+git fetch origin main
+R0_BASE_SHA="$(git rev-parse origin/main)"
+printf '%s\n' "$R0_BASE_SHA"
+git show "$R0_BASE_SHA":style.css | grep -E '^Version:|^Requires at least:|^Requires PHP:'
+git show "$R0_BASE_SHA":functions.php | grep 'AZNET_THEME_VERSION'
 ```
-Expected at the known baseline: `1.0.0`, WordPress `6.9`, PHP `8.1`, with HEAD resolving to the current canonical main commit.
+Expected at the known baseline: SHA `f8e1a95c903c3f246528368ae9878eba780539ff`, Theme `1.0.0`, WordPress `6.9`, PHP `8.1`. If main has legitimately advanced, record the new literal SHA and revalidate the same facts before continuing.
 
-- [ ] **Step 2: Verify the final v1.0 merge provenance**
+- [ ] **Step 2: Verify the final v1.0 merge provenance when the known baseline is still current**
 
-Run:
+If `R0_BASE_SHA` is `f8e1a95c903c3f246528368ae9878eba780539ff`, run:
 ```bash
-git show --no-patch --pretty=raw HEAD
+git show --no-patch --pretty=raw "$R0_BASE_SHA"
 git diff --name-status b2e5cca1461233bcb1a0333c5aa51879c3264756..f8e1a95c903c3f246528368ae9878eba780539ff
 ```
-Expected for the known merge: merge tree is equivalent to the verified PR-head tree; no post-merge conflict-resolution production delta.
+Expected: merge tree equivalent to the verified PR-head tree; no conflict-resolution production delta. If main advanced, perform the equivalent ancestry/diff check from this verified merge through the current main and record any invalidation explicitly.
 
 - [ ] **Step 3: Verify publication truth separately**
 
-Use GitHub API/connector to list `tags` and `releases`. Record exactly one of:
+Use GitHub API/connector to list tags and releases. Record exactly one status:
 ```text
-PUBLISHED: v1.0.0 tag/release exists and points to the verified commit
-PUBLICATION_PENDING: metadata/core merge is complete but no v1.0.0 tag/release exists
+PUBLISHED — v1.0.0 tag/release exists and points to the verified v1.0 commit.
+PUBLICATION_PENDING — metadata/core merge is complete but no v1.0.0 tag/release exists.
 ```
 Do not infer publication from `Version: 1.0.0`.
 
-- [ ] **Step 4: Write reconciliation evidence**
+- [ ] **Step 4: Write reconciliation evidence with literal values**
 
-Create `docs/evidence/R0_V1_SOURCE_RECONCILIATION_20260907.md` with:
+The evidence file must contain the literal output of `R0_BASE_SHA`, never a placeholder. Required shape:
 ```markdown
 # R0 v1.0 -> v1.1 Source Reconciliation
 
-- Canonical main: `<sha>`
+- Canonical main: the literal SHA printed in Step 1
 - Theme metadata: `1.0.0`
 - Core v1.0 technical state: merged / verified from listed evidence
 - Release publication: `PUBLISHED` or `PUBLICATION_PENDING`
@@ -101,20 +105,19 @@ git commit -m "docs: reconcile v1 core release state"
 - Modify: `docs/source/AZT-03-baseline-provenance.md`
 
 **Interfaces:**
-- Consumes: Task 1 reconciliation.
+- Consumes: Task 1 literal `R0_BASE_SHA` and publication classification.
 - Produces: canonical implementation-baseline source for all v1.1 work.
 
 - [ ] **Step 1: Replace stale current baseline facts**
 
-Set the header to:
+Set:
 ```markdown
 **Version:** v0.18
 **Status:** Working Source
 **Date:** 07/09/2026
 ```
-Replace the alpha baseline section with current facts:
+The current baseline section must contain the literal SHA from Step 1 plus:
 ```markdown
-- Canonical `main`: `<Task-1 SHA>`.
 - Internal Theme version: `1.0.0`.
 - WordPress floor: `6.9+`.
 - PHP floor: `8.1+`.
@@ -123,11 +126,11 @@ Replace the alpha baseline section with current facts:
 
 - [ ] **Step 2: Close the old G0 exact-next statement**
 
-Replace the stale G0 wording with:
+Use:
 ```markdown
 Core v1.0 production code/release-candidate closure is complete on canonical main. Release publication/tag state is tracked separately from implementation readiness and must be stated from live GitHub evidence.
 
-Exact product-development next: **R0/R1 v1.1 Native Product System source/design-system stream**, after canonical source reconciliation is merged.
+Exact product-development next: **R1 v1.1 Design System 2.0**, after this source reconciliation is approved and merged.
 ```
 
 - [ ] **Step 3: Preserve historical provenance inventory**
@@ -139,6 +142,7 @@ Do not alter the 817/817 classification or registered historical source artifact
 ```bash
 ! grep -q '0.1.0-alpha.7' docs/source/AZT-03-baseline-provenance.md
 ! grep -q 'Exact next:.*G0' docs/source/AZT-03-baseline-provenance.md
+grep -F "$R0_BASE_SHA" docs/source/AZT-03-baseline-provenance.md
 ```
 
 - [ ] **Step 5: Commit AZT-03**
@@ -164,7 +168,7 @@ git commit -m "docs: update AZT-03 for v1 baseline"
 
 - [ ] **Step 1: Bump AZT-01 to v0.4 and add v1.1 product objective**
 
-Add a section whose normative content is:
+Add exactly this normative direction:
 ```markdown
 ## v1.1 Native Product System objective
 
@@ -176,7 +180,7 @@ Add the explicit non-goals from the approved spec: no page builder, mega-menu bu
 
 - [ ] **Step 2: Bump AZT-02 to v0.5 and ratify the five architecture boundaries**
 
-Add sections that lock:
+Add:
 ```text
 Design System: foundation -> semantic -> component -> WordPress mapping
 Patterns: core/Woo Blocks first; no proprietary content store
@@ -188,7 +192,7 @@ Also ratify that a public extension hook is not created without a real consumer,
 
 - [ ] **Step 3: Ratify visual-preset feasibility rule**
 
-Add to AZT-02:
+Add:
 ```markdown
 On the WordPress 6.9 support floor, R1 must prove whether native style-variation selection satisfies the hybrid PHP architecture. If it does, use the native mechanism. If it does not, use a Theme-owned semantic visual-preset mapping; do not convert the Theme to FSE/block-template ownership merely to obtain style variations.
 ```
@@ -250,7 +254,7 @@ R6 Performance + Release 2.0 — PLANNED
 
 - [ ] **Step 3: Add accepted v1.1 decisions**
 
-Continue the decision log after D-016:
+Continue after D-016:
 ```text
 D-017 v1.1 uses WordPress-native authoring/patterns/presets; no proprietary page builder.
 D-018 visual preset outcome is fixed, implementation mechanism is evidence-gated on WordPress 6.9 hybrid support.
@@ -288,7 +292,7 @@ git commit -m "docs: open v1.1 roadmap and QA gates"
 
 - [ ] **Step 1: Bump AZT-EXEC-MAP to v0.14**
 
-Replace G0-G8 as the active map with R0-R6 and encode dependencies:
+Replace G0-G8 as the active map with R0-R6 and encode:
 ```text
 R0 -> R1 -> {R2,R3,R4} -> R5 -> R6
 ```
@@ -306,12 +310,13 @@ AZT-04 v0.22
 AZT-05 v1.0
 AZT-EXEC-MAP v0.14
 ```
-Set the canonical checkpoint to the new source branch/PR baseline rather than the obsolete constitution-source branch statement.
+Replace the obsolete constitution-source checkpoint statement with the literal `R0_BASE_SHA` and the R0 source branch/PR provenance once created.
 
 - [ ] **Step 3: Verify AZT-05 is unchanged**
 
+Use the base captured before the first R0 commit:
 ```bash
-git diff --exit-code <R0-branch-base> -- docs/source/AZT-05-product-constitution.md
+git diff --exit-code "$R0_BASE_SHA" -- docs/source/AZT-05-product-constitution.md
 ```
 Expected: zero diff.
 
@@ -321,6 +326,7 @@ Expected: zero diff.
 ! grep -R 'Exact next.*G0' docs/source/AZT-0*.md docs/source/AZT-EXEC-MAP.md
 ! grep -R '0.1.0-alpha.7' docs/source/AZT-0*.md docs/source/AZT-EXEC-MAP.md docs/source/SOURCE_MANIFEST.md
 grep -R 'R1.*Design System' docs/source/AZT-04-roadmap-qa-decisions.md docs/source/AZT-EXEC-MAP.md
+grep -F "$R0_BASE_SHA" docs/source/AZT-03-baseline-provenance.md docs/source/SOURCE_MANIFEST.md
 ```
 
 - [ ] **Step 5: Commit derived source files**
@@ -346,11 +352,11 @@ git commit -m "docs: refresh v1.1 execution source map"
 - [ ] **Step 1: Prove source-only diff**
 
 ```bash
-git diff --name-only <R0-branch-base>...HEAD
+git diff --name-only "$R0_BASE_SHA"...HEAD
 ```
 Expected: only `docs/source/**` and `docs/evidence/R0_V1_SOURCE_RECONCILIATION_20260907.md`.
 
-- [ ] **Step 2: Scan for placeholders and stale baseline**
+- [ ] **Step 2: Scan for plan/source placeholders and stale baseline**
 
 ```bash
 ! grep -R -E '\bTBD\b|\bTODO\b' docs/source/AZT-01-product-charter.md docs/source/AZT-02-architecture.md docs/source/AZT-03-baseline-provenance.md docs/source/AZT-04-roadmap-qa-decisions.md docs/source/AZT-EXEC-MAP.md docs/source/SOURCE_MANIFEST.md
@@ -359,7 +365,7 @@ Expected: only `docs/source/**` and `docs/evidence/R0_V1_SOURCE_RECONCILIATION_2
 
 - [ ] **Step 3: Open the source PR and stop at owner merge approval**
 
-PR body must state:
+PR body must state exactly:
 ```text
 PASS: source reconciliation only
 UNCHANGED: AZT-05 constitution
