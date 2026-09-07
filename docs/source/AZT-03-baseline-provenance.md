@@ -1,8 +1,8 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.20  
+**Version:** v0.21  
 **Status:** Working Source  
-**Date:** 07/09/2026  
+**Date:** 08/09/2026  
 **Repository:** `truongdinhnamaz/aznet-theme`
 
 ## 1. Source ownership
@@ -13,7 +13,7 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 
 ## 2. Current canonical baseline
 
-- Canonical `main`: `d2e4ae567108b6a224b623febca7a676b7114715`.
+- Canonical `main`: `d8d5670d57dc62f7e2399d9e1b2eee70fd85ef9d`.
 - Internal Theme version: `1.0.0`.
 - WordPress floor: `6.9+`.
 - PHP floor: `8.1+`.
@@ -32,7 +32,8 @@ Current production state on `main` includes:
 - G0-G8 core-v1.0 cleanup/release-candidate closure, including metadata promotion to `1.0.0`;
 - R0 v1.0 -> v1.1 source reconciliation;
 - R1 Design System 2.0, including one normalized/versioned Theme settings schema, expanded semantic tokens, Default/Editorial/Commerce visual presets and editor/frontend parity evidence;
-- R2 Native Pattern Library with 18 shipped patterns: 16 WordPress-native/core-block patterns plus 2 Woo-block-dependent patterns registered only through exact public block capability detection.
+- R2 Native Pattern Library with 18 shipped patterns: 16 WordPress-native/core-block patterns plus 2 Woo-block-dependent patterns registered only through exact public block capability detection;
+- R3 Header System 2.0 with four bounded Theme-owned presets (`standard`, `compact`, `commerce`, `overlay`), three sticky modes, shared primitives/composer, accessible progressive-enhancement mobile navigation and public-Woo fail-soft Commerce actions.
 
 PR #34 final verified head is `b2e5cca1461233bcb1a0333c5aa51879c3264756`. Its tree `b716b89f04e45c2012f8e191c7d0edf605c9dd11` is identical to the merge commit tree on canonical `main@f8e1a95c903c3f246528368ae9878eba780539ff`, so the v1.0 technical merge introduced no conflict-resolution production delta.
 
@@ -44,6 +45,10 @@ R1 current-state closure merged through PR #38 and established `main@b31f294d349
 
 R2 merged through PR #39 from verified head `6a40a44faaa8d8207c2a3b850e2bc6d65cd561ee` to canonical `main@d2e4ae567108b6a224b623febca7a676b7114715`. The R2 head tree and merge tree are identical at `3f9e934eaa4bdcb058ccf289d7ef1faa7eac1ee5`, so the merge introduced no conflict-resolution delta. Fresh exact-PR-head verification recorded 12/12 successful workflows before merge. No post-merge pull-request-triggered workflow run exists on the merge SHA, so no fresh L2-L4 claim is inferred for the merge commit beyond exact tree equivalence.
 
+R2 current-state closure merged through PR #40 and established `main@29d05e501b6f992793df8f961003d29aa8636af2` as the production base for R3.
+
+R3 merged through PR #41 from verified head `c4e6e623e4fc0113bdbc211fecf34b40528b7f77` to canonical `main@d8d5670d57dc62f7e2399d9e1b2eee70fd85ef9d`. The R3 head tree and merge tree are identical at `ebe79f1dc65ab58794592eab59a5bb2b9b3a1a00`, so the merge introduced no conflict-resolution delta. Fresh exact-PR-head verification recorded 14/14 successful workflows before merge, including R3 static/browser, retained R1/R2, clean WordPress runtime, core browser/a11y/performance, lifecycle, release-candidate package and native Homepage regression. No post-merge pull-request-triggered workflow run is inferred for the merge SHA; the retained L1-L4 claim is anchored to the exact verified PR head plus proven tree equivalence.
+
 No source statement above transfers domain ownership to the Theme.
 
 ## 3. Current release-path classification
@@ -52,14 +57,14 @@ Under AZT-05 v1.0 and D-016:
 
 - WordPress-clean core Theme readiness is release-critical.
 - Core v1.0 production code and technical release-candidate closure are complete on canonical `main`.
-- Release publication is tracked separately from implementation readiness. A fresh 07/09/2026 GitHub check still finds no Git tag and no GitHub Release; publication is therefore `PUBLICATION_PENDING`.
+- Release publication is tracked separately from implementation readiness. A fresh 08/09/2026 GitHub check still finds no Git tag and no GitHub Release; publication is therefore `PUBLICATION_PENDING`.
 - RootProfile E5-C/E5-D remains an optional provider certification/takeover track, not a core-v1.x blocker.
 - ConvertFlow F6/F7 actual-package integration evidence remains retained; F8 integrated compatibility remains BLOCKED because provider body output introduces a second document-level `<main>` inside Theme-owned `main#main`.
 - External compatibility defects must not be bypassed with private APIs, authoritative heuristics or copied domain logic.
-- R0, R1 and R2 are complete on canonical `main`.
-- R3 Header System 2.0 and R4 WooCommerce Presentation 2.0 are independently unblocked while consuming the stable R1 interfaces; R5 still waits for final R3/R4 setting keys.
+- R0, R1, R2 and R3 are complete on canonical `main`.
+- R4 WooCommerce Presentation 2.0 is the next uncompleted production stream; R5 still waits for final R4 setting keys before consuming the now-stable R3 settings interface.
 
-Exact product-development next: **begin R3 Header System 2.0 from the latest canonical `main`; R4 remains independently READY and may proceed later or in an isolated parallel branch.**
+Exact product-development next: **begin R4 WooCommerce Presentation 2.0 from the latest canonical `main`.**
 
 ## 4. Registered source artifacts
 
@@ -136,4 +141,4 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**R3 Header System 2.0 is the next sequential slice. R4 remains independently READY. Execute each on an isolated branch from the latest canonical `main`; R5 must wait for final R3/R4 setting keys.**
+**R4 WooCommerce Presentation 2.0 is the next sequential slice. Execute it on an isolated branch from the latest canonical `main`; R5 remains dependency-wait until R4 final setting keys are stable.**
