@@ -1,7 +1,7 @@
 # R1 Visual Preset Feasibility
 
 **Status:** PASS  
-**Mechanism:** `THEME_VISUAL_PRESET_MAPPING`
+Mechanism: `THEME_VISUAL_PRESET_MAPPING`
 
 ## Environment
 
