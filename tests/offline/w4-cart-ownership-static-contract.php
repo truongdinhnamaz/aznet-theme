@@ -79,9 +79,12 @@ foreach ($required_once as $needle) {
         exit(6);
     }
 }
-if (preg_match('/add_(?:action|filter)\([^;\n]*(?:woocommerce|woo)/i', $bootstrap) === 1) {
-    fwrite(STDERR, "W4 must not register WooCommerce-specific lifecycle hooks\n");
-    exit(7);
+preg_match_all('/add_(?:action|filter)\(\s*[\'\"]([^\'\"]+)[\'\"]/i', $bootstrap, $hook_matches);
+foreach ($hook_matches[1] ?? [] as $hook_name) {
+    if (preg_match('/(?:woocommerce|woo)/i', $hook_name) === 1) {
+        fwrite(STDERR, "W4 must not register WooCommerce-specific lifecycle hook {$hook_name}\n");
+        exit(7);
+    }
 }
 if (false !== strpos($bootstrap, 'render_current_rootprofile_surface')) {
     fwrite(STDERR, "RootProfile dormant dispatcher must remain unwired\n");
