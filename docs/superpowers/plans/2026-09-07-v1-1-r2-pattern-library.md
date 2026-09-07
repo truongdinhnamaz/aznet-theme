@@ -16,7 +16,8 @@
 - Patterns do not create CPTs, options, provider state or proprietary serialized structures.
 - Pattern content must remain WordPress block content after theme switch.
 - No site-specific authoritative URLs/data; only clearly replaceable example text/media placeholders.
-- Final count may be below 20 only if a candidate fails the quality gate; do not add filler.
+- V1.1 launch set is exactly **18 candidate patterns**. A candidate that fails the quality gate is removed rather than replaced with filler; final shipped count may therefore be below 18.
+- The five approved-spec candidates deferred from the v1.1 launch set are: `trust-stats`, `cta-split`, `content-featured-articles`, `commerce-benefits`, `utility-newsletter`.
 - Every shipped pattern needs deliberate desktop/tablet/mobile intent and editor/frontend parity.
 
 ---
@@ -128,7 +129,7 @@ Use native blocks and Theme classes, for example:
  * Title: Hero — Centered
  * Slug: aznet-theme/hero-centered
  * Categories: aznet-theme-hero
- * Description: Centered hero with eyebrow, heading, copy and two actions.
+ * Description: Centered hero with eyebrow, heading, copy and action.
  */
 ?>
 <!-- wp:group {"align":"full","className":"aznet-theme-pattern aznet-theme-pattern--hero-centered","layout":{"type":"constrained"}} -->
@@ -143,7 +144,7 @@ No fixed destination URL is required; the editor can set it.
 
 - [ ] **Step 4: Implement split/inverse/commerce variants**
 
-Use the same semantic hierarchy, varying only composition/class names. `hero-commerce.php` may reference Woo category/product blocks only if the block is registered; otherwise use core blocks and mark it commerce-oriented without querying products.
+Use the same semantic hierarchy, varying only composition/class names. `hero-commerce.php` remains core-block-only so the Hero category is usable with Woo absent.
 
 - [ ] **Step 5: Run GREEN**
 
@@ -160,23 +161,22 @@ git commit -m "feat: add native hero patterns"
 
 ---
 
-### Task 3: Ship Trust/CTA patterns
+### Task 3: Ship four Trust/CTA launch patterns
 
 **Files:**
 - Create: `patterns/trust-logo-strip.php`
 - Create: `patterns/trust-feature-grid.php`
-- Create: `patterns/trust-stats.php`
 - Create: `patterns/trust-testimonials.php`
 - Create: `patterns/cta-full-width.php`
-- Create: `patterns/cta-split.php`
 - Create: `tests/offline/r2-trust-patterns-contract.php`
 
 **Interfaces:**
-- Produces six core-block patterns with no authoritative trust data.
+- Produces four core-block patterns with no authoritative trust data.
+- Defers `trust-stats` and `cta-split` from the approved candidate pool.
 
 - [ ] **Step 1: Write RED**
 
-Assert all six files exist, use `aznet-theme-trust`, contain only example copy and do not claim real customer counts/certifications.
+Assert the four launch files exist, use `aznet-theme-trust`, contain only example copy and do not claim real customer counts/certifications.
 
 - [ ] **Step 2: Run RED**
 
@@ -184,12 +184,11 @@ Assert all six files exist, use `aznet-theme-trust`, contain only example copy a
 php tests/offline/r2-trust-patterns-contract.php
 ```
 
-- [ ] **Step 3: Implement with placeholder semantics**
+- [ ] **Step 3: Implement replaceable example semantics**
 
-Stats/testimonial example values must be visibly replaceable, e.g.:
+Testimonials must be visibly sample content, for example:
 ```html
-<!-- wp:heading {"level":3} --><h3 class="wp-block-heading">10+</h3><!-- /wp:heading -->
-<!-- wp:paragraph --><p>Chỉ số mẫu — hãy thay bằng dữ liệu đã được xác thực của bạn.</p><!-- /wp:paragraph -->
+<!-- wp:quote --><blockquote class="wp-block-quote"><p>“Nội dung đánh giá mẫu — hãy thay bằng phản hồi đã được xác thực của bạn.”</p></blockquote><!-- /wp:quote -->
 ```
 Do not imply AZnet Theme owns or verifies the business claim.
 
@@ -197,31 +196,31 @@ Do not imply AZnet Theme owns or verifies the business claim.
 
 ```bash
 php tests/offline/r2-trust-patterns-contract.php
-! grep -R -E 'get_option\(|get_post_meta\(|\$wpdb|Entity UUID|Journey' patterns/trust-*.php patterns/cta-*.php
+! grep -R -E 'get_option\(|get_post_meta\(|\$wpdb|Entity UUID|Journey' patterns/trust-*.php patterns/cta-full-width.php
 ```
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add patterns/trust-*.php patterns/cta-*.php tests/offline/r2-trust-patterns-contract.php
-git commit -m "feat: add trust and CTA patterns"
+git add patterns/trust-*.php patterns/cta-full-width.php tests/offline/r2-trust-patterns-contract.php
+git commit -m "feat: add trust and CTA launch patterns"
 ```
 
 ---
 
-### Task 4: Ship Content patterns
+### Task 4: Ship five Content launch patterns
 
 **Files:**
 - Create: `patterns/content-intro.php`
 - Create: `patterns/content-alternating.php`
 - Create: `patterns/content-article-grid.php`
-- Create: `patterns/content-featured-articles.php`
 - Create: `patterns/content-faq.php`
 - Create: `patterns/content-authority-quote.php`
 - Create: `tests/offline/r2-content-patterns-contract.php`
 
 **Interfaces:**
-- Produces six portable content compositions.
+- Produces five portable content compositions.
+- Defers `content-featured-articles` from the approved candidate pool.
 
 - [ ] **Step 1: Write RED**
 
@@ -235,7 +234,7 @@ php tests/offline/r2-content-patterns-contract.php
 
 - [ ] **Step 3: Implement content patterns**
 
-Use heading levels 2/3 by default so inserted patterns do not create a second document H1. For article grids, use Query Loop only when the pattern is explicitly editorial and let WordPress own query semantics; do not add custom query PHP.
+Use heading levels 2/3 by default so inserted patterns do not create a second document H1. For `content-article-grid`, use Query Loop and let WordPress own query semantics; do not add custom query PHP.
 
 - [ ] **Step 4: Run GREEN**
 
@@ -247,26 +246,25 @@ php tests/offline/r2-content-patterns-contract.php
 
 ```bash
 git add patterns/content-*.php tests/offline/r2-content-patterns-contract.php
-git commit -m "feat: add native content patterns"
+git commit -m "feat: add native content launch patterns"
 ```
 
 ---
 
-### Task 5: Ship Commerce and Utility patterns with fail-soft registration
+### Task 5: Ship three Commerce and two Utility launch patterns with fail-soft registration
 
 **Files:**
 - Create: `patterns/commerce-category-grid.php`
 - Create: `patterns/commerce-featured-products.php`
 - Create: `patterns/commerce-promotion.php`
-- Create: `patterns/commerce-benefits.php`
 - Create: `patterns/utility-contact.php`
-- Create: `patterns/utility-newsletter.php`
 - Create: `patterns/utility-footer-cta.php`
 - Modify: `inc/theme/patterns.php`
 - Create: `tests/offline/r2-commerce-utility-patterns-contract.php`
 
 **Interfaces:**
 - Woo-specific patterns register only when required public block types/capabilities are present; utility patterns are always available.
+- Defers `commerce-benefits` and `utility-newsletter` from the approved candidate pool.
 
 - [ ] **Step 1: Write RED capability contract**
 
@@ -298,20 +296,22 @@ If WordPress/Woo version exposes different public block names on the support mat
 
 - [ ] **Step 4: Implement commerce/utility files**
 
-Commerce patterns use public Woo blocks where available; promotion/benefits may remain core-block-only. Contact/newsletter patterns are presentation shells only and must not implement form submission or marketing-domain storage.
+Commerce patterns use public Woo blocks where available; promotion may remain core-block-only. Contact is a presentation shell only and must not implement form submission. Footer CTA is core-block-only.
 
-- [ ] **Step 5: Run GREEN**
+- [ ] **Step 5: Run GREEN and exact-count contract**
 
 ```bash
 php tests/offline/r2-commerce-utility-patterns-contract.php
 bash scripts/verify-g3-core.sh
+find patterns -maxdepth 1 -name '*.php' | wc -l
 ```
+Expected launch candidate count after Tasks 2-5: `18` before any quality-gate exclusion.
 
 - [ ] **Step 6: Commit**
 
 ```bash
 git add patterns/commerce-*.php patterns/utility-*.php inc/theme/patterns.php tests/offline/r2-commerce-utility-patterns-contract.php
-git commit -m "feat: add commerce and utility patterns"
+git commit -m "feat: add commerce and utility launch patterns"
 ```
 
 ---
@@ -351,9 +351,9 @@ Capture screenshots or computed-style assertions showing the R1 visual preset vo
 
 Switch temporarily to a stock WordPress theme and assert the saved post content still renders as block content rather than raw proprietary shortcodes/opaque data. Switch back without data loss.
 
-- [ ] **Step 5: Record final count**
+- [ ] **Step 5: Record final shipped count**
 
-Evidence must state exact shipped count and any candidate excluded for failing the gate. Do not claim 20 if fewer shipped.
+Evidence must state exact shipped count, the original 18-candidate launch set, any candidate excluded for failing the gate, and the five deliberately deferred approved-spec candidates. Do not replace a failed candidate merely to preserve a quota.
 
 - [ ] **Step 6: Commit**
 
