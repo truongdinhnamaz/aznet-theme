@@ -4,7 +4,7 @@
 
 **Goal:** Ship a curated WordPress-native pattern library that lets users build polished responsive pages quickly without a proprietary builder or non-portable content schema.
 
-**Architecture:** Use theme pattern files under `patterns/` with core blocks and Woo Blocks where available. Patterns carry only composition/example content; all design behavior comes from R1 semantic tokens and block/style classes. Woo patterns fail soft by remaining insertable only when their referenced Woo blocks are available.
+**Architecture:** Core-only patterns use native Theme pattern discovery under `patterns/`. Woo-block-dependent patterns are kept out of the auto-discovered directory and are registered programmatically from `inc/patterns/woocommerce/` only when the exact public Woo block types they require are registered. All design behavior comes from R1 semantic tokens and block/style classes; no pattern creates domain storage or runtime dependence on AZnet JavaScript.
 
 **Tech Stack:** WordPress 6.9+, Gutenberg/core blocks, Woo Blocks, PHP pattern files, `theme.json`, CSS tokens, WP-CLI, Playwright/axe.
 
@@ -39,7 +39,7 @@
 
 - [ ] **Step 1: Write RED static contract**
 
-Assert `patterns.php` registers only Theme-owned categories and every future `patterns/*.php` file must contain `Title`, `Slug`, `Categories`, and `Description` headers. Also reject forbidden strings:
+Assert `patterns.php` registers only Theme-owned categories and every auto-discovered `patterns/*.php` file contains `Title`, `Slug`, `Categories`, and `Description` headers. Also reject forbidden strings:
 ```php
 $forbidden = [
     'get_option(', 'get_post_meta(', '$wpdb',
@@ -72,7 +72,7 @@ function register_pattern_categories(): void {
     }
 }
 ```
-Wire it to `init` after confirming WordPress 6.9 supports the API.
+Wire category registration to `init`. Programmatic Woo pattern registration is added in Task 5 on the same hook after block types are available.
 
 - [ ] **Step 4: Run GREEN**
 
@@ -251,30 +251,33 @@ git commit -m "feat: add native content launch patterns"
 
 ---
 
-### Task 5: Ship three Commerce and two Utility launch patterns with fail-soft registration
+### Task 5: Ship three Commerce and two Utility launch patterns with true fail-soft Woo registration
 
 **Files:**
-- Create: `patterns/commerce-category-grid.php`
-- Create: `patterns/commerce-featured-products.php`
 - Create: `patterns/commerce-promotion.php`
 - Create: `patterns/utility-contact.php`
 - Create: `patterns/utility-footer-cta.php`
+- Create: `inc/patterns/woocommerce/category-grid.php`
+- Create: `inc/patterns/woocommerce/featured-products.php`
 - Modify: `inc/theme/patterns.php`
 - Create: `tests/offline/r2-commerce-utility-patterns-contract.php`
 
 **Interfaces:**
-- Woo-specific patterns register only when required public block types/capabilities are present; utility patterns are always available.
+- Auto-discovered core-only patterns are always available.
+- `aznet-theme/commerce-category-grid` registers only if public block `woocommerce/product-categories` is registered.
+- `aznet-theme/commerce-featured-products` registers only if public block `woocommerce/product-collection` is registered.
 - Defers `commerce-benefits` and `utility-newsletter` from the approved candidate pool.
 
 - [ ] **Step 1: Write RED capability contract**
 
-Stub block availability and assert:
-```php
-assert(\AZnet\Theme\should_register_woocommerce_patterns() === false);
-$GLOBALS['r2_woo_blocks_available'] = true;
-assert(\AZnet\Theme\should_register_woocommerce_patterns() === true);
+Stub `WP_Block_Type_Registry` and `register_block_pattern()` and assert:
+```text
+Woo absent -> neither Woo-dependent pattern registers
+only product-categories registered -> category-grid only
+only product-collection registered -> featured-products only
+both registered -> both patterns
 ```
-No Woo private classes/storage are allowed.
+Also assert no Woo private classes/storage/constants are referenced.
 
 - [ ] **Step 2: Run RED**
 
@@ -282,36 +285,63 @@ No Woo private classes/storage are allowed.
 php tests/offline/r2-commerce-utility-patterns-contract.php
 ```
 
-- [ ] **Step 3: Implement public block detection**
+- [ ] **Step 3: Implement each Woo pattern as a registration array**
 
-Use WordPress block registry only:
+`inc/patterns/woocommerce/category-grid.php` returns:
 ```php
-function should_register_woocommerce_patterns(): bool {
+return [
+    'slug' => 'aznet-theme/commerce-category-grid',
+    'requires_block' => 'woocommerce/product-categories',
+    'properties' => [
+        'title' => __('Commerce — Product Categories', 'aznet-theme'),
+        'categories' => ['aznet-theme-commerce'],
+        'description' => __('Responsive WooCommerce category grid.', 'aznet-theme'),
+        'content' => '<!-- wp:woocommerce/product-categories /-->',
+    ],
+];
+```
+`featured-products.php` follows the same shape with slug `aznet-theme/commerce-featured-products`, required block `woocommerce/product-collection`, and a bounded Product Collection block composition. These files are not under `/patterns`, so WordPress cannot auto-register them when Woo is absent.
+
+- [ ] **Step 4: Implement public block-gated registration**
+
+In `inc/theme/patterns.php`:
+```php
+function register_woocommerce_patterns(): void {
     $registry = \WP_Block_Type_Registry::get_instance();
-    return $registry->is_registered('woocommerce/product-collection')
-        || $registry->is_registered('woocommerce/product-template');
+    $files = [
+        dirname(__DIR__, 2) . '/inc/patterns/woocommerce/category-grid.php',
+        dirname(__DIR__, 2) . '/inc/patterns/woocommerce/featured-products.php',
+    ];
+
+    foreach ($files as $file) {
+        $definition = require $file;
+        if (!is_array($definition) || !$registry->is_registered($definition['requires_block'])) {
+            continue;
+        }
+        register_block_pattern($definition['slug'], $definition['properties']);
+    }
 }
 ```
-If WordPress/Woo version exposes different public block names on the support matrix, use the exact names proven in runtime evidence; do not inspect Woo internals.
+Use a correct root-path helper for the real file layout during implementation; the test must verify both definition files resolve. Do not inspect Woo plugin files/classes.
 
-- [ ] **Step 4: Implement commerce/utility files**
+- [ ] **Step 5: Implement core-only commerce/utility files**
 
-Commerce patterns use public Woo blocks where available; promotion may remain core-block-only. Contact is a presentation shell only and must not implement form submission. Footer CTA is core-block-only.
+`commerce-promotion`, `utility-contact`, and `utility-footer-cta` live under `/patterns` and use core blocks only. Contact is a presentation shell only and does not implement form submission.
 
-- [ ] **Step 5: Run GREEN and exact-count contract**
+- [ ] **Step 6: Run GREEN and exact-candidate count contract**
 
 ```bash
 php tests/offline/r2-commerce-utility-patterns-contract.php
 bash scripts/verify-g3-core.sh
-find patterns -maxdepth 1 -name '*.php' | wc -l
+expr "$(find patterns -maxdepth 1 -name '*.php' | wc -l)" + "$(find inc/patterns/woocommerce -maxdepth 1 -name '*.php' | wc -l)"
 ```
-Expected launch candidate count after Tasks 2-5: `18` before any quality-gate exclusion.
+Expected launch candidate definitions after Tasks 2-5: `18` before any quality-gate exclusion. On Woo-absent runtime only the 16 core-only patterns are registered.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Commit**
 
 ```bash
-git add patterns/commerce-*.php patterns/utility-*.php inc/theme/patterns.php tests/offline/r2-commerce-utility-patterns-contract.php
-git commit -m "feat: add commerce and utility launch patterns"
+git add patterns/commerce-promotion.php patterns/utility-*.php inc/patterns/woocommerce inc/theme/patterns.php tests/offline/r2-commerce-utility-patterns-contract.php
+git commit -m "feat: add fail soft commerce and utility patterns"
 ```
 
 ---
@@ -351,15 +381,19 @@ Capture screenshots or computed-style assertions showing the R1 visual preset vo
 
 Switch temporarily to a stock WordPress theme and assert the saved post content still renders as block content rather than raw proprietary shortcodes/opaque data. Switch back without data loss.
 
-- [ ] **Step 5: Record final shipped count**
+- [ ] **Step 5: Verify Woo absence/presence registration**
+
+With Woo absent, assert 16 core-only AZnet patterns and no broken Woo-dependent pattern entries. With Woo present and the two required public blocks registered, assert the two commerce patterns appear, bringing the candidate registration set to 18.
+
+- [ ] **Step 6: Record final shipped count**
 
 Evidence must state exact shipped count, the original 18-candidate launch set, any candidate excluded for failing the gate, and the five deliberately deferred approved-spec candidates. Do not replace a failed candidate merely to preserve a quota.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Commit**
 
 ```bash
 git add tests/browser/r2-pattern-library-l4.mjs .github/workflows/r2-pattern-library-browser.yml docs/evidence/R2_PATTERN_LIBRARY_L4.md
 git commit -m "test: verify native pattern library quality"
 ```
 
-**Exit:** R2 L1-L4 PASS; patterns are portable WordPress content and no builder runtime is introduced.
+**Exit:** R2 L1-L4 PASS; patterns are portable WordPress content, Woo-dependent patterns fail soft, and no builder runtime is introduced.
