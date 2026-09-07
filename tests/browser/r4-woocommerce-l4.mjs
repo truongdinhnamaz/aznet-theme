@@ -104,7 +104,12 @@ async function verifyKind(page, kind, viewport) {
     if (!bodyClass.split(/\s+/).includes(expected)) throw new Error(`product: missing body class ${expected}`);
     if (!((await themeWooStyleIds(page)).includes('aznet-theme-woocommerce-product-css'))) throw new Error('product: product stylesheet not scoped onto product page');
 
-    for (const selector of ['.product_title', '.summary .price', 'form.variations_form', '.variations select', '.single_add_to_cart_button', '.woocommerce-product-gallery__wrapper']) {
+    const themeTitle = page.locator('main#main .aznet-theme-entry__title').first();
+    await themeTitle.waitFor({ state: 'visible', timeout: 20000 });
+    if ((await themeTitle.textContent())?.trim() !== 'R4 Variable Product') throw new Error('product: Theme-owned product H1 does not match fixture title');
+    if (await page.locator('main#main h1').count() !== 1) throw new Error('product: expected exactly one H1 in main');
+
+    for (const selector of ['.summary .price', 'form.variations_form', '.variations select', '.single_add_to_cart_button', '.woocommerce-product-gallery__wrapper']) {
       await page.locator(selector).first().waitFor({ state: 'visible', timeout: 20000 });
     }
 
@@ -131,15 +136,29 @@ async function verifyKind(page, kind, viewport) {
   }
 
   if (kind === 'cart') {
-    for (const selector of ['.woocommerce-cart-form .shop_table', '.shop_table .product-name', '.shop_table .product-quantity', '.shop_table .product-subtotal', '.checkout-button']) {
-      await page.locator(selector).first().waitFor({ state: 'visible', timeout: 20000 });
+    await page.locator('.woocommerce-cart-form .shop_table, .wp-block-woocommerce-cart').first().waitFor({ state: 'visible', timeout: 20000 });
+    if (await page.locator('.woocommerce-cart-form .shop_table').count() > 0) {
+      for (const selector of ['.woocommerce-cart-form .shop_table', '.shop_table .product-name', '.shop_table .product-quantity', '.shop_table .product-subtotal', '.checkout-button']) {
+        await page.locator(selector).first().waitFor({ state: 'visible', timeout: 20000 });
+      }
+    } else {
+      for (const selector of ['.wp-block-woocommerce-cart', '.wc-block-cart-items', '.wc-block-cart-item__product', '.wc-block-components-quantity-selector', '.wc-block-cart__submit-button']) {
+        await page.locator(selector).first().waitFor({ state: 'visible', timeout: 20000 });
+      }
     }
     if (!((await themeWooStyleIds(page)).includes('aznet-theme-woocommerce-cart-css'))) throw new Error('cart: Cart stylesheet not scoped onto Cart');
   }
 
   if (kind === 'checkout') {
-    for (const selector of ['form.checkout', '#billing_first_name', '#order_review', '#payment', '#place_order']) {
-      await page.locator(selector).first().waitFor({ state: 'visible', timeout: 25000 });
+    await page.locator('form.checkout, .wc-block-checkout').first().waitFor({ state: 'visible', timeout: 25000 });
+    if (await page.locator('form.checkout').count() > 0) {
+      for (const selector of ['form.checkout', '#billing_first_name', '#order_review', '#payment', '#place_order']) {
+        await page.locator(selector).first().waitFor({ state: 'visible', timeout: 25000 });
+      }
+    } else {
+      for (const selector of ['.wc-block-checkout', '.wc-block-components-main', '.wc-block-components-sidebar', '.wc-block-components-text-input input', '.wc-block-components-checkout-place-order-button']) {
+        await page.locator(selector).first().waitFor({ state: 'visible', timeout: 25000 });
+      }
     }
     if (!((await themeWooStyleIds(page)).includes('aznet-theme-woocommerce-checkout-css'))) throw new Error('checkout: Checkout stylesheet not scoped onto Checkout');
   }
