@@ -1,0 +1,347 @@
+name: R2 Pattern Library Browser Quality
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/r2-pattern-library-browser.yml'
+      - 'tests/browser/r2-pattern-library-l4.mjs'
+      - 'inc/theme/patterns.php'
+      - 'inc/theme/bootstrap.php'
+      - 'patterns/**'
+      - 'inc/patterns/woocommerce/**'
+      - 'theme.json'
+      - 'assets/css/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  r2-pattern-browser:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout exact R2 candidate
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install WordPress 6.9 and clean R2 fixture
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+
+          rm -rf /tmp/wp /tmp/r2-pattern-library
+          mkdir -p /tmp/wp /tmp/r2-pattern-library
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create \
+            --path=/tmp/wp \
+            --dbname=wordpress \
+            --dbuser=root \
+            --dbpass=root \
+            --dbhost=127.0.0.1 \
+            --skip-check \
+            --allow-root
+          wp core install \
+            --path=/tmp/wp \
+            --url=http://127.0.0.1:8080 \
+            --title='AZnet R2 Pattern Library' \
+            --admin_user=admin \
+            --admin_password='r2-browser-password' \
+            --admin_email=r2@example.test \
+            --skip-email \
+            --allow-root
+
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          rsync -a --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='docs' \
+            --exclude='scripts' \
+            --exclude='tests' \
+            --exclude='README.md' \
+            --exclude='aznet-preview.png' \
+            ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+
+          wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+          wp core version --path=/tmp/wp --allow-root | grep -Fx '6.9'
+          wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+
+          for index in 1 2 3; do
+            wp post create \
+              --post_type=post \
+              --post_status=publish \
+              --post_title="R2 Article Fixture ${index}" \
+              --post_content="R2 article fixture content ${index}." \
+              --porcelain \
+              --path=/tmp/wp \
+              --allow-root >/dev/null
+          done
+
+          printf '%s' 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Y9Zx9sAAAAASUVORK5CYII=' | base64 -d > /tmp/r2-media.png
+          MEDIA_ID=$(wp media import /tmp/r2-media.png --title='R2 Media' --porcelain --path=/tmp/wp --allow-root)
+          MEDIA_URL=$(wp eval "echo wp_get_attachment_url(${MEDIA_ID});" --path=/tmp/wp --allow-root)
+
+          CORE_PATTERNS=(
+            aznet-theme/hero-centered
+            aznet-theme/hero-split
+            aznet-theme/hero-inverse
+            aznet-theme/hero-commerce
+            aznet-theme/trust-logo-strip
+            aznet-theme/trust-feature-grid
+            aznet-theme/trust-testimonials
+            aznet-theme/cta-full-width
+            aznet-theme/content-intro
+            aznet-theme/content-alternating
+            aznet-theme/content-article-grid
+            aznet-theme/content-faq
+            aznet-theme/content-authority-quote
+            aznet-theme/commerce-promotion
+            aznet-theme/utility-contact
+            aznet-theme/utility-footer-cta
+          )
+
+          for slug in "${CORE_PATTERNS[@]}"; do
+            R2_SLUG="$slug" wp eval '
+              $slug = getenv("R2_SLUG");
+              $registry = WP_Block_Patterns_Registry::get_instance();
+              if (! $registry->is_registered($slug)) {
+                  fwrite(STDERR, "FAIL: core Theme pattern not registered: {$slug}\n");
+                  exit(1);
+              }
+            ' --path=/tmp/wp --allow-root
+          done
+
+          wp eval '
+            $registry = WP_Block_Patterns_Registry::get_instance();
+            foreach (["aznet-theme/commerce-category-grid", "aznet-theme/commerce-featured-products"] as $slug) {
+                if ($registry->is_registered($slug)) {
+                    fwrite(STDERR, "FAIL: Woo-dependent Theme pattern registered while WooCommerce is absent: {$slug}\n");
+                    exit(1);
+                }
+            }
+            echo "PASS: Woo-dependent patterns absent without WooCommerce\n";
+          ' --path=/tmp/wp --allow-root
+
+          : > /tmp/r2-fixture.html
+          REPRESENTATIVE=(
+            aznet-theme/hero-split
+            aznet-theme/trust-feature-grid
+            aznet-theme/content-article-grid
+            aznet-theme/content-faq
+            aznet-theme/utility-contact
+          )
+          for slug in "${REPRESENTATIVE[@]}"; do
+            R2_SLUG="$slug" wp eval '
+              $slug = getenv("R2_SLUG");
+              $pattern = WP_Block_Patterns_Registry::get_instance()->get_registered($slug);
+              if (! is_array($pattern) || empty($pattern["content"])) {
+                  fwrite(STDERR, "FAIL: no content for {$slug}\n");
+                  exit(1);
+              }
+              echo $pattern["content"];
+            ' --path=/tmp/wp --allow-root >> /tmp/r2-fixture.html
+            printf '\n' >> /tmp/r2-fixture.html
+          done
+
+          cat >> /tmp/r2-fixture.html <<HTML
+          <!-- wp:image {"id":${MEDIA_ID},"sizeSlug":"full","linkDestination":"none"} -->
+          <figure class="wp-block-image size-full"><img src="${MEDIA_URL}" alt="R2 media fixture" class="wp-image-${MEDIA_ID}"/></figure>
+          <!-- /wp:image -->
+          HTML
+
+          FIXTURE_ID=$(wp post create /tmp/r2-fixture.html \
+            --post_type=page \
+            --post_status=publish \
+            --post_title='R2 Pattern Fixture' \
+            --post_name='r2-pattern-fixture' \
+            --porcelain \
+            --path=/tmp/wp \
+            --allow-root)
+          printf '%s\n' "$FIXTURE_ID" > /tmp/r2-pattern-library/fixture-id.txt
+          echo 'PASS: clean WordPress R2 pattern fixture created'
+
+      - name: Start WordPress runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/r2-pattern-library/server.log 2>&1 &
+          echo $! > /tmp/r2-pattern-library/server.pid
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/r2-pattern-fixture/ >/tmp/r2-pattern-library/smoke-clean.html; then
+              break
+            fi
+            sleep 1
+          done
+          grep -F 'Phần nội dung đầu tiên' /tmp/r2-pattern-library/smoke-clean.html
+          grep -F 'Câu hỏi thường gặp' /tmp/r2-pattern-library/smoke-clean.html
+
+      - name: Install Playwright and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Verify clean WordPress Default pattern quality
+        env:
+          R2_BASE_URL: http://127.0.0.1:8080
+          R2_STATE_DIR: /tmp/r2-pattern-library
+          R2_PRESET: default
+          R2_WOO_ENABLED: '0'
+        run: |
+          set -euo pipefail
+          FIXTURE_ID=$(cat /tmp/r2-pattern-library/fixture-id.txt)
+          wp eval "set_theme_mod( 'aznet_theme_settings', [ 'schema_version' => 1, 'visual_preset' => 'default' ] );" --path=/tmp/wp --allow-root
+          R2_FIXTURE_ID="$FIXTURE_ID" node tests/browser/r2-pattern-library-l4.mjs
+
+      - name: Install WooCommerce and prove public block gating
+        run: |
+          set -euo pipefail
+          wp plugin install woocommerce --activate --path=/tmp/wp --allow-root
+          WOO_VERSION=$(wp plugin get woocommerce --field=version --path=/tmp/wp --allow-root)
+          test -n "$WOO_VERSION"
+          printf '%s\n' "$WOO_VERSION" > /tmp/r2-pattern-library/woocommerce-version.txt
+          echo "WOO_VERSION=$WOO_VERSION"
+
+          wp eval '
+            $blocks = WP_Block_Type_Registry::get_instance();
+            foreach (["woocommerce/product-categories", "woocommerce/product-collection"] as $name) {
+                if (! $blocks->is_registered($name)) {
+                    fwrite(STDERR, "FAIL: required public Woo block capability missing: {$name}\n");
+                    exit(1);
+                }
+                echo "PUBLIC_WOO_BLOCK={$name}\n";
+            }
+            $patterns = WP_Block_Patterns_Registry::get_instance();
+            foreach (["aznet-theme/commerce-category-grid", "aznet-theme/commerce-featured-products"] as $slug) {
+                if (! $patterns->is_registered($slug)) {
+                    fwrite(STDERR, "FAIL: capability-gated Theme pattern not registered: {$slug}\n");
+                    exit(1);
+                }
+                echo "THEME_WOO_PATTERN={$slug}\n";
+            }
+          ' --path=/tmp/wp --allow-root
+
+          PRODUCT_ID=$(wp eval '
+            $product = new WC_Product_Simple();
+            $product->set_name("R2 Product Fixture");
+            $product->set_status("publish");
+            $product->set_regular_price("100");
+            echo $product->save();
+          ' --path=/tmp/wp --allow-root)
+          test -n "$PRODUCT_ID"
+          echo "R2_PRODUCT_ID=$PRODUCT_ID"
+
+          FIXTURE_ID=$(cat /tmp/r2-pattern-library/fixture-id.txt)
+          wp post get "$FIXTURE_ID" --field=post_content --path=/tmp/wp --allow-root > /tmp/r2-fixture-with-woo.html
+          for slug in aznet-theme/commerce-category-grid aznet-theme/commerce-featured-products; do
+            R2_SLUG="$slug" wp eval '
+              $slug = getenv("R2_SLUG");
+              $pattern = WP_Block_Patterns_Registry::get_instance()->get_registered($slug);
+              if (! is_array($pattern) || empty($pattern["content"])) {
+                  fwrite(STDERR, "FAIL: no Woo pattern content for {$slug}\n");
+                  exit(1);
+              }
+              echo $pattern["content"];
+            ' --path=/tmp/wp --allow-root >> /tmp/r2-fixture-with-woo.html
+            printf '\n' >> /tmp/r2-fixture-with-woo.html
+          done
+          wp post update "$FIXTURE_ID" /tmp/r2-fixture-with-woo.html --path=/tmp/wp --allow-root >/dev/null
+          curl -fsS http://127.0.0.1:8080/r2-pattern-fixture/ >/tmp/r2-pattern-library/smoke-woo.html
+          grep -F 'aznet-theme-pattern--commerce-featured-products' /tmp/r2-pattern-library/smoke-woo.html
+          grep -F 'aznet-theme-pattern--commerce-category-grid' /tmp/r2-pattern-library/smoke-woo.html
+          echo 'PASS: Woo-present R2 pattern fixture created through public capabilities'
+
+      - name: Verify Woo-present Editorial pattern quality
+        env:
+          R2_BASE_URL: http://127.0.0.1:8080
+          R2_STATE_DIR: /tmp/r2-pattern-library
+          R2_PRESET: editorial
+          R2_WOO_ENABLED: '1'
+        run: |
+          set -euo pipefail
+          FIXTURE_ID=$(cat /tmp/r2-pattern-library/fixture-id.txt)
+          wp eval "set_theme_mod( 'aznet_theme_settings', [ 'schema_version' => 1, 'visual_preset' => 'editorial' ] );" --path=/tmp/wp --allow-root
+          R2_FIXTURE_ID="$FIXTURE_ID" node tests/browser/r2-pattern-library-l4.mjs
+
+      - name: Verify theme-switch content portability
+        run: |
+          set -euo pipefail
+          FIXTURE_ID=$(cat /tmp/r2-pattern-library/fixture-id.txt)
+          wp post get "$FIXTURE_ID" --field=post_content --path=/tmp/wp --allow-root > /tmp/r2-pattern-library/post-content-before.txt
+          BEFORE_SHA=$(sha256sum /tmp/r2-pattern-library/post-content-before.txt | awk '{print $1}')
+
+          mkdir -p /tmp/wp/wp-content/themes/r2-portability
+          cat > /tmp/wp/wp-content/themes/r2-portability/style.css <<'CSS'
+          /*
+          Theme Name: R2 Portability Fixture
+          Version: 1.0.0
+          */
+          CSS
+          cat > /tmp/wp/wp-content/themes/r2-portability/index.php <<'PHP'
+          <!doctype html>
+          <html><body>
+          <?php while ( have_posts() ) : the_post(); ?>
+          <main><?php the_content(); ?></main>
+          <?php endwhile; ?>
+          </body></html>
+          PHP
+
+          wp theme activate r2-portability --path=/tmp/wp --allow-root
+          wp post get "$FIXTURE_ID" --field=post_content --path=/tmp/wp --allow-root > /tmp/r2-pattern-library/post-content-after.txt
+          AFTER_SHA=$(sha256sum /tmp/r2-pattern-library/post-content-after.txt | awk '{print $1}')
+          test "$BEFORE_SHA" = "$AFTER_SHA"
+          curl -fsS http://127.0.0.1:8080/r2-pattern-fixture/ >/tmp/r2-pattern-library/portability-render.html
+          grep -F 'Phần nội dung đầu tiên' /tmp/r2-pattern-library/portability-render.html
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          echo "PORTABILITY_CONTENT_SHA=$BEFORE_SHA"
+          echo 'PASS: R2 saved block content survives theme switch byte-for-byte'
+
+      - name: Verify R2 runtime error boundary
+        run: |
+          set -euo pipefail
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/r2-pattern-library/server.log; then
+            echo 'FAIL: Theme-caused PHP error marker found during R2 browser verification' >&2
+            exit 1
+          fi
+          test -f /tmp/r2-pattern-library/default-clean/summary.json
+          test -f /tmp/r2-pattern-library/editorial-woo/summary.json
+          test "$(find patterns -maxdepth 1 -type f -name '*.php' | wc -l | tr -d ' ')" = '16'
+          test "$(find inc/patterns/woocommerce -maxdepth 1 -type f -name '*.php' | wc -l | tr -d ' ')" = '2'
+          echo 'PASS: R2 exact shipped candidate count 18 and runtime boundary clean'
+
+      - name: Upload R2 pattern evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r2-pattern-library-browser-quality
+          path: /tmp/r2-pattern-library
+          if-no-files-found: error
