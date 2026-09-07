@@ -128,7 +128,10 @@ jobs:
       - name: Verify retained integration bytes and candidate identity
         run: |
           set -euo pipefail
-          grep -F 'Version: 0.1.0-alpha.7' /tmp/aznet-theme-homepage-native/aznet-theme/style.css
+          SOURCE_VERSION=$(sed -n 's/^Version: //p' style.css | head -n 1)
+          test -n "$SOURCE_VERSION"
+          grep -F "Version: $SOURCE_VERSION" /tmp/aznet-theme-homepage-native/aznet-theme/style.css
+          grep -F "define( 'AZNET_THEME_VERSION', '$SOURCE_VERSION' );" /tmp/aznet-theme-homepage-native/aznet-theme/functions.php
           git hash-object /tmp/aznet-theme-homepage-native/aznet-theme/inc/theme/assets.php | grep -Fx 'f19e134137412fa79a4865824c89a76c5024ce8a'
           git hash-object /tmp/aznet-theme-homepage-native/aznet-theme/assets/css/integrations/convertflow.css | grep -Fx '39115a63f00a369be72b40dd01dbd988e1d55cc5'
           echo "FRONT_PAGE_BLOB=$(git hash-object /tmp/aznet-theme-homepage-native/aznet-theme/front-page.php)"
