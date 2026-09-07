@@ -86,21 +86,24 @@ jobs:
               'AZNET_THEME_CANDIDATE_MANIFEST.txt',
           }
 
+          def relative_posix(path: Path) -> str:
+              return path.relative_to(root).as_posix()
+
           files = []
           for path in root.rglob('*'):
               if not path.is_file():
                   continue
-              rel = path.as_posix().lstrip('./')
+              rel = relative_posix(path)
               parts = Path(rel).parts
               if any(part in excluded_dirs for part in parts):
                   continue
               if rel in excluded_files or rel in generated:
                   continue
               files.append(path)
-          files = sorted(files, key=lambda p: p.as_posix())
+          files = sorted(files, key=relative_posix)
 
           required = {'style.css', 'functions.php', 'theme.json', 'front-page.php', 'index.php'}
-          actual = {p.as_posix().lstrip('./') for p in files}
+          actual = {relative_posix(p) for p in files}
           missing = required - actual
           if missing:
               raise SystemExit(f'missing required production paths: {sorted(missing)}')
@@ -110,7 +113,7 @@ jobs:
           def build(target: str) -> None:
               with ZipFile(target, 'w', compression=ZIP_DEFLATED, compresslevel=9) as zf:
                   for path in files:
-                      rel = path.as_posix().lstrip('./')
+                      rel = relative_posix(path)
                       info = ZipInfo(f'aznet-theme/{rel}', (2020, 1, 1, 0, 0, 0))
                       info.compress_type = ZIP_DEFLATED
                       info.external_attr = 0o100644 << 16
@@ -133,7 +136,7 @@ jobs:
           )
           manifest = []
           for path in files:
-              rel = path.as_posix().lstrip('./')
+              rel = relative_posix(path)
               manifest.append(f'{hashlib.sha256(path.read_bytes()).hexdigest()}\t{rel}')
           Path('AZNET_THEME_CANDIDATE_MANIFEST.txt').write_text(
               '\n'.join(manifest) + '\n', encoding='utf-8'
@@ -141,11 +144,11 @@ jobs:
 
           with ZipFile('aznet-theme-candidate.zip', 'r') as zf:
               names = zf.namelist()
-              expected = [f'aznet-theme/{p.as_posix().lstrip("./")}' for p in files]
+              expected = [f'aznet-theme/{relative_posix(p)}' for p in files]
               if names != expected:
                   raise SystemExit('zip entry list differs from deterministic production file set')
               for path in files:
-                  rel = path.as_posix().lstrip('./')
+                  rel = relative_posix(path)
                   if zf.read(f'aznet-theme/{rel}') != path.read_bytes():
                       raise SystemExit(f'zip byte mismatch: {rel}')
 
