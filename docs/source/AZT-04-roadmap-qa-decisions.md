@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.23  
+**Version:** v0.24  
 **Status:** Working Source  
 **Date:** 07/09/2026
 
@@ -25,16 +25,16 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | G | Core v1.0 Cleanup / Release | TECHNICAL PASS | G0-G8 production/release-candidate closure merged; publication is a separate live GitHub state |
 | R0 | v1.0 -> v1.1 Source Reconciliation | PASS | Source-only reconciliation merged through PR #36; v1.1 product/architecture ratified |
 | R1 | Design System 2.0 | PASS | PR #37 merged; settings/tokens + Default/Editorial/Commerce outcomes + editor/frontend parity L1-L4 |
-| R2 | Native Pattern Library | READY | Curated portable WordPress/Woo Blocks patterns; next sequential production slice |
-| R3 | Header System 2.0 | READY | Standard/Compact/Commerce/Overlay bounded presets; may run independently after R1 |
-| R4 | WooCommerce Presentation 2.0 | READY | Product-card/catalog/product/cart/checkout/account presentation improvements; may run independently after R1 |
+| R2 | Native Pattern Library | PASS | PR #39 merged; 18 portable patterns; public Woo-block gating; L1-L4 + theme-switch portability evidence |
+| R3 | Header System 2.0 | READY | Standard/Compact/Commerce/Overlay bounded presets; next sequential production slice |
+| R4 | WooCommerce Presentation 2.0 | READY | Product-card/catalog/product/cart/checkout/account presentation improvements; independently unblocked |
 | R5 | Control Center + System Health | PLANNED / DEPENDENCY WAIT | Waits for final R3/R4 setting keys |
 | R6 | Performance + Release 2.0 | PLANNED | Asset-scope evidence, exact-main CI and deterministic v1.x release closure |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform R5; no wholesale merge and no parallel admin/settings architecture |
 
-Canonical implementation baseline after R1 merge: `main@80f28be8042cee0d2995784506ffb685b9eb36cb`.
+Canonical implementation baseline after R2 merge: `main@d2e4ae567108b6a224b623febca7a676b7114715`.
 
-R1 merged from head `a6b36615c9f6391cbe103844dee7659ff0dccb76`; its tree is identical to the merge tree at `880ce360d8c0c5003869d761e76833737d895fff`. Fresh exact-PR-head verification completed 10/10 workflows successfully. No pull-request-triggered Actions run exists on the merge SHA, so post-merge execution is not inferred beyond the proven tree equivalence.
+R2 merged from head `6a40a44faaa8d8207c2a3b850e2bc6d65cd561ee`; its tree is identical to the merge tree at `3f9e934eaa4bdcb058ccf289d7ef1faa7eac1ee5`. Fresh exact-PR-head verification completed 12/12 workflows successfully. No pull-request-triggered Actions run exists on the merge SHA, so post-merge execution is not inferred beyond the proven tree equivalence.
 
 A fresh GitHub check on 07/09/2026 still finds no Git tag and no GitHub Release for v1.0.0, so **publication = PUBLICATION_PENDING** even though metadata/core technical closure is `1.0.0`.
 
@@ -82,7 +82,9 @@ Build one Theme-owned versioned presentation settings schema, expanded semantic 
 
 Ship a curated WordPress-native launch set using core blocks and public Woo blocks where available. Candidate quality beats quota; Woo-dependent patterns fail soft and content remains portable after theme switch.
 
-**Exit:** L1-L4 PASS; no proprietary builder/runtime/content store.
+**Exit:** PASS — 18 patterns shipped; 16 core/native plus 2 public-Woo-block-gated patterns. L1-L4, editor/frontend parity, clean-WP/Woo-present matrices and byte-identical theme-switch content portability proven; PR #39 merged to canonical `main`.
+
+**Next:** R3 sequentially; R4 remains independently READY.
 
 ### R3 — Header System 2.0
 
@@ -112,9 +114,9 @@ Measure asset/runtime behavior, harden surface-aware loading, add reusable PR/ex
 
 `R0 -> R1 -> {R2, R3, R4} -> R5 -> R6`
 
-R0 and R1 are now complete on canonical `main`. R2/R3/R4 may proceed independently if they consume only stable R1 interfaces. R5 waits for final R3/R4 setting keys. R6 is the integration/release closure after production streams land.
+R0, R1 and R2 are now complete on canonical `main`. R3/R4 remain independently executable while consuming stable R1 interfaces. R5 waits for final R3/R4 setting keys. R6 is the integration/release closure after production streams land.
 
-Sequential execution chooses R2 as the exact next slice; parallel execution is optional, not required.
+Sequential execution chooses R3 as the exact next slice; parallel R4 execution is optional, not required.
 
 ## 6. QA layers
 
@@ -133,7 +135,7 @@ No PASS may be inferred across layers.
 ## 7. Release-critical test matrix
 
 | Case | WordPress | Optional providers | Expected result |
-| --- | --- | --- |
+| --- | --- | --- | --- |
 | C1 | On | All off | Theme activates and renders core site without fatal; release-critical |
 | C2 | On | Woo off | Non-commerce surfaces remain normal |
 | C3 | On | Woo on | Theme presentation works without taking commerce ownership |
@@ -213,8 +215,8 @@ The following remain explicit owner approval gates:
 - provider takeover paths such as E5-D;
 - destructive retirement without proven rollback.
 
-Completed R0 and R1 merge approvals are historical cleared gates and are not requested again.
+Completed R0, R1 and R2 merge approvals are historical cleared gates and are not requested again.
 
 ## 13. Exact next
 
-**R2 — Native Pattern Library from the latest canonical `main`. R3 and R4 are independently unblocked, but the sequential execution path starts with R2.**
+**R3 — Header System 2.0 from the latest canonical `main`. R4 remains independently unblocked and may proceed later or in an isolated parallel branch.**

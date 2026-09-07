@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.15  
+**Version:** v0.16  
 **Status:** Working Execution Map / derived  
 **Date:** 07/09/2026
 
@@ -22,16 +22,16 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | G Core v1.0 closure | TECHNICAL PASS | G0-G8 merged; publication/tag is separate live state |
 | R0 v1.1 Source Reconciliation | PASS | Source-only reconciliation merged through PR #36 |
 | R1 Design System 2.0 | PASS | PR #37 merged; stable Theme settings/tokens/visual presets and L1-L4 parity evidence |
-| R2 Native Pattern Library | READY | Portable WordPress-native content, no builder store; next sequential slice |
-| R3 Header System 2.0 | READY | Bounded primitives/presets, no Header Builder; independently unblocked after R1 |
-| R4 WooCommerce Presentation 2.0 | READY | Public Woo output -> Theme presentation only; independently unblocked after R1 |
+| R2 Native Pattern Library | PASS | PR #39 merged; 18 portable patterns, public Woo-block gating and theme-switch portability evidence |
+| R3 Header System 2.0 | READY | Bounded primitives/presets, no Header Builder; next sequential slice |
+| R4 WooCommerce Presentation 2.0 | READY | Public Woo output -> Theme presentation only; independently unblocked |
 | R5 Control Center + System Health | PLANNED / DEPENDENCY WAIT | Waits for final R3/R4 setting keys |
 | R6 Performance + Release 2.0 | PLANNED | Asset evidence, exact-main CI, deterministic v1.x release closure |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted v1.1 bounded admin outcome |
 
-Canonical implementation baseline after R1 merge: `main@80f28be8042cee0d2995784506ffb685b9eb36cb`.
+Canonical implementation baseline after R2 merge: `main@d2e4ae567108b6a224b623febca7a676b7114715`.
 
-R1 verified head `a6b36615c9f6391cbe103844dee7659ff0dccb76` and merge commit share tree `880ce360d8c0c5003869d761e76833737d895fff`. Fresh exact-PR-head workflows were 10/10 SUCCESS; no pull-request-triggered run exists on the merge SHA.
+R2 verified head `6a40a44faaa8d8207c2a3b850e2bc6d65cd561ee` and merge commit share tree `3f9e934eaa4bdcb058ccf289d7ef1faa7eac1ee5`. Fresh exact-PR-head workflows were 12/12 SUCCESS; no pull-request-triggered run exists on the merge SHA.
 
 V1.0 publication state at this checkpoint remains `PUBLICATION_PENDING`: a fresh GitHub check finds no Git tag and no GitHub Release. This does not reopen G technical PASS.
 
@@ -75,11 +75,12 @@ No layer may be inferred from another.
 
 - R0 source reconciliation is complete.
 - R1 stable settings/token interfaces are merged on canonical `main`.
-- R2/R3/R4 may run independently after R1 if they consume only stable R1 interfaces.
+- R2 Native Pattern Library is merged and complete.
+- R3/R4 may run independently while consuming only stable R1 interfaces.
 - R5 waits for final R3/R4 setting keys so it cannot invent a second schema.
 - R6 is the final integration/performance/release closure after production streams are merged.
 
-The sequential path executes R2 next. Parallel R3/R4 work is optional and must use isolated branches if used.
+The sequential path executes R3 next. Parallel R4 work is optional and must use an isolated branch if used.
 
 ## 5. R0 — Source reconciliation
 
@@ -122,15 +123,15 @@ The sequential path executes R2 next. Parallel R3/R4 work is optional and must u
 
 **Forbidden:** FSE takeover, proprietary content schema, provider/domain state in Theme settings.
 
-**Exit:** PASS — L1-L4 on R1 bytes; PR #37 merged to `main@80f28be8042cee0d2995784506ffb685b9eb36cb`.
+**Exit:** PASS — L1-L4 on R1 bytes; PR #37 merged to canonical `main`.
 
-**Next:** R2/R3/R4 may start independently; sequential path starts R2.
+**Next:** R2/R3/R4 may start independently; sequential path started R2.
 
 ## 7. R2 — Native Pattern Library
 
 **Goal:** speed up authoring with curated portable block compositions instead of a proprietary builder.
 
-**Launch candidate set:** 18 approved candidate patterns. A candidate that fails the quality gate is removed rather than replaced with filler.
+**Shipped set:** 18 patterns total — 16 WordPress-native/core patterns plus 2 Woo-dependent patterns registered only when exact public Woo block types are present.
 
 **Boundaries:**
 
@@ -140,9 +141,9 @@ The sequential path executes R2 next. Parallel R3/R4 work is optional and must u
 - example content is not authoritative business/trust data;
 - saved content remains WordPress block content after theme switch.
 
-**Exit:** L1-L4 PASS with exact shipped count recorded.
+**Exit:** PASS — L1-L4, clean-WP/Woo-present browser/editor matrices, 18-pattern exact count and byte-identical theme-switch content portability proven; PR #39 merged to `main@d2e4ae567108b6a224b623febca7a676b7114715`.
 
-**Next:** continue parallel R3/R4 or wait for R5 dependency closure.
+**Next:** R3 sequentially; R4 remains independently READY.
 
 ## 8. R3 — Header System 2.0
 
@@ -238,4 +239,4 @@ At every R slice, commit bounded changes on a work/feature branch and retain a c
 
 ## 14. Exact next
 
-**R2 — create an isolated implementation branch from the latest canonical `main` and execute the Native Pattern Library plan. R3/R4 are independently unblocked but are not required to start in parallel.**
+**R3 — create an isolated implementation branch from the latest canonical `main` and execute the Header System 2.0 plan. R4 remains independently unblocked but is not required to start in parallel.**

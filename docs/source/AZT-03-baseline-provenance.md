@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.19  
+**Version:** v0.20  
 **Status:** Working Source  
 **Date:** 07/09/2026  
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -13,7 +13,7 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 
 ## 2. Current canonical baseline
 
-- Canonical `main`: `80f28be8042cee0d2995784506ffb685b9eb36cb`.
+- Canonical `main`: `d2e4ae567108b6a224b623febca7a676b7114715`.
 - Internal Theme version: `1.0.0`.
 - WordPress floor: `6.9+`.
 - PHP floor: `8.1+`.
@@ -31,13 +31,18 @@ Current production state on `main` includes:
 - Theme-native WordPress Homepage shell;
 - G0-G8 core-v1.0 cleanup/release-candidate closure, including metadata promotion to `1.0.0`;
 - R0 v1.0 -> v1.1 source reconciliation;
-- R1 Design System 2.0, including one normalized/versioned Theme settings schema, expanded semantic tokens, Default/Editorial/Commerce visual presets and editor/frontend parity evidence.
+- R1 Design System 2.0, including one normalized/versioned Theme settings schema, expanded semantic tokens, Default/Editorial/Commerce visual presets and editor/frontend parity evidence;
+- R2 Native Pattern Library with 18 shipped patterns: 16 WordPress-native/core-block patterns plus 2 Woo-block-dependent patterns registered only through exact public block capability detection.
 
 PR #34 final verified head is `b2e5cca1461233bcb1a0333c5aa51879c3264756`. Its tree `b716b89f04e45c2012f8e191c7d0edf605c9dd11` is identical to the merge commit tree on canonical `main@f8e1a95c903c3f246528368ae9878eba780539ff`, so the v1.0 technical merge introduced no conflict-resolution production delta.
 
 R0 source reconciliation merged through PR #36 and established `main@fdb227b20d569bc3bcbf81ea570f94c3a7723e87` as the production base for R1.
 
 R1 merged through PR #37 from verified head `a6b36615c9f6391cbe103844dee7659ff0dccb76` to canonical `main@80f28be8042cee0d2995784506ffb685b9eb36cb`. The R1 head tree and merge tree are identical at `880ce360d8c0c5003869d761e76833737d895fff`, so the merge introduced no conflict-resolution delta. Fresh exact-PR-head verification recorded 10/10 successful workflows before merge; no post-merge pull-request-triggered run exists on the merge SHA.
+
+R1 current-state closure merged through PR #38 and established `main@b31f294d349deea62b07f2358c733c649c4c48a2` as the production base for R2.
+
+R2 merged through PR #39 from verified head `6a40a44faaa8d8207c2a3b850e2bc6d65cd561ee` to canonical `main@d2e4ae567108b6a224b623febca7a676b7114715`. The R2 head tree and merge tree are identical at `3f9e934eaa4bdcb058ccf289d7ef1faa7eac1ee5`, so the merge introduced no conflict-resolution delta. Fresh exact-PR-head verification recorded 12/12 successful workflows before merge. No post-merge pull-request-triggered workflow run exists on the merge SHA, so no fresh L2-L4 claim is inferred for the merge commit beyond exact tree equivalence.
 
 No source statement above transfers domain ownership to the Theme.
 
@@ -51,9 +56,10 @@ Under AZT-05 v1.0 and D-016:
 - RootProfile E5-C/E5-D remains an optional provider certification/takeover track, not a core-v1.x blocker.
 - ConvertFlow F6/F7 actual-package integration evidence remains retained; F8 integrated compatibility remains BLOCKED because provider body output introduces a second document-level `<main>` inside Theme-owned `main#main`.
 - External compatibility defects must not be bypassed with private APIs, authoritative heuristics or copied domain logic.
-- R0 and R1 are complete on canonical `main`. R2 Native Pattern Library, R3 Header System 2.0 and R4 WooCommerce Presentation 2.0 may now proceed independently while consuming only the stable R1 interfaces already merged.
+- R0, R1 and R2 are complete on canonical `main`.
+- R3 Header System 2.0 and R4 WooCommerce Presentation 2.0 are independently unblocked while consuming the stable R1 interfaces; R5 still waits for final R3/R4 setting keys.
 
-Exact product-development next: **begin R2/R3/R4 from the latest canonical `main`; R2 is the next sequential execution slice unless parallel capacity is intentionally used.**
+Exact product-development next: **begin R3 Header System 2.0 from the latest canonical `main`; R4 remains independently READY and may proceed later or in an isolated parallel branch.**
 
 ## 4. Registered source artifacts
 
@@ -130,4 +136,4 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**R2/R3/R4 are unblocked by R1 merge. Execute R2 Native Pattern Library next in the sequential path, or run R2/R3/R4 independently only when each branch is isolated and consumes stable R1 interfaces. R5 must wait for final R3/R4 setting keys.**
+**R3 Header System 2.0 is the next sequential slice. R4 remains independently READY. Execute each on an isolated branch from the latest canonical `main`; R5 must wait for final R3/R4 setting keys.**
