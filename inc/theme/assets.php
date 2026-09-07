@@ -166,7 +166,7 @@ function enqueue_assets(): void {
         );
     }
 
-    if ( should_enqueue_woocommerce_blocks_assets() ) {
+    if ( function_exists( __NAMESPACE__ . '\\should_enqueue_woocommerce_blocks_assets' ) && should_enqueue_woocommerce_blocks_assets() ) {
         wp_enqueue_style(
             'aznet-theme-woocommerce-blocks',
             get_theme_file_uri( '/assets/css/components/woocommerce-blocks.css' ),
