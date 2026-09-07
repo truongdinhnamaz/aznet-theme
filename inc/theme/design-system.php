@@ -23,6 +23,22 @@ function visual_preset(): string {
 }
 
 /**
+ * Return the WordPress-native editor styles for the active visual preset.
+ *
+ * @return array<int, string>
+ */
+function editor_stylesheets(): array {
+    $stylesheets = [ 'assets/css/tokens.css' ];
+    $preset      = visual_preset();
+
+    if ( 'default' !== $preset ) {
+        $stylesheets[] = 'assets/css/presets/' . $preset . '.css';
+    }
+
+    return $stylesheets;
+}
+
+/**
  * Add the active visual preset as a Theme-owned presentation body class.
  *
  * @param array<int, string> $classes Existing body classes.
