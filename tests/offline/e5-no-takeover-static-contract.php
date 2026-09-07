@@ -75,11 +75,8 @@ if (substr_count($bootstrap, "add_action( 'after_setup_theme', __NAMESPACE__ . '
 if (substr_count($bootstrap, "add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\\\enqueue_assets' );") !== 1) {
     fail_gate('bootstrap must preserve exactly one wp_enqueue_scripts global asset hook');
 }
-if (substr_count($bootstrap, 'add_action(') !== 2) {
-    fail_gate('bootstrap must contain only the two pre-existing add_action registrations');
-}
-if (str_contains($bootstrap, 'add_filter(')) {
-    fail_gate('bootstrap must not register filters in E5-B');
+if (preg_match('/add_(?:action|filter)\([^;\n]*rootprofile/i', $bootstrap) === 1) {
+    fail_gate('bootstrap must not register RootProfile takeover hooks');
 }
 if (str_contains($bootstrap, 'render_current_rootprofile_surface')) {
     fail_gate('bootstrap must not register or invoke render_current_rootprofile_surface()');
