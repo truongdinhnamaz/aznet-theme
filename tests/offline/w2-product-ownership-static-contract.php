@@ -19,7 +19,6 @@ $forbidden = [
     '$wpdb',
     'Automattic\\WooCommerce\\Internal',
     'choiceguide_',
-    'position: sticky',
     'sticky_add_to_cart',
 ];
 
@@ -49,6 +48,22 @@ foreach ( [ 'inc/theme/woocommerce-product.php', 'assets/css/components/woocomme
     if ( false !== stripos( $contents, 'convertflow' ) ) {
         fwrite( STDERR, "W2 product presentation must not couple to ConvertFlow in {$relative}\n" );
         exit( 5 );
+    }
+}
+
+$css = file_get_contents( $root . '/assets/css/components/woocommerce-product.css' );
+if ( false !== stripos( $css, 'position: sticky' ) ) {
+    if ( ! preg_match( '/aznet-theme-woo-product--focus[^\{]*\.summary\s*\{[^\}]*position\s*:\s*sticky/is', $css ) ) {
+        fwrite( STDERR, "sticky product presentation is allowed only for the R4 Focus native summary\n" );
+        exit( 6 );
+    }
+
+    foreach ( [ '.single_add_to_cart_button', 'form.cart', '.variations_form' ] as $selector ) {
+        $pattern = '/' . preg_quote( $selector, '/' ) . '[^\{]*\{[^\}]*position\s*:\s*sticky/is';
+        if ( preg_match( $pattern, $css ) ) {
+            fwrite( STDERR, "forbidden sticky commerce-control projection: {$selector}\n" );
+            exit( 7 );
+        }
     }
 }
 
