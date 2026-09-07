@@ -1,0 +1,157 @@
+name: F8 Native Homepage Runtime Browser
+
+on:
+  push:
+    branches:
+      - test/f8-native-homepage-runtime-browser-20260907
+
+permissions:
+  contents: read
+
+jobs:
+  f8-native-homepage:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout synthetic PR27 merge candidate
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install WordPress 6.9 and activate AZnet Theme
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+
+          rm -rf /tmp/wp
+          mkdir -p /tmp/wp
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create \
+            --path=/tmp/wp \
+            --dbname=wordpress \
+            --dbuser=root \
+            --dbpass=root \
+            --dbhost=127.0.0.1 \
+            --skip-check \
+            --allow-root
+          wp core install \
+            --path=/tmp/wp \
+            --url=http://127.0.0.1:8080 \
+            --title='AZnet F8 Native Homepage' \
+            --admin_user=admin \
+            --admin_password='f8-test-password' \
+            --admin_email=f8@example.test \
+            --skip-email \
+            --allow-root
+
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          rsync -a --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='docs' \
+            --exclude='scripts' \
+            --exclude='tests' \
+            ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+
+          PAGE_ID=$(wp post create \
+            --path=/tmp/wp \
+            --post_type=page \
+            --post_status=publish \
+            --post_title='F8 Native Homepage' \
+            --post_content='<p>F8 native homepage sentinel</p><p><a href="#f8-target">Homepage focus target</a></p><h2 id="f8-target">Native Homepage body</h2><p>This long native WordPress body verifies the Theme-owned shell while preserving the public Page content boundary.</p><p>Additional content for responsive layout verification.</p>' \
+            --porcelain \
+            --allow-root)
+          wp option update show_on_front page --path=/tmp/wp --allow-root
+          wp option update page_on_front "$PAGE_ID" --path=/tmp/wp --allow-root
+          wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+
+          wp core version --path=/tmp/wp --allow-root | grep -Fx '6.9'
+          wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+
+      - name: Start WordPress runtime and assert L3 surface
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/f8-wp-server.log 2>&1 &
+          echo $! > /tmp/f8-wp-server.pid
+
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/ > /tmp/f8-homepage.html; then
+              break
+            fi
+            sleep 1
+          done
+
+          curl -fsS http://127.0.0.1:8080/ > /tmp/f8-homepage.html
+          grep -F 'F8 native homepage sentinel' /tmp/f8-homepage.html
+          grep -F 'aznet-theme-site-header' /tmp/f8-homepage.html
+          grep -F 'aznet-theme-main--front-page' /tmp/f8-homepage.html
+          grep -F 'aznet-theme-site-footer' /tmp/f8-homepage.html
+
+          test "$(grep -o 'id=.aznet-theme-convertflow-contract-css.' /tmp/f8-homepage.html | wc -l | tr -d ' ')" = '1'
+          echo 'PASS: canonical ConvertFlow token stylesheet is loaded exactly once'
+
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/f8-wp-server.log; then
+            echo 'Runtime error marker found in WordPress server log' >&2
+            exit 1
+          fi
+          echo 'PASS: F8 native Homepage L3 runtime surface'
+
+      - name: Install Playwright and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Run F8 browser visual a11y verification
+        env:
+          F8_BASE_URL: http://127.0.0.1:8080
+          F8_STATE_DIR: /tmp/f8-native
+        run: |
+          set -euo pipefail
+          node tests/browser/f8-native-homepage-l4.mjs
+
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/f8-wp-server.log; then
+            echo 'Runtime error marker found after browser verification' >&2
+            exit 1
+          fi
+
+          test -f /tmp/f8-native/browser-summary.json
+          echo 'PASS: F8 native Homepage L3-L4 verification'
+
+      - name: Upload F8 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: f8-native-homepage-runtime-browser
+          path: |
+            /tmp/f8-native
+            /tmp/f8-homepage.html
+            /tmp/f8-wp-server.log
+          if-no-files-found: warn
