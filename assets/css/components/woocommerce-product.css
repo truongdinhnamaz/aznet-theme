@@ -3,6 +3,12 @@
  * WooCommerce keeps product and commerce semantics; this file only composes native markup.
  */
 
+.single-product {
+    --aznet-theme-woo-gallery-gap: var(--aznet-theme-space-3, 1rem);
+    --aznet-theme-woo-gallery-thumb-size: 5rem;
+    --aznet-theme-woo-purchase-control-height: var(--aznet-theme-control-height, 2.75rem);
+}
+
 .single-product .aznet-theme-main .product {
     display: grid;
     grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
@@ -32,6 +38,52 @@
     min-width: 0;
     width: 100%;
     margin: 0;
+}
+
+.single-product .aznet-theme-main .woocommerce-product-gallery__wrapper {
+    margin: 0;
+}
+
+.single-product .aznet-theme-main .woocommerce-product-gallery__image {
+    overflow: hidden;
+    border-radius: var(--aznet-theme-radius-card, 0.875rem);
+    background: var(--aznet-theme-surface, #ffffff);
+}
+
+.single-product .aznet-theme-main .woocommerce-product-gallery__image img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.single-product .aznet-theme-main .flex-control-thumbs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--aznet-theme-woo-gallery-thumb-size), 100%), 1fr));
+    gap: var(--aznet-theme-woo-gallery-gap);
+    margin: var(--aznet-theme-woo-gallery-gap) 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.single-product .aznet-theme-main .flex-control-thumbs li {
+    float: none;
+    width: auto;
+    margin: 0;
+}
+
+.single-product .aznet-theme-main .flex-control-thumbs img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border: 1px solid var(--aznet-theme-border, #d9dde4);
+    border-radius: calc(var(--aznet-theme-radius-card, 0.875rem) * 0.6);
+    cursor: pointer;
+}
+
+.single-product .aznet-theme-main .flex-control-thumbs img.flex-active {
+    border-color: var(--aznet-theme-accent, #175cd3);
+    box-shadow: 0 0 0 2px var(--aznet-theme-surface, #ffffff), 0 0 0 4px var(--aznet-theme-focus, #175cd3);
 }
 
 .single-product .aznet-theme-main .summary {
@@ -91,6 +143,36 @@
     text-align: start;
 }
 
+.single-product .aznet-theme-main .variations select,
+.single-product .aznet-theme-main .quantity .qty {
+    min-height: var(--aznet-theme-woo-purchase-control-height);
+    border: 1px solid var(--aznet-theme-border, #d9dde4);
+    border-radius: var(--aznet-theme-radius-control, 0.5rem);
+    background: var(--aznet-theme-surface, #ffffff);
+    color: var(--aznet-theme-text, #17181b);
+}
+
+.single-product .aznet-theme-main .variations select {
+    width: 100%;
+    padding-inline: var(--aznet-theme-space-3, 1rem);
+}
+
+.single-product .aznet-theme-main .quantity .qty {
+    width: 5rem;
+    padding-inline: var(--aznet-theme-space-2, 0.5rem);
+    text-align: center;
+}
+
+.single-product .aznet-theme-main .single_add_to_cart_button {
+    min-height: var(--aznet-theme-woo-purchase-control-height);
+    padding-inline: var(--aznet-theme-space-4, 1.5rem);
+}
+
+.single-product .aznet-theme-main .reset_variations {
+    color: var(--aznet-theme-muted, #626873);
+    text-underline-offset: 0.2em;
+}
+
 .single-product .aznet-theme-main .single_variation_wrap {
     width: 100%;
 }
@@ -100,7 +182,8 @@
     max-width: 100%;
 }
 
-.single-product .aznet-theme-main :is(a, button, input, select, textarea):focus-visible {
+.single-product .aznet-theme-main :is(a, button, input, select, textarea):focus-visible,
+.single-product .aznet-theme-main .flex-control-thumbs img:focus-visible {
     outline: 3px solid var(--aznet-theme-focus, #175cd3);
     outline-offset: 3px;
 }
@@ -145,6 +228,14 @@
         position: static;
     }
 
+    .single-product .aznet-theme-main .woocommerce-product-gallery__wrapper {
+        display: block;
+    }
+
+    .single-product .aznet-theme-main .flex-control-thumbs {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
     .single-product .aznet-theme-main .woocommerce-product-gallery,
     .single-product .aznet-theme-main .summary,
     .single-product .aznet-theme-main .woocommerce-tabs,
@@ -156,5 +247,10 @@
     .single-product .aznet-theme-main form.cart,
     .single-product .aznet-theme-main .variations_form {
         align-items: stretch;
+    }
+
+    .single-product .aznet-theme-main .quantity .qty,
+    .single-product .aznet-theme-main .single_add_to_cart_button {
+        min-height: 3rem;
     }
 }
