@@ -1,0 +1,30 @@
+name: F6 F7 Provider Artifact Access Probe
+
+on:
+  push:
+    branches:
+      - test/f6-f7-provider-access-20260907
+
+permissions:
+  contents: read
+
+jobs:
+  provider-access:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Probe exact ConvertFlow artifact access without exposing package
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          status=$(curl -sS -o /tmp/cf-artifact.zip -w '%{http_code}' \
+            -L \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            https://api.github.com/repos/truongdinhnamaz/convert-flow/actions/artifacts/9923158317/zip)
+          echo "provider_artifact_http_status=${status}"
+          test "${status}" = '200'
+          test -s /tmp/cf-artifact.zip
+          unzip -l /tmp/cf-artifact.zip | sed -n '1,20p'
+          echo 'PASS: Theme CI can read exact source-owner ConvertFlow artifact without vendoring it'
