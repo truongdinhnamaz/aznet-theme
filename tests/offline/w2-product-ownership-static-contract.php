@@ -19,7 +19,6 @@ $forbidden = [
     '$wpdb',
     'Automattic\\WooCommerce\\Internal',
     'choiceguide_',
-    'convertflow',
     'position: sticky',
     'sticky_add_to_cart',
 ];
@@ -42,6 +41,14 @@ foreach ( $paths as $relative ) {
     if ( preg_match( "/['\"]_woocommerce_[^'\"]*['\"]/i", $contents ) ) {
         fwrite( STDERR, "forbidden Woo storage-key literal in {$relative}\n" );
         exit( 4 );
+    }
+}
+
+foreach ( [ 'inc/theme/woocommerce-product.php', 'assets/css/components/woocommerce-product.css' ] as $relative ) {
+    $contents = file_get_contents( $root . '/' . $relative );
+    if ( false !== stripos( $contents, 'convertflow' ) ) {
+        fwrite( STDERR, "W2 product presentation must not couple to ConvertFlow in {$relative}\n" );
+        exit( 5 );
     }
 }
 
