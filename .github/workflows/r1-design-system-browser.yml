@@ -1,0 +1,184 @@
+name: R1 Design System Browser Parity
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/r1-design-system-browser.yml'
+      - 'tests/browser/r1-design-system-l4.mjs'
+      - 'inc/theme/settings.php'
+      - 'inc/theme/design-system.php'
+      - 'inc/theme/assets.php'
+      - 'inc/theme/bootstrap.php'
+      - 'assets/css/tokens.css'
+      - 'assets/css/presets/**'
+      - 'theme.json'
+      - 'style.css'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  r1-browser-parity:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout exact R1 candidate
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install WordPress 6.9 and Design System fixture
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+
+          rm -rf /tmp/wp /tmp/r1-design-system
+          mkdir -p /tmp/wp /tmp/r1-design-system
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create \
+            --path=/tmp/wp \
+            --dbname=wordpress \
+            --dbuser=root \
+            --dbpass=root \
+            --dbhost=127.0.0.1 \
+            --skip-check \
+            --allow-root
+          wp core install \
+            --path=/tmp/wp \
+            --url=http://127.0.0.1:8080 \
+            --title='AZnet R1 Design System' \
+            --admin_user=admin \
+            --admin_password='r1-browser-password' \
+            --admin_email=r1@example.test \
+            --skip-email \
+            --allow-root
+
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          rsync -a --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='docs' \
+            --exclude='scripts' \
+            --exclude='tests' \
+            --exclude='README.md' \
+            --exclude='aznet-preview.png' \
+            ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+
+          printf '%s' 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Y9Zx9sAAAAASUVORK5CYII=' | base64 -d > /tmp/r1-media.png
+          MEDIA_ID=$(wp media import /tmp/r1-media.png --title='R1 Media' --porcelain --path=/tmp/wp --allow-root)
+          MEDIA_URL=$(wp eval "echo wp_get_attachment_url(${MEDIA_ID});" --path=/tmp/wp --allow-root)
+
+          cat > /tmp/r1-fixture.html <<HTML
+          <!-- wp:heading {"level":2} -->
+          <h2 class="wp-block-heading">R1 Design System Fixture</h2>
+          <!-- /wp:heading -->
+          <!-- wp:paragraph -->
+          <p>Semantic typography and spacing fixture paragraph for editor and frontend parity.</p>
+          <!-- /wp:paragraph -->
+          <!-- wp:buttons -->
+          <div class="wp-block-buttons"><!-- wp:button -->
+          <div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="/">R1 action</a></div>
+          <!-- /wp:button --></div>
+          <!-- /wp:buttons -->
+          <!-- wp:columns -->
+          <div class="wp-block-columns"><!-- wp:column -->
+          <div class="wp-block-column"><!-- wp:paragraph --><p>Column alpha</p><!-- /wp:paragraph --></div>
+          <!-- /wp:column --><!-- wp:column -->
+          <div class="wp-block-column"><!-- wp:paragraph --><p>Column beta</p><!-- /wp:paragraph --></div>
+          <!-- /wp:column --></div>
+          <!-- /wp:columns -->
+          <!-- wp:image {"id":${MEDIA_ID},"sizeSlug":"full","linkDestination":"none"} -->
+          <figure class="wp-block-image size-full"><img src="${MEDIA_URL}" alt="R1 media fixture" class="wp-image-${MEDIA_ID}"/></figure>
+          <!-- /wp:image -->
+          HTML
+
+          FIXTURE_ID=$(wp post create /tmp/r1-fixture.html \
+            --post_type=page \
+            --post_status=publish \
+            --post_title='R1 Design System Fixture' \
+            --post_name='design-system-fixture' \
+            --porcelain \
+            --path=/tmp/wp \
+            --allow-root)
+          printf '%s\n' "$FIXTURE_ID" > /tmp/r1-design-system/fixture-id.txt
+
+          wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+          wp core version --path=/tmp/wp --allow-root | grep -Fx '6.9'
+          wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+
+      - name: Start WordPress runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/r1-design-system/server.log 2>&1 &
+          echo $! > /tmp/r1-design-system/server.pid
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/design-system-fixture/ >/tmp/r1-design-system/smoke.html; then
+              break
+            fi
+            sleep 1
+          done
+          grep -F 'R1 Design System Fixture' /tmp/r1-design-system/smoke.html
+
+      - name: Install Playwright and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Run Default Editorial Commerce parity matrix
+        env:
+          R1_BASE_URL: http://127.0.0.1:8080
+          R1_STATE_DIR: /tmp/r1-design-system
+        run: |
+          set -euo pipefail
+          FIXTURE_ID=$(cat /tmp/r1-design-system/fixture-id.txt)
+          for preset in default editorial commerce; do
+            wp eval "set_theme_mod( 'aznet_theme_settings', [ 'schema_version' => 1, 'visual_preset' => '${preset}' ] );" --path=/tmp/wp --allow-root
+            R1_PRESET="$preset" R1_FIXTURE_ID="$FIXTURE_ID" node tests/browser/r1-design-system-l4.mjs
+          done
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/r1-design-system/server.log; then
+            echo 'FAIL: Theme-caused PHP error marker found during R1 browser verification' >&2
+            exit 1
+          fi
+          test -f /tmp/r1-design-system/default/summary.json
+          test -f /tmp/r1-design-system/editorial/summary.json
+          test -f /tmp/r1-design-system/commerce/summary.json
+          echo 'PASS: R1 Design System L4 parity matrix'
+
+      - name: Upload R1 browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r1-design-system-browser-parity
+          path: /tmp/r1-design-system
+          if-no-files-found: error

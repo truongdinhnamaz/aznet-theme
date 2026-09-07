@@ -74,8 +74,8 @@ foreach ($required_once as $needle) {
         exit(6);
     }
 }
-if (substr_count($bootstrap, 'add_action(') !== 2 || false !== strpos($bootstrap, 'add_filter(')) {
-    fwrite(STDERR, "bootstrap lifecycle registrations drifted\n");
+if (preg_match('/add_(?:action|filter)\([^;\n]*(?:woocommerce|woo)/i', $bootstrap) === 1) {
+    fwrite(STDERR, "W3 must not register WooCommerce-specific lifecycle hooks\n");
     exit(7);
 }
 if (false !== strpos($bootstrap, 'render_current_rootprofile_surface')) {

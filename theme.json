@@ -3,18 +3,128 @@
   "version": 3,
   "settings": {
     "appearanceTools": false,
+    "color": {
+      "custom": false,
+      "defaultPalette": false,
+      "palette": [
+        {
+          "slug": "primary",
+          "name": "Primary",
+          "color": "var(--aznet-theme-color-primary)"
+        },
+        {
+          "slug": "surface",
+          "name": "Surface",
+          "color": "var(--aznet-theme-color-surface)"
+        },
+        {
+          "slug": "text",
+          "name": "Text",
+          "color": "var(--aznet-theme-color-text)"
+        },
+        {
+          "slug": "muted",
+          "name": "Muted",
+          "color": "var(--aznet-theme-color-text-muted)"
+        },
+        {
+          "slug": "success",
+          "name": "Success",
+          "color": "var(--aznet-theme-color-success)"
+        },
+        {
+          "slug": "warning",
+          "name": "Warning",
+          "color": "var(--aznet-theme-color-warning)"
+        },
+        {
+          "slug": "danger",
+          "name": "Danger",
+          "color": "var(--aznet-theme-color-danger)"
+        }
+      ]
+    },
     "layout": {
       "contentSize": "var(--aznet-theme-container-content)",
       "wideSize": "var(--aznet-theme-container-wide)"
+    },
+    "spacing": {
+      "spacingSizes": [
+        {
+          "slug": "1",
+          "name": "1",
+          "size": "var(--aznet-theme-space-1)"
+        },
+        {
+          "slug": "2",
+          "name": "2",
+          "size": "var(--aznet-theme-space-2)"
+        },
+        {
+          "slug": "3",
+          "name": "3",
+          "size": "var(--aznet-theme-space-3)"
+        },
+        {
+          "slug": "4",
+          "name": "4",
+          "size": "var(--aznet-theme-space-4)"
+        },
+        {
+          "slug": "6",
+          "name": "6",
+          "size": "var(--aznet-theme-space-6)"
+        },
+        {
+          "slug": "section",
+          "name": "Section",
+          "size": "var(--aznet-theme-space-section)"
+        }
+      ],
+      "units": [
+        "px",
+        "rem",
+        "%"
+      ]
+    },
+    "typography": {
+      "customFontSize": false,
+      "defaultFontSizes": false,
+      "fontSizes": [
+        {
+          "slug": "sm",
+          "name": "Small",
+          "size": "var(--aznet-theme-font-size-sm)"
+        },
+        {
+          "slug": "base",
+          "name": "Base",
+          "size": "var(--aznet-theme-font-size-base)"
+        },
+        {
+          "slug": "lg",
+          "name": "Large",
+          "size": "var(--aznet-theme-font-size-lg)"
+        },
+        {
+          "slug": "xl",
+          "name": "Extra Large",
+          "size": "var(--aznet-theme-font-size-xl)"
+        }
+      ]
     }
   },
   "styles": {
     "color": {
-      "background": "var(--aznet-theme-surface)",
-      "text": "var(--aznet-theme-text)"
+      "background": "var(--aznet-theme-color-surface)",
+      "text": "var(--aznet-theme-color-text)"
     },
     "spacing": {
       "blockGap": "var(--aznet-theme-space-4)"
+    },
+    "typography": {
+      "fontSize": "var(--aznet-theme-font-size-base)",
+      "lineHeight": "var(--aznet-theme-line-height-body)"
     }
   }
 }

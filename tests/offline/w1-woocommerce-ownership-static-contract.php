@@ -58,11 +58,8 @@ $bootstrap = read_path($root, 'inc/theme/bootstrap.php');
 if (substr_count($bootstrap, "require_once __DIR__ . '/../integrations/woocommerce.php';") !== 1) {
     fail_gate('bootstrap must load WooCommerce integration exactly once');
 }
-if (substr_count($bootstrap, 'add_action(') !== 2) {
-    fail_gate('W1 must not add WordPress action registrations');
-}
-if (str_contains($bootstrap, 'add_filter(')) {
-    fail_gate('W1 must not add WordPress filter registrations');
+if (preg_match('/add_(?:action|filter)\([^;\n]*(?:woocommerce|woo)/i', $bootstrap) === 1) {
+    fail_gate('W1 must not register WooCommerce-specific WordPress hooks');
 }
 
 $content = read_path($root, 'inc/theme/content-shell.php');

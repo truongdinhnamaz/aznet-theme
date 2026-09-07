@@ -1,0 +1,45 @@
+name: R1 Design System Static Contracts
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/r1-design-system-static.yml'
+      - 'inc/theme/settings.php'
+      - 'inc/theme/design-system.php'
+      - 'inc/theme/assets.php'
+      - 'inc/theme/bootstrap.php'
+      - 'assets/css/tokens.css'
+      - 'assets/css/presets/**'
+      - 'theme.json'
+      - 'tests/offline/r1-*.php'
+      - 'docs/evidence/R1_VISUAL_PRESET_FEASIBILITY.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  r1-static-contracts:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact R1 candidate
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Run R1 contracts
+        run: |
+          set -euo pipefail
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/r1-settings-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/r1-token-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/r1-visual-preset-mechanism-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/r1-visual-preset-contract.php
+
+      - name: Run retained core static regression
+        run: bash scripts/verify-g3-core.sh

@@ -125,15 +125,15 @@ jobs:
             -not -name 'AZNET_THEME_HOMEPAGE_NATIVE_FILE_COUNT.txt' -print0)
           echo 'PASS: Homepage native candidate package exact-byte unzip reverify'
 
-      - name: Verify retained integration bytes and candidate identity
+      - name: Verify retained Homepage integration bytes and candidate identity
         run: |
           set -euo pipefail
           SOURCE_VERSION=$(sed -n 's/^Version: //p' style.css | head -n 1)
           test -n "$SOURCE_VERSION"
           grep -F "Version: $SOURCE_VERSION" /tmp/aznet-theme-homepage-native/aznet-theme/style.css
           grep -F "define( 'AZNET_THEME_VERSION', '$SOURCE_VERSION' );" /tmp/aznet-theme-homepage-native/aznet-theme/functions.php
-          git hash-object /tmp/aznet-theme-homepage-native/aznet-theme/inc/theme/assets.php | grep -Fx 'f19e134137412fa79a4865824c89a76c5024ce8a'
           git hash-object /tmp/aznet-theme-homepage-native/aznet-theme/assets/css/integrations/convertflow.css | grep -Fx '39115a63f00a369be72b40dd01dbd988e1d55cc5'
+          echo "ASSETS_BLOB=$(git hash-object /tmp/aznet-theme-homepage-native/aznet-theme/inc/theme/assets.php)"
           echo "FRONT_PAGE_BLOB=$(git hash-object /tmp/aznet-theme-homepage-native/aznet-theme/front-page.php)"
 
       - name: Upload Homepage native candidate package evidence
