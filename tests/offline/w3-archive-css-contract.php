@@ -4,13 +4,13 @@ if (!is_file($path)) { fwrite(STDERR, "missing archive CSS\n"); exit(1); }
 $css = file_get_contents($path);
 $required = [
     '.woocommerce ul.products',
-    'grid-template-columns: repeat(4, minmax(0, 1fr))',
+    'grid-template-columns: repeat(var(--aznet-theme-woo-catalog-columns, 4), minmax(0, 1fr))',
     '@media (max-width: 1023px)',
-    'repeat(3, minmax(0, 1fr))',
+    '--aznet-theme-woo-catalog-columns: 3;',
     '@media (max-width: 767px)',
-    'repeat(2, minmax(0, 1fr))',
+    '--aznet-theme-woo-catalog-columns: 2;',
     '@media (max-width: 479px)',
-    'grid-template-columns: 1fr',
+    '--aznet-theme-woo-catalog-columns: 1;',
     '.woocommerce-result-count',
     '.woocommerce-ordering',
     '.woocommerce-loop-product__title',
