@@ -1,0 +1,49 @@
+/*
+ * AZnet Theme — scoped presentation for certified public WooCommerce Blocks.
+ * WooCommerce keeps block query/product/commerce semantics.
+ */
+
+.wp-block-woocommerce-product-collection,
+.wp-block-woocommerce-product-categories {
+    color: var(--aznet-theme-text, #17181b);
+}
+
+.wp-block-woocommerce-product-collection .wc-block-product {
+    min-width: 0;
+    border: 1px solid var(--aznet-theme-border, #d9dde4);
+    border-radius: var(--aznet-theme-radius-card, 0.875rem);
+    background: var(--aznet-theme-surface, #ffffff);
+    padding: var(--aznet-theme-space-3, 1rem);
+}
+
+.wp-block-woocommerce-product-collection .wc-block-components-product-name,
+.wp-block-woocommerce-product-collection .wp-block-post-title {
+    color: var(--aznet-theme-text, #17181b);
+    line-height: var(--aznet-theme-line-height-heading, 1.2);
+}
+
+.wp-block-woocommerce-product-collection .wc-block-components-product-price {
+    color: var(--aznet-theme-text, #17181b);
+    font-weight: 700;
+}
+
+.wp-block-woocommerce-product-collection .wp-block-button,
+.wp-block-woocommerce-product-collection .wp-block-button__link {
+    max-width: 100%;
+}
+
+.wp-block-woocommerce-product-collection :is(a, button, input, select):focus-visible,
+.wp-block-woocommerce-product-categories :is(a, button, input, select):focus-visible,
+.wp-block-woocommerce-product-collection .wp-block-button__link:focus-visible {
+    outline: 3px solid var(--aznet-theme-focus, #175cd3);
+    outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+    .wp-block-woocommerce-product-collection,
+    .wp-block-woocommerce-product-categories,
+    .wp-block-woocommerce-product-collection .wc-block-product {
+        max-width: 100%;
+        min-width: 0;
+    }
+}
