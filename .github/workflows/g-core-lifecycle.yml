@@ -68,7 +68,10 @@ jobs:
           git archive "$PRIOR_COMMIT" | tar -x -C /tmp/prior-source
           rsync -a ./ /tmp/candidate-source/
           grep -F 'Version: 0.1.0-alpha.7' /tmp/prior-source/style.css
-          grep -F 'Version: 0.1.0-alpha.7' /tmp/candidate-source/style.css
+          CANDIDATE_VERSION=$(sed -n 's/^Version: //p' /tmp/candidate-source/style.css | head -n 1)
+          test -n "$CANDIDATE_VERSION"
+          grep -F "define( 'AZNET_THEME_VERSION', '$CANDIDATE_VERSION' );" /tmp/candidate-source/functions.php
+          printf '%s\n' "$CANDIDATE_VERSION" > /tmp/g6-lifecycle/candidate-version.txt
           printf '%s\n' "$PRIOR_COMMIT" > /tmp/g6-lifecycle/prior-commit.txt
           git rev-parse HEAD > /tmp/g6-lifecycle/checkout-head.txt
 
