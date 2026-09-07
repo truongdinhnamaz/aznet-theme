@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 ?>
-<main id="main" class="aznet-theme-main">
+<main id="main" class="aznet-theme-main aznet-theme-main--front-page">
     <?php if ( have_posts() ) : ?>
         <?php while ( have_posts() ) : ?>
             <?php the_post(); ?>
