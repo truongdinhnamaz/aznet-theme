@@ -45,6 +45,12 @@ wp theme activate aznet-theme
 
 Repository có thể chứa fixture phục vụ kiểm thử/tài liệu dưới `docs/fixtures/`. Fixture không phải production Theme data và không chuyển ownership của WordPress/WooCommerce/RootProfile/ConvertFlow sang Theme.
 
+## Source governance
+
+Source đã được chấp nhận là baseline cố định cho implementation; tiến độ sống được xác định từ GitHub code/PR/CI/evidence, không bằng cách tạo source version mới sau mỗi checkpoint. Quy tắc đầy đủ nằm tại [`docs/SOURCE_GOVERNANCE.md`](docs/SOURCE_GOVERNANCE.md).
+
+README chỉ là điểm dẫn nhập và không thay thế source owner theo chủ đề.
+
 ## Phát triển
 
 Mọi thay đổi production cần giữ đúng source ownership, public integration boundary và QA layer tương ứng. Không suy diễn static/contract PASS thành runtime/browser/integration/release PASS.
