@@ -1,0 +1,9 @@
+body.aznet-theme-preset--editorial,
+.editor-styles-wrapper {
+    --aznet-theme-container-content: 42rem;
+    --aznet-theme-font-size-lg: 1.1875rem;
+    --aznet-theme-font-size-xl: 1.625rem;
+    --aznet-theme-line-height-body: 1.7;
+    --aznet-theme-line-height-heading: 1.16;
+    --aznet-theme-space-section: 3.75rem;
+}
