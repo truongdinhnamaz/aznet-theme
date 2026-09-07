@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.17  
+**Version:** v0.18  
 **Status:** Working Source  
 **Date:** 07/09/2026  
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -13,8 +13,8 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 
 ## 2. Current canonical baseline
 
-- Canonical `main`: `815ffcd43653930d1f302a055961ac24cf5ae843`.
-- Internal Theme version: `0.1.0-alpha.7`.
+- Canonical `main`: `f8e1a95c903c3f246528368ae9878eba780539ff`.
+- Internal Theme version: `1.0.0`.
 - WordPress floor: `6.9+`.
 - PHP floor: `8.1+`.
 - Architecture: hybrid PHP theme + `theme.json`.
@@ -25,10 +25,13 @@ Current production state on `main` includes:
 - Milestone 0 Source Freeze & Provenance;
 - Theme Foundation;
 - Semantic Design Tokens;
-- Header/Footer v1.5;
+- Header/Footer presentation;
 - Generic Templates Page/Post/Archive/Search/404;
-- WooCommerce presentation work W1-W9 including the merged public ConvertFlow token projection from PR #24;
-- Theme-native WordPress Homepage shell from merged PR #30.
+- WooCommerce presentation work W1-W9 including the public ConvertFlow token projection;
+- Theme-native WordPress Homepage shell;
+- G0-G8 core-v1.0 cleanup/release-candidate closure, including metadata promotion to `1.0.0`.
+
+PR #34 final verified head is `b2e5cca1461233bcb1a0333c5aa51879c3264756`. Its tree `b716b89f04e45c2012f8e191c7d0edf605c9dd11` is identical to the merge commit tree on canonical `main@f8e1a95c903c3f246528368ae9878eba780539ff`, so the merge introduced no conflict-resolution production delta.
 
 No source statement above transfers domain ownership to the Theme.
 
@@ -37,12 +40,13 @@ No source statement above transfers domain ownership to the Theme.
 Under AZT-05 v1.0 and D-016:
 
 - WordPress-clean core Theme readiness is release-critical.
+- Core v1.0 production code and technical release-candidate closure are complete on canonical `main`.
+- Release publication is tracked separately from implementation readiness. At the 07/09/2026 R0 reconciliation checkpoint, GitHub has no `v1.0.0` tag and no GitHub Release; publication is therefore `PUBLICATION_PENDING`.
 - RootProfile E5-C/E5-D remains an optional provider certification/takeover track, not a core-v1.0 blocker.
-- ConvertFlow F6/F7 actual-package integration has evidence PASS outside canonical main.
-- F8 integrated compatibility remains BLOCKED because provider body output introduces a second document-level `<main>` inside Theme-owned `main#main`.
-- The F8 provider defect is tracked as external compatibility evidence; Theme must not bypass it with private APIs, authoritative heuristics or copied domain logic.
+- ConvertFlow F6/F7 actual-package integration evidence remains retained; F8 integrated compatibility remains BLOCKED because provider body output introduces a second document-level `<main>` inside Theme-owned `main#main`.
+- External compatibility defects must not be bypassed with private APIs, authoritative heuristics or copied domain logic.
 
-Exact core next: **G0 — core-v1.0 scope freeze and Theme-owned cleanup/release inventory**.
+Exact product-development next: **R1 — v1.1 Design System 2.0**, after the R0 canonical source reconciliation is approved and merged.
 
 ## 4. Registered source artifacts
 
@@ -99,8 +103,9 @@ The 9/9 pre-port visual baselines for Header, Footer and Generic content shell r
 
 - L0/L1/L2 evidence cannot be promoted to runtime/browser/integration/release claims.
 - Runtime/browser evidence is retained unless a concrete production-byte or contract invalidation is found.
-- Package/release claims are byte-specific and must be refreshed on the final v1.0 candidate.
+- Package/release claims are byte-specific and must be refreshed on the final candidate bytes of the release being promoted.
 - PRs, Actions runs, commit hashes and package hashes live in GitHub evidence; they do not require AZT-03 version bumps unless the baseline/provenance rule itself changes.
+- A Theme version string does not prove publication. Tag/Release existence and target SHA are live GitHub facts and must be checked separately.
 
 ## 9. Canonical evidence locations
 
@@ -118,4 +123,4 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**G0:** inventory only the remaining blockers that are owned by AZnet Theme and required by the AZT-05 core release constitution. Optional provider certification defects remain tracked separately and do not authorize scope transfer.
+**R1 — Design System 2.0:** begin only after the R0 v1.1 source reconciliation is approved and merged. R1 may change Theme-owned presentation settings/tokens and editor/frontend presentation only within the architecture ratified by AZT-01/AZT-02/AZT-04; it must not convert optional provider state into Theme ownership.

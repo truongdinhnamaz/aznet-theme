@@ -4,9 +4,9 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.4 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.5 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 03/09/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 07/09/2026 |
 
 | **Kiến trúc lõi: **Theme chỉ sở hữu presentation/configuration/reference cần thiết. Dữ liệu authoritative và business state ở lại owner. Boundary giữa hai bên là public/versioned provider contract hoặc adapter tối thiểu. |
 | --- |
@@ -27,6 +27,7 @@ Kiến trúc lớp, dependency policy, provider boundary và chiến lược tí
 - Theme được phép phát hiện capability/provider theo public API và thay đổi presentation tương ứng.
 - Theme không được suy luận dữ liệu authoritative khi provider vắng mặt. Fallback chỉ dùng dữ liệu WordPress/theme mà bản chất thực sự thuộc phạm vi fallback đó.
 - Theme switching phải không làm mất domain data vì theme không sở hữu domain storage.
+- Public extension hook mới không được tạo chỉ vì “có thể cần sau này”. Hook/contract mới cần consumer thực tế, owner/source decision, versioning strategy và contract tests trước khi trở thành public surface.
 
 # 3. Contract requirements
 
@@ -66,19 +67,21 @@ Global theme tokens là integration surface chiều ngược lại: plugin prese
 | Decision D-009 đã khóa prefix family: aznet-theme. Public CSS custom properties dùng --aznet-theme-*; PHP namespace dùng AZnet\\Theme; procedural functions dùng aznet_theme_; constants dùng AZNET_THEME_. |
 | --- |
 
-# 6. Cấu trúc source tree - đề xuất baseline
+# 6. Cấu trúc source tree - baseline
 
-Đây là đề xuất implementation cho skeleton, chưa phải quyết định bất biến. Mục tiêu là làm ownership nhìn thấy ngay trong source tree và cô lập adapter khỏi presentation.
+Mục tiêu là làm ownership nhìn thấy ngay trong source tree và cô lập adapter khỏi presentation.
 
-| **Path đề xuất** | **Trách nhiệm** |
+| **Path** | **Trách nhiệm** |
 | --- | --- |
-| assets/css/ | Foundation, tokens, components generic, responsive utilities có owner ở theme |
-| assets/js/ | Interaction generic của theme: navigation, disclosure, accessibility helpers |
-| inc/theme/ | Theme setup, supports, assets, template helpers không domain-specific |
+| assets/css/ | Foundation, semantic tokens, components generic, responsive utilities có owner ở theme |
+| assets/js/ | Interaction generic của theme: navigation, disclosure, accessibility/progressive-enhancement helpers |
+| inc/theme/ | Theme setup, settings, supports, assets, template helpers không domain-specific |
 | inc/integrations/ | Adapter/availability checks cho provider công khai; mỗi owner một module rõ |
-| template-parts/ | Header/Footer/generic compositional parts |
+| inc/admin/ | Chỉ Theme-owned presentation settings UI và read-only public capability diagnostics |
+| template-parts/ | Header/Footer/generic compositional parts và bounded component primitives |
+| patterns/ | WordPress-native block patterns; không phải proprietary data/content store |
 | templates/ hoặc template hierarchy root | Page/Post/Archive/Search/404/front-page shell |
-| woocommerce/ | Chỉ override presentation thực sự cần thiết; tránh fork template nếu hooks/CSS đủ |
+| woocommerce/ | Chỉ override presentation thực sự cần thiết; tránh fork template nếu hooks/CSS/Blocks đủ |
 | tests/ | Contract, runtime, accessibility smoke và visual baseline tooling |
 
 # 7. Anti-patterns bị cấm
@@ -89,18 +92,19 @@ Global theme tokens là integration surface chiều ngược lại: plugin prese
 - Fork WooCommerce commerce logic hoặc coi theme là owner của price/stock/variation/order.
 - Đưa Flatsome-specific assumption vào core theme mà không cô lập thành adapter/compatibility layer.
 - Tạo shared library chỉ vì vài đoạn duplicate khi chưa có ít nhất hai consumer thực sự và contract ổn định.
+- Tạo proprietary page-builder content schema, Header Builder store hoặc application state chỉ để mô phỏng commercial theme feature count.
 
-# 8. Technical baseline cho Milestone A/B
+# 8. Technical baseline cho v1.x
 
 | **Baseline** | **Quyết định đã khóa** |
 | --- | --- |
-| **Theme architecture** | Hybrid PHP theme + theme.json. Không dùng FSE làm source-of-truth cho template composition ở v0.x; block editor/theme.json vẫn được hỗ trợ cho settings, styles và tokens. |
-| **WordPress minimum** | 6.9+. Skeleton phải khai báo Requires at least tương ứng và test activation/runtime trên floor trước khi nâng yêu cầu. |
+| **Theme architecture** | Hybrid PHP theme + theme.json. Không dùng FSE làm source-of-truth cho template composition ở v1.x; block editor/theme.json vẫn được hỗ trợ cho settings, styles và tokens. |
+| **WordPress minimum** | 6.9+. Theme khai báo Requires at least tương ứng và test activation/runtime trên floor trước khi nâng yêu cầu. |
 | **PHP minimum** | 8.1+. Không dùng cú pháp/API bắt buộc PHP 8.2+ nếu chưa có Decision Log nâng floor. |
 | **Naming family** | aznet-theme là lexical root duy nhất. Tránh choiceguide_* và tránh generic prefix có nguy cơ xung đột. |
-| **Build tooling** | Milestone A không bắt buộc bundler. Asset pipeline giữ tối giản cho tới O-007 hoặc nhu cầu module/minification thực tế. |
+| **Build tooling** | Không tự thêm bundler/build framework. Asset pipeline giữ tối giản cho tới O-007 hoặc nhu cầu module/minification thực tế. |
 
-Compatibility QA nên tách minimum-floor verification khỏi current-stack verification; không được biến “requires” thành tuyên bố certification cho tổ hợp chưa chạy test.
+Compatibility QA phải tách minimum-floor verification khỏi current-stack verification; không được biến “requires” thành tuyên bố certification cho tổ hợp chưa chạy test.
 
 # 9. RootProfile dual-provider baseline — E0
 
@@ -123,3 +127,99 @@ Compatibility QA nên tách minimum-floor verification khỏi current-stack veri
 - Current-surface context KHÔNG đồng nghĩa với quyền production takeover. Việc Theme chiếm render path là gate riêng, chỉ được xem xét sau runtime/browser/a11y evidence và approval tương ứng.
 - Theme-side consumer/dispatcher được phép tồn tại ở trạng thái dormant và fail-soft. Contract vắng, throw, version/resource mismatch hoặc malformed payload phải trả về no-render/fallback hợp lệ; cấm slug/title/Page-ID heuristic hoặc direct-storage fallback.
 - Provider v1 organization/person/contact và Provider v2 person_profile/organization_profile vẫn giữ nguyên trách nhiệm/compatibility đã ratify tại E0; current-surface v1 là additive request-context boundary, không repurpose hai provider hiện hữu.
+
+# 11. v1.1 Native Product System architecture
+
+V1.1 nâng mức tiện dụng/polish của Theme nhưng không thay đổi product ownership hoặc biến Theme thành application engine.
+
+## 11.1. Design System 2.0
+
+Kiến trúc token:
+
+`foundation -> semantic -> component -> WordPress mapping`
+
+- Foundation values là implementation detail của Theme.
+- Semantic roles là contract ổn định cho Theme presentation và public token consumers.
+- Component tokens chỉ tồn tại khi một Theme component thực sự cần chúng.
+- `theme.json` mapping đưa curated semantic vocabulary vào block editor mà không chuyển template ownership sang FSE.
+- Existing public `--aznet-theme-*` semantics không được silently repurpose; compatibility alias được giữ khi đổi implementation vocabulary.
+
+### Visual preset feasibility rule
+
+Trên WordPress 6.9 support floor, R1 phải chứng minh liệu native style-variation selection có đáp ứng hybrid PHP architecture và editor/frontend parity hay không.
+
+- Nếu PASS: dùng native mechanism.
+- Nếu không PASS: dùng Theme-owned semantic visual-preset mapping.
+- Không được chuyển Theme sang FSE/block-template ownership chỉ để có style variations.
+
+Outcome v1.1 được khóa ở ba visual preset: `default`, `editorial`, `commerce`; implementation mechanism phải evidence-gated.
+
+## 11.2. Theme-owned presentation settings
+
+Theme-owned presentation settings dùng **một** versioned Theme Mod schema: `aznet_theme_settings`.
+
+Rules:
+
+- strict allow-list normalization;
+- schema version được lưu cùng presentation settings;
+- chỉ lưu Theme presentation state như visual/Header/commerce presets;
+- không lưu WordPress Post/Page/Menu/Media data;
+- không lưu WooCommerce product/cart/order/session truth;
+- không lưu RootProfile/ConvertFlow domain state hoặc private provider snapshot;
+- không lưu secrets, credentials, signing/license material.
+
+Admin UI, import/export và support snapshot phải đi qua cùng normalized schema; không tạo second settings store.
+
+## 11.3. Native Pattern Library
+
+Pattern architecture: **core/Woo Blocks first, portable content, no proprietary store**.
+
+- Core patterns dùng WordPress blocks và Theme presentation classes/tokens.
+- Woo-dependent patterns chỉ register khi exact public Woo block capability tồn tại; provider absent => pattern không register, Theme vẫn hoạt động.
+- Pattern example content không trở thành authoritative business/trust data.
+- Sau theme switch, saved WordPress block content phải còn là portable block content, không biến thành shortcode/opaque builder payload.
+
+## 11.4. Header System 2.0
+
+Architecture:
+
+`WordPress/Woo public data -> primitive renderers -> bounded preset composer -> Header surface`
+
+- Presets: Standard, Compact, Commerce, Overlay.
+- Preset thay composition/visibility/presentation, không tạo domain store.
+- Logo/Menu/Search dùng native WordPress public APIs/data.
+- Commerce actions chỉ dùng Woo public functions/capabilities.
+- Mobile/sticky behavior là progressive enhancement; navigation phải còn usable khi JS fail.
+- Overlay chỉ được dùng trên surface được Theme xác định an toàn bằng public WordPress condition; không dùng slug/title/Page-ID/URL heuristic.
+- Không drag/drop Header Builder hoặc mega-menu application engine.
+
+## 11.5. WooCommerce Presentation 2.0
+
+Architecture:
+
+`Woo public/native output -> Theme surface adapter -> bounded presentation preset`
+
+- WooCommerce tiếp tục sở hữu product, variation, price, stock, cart, checkout, order, account và query truth.
+- Theme được cung cấp product-card/catalog/single-product/cart/checkout/account presentation presets.
+- Hooks/CSS/Blocks-first; template override chỉ là exception khi concrete failing test chứng minh public hooks/CSS không đủ và source review chấp thuận.
+- Không wishlist/compare, AJAX filter/search, swatch domain engine, quick-view business engine hoặc custom checkout engine.
+- Woo asset loading giữ surface-aware; Woo absent không làm ảnh hưởng WordPress-clean core.
+
+## 11.6. Control Center và System Health
+
+Control Center là **presentation settings console**, không phải domain/admin platform.
+
+- Chỉ mutate `aznet_theme_settings` sau capability/nonce/normalization.
+- Logo/Menu/Patterns được link sang native WordPress controls thay vì clone editor riêng.
+- Quick Setup chỉ hướng dẫn/chọn Theme presentation; không tự tạo Page/Product/Profile/Journey/Menu data.
+- System Health là read-only diagnostic từ WordPress environment, Theme settings và public provider capability functions.
+- Provider status không được suy luận từ private constants/classes/options/storage; unknown phải báo `unknown/not-detected`.
+- Import/export chỉ chứa normalized Theme presentation settings và phải bounded/sanitized.
+
+## 11.7. Performance và release infrastructure
+
+- Assets tiếp tục surface/capability-aware; không global ecosystem bundle.
+- Performance claim cần measured evidence, không dựa feature-count/marketing comparison.
+- PR verification và exact-main post-merge verification là hai evidence points khác nhau.
+- Release candidate phải deterministic, byte-reproducible, SHA-256, unpack/reverify và clean-WordPress activation smoke.
+- Optional provider optimization chỉ được thực hiện qua public/versioned capability. Nếu capability thiếu, ghi BLOCKED_EXTERNAL_CONTRACT và giữ safe behavior; không private-detect để tối ưu.
