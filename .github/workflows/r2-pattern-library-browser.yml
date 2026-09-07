@@ -222,12 +222,12 @@ jobs:
           wp eval "set_theme_mod( 'aznet_theme_settings', [ 'schema_version' => 1, 'visual_preset' => 'default' ] );" --path=/tmp/wp --allow-root
           R2_FIXTURE_ID="$FIXTURE_ID" node tests/browser/r2-pattern-library-l4.mjs
 
-      - name: Install WooCommerce and prove public block gating
+      - name: Install WooCommerce 10.9.4 and prove public block gating
         run: |
           set -euo pipefail
-          wp plugin install woocommerce --activate --path=/tmp/wp --allow-root
+          wp plugin install woocommerce --version=10.9.4 --activate --path=/tmp/wp --allow-root
           WOO_VERSION=$(wp plugin get woocommerce --field=version --path=/tmp/wp --allow-root)
-          test -n "$WOO_VERSION"
+          test "$WOO_VERSION" = '10.9.4'
           printf '%s\n' "$WOO_VERSION" > /tmp/r2-pattern-library/woocommerce-version.txt
           echo "WOO_VERSION=$WOO_VERSION"
 
