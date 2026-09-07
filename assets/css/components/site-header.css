@@ -18,6 +18,7 @@
 .aznet-theme-site-header {
     --aznet-theme-header-muted: color-mix(in srgb, var(--aznet-theme-on-inverse) 72%, transparent);
     --aznet-theme-header-border: color-mix(in srgb, var(--aznet-theme-on-inverse) 12%, transparent);
+    --aznet-theme-header-current-height: var(--aznet-theme-header-height);
     position: relative;
     z-index: 999;
     width: 100%;
@@ -25,6 +26,49 @@
     border-bottom: 1px solid var(--aznet-theme-header-border);
     background: var(--aznet-theme-surface-inverse);
     color: var(--aznet-theme-on-inverse);
+}
+
+.aznet-theme-site-header--standard {
+    --aznet-theme-header-current-height: var(--aznet-theme-header-height);
+}
+
+.aznet-theme-site-header--compact {
+    --aznet-theme-header-current-height: var(--aznet-theme-header-height-compact);
+}
+
+.aznet-theme-site-header--compact .aznet-theme-site-header__menu {
+    gap: var(--aznet-theme-space-3);
+}
+
+.aznet-theme-site-header--commerce {
+    --aznet-theme-header-current-height: var(--aznet-theme-header-height);
+}
+
+.aznet-theme-site-header--commerce .aznet-theme-site-header__commerce-search {
+    display: flex;
+    flex: 1 1 24rem;
+    min-width: 0;
+}
+
+.aznet-theme-site-header--commerce .aznet-theme-site-header__commerce-search .aznet-theme-site-header__search {
+    width: 100%;
+}
+
+.aznet-theme-site-header--commerce .aznet-theme-site-header__commerce-search .aznet-theme-site-header__search label {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.aznet-theme-site-header--commerce .aznet-theme-site-header__commerce-search .aznet-theme-site-header__search input[type="search"] {
+    width: 100%;
+}
+
+.aznet-theme-site-header--overlay {
+    --aznet-theme-header-current-height: var(--aznet-theme-header-height);
+    background: var(--aznet-theme-surface-inverse);
+    background: color-mix(in srgb, var(--aznet-theme-surface-inverse) 82%, transparent);
+    color: var(--aznet-theme-on-inverse);
+    backdrop-filter: blur(0.5rem);
 }
 
 .aznet-theme-site-header--sticky {
@@ -40,13 +84,9 @@
     display: flex;
     align-items: center;
     width: min(var(--aznet-theme-container-shell), calc(100% - var(--aznet-theme-gutter)));
-    min-height: var(--aznet-theme-header-height);
+    min-height: var(--aznet-theme-header-current-height, var(--aznet-theme-header-height));
     margin: 0 auto;
     gap: calc(var(--aznet-theme-space-4) + var(--aznet-theme-space-1));
-}
-
-.aznet-theme-site-header--compact .aznet-theme-site-header__inner {
-    min-height: var(--aznet-theme-header-height-compact);
 }
 
 .aznet-theme-site-header a {
@@ -296,7 +336,8 @@
     }
 
     .aznet-theme-site-header__nav,
-    .aznet-theme-site-header__actions {
+    .aznet-theme-site-header__actions,
+    .aznet-theme-site-header__commerce-search {
         display: none;
     }
 
