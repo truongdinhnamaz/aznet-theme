@@ -255,7 +255,7 @@ async function inspectEditor(browser) {
 
     const wrapper = editorPage.locator('.editor-styles-wrapper').first();
     await wrapper.waitFor({ state: 'visible', timeout: 30000 });
-    await editorPage.getByText('Phần nội dung đầu tiên', { exact: false }).first().waitFor({ state: 'visible', timeout: 30000 });
+    await editorPage.getByText('Đặt giá trị cốt lõi', { exact: false }).first().waitFor({ state: 'visible', timeout: 30000 });
     await editorPage.getByText('Câu hỏi thường gặp', { exact: false }).first().waitFor({ state: 'visible', timeout: 30000 });
 
     result.variables = await cssVariables(wrapper, Object.keys(expectedVariables[preset]));
