@@ -7,6 +7,10 @@
 
 declare(strict_types=1);
 
+if (! defined('ABSPATH')) {
+    define('ABSPATH', dirname(__DIR__, 2) . '/');
+}
+
 $GLOBALS['r1_theme_mod'] = [];
 
 function get_theme_mod(string $name, mixed $default = false): mixed {
