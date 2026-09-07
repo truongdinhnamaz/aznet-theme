@@ -4,7 +4,7 @@
 
 **Goal:** Provide a small, presentation-only AZnet Theme Control Center with Quick Setup, safe settings save/reset/import/export, and read-only System Health diagnostics.
 
-**Architecture:** Reuse the single `aznet_theme_settings` Theme Mod schema established by R1 and extended by R3/R4. Add admin-only modules under `inc/admin/`, use native WordPress capability/nonce/admin-post flows, link to WordPress-native Logo/Menu/editor surfaces instead of cloning them, and detect optional providers only through public capabilities.
+**Architecture:** Reuse the single `aznet_theme_settings` Theme Mod schema established by R1 and extended by R3/R4. First ensure the Theme actually declares WordPress native custom-logo support, then add admin-only modules under `inc/admin/`, use native WordPress capability/nonce/admin-post flows, link to WordPress-native Logo/Menu/page-editor surfaces instead of cloning them, and detect optional providers only through public capabilities.
 
 **Tech Stack:** WordPress 6.9+, PHP 8.1+, WordPress admin APIs, Theme Mods, JSON import/export, screen-scoped CSS, minimal/no admin JS, WP-CLI, Playwright/axe.
 
@@ -22,7 +22,55 @@
 
 ---
 
-### Task 1: Add isolated admin bootstrap and Control Center shell
+### Task 1: Enable native WordPress custom-logo support
+
+**Files:**
+- Modify: `inc/theme/setup.php`
+- Create: `tests/offline/r5-custom-logo-support-contract.php`
+
+**Interfaces:**
+- Produces WordPress-native `custom-logo` theme support used by the existing Header and the Control Center Logo action.
+
+- [ ] **Step 1: Write RED support contract**
+
+Assert `setup()` calls:
+```php
+add_theme_support('custom-logo');
+```
+The test stubs `add_theme_support()` and fails when the feature is absent.
+
+- [ ] **Step 2: Run RED**
+
+```bash
+php tests/offline/r5-custom-logo-support-contract.php
+```
+Expected on the current v1.0 baseline: FAIL because `custom-logo` support is not yet declared.
+
+- [ ] **Step 3: Add minimal native support**
+
+Add exactly:
+```php
+add_theme_support('custom-logo');
+```
+Do not create a Theme-specific logo store or image uploader.
+
+- [ ] **Step 4: Run GREEN + core setup regressions**
+
+```bash
+php tests/offline/r5-custom-logo-support-contract.php
+bash scripts/verify-g3-core.sh
+```
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add inc/theme/setup.php tests/offline/r5-custom-logo-support-contract.php
+git commit -m "feat: enable native custom logo support"
+```
+
+---
+
+### Task 2: Add isolated admin bootstrap and Control Center shell
 
 **Files:**
 - Create: `inc/admin/bootstrap.php`
@@ -75,7 +123,7 @@ git commit -m "feat: add isolated AZnet Theme control center shell"
 
 ---
 
-### Task 2: Render Overview / Design / Header / Commerce / System Health sections
+### Task 3: Render Overview / Design / Header / Commerce / System Health sections
 
 **Files:**
 - Modify: `inc/admin/control-center.php`
@@ -110,7 +158,7 @@ function control_center_section(): string {
     return in_array($value, $allowed, true) ? $value : 'overview';
 }
 ```
-Commerce rendering must also check `Integrations\\WooCommerce\\available()`.
+Commerce rendering must also check `\AZnet\Theme\Integrations\WooCommerce\available()`.
 
 - [ ] **Step 4: Render fields from the single settings schema**
 
@@ -118,13 +166,13 @@ Design renders visual preset. Header renders preset/sticky/search/utilities. Com
 
 - [ ] **Step 5: Add Overview native-action links**
 
-Use WordPress admin URLs for:
-```text
-custom logo / Site Identity
-Menus
-Patterns/editor entry point where supported
+Use exact WordPress destinations:
+```php
+$logo_url = admin_url('customize.php?autofocus[control]=custom_logo');
+$menus_url = admin_url('nav-menus.php');
+$patterns_url = admin_url('post-new.php?post_type=page');
 ```
-Do not implement parallel logo/menu editors.
+The Patterns card text tells the user to open the block inserter -> Patterns in the native page editor. If WordPress 6.9 exposes a better stable public patterns-library URL during runtime verification, prefer that public URL and update the contract; do not create a Theme pattern browser.
 
 - [ ] **Step 6: Run GREEN**
 
@@ -141,7 +189,7 @@ git commit -m "feat: add control center presentation sections"
 
 ---
 
-### Task 3: Add nonce/capability-protected save and explicit reset
+### Task 4: Add nonce/capability-protected save and explicit reset
 
 **Files:**
 - Create: `inc/admin/settings-actions.php`
@@ -204,7 +252,7 @@ git commit -m "feat: save and reset theme presentation settings safely"
 
 ---
 
-### Task 4: Add safe JSON export/import for Theme presentation settings only
+### Task 5: Add safe JSON export/import for Theme presentation settings only
 
 **Files:**
 - Create: `inc/admin/settings-portability.php`
@@ -223,6 +271,7 @@ git commit -m "feat: save and reset theme presentation settings safely"
 }
 ```
 - Import accepts only `product=aznet-theme`, supported schema and normalized `settings`.
+- Maximum accepted import file size: **65536 bytes (64 KiB)**.
 
 - [ ] **Step 1: Write RED export/import contract**
 
@@ -238,7 +287,7 @@ rootprofile
 cart
 order
 ```
-Assert import drops unknown setting keys and rejects a different product marker or unsupported schema.
+Assert import drops unknown setting keys, rejects a different product marker or unsupported schema, and rejects payloads larger than 65536 bytes.
 
 - [ ] **Step 2: Run RED**
 
@@ -252,7 +301,7 @@ Generate JSON from `settings()` only. Use `wp_json_encode()` and a nonce/capabil
 
 - [ ] **Step 4: Implement import**
 
-Read uploaded JSON with bounded size, decode to array, validate marker/schema, pass only `payload['settings']` into `normalize_settings()`, then persist via `set_theme_mod()`.
+For `$_FILES['aznet_theme_settings_file']`, require `UPLOAD_ERR_OK`, numeric size `<= 65536`, an uploaded temporary file, valid JSON object, `product === 'aznet-theme'`, `schema_version === 1`, and array `settings`. Pass only `payload['settings']` into `normalize_settings()` then persist via `set_theme_mod()`.
 
 - [ ] **Step 5: Run GREEN**
 
@@ -269,7 +318,7 @@ git commit -m "feat: add portable theme presentation settings"
 
 ---
 
-### Task 5: Implement read-only System Health and support snapshot
+### Task 6: Implement read-only System Health and support snapshot
 
 **Files:**
 - Modify: `inc/admin/system-health.php`
@@ -286,7 +335,14 @@ git commit -m "feat: add portable theme presentation settings"
 
 - [ ] **Step 1: Write RED report contract**
 
-Stub environment and public provider functions. Assert report includes WordPress/PHP/Theme versions, visual/header/commerce presets, logo/menu presence, Woo availability, RootProfile public capability status if callable, and ConvertFlow only if a public capability contract is available. Unknown provider state is `unknown`, not guessed.
+Stub environment and public provider functions. Assert report includes WordPress/PHP/Theme versions, visual/header/commerce presets, logo/menu presence and capability values for:
+```php
+\AZnet\Theme\Integrations\WooCommerce\available();
+\AZnet\Theme\Integrations\RootProfile\provider_available();
+\AZnet\Theme\Integrations\RootProfile\profile_provider_available();
+\AZnet\Theme\Integrations\RootProfile\current_surface_available();
+```
+ConvertFlow is included only if R6/public source establishes a Theme-consumable capability. Otherwise its diagnostic value is `unknown`, not guessed.
 
 - [ ] **Step 2: Run RED**
 
@@ -303,9 +359,12 @@ PHP_VERSION;
 wp_get_theme();
 has_custom_logo();
 has_nav_menu('primary');
-Integrations\WooCommerce\available();
+\AZnet\Theme\Integrations\WooCommerce\available();
+\AZnet\Theme\Integrations\RootProfile\provider_available();
+\AZnet\Theme\Integrations\RootProfile\profile_provider_available();
+\AZnet\Theme\Integrations\RootProfile\current_surface_available();
 ```
-RootProfile uses its existing public adapter/capability functions. Do not add ConvertFlow private detection; if no public Theme-consumable capability exists, report `unknown/not-detected` and state that limitation.
+Do not call RootProfile payload functions merely to populate diagnostics. Do not add ConvertFlow private detection.
 
 - [ ] **Step 4: Implement support snapshot**
 
@@ -327,7 +386,7 @@ git commit -m "feat: add safe theme system health report"
 
 ---
 
-### Task 6: Implement Quick Setup as guidance, not a content wizard
+### Task 7: Implement Quick Setup as guidance, not a content wizard
 
 **Files:**
 - Modify: `inc/admin/control-center.php`
@@ -347,7 +406,7 @@ wp_create_nav_menu
 wc_create_order
 register_post_type
 ```
-Assert steps link to native controls and save only Theme settings.
+Assert steps link to the exact native URLs from Task 3 and save only Theme settings.
 
 - [ ] **Step 2: Run RED**
 
@@ -374,7 +433,7 @@ git commit -m "feat: add bounded quick setup guidance"
 
 ---
 
-### Task 7: Authenticated browser/a11y and update continuity gate
+### Task 8: Authenticated browser/a11y and update continuity gate
 
 **Files:**
 - Create: `tests/browser/r5-control-center-l4.mjs`
@@ -391,7 +450,7 @@ At 1440x1000 and 1024x768 verify section navigation, focus visibility, save, res
 
 - [ ] **Step 2: Verify native action links**
 
-Logo link reaches a visible native `custom_logo` control or its WordPress-6.9 equivalent. Menu link reaches native menu/navigation management. Pattern link reaches the supported native inserter/editor path.
+Logo link reaches a visible native `custom_logo` control. Menu link reaches native menu management. Patterns link opens native Page editor and the browser test verifies the block inserter exposes Theme patterns.
 
 - [ ] **Step 3: Verify settings continuity**
 
