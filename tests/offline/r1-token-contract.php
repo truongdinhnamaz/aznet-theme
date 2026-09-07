@@ -63,4 +63,16 @@ if ([] !== $missing) {
     exit(1);
 }
 
+$reduced_motion_contract = [
+    '@media (prefers-reduced-motion: reduce)',
+    '--aznet-theme-motion-fast: 0ms;',
+    '--aznet-theme-motion-base: 0ms;',
+];
+foreach ($reduced_motion_contract as $needle) {
+    if (! str_contains($css, $needle)) {
+        fwrite(STDERR, "FAIL: reduced-motion token contract missing {$needle}\n");
+        exit(1);
+    }
+}
+
 echo "PASS: R1 semantic token contract\n";
