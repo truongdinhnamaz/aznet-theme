@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+require_once __DIR__ . '/settings.php';
 require_once __DIR__ . '/setup.php';
 require_once __DIR__ . '/../integrations/woocommerce.php';
 require_once __DIR__ . '/woocommerce-product.php';
