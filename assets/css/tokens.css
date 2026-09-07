@@ -1,26 +1,55 @@
 :root {
-    --aznet-theme-surface: #ffffff;
-    --aznet-theme-text: #17181b;
-    --aznet-theme-muted: #626873;
-    --aznet-theme-border: #d9dde4;
-    --aznet-theme-accent: #175cd3;
-    --aznet-theme-focus: #175cd3;
-    --aznet-theme-surface-inverse: #111722;
-    --aznet-theme-on-inverse: #f7f8fa;
+    --aznet-theme-color-primary: #175cd3;
+    --aznet-theme-color-on-primary: #ffffff;
+    --aznet-theme-color-surface: #ffffff;
+    --aznet-theme-color-surface-subtle: #f7f8fa;
+    --aznet-theme-color-text: #17181b;
+    --aznet-theme-color-text-muted: #626873;
+    --aznet-theme-color-border: #d9dde4;
+    --aznet-theme-color-focus: #175cd3;
+    --aznet-theme-color-success: #157f3b;
+    --aznet-theme-color-warning: #9a6700;
+    --aznet-theme-color-danger: #b42318;
+
+    --aznet-theme-font-size-sm: 0.875rem;
+    --aznet-theme-font-size-base: 1rem;
+    --aznet-theme-font-size-lg: 1.125rem;
+    --aznet-theme-font-size-xl: 1.5rem;
+    --aznet-theme-line-height-body: 1.6;
+    --aznet-theme-line-height-heading: 1.2;
+
     --aznet-theme-container-content: 45rem;
     --aznet-theme-container-wide: 72rem;
     --aznet-theme-container-shell: 77.5rem;
     --aznet-theme-gutter: 2.5rem;
     --aznet-theme-gutter-mobile: 1.125rem;
+
     --aznet-theme-space-1: 0.25rem;
     --aznet-theme-space-2: 0.5rem;
     --aznet-theme-space-3: 1rem;
     --aznet-theme-space-4: 1.5rem;
     --aznet-theme-space-6: 2.625rem;
     --aznet-theme-space-section: 3.25rem;
+
+    --aznet-theme-radius-control: 0.5rem;
     --aznet-theme-radius-pill: 999px;
     --aznet-theme-radius-card: 0.875rem;
+    --aznet-theme-shadow-card: 0 0.375rem 1.5rem rgba(17, 24, 39, 0.08);
     --aznet-theme-shadow-float: 0 1.125rem 2.8125rem rgba(0, 0, 0, 0.22);
+
+    --aznet-theme-motion-fast: 120ms;
+    --aznet-theme-motion-base: 200ms;
+
     --aznet-theme-header-height: 4.75rem;
     --aznet-theme-header-height-compact: 3.875rem;
+
+    /* v1.0 public aliases retained for compatibility. */
+    --aznet-theme-surface: var(--aznet-theme-color-surface);
+    --aznet-theme-text: var(--aznet-theme-color-text);
+    --aznet-theme-muted: var(--aznet-theme-color-text-muted);
+    --aznet-theme-border: var(--aznet-theme-color-border);
+    --aznet-theme-accent: var(--aznet-theme-color-primary);
+    --aznet-theme-focus: var(--aznet-theme-color-focus);
+    --aznet-theme-surface-inverse: #111722;
+    --aznet-theme-on-inverse: #f7f8fa;
 }
