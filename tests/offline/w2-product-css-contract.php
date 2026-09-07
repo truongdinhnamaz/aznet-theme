@@ -19,8 +19,13 @@ $required = [
 foreach ( $required as $needle ) {
     if ( false === strpos( $css, $needle ) ) { fwrite( STDERR, "missing: {$needle}\n" ); exit( 2 ); }
 }
-$forbidden = [ 'position: sticky', 'display: none !important', '.site-main' ];
-foreach ( $forbidden as $needle ) {
+foreach ( [ 'display: none !important', '.site-main' ] as $needle ) {
     if ( false !== strpos( $css, $needle ) ) { fwrite( STDERR, "forbidden: {$needle}\n" ); exit( 3 ); }
+}
+if ( false !== strpos( $css, 'position: sticky' ) ) {
+    if ( ! preg_match( '/aznet-theme-woo-product--focus[^\{]*\.summary\s*\{[^\}]*position\s*:\s*sticky/is', $css ) ) {
+        fwrite( STDERR, "forbidden sticky placement outside R4 Focus native summary\n" );
+        exit( 4 );
+    }
 }
 echo "PASS: W2 product CSS contract\n";
