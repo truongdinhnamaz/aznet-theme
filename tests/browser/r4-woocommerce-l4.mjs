@@ -109,8 +109,29 @@ async function verifyKind(page, kind, viewport) {
     if ((await themeTitle.textContent())?.trim() !== 'R4 Variable Product') throw new Error('product: Theme-owned product H1 does not match fixture title');
     if (await page.locator('main#main h1').count() !== 1) throw new Error('product: expected exactly one H1 in main');
 
-    for (const selector of ['.summary .price', 'form.variations_form', '.variations select', '.single_add_to_cart_button', '.woocommerce-product-gallery__wrapper']) {
+    for (const selector of ['.summary .price', 'form.variations_form', '.variations select', '.single_add_to_cart_button']) {
       await page.locator(selector).first().waitFor({ state: 'visible', timeout: 20000 });
+    }
+
+    const galleryViewport = page.locator('.woocommerce-product-gallery .flex-viewport').first();
+    const galleryImage = page.locator('.woocommerce-product-gallery__image.flex-active-slide img').first();
+    await galleryViewport.waitFor({ state: 'visible', timeout: 20000 });
+    await galleryImage.waitFor({ state: 'visible', timeout: 20000 });
+    const imageMetrics = await galleryImage.evaluate((node) => ({
+      naturalWidth: node.naturalWidth,
+      naturalHeight: node.naturalHeight,
+      width: node.getBoundingClientRect().width,
+      height: node.getBoundingClientRect().height,
+      viewportWidth: document.documentElement.clientWidth,
+    }));
+    if (
+      imageMetrics.naturalWidth <= 0 ||
+      imageMetrics.naturalHeight <= 0 ||
+      imageMetrics.width <= 0 ||
+      imageMetrics.height <= 0 ||
+      imageMetrics.width > imageMetrics.viewportWidth + 1
+    ) {
+      throw new Error(`product: gallery image invalid ${JSON.stringify(imageMetrics)}`);
     }
 
     const select = page.locator('.variations select').first();
@@ -118,15 +139,6 @@ async function verifyKind(page, kind, viewport) {
     if (options.length < 1) throw new Error('product: native variable select has no selectable variation');
     await select.selectOption(options[0]);
     if ((await select.inputValue()) !== options[0]) throw new Error('product: native variation select did not retain selected value');
-
-    const galleryImage = page.locator('.woocommerce-product-gallery__image img').first();
-    await galleryImage.waitFor({ state: 'visible', timeout: 20000 });
-    const imageMetrics = await galleryImage.evaluate((node) => ({
-      naturalWidth: node.naturalWidth,
-      width: node.getBoundingClientRect().width,
-      viewportWidth: document.documentElement.clientWidth,
-    }));
-    if (imageMetrics.naturalWidth <= 0 || imageMetrics.width > imageMetrics.viewportWidth + 1) throw new Error(`product: gallery image invalid ${JSON.stringify(imageMetrics)}`);
 
     if (productPreset === 'focus') {
       const summaryPosition = await page.locator('.summary').evaluate((node) => getComputedStyle(node).position);
