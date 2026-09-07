@@ -314,7 +314,7 @@
     opacity: 0;
     visibility: hidden;
     transform: translateY(6px);
-    transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s ease;
+    transition: opacity 0.16s ease, transform 0.16s ease;
 }
 
 .aznet-theme-site-header__menu li:hover > .sub-menu,
@@ -344,6 +344,18 @@
         gap: var(--aznet-theme-space-3);
     }
 
+    .aznet-theme-site-header__brand {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .aznet-theme-site-header__brand span {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
     .aznet-theme-site-header__nav,
     .aznet-theme-site-header__actions,
     .aznet-theme-site-header__commerce-search {
@@ -352,6 +364,7 @@
 
     .aznet-theme-site-header__mobile {
         display: block;
+        flex: 0 0 auto;
     }
 
     .aznet-theme-site-header__mobile-panel .aznet-theme-site-header__menu .sub-menu {
