@@ -18,12 +18,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function settings_defaults(): array {
     return [
-        'schema_version'   => 1,
-        'visual_preset'    => 'default',
-        'header_preset'    => 'standard',
-        'header_sticky'    => 'sticky',
-        'header_search'    => true,
-        'header_utilities' => true,
+        'schema_version'           => 1,
+        'visual_preset'            => 'default',
+        'header_preset'            => 'standard',
+        'header_sticky'            => 'sticky',
+        'header_search'            => true,
+        'header_utilities'         => true,
+        'woo_catalog_preset'       => 'grid',
+        'woo_product_card_density' => 'balanced',
+        'woo_product_preset'       => 'classic',
     ];
 }
 
@@ -46,6 +49,18 @@ function normalize_settings( array $raw ): array {
         ? (string) $raw['header_sticky']
         : 'sticky';
 
+    $woo_catalog_preset = isset( $raw['woo_catalog_preset'] ) && in_array( $raw['woo_catalog_preset'], [ 'grid', 'compact-grid', 'editorial' ], true )
+        ? (string) $raw['woo_catalog_preset']
+        : 'grid';
+
+    $woo_product_card_density = isset( $raw['woo_product_card_density'] ) && in_array( $raw['woo_product_card_density'], [ 'comfortable', 'balanced', 'compact' ], true )
+        ? (string) $raw['woo_product_card_density']
+        : 'balanced';
+
+    $woo_product_preset = isset( $raw['woo_product_preset'] ) && in_array( $raw['woo_product_preset'], [ 'classic', 'focus', 'story' ], true )
+        ? (string) $raw['woo_product_preset']
+        : 'classic';
+
     $normalize_boolean = static function ( string $key, bool $default ) use ( $raw ): bool {
         if ( ! array_key_exists( $key, $raw ) ) {
             return $default;
@@ -65,12 +80,15 @@ function normalize_settings( array $raw ): array {
     };
 
     return [
-        'schema_version'   => 1,
-        'visual_preset'    => $preset,
-        'header_preset'    => $header_preset,
-        'header_sticky'    => $header_sticky,
-        'header_search'    => $normalize_boolean( 'header_search', true ),
-        'header_utilities' => $normalize_boolean( 'header_utilities', true ),
+        'schema_version'           => 1,
+        'visual_preset'            => $preset,
+        'header_preset'            => $header_preset,
+        'header_sticky'            => $header_sticky,
+        'header_search'            => $normalize_boolean( 'header_search', true ),
+        'header_utilities'         => $normalize_boolean( 'header_utilities', true ),
+        'woo_catalog_preset'       => $woo_catalog_preset,
+        'woo_product_card_density' => $woo_product_card_density,
+        'woo_product_preset'       => $woo_product_preset,
     ];
 }
 

@@ -42,12 +42,15 @@ $valid = AZnet\Theme\normalize_settings([
 ]);
 
 $valid_expected = [
-    'schema_version'   => 1,
-    'visual_preset'    => 'editorial',
-    'header_preset'    => 'commerce',
-    'header_sticky'    => 'sticky-compact',
-    'header_search'    => false,
-    'header_utilities' => false,
+    'schema_version'           => 1,
+    'visual_preset'            => 'editorial',
+    'header_preset'            => 'commerce',
+    'header_sticky'            => 'sticky-compact',
+    'header_search'            => false,
+    'header_utilities'         => false,
+    'woo_catalog_preset'       => 'grid',
+    'woo_product_card_density' => 'balanced',
+    'woo_product_preset'       => 'classic',
 ];
 
 if ($valid !== $valid_expected) {
