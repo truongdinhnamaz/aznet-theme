@@ -1,7 +1,7 @@
 # AZnet Theme v1.1 — Native Product System Design
 
 **Date:** 07/09/2026  
-**Status:** DESIGN APPROVED IN CHAT — WRITTEN SPEC PENDING OWNER REVIEW  
+**Status:** OWNER APPROVED — IMPLEMENTATION PLANNING  
 **Canonical repository:** `truongdinhnamaz/aznet-theme`  
 **Design branch:** `design/v1.1-native-product-system`  
 **Baseline:** `main@f8e1a95c903c3f246528368ae9878eba780539ff`
@@ -422,566 +422,478 @@ Visual hierarchy cho:
 - short description;
 - variations;
 - quantity;
-- add-to-cart CTA;
+- CTA;
 - meta.
 
-Desktop có thể sticky summary nếu presentation-safe. Mobile sticky purchase projection chỉ dùng public/native CTA state; nếu không đủ capability thì feature không render.
+Desktop có thể dùng sticky summary khi layout cho phép. Mobile sticky purchase bar chỉ được thực hiện như projection của native Woo CTA nếu public capability an toàn và không duplicate add-to-cart state machine. Nếu không đạt gate, defer bar khỏi v1.1.
 
 ## 9.6 Gallery
 
-Chuẩn hóa:
+Theme chuẩn hóa presentation của native/public gallery:
 - aspect ratio;
-- thumbnail presentation;
+- thumbnail rail/grid;
 - spacing;
-- active/focus states;
+- focus/active state;
 - mobile behavior.
 
-Không viết lại media storage/gallery domain. Native Woo fallback phải usable.
+Không tạo media store hoặc gallery engine riêng. Khi enhanced JS vắng/lỗi, ảnh vẫn phải usable theo native/fallback document flow.
 
 ## 9.7 Variations
 
-V1.1 chỉ polish native variation controls/selects. Không tạo swatch mapping engine.
+V1.1 core chỉ làm đẹp native Woo variation controls/selects. Không implement swatch engine hoặc tự mapping term -> variation.
 
-Swatch provider chỉ có thể được Theme style/certify qua public contract riêng trong tương lai.
+Swatches tương lai phải đến từ Woo/public provider capability và một certification/adapter riêng.
 
 ## 9.8 Cart / Checkout / Account
 
 ### Cart
-- responsive line-item hierarchy;
-- quantity/coupon/totals/CTA clarity;
-- mobile không ép desktop table gây unusable layout.
+- responsive item hierarchy;
+- quantity/coupon/totals/primary CTA rõ;
+- không ép desktop table gây mobile overflow.
 
 ### Checkout
 - form readability;
-- visible error/validation states;
+- visible validation/errors;
 - order summary hierarchy;
-- focus/error accessibility;
+- focus/keyboard accessibility;
 - không custom checkout state machine.
 
 ### My Account
-- navigation/content panel/forms/orders/address presentation;
-- endpoint/account state vẫn do Woo sở hữu.
+- endpoint navigation/panel/form/table presentation;
+- Woo vẫn sở hữu account/endpoints/state.
 
 ## 9.9 Commerce patterns
 
-Ưu tiên Woo Blocks/core blocks cho category/product merchandising patterns để content editable và portable.
+Ưu tiên Woo Blocks/core blocks cho category/product merchandising compositions. Pattern không query bằng Theme domain engine.
 
-## 9.10 Deferred commerce features
+## 9.10 Asset rule
 
-Không ship trong core v1.1:
-- AJAX filters;
-- live product search;
-- wishlist;
-- compare;
-- variation swatch engine;
-- quick-view engine;
-- custom checkout engine.
+Product, Archive, Cart, Checkout, Account và interactive enhancement có asset scope riêng. Không tạo global Theme Woo JS/CSS bundle chỉ vì Woo active.
 
 ---
 
 # 10. Control Center 2.0
 
-## 10.1 Role
+## 10.1 Purpose
 
-Control Center là bảng điều khiển cho **Theme-owned presentation configuration**, không phải admin platform cho ecosystem.
+Control Center là bảng điều khiển Theme-owned presentation state, không phải admin platform của ecosystem.
 
-## 10.2 Sections
+Năm khu vực:
 
-### Overview
-- Theme version;
-- active visual preset;
-- Header preset;
-- logo/menu readiness;
-- public Woo capability;
-- bounded configuration warnings.
+- **Overview** — version/preset/logo/menu/public capability summary.
+- **Design** — visual preset + bounded presentation choices.
+- **Header** — Header preset/sticky/search/utility visibility.
+- **Commerce** — Woo presentation preset/options; chỉ hiện khi public Woo capability tồn tại.
+- **System Health** — read-only Theme/environment/public capability diagnostics.
 
-### Design
-- visual preset;
-- density;
-- button/control presentation presets;
-- container behavior.
+Không thêm tab/toggle chỉ để tăng feature count.
 
-### Header
-- Header preset;
-- sticky mode;
-- visibility của search/utilities/Theme-owned primitives.
+## 10.2 Quick Setup
 
-### Commerce
-Chỉ hiện khi Woo public capability có mặt:
-- catalog density/preset;
-- product layout preset;
-- bounded presentation options.
-
-### System Health
-Read-only diagnostics và support snapshot.
-
-## 10.3 Quick Setup
-
-Optional first-run flow:
+Flow:
 
 `Style -> Logo -> Menu -> Header preset -> Patterns`
 
-Rules:
-- có thể skip;
-- không auto-create Page/Product/Journey/Profile/domain data;
-- link sang native WordPress controls khi cần logo/menu/content;
-- không lock người dùng vào wizard.
+- Người dùng có thể skip.
+- Logo/Menu action đi tới WordPress native controls.
+- Không tự tạo Page, Menu, Product, Journey hoặc provider data.
+- Pattern selection/chèn bằng WordPress-native editor.
 
-## 10.4 Settings schema
+## 10.3 Settings schema
 
-Một Theme-owned schema duy nhất:
+Một schema duy nhất:
 
 `aznet_theme_settings`
 
 Requirements:
-- schema version;
-- whitelist;
-- normalization/defaults;
-- capability/nonce protected save;
-- migration giữa minor versions;
-- reset chỉ reset Theme-owned presentation settings;
-- không xóa WordPress content/provider data.
+- versioned schema;
+- defaults;
+- strict allow-list normalization;
+- migration giữa minor versions khi cần;
+- reset chỉ Theme presentation settings.
 
-Storage mechanism cuối cùng phải dùng WordPress public Theme-owned API phù hợp; không direct private plugin storage.
+Must not contain:
+- WordPress content/menu/media data;
+- Woo product/cart/order state;
+- RootProfile/ConvertFlow domain state;
+- secrets/private provider snapshot.
 
-## 10.5 Import / Export
+## 10.4 Import / Export
 
-Cho phép export/import JSON chỉ với Theme presentation settings.
+JSON import/export chỉ Theme-owned presentation settings.
 
-Không export:
-- Posts/Pages/Menus/Media content;
-- Woo products/orders/cart state;
-- RootProfile identity/trust;
-- ConvertFlow Journey;
-- secrets/private provider state.
+Payload phải có Theme/schema version và được validate/normalize trước khi apply.
 
-Import phải schema/version validate trước mutation.
+Không export data do owner khác sở hữu.
 
 ---
 
 # 11. System Health
 
-## 11.1 Environment
+## 11.1 Environment projection
 
 Read-only:
 - WordPress version;
 - PHP version;
 - Theme version;
-- active child-theme context nếu có.
+- child-theme state nếu có.
 
 ## 11.2 Theme configuration
 
-- Logo readiness;
-- primary menu readiness;
-- visual preset;
+- custom logo configured/not configured;
+- primary menu configured/not configured;
+- active visual preset;
 - Header preset;
-- Woo presentation preset nếu capability có mặt.
+- Woo presentation preset khi áp dụng.
 
-## 11.3 Public capability diagnostics
+Không copy nội dung logo/menu vào một Theme store.
 
-- WooCommerce: available / absent / unsupported where applicable;
-- RootProfile public capability: supported / unsupported / absent;
-- ConvertFlow public capability: supported / unsupported / absent.
+## 11.3 Public capabilities
 
-Không đọc private option/meta/table/class để suy luận diagnostics.
+Chỉ dùng public capability/contract:
+- Woo available/absent;
+- RootProfile supported/unsupported/absent khi public contract cho phép;
+- ConvertFlow supported/unsupported/absent khi public contract cho phép.
 
-## 11.4 Warning semantics
+Theme không kết luận “plugin lỗi vì option X thiếu” bằng private storage inspection.
 
-Theme chỉ phát biểu điều nó có thẩm quyền chứng minh.
+## 11.4 Support Snapshot
 
-Đúng:
-- “WooCommerce không có mặt; commerce presentation đang không hoạt động.”
-
-Sai:
-- kết luận plugin khác hỏng vì private option/storage mà Theme không sở hữu.
-
-## 11.5 Support Snapshot
-
-`Copy System Report` xuất text/JSON an toàn gồm:
+Có safe copy/report output chứa allow-listed:
 - versions;
 - Theme presets;
-- public capability states;
+- capability states;
 - relevant Theme feature flags.
 
-Không chứa password, API key, DB credential, secrets hoặc private provider state.
+Không chứa:
+- password/API key/token;
+- DB credentials;
+- private provider payload;
+- user secret.
 
 ---
 
-# 12. Performance Architecture 2.0
+# 12. Performance Architecture
 
-## 12.1 Asset classes
+## 12.1 Asset layers
 
-### Core tokens
-Load globally khi Theme active.
+1. Core tokens — always.
+2. Core shell — Header/Footer/base presentation.
+3. Component assets — only when surface/component needs them.
+4. Woo assets — per Product/Archive/Cart/Checkout/Account/block surface.
+5. Provider projection — only when public capability/surface proves it is needed.
 
-### Core shell
-Header/Footer/base layout assets cần cho site shell.
+Current unconditional ConvertFlow projection is a v1.1 optimization target. If no public provider capability exists to condition it safely, record BLOCKED and retain safe current behavior rather than add private/heuristic detection.
 
-### Component assets
-Chỉ enqueue khi component/surface thật sự present.
+## 12.2 JavaScript
 
-### Woo assets
-Product, Archive, Cart, Checkout, Account tách theo surface.
+Không tạo monolithic `theme.js`.
 
-### Provider projection
-Chỉ enqueue khi public capability/surface tương ứng thật sự cần.
+Các enhancement độc lập, ví dụ:
+- `header-navigation.js`;
+- `sticky-header.js`.
 
-ConvertFlow presentation projection hiện đang unconditional trong v1.0 asset path là một v1.1 cleanup target. Fix phải giữ public token contract và chứng minh provider-absent path không regression.
+Chỉ enqueue khi feature cần. Không thêm React/Vue/jQuery dependency chỉ cho Theme generic interaction.
 
-## 12.2 JavaScript policy
+## 12.3 Measured baseline
 
-Không tạo monolithic `theme.js` nếu không cần.
+Trước optimization, capture v1.0 clean-WP performance/asset baseline. Budget cuối dựa trên measured evidence, không đặt một con số KB tùy ý trước khi đo.
 
-Interactive modules có thể gồm:
-- `header-navigation.js`
-- `sticky-header.js`
-
-và chỉ load theo capability/preset.
-
-Không thêm React/Vue/jQuery dependency cho bounded Theme interactions nếu native JS đủ.
-
-## 12.3 Performance baseline and budget-lock gate
-
-Trước implementation behavior đáng kể, R1 capture fresh v1.0 baseline trên WordPress sạch. Exact numerical budgets được ghi vào authoritative roadmap/plan từ baseline đó trước khi một v1.1 performance claim được dùng làm release gate.
-
-Budget decision phải bao gồm ít nhất:
-- total Theme-owned CSS/JS transfer/load delta trên clean core routes;
-- Theme-caused layout-shift threshold/regression allowance;
-- unexpected subresource/console error = 0;
-- surface/provider asset absence assertions.
-
-Cho tới khi baseline được đo và budget được khóa, không được claim v1.1 “nhẹ hơn” bằng marketing number suy đoán.
-
-Minimum invariants ngay từ đầu:
-- no provider asset when provider/capability absent;
-- no Woo-surface asset trên non-Woo route;
-- no unexpected failed subresource;
-- native responsive-image behavior giữ được;
-- no unexpected console error;
-- reduced-motion respected;
-- navigation/content cơ bản usable khi JS disabled.
+Minimum invariants:
+- no Woo assets trên non-Woo core route;
+- no optional provider asset khi provider/surface không cần, trừ khi public capability gate bị BLOCKED và evidence đã ghi cost/safe fallback;
+- no unexpected failed subresources;
+- no Theme-caused console error;
+- no Theme-caused pathological CLS/overflow;
+- reduced-motion respected.
 
 ---
 
 # 13. Release Engineering 2.0
 
-## 13.1 Standard lifecycle
+## 13.1 Pipeline
 
-`PR candidate -> merge main -> exact-main post-merge verification -> release candidate -> owner approval -> tag -> GitHub Release`
+`PR candidate -> merge main -> exact-main verification -> release candidate -> owner approval -> tag -> GitHub Release`
 
-Không suy diễn PASS giữa các bước.
+## 13.2 Pull request gates
 
-## 13.2 PR gates
-
-Tùy surface bị ảnh hưởng, tối thiểu:
-- PHP/static/naming/private-storage scans;
-- contract/TDD regressions;
-- WordPress-clean runtime;
+Theo affected scope:
+- PHP lint/static;
+- ownership/private-storage scan;
+- RED/GREEN contract tests;
+- WordPress runtime;
 - browser/responsive/a11y;
-- package integrity khi release-relevant.
+- package regression khi gần release.
 
-Production feature/bugfix tiếp tục RED -> intended failure -> minimal GREEN -> regression.
+## 13.3 Exact-main verification
 
-## 13.3 Main gates
+Mọi production-relevant push/merge vào `main` phải trigger fresh verification trên exact merge SHA. Green PR tree là evidence có giá trị nhưng không thay fresh exact-main run cho release closure.
 
-Mọi production merge vào `main` phải có fresh workflow trên **exact canonical main SHA** cho relevant release-critical suite. V1.1 workflow triggers phải hỗ trợ `push: main` thay vì chỉ feature branch/PR.
-
-## 13.4 Release candidate gate
+## 13.4 Deterministic release candidate
 
 Release workflow phải:
 
-1. xác nhận candidate ở canonical `main`;
-2. xác nhận version metadata consistent;
-3. chạy full regression phù hợp;
-4. build package hai lần;
-5. chứng minh byte-identical;
-6. ghi SHA-256;
-7. unzip/exact-byte reverify;
-8. clean WordPress activation/smoke từ chính packaged bytes;
-9. lưu artifact + rollback reference;
-10. dừng tại explicit owner approval nếu tag/release chưa được duyệt.
+1. xác nhận canonical `main` + version metadata;
+2. full regression;
+3. build package hai lần;
+4. verify byte-identical;
+5. SHA-256;
+6. unzip/exact-byte compare;
+7. lint packaged PHP;
+8. activate/exercise extracted package on clean WordPress;
+9. retain exact artifact + evidence;
+10. không rebuild bytes khác để publish mà không reverify.
 
-Không rebuild một package khác sau candidate PASS rồi publish mà không reverify bytes mới.
+## 13.5 Owner gate
 
-## 13.5 Tag/release
-
-Tag và GitHub Release phải trỏ đúng main SHA/package evidence đã duyệt. Production deployment là hard gate riêng nếu có.
+Version promotion/tag/GitHub Release vẫn là owner approval gate. Deployment sang production website/hạ tầng khác là gate riêng nếu source không bundle chúng thành cùng một action.
 
 ---
 
-# 14. Integration and ownership boundary
-
-## 14.1 WooCommerce
-
-Theme chỉ dùng public Woo APIs/hooks/Blocks/capabilities. Không direct-read session/private product storage để điều khiển authoritative behavior.
-
-## 14.2 RootProfile
-
-V1.1 không thay E5 ownership. Theme chỉ consume public profile/contact projection khi certified; absence/error/unsupported giữ core usable.
-
-## 14.3 ConvertFlow
-
-V1.1 không fix F8 provider defect bằng private workaround. Native Homepage vẫn là core path. ConvertFlow presentation tokens chỉ được load khi public capability/surface cần sau asset-scope refactor.
-
-## 14.4 Provider certification
-
-Provider-specific compatibility vẫn là certification track. Không claim certified nếu chưa có fresh provider/version evidence ở layer cần thiết.
-
----
-
-# 15. Error handling and fail-soft rules
-
-- Invalid Theme setting -> normalize về safe default, không fatal.
-- Missing menu/logo -> render usable fallback/absence state.
-- Woo absent -> commerce settings/surfaces không phá non-commerce site.
-- Provider absent/error/unsupported -> adapter không render capability phụ thuộc; native fallback giữ nguyên.
-- JS error -> content/navigation cơ bản vẫn usable.
-- Import settings invalid -> reject trước mutation và báo lỗi actionable.
-- Unsupported schema version -> do not guess migration; fail safe.
-
-Theme không tự chữa external provider bằng authoritative heuristics/private reads.
-
----
-
-# 16. Data lifecycle, migration and rollback
-
-## 16.1 Theme settings migration
-
-- schema-versioned;
-- migration function bounded theo version;
-- idempotent where practical;
-- regression test old -> new;
-- rollback behavior documented nếu setting mới không tồn tại ở version cũ.
-
-## 16.2 Theme switch
-
-Switch Theme không được xóa:
-- WordPress content/menu/media;
-- Woo domain data;
-- RootProfile/ConvertFlow provider data.
-
-Theme-owned settings có thể còn trong WordPress storage theo public Theme API nhưng không được mutation external data khi inactive/switching.
-
-## 16.3 Pattern portability
-
-Inserted patterns trở thành WordPress block content; Theme không giữ parallel instance registry cần thiết để content tồn tại.
-
----
-
-# 17. QA strategy
-
-QA layer discipline của AZT-04 tiếp tục áp dụng.
+# 14. QA Strategy
 
 ## L0 — Source / State
-- v1.0 source reconciliation hoàn tất trước production v1.1;
-- owner/dependency/gate rõ;
-- exact next bounded.
+- exact canonical baseline;
+- R0 source reconciliation;
+- owner/dependency/allowed/forbidden rõ.
 
 ## L1 — Static
-- lint;
+- PHP lint;
 - naming;
-- forbidden private storage/API scans;
-- asset registration/scope assertions;
-- escaping/sanitization review cho touched paths.
+- forbidden storage/private API;
+- escaping/sanitization;
+- package exclusion;
+- asset ownership/scope.
 
 ## L2 — Contract / TDD
-- token backward compatibility;
-- visual preset behavior/mapping;
-- setting normalization/migration;
-- preset composition;
-- surface-aware assets;
-- provider fail-soft;
-- pattern registration/ownership rules.
+Mỗi behavior production mới:
+
+`RED -> fail đúng intended reason -> minimal GREEN -> related regression`
+
+Contracts tối thiểu:
+- settings normalization/migration;
+- visual preset mapping;
+- pattern registration/portability boundaries;
+- Header preset/fail-soft;
+- Woo presentation preset/surface scope;
+- Control Center capability/nonce/import-export;
+- provider absence/failure;
+- release workflow/version/package.
 
 ## L3 — Runtime
 WordPress 6.9+ / PHP 8.1+:
-- clean activation;
-- core routes;
-- Theme settings save/reset/migrate;
-- Woo absent/present relevant routes;
-- no Theme-caused fatal/warning/uncaught.
+- activation;
+- clean WP core routes;
+- Theme settings continuity;
+- optional provider absence;
+- Woo surfaces khi Woo enabled;
+- package-extracted activation.
 
-## L4 — Browser / Visual / A11y
-Desktop/tablet/mobile and at least 320px narrow case where relevant:
-- Header presets;
-- mobile navigation keyboard/focus;
-- patterns editor/frontend parity samples;
-- Woo product/catalog/cart/checkout/account;
-- Control Center;
-- no duplicate IDs/landmark regressions;
-- reduced motion;
-- axe critical/serious = 0 for Theme-controlled issues;
-- no unexpected console errors/overflow.
+## L4 — Browser / Editor / A11y
+Viewports tối thiểu:
+- 1440x1000;
+- 1024x900;
+- 390x844.
+
+Với core/pattern/Header/Woo/admin surfaces phù hợp:
+- overflow <= 1px;
+- duplicate IDs = 0;
+- keyboard/focus usable;
+- axe critical/serious = 0 cho Theme-controlled defects;
+- no unexpected console/page errors;
+- reduced-motion;
+- editor/frontend parity cho presets/patterns.
 
 ## L5 — Integration
-Only for declared certification targets:
-- public contract/version/capability;
-- absence/failure behavior;
-- ownership boundary;
-- actual provider package/runtime when claiming certification.
+Chỉ claim cho exact provider/version đã chạy:
+- public contract only;
+- absent/error/unsupported fail soft;
+- token projection/coexistence;
+- provider-specific correctness không suy diễn sang version khác.
 
-## L6 — Completion / Release
-- full regression;
-- exact-main verification;
-- deterministic package;
-- SHA/unzip/exact-byte;
-- clean install;
-- upgrade/theme-switch/rollback;
+## L6 — Release
+- exact-main fresh evidence;
+- full retained regression;
+- deterministic package x2;
+- SHA-256;
+- unzip/exact compare;
+- package activation smoke;
+- update/theme-switch/rollback;
 - source/evidence closure;
 - explicit owner release gate.
 
 ---
 
-# 18. Implementation decomposition
+# 15. Delivery Slices
 
-Đây là **umbrella product design**, không phải một giant implementation slice. V1.1 phải được triển khai bằng các bounded milestones/plans; không code tất cả trong một branch lớn.
+## R0 — v1.0 closure/source reconciliation
 
-## R0 — v1.0 closure/source reconciliation prerequisite
+Before production v1.1 code:
+- reconcile AZT-03 canonical baseline/version from stale alpha state to the actual v1.0 merged state;
+- reconcile AZT-04 G0/G8 status and open v1.1 roadmap;
+- update AZT-01 product objective/non-goals for v1.1;
+- update AZT-02 architecture for Design System/Patterns/Header/Woo/Control Center/settings/release boundaries;
+- refresh AZT-EXEC-MAP;
+- update SOURCE_MANIFEST/checkpoint;
+- keep AZT-05 unchanged unless a contradiction is found.
 
-Before v1.1 production code:
-- reconcile AZT-03 baseline from alpha state to canonical v1.0 implementation state;
-- reconcile AZT-04 roadmap from G0-active to v1.0 core closure and v1.1 roadmap;
-- record tag/release publication truth accurately (do not claim published if unavailable);
-- update AZT-01/AZT-02 for the approved v1.1 product/architecture capabilities;
-- leave AZT-05 unchanged because constitutional invariants remain unchanged.
+Exit: source PR approved/merged; no production change bundled.
 
 ## R1 — Design System 2.0
-- token expansion/backward compatibility;
-- WordPress 6.9 visual-preset/style-variation feasibility gate;
-- `theme.json` curated mappings;
-- three visual presets;
-- baseline visual/performance evidence and numerical budget lock.
 
-## R2 — Pattern Library
-- registration architecture;
-- first curated pattern batches;
-- responsive/editor/frontend/a11y gates.
+1. settings schema foundation;
+2. token expansion + backward aliases;
+3. WordPress 6.9 visual-preset feasibility probe;
+4. Default/Editorial/Commerce implementation;
+5. editor/frontend L4 parity.
+
+Exit: stable design vocabulary consumed by later slices.
+
+## R2 — Native Pattern Library
+
+1. category/registration foundation;
+2. Hero patterns;
+3. Trust/CTA patterns;
+4. Content patterns;
+5. Commerce/Utility patterns with Woo absence behavior;
+6. representative editor/frontend/a11y/portability matrix.
+
+Exit: curated set passes Pattern Quality Contract.
 
 ## R3 — Header System 2.0
-- primitive decomposition;
-- presets;
-- responsive navigation;
-- sticky modes;
-- asset scoping.
+
+1. Header settings;
+2. primitive renderer split;
+3. Standard/Compact/Commerce/Overlay composer;
+4. accessible mobile navigation progressive enhancement;
+5. sticky-compact enhancement;
+6. full preset browser/a11y/fail-soft matrix.
+
+Exit: no builder; WordPress/Woo source state preserved.
 
 ## R4 — WooCommerce Presentation 2.0
-- product card system;
-- catalog presets;
-- single-product presets;
-- cart/checkout/account polish;
-- commerce patterns.
+
+1. Woo presentation settings;
+2. Product Card System + catalog presets;
+3. Single Product Classic/Focus/Story;
+4. gallery/summary/native variation polish;
+5. Cart/Checkout/Account polish;
+6. Woo Blocks asset compatibility;
+7. real Woo runtime/browser matrix + clean-WP absence regression.
+
+Exit: commerce presentation polish without commerce ownership.
 
 ## R5 — Control Center + System Health
-- settings schema/migration;
-- Overview/Design/Header/Commerce/System Health;
-- Quick Setup;
-- import/export;
-- support snapshot.
 
-## R6 — Performance + Release Engineering 2.0
-- provider asset scoping cleanup;
-- JS module scoping;
-- exact-main workflows;
-- reusable deterministic release pipeline.
+1. admin bootstrap/screen-scoped assets;
+2. Overview/Design/Header/Commerce/System Health;
+3. save/reset security;
+4. safe import/export;
+5. public-only diagnostics/support snapshot;
+6. Quick Setup guidance;
+7. authenticated browser/a11y + update/theme-switch continuity.
 
-## R7 — v1.1 closure
-- full L0-L6 regression;
-- version promotion only after final candidate evidence;
-- package/SHA/rollback;
-- source closure;
-- owner merge/release gates.
+Exit: settings UX mature without domain/admin takeover.
 
-Milestone IDs/names có thể được AZT-04 chuẩn hóa trong R0; các plan sau đó phải dùng IDs canonical từ source đã accept.
+## R6 — Performance + Release 2.0
 
----
+1. measured performance/asset baseline;
+2. complete Theme asset-scope matrix;
+3. public-contract gate for ConvertFlow projection or BLOCKED evidence;
+4. reusable PR + exact-main CI;
+5. deterministic v1.x candidate workflow;
+6. retire superseded milestone workflows only after coverage evidence;
+7. exact-main R1-R6 regression;
+8. RED exact-version contract then atomic `1.1.0` promotion;
+9. final package verification;
+10. owner-gated tag/GitHub Release.
 
-# 19. Source impact
-
-Design này là architecture/product-roadmap change và **không được đi thẳng vào production code chỉ dựa trên spec**.
-
-Required source impact before implementation:
-
-- **AZT-03 — required:** update current baseline/provenance state from stale alpha/G0 facts to actual canonical v1.0 state.
-- **AZT-04 — required:** close v1.0 G path accurately, add v1.1 milestone/QA sequencing and retain external compatibility blockers as non-core tracks.
-- **AZT-02 — required:** document approved v1.1 architecture additions: Design System 2.0 mapping, pattern boundary, Header preset composition, Theme-owned settings/Control Center boundary, asset/release architecture.
-- **AZT-01 — required:** extend the product capability promise to include curated native authoring/patterns, bounded presentation presets and Theme-owned Control Center/System Health while preserving ownership/non-goals.
-- **AZT-05 — no change expected:** page-builder prohibition, WordPress-native first, presentation ownership and optional integration rules remain governing invariants. Any future request that changes those invariants is a separate constitutional hard gate.
-- **AZT-00 — no change expected:** source priority/governance is unchanged.
-- **AZT-EXEC-MAP — derived update required after AZT-04:** regenerate/update only after authoritative roadmap/source is accepted.
-
-No source document may claim a Git tag/GitHub Release exists until publication is actually verified.
-
-## 19.1 Historical Control Center provenance
-
-- Existing design PR #16 and unmerged U0 production candidate/evidence around PR #22 are **historical/reference evidence only**.
-- If this written v1.1 spec is approved, it supersedes PR #16 as the current design direction for Control Center.
-- R5 must re-evaluate reusable Theme-owned code from old U0 against current `main`, current source and v1.1 settings/schema requirements; it must not wholesale-merge stale alpha-era production code merely because earlier tests passed.
-- Historical PASS evidence can guide regression scope but cannot be promoted to v1.1 PASS without fresh evidence on current candidate bytes.
+Exit: v1.1 L0-L6 technical closure and publication provenance.
 
 ---
 
-# 20. Definition of Done for v1.1
+# 16. Source Impact
 
-V1.1 is complete only when:
+After approval of this written spec and before production code:
 
-1. canonical source reflects v1.0 closure and approved v1.1 architecture/roadmap;
-2. Design System 2.0 and `Default / Editorial / Commerce` visual presets are production-ready using the evidence-selected mechanism;
-3. curated native pattern library passes its quality contract;
-4. four Header presets pass responsive/keyboard/fail-soft gates;
-5. Woo product/catalog/product-page/cart/checkout/account presentation meets the v1.1 contract without taking commerce ownership;
-6. Control Center only mutates Theme-owned presentation settings and passes migration/reset/import/export tests;
-7. System Health uses only public/Theme-owned facts and support snapshot excludes secrets;
-8. optional provider assets are capability/surface-aware;
-9. exact-main post-merge verification exists and is fresh for release candidate;
-10. deterministic final package is built/rebuilt byte-identically, SHA-verified, unzipped/reverified and activated on clean WordPress;
-11. update/theme-switch/rollback pass;
-12. provider certification claims are limited to fresh evidence actually obtained;
-13. explicit owner approval is obtained for release tag/deploy gates.
+### AZT-01
+Add v1.1 product objective/non-goals: native authoring, curated presets/patterns, bounded Control Center, no page builder.
 
-Passing static tests alone cannot satisfy this definition.
+### AZT-02
+Ratify:
+- four-layer Design System;
+- visual-preset feasibility rule;
+- pattern portability;
+- Header primitive/preset architecture;
+- Woo presentation boundary;
+- single Theme settings schema;
+- read-only capability diagnostics;
+- asset/release architecture.
 
----
+### AZT-03
+Reconcile stale alpha/current baseline to actual v1.0 state; keep historical provenance unchanged.
 
-# 21. Rollback and recovery
+### AZT-04
+Close the v1.0 G critical path accurately, open R0-R6, add accepted v1.1 decisions and QA gates.
 
-Each production milestone must be independently reversible.
+### AZT-EXEC-MAP
+Replace G as active path with R0-R6 dependencies.
 
-- Work occurs on bounded work/feature branches.
-- Previous v1.0 package/main SHA is the starting rollback reference until superseded by an accepted v1.1 checkpoint.
-- Setting-schema migrations require fixture/backward-compatibility tests before merge.
-- Asset-scope cleanup must preserve the previous public presentation contract where provider compatibility relies on it.
-- Pattern/content work cannot depend on a Theme-local registry whose removal destroys content.
-- No destructive retirement without canonical destination + regression + rollback evidence.
+### AZT-05
+**No constitutional change expected.** If implementation discovers a requirement that needs a page builder, domain ownership transfer, mandatory provider dependency or changed release constitution, stop and return to product-owner constitutional approval instead of coding around it.
 
 ---
 
-# 22. Decision summary
+# 17. Rollback and Migration
 
-Approved design choices:
+- `aznet_theme_settings` is versioned and normalized; incompatible future schema change requires migration before use.
+- Existing v1.0 semantic token names retain compatibility aliases in v1.x.
+- Header preset change is presentation-only; switching back to Standard restores default composition without content migration.
+- Patterns persist as WordPress block content; changing Theme must not delete content.
+- Woo presets never migrate commerce data.
+- Control Center reset removes only Theme presentation settings.
+- Workflow retirement occurs only after replacement verification and remains recoverable through Git history.
+- Final release records prior stable package/commit for rollback.
 
-- Keep AZT-05 constitution and do **not** build a page builder.
-- Prefer Native Product System over Builder-lite or minimalist-only evolution.
-- Design System 2.0 uses layered semantic tokens mapped selectively into `theme.json`.
-- Deliver `Default / Editorial / Commerce` visual presets; choose native style-variation vs Theme-owned token-preset mechanism by WordPress 6.9 evidence without changing hybrid architecture.
-- Ship a curated, quality-gated Gutenberg/Woo Blocks pattern library.
-- Header v1.1 uses `Standard / Compact / Commerce / Overlay` presets and primitives, not drag-drop builder.
-- Do not publish speculative Header hooks without a concrete consumer/contract gate; defer mega-menu builder.
-- Woo v1.1 focuses on product cards, catalog/product presets, gallery/summary and cart/checkout/account polish.
-- Defer AJAX filters/live search/wishlist/compare/swatches/quick-view/custom checkout engines from Theme core.
-- Control Center remains presentation-only with one versioned Theme settings schema.
-- System Health only reports Theme-owned/public capability facts.
-- Provider and Woo assets become stricter surface/capability scoped.
-- Release engineering must verify exact `main` after merge and deterministic packaged bytes before tag/release.
-- V1.0 source reconciliation is a hard prerequisite before production v1.1 implementation.
+---
 
-## 23. Planning and next gate
+# 18. Acceptance Criteria
 
-After owner reviews and approves this written spec:
+V1.1 can be called complete only when:
 
-1. invoke the planning phase;
-2. write the first detailed implementation plan for **R0 source reconciliation** and a concise master dependency map for R0-R7;
-3. after R0 source acceptance, create bounded milestone plans for R1-R7 as each becomes exact next rather than one giant implementation plan;
-4. execute production feature/bugfix slices with RED -> intended failure -> minimal GREEN -> regression and the AZT QA layers;
-5. stop only at true hard gates defined by source.
+1. R0 authoritative source is reconciled and merged.
+2. Default/Editorial/Commerce visual outcomes pass editor/frontend/browser evidence.
+3. Curated Pattern Library passes portability/responsive/a11y gates.
+4. Header Standard/Compact/Commerce/Overlay passes keyboard/JS-off/fail-soft/browser matrix.
+5. Woo Product/Archive/Cart/Checkout/Account presentation 2.0 passes supported Woo runtime/browser matrix while Woo-absent core remains green.
+6. Control Center settings are one allow-listed Theme Mod schema, authenticated and continuity-safe.
+7. System Health contains only public/environment/Theme-owned information and support snapshot is privacy-safe.
+8. Theme asset matrix proves no unnecessary Woo/global component loading; provider optimization obeys public contract or is explicitly BLOCKED.
+9. Exact-main post-merge verification is fresh.
+10. Final `1.1.0` package is deterministic, SHA-256 recorded, unpack/reverified, activated from extracted bytes, update/theme-switch/rollback proven.
+11. Optional external provider defects remain clearly separated from core release readiness unless source changed.
+12. Tag/GitHub Release occurs only after explicit owner approval.
 
-No production code is authorized by this spec-review step alone.
+---
+
+# 19. Deferred candidates for v1.2+
+
+Evaluate only with real demand/evidence:
+- advanced mega menu;
+- live/AJAX product search;
+- AJAX catalog navigation/filtering;
+- swatch provider certification;
+- quick view;
+- richer Header composition beyond four presets;
+- additional pattern packs;
+- deeper performance budgets based on accumulated field data.
+
+No deferred feature is implicitly approved for implementation by this spec.
+
+---
+
+# 20. Exact next after written-spec approval
+
+1. Write implementation plan for R0-R6 with bite-sized TDD/QA tasks.
+2. Execute **R0 source reconciliation first**.
+3. Do not modify production PHP/CSS/JS until R0 source gate is approved/merged.
