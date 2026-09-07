@@ -66,6 +66,21 @@ if (preg_match('/\.aznet-theme-site-header__nav[^}]*\b(?:min-)?width\s*:\s*(?:3\
     exit(1);
 }
 
+if (preg_match('/\.aznet-theme-site-header__menu\s+\.sub-menu\s*\{[^}]*transition\s*:[^;}]*visibility/s', $css)) {
+    fwrite(STDERR, "FAIL: submenu visibility must not be delayed by a transition because keyboard Tab can skip depth-2 links\n");
+    exit(1);
+}
+
+if (! preg_match('/@media\s*\(max-width:\s*980px\)[\s\S]*?\.aznet-theme-site-header__brand\s*\{[^}]*flex\s*:\s*1\s+1\s+auto[^}]*min-width\s*:\s*0/s', $css)) {
+    fwrite(STDERR, "FAIL: mobile Header brand must be allowed to shrink instead of pushing controls outside the viewport\n");
+    exit(1);
+}
+
+if (! preg_match('/@media\s*\(max-width:\s*980px\)[\s\S]*?\.aznet-theme-site-header__brand\s+span\s*\{[^}]*overflow\s*:\s*hidden[^}]*text-overflow\s*:\s*ellipsis[^}]*white-space\s*:\s*nowrap/s', $css)) {
+    fwrite(STDERR, "FAIL: long mobile site titles need bounded ellipsis presentation\n");
+    exit(1);
+}
+
 if (! str_contains($css, '@media (prefers-reduced-motion: reduce)')) {
     fwrite(STDERR, "FAIL: Header stylesheet must retain reduced-motion handling\n");
     exit(1);
