@@ -103,7 +103,7 @@ jobs:
           wp plugin install woocommerce --version=10.9.4 --activate --path=/tmp/wp --allow-root
           test "$(wp plugin get woocommerce --field=version --path=/tmp/wp --allow-root)" = '10.9.4'
           printf '%s\n' '10.9.4' > /tmp/r4-woocommerce/woocommerce-version.txt
-          printf '%s' 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Y9Zx9sAAAAASUVORK5CYII=' | base64 -d > /tmp/r4-product.png
+          printf '%s' 'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAT0lEQVR42u3PQQ0AAAgEILV/2ItgCh9u0IBOUp9NPScgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwbwH3PQNQliOz8AAAAABJRU5ErkJggg==' | base64 -d > /tmp/r4-product.png
           cp /tmp/r4-product.png /tmp/r4-gallery.png
           MEDIA_ID=$(wp media import /tmp/r4-product.png --title='R4 Product Image' --porcelain --path=/tmp/wp --allow-root)
           GALLERY_ID=$(wp media import /tmp/r4-gallery.png --title='R4 Gallery Image' --porcelain --path=/tmp/wp --allow-root)
