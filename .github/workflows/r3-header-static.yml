@@ -1,0 +1,44 @@
+name: R3 Header Static Contracts
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/r3-header-static.yml'
+      - 'inc/theme/settings.php'
+      - 'inc/theme/header.php'
+      - 'inc/theme/bootstrap.php'
+      - 'inc/theme/assets.php'
+      - 'template-parts/header/**'
+      - 'assets/css/components/site-header.css'
+      - 'assets/js/header-navigation.js'
+      - 'assets/js/sticky-header.js'
+      - 'tests/offline/r3-*.php'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  r3-header-static:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact R3 candidate
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Run R3 Header contracts
+        run: |
+          set -euo pipefail
+          for contract in tests/offline/r3-*.php; do
+            php -d zend.assertions=1 -d assert.exception=1 "$contract"
+          done
+
+      - name: Run retained core static regression
+        run: bash scripts/verify-g3-core.sh
