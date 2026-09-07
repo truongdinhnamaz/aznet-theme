@@ -201,7 +201,7 @@ jobs:
             fi
             sleep 1
           done
-          grep -F 'Phần nội dung đầu tiên' /tmp/r2-pattern-library/smoke-clean.html
+          grep -F 'Đặt giá trị cốt lõi' /tmp/r2-pattern-library/smoke-clean.html
           grep -F 'Câu hỏi thường gặp' /tmp/r2-pattern-library/smoke-clean.html
 
       - name: Install Playwright and axe
@@ -320,7 +320,7 @@ jobs:
           AFTER_SHA=$(sha256sum /tmp/r2-pattern-library/post-content-after.txt | awk '{print $1}')
           test "$BEFORE_SHA" = "$AFTER_SHA"
           curl -fsS http://127.0.0.1:8080/r2-pattern-fixture/ >/tmp/r2-pattern-library/portability-render.html
-          grep -F 'Phần nội dung đầu tiên' /tmp/r2-pattern-library/portability-render.html
+          grep -F 'Đặt giá trị cốt lõi' /tmp/r2-pattern-library/portability-render.html
           wp theme activate aznet-theme --path=/tmp/wp --allow-root
           echo "PORTABILITY_CONTENT_SHA=$BEFORE_SHA"
           echo 'PASS: R2 saved block content survives theme switch byte-for-byte'
