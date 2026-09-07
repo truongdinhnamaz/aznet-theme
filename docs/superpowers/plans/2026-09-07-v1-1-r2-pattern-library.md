@@ -322,7 +322,7 @@ function register_woocommerce_patterns(): void {
     }
 }
 ```
-Use a correct root-path helper for the real file layout during implementation; the test must verify both definition files resolve. Do not inspect Woo plugin files/classes.
+Before GREEN, the test must verify the final filesystem path expression resolves both definition files. If `dirname(__DIR__, 2)` does not resolve the repository root from `inc/theme/patterns.php`, replace it with the correct deterministic path expression; do not guess at runtime.
 
 - [ ] **Step 5: Implement core-only commerce/utility files**
 
