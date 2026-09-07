@@ -30,5 +30,6 @@ require_once __DIR__ . '/rootprofile-current-surface.php';
 
 add_action( 'after_setup_theme', __NAMESPACE__ . '\\setup' );
 add_action( 'init', __NAMESPACE__ . '\\register_pattern_categories' );
+add_action( 'init', __NAMESPACE__ . '\\register_woocommerce_patterns', 20 );
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_assets' );
 add_filter( 'body_class', __NAMESPACE__ . '\\visual_preset_body_classes' );
