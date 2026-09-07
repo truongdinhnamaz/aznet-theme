@@ -20,23 +20,42 @@ try {
   const diagnostic = await page.locator('.woocommerce-product-gallery').first().evaluate((root) => {
     const wrapper = root.querySelector('.woocommerce-product-gallery__wrapper');
     const viewport = root.querySelector('.flex-viewport');
+    const activeSlide = root.querySelector('.woocommerce-product-gallery__image.flex-active-slide');
+    const activeLink = activeSlide?.querySelector('a');
+    const activeImage = activeSlide?.querySelector('img');
     const rootStyle = getComputedStyle(root);
-    const wrapperStyle = wrapper ? getComputedStyle(wrapper) : null;
-    const rootRect = root.getBoundingClientRect();
-    const wrapperRect = wrapper?.getBoundingClientRect();
-    const jq = window.jQuery;
 
+    const box = (node) => {
+      if (!node) return null;
+      const rect = node.getBoundingClientRect();
+      const style = getComputedStyle(node);
+      return {
+        inlineStyle: node.getAttribute('style'),
+        width: rect.width,
+        height: rect.height,
+        display: style.display,
+        position: style.position,
+        float: style.float,
+        overflow: style.overflow,
+        opacity: style.opacity,
+        visibility: style.visibility,
+        marginTop: style.marginTop,
+        marginBottom: style.marginBottom,
+        paddingTop: style.paddingTop,
+        paddingBottom: style.paddingBottom,
+      };
+    };
+
+    const jq = window.jQuery;
     return {
       documentReadyState: document.readyState,
-      rootInlineStyle: root.getAttribute('style'),
+      root: box(root),
+      viewport: box(viewport),
+      wrapper: box(wrapper),
+      activeSlide: box(activeSlide),
+      activeLink: box(activeLink),
+      activeImage: box(activeImage),
       rootOpacity: rootStyle.opacity,
-      rootDisplay: rootStyle.display,
-      rootVisibility: rootStyle.visibility,
-      rootBox: { width: rootRect.width, height: rootRect.height },
-      wrapperDisplay: wrapperStyle?.display ?? null,
-      wrapperVisibility: wrapperStyle?.visibility ?? null,
-      wrapperOpacity: wrapperStyle?.opacity ?? null,
-      wrapperBox: wrapperRect ? { width: wrapperRect.width, height: wrapperRect.height } : null,
       flexViewportCount: root.querySelectorAll('.flex-viewport').length,
       flexActiveSlideCount: root.querySelectorAll('.flex-active-slide').length,
       imageCount: root.querySelectorAll('.woocommerce-product-gallery__image img').length,
@@ -51,10 +70,10 @@ try {
       productGalleryDataPresent: Boolean(jq && jq(root).data('product_gallery')),
       singleProductParamsPresent: typeof window.wc_single_product_params !== 'undefined',
       flexsliderEnabledParam: window.wc_single_product_params?.flexslider_enabled ?? null,
+      flexsliderOptions: window.wc_single_product_params?.flexslider ?? null,
       resourceScripts: performance.getEntriesByType('resource')
         .map((entry) => entry.name)
         .filter((url) => url.includes('single-product') || url.includes('flexslider')),
-      viewportPresent: Boolean(viewport),
     };
   });
 
@@ -64,9 +83,9 @@ try {
   if (
     diagnostic.rootOpacity === '0' ||
     !diagnostic.productGalleryDataPresent ||
-    !diagnostic.wrapperBox ||
-    diagnostic.wrapperBox.width <= 0 ||
-    diagnostic.wrapperBox.height <= 0 ||
+    !diagnostic.viewport || diagnostic.viewport.height <= 0 ||
+    !diagnostic.activeSlide || diagnostic.activeSlide.height <= 0 ||
+    !diagnostic.activeImage || diagnostic.activeImage.height <= 0 ||
     consoleErrors.length > 0 ||
     pageErrors.length > 0
   ) {
