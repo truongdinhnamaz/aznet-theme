@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.24  
+**Version:** v0.25  
 **Status:** Working Source  
-**Date:** 07/09/2026
+**Date:** 08/09/2026
 
 ## 1. Purpose
 
@@ -26,17 +26,17 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | R0 | v1.0 -> v1.1 Source Reconciliation | PASS | Source-only reconciliation merged through PR #36; v1.1 product/architecture ratified |
 | R1 | Design System 2.0 | PASS | PR #37 merged; settings/tokens + Default/Editorial/Commerce outcomes + editor/frontend parity L1-L4 |
 | R2 | Native Pattern Library | PASS | PR #39 merged; 18 portable patterns; public Woo-block gating; L1-L4 + theme-switch portability evidence |
-| R3 | Header System 2.0 | READY | Standard/Compact/Commerce/Overlay bounded presets; next sequential production slice |
-| R4 | WooCommerce Presentation 2.0 | READY | Product-card/catalog/product/cart/checkout/account presentation improvements; independently unblocked |
-| R5 | Control Center + System Health | PLANNED / DEPENDENCY WAIT | Waits for final R3/R4 setting keys |
+| R3 | Header System 2.0 | PASS | PR #41 merged; four bounded presets, three sticky modes, reusable primitives, mobile progressive enhancement and L1-L4 browser/a11y evidence |
+| R4 | WooCommerce Presentation 2.0 | READY / EXACT NEXT | Product-card/catalog/product/cart/checkout/account presentation improvements; independently unblocked and now sequential next |
+| R5 | Control Center + System Health | PLANNED / DEPENDENCY WAIT | R3 setting keys are stable; waits for final R4 setting keys |
 | R6 | Performance + Release 2.0 | PLANNED | Asset-scope evidence, exact-main CI and deterministic v1.x release closure |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform R5; no wholesale merge and no parallel admin/settings architecture |
 
-Canonical implementation baseline after R2 merge: `main@d2e4ae567108b6a224b623febca7a676b7114715`.
+Canonical implementation baseline after R3 merge: `main@d8d5670d57dc62f7e2399d9e1b2eee70fd85ef9d`.
 
-R2 merged from head `6a40a44faaa8d8207c2a3b850e2bc6d65cd561ee`; its tree is identical to the merge tree at `3f9e934eaa4bdcb058ccf289d7ef1faa7eac1ee5`. Fresh exact-PR-head verification completed 12/12 workflows successfully. No pull-request-triggered Actions run exists on the merge SHA, so post-merge execution is not inferred beyond the proven tree equivalence.
+R3 merged from head `c4e6e623e4fc0113bdbc211fecf34b40528b7f77`; its tree is identical to the merge tree at `ebe79f1dc65ab58794592eab59a5bb2b9b3a1a00`. Fresh exact-PR-head verification completed 14/14 workflows successfully, including R3 static/browser and retained core/R1/R2 regressions. No pull-request-triggered Actions run exists on the merge SHA, so post-merge execution is not inferred beyond the proven tree equivalence.
 
-A fresh GitHub check on 07/09/2026 still finds no Git tag and no GitHub Release for v1.0.0, so **publication = PUBLICATION_PENDING** even though metadata/core technical closure is `1.0.0`.
+A fresh GitHub check on 08/09/2026 still finds no Git tag and no GitHub Release for v1.0.0, so **publication = PUBLICATION_PENDING** even though metadata/core technical closure is `1.0.0`.
 
 ## 3. v1.0 closure state
 
@@ -84,13 +84,15 @@ Ship a curated WordPress-native launch set using core blocks and public Woo bloc
 
 **Exit:** PASS — 18 patterns shipped; 16 core/native plus 2 public-Woo-block-gated patterns. L1-L4, editor/frontend parity, clean-WP/Woo-present matrices and byte-identical theme-switch content portability proven; PR #39 merged to canonical `main`.
 
-**Next:** R3 sequentially; R4 remains independently READY.
+**Next:** R3 — completed; R4 remains READY.
 
 ### R3 — Header System 2.0
 
 Introduce Standard/Compact/Commerce/Overlay presentation presets from reusable primitives. Mobile/sticky behavior uses accessible progressive enhancement and remains usable with JS failure.
 
-**Exit:** L1-L4 PASS across preset/browser/keyboard matrix.
+**Exit:** PASS — four bounded presets and three sticky modes delivered; mobile no-JS fallback, keyboard/focus, depth-2 navigation, reduced motion, 1440/1024/390/320 responsiveness, Overlay fallback and Woo-present/absent Commerce behavior verified through L1-L4. PR #41 merged to canonical `main` with exact head/merge tree equivalence.
+
+**Next:** R4.
 
 ### R4 — WooCommerce Presentation 2.0
 
@@ -114,9 +116,7 @@ Measure asset/runtime behavior, harden surface-aware loading, add reusable PR/ex
 
 `R0 -> R1 -> {R2, R3, R4} -> R5 -> R6`
 
-R0, R1 and R2 are now complete on canonical `main`. R3/R4 remain independently executable while consuming stable R1 interfaces. R5 waits for final R3/R4 setting keys. R6 is the integration/release closure after production streams land.
-
-Sequential execution chooses R3 as the exact next slice; parallel R4 execution is optional, not required.
+R0, R1, R2 and R3 are complete on canonical `main`. R4 is now the remaining production stream in the parallel group and the exact sequential next. R5 may start only after R4 final setting keys are stable; it consumes the already-stable R3 settings rather than inventing a second schema. R6 is the integration/release closure after production streams land.
 
 ## 6. QA layers
 
@@ -215,8 +215,8 @@ The following remain explicit owner approval gates:
 - provider takeover paths such as E5-D;
 - destructive retirement without proven rollback.
 
-Completed R0, R1 and R2 merge approvals are historical cleared gates and are not requested again.
+Completed R0, R1, R2 and R3 merge approvals are historical cleared gates and are not requested again.
 
 ## 13. Exact next
 
-**R3 — Header System 2.0 from the latest canonical `main`. R4 remains independently unblocked and may proceed later or in an isolated parallel branch.**
+**R4 — WooCommerce Presentation 2.0 from the latest canonical `main`. R5 remains dependency-wait until R4 final setting keys are stable.**
