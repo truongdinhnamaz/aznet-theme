@@ -155,7 +155,7 @@ jobs:
                 "menu-item-object" => "page",
                 "menu-item-type" => "post_type",
                 "menu-item-status" => "publish",
-                "menu-item-classes" => ["r3-parent-link"],
+                "menu-item-classes" => "r3-parent-link",
             ]);
             wp_update_nav_menu_item($menu_id, 0, [
                 "menu-item-title" => "R3 Child — Tư vấn triển khai và tối ưu dài hạn",
@@ -164,7 +164,7 @@ jobs:
                 "menu-item-type" => "post_type",
                 "menu-item-status" => "publish",
                 "menu-item-parent-id" => (int) $parent,
-                "menu-item-classes" => ["r3-child-link"],
+                "menu-item-classes" => "r3-child-link",
             ]);
             foreach ([
                 "Kiến thức WordPress và chiến lược nội dung",
