@@ -30,7 +30,6 @@ $forbidden = [
     'woocommerce_save_account_details',
     'Automattic\\WooCommerce\\Internal',
     'choiceguide_',
-    'convertflow',
 ];
 
 foreach ($paths as $relative) {
@@ -49,6 +48,14 @@ foreach ($paths as $relative) {
     if (preg_match("/['\"]_woocommerce_[^'\"]*['\"]/i", $contents)) {
         fwrite(STDERR, "forbidden Woo storage-key literal in {$relative}\n");
         exit(4);
+    }
+}
+
+foreach (['inc/theme/woocommerce-account.php', 'assets/css/components/woocommerce-account.css'] as $relative) {
+    $contents = file_get_contents($root . '/' . $relative);
+    if (false !== stripos($contents, 'convertflow')) {
+        fwrite(STDERR, "W6 account presentation must not couple to ConvertFlow in {$relative}\n");
+        exit(9);
     }
 }
 
