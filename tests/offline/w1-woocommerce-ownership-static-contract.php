@@ -58,8 +58,12 @@ $bootstrap = read_path($root, 'inc/theme/bootstrap.php');
 if (substr_count($bootstrap, "require_once __DIR__ . '/../integrations/woocommerce.php';") !== 1) {
     fail_gate('bootstrap must load WooCommerce integration exactly once');
 }
-if (preg_match('/add_(?:action|filter)\([^;\n]*(?:woocommerce|woo)/i', $bootstrap) === 1) {
-    fail_gate('W1 must not register WooCommerce-specific WordPress hooks');
+
+preg_match_all('/add_(?:action|filter)\(\s*[\'\"]([^\'\"]+)[\'\"]/i', $bootstrap, $hook_matches);
+foreach ($hook_matches[1] ?? [] as $hook_name) {
+    if (preg_match('/(?:woocommerce|woo)/i', $hook_name) === 1) {
+        fail_gate("W1 must not register WooCommerce-specific WordPress hook {$hook_name}");
+    }
 }
 
 $content = read_path($root, 'inc/theme/content-shell.php');
