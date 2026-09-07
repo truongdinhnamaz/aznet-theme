@@ -53,3 +53,11 @@
     --aznet-theme-surface-inverse: #111722;
     --aznet-theme-on-inverse: #f7f8fa;
 }
+
+@media (prefers-reduced-motion: reduce) {
+    :root,
+    .editor-styles-wrapper {
+        --aznet-theme-motion-fast: 0ms;
+        --aznet-theme-motion-base: 0ms;
+    }
+}
