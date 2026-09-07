@@ -1,0 +1,47 @@
+name: F4 Homepage Token Integration Verification
+
+on:
+  push:
+    branches:
+      - test/f4-homepage-token-integration-20260907
+
+permissions:
+  contents: read
+
+jobs:
+  f4-token-integration:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout synthetic PR27 merge candidate
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Verify retained Homepage contracts
+        run: |
+          set -euo pipefail
+          php tests/offline/f1-front-page-native-shell-contract.php
+          php tests/offline/f2-front-page-content-boundary-contract.php
+          php tests/offline/f3-homepage-ownership-static-contract.php
+          php tests/offline/f5-homepage-absent-failsoft-contract.php
+          php -l front-page.php
+
+      - name: Verify canonical W8 token bridge
+        run: |
+          set -euo pipefail
+          test -f assets/css/integrations/convertflow.css
+          test -f inc/theme/assets.php
+          php tests/offline/w8-convertflow-theme-contract.php
+          git hash-object inc/theme/assets.php | grep -Fx 'f19e134137412fa79a4865824c89a76c5024ce8a'
+          git hash-object assets/css/integrations/convertflow.css | grep -Fx '39115a63f00a369be72b40dd01dbd988e1d55cc5'
+
+      - name: Verify Homepage does not duplicate ConvertFlow integration
+        run: |
+          set -euo pipefail
+          ! grep -Eqi 'convertflow|choiceguide_|get_option\s*\(|get_post_meta\s*\(|\$wpdb|template_include|template_redirect' front-page.php
+          ! grep -Eq 'assets/css/integrations/convertflow\.css|aznet-theme-convertflow-contract' front-page.php
+          echo 'PASS: F4 Homepage consumes canonical Theme token bridge without duplicating provider logic'
