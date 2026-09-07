@@ -101,6 +101,52 @@ async function isKnownWooCheckoutProviderViolation(page, kind, violation) {
   return true;
 }
 
+async function waitForResolvedVariation(page) {
+  const form = page.locator('form.variations_form').first();
+  await form.waitFor({ state: 'visible', timeout: 20000 });
+
+  try {
+    await page.waitForFunction(
+      () => {
+        const variationForm = document.querySelector('form.variations_form');
+        if (!(variationForm instanceof HTMLFormElement)) return false;
+
+        const variationId = variationForm.querySelector('input.variation_id');
+        const button = variationForm.querySelector('.single_add_to_cart_button');
+        const reset = variationForm.querySelector('.reset_variations');
+        if (!(variationId instanceof HTMLInputElement) || !(button instanceof HTMLElement) || !(reset instanceof HTMLElement)) return false;
+
+        const resetStyle = getComputedStyle(reset);
+        const resetOpacity = Number.parseFloat(resetStyle.opacity || '0');
+        const resolvedId = Number.parseInt(variationId.value || '0', 10);
+        const buttonReady = !button.classList.contains('disabled') &&
+          !button.classList.contains('wc-variation-selection-needed') &&
+          !button.classList.contains('wc-variation-is-unavailable');
+        const resetStable = resetStyle.visibility !== 'hidden' && resetStyle.display !== 'none' && resetOpacity >= 0.99;
+
+        return resolvedId > 0 && buttonReady && resetStable;
+      },
+      null,
+      { timeout: 7000 }
+    );
+  } catch (error) {
+    const state = await form.evaluate((variationForm) => {
+      const variationId = variationForm.querySelector('input.variation_id');
+      const button = variationForm.querySelector('.single_add_to_cart_button');
+      const reset = variationForm.querySelector('.reset_variations');
+      const resetStyle = reset instanceof HTMLElement ? getComputedStyle(reset) : null;
+      return {
+        variationId: variationId instanceof HTMLInputElement ? variationId.value : null,
+        buttonClass: button instanceof HTMLElement ? button.className : null,
+        resetVisibility: resetStyle?.visibility ?? null,
+        resetDisplay: resetStyle?.display ?? null,
+        resetOpacity: resetStyle?.opacity ?? null,
+      };
+    });
+    throw new Error(`product: native variation did not settle before accessibility scan ${JSON.stringify(state)}`, { cause: error });
+  }
+}
+
 async function verifyBasePage(page, kind, viewportName, result) {
   await page.locator('main#main').waitFor({ state: 'visible', timeout: 20000 });
   const mainCount = await page.locator('main#main').count();
@@ -171,6 +217,7 @@ async function verifyKind(page, kind, viewport) {
     if (options.length < 1) throw new Error('product: native variable select has no selectable variation');
     await select.selectOption(options[0]);
     if ((await select.inputValue()) !== options[0]) throw new Error('product: native variation select did not retain selected value');
+    await waitForResolvedVariation(page);
 
     if (productPreset === 'focus') {
       const summaryPosition = await page.locator('.summary').evaluate((node) => getComputedStyle(node).position);
