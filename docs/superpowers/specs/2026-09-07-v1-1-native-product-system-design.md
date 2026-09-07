@@ -51,7 +51,7 @@ Nhưng để đạt chất lượng sản phẩm thương mại cao hơn, các k
 
 Theme có thể sở hữu:
 - semantic tokens;
-- style variations;
+- visual/style presets;
 - patterns;
 - Header composition/presets;
 - Woo visual presets;
@@ -96,7 +96,7 @@ Các capability tương tác cao như advanced mega menu, live search hoặc AJA
 
 V1.1 có năm trụ cột:
 
-1. **Design System 2.0 + Style Variations**
+1. **Design System 2.0 + Visual Presets**
 2. **Native Pattern Library**
 3. **Header System 2.0**
 4. **WooCommerce Presentation 2.0**
@@ -165,15 +165,23 @@ Button, card, input, navigation, product card và các component khác tham chi�
 
 Không bật toàn bộ `appearanceTools` vô điều kiện. Editor freedom phải giữ guardrails để site không tự phân mảnh design system.
 
-## 6.2 Style variations
+## 6.2 Visual presets and WordPress-native feasibility gate
 
-V1.1 ship ba style variations đầu tiên:
+V1.1 cần ba visual presets:
 
 - **AZnet Default** — general/business baseline.
 - **AZnet Editorial** — typography/content hierarchy mạnh hơn cho knowledge/editorial/EEAT surfaces.
 - **AZnet Commerce** — density/hierarchy tối ưu hơn cho Woo surfaces.
 
-Style variation chỉ thay presentation vocabulary/mapping; không thay data owner, query, routing hoặc domain state.
+Tên “style variation” chỉ được dùng cho cơ chế WordPress native nếu support floor WordPress 6.9 thực sự cho hybrid PHP Theme áp dụng/chọn variation theo cách đáp ứng yêu cầu frontend + editor. R1 phải có một feasibility contract trên WordPress 6.9 trước khi khóa mechanism.
+
+Decision rule đã khóa:
+
+1. Nếu WordPress-native style variation mechanism đáp ứng hybrid architecture hiện tại, dùng native mechanism.
+2. Nếu native variation selection không đáp ứng hybrid PHP Theme trên support floor, dùng **Theme-owned visual preset mapping** chỉ để đổi semantic token/editor presentation settings; không chuyển kiến trúc sang block/FSE theme và không tạo content/domain state riêng.
+3. Cả hai đường phải cho frontend và editor nhận cùng semantic vocabulary, giữ content portable và cùng QA contract.
+
+Như vậy outcome `Default / Editorial / Commerce` là bắt buộc; implementation mechanism được quyết định bằng evidence trên support floor chứ không bằng giả định.
 
 ## 6.3 Backward compatibility
 
@@ -342,11 +350,19 @@ Sticky enhancement phải:
 - Account/cart chỉ render khi public Woo capability có mặt.
 - Optional item-count/mini-cart chỉ được thêm nếu public Woo capability rõ và không cần private session/storage reads.
 
-## 8.8 Extension point
+## 8.8 Extension boundary
 
-V1.1 có thể chuẩn hóa một **public presentation extension point** cho navigation item content, ví dụ `aznet_theme_header_navigation_item_content`, nhưng contract cuối phải được source/plan xác nhận trước production code.
+Header architecture phải giữ internal zone/primitive boundary đủ sạch để mở rộng sau này, nhưng **v1.1 không ship một public navigation-item hook chỉ để “chuẩn bị tương lai”**.
 
-Extension point chỉ nhận presentation content từ owner hợp lệ; nó không trở thành mega-menu data engine.
+Public extension contract chỉ được thêm khi đồng thời có:
+- ít nhất một concrete consumer/use case;
+- ownership rõ;
+- source decision/versioning;
+- contract tests.
+
+Nếu gate đó phát sinh trong v1.1, hook có thể dùng family `aznet_theme_*`; tên/payload cuối được khóa ở source trước production code. Nếu không có use case thật, extension point giữ internal và public hook được defer.
+
+Điều này giữ khả năng tiến tới mega-menu/content extension sau này mà không vi phạm YAGNI.
 
 ## 8.9 Deferred
 
@@ -473,14 +489,14 @@ Control Center là bảng điều khiển cho **Theme-owned presentation configu
 
 ### Overview
 - Theme version;
-- active style variation;
+- active visual preset;
 - Header preset;
 - logo/menu readiness;
 - public Woo capability;
 - bounded configuration warnings.
 
 ### Design
-- style variation;
+- visual preset;
 - density;
 - button/control presentation presets;
 - container behavior.
@@ -557,7 +573,7 @@ Read-only:
 
 - Logo readiness;
 - primary menu readiness;
-- style variation;
+- visual preset;
 - Header preset;
 - Woo presentation preset nếu capability có mặt.
 
@@ -624,15 +640,22 @@ và chỉ load theo capability/preset.
 
 Không thêm React/Vue/jQuery dependency cho bounded Theme interactions nếu native JS đủ.
 
-## 12.3 Performance baseline and budgets
+## 12.3 Performance baseline and budget-lock gate
 
-Trước implementation behavior đáng kể, capture fresh v1.0 baseline trên WordPress sạch. V1.1 budgets được khóa từ baseline đo được thay vì bịa số KB/Lighthouse score trong spec.
+Trước implementation behavior đáng kể, R1 capture fresh v1.0 baseline trên WordPress sạch. Exact numerical budgets được ghi vào authoritative roadmap/plan từ baseline đó trước khi một v1.1 performance claim được dùng làm release gate.
 
-Minimum invariants:
+Budget decision phải bao gồm ít nhất:
+- total Theme-owned CSS/JS transfer/load delta trên clean core routes;
+- Theme-caused layout-shift threshold/regression allowance;
+- unexpected subresource/console error = 0;
+- surface/provider asset absence assertions.
+
+Cho tới khi baseline được đo và budget được khóa, không được claim v1.1 “nhẹ hơn” bằng marketing number suy đoán.
+
+Minimum invariants ngay từ đầu:
 - no provider asset when provider/capability absent;
 - no Woo-surface asset trên non-Woo route;
 - no unexpected failed subresource;
-- no Theme-caused material CLS trên core surfaces;
 - native responsive-image behavior giữ được;
 - no unexpected console error;
 - reduced-motion respected;
@@ -763,6 +786,7 @@ QA layer discipline của AZT-04 tiếp tục áp dụng.
 
 ## L2 — Contract / TDD
 - token backward compatibility;
+- visual preset behavior/mapping;
 - setting normalization/migration;
 - preset composition;
 - surface-aware assets;
@@ -810,7 +834,7 @@ Only for declared certification targets:
 
 # 18. Implementation decomposition
 
-V1.1 phải được chia thành bounded milestones; không code tất cả trong một branch lớn.
+Đây là **umbrella product design**, không phải một giant implementation slice. V1.1 phải được triển khai bằng các bounded milestones/plans; không code tất cả trong một branch lớn.
 
 ## R0 — v1.0 closure/source reconciliation prerequisite
 
@@ -818,14 +842,15 @@ Before v1.1 production code:
 - reconcile AZT-03 baseline from alpha state to canonical v1.0 implementation state;
 - reconcile AZT-04 roadmap from G0-active to v1.0 core closure and v1.1 roadmap;
 - record tag/release publication truth accurately (do not claim published if unavailable);
-- update AZT-01/AZT-02 where approved v1.1 product/architecture changes require it;
-- leave AZT-05 unchanged unless an actual constitutional invariant changes.
+- update AZT-01/AZT-02 for the approved v1.1 product/architecture capabilities;
+- leave AZT-05 unchanged because constitutional invariants remain unchanged.
 
 ## R1 — Design System 2.0
 - token expansion/backward compatibility;
+- WordPress 6.9 visual-preset/style-variation feasibility gate;
 - `theme.json` curated mappings;
-- style variations;
-- baseline visual/performance evidence.
+- three visual presets;
+- baseline visual/performance evidence and numerical budget lock.
 
 ## R2 — Pattern Library
 - registration architecture;
@@ -866,7 +891,7 @@ Before v1.1 production code:
 - source closure;
 - owner merge/release gates.
 
-Milestone IDs/names có thể được AZT-04 chuẩn hóa trong source reconciliation; implementation plan phải dùng IDs canonical sau source update.
+Milestone IDs/names có thể được AZT-04 chuẩn hóa trong R0; các plan sau đó phải dùng IDs canonical từ source đã accept.
 
 ---
 
@@ -876,15 +901,22 @@ Design này là architecture/product-roadmap change và **không được đi th
 
 Required source impact before implementation:
 
-- **AZT-03**: update current baseline/provenance state from stale alpha/G0 facts to actual canonical v1.0 state.
-- **AZT-04**: close v1.0 G path accurately, add v1.1 milestone/QA sequencing and retain external compatibility blockers as non-core tracks.
-- **AZT-02**: document approved v1.1 architecture additions: Design System 2.0 mapping, pattern system boundary, Header preset composition, Theme-owned settings/Control Center boundary, asset/release architecture where architectural.
-- **AZT-01**: update product capability/ownership wording only where the v1.1 product promise materially expands beyond current charter.
-- **AZT-05**: **no change expected**. Page-builder prohibition, WordPress-native first, presentation ownership and optional integration rules remain governing invariants.
-- **AZT-00**: no change expected unless source priority/governance itself changes.
-- **AZT-EXEC-MAP**: regenerate/update only after authoritative roadmap/source is accepted; remains derived.
+- **AZT-03 — required:** update current baseline/provenance state from stale alpha/G0 facts to actual canonical v1.0 state.
+- **AZT-04 — required:** close v1.0 G path accurately, add v1.1 milestone/QA sequencing and retain external compatibility blockers as non-core tracks.
+- **AZT-02 — required:** document approved v1.1 architecture additions: Design System 2.0 mapping, pattern boundary, Header preset composition, Theme-owned settings/Control Center boundary, asset/release architecture.
+- **AZT-01 — required:** extend the product capability promise to include curated native authoring/patterns, bounded presentation presets and Theme-owned Control Center/System Health while preserving ownership/non-goals.
+- **AZT-05 — no change expected:** page-builder prohibition, WordPress-native first, presentation ownership and optional integration rules remain governing invariants. Any future request that changes those invariants is a separate constitutional hard gate.
+- **AZT-00 — no change expected:** source priority/governance is unchanged.
+- **AZT-EXEC-MAP — derived update required after AZT-04:** regenerate/update only after authoritative roadmap/source is accepted.
 
 No source document may claim a Git tag/GitHub Release exists until publication is actually verified.
+
+## 19.1 Historical Control Center provenance
+
+- Existing design PR #16 and unmerged U0 production candidate/evidence around PR #22 are **historical/reference evidence only**.
+- If this written v1.1 spec is approved, it supersedes PR #16 as the current design direction for Control Center.
+- R5 must re-evaluate reusable Theme-owned code from old U0 against current `main`, current source and v1.1 settings/schema requirements; it must not wholesale-merge stale alpha-era production code merely because earlier tests passed.
+- Historical PASS evidence can guide regression scope but cannot be promoted to v1.1 PASS without fresh evidence on current candidate bytes.
 
 ---
 
@@ -893,7 +925,7 @@ No source document may claim a Git tag/GitHub Release exists until publication i
 V1.1 is complete only when:
 
 1. canonical source reflects v1.0 closure and approved v1.1 architecture/roadmap;
-2. Design System 2.0 and three style variations are production-ready;
+2. Design System 2.0 and `Default / Editorial / Commerce` visual presets are production-ready using the evidence-selected mechanism;
 3. curated native pattern library passes its quality contract;
 4. four Header presets pass responsive/keyboard/fail-soft gates;
 5. Woo product/catalog/product-page/cart/checkout/account presentation meets the v1.1 contract without taking commerce ownership;
@@ -930,10 +962,10 @@ Approved design choices:
 - Keep AZT-05 constitution and do **not** build a page builder.
 - Prefer Native Product System over Builder-lite or minimalist-only evolution.
 - Design System 2.0 uses layered semantic tokens mapped selectively into `theme.json`.
-- Ship `Default / Editorial / Commerce` style variations.
+- Deliver `Default / Editorial / Commerce` visual presets; choose native style-variation vs Theme-owned token-preset mechanism by WordPress 6.9 evidence without changing hybrid architecture.
 - Ship a curated, quality-gated Gutenberg/Woo Blocks pattern library.
 - Header v1.1 uses `Standard / Compact / Commerce / Overlay` presets and primitives, not drag-drop builder.
-- Defer mega-menu builder.
+- Do not publish speculative Header hooks without a concrete consumer/contract gate; defer mega-menu builder.
 - Woo v1.1 focuses on product cards, catalog/product presets, gallery/summary and cart/checkout/account polish.
 - Defer AJAX filters/live search/wishlist/compare/swatches/quick-view/custom checkout engines from Theme core.
 - Control Center remains presentation-only with one versioned Theme settings schema.
@@ -942,13 +974,14 @@ Approved design choices:
 - Release engineering must verify exact `main` after merge and deterministic packaged bytes before tag/release.
 - V1.0 source reconciliation is a hard prerequisite before production v1.1 implementation.
 
-## 23. Next gate
+## 23. Planning and next gate
 
 After owner reviews and approves this written spec:
 
 1. invoke the planning phase;
-2. produce a detailed implementation plan beginning with **R0 source reconciliation**, not production UI code;
-3. execute bounded milestones with RED -> minimal GREEN -> regression and the AZT QA layers;
-4. stop only at true hard gates defined by source.
+2. write the first detailed implementation plan for **R0 source reconciliation** and a concise master dependency map for R0-R7;
+3. after R0 source acceptance, create bounded milestone plans for R1-R7 as each becomes exact next rather than one giant implementation plan;
+4. execute production feature/bugfix slices with RED -> intended failure -> minimal GREEN -> regression and the AZT QA layers;
+5. stop only at true hard gates defined by source.
 
 No production code is authorized by this spec-review step alone.
