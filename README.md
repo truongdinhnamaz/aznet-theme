@@ -2,65 +2,51 @@
 
 # AZnet Theme
 
-AZnet Theme là một WordPress theme presentation-first được phát triển cho AZnet. Theme sử dụng hệ token CSS và `theme.json` (Full Site Editing) để cung cấp một nền tảng linh hoạt, dễ tùy chỉnh và tương thích tốt với WooCommerce.
+AZnet Theme là WordPress house/reference theme của AZnet, tập trung vào presentation và tích hợp qua public contracts. Theme không sở hữu business/domain state của RootProfile, ConvertFlow hoặc WooCommerce.
 
-Demo: (thêm link demo ở đây khi có)
+Phiên bản hiện tại: `0.1.0-alpha.7`
 
-Phiên bản hiện tại: 0.1.0-alpha.7
+## Kiến trúc
 
-Tính năng chính
-- Token-driven CSS (CSS custom properties) cho color, spacing, radius, container.
-- Hỗ trợ Full Site Editing qua `theme.json` (v3).
-- Wiring PHP modular (namespace, inc/theme/*) và enqueue assets có điều kiện.
-- Tích hợp cơ bản với WooCommerce (template/style cho product, cart, checkout, account).
-- Template cơ bản: header, footer, single, archive, page, 404, template-parts.
+- Hybrid PHP theme + `theme.json`.
+- PHP template hierarchy tiếp tục là nguồn composition cho v0.x.
+- `theme.json` cung cấp settings, styles và semantic token mapping; không được dùng để suy ra rằng Theme đã chuyển sang Full Site Editing template ownership.
+- PHP modular dưới `inc/theme/*` và `inc/integrations/*`.
+- Assets được enqueue theo surface/capability thay vì nạp toàn bộ ecosystem globally.
 
-Yêu cầu
+## Tính năng hiện có
+
+- Semantic CSS custom properties theo family `--aznet-theme-*`.
+- Header/Footer presentation của Theme.
+- Generic Page/Post/Archive/Search/404 templates.
+- RootProfile presentation consumers/adapters theo public provider contracts; production takeover vẫn là gate riêng.
+- WooCommerce presentation cho Product, Archive, Cart, Checkout và My Account bằng hooks/CSS/Blocks-first; WooCommerce tiếp tục sở hữu commerce truth/state.
+
+## Yêu cầu
+
 - WordPress >= 6.9
 - PHP >= 8.1
-- (Tùy chọn) WooCommerce để sử dụng các template và style shop
+- WooCommerce là dependency tùy chọn cho commerce surfaces.
 
-Cách cài đặt nhanh
-1. Clone repo:
+## Cài đặt nhanh
 
-   ```bash
-   git clone https://github.com/truongdinhnamaz/aznet-theme.git
-   ```
+```bash
+git clone https://github.com/truongdinhnamaz/aznet-theme.git
+cp -r aznet-theme /path/to/wordpress/wp-content/themes/
+```
 
-2. Copy vào thư mục themes của WordPress:
+Kích hoạt qua WordPress Admin (`Appearance -> Themes`) hoặc WP-CLI:
 
-   ```bash
-   cp -r aznet-theme /path/to/wordpress/wp-content/themes/
-   ```
+```bash
+wp theme activate aznet-theme
+```
 
-3. Kích hoạt theme:
+## Nội dung mẫu
 
-   - Qua WP Admin: Appearance → Themes → Activate AZnet Theme
-   - Hoặc dùng WP-CLI:
+Repository có thể chứa fixture phục vụ kiểm thử/tài liệu dưới `docs/fixtures/`. Fixture không phải production Theme data và không chuyển ownership của WordPress/WooCommerce/RootProfile/ConvertFlow sang Theme.
 
-   ```bash
-   wp theme activate aznet-theme
-   ```
+## Phát triển
 
-4. (Nếu dùng WooCommerce) Cài và kích hoạt plugin WooCommerce để xem trang cửa hàng và sản phẩm.
+Mọi thay đổi production cần giữ đúng source ownership, public integration boundary và QA layer tương ứng. Không suy diễn static/contract PASS thành runtime/browser/integration/release PASS.
 
-Starter/demo content
-- Thư mục `docs/STARTER_CONTENT.md` có hướng dẫn tạo nội dung mẫu và import. Nên chuẩn bị một site demo với sample products, pages, và navigation để show cho khách.
-
-Phát triển & đóng góp
-- Mở PR nếu bạn sửa code. Thêm test nếu có thay đổi logic lớn.
-
-Hỗ trợ
-- Email: hello@aznet.vn (thay đổi theo contact của AZnet)
-- Mô tả bug/feature request bằng Issue trên GitHub
-
-License
-- Đây là một theme GPL-compatible. File LICENSE có chi tiết.
-
-Ghi chú nhanh (todo)
-- Thêm screenshot.png kích thước 1200×900 để hiển thị trên WordPress.org/GitHub (hiện ảnh gốc đã upload là `aznet-preview.png`)
-- Tạo demo site công khai và import starter content
-- Hoàn thiện README với link demo và hướng dẫn nâng cao
-
-Ghi chú thêm
-- Mình đã nhúng ảnh gốc bạn upload (`aznet-preview.png`) vào README để làm preview. Nếu bạn muốn mình tạo bản `screenshot.png` chuẩn 1200×900 và bản `screenshot.webp` tối ưu, hãy xác nhận — mình sẽ tạo mockup (SVG → PNG) hoặc hướng dẫn bạn upload phiên bản đã crop.
+Canonical repository: `truongdinhnamaz/aznet-theme`.
