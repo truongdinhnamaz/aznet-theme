@@ -1,110 +1,111 @@
 # AZnet Theme Source Governance
 
 **Status:** ACCEPTED / FROZEN-BY-DEFAULT  
-**Scope owner:** repository source-lifecycle governance only  
 **Repository:** `truongdinhnamaz/aznet-theme`
 
 ## 1. Core rule
 
-**SOURCE GUIDES IMPLEMENTATION. GITHUB RECORDS IMPLEMENTATION STATE.**
+**SOURCE LIVES IN GITHUB. GITHUB ALSO RECORDS IMPLEMENTATION EVIDENCE. DO NOT CONFUSE THE TWO.**
 
-Once an AZnet Theme source baseline has been accepted, that source is treated as fixed for normal implementation work. It is not a running progress log and must not be revised merely because code, tests, commits, pull requests, CI runs, package hashes or milestone slices advance.
+Canonical AZnet Theme product source is maintained as reviewable Markdown under `docs/source/` on canonical `main`. Git history provides source provenance and review history. Implementation facts continue to live in code history, PRs, Actions, packages and `docs/evidence/*`.
 
 The normal execution loop is:
 
-`read frozen source -> resolve latest valid GitHub state -> code -> test/verify -> commit/PR/evidence -> continue`
+`read canonical source -> resolve latest valid GitHub implementation state -> code -> test/verify -> commit/PR/evidence -> continue`
 
-Do not insert a source-document rewrite between implementation slices unless a true source-owned decision has changed.
+Do not rewrite source merely because implementation progressed.
 
-## 2. Authority split
+## 2. Canonical source set
 
-The existing AZT source set remains authoritative by subject:
+- `docs/source/AZT-05-product-constitution.md` — highest internal authority for product invariants and core release constitution.
+- `docs/source/AZT-00-governance.md` — source priority, change control and documentation governance.
+- `docs/source/AZT-01-product-charter.md` — product scope, ownership, goals and non-goals.
+- `docs/source/AZT-02-architecture.md` — architecture, dependency policy and public integration contracts.
+- `docs/source/AZT-03-baseline-provenance.md` — baseline/provenance authority.
+- `docs/source/AZT-04-roadmap-qa-decisions.md` — roadmap, QA gates and accepted decisions.
+- `docs/source/AZT-EXEC-MAP.md` — derived execution map; never overrides the authoritative AZT files.
 
-- **AZT-00** — source priority and documentation governance.
-- **AZT-01** — product charter and ownership.
-- **AZT-02** — architecture and integration contracts.
-- **AZT-03** — baseline/provenance rules and registered baseline evidence.
-- **AZT-04** — roadmap, QA gates and decision log.
-- **Implementation Slice Map** — derived execution map; never overrides the AZT source owners.
+Cross-product and external-domain semantics remain governed by their own source owners, including `ECOSYSTEM-ARCH-01` where applicable.
 
-This file owns only the repository rule that separates **stable source** from **live implementation state**. It does not redefine product scope, domain ownership, architecture, public contracts, QA semantics or roadmap decisions already owned elsewhere.
+## 3. Authority vs evidence
 
-## 3. What is frozen
+Being in the same repository does not give every file equal authority.
 
-After acceptance, source content is frozen-by-default for implementation purposes.
+**Source:** product rules, ownership, architecture, contracts, roadmap/release governance.  
+**Evidence:** commits, PRs, CI runs, screenshots, package hashes, runtime findings, debug notes and `docs/evidence/*`.
 
-The following do **not** justify a new source version by themselves:
+Evidence may prove or invalidate implementation. It does not silently amend source.
 
-- a feature or bugfix commit;
-- a branch or pull request opening/closing/merging;
-- a RED/GREEN test result;
-- a runtime/browser/integration/release run;
-- a package rebuild, file count or SHA-256 change;
-- a slice or milestone moving from ACTIVE to PASS when the governing rule itself did not change;
-- reconciliation of repository evidence that does not alter architecture, ownership, contract or governance.
+## 4. Frozen-by-default
 
-Those facts belong in GitHub code history, PRs, Actions, release artifacts, and `docs/evidence/*` checkpoints as appropriate.
+The following do not require a source version change by themselves:
 
-## 4. Live implementation state
+- feature/bugfix commits;
+- branch or PR state changes;
+- RED/GREEN tests;
+- runtime/browser/integration runs;
+- package rebuilds, hashes or file counts;
+- a slice moving ACTIVE -> PASS when the governing rule did not change.
 
-The latest valid implementation state must be determined from GitHub, in this order as applicable:
+When the rule did not change, record evidence and continue implementation.
+
+## 5. Reopen source only at a true source gate
+
+Source is amended when its owned content materially changes, for example:
+
+- product nature, independence or core release constitution;
+- product/domain/presentation ownership;
+- architecture or dependency policy;
+- public/versioned integration contracts;
+- support floors or naming family;
+- roadmap/gate semantics or release governance.
+
+Before production code implements a new rule, amend the owning source file first and obtain the required owner approval.
+
+## 6. Constitution-before-code
+
+Any change that can alter the nature of AZnet Theme, product independence, ownership invariants or v1.x release constitution must first be consistent with `AZT-05-product-constitution.md`.
+
+If the Constitution itself must change, amend AZT-05 and all directly affected owner documents before production implementation.
+
+## 7. Source changes use Git workflow
+
+1. Work on a source/docs branch.
+2. Change only the source owner documents whose rules actually changed.
+3. Review the diff and source impact.
+4. Open a PR.
+5. Merge only after the required owner approval.
+6. Production code governed by the new rule starts only after the source gate is accepted.
+
+## 8. DOCX/PDF status
+
+DOCX/PDF versions are derived exports for reading, archival or handoff. They are not authoritative once the corresponding source is maintained in `docs/source/` on canonical `main`.
+
+Do not edit an export and treat it as a source change. Apply the change to GitHub Markdown source, review/merge it, then regenerate exports only when useful.
+
+## 9. Live implementation state
+
+Resolve the latest valid implementation state from GitHub in this order:
 
 1. canonical `main` head;
 2. relevant work/feature branch and PR state;
-3. fresh CI/test/runtime/browser/integration evidence;
-4. release/package artifacts and hashes when the question is byte-specific;
+3. fresh CI/runtime/browser/integration evidence;
+4. release/package artifacts and hashes when byte identity matters;
 5. repository evidence/checkpoint files.
 
-A historical source checkpoint must never override fresher GitHub implementation evidence when the source-owned rule has not changed.
+An older source checkpoint must not override fresher implementation evidence when the source-owned rule did not change.
 
-### AZT-03 clarification
+## 10. Implementation discipline
 
-After the source freeze, AZT-03 is a **baseline/provenance authority**, not a continuously rewritten ledger of every new canonical commit, PR status, CI run or package hash.
-
-New implementation evidence may supersede an old recorded implementation checkpoint without requiring a new AZT-03 file. The provenance rules remain binding; the live commit/state comes from GitHub.
-
-## 5. When source may be reopened
-
-Source is reopened only at a **true hard gate** where the content owned by that source must materially change, for example:
-
-- product scope or presentation/domain ownership changes;
-- architecture mode or dependency policy changes;
-- a public/versioned integration contract is added, removed or changed incompatibly;
-- support floor, namespace/prefix family or other technical governance changes;
-- roadmap/milestone/gate semantics materially change;
-- QA/release governance changes;
-- the owner explicitly decides to replace or amend the accepted baseline.
-
-A source change requires explicit owner approval before implementation proceeds under the new rule. Evidence alone never grants permission to change source.
-
-## 6. No automatic source-document generation
-
-For normal AZnet Theme implementation work:
-
-- do **not** create `AZT-03 vNext`, `AZT-04 vNext`, Slice Map vNext or another source successor merely to record progress;
-- do **not** generate or hand off updated DOCX/PDF source files merely because code advanced;
-- do **not** duplicate GitHub state into source documents for synchronization purposes;
-- do **not** rewrite historical source/evidence to make it look current.
-
-If no true source hard gate exists, the correct action is to keep coding/testing/verifying and record evidence in GitHub.
-
-## 7. Implementation discipline remains unchanged
-
-Freezing source does not weaken gates. Implementation must still follow the accepted AZnet Theme rules, including:
-
-- Theme owns presentation; domain owners keep authoritative data/state.
-- Integration uses public/versioned contracts only.
+- Theme owns presentation; external domain owners keep authoritative data/state.
+- Integrations use public/versioned contracts only.
 - Provider absence/error/version mismatch fails soft/safe.
-- No private storage reads, domain-logic cloning or parallel truth stores in the Theme.
-- No inference of authoritative identity/routing from slug/title/Page ID/URL heuristics.
-- QA layers remain distinct; PASS is claimed only at the layer freshly evidenced.
+- No private storage reads, domain-logic cloning or parallel truth stores.
+- No authoritative identity/routing inference from slug/title/Page ID/URL heuristics.
+- QA layers remain distinct; claim only the layer freshly evidenced.
 - Production feature/bugfix behavior uses RED -> minimal GREEN -> regression where applicable.
-- Main merge, release/deploy, takeover and other approval-gated actions remain hard gates.
+- Main merge, release/deploy, takeover and destructive retirement remain approval-gated where source says so.
 
-## 8. Conflict rule
+## 11. Default behavior
 
-If older documentation wording appears to require a source update for every implementation checkpoint, this governance decision supersedes that **process interpretation only**.
-
-It does not supersede the underlying architecture, ownership, public contracts, provenance requirements or QA gates of AZT-00/01/02/03/04.
-
-**Default behavior:** keep source fixed; move implementation forward in GitHub.
+**Keep source stable; move implementation forward. When a true product rule changes, change the canonical GitHub source first.**
