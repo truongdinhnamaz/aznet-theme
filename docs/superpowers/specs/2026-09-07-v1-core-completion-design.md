@@ -2,7 +2,7 @@
 
 ## Status
 
-Approved design, implementation not started. This document is an implementation design derived from the authoritative AZnet Theme source set; it is not itself a source owner.
+Approved design. Source/constitution gate has been merged; production implementation has not started. This document is an implementation design derived from the authoritative AZnet Theme source set; it is not itself a source owner.
 
 ## Authoritative sources
 
@@ -11,9 +11,9 @@ Current governing source set for this design:
 - AZT-05 Product Constitution v1.0 — product independence, quality floor, release constitution and amendment rule.
 - AZT-01 Product Charter and Ownership v0.3 — product scope, non-goals, ownership and core v1.0 Definition of Done.
 - AZT-02 Theme Architecture and Integration Contracts v0.4 — public/fail-soft provider boundaries and dependency policy.
-- AZT-03 Current Baseline and Code Provenance v0.16 — canonical implementation state and provenance.
-- AZT-04 Roadmap, QA and Decision Log v0.20 — D-016 and current release gates.
-- AZT-EXEC-MAP-01 v0.12 — derived execution order; exact current next is G0.
+- AZT-03 Current Baseline and Code Provenance v0.17 — baseline/provenance authority and current GitHub source model.
+- AZT-04 Roadmap, QA and Decision Log v0.21 — D-016 and current release gates.
+- AZT-EXEC-MAP-01 v0.13 — derived execution order; exact current next is G0.
 - ECOSYSTEM-ARCH-01 v1.0 — cross-product domain ownership and source-of-truth rules.
 
 If this design conflicts with an authoritative source, the source governs.
@@ -34,7 +34,7 @@ External providers are consumed only through public/versioned/capability-detecte
 
 ## Current implementation state
 
-Canonical `main` is `815ffcd43653930d1f302a055961ac24cf5ae843`.
+Canonical `main` after the approved source merge is `b7443a96c8687493a0a4994aeca23b5e09a8770c`. The source merge changed documentation/governance only; the current production Theme bytes descend from the previously verified production base `815ffcd43653930d1f302a055961ac24cf5ae843`.
 
 Retain without reopening unless invalidated:
 
@@ -97,7 +97,7 @@ Exit: upgrade/theme-switch/rollback PASS.
 
 Refresh source-owned current state only where facts changed, record candidate hashes/evidence and ensure no source/current-state contradiction.
 
-Exit: AZT-03/AZT-04 and evidence are current; rollback/continuation is explicit.
+Exit: source/evidence are current; rollback/continuation is explicit.
 
 ### G8 — Owner release gate
 
@@ -121,4 +121,4 @@ Every implementation slice is committed independently on an isolated work/featur
 
 ## Exact next
 
-G0 — revalidate canonical `main@815ffcd43653930d1f302a055961ac24cf5ae843`, freeze core-v1.0 scope, and inventory the remaining Theme-owned cleanup/release blockers. No production code is authorized until the written source/spec review gate is approved.
+G0 — revalidate canonical `main@b7443a96c8687493a0a4994aeca23b5e09a8770c`, freeze core-v1.0 scope, and inventory the remaining Theme-owned cleanup/release blockers. The constitution/source review gate is approved and merged; production work may begin only after the implementation plan is accepted.

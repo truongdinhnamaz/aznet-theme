@@ -1,0 +1,192 @@
+name: G Core Browser A11y Performance
+
+on:
+  push:
+    branches:
+      - work/v1-core-completion
+    paths:
+      - '.github/workflows/g-core-browser.yml'
+      - 'tests/browser/g-core-l4.mjs'
+      - '*.php'
+      - 'inc/**'
+      - 'template-parts/**'
+      - 'assets/**'
+      - 'theme.json'
+      - 'style.css'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/g-core-browser.yml'
+      - 'tests/browser/g-core-l4.mjs'
+      - '*.php'
+      - 'inc/**'
+      - 'template-parts/**'
+      - 'assets/**'
+      - 'theme.json'
+      - 'style.css'
+
+permissions:
+  contents: read
+
+jobs:
+  core-browser:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout exact Theme candidate
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install WordPress 6.9 and core fixtures
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+
+          rm -rf /tmp/wp /tmp/g5-core
+          mkdir -p /tmp/wp /tmp/g5-core
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create \
+            --path=/tmp/wp \
+            --dbname=wordpress \
+            --dbuser=root \
+            --dbpass=root \
+            --dbhost=127.0.0.1 \
+            --skip-check \
+            --allow-root
+          wp core install \
+            --path=/tmp/wp \
+            --url=http://127.0.0.1:8080 \
+            --title='AZnet Core v1 Browser' \
+            --admin_user=admin \
+            --admin_password='g5-browser-password' \
+            --admin_email=g5@example.test \
+            --skip-email \
+            --allow-root
+
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          rsync -a --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='docs' \
+            --exclude='scripts' \
+            --exclude='tests' \
+            --exclude='README.md' \
+            --exclude='aznet-preview.png' \
+            ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+
+          FRONT_ID=$(wp post create \
+            --path=/tmp/wp \
+            --post_type=page \
+            --post_status=publish \
+            --post_title='Core Front Page' \
+            --post_name='core-front-page' \
+            --post_content='<p>G5 front sentinel</p><h2>Core front body</h2><p><a href="#front-target">Front focus target</a></p><h3 id="front-target">Front target</h3>' \
+            --porcelain \
+            --allow-root)
+
+          wp post create \
+            --path=/tmp/wp \
+            --post_type=page \
+            --post_status=publish \
+            --post_title='Native Page' \
+            --post_name='native-page' \
+            --post_content='<p>G5 page sentinel</p><h2>Native page body</h2><p>Responsive content boundary check.</p>' \
+            --allow-root
+
+          POST_ID=$(wp post create \
+            --path=/tmp/wp \
+            --post_type=post \
+            --post_status=publish \
+            --post_title='Core Sentinel Post' \
+            --post_name='core-sentinel-post' \
+            --post_content='<p>G5 post core-sentinel content</p><h2>Post body</h2>' \
+            --porcelain \
+            --allow-root)
+
+          wp term create category 'Core Test' --slug=core-test --path=/tmp/wp --allow-root >/tmp/g5-term.txt
+          wp post term set "$POST_ID" category core-test --path=/tmp/wp --allow-root
+
+          MENU_ID=$(wp menu create 'Primary' --porcelain --path=/tmp/wp --allow-root)
+          wp menu item add-custom "$MENU_ID" 'Home' 'http://127.0.0.1:8080/' --path=/tmp/wp --allow-root >/dev/null
+          wp menu item add-custom "$MENU_ID" 'Native Page' 'http://127.0.0.1:8080/native-page/' --path=/tmp/wp --allow-root >/dev/null
+          wp menu location assign "$MENU_ID" primary --path=/tmp/wp --allow-root
+
+          wp option update show_on_front page --path=/tmp/wp --allow-root
+          wp option update page_on_front "$FRONT_ID" --path=/tmp/wp --allow-root
+          wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+
+          wp core version --path=/tmp/wp --allow-root | grep -Fx '6.9'
+          wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+          wp plugin list --status=active --field=name --path=/tmp/wp --allow-root | tee /tmp/g5-core/active-plugins.txt
+          test ! -s /tmp/g5-core/active-plugins.txt
+
+      - name: Start WordPress runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/g5-core/server.log 2>&1 &
+          echo $! > /tmp/g5-core/server.pid
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/ >/tmp/g5-core/home-smoke.html; then
+              break
+            fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:8080/ >/tmp/g5-core/home-smoke.html
+          grep -F 'G5 front sentinel' /tmp/g5-core/home-smoke.html
+
+      - name: Install Playwright and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Run G5 core browser verification
+        env:
+          G_CORE_BASE_URL: http://127.0.0.1:8080
+          G_CORE_STATE_DIR: /tmp/g5-core
+        run: |
+          set -euo pipefail
+          node tests/browser/g-core-l4.mjs
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/g5-core/server.log; then
+            echo 'FAIL: Theme-caused PHP error marker found after browser verification' >&2
+            exit 1
+          fi
+          test -f /tmp/g5-core/browser-summary.json
+          echo 'PASS: G5 core L4 browser gate'
+
+      - name: Upload G5 browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: g5-core-browser-a11y-performance
+          path: /tmp/g5-core
+          if-no-files-found: error

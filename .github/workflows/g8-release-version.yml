@@ -1,0 +1,38 @@
+name: G8 Release Version Gate
+
+on:
+  push:
+    branches:
+      - work/v1-core-completion
+    paths:
+      - '.github/workflows/g8-release-version.yml'
+      - 'tests/offline/g8-release-version-contract.php'
+      - 'style.css'
+      - 'functions.php'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/g8-release-version.yml'
+      - 'tests/offline/g8-release-version-contract.php'
+      - 'style.css'
+      - 'functions.php'
+
+permissions:
+  contents: read
+
+jobs:
+  release-version:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Verify exact final v1.0 metadata
+        run: php tests/offline/g8-release-version-contract.php

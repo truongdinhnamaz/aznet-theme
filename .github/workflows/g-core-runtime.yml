@@ -1,0 +1,196 @@
+name: G Core WordPress Clean Runtime
+
+on:
+  push:
+    branches:
+      - work/v1-core-completion
+    paths:
+      - '.github/workflows/g-core-runtime.yml'
+      - '*.php'
+      - 'inc/**'
+      - 'template-parts/**'
+      - 'assets/**'
+      - 'theme.json'
+      - 'style.css'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/g-core-runtime.yml'
+      - '*.php'
+      - 'inc/**'
+      - 'template-parts/**'
+      - 'assets/**'
+      - 'theme.json'
+      - 'style.css'
+
+permissions:
+  contents: read
+
+jobs:
+  wordpress-clean-runtime:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout exact Theme candidate
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Install WordPress 6.9 and activate clean Theme
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+
+          rm -rf /tmp/wp /tmp/g4-runtime
+          mkdir -p /tmp/wp /tmp/g4-runtime
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create \
+            --path=/tmp/wp \
+            --dbname=wordpress \
+            --dbuser=root \
+            --dbpass=root \
+            --dbhost=127.0.0.1 \
+            --skip-check \
+            --allow-root
+          wp core install \
+            --path=/tmp/wp \
+            --url=http://127.0.0.1:8080 \
+            --title='AZnet Core v1 Runtime' \
+            --admin_user=admin \
+            --admin_password='g4-runtime-password' \
+            --admin_email=g4@example.test \
+            --skip-email \
+            --allow-root
+
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          rsync -a --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='docs' \
+            --exclude='scripts' \
+            --exclude='tests' \
+            --exclude='README.md' \
+            --exclude='aznet-preview.png' \
+            ./ /tmp/wp/wp-content/themes/aznet-theme/
+
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+
+          FRONT_ID=$(wp post create \
+            --path=/tmp/wp \
+            --post_type=page \
+            --post_status=publish \
+            --post_title='Core Front Page' \
+            --post_name='core-front-page' \
+            --post_content='<p>G4 front sentinel</p><h2>Core front body</h2>' \
+            --porcelain \
+            --allow-root)
+
+          wp post create \
+            --path=/tmp/wp \
+            --post_type=page \
+            --post_status=publish \
+            --post_title='Native Page' \
+            --post_name='native-page' \
+            --post_content='<p>G4 page sentinel</p><h2>Native page body</h2>' \
+            --allow-root
+
+          POST_ID=$(wp post create \
+            --path=/tmp/wp \
+            --post_type=post \
+            --post_status=publish \
+            --post_title='Core Sentinel Post' \
+            --post_name='core-sentinel-post' \
+            --post_content='<p>G4 post core-sentinel content</p>' \
+            --porcelain \
+            --allow-root)
+
+          wp term create category 'Core Test' --slug=core-test --path=/tmp/wp --allow-root >/tmp/g4-term.txt
+          wp post term set "$POST_ID" category core-test --path=/tmp/wp --allow-root
+
+          wp option update show_on_front page --path=/tmp/wp --allow-root
+          wp option update page_on_front "$FRONT_ID" --path=/tmp/wp --allow-root
+          wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+
+          wp core version --path=/tmp/wp --allow-root | grep -Fx '6.9'
+          wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+          wp plugin list --status=active --field=name --path=/tmp/wp --allow-root | tee /tmp/g4-runtime/active-plugins.txt
+          test ! -s /tmp/g4-runtime/active-plugins.txt
+
+      - name: Start runtime and verify core routes
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/g4-runtime/server.log 2>&1 &
+          echo $! > /tmp/g4-runtime/server.pid
+
+          for attempt in $(seq 1 30); do
+            code=$(curl -sS -o /tmp/g4-runtime/home.html -w '%{http_code}' http://127.0.0.1:8080/ || true)
+            if [[ "$code" == '200' ]]; then
+              break
+            fi
+            sleep 1
+          done
+
+          request() {
+            local name="$1"
+            local url="$2"
+            local expected="$3"
+            local sentinel="$4"
+            local file="/tmp/g4-runtime/${name}.html"
+            local code
+            code=$(curl -sS -o "$file" -w '%{http_code}' "$url")
+            if [[ "$code" != "$expected" ]]; then
+              echo "FAIL: ${name} expected HTTP ${expected}, got ${code}" >&2
+              exit 1
+            fi
+            grep -F 'aznet-theme-site-header' "$file"
+            grep -F 'id="main"' "$file"
+            grep -F 'aznet-theme-site-footer' "$file"
+            if [[ -n "$sentinel" ]]; then
+              grep -F "$sentinel" "$file"
+            fi
+            printf '%s %s\n' "$name" "$code" >> /tmp/g4-runtime/http-status.txt
+          }
+
+          request home 'http://127.0.0.1:8080/' 200 'G4 front sentinel'
+          request page 'http://127.0.0.1:8080/native-page/' 200 'G4 page sentinel'
+          request post 'http://127.0.0.1:8080/core-sentinel-post/' 200 'G4 post core-sentinel content'
+          request archive 'http://127.0.0.1:8080/category/core-test/' 200 'Core Sentinel Post'
+          request search 'http://127.0.0.1:8080/?s=core-sentinel' 200 'Core Sentinel Post'
+          request notfound 'http://127.0.0.1:8080/definitely-missing/' 404 ''
+
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/g4-runtime/server.log; then
+            echo 'FAIL: Theme-caused PHP error marker found in runtime log' >&2
+            exit 1
+          fi
+
+          echo 'PASS: G4 WordPress-clean core runtime'
+
+      - name: Upload G4 runtime evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: g4-wordpress-clean-runtime
+          path: /tmp/g4-runtime
+          if-no-files-found: error
