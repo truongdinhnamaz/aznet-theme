@@ -78,8 +78,20 @@ function verifyPresetStylesheet(hrefs, label) {
   }
 }
 
+async function reachFixtureButtonByKeyboard(page) {
+  for (let attempt = 0; attempt < 40; attempt += 1) {
+    await page.keyboard.press('Tab');
+    const reached = await page.evaluate(() => document.activeElement?.classList?.contains('wp-block-button__link') === true);
+    if (reached) return true;
+  }
+  return false;
+}
+
 async function inspectFrontend(browser, viewportName, viewport) {
-  const context = await browser.newContext({ viewport });
+  const context = await browser.newContext({
+    viewport,
+    reducedMotion: viewport.width <= 390 ? 'reduce' : 'no-preference',
+  });
   const page = await context.newPage();
   const consoleErrors = [];
   const pageErrors = [];
@@ -94,7 +106,15 @@ async function inspectFrontend(browser, viewportName, viewport) {
     }
   });
 
-  const result = { viewport: viewportName, status: 'failed', variables: {}, stylesheets: [], error: null };
+  const result = {
+    viewport: viewportName,
+    status: 'failed',
+    variables: {},
+    stylesheets: [],
+    focus: null,
+    reducedMotion: false,
+    error: null,
+  };
   try {
     const response = await page.goto(`${baseUrl}/design-system-fixture/`, { waitUntil: 'networkidle' });
     if (! response || response.status() !== 200) throw new Error(`expected HTTP 200, got ${response?.status() ?? 'missing'}`);
@@ -117,6 +137,28 @@ async function inspectFrontend(browser, viewportName, viewport) {
 
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     if (overflow > 1) throw new Error(`horizontal overflow ${overflow}px`);
+
+    const reachedButton = await reachFixtureButtonByKeyboard(page);
+    if (! reachedButton) throw new Error('fixture button was not keyboard reachable within 40 Tab presses');
+    result.focus = await page.locator('.wp-block-button__link').first().evaluate((element) => {
+      const style = getComputedStyle(element);
+      return {
+        focusVisible: element.matches(':focus-visible'),
+        outlineStyle: style.outlineStyle,
+        outlineWidth: style.outlineWidth,
+        boxShadow: style.boxShadow,
+      };
+    });
+    const visibleFocus = result.focus.focusVisible && (
+      (result.focus.outlineStyle !== 'none' && result.focus.outlineWidth !== '0px') ||
+      result.focus.boxShadow !== 'none'
+    );
+    if (! visibleFocus) throw new Error(`fixture button lacks visible keyboard focus: ${JSON.stringify(result.focus)}`);
+
+    result.reducedMotion = await page.evaluate(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    if (viewport.width <= 390 && ! result.reducedMotion) {
+      throw new Error('reduced-motion preference was not active in the mobile test context');
+    }
 
     const axeResults = await new AxeBuilder({ page }).analyze();
     fs.writeFileSync(path.join(axeDir, `frontend-${viewportName}.json`), JSON.stringify(axeResults, null, 2));
