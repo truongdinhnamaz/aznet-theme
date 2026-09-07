@@ -1,0 +1,47 @@
+name: R4 WooCommerce Presentation Static Contracts
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/r4-woocommerce-static.yml'
+      - 'inc/theme/settings.php'
+      - 'inc/theme/woocommerce-presentation.php'
+      - 'inc/theme/woocommerce-product.php'
+      - 'inc/theme/woocommerce-archive.php'
+      - 'inc/theme/woocommerce-cart.php'
+      - 'inc/theme/woocommerce-checkout.php'
+      - 'inc/theme/woocommerce-account.php'
+      - 'inc/theme/woocommerce-blocks.php'
+      - 'inc/theme/bootstrap.php'
+      - 'inc/theme/assets.php'
+      - 'assets/css/components/woocommerce-*.css'
+      - 'tests/offline/r4-*.php'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  r4-woocommerce-static:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact R4 candidate
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Run R4 WooCommerce contracts
+        run: |
+          set -euo pipefail
+          for contract in tests/offline/r4-*.php; do
+            php -d zend.assertions=1 -d assert.exception=1 "$contract"
+          done
+
+      - name: Run retained core static regression
+        run: bash scripts/verify-g3-core.sh
