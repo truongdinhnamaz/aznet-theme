@@ -1,0 +1,144 @@
+name: R1 Visual Preset Feasibility
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/r1-visual-preset-feasibility.yml'
+      - 'theme.json'
+      - 'inc/theme/**'
+      - 'assets/css/**'
+      - 'tests/offline/r1-visual-preset-mechanism-contract.php'
+      - 'docs/evidence/R1_VISUAL_PRESET_FEASIBILITY.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wordpress-69-probe:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout exact R1 candidate
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Install WordPress 6.9 and active hybrid Theme
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+
+          rm -rf /tmp/wp /tmp/r1-feasibility
+          mkdir -p /tmp/wp /tmp/r1-feasibility
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create \
+            --path=/tmp/wp \
+            --dbname=wordpress \
+            --dbuser=root \
+            --dbpass=root \
+            --dbhost=127.0.0.1 \
+            --skip-check \
+            --allow-root
+          wp core install \
+            --path=/tmp/wp \
+            --url=http://127.0.0.1:8080 \
+            --title='AZnet R1 Feasibility' \
+            --admin_user=admin \
+            --admin_password='r1-feasibility-password' \
+            --admin_email=r1@example.test \
+            --skip-email \
+            --allow-root
+
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          rsync -a --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='docs' \
+            --exclude='scripts' \
+            --exclude='tests' \
+            --exclude='README.md' \
+            --exclude='aznet-preview.png' \
+            ./ /tmp/wp/wp-content/themes/aznet-theme/
+
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme/styles
+          cat > /tmp/wp/wp-content/themes/aznet-theme/styles/r1-probe.json <<'JSON'
+          {
+            "$schema": "https://schemas.wp.org/trunk/theme.json",
+            "version": 3,
+            "title": "R1 Probe",
+            "settings": {
+              "custom": {
+                "r1Probe": "native-style-variation"
+              }
+            },
+            "styles": {
+              "color": {
+                "background": "#123456"
+              }
+            }
+          }
+          JSON
+
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          wp core version --path=/tmp/wp --allow-root | tee /tmp/r1-feasibility/wp-version.txt
+          php -r 'echo PHP_VERSION, PHP_EOL;' | tee /tmp/r1-feasibility/php-version.txt
+          wp eval 'echo wp_get_theme()->get("Name"), PHP_EOL;' --path=/tmp/wp --allow-root | tee /tmp/r1-feasibility/theme-name.txt
+
+      - name: Probe native theme-style variation capability
+        run: |
+          set -euo pipefail
+          wp eval '
+          $variations = WP_Theme_JSON_Resolver::get_style_variations("theme");
+          $found = false;
+          foreach ($variations as $variation) {
+              if (($variation["title"] ?? "") === "R1 Probe") {
+                  $found = true;
+                  break;
+              }
+          }
+          echo "IS_BLOCK_THEME=" . (wp_is_block_theme() ? "1" : "0") . PHP_EOL;
+          echo "THEME_OBJECT_IS_BLOCK=" . (wp_get_theme()->is_block_theme() ? "1" : "0") . PHP_EOL;
+          echo "HAS_THEME_JSON=" . (wp_theme_has_theme_json() ? "1" : "0") . PHP_EOL;
+          echo "PROBE_VARIATION_DISCOVERED=" . ($found ? "1" : "0") . PHP_EOL;
+          echo "VARIATION_COUNT=" . count($variations) . PHP_EOL;
+          ' --path=/tmp/wp --allow-root | tee /tmp/r1-feasibility/probe.txt
+
+          grep -Fx '6.9' /tmp/r1-feasibility/wp-version.txt
+          grep -Fx 'IS_BLOCK_THEME=0' /tmp/r1-feasibility/probe.txt
+          grep -Fx 'THEME_OBJECT_IS_BLOCK=0' /tmp/r1-feasibility/probe.txt
+          grep -Fx 'HAS_THEME_JSON=1' /tmp/r1-feasibility/probe.txt
+          grep -Fx 'PROBE_VARIATION_DISCOVERED=1' /tmp/r1-feasibility/probe.txt
+
+          printf '%s\n' 'DECISION=THEME_VISUAL_PRESET_MAPPING' | tee /tmp/r1-feasibility/decision.txt
+          printf '%s\n' 'REASON=WordPress 6.9 discovers theme style-variation JSON, but AZnet Theme remains a classic/hybrid PHP theme (wp_is_block_theme=0). R1 therefore does not adopt the block-theme Site Editor variation-selection model or change template ownership.' | tee /tmp/r1-feasibility/reason.txt
+
+      - name: Upload feasibility evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r1-visual-preset-feasibility
+          path: /tmp/r1-feasibility
+          if-no-files-found: error
