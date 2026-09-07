@@ -1,9 +1,9 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.16  
+**Version:** v0.17  
 **Status:** Working Execution Map / derived  
-**Date:** 07/09/2026
+**Date:** 08/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
@@ -14,7 +14,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | 0 Source Freeze & Provenance | PASS | 817/817 classification + accepted source-bound evidence |
 | A Theme Foundation | PASS | WordPress-clean hybrid PHP + `theme.json` |
 | B Semantic Tokens | PASS / retained | `--aznet-theme-*` + `theme.json`; R1 extended semantics without silently repurposing public tokens |
-| C Header/Footer | PASS / retained | v1.0 Theme presentation owner; R3 is additive v1.1 preset system |
+| C Header/Footer | PASS / retained | v1.0 Theme presentation owner; R3 adds the bounded v1.1 preset system |
 | D Generic Templates | PASS | Page/Post/Archive/Search/404 through L6 |
 | W Woo presentation | PASS / retained | Woo owns commerce truth; R4 is presentation-only v1.1 upgrade |
 | E RootProfile Profile/Contact | OPTIONAL COMPAT ACTIVE | External E5-C blocker; E5-D takeover locked; not core-v1.1 critical path |
@@ -23,17 +23,17 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | R0 v1.1 Source Reconciliation | PASS | Source-only reconciliation merged through PR #36 |
 | R1 Design System 2.0 | PASS | PR #37 merged; stable Theme settings/tokens/visual presets and L1-L4 parity evidence |
 | R2 Native Pattern Library | PASS | PR #39 merged; 18 portable patterns, public Woo-block gating and theme-switch portability evidence |
-| R3 Header System 2.0 | READY | Bounded primitives/presets, no Header Builder; next sequential slice |
-| R4 WooCommerce Presentation 2.0 | READY | Public Woo output -> Theme presentation only; independently unblocked |
-| R5 Control Center + System Health | PLANNED / DEPENDENCY WAIT | Waits for final R3/R4 setting keys |
+| R3 Header System 2.0 | PASS | PR #41 merged; bounded presets/primitives, accessible mobile/sticky behavior and L1-L4 browser evidence |
+| R4 WooCommerce Presentation 2.0 | READY / EXACT NEXT | Public Woo output -> Theme presentation only; remaining production stream before R5 |
+| R5 Control Center + System Health | PLANNED / DEPENDENCY WAIT | R3 setting keys stable; waits for final R4 setting keys |
 | R6 Performance + Release 2.0 | PLANNED | Asset evidence, exact-main CI, deterministic v1.x release closure |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted v1.1 bounded admin outcome |
 
-Canonical implementation baseline after R2 merge: `main@d2e4ae567108b6a224b623febca7a676b7114715`.
+Canonical implementation baseline after R3 merge: `main@d8d5670d57dc62f7e2399d9e1b2eee70fd85ef9d`.
 
-R2 verified head `6a40a44faaa8d8207c2a3b850e2bc6d65cd561ee` and merge commit share tree `3f9e934eaa4bdcb058ccf289d7ef1faa7eac1ee5`. Fresh exact-PR-head workflows were 12/12 SUCCESS; no pull-request-triggered run exists on the merge SHA.
+R3 verified head `c4e6e623e4fc0113bdbc211fecf34b40528b7f77` and merge commit share tree `ebe79f1dc65ab58794592eab59a5bb2b9b3a1a00`. Fresh exact-PR-head workflows were 14/14 SUCCESS; no pull-request-triggered run exists on the merge SHA, so no deeper post-merge execution claim is inferred beyond tree equivalence.
 
-V1.0 publication state at this checkpoint remains `PUBLICATION_PENDING`: a fresh GitHub check finds no Git tag and no GitHub Release. This does not reopen G technical PASS.
+V1.0 publication state at this checkpoint remains `PUBLICATION_PENDING`: a fresh 08/09/2026 GitHub check finds no Git tag and no GitHub Release. This does not reopen G technical PASS.
 
 ## 2. Slice discipline
 
@@ -76,11 +76,10 @@ No layer may be inferred from another.
 - R0 source reconciliation is complete.
 - R1 stable settings/token interfaces are merged on canonical `main`.
 - R2 Native Pattern Library is merged and complete.
-- R3/R4 may run independently while consuming only stable R1 interfaces.
-- R5 waits for final R3/R4 setting keys so it cannot invent a second schema.
+- R3 Header System 2.0 is merged and its setting keys are stable.
+- R4 is the remaining independent production stream in the parallel group and is now the sequential exact next.
+- R5 waits for final R4 setting keys so it cannot invent a second schema.
 - R6 is the final integration/performance/release closure after production streams are merged.
-
-The sequential path executes R3 next. Parallel R4 work is optional and must use an isolated branch if used.
 
 ## 5. R0 — Source reconciliation
 
@@ -143,7 +142,7 @@ The sequential path executes R3 next. Parallel R4 work is optional and must use 
 
 **Exit:** PASS — L1-L4, clean-WP/Woo-present browser/editor matrices, 18-pattern exact count and byte-identical theme-switch content portability proven; PR #39 merged to `main@d2e4ae567108b6a224b623febca7a676b7114715`.
 
-**Next:** R3 sequentially; R4 remains independently READY.
+**Next:** R3 — completed; R4 remains READY.
 
 ## 8. R3 — Header System 2.0
 
@@ -157,9 +156,9 @@ The sequential path executes R3 next. Parallel R4 work is optional and must use 
 
 **Forbidden:** slug/title/Page-ID/URL authoritative heuristic, mega-menu application engine, Woo session/private state reads.
 
-**Exit:** L1-L4 PASS.
+**Exit:** PASS — four presets, three sticky modes, strict normalized settings, shared primitives/composer, mobile progressive enhancement and sticky-compact enhancement delivered. R3 static/browser plus retained core/R1/R2 workflow matrix completed 14/14 SUCCESS on exact head `c4e6e623e4fc0113bdbc211fecf34b40528b7f77`; PR #41 merged to `main@d8d5670d57dc62f7e2399d9e1b2eee70fd85ef9d` with identical tree `ebe79f1dc65ab58794592eab59a5bb2b9b3a1a00`.
 
-**Next:** R5 once R4 setting interface is also stable.
+**Next:** R4.
 
 ## 9. R4 — WooCommerce Presentation 2.0
 
@@ -175,7 +174,7 @@ The sequential path executes R3 next. Parallel R4 work is optional and must use 
 
 **Exit:** L1-L4 PASS with Woo present plus clean-WP/Woo-absent regression.
 
-**Next:** R5 once R3/R4 settings are final.
+**Next:** R5 once R4 settings are final.
 
 ## 10. R5 — Control Center + System Health
 
@@ -239,4 +238,4 @@ At every R slice, commit bounded changes on a work/feature branch and retain a c
 
 ## 14. Exact next
 
-**R3 — create an isolated implementation branch from the latest canonical `main` and execute the Header System 2.0 plan. R4 remains independently unblocked but is not required to start in parallel.**
+**R4 — create an isolated implementation branch from the latest canonical `main` and execute WooCommerce Presentation 2.0. R5 remains dependency-wait until R4 final setting keys are stable.**
