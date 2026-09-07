@@ -64,11 +64,9 @@ jobs:
           set -euo pipefail
           rm -rf /tmp/g6-lifecycle /tmp/prior-source /tmp/candidate-source
           mkdir -p /tmp/g6-lifecycle /tmp/prior-source /tmp/candidate-source
-
           git cat-file -e "${PRIOR_COMMIT}^{commit}"
           git archive "$PRIOR_COMMIT" | tar -x -C /tmp/prior-source
           rsync -a ./ /tmp/candidate-source/
-
           grep -F 'Version: 0.1.0-alpha.7' /tmp/prior-source/style.css
           grep -F 'Version: 0.1.0-alpha.7' /tmp/candidate-source/style.css
           printf '%s\n' "$PRIOR_COMMIT" > /tmp/g6-lifecycle/prior-commit.txt
@@ -80,43 +78,16 @@ jobs:
           curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
           chmod +x /tmp/wp-cli.phar
           sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
-
           rm -rf /tmp/wp
           mkdir -p /tmp/wp
           wp core download --version=6.9 --path=/tmp/wp --force --allow-root
-          wp config create \
-            --path=/tmp/wp \
-            --dbname=wordpress \
-            --dbuser=root \
-            --dbpass=root \
-            --dbhost=127.0.0.1 \
-            --skip-check \
-            --allow-root
-          wp core install \
-            --path=/tmp/wp \
-            --url=http://127.0.0.1:8080 \
-            --title='AZnet Core Lifecycle' \
-            --admin_user=admin \
-            --admin_password='g6-lifecycle-password' \
-            --admin_email=g6@example.test \
-            --skip-email \
-            --allow-root
-
-          sync_theme() {
-            local source="$1"
-            mkdir -p /tmp/wp/wp-content/themes/aznet-theme
-            rsync -a --delete \
-              --exclude='.git' \
-              --exclude='.github' \
-              --exclude='docs' \
-              --exclude='scripts' \
-              --exclude='tests' \
-              --exclude='README.md' \
-              --exclude='aznet-preview.png' \
-              "$source"/ /tmp/wp/wp-content/themes/aznet-theme/
-          }
-
-          sync_theme /tmp/prior-source
+          wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='AZnet Core Lifecycle' --admin_user=admin --admin_password='g6-lifecycle-password' --admin_email=g6@example.test --skip-email --allow-root
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
+            /tmp/prior-source/ /tmp/wp/wp-content/themes/aznet-theme/
           wp theme activate aznet-theme --path=/tmp/wp --allow-root
           wp core version --path=/tmp/wp --allow-root | grep -Fx '6.9'
           wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
@@ -124,46 +95,17 @@ jobs:
       - name: Create persistent native and opaque external sentinels
         run: |
           set -euo pipefail
-          FRONT_ID=$(wp post create \
-            --path=/tmp/wp \
-            --post_type=page \
-            --post_status=publish \
-            --post_title='Lifecycle Front Page' \
-            --post_name='lifecycle-front-page' \
-            --post_content='<p>G6 lifecycle front sentinel</p>' \
-            --porcelain \
-            --allow-root)
-
-          PAGE_ID=$(wp post create \
-            --path=/tmp/wp \
-            --post_type=page \
-            --post_status=publish \
-            --post_title='Lifecycle Page' \
-            --post_name='lifecycle-page' \
-            --post_content='<p>G6 lifecycle page sentinel</p>' \
-            --porcelain \
-            --allow-root)
-
-          POST_ID=$(wp post create \
-            --path=/tmp/wp \
-            --post_type=post \
-            --post_status=publish \
-            --post_title='Lifecycle Post' \
-            --post_name='lifecycle-post' \
-            --post_content='<p>G6 lifecycle post sentinel</p>' \
-            --porcelain \
-            --allow-root)
-
+          FRONT_ID=$(wp post create --path=/tmp/wp --post_type=page --post_status=publish --post_title='Lifecycle Front Page' --post_name='lifecycle-front-page' --post_content='<p>G6 lifecycle front sentinel</p>' --porcelain --allow-root)
+          PAGE_ID=$(wp post create --path=/tmp/wp --post_type=page --post_status=publish --post_title='Lifecycle Page' --post_name='lifecycle-page' --post_content='<p>G6 lifecycle page sentinel</p>' --porcelain --allow-root)
+          POST_ID=$(wp post create --path=/tmp/wp --post_type=post --post_status=publish --post_title='Lifecycle Post' --post_name='lifecycle-post' --post_content='<p>G6 lifecycle post sentinel</p>' --porcelain --allow-root)
           MENU_ID=$(wp menu create 'Lifecycle Primary' --porcelain --path=/tmp/wp --allow-root)
           wp menu item add-custom "$MENU_ID" 'Lifecycle Page' 'http://127.0.0.1:8080/lifecycle-page/' --path=/tmp/wp --allow-root >/dev/null
           wp menu location assign "$MENU_ID" primary --path=/tmp/wp --allow-root
-
           wp option update show_on_front page --path=/tmp/wp --allow-root
           wp option update page_on_front "$FRONT_ID" --path=/tmp/wp --allow-root
           wp option add aznet_external_domain_sentinel preserve-me --path=/tmp/wp --allow-root
           wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
           wp rewrite flush --hard --path=/tmp/wp --allow-root
-
           printf '%s\n' "$FRONT_ID" > /tmp/g6-lifecycle/front-id.txt
           printf '%s\n' "$PAGE_ID" > /tmp/g6-lifecycle/page-id.txt
           printf '%s\n' "$POST_ID" > /tmp/g6-lifecycle/post-id.txt
@@ -175,9 +117,7 @@ jobs:
           nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/g6-lifecycle/server.log 2>&1 &
           echo $! > /tmp/g6-lifecycle/server.pid
           for attempt in $(seq 1 30); do
-            if curl -fsS http://127.0.0.1:8080/ >/tmp/g6-lifecycle/prior-home.html; then
-              break
-            fi
+            if curl -fsS http://127.0.0.1:8080/ >/tmp/g6-lifecycle/prior-home.html; then break; fi
             sleep 1
           done
           curl -fsS http://127.0.0.1:8080/ >/tmp/g6-lifecycle/prior-home.html
@@ -188,39 +128,31 @@ jobs:
         run: |
           set -euo pipefail
           rsync -a --delete \
-            --exclude='.git' \
-            --exclude='.github' \
-            --exclude='docs' \
-            --exclude='scripts' \
-            --exclude='tests' \
-            --exclude='README.md' \
-            --exclude='aznet-preview.png' \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
             /tmp/candidate-source/ /tmp/wp/wp-content/themes/aznet-theme/
-
           wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
           curl -fsS http://127.0.0.1:8080/ >/tmp/g6-lifecycle/candidate-home.html
           grep -F 'G6 lifecycle front sentinel' /tmp/g6-lifecycle/candidate-home.html
           grep -F 'aznet-theme-site-header' /tmp/g6-lifecycle/candidate-home.html
-
           FRONT_ID=$(cat /tmp/g6-lifecycle/front-id.txt)
           PAGE_ID=$(cat /tmp/g6-lifecycle/page-id.txt)
           POST_ID=$(cat /tmp/g6-lifecycle/post-id.txt)
           MENU_ID=$(cat /tmp/g6-lifecycle/menu-id.txt)
-
           test "$(wp option get page_on_front --path=/tmp/wp --allow-root)" = "$FRONT_ID"
           test "$(wp post get "$PAGE_ID" --field=post_status --path=/tmp/wp --allow-root)" = 'publish'
           test "$(wp post get "$POST_ID" --field=post_status --path=/tmp/wp --allow-root)" = 'publish'
           test "$(wp option get aznet_external_domain_sentinel --path=/tmp/wp --allow-root)" = 'preserve-me'
           test "$(wp eval '$locations = get_nav_menu_locations(); echo (int) ($locations["primary"] ?? 0);' --path=/tmp/wp --allow-root)" = "$MENU_ID"
 
-      - name: Switch away and prove data survives
+      - name: Switch away using deterministic local fixture and prove data survives
         run: |
           set -euo pipefail
-          if ! wp theme activate twentytwentysix --path=/tmp/wp --allow-root; then
-            wp theme install twentytwentysix --activate --path=/tmp/wp --allow-root
-          fi
-          wp theme status twentytwentysix --path=/tmp/wp --allow-root | grep -F 'Status: Active'
-
+          mkdir -p /tmp/wp/wp-content/themes/g6-switch-target
+          printf '%s\n' '/*' 'Theme Name: G6 Switch Target' 'Version: 1.0.0' '*/' > /tmp/wp/wp-content/themes/g6-switch-target/style.css
+          printf '%s\n' '<?php' 'wp_head();' 'echo "<main>G6 switch target</main>";' 'wp_footer();' > /tmp/wp/wp-content/themes/g6-switch-target/index.php
+          wp theme activate g6-switch-target --path=/tmp/wp --allow-root
+          wp theme status g6-switch-target --path=/tmp/wp --allow-root | grep -F 'Status: Active'
           FRONT_ID=$(cat /tmp/g6-lifecycle/front-id.txt)
           PAGE_ID=$(cat /tmp/g6-lifecycle/page-id.txt)
           POST_ID=$(cat /tmp/g6-lifecycle/post-id.txt)
@@ -234,11 +166,9 @@ jobs:
           set -euo pipefail
           wp theme activate aznet-theme --path=/tmp/wp --allow-root
           wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
-
           MENU_ID=$(cat /tmp/g6-lifecycle/menu-id.txt)
           test "$(wp eval '$locations = get_nav_menu_locations(); echo (int) ($locations["primary"] ?? 0);' --path=/tmp/wp --allow-root)" = "$MENU_ID"
           test "$(wp option get aznet_external_domain_sentinel --path=/tmp/wp --allow-root)" = 'preserve-me'
-
           curl -fsS http://127.0.0.1:8080/ >/tmp/g6-lifecycle/reactivated-home.html
           grep -F 'G6 lifecycle front sentinel' /tmp/g6-lifecycle/reactivated-home.html
           grep -F 'aznet-theme-site-header' /tmp/g6-lifecycle/reactivated-home.html
@@ -247,31 +177,21 @@ jobs:
         run: |
           set -euo pipefail
           rsync -a --delete \
-            --exclude='.git' \
-            --exclude='.github' \
-            --exclude='docs' \
-            --exclude='scripts' \
-            --exclude='tests' \
-            --exclude='README.md' \
-            --exclude='aznet-preview.png' \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
             /tmp/prior-source/ /tmp/wp/wp-content/themes/aznet-theme/
-
           wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
           grep -F 'Version: 0.1.0-alpha.7' /tmp/wp/wp-content/themes/aznet-theme/style.css
           test "$(wp option get aznet_external_domain_sentinel --path=/tmp/wp --allow-root)" = 'preserve-me'
-
           MENU_ID=$(cat /tmp/g6-lifecycle/menu-id.txt)
           test "$(wp eval '$locations = get_nav_menu_locations(); echo (int) ($locations["primary"] ?? 0);' --path=/tmp/wp --allow-root)" = "$MENU_ID"
-
           curl -fsS http://127.0.0.1:8080/ >/tmp/g6-lifecycle/rollback-home.html
           grep -F 'G6 lifecycle front sentinel' /tmp/g6-lifecycle/rollback-home.html
           grep -F 'aznet-theme-site-header' /tmp/g6-lifecycle/rollback-home.html
-
           if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/g6-lifecycle/server.log; then
             echo 'FAIL: Theme-caused PHP error marker found in lifecycle runtime' >&2
             exit 1
           fi
-
           echo 'PASS: G6 update/theme-switch/rollback lifecycle'
 
       - name: Upload G6 lifecycle evidence
