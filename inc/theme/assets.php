@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param string|null $version Asset version.
  */
 function enqueue_visual_preset_asset( ?string $version = null ): void {
-    $preset = visual_preset();
+    $preset = function_exists( __NAMESPACE__ . '\\visual_preset' ) ? visual_preset() : 'default';
 
     if ( 'default' === $preset ) {
         return;
