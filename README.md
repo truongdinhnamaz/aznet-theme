@@ -4,12 +4,12 @@
 
 AZnet Theme là WordPress house/reference theme của AZnet, tập trung vào presentation và tích hợp qua public contracts. Theme không sở hữu business/domain state của RootProfile, ConvertFlow hoặc WooCommerce.
 
-Phiên bản hiện tại: `0.1.0-alpha.7`
+Phiên bản hiện tại: `1.0.0`
 
 ## Kiến trúc
 
 - Hybrid PHP theme + `theme.json`.
-- PHP template hierarchy tiếp tục là nguồn composition cho v0.x.
+- PHP template hierarchy tiếp tục là nguồn composition cho v1.x.
 - `theme.json` cung cấp settings, styles và semantic token mapping; không được dùng để suy ra rằng Theme đã chuyển sang Full Site Editing template ownership.
 - PHP modular dưới `inc/theme/*` và `inc/integrations/*`.
 - Assets được enqueue theo surface/capability thay vì nạp toàn bộ ecosystem globally.
