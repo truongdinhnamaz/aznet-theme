@@ -4,8 +4,6 @@
  * Executed only by CI through wp eval-file.
  */
 
-declare(strict_types=1);
-
 if ( ! class_exists( 'WooCommerce' ) || ! class_exists( 'WC_Product_Simple' ) ) {
     fwrite( STDERR, "FAIL: WooCommerce public product APIs unavailable\n" );
     exit( 1 );
