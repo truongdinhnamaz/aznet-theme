@@ -52,7 +52,7 @@ The source-defined G stream is no longer the active implementation path. Its ret
 - G7: deterministic package candidate PASS;
 - G8: metadata promoted atomically to `1.0.0` and final candidate gates PASS.
 
-PR #34 final verified head `b2e5cca1461233bcbf81ea570f94c3a7723e87` is historical evidence only if cited by SHA; the canonical recorded v1.0 final verified head remains `b2e5cca1461233bcb1a0333c5aa51879c3264756`, and merge commit `f8e1a95c903c3f246528368ae9878eba780539ff` shares tree `b716b89f04e45c2012f8e191c7d0edf605c9dd11` with that verified head.
+PR #34 final verified head remains `b2e5cca1461233bcb1a0333c5aa51879c3264756`, and merge commit `f8e1a95c903c3f246528368ae9878eba780539ff` shares tree `b716b89f04e45c2012f8e191c7d0edf605c9dd11` with that verified head.
 
 Publication/tag is not inferred from technical PASS and remains a separate owner action/state.
 
@@ -133,7 +133,7 @@ No PASS may be inferred across layers.
 ## 7. Release-critical test matrix
 
 | Case | WordPress | Optional providers | Expected result |
-| --- | --- | --- | --- |
+| --- | --- | --- |
 | C1 | On | All off | Theme activates and renders core site without fatal; release-critical |
 | C2 | On | Woo off | Non-commerce surfaces remain normal |
 | C3 | On | Woo on | Theme presentation works without taking commerce ownership |
