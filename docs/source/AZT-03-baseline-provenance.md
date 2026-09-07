@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.18  
+**Version:** v0.19  
 **Status:** Working Source  
 **Date:** 07/09/2026  
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -13,7 +13,7 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 
 ## 2. Current canonical baseline
 
-- Canonical `main`: `f8e1a95c903c3f246528368ae9878eba780539ff`.
+- Canonical `main`: `80f28be8042cee0d2995784506ffb685b9eb36cb`.
 - Internal Theme version: `1.0.0`.
 - WordPress floor: `6.9+`.
 - PHP floor: `8.1+`.
@@ -29,9 +29,15 @@ Current production state on `main` includes:
 - Generic Templates Page/Post/Archive/Search/404;
 - WooCommerce presentation work W1-W9 including the public ConvertFlow token projection;
 - Theme-native WordPress Homepage shell;
-- G0-G8 core-v1.0 cleanup/release-candidate closure, including metadata promotion to `1.0.0`.
+- G0-G8 core-v1.0 cleanup/release-candidate closure, including metadata promotion to `1.0.0`;
+- R0 v1.0 -> v1.1 source reconciliation;
+- R1 Design System 2.0, including one normalized/versioned Theme settings schema, expanded semantic tokens, Default/Editorial/Commerce visual presets and editor/frontend parity evidence.
 
-PR #34 final verified head is `b2e5cca1461233bcb1a0333c5aa51879c3264756`. Its tree `b716b89f04e45c2012f8e191c7d0edf605c9dd11` is identical to the merge commit tree on canonical `main@f8e1a95c903c3f246528368ae9878eba780539ff`, so the merge introduced no conflict-resolution production delta.
+PR #34 final verified head is `b2e5cca1461233bcb1a0333c5aa51879c3264756`. Its tree `b716b89f04e45c2012f8e191c7d0edf605c9dd11` is identical to the merge commit tree on canonical `main@f8e1a95c903c3f246528368ae9878eba780539ff`, so the v1.0 technical merge introduced no conflict-resolution production delta.
+
+R0 source reconciliation merged through PR #36 and established `main@fdb227b20d569bc3bcbf81ea570f94c3a7723e87` as the production base for R1.
+
+R1 merged through PR #37 from verified head `a6b36615c9f6391cbe103844dee7659ff0dccb76` to canonical `main@80f28be8042cee0d2995784506ffb685b9eb36cb`. The R1 head tree and merge tree are identical at `880ce360d8c0c5003869d761e76833737d895fff`, so the merge introduced no conflict-resolution delta. Fresh exact-PR-head verification recorded 10/10 successful workflows before merge; no post-merge pull-request-triggered run exists on the merge SHA.
 
 No source statement above transfers domain ownership to the Theme.
 
@@ -41,12 +47,13 @@ Under AZT-05 v1.0 and D-016:
 
 - WordPress-clean core Theme readiness is release-critical.
 - Core v1.0 production code and technical release-candidate closure are complete on canonical `main`.
-- Release publication is tracked separately from implementation readiness. At the 07/09/2026 R0 reconciliation checkpoint, GitHub has no `v1.0.0` tag and no GitHub Release; publication is therefore `PUBLICATION_PENDING`.
-- RootProfile E5-C/E5-D remains an optional provider certification/takeover track, not a core-v1.0 blocker.
+- Release publication is tracked separately from implementation readiness. A fresh 07/09/2026 GitHub check still finds no Git tag and no GitHub Release; publication is therefore `PUBLICATION_PENDING`.
+- RootProfile E5-C/E5-D remains an optional provider certification/takeover track, not a core-v1.x blocker.
 - ConvertFlow F6/F7 actual-package integration evidence remains retained; F8 integrated compatibility remains BLOCKED because provider body output introduces a second document-level `<main>` inside Theme-owned `main#main`.
 - External compatibility defects must not be bypassed with private APIs, authoritative heuristics or copied domain logic.
+- R0 and R1 are complete on canonical `main`. R2 Native Pattern Library, R3 Header System 2.0 and R4 WooCommerce Presentation 2.0 may now proceed independently while consuming only the stable R1 interfaces already merged.
 
-Exact product-development next: **R1 — v1.1 Design System 2.0**, after the R0 canonical source reconciliation is approved and merged.
+Exact product-development next: **begin R2/R3/R4 from the latest canonical `main`; R2 is the next sequential execution slice unless parallel capacity is intentionally used.**
 
 ## 4. Registered source artifacts
 
@@ -104,7 +111,7 @@ The 9/9 pre-port visual baselines for Header, Footer and Generic content shell r
 - L0/L1/L2 evidence cannot be promoted to runtime/browser/integration/release claims.
 - Runtime/browser evidence is retained unless a concrete production-byte or contract invalidation is found.
 - Package/release claims are byte-specific and must be refreshed on the final candidate bytes of the release being promoted.
-- PRs, Actions runs, commit hashes and package hashes live in GitHub evidence; they do not require AZT-03 version bumps unless the baseline/provenance rule itself changes.
+- PRs, Actions runs, commit hashes and package hashes live in GitHub evidence; they do not require AZT-03 version bumps unless the represented canonical baseline/provenance statement changes.
 - A Theme version string does not prove publication. Tag/Release existence and target SHA are live GitHub facts and must be checked separately.
 
 ## 9. Canonical evidence locations
@@ -123,4 +130,4 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**R1 — Design System 2.0:** begin only after the R0 v1.1 source reconciliation is approved and merged. R1 may change Theme-owned presentation settings/tokens and editor/frontend presentation only within the architecture ratified by AZT-01/AZT-02/AZT-04; it must not convert optional provider state into Theme ownership.
+**R2/R3/R4 are unblocked by R1 merge. Execute R2 Native Pattern Library next in the sequential path, or run R2/R3/R4 independently only when each branch is isolated and consumes stable R1 interfaces. R5 must wait for final R3/R4 setting keys.**

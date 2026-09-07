@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.14  
+**Version:** v0.15  
 **Status:** Working Execution Map / derived  
 **Date:** 07/09/2026
 
@@ -13,25 +13,27 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | --- | --- | --- |
 | 0 Source Freeze & Provenance | PASS | 817/817 classification + accepted source-bound evidence |
 | A Theme Foundation | PASS | WordPress-clean hybrid PHP + `theme.json` |
-| B Semantic Tokens | PASS / retained | `--aznet-theme-*` + `theme.json`; R1 may extend semantics without silently repurposing public tokens |
+| B Semantic Tokens | PASS / retained | `--aznet-theme-*` + `theme.json`; R1 extended semantics without silently repurposing public tokens |
 | C Header/Footer | PASS / retained | v1.0 Theme presentation owner; R3 is additive v1.1 preset system |
 | D Generic Templates | PASS | Page/Post/Archive/Search/404 through L6 |
 | W Woo presentation | PASS / retained | Woo owns commerce truth; R4 is presentation-only v1.1 upgrade |
 | E RootProfile Profile/Contact | OPTIONAL COMPAT ACTIVE | External E5-C blocker; E5-D takeover locked; not core-v1.1 critical path |
 | F Homepage | CORE PASS / COMPAT ACTIVE | Native Homepage on main; external F8 compatibility defect remains non-blocking under D-016 |
 | G Core v1.0 closure | TECHNICAL PASS | G0-G8 merged; publication/tag is separate live state |
-| R0 v1.1 Source Reconciliation | ACTIVE | Source-only; exact next is source PR approval/merge |
-| R1 Design System 2.0 | PLANNED | Theme-owned settings/tokens/visual presets only |
-| R2 Native Pattern Library | PLANNED | Portable WordPress-native content, no builder store |
-| R3 Header System 2.0 | PLANNED | Bounded primitives/presets, no Header Builder |
-| R4 WooCommerce Presentation 2.0 | PLANNED | Public Woo output -> Theme presentation only |
-| R5 Control Center + System Health | PLANNED | Single Theme settings schema + read-only public diagnostics |
+| R0 v1.1 Source Reconciliation | PASS | Source-only reconciliation merged through PR #36 |
+| R1 Design System 2.0 | PASS | PR #37 merged; stable Theme settings/tokens/visual presets and L1-L4 parity evidence |
+| R2 Native Pattern Library | READY | Portable WordPress-native content, no builder store; next sequential slice |
+| R3 Header System 2.0 | READY | Bounded primitives/presets, no Header Builder; independently unblocked after R1 |
+| R4 WooCommerce Presentation 2.0 | READY | Public Woo output -> Theme presentation only; independently unblocked after R1 |
+| R5 Control Center + System Health | PLANNED / DEPENDENCY WAIT | Waits for final R3/R4 setting keys |
 | R6 Performance + Release 2.0 | PLANNED | Asset evidence, exact-main CI, deterministic v1.x release closure |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted v1.1 bounded admin outcome |
 
-Canonical implementation baseline at R0 start: `main@f8e1a95c903c3f246528368ae9878eba780539ff`.
+Canonical implementation baseline after R1 merge: `main@80f28be8042cee0d2995784506ffb685b9eb36cb`.
 
-V1.0 publication state at this checkpoint: `PUBLICATION_PENDING` because no Git tag and no GitHub Release exist. This does not reopen G technical PASS.
+R1 verified head `a6b36615c9f6391cbe103844dee7659ff0dccb76` and merge commit share tree `880ce360d8c0c5003869d761e76833737d895fff`. Fresh exact-PR-head workflows were 10/10 SUCCESS; no pull-request-triggered run exists on the merge SHA.
+
+V1.0 publication state at this checkpoint remains `PUBLICATION_PENDING`: a fresh GitHub check finds no Git tag and no GitHub Release. This does not reopen G technical PASS.
 
 ## 2. Slice discipline
 
@@ -71,11 +73,13 @@ No layer may be inferred from another.
 
 `R0 -> R1 -> {R2, R3, R4} -> R5 -> R6`
 
-- R0 is source-only and must merge before v1.1 production code.
-- R1 creates the stable settings/token interfaces consumed by later streams.
+- R0 source reconciliation is complete.
+- R1 stable settings/token interfaces are merged on canonical `main`.
 - R2/R3/R4 may run independently after R1 if they consume only stable R1 interfaces.
 - R5 waits for final R3/R4 setting keys so it cannot invent a second schema.
 - R6 is the final integration/performance/release closure after production streams are merged.
+
+The sequential path executes R2 next. Parallel R3/R4 work is optional and must use isolated branches if used.
 
 ## 5. R0 — Source reconciliation
 
@@ -87,21 +91,22 @@ No layer may be inferred from another.
 
 **Forbidden:** production PHP/CSS/JS, changing AZT-05 without new constitutional approval, provider code, takeover.
 
-**Exit:**
+**Exit:** PASS.
 
 - AZT-01 v0.4;
 - AZT-02 v0.5;
-- AZT-03 v0.18;
-- AZT-04 v0.22;
-- AZT-EXEC-MAP v0.14;
+- AZT-03 v0.18 at R0 closure;
+- AZT-04 v0.22 at R0 closure;
+- AZT-EXEC-MAP v0.14 at R0 closure;
 - SOURCE_MANIFEST synchronized;
 - AZT-05 byte-unchanged;
 - source-only diff verified;
-- explicit owner merge approval.
+- explicit owner merge approval received;
+- PR #36 merged.
 
-**Rollback:** source branch/PR can be closed without changing canonical `main`; after merge, revert the bounded source merge commit if a contradiction is found before R1.
+**Rollback:** revert the bounded R0 source merge if a source contradiction is discovered; no domain/product source from other products is copied into Theme.
 
-**Next:** R1.
+**Next:** R1 — completed.
 
 ## 6. R1 — Design System 2.0
 
@@ -112,14 +117,14 @@ No layer may be inferred from another.
 - one versioned `aznet_theme_settings` Theme Mod schema;
 - expanded semantic token vocabulary retaining existing public aliases;
 - Default/Editorial/Commerce visual outcomes;
-- WordPress-6.9 evidence choosing native style variations or Theme-owned visual-preset mapping;
+- WordPress-6.9 evidence selecting Theme-owned visual-preset mapping without FSE takeover;
 - editor/frontend parity.
 
 **Forbidden:** FSE takeover, proprietary content schema, provider/domain state in Theme settings.
 
-**Exit:** L1-L4 PASS on final R1 bytes.
+**Exit:** PASS — L1-L4 on R1 bytes; PR #37 merged to `main@80f28be8042cee0d2995784506ffb685b9eb36cb`.
 
-**Next:** R2/R3/R4 may start independently.
+**Next:** R2/R3/R4 may start independently; sequential path starts R2.
 
 ## 7. R2 — Native Pattern Library
 
@@ -233,4 +238,4 @@ At every R slice, commit bounded changes on a work/feature branch and retain a c
 
 ## 14. Exact next
 
-**R0 — obtain explicit owner approval to merge the source-only reconciliation PR. After merge, create a fresh R1 implementation branch from the latest canonical `main` and execute Design System 2.0.**
+**R2 — create an isolated implementation branch from the latest canonical `main` and execute the Native Pattern Library plan. R3/R4 are independently unblocked but are not required to start in parallel.**
