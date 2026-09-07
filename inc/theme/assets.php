@@ -11,6 +11,42 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+/**
+ * Enqueue the active non-default visual preset stylesheet.
+ *
+ * @param string|null $version Asset version.
+ */
+function enqueue_visual_preset_asset( ?string $version = null ): void {
+    $preset = visual_preset();
+
+    if ( 'default' === $preset ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'aznet-theme-preset-' . $preset,
+        get_theme_file_uri( '/assets/css/presets/' . $preset . '.css' ),
+        [ 'aznet-theme-tokens' ],
+        $version
+    );
+}
+
+/**
+ * Enqueue Design System assets in the block editor.
+ */
+function enqueue_editor_design_system_assets(): void {
+    $version = defined( 'AZNET_THEME_VERSION' ) ? AZNET_THEME_VERSION : null;
+
+    wp_enqueue_style(
+        'aznet-theme-tokens',
+        get_theme_file_uri( '/assets/css/tokens.css' ),
+        [],
+        $version
+    );
+
+    enqueue_visual_preset_asset( $version );
+}
+
 function enqueue_assets(): void {
     $version = defined( 'AZNET_THEME_VERSION' ) ? AZNET_THEME_VERSION : null;
 
@@ -20,6 +56,8 @@ function enqueue_assets(): void {
         [],
         $version
     );
+
+    enqueue_visual_preset_asset( $version );
 
     wp_enqueue_style(
         'aznet-theme-convertflow-contract',
