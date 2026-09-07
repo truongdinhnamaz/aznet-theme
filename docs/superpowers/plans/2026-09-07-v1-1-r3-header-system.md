@@ -4,7 +4,7 @@
 
 **Goal:** Replace the single fixed Header composition with four bounded, accessible presentation presets while preserving WordPress/Woo data ownership and no-builder architecture.
 
-**Architecture:** Split Header responsibilities into settings/preset resolution, reusable primitive template parts, one composer and small progressive-enhancement scripts. Presets change composition/visibility only; data still comes from WordPress custom logo/menu/search and public Woo functions.
+**Architecture:** Split Header responsibilities into settings/preset resolution, reusable primitive template parts, one composer and small progressive-enhancement scripts. Presets change composition/visibility only; data still comes from WordPress custom logo/menu/search and public Woo functions. The `overlay` request is deliberately fail-safe: it is effective only on the WordPress front-page surface; every other route resolves to `standard`, and the front-page overlay itself keeps a contrast-safe translucent surface instead of assuming a specific Hero implementation.
 
 **Tech Stack:** PHP 8.1+, WordPress 6.9+, PHP template parts, CSS, vanilla JS, Theme Mod settings interface from R1, WP-CLI, Playwright/axe.
 
@@ -13,11 +13,12 @@
 ## Global Constraints
 
 - R1 settings/token interfaces must be merged first.
-- Presets: `standard`, `compact`, `commerce`, `overlay`.
+- Requested presets: `standard`, `compact`, `commerce`, `overlay`; effective `overlay` is limited to `is_front_page()` and otherwise degrades to `standard`.
 - Sticky modes: `off`, `sticky`, `sticky-compact`.
 - No drag/drop Header Builder, mega-menu builder or public extension hook without a real consumer/source decision.
 - Mobile navigation must remain usable if JS fails.
 - Woo account/cart actions use public functions only; no cart/session storage reads.
+- No slug/title/Page-ID/URL heuristic is used to decide Header preset behavior.
 
 ---
 
@@ -87,16 +88,22 @@ git commit -m "feat: add header presentation settings"
 
 **Interfaces:**
 - Produces:
-  - `header_preset(): string`
+  - `header_preset(): string` — normalized requested preset from Theme settings.
+  - `effective_header_preset(): string` — requested preset after safe surface fallback.
   - `header_sticky_mode(): string`
   - `header_context(): array`
   - primitive parts that consume context, not provider storage.
 
 - [ ] **Step 1: Write RED preset/context contract**
 
-Stub WordPress/Woo functions and assert:
+Stub WordPress/Woo functions and assert requested/effective behavior:
 ```php
-assert(\AZnet\Theme\header_preset() === 'commerce');
+assert(\AZnet\Theme\header_preset() === 'overlay');
+$GLOBALS['r3_is_front_page'] = false;
+assert(\AZnet\Theme\effective_header_preset() === 'standard');
+$GLOBALS['r3_is_front_page'] = true;
+assert(\AZnet\Theme\effective_header_preset() === 'overlay');
+
 $context = \AZnet\Theme\header_context();
 assert(array_key_exists('site_title', $context));
 assert(array_key_exists('logo_id', $context));
@@ -112,26 +119,44 @@ When Woo functions are absent, account/cart URLs must be empty strings and no er
 php tests/offline/r3-header-preset-contract.php
 ```
 
-- [ ] **Step 3: Implement resolver/context**
+- [ ] **Step 3: Implement requested/effective resolver and context**
 
-Use R1 settings and public WordPress/Woo functions only. The context function may call `wp_nav_menu(... 'echo' => false)` and `wc_get_page_permalink()/wc_get_cart_url()` when available. No global cart/session reads.
+Use:
+```php
+function header_preset(): string {
+    $value = setting('header_preset', 'standard');
+    return in_array($value, ['standard', 'compact', 'commerce', 'overlay'], true) ? $value : 'standard';
+}
+
+function effective_header_preset(): string {
+    $requested = header_preset();
+    if ('overlay' === $requested && !(function_exists('is_front_page') && \is_front_page())) {
+        return 'standard';
+    }
+    return $requested;
+}
+```
+The context function may call public WordPress functions and `wc_get_page_permalink()/wc_get_cart_url()` when available. No global cart/session reads and no URL/slug/Page-ID inference.
 
 - [ ] **Step 4: Split primitive markup**
 
 Each part receives `$args` from `get_template_part()` and owns one role only. Example brand primitive:
 ```php
 <a class="aznet-theme-site-header__brand" href="<?php echo esc_url($args['home_url']); ?>" rel="home" aria-label="<?php echo esc_attr($args['site_title']); ?>">
-    <?php echo $args['logo_html'] !== '' ? $args['logo_html'] : esc_html($args['site_title']); ?>
+    <?php if ('' !== $args['logo_html']) : ?>
+        <?php echo $args['logo_html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WordPress attachment HTML. ?>
+    <?php else : ?>
+        <?php echo esc_html($args['site_title']); ?>
+    <?php endif; ?>
 </a>
 ```
-Escape outputs by context; WordPress-generated image/menu HTML may use documented phpcs ignore comments.
 
 - [ ] **Step 5: Convert `site-header.php` into one composer**
 
-Render one `<header>` with classes:
+Render one `<header>` with classes derived from the **effective** preset:
 ```text
 aznet-theme-site-header
-aznet-theme-site-header--{preset}
+aznet-theme-site-header--{effective-preset}
 aznet-theme-site-header--{sticky-mode}
 ```
 Compose primitives according to preset using conditionals, not duplicated full header templates.
@@ -159,12 +184,12 @@ git commit -m "feat: compose header from reusable presets"
 - Create: `tests/offline/r3-header-css-contract.php`
 
 **Interfaces:**
-- Consumes header classes from Task 2.
+- Consumes effective Header classes from Task 2.
 - Produces responsive CSS for Standard/Compact/Commerce/Overlay.
 
 - [ ] **Step 1: Write RED CSS contract**
 
-Assert selectors exist for all four presets and that mobile layout has a usable fallback before JS enhancement. Reject fixed pixel widths that force horizontal overflow for nav labels.
+Assert selectors exist for all four presets, mobile layout has a usable fallback before JS enhancement, and the overlay style contains an explicit contrast-safe background rather than pure transparency. Reject fixed pixel widths that force horizontal overflow for nav labels.
 
 - [ ] **Step 2: Run RED**
 
@@ -176,11 +201,19 @@ php tests/offline/r3-header-css-contract.php
 
 Use token-driven rules such as:
 ```css
-.aznet-theme-site-header--compact { --aznet-theme-header-current-height: var(--aznet-theme-header-height-compact); }
-.aznet-theme-site-header--commerce .aznet-theme-site-header__search { flex: 1 1 24rem; }
-.aznet-theme-site-header--overlay { background: transparent; color: var(--aznet-theme-color-on-inverse); }
+.aznet-theme-site-header--compact {
+    --aznet-theme-header-current-height: var(--aznet-theme-header-height-compact);
+}
+.aznet-theme-site-header--commerce .aznet-theme-site-header__search {
+    flex: 1 1 24rem;
+}
+.aznet-theme-site-header--overlay {
+    background: color-mix(in srgb, var(--aznet-theme-color-surface-inverse) 72%, transparent);
+    color: var(--aznet-theme-color-on-inverse);
+    backdrop-filter: blur(0.5rem);
+}
 ```
-Overlay must include a safe non-overlay/fallback class path when the composer does not mark the current surface as overlay-capable.
+If `color-mix()` or `backdrop-filter` is unsupported, the preceding/fallback declaration must remain readable; do not rely on transparent text over unknown media.
 
 - [ ] **Step 4: Run GREEN**
 
@@ -301,7 +334,7 @@ git commit -m "feat: add sticky compact header enhancement"
 
 - [ ] **Step 1: Create fixtures**
 
-Test each preset with long site title, depth-2 menu, search enabled, and with Woo absent/present for Commerce.
+Test each requested preset with long site title, depth-2 menu, search enabled, and with Woo absent/present for Commerce. Include both front-page and non-front-page routes while the stored preset is `overlay`.
 
 - [ ] **Step 2: Test viewports**
 
@@ -317,7 +350,7 @@ Axe critical/serious = 0 for Theme-controlled header markup; exactly one banner 
 
 - [ ] **Step 5: Sticky/overlay behavior**
 
-Check compact transition does not cause meaningful CLS in the harness; reduced-motion removes animation. Overlay preset must safely fall back on non-overlay fixture pages.
+Check compact transition does not cause meaningful CLS in the harness; reduced-motion removes animation. With stored `overlay`, front page uses the contrast-safe overlay class while Page/Post routes resolve to `standard`. No route/slug/title heuristic is used.
 
 - [ ] **Step 6: Commit evidence**
 
