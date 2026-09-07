@@ -1,0 +1,276 @@
+name: R3 Header Browser Quality
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/r3-header-browser.yml'
+      - 'tests/browser/r3-header-l4.mjs'
+      - 'inc/theme/settings.php'
+      - 'inc/theme/header.php'
+      - 'inc/theme/assets.php'
+      - 'template-parts/header/**'
+      - 'assets/css/components/site-header.css'
+      - 'assets/js/header-navigation.js'
+      - 'assets/js/sticky-header.js'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  r3-header-browser:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout exact R3 candidate
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install WordPress 6.9 and Header fixtures
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+
+          rm -rf /tmp/wp /tmp/r3-header
+          mkdir -p /tmp/wp /tmp/r3-header
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create \
+            --path=/tmp/wp \
+            --dbname=wordpress \
+            --dbuser=root \
+            --dbpass=root \
+            --dbhost=127.0.0.1 \
+            --skip-check \
+            --allow-root
+          wp core install \
+            --path=/tmp/wp \
+            --url=http://127.0.0.1:8080 \
+            --title='AZnet Header Fixture' \
+            --admin_user=admin \
+            --admin_password='r3-browser-password' \
+            --admin_email=r3@example.test \
+            --skip-email \
+            --allow-root
+
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          rsync -a --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='docs' \
+            --exclude='scripts' \
+            --exclude='tests' \
+            --exclude='README.md' \
+            --exclude='aznet-preview.png' \
+            ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+
+          wp option update blogname 'AZnet Header Fixture — Một tiêu đề website rất dài để kiểm tra khả năng co giãn' --path=/tmp/wp --allow-root
+          wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
+
+          FRONT_ID=$(wp post create \
+            --post_type=page \
+            --post_status=publish \
+            --post_title='R3 Front Fixture' \
+            --post_name='r3-front' \
+            --post_content='<p>R3 front fixture content.</p><div style="min-height:2400px" aria-hidden="true"></div>' \
+            --porcelain \
+            --path=/tmp/wp \
+            --allow-root)
+          INNER_ID=$(wp post create \
+            --post_type=page \
+            --post_status=publish \
+            --post_title='R3 Inner Fixture' \
+            --post_name='r3-inner' \
+            --post_content='<p>R3 inner fixture content.</p><div style="min-height:2400px" aria-hidden="true"></div>' \
+            --porcelain \
+            --path=/tmp/wp \
+            --allow-root)
+          CHILD_ID=$(wp post create \
+            --post_type=page \
+            --post_status=publish \
+            --post_title='R3 Child Fixture' \
+            --post_name='r3-child' \
+            --post_content='<p>R3 child fixture content.</p>' \
+            --porcelain \
+            --path=/tmp/wp \
+            --allow-root)
+          wp option update show_on_front page --path=/tmp/wp --allow-root
+          wp option update page_on_front "$FRONT_ID" --path=/tmp/wp --allow-root
+
+          mkdir -p /tmp/wp/wp-content/mu-plugins
+          cat > /tmp/wp/wp-content/mu-plugins/r3-nav-fixture.php <<'PHP'
+          <?php
+          add_filter(
+              'nav_menu_link_attributes',
+              static function ( array $atts, WP_Post $item ): array {
+                  foreach ( [ 'r3-parent-link', 'r3-child-link' ] as $fixture_class ) {
+                      if ( in_array( $fixture_class, (array) $item->classes, true ) ) {
+                          $atts['class'] = trim( ( $atts['class'] ?? '' ) . ' ' . $fixture_class );
+                      }
+                  }
+                  return $atts;
+              },
+              10,
+              2
+          );
+          PHP
+
+          R3_INNER_ID="$INNER_ID" R3_CHILD_ID="$CHILD_ID" wp eval '
+            $menu_id = wp_create_nav_menu("R3 Primary Fixture");
+            if (is_wp_error($menu_id)) {
+                fwrite(STDERR, "FAIL: unable to create R3 menu\n");
+                exit(1);
+            }
+            $parent = wp_update_nav_menu_item($menu_id, 0, [
+                "menu-item-title" => "R3 Parent — Dịch vụ và giải pháp WordPress chuyên sâu",
+                "menu-item-object-id" => (int) getenv("R3_INNER_ID"),
+                "menu-item-object" => "page",
+                "menu-item-type" => "post_type",
+                "menu-item-status" => "publish",
+                "menu-item-classes" => ["r3-parent-link"],
+            ]);
+            wp_update_nav_menu_item($menu_id, 0, [
+                "menu-item-title" => "R3 Child — Tư vấn triển khai và tối ưu dài hạn",
+                "menu-item-object-id" => (int) getenv("R3_CHILD_ID"),
+                "menu-item-object" => "page",
+                "menu-item-type" => "post_type",
+                "menu-item-status" => "publish",
+                "menu-item-parent-id" => (int) $parent,
+                "menu-item-classes" => ["r3-child-link"],
+            ]);
+            foreach ([
+                "Kiến thức WordPress và chiến lược nội dung",
+                "Giải pháp thương mại điện tử cho doanh nghiệp",
+                "Liên hệ và hỗ trợ triển khai website",
+            ] as $index => $label) {
+                wp_update_nav_menu_item($menu_id, 0, [
+                    "menu-item-title" => $label,
+                    "menu-item-url" => home_url("/r3-inner/?menu=" . ($index + 1)),
+                    "menu-item-status" => "publish",
+                    "menu-item-type" => "custom",
+                ]);
+            }
+            $locations = get_theme_mod("nav_menu_locations", []);
+            $locations = is_array($locations) ? $locations : [];
+            $locations["primary"] = (int) $menu_id;
+            set_theme_mod("nav_menu_locations", $locations);
+          ' --path=/tmp/wp --allow-root
+
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+          wp core version --path=/tmp/wp --allow-root | grep -Fx '6.9'
+          wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+          echo 'PASS: WordPress 6.9 Header fixtures created'
+
+      - name: Start WordPress runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/r3-header/server.log 2>&1 &
+          echo $! > /tmp/r3-header/server.pid
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/r3-inner/ >/tmp/r3-header/smoke.html; then
+              break
+            fi
+            sleep 1
+          done
+          grep -F 'AZnet Header Fixture' /tmp/r3-header/smoke.html
+          grep -F 'r3-parent-link' /tmp/r3-header/smoke.html
+
+      - name: Install Playwright and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Verify clean WordPress Header preset matrix
+        env:
+          R3_BASE_URL: http://127.0.0.1:8080
+          R3_STATE_DIR: /tmp/r3-header
+        run: |
+          set -euo pipefail
+          run_scenario() {
+            scenario="$1"
+            preset="$2"
+            sticky="$3"
+            wp eval "set_theme_mod( 'aznet_theme_settings', [ 'schema_version' => 1, 'visual_preset' => 'default', 'header_preset' => '${preset}', 'header_sticky' => '${sticky}', 'header_search' => true, 'header_utilities' => true ] );" --path=/tmp/wp --allow-root
+            R3_SCENARIO="$scenario" R3_PRESET="$preset" R3_STICKY="$sticky" R3_WOO_ENABLED='0' node tests/browser/r3-header-l4.mjs
+          }
+
+          run_scenario standard-clean standard sticky-compact
+          run_scenario compact-clean compact sticky
+          run_scenario overlay-clean overlay sticky
+          run_scenario commerce-clean commerce sticky
+
+      - name: Install WooCommerce 10.9.4 and verify public Commerce actions
+        env:
+          R3_BASE_URL: http://127.0.0.1:8080
+          R3_STATE_DIR: /tmp/r3-header
+        run: |
+          set -euo pipefail
+          wp plugin install woocommerce --version=10.9.4 --activate --path=/tmp/wp --allow-root
+          WOO_VERSION=$(wp plugin get woocommerce --field=version --path=/tmp/wp --allow-root)
+          test "$WOO_VERSION" = '10.9.4'
+          printf '%s\n' "$WOO_VERSION" > /tmp/r3-header/woocommerce-version.txt
+
+          wp eval 'if ( class_exists( "WC_Install" ) ) { WC_Install::create_pages(); }' --path=/tmp/wp --allow-root
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+          wp eval '
+            foreach (["myaccount", "cart"] as $page) {
+                $url = "cart" === $page ? wc_get_cart_url() : wc_get_page_permalink($page);
+                if (!is_string($url) || "" === trim($url)) {
+                    fwrite(STDERR, "FAIL: public Woo URL unavailable for {$page}\n");
+                    exit(1);
+                }
+                echo "PUBLIC_WOO_URL={$page}:{$url}\n";
+            }
+          ' --path=/tmp/wp --allow-root
+
+          wp eval "set_theme_mod( 'aznet_theme_settings', [ 'schema_version' => 1, 'visual_preset' => 'commerce', 'header_preset' => 'commerce', 'header_sticky' => 'sticky', 'header_search' => true, 'header_utilities' => true ] );" --path=/tmp/wp --allow-root
+          R3_SCENARIO='commerce-woo' R3_PRESET='commerce' R3_STICKY='sticky' R3_WOO_ENABLED='1' node tests/browser/r3-header-l4.mjs
+
+      - name: Verify R3 runtime error boundary
+        run: |
+          set -euo pipefail
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/r3-header/server.log; then
+            echo 'FAIL: Theme-caused PHP error marker found during R3 verification' >&2
+            exit 1
+          fi
+          for scenario in standard-clean compact-clean overlay-clean commerce-clean commerce-woo; do
+            test -f "/tmp/r3-header/${scenario}/summary.json"
+          done
+          echo 'PASS: R3 runtime error boundary clean'
+
+      - name: Upload R3 Header evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r3-header-browser-quality
+          path: /tmp/r3-header
+          if-no-files-found: error
