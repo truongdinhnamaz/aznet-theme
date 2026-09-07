@@ -251,7 +251,7 @@ git commit -m "ci: verify pull requests and exact main commits"
 
 **Interfaces:**
 - Manual `workflow_dispatch` release-candidate workflow on canonical main.
-- Produces deterministic `aznet-theme-<version>.zip`, SHA-256 and verification artifact; does not publish tag/release by default.
+- Produces a deterministic ZIP named from the exact parsed `AZNET_THEME_VERSION`, using the form `aznet-theme-${AZNET_THEME_VERSION}.zip`, plus SHA-256 and verification artifact; does not publish tag/release by default.
 
 - [ ] **Step 1: Write RED workflow contract**
 
@@ -260,6 +260,7 @@ Assert the workflow:
 uses workflow_dispatch
 checks out the requested/current main SHA
 requires the ref to resolve to canonical main
+parses AZNET_THEME_VERSION and confirms style.css matches it
 runs full v1 core verification
 builds package twice
 compares package bytes
@@ -375,9 +376,9 @@ Evidence records exact main SHA, package filename, inner ZIP SHA-256, file count
 
 - [ ] **Step 3: Verify publication/version remains pre-promotion**
 
-At this stage Theme must still have the current development/pre-release version agreed for the R stream; do not set `1.1.0` until this task is green.
+At this stage Theme still carries the current canonical main version metadata. The pre-promotion artifact is evidence-only and must not be published as a new release. Do not set `1.1.0` until this task is green.
 
-- [ ] **Step 4: Commit evidence if source policy permits evidence-on-main branch; otherwise keep it in the release PR branch**
+- [ ] **Step 4: Commit evidence on the bounded release branch**
 
 ```bash
 git add docs/evidence/R6_V1_1_PREPROMOTION.md
