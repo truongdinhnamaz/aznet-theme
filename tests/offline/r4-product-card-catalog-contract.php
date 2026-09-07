@@ -61,7 +61,7 @@ foreach ([
     }
 }
 
-if (! str_contains($presentation, "'archive' === $surface")) {
+if (! str_contains($presentation, "'archive' === \$surface")) {
     fwrite(STDERR, "FAIL: R4 archive presentation classes are not surface-scoped\n");
     exit(1);
 }
