@@ -34,7 +34,6 @@ $forbidden = [
     'fetch(',
     'XMLHttpRequest',
     'choiceguide_',
-    'convertflow',
     'position: sticky',
 ];
 
@@ -54,6 +53,14 @@ foreach ($paths as $relative) {
     if (preg_match("/['\"]_woocommerce_[^'\"]*['\"]/i", $contents)) {
         fwrite(STDERR, "forbidden Woo storage-key literal in {$relative}\n");
         exit(4);
+    }
+}
+
+foreach (['inc/theme/woocommerce-checkout.php', 'assets/css/components/woocommerce-checkout.css'] as $relative) {
+    $contents = file_get_contents($root . '/' . $relative);
+    if (false !== stripos($contents, 'convertflow')) {
+        fwrite(STDERR, "W5 Checkout presentation must not couple to ConvertFlow in {$relative}\n");
+        exit(9);
     }
 }
 
