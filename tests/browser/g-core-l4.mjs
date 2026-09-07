@@ -73,10 +73,23 @@ async function inspectCase(browser, routeName, route, viewportName, viewport) {
   const page = await context.newPage();
   const consoleErrors = [];
   const pageErrors = [];
+  const failedSubresources = [];
   page.on('console', (message) => {
-    if (message.type() === 'error') consoleErrors.push(message.text());
+    if (message.type() !== 'error') return;
+    const text = message.text();
+    const expectedDocumentStatusNoise =
+      route.status >= 400 &&
+      new RegExp(`^Failed to load resource: the server responded with a status of ${route.status}\\b`).test(text);
+    if (!expectedDocumentStatusNoise) consoleErrors.push(text);
   });
   page.on('pageerror', (error) => pageErrors.push(error.message));
+  page.on('response', (networkResponse) => {
+    const status = networkResponse.status();
+    if (status < 400) return;
+    const request = networkResponse.request();
+    if (request.resourceType() === 'document') return;
+    failedSubresources.push(`${status} ${request.resourceType()} ${networkResponse.url()}`);
+  });
 
   const key = `${routeName}-${viewportName}`;
   const result = {
@@ -92,6 +105,7 @@ async function inspectCase(browser, routeName, route, viewportName, viewport) {
     reducedMotion: null,
     blockingAxeViolations: null,
     stylesheets: [],
+    failedSubresources,
     consoleErrors,
     pageErrors,
     status: 'failed',
@@ -166,6 +180,7 @@ async function inspectCase(browser, routeName, route, viewportName, viewport) {
       throw new Error(`blocking axe violations: ${blocking.map((item) => `${item.id}:${item.impact}`).join(', ')}`);
     }
 
+    if (failedSubresources.length > 0) throw new Error(`failed subresources: ${failedSubresources.join(' | ')}`);
     if (consoleErrors.length > 0) throw new Error(`console errors: ${consoleErrors.join(' | ')}`);
     if (pageErrors.length > 0) throw new Error(`page errors: ${pageErrors.join(' | ')}`);
 
