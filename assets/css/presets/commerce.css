@@ -1,0 +1,8 @@
+body.aznet-theme-preset--commerce,
+.editor-styles-wrapper {
+    --aznet-theme-font-size-sm: 0.8125rem;
+    --aznet-theme-line-height-body: 1.5;
+    --aznet-theme-radius-card: 0.75rem;
+    --aznet-theme-shadow-card: 0 0.25rem 1rem rgba(17, 24, 39, 0.08);
+    --aznet-theme-space-section: 2.75rem;
+}
