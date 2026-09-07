@@ -5,8 +5,10 @@
 
 ## Environment
 
-- WordPress: `6.9`
-- PHP: `8.1.34`
+- WordPress floor under probe: `6.9`
+- WordPress observed: `6.9`
+- PHP floor under probe: `8.1`
+- PHP observed: `8.1.34`
 - Theme: `AZnet Theme`
 - Architecture constraint: hybrid PHP + `theme.json`; no block/FSE template takeover.
 
