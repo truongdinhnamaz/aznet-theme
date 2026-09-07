@@ -23,6 +23,7 @@ require_once __DIR__ . '/woocommerce-archive.php';
 require_once __DIR__ . '/woocommerce-cart.php';
 require_once __DIR__ . '/woocommerce-checkout.php';
 require_once __DIR__ . '/woocommerce-account.php';
+require_once __DIR__ . '/woocommerce-blocks.php';
 require_once __DIR__ . '/content-shell.php';
 require_once __DIR__ . '/assets.php';
 require_once __DIR__ . '/../integrations/rootprofile.php';
