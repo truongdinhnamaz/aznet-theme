@@ -1,0 +1,243 @@
+name: R6 Performance Baseline
+
+on:
+  push:
+    branches:
+      - work/v1.1-r6-performance-release
+    paths:
+      - '.github/workflows/r6-performance-baseline.yml'
+      - '.github/workflows/v1-core-ci.yml'
+      - '.github/workflows/v1-main-verification.yml'
+      - '.github/workflows/v1-release-candidate.yml'
+      - 'scripts/verify-v1-core.sh'
+      - 'scripts/build-release-package.py'
+      - 'tests/browser/r6-performance-baseline.mjs'
+      - 'tests/offline/r6-asset-scope-contract.php'
+      - 'tests/offline/r6-convertflow-asset-gate-contract.php'
+      - 'tests/offline/r6-ci-trigger-contract.php'
+      - 'tests/offline/r6-release-workflow-contract.php'
+      - 'tests/fixtures/r4-woocommerce-setup.php'
+      - 'docs/source/AZT-04-roadmap-qa-decisions.md'
+      - 'docs/evidence/R5_CONTROL_CENTER_L4.md'
+      - '*.php'
+      - 'inc/**'
+      - 'template-parts/**'
+      - 'assets/**'
+      - 'patterns/**'
+      - 'theme.json'
+      - 'style.css'
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/r6-performance-baseline.yml'
+      - '.github/workflows/v1-core-ci.yml'
+      - '.github/workflows/v1-main-verification.yml'
+      - '.github/workflows/v1-release-candidate.yml'
+      - 'scripts/verify-v1-core.sh'
+      - 'scripts/build-release-package.py'
+      - 'tests/browser/r6-performance-baseline.mjs'
+      - 'tests/offline/r6-asset-scope-contract.php'
+      - 'tests/offline/r6-convertflow-asset-gate-contract.php'
+      - 'tests/offline/r6-ci-trigger-contract.php'
+      - 'tests/offline/r6-release-workflow-contract.php'
+      - 'tests/fixtures/r4-woocommerce-setup.php'
+      - 'docs/source/AZT-04-roadmap-qa-decisions.md'
+      - 'docs/evidence/R5_CONTROL_CENTER_L4.md'
+      - '*.php'
+      - 'inc/**'
+      - 'template-parts/**'
+      - 'assets/**'
+      - 'patterns/**'
+      - 'theme.json'
+      - 'style.css'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  r6-performance-baseline:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout exact R6 baseline candidate
+        uses: actions/checkout@v4
+
+      - name: Record exact checkout identity
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/r6-performance
+          mkdir -p /tmp/r6-performance
+          git rev-parse HEAD | tee /tmp/r6-performance/checkout-head.txt
+          git rev-parse HEAD^{tree} | tee /tmp/r6-performance/checkout-tree.txt
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Verify R6 exact Theme asset-scope contract
+        run: php tests/offline/r6-asset-scope-contract.php
+
+      - name: Verify R6 ConvertFlow public-capability gate
+        run: php tests/offline/r6-convertflow-asset-gate-contract.php
+
+      - name: Verify R6 reusable CI trigger contract
+        run: php tests/offline/r6-ci-trigger-contract.php
+
+      - name: Verify R6 release workflow contract
+        run: php tests/offline/r6-release-workflow-contract.php
+
+      - name: Verify reusable v1 core chain
+        run: bash scripts/verify-v1-core.sh
+
+      - name: Exercise deterministic release package builder
+        run: |
+          set -euo pipefail
+          VERSION=$(sed -n 's/^Version:[[:space:]]*//p' style.css | head -n 1)
+          test -n "$VERSION"
+          rm -rf /tmp/r6-package-a /tmp/r6-package-b /tmp/r6-package-extracted /tmp/r6-package-expected
+          mkdir -p /tmp/r6-package-a /tmp/r6-package-b /tmp/r6-package-extracted /tmp/r6-package-expected/aznet-theme
+          python3 scripts/build-release-package.py --source . --output "/tmp/r6-package-a/aznet-theme-${VERSION}.zip" --version "$VERSION"
+          python3 scripts/build-release-package.py --source . --output "/tmp/r6-package-b/aznet-theme-${VERSION}.zip" --version "$VERSION"
+          cmp "/tmp/r6-package-a/aznet-theme-${VERSION}.zip" "/tmp/r6-package-b/aznet-theme-${VERSION}.zip"
+          sha256sum "/tmp/r6-package-a/aznet-theme-${VERSION}.zip" | tee /tmp/r6-performance/prepromotion-package-sha256.txt
+          unzip -q "/tmp/r6-package-a/aznet-theme-${VERSION}.zip" -d /tmp/r6-package-extracted
+          test "$(find /tmp/r6-package-extracted -mindepth 1 -maxdepth 1 -type d -printf '%f\n')" = 'aznet-theme'
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
+            ./ /tmp/r6-package-expected/aznet-theme/
+          diff -ru /tmp/r6-package-expected/aznet-theme /tmp/r6-package-extracted/aznet-theme
+          find /tmp/r6-package-extracted/aznet-theme -type f | LC_ALL=C sort > /tmp/r6-performance/prepromotion-package-files.txt
+          echo 'PASS: deterministic pre-promotion package builder exercised twice with exact-byte reverify'
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install WordPress 6.9 and clean fixtures
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          rm -rf /tmp/wp
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='AZnet R6 Performance' --admin_user=admin --admin_password='r6-performance-password' --admin_email=r6@example.test --skip-email --allow-root
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
+            ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
+          PAGE_ID=$(wp post list --post_type=page --name=sample-page --field=ID --path=/tmp/wp --allow-root | head -n 1)
+          if [ -n "$PAGE_ID" ]; then
+            wp post update "$PAGE_ID" --post_status=publish --post_title='Sample Page' --post_content='<h2>Sample Page</h2><p>R6 clean page fixture.</p>' --path=/tmp/wp --allow-root >/dev/null
+          else
+            PAGE_ID=$(wp post create --post_type=page --post_status=publish --post_title='Sample Page' --post_name='sample-page' --post_content='<h2>Sample Page</h2><p>R6 clean page fixture.</p>' --porcelain --path=/tmp/wp --allow-root)
+          fi
+          CATEGORY_ID=$(wp term create category Sample --slug=sample --porcelain --path=/tmp/wp --allow-root)
+          POST_ID=$(wp post create --post_type=post --post_status=publish --post_title='Sample Post' --post_name='sample-post' --post_content='<p>R6 clean post fixture.</p>' --porcelain --path=/tmp/wp --allow-root)
+          wp post term add "$POST_ID" category "$CATEGORY_ID" --by=id --path=/tmp/wp --allow-root
+          test -n "$PAGE_ID"
+          test -n "$POST_ID"
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+          wp core version --path=/tmp/wp --allow-root | tee /tmp/r6-performance/wordpress-version.txt | grep -Fx '6.9'
+          php -r 'echo PHP_VERSION, PHP_EOL;' | tee /tmp/r6-performance/php-version.txt
+          wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+
+      - name: Start WordPress runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/r6-performance/server.log 2>&1 &
+          echo $! > /tmp/r6-performance/server.pid
+          for attempt in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:8080/sample-page/ >/tmp/r6-performance/clean-smoke.html && break
+            sleep 1
+          done
+          grep -F 'R6 clean page fixture' /tmp/r6-performance/clean-smoke.html
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Capture clean WordPress baseline
+        env:
+          R6_BASE_URL: http://127.0.0.1:8080
+          R6_STATE_DIR: /tmp/r6-performance
+          R6_MODE: clean
+        run: node tests/browser/r6-performance-baseline.mjs
+
+      - name: Install WooCommerce 10.9.4 and public product fixtures
+        run: |
+          set -euo pipefail
+          wp plugin install woocommerce --version=10.9.4 --activate --path=/tmp/wp --allow-root
+          test "$(wp plugin get woocommerce --field=version --path=/tmp/wp --allow-root)" = '10.9.4'
+          wp plugin get woocommerce --field=version --path=/tmp/wp --allow-root | tee /tmp/r6-performance/woocommerce-version.txt
+          printf '%s' 'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAT0lEQVR42u3PQQ0AAAgEILV/2ItgCh9u0IBOUp9NPScgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwbwH3PQNQliOz8AAAAABJRU5ErkJggg==' | base64 -d > /tmp/r6-product.png
+          cp /tmp/r6-product.png /tmp/r6-gallery.png
+          MEDIA_ID=$(wp media import /tmp/r6-product.png --title='R6 Product Image' --porcelain --path=/tmp/wp --allow-root)
+          GALLERY_ID=$(wp media import /tmp/r6-gallery.png --title='R6 Gallery Image' --porcelain --path=/tmp/wp --allow-root)
+          R4_MEDIA_ID="$MEDIA_ID" R4_GALLERY_ID="$GALLERY_ID" wp eval-file tests/fixtures/r4-woocommerce-setup.php --path=/tmp/wp --allow-root | tee /tmp/r6-performance/woo-fixture-output.txt
+          SIMPLE_ID=$(sed -n 's/^SIMPLE_ID=//p' /tmp/r6-performance/woo-fixture-output.txt)
+          test -n "$SIMPLE_ID"
+          echo "R6_PRODUCT_ID=$SIMPLE_ID" >> "$GITHUB_ENV"
+          printf '%s\n' "$SIMPLE_ID" > /tmp/r6-performance/simple-product-id.txt
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+          curl -fsS http://127.0.0.1:8080/shop/ >/tmp/r6-performance/shop-smoke.html
+          curl -fsS http://127.0.0.1:8080/product/r4-simple-product/ >/tmp/r6-performance/product-smoke.html
+          grep -F 'R4 Simple Product' /tmp/r6-performance/product-smoke.html
+
+      - name: Capture WooCommerce baseline
+        env:
+          R6_BASE_URL: http://127.0.0.1:8080
+          R6_STATE_DIR: /tmp/r6-performance
+          R6_MODE: woo
+          R6_PRODUCT_ID: ${{ env.R6_PRODUCT_ID }}
+        run: node tests/browser/r6-performance-baseline.mjs
+
+      - name: Verify runtime boundary and baseline completeness
+        run: |
+          set -euo pipefail
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/r6-performance/server.log; then
+            echo 'FAIL: PHP error marker found during R6 performance baseline' >&2
+            exit 1
+          fi
+          test -f /tmp/r6-performance/clean/summary.json
+          test -f /tmp/r6-performance/woo/summary.json
+          node - <<'NODE'
+          const fs = require('fs');
+          for (const mode of ['clean', 'woo']) {
+            const summary = JSON.parse(fs.readFileSync(`/tmp/r6-performance/${mode}/summary.json`, 'utf8'));
+            if (summary.failures.length) process.exit(1);
+            if (summary.caseCount !== summary.expectedCaseCount) process.exit(1);
+          }
+          NODE
+          echo 'PASS: R6 clean and Woo performance baselines complete'
+
+      - name: Upload R6 performance baseline evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r6-performance-baseline
+          path: /tmp/r6-performance
+          if-no-files-found: error

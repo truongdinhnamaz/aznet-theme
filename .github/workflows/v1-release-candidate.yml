@@ -1,0 +1,127 @@
+name: V1 Release Candidate Package
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release-candidate:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Checkout requested main candidate
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Require canonical main and record exact SHA
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = 'refs/heads/main'
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          rm -rf /tmp/v1-release
+          mkdir -p /tmp/v1-release/out
+          printf '%s\n' "$GITHUB_SHA" | tee /tmp/v1-release/checkout-sha.txt
+          git rev-parse HEAD^{tree} | tee /tmp/v1-release/checkout-tree.txt
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+      - name: Parse and cross-check Theme version
+        run: |
+          set -euo pipefail
+          STYLE_VERSION=$(sed -n 's/^Version:[[:space:]]*//p' style.css | head -n 1)
+          PHP_VERSION=$(sed -n "s/.*define( 'AZNET_THEME_VERSION', '\([^']*\)' );.*/\1/p" functions.php | head -n 1)
+          test -n "$STYLE_VERSION"
+          test -n "$PHP_VERSION"
+          test "$STYLE_VERSION" = "$PHP_VERSION"
+          VERSION="$PHP_VERSION"
+          ZIP_NAME="aznet-theme-${VERSION}.zip"
+          printf '%s\n' "$VERSION" | tee /tmp/v1-release/theme-version.txt
+          printf '%s\n' "$ZIP_NAME" | tee /tmp/v1-release/zip-name.txt
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "ZIP_NAME=$ZIP_NAME" >> "$GITHUB_ENV"
+          echo "AZNET_THEME_VERSION=$VERSION" >> "$GITHUB_ENV"
+      - name: Run full reusable v1 core verification
+        run: bash scripts/verify-v1-core.sh
+      - name: Build deterministic package twice
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/v1-release/build-a /tmp/v1-release/build-b
+          python3 scripts/build-release-package.py --source . --output "/tmp/v1-release/build-a/${ZIP_NAME}" --version "$VERSION"
+          python3 scripts/build-release-package.py --source . --output "/tmp/v1-release/build-b/${ZIP_NAME}" --version "$VERSION"
+          cmp "/tmp/v1-release/build-a/${ZIP_NAME}" "/tmp/v1-release/build-b/${ZIP_NAME}"
+          cp "/tmp/v1-release/build-a/${ZIP_NAME}" "/tmp/v1-release/out/${ZIP_NAME}"
+          sha256sum "/tmp/v1-release/out/${ZIP_NAME}" | tee /tmp/v1-release/out/SHA256SUMS.txt
+      - name: Unzip and exact-compare packaged files
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/v1-release/extracted /tmp/v1-release/expected/aznet-theme
+          unzip -q "/tmp/v1-release/out/${ZIP_NAME}" -d /tmp/v1-release/extracted
+          test "$(find /tmp/v1-release/extracted -mindepth 1 -maxdepth 1 -type d -printf '%f\n')" = 'aznet-theme'
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
+            ./ /tmp/v1-release/expected/aznet-theme/
+          diff -ru /tmp/v1-release/expected/aznet-theme /tmp/v1-release/extracted/aznet-theme
+          unzip -Z1 "/tmp/v1-release/out/${ZIP_NAME}" | LC_ALL=C sort > /tmp/v1-release/out/package-manifest.txt
+          test "$(cut -d/ -f1 /tmp/v1-release/out/package-manifest.txt | sort -u)" = 'aznet-theme'
+      - name: Lint packaged PHP
+        run: |
+          set -euo pipefail
+          PHP_COUNT=0
+          while IFS= read -r -d '' file; do
+            php -l "$file" >/dev/null
+            PHP_COUNT=$((PHP_COUNT + 1))
+          done < <(find /tmp/v1-release/extracted/aznet-theme -type f -name '*.php' -print0)
+          test "$PHP_COUNT" -gt 0
+          printf '%s\n' "$PHP_COUNT" | tee /tmp/v1-release/out/php-file-count.txt
+      - name: Activate extracted package on WordPress 6.9
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          rm -rf /tmp/wp
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='AZnet V1 Candidate' --admin_user=admin --admin_password='v1-candidate-password' --admin_email=release@example.test --skip-email --allow-root
+          rsync -a --delete /tmp/v1-release/extracted/aznet-theme/ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          wp core version --path=/tmp/wp --allow-root | grep -Fx '6.9'
+          wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+          grep -F "Version: ${VERSION}" /tmp/wp/wp-content/themes/aznet-theme/style.css
+          grep -F "define( 'AZNET_THEME_VERSION', '${VERSION}' );" /tmp/wp/wp-content/themes/aznet-theme/functions.php
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/v1-release/package-server.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:8080/ >/tmp/v1-release/package-home.html && break
+            sleep 1
+          done
+          grep -F 'aznet-theme-site-header' /tmp/v1-release/package-home.html
+          grep -F 'aznet-theme-site-footer' /tmp/v1-release/package-home.html
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/v1-release/package-server.log; then
+            echo 'FAIL: packaged Theme runtime error marker found' >&2
+            exit 1
+          fi
+          echo 'PASS: extracted package activates and renders on WordPress 6.9'
+      - name: Upload deterministic release candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: v1-release-candidate-${{ env.VERSION }}
+          path: /tmp/v1-release/out
+          if-no-files-found: error
