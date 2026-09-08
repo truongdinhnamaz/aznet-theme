@@ -37,3 +37,11 @@ function system_health_report(): array {
         ],
     ];
 }
+
+function support_snapshot(): array {
+    return [
+        'product' => 'aznet-theme',
+        'report' => system_health_report(),
+        'settings' => settings(),
+    ];
+}
