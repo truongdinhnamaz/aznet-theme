@@ -64,9 +64,10 @@ function homepage_slot_statuses(): array {
         }
     }
 
-    $statuses['contact_provider'] = function_exists( 'AZnet\\Theme\\Integrations\\RootProfile\\available' )
-        ? 'READY'
-        : 'PROVIDER_UNAVAILABLE';
+    $statuses['contact_provider'] = function_exists( 'AZnet\\Theme\\Integrations\\RootProfile\\provider_available' )
+        && \AZnet\Theme\Integrations\RootProfile\provider_available()
+            ? 'READY'
+            : 'PROVIDER_UNAVAILABLE';
 
     return $statuses;
 }
