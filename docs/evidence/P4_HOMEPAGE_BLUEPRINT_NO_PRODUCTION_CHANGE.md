@@ -1,1 +1,0 @@
-Pre-feature checkpoint: documentation only; no production Theme code has changed yet.
