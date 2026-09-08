@@ -27,13 +27,13 @@ if (!preg_match("/define\\(\\s*'AZNET_THEME_VERSION'\\s*,\\s*'([^']+)'\\s*\\)/",
 
 $styleVersion = trim($styleMatch[1]);
 $constantVersion = trim($constantMatch[1]);
-$expected = '1.0.0';
+$expected = '1.1.0';
 
 if ($styleVersion !== $constantVersion) {
     g8_fail("release metadata mismatch: style.css={$styleVersion}; functions.php={$constantVersion}");
 }
 if ($styleVersion !== $expected) {
-    g8_fail("expected final v1.0 release version {$expected}, got {$styleVersion}");
+    g8_fail("expected final v1.1 release version {$expected}, got {$styleVersion}");
 }
 if (preg_match('/(?:alpha|beta|rc|dev|snapshot)/i', $styleVersion)) {
     g8_fail("pre-release marker remains in final version: {$styleVersion}");
