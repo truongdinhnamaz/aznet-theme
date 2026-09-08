@@ -12,6 +12,7 @@ namespace {
     $GLOBALS['r6_mobile_panel'] = false;
     $GLOBALS['r6_sticky_mode'] = 'off';
     $GLOBALS['r6_generic'] = false;
+    $GLOBALS['r6_is_post'] = false;
     $GLOBALS['r6_woo_product'] = false;
     $GLOBALS['r6_woo_archive'] = false;
     $GLOBALS['r6_woo_cart'] = false;
@@ -42,6 +43,10 @@ namespace {
 
     function get_stylesheet_uri(): string {
         return 'https://example.test/wp-content/themes/aznet-theme/style.css';
+    }
+
+    function is_singular($post_types = ''): bool {
+        return 'post' === $post_types && (bool) ($GLOBALS['r6_is_post'] ?? false);
     }
 }
 
@@ -99,6 +104,7 @@ namespace {
             'mobile_panel' => false,
             'sticky_mode' => 'off',
             'generic' => false,
+            'is_post' => false,
             'woo_product' => false,
             'woo_archive' => false,
             'woo_cart' => false,
@@ -155,8 +161,8 @@ namespace {
             [],
         ],
         'clean-post-editorial' => [
-            ['generic' => true, 'preset' => 'editorial'],
-            [...$coreStyles, 'aznet-theme-generic-content', 'aznet-theme-preset-editorial'],
+            ['generic' => true, 'preset' => 'editorial', 'is_post' => true],
+            [...$coreStyles, 'aznet-theme-generic-content', 'aznet-theme-preset-editorial', 'aznet-theme-article'],
             [],
         ],
         'woo-product' => [
