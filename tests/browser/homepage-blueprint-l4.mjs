@@ -76,6 +76,7 @@ async function inspectViewport(browser, name, viewport) {
     h1Count: null,
     articleCards: null,
     detailsCount: null,
+    heroFlow: null,
     overflowPx: null,
     duplicateIds: [],
     focus: null,
@@ -106,6 +107,36 @@ async function inspectViewport(browser, name, viewport) {
 
     for (const selector of requiredSelectors) {
       if (await page.locator(selector).count() < 1) throw new Error(`missing Homepage section ${selector}`);
+    }
+
+    result.heroFlow = await page.evaluate(() => {
+      const hero = document.querySelector('.aznet-theme-homepage-blueprint__hero');
+      const h1 = hero?.querySelector('h1');
+      const lead = hero?.querySelector('.aznet-theme-homepage-blueprint__lead');
+      const buttons = hero?.querySelector('.wp-block-buttons');
+      if (!(h1 instanceof HTMLElement) || !(lead instanceof HTMLElement) || !(buttons instanceof HTMLElement)) return null;
+      const h1Rect = h1.getBoundingClientRect();
+      const leadRect = lead.getBoundingClientRect();
+      const buttonsRect = buttons.getBoundingClientRect();
+      const buttonWidths = [...buttons.querySelectorAll('.wp-block-button__link')].map((node) => node.getBoundingClientRect().width);
+      return {
+        h1Top: h1Rect.top,
+        h1Bottom: h1Rect.bottom,
+        leadTop: leadRect.top,
+        leadBottom: leadRect.bottom,
+        buttonsTop: buttonsRect.top,
+        buttonWidths,
+      };
+    });
+    if (!result.heroFlow) throw new Error('unable to inspect Homepage hero geometry');
+    if (result.heroFlow.leadTop < result.heroFlow.h1Bottom - 1) {
+      throw new Error(`Hero lead is not stacked below H1: ${JSON.stringify(result.heroFlow)}`);
+    }
+    if (result.heroFlow.buttonsTop < result.heroFlow.leadBottom - 1) {
+      throw new Error(`Hero CTA group is not stacked below lead: ${JSON.stringify(result.heroFlow)}`);
+    }
+    if (result.heroFlow.buttonWidths.some((width) => width < 110)) {
+      throw new Error(`Hero CTA is visually squeezed below 110px: ${JSON.stringify(result.heroFlow)}`);
     }
 
     result.articleCards = await page.locator('.aznet-theme-homepage-blueprint__article-card').count();
