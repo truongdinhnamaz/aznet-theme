@@ -14,6 +14,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once __DIR__ . '/settings.php';
 require_once __DIR__ . '/homepage-content-map.php';
 require_once __DIR__ . '/homepage-composer.php';
+require_once __DIR__ . '/provisioning-blueprints.php';
+require_once __DIR__ . '/provisioning-discovery.php';
+require_once __DIR__ . '/provisioning-plan.php';
+require_once __DIR__ . '/provisioning-provenance.php';
+require_once __DIR__ . '/provisioning-runner.php';
+require_once __DIR__ . '/provisioning-readiness.php';
 require_once __DIR__ . '/design-system.php';
 require_once __DIR__ . '/setup.php';
 require_once __DIR__ . '/patterns.php';

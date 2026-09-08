@@ -82,6 +82,15 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-c
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-control-center-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-contract.php
 
+printf '%s\n' '==> Law Site Provisioning contracts'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-blueprint-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-activation-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-discovery-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-plan-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-runner-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-idempotency-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-readiness-contract.php
+
 printf '%s\n' '==> Classic Editor policy contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/classic-editor-policy-contract.php
 
