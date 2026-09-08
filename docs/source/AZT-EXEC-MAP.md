@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.19  
+**Version:** v0.20  
 **Status:** Working Execution Map / derived  
 **Date:** 08/09/2026
 
@@ -15,7 +15,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | A Theme Foundation | PASS | WordPress-clean hybrid PHP + `theme.json` |
 | B Semantic Tokens | PASS / retained | `--aznet-theme-*` + `theme.json`; R1 extended semantics without silently repurposing public tokens |
 | C Header/Footer | PASS / retained | v1.0 Theme presentation owner; R3 adds the bounded v1.1 preset system |
-| D Generic Templates | PASS / editorial quality reopened | Page/Post/Archive/Search/404 technical closure retained; pilot invalidates only professional editorial presentation depth |
+| D Generic Templates | PASS / editorial quality hardening active | Page/Post/Archive/Search/404 technical closure retained; P2/P3 merged, P4 proves professional pilot quality |
 | W Woo presentation | PASS / retained | Woo owns commerce truth; R4 deepens presentation only |
 | E RootProfile Profile/Contact | OPTIONAL COMPAT ACTIVE | External E5-C blocker; E5-D takeover locked; not core-v1.1 critical path |
 | F Homepage | CORE PASS / COMPAT ACTIVE | Native Homepage on main; external F8 compatibility defect remains non-blocking under D-016 |
@@ -26,23 +26,23 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | R3 Header System 2.0 | PASS | PR #41 merged; bounded presets/primitives, accessible mobile/sticky behavior and L1-L4 browser evidence |
 | R4 WooCommerce Presentation 2.0 | PASS | PR #43 merged; public Woo output -> Theme presentation only; clean-WP/Woo-present L1-L4 evidence |
 | R5 Control Center + System Health | PASS | PR #44 merged; bounded Theme settings admin, public/read-only health diagnostics and update/theme-switch continuity |
-| R6 Performance + Release 2.0 | PASS / TECHNICAL CANDIDATE | PR #46-#48 complete; exact-main + deterministic `1.1.0` candidate verified; publication/deployment not implied |
+| R6 Performance + Release 2.0 | PASS / TECHNICAL CANDIDATE | PR #46-#48 complete; exact-main + deterministic `1.1.0` R6 candidate verified; publication/deployment not implied |
 | P1 Pilot identity cleanup | SITE-OPS READY | Active `1.1.0` proven; delete only inactive legacy theme identities through WordPress core UI after smoke |
-| P2 Editorial Single-Post | READY / EXACT THEME NEXT | Generic high-trust Post presentation only; WordPress owns editorial state; no SEO/domain/query takeover |
-| P3 Editorial Listing/Search | PLANNED | Improve archive/search scan presentation without replacing main query |
-| P4 Real Pilot QA | PLANNED | Current-stack law-site route/responsive/a11y/provider compatibility evidence |
-| P5 Publication/Deployment | GATED | Tag/GitHub Release and production deploy remain explicit owner actions |
+| P2 Editorial Single-Post | PASS | PR #51 merged; native WordPress editorial presentation only; no SEO/domain/query takeover |
+| P3 Editorial Listing/Search | PASS | PR #52 merged; native thumbnail/date scan presentation + resilient long titles/excerpts; main query retained |
+| P4 Real Pilot QA | READY / EXACT NEXT | Pilot QA execution approved; current-stack law-site route/responsive/a11y/Rank Math/RootProfile evidence required |
+| P5 Publication/Deployment | GATED | Tag/GitHub Release and final production deploy remain explicit owner actions |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
-Verified v1.1 implementation/release baseline: `main@4673202f67068294fe92d49d1ed66e371d0ecbb3`, Theme `1.1.0`, implementation tree `dca0e3719063cdee22e3e535e16c61b24a8a6046`, final candidate SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b`.
+Current post-hardening implementation baseline: `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`, Theme `1.1.0`, tree `8fc309ea8e01bfe727da943754c98164b3f92a58`. Fresh `V1 Exact Main Verification` run `34195248467` succeeded on that exact SHA.
 
-Evidence/plan-only PR #49 merged to `main@38843b08bdc5a3d3dccbc2447029879701168db3` without changing production PHP/CSS/JS/test/workflow bytes. The pilot System Health evidence proves active AZnet Theme `1.1.0` on WordPress `7.1` / PHP `8.4.24`, `primary_menu=yes`, RootProfile v1/v2 present, current-surface absent, Woo absent and ConvertFlow intentionally `unknown`.
+The previous R6 package SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b` is retained as historical R6 candidate evidence only; P2/P3 changed production bytes, so P5 requires a new deterministic package/SHA.
 
-R4 final head `bfd383da4fd1e7029d8c901ad807e9ca3c03d5ab` and merge `0ddc6c799391d57db134f04449effdf511d41d1f` share tree `e66c6ebbcc1de7d695ffa67172928d0f0580e443`. R4 verified functional/test head `675a4f0a07b7c6c4796ad359a4b13f9c2d94f74a` completed 16/16 workflows successfully.
+The pilot System Health evidence proves active AZnet Theme `1.1.0` on WordPress `7.1` / PHP `8.4.24`, `primary_menu=yes`, RootProfile v1/v2 present, current-surface absent, Woo absent and ConvertFlow intentionally `unknown`.
 
-R5 final evidence head `fed7429853ce5f6a209a0bf763a4c72f5ed1d376` and merge `6c69def2ff4ac7adb1221de09aec057b63b1adf6` share tree `7798435b12d166f74d91f55ef10fbaf385bcb0ef`. R5 verified functional/test head `d85af1210e79be2ceb48cef23c7d1d3dbb3ebc8c` completed 18/18 workflows successfully.
+P2 final verified head `dec498b997aec6bc8b08cf91f3e09c42611bbd66` merged through PR #51 to `main@a863da861b6a299920568b2b0c9ca57924727431` after Theme-owned author-fallback and CPT/Woo scope regressions were fixed.
 
-R6 infrastructure merged via PR #46, covered workflow retirement via PR #47 and owner-approved metadata promotion via PR #48. Post-promotion exact-main verification and manual release-candidate workflow succeeded on `main@4673202f...`. No GitHub Release or tag publication is established.
+P3 final verified head `d78091900451176c3815b23d1485036e784bdde9` merged through PR #52 to `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`; head and merge share tree `8fc309ea8e01bfe727da943754c98164b3f92a58`.
 
 ## 2. Slice discipline
 
@@ -88,7 +88,7 @@ No layer may be inferred from another.
 - R3 Header System 2.0 complete.
 - R4 WooCommerce Presentation 2.0 complete.
 - R5 Control Center + System Health complete.
-- R6 performance/release technical closure complete on verified `1.1.0` candidate bytes.
+- R6 performance/release technical closure complete on verified `1.1.0` R6 candidate bytes.
 
 ## 5. R0 — Source reconciliation
 
@@ -160,9 +160,9 @@ No layer may be inferred from another.
 8. owner-approved RED -> GREEN atomic metadata promotion completed in both `style.css` and `AZNET_THEME_VERSION` to exact `1.1.0`;
 9. final exact-main/package verification passed on promoted bytes.
 
-**Candidate:** `aznet-theme-1.1.0.zip`; SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b`.
+**Historical candidate:** `aznet-theme-1.1.0.zip`; SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b`.
 
-**Exit:** PASS technical candidate. Tag/GitHub Release and deployment remain separate gates.
+**Exit:** PASS technical R6 candidate. Tag/GitHub Release and deployment remain separate gates; later P2/P3 production bytes require a new P5 package.
 
 ## 12. Post-R6 production-readiness sequence
 
@@ -188,13 +188,13 @@ No layer may be inferred from another.
 
 **Forbidden:** legal/business semantics, Theme SEO title/meta/canonical/schema/OG, related-post ranking/query engine, private provider storage/API reads, authoritative route heuristics.
 
-**TDD:** create `tests/offline/editorial-single-post-contract.php`; confirm RED on current minimal `single.php`; implement minimal GREEN in focused content parts + scoped article CSS; run retained regressions.
+**TDD:** RED on previous minimal `single.php` -> minimal GREEN in focused content parts + scoped article CSS -> retained regressions.
 
-**Exit:** L1/L2 GREEN before deeper browser/runtime verification.
+**Exit:** PASS — PR #51 merged to `main@a863da861...`; final candidate constrained P2 to native Post and fails soft when native author data is unavailable.
 
-**Rollback:** revert bounded P2 feature commit/PR; WordPress content remains unchanged.
+**Rollback:** revert bounded P2 merge; WordPress content remains unchanged.
 
-**Next:** P3.
+**Next:** P3 — completed.
 
 ### P3 — Editorial Listing/Search Hardening
 
@@ -202,9 +202,15 @@ No layer may be inferred from another.
 
 **TDD:** RED contract -> optional native thumbnail/date + resilient title/excerpt presentation -> regression.
 
-**Exit:** L1/L2 GREEN, then feed P4 browser matrix.
+**Exit:** PASS — PR #52 merged to `main@a1dd42dd...`; fresh exact-main verification run `34195248467` succeeded.
+
+**Rollback:** revert bounded P3 merge; WordPress content/query state remains unchanged.
+
+**Next:** P4.
 
 ### P4 — Real Pilot QA
+
+**State:** READY / EXACT NEXT. Owner approved P4 pilot QA execution on 08/09/2026.
 
 **Goal:** prove final editorial candidate on support-floor generic fixtures and the real current-stack pilot.
 
@@ -214,9 +220,15 @@ No layer may be inferred from another.
 
 **Quality:** no Theme-caused PHP fatal/warning/uncaught; no horizontal overflow; keyboard/focus/landmarks/headings/labels; Vietnamese diacritics/long citations/wide tables/media; Rank Math independence; provider states accurately reported; update/theme-switch/rollback continuity; measured asset behavior.
 
+**Allowed pilot action:** install/update a QA candidate on the approved pilot as needed for the matrix. This approval does not authorize tag/GitHub Release or final production deployment.
+
+**Exit:** current-stack pilot evidence complete with any defects reduced to the shallowest reproducible layer; P1 duplicate cleanup closed before final pilot production sign-off.
+
+**Next:** P5 only after P4 PASS.
+
 ### P5 — Final Candidate / Publication / Deployment
 
-Run exact-main verification, deterministic double-build byte identity, unzip/exact-compare/lint/clean-WordPress activation smoke and rollback reference. Stop before tag/GitHub Release and production deployment unless separately approved.
+Run exact-main verification, deterministic double-build byte identity, unzip/exact-compare/lint/clean-WordPress activation smoke and rollback reference. Stop before tag/GitHub Release and final production deployment unless separately approved.
 
 ## 13. Optional compatibility tracks
 
@@ -238,4 +250,4 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 15. Exact next
 
-**P2 — Editorial Single-Post Hardening from the latest canonical `main`. Start with the failing offline contract against the current minimal `single.php`, then implement only Theme-owned presentation needed for GREEN. P1 duplicate-theme cleanup may proceed in parallel as a site-operations task, but destructive deletion remains outside Theme code.**
+**P4 — Real Pilot QA from canonical post-P3 `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`. Prepare an exact candidate for the approved pilot, verify the current-stack route/responsive/a11y/Rank Math/RootProfile matrix, record defects/evidence, and keep P1 duplicate-theme deletion as a separate destructive site-ops gate. Stop before tag/GitHub Release or final production deployment.**

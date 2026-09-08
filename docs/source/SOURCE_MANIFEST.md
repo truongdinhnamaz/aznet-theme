@@ -1,20 +1,20 @@
 # AZnet Theme Source Manifest
 
-Canonical source is reconciled through the completed v1.1 R6 technical candidate and the approved post-R6 professional editorial/law-site production-readiness sequence.
+Canonical source is reconciled through the completed v1.1 R6 technical candidate, merged P2/P3 editorial hardening and the approved P4 real-pilot QA next step.
 
 | Source | Semantic version | Role |
 | --- | --- | --- |
-| `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution; unchanged by R0-R6/source closure |
+| `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution; unchanged by R0-R6/P2-P3 source closure |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership plus approved v1.1 Native Product System objective/non-goals; unchanged by editorial pilot hardening |
-| `AZT-02-architecture.md` | v0.5 | Theme architecture, public integration contracts and v1.1 settings/pattern/Header/Woo/Control Center boundaries; unchanged by source closure |
-| `AZT-03-baseline-provenance.md` | v0.23 | Canonical implementation/provenance through completed R6, Theme `1.1.0`, final deterministic candidate and publication-state separation |
-| `AZT-04-roadmap-qa-decisions.md` | v0.27 | R0-R6 PASS, post-R6 P1-P5 production-readiness sequence, QA layers and accepted D-001..D-023 decisions |
-| `AZT-EXEC-MAP.md` | v0.19 | Derived execution map with core `R0 -> R1 -> {R2,R3,R4} -> R5 -> R6 = PASS` and exact Theme-owned next P2 Editorial Single-Post |
+| `AZT-02-architecture.md` | v0.5 | Theme architecture, public integration contracts and v1.1 settings/pattern/Header/Woo/Control Center boundaries; unchanged by P2/P3 source closure |
+| `AZT-03-baseline-provenance.md` | v0.24 | Canonical implementation/provenance through P2/P3 post-hardening `main`, Theme `1.1.0`, historical R6 package provenance and publication-state separation |
+| `AZT-04-roadmap-qa-decisions.md` | v0.28 | R0-R6 + P2/P3 PASS, P4 exact next, P5 gates, QA layers and accepted D-001..D-023 decisions |
+| `AZT-EXEC-MAP.md` | v0.20 | Derived execution map with P2/P3 complete and exact next P4 Real Pilot QA |
 
-Verified v1.1 implementation/release baseline represented by this manifest: `main@4673202f67068294fe92d49d1ed66e371d0ecbb3`, implementation tree `dca0e3719063cdee22e3e535e16c61b24a8a6046`, Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.
+Current post-hardening implementation baseline represented by this manifest: `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`, implementation tree `8fc309ea8e01bfe727da943754c98164b3f92a58`, Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.
 
-Evidence/plan-only PR #49 subsequently merged to `main@38843b08bdc5a3d3dccbc2447029879701168db3` without changing production PHP/CSS/JS/test/workflow bytes. The production/package evidence therefore remains byte-specific to the verified `4673202f...` implementation baseline until a later production code change creates a new candidate.
+Fresh `V1 Exact Main Verification` run `34195248467` succeeded on that exact post-P3 main SHA, covering reusable static/contracts plus clean WordPress 6.9 runtime/browser/a11y.
 
 R4 provenance: PR #43 merged from final evidence head `bfd383da4fd1e7029d8c901ad807e9ca3c03d5ab` to `main@0ddc6c799391d57db134f04449effdf511d41d1f`; head and merge share tree `e66c6ebbcc1de7d695ffa67172928d0f0580e443`. The R4 functional/test head completed 16/16 workflows successfully. Detailed evidence remains in `docs/evidence/R4_WOOCOMMERCE_PRESENTATION_L4.md`.
 
@@ -22,12 +22,16 @@ R5 provenance: PR #44 merged from final evidence head `fed7429853ce5f6a209a0bf76
 
 R6 provenance: performance/release infrastructure merged via PR #46 to `main@a3dc550bd748acab59e1df2384f8e2ada55541e9`; covered legacy verification workflows were retired via PR #47 to `main@27537e520ba15afe771cea86080abd99a7276a35`; owner-approved atomic metadata promotion merged via PR #48 to `main@4673202f67068294fe92d49d1ed66e371d0ecbb3`. Fresh exact-main verification succeeded on promoted bytes. Manual `V1 Release Candidate Package` run `34187975628` succeeded on the same exact main SHA.
 
-Final verified v1.1 candidate: `aznet-theme-1.1.0.zip`, exactly one top-level `aznet-theme/` directory, SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b`.
+Historical R6 verified candidate: `aznet-theme-1.1.0.zip`, exactly one top-level `aznet-theme/` directory, SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b`. This hash is **not** the final P5 package hash because later P2/P3 production hardening changed canonical bytes.
+
+P2 provenance: PR #51 merged final verified head `dec498b997aec6bc8b08cf91f3e09c42611bbd66` to `main@a863da861b6a299920568b2b0c9ca57924727431`. Editorial Article presentation remains native-Post scoped and WordPress-owned data stays authoritative.
+
+P3 provenance: PR #52 merged final verified head `d78091900451176c3815b23d1485036e784bdde9` to `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`; head and merge share tree `8fc309ea8e01bfe727da943754c98164b3f92a58`.
 
 Pilot production-readiness evidence: active AZnet Theme `1.1.0` on WordPress `7.1` / PHP `8.4.24`, `primary_menu=yes`, RootProfile v1/v2 detected, RootProfile current-surface absent, Woo absent and ConvertFlow intentionally `unknown`. This is current-stack pilot evidence, not a replacement for support-floor certification.
 
-Release publication remains separate from implementation metadata. A fresh 08/09/2026 GitHub release check returns no GitHub Release and no tag evidence has been established; publication remains `PUBLICATION_PENDING`. Production deployment remains separately approval-gated.
+Release publication remains separate from implementation metadata. No GitHub Release or tag publication has been established; publication remains `PUBLICATION_PENDING`. Final production deployment remains separately approval-gated.
 
-Post-R6 exact Theme-owned next is **P2 Editorial Single-Post Hardening**. P1 duplicate-theme cleanup is a parallel site-operations task and may delete only inactive legacy theme identities through WordPress core UI after smoke/rollback confidence; Theme code must not automate that destructive cleanup.
+Post-P3 exact next is **P4 Real Pilot QA**. Owner approval covers P4 pilot QA execution only. P1 duplicate-theme cleanup remains a parallel destructive site-operations task and may delete only inactive legacy theme identities through WordPress core UI after smoke/rollback confidence; Theme code must not automate that cleanup. P5 tag/GitHub Release/final production deployment remain separate gates.
 
 Derived DOCX source set produced before GitHub canonical-medium migration remains archival/export evidence only. From AZT-00 v0.4 onward, canonical source changes occur in `docs/source/` on `main` through reviewed Git history.
