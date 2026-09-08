@@ -10,7 +10,7 @@
 
 AZnet Theme already has a valid WordPress-native Homepage shell, and PR #57 established that native WordPress Posts and Pages, including the configured static Front Page, use the Classic Editor. The previous full-page Block Pattern workflow is therefore no longer the correct product direction for Homepage setup.
 
-The product need is broader than a single static Homepage: an AZnet website must be able to select a visual Homepage template and have the existing WordPress content automatically composed according to that template, while preserving the same content when the user changes templates later.
+The product need is broader than a single static Homepage: an AZnet website must be able to select a visual Homepage template and have existing WordPress content automatically composed according to that template, while preserving the same content when the user changes templates later.
 
 The target pilot is a legal-services website with no product catalogue. The website is expected to have a stable set of WordPress Pages and Categories, and the Homepage should automatically adapt to the content that actually exists.
 
@@ -78,7 +78,7 @@ The Homepage Composer must not copy or reconstruct ConvertFlow Journey semantics
 - a proprietary page-builder schema;
 - changing Page/Post/Category data when applying a visual preset.
 
-## 4. Classic Editor policy
+## 4. Classic Editor and existing Homepage body boundary
 
 PR #57 remains authoritative for the current admin editing experience:
 
@@ -88,7 +88,19 @@ PR #57 remains authoritative for the current admin editing experience:
 
 Homepage Composer must not re-enable Block Editor for the Front Page and must not require users to author the Homepage layout manually.
 
-The Front Page remains a WordPress Page and may supply Hero content, but the overall Homepage layout is composed by the Theme from mapped sources.
+The Front Page remains a WordPress Page and supplies Hero metadata. The existing public WordPress `the_content` boundary must also remain available because current Homepage integration allows external owners such as ConvertFlow to use that public body boundary without Theme-private coupling.
+
+When Law 01 is active:
+
+1. the Theme resolves Hero metadata from the configured static Front Page;
+2. the Theme executes the normal filtered Front Page body exactly once and renders non-empty output in a bounded `native_body` region immediately after Hero;
+3. the Theme does not inspect, classify, reconstruct or mutate the filtered body output;
+4. the remaining mapped Law 01 sections render after that body region;
+5. when the filtered body is empty, no empty body wrapper is emitted.
+
+This preserves the existing WordPress/ConvertFlow public body contract without making Homepage Composer responsible for Journey semantics.
+
+If Law 01 is inactive or the Composer cannot produce a safe model, `front-page.php` keeps the existing WordPress-native loop/`the_content()` fallback.
 
 ## 5. Content Map v1
 
@@ -97,6 +109,7 @@ Content Map v1 uses fixed semantic slots with fixed allowed source types. It is 
 | Slot | Source type | Runtime use |
 | --- | --- | --- |
 | `hero` | configured static Front Page | title, excerpt, featured image, permalink/context |
+| `native_body` | filtered static Front Page body | public WordPress `the_content` output rendered exactly once, uninterpreted |
 | `services` | one published parent Page | parent summary plus direct published child Pages |
 | `about` | one published Page | title, excerpt/content summary, featured image, permalink |
 | `team` | one published Page | editorial team teaser, image and CTA only |
@@ -104,8 +117,8 @@ Content Map v1 uses fixed semantic slots with fixed allowed source types. It is 
 | `knowledge_latest` | same selected Category IDs | latest published Posts in mapped categories |
 | `case_analysis` | one Category ID | latest published analysis Posts |
 | `legal_news` | one Category ID | compact latest-news list |
-| `process` | one published Page | authored process summary/content |
-| `faq` | one published Page | authored FAQ content presented by the Theme |
+| `process` | one published Page | authored Page content rendered inside a process presentation wrapper |
+| `faq` | one published Page | authored Page content rendered inside an FAQ presentation wrapper |
 | `contact` | one published Page plus accepted public provider capability when available | contact CTA/link and public-safe contact projection |
 
 ### 5.1 Reference rules
@@ -131,35 +144,39 @@ The Content Map stores identifiers/references only. It must not persist copies o
 - article lists;
 - query results.
 
-## 6. Theme settings schema
+## 6. Theme settings schema v2
 
 Do not create a second Theme settings store.
 
-Extend the existing `aznet_theme_settings` Theme Mod schema from schema version 1 to schema version 2 so it can hold Theme-owned presentation/configuration/reference state.
+Extend the existing `aznet_theme_settings` Theme Mod schema from schema version 1 to schema version 2. Use explicit flat keys to match the current normalized settings style.
 
-The normalized conceptual shape is:
+Required new normalized keys:
 
 ```text
 schema_version = 2
-visual_preset = ...
-header_preset = ...
-homepage_preset = law-01
-homepage_references = {
-  services_page,
-  about_page,
-  team_page,
-  knowledge_terms[],
-  case_analysis_term,
-  legal_news_term,
-  process_page,
-  faq_page,
-  contact_page
-}
+homepage_preset = off | law-01
+homepage_services_page = int >= 0
+homepage_about_page = int >= 0
+homepage_team_page = int >= 0
+homepage_knowledge_terms = int[]
+homepage_case_analysis_term = int >= 0
+homepage_legal_news_term = int >= 0
+homepage_process_page = int >= 0
+homepage_faq_page = int >= 0
+homepage_contact_page = int >= 0
 ```
 
-The exact PHP representation may remain a flat normalized array if that better matches current implementation style, but the schema must preserve the distinction between presentation choice and typed source references.
+Rules:
 
-Import/export and reset behavior must continue through the same normalized schema.
+- `0` means unmapped for single references;
+- `[]` means unmapped for multi-reference terms;
+- normalization casts only positive integer IDs into stored references;
+- term arrays are unique, positive integer IDs in saved display order;
+- object existence/type/publication is resolved at read time, not copied into settings;
+- schema v1 settings migrate losslessly by retaining all existing presentation values and adding safe Homepage defaults;
+- import/export/reset continue through the same normalized `aznet_theme_settings` schema.
+
+The settings store contains presentation/configuration/reference state only. It is not a content snapshot.
 
 ## 7. Query policy
 
@@ -169,21 +186,21 @@ Homepage Composer v1 supports bounded query policies only.
 
 - `post_status=publish`;
 - post type `post`;
-- Category membership restricted to mapped `knowledge_terms`;
+- Category membership restricted to mapped `homepage_knowledge_terms`;
 - order by WordPress publication date descending;
-- limit determined by the active presentation preset.
+- result limit is defined by Law 01 presentation constants/configuration, not editable query logic.
 
 ### `case_analysis`
 
-- published Posts in the mapped `case_analysis_term`;
+- published Posts in mapped `homepage_case_analysis_term`;
 - newest first;
-- bounded result count determined by preset.
+- bounded result count defined by Law 01.
 
 ### `legal_news`
 
-- published Posts in the mapped `legal_news_term`;
+- published Posts in mapped `homepage_legal_news_term`;
 - newest first;
-- bounded compact list count determined by preset.
+- bounded compact list count defined by Law 01.
 
 The Theme must not implement a recommendation/ranking engine, full query builder, semantic search or editorial scoring system in this slice.
 
@@ -197,8 +214,8 @@ Rules:
 
 - no persistence;
 - no option/transient/database write;
-- no mutation of WordPress queries/content;
-- later sections may skip already displayed IDs and pull the next eligible item;
+- no mutation of WordPress content/taxonomy;
+- each later bounded query may exclude IDs already rendered by earlier Composer sections;
 - deduplication is presentation behavior, not authoritative editorial state.
 
 ## 9. Law 01 presentation preset
@@ -207,9 +224,9 @@ Law 01 targets a combined professional legal-services + legal-knowledge website.
 
 ### 9.1 Visual language
 
-- deep navy as the primary dark surface;
+- deep navy primary dark surface;
 - restrained warm gold/brass accent;
-- serif display heading paired with highly readable sans-serif body text;
+- serif display heading paired with a highly readable sans-serif body face already available to the Theme/system stack;
 - generous white space;
 - professional photography preferred over generic legal stock symbols;
 - no fabricated metrics, ratings, testimonials or certifications;
@@ -219,17 +236,18 @@ Law 01 targets a combined professional legal-services + legal-knowledge website.
 
 1. Header
 2. Hero
-3. Legal services
-4. About
-5. Team teaser
-6. Legal knowledge topics
-7. Latest legal knowledge
-8. Case analysis / case law & practice
-9. Legal news
-10. Consultation process
-11. FAQ
-12. Final CTA
-13. Footer
+3. Native Front Page body, only when filtered output is non-empty
+4. Legal services
+5. About
+6. Team teaser
+7. Legal knowledge topics
+8. Latest legal knowledge
+9. Case analysis / case law & practice
+10. Legal news
+11. Consultation process
+12. FAQ
+13. Final CTA
+14. Footer
 
 ### 9.3 Hero
 
@@ -237,19 +255,21 @@ Source: static Front Page.
 
 Presentation:
 
-- eyebrow;
+- editable preset eyebrow copy that is generic and non-factual;
 - one H1 from Page title;
 - supporting copy from Page excerpt when available;
 - featured image when available;
-- primary CTA to the mapped contact destination;
+- primary CTA to the mapped Contact Page;
 - phone CTA only when an accepted public-safe contact provider supplies a phone value.
 
 Fallbacks:
 
 - no featured image => text-centric full-width hero;
 - no excerpt => no empty placeholder;
-- no valid contact destination => no false booking CTA;
+- no valid Contact Page => no false contact/booking CTA;
 - no phone capability => no phone button.
+
+Law 01 must not label a CTA “Đặt lịch tư vấn” unless a real mapped destination/capability supports booking. With only a Contact Page, default CTA copy is the truthful generic “Liên hệ tư vấn”.
 
 ### 9.4 Legal services
 
@@ -264,15 +284,15 @@ The preset adapts to actual item count:
 - 5 => balanced 3+2 treatment;
 - 6 => 3x2;
 - 7–8 => 4x2;
-- more than preset limit => bounded list plus link to the parent services Page.
+- more than the Law 01 Homepage limit => bounded list plus link to the parent services Page.
 
-Each child Page card uses native title, permalink and safe excerpt/summary presentation. No service is invented from a title heuristic.
+Each child Page card uses native title, permalink and an existing Page excerpt when present. If excerpt is empty, the card renders without summary rather than automatically slicing legal body copy into a potentially misleading summary.
 
 ### 9.5 About
 
 Source: mapped Page.
 
-Two-column editorial layout when image exists; text-centric layout when it does not. Optional credibility facts may render only when supplied by a valid source; Law 01 ships no default client counts, success rates or years-of-experience claims.
+Two-column editorial layout when a featured image exists; text-centric layout when it does not. Optional credibility facts may render only from a valid owner/provider source. Law 01 ships no default client counts, success rates or years-of-experience claims.
 
 ### 9.6 Team teaser
 
@@ -286,17 +306,17 @@ A future RootProfile collection enhancement is a separate integration change and
 
 Source: selected Category references.
 
-Render topic cards/links from actual Category names and permalinks. Layout adapts to mapped count. Theme does not decide that one legal domain is semantically more important than another unless explicit presentation ordering is stored as Theme-owned reference order.
+Render topic cards/links from actual Category names and permalinks. Layout adapts to mapped count. Stored `homepage_knowledge_terms` order is presentation order; Theme does not infer semantic priority.
 
 ### 9.8 Latest knowledge
 
 Preferred desktop layout: one lead article plus four compact articles when data permits. Fewer Posts collapse naturally into a smaller grid. No carousel is required.
 
-Wording must follow selection policy: date-sorted output may be labelled “Mới cập nhật”; manually curated output, if introduced in a future design, must not be labelled “Mới nhất”.
+Because v1 is date-sorted only, the section may use “Mới cập nhật”. A future curated mode must use wording that reflects its actual selection policy.
 
 ### 9.9 Case analysis / case law & practice
 
-Editorially distinct section. It must use the exact mapped category meaning and must not relabel arbitrary analysis content as “Án lệ” unless the authoritative WordPress source actually uses that semantic/category.
+Editorially distinct section. It uses the exact mapped Category name as the public semantic label by default. The Theme must not relabel arbitrary analysis content as “Án lệ” unless the WordPress source itself carries that meaning.
 
 ### 9.10 Legal news
 
@@ -304,15 +324,19 @@ Compact section placed after expertise/analysis content so the site remains a pr
 
 ### 9.11 Process
 
-Source: mapped Process Page. Theme renders the authored process content in a timeline/step presentation when structurally suitable. Starter provisioning copy is editable WordPress content, not permanent Theme business workflow semantics.
+Source: mapped Process Page.
+
+V1 does **not** parse arbitrary Classic Editor headings/paragraphs into inferred business steps. It renders the authored Page content through the normal WordPress content filter inside a Law 01 process wrapper. If provisioning later creates a starter Process Page, it may seed an ordered-list/step-shaped WordPress body that Law 01 styles generically.
 
 ### 9.12 FAQ
 
-Source: mapped FAQ Page. Theme may enhance presentation as an accessible disclosure/accordion only when the source structure can be safely rendered. FAQ answers remain WordPress-authored content; Theme creates no FAQ datastore and emits no fabricated FAQ schema.
+Source: mapped FAQ Page.
+
+V1 does **not** infer question/answer pairs from arbitrary Classic Editor content. It renders the authored Page content through the normal WordPress content filter inside a Law 01 FAQ wrapper. Native/authored `<details>` elements, when present in the Page content, receive accessible Law 01 styling without a JavaScript dependency. Provisioning may seed editable `<details><summary>…</summary>…</details>` content, but the Theme does not create a FAQ datastore or auto-generate FAQ schema.
 
 ### 9.13 Final CTA
 
-Uses mapped Contact Page and accepted public contact capabilities. “Đặt lịch tư vấn” is shown only when an actual booking/contact destination supports that promise; otherwise use a truthful generic contact CTA.
+Uses the mapped Contact Page and accepted public contact capabilities. With only a valid Contact Page, use “Liên hệ tư vấn”. Booking-specific copy requires a real booking destination/capability. No CTA renders with a fabricated URL.
 
 ## 10. Control Center — Homepage tab
 
@@ -324,9 +348,12 @@ Show Homepage preset cards with preview, description and active state.
 
 For Law 01:
 
-- name: `Luật 01`;
+- setting value: `law-01`;
+- display name: `Luật 01`;
 - description: professional legal-services site with strong legal editorial content;
 - applying the preset changes only `homepage_preset` presentation state.
+
+The `off` state preserves the existing native Front Page rendering path.
 
 Applying a preset must not:
 
@@ -342,12 +369,14 @@ Render type-safe selectors:
 
 - Page selectors for Page-backed slots;
 - Category selectors for taxonomy-backed slots;
-- multi-select for `knowledge_terms`;
+- ordered multi-select for `homepage_knowledge_terms`;
 - no free-form slug, URL or manual numeric ID input.
+
+Saving the Homepage form goes through the existing normalized Theme settings write path and preserves settings belonging to other Control Center sections.
 
 ### 10.3 Diagnostics
 
-Each slot receives one of these read-only statuses:
+Each mapped slot receives one of these read-only statuses:
 
 - `READY` — valid source and enough data to render;
 - `EMPTY` — valid source exists but contains no renderable child/content items for the section;
@@ -359,18 +388,18 @@ Control Center reports status but does not auto-repair by heuristics.
 
 ## 11. Runtime architecture
 
-Recommended responsibilities:
+Use focused modules with these responsibilities:
 
-- `inc/theme/homepage-settings.php` or equivalent focused module: normalize Homepage preset/reference settings;
-- `inc/theme/homepage-content-map.php`: validate typed WordPress references and resolve bounded read models;
-- `inc/theme/homepage-composer.php`: orchestrate section order and fail-soft section rendering;
-- `template-parts/homepage/`: focused section renderers;
-- `assets/css/components/homepage-law-01.css`: Law 01 scoped presentation;
-- `inc/admin/control-center.php` or a focused extracted Homepage admin module: source mapping UI and diagnostics.
+- `inc/theme/homepage-content-map.php` — validate typed WordPress references, resolve bounded source/read models and request-local article ledger;
+- `inc/theme/homepage-composer.php` — orchestrate Law 01 section order, native-body preservation and fail-soft section rendering;
+- `inc/theme/settings.php` — schema v2 normalization/defaults, keeping the existing single settings store;
+- `inc/admin/homepage.php` — Homepage Control Center fields, typed selectors and diagnostics;
+- `inc/admin/control-center.php` — register/rout the `homepage` tab and delegate rendering to the focused Homepage admin module;
+- `template-parts/homepage/law-01/` — focused section renderers;
+- `assets/css/components/homepage-law-01.css` — Law 01 scoped presentation;
+- `front-page.php` — select Composer versus existing native fallback without domain/provider heuristics.
 
-Existing project patterns should be followed; do not introduce a framework, builder engine or bundler.
-
-`front-page.php` remains the Theme-owned Front Page entry point, but the implementation must preserve a safe WordPress-native fallback when no valid Homepage preset/map can render.
+Do not introduce a framework, builder engine or bundler.
 
 ## 12. Fail-soft behavior
 
@@ -378,18 +407,19 @@ Homepage Composer must never fatal because a mapped object or provider disappear
 
 Examples:
 
-- `services_page` deleted => Services section hidden; diagnostic `INVALID`;
-- Services parent exists with zero published direct children => section may render parent introduction only when useful, otherwise `EMPTY` and hidden according to preset rule;
-- one knowledge Category deleted => remaining valid Categories still render; deleted reference is reported;
-- no valid content in a section => no empty cards/placeholders on the public Homepage;
-- optional RootProfile/contact provider absent => WordPress-native Page/link fallback where truthful, otherwise component hidden;
-- malformed settings => normalized safe defaults, no arbitrary object lookup.
+- `homepage_services_page` deleted => Services hidden; diagnostic `INVALID`;
+- Services parent exists with zero published direct children => no fake child cards; parent-only introduction may render if its own excerpt/title is useful, otherwise diagnostic `EMPTY`;
+- one knowledge Category deleted => remaining valid Categories still render and the deleted reference is reported invalid;
+- no valid content in a section => no empty public placeholders;
+- optional RootProfile/contact provider absent => mapped WordPress Contact Page remains the truthful CTA fallback; provider-only phone UI disappears;
+- malformed settings => normalized safe defaults and no arbitrary object lookup;
+- Law 01 preset active but no valid static Front Page => Composer does not claim a valid Law 01 surface; existing native fallback remains available.
 
 ## 13. Provisioning boundary
 
 Law Site Provisioning is a separate sub-project from Homepage preset selection.
 
-Provisioning may eventually create a starter WordPress-native structure such as:
+Provisioning is allowed to create this starter WordPress-native structure only after an explicit user action:
 
 ### Pages
 
@@ -423,43 +453,45 @@ Provisioning requirements:
 - explicit user action;
 - idempotent behavior;
 - no overwrite of existing user content;
-- no duplicate creation when an earlier provisioning record/reference proves the same starter object was already created;
 - no title/slug heuristic takeover of unrelated existing objects;
+- exact IDs returned by objects created in that provisioning run may be used to initialize the Content Map;
 - starter copy must be clearly editable and must not assert unverified business/legal facts;
 - changing Homepage preset never invokes provisioning.
 
-Provisioning implementation is not required to complete Homepage Composer Core + Law 01 if doing so would delay a safe first downloadable Theme package. It can be a follow-on bounded slice after the Composer and Law 01 are working with manually mapped existing WordPress objects.
+Provisioning is **not required** for the first downloadable Composer + Law 01 package. The first package is complete when it safely maps and renders existing WordPress content. Provisioning is the next separate sub-project after that package unless the owner explicitly reprioritizes it.
 
 ## 14. Migration from the previous Homepage Pattern direction
 
 The previous `Homepage — Professional Services` pattern workflow is superseded for Homepage setup by this design because the current admin policy uses Classic Editor for native Pages.
 
-Before removing any existing pattern code:
+Before removing existing pattern code:
 
 - identify whether another surface/test still depends on it;
 - keep historical evidence unchanged;
 - retire only after the Composer destination path and retained fallback/regression pass;
 - do not delete portable WordPress content already inserted by users.
 
-Removal/retirement is a separate cleanup gate; it is not required for first Composer GREEN if retention causes no runtime conflict.
+Pattern removal is a cleanup gate, not part of the minimum first Composer GREEN unless retained code conflicts with runtime behavior.
 
 ## 15. Accessibility, responsive and performance requirements
 
 Law 01 must pass at minimum:
 
-- one coherent page-level H1;
-- heading hierarchy without skipped structural misuse;
+- one coherent page-level H1 from the Front Page title;
+- coherent heading hierarchy in Theme-generated sections;
 - keyboard-reachable links/buttons;
 - visible focus state;
 - no horizontal overflow at 1440, 1024, 390 and 320 px;
 - long Vietnamese titles/diacritics wrap safely;
 - images stay inside viewport and use appropriate WordPress image APIs/output;
 - no duplicate IDs;
-- axe critical/serious = 0 in tested scope;
+- axe critical/serious = 0 in tested Theme-owned scope;
 - no Theme-caused console errors;
-- surface-aware CSS loading: Law 01 Homepage CSS only when the preset is active on the Front Page;
+- surface-aware CSS loading: Law 01 Homepage CSS only when `is_front_page()` and `homepage_preset=law-01`;
 - no global ecosystem bundle;
 - no new build stack unless separately approved.
+
+The uninterpreted `native_body` region is integration output and is tested for coexistence/containment; the Theme must not silently rewrite third-party semantics merely to make its own visual assertions pass.
 
 ## 16. TDD and QA strategy
 
@@ -468,7 +500,7 @@ Implementation follows RED -> minimal GREEN -> regression.
 ### L0 — Source/state
 
 - confirm canonical `main` and PR #57 Classic Editor policy;
-- update authoritative architecture/roadmap source for the new Homepage Composer decision before production implementation proceeds beyond the design gate.
+- update authoritative AZT-02 architecture and AZT-04 roadmap/decision source for Homepage Composer before production implementation proceeds beyond the design gate.
 
 ### L1 — Static
 
@@ -484,14 +516,16 @@ Implementation follows RED -> minimal GREEN -> regression.
 Required contract coverage:
 
 - schema v1 -> v2 normalization/migration;
-- allow-listed `homepage_preset` values;
+- `homepage_preset` allow-list `off|law-01`;
 - typed Page/Category reference normalization;
 - invalid/missing/wrong-type reference fail-soft;
 - Services direct-child resolution;
 - bounded post queries;
-- display-ledger deduplication;
+- request-local display-ledger deduplication;
+- native `the_content` body executed/rendered exactly once when Composer is active;
 - Control Center type-safe mapping form and diagnostics;
 - applying preset does not mutate WordPress content;
+- Process/FAQ do not infer semantics from arbitrary body structure;
 - Law 01 required section order and fallback behavior;
 - retained Classic Editor policy contract.
 
@@ -502,8 +536,9 @@ On WordPress 6.9+ / PHP 8.1+:
 - activate Theme;
 - configure a static Front Page;
 - create representative Pages/Categories/Posts through test fixtures;
-- save Content Map references through Theme settings path;
+- save Content Map references through the Theme settings path;
 - render Law 01 Homepage;
+- verify a non-empty native Front Page body appears exactly once;
 - test mapped/unmapped/deleted source states;
 - verify no PHP fatal/warning/parse/uncaught Theme markers.
 
@@ -516,18 +551,20 @@ Test 1440/1024/390/320:
 - long Vietnamese content;
 - empty/fewer/more item states;
 - keyboard/focus;
-- axe critical/serious = 0;
+- axe critical/serious = 0 in Theme-owned scope;
 - overflow and duplicate IDs;
-- no console errors.
+- no Theme-caused console errors.
 
 ### L5 — Integration
 
 Relevant checks only:
 
 - RootProfile absent/present where current accepted public contracts are used;
-- optional contact provider absent => truthful fallback/hide behavior;
-- ConvertFlow coexistence must not transfer Journey semantics into Theme;
-- theme switch must leave WordPress content intact.
+- optional contact provider absent => truthful mapped-Page fallback/hide behavior;
+- ConvertFlow/public `the_content` coexistence: output preserved exactly once and Theme does not reconstruct Journey semantics;
+- theme switch leaves WordPress content intact.
+
+Do not claim ConvertFlow lifecycle/analytics integration PASS unless exact provider evidence is available at that layer.
 
 ### L6 — Completion/release
 
@@ -548,13 +585,13 @@ The work is split into three sub-projects so each can be independently reviewed 
 
 Deliver:
 
+- AZT source decision updates;
 - schema v2 settings/reference model;
 - Content Map resolver;
 - bounded query/read models;
 - request-local ledger;
-- fail-soft composer;
-- Control Center Homepage tab + diagnostics;
-- source/architecture updates.
+- native-body-preserving fail-soft composer;
+- Control Center Homepage tab + diagnostics.
 
 ### Sub-project B — Law 01 Presentation Preset
 
@@ -563,17 +600,17 @@ Deliver:
 - Law 01 section renderers/composition;
 - scoped CSS;
 - adaptive content states;
-- browser/a11y/runtime evidence;
+- runtime/browser/a11y evidence;
 - package-ready visual implementation.
 
 ### Sub-project C — Law Site Provisioning
 
-Deliver later unless it is proven necessary for the first downloadable package:
+Follow-on after the first package:
 
 - explicit starter setup operation;
 - idempotent Page/Category creation;
 - no-overwrite behavior;
-- automatic initial Content Map wiring using IDs returned from objects created by that exact provisioning operation.
+- initial Content Map wiring only from IDs returned by that exact provisioning operation.
 
 ## 18. First downloadable package acceptance
 
@@ -584,12 +621,11 @@ The first downloadable/updateable Theme package is acceptable when Sub-project A
 3. allow Law 01 selection in Control Center;
 4. allow type-safe mapping of existing WordPress Pages/Categories;
 5. render the complete Law 01 Homepage automatically from mapped real content;
-6. fail soft for missing/empty sources;
-7. preserve all WordPress content when changing or disabling the Homepage preset;
-8. pass retained runtime/browser/a11y/integration regressions;
-9. produce a verified ZIP + SHA + rollback reference.
-
-Provisioning is desirable but is not allowed to block the first safe downloadable package if Composer + Law 01 can already be configured from existing WordPress content.
+6. preserve non-empty public Front Page `the_content` output exactly once;
+7. fail soft for missing/empty sources;
+8. preserve all WordPress content when changing or disabling the Homepage preset;
+9. pass retained runtime/browser/a11y/integration regressions at the evidence layers actually available;
+10. produce a verified ZIP + SHA + rollback reference.
 
 ## 19. Non-goals for the first package
 
@@ -600,7 +636,9 @@ Provisioning is desirable but is not allowed to block the first safe downloadabl
 - no testimonial/review engine;
 - no legal service CPT;
 - no FAQ CPT/store;
+- no automatic parsing of arbitrary Classic Editor content into FAQ/process domain semantics;
 - no auto-generated legal claims;
 - no WooCommerce/Product work;
 - no ConvertFlow Journey implementation inside Theme;
+- no Law Site Provisioning in the first package;
 - no automatic merge/deploy without owner approval.
