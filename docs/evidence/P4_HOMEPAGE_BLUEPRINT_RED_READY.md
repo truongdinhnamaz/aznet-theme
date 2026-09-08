@@ -1,1 +1,0 @@
-RED branch is ready for CI verification before production code is added.
