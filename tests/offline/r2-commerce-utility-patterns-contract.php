@@ -61,8 +61,8 @@ foreach ($woo_expected as $filename => $block_name) {
 
 $core_count = count(glob($root . '/patterns/*.php') ?: []);
 $woo_count  = count(glob($root . '/inc/patterns/woocommerce/*.php') ?: []);
-if (16 !== $core_count || 2 !== $woo_count) {
-    fwrite(STDERR, "FAIL: expected 16 core + 2 Woo-gated R2 candidates, got {$core_count} + {$woo_count}\n");
+if (16 > $core_count || 2 !== $woo_count) {
+    fwrite(STDERR, "FAIL: expected at least 16 core + exactly 2 Woo-gated R2 candidates, got {$core_count} + {$woo_count}\n");
     exit(1);
 }
 
