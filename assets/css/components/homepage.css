@@ -19,8 +19,8 @@
 .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__hero {
     position: relative;
     min-height: clamp(31rem, 72vh, 47rem);
-    display: flex;
-    align-items: center;
+    display: grid;
+    align-content: center;
     background: linear-gradient(135deg, var(--aznet-theme-color-surface) 0%, var(--aznet-theme-color-surface-subtle) 100%);
     border-bottom: 1px solid var(--aznet-theme-color-border);
 }
