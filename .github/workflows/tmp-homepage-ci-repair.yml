@@ -1,9 +1,9 @@
 name: Temporary Homepage CI Repair
 
 on:
-  push:
+  pull_request:
     branches:
-      - work/homepage-composer-law01
+      - main
 
 permissions:
   contents: write
