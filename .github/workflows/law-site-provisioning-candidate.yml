@@ -25,8 +25,8 @@ jobs:
       - name: Checkout exact candidate
         uses: actions/checkout@v4
 
-      - name: Record exact identity
-        run: git rev-parse HEAD | tee CANDIDATE_HEAD_SHA.txt
+      - name: Record exact identity outside package source
+        run: git rev-parse HEAD | tee /tmp/CANDIDATE_HEAD_SHA.txt
 
       - name: Set up PHP 8.1
         uses: shivammathur/setup-php@v2
@@ -65,12 +65,13 @@ jobs:
           test ! -e /tmp/unpacked/aznet-theme/docs
           test ! -e /tmp/unpacked/aznet-theme/scripts
           test ! -e /tmp/unpacked/aznet-theme/tests
+          test ! -e /tmp/unpacked/aznet-theme/CANDIDATE_HEAD_SHA.txt
           python3 - <<'PY'
           from pathlib import Path
           import sys
           root=Path('.')
           unpacked=Path('/tmp/unpacked/aznet-theme')
-          excluded={'.git','.github','docs','scripts','tests'}
+          excluded={'.git','.github','docs','scripts','tests','candidate'}
           root_excluded={'README.md','aznet-preview.png'}
           source=[]
           for p in root.rglob('*'):
@@ -95,5 +96,5 @@ jobs:
           name: aznet-theme-law-site-provisioning-candidate
           path: |
             candidate/*
-            CANDIDATE_HEAD_SHA.txt
+            /tmp/CANDIDATE_HEAD_SHA.txt
           if-no-files-found: error
