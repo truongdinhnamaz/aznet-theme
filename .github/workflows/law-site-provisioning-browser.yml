@@ -4,6 +4,8 @@ on:
   pull_request:
     branches: [main, work/homepage-composer-law01]
     paths:
+      - 'style.css'
+      - 'functions.php'
       - 'inc/theme/provisioning-*.php'
       - 'inc/admin/provisioning.php'
       - 'inc/admin/control-center.php'
@@ -15,6 +17,7 @@ on:
       - 'tests/browser/law-site-provisioning-l4.mjs'
       - 'scripts/verify-v1-core.sh'
       - '.github/workflows/law-site-provisioning-browser.yml'
+      - '.github/workflows/law-site-provisioning-candidate.yml'
   workflow_dispatch:
 
 permissions:
@@ -34,7 +37,10 @@ jobs:
           --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
           --health-interval=10s --health-timeout=5s --health-retries=10
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout exact candidate head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Record exact checkout identity
         run: git rev-parse HEAD | tee /tmp/provisioning-head-sha.txt
       - name: Set up PHP 8.1
