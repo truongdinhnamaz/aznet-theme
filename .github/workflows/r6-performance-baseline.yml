@@ -105,6 +105,27 @@ jobs:
       - name: Verify reusable v1 core chain
         run: bash scripts/verify-v1-core.sh
 
+      - name: Exercise deterministic release package builder
+        run: |
+          set -euo pipefail
+          VERSION=$(sed -n 's/^Version:[[:space:]]*//p' style.css | head -n 1)
+          test -n "$VERSION"
+          rm -rf /tmp/r6-package-a /tmp/r6-package-b /tmp/r6-package-extracted /tmp/r6-package-expected
+          mkdir -p /tmp/r6-package-a /tmp/r6-package-b /tmp/r6-package-extracted /tmp/r6-package-expected/aznet-theme
+          python3 scripts/build-release-package.py --source . --output "/tmp/r6-package-a/aznet-theme-${VERSION}.zip" --version "$VERSION"
+          python3 scripts/build-release-package.py --source . --output "/tmp/r6-package-b/aznet-theme-${VERSION}.zip" --version "$VERSION"
+          cmp "/tmp/r6-package-a/aznet-theme-${VERSION}.zip" "/tmp/r6-package-b/aznet-theme-${VERSION}.zip"
+          sha256sum "/tmp/r6-package-a/aznet-theme-${VERSION}.zip" | tee /tmp/r6-performance/prepromotion-package-sha256.txt
+          unzip -q "/tmp/r6-package-a/aznet-theme-${VERSION}.zip" -d /tmp/r6-package-extracted
+          test "$(find /tmp/r6-package-extracted -mindepth 1 -maxdepth 1 -type d -printf '%f\n')" = 'aznet-theme'
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
+            ./ /tmp/r6-package-expected/aznet-theme/
+          diff -ru /tmp/r6-package-expected/aznet-theme /tmp/r6-package-extracted/aznet-theme
+          find /tmp/r6-package-extracted/aznet-theme -type f | LC_ALL=C sort > /tmp/r6-performance/prepromotion-package-files.txt
+          echo 'PASS: deterministic pre-promotion package builder exercised twice with exact-byte reverify'
+
       - name: Set up Node 22
         uses: actions/setup-node@v4
         with:
