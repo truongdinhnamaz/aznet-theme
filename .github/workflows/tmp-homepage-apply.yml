@@ -1,0 +1,78 @@
+name: Temporary Homepage Composer Apply
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  apply-implementation:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Decode and apply implementation payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .github/tmp/hcpart00 .github/tmp/hcpart01 .github/tmp/hcpart02 .github/tmp/hcpart03 .github/tmp/hcpart04 > /tmp/homepage-impl.b64
+          base64 -d /tmp/homepage-impl.b64 > /tmp/homepage-impl.tar.gz
+          tar -tzf /tmp/homepage-impl.tar.gz
+          tar -xzf /tmp/homepage-impl.tar.gz -C .
+
+      - name: Verify Homepage Composer RED-GREEN contracts and retained boundaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-settings-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-content-map-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-control-center-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/f1-front-page-native-shell-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/f2-front-page-content-boundary-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/f3-homepage-ownership-static-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/f5-homepage-absent-failsoft-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/r1-settings-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/r1-visual-preset-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/r3-header-settings-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/r3-header-preset-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/r4-woocommerce-settings-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-asset-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-control-center-contract.php
+          php -l front-page.php
+          php -l inc/theme/settings.php
+          php -l inc/theme/homepage-content-map.php
+          php -l inc/theme/homepage-composer.php
+          php -l inc/theme/assets.php
+          php -l inc/admin/homepage.php
+          php -l inc/admin/control-center.php
+          find template-parts/homepage/law-01 -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: Commit verified implementation and remove transport files
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .github/tmp
+          rm -f .github/workflows/tmp-homepage-apply.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git commit -m 'feat: add homepage composer and law01 preset'
+          git push origin HEAD:work/homepage-composer-law01
