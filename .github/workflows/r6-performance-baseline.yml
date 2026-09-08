@@ -8,7 +8,10 @@ on:
       - '.github/workflows/r6-performance-baseline.yml'
       - 'tests/browser/r6-performance-baseline.mjs'
       - 'tests/offline/r6-asset-scope-contract.php'
+      - 'tests/offline/r6-convertflow-asset-gate-contract.php'
       - 'tests/fixtures/r4-woocommerce-setup.php'
+      - 'docs/source/AZT-04-roadmap-qa-decisions.md'
+      - 'docs/evidence/R5_CONTROL_CENTER_L4.md'
       - '*.php'
       - 'inc/**'
       - 'template-parts/**'
@@ -22,7 +25,10 @@ on:
       - '.github/workflows/r6-performance-baseline.yml'
       - 'tests/browser/r6-performance-baseline.mjs'
       - 'tests/offline/r6-asset-scope-contract.php'
+      - 'tests/offline/r6-convertflow-asset-gate-contract.php'
       - 'tests/fixtures/r4-woocommerce-setup.php'
+      - 'docs/source/AZT-04-roadmap-qa-decisions.md'
+      - 'docs/evidence/R5_CONTROL_CENTER_L4.md'
       - '*.php'
       - 'inc/**'
       - 'template-parts/**'
@@ -72,6 +78,9 @@ jobs:
 
       - name: Verify R6 exact Theme asset-scope contract
         run: php tests/offline/r6-asset-scope-contract.php
+
+      - name: Verify R6 ConvertFlow public-capability gate
+        run: php tests/offline/r6-convertflow-asset-gate-contract.php
 
       - name: Set up Node 22
         uses: actions/setup-node@v4
