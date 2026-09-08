@@ -1,0 +1,1 @@
+Scope: AZnet Theme presentation-only Homepage blueprint. No provider/domain source, no automatic WordPress Page mutation, no tag/release/deploy.
