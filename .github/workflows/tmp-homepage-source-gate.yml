@@ -1,0 +1,88 @@
+name: Temporary Homepage Composer Source Gate
+
+on:
+  push:
+    branches:
+      - work/homepage-composer-law01
+
+permissions:
+  contents: write
+
+jobs:
+  amend-source:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply approved source amendments
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              if old not in text:
+                  raise SystemExit(f'marker not found in {path}: {old[:80]}')
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          # AZT-02
+          p = Path('docs/source/AZT-02-architecture.md')
+          text = p.read_text(encoding='utf-8')
+          text = text.replace('| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.5 |', '| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.6 |', 1)
+          section = '''\n\n# 12. Homepage Composer v1\n\nHomepage Composer là Theme-owned presentation composition, không phải content/domain engine.\n\n- Content Map chỉ lưu typed references tới WordPress Page/Category hiện hữu; không copy title/body/excerpt/contact/profile/query-result data.\n- Presentation Preset chỉ lưu Theme-owned layout/visual behavior và có thể đổi mà không mutation WordPress content.\n- `front-page.php` phải giữ WordPress Loop của Front Page và đúng một `the_content()` execution để WordPress/public provider filters giữ nguyên boundary.\n- Theme được render mapped WordPress-native presentation sections quanh body boundary đó nhưng không được reconstruct ConvertFlow Journey semantics.\n- Reference validation dựa trên object type/publication state. Missing/invalid reference phải fail-soft; cấm title/slug/URL heuristic repair.\n- Law 01 v1 không có RootProfile team-collection integration vì chưa tồn tại accepted public collection contract cho use case này.\n- Applying Homepage preset không được create/rewrite/delete/publish/reclassify WordPress content.\n'''
+          if '# 12. Homepage Composer v1' not in text:
+              text = text.rstrip() + section + '\n'
+          p.write_text(text, encoding='utf-8')
+
+          # AZT-04
+          p = Path('docs/source/AZT-04-roadmap-qa-decisions.md')
+          text = p.read_text(encoding='utf-8')
+          text = text.replace('**Version:** v0.28', '**Version:** v0.29', 1)
+          d23 = '| **D-023** | **Professional editorial/law-site pilot hardening remains generic Theme presentation: WordPress owns publication/content state, SEO owner keeps metadata/schema, and no legal/domain semantics move into Theme** | **Accepted** |'
+          d24 = '| **D-024** | **Homepage template switching uses a stable typed Content Map plus Theme-owned Presentation Preset; Classic Editor remains for native Post/Page; provisioning is separate from preset application; the Front Page keeps exactly one `the_content()` boundary and no provider/domain semantics are cloned into Theme.** | **Accepted** |'
+          if d24 not in text:
+              if d23 not in text:
+                  raise SystemExit('D-023 marker not found in AZT-04')
+              text = text.replace(d23, d23 + '\n' + d24, 1)
+          slice_text = '''\n### P4-A — Homepage Composer + Law 01\n\n**State:** APPROVED / IMPLEMENTATION ACTIVE.\n\nImplement the approved Homepage Composer Core + `law-01` presentation preset as a bounded Theme-owned presentation slice. Content Map stores typed WordPress references only; preset switching must not mutate WordPress content. Native Post/Page Classic Editor policy remains. `front-page.php` retains exactly one `the_content()` boundary. Law Site Provisioning is a separate follow-on slice.\n\n**Gates:** L1 static -> L2 RED/GREEN contracts -> L3 disposable WordPress runtime -> L4 browser/visual/a11y -> deterministic candidate package. Main merge, release tag and production deployment remain explicit owner gates.\n\n'''
+          if '### P4-A — Homepage Composer + Law 01' not in text:
+              marker = '### P5 — Publication and deployment'
+              if marker not in text:
+                  raise SystemExit('P5 marker not found in AZT-04')
+              text = text.replace(marker, slice_text + marker, 1)
+          p.write_text(text, encoding='utf-8')
+
+          # SOURCE_MANIFEST
+          p = Path('docs/source/SOURCE_MANIFEST.md')
+          text = p.read_text(encoding='utf-8')
+          text = text.replace('`AZT-02-architecture.md` | v0.5', '`AZT-02-architecture.md` | v0.6')
+          text = text.replace('`AZT-04-roadmap-qa-decisions.md` | v0.28', '`AZT-04-roadmap-qa-decisions.md` | v0.29')
+          text = text.replace('D-001..D-023', 'D-001..D-024')
+          p.write_text(text, encoding='utf-8')
+
+          # EXEC MAP
+          p = Path('docs/source/AZT-EXEC-MAP.md')
+          text = p.read_text(encoding='utf-8')
+          if '**Version:** v0.20' in text:
+              text = text.replace('**Version:** v0.20', '**Version:** v0.21', 1)
+          note = '''\n> **D-024 exact next:** Homepage Composer Core + `law-01` is the approved Theme-owned implementation slice. Stable typed Content Map is independent from Presentation Preset; Classic Editor remains for native Post/Page; Law Site Provisioning is separate and is not required for the first downloadable candidate.\n'''
+          if '> **D-024 exact next:**' not in text:
+              marker = 'This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.\n'
+              if marker not in text:
+                  raise SystemExit('EXEC map intro marker not found')
+              text = text.replace(marker, marker + note, 1)
+          p.write_text(text, encoding='utf-8')
+          PY
+      - name: Commit source gate
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/source/AZT-02-architecture.md docs/source/AZT-04-roadmap-qa-decisions.md docs/source/SOURCE_MANIFEST.md docs/source/AZT-EXEC-MAP.md
+          git diff --cached --check
+          git commit -m 'docs: ratify homepage composer law01 architecture'
+          git push origin HEAD:work/homepage-composer-law01
