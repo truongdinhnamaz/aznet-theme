@@ -1,1 +1,0 @@
-Tooling recovery note: feature implementation will proceed from canonical main on a clean branch.
