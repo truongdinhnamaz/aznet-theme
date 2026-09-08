@@ -8,11 +8,14 @@ on:
       - '.github/workflows/r6-performance-baseline.yml'
       - '.github/workflows/v1-core-ci.yml'
       - '.github/workflows/v1-main-verification.yml'
+      - '.github/workflows/v1-release-candidate.yml'
       - 'scripts/verify-v1-core.sh'
+      - 'scripts/build-release-package.py'
       - 'tests/browser/r6-performance-baseline.mjs'
       - 'tests/offline/r6-asset-scope-contract.php'
       - 'tests/offline/r6-convertflow-asset-gate-contract.php'
       - 'tests/offline/r6-ci-trigger-contract.php'
+      - 'tests/offline/r6-release-workflow-contract.php'
       - 'tests/fixtures/r4-woocommerce-setup.php'
       - 'docs/source/AZT-04-roadmap-qa-decisions.md'
       - 'docs/evidence/R5_CONTROL_CENTER_L4.md'
@@ -29,11 +32,14 @@ on:
       - '.github/workflows/r6-performance-baseline.yml'
       - '.github/workflows/v1-core-ci.yml'
       - '.github/workflows/v1-main-verification.yml'
+      - '.github/workflows/v1-release-candidate.yml'
       - 'scripts/verify-v1-core.sh'
+      - 'scripts/build-release-package.py'
       - 'tests/browser/r6-performance-baseline.mjs'
       - 'tests/offline/r6-asset-scope-contract.php'
       - 'tests/offline/r6-convertflow-asset-gate-contract.php'
       - 'tests/offline/r6-ci-trigger-contract.php'
+      - 'tests/offline/r6-release-workflow-contract.php'
       - 'tests/fixtures/r4-woocommerce-setup.php'
       - 'docs/source/AZT-04-roadmap-qa-decisions.md'
       - 'docs/evidence/R5_CONTROL_CENTER_L4.md'
@@ -92,6 +98,9 @@ jobs:
 
       - name: Verify R6 reusable CI trigger contract
         run: php tests/offline/r6-ci-trigger-contract.php
+
+      - name: Verify R6 release workflow contract
+        run: php tests/offline/r6-release-workflow-contract.php
 
       - name: Verify reusable v1 core chain
         run: bash scripts/verify-v1-core.sh
