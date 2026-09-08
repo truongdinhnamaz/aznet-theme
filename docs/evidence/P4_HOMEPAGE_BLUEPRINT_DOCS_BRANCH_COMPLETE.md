@@ -1,1 +1,0 @@
-Docs branch checkpoint complete; feature implementation proceeds separately.
