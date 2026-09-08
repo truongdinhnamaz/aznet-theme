@@ -1,0 +1,175 @@
+name: V1 Exact Main Verification
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - '*.php'
+      - 'inc/**'
+      - 'template-parts/**'
+      - 'assets/**'
+      - 'patterns/**'
+      - 'theme.json'
+      - 'style.css'
+
+permissions:
+  contents: read
+
+jobs:
+  static-contracts:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact main commit
+        uses: actions/checkout@v4
+      - name: Record exact main SHA
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/v1-main-static
+          printf '%s\n' '${{ github.sha }}' | tee /tmp/v1-main-static/checkout-sha.txt
+          test "$(git rev-parse HEAD)" = '${{ github.sha }}'
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Verify reusable v1 core static and contract gate
+        run: bash scripts/verify-v1-core.sh
+      - name: Upload exact-main static evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v1-main-static-contracts
+          path: /tmp/v1-main-static
+          if-no-files-found: error
+
+  clean-runtime-browser:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Checkout exact main commit
+        uses: actions/checkout@v4
+      - name: Record exact main SHA
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/v1-main-browser
+          mkdir -p /tmp/v1-main-browser
+          printf '%s\n' '${{ github.sha }}' | tee /tmp/v1-main-browser/checkout-sha.txt
+          git rev-parse HEAD | tee /tmp/v1-main-browser/git-head.txt
+          test "$(git rev-parse HEAD)" = '${{ github.sha }}'
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install WordPress 6.9 and exact core fixtures
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          rm -rf /tmp/wp
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='AZnet V1 Exact Main' --admin_user=admin --admin_password='v1-main-password' --admin_email=main@example.test --skip-email --allow-root
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
+            ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+
+          FRONT_ID=$(wp post create --post_type=page --post_status=publish --post_title='Core Front Page' --post_name='core-front-page' --post_content='<p>G5 front sentinel</p><h2>Core front body</h2><p><a href="#front-target">Front focus target</a></p><h3 id="front-target">Front target</h3>' --porcelain --path=/tmp/wp --allow-root)
+          wp post create --post_type=page --post_status=publish --post_title='Native Page' --post_name='native-page' --post_content='<p>G5 page sentinel</p><h2>Native page body</h2><p>Responsive content boundary check.</p>' --path=/tmp/wp --allow-root >/dev/null
+          POST_ID=$(wp post create --post_type=post --post_status=publish --post_title='Core Sentinel Post' --post_name='core-sentinel-post' --post_content='<p>G5 post core-sentinel content</p><h2>Post body</h2>' --porcelain --path=/tmp/wp --allow-root)
+          wp term create category 'Core Test' --slug=core-test --path=/tmp/wp --allow-root >/dev/null
+          wp post term set "$POST_ID" category core-test --path=/tmp/wp --allow-root
+          MENU_ID=$(wp menu create 'Primary' --porcelain --path=/tmp/wp --allow-root)
+          wp menu item add-custom "$MENU_ID" 'Home' 'http://127.0.0.1:8080/' --path=/tmp/wp --allow-root >/dev/null
+          wp menu item add-custom "$MENU_ID" 'Native Page' 'http://127.0.0.1:8080/native-page/' --path=/tmp/wp --allow-root >/dev/null
+          wp menu location assign "$MENU_ID" primary --path=/tmp/wp --allow-root
+          wp option update show_on_front page --path=/tmp/wp --allow-root
+          wp option update page_on_front "$FRONT_ID" --path=/tmp/wp --allow-root
+          wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+          wp core version --path=/tmp/wp --allow-root | tee /tmp/v1-main-browser/wordpress-version.txt | grep -Fx '6.9'
+          wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+          wp plugin list --status=active --field=name --path=/tmp/wp --allow-root | tee /tmp/v1-main-browser/active-plugins.txt
+          test ! -s /tmp/v1-main-browser/active-plugins.txt
+      - name: Start exact-main WordPress runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/v1-main-browser/server.log 2>&1 &
+          echo $! > /tmp/v1-main-browser/server.pid
+          for attempt in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:8080/ >/tmp/v1-main-browser/home-smoke.html && break
+            sleep 1
+          done
+          grep -F 'G5 front sentinel' /tmp/v1-main-browser/home-smoke.html
+      - name: Verify exact-main clean runtime routes
+        run: |
+          set -euo pipefail
+          request() {
+            local name="$1" url="$2" expected="$3" sentinel="$4"
+            local file="/tmp/v1-main-browser/runtime-${name}.html"
+            local code
+            code=$(curl -sS -o "$file" -w '%{http_code}' "$url")
+            test "$code" = "$expected"
+            grep -F 'aznet-theme-site-header' "$file"
+            grep -F 'id="main"' "$file"
+            grep -F 'aznet-theme-site-footer' "$file"
+            if [[ -n "$sentinel" ]]; then grep -F "$sentinel" "$file"; fi
+          }
+          request home 'http://127.0.0.1:8080/' 200 'G5 front sentinel'
+          request page 'http://127.0.0.1:8080/native-page/' 200 'G5 page sentinel'
+          request post 'http://127.0.0.1:8080/core-sentinel-post/' 200 'G5 post core-sentinel content'
+          request archive 'http://127.0.0.1:8080/category/core-test/' 200 'Core Sentinel Post'
+          request search 'http://127.0.0.1:8080/?s=core-sentinel' 200 'Core Sentinel Post'
+          request notfound 'http://127.0.0.1:8080/definitely-missing/' 404 ''
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/v1-main-browser/server.log; then
+            echo 'FAIL: Theme-caused PHP error marker found in exact-main runtime' >&2
+            exit 1
+          fi
+          echo 'PASS: exact-main WordPress 6.9 clean runtime'
+      - name: Install Playwright and axe
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+      - name: Run exact-main core browser and a11y verification
+        env:
+          G_CORE_BASE_URL: http://127.0.0.1:8080
+          G_CORE_STATE_DIR: /tmp/v1-main-browser
+        run: |
+          set -euo pipefail
+          node tests/browser/g-core-l4.mjs
+          test -f /tmp/v1-main-browser/browser-summary.json
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/v1-main-browser/server.log; then
+            echo 'FAIL: Theme-caused PHP error marker found after exact-main browser verification' >&2
+            exit 1
+          fi
+          echo 'PASS: exact-main browser/a11y gate'
+      - name: Upload exact-main runtime/browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v1-main-clean-runtime-browser
+          path: /tmp/v1-main-browser
+          if-no-files-found: error
