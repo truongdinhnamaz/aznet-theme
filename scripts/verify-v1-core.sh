@@ -90,6 +90,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-plan-c
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-runner-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-idempotency-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-readiness-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-admin-a11y-contract.php
 
 printf '%s\n' '==> Classic Editor policy contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/classic-editor-policy-contract.php

@@ -22,19 +22,25 @@ function render_provisioning_invitation(): void {
 
 function provisioning_action_select( string $kind, string $role, array $candidates, bool $new_site, bool $required ): void {
     $default = $new_site || $required ? 'create' : 'skip';
-    echo '<div class="aznet-theme-provision-row"><strong>' . esc_html( $role ) . '</strong>';
-    echo '<select name="' . esc_attr( $kind ) . '[' . esc_attr( $role ) . '][action]">';
+    $base_id = 'aznet-theme-provision-' . sanitize_html_class( $kind . '-' . $role );
+    $action_id = $base_id . '-action';
+    $object_id = $base_id . '-object';
+    echo '<fieldset class="aznet-theme-provision-row"><legend><strong>' . esc_html( $role ) . '</strong></legend>';
+    echo '<label class="screen-reader-text" for="' . esc_attr( $action_id ) . '">' . esc_html( sprintf( __( 'Hành động cho %s', 'aznet-theme' ), $role ) ) . '</label>';
+    echo '<select id="' . esc_attr( $action_id ) . '" name="' . esc_attr( $kind ) . '[' . esc_attr( $role ) . '][action]">';
     foreach ( [ 'create' => 'Create new', 'reuse' => 'Reuse existing', 'skip' => 'Skip' ] as $value => $label ) {
         if ( $required && 'skip' === $value ) { continue; }
         echo '<option value="' . esc_attr( $value ) . '" ' . selected( $default, $value, false ) . '>' . esc_html( $label ) . '</option>';
     }
-    echo '</select><select name="' . esc_attr( $kind ) . '[' . esc_attr( $role ) . '][object_id]"><option value="0">—</option>';
+    echo '</select>';
+    echo '<label class="screen-reader-text" for="' . esc_attr( $object_id ) . '">' . esc_html( sprintf( __( 'Nguồn WordPress hiện có cho %s', 'aznet-theme' ), $role ) ) . '</label>';
+    echo '<select id="' . esc_attr( $object_id ) . '" name="' . esc_attr( $kind ) . '[' . esc_attr( $role ) . '][object_id]"><option value="0">—</option>';
     foreach ( $candidates as $candidate ) {
         $id = (int) ( $candidate['id'] ?? 0 );
         $label = $candidate['title'] ?? $candidate['name'] ?? (string) $id;
         echo '<option value="' . esc_attr( (string) $id ) . '">' . esc_html( (string) $label ) . ' (#' . esc_html( (string) $id ) . ')</option>';
     }
-    echo '</select></div>';
+    echo '</select></fieldset>';
 }
 
 function handle_provisioning_plan(): void {
@@ -99,7 +105,7 @@ function render_provisioning_wizard(): void {
         foreach ( $blueprint['pages'] as $role => $definition ) { provisioning_action_select( 'pages', $role, $state['pages'], $new_site, in_array( $role, [ 'home','about','services','contact' ], true ) ); }
         foreach ( $blueprint['categories'] as $role => $definition ) { provisioning_action_select( 'categories', $role, $state['categories'], $new_site, false ); }
         $menu_default = (int) $state['primary_menu_id'] > 0 ? 'reuse' : 'create';
-        echo '<div class="aznet-theme-provision-row"><strong>Primary Menu</strong><select name="menu_action"><option value="create" ' . selected( $menu_default, 'create', false ) . '>Create new</option><option value="reuse" ' . selected( $menu_default, 'reuse', false ) . '>Reuse assigned</option><option value="skip">Skip</option></select><input type="number" min="0" name="menu_id" value="' . esc_attr( (string) $state['primary_menu_id'] ) . '"></div>';
+        echo '<fieldset class="aznet-theme-provision-row"><legend><strong>Primary Menu</strong></legend><label class="screen-reader-text" for="aznet-theme-provision-menu-action">' . esc_html__( 'Hành động cho Primary Menu', 'aznet-theme' ) . '</label><select id="aznet-theme-provision-menu-action" name="menu_action"><option value="create" ' . selected( $menu_default, 'create', false ) . '>Create new</option><option value="reuse" ' . selected( $menu_default, 'reuse', false ) . '>Reuse assigned</option><option value="skip">Skip</option></select><label class="screen-reader-text" for="aznet-theme-provision-menu-id">' . esc_html__( 'ID Primary Menu hiện có', 'aznet-theme' ) . '</label><input id="aznet-theme-provision-menu-id" type="number" min="0" name="menu_id" value="' . esc_attr( (string) $state['primary_menu_id'] ) . '"></fieldset>';
         submit_button( __( 'Xem trước thay đổi', 'aznet-theme' ) ); echo '</form>';
     } elseif ( 3 === $step ) {
         $plan = get_transient( provisioning_plan_transient_key() );
