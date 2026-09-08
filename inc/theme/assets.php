@@ -121,6 +121,15 @@ function enqueue_assets(): void {
         );
     }
 
+    if ( function_exists( 'is_singular' ) && is_singular( 'post' ) ) {
+        wp_enqueue_style(
+            'aznet-theme-article',
+            get_theme_file_uri( '/assets/css/components/article.css' ),
+            [ 'aznet-theme-tokens', 'aznet-theme-generic-content' ],
+            $version
+        );
+    }
+
     if ( should_enqueue_woocommerce_product_assets() ) {
         wp_enqueue_style(
             'aznet-theme-woocommerce-product',

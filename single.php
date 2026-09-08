@@ -13,21 +13,12 @@ get_header();
 
 $shell_classes = \AZnet\Theme\content_shell_classes( false );
 ?>
-<main id="main" class="aznet-theme-main">
+<main id="main" class="aznet-theme-main aznet-theme-main--article">
     <?php if ( have_posts() ) : ?>
         <?php while ( have_posts() ) : ?>
             <?php the_post(); ?>
             <div class="<?php echo esc_attr( implode( ' ', $shell_classes ) ); ?>">
-                <article id="post-<?php the_ID(); ?>" <?php post_class( 'aznet-theme-entry aznet-theme-entry--post' ); ?>>
-                    <header class="aznet-theme-entry__header">
-                        <h1 class="aznet-theme-entry__title"><?php the_title(); ?></h1>
-                    </header>
-
-                    <div class="aznet-theme-entry__content">
-                        <?php the_content(); ?>
-                        <?php wp_link_pages(); ?>
-                    </div>
-                </article>
+                <?php get_template_part( 'template-parts/content/content', 'single' ); ?>
             </div>
         <?php endwhile; ?>
     <?php else : ?>
