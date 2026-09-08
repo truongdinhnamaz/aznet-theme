@@ -60,13 +60,16 @@ foreach (['actions/create-release', 'softprops/action-gh-release', 'git tag ', '
 }
 
 $builderMarkers = [
-    "'aznet-theme'",
+    "PACKAGE_ROOT = 'aznet-theme'",
     'ZipInfo',
-    'date_time',
+    'FIXED_ZIP_TIME = (2020, 1, 1, 0, 0, 0)',
     'external_attr',
     'sorted(',
     'style.css',
     'functions.php',
+    'theme.json',
+    'front-page.php',
+    'index.php',
     'AZNET_THEME_VERSION',
 ];
 
@@ -80,6 +83,10 @@ foreach (['.git', '.github', 'docs', 'scripts', 'tests', 'README.md', 'aznet-pre
     if (! str_contains($builder, $excluded)) {
         fail_r6_release("package builder missing exclusion: {$excluded}");
     }
+}
+
+if (! str_contains($builder, 'any(part in EXCLUDED_DIRS for part in relative.parts)')) {
+    fail_r6_release('package builder must preserve the legacy exclusion rule at any path depth');
 }
 
 echo "PASS: R6 deterministic reusable v1.x release-candidate workflow contract\n";
