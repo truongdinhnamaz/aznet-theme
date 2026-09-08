@@ -104,12 +104,17 @@ try {
       const label = `${viewportName}-${route.name}`;
       try {
         if (mode === 'woo' && ['cart', 'checkout'].includes(route.name)) {
-          const seedResponse = await page.goto(`${baseUrl}/?add-to-cart=${wooProductId}`, {
-            waitUntil: 'domcontentloaded',
-            timeout: 30000,
-          });
-          if (!seedResponse || seedResponse.status() >= 400) {
-            throw new Error(`${label}: unable to seed Woo cart`);
+          const seedPage = await context.newPage();
+          try {
+            const seedResponse = await seedPage.goto(`${baseUrl}/?add-to-cart=${wooProductId}`, {
+              waitUntil: 'domcontentloaded',
+              timeout: 30000,
+            });
+            if (!seedResponse || seedResponse.status() >= 400) {
+              throw new Error(`${label}: unable to seed Woo cart`);
+            }
+          } finally {
+            await seedPage.close();
           }
         }
 
