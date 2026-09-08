@@ -77,6 +77,7 @@ The first production blueprint will contain these native sections in this order.
 - short eyebrow;
 - concise supporting paragraph;
 - primary CTA and secondary CTA using core Button blocks;
+- default CTA targets are in-page anchors `#services` and `#contact`, with corresponding target sections in the same pattern;
 - no hard-coded external URL, Page ID or provider route;
 - starter text must be clearly editable and must not assert unverified business facts.
 
@@ -88,7 +89,7 @@ This section must avoid fabricated testimonials, certifications, client counts, 
 
 ### 6.3 Services / expertise overview
 
-A responsive card grid built from core Group/Columns blocks.
+A responsive card grid built from core Group/Columns blocks and carrying the `services` anchor target.
 
 The pattern provides presentation placeholders only. The Theme does not define authoritative legal services, product taxonomy or business-domain categories.
 
@@ -119,7 +120,7 @@ The Theme does not create legal advice, structured FAQ schema or domain answers.
 
 ### 6.8 Final CTA / contact handoff
 
-A final call-to-action section with native Buttons and editable contact-oriented copy.
+A final call-to-action section carrying the `contact` anchor target, with native Buttons and editable contact-oriented copy.
 
 No contact form engine, lead state, conversion tracking or private provider integration is introduced.
 
@@ -152,7 +153,7 @@ Frontend loading must be surface-aware:
 - existing design tokens and `theme.json` presets remain the visual source;
 - no new bundler/build stack.
 
-For editor parity, the same scoped presentation may be loaded in the Block Editor in a way that remains inert unless the blueprint classes are present. Editor support must not create a second content model.
+Editor parity will use `enqueue_block_editor_assets` to load the same small scoped Homepage stylesheet in the Block Editor. Because every selector is rooted under `.aznet-theme-homepage-blueprint`, the stylesheet remains inert for editor content that does not contain the blueprint. This editor asset does not create a second content model.
 
 ## 9. `front-page.php` behavior
 
@@ -209,6 +210,7 @@ Add a contract that fails before the full-page pattern exists and then protects:
 
 - expected pattern slug/title/category;
 - one H1 and required section markers;
+- matching `services` / `contact` in-page anchor targets;
 - native core Query block for recent Posts;
 - native FAQ/details presentation;
 - no provider-private APIs/storage;
@@ -219,7 +221,7 @@ Add a contract that fails before the full-page pattern exists and then protects:
 
 ### 12.2 Asset-scope contract — RED first
 
-Protect that Homepage CSS is registered/enqueued only for the Front Page and remains class-scoped.
+Protect that Homepage CSS is frontend-enqueued only for the Front Page, is editor-enqueued through the explicit editor hook, and remains root-class scoped.
 
 ### 12.3 Control Center guidance contract
 
@@ -289,7 +291,7 @@ Expected production touch points are bounded to:
 - `patterns/homepage-professional-services.php`;
 - `inc/theme/patterns.php` for the new Pages category if needed;
 - `assets/css/components/homepage.css`;
-- `inc/theme/assets.php` for Front Page asset scope;
+- `inc/theme/assets.php` for Front Page/editor asset scope;
 - `inc/admin/control-center.php` for non-mutating Homepage setup guidance;
 - tests/workflow/evidence needed to prove the slice.
 
