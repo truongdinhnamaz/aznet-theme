@@ -20,6 +20,18 @@ if (!class_exists('WP_Post')) {
     }
 }
 
+$GLOBALS['aznet_theme_test_options'] = [
+    'show_on_front' => 'page',
+    'page_on_front' => 300,
+];
+
+if (!function_exists('get_option')) {
+    function get_option(string $key, mixed $default = false): mixed
+    {
+        return $GLOBALS['aznet_theme_test_options'][$key] ?? $default;
+    }
+}
+
 function classic_editor_policy_fail(string $message): never
 {
     fwrite(STDERR, "FAIL: {$message}\n");
