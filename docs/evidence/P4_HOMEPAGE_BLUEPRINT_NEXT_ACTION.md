@@ -1,1 +1,0 @@
-Next action: create isolated feature branch from this checkpoint and start RED contracts.
