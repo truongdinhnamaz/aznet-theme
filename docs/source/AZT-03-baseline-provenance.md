@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.23  
+**Version:** v0.24  
 **Status:** Working Source  
 **Date:** 08/09/2026  
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -13,10 +13,9 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 
 ## 2. Current canonical baseline
 
-- Canonical implementation/release baseline: `main@4673202f67068294fe92d49d1ed66e371d0ecbb3`.
-- Current canonical repository head after the evidence/plan-only PR #49: `main@38843b08bdc5a3d3dccbc2447029879701168db3`; PR #49 changes no production PHP/CSS/JS/test/workflow bytes.
-- Verified v1.1 implementation tree at metadata promotion: `dca0e3719063cdee22e3e535e16c61b24a8a6046`.
-- Internal Theme version: `1.1.0`.
+- Current canonical repository/implementation head after P3: `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`.
+- Current implementation tree: `8fc309ea8e01bfe727da943754c98164b3f92a58`.
+- Internal Theme version remains `1.1.0`.
 - WordPress floor: `6.9+`.
 - PHP floor: `8.1+`.
 - Architecture: hybrid PHP theme + `theme.json`.
@@ -38,7 +37,9 @@ Current production state includes:
 - R3 Header System 2.0 with four bounded Theme-owned presets (`standard`, `compact`, `commerce`, `overlay`), three sticky modes, shared primitives/composer, accessible progressive-enhancement mobile navigation and public-Woo fail-soft Commerce actions;
 - R4 WooCommerce Presentation 2.0 with bounded catalog/card/product presentation presets, native Woo product/gallery/variation controls, responsive Cart/Checkout/Account presentation and public-capability/content-gated Woo Blocks styling while WooCommerce retains commerce truth;
 - R5 Control Center + System Health with WordPress-native Logo/Menu ownership, the single `aznet_theme_settings` presentation schema, guarded save/reset/import/export, public/read-only capability diagnostics and update/theme-switch continuity evidence;
-- R6 Performance + Release 2.0 technical closure: measured asset/performance evidence, reusable PR/exact-main verification, deterministic v1.x package infrastructure, bounded workflow retirement, atomic metadata promotion to `1.1.0`, and post-promotion exact-main/package verification.
+- R6 Performance + Release 2.0 technical closure: measured asset/performance evidence, reusable PR/exact-main verification, deterministic v1.x package infrastructure, bounded workflow retirement, atomic metadata promotion to `1.1.0`, and post-promotion exact-main/package verification;
+- P2 Editorial Single-Post Hardening: native WordPress publication presentation, singular-Post scoped article assets and fail-soft native author handling without SEO/domain/query takeover;
+- P3 Editorial Listing/Search Hardening: native featured image/date scan presentation and resilient long-title/excerpt styling while preserving WordPress main-query ownership.
 
 PR #34 final verified head is `b2e5cca1461233bcb1a0333c5aa51879c3264756`. Its tree `b716b89f04e45c2012f8e191c7d0edf605c9dd11` is identical to the merge commit tree on canonical `main@f8e1a95c903c3f246528368ae9878eba780539ff`, so the v1.0 technical merge introduced no conflict-resolution production delta.
 
@@ -64,9 +65,15 @@ R6 infrastructure merged through PR #46 to `main@a3dc550bd748acab59e1df2384f8e2a
 
 Post-merge workflow retirement merged through PR #47 to `main@27537e520ba15afe771cea86080abd99a7276a35`, removing only superseded G workflows after replacement coverage and retaining unmatched lifecycle/version gates.
 
-Owner-approved metadata promotion merged through PR #48 to `main@4673202f67068294fe92d49d1ed66e371d0ecbb3`. `style.css` Theme Version and `AZNET_THEME_VERSION` were promoted atomically to exact `1.1.0` after RED -> GREEN version and byte-preservation gates. Fresh exact-main verification succeeded on those promoted bytes. Manual `V1 Release Candidate Package` run `34187975628` also succeeded on that exact main SHA. The deterministic candidate is `aznet-theme-1.1.0.zip`, contains exactly one top-level `aznet-theme/` directory and has SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b`.
+Owner-approved metadata promotion merged through PR #48 to `main@4673202f67068294fe92d49d1ed66e371d0ecbb3`. `style.css` Theme Version and `AZNET_THEME_VERSION` were promoted atomically to exact `1.1.0` after RED -> GREEN version and byte-preservation gates. Fresh exact-main verification succeeded on those promoted bytes. Manual `V1 Release Candidate Package` run `34187975628` also succeeded on that exact main SHA. The deterministic R6 candidate was `aznet-theme-1.1.0.zip`, contained exactly one top-level `aznet-theme/` directory and had SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b`.
 
-PR #49 merged evidence/audit and the law-site production-readiness plan to `main@38843b08bdc5a3d3dccbc2447029879701168db3`; it changes documentation only and therefore does not invalidate the verified v1.1 production/package bytes.
+PR #49 merged evidence/audit and the law-site production-readiness plan to `main@38843b08bdc5a3d3dccbc2447029879701168db3`; it changed documentation only and therefore did not invalidate the then-verified R6 package bytes.
+
+P2 Editorial Single-Post Hardening merged through PR #51 from final verified head `dec498b997aec6bc8b08cf91f3e09c42611bbd66` to `main@a863da861b6a299920568b2b0c9ca57924727431`. It added bounded native-Post editorial presentation and singular-Post scoped article CSS. During verification, regressions caught an empty native-author link and a Woo/CPT scope leak; both were reduced to Theme-owned root causes and fixed before merge. Fresh exact-main verification succeeded after merge.
+
+P3 Editorial Listing/Search Hardening merged through PR #52 from final verified head `d78091900451176c3815b23d1485036e784bdde9` to `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`. Head and merge share tree `8fc309ea8e01bfe727da943754c98164b3f92a58`. Fresh `V1 Exact Main Verification` run `34195248467` completed successfully on that exact merge SHA, covering reusable static/contracts plus clean WordPress 6.9 runtime/browser/a11y.
+
+Because P2/P3 changed production bytes after the R6 package, SHA-256 `000735...` is now **historical R6 candidate evidence**, not the final package for P4/P5. A new deterministic package/SHA must be produced from the final post-hardening bytes before publication.
 
 No source statement above transfers domain ownership to the Theme.
 
@@ -75,18 +82,19 @@ No source statement above transfers domain ownership to the Theme.
 Under AZT-05 v1.0 and D-016:
 
 - WordPress-clean core Theme readiness is release-critical.
-- R0 through R6 core-v1.1 technical implementation/release-candidate closure is complete.
-- Theme metadata is `1.1.0`; package filenames do not substitute for metadata.
-- The verified deterministic v1.1 candidate is byte-specific to `main@4673202f...` and SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b`.
-- Release publication is tracked separately from implementation readiness. A fresh 08/09/2026 GitHub release check returns no GitHub Release; no tag evidence has been established, so publication remains `PUBLICATION_PENDING`.
-- Production deployment remains unapproved and is not inferred from the pilot site manually running candidate Theme bytes.
+- R0 through R6 core-v1.1 technical implementation/release-candidate closure remains complete.
+- P2 and P3 editorial production-hardening implementation is now merged and exact-main verified.
+- Theme metadata remains `1.1.0`; package filenames do not substitute for metadata.
+- The R6 package hash `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b` is retained as historical provenance only because later P2/P3 production bytes invalidate it as a final candidate.
+- Release publication is tracked separately from implementation readiness. No GitHub Release or tag publication has been established; publication remains `PUBLICATION_PENDING`.
+- Production deployment remains separately approval-gated. Approval to run P4 pilot QA does not imply final production deployment.
 - RootProfile E5-C/E5-D remains an optional provider certification/takeover track, not a core-v1.x blocker.
 - ConvertFlow F6/F7 actual-package integration evidence remains retained; F8 integrated compatibility remains BLOCKED because provider body output introduces a second document-level `<main>` inside Theme-owned `main#main`.
 - R6 ConvertFlow projection asset optimization remains `BLOCKED_EXTERNAL_CONTRACT` until a documented public/versioned Theme-consumable capability exists; safe global bridge behavior is retained.
 - External compatibility defects must not be bypassed with private APIs, authoritative heuristics or copied domain logic.
 - The pilot System Health evidence shows active AZnet Theme `1.1.0` on WordPress `7.1` / PHP `8.4.24`, primary menu continuity, RootProfile v1/v2 present, RootProfile current-surface absent, Woo absent and ConvertFlow intentionally `unknown`.
 
-Current product-development next is governed by AZT-04. R6 is closed; the next Theme-owned production-quality slice is generic editorial single-post hardening, while duplicate-theme cleanup on the pilot site remains a separate destructive site-operations gate.
+Current product-development next is governed by AZT-04. P2/P3 are closed; the exact next is P4 Real Pilot QA. Duplicate-theme cleanup on the pilot remains a separate destructive site-operations gate until completed.
 
 ## 4. Registered source artifacts
 
@@ -164,4 +172,4 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**R6 is technically closed. Follow AZT-04 for the approved post-R6 production-readiness sequence. The next Theme-owned implementation slice is generic Editorial Single-Post Hardening from the latest canonical `main`; pilot duplicate-theme deletion remains a separate destructive site-operations step and must not be automated by the Theme.**
+**P4 — Real Pilot QA from canonical `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0` after source closure. Use the approved pilot execution to prove current-stack routes/responsive/a11y/Rank Math/RootProfile compatibility and measured site behavior. P1 duplicate-theme deletion remains a separate destructive site-operations gate. Stop before tag/GitHub Release or final production deployment.**
