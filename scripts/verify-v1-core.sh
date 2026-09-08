@@ -62,5 +62,6 @@ printf '%s\n' '==> R6 pre-promotion contracts'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/r6-asset-scope-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/r6-convertflow-asset-gate-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/r6-ci-trigger-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/r6-release-workflow-contract.php
 
 printf '%s\n' 'PASS: reusable v1 core verification'
