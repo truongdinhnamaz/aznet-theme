@@ -40,7 +40,7 @@ foreach ($forbiddenDetection as $forbidden) {
 
 $requiredSourceMarkers = [
     'O-008 ConvertFlow projection asset gating: OPEN/BLOCKED unless a documented public/versioned Theme-consumable capability exists; private detection is forbidden.',
-    'R6 may execute safe pre-promotion work, but it must stop before the metadata/version promotion gate unless explicitly approved.',
+    'ConvertFlow projection optimization correctly recorded `BLOCKED_EXTERNAL_CONTRACT`',
 ];
 
 foreach ($requiredSourceMarkers as $marker) {
