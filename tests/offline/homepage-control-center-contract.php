@@ -13,6 +13,8 @@ assert(str_contains($control, "'homepage'"));
 assert(str_contains($control, "'Trang chủ'"));
 assert(str_contains($control, 'render_homepage_settings()'));
 assert(str_contains($bootstrap, "require_once __DIR__ . '/homepage.php';"));
+assert(str_contains($source, "AZnet\\\\Theme\\\\Integrations\\\\RootProfile\\\\provider_available"), 'Homepage diagnostics must use the accepted RootProfile v1 public provider capability');
+assert(! str_contains($source, "AZnet\\\\Theme\\\\Integrations\\\\RootProfile\\\\available"), 'Homepage diagnostics must not probe a nonexistent RootProfile capability');
 foreach (['wp_insert_post(', 'wp_update_post(', 'wp_delete_post(', 'wp_insert_term(', 'wp_delete_term('] as $forbidden) {
     assert(! str_contains($source, $forbidden), "Admin must not mutate native content: {$forbidden}");
 }
