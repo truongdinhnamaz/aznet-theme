@@ -155,6 +155,10 @@
     color: var(--aznet-theme-on-inverse);
 }
 
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__about p.has-primary-color {
+    color: var(--aznet-theme-on-inverse) !important;
+}
+
 .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__about p:not(.has-primary-color) {
     color: color-mix(in srgb, var(--aznet-theme-on-inverse) 78%, transparent);
 }
