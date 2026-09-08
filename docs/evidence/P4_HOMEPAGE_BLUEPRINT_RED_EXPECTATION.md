@@ -1,0 +1,1 @@
+Expected RED: reusable v1 core verification must fail specifically because `patterns/homepage-professional-services.php` does not yet exist. Production implementation remains absent at this checkpoint.
