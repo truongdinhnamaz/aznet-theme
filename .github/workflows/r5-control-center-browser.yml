@@ -166,7 +166,7 @@ jobs:
           wp post list --post_type=page --name=r5-continuity --field=post_title --path=/tmp/wp --allow-root | grep -Fx 'R5 Continuity Page'
           wp theme activate aznet-theme --path=/tmp/wp --allow-root
           wp eval "if ( ! has_custom_logo() || ! has_nav_menu( 'primary' ) ) { exit(1); }" --path=/tmp/wp --allow-root
-          wp eval '$s = get_theme_mod( "aznet_theme_settings", [] ); if ( ! is_array( $s ) || 1 !== (int) ( $s["schema_version"] ?? 0 ) ) { exit(1); }' --path=/tmp/wp --allow-root
+          wp eval '$s = get_theme_mod( "aznet_theme_settings", [] ); if ( ! is_array( $s ) || 2 !== (int) ( $s["schema_version"] ?? 0 ) ) { exit(1); }' --path=/tmp/wp --allow-root
           echo 'PASS: R5 theme-switch safety retained WordPress data, external sentinel and AZnet presentation state'
 
       - name: Verify runtime boundary and evidence completeness
