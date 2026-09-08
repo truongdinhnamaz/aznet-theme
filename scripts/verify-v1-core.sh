@@ -70,4 +70,9 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/editorial-single-po
 printf '%s\n' '==> P3 Editorial Listing/Search contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/editorial-listing-search-contract.php
 
+printf '%s\n' '==> P4 Native Editable Homepage blueprint contracts'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-asset-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-control-center-contract.php
+
 printf '%s\n' 'PASS: reusable v1 core verification'

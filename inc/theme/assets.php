@@ -69,6 +69,45 @@ function enqueue_sticky_header_asset( ?string $version = null ): void {
     );
 }
 
+/**
+ * Enqueue the dedicated Homepage blueprint presentation only on the Front Page.
+ *
+ * @param string|null $version Asset version.
+ */
+function enqueue_homepage_blueprint_asset( ?string $version = null ): void {
+    if ( ! function_exists( 'is_front_page' ) || ! is_front_page() ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'aznet-theme-homepage',
+        get_theme_file_uri( '/assets/css/components/homepage.css' ),
+        [ 'aznet-theme-tokens' ],
+        $version
+    );
+}
+
+/**
+ * Enqueue scoped Homepage blueprint styles in the Block Editor.
+ */
+function enqueue_homepage_blueprint_editor_asset(): void {
+    $version = defined( 'AZNET_THEME_VERSION' ) ? AZNET_THEME_VERSION : null;
+
+    wp_enqueue_style(
+        'aznet-theme-tokens',
+        get_theme_file_uri( '/assets/css/tokens.css' ),
+        [],
+        $version
+    );
+
+    wp_enqueue_style(
+        'aznet-theme-homepage-editor',
+        get_theme_file_uri( '/assets/css/components/homepage.css' ),
+        [ 'aznet-theme-tokens' ],
+        $version
+    );
+}
+
 function enqueue_assets(): void {
     $version = defined( 'AZNET_THEME_VERSION' ) ? AZNET_THEME_VERSION : null;
 
@@ -111,6 +150,8 @@ function enqueue_assets(): void {
         [ 'aznet-theme-tokens' ],
         $version
     );
+
+    enqueue_homepage_blueprint_asset( $version );
 
     if ( should_enqueue_generic_content_assets() ) {
         wp_enqueue_style(

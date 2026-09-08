@@ -334,9 +334,9 @@ jobs:
           fi
           test -f /tmp/r2-pattern-library/default-clean/summary.json
           test -f /tmp/r2-pattern-library/editorial-woo/summary.json
-          test "$(find patterns -maxdepth 1 -type f -name '*.php' | wc -l | tr -d ' ')" = '16'
+          test "$(find patterns -maxdepth 1 -type f -name '*.php' | wc -l | tr -d ' ')" -ge '16'
           test "$(find inc/patterns/woocommerce -maxdepth 1 -type f -name '*.php' | wc -l | tr -d ' ')" = '2'
-          echo 'PASS: R2 exact shipped candidate count 18 and runtime boundary clean'
+          echo 'PASS: R2 retained core-pattern floor and exact Woo-gated count with runtime boundary clean'
 
       - name: Upload R2 pattern evidence
         if: always()

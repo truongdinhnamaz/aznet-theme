@@ -1,0 +1,315 @@
+.aznet-theme-homepage-blueprint {
+    overflow: clip;
+    color: var(--aznet-theme-color-text);
+    background: var(--aznet-theme-color-surface);
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__hero,
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__trust,
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__services,
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__about,
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__process,
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__articles,
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__faq,
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__contact {
+    box-sizing: border-box;
+    padding-block: clamp(3.25rem, 7vw, 6.5rem);
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__hero {
+    position: relative;
+    min-height: clamp(31rem, 72vh, 47rem);
+    display: grid;
+    align-content: center;
+    background: linear-gradient(135deg, var(--aznet-theme-color-surface) 0%, var(--aznet-theme-color-surface-subtle) 100%);
+    border-bottom: 1px solid var(--aznet-theme-color-border);
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__hero::after {
+    content: "";
+    position: absolute;
+    inset: auto clamp(1.25rem, 6vw, 7rem) 2rem auto;
+    width: clamp(7rem, 16vw, 14rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--aznet-theme-color-primary) 24%, transparent);
+    pointer-events: none;
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__eyebrow {
+    margin-bottom: var(--aznet-theme-space-3);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__hero h1 {
+    max-width: 19ch;
+    margin-top: 0;
+    margin-bottom: var(--aznet-theme-space-4);
+    font-size: clamp(2.5rem, 6vw, 5.25rem);
+    line-height: 1.03;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__lead {
+    max-width: 44rem;
+    margin-bottom: var(--aznet-theme-space-6);
+    color: var(--aznet-theme-color-text-muted);
+    font-size: clamp(1.08rem, 2vw, 1.3rem);
+}
+
+.aznet-theme-homepage-blueprint .wp-block-buttons {
+    gap: 0.75rem;
+}
+
+.aznet-theme-homepage-blueprint .wp-block-button__link {
+    min-height: 3rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.78rem 1.3rem;
+    border-radius: var(--aznet-theme-radius-control);
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform var(--aznet-theme-motion-fast) ease, box-shadow var(--aznet-theme-motion-fast) ease;
+}
+
+.aznet-theme-homepage-blueprint .wp-block-button__link:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--aznet-theme-shadow-card);
+}
+
+.aznet-theme-homepage-blueprint .wp-block-button__link:focus-visible {
+    outline: 3px solid var(--aznet-theme-color-focus);
+    outline-offset: 3px;
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__trust {
+    margin-top: clamp(-2.4rem, -3vw, -1.25rem);
+    position: relative;
+    z-index: 2;
+    padding-inline: var(--aznet-theme-gutter);
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__trust > .wp-block-columns {
+    padding: clamp(1.4rem, 3vw, 2.2rem);
+    border: 1px solid var(--aznet-theme-color-border);
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-color-surface);
+    box-shadow: var(--aznet-theme-shadow-card);
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__trust .wp-block-column {
+    min-width: 0;
+    padding: var(--aznet-theme-space-3);
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__services {
+    padding-inline: var(--aznet-theme-gutter);
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__services > p:first-child,
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__about p.has-primary-color,
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__process p.has-primary-color {
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__services > h2,
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__about h2,
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__process > h2,
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__articles > h2,
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__faq > h2,
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__contact > h2 {
+    margin-top: 0.4rem;
+    margin-bottom: var(--aznet-theme-space-4);
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__card-grid {
+    margin-top: var(--aznet-theme-space-6);
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__card {
+    min-width: 0;
+    padding: clamp(1.4rem, 3vw, 2rem);
+    border: 1px solid var(--aznet-theme-color-border);
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-color-surface);
+    box-shadow: 0 1px 0 rgba(17, 24, 39, 0.03);
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__card h3 {
+    margin-top: 0;
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__about {
+    padding-inline: var(--aznet-theme-gutter);
+    background: var(--aznet-theme-surface-inverse);
+    color: var(--aznet-theme-on-inverse);
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__about p.has-primary-color {
+    color: var(--aznet-theme-on-inverse) !important;
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__about p:not(.has-primary-color) {
+    color: color-mix(in srgb, var(--aznet-theme-on-inverse) 78%, transparent);
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__process {
+    padding-inline: var(--aznet-theme-gutter);
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__process .wp-block-column {
+    min-width: 0;
+    padding-top: var(--aznet-theme-space-4);
+    border-top: 2px solid var(--aznet-theme-color-primary);
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__articles {
+    padding-inline: var(--aznet-theme-gutter);
+    background: var(--aznet-theme-color-surface-subtle);
+}
+
+.aznet-theme-homepage-blueprint .wp-block-query {
+    margin-top: var(--aznet-theme-space-6);
+}
+
+.aznet-theme-homepage-blueprint .wp-block-post-template {
+    gap: clamp(1rem, 2vw, 2rem);
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__article-card {
+    min-width: 0;
+    height: 100%;
+    padding: 1rem;
+    border: 1px solid var(--aznet-theme-color-border);
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-color-surface);
+}
+
+.aznet-theme-homepage-blueprint .wp-block-post-featured-image {
+    margin: -1rem -1rem 1rem;
+}
+
+.aznet-theme-homepage-blueprint .wp-block-post-featured-image img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    border-radius: var(--aznet-theme-radius-card) var(--aznet-theme-radius-card) 0 0;
+}
+
+.aznet-theme-homepage-blueprint .wp-block-post-title {
+    margin-block: 0.6rem;
+    line-height: 1.25;
+}
+
+.aznet-theme-homepage-blueprint .wp-block-post-title a {
+    color: inherit;
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.16em;
+}
+
+.aznet-theme-homepage-blueprint .wp-block-post-date {
+    color: var(--aznet-theme-color-text-muted);
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__faq {
+    max-width: 56rem;
+    padding-inline: var(--aznet-theme-gutter);
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__faq details {
+    padding-block: 1.1rem;
+    border-top: 1px solid var(--aznet-theme-color-border);
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__faq details:last-child {
+    border-bottom: 1px solid var(--aznet-theme-color-border);
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__faq summary {
+    cursor: pointer;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__faq summary:focus-visible {
+    outline: 3px solid var(--aznet-theme-color-focus);
+    outline-offset: 4px;
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__contact {
+    text-align: center;
+    background: var(--aznet-theme-color-primary);
+    color: var(--aznet-theme-color-on-primary);
+}
+
+.aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__contact .wp-block-button__link {
+    background: var(--aznet-theme-color-on-primary) !important;
+    color: var(--aznet-theme-color-primary) !important;
+}
+
+.aznet-theme-homepage-blueprint :where(h1, h2, h3, p, a, summary) {
+    overflow-wrap: anywhere;
+}
+
+.aznet-theme-homepage-blueprint :where(img, video, iframe, svg) {
+    max-width: 100%;
+}
+
+.aznet-theme-homepage-blueprint .wp-block-table {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+@media (max-width: 782px) {
+    .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__hero {
+        min-height: auto;
+    }
+
+    .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__hero,
+    .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__trust,
+    .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__services,
+    .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__about,
+    .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__process,
+    .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__articles,
+    .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__faq,
+    .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__contact {
+        padding-inline: var(--aznet-theme-gutter-mobile);
+    }
+
+    .aznet-theme-homepage-blueprint .wp-block-columns {
+        gap: 1.25rem;
+    }
+
+    .aznet-theme-homepage-blueprint .wp-block-buttons {
+        align-items: stretch;
+    }
+
+    .aznet-theme-homepage-blueprint .wp-block-button {
+        width: 100%;
+    }
+
+    .aznet-theme-homepage-blueprint .wp-block-button__link {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__hero h1 {
+        font-size: clamp(2.15rem, 11vw, 3.1rem);
+    }
+
+    .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__hero::after {
+        display: none;
+    }
+}

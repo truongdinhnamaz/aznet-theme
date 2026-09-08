@@ -89,7 +89,8 @@ assert(['1', '2', '3', '4', '6', 'section'] === array_column($theme_json['settin
 $bootstrap = (string) file_get_contents($root . '/inc/theme/bootstrap.php');
 assert(str_contains($bootstrap, "require_once __DIR__ . '/design-system.php';"));
 assert(str_contains($bootstrap, "add_filter( 'body_class', __NAMESPACE__ . '\\\\visual_preset_body_classes' );"));
-assert(! str_contains($bootstrap, 'enqueue_block_editor_assets'));
+assert(str_contains($bootstrap, "add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\\\\enqueue_homepage_blueprint_editor_asset' );"));
+assert(! str_contains($bootstrap, "add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\\\\enqueue_visual_preset_asset' );"));
 
 $setup = (string) file_get_contents($root . '/inc/theme/setup.php');
 assert(str_contains($setup, "add_theme_support( 'editor-styles' );"));
