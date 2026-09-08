@@ -90,7 +90,12 @@ jobs:
             ./ /tmp/wp/wp-content/themes/aznet-theme/
           wp theme activate aznet-theme --path=/tmp/wp --allow-root
           wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
-          PAGE_ID=$(wp post create --post_type=page --post_status=publish --post_title='Sample Page' --post_name='sample-page' --post_content='<h2>Sample Page</h2><p>R6 clean page fixture.</p>' --porcelain --path=/tmp/wp --allow-root)
+          PAGE_ID=$(wp post list --post_type=page --name=sample-page --field=ID --path=/tmp/wp --allow-root | head -n 1)
+          if [ -n "$PAGE_ID" ]; then
+            wp post update "$PAGE_ID" --post_status=publish --post_title='Sample Page' --post_content='<h2>Sample Page</h2><p>R6 clean page fixture.</p>' --path=/tmp/wp --allow-root >/dev/null
+          else
+            PAGE_ID=$(wp post create --post_type=page --post_status=publish --post_title='Sample Page' --post_name='sample-page' --post_content='<h2>Sample Page</h2><p>R6 clean page fixture.</p>' --porcelain --path=/tmp/wp --allow-root)
+          fi
           CATEGORY_ID=$(wp term create category Sample --slug=sample --porcelain --path=/tmp/wp --allow-root)
           POST_ID=$(wp post create --post_type=post --post_status=publish --post_title='Sample Post' --post_name='sample-post' --post_content='<p>R6 clean post fixture.</p>' --porcelain --path=/tmp/wp --allow-root)
           wp post term add "$POST_ID" category "$CATEGORY_ID" --by=id --path=/tmp/wp --allow-root
