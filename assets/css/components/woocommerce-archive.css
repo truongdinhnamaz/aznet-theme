@@ -1,3 +1,33 @@
+body.aznet-theme-woo-catalog--grid {
+    --aznet-theme-woo-catalog-columns: 4;
+}
+
+body.aznet-theme-woo-catalog--compact-grid {
+    --aznet-theme-woo-catalog-columns: 5;
+}
+
+body.aznet-theme-woo-catalog--editorial {
+    --aznet-theme-woo-catalog-columns: 3;
+}
+
+body.aznet-theme-woo-card--comfortable {
+    --aznet-theme-woo-card-gap: var(--aznet-theme-space-6, 2rem);
+    --aznet-theme-woo-card-padding: var(--aznet-theme-space-4, 1.5rem);
+    --aznet-theme-woo-card-media-ratio: 4 / 3;
+}
+
+body.aznet-theme-woo-card--balanced {
+    --aznet-theme-woo-card-gap: var(--aznet-theme-space-4, 1.5rem);
+    --aznet-theme-woo-card-padding: var(--aznet-theme-space-3, 1rem);
+    --aznet-theme-woo-card-media-ratio: 1 / 1;
+}
+
+body.aznet-theme-woo-card--compact {
+    --aznet-theme-woo-card-gap: var(--aznet-theme-space-3, 1rem);
+    --aznet-theme-woo-card-padding: var(--aznet-theme-space-2, 0.5rem);
+    --aznet-theme-woo-card-media-ratio: 1 / 1;
+}
+
 .woocommerce .woocommerce-result-count,
 .woocommerce .woocommerce-ordering {
     margin-bottom: var(--aznet-theme-space-4, 1.5rem);
@@ -15,8 +45,8 @@
 
 .woocommerce ul.products {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: var(--aznet-theme-space-4, 1.5rem);
+    grid-template-columns: repeat(var(--aznet-theme-woo-catalog-columns, 4), minmax(0, 1fr));
+    gap: var(--aznet-theme-woo-card-gap, var(--aznet-theme-space-4, 1.5rem));
     margin: 0;
     padding: 0;
 }
@@ -34,13 +64,20 @@
     border: 1px solid var(--aznet-theme-border, #d9dde4);
     border-radius: var(--aznet-theme-radius-card, 0.875rem);
     background: var(--aznet-theme-surface, #ffffff);
-    padding: var(--aznet-theme-space-3, 1rem);
+    padding: var(--aznet-theme-woo-card-padding, var(--aznet-theme-space-3, 1rem));
+    box-shadow: var(--aznet-theme-shadow-card, none);
+}
+
+.woocommerce ul.products li.product .woocommerce-loop-product__link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
 }
 
 .woocommerce ul.products li.product a img {
     display: block;
     width: 100%;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: var(--aznet-theme-woo-card-media-ratio, 1 / 1);
     object-fit: cover;
     border-radius: calc(var(--aznet-theme-radius-card, 0.875rem) * 0.75);
     margin-bottom: var(--aznet-theme-space-3, 1rem);
@@ -52,6 +89,11 @@
     line-height: 1.45;
     margin: 0 0 var(--aznet-theme-space-2, 0.5rem);
     padding: 0;
+}
+
+body.aznet-theme-woo-catalog--editorial .woocommerce ul.products li.product .woocommerce-loop-product__title {
+    font-size: var(--aznet-theme-font-size-lg, 1.125rem);
+    line-height: var(--aznet-theme-line-height-heading, 1.25);
 }
 
 .woocommerce ul.products li.product .price {
@@ -66,33 +108,44 @@
 }
 
 .woocommerce ul.products li.product .button {
+    min-height: var(--aznet-theme-control-height, 2.75rem);
     margin-top: 0;
 }
 
 .woocommerce a:focus-visible,
 .woocommerce button:focus-visible,
 .woocommerce select:focus-visible,
-.woocommerce input:focus-visible {
+.woocommerce input:focus-visible,
+.woocommerce ul.products li.product .woocommerce-loop-product__link:focus-visible {
     outline: 3px solid var(--aznet-theme-focus, #175cd3);
     outline-offset: 3px;
 }
 
 @media (max-width: 1023px) {
-    .woocommerce ul.products {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+    body.aznet-theme-woo-catalog--grid,
+    body.aznet-theme-woo-catalog--compact-grid,
+    body.aznet-theme-woo-catalog--editorial {
+        --aznet-theme-woo-catalog-columns: 3;
     }
 }
 
 @media (max-width: 767px) {
+    body.aznet-theme-woo-catalog--grid,
+    body.aznet-theme-woo-catalog--compact-grid,
+    body.aznet-theme-woo-catalog--editorial {
+        --aznet-theme-woo-catalog-columns: 2;
+    }
+
     .woocommerce ul.products {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: var(--aznet-theme-space-3, 1rem);
     }
 }
 
 @media (max-width: 479px) {
-    .woocommerce ul.products {
-        grid-template-columns: 1fr;
+    body.aznet-theme-woo-catalog--grid,
+    body.aznet-theme-woo-catalog--compact-grid,
+    body.aznet-theme-woo-catalog--editorial {
+        --aznet-theme-woo-catalog-columns: 1;
     }
 
     .woocommerce .woocommerce-result-count,

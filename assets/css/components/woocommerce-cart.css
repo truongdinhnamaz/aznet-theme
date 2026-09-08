@@ -32,6 +32,15 @@
     overflow-wrap: anywhere;
 }
 
+.woocommerce-cart .shop_table .product-quantity {
+    min-width: 5.5rem;
+}
+
+.woocommerce-cart .shop_table .product-subtotal {
+    color: var(--aznet-theme-text, #17181b);
+    font-weight: 700;
+}
+
 .woocommerce-cart .coupon {
     display: flex;
     flex-wrap: wrap;
@@ -110,5 +119,25 @@
     .woocommerce-cart .cart-collaterals .cart_totals {
         width: 100%;
         margin-inline: 0;
+    }
+}
+
+@media (max-width: 640px) {
+    .woocommerce-cart .shop_table,
+    .woocommerce-cart .shop_table tbody,
+    .woocommerce-cart .shop_table tr,
+    .woocommerce-cart .shop_table td {
+        max-width: 100%;
+    }
+
+    .woocommerce-cart .shop_table .product-thumbnail img {
+        max-width: 4.5rem;
+        height: auto;
+    }
+
+    .woocommerce-cart .shop_table .product-quantity,
+    .woocommerce-cart .shop_table .product-subtotal {
+        min-width: 0;
+        overflow-wrap: anywhere;
     }
 }

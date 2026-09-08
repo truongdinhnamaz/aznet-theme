@@ -1,0 +1,182 @@
+name: R4 WooCommerce Presentation Browser Quality
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/r4-woocommerce-browser.yml'
+      - 'tests/browser/r4-woocommerce-l4.mjs'
+      - 'tests/fixtures/r4-woocommerce-setup.php'
+      - 'inc/theme/settings.php'
+      - 'inc/theme/woocommerce-*.php'
+      - 'inc/theme/bootstrap.php'
+      - 'inc/theme/assets.php'
+      - 'patterns/**'
+      - 'inc/patterns/woocommerce/**'
+      - 'assets/css/components/woocommerce-*.css'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  r4-woocommerce-browser:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout exact R4 candidate
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install WordPress 6.9 and clean fixtures
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          rm -rf /tmp/wp /tmp/r4-woocommerce
+          mkdir -p /tmp/wp /tmp/r4-woocommerce
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          ADMIN_PASS=$(openssl rand -hex 16)
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='AZnet R4 Woo Fixture' --admin_user=admin --admin_password="$ADMIN_PASS" --admin_email=r4@example.test --skip-email --allow-root
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='README.md' --exclude='aznet-preview.png' ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
+          wp post create --post_type=page --post_status=publish --post_title='R4 Generic Fixture' --post_name='r4-generic' --post_content='<h2>R4 generic fixture</h2><p>Generic WordPress content without Woo blocks.</p>' --path=/tmp/wp --allow-root >/dev/null
+          wp post create --post_type=post --post_status=publish --post_title='R4 Clean Post' --post_name='r4-clean-post' --post_content='<p>R4 clean WordPress post fixture.</p>' --path=/tmp/wp --allow-root >/dev/null
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+          wp core version --path=/tmp/wp --allow-root | grep -Fx '6.9'
+          wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+
+      - name: Start WordPress runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/r4-woocommerce/server.log 2>&1 &
+          echo $! > /tmp/r4-woocommerce/server.pid
+          for attempt in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:8080/r4-generic/ >/tmp/r4-woocommerce/clean-smoke.html && break
+            sleep 1
+          done
+          grep -F 'R4 generic fixture' /tmp/r4-woocommerce/clean-smoke.html
+
+      - name: Install Playwright and axe
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Verify clean WordPress absence regression
+        env:
+          R4_BASE_URL: http://127.0.0.1:8080
+          R4_STATE_DIR: /tmp/r4-woocommerce
+          R4_MODE: clean
+          R4_SCENARIO: clean-wordpress
+        run: node tests/browser/r4-woocommerce-l4.mjs
+
+      - name: Install WooCommerce 10.9.4 and public fixtures
+        run: |
+          set -euo pipefail
+          wp plugin install woocommerce --version=10.9.4 --activate --path=/tmp/wp --allow-root
+          test "$(wp plugin get woocommerce --field=version --path=/tmp/wp --allow-root)" = '10.9.4'
+          printf '%s\n' '10.9.4' > /tmp/r4-woocommerce/woocommerce-version.txt
+          printf '%s' 'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAT0lEQVR42u3PQQ0AAAgEILV/2ItgCh9u0IBOUp9NPScgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwbwH3PQNQliOz8AAAAABJRU5ErkJggg==' | base64 -d > /tmp/r4-product.png
+          cp /tmp/r4-product.png /tmp/r4-gallery.png
+          MEDIA_ID=$(wp media import /tmp/r4-product.png --title='R4 Product Image' --porcelain --path=/tmp/wp --allow-root)
+          GALLERY_ID=$(wp media import /tmp/r4-gallery.png --title='R4 Gallery Image' --porcelain --path=/tmp/wp --allow-root)
+          R4_MEDIA_ID="$MEDIA_ID" R4_GALLERY_ID="$GALLERY_ID" wp eval-file tests/fixtures/r4-woocommerce-setup.php --path=/tmp/wp --allow-root | tee /tmp/r4-woocommerce/fixture-output.txt
+          SIMPLE_ID=$(sed -n 's/^SIMPLE_ID=//p' /tmp/r4-woocommerce/fixture-output.txt)
+          VARIABLE_ID=$(sed -n 's/^VARIABLE_ID=//p' /tmp/r4-woocommerce/fixture-output.txt)
+          test -n "$SIMPLE_ID"
+          test -n "$VARIABLE_ID"
+          printf '%s\n' "$SIMPLE_ID" > /tmp/r4-woocommerce/simple-product-id.txt
+          printf '%s\n' "$VARIABLE_ID" > /tmp/r4-woocommerce/variable-product-id.txt
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+          curl -fsS http://127.0.0.1:8080/shop/ >/tmp/r4-woocommerce/shop-smoke.html
+          curl -fsS http://127.0.0.1:8080/product/r4-variable-product/ >/tmp/r4-woocommerce/product-smoke.html
+          grep -F 'R4 Variable Product' /tmp/r4-woocommerce/product-smoke.html
+
+      - name: Verify Grid + Classic full surface matrix
+        env:
+          R4_BASE_URL: http://127.0.0.1:8080
+          R4_STATE_DIR: /tmp/r4-woocommerce
+          R4_MODE: woo
+          R4_SCENARIO: grid-classic
+          R4_CATALOG_PRESET: grid
+          R4_CARD_DENSITY: balanced
+          R4_PRODUCT_PRESET: classic
+          R4_FULL_SURFACES: '1'
+        run: |
+          set -euo pipefail
+          SIMPLE_ID=$(cat /tmp/r4-woocommerce/simple-product-id.txt)
+          wp eval "set_theme_mod( 'aznet_theme_settings', [ 'schema_version' => 1, 'visual_preset' => 'commerce', 'header_preset' => 'commerce', 'header_sticky' => 'sticky', 'header_search' => true, 'header_utilities' => true, 'woo_catalog_preset' => 'grid', 'woo_product_card_density' => 'balanced', 'woo_product_preset' => 'classic' ] );" --path=/tmp/wp --allow-root
+          R4_SIMPLE_PRODUCT_ID="$SIMPLE_ID" node tests/browser/r4-woocommerce-l4.mjs
+
+      - name: Verify Compact Grid + Focus matrix
+        env:
+          R4_BASE_URL: http://127.0.0.1:8080
+          R4_STATE_DIR: /tmp/r4-woocommerce
+          R4_MODE: woo
+          R4_SCENARIO: compact-focus
+          R4_CATALOG_PRESET: compact-grid
+          R4_CARD_DENSITY: compact
+          R4_PRODUCT_PRESET: focus
+        run: |
+          wp eval "set_theme_mod( 'aznet_theme_settings', [ 'schema_version' => 1, 'visual_preset' => 'commerce', 'header_preset' => 'commerce', 'header_sticky' => 'sticky', 'header_search' => true, 'header_utilities' => true, 'woo_catalog_preset' => 'compact-grid', 'woo_product_card_density' => 'compact', 'woo_product_preset' => 'focus' ] );" --path=/tmp/wp --allow-root
+          node tests/browser/r4-woocommerce-l4.mjs
+
+      - name: Verify Editorial + Story matrix
+        env:
+          R4_BASE_URL: http://127.0.0.1:8080
+          R4_STATE_DIR: /tmp/r4-woocommerce
+          R4_MODE: woo
+          R4_SCENARIO: editorial-story
+          R4_CATALOG_PRESET: editorial
+          R4_CARD_DENSITY: comfortable
+          R4_PRODUCT_PRESET: story
+        run: |
+          wp eval "set_theme_mod( 'aznet_theme_settings', [ 'schema_version' => 1, 'visual_preset' => 'editorial', 'header_preset' => 'standard', 'header_sticky' => 'sticky', 'header_search' => true, 'header_utilities' => true, 'woo_catalog_preset' => 'editorial', 'woo_product_card_density' => 'comfortable', 'woo_product_preset' => 'story' ] );" --path=/tmp/wp --allow-root
+          node tests/browser/r4-woocommerce-l4.mjs
+
+      - name: Verify runtime boundary and evidence completeness
+        run: |
+          set -euo pipefail
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/r4-woocommerce/server.log; then
+            echo 'FAIL: PHP error marker found during R4 browser verification' >&2
+            exit 1
+          fi
+          for scenario in clean-wordpress grid-classic compact-focus editorial-story; do
+            test -f "/tmp/r4-woocommerce/${scenario}/summary.json"
+          done
+          echo 'PASS: R4 runtime boundary clean and all scenario summaries present'
+
+      - name: Upload R4 WooCommerce evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r4-woocommerce-browser-quality
+          path: /tmp/r4-woocommerce
+          if-no-files-found: error
