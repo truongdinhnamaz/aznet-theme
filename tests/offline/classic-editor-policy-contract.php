@@ -20,18 +20,6 @@ if (!class_exists('WP_Post')) {
     }
 }
 
-$GLOBALS['aznet_theme_test_options'] = [
-    'show_on_front' => 'page',
-    'page_on_front' => 300,
-];
-
-if (!function_exists('get_option')) {
-    function get_option(string $key, mixed $default = false): mixed
-    {
-        return $GLOBALS['aznet_theme_test_options'][$key] ?? $default;
-    }
-}
-
 function classic_editor_policy_fail(string $message): never
 {
     fwrite(STDERR, "FAIL: {$message}\n");
@@ -62,13 +50,17 @@ if (!is_callable($filter)) {
 
 classic_editor_policy_assert(false, $filter(true, new WP_Post(101, 'post')), 'Posts must use Classic Editor');
 classic_editor_policy_assert(false, $filter(true, new WP_Post(202, 'page')), 'Regular Pages must use Classic Editor');
-classic_editor_policy_assert(true, $filter(true, new WP_Post(300, 'page')), 'Static Front Page must preserve an enabled Block Editor decision');
-classic_editor_policy_assert(false, $filter(false, new WP_Post(300, 'page')), 'Static Front Page must not force-enable Block Editor against an upstream decision');
+classic_editor_policy_assert(false, $filter(true, new WP_Post(300, 'page')), 'Static Front Page must also use Classic Editor');
+classic_editor_policy_assert(false, $filter(false, new WP_Post(300, 'page')), 'Static Front Page must remain Classic when upstream already disabled Block Editor');
 classic_editor_policy_assert(true, $filter(true, new WP_Post(404, 'product')), 'Other post types must preserve an enabled upstream editor decision');
 classic_editor_policy_assert(false, $filter(false, new WP_Post(404, 'product')), 'Other post types must preserve a disabled upstream editor decision');
 
-$GLOBALS['aznet_theme_test_options']['show_on_front'] = 'posts';
-classic_editor_policy_assert(false, $filter(true, new WP_Post(300, 'page')), 'A Page is not exempt when WordPress is configured to show latest posts on the front');
+$policy = (string) file_get_contents($policyPath);
+foreach (["get_option( 'show_on_front'", "get_option( 'page_on_front'"] as $needle) {
+    if (str_contains($policy, $needle)) {
+        classic_editor_policy_fail('editor policy must not special-case the Front Page: ' . $needle);
+    }
+}
 
 $bootstrap = (string) file_get_contents($bootstrapPath);
 if (!str_contains($bootstrap, "require_once __DIR__ . '/editor-policy.php';")) {
