@@ -18,3 +18,17 @@ html {
 *::after {
     box-sizing: inherit;
 }
+
+body {
+    margin: 0;
+}
+
+.aznet-theme-site {
+    min-height: 100vh;
+}
+
+.aznet-theme-main {
+    width: min(calc(100% - (var(--aznet-theme-space-3) * 2)), var(--aznet-theme-container-wide));
+    margin-inline: auto;
+    padding-block: var(--aznet-theme-space-4);
+}
