@@ -30,6 +30,7 @@ require_once __DIR__ . '/../integrations/rootprofile.php';
 require_once __DIR__ . '/contact-surface.php';
 require_once __DIR__ . '/profile-surface.php';
 require_once __DIR__ . '/rootprofile-current-surface.php';
+require_once __DIR__ . '/../admin/bootstrap.php';
 
 add_action( 'after_setup_theme', __NAMESPACE__ . '\\setup' );
 add_action( 'init', __NAMESPACE__ . '\\register_pattern_categories' );

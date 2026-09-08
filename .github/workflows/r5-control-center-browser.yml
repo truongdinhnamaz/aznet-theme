@@ -1,0 +1,189 @@
+name: R5 Control Center Browser Quality
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/r5-control-center-browser.yml'
+      - 'tests/browser/r5-control-center-l4.mjs'
+      - 'tests/offline/r5-control-center-static-contract.php'
+      - 'inc/admin/**'
+      - 'inc/theme/settings.php'
+      - 'inc/theme/setup.php'
+      - 'inc/theme/bootstrap.php'
+      - 'assets/css/admin/control-center.css'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  r5-control-center-browser:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout exact R5 candidate
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify R5 static contract first
+        run: php tests/offline/r5-control-center-static-contract.php
+
+      - name: Prepare prior R4 theme and exact R5 candidate
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/r5-prior /tmp/r5-candidate /tmp/r5-control-center
+          mkdir -p /tmp/r5-prior /tmp/r5-candidate /tmp/r5-control-center
+          git archive 0ddc6c799391d57db134f04449effdf511d41d1f | tar -x -C /tmp/r5-prior
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
+            ./ /tmp/r5-candidate/
+          test -f /tmp/r5-prior/style.css
+          test -f /tmp/r5-candidate/style.css
+
+      - name: Install WordPress 6.9 on prior R4 theme
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          rm -rf /tmp/wp
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          ADMIN_PASS=$(openssl rand -hex 16)
+          echo "R5_ADMIN_PASS=$ADMIN_PASS" >> "$GITHUB_ENV"
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='AZnet R5 Fixture' --admin_user=admin --admin_password="$ADMIN_PASS" --admin_email=r5@example.test --skip-email --allow-root
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
+            /tmp/r5-prior/ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+          test "$(wp core version --path=/tmp/wp --allow-root)" = '6.9'
+          wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+
+      - name: Seed prior-version continuity state
+        run: |
+          set -euo pipefail
+          printf '%s' 'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAT0lEQVR42u3PQQ0AAAgEILV/2ItgCh9u0IBOUp9NPScgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwbwH3PQNQliOz8AAAAABJRU5ErkJggg==' | base64 -d > /tmp/r5-logo.png
+          LOGO_ID=$(wp media import /tmp/r5-logo.png --title='R5 Logo' --porcelain --path=/tmp/wp --allow-root)
+          wp theme mod set custom_logo "$LOGO_ID" --path=/tmp/wp --allow-root
+          MENU_ID=$(wp menu create 'R5 Primary' --porcelain --path=/tmp/wp --allow-root)
+          wp menu item add-custom "$MENU_ID" 'R5 Home' 'http://127.0.0.1:8080/' --path=/tmp/wp --allow-root >/dev/null
+          wp menu location assign "$MENU_ID" primary --path=/tmp/wp --allow-root
+          wp post create --post_type=page --post_status=publish --post_title='R5 Continuity Page' --post_name='r5-continuity' --post_content='<p>R5 continuity sentinel</p>' --path=/tmp/wp --allow-root >/dev/null
+          wp option add r5_external_provider_sentinel keep --path=/tmp/wp --allow-root
+          wp eval "set_theme_mod( 'aznet_theme_settings', [ 'schema_version' => 1, 'visual_preset' => 'editorial', 'header_preset' => 'compact', 'header_sticky' => 'sticky-compact', 'header_search' => false, 'header_utilities' => true, 'woo_catalog_preset' => 'editorial', 'woo_product_card_density' => 'comfortable', 'woo_product_preset' => 'story' ] );" --path=/tmp/wp --allow-root
+          wp eval "if ( ! has_custom_logo() || ! has_nav_menu( 'primary' ) ) { exit(1); }" --path=/tmp/wp --allow-root
+
+      - name: Update in place to exact R5 candidate and verify continuity
+        run: |
+          set -euo pipefail
+          rsync -a --delete /tmp/r5-candidate/ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+          test "$(wp option get r5_external_provider_sentinel --path=/tmp/wp --allow-root)" = 'keep'
+          wp post list --post_type=page --name=r5-continuity --field=post_title --path=/tmp/wp --allow-root | grep -Fx 'R5 Continuity Page'
+          wp eval '$s = get_theme_mod( "aznet_theme_settings", [] ); if ( "editorial" !== ( $s["visual_preset"] ?? null ) || "compact" !== ( $s["header_preset"] ?? null ) || false !== ( $s["header_search"] ?? null ) ) { exit(1); }' --path=/tmp/wp --allow-root
+          wp eval "if ( ! has_custom_logo() || ! has_nav_menu( 'primary' ) ) { exit(1); }" --path=/tmp/wp --allow-root
+          test "$(wp theme mod get custom_logo --path=/tmp/wp --allow-root)" != ''
+          echo 'PASS: R5 in-place update retained Theme settings, logo, menu, content and external sentinel'
+
+      - name: Start WordPress runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/r5-control-center/server.log 2>&1 &
+          echo $! > /tmp/r5-control-center/server.pid
+          for attempt in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:8080/wp-login.php >/tmp/r5-control-center/login-smoke.html && break
+            sleep 1
+          done
+          grep -F 'user_login' /tmp/r5-control-center/login-smoke.html
+
+      - name: Install Playwright and axe
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Verify authenticated clean-WP Control Center
+        env:
+          R5_BASE_URL: http://127.0.0.1:8080
+          R5_ADMIN_USER: admin
+          R5_STATE_DIR: /tmp/r5-control-center
+          R5_EXPECT_WOO: '0'
+        run: node tests/browser/r5-control-center-l4.mjs
+
+      - name: Verify Woo capability-gated Commerce section
+        run: |
+          set -euo pipefail
+          wp plugin install woocommerce --version=10.9.4 --activate --path=/tmp/wp --allow-root
+          test "$(wp plugin get woocommerce --field=version --path=/tmp/wp --allow-root)" = '10.9.4'
+
+      - name: Verify authenticated Woo-present Control Center
+        env:
+          R5_BASE_URL: http://127.0.0.1:8080
+          R5_ADMIN_USER: admin
+          R5_STATE_DIR: /tmp/r5-control-center
+          R5_EXPECT_WOO: '1'
+        run: node tests/browser/r5-control-center-l4.mjs
+
+      - name: Verify theme-switch safety and return continuity
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/wp/wp-content/themes/r5-switch-target
+          printf '%s\n' '/*' 'Theme Name: R5 Switch Target' 'Version: 1.0.0' '*/' > /tmp/wp/wp-content/themes/r5-switch-target/style.css
+          printf '%s\n' '<?php' 'wp_head();' 'echo "<main>R5 switch target</main>";' 'wp_footer();' > /tmp/wp/wp-content/themes/r5-switch-target/index.php
+          wp theme activate r5-switch-target --path=/tmp/wp --allow-root
+          wp theme status r5-switch-target --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+          test "$(wp option get r5_external_provider_sentinel --path=/tmp/wp --allow-root)" = 'keep'
+          wp post list --post_type=page --name=r5-continuity --field=post_title --path=/tmp/wp --allow-root | grep -Fx 'R5 Continuity Page'
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          wp eval "if ( ! has_custom_logo() || ! has_nav_menu( 'primary' ) ) { exit(1); }" --path=/tmp/wp --allow-root
+          wp eval '$s = get_theme_mod( "aznet_theme_settings", [] ); if ( ! is_array( $s ) || 1 !== (int) ( $s["schema_version"] ?? 0 ) ) { exit(1); }' --path=/tmp/wp --allow-root
+          echo 'PASS: R5 theme-switch safety retained WordPress data, external sentinel and AZnet presentation state'
+
+      - name: Verify runtime boundary and evidence completeness
+        run: |
+          set -euo pipefail
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/r5-control-center/server.log; then
+            echo 'FAIL: PHP error marker found during R5 browser verification' >&2
+            exit 1
+          fi
+          test -f /tmp/r5-control-center/clean/summary.json
+          test -f /tmp/r5-control-center/woo/summary.json
+          echo 'PASS: R5 runtime boundary clean and browser summaries present'
+
+      - name: Upload R5 Control Center evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r5-control-center-browser-quality
+          path: /tmp/r5-control-center
+          if-no-files-found: error
