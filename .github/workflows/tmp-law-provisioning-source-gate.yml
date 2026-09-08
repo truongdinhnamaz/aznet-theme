@@ -1,0 +1,74 @@
+name: Temporary Law Provisioning Source Gate
+
+on:
+  push:
+    branches:
+      - work/law-site-provisioning-design
+    paths:
+      - '.github/workflows/tmp-law-provisioning-source-gate.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  ratify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/law-site-provisioning-design
+          fetch-depth: 0
+      - name: Ratify D-025 source gate
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('docs/source/AZT-02-architecture.md')
+          s=p.read_text()
+          s=s.replace('| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.6 |','| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.7 |',1)
+          if '# 13. Law Site Provisioning v1' not in s:
+              s=s.rstrip()+'''\n\n# 13. Law Site Provisioning v1\n\nAZnet Theme may own an explicit, bounded setup workflow that creates ordinary WordPress-native starter objects through public WordPress APIs only after an authorized user confirms an explicit change plan.\n\nThis bootstrap capability does not transfer ongoing Page/Post/Category/Menu ownership to Theme.\n\nRequired constraints:\n- Theme activation performs no content provisioning.\n- Provisioning and Homepage preset switching are separate operations.\n- Existing-site reuse is explicit and typed; title/slug/URL matching cannot silently establish semantic source ownership.\n- Created objects become ordinary WordPress content and survive Theme switching.\n- Idempotency uses bounded provisioning provenance plus the current explicit Content Map.\n- Failed-run rollback may remove only objects created by that failed run and may restore only captured configuration/settings changed by the run.\n- After a successful handoff there is no Theme-owned destructive “delete all demo content” action.\n- Starter copy is non-authoritative and is not synchronized after successful provisioning.\n'''
+          p.write_text(s)
+
+          p=Path('docs/source/AZT-04-roadmap-qa-decisions.md')
+          s=p.read_text().replace('**Version:** v0.29','**Version:** v0.30',1)
+          needle='| **D-024** | **Homepage template switching uses a stable typed Content Map plus Theme-owned Presentation Preset; Classic Editor remains for native Post/Page; provisioning is separate from preset application; the Front Page keeps exactly one `the_content()` boundary and no provider/domain semantics are cloned into Theme.** | **Accepted** |'
+          if 'D-025' not in s:
+              s=s.replace(needle, needle+'\n| **D-025** | **Law Site Provisioning v1 is an explicit idempotent WordPress-native bootstrap workflow: activation is mutation-free; new/existing sites use a visible confirmed change plan; created content becomes WordPress-owned; failed-run rollback is current-run bounded; successful setup is not equivalent to Launch Ready.** | **Accepted** |',1)
+          section='''\n\n### P4-B — Law Site Provisioning v1\n\n**State:** READY / EXACT NEXT after written spec approval.\n\nImplement the accepted bounded setup workflow on top of Homepage Composer + `law-01`. Theme activation stays mutation-free. New and existing sites use read-only discovery, explicit typed reuse/create/skip selections and a visible confirmed change plan before writes. Created starter objects are ordinary WordPress-native content; idempotency relies on bounded provenance plus the current explicit Content Map, never title/slug/URL semantic guessing. Failed-run rollback is limited to captured settings/configuration and objects created by that failed run. Successful setup is Setup Ready only; Launch Ready remains an editorial/business review state.\n\n**QA:** L1 static ownership/security, L2 RED→GREEN contracts, L3 empty-site/existing-site/rerun/rollback/user-edit runtime, L4 wizard + resulting Homepage browser/a11y, then deterministic candidate-package evidence.\n\n**Gate:** main merge, tag/GitHub Release and production deployment remain explicit owner actions.\n'''
+          if '### P4-B — Law Site Provisioning v1' not in s:
+              pos=s.find('### P5')
+              s=s[:pos]+section+'\n'+s[pos:] if pos!=-1 else s.rstrip()+section+'\n'
+          p.write_text(s)
+
+          p=Path('docs/source/SOURCE_MANIFEST.md')
+          s=p.read_text()
+          s=s.replace('| `AZT-02-architecture.md` | v0.6 |','| `AZT-02-architecture.md` | v0.7 |')
+          s=s.replace('| `AZT-04-roadmap-qa-decisions.md` | v0.29 | R0-R6 + P2/P3 PASS, P4 exact next, P5 gates, QA layers and accepted D-001..D-024 decisions |','| `AZT-04-roadmap-qa-decisions.md` | v0.30 | R0-R6 + P2/P3 PASS, P4/P4-B exact next, P5 gates, QA layers and accepted D-001..D-025 decisions |')
+          p.write_text(s)
+
+          p=Path('docs/source/AZT-EXEC-MAP.md')
+          s=p.read_text().replace('**Version:** v0.21','**Version:** v0.22',1)
+          old='> **D-024 exact next:** Homepage Composer Core + `law-01` is the approved Theme-owned implementation slice. Stable typed Content Map is independent from Presentation Preset; Classic Editor remains for native Post/Page; Law Site Provisioning is separate and is not required for the first downloadable candidate.'
+          new='> **D-025 exact next:** Law Site Provisioning v1 is the approved Theme-owned setup slice layered on Homepage Composer + `law-01`. Activation remains mutation-free; setup requires an explicit typed change plan; created objects become ordinary WordPress content; existing-site reuse is explicit; idempotency/rollback stay bounded by provenance and current-run evidence.'
+          s=s.replace(old,new,1)
+          if 'P4-B Law Site Provisioning' not in s:
+              anchor='| P5 Publication/Deployment | GATED | Tag/GitHub Release and final production deploy remain explicit owner actions |'
+              s=s.replace(anchor,'| P4-B Law Site Provisioning | READY / EXACT NEXT | Explicit idempotent WordPress-native setup wizard; source ratified by D-025; no activation provisioning or existing-site overwrite |\n'+anchor,1)
+          section='''\n\n### P4-B — Law Site Provisioning v1\n\n**State:** READY / EXACT NEXT. Written spec approved by owner on 08/09/2026.\n\n**Goal:** provision or explicitly map the bounded Law 01 starter structure without transferring ongoing WordPress content ownership to Theme.\n\n**TDD:** source gate -> blueprint RED/GREEN -> activation/discovery RED/GREEN -> explicit change-plan RED/GREEN -> transaction/provenance/rollback RED/GREEN -> idempotency/readiness RED/GREEN -> disposable WordPress empty/existing/rerun/rollback/user-edit runtime -> wizard/resulting Homepage L4.\n\n**Rollback:** before successful handoff, restore captured settings/Front Page/menu assignment and remove only current-run creations. After success, presentation rollback is `homepage_preset=off` or remapping; WordPress content persists.\n\n**Exit:** deterministic downloadable candidate with fresh exact-head evidence; main merge/release/deploy remain separately owner-gated.\n\n**Next:** implement Task 2 blueprint after this source-only gate.\n'''
+          if '### P4-B — Law Site Provisioning v1' not in s:
+              pos=s.find('### P5 — Final Candidate / Publication / Deployment')
+              s=s[:pos]+section+'\n'+s[pos:] if pos!=-1 else s.rstrip()+section+'\n'
+          p.write_text(s)
+          PY
+          grep -q 'v0.7' docs/source/AZT-02-architecture.md
+          grep -q 'D-025' docs/source/AZT-04-roadmap-qa-decisions.md
+          grep -q 'v0.30' docs/source/SOURCE_MANIFEST.md
+          grep -q 'D-025 exact next' docs/source/AZT-EXEC-MAP.md
+          rm -f .github/workflows/tmp-export-law-provisioning.yml .github/workflows/tmp-law-provisioning-source-gate.yml
+          git config user.name 'AZnet Theme CI'
+          git config user.email 'ci@aznet.vn'
+          git add docs/source .github/workflows
+          git diff --cached --exit-code && { echo 'No source changes'; exit 1; } || true
+          git commit -m 'docs: ratify law site provisioning architecture'
+          git push origin HEAD:work/law-site-provisioning-design
