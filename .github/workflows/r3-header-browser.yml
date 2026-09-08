@@ -252,6 +252,22 @@ jobs:
             }
           ' --path=/tmp/wp --allow-root
 
+          # Woo activation can spawn background requests that destabilize the single-process
+          # PHP development server used by this CI harness. Restart only the disposable test
+          # runtime after plugin lifecycle mutations; Theme bytes and assertions stay unchanged.
+          if test -f /tmp/r3-header/server.pid; then
+            kill "$(cat /tmp/r3-header/server.pid)" 2>/dev/null || true
+          fi
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp >> /tmp/r3-header/server.log 2>&1 &
+          echo $! > /tmp/r3-header/server.pid
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/r3-inner/ >/tmp/r3-header/woo-smoke.html; then
+              break
+            fi
+            sleep 1
+          done
+          grep -F 'r3-parent-link' /tmp/r3-header/woo-smoke.html
+
           wp eval "set_theme_mod( 'aznet_theme_settings', [ 'schema_version' => 1, 'visual_preset' => 'commerce', 'header_preset' => 'commerce', 'header_sticky' => 'sticky', 'header_search' => true, 'header_utilities' => true ] );" --path=/tmp/wp --allow-root
           R3_SCENARIO='commerce-woo' R3_PRESET='commerce' R3_STICKY='sticky' R3_WOO_ENABLED='1' node tests/browser/r3-header-l4.mjs
 
