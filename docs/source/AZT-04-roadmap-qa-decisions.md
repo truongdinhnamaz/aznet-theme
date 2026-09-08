@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.28  
+**Version:** v0.29  
 **Status:** Working Source  
 **Date:** 08/09/2026
 
@@ -153,6 +153,15 @@ Minimum quality: no Theme-caused PHP fatal/warning/uncaught, no horizontal overf
 
 P4 may install/update a test candidate on the pilot only as necessary to perform approved QA. It does **not** authorize tag/GitHub Release or final production deployment. Any destructive duplicate-theme deletion remains under P1's separate site-operations gate.
 
+
+### P4-A — Homepage Composer + Law 01
+
+**State:** APPROVED / IMPLEMENTATION ACTIVE.
+
+Implement the approved Homepage Composer Core + `law-01` presentation preset as a bounded Theme-owned presentation slice. Content Map stores typed WordPress references only; preset switching must not mutate WordPress content. Native Post/Page Classic Editor policy remains. `front-page.php` retains exactly one `the_content()` boundary. Law Site Provisioning is a separate follow-on slice.
+
+**Gates:** L1 static -> L2 RED/GREEN contracts -> L3 disposable WordPress runtime -> L4 browser/visual/a11y -> deterministic candidate package. Main merge, release tag and production deployment remain explicit owner gates.
+
 ### P5 — Publication and deployment
 
 Only after the final production-hardening candidate has fresh exact-main/package evidence may publication proceed. Git tag/GitHub Release and final production deployment remain separate explicit owner approvals.
@@ -242,6 +251,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-021** | **Woo v1.1 expands presentation only; wishlist/filter/search/swatches/quick-view/custom-checkout engines remain outside Theme** | **Accepted** |
 | **D-022** | **Exact-main post-merge verification is required before a v1.x release candidate is promoted** | **Accepted** |
 | **D-023** | **Professional editorial/law-site pilot hardening remains generic Theme presentation: WordPress owns publication/content state, SEO owner keeps metadata/schema, and no legal/domain semantics move into Theme** | **Accepted** |
+| **D-024** | **Homepage template switching uses a stable typed Content Map plus Theme-owned Presentation Preset; Classic Editor remains for native Post/Page; provisioning is separate from preset application; the Front Page keeps exactly one `the_content()` boundary and no provider/domain semantics are cloned into Theme.** | **Accepted** |
 
 ## 11. Open questions
 

@@ -4,7 +4,7 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.5 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.6 |
 | --- | --- | --- | --- |
 | **Trạng thái** | Working Source | **Ngày** | 07/09/2026 |
 
@@ -223,3 +223,16 @@ Control Center là **presentation settings console**, không phải domain/admin
 - PR verification và exact-main post-merge verification là hai evidence points khác nhau.
 - Release candidate phải deterministic, byte-reproducible, SHA-256, unpack/reverify và clean-WordPress activation smoke.
 - Optional provider optimization chỉ được thực hiện qua public/versioned capability. Nếu capability thiếu, ghi BLOCKED_EXTERNAL_CONTRACT và giữ safe behavior; không private-detect để tối ưu.
+
+
+# 12. Homepage Composer v1
+
+Homepage Composer là Theme-owned presentation composition, không phải content/domain engine.
+
+- Content Map chỉ lưu typed references tới WordPress Page/Category hiện hữu; không copy title/body/excerpt/contact/profile/query-result data.
+- Presentation Preset chỉ lưu Theme-owned layout/visual behavior và có thể đổi mà không mutation WordPress content.
+- `front-page.php` phải giữ WordPress Loop của Front Page và đúng một `the_content()` execution để WordPress/public provider filters giữ nguyên boundary.
+- Theme được render mapped WordPress-native presentation sections quanh body boundary đó nhưng không được reconstruct ConvertFlow Journey semantics.
+- Reference validation dựa trên object type/publication state. Missing/invalid reference phải fail-soft; cấm title/slug/URL heuristic repair.
+- Law 01 v1 không có RootProfile team-collection integration vì chưa tồn tại accepted public collection contract cho use case này.
+- Applying Homepage preset không được create/rewrite/delete/publish/reclassify WordPress content.

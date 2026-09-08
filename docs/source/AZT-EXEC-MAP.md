@@ -1,11 +1,13 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.20  
+**Version:** v0.21  
 **Status:** Working Execution Map / derived  
 **Date:** 08/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
+
+> **D-024 exact next:** Homepage Composer Core + `law-01` is the approved Theme-owned implementation slice. Stable typed Content Map is independent from Presentation Preset; Classic Editor remains for native Post/Page; Law Site Provisioning is separate and is not required for the first downloadable candidate.
 
 ## 1. Current state
 
