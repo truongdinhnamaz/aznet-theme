@@ -132,7 +132,7 @@ function render_control_center(): void {
             [ 'Logo', 'Dùng Custom Logo native của WordPress.', admin_url( 'customize.php?autofocus[control]=custom_logo' ) ],
             [ 'Menu', 'Quản lý menu bằng WordPress.', admin_url( 'nav-menus.php' ) ],
             [ 'Header', 'Chọn preset và sticky mode.', add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'header' ], admin_url( 'admin.php' ) ) ],
-            [ 'Trang', 'Quản lý và sửa Page bằng Classic Editor.', admin_url( 'edit.php?post_type=page' ) ],
+            [ 'Trang', 'Tạo Page mới bằng Classic Editor.', admin_url( 'post-new.php?post_type=page' ) ],
         ];
         foreach ( $cards as $card ) {
             echo '<a class="aznet-theme-card" href="' . esc_url( $card[2] ) . '"><strong>' . esc_html( $card[0] ) . '</strong><span>' . esc_html( $card[1] ) . '</span></a>';
