@@ -1,0 +1,234 @@
+.aznet-theme-main--article {
+    padding-block: var(--aznet-theme-space-section);
+}
+
+.aznet-theme-article {
+    width: 100%;
+    max-width: var(--aznet-theme-container-content);
+}
+
+.aznet-theme-article__header {
+    display: grid;
+    gap: var(--aznet-theme-space-3);
+}
+
+.aznet-theme-article .screen-reader-text {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.aznet-theme-article__categories,
+.aznet-theme-article__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--aznet-theme-space-2);
+    font-size: var(--aznet-theme-font-size-sm);
+}
+
+.aznet-theme-article__categories a,
+.aznet-theme-article__tags a {
+    color: var(--aznet-theme-accent);
+}
+
+.aznet-theme-article__title {
+    line-height: var(--aznet-theme-line-height-heading);
+    overflow-wrap: anywhere;
+}
+
+.aznet-theme-article__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--aznet-theme-space-2) var(--aznet-theme-space-4);
+    color: var(--aznet-theme-muted);
+    font-size: var(--aznet-theme-font-size-sm);
+}
+
+.aznet-theme-article__meta a {
+    color: inherit;
+}
+
+.aznet-theme-article__modified {
+    display: inline-flex;
+    gap: var(--aznet-theme-space-1);
+}
+
+.aznet-theme-article__featured-media {
+    margin: 0 0 var(--aznet-theme-space-6);
+}
+
+.aznet-theme-article__featured-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--aznet-theme-radius-card);
+}
+
+.aznet-theme-article__content {
+    font-size: var(--aznet-theme-font-size-base);
+    line-height: var(--aznet-theme-line-height-body);
+}
+
+.aznet-theme-article__content > :first-child {
+    margin-block-start: 0;
+}
+
+.aznet-theme-article__content > :last-child {
+    margin-block-end: 0;
+}
+
+.aznet-theme-article__content :where(h2, h3, h4, h5, h6) {
+    margin-block: var(--aznet-theme-space-6) var(--aznet-theme-space-3);
+    line-height: var(--aznet-theme-line-height-heading);
+    overflow-wrap: anywhere;
+}
+
+.aznet-theme-article__content :where(p, ul, ol, blockquote, table, figure) {
+    margin-block: 0 var(--aznet-theme-space-4);
+}
+
+.aznet-theme-article__content :where(ul, ol) {
+    padding-inline-start: var(--aznet-theme-space-6);
+}
+
+.aznet-theme-article__content li + li {
+    margin-block-start: var(--aznet-theme-space-1);
+}
+
+.aznet-theme-article__content blockquote {
+    margin-inline: 0;
+    padding: var(--aznet-theme-space-3) var(--aznet-theme-space-4);
+    color: var(--aznet-theme-muted);
+    background: var(--aznet-theme-surface);
+    border-inline-start: 4px solid var(--aznet-theme-accent);
+}
+
+.aznet-theme-article__content .wp-block-table {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.aznet-theme-article__content table {
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+}
+
+.aznet-theme-article__content :where(th, td) {
+    padding: var(--aznet-theme-space-2) var(--aznet-theme-space-3);
+    overflow-wrap: anywhere;
+    text-align: start;
+    vertical-align: top;
+    border: 1px solid var(--aznet-theme-border);
+}
+
+.aznet-theme-article__content :where(img, video, svg, iframe) {
+    max-width: 100%;
+}
+
+.aznet-theme-article__content :where(a, button, input, select, textarea):focus-visible,
+.aznet-theme-article__meta a:focus-visible,
+.aznet-theme-article__categories a:focus-visible,
+.aznet-theme-article__tags a:focus-visible,
+.aznet-theme-article-author a:focus-visible,
+.aznet-theme-article .post-navigation a:focus-visible {
+    outline: 2px solid var(--aznet-theme-focus);
+    outline-offset: 2px;
+}
+
+.aznet-theme-article__page-links,
+.aznet-theme-article__taxonomy,
+.aznet-theme-article .post-navigation,
+.aznet-theme-article-author {
+    margin-block-start: var(--aznet-theme-space-6);
+}
+
+.aznet-theme-article__taxonomy {
+    padding-block-start: var(--aznet-theme-space-4);
+    border-block-start: 1px solid var(--aznet-theme-border);
+}
+
+.aznet-theme-article__taxonomy-label {
+    color: var(--aznet-theme-muted);
+}
+
+.aznet-theme-article .post-navigation .nav-links {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--aznet-theme-space-4);
+}
+
+.aznet-theme-article .post-navigation a {
+    display: grid;
+    gap: var(--aznet-theme-space-1);
+    min-width: 0;
+    padding: var(--aznet-theme-space-3);
+    color: var(--aznet-theme-text);
+    text-decoration: none;
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+}
+
+.aznet-theme-article .post-navigation .nav-subtitle {
+    color: var(--aznet-theme-muted);
+    font-size: var(--aznet-theme-font-size-sm);
+}
+
+.aznet-theme-article .post-navigation .nav-title {
+    overflow-wrap: anywhere;
+}
+
+.aznet-theme-article-author {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--aznet-theme-space-3);
+    align-items: start;
+    padding: var(--aznet-theme-space-4);
+    background: var(--aznet-theme-surface);
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+}
+
+.aznet-theme-article-author__avatar {
+    display: block;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+}
+
+.aznet-theme-article-author__title,
+.aznet-theme-article-author__description {
+    margin: 0;
+}
+
+.aznet-theme-article-author__title {
+    font-size: var(--aznet-theme-font-size-lg);
+    line-height: var(--aznet-theme-line-height-heading);
+}
+
+.aznet-theme-article-author__title a {
+    color: var(--aznet-theme-text);
+    text-decoration: none;
+}
+
+.aznet-theme-article-author__description {
+    margin-block-start: var(--aznet-theme-space-2);
+    color: var(--aznet-theme-muted);
+}
+
+@media (max-width: 47.999rem) {
+    .aznet-theme-article .post-navigation .nav-links {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .aznet-theme-article-author {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
