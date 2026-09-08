@@ -6,6 +6,9 @@ on:
       - work/v1.1-r6-performance-release
     paths:
       - '.github/workflows/r6-performance-baseline.yml'
+      - '.github/workflows/v1-core-ci.yml'
+      - '.github/workflows/v1-main-verification.yml'
+      - 'scripts/verify-v1-core.sh'
       - 'tests/browser/r6-performance-baseline.mjs'
       - 'tests/offline/r6-asset-scope-contract.php'
       - 'tests/offline/r6-convertflow-asset-gate-contract.php'
@@ -24,6 +27,9 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/r6-performance-baseline.yml'
+      - '.github/workflows/v1-core-ci.yml'
+      - '.github/workflows/v1-main-verification.yml'
+      - 'scripts/verify-v1-core.sh'
       - 'tests/browser/r6-performance-baseline.mjs'
       - 'tests/offline/r6-asset-scope-contract.php'
       - 'tests/offline/r6-convertflow-asset-gate-contract.php'
@@ -86,6 +92,9 @@ jobs:
 
       - name: Verify R6 reusable CI trigger contract
         run: php tests/offline/r6-ci-trigger-contract.php
+
+      - name: Verify reusable v1 core chain
+        run: bash scripts/verify-v1-core.sh
 
       - name: Set up Node 22
         uses: actions/setup-node@v4
