@@ -4,7 +4,7 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.6 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.7 |
 | --- | --- | --- | --- |
 | **Trạng thái** | Working Source | **Ngày** | 07/09/2026 |
 
@@ -236,3 +236,19 @@ Homepage Composer là Theme-owned presentation composition, không phải conten
 - Reference validation dựa trên object type/publication state. Missing/invalid reference phải fail-soft; cấm title/slug/URL heuristic repair.
 - Law 01 v1 không có RootProfile team-collection integration vì chưa tồn tại accepted public collection contract cho use case này.
 - Applying Homepage preset không được create/rewrite/delete/publish/reclassify WordPress content.
+
+# 13. Law Site Provisioning v1
+
+AZnet Theme may own an explicit, bounded setup workflow that creates ordinary WordPress-native starter objects through public WordPress APIs only after an authorized user confirms an explicit change plan.
+
+This bootstrap capability does not transfer ongoing Page/Post/Category/Menu ownership to Theme.
+
+Required constraints:
+- Theme activation performs no content provisioning.
+- Provisioning and Homepage preset switching are separate operations.
+- Existing-site reuse is explicit and typed; title/slug/URL matching cannot silently establish semantic source ownership.
+- Created objects become ordinary WordPress content and survive Theme switching.
+- Idempotency uses bounded provisioning provenance plus the current explicit Content Map.
+- Failed-run rollback may remove only objects created by that failed run and may restore only captured configuration/settings changed by the run.
+- After a successful handoff there is no Theme-owned destructive “delete all demo content” action.
+- Starter copy is non-authoritative and is not synchronized after successful provisioning.

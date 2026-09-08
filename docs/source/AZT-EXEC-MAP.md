@@ -1,13 +1,13 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.21  
+**Version:** v0.22  
 **Status:** Working Execution Map / derived  
 **Date:** 08/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **D-024 exact next:** Homepage Composer Core + `law-01` is the approved Theme-owned implementation slice. Stable typed Content Map is independent from Presentation Preset; Classic Editor remains for native Post/Page; Law Site Provisioning is separate and is not required for the first downloadable candidate.
+> **D-025 exact next:** Law Site Provisioning v1 is the approved Theme-owned setup slice layered on Homepage Composer + `law-01`. Activation remains mutation-free; setup requires an explicit typed change plan; created objects become ordinary WordPress content; existing-site reuse is explicit; idempotency/rollback stay bounded by provenance and current-run evidence.
 
 ## 1. Current state
 
@@ -33,6 +33,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | P2 Editorial Single-Post | PASS | PR #51 merged; native WordPress editorial presentation only; no SEO/domain/query takeover |
 | P3 Editorial Listing/Search | PASS | PR #52 merged; native thumbnail/date scan presentation + resilient long titles/excerpts; main query retained |
 | P4 Real Pilot QA | READY / EXACT NEXT | Pilot QA execution approved; current-stack law-site route/responsive/a11y/Rank Math/RootProfile evidence required |
+| P4-B Law Site Provisioning | READY / EXACT NEXT | Explicit idempotent WordPress-native setup wizard; source ratified by D-025; no activation provisioning or existing-site overwrite |
 | P5 Publication/Deployment | GATED | Tag/GitHub Release and final production deploy remain explicit owner actions |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
@@ -227,6 +228,22 @@ No layer may be inferred from another.
 **Exit:** current-stack pilot evidence complete with any defects reduced to the shallowest reproducible layer; P1 duplicate cleanup closed before final pilot production sign-off.
 
 **Next:** P5 only after P4 PASS.
+
+
+
+### P4-B — Law Site Provisioning v1
+
+**State:** READY / EXACT NEXT. Written spec approved by owner on 08/09/2026.
+
+**Goal:** provision or explicitly map the bounded Law 01 starter structure without transferring ongoing WordPress content ownership to Theme.
+
+**TDD:** source gate -> blueprint RED/GREEN -> activation/discovery RED/GREEN -> explicit change-plan RED/GREEN -> transaction/provenance/rollback RED/GREEN -> idempotency/readiness RED/GREEN -> disposable WordPress empty/existing/rerun/rollback/user-edit runtime -> wizard/resulting Homepage L4.
+
+**Rollback:** before successful handoff, restore captured settings/Front Page/menu assignment and remove only current-run creations. After success, presentation rollback is `homepage_preset=off` or remapping; WordPress content persists.
+
+**Exit:** deterministic downloadable candidate with fresh exact-head evidence; main merge/release/deploy remain separately owner-gated.
+
+**Next:** implement Task 2 blueprint after this source-only gate.
 
 ### P5 — Final Candidate / Publication / Deployment
 

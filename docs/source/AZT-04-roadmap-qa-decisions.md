@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.29  
+**Version:** v0.30  
 **Status:** Working Source  
 **Date:** 08/09/2026
 
@@ -162,6 +162,18 @@ Implement the approved Homepage Composer Core + `law-01` presentation preset as 
 
 **Gates:** L1 static -> L2 RED/GREEN contracts -> L3 disposable WordPress runtime -> L4 browser/visual/a11y -> deterministic candidate package. Main merge, release tag and production deployment remain explicit owner gates.
 
+
+
+### P4-B — Law Site Provisioning v1
+
+**State:** READY / EXACT NEXT after written spec approval.
+
+Implement the accepted bounded setup workflow on top of Homepage Composer + `law-01`. Theme activation stays mutation-free. New and existing sites use read-only discovery, explicit typed reuse/create/skip selections and a visible confirmed change plan before writes. Created starter objects are ordinary WordPress-native content; idempotency relies on bounded provenance plus the current explicit Content Map, never title/slug/URL semantic guessing. Failed-run rollback is limited to captured settings/configuration and objects created by that failed run. Successful setup is Setup Ready only; Launch Ready remains an editorial/business review state.
+
+**QA:** L1 static ownership/security, L2 RED→GREEN contracts, L3 empty-site/existing-site/rerun/rollback/user-edit runtime, L4 wizard + resulting Homepage browser/a11y, then deterministic candidate-package evidence.
+
+**Gate:** main merge, tag/GitHub Release and production deployment remain explicit owner actions.
+
 ### P5 — Publication and deployment
 
 Only after the final production-hardening candidate has fresh exact-main/package evidence may publication proceed. Git tag/GitHub Release and final production deployment remain separate explicit owner approvals.
@@ -252,6 +264,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-022** | **Exact-main post-merge verification is required before a v1.x release candidate is promoted** | **Accepted** |
 | **D-023** | **Professional editorial/law-site pilot hardening remains generic Theme presentation: WordPress owns publication/content state, SEO owner keeps metadata/schema, and no legal/domain semantics move into Theme** | **Accepted** |
 | **D-024** | **Homepage template switching uses a stable typed Content Map plus Theme-owned Presentation Preset; Classic Editor remains for native Post/Page; provisioning is separate from preset application; the Front Page keeps exactly one `the_content()` boundary and no provider/domain semantics are cloned into Theme.** | **Accepted** |
+| **D-025** | **Law Site Provisioning v1 is an explicit idempotent WordPress-native bootstrap workflow: activation is mutation-free; new/existing sites use a visible confirmed change plan; created content becomes WordPress-owned; failed-run rollback is current-run bounded; successful setup is not equivalent to Launch Ready.** | **Accepted** |
 
 ## 11. Open questions
 
