@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.24  
+**Version:** v0.25  
 **Status:** Working Source  
 **Date:** 08/09/2026  
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -13,8 +13,8 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 
 ## 2. Current canonical baseline
 
-- Current canonical repository/implementation head after P3: `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`.
-- Current implementation tree: `8fc309ea8e01bfe727da943754c98164b3f92a58`.
+- Current canonical repository/implementation head after PR #57: `main@12a480311dcb59f3d7a152ef7e72ca927c2f632d`.
+- Current canonical implementation tree: `32ebca25a63d511e74250646d333202994c65328`.
 - Internal Theme version remains `1.1.0`.
 - WordPress floor: `6.9+`.
 - PHP floor: `8.1+`.
@@ -76,6 +76,17 @@ P3 Editorial Listing/Search Hardening merged through PR #52 from final verified 
 Because P2/P3 changed production bytes after the R6 package, SHA-256 `000735...` is now **historical R6 candidate evidence**, not the final package for P4/P5. A new deterministic package/SHA must be produced from the final post-hardening bytes before publication.
 
 No source statement above transfers domain ownership to the Theme.
+
+
+### Law Site Provisioning v1 candidate provenance — stacked, not canonical main
+
+D-025 provisioning implementation is verified on stacked branch `work/law-site-provisioning`, above Homepage Composer + Law 01 PR #58. The exact production/package head is `6acd8b633503a701eb47ed0df072f6def4e1b03e`; documentation-only evidence commits after that head do not change candidate production bytes.
+
+Fresh exact-head `Law Site Provisioning Candidate Package` run `34258576549` passed the reusable v1 core chain on PHP 8.1.34 with mbstring/mysqli, linted 89 production PHP files, built the candidate twice deterministically, and passed exact-byte unpacked/source comparison. Candidate: `aznet-theme-1.1.1-law-site-provisioning-candidate.zip`, 112 files, SHA-256 `570e4e46294c45621ed5bbbd030c4aa8e12c050254db413f2d34da2855e628dd`, artifact ID `10068904666`.
+
+Fresh exact-head `Law Site Provisioning Browser Quality` run `34258576713` passed WordPress 6.9 / PHP 8.1 / MySQL 8 empty-site, existing-site no-overwrite, rerun idempotency, injected rollback and user-edit-preservation scenarios. Wizard Steps 1-4 and public Law 01 at 1440/1024/390/320 reported zero critical/serious axe blockers. Artifact ID `10068945557`. Detailed evidence: `docs/evidence/LAW_SITE_PROVISIONING_L4.md`.
+
+This candidate provenance does not make the branch canonical `main`, does not imply PR #58/#59 merge, and does not authorize a Git tag, GitHub Release or production deployment.
 
 ## 3. Current release-path classification
 

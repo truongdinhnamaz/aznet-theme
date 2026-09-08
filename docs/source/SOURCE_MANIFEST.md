@@ -8,11 +8,11 @@ Canonical source is reconciled through the completed v1.1 R6 technical candidate
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership plus approved v1.1 Native Product System objective/non-goals; unchanged by editorial pilot hardening |
 | `AZT-02-architecture.md` | v0.7 | Theme architecture, public integration contracts and v1.1 settings/pattern/Header/Woo/Control Center boundaries; unchanged by P2/P3 source closure |
-| `AZT-03-baseline-provenance.md` | v0.24 | Canonical implementation/provenance through P2/P3 post-hardening `main`, Theme `1.1.0`, historical R6 package provenance and publication-state separation |
+| `AZT-03-baseline-provenance.md` | v0.25 | Canonical implementation/provenance through P2/P3 post-hardening `main`, Theme `1.1.0`, historical R6 package provenance and publication-state separation |
 | `AZT-04-roadmap-qa-decisions.md` | v0.30 | R0-R6 + P2/P3 PASS, P4/P4-B exact next, P5 gates, QA layers and accepted D-001..D-025 decisions |
-| `AZT-EXEC-MAP.md` | v0.20 | Derived execution map with P2/P3 complete and exact next P4 Real Pilot QA |
+| `AZT-EXEC-MAP.md` | v0.22 | Derived execution map with P2/P3 complete and exact next P4 Real Pilot QA |
 
-Current post-hardening implementation baseline represented by this manifest: `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`, implementation tree `8fc309ea8e01bfe727da943754c98164b3f92a58`, Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.
+Current canonical implementation baseline represented by this manifest: `main@12a480311dcb59f3d7a152ef7e72ca927c2f632d`, implementation tree `32ebca25a63d511e74250646d333202994c65328`, Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`. The verified Law Site Provisioning `1.1.1` candidate remains stacked on unmerged PR #58/#59 and is provenance evidence, not canonical main.
 
 Fresh `V1 Exact Main Verification` run `34195248467` succeeded on that exact post-P3 main SHA, covering reusable static/contracts plus clean WordPress 6.9 runtime/browser/a11y.
 
@@ -29,6 +29,8 @@ P2 provenance: PR #51 merged final verified head `dec498b997aec6bc8b08cf91f3e09c
 P3 provenance: PR #52 merged final verified head `d78091900451176c3815b23d1485036e784bdde9` to `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`; head and merge share tree `8fc309ea8e01bfe727da943754c98164b3f92a58`.
 
 Pilot production-readiness evidence: active AZnet Theme `1.1.0` on WordPress `7.1` / PHP `8.4.24`, `primary_menu=yes`, RootProfile v1/v2 detected, RootProfile current-surface absent, Woo absent and ConvertFlow intentionally `unknown`. This is current-stack pilot evidence, not a replacement for support-floor certification.
+
+Law Site Provisioning candidate provenance: exact production/package head `6acd8b633503a701eb47ed0df072f6def4e1b03e`; candidate SHA-256 `570e4e46294c45621ed5bbbd030c4aa8e12c050254db413f2d34da2855e628dd`; package run `34258576549`; browser/runtime run `34258576713`. This is stacked candidate evidence only; PR #58/#59 remain unmerged and release/deploy remain gated.
 
 Release publication remains separate from implementation metadata. No GitHub Release or tag publication has been established; publication remains `PUBLICATION_PENDING`. Final production deployment remains separately approval-gated.
 
