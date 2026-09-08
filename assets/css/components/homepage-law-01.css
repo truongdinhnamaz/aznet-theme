@@ -8,6 +8,14 @@
     background: var(--aznet-theme-color-surface);
 }
 
+/* This stylesheet is enqueued only while the Law 01 Homepage Composer is active. */
+.aznet-theme-main--front-page {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    padding-block: 0;
+}
+
 .aznet-theme-homepage--law-01 .aznet-theme-law01-container {
     width: min(calc(100% - (2 * var(--aznet-theme-gutter))), var(--aznet-theme-container-shell));
     margin-inline: auto;
