@@ -138,6 +138,11 @@ jobs:
           wp option update show_on_front page --path=/tmp/wp --allow-root
           wp option update page_on_front "$PAGE_ID" --path=/tmp/wp --allow-root
 
+          DEFAULT_POST_IDS=$(wp post list --post_type=post --format=ids --path=/tmp/wp --allow-root)
+          if [ -n "$DEFAULT_POST_IDS" ]; then
+            wp post delete $DEFAULT_POST_IDS --force --path=/tmp/wp --allow-root >/dev/null
+          fi
+
           wp post create --path=/tmp/wp --allow-root --post_type=post --post_status=publish --post_title='Quy trình tiếp nhận và xử lý một yêu cầu chuyên môn có nhiều tài liệu cần đối chiếu' --post_excerpt='Nội dung mẫu dài để kiểm tra khả năng xuống dòng tiếng Việt và thẻ bài viết trên Trang chủ.' --post_content='<p>Nội dung kiểm thử P4 với dấu tiếng Việt đầy đủ.</p>' >/dev/null
           wp post create --path=/tmp/wp --allow-root --post_type=post --post_status=publish --post_title='Cách chuẩn bị hồ sơ, câu hỏi và thông tin trước một buổi trao đổi chuyên môn' --post_excerpt='Bài viết mẫu dùng WordPress native Query block.' --post_content='<p>Nội dung kiểm thử P4.</p>' >/dev/null
           wp post create --path=/tmp/wp --allow-root --post_type=post --post_status=publish --post_title='Những điểm nên làm rõ trước khi lựa chọn phương án tiếp theo' --post_excerpt='Kiểm tra card, tiêu đề và đoạn mô tả.' --post_content='<p>Nội dung kiểm thử P4.</p>' >/dev/null
