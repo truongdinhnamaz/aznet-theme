@@ -167,14 +167,14 @@ jobs:
           $news = law01_cat( 'Tin pháp luật', 'tin-phap-luat' );
 
           for ( $i = 1; $i <= 5; $i++ ) {
-              law01_post( "Kiến thức pháp luật số {$i}", "kien-thuc-{$i}", [ $i % 2 ? $knowledge_a : $knowledge_b ], sprintf( '2026-09-%02d 10:00:00', 20 - $i ) );
+              law01_post( "Kiến thức pháp luật số {$i}", "kien-thuc-{$i}", [ $i % 2 ? $knowledge_a : $knowledge_b ], sprintf( '2026-09-%02d 10:00:00', 7 - $i ) );
           }
-          law01_post( 'Bài giao thoa kiến thức và phân tích', 'bai-giao-thoa', [ $knowledge_a, $analysis ], '2026-09-20 11:00:00' );
+          law01_post( 'Bài giao thoa kiến thức và phân tích', 'bai-giao-thoa', [ $knowledge_a, $analysis ], '2026-09-07 11:00:00' );
           for ( $i = 1; $i <= 3; $i++ ) {
-              law01_post( "Phân tích vụ việc số {$i}", "phan-tich-{$i}", [ $analysis ], sprintf( '2026-09-%02d 09:00:00', 14 - $i ) );
+              law01_post( "Phân tích vụ việc số {$i}", "phan-tich-{$i}", [ $analysis ], sprintf( '2026-09-%02d 09:00:00', 6 - $i ) );
           }
           for ( $i = 1; $i <= 5; $i++ ) {
-              law01_post( "Tin pháp luật số {$i}", "tin-phap-luat-{$i}", [ $news ], sprintf( '2026-09-%02d 08:00:00', 10 - $i ) );
+              law01_post( "Tin pháp luật số {$i}", "tin-phap-luat-{$i}", [ $news ], sprintf( '2026-09-%02d 08:00:00', 7 - $i ) );
           }
 
           update_option( 'show_on_front', 'page' );
