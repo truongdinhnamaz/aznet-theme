@@ -19,6 +19,7 @@ function register_pattern_categories(): void {
         'aznet-theme-hero'     => __( 'AZnet — Hero', 'aznet-theme' ),
         'aznet-theme-trust'    => __( 'AZnet — Trust & CTA', 'aznet-theme' ),
         'aznet-theme-content'  => __( 'AZnet — Content', 'aznet-theme' ),
+        'aznet-theme-pages'    => __( 'AZnet — Pages', 'aznet-theme' ),
         'aznet-theme-commerce' => __( 'AZnet — Commerce', 'aznet-theme' ),
         'aznet-theme-utility'  => __( 'AZnet — Utility', 'aznet-theme' ),
     ];
