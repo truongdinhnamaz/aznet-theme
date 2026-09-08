@@ -1,1 +1,0 @@
-Owner approved the written Homepage blueprint spec; implementation may proceed on a feature branch, while merge/release/deploy remain gated.
