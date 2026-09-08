@@ -83,6 +83,32 @@ function render_quick_setup_form(): void {
     echo '</form>';
 }
 
+/**
+ * Render read-only WordPress-native Homepage setup guidance.
+ */
+function render_homepage_setup_card(): void {
+    $show_on_front = (string) get_option( 'show_on_front', 'posts' );
+    $front_page_id = (int) get_option( 'page_on_front', 0 );
+
+    echo '<div class="aznet-theme-panel aznet-theme-homepage-setup">';
+    echo '<h2>' . esc_html__( 'Homepage Setup', 'aznet-theme' ) . '</h2>';
+
+    if ( 'page' === $show_on_front && $front_page_id > 0 ) {
+        $edit_link = get_edit_post_link( $front_page_id, 'raw' );
+        echo '<p>' . esc_html__( 'Trang chủ tĩnh đã được cấu hình. Mở trang này rồi chọn Block Inserter → Patterns → AZnet — Pages → Homepage — Professional Services.', 'aznet-theme' ) . '</p>';
+        echo '<p>' . esc_html__( 'Sau khi chèn, toàn bộ nội dung là các block WordPress bình thường và có thể sửa trực tiếp.', 'aznet-theme' ) . '</p>';
+        if ( is_string( $edit_link ) && '' !== $edit_link ) {
+            echo '<p><a class="button button-primary" href="' . esc_url( $edit_link ) . '">' . esc_html__( 'Sửa Trang chủ', 'aznet-theme' ) . '</a></p>';
+        }
+    } else {
+        echo '<p>' . esc_html__( 'Homepage — Professional Services được thiết kế cho một Trang tĩnh. Hãy tạo hoặc chọn Page bằng WordPress rồi cấu hình Page đó làm Trang chủ.', 'aznet-theme' ) . '</p>';
+        echo '<p><a class="button" href="' . esc_url( admin_url( 'options-reading.php' ) ) . '">' . esc_html__( 'Mở Cài đặt đọc', 'aznet-theme' ) . '</a></p>';
+    }
+
+    echo '<p class="description">' . esc_html__( 'AZnet Theme không tự tạo, ghi đè hoặc xuất bản nội dung Trang chủ.', 'aznet-theme' ) . '</p>';
+    echo '</div>';
+}
+
 function render_control_center(): void {
     if ( ! current_user_can( 'edit_theme_options' ) ) { return; }
     $section = control_center_section();
@@ -99,6 +125,7 @@ function render_control_center(): void {
 
     if ( 'overview' === $section ) {
         render_quick_setup_form();
+        render_homepage_setup_card();
         echo '<div class="aznet-theme-grid">';
         $cards = [
             [ 'Phong cách', 'Chọn visual preset toàn Theme.', add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'design' ], admin_url( 'admin.php' ) ) ],
