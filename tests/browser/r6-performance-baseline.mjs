@@ -59,6 +59,7 @@ try {
       const context = await browser.newContext({ viewport });
       const page = await context.newPage();
       const requestFailures = [];
+      const failedSubresources = [];
       const consoleErrors = [];
       const pageErrors = [];
 
@@ -69,9 +70,22 @@ try {
         });
       });
       page.on('console', (message) => {
-        if (message.type() === 'error') consoleErrors.push(message.text());
+        if (message.type() !== 'error') return;
+        const text = message.text();
+        const expectedDocumentStatusNoise = route.status.some((expectedStatus) =>
+          expectedStatus >= 400 &&
+          new RegExp(`^Failed to load resource: the server responded with a status of ${expectedStatus}\\b`).test(text)
+        );
+        if (!expectedDocumentStatusNoise) consoleErrors.push(text);
       });
       page.on('pageerror', (error) => pageErrors.push(String(error)));
+      page.on('response', (networkResponse) => {
+        const responseStatus = networkResponse.status();
+        if (responseStatus < 400) return;
+        const request = networkResponse.request();
+        if (request.resourceType() === 'document') return;
+        failedSubresources.push(`${responseStatus} ${request.resourceType()} ${networkResponse.url()}`);
+      });
 
       await page.addInitScript(() => {
         globalThis.__aznetR6Cls = 0;
@@ -141,7 +155,8 @@ try {
         const providerAssets = resources.filter((entry) => /choiceguide|convertflow/i.test(entry.url) && !isThemeAsset(entry.url));
 
         if (metrics.overflowPx > 1) throw new Error(`${label}: horizontal overflow ${metrics.overflowPx}px`);
-        if (requestFailures.length) throw new Error(`${label}: failed subresources ${JSON.stringify(requestFailures)}`);
+        if (requestFailures.length) throw new Error(`${label}: failed requests ${JSON.stringify(requestFailures)}`);
+        if (failedSubresources.length) throw new Error(`${label}: failed subresources ${JSON.stringify(failedSubresources)}`);
         if (consoleErrors.length) throw new Error(`${label}: console errors ${JSON.stringify(consoleErrors)}`);
         if (pageErrors.length) throw new Error(`${label}: page errors ${JSON.stringify(pageErrors)}`);
         if (mode === 'clean' && wooThemeAssets.length) {
@@ -165,6 +180,7 @@ try {
           themeTransferBytes,
           themeDecodedBytes,
           requestFailures,
+          failedSubresources,
           consoleErrors,
           pageErrors,
           themeAssets,
