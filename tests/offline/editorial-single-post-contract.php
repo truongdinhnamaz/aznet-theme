@@ -25,8 +25,16 @@ function source_editorial_single(string $path): string {
 $single = source_editorial_single($root . '/single.php');
 $assets = source_editorial_single($root . '/inc/theme/assets.php');
 
+if (! str_contains($single, "is_singular( 'post' )")) {
+    fail_editorial_single('single.php must scope editorial composition to native Posts');
+}
+
 if (! str_contains($single, "get_template_part( 'template-parts/content/content', 'single' )")) {
-    fail_editorial_single('single.php must delegate Post composition to content-single.php');
+    fail_editorial_single('single.php must delegate native Post composition to content-single.php');
+}
+
+if (! str_contains($single, "post_class( 'aznet-theme-entry aznet-theme-entry--post' )")) {
+    fail_editorial_single('single.php must retain the generic fallback for non-Post single types');
 }
 
 $content = source_editorial_single($root . '/template-parts/content/content-single.php');
