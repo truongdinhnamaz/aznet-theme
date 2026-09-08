@@ -1,0 +1,155 @@
+name: Temporary Homepage CI Repair
+
+on:
+  push:
+    branches:
+      - work/homepage-composer-law01
+
+permissions:
+  contents: write
+
+jobs:
+  apply-repair:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/homepage-composer-law01
+          fetch-depth: 0
+      - name: Apply root-cause CI repairs
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          # 1) Law 01 runtime fixture: all test posts must be published in the past.
+          p = Path('.github/workflows/homepage-law-01-browser.yml')
+          text = p.read_text(encoding='utf-8')
+          replacements = {
+              "sprintf( '2026-09-%02d 10:00:00', 20 - $i )": "sprintf( '2026-09-%02d 10:00:00', 7 - $i )",
+              "'2026-09-20 11:00:00'": "'2026-09-07 11:00:00'",
+              "sprintf( '2026-09-%02d 09:00:00', 14 - $i )": "sprintf( '2026-09-%02d 09:00:00', 6 - $i )",
+              "sprintf( '2026-09-%02d 08:00:00', 10 - $i )": "sprintf( '2026-09-%02d 08:00:00', 7 - $i )",
+          }
+          for old, new in replacements.items():
+              if old not in text:
+                  raise SystemExit(f'Law01 fixture marker missing: {old}')
+              text = text.replace(old, new, 1)
+          p.write_text(text, encoding='utf-8')
+
+          # 2) R1 browser contract: PR #57 intentionally moved native Page/Post to Classic Editor.
+          p = Path('tests/browser/r1-design-system-l4.mjs')
+          text = p.read_text(encoding='utf-8')
+          start = text.index('async function inspectEditor(browser) {')
+          end = text.index('\nconst browser = await chromium.launch', start)
+          classic = r'''async function inspectEditor(browser) {
+  const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+  const page = await context.newPage();
+  const result = { status: 'failed', mode: null, titleVisible: false, contentPresent: false, blockEditorPresent: null, error: null };
+  try {
+    await page.goto(`${baseUrl}/wp-login.php`, { waitUntil: 'domcontentloaded' });
+    await page.locator('#user_login').fill('admin');
+    await page.locator('#user_pass').fill('r1-browser-password');
+    await Promise.all([
+      page.waitForURL(/wp-admin/),
+      page.locator('#wp-submit').click(),
+    ]);
+
+    await page.goto(`${baseUrl}/wp-admin/post.php?post=${fixtureId}&action=edit`, { waitUntil: 'domcontentloaded' });
+    await page.locator('#post').waitFor({ state: 'visible', timeout: 30000 });
+    await page.locator('#title').waitFor({ state: 'visible', timeout: 30000 });
+    await page.locator('#content').waitFor({ state: 'attached', timeout: 30000 });
+
+    result.mode = 'classic';
+    result.titleVisible = await page.locator('#title').isVisible();
+    result.contentPresent = (await page.locator('#content').inputValue()).includes('R1 Design System Fixture');
+    result.blockEditorPresent = await page.locator('.edit-post-layout, .interface-interface-skeleton').count();
+
+    if (!result.titleVisible) throw new Error('Classic Editor title field is not visible');
+    if (!result.contentPresent) throw new Error('Classic Editor did not retain fixture content');
+    if (result.blockEditorPresent !== 0) throw new Error('native Page unexpectedly exposed Block Editor under the accepted Classic Editor policy');
+
+    await page.screenshot({ path: path.join(screenshotDir, 'editor-classic.png'), fullPage: true });
+    result.status = 'passed';
+    console.log(`PASS: R1 ${preset} Classic Editor policy smoke`);
+  } catch (error) {
+    result.error = error instanceof Error ? error.message : String(error);
+    failures.push(`editor: ${result.error}`);
+    console.error(`FAIL: R1 ${preset} Classic Editor smoke: ${result.error}`);
+    await page.screenshot({ path: path.join(screenshotDir, 'editor-classic-failure.png'), fullPage: true }).catch(() => {});
+  } finally {
+    summary.editor = result;
+    await context.close();
+  }
+}
+'''
+          text = text[:start] + classic + text[end:]
+          p.write_text(text, encoding='utf-8')
+
+          # 3) R2 browser contract: retain runtime pattern proof, but admin smoke follows Classic Editor policy.
+          p = Path('tests/browser/r2-pattern-library-l4.mjs')
+          text = p.read_text(encoding='utf-8')
+          start = text.index('async function inspectEditor(browser) {')
+          end = text.index('\nconst browser = await chromium.launch', start)
+          classic = r'''async function inspectEditor(browser) {
+  const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+  const page = await context.newPage();
+  const result = { status: 'failed', mode: null, patternMarkupPresent: false, blockEditorPresent: null, error: null };
+
+  try {
+    await page.goto(`${baseUrl}/wp-login.php`, { waitUntil: 'domcontentloaded' });
+    await page.locator('#user_login').fill('admin');
+    await page.locator('#user_pass').fill('r2-browser-password');
+    await Promise.all([
+      page.waitForURL(/wp-admin/),
+      page.locator('#wp-submit').click(),
+    ]);
+
+    await page.goto(`${baseUrl}/wp-admin/post.php?post=${fixtureId}&action=edit`, { waitUntil: 'domcontentloaded' });
+    await page.locator('#post').waitFor({ state: 'visible', timeout: 30000 });
+    await page.locator('#content').waitFor({ state: 'attached', timeout: 30000 });
+
+    const content = await page.locator('#content').inputValue();
+    result.mode = 'classic';
+    result.patternMarkupPresent = content.includes('aznet-theme-pattern--hero-split') && content.includes('aznet-theme-pattern--content-faq');
+    result.blockEditorPresent = await page.locator('.edit-post-layout, .interface-interface-skeleton').count();
+
+    if (!result.patternMarkupPresent) throw new Error('Classic Editor did not retain representative native pattern markup');
+    if (result.blockEditorPresent !== 0) throw new Error('native Page unexpectedly exposed Block Editor under the accepted Classic Editor policy');
+
+    await page.screenshot({ path: path.join(screenshotDir, 'editor-classic.png'), fullPage: true });
+    result.status = 'passed';
+    console.log(`PASS: R2 ${preset} ${wooEnabled ? 'Woo' : 'clean'} Classic Editor policy smoke`);
+  } catch (error) {
+    result.error = error instanceof Error ? error.message : String(error);
+    failures.push(`editor: ${result.error}`);
+    console.error(`FAIL: R2 ${preset} Classic Editor smoke: ${result.error}`);
+    await page.screenshot({ path: path.join(screenshotDir, 'editor-classic-failure.png'), fullPage: true }).catch(() => {});
+  } finally {
+    summary.editor = result;
+    await context.close();
+  }
+}
+'''
+          text = text[:start] + classic + text[end:]
+          p.write_text(text, encoding='utf-8')
+
+          # 4) R5: instrument the exact failing boundary before changing any assertion.
+          p = Path('.github/workflows/r5-control-center-browser.yml')
+          text = p.read_text(encoding='utf-8')
+          marker = "          wp theme activate aznet-theme --path=/tmp/wp --allow-root\n          wp eval \"if ( ! has_custom_logo() || ! has_nav_menu( 'primary' ) ) { exit(1); }\" --path=/tmp/wp --allow-root\n"
+          replacement = "          wp theme activate aznet-theme --path=/tmp/wp --allow-root\n          echo 'R5_DIAGNOSTIC_BEGIN'\n          wp theme mod get custom_logo --path=/tmp/wp --allow-root || true\n          wp eval 'echo has_custom_logo() ? \"logo=yes\\n\" : \"logo=no\\n\"; echo has_nav_menu( \"primary\" ) ? \"menu=yes\\n\" : \"menu=no\\n\"; var_export( get_theme_mod( \"aznet_theme_settings\", [] ) ); echo \"\\n\";' --path=/tmp/wp --allow-root\n          echo 'R5_DIAGNOSTIC_END'\n          wp eval \"if ( ! has_custom_logo() || ! has_nav_menu( 'primary' ) ) { exit(1); }\" --path=/tmp/wp --allow-root\n"
+          if marker not in text:
+              raise SystemExit('R5 theme-switch marker missing')
+          text = text.replace(marker, replacement, 1)
+          p.write_text(text, encoding='utf-8')
+          PY
+      - name: Commit root-cause repairs
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .github/workflows/homepage-law-01-browser.yml .github/workflows/r5-control-center-browser.yml tests/browser/r1-design-system-l4.mjs tests/browser/r2-pattern-library-l4.mjs
+          git diff --cached --check
+          git commit -m 'test: align homepage verification with current policy'
+          git push origin HEAD:work/homepage-composer-law01
