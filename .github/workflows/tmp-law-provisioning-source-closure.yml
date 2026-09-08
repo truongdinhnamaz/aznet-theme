@@ -47,7 +47,7 @@ jobs:
               s = s.replace('\nRelease publication remains separate', insert + '\nRelease publication remains separate', 1)
           p.write_text(s)
           PY
-          grep -q 'Version: v0.25' docs/source/AZT-03-baseline-provenance.md
+          grep -q '\*\*Version:\*\* v0.25' docs/source/AZT-03-baseline-provenance.md
           grep -q '6acd8b633503a701eb47ed0df072f6def4e1b03e' docs/source/AZT-03-baseline-provenance.md
           grep -q 'AZT-03-baseline-provenance.md.*v0.25' docs/source/SOURCE_MANIFEST.md
           grep -q 'AZT-EXEC-MAP.md.*v0.22' docs/source/SOURCE_MANIFEST.md
