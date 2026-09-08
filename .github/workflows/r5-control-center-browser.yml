@@ -157,7 +157,11 @@ jobs:
       - name: Verify theme-switch safety and return continuity
         run: |
           set -euo pipefail
-          wp theme install twentytwentysix --activate --path=/tmp/wp --allow-root
+          mkdir -p /tmp/wp/wp-content/themes/r5-switch-target
+          printf '%s\n' '/*' 'Theme Name: R5 Switch Target' 'Version: 1.0.0' '*/' > /tmp/wp/wp-content/themes/r5-switch-target/style.css
+          printf '%s\n' '<?php' 'wp_head();' 'echo "<main>R5 switch target</main>";' 'wp_footer();' > /tmp/wp/wp-content/themes/r5-switch-target/index.php
+          wp theme activate r5-switch-target --path=/tmp/wp --allow-root
+          wp theme status r5-switch-target --path=/tmp/wp --allow-root | grep -F 'Status: Active'
           test "$(wp option get r5_external_provider_sentinel --path=/tmp/wp --allow-root)" = 'keep'
           wp post list --post_type=page --name=r5-continuity --field=post_title --path=/tmp/wp --allow-root | grep -Fx 'R5 Continuity Page'
           wp theme activate aznet-theme --path=/tmp/wp --allow-root
