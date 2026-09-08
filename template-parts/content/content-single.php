@@ -14,9 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'aznet-theme-entry aznet-theme-entry--post aznet-theme-article' ); ?>>
     <header class="aznet-theme-entry__header aznet-theme-article__header">
         <?php if ( has_category() ) : ?>
-            <div class="aznet-theme-article__categories" aria-label="<?php esc_attr_e( 'Categories', 'aznet-theme' ); ?>">
+            <nav class="aznet-theme-article__categories" aria-label="<?php esc_attr_e( 'Categories', 'aznet-theme' ); ?>">
                 <?php the_category( ' ' ); ?>
-            </div>
+            </nav>
         <?php endif; ?>
 
         <h1 class="aznet-theme-entry__title aznet-theme-article__title"><?php the_title(); ?></h1>
