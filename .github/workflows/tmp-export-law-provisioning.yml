@@ -1,0 +1,31 @@
+name: Temporary Export Law Provisioning Checkout
+
+on:
+  push:
+    branches:
+      - work/law-site-provisioning-design
+    paths:
+      - '.github/workflows/tmp-export-law-provisioning.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v4
+      - name: Archive exact checkout
+        run: |
+          set -euo pipefail
+          tar --exclude='.git' -czf /tmp/law-site-provisioning-checkout.tar.gz .
+          git rev-parse HEAD > /tmp/HEAD_SHA.txt
+      - name: Upload checkout
+        uses: actions/upload-artifact@v4
+        with:
+          name: law-site-provisioning-full-checkout
+          path: |
+            /tmp/law-site-provisioning-checkout.tar.gz
+            /tmp/HEAD_SHA.txt
+          if-no-files-found: error
