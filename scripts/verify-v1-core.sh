@@ -75,4 +75,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-asset-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-control-center-contract.php
 
+printf '%s\n' '==> Classic Editor policy contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/classic-editor-policy-contract.php
+
 printf '%s\n' 'PASS: reusable v1 core verification'
