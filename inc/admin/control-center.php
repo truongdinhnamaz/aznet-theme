@@ -22,26 +22,64 @@ function field_select( string $name, string $label, array $choices, string $curr
     echo '</select></label>';
 }
 
+function field_checkbox( string $name, string $label, bool $current ): void {
+    echo '<label class="aznet-theme-field"><span>' . esc_html( $label ) . '</span><span>';
+    echo '<input type="hidden" name="aznet_theme_settings[' . esc_attr( $name ) . ']" value="0">';
+    echo '<input type="checkbox" name="aznet_theme_settings[' . esc_attr( $name ) . ']" value="1" ' . checked( $current, true, false ) . '>';
+    echo '</span></label>';
+}
+
+function render_hidden_settings( array $visible_keys ): void {
+    $s = settings();
+    foreach ( settings_defaults() as $key => $default ) {
+        if ( 'schema_version' === $key || in_array( $key, $visible_keys, true ) ) { continue; }
+        $value = $s[ $key ] ?? $default;
+        echo '<input type="hidden" name="aznet_theme_settings[' . esc_attr( $key ) . ']" value="' . esc_attr( is_bool( $value ) ? ( $value ? '1' : '0' ) : (string) $value ) . '">';
+    }
+}
+
 function render_settings_form( string $section ): void {
     $s = settings();
+    $visible_keys = [];
+    if ( 'design' === $section ) {
+        $visible_keys = [ 'visual_preset' ];
+    } elseif ( 'header' === $section ) {
+        $visible_keys = [ 'header_preset', 'header_sticky', 'header_search', 'header_utilities' ];
+    } elseif ( 'commerce' === $section ) {
+        $visible_keys = [ 'woo_catalog_preset', 'woo_product_card_density', 'woo_product_preset' ];
+    }
+
     echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="aznet-theme-panel">';
     echo '<input type="hidden" name="action" value="aznet_theme_save_settings">';
     wp_nonce_field( 'aznet_theme_save_settings' );
-    foreach ( settings_defaults() as $key => $default ) {
-        if ( 'schema_version' === $key ) { continue; }
-        echo '<input type="hidden" name="aznet_theme_settings[' . esc_attr( $key ) . ']" value="' . esc_attr( is_bool( $s[$key] ?? $default ) ? ( ( $s[$key] ?? $default ) ? '1' : '0' ) : (string) ( $s[$key] ?? $default ) ) . '">';
-    }
+    render_hidden_settings( $visible_keys );
+
     if ( 'design' === $section ) {
         field_select( 'visual_preset', __( 'Phong cách', 'aznet-theme' ), [ 'default' => 'Default', 'editorial' => 'Editorial', 'commerce' => 'Commerce' ], (string) $s['visual_preset'] );
     } elseif ( 'header' === $section ) {
         field_select( 'header_preset', __( 'Kiểu Header', 'aznet-theme' ), [ 'standard' => 'Standard', 'compact' => 'Compact', 'commerce' => 'Commerce', 'overlay' => 'Overlay' ], (string) $s['header_preset'] );
         field_select( 'header_sticky', __( 'Sticky', 'aznet-theme' ), [ 'off' => 'Off', 'sticky' => 'Sticky', 'sticky-compact' => 'Sticky Compact' ], (string) $s['header_sticky'] );
+        field_checkbox( 'header_search', __( 'Hiển thị tìm kiếm', 'aznet-theme' ), (bool) $s['header_search'] );
+        field_checkbox( 'header_utilities', __( 'Hiển thị tiện ích Header', 'aznet-theme' ), (bool) $s['header_utilities'] );
     } elseif ( 'commerce' === $section ) {
         field_select( 'woo_catalog_preset', __( 'Catalog', 'aznet-theme' ), [ 'grid' => 'Grid', 'compact-grid' => 'Compact Grid', 'editorial' => 'Editorial' ], (string) $s['woo_catalog_preset'] );
         field_select( 'woo_product_card_density', __( 'Mật độ thẻ sản phẩm', 'aznet-theme' ), [ 'comfortable' => 'Comfortable', 'balanced' => 'Balanced', 'compact' => 'Compact' ], (string) $s['woo_product_card_density'] );
         field_select( 'woo_product_preset', __( 'Trang sản phẩm', 'aznet-theme' ), [ 'classic' => 'Classic', 'focus' => 'Focus', 'story' => 'Story' ], (string) $s['woo_product_preset'] );
     }
     submit_button( __( 'Lưu thiết lập', 'aznet-theme' ) );
+    echo '</form>';
+}
+
+function render_quick_setup_form(): void {
+    $s = settings();
+    echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="aznet-theme-panel">';
+    echo '<input type="hidden" name="action" value="aznet_theme_save_settings">';
+    wp_nonce_field( 'aznet_theme_save_settings' );
+    render_hidden_settings( [ 'visual_preset', 'header_preset' ] );
+    echo '<h2>' . esc_html__( 'Quick Setup', 'aznet-theme' ) . '</h2>';
+    field_select( 'visual_preset', __( 'Phong cách', 'aznet-theme' ), [ 'default' => 'Default', 'editorial' => 'Editorial', 'commerce' => 'Commerce' ], (string) $s['visual_preset'] );
+    field_select( 'header_preset', __( 'Kiểu Header', 'aznet-theme' ), [ 'standard' => 'Standard', 'compact' => 'Compact', 'commerce' => 'Commerce', 'overlay' => 'Overlay' ], (string) $s['header_preset'] );
+    submit_button( __( 'Lưu Quick Setup', 'aznet-theme' ), 'primary', 'submit', false );
     echo '</form>';
 }
 
@@ -60,6 +98,7 @@ function render_control_center(): void {
     echo '</nav>';
 
     if ( 'overview' === $section ) {
+        render_quick_setup_form();
         echo '<div class="aznet-theme-grid">';
         $cards = [
             [ 'Phong cách', 'Chọn visual preset toàn Theme.', add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'design' ], admin_url( 'admin.php' ) ) ],
@@ -77,8 +116,10 @@ function render_control_center(): void {
         wp_nonce_field( 'aznet_theme_export_settings' ); submit_button( 'Xuất JSON', 'secondary', 'submit', false ); echo '</form>';
         echo '<form method="post" enctype="multipart/form-data" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="aznet_theme_import_settings">';
         wp_nonce_field( 'aznet_theme_import_settings' ); echo '<input type="file" name="aznet_theme_settings_file" accept="application/json,.json" required> '; submit_button( 'Nhập JSON', 'secondary', 'submit', false ); echo '</form></div>';
-        echo '<div class="aznet-theme-panel aznet-theme-danger"><h2>Đặt lại thiết lập Theme</h2><form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="aznet_theme_reset_settings"><input type="hidden" name="confirm_reset" value="1">';
-        wp_nonce_field( 'aznet_theme_reset_settings' ); submit_button( 'Đặt lại', 'delete', 'submit', false ); echo '</form></div>';
+        echo '<div class="aznet-theme-panel aznet-theme-danger"><h2>Đặt lại thiết lập Theme</h2><form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="aznet_theme_reset_settings">';
+        wp_nonce_field( 'aznet_theme_reset_settings' );
+        echo '<label><input type="checkbox" name="confirm_reset" value="1" required> ' . esc_html__( 'Tôi xác nhận chỉ đặt lại thiết lập trình bày của AZnet Theme.', 'aznet-theme' ) . '</label> ';
+        submit_button( 'Đặt lại', 'delete', 'submit', false ); echo '</form></div>';
     } elseif ( 'system-health' === $section ) {
         $report = system_health_report();
         echo '<div class="aznet-theme-panel"><h2>System Health</h2><table class="widefat striped"><tbody>';
@@ -88,6 +129,8 @@ function render_control_center(): void {
             }
         }
         echo '</tbody></table></div>';
+        $snapshot = wp_json_encode( support_snapshot(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+        echo '<div class="aznet-theme-panel"><h2>' . esc_html__( 'Support Snapshot', 'aznet-theme' ) . '</h2><textarea class="large-text code" rows="16" readonly>' . esc_textarea( is_string( $snapshot ) ? $snapshot : '{}' ) . '</textarea></div>';
     } else {
         render_settings_form( $section );
     }
