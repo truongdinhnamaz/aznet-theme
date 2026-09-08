@@ -58,10 +58,13 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/r5-control-center-s
 printf '%s\n' '==> Woo asset scope regression'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/w1-woocommerce-asset-scope-contract.php
 
-printf '%s\n' '==> R6 pre-promotion contracts'
+printf '%s\n' '==> R6 contracts'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/r6-asset-scope-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/r6-convertflow-asset-gate-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/r6-ci-trigger-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/r6-release-workflow-contract.php
+
+printf '%s\n' '==> P2 Editorial Single-Post contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/editorial-single-post-contract.php
 
 printf '%s\n' 'PASS: reusable v1 core verification'
