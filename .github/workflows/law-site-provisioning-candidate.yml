@@ -22,8 +22,10 @@ jobs:
   candidate-package:
     runs-on: ubuntu-24.04
     steps:
-      - name: Checkout exact candidate
+      - name: Checkout exact candidate head
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Record exact identity outside package source
         run: git rev-parse HEAD | tee /tmp/CANDIDATE_HEAD_SHA.txt
