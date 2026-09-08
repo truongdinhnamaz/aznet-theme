@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.25  
+**Version:** v0.26  
 **Status:** Working Source  
 **Date:** 08/09/2026
 
@@ -27,16 +27,20 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | R1 | Design System 2.0 | PASS | PR #37 merged; settings/tokens + Default/Editorial/Commerce outcomes + editor/frontend parity L1-L4 |
 | R2 | Native Pattern Library | PASS | PR #39 merged; 18 portable patterns; public Woo-block gating; L1-L4 + theme-switch portability evidence |
 | R3 | Header System 2.0 | PASS | PR #41 merged; four bounded presets, three sticky modes, reusable primitives, mobile progressive enhancement and L1-L4 browser/a11y evidence |
-| R4 | WooCommerce Presentation 2.0 | READY / EXACT NEXT | Product-card/catalog/product/cart/checkout/account presentation improvements; independently unblocked and now sequential next |
-| R5 | Control Center + System Health | PLANNED / DEPENDENCY WAIT | R3 setting keys are stable; waits for final R4 setting keys |
-| R6 | Performance + Release 2.0 | PLANNED | Asset-scope evidence, exact-main CI and deterministic v1.x release closure |
-| U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform R5; no wholesale merge and no parallel admin/settings architecture |
+| R4 | WooCommerce Presentation 2.0 | PASS | PR #43 merged; catalog/card/product/cart/checkout/account presentation, clean-WP fail-soft and Woo-present L1-L4 evidence |
+| R5 | Control Center + System Health | PASS | PR #44 merged; bounded presentation admin, System Health, authenticated browser/a11y and update/theme-switch continuity evidence |
+| R6 | Performance + Release 2.0 | READY / EXACT NEXT | Measured asset/performance closure, exact-main CI, deterministic v1.1 package and atomic metadata promotion subject to release gates |
+| U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
-Canonical implementation baseline after R3 merge: `main@d8d5670d57dc62f7e2399d9e1b2eee70fd85ef9d`.
+Canonical implementation baseline after R5 merge and the subsequent no-op history correction: `main@484e896cace06d684d29a3f93e3cce85e84a9f80`, production tree `7798435b12d166f74d91f55ef10fbaf385bcb0ef`.
 
-R3 merged from head `c4e6e623e4fc0113bdbc211fecf34b40528b7f77`; its tree is identical to the merge tree at `ebe79f1dc65ab58794592eab59a5bb2b9b3a1a00`. Fresh exact-PR-head verification completed 14/14 workflows successfully, including R3 static/browser and retained core/R1/R2 regressions. No pull-request-triggered Actions run exists on the merge SHA, so post-merge execution is not inferred beyond the proven tree equivalence.
+R4 merged through PR #43 to `main@0ddc6c799391d57db134f04449effdf511d41d1f`; final head and merge share tree `e66c6ebbcc1de7d695ffa67172928d0f0580e443`. R4 functional/test head `675a4f0a07b7c6c4796ad359a4b13f9c2d94f74a` completed 16/16 workflows successfully and the final evidence-only head retained fresh 16/16 success.
 
-A fresh GitHub check on 08/09/2026 still finds no Git tag and no GitHub Release for v1.0.0, so **publication = PUBLICATION_PENDING** even though metadata/core technical closure is `1.0.0`.
+R5 merged through PR #44 to `main@6c69def2ff4ac7adb1221de09aec057b63b1adf6`; final head and merge share tree `7798435b12d166f74d91f55ef10fbaf385bcb0ef`. R5 functional/test head `d85af1210e79be2ceb48cef23c7d1d3dbb3ebc8c` completed 18/18 workflows successfully, including R5 authenticated browser/continuity plus all retained R1-R4/core regressions. The final evidence-only head `fed7429853ce5f6a209a0bf763a4c72f5ed1d376` differs from the verified functional/test head only by `docs/evidence/R5_CONTROL_CENTER_L4.md` and merged without tree delta.
+
+After R5 merge, a temporary source-state sentinel was accidentally added to `main` and immediately removed in the next commit. Current `main@484e896cace06d684d29a3f93e3cce85e84a9f80` compares to the R5 merge with no changed files; implementation bytes remain the exact R5 production tree. This history event does not reopen any QA layer.
+
+A fresh GitHub release check on 08/09/2026 returns no GitHub Release; no tag evidence has been established. Publication therefore remains **PUBLICATION_PENDING** and Theme metadata intentionally remains `1.0.0` until the R6 promotion gate.
 
 ## 3. v1.0 closure state
 
@@ -84,7 +88,7 @@ Ship a curated WordPress-native launch set using core blocks and public Woo bloc
 
 **Exit:** PASS — 18 patterns shipped; 16 core/native plus 2 public-Woo-block-gated patterns. L1-L4, editor/frontend parity, clean-WP/Woo-present matrices and byte-identical theme-switch content portability proven; PR #39 merged to canonical `main`.
 
-**Next:** R3 — completed; R4 remains READY.
+**Next:** R3 — completed; R4 completed.
 
 ### R3 — Header System 2.0
 
@@ -92,31 +96,49 @@ Introduce Standard/Compact/Commerce/Overlay presentation presets from reusable p
 
 **Exit:** PASS — four bounded presets and three sticky modes delivered; mobile no-JS fallback, keyboard/focus, depth-2 navigation, reduced motion, 1440/1024/390/320 responsiveness, Overlay fallback and Woo-present/absent Commerce behavior verified through L1-L4. PR #41 merged to canonical `main` with exact head/merge tree equivalence.
 
-**Next:** R4.
+**Next:** R4 — completed.
 
 ### R4 — WooCommerce Presentation 2.0
 
 Improve product cards, catalog, single-product, cart, checkout and account presentation through public Woo APIs/hooks/Blocks and surface-scoped CSS. No commerce/domain engine is added.
 
-**Exit:** L1-L4 PASS with Woo present plus clean-WP/Woo-absent regression.
+**Exit:** PASS — public-Woo presentation settings/surfaces delivered without template takeover or commerce state duplication; clean-WP absence regression and Woo-present Theme-owned L1-L4 matrix complete. PR #43 merged to canonical `main`; detailed evidence is `docs/evidence/R4_WOOCOMMERCE_PRESENTATION_L4.md`.
+
+**Next:** R5 — completed.
 
 ### R5 — Control Center + System Health
 
 Provide a bounded presentation settings console using the single normalized Theme Mod schema. Quick Setup links to/uses native WordPress controls and does not create domain/content state. System Health is read-only and public-capability-based.
 
-**Exit:** L1-L4 plus update/theme-switch continuity PASS.
+**Exit:** PASS — static/contract, real WordPress authenticated browser/a11y, clean-WP/Woo-present capability gating, settings portability, in-place update continuity and theme-switch continuity all verified. PR #44 merged to canonical `main`; detailed evidence is `docs/evidence/R5_CONTROL_CENTER_L4.md`.
+
+**Next:** R6.
 
 ### R6 — Performance + Release 2.0
 
 Measure asset/runtime behavior, harden surface-aware loading, add reusable PR/exact-main CI and deterministic v1.x packaging. Provider-specific optimization without a public capability is BLOCKED rather than privately detected.
 
-**Exit:** fresh final exact-main L0-L6 evidence, deterministic package identity and rollback reference; version/tag/release stops at owner gate.
+**Required sequence:**
+
+1. capture route/asset/performance baseline on the latest canonical `main`;
+2. harden only Theme-owned surface-aware asset loading where measured evidence justifies change;
+3. evaluate ConvertFlow projection loading only through a documented public capability; otherwise record `BLOCKED_EXTERNAL_CONTRACT` and retain safe behavior;
+4. add reusable PR CI and exact-main post-merge verification;
+5. add deterministic v1.x release-candidate workflow/package builder with stable top-level `aznet-theme/` identity;
+6. retire obsolete milestone-specific workflows only after replacement coverage and fresh evidence;
+7. run final exact-main R1-R6 regression before metadata promotion;
+8. at the source-defined approval gate, promote `style.css` Theme Version and `AZNET_THEME_VERSION` atomically to exact `1.1.0` — never only the package filename;
+9. rerun exact-main/package verification on promoted bytes and stop before tag/GitHub Release unless separately approved.
+
+**Exit:** fresh final exact-main L0-L6 evidence, deterministic package identity/SHA/file count and rollback reference.
+
+**Hard gate:** release metadata promotion and later tag/GitHub Release remain explicit owner approvals under Section 12.
 
 ## 5. Dependency order
 
 `R0 -> R1 -> {R2, R3, R4} -> R5 -> R6`
 
-R0, R1, R2 and R3 are complete on canonical `main`. R4 is now the remaining production stream in the parallel group and the exact sequential next. R5 may start only after R4 final setting keys are stable; it consumes the already-stable R3 settings rather than inventing a second schema. R6 is the integration/release closure after production streams land.
+R0 through R5 are complete on canonical `main`. R4 final setting keys were consumed by R5 without a parallel settings schema. R6 is now the only remaining core-v1.1 implementation/release-closure stream.
 
 ## 6. QA layers
 
@@ -210,13 +232,14 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 The following remain explicit owner approval gates:
 
 - any later product/architecture/public-contract change not already ratified here;
-- release version promotion/tag/GitHub Release;
+- release metadata/version promotion;
+- Git tag/GitHub Release;
 - production deployment;
 - provider takeover paths such as E5-D;
 - destructive retirement without proven rollback.
 
-Completed R0, R1, R2 and R3 merge approvals are historical cleared gates and are not requested again.
+Completed R0-R5 implementation/source merge approvals are historical cleared gates and are not requested again for those already-merged scopes. R6 may execute safe pre-promotion work, but it must stop before the metadata/version promotion gate unless explicitly approved.
 
 ## 13. Exact next
 
-**R4 — WooCommerce Presentation 2.0 from the latest canonical `main`. R5 remains dependency-wait until R4 final setting keys are stable.**
+**R6 — Performance + Release 2.0 from the latest canonical `main`. First capture measured route/asset/performance baseline and build exact-main release infrastructure; do not promote metadata or tag/release without the explicit gate in Section 12.**
