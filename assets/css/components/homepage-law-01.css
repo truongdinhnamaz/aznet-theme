@@ -2,6 +2,7 @@
     --law01-navy: #0f2742;
     --law01-navy-deep: #091a2c;
     --law01-gold: #b88b45;
+    --law01-gold-text: #8a632b;
     --law01-cream: #f7f4ee;
     color: var(--aznet-theme-color-text);
     background: var(--aznet-theme-color-surface);
@@ -20,7 +21,7 @@
 .aznet-theme-homepage--law-01 .aznet-theme-law01-section h2 { margin: .4rem 0 2rem; font-size: clamp(2rem, 3.6vw, 3.5rem); }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-section h3 { margin: 0 0 .8rem; font-size: clamp(1.15rem, 2vw, 1.5rem); }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-section a:focus-visible { outline: 3px solid var(--aznet-theme-color-focus); outline-offset: 4px; }
-.aznet-theme-homepage--law-01 .aznet-theme-law01-eyebrow { color: var(--law01-gold); font-size: .78rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+.aznet-theme-homepage--law-01 .aznet-theme-law01-eyebrow { color: var(--law01-gold-text); font-size: .78rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-lede { max-width: 60ch; font-size: clamp(1rem, 1.4vw, 1.2rem); color: var(--aznet-theme-color-text-muted); }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.6rem; }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-button { display: inline-flex; min-height: 3rem; align-items: center; justify-content: center; padding: .75rem 1.2rem; border: 1px solid var(--law01-gold); border-radius: var(--aznet-theme-radius-control); background: var(--law01-gold); color: #16120c; font-weight: 750; text-decoration: none; }
@@ -31,6 +32,9 @@
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero { background: var(--law01-navy); color: #fff; padding-block: clamp(4rem, 7vw, 7.5rem); }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero__grid { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(18rem, .88fr); gap: clamp(2rem, 5vw, 5.5rem); align-items: center; }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero__grid--text { grid-template-columns: minmax(0, 52rem); }
+.aznet-theme-homepage--law-01 .aznet-theme-law01-hero .aznet-theme-law01-eyebrow,
+.aznet-theme-homepage--law-01 .aznet-theme-law01-analysis .aznet-theme-law01-eyebrow,
+.aznet-theme-homepage--law-01 .aznet-theme-law01-final-cta .aznet-theme-law01-eyebrow { color: var(--law01-gold); }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero .aznet-theme-law01-lede { color: #dce5ee; }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero__media { border-radius: 1rem; overflow: hidden; box-shadow: var(--aznet-theme-shadow-float); }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero__image,
@@ -57,6 +61,7 @@
 .aznet-theme-homepage--law-01 .aznet-theme-law01-panel { padding: clamp(1.5rem, 4vw, 3rem); }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-analysis { background: var(--law01-navy-deep); color: #fff; }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-analysis .aznet-theme-law01-article-card { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.18); box-shadow: none; }
+.aznet-theme-homepage--law-01 .aznet-theme-law01-analysis .aznet-theme-law01-meta { color: #b8c5d3; }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-news-list { display: grid; gap: 0; border-top: 1px solid var(--aznet-theme-color-border); }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-news-list article { display: grid; grid-template-columns: 8rem 1fr; gap: 1.25rem; padding-block: 1rem; border-bottom: 1px solid var(--aznet-theme-color-border); }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-news-list h3 { margin: 0; }
