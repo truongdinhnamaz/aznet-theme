@@ -76,6 +76,10 @@ function normalize_settings( array $raw ): array {
             return 1 === $value;
         }
 
+        if ( is_string( $value ) && in_array( $value, [ '0', '1' ], true ) ) {
+            return '1' === $value;
+        }
+
         return $default;
     };
 
