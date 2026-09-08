@@ -5,6 +5,9 @@ $css = $root . '/assets/css/components/homepage-law-01.css';
 if (! is_file($css)) { fwrite(STDERR, "FAIL: Law 01 stylesheet missing\n"); exit(1); }
 $cssSource = file_get_contents($css);
 assert(str_contains($cssSource, '.aznet-theme-homepage--law-01'));
+assert(str_contains($cssSource, '--law01-gold-text: #8a632b;'), 'Light-surface eyebrow color must retain WCAG contrast on white/cream.');
+assert(str_contains($cssSource, '.aznet-theme-law01-analysis .aznet-theme-law01-meta { color: #b8c5d3; }'), 'Analysis metadata must use a light contrast-safe color on the dark card surface.');
+assert(str_contains($cssSource, '.aznet-theme-law01-hero .aznet-theme-law01-eyebrow,'), 'Dark-surface eyebrow override must retain the brighter gold role.');
 $assets = file_get_contents($root . '/inc/theme/assets.php');
 assert(str_contains($assets, 'homepage-law-01.css'));
 assert(str_contains($assets, "'law-01'"));
