@@ -95,13 +95,13 @@ function render_homepage_setup_card(): void {
 
     if ( 'page' === $show_on_front && $front_page_id > 0 ) {
         $edit_link = get_edit_post_link( $front_page_id, 'raw' );
-        echo '<p>' . esc_html__( 'Trang chủ tĩnh đã được cấu hình. Mở trang này rồi chọn Block Inserter → Patterns → AZnet — Pages → Homepage — Professional Services.', 'aznet-theme' ) . '</p>';
-        echo '<p>' . esc_html__( 'Sau khi chèn, toàn bộ nội dung là các block WordPress bình thường và có thể sửa trực tiếp.', 'aznet-theme' ) . '</p>';
+        echo '<p>' . esc_html__( 'Trang chủ tĩnh đã được cấu hình. Trang chủ dùng Classic Editor giống các Page WordPress thông thường.', 'aznet-theme' ) . '</p>';
+        echo '<p>' . esc_html__( 'Bấm nút dưới để sửa nội dung Trang chủ bằng Classic Editor.', 'aznet-theme' ) . '</p>';
         if ( is_string( $edit_link ) && '' !== $edit_link ) {
             echo '<p><a class="button button-primary" href="' . esc_url( $edit_link ) . '">' . esc_html__( 'Sửa Trang chủ', 'aznet-theme' ) . '</a></p>';
         }
     } else {
-        echo '<p>' . esc_html__( 'Homepage — Professional Services được thiết kế cho một Trang tĩnh. Hãy tạo hoặc chọn Page bằng WordPress rồi cấu hình Page đó làm Trang chủ.', 'aznet-theme' ) . '</p>';
+        echo '<p>' . esc_html__( 'Hãy tạo hoặc chọn một Page bằng WordPress rồi cấu hình Page đó làm Trang chủ. Page được sửa bằng Classic Editor.', 'aznet-theme' ) . '</p>';
         echo '<p><a class="button" href="' . esc_url( admin_url( 'options-reading.php' ) ) . '">' . esc_html__( 'Mở Cài đặt đọc', 'aznet-theme' ) . '</a></p>';
     }
 
@@ -132,7 +132,7 @@ function render_control_center(): void {
             [ 'Logo', 'Dùng Custom Logo native của WordPress.', admin_url( 'customize.php?autofocus[control]=custom_logo' ) ],
             [ 'Menu', 'Quản lý menu bằng WordPress.', admin_url( 'nav-menus.php' ) ],
             [ 'Header', 'Chọn preset và sticky mode.', add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'header' ], admin_url( 'admin.php' ) ) ],
-            [ 'Patterns', 'Mở Page editor rồi Block Inserter → Patterns.', admin_url( 'post-new.php?post_type=page' ) ],
+            [ 'Trang', 'Tạo Page mới bằng Classic Editor.', admin_url( 'post-new.php?post_type=page' ) ],
         ];
         foreach ( $cards as $card ) {
             echo '<a class="aznet-theme-card" href="' . esc_url( $card[2] ) . '"><strong>' . esc_html( $card[0] ) . '</strong><span>' . esc_html( $card[1] ) . '</span></a>';

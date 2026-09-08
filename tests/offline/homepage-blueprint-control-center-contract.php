@@ -15,8 +15,7 @@ function homepage_control_fail(string $message): never
 $required = [
     'function render_homepage_setup_card(): void',
     'Homepage Setup',
-    'Homepage — Professional Services',
-    'AZnet — Pages',
+    'Classic Editor',
     'get_edit_post_link',
     "get_option( 'show_on_front'",
     "get_option( 'page_on_front'",
@@ -49,6 +48,16 @@ foreach ([
     }
 }
 
+foreach ([
+    'Block Inserter',
+    'Homepage — Professional Services',
+    'AZnet — Pages',
+] as $needle) {
+    if (str_contains($helper, $needle)) {
+        homepage_control_fail('Homepage Setup must not instruct a Block Editor-only workflow after Classic mode is selected: ' . $needle);
+    }
+}
+
 if (! str_contains($source, 'render_homepage_setup_card();')) {
     homepage_control_fail('Homepage Setup card is not rendered on Control Center Overview');
 }
@@ -57,4 +66,4 @@ if (str_contains($helper, 'choiceguide_') || str_contains($helper, 'rootprofile_
     homepage_control_fail('Homepage Setup guidance must not inspect provider state');
 }
 
-echo "PASS: Homepage blueprint Control Center guidance contract\n";
+echo "PASS: Homepage Classic Editor Control Center guidance contract\n";
