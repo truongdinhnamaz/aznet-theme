@@ -45,7 +45,7 @@ foreach ($required as $function) {
 }
 
 $defaults = \AZnet\Theme\settings_defaults();
-assert(1 === $defaults['schema_version']);
+assert(2 === $defaults['schema_version']);
 assert('default' === $defaults['visual_preset']);
 
 $GLOBALS['r1_theme_mod'] = [
@@ -62,7 +62,7 @@ $GLOBALS['r1_theme_mod'] = [
     'visual_preset'  => 'invalid',
 ];
 $invalid = \AZnet\Theme\settings();
-assert(1 === $invalid['schema_version']);
+assert(2 === $invalid['schema_version']);
 assert('default' === $invalid['visual_preset']);
 assert('default' === \AZnet\Theme\setting('visual_preset'));
 assert('fallback' === \AZnet\Theme\setting('missing_key', 'fallback'));

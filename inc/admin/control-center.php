@@ -8,7 +8,7 @@ use function AZnet\Theme\Integrations\WooCommerce\available as woo_available;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 function control_center_section(): string {
-    $allowed = [ 'overview', 'design', 'header', 'commerce', 'system-health' ];
+    $allowed = [ 'overview', 'design', 'header', 'homepage', 'commerce', 'system-health' ];
     $value = isset( $_GET['section'] ) ? sanitize_key( wp_unslash( $_GET['section'] ) ) : 'overview';
     if ( 'commerce' === $value && ! woo_available() ) { return 'overview'; }
     return in_array( $value, $allowed, true ) ? $value : 'overview';
@@ -34,6 +34,12 @@ function render_hidden_settings( array $visible_keys ): void {
     foreach ( settings_defaults() as $key => $default ) {
         if ( 'schema_version' === $key || in_array( $key, $visible_keys, true ) ) { continue; }
         $value = $s[ $key ] ?? $default;
+        if ( is_array( $value ) ) {
+            foreach ( $value as $item ) {
+                echo '<input type="hidden" name="aznet_theme_settings[' . esc_attr( $key ) . '][]" value="' . esc_attr( (string) $item ) . '">';
+            }
+            continue;
+        }
         echo '<input type="hidden" name="aznet_theme_settings[' . esc_attr( $key ) . ']" value="' . esc_attr( is_bool( $value ) ? ( $value ? '1' : '0' ) : (string) $value ) . '">';
     }
 }
@@ -112,9 +118,9 @@ function render_homepage_setup_card(): void {
 function render_control_center(): void {
     if ( ! current_user_can( 'edit_theme_options' ) ) { return; }
     $section = control_center_section();
-    $tabs = [ 'overview' => 'Tổng quan', 'design' => 'Thiết kế', 'header' => 'Header', 'system-health' => 'System Health' ];
+    $tabs = [ 'overview' => 'Tổng quan', 'design' => 'Thiết kế', 'header' => 'Header', 'homepage' => 'Trang chủ', 'system-health' => 'System Health' ];
     if ( woo_available() ) {
-        $tabs = [ 'overview' => 'Tổng quan', 'design' => 'Thiết kế', 'header' => 'Header', 'commerce' => 'Commerce', 'system-health' => 'System Health' ];
+        $tabs = [ 'overview' => 'Tổng quan', 'design' => 'Thiết kế', 'header' => 'Header', 'homepage' => 'Trang chủ', 'commerce' => 'Commerce', 'system-health' => 'System Health' ];
     }
     echo '<div class="wrap aznet-theme-control-center"><h1>AZnet Theme</h1><nav class="nav-tab-wrapper">';
     foreach ( $tabs as $slug => $label ) {
@@ -147,6 +153,8 @@ function render_control_center(): void {
         wp_nonce_field( 'aznet_theme_reset_settings' );
         echo '<label><input type="checkbox" name="confirm_reset" value="1" required> ' . esc_html__( 'Tôi xác nhận chỉ đặt lại thiết lập trình bày của AZnet Theme.', 'aznet-theme' ) . '</label> ';
         submit_button( 'Đặt lại', 'delete', 'submit', false ); echo '</form></div>';
+    } elseif ( 'homepage' === $section ) {
+        render_homepage_settings();
     } elseif ( 'system-health' === $section ) {
         $report = system_health_report();
         echo '<div class="aznet-theme-panel"><h2>System Health</h2><table class="widefat striped"><tbody>';

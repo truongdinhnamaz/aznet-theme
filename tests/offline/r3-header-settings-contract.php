@@ -42,7 +42,7 @@ $valid = AZnet\Theme\normalize_settings([
 ]);
 
 $valid_expected = [
-    'schema_version'           => 1,
+    'schema_version'           => 2,
     'visual_preset'            => 'editorial',
     'header_preset'            => 'commerce',
     'header_sticky'            => 'sticky-compact',
@@ -51,6 +51,16 @@ $valid_expected = [
     'woo_catalog_preset'       => 'grid',
     'woo_product_card_density' => 'balanced',
     'woo_product_preset'       => 'classic',
+    'homepage_preset'               => 'off',
+    'homepage_services_page'        => 0,
+    'homepage_about_page'           => 0,
+    'homepage_team_page'            => 0,
+    'homepage_knowledge_terms'      => [],
+    'homepage_case_analysis_term'   => 0,
+    'homepage_legal_news_term'      => 0,
+    'homepage_process_page'         => 0,
+    'homepage_faq_page'             => 0,
+    'homepage_contact_page'         => 0,
 ];
 
 if ($valid !== $valid_expected) {

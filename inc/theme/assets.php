@@ -108,6 +108,23 @@ function enqueue_homepage_blueprint_editor_asset(): void {
     );
 }
 
+
+/** Enqueue Law 01 only for its active Front Page presentation surface. */
+function enqueue_homepage_law01_asset( ?string $version = null ): void {
+    if ( ! function_exists( __NAMESPACE__ . '\\homepage_composer_active' ) || ! homepage_composer_active() ) {
+        return;
+    }
+    if ( 'law-01' !== homepage_preset() ) {
+        return;
+    }
+    wp_enqueue_style(
+        'aznet-theme-homepage-law-01',
+        get_theme_file_uri( '/assets/css/components/homepage-law-01.css' ),
+        [ 'aznet-theme-tokens' ],
+        $version
+    );
+}
+
 function enqueue_assets(): void {
     $version = defined( 'AZNET_THEME_VERSION' ) ? AZNET_THEME_VERSION : null;
 
@@ -152,6 +169,7 @@ function enqueue_assets(): void {
     );
 
     enqueue_homepage_blueprint_asset( $version );
+    enqueue_homepage_law01_asset( $version );
 
     if ( should_enqueue_generic_content_assets() ) {
         wp_enqueue_style(

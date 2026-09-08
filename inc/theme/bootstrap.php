@@ -12,6 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once __DIR__ . '/settings.php';
+require_once __DIR__ . '/homepage-content-map.php';
+require_once __DIR__ . '/homepage-composer.php';
 require_once __DIR__ . '/design-system.php';
 require_once __DIR__ . '/setup.php';
 require_once __DIR__ . '/patterns.php';

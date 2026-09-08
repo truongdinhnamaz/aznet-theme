@@ -5,6 +5,7 @@ namespace AZnet\Theme\Admin;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 require_once __DIR__ . '/control-center.php';
+require_once __DIR__ . '/homepage.php';
 require_once __DIR__ . '/settings-actions.php';
 require_once __DIR__ . '/settings-portability.php';
 require_once __DIR__ . '/system-health.php';
