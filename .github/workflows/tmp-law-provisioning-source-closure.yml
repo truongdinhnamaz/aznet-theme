@@ -1,0 +1,59 @@
+name: Temporary Law Provisioning Source Closure
+
+on:
+  push:
+    branches:
+      - work/law-site-provisioning
+    paths:
+      - '.github/workflows/tmp-law-provisioning-source-closure.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  close-source:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/law-site-provisioning
+          fetch-depth: 0
+      - name: Record candidate provenance in AZT-03 and manifest
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path('docs/source/AZT-03-baseline-provenance.md')
+          s = p.read_text()
+          s = s.replace('**Version:** v0.24', '**Version:** v0.25', 1)
+          s = s.replace('Current canonical repository/implementation head after P3: `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`.', 'Current canonical repository/implementation head after PR #57: `main@12a480311dcb59f3d7a152ef7e72ca927c2f632d`.', 1)
+          s = s.replace('Current implementation tree: `8fc309ea8e01bfe727da943754c98164b3f92a58`.', 'Current canonical implementation tree: `32ebca25a63d511e74250646d333202994c65328`.', 1)
+          marker = '## 3. Current release-path classification'
+          addition = '''\n### Law Site Provisioning v1 candidate provenance — stacked, not canonical main\n\nD-025 provisioning implementation is verified on stacked branch `work/law-site-provisioning`, above Homepage Composer + Law 01 PR #58. The exact production/package head is `6acd8b633503a701eb47ed0df072f6def4e1b03e`; documentation-only evidence commits after that head do not change candidate production bytes.\n\nFresh exact-head `Law Site Provisioning Candidate Package` run `34258576549` passed the reusable v1 core chain on PHP 8.1.34 with mbstring/mysqli, linted 89 production PHP files, built the candidate twice deterministically, and passed exact-byte unpacked/source comparison. Candidate: `aznet-theme-1.1.1-law-site-provisioning-candidate.zip`, 112 files, SHA-256 `570e4e46294c45621ed5bbbd030c4aa8e12c050254db413f2d34da2855e628dd`, artifact ID `10068904666`.\n\nFresh exact-head `Law Site Provisioning Browser Quality` run `34258576713` passed WordPress 6.9 / PHP 8.1 / MySQL 8 empty-site, existing-site no-overwrite, rerun idempotency, injected rollback and user-edit-preservation scenarios. Wizard Steps 1-4 and public Law 01 at 1440/1024/390/320 reported zero critical/serious axe blockers. Artifact ID `10068945557`. Detailed evidence: `docs/evidence/LAW_SITE_PROVISIONING_L4.md`.\n\nThis candidate provenance does not make the branch canonical `main`, does not imply PR #58/#59 merge, and does not authorize a Git tag, GitHub Release or production deployment.\n\n'''
+          if '### Law Site Provisioning v1 candidate provenance' not in s:
+              s = s.replace(marker, addition + marker, 1)
+          p.write_text(s)
+
+          p = Path('docs/source/SOURCE_MANIFEST.md')
+          s = p.read_text()
+          s = s.replace('`AZT-03-baseline-provenance.md` | v0.24', '`AZT-03-baseline-provenance.md` | v0.25', 1)
+          s = s.replace('`AZT-EXEC-MAP.md` | v0.20', '`AZT-EXEC-MAP.md` | v0.22', 1)
+          old = 'Current post-hardening implementation baseline represented by this manifest: `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`, implementation tree `8fc309ea8e01bfe727da943754c98164b3f92a58`, Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.'
+          new = 'Current canonical implementation baseline represented by this manifest: `main@12a480311dcb59f3d7a152ef7e72ca927c2f632d`, implementation tree `32ebca25a63d511e74250646d333202994c65328`, Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`. The verified Law Site Provisioning `1.1.1` candidate remains stacked on unmerged PR #58/#59 and is provenance evidence, not canonical main.'
+          s = s.replace(old, new, 1)
+          if 'Law Site Provisioning candidate provenance:' not in s:
+              insert = '''\nLaw Site Provisioning candidate provenance: exact production/package head `6acd8b633503a701eb47ed0df072f6def4e1b03e`; candidate SHA-256 `570e4e46294c45621ed5bbbd030c4aa8e12c050254db413f2d34da2855e628dd`; package run `34258576549`; browser/runtime run `34258576713`. This is stacked candidate evidence only; PR #58/#59 remain unmerged and release/deploy remain gated.\n'''
+              s = s.replace('\nRelease publication remains separate', insert + '\nRelease publication remains separate', 1)
+          p.write_text(s)
+          PY
+          grep -q 'Version: v0.25' docs/source/AZT-03-baseline-provenance.md
+          grep -q '6acd8b633503a701eb47ed0df072f6def4e1b03e' docs/source/AZT-03-baseline-provenance.md
+          grep -q 'AZT-03-baseline-provenance.md.*v0.25' docs/source/SOURCE_MANIFEST.md
+          grep -q 'AZT-EXEC-MAP.md.*v0.22' docs/source/SOURCE_MANIFEST.md
+          rm -f .github/workflows/tmp-law-provisioning-source-closure.yml
+          git config user.name 'AZnet Theme CI'
+          git config user.email 'ci@aznet.vn'
+          git add docs/source .github/workflows
+          git commit -m 'docs: register law provisioning candidate provenance'
+          git push origin HEAD:work/law-site-provisioning
