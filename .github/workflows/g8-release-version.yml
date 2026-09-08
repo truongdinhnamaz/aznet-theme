@@ -34,5 +34,5 @@ jobs:
           php-version: '8.1'
           coverage: none
 
-      - name: Verify exact final v1.0 metadata
+      - name: Verify exact final v1.1 metadata
         run: php tests/offline/g8-release-version-contract.php
