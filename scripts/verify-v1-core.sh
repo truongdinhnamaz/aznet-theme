@@ -72,5 +72,6 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/editorial-listing-s
 
 printf '%s\n' '==> P4 Native Editable Homepage blueprint contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-asset-contract.php
 
 printf '%s\n' 'PASS: reusable v1 core verification'
