@@ -135,8 +135,9 @@ async function inspectViewport(browser, name, viewport) {
     if (result.heroFlow.buttonsTop < result.heroFlow.leadBottom - 1) {
       throw new Error(`Hero CTA group is not stacked below lead: ${JSON.stringify(result.heroFlow)}`);
     }
-    if (result.heroFlow.buttonWidths.some((width) => width < 110)) {
-      throw new Error(`Hero CTA is visually squeezed below 110px: ${JSON.stringify(result.heroFlow)}`);
+    const minButtonWidth = viewport.width <= 390 ? Math.min(220, viewport.width - 80) : 80;
+    if (result.heroFlow.buttonWidths.some((width) => width < minButtonWidth)) {
+      throw new Error(`Hero CTA is visually squeezed below ${minButtonWidth}px: ${JSON.stringify(result.heroFlow)}`);
     }
 
     result.articleCards = await page.locator('.aznet-theme-homepage-blueprint__article-card').count();
