@@ -11,9 +11,10 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 PACKAGE_ROOT = 'aznet-theme'
-FIXED_ZIP_TIME = (1980, 1, 1, 0, 0, 0)
+FIXED_ZIP_TIME = (2020, 1, 1, 0, 0, 0)
 EXCLUDED_DIRS = {'.git', '.github', 'docs', 'scripts', 'tests'}
 EXCLUDED_ROOT_FILES = {'README.md', 'aznet-preview.png'}
+REQUIRED_PRODUCTION_PATHS = {'style.css', 'functions.php', 'theme.json', 'front-page.php', 'index.php'}
 
 
 def parse_args() -> argparse.Namespace:
@@ -43,7 +44,7 @@ def php_version(source: Path) -> str:
 def excluded(relative: PurePosixPath) -> bool:
     if not relative.parts:
         return True
-    if relative.parts[0] in EXCLUDED_DIRS:
+    if any(part in EXCLUDED_DIRS for part in relative.parts):
         return True
     return len(relative.parts) == 1 and relative.name in EXCLUDED_ROOT_FILES
 
@@ -76,6 +77,11 @@ def build_zip(source: Path, output: Path, version: str) -> tuple[int, str]:
     if not files:
         raise ValueError('release package would be empty')
 
+    actual = {path.relative_to(source).as_posix() for path in files}
+    missing = REQUIRED_PRODUCTION_PATHS - actual
+    if missing:
+        raise ValueError(f'missing required production paths: {sorted(missing)}')
+
     output.parent.mkdir(parents=True, exist_ok=True)
     if output.exists():
         output.unlink()
@@ -85,17 +91,14 @@ def build_zip(source: Path, output: Path, version: str) -> tuple[int, str]:
         mode='w',
         compression=zipfile.ZIP_DEFLATED,
         compresslevel=9,
-        strict_timestamps=True,
     ) as archive:
         for path in files:
             relative = PurePosixPath(path.relative_to(source).as_posix())
             archive_name = str(PurePosixPath(PACKAGE_ROOT) / relative)
             info = zipfile.ZipInfo(archive_name, date_time=FIXED_ZIP_TIME)
-            info.create_system = 3
             info.compress_type = zipfile.ZIP_DEFLATED
-            info.external_attr = (0o100644 & 0xFFFF) << 16
-            info.flag_bits |= 0x800
-            archive.writestr(info, path.read_bytes(), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+            info.external_attr = 0o100644 << 16
+            archive.writestr(info, path.read_bytes())
 
     digest = hashlib.sha256(output.read_bytes()).hexdigest()
     return len(files), digest
