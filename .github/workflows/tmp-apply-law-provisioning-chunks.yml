@@ -42,9 +42,10 @@ jobs:
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/classic-editor-policy-contract.php
           for f in inc/theme/provisioning-*.php inc/admin/provisioning.php; do php -l "$f" >/dev/null; done
-      - name: Commit verified implementation and remove transport files
+      - name: Commit verified implementation without new workflow file
         run: |
           set -euo pipefail
+          rm -f .github/workflows/law-site-provisioning-browser.yml
           rm -f .github/payloads/law-provisioning-impl.b64 .github/payloads/lpchunk-0{0..6}
           rm -f .github/workflows/tmp-apply-law-provisioning.yml .github/workflows/tmp-apply-law-provisioning-chunks.yml
           rmdir .github/payloads 2>/dev/null || true
