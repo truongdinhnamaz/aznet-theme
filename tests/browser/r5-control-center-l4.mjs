@@ -196,11 +196,16 @@ async function verifyCommerceCapability(page) {
 
 const browser = await chromium.launch({ headless: true });
 try {
+  const authContext = await browser.newContext({ viewport: viewports['1440x1000'] });
+  const authPage = await authContext.newPage();
+  await login(authPage);
+  const authState = await authContext.storageState();
+  await authContext.close();
+
   for (const [viewportName, viewport] of Object.entries(viewports)) {
-    const context = await browser.newContext({ viewport });
+    const context = await browser.newContext({ viewport, storageState: authState });
     const page = await context.newPage();
     try {
-      await login(page);
       await gotoCenter(page);
       if ((await page.locator('h1').first().textContent())?.trim() !== 'AZnet Theme') throw new Error('Control Center heading missing');
       if (await page.locator('#toplevel_page_aznet-theme').count() !== 1) throw new Error('AZnet Theme admin menu missing');
