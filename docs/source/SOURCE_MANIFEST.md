@@ -8,7 +8,7 @@ Canonical source is reconciled through the completed v1.1 R6 technical candidate
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership plus approved v1.1 Native Product System objective/non-goals; unchanged by editorial pilot hardening |
 | `AZT-02-architecture.md` | v0.7 | Theme architecture, public integration contracts and v1.1 settings/pattern/Header/Woo/Control Center boundaries; unchanged by P2/P3 source closure |
-| `AZT-03-baseline-provenance.md` | v0.25 | Canonical implementation/provenance through P2/P3 post-hardening `main`, Theme `1.1.0`, historical R6 package provenance and publication-state separation |
+| `AZT-03-baseline-provenance.md` | v0.26 | Canonical implementation/provenance plus refreshed stacked Law Site Provisioning 1.1.1 full-width candidate evidence; canonical `main` remains unchanged |
 | `AZT-04-roadmap-qa-decisions.md` | v0.30 | R0-R6 + P2/P3 PASS, P4/P4-B exact next, P5 gates, QA layers and accepted D-001..D-025 decisions |
 | `AZT-EXEC-MAP.md` | v0.22 | Derived execution map with P2/P3 complete and exact next P4 Real Pilot QA |
 
@@ -30,7 +30,7 @@ P3 provenance: PR #52 merged final verified head `d78091900451176c3815b23d148503
 
 Pilot production-readiness evidence: active AZnet Theme `1.1.0` on WordPress `7.1` / PHP `8.4.24`, `primary_menu=yes`, RootProfile v1/v2 detected, RootProfile current-surface absent, Woo absent and ConvertFlow intentionally `unknown`. This is current-stack pilot evidence, not a replacement for support-floor certification.
 
-Law Site Provisioning candidate provenance: exact production/package head `6acd8b633503a701eb47ed0df072f6def4e1b03e`; candidate SHA-256 `570e4e46294c45621ed5bbbd030c4aa8e12c050254db413f2d34da2855e628dd`; package run `34258576549`; browser/runtime run `34258576713`. This is stacked candidate evidence only; PR #58/#59 remain unmerged and release/deploy remain gated.
+Law Site Provisioning candidate provenance: exact production/package head `1a735889e88e1a5e649c5b15a5044d7471dff669`; candidate SHA-256 `3fea2ae3d8293c7873442d61d61ac9695bc0dab92145485c9a57b303f663edca`; package run `34261603657`; browser/runtime run `34261603755`. This refreshed candidate includes the pilot full-width Law 01 presentation fix. It remains stacked candidate evidence only; PR #58/#59 remain unmerged and release/deploy remain gated.
 
 Release publication remains separate from implementation metadata. No GitHub Release or tag publication has been established; publication remains `PUBLICATION_PENDING`. Final production deployment remains separately approval-gated.
 
