@@ -1,0 +1,55 @@
+name: Temporary Apply Law Provisioning Chunks
+
+on:
+  push:
+    branches:
+      - work/law-site-provisioning
+    paths:
+      - '.github/workflows/tmp-apply-law-provisioning-chunks.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/law-site-provisioning
+          fetch-depth: 0
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring
+          coverage: none
+      - name: Reassemble and verify exact implementation payload
+        run: |
+          set -euo pipefail
+          cat .github/payloads/lpchunk-0{0..6} > /tmp/law-provisioning-impl.b64
+          test "$(wc -c < /tmp/law-provisioning-impl.b64)" -eq 37640
+          base64 -d /tmp/law-provisioning-impl.b64 > /tmp/law-provisioning-impl.tar.gz
+          echo '081bea3b82e73213f3a13810b12ded866c050e36b88347fe4ac827cc7756c0a1  /tmp/law-provisioning-impl.tar.gz' | sha256sum -c -
+          tar -xzf /tmp/law-provisioning-impl.tar.gz
+      - name: Verify provisioning contracts and retained boundaries
+        run: |
+          set -euo pipefail
+          for test in tests/offline/provisioning-*.php; do
+            php -d zend.assertions=1 -d assert.exception=1 "$test"
+          done
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/classic-editor-policy-contract.php
+          for f in inc/theme/provisioning-*.php inc/admin/provisioning.php; do php -l "$f" >/dev/null; done
+      - name: Commit verified implementation and remove transport files
+        run: |
+          set -euo pipefail
+          rm -f .github/payloads/law-provisioning-impl.b64 .github/payloads/lpchunk-0{0..6}
+          rm -f .github/workflows/tmp-apply-law-provisioning.yml .github/workflows/tmp-apply-law-provisioning-chunks.yml
+          rmdir .github/payloads 2>/dev/null || true
+          git config user.name 'AZnet Theme CI'
+          git config user.email 'ci@aznet.vn'
+          git add -A
+          git commit -m 'feat: add law site provisioning v1'
+          git push origin HEAD:work/law-site-provisioning
