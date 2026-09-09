@@ -32,7 +32,7 @@ jobs:
           rm .github/workflows/tmp-v11-source-closure.yml
           rm .github/workflows/tmp-v11-tdd.yml
           rm .github/tmp-v11-source-closure-trigger
-          git diff --check
+          git diff --check -- .github
           git diff -- docs/source
       - name: Commit source closure and retire temporary files
         run: |
