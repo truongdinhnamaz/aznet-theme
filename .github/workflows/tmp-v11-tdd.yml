@@ -1,0 +1,17 @@
+name: Temporary Law Provisioning v1.1 TDD
+on:
+  push:
+    branches:
+      - work/law-site-provisioning-v1-1
+jobs:
+  contract:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, mysqli
+          coverage: none
+      - name: Run recommendation contract
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-recommendations-contract.php
