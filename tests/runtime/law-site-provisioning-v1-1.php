@@ -198,9 +198,10 @@ if ( 'user-edit' === $scenario ) {
     $edited_id = (int) $starter[0]->ID;
     wp_update_post( [ 'ID' => $edited_id, 'post_content' => 'USER EDIT MUST SURVIVE' ] );
     $front_id = (int) get_option( 'page_on_front', 0 );
-    $replacement_id = wp_insert_attachment( [ 'post_mime_type' => 'image/webp', 'post_title' => 'User Hero', 'post_status' => 'inherit' ], '', $front_id, true );
-    aznet_v11_must( ! is_wp_error( $replacement_id ), 'replacement attachment fixture failed' );
-    set_post_thumbnail( $front_id, (int) $replacement_id );
+    $replacement_id = AZnet\Theme\provisioning_find_owned_role( 'law01-v1-1', 'attachment', 'starter_media:editorial-1' );
+    aznet_v11_must( $replacement_id > 0 && get_post( $replacement_id ) instanceof WP_Post, 'valid imported replacement attachment fixture missing' );
+    aznet_v11_must( false !== set_post_thumbnail( $front_id, $replacement_id ), 'replacement featured image fixture could not be assigned' );
+    aznet_v11_must( $replacement_id === (int) get_post_thumbnail_id( $front_id ), 'replacement featured image fixture was not persisted before rerun' );
     $second = aznet_v11_apply( $selection );
     aznet_v11_must( true === $second['ok'], implode( '; ', $second['errors'] ) );
     aznet_v11_must( 'USER EDIT MUST SURVIVE' === get_post( $edited_id )->post_content, 'rerun overwrote edited starter Post' );
