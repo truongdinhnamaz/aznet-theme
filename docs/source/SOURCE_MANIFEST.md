@@ -7,12 +7,12 @@ Canonical source is reconciled through the completed v1.1 R6 technical candidate
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution; unchanged by R0-R6/P2-P3 source closure |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership plus approved v1.1 Native Product System objective/non-goals; unchanged by editorial pilot hardening |
-| `AZT-02-architecture.md` | v0.7 | Theme architecture, public integration contracts and v1.1 settings/pattern/Header/Woo/Control Center boundaries; unchanged by P2/P3 source closure |
-| `AZT-03-baseline-provenance.md` | v0.27 | Canonical implementation/provenance plus refreshed stacked Law Site Provisioning 1.1.1 cache-safe full-width candidate evidence; canonical `main` remains unchanged |
-| `AZT-04-roadmap-qa-decisions.md` | v0.30 | R0-R6 + P2/P3 PASS, P4/P4-B exact next, P5 gates, QA layers and accepted D-001..D-025 decisions |
-| `AZT-EXEC-MAP.md` | v0.22 | Derived execution map with P2/P3 complete and exact next P4 Real Pilot QA |
+| `AZT-02-architecture.md` | v0.8 | Theme architecture, public integration contracts and v1.1 settings/pattern/Header/Woo/Control Center boundaries; unchanged by P2/P3 source closure |
+| `AZT-03-baseline-provenance.md` | v0.28 | Canonical implementation/provenance plus verified stacked Law Site Provisioning v1.1 candidate evidence; canonical `main` remains unchanged |
+| `AZT-04-roadmap-qa-decisions.md` | v0.32 | R0-R6 + P2/P3 PASS, P4 real-pilot gate, P4-B v1.1 stacked candidate PASS, P5 gates, QA layers and accepted D-001..D-026 decisions |
+| `AZT-EXEC-MAP.md` | v0.24 | Derived execution map with P4-B Law Site Provisioning v1.1 candidate checkpoint and owner-gated integration next |
 
-Current canonical implementation baseline represented by this manifest: `main@12a480311dcb59f3d7a152ef7e72ca927c2f632d`, implementation tree `32ebca25a63d511e74250646d333202994c65328`, Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`. The verified Law Site Provisioning `1.1.1` candidate remains stacked on unmerged PR #58/#59 and is provenance evidence, not canonical main.
+Current canonical implementation baseline represented by this manifest: `main@12a480311dcb59f3d7a152ef7e72ca927c2f632d`, implementation tree `32ebca25a63d511e74250646d333202994c65328`, Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`. The verified Law Site Provisioning v1.1 `1.1.1` candidate remains stacked in PR #61 on the Law 01 Premium PR #60 branch and is provenance evidence, not canonical main.
 
 Fresh `V1 Exact Main Verification` run `34195248467` succeeded on that exact post-P3 main SHA, covering reusable static/contracts plus clean WordPress 6.9 runtime/browser/a11y.
 
@@ -30,7 +30,7 @@ P3 provenance: PR #52 merged final verified head `d78091900451176c3815b23d148503
 
 Pilot production-readiness evidence: active AZnet Theme `1.1.0` on WordPress `7.1` / PHP `8.4.24`, `primary_menu=yes`, RootProfile v1/v2 detected, RootProfile current-surface absent, Woo absent and ConvertFlow intentionally `unknown`. This is current-stack pilot evidence, not a replacement for support-floor certification.
 
-Law Site Provisioning candidate provenance: exact production/package head `9a39977a6888f1fc656dd64f202e47dbd441ac3c`; candidate SHA-256 `09d92603e97688abe8a30212ed17b7e5be8e0c642ae1f78674cc95107ecf91c4`; package run `34343371228`; browser/runtime run `34343371237`. This refreshed candidate includes the pilot full-width Law 01 presentation fix plus a content-derived Law 01 stylesheet cache key so same-version asset caches cannot mask changed CSS bytes after fresh HTML is rendered. It remains stacked candidate evidence only; PR #58/#59 remain unmerged and release/deploy remain gated.
+Law Site Provisioning v1.1 candidate provenance: exact verified production/test/package head `d564c6e8a43f458a493fe816c4fc768d4917065f`; candidate SHA-256 `51006edeed48c92be0de84926e033a6d081e8fd493b2be7c03223056da784bf9`; package run `34362997863`; package artifact ID `10108650421`; browser/runtime run `34362997879`; browser artifact ID `10108690457`. The candidate retains the cache-safe full-width Law 01 presentation, adds proposal-only recommendation, starter editorial/media and index-safe publication, and passes L1-L4 stacked-candidate gates. PR #61 remains draft/stacked on PR #60; canonical `main`, release/tag and production deployment remain unchanged/gated.
 
 Release publication remains separate from implementation metadata. No GitHub Release or tag publication has been established; publication remains `PUBLICATION_PENDING`. Final production deployment remains separately approval-gated.
 

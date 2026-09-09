@@ -37,6 +37,47 @@ function provisioning_post_count(): int {
     return $total;
 }
 
+function provisioning_published_post_count(): int {
+    $counts = wp_count_posts( 'post' );
+    return isset( $counts->publish ) ? (int) $counts->publish : 0;
+}
+
+/** @return array<int,string> */
+function provisioning_discovered_blueprints(): array {
+    $found = [];
+    foreach ( [ 'law01-v1', 'law01-v1-1' ] as $blueprint ) {
+        $present = false;
+        if ( function_exists( 'get_posts' ) && function_exists( 'get_post_meta' ) ) {
+            $ids = get_posts( [
+                'post_type' => [ 'page', 'post', 'attachment' ],
+                'post_status' => 'any',
+                'posts_per_page' => 1,
+                'fields' => 'ids',
+                'no_found_rows' => true,
+                'suppress_filters' => true,
+                'meta_key' => defined( __NAMESPACE__ . '\\PROVISIONING_META_BLUEPRINT' ) ? PROVISIONING_META_BLUEPRINT : '_aznet_theme_provisioned_by',
+                'meta_value' => $blueprint,
+            ] );
+            $present = is_array( $ids ) && [] !== $ids;
+        }
+        if ( ! $present && function_exists( 'get_terms' ) && function_exists( 'get_term_meta' ) ) {
+            $terms = get_terms( [
+                'taxonomy' => [ 'category', 'nav_menu' ],
+                'hide_empty' => false,
+                'number' => 1,
+                'fields' => 'ids',
+                'meta_query' => [ [
+                    'key' => defined( __NAMESPACE__ . '\\PROVISIONING_META_BLUEPRINT' ) ? PROVISIONING_META_BLUEPRINT : '_aznet_theme_provisioned_by',
+                    'value' => $blueprint,
+                ] ],
+            ] );
+            $present = ! is_wp_error( $terms ) && is_array( $terms ) && [] !== $terms;
+        }
+        if ( $present ) { $found[] = $blueprint; }
+    }
+    return $found;
+}
+
 /** @return array<string,mixed> */
 function provisioning_discovery(): array {
     $s = settings();
@@ -62,6 +103,8 @@ function provisioning_discovery(): array {
         'page_count' => count( $pages ),
         'category_count' => count( $categories ),
         'post_count' => provisioning_post_count(),
+        'published_post_count' => provisioning_published_post_count(),
+        'prior_blueprints' => provisioning_discovered_blueprints(),
         'homepage_preset' => (string) ( $s['homepage_preset'] ?? 'off' ),
         'homepage_slots' => $slots,
         'primary_menu_id' => isset( $locations['primary'] ) ? (int) $locations['primary'] : 0,

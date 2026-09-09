@@ -33,9 +33,20 @@ function provisioning_find_owned_role( string $blueprint, string $object_type, s
         [ 'key' => PROVISIONING_META_BLUEPRINT, 'value' => $blueprint ],
         [ 'key' => PROVISIONING_META_ROLE, 'value' => $role ],
     ];
-    if ( 'page' === $object_type ) {
-        $posts = get_posts( [ 'post_type' => 'page', 'post_status' => 'any', 'posts_per_page' => 1, 'no_found_rows' => true, 'meta_query' => $meta_query ] );
-        if ( is_array( $posts ) && isset( $posts[0] ) && $posts[0] instanceof \WP_Post ) { return (int) $posts[0]->ID; }
+    if ( in_array( $object_type, [ 'page', 'post', 'attachment' ], true ) ) {
+        $posts = get_posts( [
+            'post_type' => $object_type,
+            'post_status' => 'any',
+            'posts_per_page' => 1,
+            'no_found_rows' => true,
+            'suppress_filters' => true,
+            'meta_query' => $meta_query,
+        ] );
+        if ( is_array( $posts ) && isset( $posts[0] ) ) {
+            $candidate = $posts[0];
+            if ( $candidate instanceof \WP_Post ) { return (int) $candidate->ID; }
+            if ( is_numeric( $candidate ) ) { return (int) $candidate; }
+        }
         return 0;
     }
     if ( in_array( $object_type, [ 'category', 'menu' ], true ) ) {

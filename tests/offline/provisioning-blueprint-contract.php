@@ -10,7 +10,7 @@ assert(is_array($bp));
 assert($bp['key'] === 'law01-v1');
 assert($bp['homepage_preset'] === 'law-01');
 assert(\AZnet\Theme\provisioning_blueprint('unknown') === null);
-assert(\AZnet\Theme\provisioning_blueprint_keys() === ['law01-v1']);
+assert(\AZnet\Theme\provisioning_blueprint_keys() === ['law01-v1', 'law01-v1-1']);
 $pageRoles = ['home','about','services','service_business','service_civil','service_criminal','service_real_estate','service_family','service_labor','team','process','faq','contact'];
 $categoryRoles = ['knowledge','knowledge_business','knowledge_civil','knowledge_criminal','knowledge_real_estate','knowledge_family','knowledge_labor','case_analysis','legal_news'];
 assert(array_keys($bp['pages']) === $pageRoles);
@@ -21,6 +21,7 @@ assert($bp['pages']['service_criminal']['parent_role'] === 'services');
 assert($bp['categories']['knowledge']['parent_role'] === null);
 assert($bp['categories']['knowledge_civil']['parent_role'] === 'knowledge');
 assert($bp['editorial_examples']['status'] === 'draft');
+assert($bp['editorial_examples']['items'] === [], 'v1 starter editorial behavior must remain unchanged');
 assert($bp['menu']['location'] === 'primary');
 foreach ($bp['pages'] as $role => $page) {
     assert(in_array($page['status'], ['publish'], true), "Structural page must publish: {$role}");
