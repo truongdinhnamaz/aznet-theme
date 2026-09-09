@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.33  
+**Version:** v0.34  
 **Status:** Working Source  
 **Date:** 10/09/2026
 
@@ -33,13 +33,13 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P1 | Pilot identity cleanup | SITE-OPS READY | Active pilot Theme `1.1.0` proven; only inactive legacy duplicates may be deleted through WordPress core UI after smoke/rollback confidence |
 | P2 | Editorial single-post hardening | PASS | PR #51 merged; native Post editorial presentation + singular-post scoped assets + retained regressions |
 | P3 | Editorial archive/search hardening | PASS | PR #52 merged; native thumbnail/date scan presentation + resilient long-title/excerpt styling; WordPress main query retained |
-| P4 | Real law-site pilot QA | READY / AFTER MAIN INTEGRATION | Owner-approved pilot QA remains pending; PR #58 integration must clear its explicit main gate first |
-| P4-A | Homepage Composer + Law 01 | PR HEAD PASS / MAIN GATE | Premium Law01 + Composer integrated in PR #58; exact PR-head matrix is GREEN; canonical-main merge remains owner-gated |
-| P4-B | Law Site Provisioning v1.1 | PR HEAD PASS / MAIN GATE | D-026 smart setup integrated in PR #58 with Theme metadata restored to `1.1.0`; exact PR-head package/browser matrix is GREEN |
+| P4 | Real law-site pilot QA | READY / EXACT NEXT | Owner-approved pilot QA is now the exact next after canonical PR #58 integration and D-022 exact-main PASS |
+| P4-A | Homepage Composer + Law 01 | PASS / MERGED | Premium Law01 + Composer merged through PR #58; exact-main static/runtime/browser core verification PASS |
+| P4-B | Law Site Provisioning v1.1 | PASS / MERGED | D-026 smart setup merged through PR #58 with Theme metadata `1.1.0`; deterministic package/browser evidence retained and exact-main verification PASS |
 | P5 | Publication & production deployment | GATED | Tag/GitHub Release and final production deployment remain separate explicit owner gates |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
-Current canonical implementation remains `main@12a480311dcb59f3d7a152ef7e72ca927c2f632d`, tree `32ebca25a63d511e74250646d333202994c65328`, Theme metadata `1.1.0`. PR #58 is a verified integration candidate only until an explicit owner-approved merge; no PR-head PASS is promoted to exact-main evidence.
+Current canonical implementation is `main@04edd8b312de70e6ee8339c461ae8f16f93e5859`, tree `28c30353e9f01bc51f4474347069738d410b5256`, Theme metadata `1.1.0`. Owner-approved PR #58 merge is complete. Fresh `V1 Exact Main Verification` run `34414878827` succeeded on that exact merge SHA; PR-head evidence is retained separately and is not substituted for exact-main evidence.
 
 The earlier deterministic R6 candidate SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b` remains historical release-provenance evidence only. P2/P3 changed production bytes, so P5 must build and verify a new deterministic package from the final post-hardening bytes before publication.
 
@@ -158,29 +158,23 @@ P4 may install/update a test candidate on the pilot only as necessary to perform
 
 ### P4-A — Homepage Composer + Law 01
 
-**State:** **PR HEAD PASS / OWNER MAIN GATE.**
+**State:** **PASS / MERGED TO CANONICAL MAIN.**
 
-Homepage Composer Core + `law-01` Premium presentation are integrated in PR #58. Content Map remains typed WordPress references only; preset switching does not mutate WordPress content; native Post/Page Classic Editor policy remains; `front-page.php` retains exactly one `the_content()` boundary.
+Homepage Composer Core + `law-01` Premium presentation merged through PR #58 to `main@04edd8b312de70e6ee8339c461ae8f16f93e5859`. Content Map remains typed WordPress references only; preset switching does not mutate WordPress content; native Post/Page Classic Editor policy remains; `front-page.php` retains exactly one `the_content()` boundary.
 
-Fresh exact PR-head `356ef8c00991c63e294d619d42c7094d1074226d` completed all 21 triggered pull-request workflows successfully after integration debugging. The previously observed candidate-only metadata bump was rejected by G8 and restored to source-approved Theme metadata `1.1.0` before this final PR-head matrix.
-
-**Gate:** merge PR #58 into canonical `main` requires explicit owner approval. After merge, D-022 requires fresh exact-main verification; PR-head evidence cannot substitute for it.
+Fresh D-022 exact-main run `34414878827` passed reusable static/contracts plus WordPress 6.9 clean runtime/browser/a11y on the exact merge SHA. The integration-only `1.1.1` metadata attempt remains rejected historical evidence; canonical Theme metadata is `1.1.0`.
 
 ### P4-B — Law Site Provisioning v1.1
 
-**State:** **PR HEAD PASS / INTEGRATED IN PR #58; OWNER MAIN GATE.**
+**State:** **PASS / MERGED TO CANONICAL MAIN.**
 
 D-026 `law01-v1-1` remains an additive WordPress-native setup workflow. Recommendations are proposal-only until explicit change-plan confirmation; activation remains mutation-free; existing-site overwrite and whole-site noindex takeover remain forbidden. Starter Pages/Posts/Categories/Attachments become ordinary WordPress-owned content after successful provisioning. New/mostly-empty-site starter publication is coupled to explicit native search-visibility consent; active-site starter Posts fail safe to Draft without a public per-Post SEO contract.
 
-**Fresh integrated QA:** exact head `356ef8c00991c63e294d619d42c7094d1074226d` completed 21/21 triggered PR workflows successfully. `Law Site Provisioning Candidate Package` run `34413505990` produced deterministic Theme `1.1.0` candidate `aznet-theme-1.1.0-law-site-provisioning-v1-1-candidate.zip`, 121 files, SHA-256 `19a0411616c67b8795fd08d3590accc571239ca65f4b67f9bc44c3d655170252`, artifact `10128165973`. `Law Site Provisioning Browser Quality` run `34413506017` passed the WP 6.9 / PHP 8.1 / MySQL 8 runtime/browser/a11y matrix; artifact `10128198277`.
-
-**Integration debugging evidence:** G8 run `34412609546` correctly rejected unapproved Theme metadata `1.1.1`; commit `ec1e86f631a1b341736422296ae4689830a505c6` restored both metadata locations to `1.1.0`. R2 browser run `34413075882` exposed a disposable CI-server lifecycle failure, not a Theme runtime defect; test-only commit `356ef8c00991c63e294d619d42c7094d1074226d` made the portability harness restart that disposable server and the rerun passed.
+Pre-merge integrated QA remains retained: package run `34413505990` produced Theme `1.1.0` deterministic candidate SHA-256 `19a0411616c67b8795fd08d3590accc571239ca65f4b67f9bc44c3d655170252`; browser/runtime run `34413506017` passed WordPress 6.9 / PHP 8.1 / MySQL 8 provisioning scenarios. Canonical integration is separately proven by exact-main run `34414878827` SUCCESS on `main@04edd8b312de70e6ee8339c461ae8f16f93e5859`.
 
 **Known observation:** the separately recorded WordPress-core `WP_Query::rewind_posts()` warning remains UNKNOWN/non-blocking and does not support a blanket PHP-log-clean claim.
 
-**Gate:** PR #61, #60 and #59 have been merged upward through the stack; PR #58 is now the sole canonical-main integration gate. No tag/GitHub Release, L5 provider certification or production deployment is authorized by this state.
-
-**Next:** explicit owner disposition for PR #58 -> `main`; after merge, run D-022 exact-main verification before any release-candidate promotion.
+**Next:** P4 Real Pilot QA under the already-approved pilot execution scope. No tag/GitHub Release, L5 provider certification, destructive duplicate-theme deletion or final production deployment is authorized by this merge.
 
 ### P5 — Publication and deployment
 
@@ -306,8 +300,8 @@ The following remain explicit owner approval gates:
 - destructive retirement/deletion without proven rollback;
 - merge of future production hardening into canonical `main` after its own fresh verification when the active PR is explicitly owner-gated.
 
-Metadata promotion to `1.1.0` is a historical cleared gate completed through PR #48. Source closure and the post-R6 roadmap were explicitly approved by the product owner on 08/09/2026. P2 and P3 production merges were separately owner-approved. P4 pilot QA execution is now approved. None of these approvals include Git tag/GitHub Release or final production deployment.
+Metadata promotion to `1.1.0` is a historical cleared gate completed through PR #48. Source closure and the post-R6 roadmap were explicitly approved by the product owner on 08/09/2026. P2 and P3 production merges were separately owner-approved. Owner-approved PR #58 canonical integration is cleared at `main@04edd8b312de70e6ee8339c461ae8f16f93e5859` and D-022 exact-main run `34414878827` is PASS. P4 pilot QA execution remains approved. None of these approvals include Git tag/GitHub Release, destructive duplicate-theme cleanup, L5 provider certification or final production deployment.
 
 ## 14. Exact next
 
-**Owner-gated PR #58 -> `main` integration is the exact next action. If approved and merged, run D-022 fresh exact-main verification on the resulting merge SHA before promoting any release candidate; then continue P4 real-pilot QA. P1 duplicate-theme cleanup remains a separate destructive site-operations gate. Stop before tag/GitHub Release or final production deployment.**
+**P4 — Real law-site pilot QA on canonical `main@04edd8b312de70e6ee8339c461ae8f16f93e5859`. D-022 exact-main verification run `34414878827` is PASS. Prove the real current-stack route/responsive/a11y/Rank Math/RootProfile matrix and measured site behavior. P1 duplicate-theme cleanup remains a parallel destructive site-operations gate. Stop before tag/GitHub Release or final production deployment.**

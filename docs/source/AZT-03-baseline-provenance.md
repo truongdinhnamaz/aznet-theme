@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.29  
+**Version:** v0.30  
 **Status:** Working Source  
 **Date:** 10/09/2026  
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -13,8 +13,8 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 
 ## 2. Current canonical baseline
 
-- Current canonical repository/implementation head after PR #57: `main@12a480311dcb59f3d7a152ef7e72ca927c2f632d`.
-- Current canonical implementation tree: `32ebca25a63d511e74250646d333202994c65328`.
+- Current canonical repository/implementation head after owner-approved PR #58 merge: `main@04edd8b312de70e6ee8339c461ae8f16f93e5859`.
+- Current canonical implementation tree: `28c30353e9f01bc51f4474347069738d410b5256`.
 - Internal Theme version remains `1.1.0`.
 - WordPress floor: `6.9+`.
 - PHP floor: `8.1+`.
@@ -40,6 +40,8 @@ Current production state includes:
 - R6 Performance + Release 2.0 technical closure: measured asset/performance evidence, reusable PR/exact-main verification, deterministic v1.x package infrastructure, bounded workflow retirement, atomic metadata promotion to `1.1.0`, and post-promotion exact-main/package verification;
 - P2 Editorial Single-Post Hardening: native WordPress publication presentation, singular-Post scoped article assets and fail-soft native author handling without SEO/domain/query takeover;
 - P3 Editorial Listing/Search Hardening: native featured image/date scan presentation and resilient long-title/excerpt styling while preserving WordPress main-query ownership.
+- P4-A Homepage Composer + Law 01 Premium presentation with typed WordPress Content Map, exactly one native `the_content()` boundary and Theme-owned presentation only.
+- P4-B D-025/D-026 Law Site Provisioning with mutation-free activation, proposal-only recommendations, WordPress-owned starter content/media and index-safe publication boundaries.
 
 PR #34 final verified head is `b2e5cca1461233bcb1a0333c5aa51879c3264756`. Its tree `b716b89f04e45c2012f8e191c7d0edf605c9dd11` is identical to the merge commit tree on canonical `main@f8e1a95c903c3f246528368ae9878eba780539ff`, so the v1.0 technical merge introduced no conflict-resolution production delta.
 
@@ -78,21 +80,17 @@ Because P2/P3 changed production bytes after the R6 package, SHA-256 `000735...`
 No source statement above transfers domain ownership to the Theme.
 
 
-### Homepage Law 01 + Law Site Provisioning integration candidate — PR #58, not canonical main
+### Homepage Law 01 + Law Site Provisioning — canonical main integration
 
-The previously recorded D-026 stacked candidate at `d564c6e8a43f458a493fe816c4fc768d4917065f` remains historical evidence for the v1.1 implementation slice. Its `1.1.1` package label is **not** the integration/release metadata baseline: fresh G8 verification later proved that Theme metadata must remain the source-approved `1.1.0` until a separately approved release-governance change occurs.
+The D-024/D-025/D-026 stack is canonical Theme implementation after owner-approved PR #58 merge. The previously recorded stacked `1.1.1` package remains historical candidate evidence only; the integration/release metadata baseline is the source-approved Theme `1.1.0`.
 
-The approved stack was integrated upward without conflict-resolution byte deltas: PR #61 -> PR #60 at `f10751b5fadd19107bbec7bcd1fafa2bd92d409b`; PR #60 -> PR #59 at `bb2155d114922f585a1650b6bbdf61b3ce6414a3`; PR #59 -> PR #58 at `ed087860364b8f8ad542226866d604013aee8ff5`.
+PR #58 merged to canonical `main@04edd8b312de70e6ee8339c461ae8f16f93e5859` with tree `28c30353e9f01bc51f4474347069738d410b5256`. The merge tree is identical to final PR head `992cf0274a9bdec93131fbb69401516b5c602ed8`, so no conflict-resolution byte delta was introduced by the canonical merge.
 
-Fresh PR #58 verification caught two integration-only issues before any canonical-main merge. G8 run `34412609546` failed exactly because candidate-only commit `97110c42af945837a29520585d183b2f7e58ceae` had changed `style.css` and `AZNET_THEME_VERSION` from `1.1.0` to `1.1.1`. Minimal production fix `ec1e86f631a1b341736422296ae4689830a505c6` restored the approved metadata bytes to `1.1.0`; the exact G8 contract then passed. R2 Pattern Library Browser run `34413075882` separately exposed a disposable PHP-development-server death during theme-switch portability verification; artifact/log evidence showed no Theme PHP error at the failure boundary. Test-harness-only commit `356ef8c00991c63e294d619d42c7094d1074226d` restarts only that disposable runtime before portability rendering, matching the already-proven R3 harness pattern and changing no packaged Theme bytes.
+Fresh D-022 `V1 Exact Main Verification` run `34414878827` completed SUCCESS on exact `main@04edd8b312de70e6ee8339c461ae8f16f93e5859`. `static-contracts` passed the reusable v1 core/static contract gate on PHP 8.1; `clean-runtime-browser` passed WordPress 6.9 clean runtime routes plus core browser/a11y verification. Exact-main evidence artifacts: static `10128678294` and runtime/browser `10128707347`.
 
-Exact PR-head `356ef8c00991c63e294d619d42c7094d1074226d` then completed all 21 triggered pull-request workflows successfully, including reusable core, lifecycle, R1-R6 static/browser, Homepage/Law01, Law Site Provisioning browser/runtime and deterministic package gates.
+Pre-merge integration package evidence remains retained: `Law Site Provisioning Candidate Package` run `34413505990`, Theme `1.1.0`, 121 packaged files, SHA-256 `19a0411616c67b8795fd08d3590accc571239ca65f4b67f9bc44c3d655170252`, artifact `10128165973`; browser/runtime run `34413506017`, artifact `10128198277`.
 
-Fresh `Law Site Provisioning Candidate Package` run `34413505990` checked out exact head `356ef8c00991c63e294d619d42c7094d1074226d`, passed PHP 8.1.34 + mbstring/mysqli reusable core verification, linted 93 production PHP files, built twice deterministically, passed `unzip -t` and exact-byte unpacked/source comparison for 121 packaged files. Integration candidate: `aznet-theme-1.1.0-law-site-provisioning-v1-1-candidate.zip`; SHA-256 `19a0411616c67b8795fd08d3590accc571239ca65f4b67f9bc44c3d655170252`; artifact ID `10128165973`.
-
-Fresh `Law Site Provisioning Browser Quality` run `34413506017` passed WordPress 6.9 / PHP 8.1 / MySQL 8 recommendation-first setup, new/active/rerun/rollback/user-edit/index-restore runtime scenarios and Law 01 Homepage responsive/a11y checks; browser artifact ID `10128198277`. The separately known WordPress-core `WP_Query::rewind_posts()` warning remains UNKNOWN/non-blocking and is not a blanket clean-log claim.
-
-PR #58 remains an open owner-gated integration candidate against canonical `main@12a480311dcb59f3d7a152ef7e72ca927c2f632d`. The verified PR-head candidate does not itself make `main` canonical to these bytes and does not authorize a tag, GitHub Release, L5 provider certification or production deployment. Detailed integration evidence: `docs/evidence/HOMEPAGE_LAW01_PROVISIONING_PR58_INTEGRATION.md`.
+The separately known WordPress-core `WP_Query::rewind_posts()` warning remains UNKNOWN/non-blocking and is not a blanket PHP-log-clean claim. No source statement here authorizes a Git tag, GitHub Release, L5 provider certification, destructive pilot cleanup or final production deployment. Detailed integration evidence remains `docs/evidence/HOMEPAGE_LAW01_PROVISIONING_PR58_INTEGRATION.md`.
 
 ## 3. Current release-path classification
 
@@ -111,7 +109,7 @@ Under AZT-05 v1.0 and D-016:
 - External compatibility defects must not be bypassed with private APIs, authoritative heuristics or copied domain logic.
 - The pilot System Health evidence shows active AZnet Theme `1.1.0` on WordPress `7.1` / PHP `8.4.24`, primary menu continuity, RootProfile v1/v2 present, RootProfile current-surface absent, Woo absent and ConvertFlow intentionally `unknown`.
 
-Current product-development next is governed by AZT-04. P2/P3 are closed; the exact next is P4 Real Pilot QA. Duplicate-theme cleanup on the pilot remains a separate destructive site-operations gate until completed.
+Current product-development next is governed by AZT-04. P2/P3 and P4-A/P4-B canonical integration are closed through exact-main verification on `main@04edd8b312de70e6ee8339c461ae8f16f93e5859`; the exact next is P4 Real Pilot QA. Duplicate-theme cleanup on the pilot remains a separate destructive site-operations gate until completed.
 
 ## 4. Registered source artifacts
 
@@ -189,4 +187,4 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**P4 — Real Pilot QA from canonical `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0` after source closure. Use the approved pilot execution to prove current-stack routes/responsive/a11y/Rank Math/RootProfile compatibility and measured site behavior. P1 duplicate-theme deletion remains a separate destructive site-operations gate. Stop before tag/GitHub Release or final production deployment.**
+**P4 — Real Pilot QA from canonical `main@04edd8b312de70e6ee8339c461ae8f16f93e5859` after owner-approved PR #58 merge and successful D-022 exact-main verification run `34414878827`. Prove current-stack routes/responsive/a11y/Rank Math/RootProfile compatibility and measured actual-site behavior. P1 duplicate-theme deletion remains a separate destructive site-operations gate. Stop before tag/GitHub Release or final production deployment.**

@@ -59,3 +59,13 @@ The separately known WordPress-core `WP_Query::rewind_posts()` warning remains U
 ## NEXT
 
 PR #58 -> `main` remains an explicit owner merge gate. If merged, run D-022 fresh exact-main verification on the resulting merge SHA before promoting any release candidate. P4 real-pilot QA remains a subsequent approved execution step.
+
+## Post-merge canonical-main verification
+
+- Owner-approved PR #58 merged to `main@04edd8b312de70e6ee8339c461ae8f16f93e5859`.
+- Merge tree: `28c30353e9f01bc51f4474347069738d410b5256`; identical to final PR-head tree, so no conflict-resolution byte delta.
+- D-022 `V1 Exact Main Verification` run `34414878827`: **SUCCESS** on exact merge SHA.
+- `static-contracts`: SUCCESS; artifact `10128678294`.
+- `clean-runtime-browser`: SUCCESS on WordPress 6.9 / PHP 8.1; artifact `10128707347`.
+- Theme metadata remains `1.1.0`.
+- No tag, GitHub Release, L5 provider certification, destructive pilot cleanup or final production deployment is implied.
