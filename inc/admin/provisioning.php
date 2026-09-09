@@ -270,13 +270,13 @@ function render_provisioning_wizard(): void {
         $result = get_transient( provisioning_result_transient_key() );
         if ( ! is_array( $result ) ) { echo '<p>' . esc_html__( 'Không có kết quả thiết lập gần đây.', 'aznet-theme' ) . '</p>'; }
         elseif ( empty( $result['ok'] ) ) {
-            echo '<h3>' . esc_html__( 'Thiết lập chưa hoàn tất', 'aznet-theme' ) . '</h3><div class="notice notice-error inline"><p>' . esc_html( implode( ' ', (array) ( $result['errors'] ?? [] ) ) . '</p></div>';
+            echo '<h3>' . esc_html__( 'Thiết lập chưa hoàn tất', 'aznet-theme' ) . '</h3><div class="notice notice-error inline"><p>' . esc_html( implode( ' ', (array) ( $result['errors'] ?? [] ) ) ) . '</p></div>';
             echo '<p><a class="button" href="' . esc_url( provisioning_url( 1 ) ) . '">' . esc_html__( 'Chạy lại kiểm tra', 'aznet-theme' ) . '</a></p>';
         } else {
             $readiness = provisioning_readiness();
             echo '<h3>' . esc_html__( 'Thiết lập hoàn tất — Website đã sẵn sàng để chỉnh nội dung.', 'aznet-theme' ) . '</h3>';
             echo '<p><strong>' . esc_html__( 'Setup status:', 'aznet-theme' ) . '</strong> <code>' . esc_html( (string) $readiness['status'] ) . '</code></p>';
-            echo '<p>' . esc_html( sprintf( 'Created: %d · Reused: %d', count( (array) ( $result['created'] ?? [] ) ), count( (array) ( $result['reused'] ?? [] ) ) ) . '</p>';
+            echo '<p>' . esc_html( sprintf( 'Created: %d · Reused: %d', count( (array) ( $result['created'] ?? [] ) ), count( (array) ( $result['reused'] ?? [] ) ) ) ) . '</p>';
             echo '<div class="aznet-theme-provision-actions">';
             echo '<a class="button button-primary" href="' . esc_url( home_url( '/' ) ) . '" target="_blank" rel="noopener">' . esc_html__( 'Xem trang chủ', 'aznet-theme' ) . '</a> ';
             echo '<a class="button" href="#launch-checklist">' . esc_html__( 'Chỉnh nội dung cần thiết', 'aznet-theme' ) . '</a> ';
