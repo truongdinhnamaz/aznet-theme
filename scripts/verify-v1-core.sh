@@ -81,6 +81,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-content-ma
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-control-center-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-premium-presentation-contract.php
 
 printf '%s\n' '==> Law Site Provisioning contracts'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-blueprint-contract.php
