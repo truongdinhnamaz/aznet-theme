@@ -15,3 +15,5 @@ jobs:
           coverage: none
       - name: Run recommendation contract
         run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-recommendations-contract.php
+      - name: Run full reusable core regression
+        run: bash scripts/verify-v1-core.sh
