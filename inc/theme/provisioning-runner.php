@@ -46,8 +46,11 @@ function provisioning_rollback_failed_run( array $receipt ): array {
         $id = (int) ( $item['id'] ?? 0 );
         if ( $id <= 0 ) { continue; }
         try {
-            if ( 'page' === $type ) {
-                if ( false === wp_delete_post( $id, true ) ) { $errors[] = 'Failed to delete current-run Page #' . $id; }
+            if ( in_array( $type, [ 'page', 'post' ], true ) ) {
+                if ( false === wp_delete_post( $id, true ) ) { $errors[] = 'Failed to delete current-run ' . $type . ' #' . $id; }
+            } elseif ( 'attachment' === $type ) {
+                $deleted = function_exists( 'wp_delete_attachment' ) ? wp_delete_attachment( $id, true ) : wp_delete_post( $id, true );
+                if ( false === $deleted ) { $errors[] = 'Failed to delete current-run attachment #' . $id; }
             } elseif ( 'category' === $type ) {
                 $deleted = wp_delete_term( $id, 'category' );
                 if ( false === $deleted || is_wp_error( $deleted ) ) { $errors[] = 'Failed to delete current-run Category #' . $id; }
@@ -143,6 +146,12 @@ function provisioning_apply_homepage_mapping( array $page_ids, array $term_ids, 
     set_theme_mod( 'aznet_theme_settings', normalize_settings( $s ) );
 }
 
+function provisioning_target_has_thumbnail( int $post_id ): bool {
+    if ( $post_id <= 0 ) { return false; }
+    if ( function_exists( 'has_post_thumbnail' ) ) { return has_post_thumbnail( $post_id ); }
+    return function_exists( 'get_post_thumbnail_id' ) && (int) get_post_thumbnail_id( $post_id ) > 0;
+}
+
 /** @return array<string,mixed> */
 function provisioning_apply_plan( array $plan ): array {
     $validation = provisioning_validate_plan( $plan );
@@ -155,6 +164,8 @@ function provisioning_apply_plan( array $plan ): array {
     $receipt = provisioning_initial_receipt( provisioning_run_id() );
     $page_ids = [];
     $term_ids = [];
+    $post_ids = [];
+    $media_ids = [];
     $menu_id = 0;
 
     try {
@@ -208,10 +219,59 @@ function provisioning_apply_plan( array $plan ): array {
                 provisioning_apply_homepage_mapping( $page_ids, $term_ids, $op );
             } elseif ( 'set_homepage_preset' === $type ) {
                 $s = settings(); $s['homepage_preset'] = (string) ( $op['preset'] ?? 'off' ); set_theme_mod( 'aznet_theme_settings', normalize_settings( $s ) );
+            } elseif ( 'import_media' === $type ) {
+                $media_role = (string) ( $op['media_role'] ?? $role );
+                $provenance_role = function_exists( __NAMESPACE__ . '\\provisioning_media_role_provenance' ) ? provisioning_media_role_provenance( $media_role ) : 'starter_media:' . $media_role;
+                $before = provisioning_find_owned_role( (string) $plan['blueprint'], 'attachment', $provenance_role );
+                $id = provisioning_import_media( $media_role, (string) $plan['blueprint'], (string) $receipt['run_id'] );
+                $media_ids[ $media_role ] = $id;
+                if ( $before > 0 ) { $receipt['reused'][] = [ 'type' => 'attachment', 'id' => $id, 'role' => $provenance_role ]; }
+                else { $receipt['created'][] = [ 'type' => 'attachment', 'id' => $id, 'role' => $provenance_role ]; }
+            } elseif ( 'create_post' === $type ) {
+                $editorial_role = (string) ( $op['editorial_role'] ?? '' );
+                $owned = provisioning_find_owned_role( (string) $plan['blueprint'], 'post', $role );
+                if ( $owned > 0 && get_post( $owned ) instanceof \WP_Post ) {
+                    $post_ids[ $role ] = $owned; $receipt['reused'][] = [ 'type' => 'post', 'id' => $owned, 'role' => $role ];
+                } else {
+                    $definition = $blueprint['editorial_examples']['items'][ $editorial_role ] ?? null;
+                    if ( ! is_array( $definition ) ) { throw new \RuntimeException( 'Unknown starter Post role: ' . $editorial_role ); }
+                    $category_role = (string) ( $op['category_role'] ?? '' );
+                    $category_id = (int) ( $term_ids[ $category_role ] ?? 0 );
+                    if ( $category_id <= 0 ) { throw new \RuntimeException( 'Starter Post Category is unresolved: ' . $category_role ); }
+                    $id = wp_insert_post( [
+                        'post_type' => 'post',
+                        'post_status' => (string) ( $op['post_status'] ?? 'draft' ),
+                        'post_title' => (string) $definition['title'],
+                        'post_excerpt' => (string) $definition['excerpt'],
+                        'post_content' => (string) $definition['content'],
+                    ], true );
+                    if ( is_wp_error( $id ) || (int) $id <= 0 ) { throw new \RuntimeException( is_wp_error( $id ) ? $id->get_error_message() : 'Starter Post creation failed.' ); }
+                    $id = (int) $id;
+                    if ( function_exists( 'wp_set_post_categories' ) ) {
+                        $assigned = wp_set_post_categories( $id, [ $category_id ], false );
+                        if ( is_wp_error( $assigned ) ) { throw new \RuntimeException( $assigned->get_error_message() ); }
+                    }
+                    if ( ! provisioning_mark_post( $id, (string) $plan['blueprint'], $role, (string) $receipt['run_id'] ) ) { throw new \RuntimeException( 'Starter Post provenance failed for #' . $id ); }
+                    $post_ids[ $role ] = $id; $receipt['created'][] = [ 'type' => 'post', 'id' => $id, 'role' => $role ];
+                }
+            } elseif ( 'assign_featured_media' === $type ) {
+                $media_role = (string) ( $op['media_role'] ?? '' );
+                $media_id = (int) ( $media_ids[ $media_role ] ?? 0 );
+                $target_role = (string) ( $op['target_role'] ?? '' );
+                $target_type = (string) ( $op['target_type'] ?? '' );
+                $target_id = 'page_role' === $target_type ? (int) ( $page_ids[ $target_role ] ?? 0 ) : (int) ( $post_ids[ $target_role ] ?? 0 );
+                if ( $target_id <= 0 || $media_id <= 0 ) { throw new \RuntimeException( 'Featured-media assignment target is unresolved.' ); }
+                if ( ! provisioning_target_has_thumbnail( $target_id ) && function_exists( 'set_post_thumbnail' ) ) {
+                    if ( false === set_post_thumbnail( $target_id, $media_id ) ) { throw new \RuntimeException( 'Featured-media assignment failed for #' . $target_id ); }
+                }
             }
+            // set_search_visibility is implemented in the dedicated index-safety slice.
             provisioning_test_maybe_fail( $op_id );
         }
-        return [ 'ok' => true, 'run_id' => $receipt['run_id'], 'created' => $receipt['created'], 'reused' => $receipt['reused'], 'errors' => [], 'page_ids' => $page_ids, 'term_ids' => $term_ids, 'menu_id' => $menu_id ];
+        return [
+            'ok' => true, 'run_id' => $receipt['run_id'], 'created' => $receipt['created'], 'reused' => $receipt['reused'], 'errors' => [],
+            'page_ids' => $page_ids, 'term_ids' => $term_ids, 'post_ids' => $post_ids, 'media_ids' => $media_ids, 'menu_id' => $menu_id,
+        ];
     } catch ( \Throwable $e ) {
         $receipt['errors'][] = $e->getMessage();
         $rollback = provisioning_rollback_failed_run( $receipt );
