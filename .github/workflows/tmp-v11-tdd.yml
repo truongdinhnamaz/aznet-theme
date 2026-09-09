@@ -13,6 +13,9 @@ jobs:
           php-version: '8.1'
           extensions: mbstring, mysqli
           coverage: none
+      - name: Diagnose starter editorial word counts
+        run: |
+          php -r 'define("ABSPATH", __DIR__ . "/"); require "inc/theme/provisioning-blueprints.php"; $bp=AZnet\Theme\provisioning_blueprint("law01-v1-1"); foreach($bp["editorial_examples"]["items"] as $role=>$item){$plain=trim(strip_tags($item["content"])); $words=preg_split("/\\s+/u",$plain) ?: []; echo $role, "=", count($words), PHP_EOL;}'
       - name: Run recommendation contract
         run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-recommendations-contract.php
       - name: Run starter editorial contract
