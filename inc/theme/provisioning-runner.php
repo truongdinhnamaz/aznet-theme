@@ -23,7 +23,10 @@ function provisioning_initial_receipt( string $run_id ): array {
             'show_on_front' => get_option( 'show_on_front', 'posts' ),
             'page_on_front' => (int) get_option( 'page_on_front', 0 ),
             'nav_locations' => get_theme_mod( 'nav_menu_locations', [] ),
+            'blog_public' => (int) get_option( 'blog_public', 1 ),
         ],
+        'index_visibility_changed' => false,
+        'index_visibility_target' => null,
         'created' => [],
         'reused' => [],
         'errors' => [],
@@ -38,6 +41,9 @@ function provisioning_rollback_failed_run( array $receipt ): array {
         update_option( 'show_on_front', $receipt['pre']['show_on_front'] ?? 'posts' );
         update_option( 'page_on_front', (int) ( $receipt['pre']['page_on_front'] ?? 0 ) );
     } catch ( \Throwable $e ) { $errors[] = 'Front Page rollback failed: ' . $e->getMessage(); }
+    if ( ! empty( $receipt['index_visibility_changed'] ) ) {
+        try { update_option( 'blog_public', (int) ( $receipt['pre']['blog_public'] ?? 1 ) ); } catch ( \Throwable $e ) { $errors[] = 'Search visibility rollback failed: ' . $e->getMessage(); }
+    }
     try { set_theme_mod( 'nav_menu_locations', (array) ( $receipt['pre']['nav_locations'] ?? [] ) ); } catch ( \Throwable $e ) { $errors[] = 'Menu-location rollback failed: ' . $e->getMessage(); }
 
     $created = array_reverse( (array) ( $receipt['created'] ?? [] ) );
@@ -165,6 +171,7 @@ function provisioning_apply_plan( array $plan ): array {
     $page_ids = [];
     $term_ids = [];
     $post_ids = [];
+    $created_starter_post_ids = [];
     $media_ids = [];
     $menu_id = 0;
 
@@ -219,6 +226,15 @@ function provisioning_apply_plan( array $plan ): array {
                 provisioning_apply_homepage_mapping( $page_ids, $term_ids, $op );
             } elseif ( 'set_homepage_preset' === $type ) {
                 $s = settings(); $s['homepage_preset'] = (string) ( $op['preset'] ?? 'off' ); set_theme_mod( 'aznet_theme_settings', normalize_settings( $s ) );
+            } elseif ( 'set_search_visibility' === $type ) {
+                $target = (int) ( $op['target'] ?? 0 );
+                $current = (int) get_option( 'blog_public', 1 );
+                if ( $current !== $target ) {
+                    update_option( 'blog_public', $target );
+                    if ( $target !== (int) get_option( 'blog_public', 1 ) ) { throw new \RuntimeException( 'Search visibility update failed.' ); }
+                    $receipt['index_visibility_changed'] = true;
+                    $receipt['index_visibility_target'] = $target;
+                }
             } elseif ( 'import_media' === $type ) {
                 $media_role = (string) ( $op['media_role'] ?? $role );
                 $provenance_role = function_exists( __NAMESPACE__ . '\\provisioning_media_role_provenance' ) ? provisioning_media_role_provenance( $media_role ) : 'starter_media:' . $media_role;
@@ -252,7 +268,7 @@ function provisioning_apply_plan( array $plan ): array {
                         if ( is_wp_error( $assigned ) ) { throw new \RuntimeException( $assigned->get_error_message() ); }
                     }
                     if ( ! provisioning_mark_post( $id, (string) $plan['blueprint'], $role, (string) $receipt['run_id'] ) ) { throw new \RuntimeException( 'Starter Post provenance failed for #' . $id ); }
-                    $post_ids[ $role ] = $id; $receipt['created'][] = [ 'type' => 'post', 'id' => $id, 'role' => $role ];
+                    $post_ids[ $role ] = $id; $created_starter_post_ids[] = $id; $receipt['created'][] = [ 'type' => 'post', 'id' => $id, 'role' => $role ];
                 }
             } elseif ( 'assign_featured_media' === $type ) {
                 $media_role = (string) ( $op['media_role'] ?? '' );
@@ -265,8 +281,20 @@ function provisioning_apply_plan( array $plan ): array {
                     if ( false === set_post_thumbnail( $target_id, $media_id ) ) { throw new \RuntimeException( 'Featured-media assignment failed for #' . $target_id ); }
                 }
             }
-            // set_search_visibility is implemented in the dedicated index-safety slice.
             provisioning_test_maybe_fail( $op_id );
+        }
+        foreach ( array_values( array_unique( $created_starter_post_ids ) ) as $starter_post_id ) {
+            if ( ! provisioning_store_starter_fingerprint( (int) $starter_post_id ) ) { throw new \RuntimeException( 'Starter Post fingerprint failed for #' . (int) $starter_post_id ); }
+        }
+        if ( ! empty( $receipt['index_visibility_changed'] ) ) {
+            provisioning_store_index_receipt( [
+                'blueprint' => (string) $plan['blueprint'],
+                'run_id' => (string) $receipt['run_id'],
+                'changed' => true,
+                'pre_blog_public' => (int) ( $receipt['pre']['blog_public'] ?? 1 ),
+                'target_blog_public' => (int) ( $receipt['index_visibility_target'] ?? 0 ),
+                'restored' => false,
+            ] );
         }
         return [
             'ok' => true, 'run_id' => $receipt['run_id'], 'created' => $receipt['created'], 'reused' => $receipt['reused'], 'errors' => [],
