@@ -1,0 +1,72 @@
+name: Temporary Law Cachefix Source Closure
+
+on:
+  push:
+    branches: [work/law-site-provisioning]
+    paths:
+      - '.github/workflows/tmp-law-cachefix-source-closure.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  close-source:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/law-site-provisioning
+          fetch-depth: 0
+      - name: Refresh candidate provenance
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path('docs/source/AZT-03-baseline-provenance.md')
+          s = p.read_text()
+          replacements = [
+              ('**Version:** v0.26', '**Version:** v0.27'),
+              (
+                  'The exact production/package head is `1a735889e88e1a5e649c5b15a5044d7471dff669`; documentation-only evidence commits after that head do not change candidate production bytes. The pilot full-width follow-up is presentation-only: Law 01 section surfaces now span the viewport while the inner shell container remains constrained.',
+                  'The exact production/package head is `9a39977a6888f1fc656dd64f202e47dbd441ac3c`; documentation/source commits after that head do not change candidate production bytes. The pilot full-width follow-up remains presentation-only: Law 01 section surfaces span the viewport while the inner shell container remains constrained. A content-derived stylesheet cache key now prevents an older same-version Law 01 CSS response from masking those bytes on a real pilot.'
+              ),
+              (
+                  'Fresh exact-head `Law Site Provisioning Candidate Package` run `34261603657` passed the reusable v1 core chain on PHP 8.1.34 with mbstring/mysqli, linted 89 production PHP files, built the candidate twice deterministically, and passed exact-byte unpacked/source comparison. Candidate: `aznet-theme-1.1.1-law-site-provisioning-candidate.zip`, 112 files, SHA-256 `3fea2ae3d8293c7873442d61d61ac9695bc0dab92145485c9a57b303f663edca`, artifact ID `10070115746`.',
+                  'Fresh exact-head `Law Site Provisioning Candidate Package` run `34343371228` passed the reusable v1 core chain on PHP 8.1.34 with mbstring/mysqli, linted 89 production PHP files, built the candidate twice deterministically, and passed exact-byte unpacked/source comparison. Candidate: `aznet-theme-1.1.1-law-site-provisioning-candidate.zip`, 112 files, SHA-256 `09d92603e97688abe8a30212ed17b7e5be8e0c642ae1f78674cc95107ecf91c4`, artifact ID `10100675340`.'
+              ),
+              (
+                  'Fresh exact-head `Law Site Provisioning Browser Quality` run `34261603755` passed WordPress 6.9 / PHP 8.1 / MySQL 8 empty-site, existing-site no-overwrite, rerun idempotency, injected rollback and user-edit-preservation scenarios. Wizard Steps 1-4 and public Law 01 at 1440/1024/390/320 reported zero critical/serious axe blockers and zero horizontal overflow; fresh screenshot evidence confirms full-width Law 01 section surfaces with constrained inner content. Artifact ID `10070160592`. Detailed evidence: `docs/evidence/LAW_SITE_PROVISIONING_L4.md`.',
+                  'Fresh exact-head `Law Site Provisioning Browser Quality` run `34343371237` passed WordPress 6.9 / PHP 8.1 / MySQL 8 empty-site, existing-site no-overwrite, rerun idempotency, injected rollback and user-edit-preservation scenarios. Wizard Steps 1-4 and public Law 01 at 1440/1024/390/320 reported zero critical/serious axe blockers and zero horizontal overflow. The browser regression now asserts viewport-edge geometry for the Law 01 root/Hero/Services/Final CTA and confirms a content-derived stylesheet URL (`?ver=1.1.1-<12hex>`). Artifact ID `10100703126`. Detailed evidence: `docs/evidence/LAW_SITE_PROVISIONING_L4.md`.'
+              ),
+          ]
+          for old, new in replacements:
+              if old not in s:
+                  raise SystemExit(f'AZT-03 replacement target missing: {old[:80]}')
+              s = s.replace(old, new, 1)
+          p.write_text(s)
+
+          p = Path('docs/source/SOURCE_MANIFEST.md')
+          s = p.read_text()
+          replacements = [
+              (
+                  '| `AZT-03-baseline-provenance.md` | v0.26 | Canonical implementation/provenance plus refreshed stacked Law Site Provisioning 1.1.1 full-width candidate evidence; canonical `main` remains unchanged |',
+                  '| `AZT-03-baseline-provenance.md` | v0.27 | Canonical implementation/provenance plus refreshed stacked Law Site Provisioning 1.1.1 cache-safe full-width candidate evidence; canonical `main` remains unchanged |'
+              ),
+              (
+                  'Law Site Provisioning candidate provenance: exact production/package head `1a735889e88e1a5e649c5b15a5044d7471dff669`; candidate SHA-256 `3fea2ae3d8293c7873442d61d61ac9695bc0dab92145485c9a57b303f663edca`; package run `34261603657`; browser/runtime run `34261603755`. This refreshed candidate includes the pilot full-width Law 01 presentation fix. It remains stacked candidate evidence only; PR #58/#59 remain unmerged and release/deploy remain gated.',
+                  'Law Site Provisioning candidate provenance: exact production/package head `9a39977a6888f1fc656dd64f202e47dbd441ac3c`; candidate SHA-256 `09d92603e97688abe8a30212ed17b7e5be8e0c642ae1f78674cc95107ecf91c4`; package run `34343371228`; browser/runtime run `34343371237`. This refreshed candidate includes the pilot full-width Law 01 presentation fix plus a content-derived Law 01 stylesheet cache key so same-version asset caches cannot mask changed CSS bytes after fresh HTML is rendered. It remains stacked candidate evidence only; PR #58/#59 remain unmerged and release/deploy remain gated.'
+              ),
+          ]
+          for old, new in replacements:
+              if old not in s:
+                  raise SystemExit(f'Manifest replacement target missing: {old[:80]}')
+              s = s.replace(old, new, 1)
+          p.write_text(s)
+          PY
+
+          git config user.name truongdinhnamaz
+          git config user.email truongnam151@gmail.com
+          git rm .github/workflows/tmp-law-cachefix-source-closure.yml
+          git add docs/source/AZT-03-baseline-provenance.md docs/source/SOURCE_MANIFEST.md
+          git commit -m 'docs: close cache-safe Law 01 candidate provenance'
+          git push origin HEAD:work/law-site-provisioning
