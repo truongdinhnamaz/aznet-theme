@@ -60,6 +60,8 @@ Core operation includes:
 - surface-aware Theme assets;
 - Theme update and theme-switch continuity for WordPress-owned content.
 
+Core visual/admin rendering must not require externally hosted fonts, icons, stylesheets, scripts, analytics or CDN assets. Required Theme assets must ship in the package or come from WordPress Core. User-authored remote media/embeds and optional provider-owned remote content are outside this rule, provided Theme Core does not require them.
+
 ### 4.2 Explicitly outside runtime dependency
 
 The following may be used for development and QA because they are not installed on or required by the production WordPress site:
@@ -116,13 +118,15 @@ The correct state vocabulary is informational, for example:
 - `Unsupported version`
 - `Provider error`
 
-Only Theme-owned failures may lower Standalone Core readiness.
+Only Theme-owned capability/environment failures may lower Standalone Core readiness. User configuration observations such as “primary menu not assigned yet” or “front page not selected yet” may be reported as setup state, but must not be conflated with a broken or externally dependent Theme Core.
 
 ### 6.2 Capability-driven UI
 
 Provider-specific workflow UI should appear only when the exact supported public capability exists.
 
 Example: Commerce configuration may appear when WooCommerce is available. Without WooCommerce, the Theme remains complete and no “missing WooCommerce” remediation UI is needed.
+
+This rule does not prohibit an informational **Optional Integrations** diagnostics section from reporting that a provider is `Not present`; it prohibits provider-dependent workflows from being presented as incomplete Core features.
 
 ### 6.3 Commerce visual preset distinction
 
@@ -141,16 +145,17 @@ Examples:
 - WordPress floor supported;
 - PHP floor supported;
 - active Theme/version;
-- primary menu state;
-- Homepage state;
-- provisioning/readiness state;
-- core presentation health.
+- Theme Core capability health;
+- Homepage/provisioning setup state;
+- primary menu and other user-configuration observations.
 
 It should be able to conclude:
 
 > **Standalone Core: READY**
 
 without any optional provider installed.
+
+`Standalone Core: READY` means the Theme-owned capabilities are healthy and independently operable on the supported WordPress/PHP environment. It does not require every user-owned configuration item to be populated. A site may therefore be Core READY while also showing setup recommendations such as assigning a primary menu.
 
 ### Optional Integrations
 
@@ -195,7 +200,8 @@ Verify that:
 - optional provider calls are guarded/capability-detected;
 - Theme production code does not read private provider storage/APIs;
 - admin UX contains no required-plugin nag or mandatory remote importer path;
-- Core package contains all starter assets needed for supported provisioning presets.
+- Core package contains all starter assets needed for supported provisioning presets;
+- Core frontend/admin assets contain no mandatory third-party runtime URL dependency for fonts/icons/styles/scripts/analytics/CDNs.
 
 ### L2 — Contract/TDD gate
 
@@ -233,7 +239,8 @@ Flow:
 7. rerun to verify idempotency;
 8. render Homepage/Post/Page/Archive/Search/404;
 9. verify no Theme-caused fatal/parse/uncaught error and enforce the project’s scoped warning policy;
-10. verify no external service is required to finish setup.
+10. verify no external service is required to finish setup;
+11. verify Theme Core still renders when outbound third-party requests are unavailable, apart from WordPress/user/provider behavior outside Theme Core ownership.
 
 ### L4 — Standalone browser/a11y
 
@@ -246,7 +253,8 @@ On the zero-plugin provisioned site, verify at 1440/1024/390/320:
 - keyboard/focus/landmark/heading/label quality;
 - no horizontal overflow;
 - covered axe critical/serious blockers = 0;
-- optional providers are not presented as missing requirements.
+- optional providers are not presented as missing requirements;
+- Theme-owned frontend/admin rendering does not require third-party asset hosts.
 
 ### L5 — Optional compatibility
 
@@ -268,7 +276,8 @@ Before Core Ready/release promotion:
 4. activate with zero plugins;
 5. execute minimum standalone setup/provision/runtime/browser path;
 6. verify update/theme-switch continuity;
-7. only then claim Standalone Core PASS for those exact package bytes.
+7. verify required Theme assets are self-contained and no mandatory third-party runtime host is needed;
+8. only then claim Standalone Core PASS for those exact package bytes.
 
 Source-tree PASS alone is insufficient for final release readiness.
 
@@ -312,15 +321,16 @@ After written-spec approval, implementation planning should start with source ra
 Expected authoritative source owners:
 
 - **AZT-01** — strengthen product promise/Definition of Done around zero mandatory runtime dependency;
-- **AZT-02** — ratify D-027 runtime boundary, capability vocabulary and offline-runtime provisioning rule;
+- **AZT-02** — ratify D-027 runtime boundary, capability vocabulary, self-contained Theme asset rule and offline-runtime provisioning rule;
 - **AZT-04** — add D-027 to Decision Log and add Standalone Core release/QA gate to roadmap/P5;
 - **AZT-EXEC-MAP** — derive exact implementation slices and next action;
 - **SOURCE_MANIFEST** — update semantic versions/state after source merge.
 
 Expected implementation/test areas after source ratification:
 
-- `inc/admin/system-health.php` — split Core readiness from optional integration information;
+- `inc/admin/system-health.php` — split Core readiness from optional integration information and user setup observations;
 - Control Center/admin copy — remove any wording that could imply optional provider requirement;
+- Theme asset inventory/loading — prove required Core assets are package-local/WordPress-native;
 - provisioning contracts/runtime/browser tests — extend clean zero-plugin path to full Law01 first-run;
 - reusable core verification — add standalone static/contract gate;
 - exact-main/final candidate workflows — execute standalone proof against final package bytes;
@@ -378,13 +388,14 @@ D-027 implementation is complete only when all are true:
 1. authoritative sources ratify the standalone runtime contract;
 2. Core/optional capability terminology is consistent in source and admin UX;
 3. no required-plugin nag/mandatory remote setup dependency exists for Core;
-4. System Health can report `Standalone Core: READY` with zero plugins;
-5. Law01 zero-plugin first-run provisioning PASS is proven at L2/L3/L4;
-6. provider-absent regressions remain PASS;
-7. exact final candidate ZIP passes the standalone install/activate/setup/provision/render path;
-8. update/theme-switch continuity is verified on the candidate path;
-9. optional compatibility state remains separate from Core readiness;
-10. evidence records exact branch/head/run/package SHA and does not overclaim L5 or P5 publication/deployment.
+4. System Health can report `Standalone Core: READY` with zero plugins while separately reporting user setup observations;
+5. required Core visual/admin assets are self-contained in the Theme package or WordPress Core;
+6. Law01 zero-plugin first-run provisioning PASS is proven at L2/L3/L4;
+7. provider-absent regressions remain PASS;
+8. exact final candidate ZIP passes the standalone install/activate/setup/provision/render path;
+9. update/theme-switch continuity is verified on the candidate path;
+10. optional compatibility state remains separate from Core readiness;
+11. evidence records exact branch/head/run/package SHA and does not overclaim L5 or P5 publication/deployment.
 
 ## 17. Non-goals
 
@@ -397,6 +408,7 @@ D-027 does **not**:
 - create a proprietary page builder;
 - require Theme to implement SEO-plugin storage or schema engines;
 - prohibit external development/QA tooling;
+- prohibit user-authored external links/embeds or optional provider-owned remote content;
 - authorize publication, production deployment or destructive site cleanup;
 - make optional provider certification mandatory for Core release unless a future approved source decision explicitly changes that rule.
 
@@ -407,7 +419,8 @@ Invoke the implementation-planning workflow and produce a bounded plan in this o
 1. source ratification for D-027;
 2. RED standalone contracts against the current baseline;
 3. minimal admin/System Health semantic changes required by the contract;
-4. full zero-plugin Law01 runtime/browser path;
-5. exact-package standalone verification;
-6. regression matrix and evidence/source closure;
-7. stop at the next true owner gate for merge/release/deploy.
+4. self-contained Core asset verification/fixes if RED exposes any;
+5. full zero-plugin Law01 runtime/browser path;
+6. exact-package standalone verification;
+7. regression matrix and evidence/source closure;
+8. stop at the next true owner gate for merge/release/deploy.
