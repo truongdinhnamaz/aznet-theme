@@ -1,0 +1,125 @@
+name: Law Site Provisioning Browser Quality
+
+on:
+  pull_request:
+    branches: [main, work/homepage-composer-law01, work/law01-premium-presentation]
+    paths:
+      - 'style.css'
+      - 'functions.php'
+      - 'inc/theme/provisioning-*.php'
+      - 'inc/admin/provisioning.php'
+      - 'inc/admin/control-center.php'
+      - 'inc/admin/bootstrap.php'
+      - 'inc/theme/bootstrap.php'
+      - 'assets/css/admin/control-center.css'
+      - 'assets/starter/law01/**'
+      - 'tests/offline/provisioning-*.php'
+      - 'tests/runtime/law-site-provisioning-*.php'
+      - 'tests/browser/law-site-provisioning-*.mjs'
+      - 'scripts/verify-v1-core.sh'
+      - '.github/workflows/law-site-provisioning-browser.yml'
+      - '.github/workflows/law-site-provisioning-candidate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  provisioning-runtime-browser:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    steps:
+      - name: Checkout exact candidate head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Record exact checkout identity
+        run: git rev-parse HEAD | tee /tmp/provisioning-head-sha.txt
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli, mbstring
+          coverage: none
+      - name: Verify provisioning offline contracts
+        run: |
+          set -euo pipefail
+          for t in tests/offline/provisioning-*.php; do php -d zend.assertions=1 -d assert.exception=1 "$t"; done
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/classic-editor-policy-contract.php
+          for f in inc/theme/provisioning-*.php inc/admin/provisioning.php tests/runtime/law-site-provisioning-*.php; do php -l "$f" >/dev/null; done
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install WordPress 6.9 and exact Theme candidate
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp
+          chmod +x /tmp/wp && sudo mv /tmp/wp /usr/local/bin/wp
+          rm -rf /tmp/wp-site /tmp/law-provisioning && mkdir -p /tmp/wp-site /tmp/law-provisioning
+          wp core download --version=6.9 --path=/tmp/wp-site --force --allow-root
+          wp config create --path=/tmp/wp-site --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp-site --url=http://127.0.0.1:8080 --title='AZnet Law Provisioning' --admin_user=admin --admin_password='law-provisioning-password' --admin_email=provisioning@example.test --skip-email --allow-root
+          mkdir -p /tmp/wp-site/wp-content/themes/aznet-theme
+          rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='README.md' --exclude='aznet-preview.png' ./ /tmp/wp-site/wp-content/themes/aznet-theme/
+          bp=$(wp post list --post_type=page --post_status=any --format=count --path=/tmp/wp-site --allow-root)
+          bc=$(wp term list category --format=count --path=/tmp/wp-site --allow-root)
+          wp theme activate aznet-theme --path=/tmp/wp-site --allow-root
+          test "$bp" = "$(wp post list --post_type=page --post_status=any --format=count --path=/tmp/wp-site --allow-root)"
+          test "$bc" = "$(wp term list category --format=count --path=/tmp/wp-site --allow-root)"
+          test "$(wp option get show_on_front --path=/tmp/wp-site --allow-root)" = posts
+      - name: Normalize disposable empty-site browser fixture
+        run: |
+          set -euo pipefail
+          for id in $(wp post list --post_type=post --post_status=publish --format=ids --path=/tmp/wp-site --allow-root); do
+            wp post update "$id" --post_status=draft --path=/tmp/wp-site --allow-root >/dev/null
+          done
+          test "$(wp post list --post_type=post --post_status=publish --format=count --path=/tmp/wp-site --allow-root)" = "0"
+          test "$(wp post list --post_type=page --post_status=any --format=count --path=/tmp/wp-site --allow-root)" -le "2"
+      - name: Start WordPress runtime
+        run: |
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp-site > /tmp/law-provisioning/server.log 2>&1 & echo $! > /tmp/law-provisioning/server.pid
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:8080/wp-login.php >/dev/null && exit 0; sleep 1; done; exit 1
+      - name: Install Playwright and axe
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+      - name: Drive v1.1 recommendation wizard and complete Homepage L4
+        env:
+          PROVISION_BASE_URL: http://127.0.0.1:8080
+          PROVISION_STATE_DIR: /tmp/law-provisioning
+        run: node tests/browser/law-site-provisioning-v1-1-l4.mjs
+      - name: Check browser runtime log boundary
+        run: |
+          set -euo pipefail
+          if grep -E 'PHP (Fatal error|Parse error)|Uncaught' /tmp/law-provisioning/server.log; then exit 1; fi
+          unexpected="$(grep 'PHP Warning:' /tmp/law-provisioning/server.log | grep -v 'Undefined array key 0 in /tmp/wp-site/wp-includes/class-wp-query.php on line 3872' || true)"
+          printf '%s' "$unexpected" > /tmp/law-provisioning/unexpected-php-warnings.log
+          test -z "$unexpected"
+      - name: Stop browser runtime
+        if: always()
+        run: kill "$(cat /tmp/law-provisioning/server.pid)" || true
+      - name: Run v1.1 new/active/rerun/rollback/user-edit/index-restore runtime matrix
+        run: |
+          set -euo pipefail
+          for s in new active rerun rollback user-edit restore-index; do
+            AZNET_PROVISION_V11_SCENARIO="$s" wp eval-file tests/runtime/law-site-provisioning-v1-1.php --path=/tmp/wp-site --allow-root | tee "/tmp/law-provisioning/v11-${s}.txt"
+          done
+      - name: Upload provisioning evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: law-site-provisioning-browser-quality
+          path: |
+            /tmp/law-provisioning
+            /tmp/provisioning-head-sha.txt
+          if-no-files-found: warn

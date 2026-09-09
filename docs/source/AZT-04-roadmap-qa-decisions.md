@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.29  
+**Version:** v0.32  
 **Status:** Working Source  
-**Date:** 08/09/2026
+**Date:** 09/09/2026
 
 ## 1. Purpose
 
@@ -162,6 +162,22 @@ Implement the approved Homepage Composer Core + `law-01` presentation preset as 
 
 **Gates:** L1 static -> L2 RED/GREEN contracts -> L3 disposable WordPress runtime -> L4 browser/visual/a11y -> deterministic candidate package. Main merge, release tag and production deployment remain explicit owner gates.
 
+
+
+### P4-B — Law Site Provisioning v1.1
+
+**State:** CANDIDATE PASS / STACKED; owner integration gate.
+
+D-026 `law01-v1-1` is implemented as the accepted additive WordPress-native setup workflow on top of Law 01 Premium. Recommendations remain proposal-only until explicit change-plan confirmation; activation remains mutation-free; existing-site overwrite and whole-site noindex takeover remain forbidden. Starter Pages/Posts/Categories/Attachments become ordinary WordPress-owned content after successful provisioning. New/mostly-empty-site starter publication is coupled to explicit native search-visibility consent; active-site starter Posts fail safe to Draft without a public per-Post SEO publication contract.
+
+**QA:** L1/L2 contracts and reusable core regression PASS; L3 new/active/rerun/rollback/user-edit/index-restore PASS on WordPress 6.9 / PHP 8.1 / MySQL 8; L4 recommendation wizard plus resulting Homepage responsive/a11y PASS at 1440/1024/390/320; deterministic `1.1.1` candidate package PASS. Exact verified head `d564c6e8a43f458a493fe816c4fc768d4917065f`; package run `34362997863`; browser/runtime run `34362997879`; inner ZIP SHA-256 `51006edeed48c92be0de84926e033a6d081e8fd493b2be7c03223056da784bf9`.
+
+**Known observation:** the separately recorded WordPress-core `WP_Query::rewind_posts()` warning remains UNKNOWN/non-blocking and does not support a blanket PHP-log-clean claim.
+
+**Gate:** PR #61 remains draft/stacked on PR #60. Main integration/merge, tag/GitHub Release and final production deployment remain explicit owner actions. L5 provider certification and P4 real-site pilot sign-off are separate gates.
+
+**v1.1 next:** owner-gated integration/merge disposition; do not infer canonical-main, publication or deployment PASS from stacked candidate evidence.
+
 ### P5 — Publication and deployment
 
 Only after the final production-hardening candidate has fresh exact-main/package evidence may publication proceed. Git tag/GitHub Release and final production deployment remain separate explicit owner approvals.
@@ -252,6 +268,8 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-022** | **Exact-main post-merge verification is required before a v1.x release candidate is promoted** | **Accepted** |
 | **D-023** | **Professional editorial/law-site pilot hardening remains generic Theme presentation: WordPress owns publication/content state, SEO owner keeps metadata/schema, and no legal/domain semantics move into Theme** | **Accepted** |
 | **D-024** | **Homepage template switching uses a stable typed Content Map plus Theme-owned Presentation Preset; Classic Editor remains for native Post/Page; provisioning is separate from preset application; the Front Page keeps exactly one `the_content()` boundary and no provider/domain semantics are cloned into Theme.** | **Accepted** |
+| **D-025** | **Law Site Provisioning v1 is an explicit idempotent WordPress-native bootstrap workflow: activation is mutation-free; new/existing sites use a visible confirmed change plan; created content becomes WordPress-owned; failed-run rollback is current-run bounded; successful setup is not equivalent to Launch Ready.** | **Accepted** |
+| **D-026** | **Law Site Provisioning v1.1 may preselect non-authoritative exact-label recommendations, seed bounded WordPress-native starter editorial/media content, and temporarily discourage indexing only on a confirmed new/mostly-empty-site plan; active-site starter content fails safe to Draft without a public per-Post SEO contract, and all authoritative mapping/mutation remains explicit in the confirmed provisioning plan.** | **Accepted** |
 
 ## 11. Open questions
 

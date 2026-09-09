@@ -1,8 +1,8 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.24  
+**Version:** v0.28  
 **Status:** Working Source  
-**Date:** 08/09/2026  
+**Date:** 09/09/2026  
 **Repository:** `truongdinhnamaz/aznet-theme`
 
 ## 1. Source ownership
@@ -13,8 +13,8 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 
 ## 2. Current canonical baseline
 
-- Current canonical repository/implementation head after P3: `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`.
-- Current implementation tree: `8fc309ea8e01bfe727da943754c98164b3f92a58`.
+- Current canonical repository/implementation head after PR #57: `main@12a480311dcb59f3d7a152ef7e72ca927c2f632d`.
+- Current canonical implementation tree: `32ebca25a63d511e74250646d333202994c65328`.
 - Internal Theme version remains `1.1.0`.
 - WordPress floor: `6.9+`.
 - PHP floor: `8.1+`.
@@ -76,6 +76,17 @@ P3 Editorial Listing/Search Hardening merged through PR #52 from final verified 
 Because P2/P3 changed production bytes after the R6 package, SHA-256 `000735...` is now **historical R6 candidate evidence**, not the final package for P4/P5. A new deterministic package/SHA must be produced from the final post-hardening bytes before publication.
 
 No source statement above transfers domain ownership to the Theme.
+
+
+### Law Site Provisioning v1.1 candidate provenance — stacked, not canonical main
+
+D-026 `law01-v1-1` implementation is verified on stacked branch `work/law-site-provisioning-v1-1`, PR #61, above `work/law01-premium-presentation` / PR #60. The exact verified production/test/package head is `d564c6e8a43f458a493fe816c4fc768d4917065f`. The next branch commit `a64053ced9c64e16a771bed7695d63437bd3838c` removes only the temporary RED/GREEN workflow after persistent gates were GREEN; later evidence/source closure commits do not change the verified production package bytes.
+
+Fresh exact-head `Law Site Provisioning Candidate Package` run `34362997863` passed the reusable v1 core chain on PHP 8.1.34 with mbstring/mysqli, linted 93 production PHP files, built the candidate twice deterministically, passed `unzip -t` and exact-byte unpacked/source comparison for 121 files. Candidate: `aznet-theme-1.1.1-law-site-provisioning-v1-1-candidate.zip`, SHA-256 `51006edeed48c92be0de84926e033a6d081e8fd493b2be7c03223056da784bf9`, artifact ID `10108650421`.
+
+Fresh exact-head `Law Site Provisioning Browser Quality` run `34362997879` passed WordPress 6.9 / PHP 8.1 / MySQL 8 recommendation-first wizard, new/active/rerun/rollback/user-edit/index-restore runtime scenarios and resulting Law 01 Homepage checks at 1440/1024/390/320. Hero media is served from WordPress uploads; Knowledge/Case Analysis/Legal News starter coverage is present; Hero/Services/Final CTA are viewport-wide with constrained inner content; horizontal overflow is zero; covered axe checks have no critical/serious blockers. Browser artifact ID `10108690457`. The separately known WordPress-core `WP_Query::rewind_posts()` warning remains an unresolved/non-blocking observation, not a blanket clean-log claim. Detailed evidence: `docs/evidence/LAW_SITE_PROVISIONING_V1_1_L4.md`.
+
+This candidate provenance does not make the branch canonical `main`, does not imply PR #60/#61 merge, and does not authorize a Git tag, GitHub Release or final production deployment.
 
 ## 3. Current release-path classification
 

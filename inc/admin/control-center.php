@@ -8,7 +8,7 @@ use function AZnet\Theme\Integrations\WooCommerce\available as woo_available;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 function control_center_section(): string {
-    $allowed = [ 'overview', 'design', 'header', 'homepage', 'commerce', 'system-health' ];
+    $allowed = [ 'overview', 'design', 'header', 'homepage', 'provisioning', 'commerce', 'system-health' ];
     $value = isset( $_GET['section'] ) ? sanitize_key( wp_unslash( $_GET['section'] ) ) : 'overview';
     if ( 'commerce' === $value && ! woo_available() ) { return 'overview'; }
     return in_array( $value, $allowed, true ) ? $value : 'overview';
@@ -118,9 +118,9 @@ function render_homepage_setup_card(): void {
 function render_control_center(): void {
     if ( ! current_user_can( 'edit_theme_options' ) ) { return; }
     $section = control_center_section();
-    $tabs = [ 'overview' => 'Tổng quan', 'design' => 'Thiết kế', 'header' => 'Header', 'homepage' => 'Trang chủ', 'system-health' => 'System Health' ];
+    $tabs = [ 'overview' => 'Tổng quan', 'design' => 'Thiết kế', 'header' => 'Header', 'homepage' => 'Trang chủ', 'provisioning' => 'Thiết lập nhanh', 'system-health' => 'System Health' ];
     if ( woo_available() ) {
-        $tabs = [ 'overview' => 'Tổng quan', 'design' => 'Thiết kế', 'header' => 'Header', 'homepage' => 'Trang chủ', 'commerce' => 'Commerce', 'system-health' => 'System Health' ];
+        $tabs = [ 'overview' => 'Tổng quan', 'design' => 'Thiết kế', 'header' => 'Header', 'homepage' => 'Trang chủ', 'provisioning' => 'Thiết lập nhanh', 'commerce' => 'Commerce', 'system-health' => 'System Health' ];
     }
     echo '<div class="wrap aznet-theme-control-center"><h1>AZnet Theme</h1><nav class="nav-tab-wrapper">';
     foreach ( $tabs as $slug => $label ) {
@@ -131,6 +131,7 @@ function render_control_center(): void {
 
     if ( 'overview' === $section ) {
         render_quick_setup_form();
+        render_provisioning_invitation();
         render_homepage_setup_card();
         echo '<div class="aznet-theme-grid">';
         $cards = [
@@ -155,6 +156,8 @@ function render_control_center(): void {
         submit_button( 'Đặt lại', 'delete', 'submit', false ); echo '</form></div>';
     } elseif ( 'homepage' === $section ) {
         render_homepage_settings();
+    } elseif ( 'provisioning' === $section ) {
+        render_provisioning_wizard();
     } elseif ( 'system-health' === $section ) {
         $report = system_health_report();
         echo '<div class="aznet-theme-panel"><h2>System Health</h2><table class="widefat striped"><tbody>';
