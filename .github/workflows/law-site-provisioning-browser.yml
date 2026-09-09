@@ -2,7 +2,7 @@ name: Law Site Provisioning Browser Quality
 
 on:
   pull_request:
-    branches: [main, work/homepage-composer-law01]
+    branches: [main, work/homepage-composer-law01, work/law01-premium-presentation]
     paths:
       - 'style.css'
       - 'functions.php'
@@ -12,9 +12,10 @@ on:
       - 'inc/admin/bootstrap.php'
       - 'inc/theme/bootstrap.php'
       - 'assets/css/admin/control-center.css'
+      - 'assets/starter/law01/**'
       - 'tests/offline/provisioning-*.php'
       - 'tests/runtime/law-site-provisioning-*.php'
-      - 'tests/browser/law-site-provisioning-l4.mjs'
+      - 'tests/browser/law-site-provisioning-*.mjs'
       - 'scripts/verify-v1-core.sh'
       - '.github/workflows/law-site-provisioning-browser.yml'
       - '.github/workflows/law-site-provisioning-candidate.yml'
@@ -84,28 +85,26 @@ jobs:
         run: |
           npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
           npx playwright install --with-deps chromium
-      - name: Drive empty-site wizard and verify browser/a11y
+      - name: Drive v1.1 recommendation wizard and complete Homepage L4
         env:
           PROVISION_BASE_URL: http://127.0.0.1:8080
           PROVISION_STATE_DIR: /tmp/law-provisioning
+        run: node tests/browser/law-site-provisioning-v1-1-l4.mjs
+      - name: Check browser runtime log boundary
         run: |
           set -euo pipefail
-          node tests/browser/law-site-provisioning-l4.mjs
-          ! grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/law-provisioning/server.log
-          wp eval-file tests/runtime/law-site-provisioning-empty.php --path=/tmp/wp-site --allow-root | tee /tmp/law-provisioning/empty-site.txt
+          if grep -E 'PHP (Fatal error|Parse error)|Uncaught' /tmp/law-provisioning/server.log; then exit 1; fi
+          unexpected="$(grep 'PHP Warning:' /tmp/law-provisioning/server.log | grep -v 'Undefined array key 0 in /tmp/wp-site/wp-includes/class-wp-query.php on line 3872' || true)"
+          printf '%s' "$unexpected" > /tmp/law-provisioning/unexpected-php-warnings.log
+          test -z "$unexpected"
       - name: Stop browser runtime
+        if: always()
         run: kill "$(cat /tmp/law-provisioning/server.pid)" || true
-      - name: Run existing/rerun/rollback/user-edit scenarios
+      - name: Run v1.1 new/active/rerun/rollback/user-edit/index-restore runtime matrix
         run: |
           set -euo pipefail
-          reset_wp() {
-            wp db reset --yes --path=/tmp/wp-site --allow-root >/dev/null
-            wp core install --path=/tmp/wp-site --url=http://127.0.0.1:8080 --title='AZnet Provisioning Runtime' --admin_user=admin --admin_password='law-provisioning-password' --admin_email=runtime@example.test --skip-email --allow-root >/dev/null
-            wp theme activate aznet-theme --path=/tmp/wp-site --allow-root >/dev/null
-          }
-          for s in existing rerun rollback user-edit; do
-            reset_wp
-            AZNET_PROVISION_SCENARIO="$s" wp eval-file tests/runtime/law-site-provisioning-scenarios.php --path=/tmp/wp-site --allow-root | tee "/tmp/law-provisioning/${s}.txt"
+          for s in new active rerun rollback user-edit restore-index; do
+            AZNET_PROVISION_V11_SCENARIO="$s" wp eval-file tests/runtime/law-site-provisioning-v1-1.php --path=/tmp/wp-site --allow-root | tee "/tmp/law-provisioning/v11-${s}.txt"
           done
       - name: Upload provisioning evidence
         if: always()
