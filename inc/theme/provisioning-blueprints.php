@@ -104,7 +104,7 @@ function provisioning_blueprint( string $key ): ?array {
             'knowledge_business' => $article(
                 'Những tài liệu doanh nghiệp nên chuẩn bị trước khi trao đổi pháp lý',
                 'Gợi ý cách tập hợp và sắp xếp hồ sơ doanh nghiệp để buổi trao đổi đi thẳng vào vấn đề cần làm rõ.',
-                'knowledge_business', 'editorial-documents',
+                'knowledge_business', 'editorial-1',
                 'Với vấn đề phát sinh trong hoạt động doanh nghiệp, thông tin thường nằm rải rác giữa hồ sơ pháp lý, quyết định nội bộ, hợp đồng, thư từ và tài liệu vận hành.',
                 'Có thể bắt đầu từ giấy tờ đăng ký, điều lệ hoặc quy chế liên quan, hợp đồng và phụ lục, biên bản hoặc quyết định nội bộ, chứng từ giao dịch, thư điện tử và các văn bản đã gửi hoặc nhận.',
                 'Đặc biệt nên đánh dấu mốc ký kết, mốc thực hiện công việc, thay đổi người phụ trách, lần phát sinh bất đồng và những lần các bên đã trao đổi để xử lý.',
@@ -113,7 +113,7 @@ function provisioning_blueprint( string $key ): ?array {
             'knowledge_civil' => $article(
                 'Những tài liệu nên chuẩn bị khi phát sinh tranh chấp dân sự',
                 'Một cách đơn giản để gom hợp đồng, chứng từ và trao đổi thành bộ hồ sơ dễ rà soát.',
-                'knowledge_civil', 'editorial-notes',
+                'knowledge_civil', 'editorial-2',
                 'Tranh chấp dân sự thường khó theo dõi khi mỗi bên nhớ sự việc theo một cách và tài liệu được lưu ở nhiều nơi khác nhau.',
                 'Nên gom hợp đồng, giấy nhận tiền hoặc chứng từ thanh toán, biên bản bàn giao, tin nhắn hoặc thư điện tử, hình ảnh liên quan và các văn bản mà các bên đã trao đổi trong quá trình giải quyết.',
                 'Nên tách rõ thời điểm hình thành thỏa thuận, thời điểm thực hiện, thời điểm có dấu hiệu không thống nhất và những đề nghị xử lý đã được đưa ra.',
@@ -122,7 +122,7 @@ function provisioning_blueprint( string $key ): ?array {
             'knowledge_criminal' => $article(
                 'Những thông tin nên ghi nhận khi cần hỗ trợ pháp lý trong vụ việc hình sự',
                 'Gợi ý chuẩn bị thông tin, giấy tờ và dòng sự việc để người tiếp nhận có bức tranh ban đầu rõ ràng hơn.',
-                'knowledge_criminal', 'editorial-books',
+                'knowledge_criminal', 'editorial-3',
                 'Khi một vụ việc có dấu hiệu liên quan đến quy trình tố tụng hoặc cơ quan có thẩm quyền, việc ghi nhận chính xác nguồn tài liệu và mốc làm việc đặc biệt quan trọng.',
                 'Nên giữ các giấy mời, giấy triệu tập, biên bản, quyết định hoặc văn bản đã nhận; tài liệu cá nhân có liên quan; thông tin về những lần làm việc; cùng bản sao các tài liệu đã cung cấp nếu có.',
                 'Nên ghi đúng ngày giờ của từng lần liên hệ hoặc làm việc, người tham gia, tài liệu đã giao nhận và nội dung mình còn chưa hiểu rõ, thay vì dựa vào trí nhớ sau một thời gian dài.',
@@ -131,7 +131,7 @@ function provisioning_blueprint( string $key ): ?array {
             'knowledge_real_estate' => $article(
                 'Hồ sơ cơ bản cần rà soát khi làm việc với vấn đề đất đai',
                 'Cách tập hợp giấy tờ về quyền, hiện trạng, giao dịch và quá trình sử dụng để việc rà soát có điểm bắt đầu rõ ràng.',
-                'knowledge_real_estate', 'editorial-architecture',
+                'knowledge_real_estate', 'editorial-4',
                 'Vấn đề đất đai thường liên quan đồng thời đến giấy tờ, quá trình sử dụng, hiện trạng thực tế, giao dịch và thông tin từ nhiều thời kỳ.',
                 'Nên tập hợp giấy tờ về quyền sử dụng hoặc nguồn gốc, hợp đồng hay giấy viết tay liên quan, hồ sơ đo đạc hoặc sơ đồ nếu có, chứng từ tài chính, biên bản làm việc và hình ảnh thể hiện hiện trạng mà mình đang có.',
                 'Hãy lập dòng thời gian về việc nhận chuyển giao hoặc bắt đầu sử dụng, các lần thay đổi hiện trạng, giao dịch, điều chỉnh giấy tờ và những lần phát sinh bất đồng hoặc làm việc với cơ quan hay bên liên quan.',
@@ -140,7 +140,7 @@ function provisioning_blueprint( string $key ): ?array {
             'knowledge_family' => $article(
                 'Thông tin nên chuẩn bị trước khi trao đổi về vấn đề hôn nhân và gia đình',
                 'Gợi ý tổ chức giấy tờ nhân thân, thông tin gia đình, tài sản và các trao đổi liên quan theo cách dễ rà soát.',
-                'knowledge_family', 'editorial-notes',
+                'knowledge_family', 'editorial-2',
                 'Vấn đề hôn nhân và gia đình thường có cả dữ kiện pháp lý lẫn yếu tố đời sống, vì vậy việc trình bày rõ điều cần giải quyết giúp tránh sa vào những chi tiết không liên quan đến mục tiêu chính.',
                 'Có thể chuẩn bị giấy tờ nhân thân và quan hệ gia đình, thông tin về con nếu có, tài liệu về tài sản hoặc nghĩa vụ tài chính có liên quan, các thỏa thuận đã lập và những trao đổi quan trọng cần người tiếp nhận biết.',
                 'Nên ghi các mốc thay đổi đáng chú ý trong đời sống hoặc quản lý tài sản, các lần hai bên đã trao đổi về phương án và những vấn đề hiện vẫn chưa thống nhất.',
@@ -149,7 +149,7 @@ function provisioning_blueprint( string $key ): ?array {
             'knowledge_labor' => $article(
                 'Hồ sơ thường cần rà soát khi phát sinh vấn đề trong quan hệ lao động',
                 'Một danh sách chuẩn bị để người lao động hoặc doanh nghiệp có thể hệ thống tài liệu trước buổi trao đổi.',
-                'knowledge_labor', 'editorial-documents',
+                'knowledge_labor', 'editorial-1',
                 'Quan hệ lao động thường được phản ánh qua nhiều lớp tài liệu từ tuyển dụng, hợp đồng, quá trình làm việc đến quyết định và trao đổi khi phát sinh vấn đề.',
                 'Nên gom hợp đồng và phụ lục, mô tả công việc nếu có, bảng lương hoặc chứng từ liên quan, quyết định hoặc thông báo, biên bản làm việc, nội quy hoặc chính sách đã được cung cấp và các trao đổi điện tử có liên quan.',
                 'Dòng thời gian nên thể hiện thời điểm bắt đầu công việc, thay đổi vị trí hoặc điều kiện làm việc, các lần đánh giá hoặc trao đổi, sự kiện làm phát sinh vấn đề và những bước hai bên đã thực hiện sau đó.',
@@ -158,7 +158,7 @@ function provisioning_blueprint( string $key ): ?array {
             'case_analysis' => $article(
                 'Cách hệ thống hóa tài liệu trước khi phân tích một vụ việc pháp lý',
                 'Phương pháp tổ chức hồ sơ theo dữ kiện, tài liệu và câu hỏi mở để việc phân tích có nền tảng rõ ràng.',
-                'case_analysis', 'editorial-books',
+                'case_analysis', 'editorial-3',
                 'Một vụ việc trở nên khó phân tích khi dữ kiện, cảm nhận, giả định và tài liệu bị trộn lẫn trong cùng một câu chuyện dài.',
                 'Hãy tạo một danh mục tài liệu gồm tên tài liệu, nguồn nhận, thời điểm, bản gốc hay bản sao và vấn đề mà tài liệu có thể giúp làm rõ. Các bản ghi âm, ảnh, tin nhắn hoặc thư điện tử nên được giữ cùng ngữ cảnh thay vì chỉ trích một đoạn rời rạc.',
                 'Sau khi có dòng thời gian, có thể tạo ba cột riêng: dữ kiện đã có tài liệu, dữ kiện do một bên trình bày nhưng chưa kiểm tra và câu hỏi còn bỏ ngỏ. Cách này giúp tránh biến giả định thành sự thật trong quá trình đọc hồ sơ.',
@@ -167,7 +167,7 @@ function provisioning_blueprint( string $key ): ?array {
             'legal_news' => $article(
                 'Cách theo dõi và kiểm tra thông tin pháp luật trước khi sử dụng',
                 'Gợi ý quy trình biên tập thận trọng khi website muốn chia sẻ thông tin pháp luật từ các nguồn đang được theo dõi.',
-                'legal_news', 'editorial-architecture',
+                'legal_news', 'editorial-4',
                 'Khi biên tập nội dung thuộc nhóm tin pháp luật, điều quan trọng là phân biệt thông tin mới đọc được với thông tin đã được kiểm tra từ nguồn phù hợp.',
                 'Nên lưu đường dẫn hoặc bản ghi nguồn, tiêu đề gốc, đơn vị công bố, thời điểm truy cập, tài liệu gốc đi kèm nếu có và ghi chú phần nào đã được kiểm tra. Không nên chỉ dựa vào ảnh chụp màn hình hoặc một bài đăng được chia sẻ lại mà mất dấu nguồn ban đầu.',
                 'Có thể tạo dòng theo dõi gồm lúc phát hiện thông tin, lúc kiểm tra nguồn, nội dung cần đối chiếu và trạng thái biên tập. Nếu một điểm chưa xác minh được, hãy để ở trạng thái chờ thay vì viết theo cách khiến người đọc tưởng đó là dữ kiện đã chắc chắn.',
