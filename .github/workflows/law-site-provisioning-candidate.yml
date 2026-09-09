@@ -2,7 +2,7 @@ name: Law Site Provisioning Candidate Package
 
 on:
   pull_request:
-    branches: [main, work/homepage-composer-law01]
+    branches: [main, work/homepage-composer-law01, work/law01-premium-presentation]
     paths:
       - 'style.css'
       - 'functions.php'
@@ -13,6 +13,7 @@ on:
       - 'tests/**'
       - 'scripts/**'
       - '.github/workflows/law-site-provisioning-candidate.yml'
+      - '.github/workflows/law-site-provisioning-browser.yml'
   workflow_dispatch:
 
 permissions:
@@ -26,48 +27,48 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-
       - name: Record exact identity outside package source
         run: git rev-parse HEAD | tee /tmp/CANDIDATE_HEAD_SHA.txt
-
       - name: Set up PHP 8.1
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
           extensions: mbstring, mysqli
           coverage: none
-
       - name: Run full reusable v1 core regression
         run: bash scripts/verify-v1-core.sh
-
-      - name: Build deterministic candidate twice
+      - name: Build deterministic v1.1 candidate twice
         run: |
           set -euo pipefail
           VERSION=$(sed -n 's/^Version: //p' style.css | head -n 1)
           test -n "$VERSION"
-          mkdir -p /tmp/a /tmp/b candidate
+          rm -rf /tmp/a /tmp/b candidate && mkdir -p /tmp/a /tmp/b candidate
           python3 scripts/build-release-package.py --source . --output "/tmp/a/aznet-theme-${VERSION}.zip" --version "$VERSION"
           python3 scripts/build-release-package.py --source . --output "/tmp/b/aznet-theme-${VERSION}.zip" --version "$VERSION"
           cmp "/tmp/a/aznet-theme-${VERSION}.zip" "/tmp/b/aznet-theme-${VERSION}.zip"
-          cp "/tmp/a/aznet-theme-${VERSION}.zip" "candidate/aznet-theme-${VERSION}-law-site-provisioning-candidate.zip"
-          sha256sum "candidate/aznet-theme-${VERSION}-law-site-provisioning-candidate.zip" | tee candidate/SHA256SUMS.txt
+          cp "/tmp/a/aznet-theme-${VERSION}.zip" "candidate/aznet-theme-${VERSION}-law-site-provisioning-v1-1-candidate.zip"
+          sha256sum "candidate/aznet-theme-${VERSION}-law-site-provisioning-v1-1-candidate.zip" | tee candidate/SHA256SUMS.txt
           printf '%s\n' "$VERSION" > candidate/VERSION.txt
-
-      - name: Exact-byte unzip and hygiene verification
+      - name: Exact-byte unzip and v1.1 hygiene verification
         run: |
           set -euo pipefail
           VERSION=$(cat candidate/VERSION.txt)
-          ZIP="candidate/aznet-theme-${VERSION}-law-site-provisioning-candidate.zip"
+          ZIP="candidate/aznet-theme-${VERSION}-law-site-provisioning-v1-1-candidate.zip"
           rm -rf /tmp/unpacked && mkdir /tmp/unpacked
+          unzip -t "$ZIP"
           unzip -q "$ZIP" -d /tmp/unpacked
           test -f /tmp/unpacked/aznet-theme/style.css
+          test -f /tmp/unpacked/aznet-theme/inc/theme/provisioning-recommendations.php
+          test -f /tmp/unpacked/aznet-theme/inc/theme/provisioning-editorial.php
+          test -f /tmp/unpacked/aznet-theme/inc/theme/provisioning-media.php
+          test -f /tmp/unpacked/aznet-theme/inc/theme/provisioning-indexing.php
           test -f /tmp/unpacked/aznet-theme/inc/theme/provisioning-runner.php
           test -f /tmp/unpacked/aznet-theme/inc/admin/provisioning.php
+          for f in hero editorial-1 editorial-2 editorial-3 editorial-4; do test -f "/tmp/unpacked/aznet-theme/assets/starter/law01/${f}.webp"; done
           test ! -e /tmp/unpacked/aznet-theme/.github
           test ! -e /tmp/unpacked/aznet-theme/docs
           test ! -e /tmp/unpacked/aznet-theme/scripts
           test ! -e /tmp/unpacked/aznet-theme/tests
-          test ! -e /tmp/unpacked/aznet-theme/CANDIDATE_HEAD_SHA.txt
           python3 - <<'PY'
           from pathlib import Path
           import sys
@@ -91,11 +92,10 @@ jobs:
               print('FAIL package file set mismatch', file=sys.stderr); sys.exit(1)
           print('PASS: package exact-byte source comparison', len(source))
           PY
-
-      - name: Upload exact candidate
+      - name: Upload exact v1.1 candidate
         uses: actions/upload-artifact@v4
         with:
-          name: aznet-theme-law-site-provisioning-candidate
+          name: aznet-theme-law-site-provisioning-v1-1-candidate
           path: |
             candidate/*
             /tmp/CANDIDATE_HEAD_SHA.txt

@@ -45,5 +45,6 @@ if ( is_admin() ) {
     add_action( 'admin_post_aznet_theme_import_settings', __NAMESPACE__ . '\\handle_import_settings' );
     add_action( 'admin_post_aznet_theme_provisioning_plan', __NAMESPACE__ . '\\handle_provisioning_plan' );
     add_action( 'admin_post_aznet_theme_provisioning_apply', __NAMESPACE__ . '\\handle_provisioning_apply' );
+    add_action( 'admin_post_aznet_theme_provisioning_restore_indexing', __NAMESPACE__ . '\\handle_provisioning_restore_indexing' );
     add_filter( 'use_block_editor_for_post', __NAMESPACE__ . '\\use_classic_editor_for_regular_content', 10, 2 );
 }

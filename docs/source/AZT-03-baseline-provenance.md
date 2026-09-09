@@ -1,8 +1,8 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.27  
+**Version:** v0.28  
 **Status:** Working Source  
-**Date:** 08/09/2026  
+**Date:** 09/09/2026  
 **Repository:** `truongdinhnamaz/aznet-theme`
 
 ## 1. Source ownership
@@ -78,15 +78,15 @@ Because P2/P3 changed production bytes after the R6 package, SHA-256 `000735...`
 No source statement above transfers domain ownership to the Theme.
 
 
-### Law Site Provisioning v1 candidate provenance — stacked, not canonical main
+### Law Site Provisioning v1.1 candidate provenance — stacked, not canonical main
 
-D-025 provisioning implementation is verified on stacked branch `work/law-site-provisioning`, above Homepage Composer + Law 01 PR #58. The exact production/package head is `9a39977a6888f1fc656dd64f202e47dbd441ac3c`; documentation/source commits after that head do not change candidate production bytes. The pilot full-width follow-up remains presentation-only: Law 01 section surfaces span the viewport while the inner shell container remains constrained. A content-derived stylesheet cache key now prevents an older same-version Law 01 CSS response from masking those bytes on a real pilot.
+D-026 `law01-v1-1` implementation is verified on stacked branch `work/law-site-provisioning-v1-1`, PR #61, above `work/law01-premium-presentation` / PR #60. The exact verified production/test/package head is `d564c6e8a43f458a493fe816c4fc768d4917065f`. The next branch commit `a64053ced9c64e16a771bed7695d63437bd3838c` removes only the temporary RED/GREEN workflow after persistent gates were GREEN; later evidence/source closure commits do not change the verified production package bytes.
 
-Fresh exact-head `Law Site Provisioning Candidate Package` run `34343371228` passed the reusable v1 core chain on PHP 8.1.34 with mbstring/mysqli, linted 89 production PHP files, built the candidate twice deterministically, and passed exact-byte unpacked/source comparison. Candidate: `aznet-theme-1.1.1-law-site-provisioning-candidate.zip`, 112 files, SHA-256 `09d92603e97688abe8a30212ed17b7e5be8e0c642ae1f78674cc95107ecf91c4`, artifact ID `10100675340`.
+Fresh exact-head `Law Site Provisioning Candidate Package` run `34362997863` passed the reusable v1 core chain on PHP 8.1.34 with mbstring/mysqli, linted 93 production PHP files, built the candidate twice deterministically, passed `unzip -t` and exact-byte unpacked/source comparison for 121 files. Candidate: `aznet-theme-1.1.1-law-site-provisioning-v1-1-candidate.zip`, SHA-256 `51006edeed48c92be0de84926e033a6d081e8fd493b2be7c03223056da784bf9`, artifact ID `10108650421`.
 
-Fresh exact-head `Law Site Provisioning Browser Quality` run `34343371237` passed WordPress 6.9 / PHP 8.1 / MySQL 8 empty-site, existing-site no-overwrite, rerun idempotency, injected rollback and user-edit-preservation scenarios. Wizard Steps 1-4 and public Law 01 at 1440/1024/390/320 reported zero critical/serious axe blockers and zero horizontal overflow. The browser regression now asserts viewport-edge geometry for the Law 01 root/Hero/Services/Final CTA and confirms a content-derived stylesheet URL (`?ver=1.1.1-<12hex>`). Artifact ID `10100703126`. Detailed evidence: `docs/evidence/LAW_SITE_PROVISIONING_L4.md`.
+Fresh exact-head `Law Site Provisioning Browser Quality` run `34362997879` passed WordPress 6.9 / PHP 8.1 / MySQL 8 recommendation-first wizard, new/active/rerun/rollback/user-edit/index-restore runtime scenarios and resulting Law 01 Homepage checks at 1440/1024/390/320. Hero media is served from WordPress uploads; Knowledge/Case Analysis/Legal News starter coverage is present; Hero/Services/Final CTA are viewport-wide with constrained inner content; horizontal overflow is zero; covered axe checks have no critical/serious blockers. Browser artifact ID `10108690457`. The separately known WordPress-core `WP_Query::rewind_posts()` warning remains an unresolved/non-blocking observation, not a blanket clean-log claim. Detailed evidence: `docs/evidence/LAW_SITE_PROVISIONING_V1_1_L4.md`.
 
-This candidate provenance does not make the branch canonical `main`, does not imply PR #58/#59 merge, and does not authorize a Git tag, GitHub Release or production deployment.
+This candidate provenance does not make the branch canonical `main`, does not imply PR #60/#61 merge, and does not authorize a Git tag, GitHub Release or final production deployment.
 
 ## 3. Current release-path classification
 

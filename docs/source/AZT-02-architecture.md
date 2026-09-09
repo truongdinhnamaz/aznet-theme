@@ -4,9 +4,9 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.7 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.8 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 07/09/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 09/09/2026 |
 
 | **Kiến trúc lõi: **Theme chỉ sở hữu presentation/configuration/reference cần thiết. Dữ liệu authoritative và business state ở lại owner. Boundary giữa hai bên là public/versioned provider contract hoặc adapter tối thiểu. |
 | --- |
@@ -252,3 +252,15 @@ Required constraints:
 - Failed-run rollback may remove only objects created by that failed run and may restore only captured configuration/settings changed by the run.
 - After a successful handoff there is no Theme-owned destructive “delete all demo content” action.
 - Starter copy is non-authoritative and is not synchronized after successful provisioning.
+
+
+# 12. Law Site Provisioning v1.1 — recommendation, starter content/media và index-safety
+
+- Blueprint machine key: `law01-v1-1`; `law01-v1` provenance remains compatible.
+- Recommendation state is proposal-only and never authoritative mapping.
+- Exact normalized display-label matching is allowed only to preselect UI suggestions; no slug/URL/fuzzy/synonym inference is authoritative.
+- Starter Posts and attachments are created only through an explicit confirmed provisioning plan and become ordinary WordPress-owned content/media after creation.
+- On a confirmed new/mostly-empty site plan, publishing starter Posts may be coupled to explicit WordPress-native `blog_public=0` consent. Declining that consent falls back to Draft starter Posts.
+- Existing/active sites must never receive whole-site noindex merely to publish starter content. Without an accepted public per-Post SEO-owner contract, starter Posts remain Draft.
+- Theme must not direct-write Rank Math, Yoast or other private SEO plugin storage/API.
+- Current explicit Content Map and WordPress publication/media state remain authoritative over recommendations and provisioning provenance.
