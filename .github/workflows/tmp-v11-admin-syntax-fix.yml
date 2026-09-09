@@ -32,3 +32,4 @@ jobs:
           git add inc/admin/provisioning.php
           git commit -m "fix: repair provisioning admin syntax"
           git push origin HEAD:work/law-site-provisioning-v1-1
+# Trigger one-shot syntax repair after workflow registration.
