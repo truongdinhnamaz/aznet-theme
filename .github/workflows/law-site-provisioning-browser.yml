@@ -77,6 +77,14 @@ jobs:
           test "$bp" = "$(wp post list --post_type=page --post_status=any --format=count --path=/tmp/wp-site --allow-root)"
           test "$bc" = "$(wp term list category --format=count --path=/tmp/wp-site --allow-root)"
           test "$(wp option get show_on_front --path=/tmp/wp-site --allow-root)" = posts
+      - name: Normalize disposable empty-site browser fixture
+        run: |
+          set -euo pipefail
+          for id in $(wp post list --post_type=post --post_status=publish --format=ids --path=/tmp/wp-site --allow-root); do
+            wp post update "$id" --post_status=draft --path=/tmp/wp-site --allow-root >/dev/null
+          done
+          test "$(wp post list --post_type=post --post_status=publish --format=count --path=/tmp/wp-site --allow-root)" = "0"
+          test "$(wp post list --post_type=page --post_status=any --format=count --path=/tmp/wp-site --allow-root)" -le "2"
       - name: Start WordPress runtime
         run: |
           nohup php -S 127.0.0.1:8080 -t /tmp/wp-site > /tmp/law-provisioning/server.log 2>&1 & echo $! > /tmp/law-provisioning/server.pid
