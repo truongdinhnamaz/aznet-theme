@@ -30,4 +30,43 @@ jobs:
         run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-indexing-contract.php
       - name: Run full reusable core regression
         run: bash scripts/verify-v1-core.sh
-# Fresh exact-head trigger after index-safety runner patch.
+  runtime:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, mysqli
+          coverage: none
+      - name: Install disposable WordPress 6.9
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp
+          chmod +x /tmp/wp && sudo mv /tmp/wp /usr/local/bin/wp
+          rm -rf /tmp/wp-site && mkdir -p /tmp/wp-site
+          wp core download --version=6.9 --path=/tmp/wp-site --force --allow-root
+          wp config create --path=/tmp/wp-site --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp-site --url=http://127.0.0.1:8080 --title='AZnet Law v1.1 Runtime' --admin_user=admin --admin_password='runtime-password' --admin_email=runtime@example.test --skip-email --allow-root
+          mkdir -p /tmp/wp-site/wp-content/themes/aznet-theme
+          rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='README.md' ./ /tmp/wp-site/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp-site --allow-root
+      - name: Run v1.1 runtime scenarios
+        run: |
+          set -euo pipefail
+          for scenario in new active rerun rollback user-edit restore-index; do
+            echo "==> ${scenario}"
+            AZNET_PROVISION_V11_SCENARIO="$scenario" wp eval-file "$GITHUB_WORKSPACE/tests/runtime/law-site-provisioning-v1-1.php" --path=/tmp/wp-site --allow-root
+          done
+# Temporary RED/GREEN workflow; remove after persistent Task 7 gates are green.
