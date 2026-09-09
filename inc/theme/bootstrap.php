@@ -20,6 +20,7 @@ require_once __DIR__ . '/provisioning-discovery.php';
 require_once __DIR__ . '/provisioning-recommendations.php';
 require_once __DIR__ . '/provisioning-editorial.php';
 require_once __DIR__ . '/provisioning-plan.php';
+require_once __DIR__ . '/provisioning-media.php';
 require_once __DIR__ . '/provisioning-runner.php';
 require_once __DIR__ . '/provisioning-readiness.php';
 require_once __DIR__ . '/design-system.php';
