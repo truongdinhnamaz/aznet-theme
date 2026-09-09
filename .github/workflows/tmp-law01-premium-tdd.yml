@@ -36,3 +36,4 @@ jobs:
             premium-candidate/*
             /tmp/PREMIUM_HEAD_SHA.txt
           if-no-files-found: error
+# Final verification trigger after browser assertion correction.
