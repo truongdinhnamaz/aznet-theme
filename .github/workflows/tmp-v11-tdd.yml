@@ -30,3 +30,4 @@ jobs:
         run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-indexing-contract.php
       - name: Run full reusable core regression
         run: bash scripts/verify-v1-core.sh
+# Fresh exact-head trigger after index-safety runner patch.
