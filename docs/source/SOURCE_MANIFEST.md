@@ -7,10 +7,10 @@ Canonical source is reconciled through the completed v1.1 R6 technical candidate
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution; unchanged by R0-R6/P2-P3 source closure |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership plus approved v1.1 Native Product System objective/non-goals; unchanged by editorial pilot hardening |
-| `AZT-02-architecture.md` | v0.7 | Theme architecture, public integration contracts and v1.1 settings/pattern/Header/Woo/Control Center boundaries; unchanged by P2/P3 source closure |
+| `AZT-02-architecture.md` | v0.8 | Theme architecture, public integration contracts and v1.1 settings/pattern/Header/Woo/Control Center boundaries; unchanged by P2/P3 source closure |
 | `AZT-03-baseline-provenance.md` | v0.27 | Canonical implementation/provenance plus refreshed stacked Law Site Provisioning 1.1.1 cache-safe full-width candidate evidence; canonical `main` remains unchanged |
-| `AZT-04-roadmap-qa-decisions.md` | v0.30 | R0-R6 + P2/P3 PASS, P4/P4-B exact next, P5 gates, QA layers and accepted D-001..D-025 decisions |
-| `AZT-EXEC-MAP.md` | v0.22 | Derived execution map with P2/P3 complete and exact next P4 Real Pilot QA |
+| `AZT-04-roadmap-qa-decisions.md` | v0.31 | R0-R6 + P2/P3 PASS, P4/P4-B v1.1 execution, P5 gates, QA layers and accepted D-001..D-026 decisions |
+| `AZT-EXEC-MAP.md` | v0.23 | Derived execution map with P4-B Law Site Provisioning v1.1 exact execution order |
 
 Current canonical implementation baseline represented by this manifest: `main@12a480311dcb59f3d7a152ef7e72ca927c2f632d`, implementation tree `32ebca25a63d511e74250646d333202994c65328`, Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`. The verified Law Site Provisioning `1.1.1` candidate remains stacked on unmerged PR #58/#59 and is provenance evidence, not canonical main.
 

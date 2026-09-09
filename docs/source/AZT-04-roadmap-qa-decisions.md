@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.30  
+**Version:** v0.31  
 **Status:** Working Source  
-**Date:** 08/09/2026
+**Date:** 09/09/2026
 
 ## 1. Purpose
 
@@ -174,6 +174,9 @@ Implement the accepted bounded setup workflow on top of Homepage Composer + `law
 
 **Gate:** main merge, tag/GitHub Release and production deployment remain explicit owner actions.
 
+
+**v1.1 exact next:** implement `law01-v1-1` as the approved additive provisioning slice: recommendation-first UX, bounded starter editorial/media coverage, explicit confirmed plan operations, new/mostly-empty-site index-safety and active-site Draft fallback without private SEO writes. Execution order: P4-B v1.1 source gate → recommendation/classification → starter editorial → plan/admin UX → media/runner → index/readiness → L3/L4 → candidate/evidence.
+
 ### P5 — Publication and deployment
 
 Only after the final production-hardening candidate has fresh exact-main/package evidence may publication proceed. Git tag/GitHub Release and final production deployment remain separate explicit owner approvals.
@@ -265,6 +268,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-023** | **Professional editorial/law-site pilot hardening remains generic Theme presentation: WordPress owns publication/content state, SEO owner keeps metadata/schema, and no legal/domain semantics move into Theme** | **Accepted** |
 | **D-024** | **Homepage template switching uses a stable typed Content Map plus Theme-owned Presentation Preset; Classic Editor remains for native Post/Page; provisioning is separate from preset application; the Front Page keeps exactly one `the_content()` boundary and no provider/domain semantics are cloned into Theme.** | **Accepted** |
 | **D-025** | **Law Site Provisioning v1 is an explicit idempotent WordPress-native bootstrap workflow: activation is mutation-free; new/existing sites use a visible confirmed change plan; created content becomes WordPress-owned; failed-run rollback is current-run bounded; successful setup is not equivalent to Launch Ready.** | **Accepted** |
+| **D-026** | **Law Site Provisioning v1.1 may preselect non-authoritative exact-label recommendations, seed bounded WordPress-native starter editorial/media content, and temporarily discourage indexing only on a confirmed new/mostly-empty-site plan; active-site starter content fails safe to Draft without a public per-Post SEO contract, and all authoritative mapping/mutation remains explicit in the confirmed provisioning plan.** | **Accepted** |
 
 ## 11. Open questions
 

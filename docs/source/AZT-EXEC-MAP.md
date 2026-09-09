@@ -1,13 +1,15 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.22  
+**Version:** v0.23  
 **Status:** Working Execution Map / derived  
-**Date:** 08/09/2026
+**Date:** 09/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **D-025 exact next:** Law Site Provisioning v1 is the approved Theme-owned setup slice layered on Homepage Composer + `law-01`. Activation remains mutation-free; setup requires an explicit typed change plan; created objects become ordinary WordPress content; existing-site reuse is explicit; idempotency/rollback stay bounded by provenance and current-run evidence.
+> **D-026 exact next:** Law Site Provisioning v1.1 (`law01-v1-1`) extends the explicit WordPress-native setup slice with proposal-only smart recommendations, bounded starter editorial/media coverage and index-safe publication. Active sites never receive whole-site noindex for starter content.
+
+**Exact execution:** `P4-B v1.1 source gate → recommendation/classification → starter editorial → plan/admin UX → media/runner → index/readiness → L3/L4 → candidate/evidence`.
 
 ## 1. Current state
 
@@ -33,7 +35,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | P2 Editorial Single-Post | PASS | PR #51 merged; native WordPress editorial presentation only; no SEO/domain/query takeover |
 | P3 Editorial Listing/Search | PASS | PR #52 merged; native thumbnail/date scan presentation + resilient long titles/excerpts; main query retained |
 | P4 Real Pilot QA | READY / EXACT NEXT | Pilot QA execution approved; current-stack law-site route/responsive/a11y/Rank Math/RootProfile evidence required |
-| P4-B Law Site Provisioning | READY / EXACT NEXT | Explicit idempotent WordPress-native setup wizard; source ratified by D-025; no activation provisioning or existing-site overwrite |
+| P4-B Law Site Provisioning | V1.1 IMPLEMENTATION ACTIVE | `law01-v1-1`: D-026 source gate, smart recommendation, starter editorial/media, index-safety; activation remains mutation-free and existing-site overwrite remains forbidden |
 | P5 Publication/Deployment | GATED | Tag/GitHub Release and final production deploy remain explicit owner actions |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
