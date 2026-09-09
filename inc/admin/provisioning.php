@@ -12,6 +12,8 @@ use function AZnet\Theme\provisioning_readiness;
 use function AZnet\Theme\provisioning_recommendations;
 use function AZnet\Theme\provisioning_editorial_coverage_recommendations;
 use function AZnet\Theme\provisioning_site_mode;
+use function AZnet\Theme\provisioning_index_restore_available;
+use function AZnet\Theme\provisioning_restore_search_visibility;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
@@ -34,9 +36,7 @@ function provisioning_candidate_label( int $id, array $candidates ): string {
     return '';
 }
 
-/**
- * Keep full typed controls available for advanced correction while defaulting to a proposal-only recommendation.
- */
+/** Keep full typed controls available for advanced correction while defaulting to a proposal-only recommendation. */
 function provisioning_action_select( string $kind, string $role, array $candidates, bool $new_site, bool $required, ?array $recommendation = null ): void {
     $default = $new_site || $required ? 'create' : 'skip';
     $default_id = 0;
@@ -126,7 +126,6 @@ function handle_provisioning_plan(): void {
             $role = sanitize_key( (string) $role );
             $starter_posts[ $role ] = [ 'action' => ! empty( $value ) ? 'create' : 'skip' ];
         }
-        // Re-check coverage against the user's final typed Category choices so existing public content wins over demo creation.
         $coverage = provisioning_editorial_coverage_recommendations( [ 'categories' => $selections['categories'] ], provisioning_discovery() );
         foreach ( $coverage as $role => $recommendation ) {
             if ( 'SKIP_HAS_PUBLIC_CONTENT' === (string) ( $recommendation['state'] ?? '' ) ) { $starter_posts[ $role ] = [ 'action' => 'skip' ]; }
@@ -163,6 +162,21 @@ function handle_provisioning_apply(): void {
     set_transient( provisioning_result_transient_key(), $result, 30 * MINUTE_IN_SECONDS );
     delete_transient( provisioning_plan_transient_key() );
     wp_safe_redirect( provisioning_url( 4 ) ); exit;
+}
+
+function handle_provisioning_restore_indexing(): void {
+    if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Bạn không có quyền thực hiện thao tác này.', 'aznet-theme' ) ); }
+    check_admin_referer( 'aznet_theme_restore_indexing' );
+    $result = provisioning_restore_search_visibility();
+    set_transient( provisioning_result_transient_key(), [
+        'ok' => ! empty( $result['ok'] ),
+        'created' => [],
+        'reused' => [],
+        'errors' => (array) ( $result['errors'] ?? [] ),
+        'indexing_restored' => ! empty( $result['changed'] ),
+    ], 30 * MINUTE_IN_SECONDS );
+    wp_safe_redirect( provisioning_url( 4 ) );
+    exit;
 }
 
 /** @return string */
@@ -206,36 +220,31 @@ function render_provisioning_wizard(): void {
         $mode = provisioning_site_mode( $state );
         $new_site = 'NEW_OR_MOSTLY_EMPTY' === $mode;
         $recommendations = provisioning_recommendations( 'law01-v1-1', $state );
-        $coverage = provisioning_editorial_coverage_recommendations( $recommendations, $state );
-        echo '<h3>' . esc_html__( 'Thiết lập được khuyến nghị cho Luật 01', 'aznet-theme' ) . '</h3>';
-        echo '<p>' . esc_html__( 'Các lựa chọn dưới đây là gợi ý — chưa áp dụng. Theme chỉ ghi dữ liệu sau khi bạn xem và xác nhận kế hoạch ở Bước 3.', 'aznet-theme' ) . '</p>';
+        $editorial = provisioning_editorial_coverage_recommendations( $recommendations, $state );
+        echo '<h3>' . esc_html__( 'Thiết lập được khuyến nghị', 'aznet-theme' ) . '</h3><p>' . esc_html__( 'Theme chỉ chuẩn bị gợi ý. Không có mapping hoặc dữ liệu nào được thay đổi trước khi bạn xem và xác nhận kế hoạch ở bước tiếp theo.', 'aznet-theme' ) . '</p>';
         echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="aznet_theme_provisioning_plan"><input type="hidden" name="blueprint" value="law01-v1-1">';
         wp_nonce_field( 'aznet_theme_provisioning' );
-
-        echo '<div class="aznet-theme-provision-recommendation-grid">';
-        foreach ( $blueprint['pages'] as $role => $definition ) { provisioning_render_recommendation_card( 'pages', (string) $role, (array) $definition, (array) ( $recommendations['pages'][ $role ] ?? [] ), (array) $state['pages'] ); }
-        foreach ( $blueprint['categories'] as $role => $definition ) { provisioning_render_recommendation_card( 'categories', (string) $role, (array) $definition, (array) ( $recommendations['categories'][ $role ] ?? [] ), (array) $state['categories'] ); }
+        echo '<div class="aznet-theme-provision-recommendations">';
+        foreach ( $blueprint['pages'] as $role => $definition ) { provisioning_render_recommendation_card( 'pages', $role, $definition, (array) ( $recommendations['pages'][ $role ] ?? [] ), $state['pages'] ); }
+        foreach ( $blueprint['categories'] as $role => $definition ) { provisioning_render_recommendation_card( 'categories', $role, $definition, (array) ( $recommendations['categories'][ $role ] ?? [] ), $state['categories'] ); }
         echo '</div>';
-
         echo '<details class="aznet-theme-provision-advanced"><summary>' . esc_html__( 'Tùy chỉnh nâng cao', 'aznet-theme' ) . '</summary>';
-        foreach ( $blueprint['pages'] as $role => $definition ) { provisioning_action_select( 'pages', (string) $role, (array) $state['pages'], $new_site, in_array( $role, [ 'home','about','services','contact' ], true ), (array) ( $recommendations['pages'][ $role ] ?? [] ) ); }
-        foreach ( $blueprint['categories'] as $role => $definition ) { provisioning_action_select( 'categories', (string) $role, (array) $state['categories'], $new_site, false, (array) ( $recommendations['categories'][ $role ] ?? [] ) ); }
+        foreach ( $blueprint['pages'] as $role => $definition ) { provisioning_action_select( 'pages', $role, $state['pages'], $new_site, in_array( $role, [ 'home','about','services','contact' ], true ), (array) ( $recommendations['pages'][ $role ] ?? [] ) ); }
+        foreach ( $blueprint['categories'] as $role => $definition ) { provisioning_action_select( 'categories', $role, $state['categories'], $new_site, false, (array) ( $recommendations['categories'][ $role ] ?? [] ) ); }
         $menu_default = (int) $state['primary_menu_id'] > 0 ? 'reuse' : 'create';
-        echo '<fieldset class="aznet-theme-provision-row"><legend><strong>Primary Menu</strong></legend><label class="screen-reader-text" for="aznet-theme-provision-menu-action">' . esc_html__( 'Hành động cho Primary Menu', 'aznet-theme' ) . '</label><select id="aznet-theme-provision-menu-action" name="menu_action"><option value="create" ' . selected( $menu_default, 'create', false ) . '>Create new</option><option value="reuse" ' . selected( $menu_default, 'reuse', false ) . '>Reuse assigned</option><option value="skip">Skip</option></select><label class="screen-reader-text" for="aznet-theme-provision-menu-id">' . esc_html__( 'ID Primary Menu hiện có', 'aznet-theme' ) . '</label><input id="aznet-theme-provision-menu-id" type="number" min="0" name="menu_id" value="' . esc_attr( (string) $state['primary_menu_id'] ) . '"></fieldset>';
-        echo '</details>';
-
-        echo '<section class="aznet-theme-provision-starter-options"><h4>' . esc_html__( 'Nội dung mẫu để Trang chủ có dữ liệu hiển thị', 'aznet-theme' ) . '</h4>';
-        foreach ( (array) ( $blueprint['editorial_examples']['items'] ?? [] ) as $role => $definition ) {
-            $rec = (array) ( $coverage[ $role ] ?? [] );
-            $suggest = 'SUGGESTED_CREATE' === (string) ( $rec['state'] ?? '' );
-            echo '<label><input type="checkbox" name="starter_posts[' . esc_attr( (string) $role ) . ']" value="1" ' . checked( $suggest, true, false ) . '> ' . esc_html( (string) $definition['title'] ) . '</label><br>';
+        echo '<fieldset class="aznet-theme-provision-row"><legend><strong>Primary Menu</strong></legend><label class="screen-reader-text" for="aznet-theme-provision-menu-action">' . esc_html__( 'Hành động cho Primary Menu', 'aznet-theme' ) . '</label><select id="aznet-theme-provision-menu-action" name="menu_action"><option value="create" ' . selected( $menu_default, 'create', false ) . '>Create new</option><option value="reuse" ' . selected( $menu_default, 'reuse', false ) . '>Reuse assigned</option><option value="skip">Skip</option></select><label class="screen-reader-text" for="aznet-theme-provision-menu-id">' . esc_html__( 'ID Primary Menu hiện có', 'aznet-theme' ) . '</label><input id="aznet-theme-provision-menu-id" type="number" min="0" name="menu_id" value="' . esc_attr( (string) $state['primary_menu_id'] ) . '"></fieldset></details>';
+        echo '<section class="aznet-theme-provision-starter"><h4>' . esc_html__( 'Nội dung mẫu để Trang chủ có dữ liệu', 'aznet-theme' ) . '</h4>';
+        foreach ( $editorial as $role => $choice ) {
+            if ( 'SUGGESTED_CREATE' !== (string) ( $choice['state'] ?? '' ) ) { continue; }
+            $definition = $blueprint['editorial_examples']['items'][ $role ] ?? null;
+            if ( ! is_array( $definition ) ) { continue; }
+            echo '<label><input type="checkbox" name="starter_posts[' . esc_attr( $role ) . ']" value="1" checked> ' . esc_html( (string) $definition['title'] ) . '</label><br>';
         }
-        echo '<h4>' . esc_html__( 'Ảnh mẫu', 'aznet-theme' ) . '</h4>';
-        foreach ( [ 'hero' => 'Hero', 'editorial-1' => 'Editorial 1', 'editorial-2' => 'Editorial 2', 'editorial-3' => 'Editorial 3', 'editorial-4' => 'Editorial 4' ] as $media_role => $label ) {
-            echo '<label><input type="checkbox" name="starter_media[' . esc_attr( $media_role ) . ']" value="1" checked> ' . esc_html( $label ) . '</label> ';
+        echo '<h4>' . esc_html__( 'Media mẫu', 'aznet-theme' ) . '</h4>';
+        foreach ( [ 'hero' => 'Ảnh Hero mẫu', 'editorial-1' => 'Ảnh editorial 1', 'editorial-2' => 'Ảnh editorial 2', 'editorial-3' => 'Ảnh editorial 3', 'editorial-4' => 'Ảnh editorial 4' ] as $media_role => $label ) {
+            echo '<label><input type="checkbox" name="starter_media[' . esc_attr( $media_role ) . ']" value="1" checked> ' . esc_html( $label ) . '</label><br>';
         }
         echo '</section>';
-
         if ( $new_site ) {
             echo '<section class="aznet-theme-provision-index-safety"><h4>' . esc_html__( 'Hiển thị bài mẫu trong giai đoạn hoàn thiện', 'aznet-theme' ) . '</h4>';
             echo '<label><input type="checkbox" name="publish_starter_posts" value="1" checked> ' . esc_html__( 'Publish các bài starter để Trang chủ hiển thị đầy đủ ngay', 'aznet-theme' ) . '</label><br>';
@@ -245,7 +254,6 @@ function render_provisioning_wizard(): void {
             echo '<input type="hidden" name="publish_starter_posts" value="0"><input type="hidden" name="discourage_indexing" value="0">';
             echo '<p class="description">' . esc_html__( 'Website đang hoạt động: starter Posts mới sẽ giữ Draft. Theme không noindex toàn site và không ghi private SEO meta.', 'aznet-theme' ) . '</p>';
         }
-
         submit_button( __( 'Dùng các thiết lập được khuyến nghị', 'aznet-theme' ) ); echo '</form>';
     } elseif ( 3 === $step ) {
         $plan = get_transient( provisioning_plan_transient_key() );
@@ -262,13 +270,13 @@ function render_provisioning_wizard(): void {
         $result = get_transient( provisioning_result_transient_key() );
         if ( ! is_array( $result ) ) { echo '<p>' . esc_html__( 'Không có kết quả thiết lập gần đây.', 'aznet-theme' ) . '</p>'; }
         elseif ( empty( $result['ok'] ) ) {
-            echo '<h3>' . esc_html__( 'Thiết lập chưa hoàn tất', 'aznet-theme' ) . '</h3><div class="notice notice-error inline"><p>' . esc_html( implode( ' ', (array) ( $result['errors'] ?? [] ) ) ) . '</p></div>';
+            echo '<h3>' . esc_html__( 'Thiết lập chưa hoàn tất', 'aznet-theme' ) . '</h3><div class="notice notice-error inline"><p>' . esc_html( implode( ' ', (array) ( $result['errors'] ?? [] ) ) . '</p></div>';
             echo '<p><a class="button" href="' . esc_url( provisioning_url( 1 ) ) . '">' . esc_html__( 'Chạy lại kiểm tra', 'aznet-theme' ) . '</a></p>';
         } else {
             $readiness = provisioning_readiness();
             echo '<h3>' . esc_html__( 'Thiết lập hoàn tất — Website đã sẵn sàng để chỉnh nội dung.', 'aznet-theme' ) . '</h3>';
             echo '<p><strong>' . esc_html__( 'Setup status:', 'aznet-theme' ) . '</strong> <code>' . esc_html( (string) $readiness['status'] ) . '</code></p>';
-            echo '<p>' . esc_html( sprintf( 'Created: %d · Reused: %d', count( (array) ( $result['created'] ?? [] ) ), count( (array) ( $result['reused'] ?? [] ) ) ) ) . '</p>';
+            echo '<p>' . esc_html( sprintf( 'Created: %d · Reused: %d', count( (array) ( $result['created'] ?? [] ) ), count( (array) ( $result['reused'] ?? [] ) ) ) . '</p>';
             echo '<div class="aznet-theme-provision-actions">';
             echo '<a class="button button-primary" href="' . esc_url( home_url( '/' ) ) . '" target="_blank" rel="noopener">' . esc_html__( 'Xem trang chủ', 'aznet-theme' ) . '</a> ';
             echo '<a class="button" href="#launch-checklist">' . esc_html__( 'Chỉnh nội dung cần thiết', 'aznet-theme' ) . '</a> ';
@@ -276,7 +284,15 @@ function render_provisioning_wizard(): void {
             echo '<div id="launch-checklist" class="aznet-theme-launch-checklist"><h4>' . esc_html__( 'Trước khi phát hành chính thức', 'aznet-theme' ) . '</h4><ul>';
             foreach ( (array) $readiness['launch_warnings'] as $warning ) { echo '<li>' . esc_html( (string) $warning ) . '</li>'; }
             foreach ( (array) $readiness['optional_warnings'] as $warning ) { echo '<li>' . esc_html( sprintf( 'Phần tùy chọn chưa cấu hình: %s', (string) $warning ) ) . '</li>'; }
-            echo '</ul><p><a href="' . esc_url( admin_url( 'edit.php?post_type=page' ) ) . '">' . esc_html__( 'Mở danh sách Page để chỉnh nội dung', 'aznet-theme' ) . '</a></p></div>';
+            echo '</ul><p><a href="' . esc_url( admin_url( 'edit.php?post_type=page' ) ) . '">' . esc_html__( 'Mở danh sách Page để chỉnh nội dung', 'aznet-theme' ) . '</a></p>';
+            if ( provisioning_index_restore_available() ) {
+                echo '<div class="notice notice-warning inline"><p><strong>' . esc_html__( 'Tôi đã hoàn thiện nội dung', 'aznet-theme' ) . '</strong></p><p>' . esc_html__( 'Website đang tạm ngăn công cụ tìm kiếm lập chỉ mục do Thiết lập nhanh.', 'aznet-theme' ) . '</p></div>';
+                echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="aznet_theme_provisioning_restore_indexing">';
+                wp_nonce_field( 'aznet_theme_restore_indexing' );
+                submit_button( __( 'Cho phép công cụ tìm kiếm lập chỉ mục trở lại', 'aznet-theme' ), 'secondary', 'submit', false );
+                echo '</form>';
+            }
+            echo '</div>';
         }
     }
     echo '</div>';
