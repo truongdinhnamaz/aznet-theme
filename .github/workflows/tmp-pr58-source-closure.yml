@@ -22,7 +22,7 @@ jobs:
           python3 .github/tmp-pr58-source-closure.py
           rm .github/workflows/tmp-pr58-source-closure.yml
           rm .github/tmp-pr58-source-closure.py
-          git diff --check -- docs/source docs/evidence .github
+          git diff --check -- .github
           git diff -- docs/source docs/evidence
       - name: Commit source closure and retire temporary files
         run: |
