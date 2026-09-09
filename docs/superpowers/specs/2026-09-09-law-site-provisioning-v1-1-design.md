@@ -19,7 +19,9 @@ This must remain safe for existing active sites. Faster setup must not become si
 
 ## 2. Decision
 
-Extend Law Site Provisioning with a new provisioning blueprint/version, **`law01-v1.1`**, while retaining compatibility with objects provisioned by `law01-v1`.
+Extend Law Site Provisioning with a new provisioning blueprint/version, **`law01-v1-1`**, while retaining compatibility with objects provisioned by `law01-v1`.
+
+`law01-v1-1` is the sanitize-safe machine key; the product/design version remains **v1.1**.
 
 The v1.1 design adds four bounded capabilities:
 
@@ -54,7 +56,7 @@ Law Site Provisioning v1.1 does not:
 
 ## 4. Relationship to existing v1
 
-`law01-v1.1` is an additive upgrade path, not a replacement that invalidates v1 provenance.
+`law01-v1-1` is an additive upgrade path, not a replacement that invalidates v1 provenance.
 
 Rules:
 
@@ -71,7 +73,7 @@ Classification changes **default recommendations only**. It never creates author
 
 ### 5.1 `PREVIOUSLY_PROVISIONED`
 
-Use this mode when valid AZnet Law provisioning provenance/receipt exists for `law01-v1` or `law01-v1.1`.
+Use this mode when valid AZnet Law provisioning provenance/receipt exists for `law01-v1` or `law01-v1-1`.
 
 Default behavior:
 
@@ -380,7 +382,7 @@ The Theme never replaces a user-selected Front Page Featured Image on rerun.
 Created starter Posts and imported attachments receive bounded internal provenance, for example:
 
 ```text
-_aznet_theme_provisioned_by = law01-v1.1
+_aznet_theme_provisioned_by = law01-v1-1
 _aznet_theme_provisioning_role = starter_post:knowledge_civil
 _aznet_theme_provisioning_run = <opaque run id>
 ```
