@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.26  
+**Version:** v0.27  
 **Status:** Working Source  
 **Date:** 08/09/2026  
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -80,11 +80,11 @@ No source statement above transfers domain ownership to the Theme.
 
 ### Law Site Provisioning v1 candidate provenance — stacked, not canonical main
 
-D-025 provisioning implementation is verified on stacked branch `work/law-site-provisioning`, above Homepage Composer + Law 01 PR #58. The exact production/package head is `1a735889e88e1a5e649c5b15a5044d7471dff669`; documentation-only evidence commits after that head do not change candidate production bytes. The pilot full-width follow-up is presentation-only: Law 01 section surfaces now span the viewport while the inner shell container remains constrained.
+D-025 provisioning implementation is verified on stacked branch `work/law-site-provisioning`, above Homepage Composer + Law 01 PR #58. The exact production/package head is `9a39977a6888f1fc656dd64f202e47dbd441ac3c`; documentation/source commits after that head do not change candidate production bytes. The pilot full-width follow-up remains presentation-only: Law 01 section surfaces span the viewport while the inner shell container remains constrained. A content-derived stylesheet cache key now prevents an older same-version Law 01 CSS response from masking those bytes on a real pilot.
 
-Fresh exact-head `Law Site Provisioning Candidate Package` run `34261603657` passed the reusable v1 core chain on PHP 8.1.34 with mbstring/mysqli, linted 89 production PHP files, built the candidate twice deterministically, and passed exact-byte unpacked/source comparison. Candidate: `aznet-theme-1.1.1-law-site-provisioning-candidate.zip`, 112 files, SHA-256 `3fea2ae3d8293c7873442d61d61ac9695bc0dab92145485c9a57b303f663edca`, artifact ID `10070115746`.
+Fresh exact-head `Law Site Provisioning Candidate Package` run `34343371228` passed the reusable v1 core chain on PHP 8.1.34 with mbstring/mysqli, linted 89 production PHP files, built the candidate twice deterministically, and passed exact-byte unpacked/source comparison. Candidate: `aznet-theme-1.1.1-law-site-provisioning-candidate.zip`, 112 files, SHA-256 `09d92603e97688abe8a30212ed17b7e5be8e0c642ae1f78674cc95107ecf91c4`, artifact ID `10100675340`.
 
-Fresh exact-head `Law Site Provisioning Browser Quality` run `34261603755` passed WordPress 6.9 / PHP 8.1 / MySQL 8 empty-site, existing-site no-overwrite, rerun idempotency, injected rollback and user-edit-preservation scenarios. Wizard Steps 1-4 and public Law 01 at 1440/1024/390/320 reported zero critical/serious axe blockers and zero horizontal overflow; fresh screenshot evidence confirms full-width Law 01 section surfaces with constrained inner content. Artifact ID `10070160592`. Detailed evidence: `docs/evidence/LAW_SITE_PROVISIONING_L4.md`.
+Fresh exact-head `Law Site Provisioning Browser Quality` run `34343371237` passed WordPress 6.9 / PHP 8.1 / MySQL 8 empty-site, existing-site no-overwrite, rerun idempotency, injected rollback and user-edit-preservation scenarios. Wizard Steps 1-4 and public Law 01 at 1440/1024/390/320 reported zero critical/serious axe blockers and zero horizontal overflow. The browser regression now asserts viewport-edge geometry for the Law 01 root/Hero/Services/Final CTA and confirms a content-derived stylesheet URL (`?ver=1.1.1-<12hex>`). Artifact ID `10100703126`. Detailed evidence: `docs/evidence/LAW_SITE_PROVISIONING_L4.md`.
 
 This candidate provenance does not make the branch canonical `main`, does not imply PR #58/#59 merge, and does not authorize a Git tag, GitHub Release or production deployment.
 
