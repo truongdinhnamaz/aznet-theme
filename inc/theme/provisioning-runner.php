@@ -235,6 +235,15 @@ function provisioning_apply_plan( array $plan ): array {
                     $receipt['index_visibility_changed'] = true;
                     $receipt['index_visibility_target'] = $target;
                 }
+            } elseif ( 'set_search_visibility' === $type ) {
+                $target = (int) ( $op['target'] ?? 0 );
+                $current = (int) get_option( 'blog_public', 1 );
+                if ( $current !== $target ) {
+                    update_option( 'blog_public', $target );
+                    if ( $target !== (int) get_option( 'blog_public', 1 ) ) { throw new \RuntimeException( 'Search visibility update failed.' ); }
+                    $receipt['index_visibility_changed'] = true;
+                    $receipt['index_visibility_target'] = $target;
+                }
             } elseif ( 'import_media' === $type ) {
                 $media_role = (string) ( $op['media_role'] ?? $role );
                 $provenance_role = function_exists( __NAMESPACE__ . '\\provisioning_media_role_provenance' ) ? provisioning_media_role_provenance( $media_role ) : 'starter_media:' . $media_role;
