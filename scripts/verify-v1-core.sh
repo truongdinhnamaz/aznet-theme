@@ -88,6 +88,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-bluepr
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-activation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-discovery-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-recommendations-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-starter-editorial-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-plan-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-runner-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-idempotency-contract.php
