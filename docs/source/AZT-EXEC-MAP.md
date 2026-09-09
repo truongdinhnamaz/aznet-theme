@@ -1,15 +1,15 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.23  
+**Version:** v0.24  
 **Status:** Working Execution Map / derived  
 **Date:** 09/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **D-026 exact next:** Law Site Provisioning v1.1 (`law01-v1-1`) extends the explicit WordPress-native setup slice with proposal-only smart recommendations, bounded starter editorial/media coverage and index-safe publication. Active sites never receive whole-site noindex for starter content.
+> **D-026 candidate checkpoint:** Law Site Provisioning v1.1 (`law01-v1-1`) completed the approved stacked implementation path with proposal-only smart recommendations, bounded starter editorial/media coverage and index-safe publication. Active sites never receive whole-site noindex for starter content.
 
-**Exact execution:** `P4-B v1.1 source gate → recommendation/classification → starter editorial → plan/admin UX → media/runner → index/readiness → L3/L4 → candidate/evidence`.
+**Completed execution:** `P4-B v1.1 source gate → recommendation/classification → starter editorial → plan/admin UX → media/runner → index/readiness → L3/L4 → candidate/evidence = PASS on verified head d564c6e8...`.
 
 ## 1. Current state
 
@@ -35,7 +35,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | P2 Editorial Single-Post | PASS | PR #51 merged; native WordPress editorial presentation only; no SEO/domain/query takeover |
 | P3 Editorial Listing/Search | PASS | PR #52 merged; native thumbnail/date scan presentation + resilient long titles/excerpts; main query retained |
 | P4 Real Pilot QA | READY / EXACT NEXT | Pilot QA execution approved; current-stack law-site route/responsive/a11y/Rank Math/RootProfile evidence required |
-| P4-B Law Site Provisioning | V1.1 IMPLEMENTATION ACTIVE | `law01-v1-1`: D-026 source gate, smart recommendation, starter editorial/media, index-safety; activation remains mutation-free and existing-site overwrite remains forbidden |
+| P4-B Law Site Provisioning | V1.1 CANDIDATE PASS / STACKED | `law01-v1-1`: L1-L4 + deterministic candidate PASS on `d564c6e8...`; activation remains mutation-free, existing-site overwrite remains forbidden, PR #61 integration remains owner-gated |
 | P5 Publication/Deployment | GATED | Tag/GitHub Release and final production deploy remain explicit owner actions |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
@@ -233,19 +233,21 @@ No layer may be inferred from another.
 
 
 
-### P4-B — Law Site Provisioning v1
+### P4-B — Law Site Provisioning v1.1
 
-**State:** READY / EXACT NEXT. Written spec approved by owner on 08/09/2026.
+**State:** CANDIDATE PASS / STACKED. D-026 source gate and implementation path completed on PR #61; main integration remains owner-gated.
 
-**Goal:** provision or explicitly map the bounded Law 01 starter structure without transferring ongoing WordPress content ownership to Theme.
+**Goal:** provision or explicitly map the bounded Law 01 starter structure with proposal-only recommendation, starter editorial/media coverage and index-safe publication without transferring ongoing WordPress content ownership to Theme.
 
-**TDD:** source gate -> blueprint RED/GREEN -> activation/discovery RED/GREEN -> explicit change-plan RED/GREEN -> transaction/provenance/rollback RED/GREEN -> idempotency/readiness RED/GREEN -> disposable WordPress empty/existing/rerun/rollback/user-edit runtime -> wizard/resulting Homepage L4.
+**TDD / verification:** source gate -> recommendation/classification -> starter editorial -> plan/admin UX -> media/runner -> index/readiness -> L3 runtime -> L4 browser/a11y -> deterministic candidate = PASS on verified production/test/package head `d564c6e8a43f458a493fe816c4fc768d4917065f`.
 
-**Rollback:** before successful handoff, restore captured settings/Front Page/menu assignment and remove only current-run creations. After success, presentation rollback is `homepage_preset=off` or remapping; WordPress content persists.
+**Evidence:** package run `34362997863`; browser/runtime run `34362997879`; candidate `aznet-theme-1.1.1-law-site-provisioning-v1-1-candidate.zip`; SHA-256 `51006edeed48c92be0de84926e033a6d081e8fd493b2be7c03223056da784bf9`; detailed evidence `docs/evidence/LAW_SITE_PROVISIONING_V1_1_L4.md`.
 
-**Exit:** deterministic downloadable candidate with fresh exact-head evidence; main merge/release/deploy remain separately owner-gated.
+**Rollback:** before successful handoff, restore captured settings/Front Page/menu assignment/indexing and remove only current-run creations. After success, presentation rollback is `homepage_preset=off` or remapping; WordPress-owned content persists.
 
-**Next:** implement Task 2 blueprint after this source-only gate.
+**Exit:** PASS through L4 + deterministic stacked candidate. No L5 provider certification, canonical-main merge, tag/GitHub Release or production deployment is implied.
+
+**Next:** owner-gated PR #61 integration/merge disposition; P4 real-site pilot and P5 publication/deployment remain separate gates.
 
 ### P5 — Final Candidate / Publication / Deployment
 
