@@ -76,3 +76,4 @@ jobs:
       - name: Stop runtime
         if: always()
         run: kill "$(cat /tmp/law-provisioning/server.pid)" || true
+# Final browser rerun after correcting the About readability assertion.
