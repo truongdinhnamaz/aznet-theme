@@ -19,9 +19,10 @@ jobs:
       - name: Apply canonical-main source closure
         run: |
           set -euo pipefail
-          python3 .github/tmp-pr58-main-closure.py
+          python3 .github/tmp-pr58-main-closure-v2.py
           rm .github/workflows/tmp-pr58-main-closure.yml
           rm .github/tmp-pr58-main-closure.py
+          rm .github/tmp-pr58-main-closure-v2.py
           git diff --check -- .github
           git diff -- docs/source docs/evidence/HOMEPAGE_LAW01_PROVISIONING_PR58_INTEGRATION.md
       - name: Commit source closure and retire temporary files
@@ -29,6 +30,6 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/source docs/evidence/HOMEPAGE_LAW01_PROVISIONING_PR58_INTEGRATION.md .github/workflows/tmp-pr58-main-closure.yml .github/tmp-pr58-main-closure.py
+          git add docs/source docs/evidence/HOMEPAGE_LAW01_PROVISIONING_PR58_INTEGRATION.md .github/workflows/tmp-pr58-main-closure.yml .github/tmp-pr58-main-closure.py .github/tmp-pr58-main-closure-v2.py
           git commit -m "docs: close PR58 canonical main state"
           git push origin HEAD:docs/pr58-main-closure
