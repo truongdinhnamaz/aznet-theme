@@ -28,6 +28,10 @@ $assets = file_get_contents($root . '/inc/theme/assets.php');
 assert(str_contains($assets, 'homepage-law-01.css'));
 assert(str_contains($assets, "'law-01'"));
 assert(str_contains($assets, 'homepage_composer_active()'));
+assert(str_contains($assets, 'function asset_content_version('), 'Theme must provide content-derived asset cache busting for changed scoped assets.');
+assert(str_contains($assets, "asset_content_version( '/assets/css/components/homepage-law-01.css', \$version )"), 'Law 01 stylesheet URL must change when its bytes change even if Theme metadata version is unchanged.');
+assert(str_contains($assets, "hash_file( 'sha256', \$path )"), 'Law 01 cache key must derive from file bytes rather than only the Theme version.');
+
 $composer = file_get_contents($root . '/inc/theme/homepage-composer.php');
 $order = ['hero','services','about','team','topics','latest','analysis','news','process','faq','final-cta'];
 foreach ($order as $slug) {
