@@ -1,8 +1,8 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.24  
+**Version:** v0.29  
 **Status:** Working Source  
-**Date:** 08/09/2026  
+**Date:** 10/09/2026  
 **Repository:** `truongdinhnamaz/aznet-theme`
 
 ## 1. Source ownership
@@ -13,8 +13,8 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 
 ## 2. Current canonical baseline
 
-- Current canonical repository/implementation head after P3: `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`.
-- Current implementation tree: `8fc309ea8e01bfe727da943754c98164b3f92a58`.
+- Current canonical repository/implementation head after PR #57: `main@12a480311dcb59f3d7a152ef7e72ca927c2f632d`.
+- Current canonical implementation tree: `32ebca25a63d511e74250646d333202994c65328`.
 - Internal Theme version remains `1.1.0`.
 - WordPress floor: `6.9+`.
 - PHP floor: `8.1+`.
@@ -76,6 +76,23 @@ P3 Editorial Listing/Search Hardening merged through PR #52 from final verified 
 Because P2/P3 changed production bytes after the R6 package, SHA-256 `000735...` is now **historical R6 candidate evidence**, not the final package for P4/P5. A new deterministic package/SHA must be produced from the final post-hardening bytes before publication.
 
 No source statement above transfers domain ownership to the Theme.
+
+
+### Homepage Law 01 + Law Site Provisioning integration candidate — PR #58, not canonical main
+
+The previously recorded D-026 stacked candidate at `d564c6e8a43f458a493fe816c4fc768d4917065f` remains historical evidence for the v1.1 implementation slice. Its `1.1.1` package label is **not** the integration/release metadata baseline: fresh G8 verification later proved that Theme metadata must remain the source-approved `1.1.0` until a separately approved release-governance change occurs.
+
+The approved stack was integrated upward without conflict-resolution byte deltas: PR #61 -> PR #60 at `f10751b5fadd19107bbec7bcd1fafa2bd92d409b`; PR #60 -> PR #59 at `bb2155d114922f585a1650b6bbdf61b3ce6414a3`; PR #59 -> PR #58 at `ed087860364b8f8ad542226866d604013aee8ff5`.
+
+Fresh PR #58 verification caught two integration-only issues before any canonical-main merge. G8 run `34412609546` failed exactly because candidate-only commit `97110c42af945837a29520585d183b2f7e58ceae` had changed `style.css` and `AZNET_THEME_VERSION` from `1.1.0` to `1.1.1`. Minimal production fix `ec1e86f631a1b341736422296ae4689830a505c6` restored the approved metadata bytes to `1.1.0`; the exact G8 contract then passed. R2 Pattern Library Browser run `34413075882` separately exposed a disposable PHP-development-server death during theme-switch portability verification; artifact/log evidence showed no Theme PHP error at the failure boundary. Test-harness-only commit `356ef8c00991c63e294d619d42c7094d1074226d` restarts only that disposable runtime before portability rendering, matching the already-proven R3 harness pattern and changing no packaged Theme bytes.
+
+Exact PR-head `356ef8c00991c63e294d619d42c7094d1074226d` then completed all 21 triggered pull-request workflows successfully, including reusable core, lifecycle, R1-R6 static/browser, Homepage/Law01, Law Site Provisioning browser/runtime and deterministic package gates.
+
+Fresh `Law Site Provisioning Candidate Package` run `34413505990` checked out exact head `356ef8c00991c63e294d619d42c7094d1074226d`, passed PHP 8.1.34 + mbstring/mysqli reusable core verification, linted 93 production PHP files, built twice deterministically, passed `unzip -t` and exact-byte unpacked/source comparison for 121 packaged files. Integration candidate: `aznet-theme-1.1.0-law-site-provisioning-v1-1-candidate.zip`; SHA-256 `19a0411616c67b8795fd08d3590accc571239ca65f4b67f9bc44c3d655170252`; artifact ID `10128165973`.
+
+Fresh `Law Site Provisioning Browser Quality` run `34413506017` passed WordPress 6.9 / PHP 8.1 / MySQL 8 recommendation-first setup, new/active/rerun/rollback/user-edit/index-restore runtime scenarios and Law 01 Homepage responsive/a11y checks; browser artifact ID `10128198277`. The separately known WordPress-core `WP_Query::rewind_posts()` warning remains UNKNOWN/non-blocking and is not a blanket clean-log claim.
+
+PR #58 remains an open owner-gated integration candidate against canonical `main@12a480311dcb59f3d7a152ef7e72ca927c2f632d`. The verified PR-head candidate does not itself make `main` canonical to these bytes and does not authorize a tag, GitHub Release, L5 provider certification or production deployment. Detailed integration evidence: `docs/evidence/HOMEPAGE_LAW01_PROVISIONING_PR58_INTEGRATION.md`.
 
 ## 3. Current release-path classification
 

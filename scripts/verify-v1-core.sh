@@ -75,6 +75,28 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-asset-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-control-center-contract.php
 
+printf '%s\n' '==> Homepage Composer + Law 01 contracts'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-settings-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-content-map-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-control-center-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-premium-presentation-contract.php
+
+printf '%s\n' '==> Law Site Provisioning contracts'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-blueprint-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-activation-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-discovery-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-recommendations-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-starter-editorial-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-v1-1-plan-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-media-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-plan-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-runner-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-idempotency-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-readiness-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-admin-a11y-contract.php
+
 printf '%s\n' '==> Classic Editor policy contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/classic-editor-policy-contract.php
 

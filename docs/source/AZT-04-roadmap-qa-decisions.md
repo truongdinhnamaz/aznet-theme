@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.28  
+**Version:** v0.33  
 **Status:** Working Source  
-**Date:** 08/09/2026
+**Date:** 10/09/2026
 
 ## 1. Purpose
 
@@ -33,11 +33,13 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P1 | Pilot identity cleanup | SITE-OPS READY | Active pilot Theme `1.1.0` proven; only inactive legacy duplicates may be deleted through WordPress core UI after smoke/rollback confidence |
 | P2 | Editorial single-post hardening | PASS | PR #51 merged; native Post editorial presentation + singular-post scoped assets + retained regressions |
 | P3 | Editorial archive/search hardening | PASS | PR #52 merged; native thumbnail/date scan presentation + resilient long-title/excerpt styling; WordPress main query retained |
-| P4 | Real law-site pilot QA | READY / EXACT NEXT | Owner approved pilot QA execution; prove current-stack route/responsive/a11y/Rank Math/RootProfile compatibility without implying final production deployment |
+| P4 | Real law-site pilot QA | READY / AFTER MAIN INTEGRATION | Owner-approved pilot QA remains pending; PR #58 integration must clear its explicit main gate first |
+| P4-A | Homepage Composer + Law 01 | PR HEAD PASS / MAIN GATE | Premium Law01 + Composer integrated in PR #58; exact PR-head matrix is GREEN; canonical-main merge remains owner-gated |
+| P4-B | Law Site Provisioning v1.1 | PR HEAD PASS / MAIN GATE | D-026 smart setup integrated in PR #58 with Theme metadata restored to `1.1.0`; exact PR-head package/browser matrix is GREEN |
 | P5 | Publication & production deployment | GATED | Tag/GitHub Release and final production deployment remain separate explicit owner gates |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
-Current canonical post-hardening implementation: `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`, tree `8fc309ea8e01bfe727da943754c98164b3f92a58`, Theme metadata `1.1.0`. Fresh `V1 Exact Main Verification` run `34195248467` succeeded on that exact SHA after PR #52.
+Current canonical implementation remains `main@12a480311dcb59f3d7a152ef7e72ca927c2f632d`, tree `32ebca25a63d511e74250646d333202994c65328`, Theme metadata `1.1.0`. PR #58 is a verified integration candidate only until an explicit owner-approved merge; no PR-head PASS is promoted to exact-main evidence.
 
 The earlier deterministic R6 candidate SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b` remains historical release-provenance evidence only. P2/P3 changed production bytes, so P5 must build and verify a new deterministic package from the final post-hardening bytes before publication.
 
@@ -153,6 +155,33 @@ Minimum quality: no Theme-caused PHP fatal/warning/uncaught, no horizontal overf
 
 P4 may install/update a test candidate on the pilot only as necessary to perform approved QA. It does **not** authorize tag/GitHub Release or final production deployment. Any destructive duplicate-theme deletion remains under P1's separate site-operations gate.
 
+
+### P4-A — Homepage Composer + Law 01
+
+**State:** **PR HEAD PASS / OWNER MAIN GATE.**
+
+Homepage Composer Core + `law-01` Premium presentation are integrated in PR #58. Content Map remains typed WordPress references only; preset switching does not mutate WordPress content; native Post/Page Classic Editor policy remains; `front-page.php` retains exactly one `the_content()` boundary.
+
+Fresh exact PR-head `356ef8c00991c63e294d619d42c7094d1074226d` completed all 21 triggered pull-request workflows successfully after integration debugging. The previously observed candidate-only metadata bump was rejected by G8 and restored to source-approved Theme metadata `1.1.0` before this final PR-head matrix.
+
+**Gate:** merge PR #58 into canonical `main` requires explicit owner approval. After merge, D-022 requires fresh exact-main verification; PR-head evidence cannot substitute for it.
+
+### P4-B — Law Site Provisioning v1.1
+
+**State:** **PR HEAD PASS / INTEGRATED IN PR #58; OWNER MAIN GATE.**
+
+D-026 `law01-v1-1` remains an additive WordPress-native setup workflow. Recommendations are proposal-only until explicit change-plan confirmation; activation remains mutation-free; existing-site overwrite and whole-site noindex takeover remain forbidden. Starter Pages/Posts/Categories/Attachments become ordinary WordPress-owned content after successful provisioning. New/mostly-empty-site starter publication is coupled to explicit native search-visibility consent; active-site starter Posts fail safe to Draft without a public per-Post SEO contract.
+
+**Fresh integrated QA:** exact head `356ef8c00991c63e294d619d42c7094d1074226d` completed 21/21 triggered PR workflows successfully. `Law Site Provisioning Candidate Package` run `34413505990` produced deterministic Theme `1.1.0` candidate `aznet-theme-1.1.0-law-site-provisioning-v1-1-candidate.zip`, 121 files, SHA-256 `19a0411616c67b8795fd08d3590accc571239ca65f4b67f9bc44c3d655170252`, artifact `10128165973`. `Law Site Provisioning Browser Quality` run `34413506017` passed the WP 6.9 / PHP 8.1 / MySQL 8 runtime/browser/a11y matrix; artifact `10128198277`.
+
+**Integration debugging evidence:** G8 run `34412609546` correctly rejected unapproved Theme metadata `1.1.1`; commit `ec1e86f631a1b341736422296ae4689830a505c6` restored both metadata locations to `1.1.0`. R2 browser run `34413075882` exposed a disposable CI-server lifecycle failure, not a Theme runtime defect; test-only commit `356ef8c00991c63e294d619d42c7094d1074226d` made the portability harness restart that disposable server and the rerun passed.
+
+**Known observation:** the separately recorded WordPress-core `WP_Query::rewind_posts()` warning remains UNKNOWN/non-blocking and does not support a blanket PHP-log-clean claim.
+
+**Gate:** PR #61, #60 and #59 have been merged upward through the stack; PR #58 is now the sole canonical-main integration gate. No tag/GitHub Release, L5 provider certification or production deployment is authorized by this state.
+
+**Next:** explicit owner disposition for PR #58 -> `main`; after merge, run D-022 exact-main verification before any release-candidate promotion.
+
 ### P5 — Publication and deployment
 
 Only after the final production-hardening candidate has fresh exact-main/package evidence may publication proceed. Git tag/GitHub Release and final production deployment remain separate explicit owner approvals.
@@ -242,6 +271,9 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-021** | **Woo v1.1 expands presentation only; wishlist/filter/search/swatches/quick-view/custom-checkout engines remain outside Theme** | **Accepted** |
 | **D-022** | **Exact-main post-merge verification is required before a v1.x release candidate is promoted** | **Accepted** |
 | **D-023** | **Professional editorial/law-site pilot hardening remains generic Theme presentation: WordPress owns publication/content state, SEO owner keeps metadata/schema, and no legal/domain semantics move into Theme** | **Accepted** |
+| **D-024** | **Homepage template switching uses a stable typed Content Map plus Theme-owned Presentation Preset; Classic Editor remains for native Post/Page; provisioning is separate from preset application; the Front Page keeps exactly one `the_content()` boundary and no provider/domain semantics are cloned into Theme.** | **Accepted** |
+| **D-025** | **Law Site Provisioning v1 is an explicit idempotent WordPress-native bootstrap workflow: activation is mutation-free; new/existing sites use a visible confirmed change plan; created content becomes WordPress-owned; failed-run rollback is current-run bounded; successful setup is not equivalent to Launch Ready.** | **Accepted** |
+| **D-026** | **Law Site Provisioning v1.1 may preselect non-authoritative exact-label recommendations, seed bounded WordPress-native starter editorial/media content, and temporarily discourage indexing only on a confirmed new/mostly-empty-site plan; active-site starter content fails safe to Draft without a public per-Post SEO contract, and all authoritative mapping/mutation remains explicit in the confirmed provisioning plan.** | **Accepted** |
 
 ## 11. Open questions
 
@@ -278,4 +310,4 @@ Metadata promotion to `1.1.0` is a historical cleared gate completed through PR 
 
 ## 14. Exact next
 
-**P4 — Real law-site pilot QA on the post-P3 candidate from canonical `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`. Prove the real current-stack route/responsive/a11y/Rank Math/RootProfile matrix and measured site behavior. P1 duplicate-theme cleanup remains a parallel destructive site-operations gate. Stop before tag/GitHub Release or final production deployment.**
+**Owner-gated PR #58 -> `main` integration is the exact next action. If approved and merged, run D-022 fresh exact-main verification on the resulting merge SHA before promoting any release candidate; then continue P4 real-pilot QA. P1 duplicate-theme cleanup remains a separate destructive site-operations gate. Stop before tag/GitHub Release or final production deployment.**

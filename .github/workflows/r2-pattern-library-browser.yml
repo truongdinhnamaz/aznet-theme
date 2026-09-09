@@ -319,7 +319,21 @@ jobs:
           wp post get "$FIXTURE_ID" --field=post_content --path=/tmp/wp --allow-root > /tmp/r2-pattern-library/post-content-after.txt
           AFTER_SHA=$(sha256sum /tmp/r2-pattern-library/post-content-after.txt | awk '{print $1}')
           test "$BEFORE_SHA" = "$AFTER_SHA"
-          curl -fsS http://127.0.0.1:8080/r2-pattern-fixture/ >/tmp/r2-pattern-library/portability-render.html
+
+          # Theme/plugin lifecycle mutations can destabilize the single-process PHP
+          # development server used by this disposable CI harness. Restart only that
+          # test runtime before portability rendering; Theme bytes and assertions stay unchanged.
+          if test -f /tmp/r2-pattern-library/server.pid; then
+            kill "$(cat /tmp/r2-pattern-library/server.pid)" 2>/dev/null || true
+          fi
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp >> /tmp/r2-pattern-library/server.log 2>&1 &
+          echo $! > /tmp/r2-pattern-library/server.pid
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/r2-pattern-fixture/ >/tmp/r2-pattern-library/portability-render.html; then
+              break
+            fi
+            sleep 1
+          done
           grep -F 'Đặt giá trị cốt lõi' /tmp/r2-pattern-library/portability-render.html
           wp theme activate aznet-theme --path=/tmp/wp --allow-root
           echo "PORTABILITY_CONTENT_SHA=$BEFORE_SHA"

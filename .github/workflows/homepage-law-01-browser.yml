@@ -1,0 +1,269 @@
+name: Homepage Composer Law 01 Browser Quality
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'front-page.php'
+      - 'inc/theme/homepage-*.php'
+      - 'inc/theme/settings.php'
+      - 'inc/theme/assets.php'
+      - 'inc/theme/bootstrap.php'
+      - 'inc/admin/homepage.php'
+      - 'inc/admin/control-center.php'
+      - 'inc/admin/bootstrap.php'
+      - 'template-parts/homepage/law-01/**'
+      - 'assets/css/components/homepage-law-01.css'
+      - 'tests/offline/homepage-*.php'
+      - 'tests/browser/homepage-law-01-l4.mjs'
+      - 'scripts/verify-v1-core.sh'
+      - '.github/workflows/homepage-law-01-browser.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  law01-homepage:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+
+      - name: Record exact checkout identity
+        run: git rev-parse HEAD
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Verify Homepage Composer offline contracts
+        run: |
+          set -euo pipefail
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-settings-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-content-map-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-control-center-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/f2-front-page-content-boundary-contract.php
+          php -l front-page.php
+          php -l inc/theme/homepage-content-map.php
+          php -l inc/theme/homepage-composer.php
+          php -l inc/admin/homepage.php
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install WordPress 6.9 and exact Theme candidate
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+
+          rm -rf /tmp/wp /tmp/homepage-law01
+          mkdir -p /tmp/wp /tmp/homepage-law01
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='AZnet Law 01' --admin_user=admin --admin_password='law01-browser-password' --admin_email=law01@example.test --skip-email --allow-root
+
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
+            ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          wp core version --path=/tmp/wp --allow-root | grep -Fx '6.9'
+          wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+
+      - name: Create typed WordPress Law 01 fixture
+        run: |
+          set -euo pipefail
+          cat > /tmp/law01-fixture.php <<'PHP'
+          <?php
+          function law01_page( string $title, string $slug, string $excerpt, string $content = '', int $parent = 0, int $menu_order = 0 ): int {
+              $id = wp_insert_post( [
+                  'post_type' => 'page',
+                  'post_status' => 'publish',
+                  'post_title' => $title,
+                  'post_name' => $slug,
+                  'post_excerpt' => $excerpt,
+                  'post_content' => $content,
+                  'post_parent' => $parent,
+                  'menu_order' => $menu_order,
+              ], true );
+              if ( is_wp_error( $id ) ) { throw new RuntimeException( $id->get_error_message() ); }
+              return (int) $id;
+          }
+          function law01_cat( string $name, string $slug ): int {
+              $result = wp_insert_term( $name, 'category', [ 'slug' => $slug ] );
+              if ( is_wp_error( $result ) ) { throw new RuntimeException( $result->get_error_message() ); }
+              return (int) $result['term_id'];
+          }
+          function law01_post( string $title, string $slug, array $cats, string $date ): int {
+              $id = wp_insert_post( [
+                  'post_type' => 'post',
+                  'post_status' => 'publish',
+                  'post_title' => $title,
+                  'post_name' => $slug,
+                  'post_excerpt' => 'Đoạn trích kiểm thử tiếng Việt đủ dài để xác minh typography và khả năng co giãn của thẻ nội dung.',
+                  'post_content' => '<p>Nội dung kiểm thử Law 01.</p>',
+                  'post_date' => $date,
+                  'post_date_gmt' => get_gmt_from_date( $date ),
+              ], true );
+              if ( is_wp_error( $id ) ) { throw new RuntimeException( $id->get_error_message() ); }
+              wp_set_post_categories( (int) $id, $cats );
+              return (int) $id;
+          }
+
+          $front = law01_page(
+              'Bảo vệ quyền lợi của bạn bằng giải pháp pháp lý rõ ràng',
+              'trang-chu',
+              'Dịch vụ pháp lý chuyên nghiệp kết hợp hệ thống kiến thức giúp khách hàng hiểu vấn đề trước khi đưa ra quyết định.',
+              '<p id="law01-native-body">Native Front Page body sentinel</p>'
+          );
+          $about = law01_page( 'Giới thiệu', 'gioi-thieu', 'Một đội ngũ hướng tới tư vấn rõ ràng, bảo mật và giải pháp thực tiễn.' );
+          $services = law01_page( 'Dịch vụ pháp lý', 'dich-vu-phap-ly', 'Các lĩnh vực hỗ trợ pháp lý chính.' );
+          $service_titles = [
+              'Luật Doanh nghiệp' => 'luat-doanh-nghiep',
+              'Dân sự và Tranh chấp' => 'dan-su-tranh-chap',
+              'Hình sự' => 'hinh-su',
+              'Đất đai và Bất động sản' => 'dat-dai-bat-dong-san',
+              'Hôn nhân và Gia đình' => 'hon-nhan-gia-dinh',
+              'Lao động' => 'lao-dong',
+          ];
+          $order = 1;
+          foreach ( $service_titles as $title => $slug ) {
+              law01_page( $title, $slug, 'Nội dung mô tả dịch vụ được quản lý bằng Page WordPress.', '', $services, $order++ );
+          }
+          $team = law01_page( 'Đội ngũ luật sư', 'doi-ngu-luat-su', 'Tìm hiểu đội ngũ và cách chúng tôi phối hợp trong quá trình tư vấn.' );
+          $process = law01_page( 'Quy trình tư vấn', 'quy-trinh-tu-van', 'Tiếp nhận thông tin, đánh giá phạm vi và thống nhất phương án phù hợp.' );
+          $faq = law01_page( 'Câu hỏi thường gặp', 'cau-hoi-thuong-gap', 'Các câu hỏi phổ biến trước khi bắt đầu trao đổi pháp lý.' );
+          $contact = law01_page( 'Liên hệ', 'lien-he', 'Gửi thông tin để bắt đầu trao đổi.' );
+
+          $knowledge_a = law01_cat( 'Kiến thức Doanh nghiệp', 'kien-thuc-doanh-nghiep' );
+          $knowledge_b = law01_cat( 'Kiến thức Dân sự', 'kien-thuc-dan-su' );
+          $analysis = law01_cat( 'Phân tích vụ việc', 'phan-tich-vu-viec' );
+          $news = law01_cat( 'Tin pháp luật', 'tin-phap-luat' );
+
+          for ( $i = 1; $i <= 5; $i++ ) {
+              law01_post( "Kiến thức pháp luật số {$i}", "kien-thuc-{$i}", [ $i % 2 ? $knowledge_a : $knowledge_b ], sprintf( '2026-09-%02d 10:00:00', 7 - $i ) );
+          }
+          law01_post( 'Bài giao thoa kiến thức và phân tích', 'bai-giao-thoa', [ $knowledge_a, $analysis ], '2026-09-07 11:00:00' );
+          for ( $i = 1; $i <= 3; $i++ ) {
+              law01_post( "Phân tích vụ việc số {$i}", "phan-tich-{$i}", [ $analysis ], sprintf( '2026-09-%02d 09:00:00', 6 - $i ) );
+          }
+          for ( $i = 1; $i <= 5; $i++ ) {
+              law01_post( "Tin pháp luật số {$i}", "tin-phap-luat-{$i}", [ $news ], sprintf( '2026-09-%02d 08:00:00', 7 - $i ) );
+          }
+
+          update_option( 'show_on_front', 'page' );
+          update_option( 'page_on_front', $front );
+          set_theme_mod( 'aznet_theme_settings', [
+              'schema_version' => 2,
+              'visual_preset' => 'default',
+              'header_preset' => 'standard',
+              'header_sticky' => 'sticky',
+              'header_search' => true,
+              'header_utilities' => true,
+              'woo_catalog_preset' => 'grid',
+              'woo_product_card_density' => 'balanced',
+              'woo_product_preset' => 'classic',
+              'homepage_preset' => 'law-01',
+              'homepage_services_page' => $services,
+              'homepage_about_page' => $about,
+              'homepage_team_page' => $team,
+              'homepage_knowledge_terms' => [ $knowledge_a, $knowledge_b ],
+              'homepage_case_analysis_term' => $analysis,
+              'homepage_legal_news_term' => $news,
+              'homepage_process_page' => $process,
+              'homepage_faq_page' => $faq,
+              'homepage_contact_page' => $contact,
+          ] );
+
+          echo wp_json_encode( compact( 'front', 'about', 'services', 'team', 'process', 'faq', 'contact', 'knowledge_a', 'knowledge_b', 'analysis', 'news' ) );
+          PHP
+
+          wp eval-file /tmp/law01-fixture.php --path=/tmp/wp --allow-root | tee /tmp/homepage-law01/fixture.json
+          wp option get show_on_front --path=/tmp/wp --allow-root | grep -Fx 'page'
+          FRONT_ID=$(wp option get page_on_front --path=/tmp/wp --allow-root)
+          test "$FRONT_ID" -gt 0
+          wp post get "$FRONT_ID" --field=post_content --path=/tmp/wp --allow-root | grep -F 'law01-native-body'
+
+          MENU_ID=$(wp menu create 'Primary Law01' --porcelain --path=/tmp/wp --allow-root)
+          wp menu item add-post "$MENU_ID" "$FRONT_ID" --title='Trang chủ' --path=/tmp/wp --allow-root >/dev/null
+          CONTACT_ID=$(php -r '$j=json_decode(file_get_contents("/tmp/homepage-law01/fixture.json"), true); echo $j["contact"];')
+          wp menu item add-post "$MENU_ID" "$CONTACT_ID" --title='Liên hệ' --path=/tmp/wp --allow-root >/dev/null
+          wp menu location assign "$MENU_ID" primary --path=/tmp/wp --allow-root
+          wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+
+      - name: Start WordPress runtime and verify Law 01 surface
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/homepage-law01/server.log 2>&1 &
+          echo $! > /tmp/homepage-law01/server.pid
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/ > /tmp/homepage-law01/homepage.html; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:8080/ > /tmp/homepage-law01/homepage.html
+          grep -F 'aznet-theme-homepage--law-01' /tmp/homepage-law01/homepage.html
+          grep -F 'aznet-theme-law01-services' /tmp/homepage-law01/homepage.html
+          grep -F 'aznet-theme-law01-analysis' /tmp/homepage-law01/homepage.html
+          grep -F 'aznet-theme-law01-news' /tmp/homepage-law01/homepage.html
+          grep -F 'law01-native-body' /tmp/homepage-law01/homepage.html
+          grep -F '/assets/css/components/homepage-law-01.css' /tmp/homepage-law01/homepage.html
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/homepage-law01/server.log; then
+            echo 'Theme runtime error marker found before browser verification' >&2
+            exit 1
+          fi
+          echo 'PASS: Homepage Composer Law 01 L3 runtime surface'
+
+      - name: Install Playwright and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Run Law 01 browser visual and accessibility verification
+        env:
+          LAW01_BASE_URL: http://127.0.0.1:8080
+          LAW01_STATE_DIR: /tmp/homepage-law01
+        run: |
+          set -euo pipefail
+          node tests/browser/homepage-law-01-l4.mjs
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/homepage-law01/server.log; then
+            echo 'Theme runtime error marker found after browser verification' >&2
+            exit 1
+          fi
+          test -f /tmp/homepage-law01/browser-summary.json
+          echo 'PASS: Homepage Composer Law 01 L3-L4 verification'
+
+      - name: Upload Law 01 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage-law01-browser-quality
+          path: /tmp/homepage-law01
+          if-no-files-found: warn

@@ -195,7 +195,7 @@ async function inspectFrontend(browser, viewportName, viewport) {
 async function inspectEditor(browser) {
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
   const page = await context.newPage();
-  const result = { status: 'failed', variables: {}, stylesheets: [], canvas: null, error: null };
+  const result = { status: 'failed', mode: null, titleVisible: false, contentPresent: false, blockEditorPresent: null, error: null };
   try {
     await page.goto(`${baseUrl}/wp-login.php`, { waitUntil: 'domcontentloaded' });
     await page.locator('#user_login').fill('admin');
@@ -206,42 +206,27 @@ async function inspectEditor(browser) {
     ]);
 
     await page.goto(`${baseUrl}/wp-admin/post.php?post=${fixtureId}&action=edit`, { waitUntil: 'domcontentloaded' });
-    await page.locator('.edit-post-layout, .interface-interface-skeleton').first().waitFor({ state: 'visible', timeout: 30000 });
-    await page.waitForTimeout(1500);
+    await page.locator('#post').waitFor({ state: 'visible', timeout: 30000 });
+    await page.locator('#title').waitFor({ state: 'visible', timeout: 30000 });
+    await page.locator('#content').waitFor({ state: 'attached', timeout: 30000 });
 
-    let editorPage = page;
-    const iframe = page.locator('iframe[name="editor-canvas"]');
-    if (await iframe.count()) {
-      await iframe.first().waitFor({ state: 'visible', timeout: 30000 });
-      const frame = page.frames().find((candidate) => candidate.name() === 'editor-canvas');
-      if (! frame) throw new Error('editor-canvas iframe exists but frame was not resolved');
-      editorPage = frame;
-      result.canvas = 'iframe';
-    } else {
-      result.canvas = 'document';
-    }
+    result.mode = 'classic';
+    result.titleVisible = await page.locator('#title').isVisible();
+    result.contentPresent = (await page.locator('#content').inputValue()).includes('R1 Design System Fixture');
+    result.blockEditorPresent = await page.locator('.edit-post-layout, .interface-interface-skeleton').count();
 
-    const wrapper = editorPage.locator('.editor-styles-wrapper').first();
-    await wrapper.waitFor({ state: 'visible', timeout: 30000 });
-    await editorPage.getByText('R1 Design System Fixture', { exact: false }).first().waitFor({ state: 'visible', timeout: 30000 });
+    if (! result.titleVisible) throw new Error('Classic Editor title field is not visible');
+    if (! result.contentPresent) throw new Error('Classic Editor did not retain fixture content');
+    if (result.blockEditorPresent !== 0) throw new Error('native Page unexpectedly exposed Block Editor under the accepted Classic Editor policy');
 
-    result.variables = await cssVariables(wrapper, Object.keys(expectedVariables[preset]));
-    verifyVariables(result.variables, expectedVariables[preset], 'editor');
-
-    // WordPress may inline, concatenate or otherwise transform editor styles before
-    // they reach the editor canvas. Computed semantic variables are the behavioral
-    // contract for editor/frontend parity; literal <link> URLs are recorded only as
-    // diagnostic evidence and are not an implementation requirement.
-    result.stylesheets = await editorPage.locator('link[rel="stylesheet"]').evaluateAll((links) => links.map((link) => link.href));
-
-    await page.screenshot({ path: path.join(screenshotDir, 'editor.png'), fullPage: true });
+    await page.screenshot({ path: path.join(screenshotDir, 'editor-classic.png'), fullPage: true });
     result.status = 'passed';
-    console.log(`PASS: R1 ${preset} editor parity (${result.canvas})`);
+    console.log(`PASS: R1 ${preset} Classic Editor policy smoke`);
   } catch (error) {
     result.error = error instanceof Error ? error.message : String(error);
     failures.push(`editor: ${result.error}`);
-    console.error(`FAIL: R1 ${preset} editor: ${result.error}`);
-    await page.screenshot({ path: path.join(screenshotDir, 'editor-failure.png'), fullPage: true }).catch(() => {});
+    console.error(`FAIL: R1 ${preset} Classic Editor smoke: ${result.error}`);
+    await page.screenshot({ path: path.join(screenshotDir, 'editor-classic-failure.png'), fullPage: true }).catch(() => {});
   } finally {
     summary.editor = result;
     await context.close();

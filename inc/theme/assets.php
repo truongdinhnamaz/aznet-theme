@@ -108,6 +108,43 @@ function enqueue_homepage_blueprint_editor_asset(): void {
     );
 }
 
+/**
+ * Build a cache key that changes when a scoped asset's bytes change.
+ *
+ * @param string      $relative_path Theme-relative asset path.
+ * @param string|null $fallback      Theme/version fallback.
+ */
+function asset_content_version( string $relative_path, ?string $fallback = null ): ?string {
+    $path = get_theme_file_path( $relative_path );
+    if ( ! is_file( $path ) ) {
+        return $fallback;
+    }
+
+    $hash = hash_file( 'sha256', $path );
+    if ( ! is_string( $hash ) || '' === $hash ) {
+        return $fallback;
+    }
+
+    $fingerprint = substr( $hash, 0, 12 );
+    return null !== $fallback && '' !== $fallback ? $fallback . '-' . $fingerprint : $fingerprint;
+}
+
+/** Enqueue Law 01 only for its active Front Page presentation surface. */
+function enqueue_homepage_law01_asset( ?string $version = null ): void {
+    if ( ! function_exists( __NAMESPACE__ . '\\homepage_composer_active' ) || ! homepage_composer_active() ) {
+        return;
+    }
+    if ( 'law-01' !== homepage_preset() ) {
+        return;
+    }
+    wp_enqueue_style(
+        'aznet-theme-homepage-law-01',
+        get_theme_file_uri( '/assets/css/components/homepage-law-01.css' ),
+        [ 'aznet-theme-tokens' ],
+        asset_content_version( '/assets/css/components/homepage-law-01.css', $version )
+    );
+}
+
 function enqueue_assets(): void {
     $version = defined( 'AZNET_THEME_VERSION' ) ? AZNET_THEME_VERSION : null;
 
@@ -152,6 +189,7 @@ function enqueue_assets(): void {
     );
 
     enqueue_homepage_blueprint_asset( $version );
+    enqueue_homepage_law01_asset( $version );
 
     if ( should_enqueue_generic_content_assets() ) {
         wp_enqueue_style(
