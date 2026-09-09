@@ -108,6 +108,26 @@ function enqueue_homepage_blueprint_editor_asset(): void {
     );
 }
 
+/**
+ * Build a cache key that changes when a scoped asset's bytes change.
+ *
+ * @param string      $relative_path Theme-relative asset path.
+ * @param string|null $fallback      Theme/version fallback.
+ */
+function asset_content_version( string $relative_path, ?string $fallback = null ): ?string {
+    $path = get_theme_file_path( $relative_path );
+    if ( ! is_file( $path ) ) {
+        return $fallback;
+    }
+
+    $hash = hash_file( 'sha256', $path );
+    if ( ! is_string( $hash ) || '' === $hash ) {
+        return $fallback;
+    }
+
+    $fingerprint = substr( $hash, 0, 12 );
+    return null !== $fallback && '' !== $fallback ? $fallback . '-' . $fingerprint : $fingerprint;
+}
 
 /** Enqueue Law 01 only for its active Front Page presentation surface. */
 function enqueue_homepage_law01_asset( ?string $version = null ): void {
@@ -121,7 +141,7 @@ function enqueue_homepage_law01_asset( ?string $version = null ): void {
         'aznet-theme-homepage-law-01',
         get_theme_file_uri( '/assets/css/components/homepage-law-01.css' ),
         [ 'aznet-theme-tokens' ],
-        $version
+        asset_content_version( '/assets/css/components/homepage-law-01.css', $version )
     );
 }
 
