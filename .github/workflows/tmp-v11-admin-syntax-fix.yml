@@ -12,17 +12,27 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Fix verified admin parse error
+      - name: Fix verified admin parse errors
         run: |
           python3 - <<'PY'
           from pathlib import Path
           p = Path('inc/admin/provisioning.php')
           s = p.read_text()
-          old = "esc_html( implode( ' ', (array) ( $result['errors'] ?? [] ) ) . '</p></div>'"
-          new = "esc_html( implode( ' ', (array) ( $result['errors'] ?? [] ) ) ) . '</p></div>'"
-          if old not in s:
-              raise SystemExit('expected parse-error fragment not found')
-          p.write_text(s.replace(old, new, 1))
+          replacements = [
+              (
+                  "esc_html( implode( ' ', (array) ( $result['errors'] ?? [] ) ) . '</p></div>'",
+                  "esc_html( implode( ' ', (array) ( $result['errors'] ?? [] ) ) ) . '</p></div>'",
+              ),
+              (
+                  "esc_html( sprintf( 'Created: %d · Reused: %d', count( (array) ( $result['created'] ?? [] ) ), count( (array) ( $result['reused'] ?? [] ) ) ) . '</p>'",
+                  "esc_html( sprintf( 'Created: %d · Reused: %d', count( (array) ( $result['created'] ?? [] ) ), count( (array) ( $result['reused'] ?? [] ) ) ) ) . '</p>'",
+              ),
+          ]
+          for old, new in replacements:
+              if old not in s:
+                  raise SystemExit('expected parse-error fragment not found: ' + old)
+              s = s.replace(old, new, 1)
+          p.write_text(s)
           PY
           php -l inc/admin/provisioning.php
       - name: Commit fix
@@ -32,4 +42,4 @@ jobs:
           git add inc/admin/provisioning.php
           git commit -m "fix: repair provisioning admin syntax"
           git push origin HEAD:work/law-site-provisioning-v1-1
-# Trigger one-shot syntax repair after workflow registration.
+# Trigger verified two-fragment syntax repair.
