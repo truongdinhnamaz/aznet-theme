@@ -1,0 +1,78 @@
+name: Temporary Law 01 Premium Browser
+on:
+  push:
+    branches:
+      - work/law01-premium-presentation
+jobs:
+  premium-browser:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Record exact head
+        run: git rev-parse HEAD | tee /tmp/premium-browser-head-sha.txt
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli, mbstring
+          coverage: none
+      - name: Verify Law 01 contracts
+        run: |
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-premium-presentation-contract.php
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install WordPress 6.9 and Theme candidate
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp
+          chmod +x /tmp/wp && sudo mv /tmp/wp /usr/local/bin/wp
+          rm -rf /tmp/wp-site /tmp/law-provisioning && mkdir -p /tmp/wp-site /tmp/law-provisioning
+          wp core download --version=6.9 --path=/tmp/wp-site --force --allow-root
+          wp config create --path=/tmp/wp-site --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp-site --url=http://127.0.0.1:8080 --title='AZnet Law Premium' --admin_user=admin --admin_password='law-provisioning-password' --admin_email=premium@example.test --skip-email --allow-root
+          mkdir -p /tmp/wp-site/wp-content/themes/aznet-theme
+          rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='README.md' --exclude='aznet-preview.png' ./ /tmp/wp-site/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp-site --allow-root
+      - name: Start WordPress runtime
+        run: |
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp-site > /tmp/law-provisioning/server.log 2>&1 & echo $! > /tmp/law-provisioning/server.pid
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:8080/wp-login.php >/dev/null && exit 0; sleep 1; done; exit 1
+      - name: Install Playwright and axe
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+      - name: Provision through wizard and verify retained L4
+        env:
+          PROVISION_BASE_URL: http://127.0.0.1:8080
+          PROVISION_STATE_DIR: /tmp/law-provisioning
+        run: node tests/browser/law-site-provisioning-l4.mjs
+      - name: Verify premium presentation L4
+        env:
+          PROVISION_BASE_URL: http://127.0.0.1:8080
+          PROVISION_STATE_DIR: /tmp/law-provisioning
+        run: node tests/browser/law01-premium-presentation-l4.mjs
+      - name: Check runtime log boundary
+        run: "! grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/law-provisioning/server.log"
+      - name: Upload premium browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: law01-premium-browser-quality
+          path: |
+            /tmp/law-provisioning
+            /tmp/premium-browser-head-sha.txt
+          if-no-files-found: warn
+      - name: Stop runtime
+        if: always()
+        run: kill "$(cat /tmp/law-provisioning/server.pid)" || true
