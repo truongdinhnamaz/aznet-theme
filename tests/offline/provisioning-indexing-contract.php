@@ -23,9 +23,9 @@ foreach ( [ 'rank_math', 'rankmath', 'yoast', '_robots', 'wpseo_' ] as $forbidde
 $runner = (string) file_get_contents( $root . '/inc/theme/provisioning-runner.php' );
 foreach ( [
     "'blog_public' => (int) get_option( 'blog_public', 1 )",
-    "'set_search_visibility' === $type",
-    "update_option( 'blog_public', $target )",
-    "update_option( 'blog_public', (int) ( $receipt['pre']['blog_public'] ?? 1 ) )",
+    "'set_search_visibility' === \$type",
+    "update_option( 'blog_public', \$target )",
+    "update_option( 'blog_public', (int) ( \$receipt['pre']['blog_public'] ?? 1 ) )",
     'provisioning_store_index_receipt(',
     'provisioning_store_starter_fingerprint(',
 ] as $needle ) {
