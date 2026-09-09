@@ -41,9 +41,15 @@ try {
         const container=document.querySelector('.aznet-theme-law01-editorial__grid');
         const child=container?.firstElementChild;
         if(!(container instanceof HTMLElement)||!(child instanceof HTMLElement))return null;
-        return {container:container.getBoundingClientRect().width,child:child.getBoundingClientRect().width};
+        const style=getComputedStyle(child);
+        return {
+          childCount:container.children.length,
+          gridColumnStart:style.gridColumnStart,
+          gridColumnEnd:style.gridColumnEnd,
+          childWidth:child.getBoundingClientRect().width
+        };
       });
-      if(!editorial||editorial.child/editorial.container<0.72)throw new Error(`${name}: About no-media fallback still leaves a dead second column`);
+      if(!editorial||editorial.childCount!==1||editorial.gridColumnStart!=='1'||editorial.gridColumnEnd!=='-1'||editorial.childWidth<650)throw new Error(`${name}: About no-media fallback must span the grid while keeping a readable editorial measure`);
     }
 
     const axe=await new AxeBuilder({page}).analyze();
