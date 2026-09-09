@@ -12,7 +12,18 @@ foreach ([
     'id="aznet-theme-provision-menu-action"',
     'for="aznet-theme-provision-menu-id"',
     'id="aznet-theme-provision-menu-id"',
+    'Dùng các thiết lập được khuyến nghị',
+    'Tùy chỉnh nâng cao',
+    'Gợi ý — chưa áp dụng',
+    'Cần xác nhận',
+    'Tạm thời ngăn công cụ tìm kiếm lập chỉ mục website',
+    'Sử dụng nội dung hiện có',
+    'Sẽ tạo mới',
+    'Sẽ import media',
+    'Sẽ thay đổi cấu hình',
+    'Tôi đã xem các thay đổi trên và đồng ý áp dụng.',
+    'name="confirm_plan"',
 ] as $needle) {
-    if (!str_contains($admin, $needle)) { throw new RuntimeException('missing accessible provisioning control marker: ' . $needle); }
+    if (!str_contains($admin, $needle)) { throw new RuntimeException('missing accessible/recommendation provisioning marker: ' . $needle); }
 }
-echo "PASS: Provisioning wizard controls have explicit accessible labels\n";
+echo "PASS: Provisioning wizard exposes accessible recommendation-first confirmation UX\n";
