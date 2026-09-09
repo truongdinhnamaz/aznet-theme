@@ -1,16 +1,38 @@
-name: Temporary Law 01 Premium TDD
+name: Temporary Law 01 Premium Verification
 on:
   push:
     branches:
       - work/law01-premium-presentation
 jobs:
-  premium-contract:
-    runs-on: ubuntu-latest
+  premium-regression-package:
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      - name: Record exact head
+        run: git rev-parse HEAD | tee /tmp/PREMIUM_HEAD_SHA.txt
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
+          extensions: mbstring, mysqli
           coverage: none
-      - name: Run premium presentation contract
-        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-premium-presentation-contract.php
+      - name: Run full reusable core regression
+        run: bash scripts/verify-v1-core.sh
+      - name: Build deterministic premium candidate
+        run: |
+          set -euo pipefail
+          VERSION=$(sed -n 's/^Version: //p' style.css | head -n 1)
+          rm -rf /tmp/premium-a /tmp/premium-b premium-candidate
+          mkdir -p /tmp/premium-a /tmp/premium-b premium-candidate
+          python3 scripts/build-release-package.py --source . --output "/tmp/premium-a/aznet-theme-${VERSION}.zip" --version "$VERSION"
+          python3 scripts/build-release-package.py --source . --output "/tmp/premium-b/aznet-theme-${VERSION}.zip" --version "$VERSION"
+          cmp "/tmp/premium-a/aznet-theme-${VERSION}.zip" "/tmp/premium-b/aznet-theme-${VERSION}.zip"
+          cp "/tmp/premium-a/aznet-theme-${VERSION}.zip" "premium-candidate/aznet-theme-${VERSION}-law01-premium-candidate.zip"
+          sha256sum premium-candidate/*.zip | tee premium-candidate/SHA256SUMS.txt
+          unzip -t premium-candidate/*.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aznet-theme-law01-premium-candidate
+          path: |
+            premium-candidate/*
+            /tmp/PREMIUM_HEAD_SHA.txt
+          if-no-files-found: error
