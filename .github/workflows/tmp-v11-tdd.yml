@@ -26,5 +26,7 @@ jobs:
         run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-admin-a11y-contract.php
       - name: Run starter media contract
         run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-media-contract.php
+      - name: Run index-safety contract
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-indexing-contract.php
       - name: Run full reusable core regression
         run: bash scripts/verify-v1-core.sh
