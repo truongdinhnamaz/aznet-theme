@@ -67,6 +67,13 @@ foreach ([
     }
 }
 
+$browserRun = strpos($workflow, 'node tests/browser/x6-cross-surface-l4.mjs');
+$cleanup = strpos($workflow, 'rm -rf node_modules');
+$packageBuild = strpos($workflow, '- name: Build deterministic current-version package twice');
+if (false === $browserRun || false === $cleanup || false === $packageBuild || ! ($browserRun < $cleanup && $cleanup < $packageBuild)) {
+    x6_fail('X6 workflow must remove transient node_modules after browser QA and before release packaging');
+}
+
 $implementation = x6_read('tests/runtime/x6-cross-surface.php') . "\n"
     . x6_read('tests/browser/x6-cross-surface-l4.mjs') . "\n"
     . $workflow;
