@@ -71,15 +71,16 @@ if ( is_wp_error( $page_id ) || 0 >= (int) $page_id ) {
 }
 
 $category_url = get_category_link( $category_id );
+$search_url   = get_search_link( 'X4 Navigation Fixture Post' );
 $post_url     = get_permalink( $target_post_id );
 $page_url     = get_permalink( (int) $page_id );
-if ( is_wp_error( $category_url ) || ! is_string( $post_url ) || ! is_string( $page_url ) ) {
+if ( is_wp_error( $category_url ) || ! is_string( $search_url ) || ! is_string( $post_url ) || ! is_string( $page_url ) ) {
     WP_CLI::error( 'Unable to resolve X4 fixture URLs.' );
 }
 
 $result = [
     'archive_url' => $category_url,
-    'search_url'  => add_query_arg( 's', 'X4 Navigation Fixture Post', home_url( '/' ) ),
+    'search_url'  => $search_url,
     'post_url'    => $post_url,
     'page_url'    => $page_url,
     'home_url'    => home_url( '/' ),
