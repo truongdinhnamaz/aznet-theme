@@ -24,9 +24,12 @@ function provisioning_initial_receipt( string $run_id ): array {
             'page_on_front' => (int) get_option( 'page_on_front', 0 ),
             'nav_locations' => get_theme_mod( 'nav_menu_locations', [] ),
             'blog_public' => (int) get_option( 'blog_public', 1 ),
+            'blogname' => (string) get_option( 'blogname', '' ),
+            'blogdescription' => (string) get_option( 'blogdescription', '' ),
         ],
         'index_visibility_changed' => false,
         'index_visibility_target' => null,
+        'starter_identity_changed' => false,
         'created' => [],
         'reused' => [],
         'errors' => [],
@@ -43,6 +46,12 @@ function provisioning_rollback_failed_run( array $receipt ): array {
     } catch ( \Throwable $e ) { $errors[] = 'Front Page rollback failed: ' . $e->getMessage(); }
     if ( ! empty( $receipt['index_visibility_changed'] ) ) {
         try { update_option( 'blog_public', (int) ( $receipt['pre']['blog_public'] ?? 1 ) ); } catch ( \Throwable $e ) { $errors[] = 'Search visibility rollback failed: ' . $e->getMessage(); }
+    }
+    if ( ! empty( $receipt['starter_identity_changed'] ) ) {
+        try {
+            update_option( 'blogname', (string) ( $receipt['pre']['blogname'] ?? '' ) );
+            update_option( 'blogdescription', (string) ( $receipt['pre']['blogdescription'] ?? '' ) );
+        } catch ( \Throwable $e ) { $errors[] = 'Starter site identity rollback failed: ' . $e->getMessage(); }
     }
     try { set_theme_mod( 'nav_menu_locations', (array) ( $receipt['pre']['nav_locations'] ?? [] ) ); } catch ( \Throwable $e ) { $errors[] = 'Menu-location rollback failed: ' . $e->getMessage(); }
 
@@ -226,33 +235,17 @@ function provisioning_apply_plan( array $plan ): array {
                 provisioning_apply_homepage_mapping( $page_ids, $term_ids, $op );
             } elseif ( 'set_homepage_preset' === $type ) {
                 $s = settings(); $s['homepage_preset'] = (string) ( $op['preset'] ?? 'off' ); set_theme_mod( 'aznet_theme_settings', normalize_settings( $s ) );
-            } elseif ( 'set_search_visibility' === $type ) {
-                $target = (int) ( $op['target'] ?? 0 );
-                $current = (int) get_option( 'blog_public', 1 );
-                if ( $current !== $target ) {
-                    update_option( 'blog_public', $target );
-                    if ( $target !== (int) get_option( 'blog_public', 1 ) ) { throw new \RuntimeException( 'Search visibility update failed.' ); }
-                    $receipt['index_visibility_changed'] = true;
-                    $receipt['index_visibility_target'] = $target;
+            } elseif ( 'set_homepage_variant' === $type ) {
+                $s = settings(); $s['homepage_law01_variant'] = (string) ( $op['variant'] ?? 'navy-gold' ); set_theme_mod( 'aznet_theme_settings', normalize_settings( $s ) );
+            } elseif ( 'set_starter_site_defaults' === $type ) {
+                $blogname = (string) ( $op['blogname'] ?? '' );
+                $blogdescription = (string) ( $op['blogdescription'] ?? '' );
+                update_option( 'blogname', $blogname );
+                update_option( 'blogdescription', $blogdescription );
+                if ( $blogname !== (string) get_option( 'blogname', '' ) || $blogdescription !== (string) get_option( 'blogdescription', '' ) ) {
+                    throw new \RuntimeException( 'Starter site defaults update failed.' );
                 }
-            } elseif ( 'set_search_visibility' === $type ) {
-                $target = (int) ( $op['target'] ?? 0 );
-                $current = (int) get_option( 'blog_public', 1 );
-                if ( $current !== $target ) {
-                    update_option( 'blog_public', $target );
-                    if ( $target !== (int) get_option( 'blog_public', 1 ) ) { throw new \RuntimeException( 'Search visibility update failed.' ); }
-                    $receipt['index_visibility_changed'] = true;
-                    $receipt['index_visibility_target'] = $target;
-                }
-            } elseif ( 'set_search_visibility' === $type ) {
-                $target = (int) ( $op['target'] ?? 0 );
-                $current = (int) get_option( 'blog_public', 1 );
-                if ( $current !== $target ) {
-                    update_option( 'blog_public', $target );
-                    if ( $target !== (int) get_option( 'blog_public', 1 ) ) { throw new \RuntimeException( 'Search visibility update failed.' ); }
-                    $receipt['index_visibility_changed'] = true;
-                    $receipt['index_visibility_target'] = $target;
-                }
+                $receipt['starter_identity_changed'] = true;
             } elseif ( 'set_search_visibility' === $type ) {
                 $target = (int) ( $op['target'] ?? 0 );
                 $current = (int) get_option( 'blog_public', 1 );
