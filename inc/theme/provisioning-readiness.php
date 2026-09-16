@@ -10,7 +10,7 @@ function provisioning_readiness_page_ok( int $id ): bool {
 }
 
 function provisioning_is_law_starter_blueprint( string $blueprint ): bool {
-    return in_array( $blueprint, [ 'law01-v1', 'law01-v1-1' ], true );
+    return in_array( $blueprint, [ 'law01-v1', 'law01-v1-1', 'law01-v1-2' ], true );
 }
 
 /** @return array<int,string> */
@@ -40,7 +40,7 @@ function provisioning_launch_warnings(): array {
     } elseif ( $front_id > 0 && function_exists( 'get_post_thumbnail_id' ) && function_exists( 'get_post_meta' ) ) {
         $thumb_id = (int) get_post_thumbnail_id( $front_id );
         if ( $thumb_id > 0
-            && 'law01-v1-1' === (string) get_post_meta( $thumb_id, PROVISIONING_META_BLUEPRINT, true )
+            && provisioning_is_law_starter_blueprint( (string) get_post_meta( $thumb_id, PROVISIONING_META_BLUEPRINT, true ) )
             && 'starter_media:hero' === (string) get_post_meta( $thumb_id, PROVISIONING_META_ROLE, true ) ) {
             $warnings[] = 'Thay ảnh Hero mẫu bằng hình ảnh thực tế của website khi có thể.';
         }

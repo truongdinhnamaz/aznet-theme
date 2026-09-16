@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 /** @return array<int,string> */
 function provisioning_blueprint_keys(): array {
-    return [ 'law01-v1', 'law01-v1-1' ];
+    return [ 'law01-v1', 'law01-v1-1', 'law01-v1-2' ];
 }
 
 /** @return array<string,mixed>|null */
@@ -78,7 +78,7 @@ function provisioning_blueprint( string $key ): ?array {
         ],
     ];
 
-    if ( 'law01-v1-1' !== $key ) { return $blueprint; }
+    if ( 'law01-v1' === $key ) { return $blueprint; }
 
     $starter_content = static function ( string $context, string $documents, string $focus, string $questions ): string {
         return '<p>' . $context . ' Bài viết mẫu này giúp người quản trị hình dung một nội dung kiến thức hoàn chỉnh trên website. Nội dung tập trung vào việc chuẩn bị và tổ chức thông tin trước khi trao đổi với người có chuyên môn; không thay thế việc đánh giá hồ sơ thực tế và không đưa ra kết luận cho một tình huống cụ thể.</p>'
@@ -175,6 +175,46 @@ function provisioning_blueprint( string $key ): ?array {
             ),
         ],
     ];
+
+    if ( 'law01-v1-1' === $key ) { return $blueprint; }
+
+    // v1.2 is a complete example site, not a runtime fallback. These values are copied into
+    // ordinary WordPress-owned fields only after the visible provisioning plan is confirmed.
+    $blueprint['homepage_variant'] = 'burgundy-gold';
+    $blueprint['site_defaults'] = [
+        'blogname' => 'ABC Lawyer',
+        'blogdescription' => 'Tận tâm với khách hàng – Chuyên nghiệp trong từng giải pháp.',
+    ];
+    $blueprint['pages']['home'] = $page(
+        'Giải pháp pháp lý rõ ràng cho cá nhân và doanh nghiệp',
+        'Đồng hành cùng cá nhân và doanh nghiệp với cách tiếp cận rõ ràng, thực tiễn và minh bạch trong từng bước xử lý.',
+        '<p>ABC Lawyer hướng đến việc giúp khách hàng hiểu rõ vấn đề, xác định thông tin cần chuẩn bị và lựa chọn bước làm việc phù hợp trước khi đi sâu vào từng vụ việc cụ thể.</p><p>Các nội dung trên website được tổ chức theo nhóm dịch vụ, kiến thức và quy trình để việc tìm hiểu ban đầu thuận tiện, mạch lạc và dễ tiếp tục trao đổi khi cần.</p>'
+    );
+    $blueprint['pages']['about'] = $page(
+        'Giới thiệu',
+        'ABC Lawyer xây dựng trải nghiệm tư vấn dựa trên sự rõ ràng, tôn trọng thông tin thực tế và phối hợp nhất quán trong quá trình làm việc.',
+        '<p>ABC Lawyer là tên mẫu dùng để trình diễn một website luật hoàn chỉnh ngay sau khi thiết lập. Nội dung có thể được thay bằng tên và thông tin thực tế của đơn vị mà không cần thay đổi cấu trúc giao diện.</p><h2>Nguyên tắc làm việc</h2><p>Chúng tôi ưu tiên tiếp nhận đầy đủ bối cảnh, rà soát tài liệu theo phạm vi đã thống nhất, trình bày phương án dễ hiểu và giữ trao đổi minh bạch trong suốt quá trình phối hợp.</p><h2>Đồng hành cùng khách hàng</h2><p>Mỗi yêu cầu được tiếp cận từ mục tiêu thực tế của khách hàng, những dữ kiện đang có và các điểm cần tiếp tục làm rõ trước khi lựa chọn bước xử lý phù hợp.</p>'
+    );
+    $blueprint['pages']['services'] = $page(
+        'Dịch vụ pháp lý',
+        'Các dịch vụ pháp lý dành cho cá nhân và doanh nghiệp được nhóm theo nhu cầu để khách hàng dễ xác định nơi bắt đầu.',
+        '<p>Danh mục dịch vụ giúp khách hàng đi từ nhu cầu thực tế đến nhóm thông tin cần chuẩn bị. Mỗi lĩnh vực có phần mô tả phạm vi hỗ trợ và gợi ý hồ sơ ban đầu để quá trình trao đổi hiệu quả hơn.</p>'
+    );
+    $blueprint['pages']['team'] = $page(
+        'Đội ngũ luật sư',
+        'Đội ngũ được tổ chức theo hướng phối hợp chuyên môn, trao đổi rõ trách nhiệm và bám sát phạm vi công việc đã thống nhất.',
+        '<p>ABC Lawyer xây dựng cách làm việc theo hướng phối hợp giữa người tiếp nhận, người rà soát hồ sơ và người phụ trách chuyên môn phù hợp với từng nhóm vấn đề.</p><p>Khi website được đưa vào sử dụng thực tế, đơn vị có thể bổ sung từng hồ sơ nhân sự bằng Page con cùng ảnh đại diện; Trang chủ sẽ trình bày các hồ sơ đó theo cùng hệ thống giao diện.</p>'
+    );
+    $blueprint['pages']['process'] = $page(
+        'Quy trình tư vấn',
+        'Bốn bước giúp khách hàng biết trước cách yêu cầu được tiếp nhận, đánh giá, đề xuất phương án và phối hợp thực hiện.',
+        '<ol><li><strong>Tiếp nhận yêu cầu</strong><p>Ghi nhận nhu cầu, mục tiêu và tài liệu ban đầu.</p></li><li><strong>Đánh giá vấn đề</strong><p>Rà soát thông tin để xác định phạm vi cần làm rõ.</p></li><li><strong>Đề xuất phương án</strong><p>Trao đổi hướng xử lý và phạm vi công việc phù hợp.</p></li><li><strong>Đồng hành thực hiện</strong><p>Phối hợp theo phạm vi và cách thức đã được thống nhất.</p></li></ol>'
+    );
+    $blueprint['pages']['contact'] = $page(
+        'Liên hệ',
+        'Gửi yêu cầu tư vấn cùng thông tin khái quát để việc tiếp nhận và chuẩn bị cho buổi trao đổi được rõ ràng hơn.',
+        '<p>Khi gửi yêu cầu tư vấn, bạn nên mô tả ngắn gọn vấn đề, mục tiêu cần hỗ trợ và những tài liệu hiện có.</p><h2>Thông tin nên chuẩn bị</h2><p>Hãy ghi các mốc chính, những bên có liên quan, tài liệu đang nắm giữ và câu hỏi quan trọng nhất bạn muốn làm rõ. Đơn vị vận hành website có thể bổ sung số điện thoại, email, địa chỉ hoặc biểu mẫu liên hệ thực tế sau khi xác nhận thông tin chính thức.</p>'
+    );
 
     return $blueprint;
 }

@@ -7,8 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 const PROVISIONING_META_STARTER_FINGERPRINT = '_aznet_theme_starter_fingerprint';
 
 /** @return array<string,mixed>|null */
-function provisioning_editorial_definition( string $role ): ?array {
-    $blueprint = provisioning_blueprint( 'law01-v1-1' );
+function provisioning_editorial_definition( string $role, string $blueprint_key = 'law01-v1-1' ): ?array {
+    $blueprint = provisioning_blueprint( $blueprint_key );
     if ( ! is_array( $blueprint ) ) { return null; }
     $item = $blueprint['editorial_examples']['items'][ $role ] ?? null;
     return is_array( $item ) ? $item : null;
@@ -25,9 +25,9 @@ function provisioning_category_public_post_count( int $term_id ): int {
 }
 
 /** @return array<string,array<string,mixed>> */
-function provisioning_editorial_coverage_recommendations( array $recommendations, array $discovery ): array {
+function provisioning_editorial_coverage_recommendations( array $recommendations, array $discovery, string $blueprint_key = 'law01-v1-1' ): array {
     unset( $discovery );
-    $blueprint = provisioning_blueprint( 'law01-v1-1' );
+    $blueprint = provisioning_blueprint( $blueprint_key );
     if ( ! is_array( $blueprint ) ) { return []; }
     $category_recommendations = (array) ( $recommendations['categories'] ?? [] );
     $out = [];
@@ -72,18 +72,20 @@ function provisioning_store_starter_fingerprint( int $post_id ): bool {
 /** @return array<int,int> */
 function provisioning_untouched_starter_post_ids(): array {
     if ( ! function_exists( 'get_posts' ) || ! function_exists( 'get_post_meta' ) ) { return []; }
-    $posts = get_posts( [
-        'post_type' => 'post', 'post_status' => 'any', 'posts_per_page' => -1, 'no_found_rows' => true,
-        'suppress_filters' => true,
-        'meta_query' => [ [ 'key' => PROVISIONING_META_BLUEPRINT, 'value' => 'law01-v1-1' ] ],
-    ] );
     $out = [];
-    foreach ( is_array( $posts ) ? $posts : [] as $post ) {
-        if ( ! $post instanceof \WP_Post ) { continue; }
-        $role = (string) get_post_meta( $post->ID, PROVISIONING_META_ROLE, true );
-        if ( ! str_starts_with( $role, 'starter_post:' ) ) { continue; }
-        $stored = (string) get_post_meta( $post->ID, PROVISIONING_META_STARTER_FINGERPRINT, true );
-        if ( '' !== $stored && hash_equals( $stored, provisioning_starter_post_fingerprint( (int) $post->ID ) ) ) { $out[] = (int) $post->ID; }
+    foreach ( [ 'law01-v1-2', 'law01-v1-1' ] as $blueprint_key ) {
+        $posts = get_posts( [
+            'post_type' => 'post', 'post_status' => 'any', 'posts_per_page' => -1, 'no_found_rows' => true,
+            'suppress_filters' => true,
+            'meta_query' => [ [ 'key' => PROVISIONING_META_BLUEPRINT, 'value' => $blueprint_key ] ],
+        ] );
+        foreach ( is_array( $posts ) ? $posts : [] as $post ) {
+            if ( ! $post instanceof \WP_Post ) { continue; }
+            $role = (string) get_post_meta( $post->ID, PROVISIONING_META_ROLE, true );
+            if ( ! str_starts_with( $role, 'starter_post:' ) ) { continue; }
+            $stored = (string) get_post_meta( $post->ID, PROVISIONING_META_STARTER_FINGERPRINT, true );
+            if ( '' !== $stored && hash_equals( $stored, provisioning_starter_post_fingerprint( (int) $post->ID ) ) ) { $out[] = (int) $post->ID; }
+        }
     }
-    return $out;
+    return array_values( array_unique( $out ) );
 }

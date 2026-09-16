@@ -93,11 +93,11 @@ jobs:
         run: |
           npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
           npx playwright install --with-deps chromium
-      - name: Drive v1.1 recommendation wizard and complete Homepage L4
+      - name: Drive v1.2 Complete Starter Site and verify Homepage L4
         env:
           PROVISION_BASE_URL: http://127.0.0.1:8080
           PROVISION_STATE_DIR: /tmp/law-provisioning
-        run: node tests/browser/law-site-provisioning-v1-1-l4.mjs
+        run: node tests/browser/law-site-provisioning-v1-2-l4.mjs
       - name: Check browser runtime log boundary
         run: |
           set -euo pipefail
@@ -108,7 +108,7 @@ jobs:
       - name: Stop browser runtime
         if: always()
         run: kill "$(cat /tmp/law-provisioning/server.pid)" || true
-      - name: Run v1.1 new/active/rerun/rollback/user-edit/index-restore runtime matrix
+      - name: Run retained v1.1 new/active/rerun/rollback/user-edit/index-restore runtime matrix
         run: |
           set -euo pipefail
           for s in new active rerun rollback user-edit restore-index; do

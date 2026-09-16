@@ -45,7 +45,7 @@ function provisioning_published_post_count(): int {
 /** @return array<int,string> */
 function provisioning_discovered_blueprints(): array {
     $found = [];
-    foreach ( [ 'law01-v1', 'law01-v1-1' ] as $blueprint ) {
+    foreach ( [ 'law01-v1-2', 'law01-v1-1', 'law01-v1' ] as $blueprint ) {
         $present = false;
         if ( function_exists( 'get_posts' ) && function_exists( 'get_post_meta' ) ) {
             $ids = get_posts( [

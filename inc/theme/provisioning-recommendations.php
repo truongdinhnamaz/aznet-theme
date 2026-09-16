@@ -14,7 +14,7 @@ const PROVISIONING_MODE_ACTIVE = 'EXISTING_ACTIVE';
  */
 function provisioning_site_mode( array $discovery ): string {
     $prior = array_values( array_intersect(
-        [ 'law01-v1', 'law01-v1-1' ],
+        [ 'law01-v1', 'law01-v1-1', 'law01-v1-2' ],
         array_map( 'strval', (array) ( $discovery['prior_blueprints'] ?? [] ) )
     ) );
     if ( [] !== $prior ) { return PROVISIONING_MODE_PREVIOUS; }
@@ -84,7 +84,7 @@ function provisioning_recommendation_result( string $state, string $action, int 
 
 function provisioning_owned_role_for_recommendation( string $blueprint, string $object_type, string $role ): int {
     if ( ! function_exists( __NAMESPACE__ . '\\provisioning_find_owned_role' ) ) { return 0; }
-    foreach ( array_values( array_unique( [ $blueprint, 'law01-v1-1', 'law01-v1' ] ) ) as $candidate_blueprint ) {
+    foreach ( array_values( array_unique( [ $blueprint, 'law01-v1-2', 'law01-v1-1', 'law01-v1' ] ) ) as $candidate_blueprint ) {
         if ( ! in_array( $candidate_blueprint, provisioning_blueprint_keys(), true ) ) { continue; }
         $id = provisioning_find_owned_role( $candidate_blueprint, $object_type, $role );
         if ( $id > 0 ) { return $id; }
@@ -99,7 +99,6 @@ function provisioning_owned_role_for_recommendation( string $blueprint, string $
  */
 function provisioning_recommendations( string $blueprint_key, array $discovery ): array {
     $blueprint = provisioning_blueprint( $blueprint_key );
-    // During additive v1 -> v1.1 rollout, structural recommendation can safely reuse the v1 structure.
     if ( null === $blueprint && 'law01-v1-1' === $blueprint_key ) { $blueprint = provisioning_blueprint( 'law01-v1' ); }
     if ( null === $blueprint ) { return [ 'mode' => provisioning_site_mode( $discovery ), 'pages' => [], 'categories' => [] ]; }
 
