@@ -32,20 +32,24 @@ async function supportSnapshot(page) {
   return JSON.parse(await box.inputValue());
 }
 
-async function approvedMenuState(page) {
-  await page.goto(`${baseUrl}/wp-admin/nav-menus.php`, { waitUntil: 'domcontentloaded', timeout: 30000 });
-  const options = page.locator('#select-menu-to-edit option');
-  const matches = [];
-  for (let i = 0; i < await options.count(); i += 1) {
-    const option = options.nth(i);
-    const label = (await option.innerText()).trim();
-    if (label === MENU_NAME) matches.push({ value: await option.getAttribute('value'), label });
-  }
-  if (matches.length !== 1) throw new Error(`Expected one approved phone menu, got ${JSON.stringify(matches)}`);
-  const menuId = Number(matches[0].value || 0);
-  if (!Number.isInteger(menuId) || menuId <= 0) throw new Error(`Invalid phone menu id: ${matches[0].value}`);
+async function locationState(page) {
+  await page.goto(`${baseUrl}/wp-admin/nav-menus.php?action=locations`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  const select = page.locator(`select[name="menu-locations[${UTILITY_LOCATION}]"]`);
+  if ((await select.count()) !== 1) return { registered: false, menu_id: null };
+  return { registered: true, menu_id: await select.inputValue() };
+}
+
+async function approvedMenuFromLocation(page, location) {
+  if (!location.registered) throw new Error(`${UTILITY_LOCATION} is not registered`);
+  const menuId = Number(location.menu_id || 0);
+  if (!Number.isInteger(menuId) || menuId <= 0) throw new Error(`Invalid ${UTILITY_LOCATION} menu id: ${location.menu_id}`);
 
   await page.goto(`${baseUrl}/wp-admin/nav-menus.php?action=edit&menu=${menuId}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  const menuNameField = page.locator('#menu-name');
+  if ((await menuNameField.count()) !== 1) throw new Error(`Menu ${menuId} edit surface unavailable`);
+  const menu_name = await page.locator('#menu-name').inputValue();
+  if (menu_name !== MENU_NAME) throw new Error(`Approved phone menu name drift: ${menu_name}`);
+
   const rows = page.locator('#menu-to-edit .menu-item');
   const items = [];
   for (let index = 0; index < await rows.count(); index += 1) {
@@ -59,14 +63,7 @@ async function approvedMenuState(page) {
   }
   const exact = items.length === 1 && items[0]?.title === PHONE_DISPLAY && items[0]?.href === PHONE_HREF;
   if (!exact) throw new Error(`Approved phone menu drift: ${JSON.stringify(items)}`);
-  return { menu_id: menuId, item_count: items.length, items };
-}
-
-async function locationState(page) {
-  await page.goto(`${baseUrl}/wp-admin/nav-menus.php?action=locations`, { waitUntil: 'domcontentloaded', timeout: 30000 });
-  const select = page.locator(`select[name="menu-locations[${UTILITY_LOCATION}]"]`);
-  if ((await select.count()) !== 1) return { registered: false, menu_id: null };
-  return { registered: true, menu_id: await select.inputValue() };
+  return { menu_id: menuId, menu_name, item_count: items.length, items };
 }
 
 async function publicCase(browser, viewport) {
@@ -110,8 +107,8 @@ try {
   const adminPage = await adminContext.newPage();
   await login(adminPage);
   const support = await supportSnapshot(adminPage);
-  const menu = await approvedMenuState(adminPage);
   const location = await locationState(adminPage);
+  const menu = await approvedMenuFromLocation(adminPage, location);
   await adminContext.close();
 
   const version = support?.report?.theme?.version || null;
