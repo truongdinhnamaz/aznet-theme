@@ -67,11 +67,15 @@ assert(str_contains($assets, 'homepage-law-01-variants.css'), 'Variant asset mus
 
 $setupSource = file_get_contents($root . '/inc/theme/setup.php');
 $headerTemplate = file_get_contents($root . '/template-parts/header/site-header.php');
-$headerCss = file_get_contents($root . '/assets/css/components/site-header.css');
+$utilityCssPath = $root . '/assets/css/components/header-utility.css';
 assert(str_contains($setupSource, "'header-utility'"), 'WordPress must own hotline/contact links through a native menu location.');
 assert(str_contains($headerTemplate, "header/utility-navigation"), 'Header must render the optional utility menu without storing contact truth in Theme settings.');
-assert(str_contains($headerCss, '.aznet-theme-site-header__utility-menu'), 'Header utility links need generic presentation on every surface, not only Law 01.');
-assert(str_contains($headerCss, '.aznet-theme-site-header__utility-nav'), 'Header utility navigation layout must belong to the global Header surface.');
+assert(is_file($utilityCssPath), 'Header utility presentation must have its own surface-aware asset.');
+$utilityCss = file_get_contents($utilityCssPath);
+assert(str_contains($utilityCss, '.aznet-theme-site-header__utility-menu'), 'Header utility links need presentation on every surface where the menu is present.');
+assert(str_contains($utilityCss, '.aznet-theme-site-header__utility-nav'), 'Header utility navigation layout must be isolated in its component asset.');
+assert(str_contains($assets, 'enqueue_header_utility_asset'), 'Header utility asset must use capability-driven loading.');
+assert(str_contains($assets, "has_nav_menu( 'header-utility' )"), 'Header utility CSS must not load when its WordPress menu is absent.');
 
 $heroSource = file_get_contents($root . '/template-parts/homepage/law-01/hero.php');
 $servicesSource = file_get_contents($root . '/template-parts/homepage/law-01/services.php');
