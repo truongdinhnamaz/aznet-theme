@@ -154,7 +154,10 @@ async function verifyFrontend(page, viewportName, outputDir) {
     await assertNoForbiddenDependencyCopy(page, label);
 
     if (pageErrors.length) fail(`${label}: uncaught browser errors ${pageErrors.join(' | ')}`);
-    if (consoleErrors.length) fail(`${label}: browser console errors ${consoleErrors.join(' | ')}`);
+    const unexpectedConsoleErrors = routeName === 'notFound'
+      ? consoleErrors.filter((text) => !/Failed to load resource: the server responded with a status of 404 \(Not Found\)/.test(text))
+      : consoleErrors;
+    if (unexpectedConsoleErrors.length) fail(`${label}: browser console errors ${unexpectedConsoleErrors.join(' | ')}`);
 
     if (routeName === 'home') {
       if (!(await page.locator('.aznet-theme-homepage--law-01').count())) fail(`${label}: Law01 Homepage Composer surface missing`);
