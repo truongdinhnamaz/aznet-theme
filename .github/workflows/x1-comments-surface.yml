@@ -53,7 +53,7 @@ jobs:
       - name: Record exact identity
         run: |
           set -euo pipefail
-          mkdir -p /tmp/x1-comments
+          mkdir -p /tmp/x1-comments /tmp/x1-comments-l4
           git rev-parse HEAD | tee /tmp/x1-comments/head-sha.txt
 
       - name: Set up PHP 8.1
@@ -133,6 +133,24 @@ jobs:
           fi
           echo 'PASS: X1 WordPress comments HTML and scoped assets'
 
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Run X1 comments browser matrix
+        run: |
+          set -euo pipefail
+          X1_COMMENTS_URL="$(cat /tmp/x1-comments/url.txt)" \
+          X1_COMMENTS_STATE_DIR="/tmp/x1-comments-l4" \
+          node tests/browser/x1-comments-surface-l4.mjs
+
       - name: Verify runtime boundary
         run: |
           set -euo pipefail
@@ -143,16 +161,19 @@ jobs:
           fi
           unexpected="$(grep 'PHP Warning:' /tmp/x1-comments/server.log | grep -v 'Undefined array key 0 in /tmp/wp-site/wp-includes/class-wp-query.php on line 3872' || true)"
           test -z "$unexpected"
-          echo 'PASS: X1 runtime boundary'
+          test -f /tmp/x1-comments-l4/summary.json
+          echo 'PASS: X1 runtime/browser boundary'
 
       - name: Stop WordPress runtime
         if: always()
         run: test ! -f /tmp/x1-comments/server.pid || kill "$(cat /tmp/x1-comments/server.pid)" || true
 
-      - name: Upload X1 runtime evidence
+      - name: Upload X1 evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: x1-comments-runtime
-          path: /tmp/x1-comments
+          name: x1-comments-evidence
+          path: |
+            /tmp/x1-comments
+            /tmp/x1-comments-l4
           if-no-files-found: warn
