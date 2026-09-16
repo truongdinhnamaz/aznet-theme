@@ -28,6 +28,7 @@ function settings_defaults(): array {
         'woo_product_card_density'      => 'balanced',
         'woo_product_preset'            => 'classic',
         'homepage_preset'               => 'off',
+        'homepage_law01_variant'        => 'navy-gold',
         'homepage_services_page'        => 0,
         'homepage_about_page'           => 0,
         'homepage_team_page'            => 0,
@@ -74,6 +75,10 @@ function normalize_settings( array $raw ): array {
     $homepage_preset = isset( $raw['homepage_preset'] ) && in_array( $raw['homepage_preset'], [ 'off', 'law-01' ], true )
         ? (string) $raw['homepage_preset']
         : 'off';
+
+    $homepage_law01_variant = isset( $raw['homepage_law01_variant'] ) && in_array( $raw['homepage_law01_variant'], [ 'navy-gold', 'burgundy-gold' ], true )
+        ? (string) $raw['homepage_law01_variant']
+        : 'navy-gold';
 
     $normalize_boolean = static function ( string $key, bool $default ) use ( $raw ): bool {
         if ( ! array_key_exists( $key, $raw ) ) {
@@ -125,6 +130,7 @@ function normalize_settings( array $raw ): array {
         'woo_product_card_density'      => $woo_product_card_density,
         'woo_product_preset'            => $woo_product_preset,
         'homepage_preset'               => $homepage_preset,
+        'homepage_law01_variant'        => $homepage_law01_variant,
         'homepage_services_page'        => $normalize_id( $raw['homepage_services_page'] ?? 0 ),
         'homepage_about_page'           => $normalize_id( $raw['homepage_about_page'] ?? 0 ),
         'homepage_team_page'            => $normalize_id( $raw['homepage_team_page'] ?? 0 ),
