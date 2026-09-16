@@ -70,6 +70,9 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/editorial-single-po
 printf '%s\n' '==> P3 Editorial Listing/Search contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/editorial-listing-search-contract.php
 
+printf '%s\n' '==> X1 Comments Surface contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/x1-comments-surface-contract.php
+
 printf '%s\n' '==> X2 Search / 404 / Empty States contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x2-search-404-empty-contract.php
 
@@ -84,6 +87,9 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/x4-retained-workflo
 
 printf '%s\n' '==> X5 Native Form Controls contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x5-native-form-controls-contract.php
+
+printf '%s\n' '==> X6 Cross-surface QA & Release Closure contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-release-closure-contract.php
 
 printf '%s\n' '==> P4 Native Editable Homepage blueprint contracts'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-contract.php
