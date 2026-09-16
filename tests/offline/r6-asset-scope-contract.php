@@ -167,12 +167,12 @@ namespace {
     $cases = [
         'clean-page-default' => [
             ['generic' => true, 'is_page' => true],
-            [...$coreStyles, 'aznet-theme-generic-content', 'aznet-theme-media'],
+            [...$coreStyles, 'aznet-theme-generic-content', 'aznet-theme-forms', 'aznet-theme-media'],
             [],
         ],
         'clean-post-editorial' => [
             ['generic' => true, 'preset' => 'editorial', 'is_post' => true],
-            [...$coreStyles, 'aznet-theme-generic-content', 'aznet-theme-preset-editorial', 'aznet-theme-navigation', 'aznet-theme-media', 'aznet-theme-article'],
+            [...$coreStyles, 'aznet-theme-generic-content', 'aznet-theme-preset-editorial', 'aznet-theme-forms', 'aznet-theme-navigation', 'aznet-theme-media', 'aznet-theme-article'],
             [],
         ],
         'woo-product' => [
@@ -250,6 +250,9 @@ namespace {
         \AZnet\Theme\enqueue_assets();
         if (isset($GLOBALS['r6_styles']['aznet-theme-media'])) {
             fail_r6_asset_scope("{$label}: X3 media asset leaked onto Woo route");
+        }
+        if (isset($GLOBALS['r6_styles']['aznet-theme-forms'])) {
+            fail_r6_asset_scope("{$label}: X5 form asset leaked onto Woo route");
         }
     }
 
