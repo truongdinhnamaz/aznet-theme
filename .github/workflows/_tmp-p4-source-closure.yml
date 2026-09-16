@@ -1,0 +1,118 @@
+name: Temporary P4 Source Closure
+
+on:
+  push:
+    branches: [docs/p4-authenticated-closure]
+    paths:
+      - '.github/workflows/_tmp-p4-source-closure.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile-source:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: docs/p4-authenticated-closure
+          fetch-depth: 0
+
+      - name: Reconcile authoritative source state
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          def patch(path, replacements):
+              p = Path(path)
+              text = p.read_text()
+              for old, new in replacements:
+                  if old not in text:
+                      raise SystemExit(f'missing expected source text in {path}: {old[:120]!r}')
+                  text = text.replace(old, new, 1)
+              p.write_text(text)
+
+          main_sha = 'bf45a315e93fa22c441c81377f98ff34901d7ca5'
+          main_tree = 'c7db15f585e181de3eb58f96ca388878964fe64a'
+
+          patch('docs/source/AZT-03-baseline-provenance.md', [
+              ('**Version:** v0.32', '**Version:** v0.33'),
+              ('- Current canonical implementation head after owner-approved D-027 PR #64 merge: `main@16563bdc88f172a1d7737b92293c7958670aac96`.\n- Current canonical implementation tree: `d2c4128f2b860bfd59c5efa11565dba38a34458e`.',
+               f'- Current canonical implementation head after owner-approved P4 authenticated QA PR #67 merge: `main@{main_sha}`.\n- Current canonical implementation tree: `{main_tree}`.'),
+              ('- P4 public-pilot QA with GitHub-hosted Chromium against the real unauthenticated pilot route matrix; authenticated/admin verification remains separately blocked.',
+               '- P4 real-pilot QA with fresh public route/viewport verification plus authenticated, read-only WordPress Admin/System Health verification on the canonical D-027-capable Theme; P1 destructive duplicate-theme cleanup remains separate.'),
+              ('D-027 does not authorize a Git tag, GitHub Release, final production deployment, destructive pilot cleanup or optional-provider L5 certification. P4 public-pilot QA subsequently completed on GitHub Actions at functional head `758392b03227eb446627cc4669b0b0ddf56ed71e`: run `35045540722` passed 28 public route/viewport checks with no Theme-owned blocking failure; artifact `10427345921`, digest `sha256:cf84a35e722f4b5b8c944c42dee3f1bdb344f191e07529b002636afb42420b78`. This changes the prior access statement only for unauthenticated public routes. Authenticated WordPress Admin/System Health re-verification remains BLOCKED, RootProfile current public-surface/L5 certification is not inferred, and full P4 is not claimed PASS. Detailed evidence is `docs/evidence/P4_PUBLIC_PILOT_QA_20260916.md`.',
+               'D-027 does not authorize a Git tag, GitHub Release, final production deployment, destructive pilot cleanup or optional-provider L5 certification. P4 public-pilot QA first completed on GitHub Actions at functional head `758392b03227eb446627cc4669b0b0ddf56ed71e`. After the owner replaced historical pilot Theme `1.1.1` bits with the exact verified D-027 `1.1.0` package, authenticated read-only run `35047440842` completed SUCCESS on the real pilot and reported WordPress `7.1`, PHP `8.4.25`, current D-027 System Health shape and Standalone Core `ready`; artifact `10427876863`, digest `sha256:96d2943661e27ef05ce5b16940a792fbd4727d635849a8f5e9e8589b03d2abe9`. The public matrix was then rerun after replacement and again passed 28/28 route/viewport checks with zero Theme-owned blocker; fresh artifact `10427713118`, digest `sha256:c58d0efebe9fdeea14c2d9d1ba3fa8a4439f2bafffc1dc180cf3b1d1554cbadb`. Authenticated QA harness/evidence merged through owner-approved PR #67 to canonical `main@bf45a315e93fa22c441c81377f98ff34901d7ca5`, tree `c7db15f585e181de3eb58f96ca388878964fe64a`. Fresh exact-main run `35048609753` then completed SUCCESS; artifacts: static `10427853326`, clean runtime/browser `10427687863`. P4 public + authenticated QA is therefore PASS at the tested Theme-owned scope. P1 duplicate-theme cleanup remains a separate destructive site-operations gate before final pilot sign-off, and RootProfile/ConvertFlow optional-provider L5 certification is not inferred. Detailed evidence is `docs/evidence/P4_PUBLIC_PILOT_QA_20260916.md` plus `docs/evidence/P4_AUTHENTICATED_PILOT_QA_20260916.md`.')
+          ])
+
+          patch('docs/source/AZT-04-roadmap-qa-decisions.md', [
+              ('**Version:** v0.37', '**Version:** v0.38'),
+              ('| P4 | Real law-site pilot QA | PUBLIC QA PASS / AUTHENTICATED QA BLOCKED | GitHub Actions reached the real pilot and passed the unauthenticated 28-check route/viewport matrix; authenticated Admin/System Health and unobserved provider surfaces remain unproven |',
+               '| P4 | Real law-site pilot QA | PUBLIC + AUTHENTICATED QA PASS / P1 CLEANUP PENDING | Fresh public 28-check matrix and authenticated read-only Admin/System Health matrix PASS on canonical D-027-capable Theme bytes; destructive duplicate-theme cleanup remains a separate P1 gate before final pilot sign-off |'),
+              ('Current canonical implementation is `main@16563bdc88f172a1d7737b92293c7958670aac96`, tree `d2c4128f2b860bfd59c5efa11565dba38a34458e`, Theme metadata `1.1.0`. D-027 source PR #63 and owner-approved implementation PR #64 are merged. Fresh `V1 Exact Main Verification` run `35042767873` succeeded on that exact merge SHA; pre-merge branch/package evidence is retained separately and is not substituted for exact-main evidence.',
+               f'Current canonical implementation is `main@{main_sha}`, tree `{main_tree}`, Theme metadata `1.1.0`. D-027 source/implementation closure remains retained through PR #63/#64; P4 public QA merged through PR #66 and authenticated read-only QA merged through owner-approved PR #67. Fresh `V1 Exact Main Verification` run `35048609753` succeeded on exact `main@{main_sha}`; artifacts: static `10427853326`, clean runtime/browser `10427687863`.'),
+              ('**State:** **PUBLIC QA PASS / AUTHENTICATED QA BLOCKED.** Pilot QA execution remains owner-approved; the unauthenticated public matrix is now complete, while the authenticated/admin portion still requires a secure access path.',
+               '**State:** **PUBLIC + AUTHENTICATED QA PASS / P1 CLEANUP PENDING.** The real pilot public matrix and authenticated read-only Admin/System Health matrix are complete on canonical D-027-capable Theme bytes. Final pilot sign-off still depends on the separate P1 duplicate-theme cleanup gate.'),
+              ('Fresh GitHub-only public-pilot run `35045540722` succeeded at functional head `758392b03227eb446627cc4669b0b0ddf56ed71e`: Homepage, representative Post, representative Page, Category, search results, search no-results and 404 were tested at 1440/1024/390/320. Theme-owned blocking failures were zero, horizontal overflow was zero, each route retained one `<main>` and at least one H1, and no Theme-owned console/page/request error was recorded. The representative Post contains ten unlabeled task-list checkboxes inside WordPress-owned `the_content()`; those are retained as `CONTENT_AUTHORED_SEMANTICS`, not silently reassigned to the Theme. RootProfile public profile surface was not observed in the tested route set, so no provider L5 claim is made. Evidence: `docs/evidence/P4_PUBLIC_PILOT_QA_20260916.md`.',
+               'Fresh GitHub-only public-pilot run `35045540722` succeeded at functional head `758392b03227eb446627cc4669b0b0ddf56ed71e`; after the owner replaced historical pilot Theme `1.1.1` bits with the exact verified D-027 `1.1.0` package, the same public workflow was rerun and again passed 28/28 route/viewport checks. Fresh post-replacement public artifact: `10427713118`, digest `sha256:c58d0efebe9fdeea14c2d9d1ba3fa8a4439f2bafffc1dc180cf3b1d1554cbadb`. Authenticated read-only run `35047440842` also completed SUCCESS: WordPress `7.1`, PHP `8.4.25`, Theme `1.1.0`, current D-027 report shape, Standalone Core `ready`, 1440x1000 + 390x844 overflow `0`, visible focus retained and axe critical/serious findings `0`; artifact `10427876863`, digest `sha256:96d2943661e27ef05ce5b16940a792fbd4727d635849a8f5e9e8589b03d2abe9`. The representative Post still contains ten unlabeled task-list checkboxes inside WordPress-owned `the_content()`; those remain `CONTENT_AUTHORED_SEMANTICS`. RootProfile public profile surface was not observed, so no provider L5 claim is made. Evidence: `docs/evidence/P4_PUBLIC_PILOT_QA_20260916.md` and `docs/evidence/P4_AUTHENTICATED_PILOT_QA_20260916.md`.'),
+              ('D-027 source PR #63 and owner-approved implementation PR #64 are merged to canonical `main@16563bdc88f172a1d7737b92293c7958670aac96`; exact-main run `35042767873` is PASS. P4 public pilot execution is now PASS at unauthenticated L4 scope through run `35045540722`; authenticated Admin/System Health re-verification remains access-blocked. None of these approvals include Git tag/GitHub Release, destructive duplicate-theme cleanup, L5 provider certification or final production deployment.',
+               f'D-027 source PR #63 and owner-approved implementation PR #64 remain canonical history. P4 public QA PR #66 and owner-approved authenticated QA PR #67 are merged; canonical `main@{main_sha}` passed exact-main run `35048609753`. P4 public + authenticated QA is PASS at the tested Theme-owned scope, while P1 destructive duplicate-theme cleanup remains pending before final pilot sign-off. None of these approvals include Git tag/GitHub Release, destructive duplicate-theme cleanup, L5 provider certification or final production deployment.'),
+              ('**P4 authenticated pilot QA — obtain a secure authenticated WordPress Admin path and re-verify System Health/current Theme configuration plus any admin-only continuity checks still required. The public 28-check pilot matrix is PASS and must not be rerun without invalidation; P4-C remains PASS / MERGED. Until authenticated access exists, record `P4 PUBLIC QA PASS / AUTHENTICATED QA BLOCKED`. P5 remains gated; stop before tag/GitHub Release or final production deployment unless separately approved.**',
+               '**P1 pilot identity cleanup — inspect the remaining installed Theme identities through WordPress core lifecycle tooling and prove which duplicates are inactive. Read-only inspection is the safe next action. Any deletion is destructive and requires separate explicit owner approval plus rollback confidence. After P1 cleanup closes, record final P4 pilot sign-off; P5 remains gated and no tag/GitHub Release/final production deployment is authorized without separate approval.**')
+          ])
+
+          patch('docs/source/AZT-EXEC-MAP.md', [
+              ('**Version:** v0.29', '**Version:** v0.30'),
+              ('> **Canonical-main checkpoint:** D-027 source + Standalone Core implementation merged through PR #63/#64 to `main@16563bdc88f172a1d7737b92293c7958670aac96`, tree `d2c4128f2b860bfd59c5efa11565dba38a34458e`. Theme metadata remains source-approved `1.1.0`; optional integrations remain additive and ownership boundaries are unchanged.',
+               f'> **Canonical-main checkpoint:** D-027 remains canonical through PR #63/#64; P4 public QA merged through PR #66 and authenticated read-only QA merged through owner-approved PR #67 to `main@{main_sha}`, tree `{main_tree}`. Theme metadata remains source-approved `1.1.0`; optional integrations remain additive and ownership boundaries are unchanged.'),
+              ('**Completed execution:** `PR #58 canonical integration -> D-022 exact-main PASS -> D-027 focused RED -> minimal GREEN -> zero-plugin L1-L4 + retained regression -> exact-package PASS -> PR #63 source merge -> owner-approved PR #64 implementation merge -> exact-main PASS run 35042767873`.',
+               '**Completed execution:** `PR #58 canonical integration -> D-027 source/implementation closure -> P4 public 28-check PASS -> authenticated RED/diagnostic -> PILOT_THEME_BITS_DRIFT isolated -> owner replaced historical 1.1.1 pilot bits with exact D-027 1.1.0 package -> authenticated PASS -> owner-approved PR #67 merge -> exact-main PASS run 35048609753`.'),
+              ('| P4 Real Pilot QA | PUBLIC QA PASS / AUTHENTICATED QA BLOCKED | GitHub Actions public matrix PASS at 7 routes x 4 viewports; authenticated Admin/System Health remains access-blocked; no product dependency is inferred |',
+               '| P4 Real Pilot QA | PUBLIC + AUTHENTICATED QA PASS / P1 CLEANUP PENDING | 28-check public matrix and authenticated read-only Admin/System Health matrix PASS on canonical D-027-capable Theme; destructive duplicate-theme cleanup remains separate P1 gate |'),
+              ('Current canonical implementation baseline is `main@16563bdc88f172a1d7737b92293c7958670aac96`, Theme `1.1.0`, tree `d2c4128f2b860bfd59c5efa11565dba38a34458e`. D-027 source PR #63 and implementation PR #64 are merged; exact-main verification run `35042767873` succeeded on that exact SHA.',
+               f'Current canonical implementation baseline is `main@{main_sha}`, Theme `1.1.0`, tree `{main_tree}`. D-027 PR #63/#64 remain retained; P4 public QA PR #66 and authenticated QA PR #67 are merged. Exact-main verification run `35048609753` succeeded on that exact SHA.'),
+              ('The pilot System Health evidence proves active AZnet Theme `1.1.0` on WordPress `7.1` / PHP `8.4.24`, `primary_menu=yes`, RootProfile v1/v2 present, current-surface absent, Woo absent and ConvertFlow intentionally `unknown`.',
+               'Fresh authenticated pilot evidence proves active AZnet Theme `1.1.0` on WordPress `7.1` / PHP `8.4.25`, D-027 current System Health shape, Standalone Core `ready`, `primary_menu=yes`, RootProfile v1/v2 available, current-surface absent, Woo absent and ConvertFlow intentionally `unknown`.'),
+              ('Fresh P4 GitHub-only public evidence adds run `35045540722` at functional head `758392b03227eb446627cc4669b0b0ddf56ed71e`: 28/28 public route/viewport checks passed with no Theme-owned blocking failure. This does not refresh the historical authenticated System Health snapshot; authenticated/admin QA remains BLOCKED. RootProfile public profile surface was not observed in the tested public matrix, so L5 is not inferred.',
+               'Fresh P4 public evidence after Theme replacement retains run `35045540722` with 28/28 route/viewport checks PASS and fresh artifact `10427713118`. Authenticated read-only run `35047440842` PASS adds current Admin/System Health evidence with artifact `10427876863`; PR #67 merged the harness/evidence and exact-main run `35048609753` then PASSed on canonical main. RootProfile public profile surface was not observed in the tested public matrix, so L5 is not inferred.'),
+              ('**State:** READY / EXACT NEXT. Owner approved P4 pilot QA execution on 08/09/2026.',
+               '**State:** PUBLIC + AUTHENTICATED QA PASS / P1 CLEANUP PENDING.'),
+              ('**Pilot environment:** WordPress `7.1` / PHP `8.4.24` is current-stack evidence only; it does not replace `6.9+` / `8.1+` support-floor evidence.',
+               '**Pilot environment:** WordPress `7.1` / PHP `8.4.25` is current-stack evidence only; it does not replace `6.9+` / `8.1+` support-floor evidence.'),
+              ('**Exit:** current-stack pilot evidence complete with any defects reduced to the shallowest reproducible layer; P1 duplicate cleanup closed before final pilot production sign-off.\n\n**Next:** P5 only after P4 PASS.',
+               '**Exit:** public + authenticated current-stack pilot evidence is complete at the tested Theme-owned scope; final pilot production sign-off still requires P1 duplicate cleanup closure.\n\n**Next:** P1 read-only duplicate-theme identity inspection. Any deletion requires separate explicit owner approval and rollback confidence. P5 remains gated until final P4 sign-off.')
+          ])
+
+          patch('docs/source/SOURCE_MANIFEST.md', [
+              ('Canonical source is reconciled through the completed v1.1 R6 technical candidate, merged P2/P3 editorial hardening, PR #58 Homepage/Law01/Provisioning integration, and D-027 Standalone Core closure through source PR #63 + owner-approved implementation PR #64 with fresh exact-main verification.',
+               'Canonical source is reconciled through the completed v1.1 R6 technical candidate, merged P2/P3 editorial hardening, PR #58 Homepage/Law01/Provisioning integration, D-027 Standalone Core closure, P4 public QA PR #66 and owner-approved authenticated QA PR #67 with fresh exact-main verification.'),
+              ('| `AZT-03-baseline-provenance.md` | v0.32 | Canonical implementation/provenance through D-027 closure plus P4 public-pilot evidence |',
+               '| `AZT-03-baseline-provenance.md` | v0.33 | Canonical implementation/provenance through D-027 plus P4 public + authenticated pilot evidence |'),
+              ('| `AZT-04-roadmap-qa-decisions.md` | v0.37 | R0-R6/P2-P3/P4-A/P4-B/P4-C PASS; P4 public QA PASS/authenticated QA BLOCKED; P5 gates and D-001..D-027 |',
+               '| `AZT-04-roadmap-qa-decisions.md` | v0.38 | R0-R6/P2-P3/P4-A/P4-B/P4-C PASS; P4 public + authenticated QA PASS with P1 cleanup pending; P5 gates and D-001..D-027 |'),
+              ('| `AZT-EXEC-MAP.md` | v0.29 | Derived execution map with P4 public matrix PASS and authenticated pilot QA as exact next |',
+               '| `AZT-EXEC-MAP.md` | v0.30 | Derived execution map with P4 public + authenticated QA PASS and P1 duplicate cleanup as exact next |'),
+              ('Current canonical implementation baseline: `main@16563bdc88f172a1d7737b92293c7958670aac96`, tree `d2c4128f2b860bfd59c5efa11565dba38a34458e`, Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.',
+               f'Current canonical implementation baseline: `main@{main_sha}`, tree `{main_tree}`, Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.'),
+              ('P4 public-pilot QA then completed through GitHub Actions on functional head `758392b03227eb446627cc4669b0b0ddf56ed71e`. Run `35045540722` passed 28 public route/viewport checks; artifact `10427345921`, digest `sha256:cf84a35e722f4b5b8c944c42dee3f1bdb344f191e07529b002636afb42420b78`. Authenticated Admin/System Health remains BLOCKED and full P4 PASS is not inferred. Evidence: `docs/evidence/P4_PUBLIC_PILOT_QA_20260916.md`.',
+               'P4 public-pilot QA completed through GitHub Actions on functional head `758392b03227eb446627cc4669b0b0ddf56ed71e`. After the owner replaced historical pilot Theme `1.1.1` bits with the exact D-027 `1.1.0` package, authenticated read-only run `35047440842` completed SUCCESS with artifact `10427876863`, digest `sha256:96d2943661e27ef05ce5b16940a792fbd4727d635849a8f5e9e8589b03d2abe9`; the public workflow was rerun after replacement and again passed 28/28 checks with artifact `10427713118`, digest `sha256:c58d0efebe9fdeea14c2d9d1ba3fa8a4439f2bafffc1dc180cf3b1d1554cbadb`. Owner-approved PR #67 merged authenticated QA to canonical main, and exact-main run `35048609753` succeeded with artifacts `10427853326` (static) and `10427687863` (clean runtime/browser). P4 public + authenticated QA is PASS at tested Theme-owned scope; P1 duplicate-theme cleanup remains pending before final pilot sign-off. Evidence: `docs/evidence/P4_PUBLIC_PILOT_QA_20260916.md` and `docs/evidence/P4_AUTHENTICATED_PILOT_QA_20260916.md`.'),
+              ('**Exact next:** P4 public pilot QA is PASS at unauthenticated scope. Obtain a secure authenticated WordPress Admin path and complete the remaining System Health/admin-only verification; until then record `P4 PUBLIC QA PASS / AUTHENTICATED QA BLOCKED`. P1 duplicate-theme cleanup remains a parallel destructive site-operations gate. Git tag/GitHub Release and final production deployment remain separate P5 owner gates.',
+               '**Exact next:** P1 pilot identity cleanup. First inspect installed Theme identities read-only and prove which duplicate AZnet Theme installs are inactive. Any deletion is destructive and requires separate explicit owner approval plus rollback confidence. After P1 closure, record final P4 pilot sign-off. Git tag/GitHub Release and final production deployment remain separate P5 owner gates.')
+          ])
+          PY
+
+          git diff --check
+          git status --short
+
+      - name: Commit source closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'truongdinhnamaz'
+          git config user.email 'truongnam151@gmail.com'
+          git add docs/source/AZT-03-baseline-provenance.md docs/source/AZT-04-roadmap-qa-decisions.md docs/source/AZT-EXEC-MAP.md docs/source/SOURCE_MANIFEST.md
+          git diff --cached --check
+          git commit -m 'docs: close authenticated P4 pilot state'
+          git push origin HEAD:docs/p4-authenticated-closure
