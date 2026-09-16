@@ -107,7 +107,7 @@ Publication/tag is not inferred from technical PASS and remains a separate owner
 
 **Goal:** close v1.1 with measured asset/runtime behavior, reusable PR/exact-main CI, deterministic v1.x packaging and atomic metadata promotion.
 
-**Exit:** PASS — measured clean/Woo route/asset baseline established; Theme-owned surface-aware loading guarded; ConvertFlow projection optimization correctly recorded `BLOCKED_EXTERNAL_CONTRACT`; reusable PR/exact-main verification merged; deterministic main-only candidate builder merged; covered G workflows retired; final exact-main R1-R6 verification passed before metadata promotion; owner-approved metadata promotion moved both `style.css` and `AZNET_THEME_VERSION` atomically to `1.1.0`; post-promotion exact-main/package verification passed.
+**Exit:** PASS — measured clean/Woo route/asset baseline established; Theme-owned surface-aware loading guarded; ConvertFlow projection optimization correctly recorded `BLOCKED_EXTERNAL_CONTRACT`; reusable PR/exact-main verification merged; deterministic main-only candidate builder merged; covered G workflows retired; final exact-main R1-R6 verification passed; owner-approved metadata promotion moved both `style.css` and `AZNET_THEME_VERSION` atomically to `1.1.0`; post-promotion exact-main/package verification passed.
 
 **Historical candidate:** `aznet-theme-1.1.0.zip`, one canonical top-level `aznet-theme/` directory, SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b`.
 
