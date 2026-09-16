@@ -61,6 +61,18 @@ foreach ([
     assert(str_contains($browserText, $needle), "Harness missing nonzero-menu regression marker: {$needle}");
 }
 
+// A failed prior run may have created the bounded menu before rollback could learn its
+// nonzero id. Recovery must inspect and reuse only an empty/exact menu; unexpected
+// menu contents must stop before any new logo/media mutation.
+foreach ([
+    'resolveExistingPhoneMenu',
+    'adopted_existing_menu',
+    'unexpected existing menu contents',
+    'existing_menu_state',
+] as $needle) {
+    assert(str_contains($browserText, $needle), "Harness missing partial-menu recovery marker: {$needle}");
+}
+
 foreach ([
     'get_option(',
     'get_post_meta(',
