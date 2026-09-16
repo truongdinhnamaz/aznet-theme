@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.28
+**Version:** v0.29
 **Status:** Working Execution Map / derived  
 **Date:** 16/09/2026
 
@@ -34,7 +34,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | P1 Pilot identity cleanup | SITE-OPS READY | Active `1.1.0` proven; delete only inactive legacy theme identities through WordPress core UI after smoke |
 | P2 Editorial Single-Post | PASS | PR #51 merged; native WordPress editorial presentation only; no SEO/domain/query takeover |
 | P3 Editorial Listing/Search | PASS | PR #52 merged; native thumbnail/date scan presentation + resilient long titles/excerpts; main query retained |
-| P4 Real Pilot QA | PILOT ACCESS BLOCKED / APPROVED | Pilot QA remains approved; current QA environment cannot reach the pilot; no product dependency is inferred |
+| P4 Real Pilot QA | PUBLIC QA PASS / AUTHENTICATED QA BLOCKED | GitHub Actions public matrix PASS at 7 routes x 4 viewports; authenticated Admin/System Health remains access-blocked; no product dependency is inferred |
 | P4-A Homepage Composer + Law 01 | PASS / MERGED | PR #58 merged; exact-main static/runtime/browser core verification PASS |
 | P4-B Law Site Provisioning | PASS / MERGED | D-026 merged; Theme `1.1.0`; deterministic package/browser evidence retained; activation mutation-free and active-site overwrite/noindex takeover forbidden |
 | P4-C Standalone Core independence | PASS / MERGED | PR #63/#64 merged; zero-plugin L1-L4, exact-package and exact-main PASS; optional integrations remain additive |
@@ -46,6 +46,8 @@ Current canonical implementation baseline is `main@16563bdc88f172a1d7737b92293c7
 The previous R6 package SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b` is retained as historical R6 candidate evidence only; P2/P3 changed production bytes, so P5 requires a new deterministic package/SHA.
 
 The pilot System Health evidence proves active AZnet Theme `1.1.0` on WordPress `7.1` / PHP `8.4.24`, `primary_menu=yes`, RootProfile v1/v2 present, current-surface absent, Woo absent and ConvertFlow intentionally `unknown`.
+
+Fresh P4 GitHub-only public evidence adds run `35045540722` at functional head `758392b03227eb446627cc4669b0b0ddf56ed71e`: 28/28 public route/viewport checks passed with no Theme-owned blocking failure. This does not refresh the historical authenticated System Health snapshot; authenticated/admin QA remains BLOCKED. RootProfile public profile surface was not observed in the tested public matrix, so L5 is not inferred.
 
 P2 final verified head `dec498b997aec6bc8b08cf91f3e09c42611bbd66` merged through PR #51 to `main@a863da861b6a299920568b2b0c9ca57924727431` after Theme-owned author-fallback and CPT/Woo scope regressions were fixed.
 
@@ -295,4 +297,4 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 15. Exact next
 
-**P4 Real Pilot QA — obtain/restore pilot access and run the approved current-stack matrix against canonical `main@16563bdc88f172a1d7737b92293c7958670aac96`. Keep P4-C D-027 PASS unless invalidated. While access is unavailable, remain `PILOT ACCESS BLOCKED / APPROVED`; do not advance to P5 publication/deployment without P4 PASS and separate owner approval.**
+**P4 authenticated pilot QA — obtain a secure authenticated WordPress Admin path and complete the remaining System Health/admin-only verification. Preserve the fresh public-matrix PASS (`35045540722`) and P4-C D-027 PASS unless invalidated. While authenticated access is unavailable, remain `PUBLIC QA PASS / AUTHENTICATED QA BLOCKED`; do not advance to P5 publication/deployment without full P4 PASS and separate owner approval.**

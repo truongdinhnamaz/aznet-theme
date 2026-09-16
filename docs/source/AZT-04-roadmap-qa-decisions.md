@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.36
+**Version:** v0.37
 **Status:** Working Source  
 **Date:** 16/09/2026
 
@@ -33,7 +33,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P1 | Pilot identity cleanup | SITE-OPS READY | Active pilot Theme `1.1.0` proven; only inactive legacy duplicates may be deleted through WordPress core UI after smoke/rollback confidence |
 | P2 | Editorial single-post hardening | PASS | PR #51 merged; native Post editorial presentation + singular-post scoped assets + retained regressions |
 | P3 | Editorial archive/search hardening | PASS | PR #52 merged; native thumbnail/date scan presentation + resilient long-title/excerpt styling; WordPress main query retained |
-| P4 | Real law-site pilot QA | PILOT ACCESS BLOCKED / APPROVED | Execution remains approved, but the current QA environment cannot reach the pilot; this is an environment/access blocker, not a Theme runtime dependency |
+| P4 | Real law-site pilot QA | PUBLIC QA PASS / AUTHENTICATED QA BLOCKED | GitHub Actions reached the real pilot and passed the unauthenticated 28-check route/viewport matrix; authenticated Admin/System Health and unobserved provider surfaces remain unproven |
 | P4-A | Homepage Composer + Law 01 | PASS / MERGED | Premium Law01 + Composer merged through PR #58; exact-main static/runtime/browser core verification PASS |
 | P4-B | Law Site Provisioning v1.1 | PASS / MERGED | D-026 smart setup merged through PR #58 with Theme metadata `1.1.0`; deterministic package/browser evidence retained and exact-main verification PASS |
 | P4-C | Standalone Core independence | PASS / MERGED | D-027 source + implementation merged through PR #63/#64; zero-plugin L1-L4, exact-package and exact-main gates PASS; optional integrations remain additive |
@@ -148,7 +148,9 @@ Improve native archive/search card scan quality for long Vietnamese titles, opti
 
 ### P4 — Real law-site pilot QA
 
-**State:** **READY / EXACT NEXT; pilot QA execution approved by owner on 08/09/2026.**
+**State:** **PUBLIC QA PASS / AUTHENTICATED QA BLOCKED.** Pilot QA execution remains owner-approved; the unauthenticated public matrix is now complete, while the authenticated/admin portion still requires a secure access path.
+
+Fresh GitHub-only public-pilot run `35045540722` succeeded at functional head `758392b03227eb446627cc4669b0b0ddf56ed71e`: Homepage, representative Post, representative Page, Category, search results, search no-results and 404 were tested at 1440/1024/390/320. Theme-owned blocking failures were zero, horizontal overflow was zero, each route retained one `<main>` and at least one H1, and no Theme-owned console/page/request error was recorded. The representative Post contains ten unlabeled task-list checkboxes inside WordPress-owned `the_content()`; those are retained as `CONTENT_AUTHORED_SEMANTICS`, not silently reassigned to the Theme. RootProfile public profile surface was not observed in the tested route set, so no provider L5 claim is made. Evidence: `docs/evidence/P4_PUBLIC_PILOT_QA_20260916.md`.
 
 Run realistic Vietnamese legal/editorial fixtures and the actual pilot stack across homepage, long Post, Page, archive/category, search/no-results, 404 and public RootProfile surfaces. Support-floor evidence remains separate from current-stack pilot evidence.
 
@@ -314,8 +316,8 @@ The following remain explicit owner approval gates:
 - destructive retirement/deletion without proven rollback;
 - merge of future production hardening into canonical `main` after its own fresh verification when the active PR is explicitly owner-gated.
 
-Metadata promotion to `1.1.0` is a historical cleared gate completed through PR #48. Source closure and the post-R6 roadmap were explicitly approved by the product owner on 08/09/2026. P2 and P3 production merges were separately owner-approved. Owner-approved PR #58 canonical integration remains historical PASS evidence. D-027 source PR #63 and owner-approved implementation PR #64 are merged to canonical `main@16563bdc88f172a1d7737b92293c7958670aac96`; exact-main run `35042767873` is PASS. P4 pilot QA execution remains approved but is currently access-blocked from the available QA environment. None of these approvals include Git tag/GitHub Release, destructive duplicate-theme cleanup, L5 provider certification or final production deployment.
+Metadata promotion to `1.1.0` is a historical cleared gate completed through PR #48. Source closure and the post-R6 roadmap were explicitly approved by the product owner on 08/09/2026. P2 and P3 production merges were separately owner-approved. Owner-approved PR #58 canonical integration remains historical PASS evidence. D-027 source PR #63 and owner-approved implementation PR #64 are merged to canonical `main@16563bdc88f172a1d7737b92293c7958670aac96`; exact-main run `35042767873` is PASS. P4 public pilot execution is now PASS at unauthenticated L4 scope through run `35045540722`; authenticated Admin/System Health re-verification remains access-blocked. None of these approvals include Git tag/GitHub Release, destructive duplicate-theme cleanup, L5 provider certification or final production deployment.
 
 ## 14. Exact next
 
-**P4 Real Pilot QA — restore/obtain pilot access and execute the already-approved real-site matrix on the D-027-closed canonical Theme. P4-C is PASS / MERGED; do not reopen it without invalidation. Until pilot access exists, record `P4 PILOT ACCESS BLOCKED / APPROVED`. P5 remains gated; stop before tag/GitHub Release or final production deployment unless separately approved.**
+**P4 authenticated pilot QA — obtain a secure authenticated WordPress Admin path and re-verify System Health/current Theme configuration plus any admin-only continuity checks still required. The public 28-check pilot matrix is PASS and must not be rerun without invalidation; P4-C remains PASS / MERGED. Until authenticated access exists, record `P4 PUBLIC QA PASS / AUTHENTICATED QA BLOCKED`. P5 remains gated; stop before tag/GitHub Release or final production deployment unless separately approved.**
