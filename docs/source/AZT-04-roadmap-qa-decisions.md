@@ -29,7 +29,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | R3 | Header System 2.0 | PASS | PR #41 merged; four bounded presets, three sticky modes, reusable primitives, mobile progressive enhancement and L1-L4 browser/a11y evidence |
 | R4 | WooCommerce Presentation 2.0 | PASS | PR #43 merged; catalog/card/product/cart/checkout/account presentation, clean-WP fail-soft and Woo-present L1-L4 evidence |
 | R5 | Control Center + System Health | PASS | PR #44 merged; bounded presentation admin, System Health, authenticated browser/a11y and update/theme-switch continuity evidence |
-| R6 | Performance + Release 2.0 | PASS / TECHNICAL CANDIDATE | PR #46-#48 technical candidate evidence retained; v1.1.0 publication later completed under P5, while production deployment remains separate |
+| R6 | Performance + Release 2.0 | PASS / TECHNICAL CANDIDATE | PR #46-#48 technical candidate evidence retained; publication and production deployment were later completed under P5, while R6 remains technical provenance only |
 | P1 | Pilot identity cleanup | PASS | Owner-approved inactive legacy `aznet-theme-release-v1.0.0` deletion completed through WordPress core UI; fresh post-delete inventory proves only active `aznet-theme` `1.1.0` remains among AZnet Theme identities |
 | P2 | Editorial single-post hardening | PASS | PR #51 merged; native Post editorial presentation + singular-post scoped assets + retained regressions |
 | P3 | Editorial archive/search hardening | PASS | PR #52 merged; native thumbnail/date scan presentation + resilient long-title/excerpt styling; WordPress main query retained |
@@ -40,9 +40,9 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P5 | Publication & production deployment | PASS | Tag `v1.1.0` + GitHub Release publication and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
-Current canonical source is `main@7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`, Theme metadata `1.1.0`. D-027 source/implementation closure remains retained through PR #63/#64; P4 public QA merged through PR #66, authenticated read-only QA through PR #67, P1 identity inspection through PR #69, P1/P4 closure through PR #70, and P5 technical closure through owner-approved PR #71. P5 technical run `35051428372` verified final package bytes; publication run `35052694111` then published tag `v1.1.0` and the matching GitHub Release asset.
+Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` points to `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`. Publication source closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72. P5 technical run `35051428372` verified final package bytes, publication run `35052694111` published the matching tag/Release, and production read-only run `35054176392` closed deployment at the tested Theme-owned/site-operations scope.
 
-The earlier deterministic R6 candidate SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b` remains historical release-provenance evidence only. P5 independently rebuilt and verified the final post-hardening production bytes as `aznet-theme-1.1.0.zip`, SHA-256 `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`; owner-approved publication is now complete, while final production deployment remains separately gated.
+The earlier deterministic R6 candidate SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b` remains historical release-provenance evidence only. P5 independently rebuilt and verified the final post-hardening production bytes as `aznet-theme-1.1.0.zip`, SHA-256 `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`; owner-approved publication and production deployment disposition are now complete, with fresh deployment evidence in run `35054176392`.
 
 R4 merged through PR #43 to `main@0ddc6c799391d57db134f04449effdf511d41d1f`; final head and merge share tree `e66c6ebbcc1de7d695ffa67172928d0f0580e443`. R4 functional/test head `675a4f0a07b7c6c4796ad359a4b13f9c2d94f74a` completed 16/16 workflows successfully and the final evidence-only head retained fresh 16/16 success.
 
@@ -54,7 +54,7 @@ P2 merged through PR #51 from final verified head `dec498b997aec6bc8b08cf91f3e09
 
 P3 merged through PR #52 from final verified head `d78091900451176c3815b23d1485036e784bdde9` to `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`. Head and merge share tree `8fc309ea8e01bfe727da943754c98164b3f92a58`. Fresh exact-main verification succeeded after merge.
 
-A GitHub release check on 08/09/2026 historically established that publication had not yet occurred at that checkpoint. That historical `PUBLICATION_PENDING` state was superseded on 16/09/2026 by owner-approved publication run `35052694111`; final production deployment remains a separate gate.
+A GitHub release check on 08/09/2026 historically established that publication had not yet occurred at that checkpoint. That historical `PUBLICATION_PENDING` state was superseded on 16/09/2026 by owner-approved publication run `35052694111`; final production deployment was then separately owner-approved and verified by read-only run `35054176392`.
 
 ## 3. v1.0 closure state
 
@@ -189,7 +189,7 @@ Standalone Core now has executable evidence that WordPress 6.9 + AZnet Theme 1.1
 
 Fresh exact-main run `35042767873` passed reusable static/contracts plus clean WordPress 6.9 runtime/browser/a11y on the exact merge SHA. Pre-merge final-head runs `35042040619`, `35042040512`, `35042040532` and exact-package `35042040620` are retained; exact D-027 candidate ZIP SHA-256 is `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`.
 
-**Next:** P4 Real Pilot QA when pilot access is available. P5 publication/deployment remains gated and requires separate owner approval; no provider L5 certification is inferred from Core PASS.
+**Historical next at D-027 closure:** P4 Real Pilot QA when pilot access became available; P5 publication/deployment required later separate owner approvals. Those release-critical steps are now closed, while no provider L5 certification is inferred from Core PASS.
 
 ### P5 — Publication and deployment
 
@@ -210,9 +210,9 @@ Core v1.1 is complete:
 Post-R6 production readiness:
 
 `P1 site-ops cleanup (parallel/destructive gate)`  
-`P2 Editorial Single-Post PASS -> P3 Editorial Listing/Search PASS -> P4-C Standalone Core PASS -> P4 Real Pilot QA PASS -> P1 cleanup PASS -> P5 technical candidate PASS -> P5 publication PASS -> production deployment GATED`
+`P2 Editorial Single-Post PASS -> P3 Editorial Listing/Search PASS -> P4-C Standalone Core PASS -> P4 Real Pilot QA PASS -> P1 cleanup PASS -> P5 technical candidate PASS -> P5 publication PASS -> production deployment PASS`
 
-P1/P4 pilot sign-off and P5 publication are closed; production deployment is the remaining explicit owner gate in this sequence.
+P1/P4 pilot sign-off, P5 publication and owner-approved production deployment verification are closed; the v1.1 release-critical path is complete.
 
 ## 7. QA layers
 
@@ -316,12 +316,11 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 The following remain explicit owner approval gates:
 
 - any later product/architecture/public-contract change not already ratified here;
-- final production deployment;
 - provider takeover paths such as E5-D;
 - destructive retirement/deletion without proven rollback;
 - merge of future production hardening into canonical `main` after its own fresh verification when the active PR is explicitly owner-gated.
 
-Metadata promotion to `1.1.0` is a historical cleared gate completed through PR #48. Source closure and the post-R6 roadmap were explicitly approved by the product owner on 08/09/2026. P2 and P3 production merges were separately owner-approved. Owner-approved PR #58 canonical integration remains historical PASS evidence. D-027 source PR #63 and owner-approved implementation PR #64 remain canonical history. P4 public QA PR #66 and owner-approved authenticated QA PR #67 are merged; canonical `main@bf45a315e93fa22c441c81377f98ff34901d7ca5` passed exact-main run `35048609753`. P4 public + authenticated QA is retained and P1 cleanup is PASS after owner-approved deletion of only `aznet-theme-release-v1.0.0`; post-delete run `35050519817` closes final P4 pilot sign-off at the tested Theme-owned scope. P5 technical closure PR #71 was owner-approved and merged; the owner then separately approved publication as tag `v1.1.0` + GitHub Release, completed by run `35052694111`. Provider L5 certification and final production deployment remain unapproved/separate gates.
+Metadata promotion to `1.1.0` is a historical cleared gate completed through PR #48. Source closure and the post-R6 roadmap were explicitly approved by the product owner on 08/09/2026. P2 and P3 production merges were separately owner-approved. Owner-approved PR #58 canonical integration remains historical PASS evidence. D-027 source PR #63 and owner-approved implementation PR #64 remain canonical history. P4 public QA PR #66 and owner-approved authenticated QA PR #67 are merged; canonical `main@bf45a315e93fa22c441c81377f98ff34901d7ca5` passed exact-main run `35048609753`. P4 public + authenticated QA is retained and P1 cleanup is PASS after owner-approved deletion of only `aznet-theme-release-v1.0.0`; post-delete run `35050519817` closes final P4 pilot sign-off at the tested Theme-owned scope. P5 technical closure PR #71 was owner-approved and merged; the owner then separately approved publication as tag `v1.1.0` + GitHub Release, completed by run `35052694111`, and separately approved the existing-package production deployment disposition verified by run `35054176392`. Provider L5 certification remains separate/unproven.
 
 ## 14. Exact next
 

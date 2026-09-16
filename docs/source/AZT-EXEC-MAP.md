@@ -7,9 +7,9 @@
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** D-027/P4/P1 remain retained; owner-approved P5 technical closure PR #71 merged to `main@7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`. P5 technical run `35051428372` verifies the final deterministic `1.1.0` package, and owner-approved publication run `35052694111` published tag `v1.1.0` plus the matching GitHub Release asset. Optional integrations remain additive and ownership boundaries are unchanged.
+> **Canonical-main checkpoint:** live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` is `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`; publication closure PR #72 merged at `15f25e4f6d8e64c588866405629b793a85ee0323`, and restored post-noop checkpoint `e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb`. P5 technical run `35051428372`, publication run `35052694111`, and production read-only run `35054176392` close the v1.1 release-critical path. Optional integrations remain additive and ownership boundaries are unchanged.
 
-**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> PR #70 -> P5 exact-main + deterministic package/lifecycle PASS run 35051428372 -> owner-approved PR #71 -> main 7dbbb0e8... -> owner-approved publication run 35052694111 -> annotated tag v1.1.0 + GitHub Release + exact asset digest PASS -> P5 PUBLICATION PASS / DEPLOYMENT GATED`.
+**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> PR #70 -> P5 exact-main + deterministic package/lifecycle PASS run 35051428372 -> owner-approved PR #71 -> publication run 35052694111 -> annotated tag v1.1.0 + GitHub Release PASS -> owner-approved production deployment disposition -> read-only run 35054176392 PASS -> P5 PASS`.
 
 ## 1. Current state
 
@@ -30,7 +30,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | R3 Header System 2.0 | PASS | PR #41 merged; bounded presets/primitives, accessible mobile/sticky behavior and L1-L4 browser evidence |
 | R4 WooCommerce Presentation 2.0 | PASS | PR #43 merged; public Woo output -> Theme presentation only; clean-WP/Woo-present L1-L4 evidence |
 | R5 Control Center + System Health | PASS | PR #44 merged; bounded Theme settings admin, public/read-only health diagnostics and update/theme-switch continuity |
-| R6 Performance + Release 2.0 | PASS / TECHNICAL CANDIDATE | PR #46-#48 complete; exact-main + deterministic `1.1.0` R6 candidate verified; publication/deployment not implied |
+| R6 Performance + Release 2.0 | PASS / TECHNICAL CANDIDATE | PR #46-#48 retained technical provenance; R6 itself did not imply publication/deployment, both of which were later completed under P5 |
 | P1 Pilot identity cleanup | PASS | Only intended active `aznet-theme` v1.1.0 remains among AZnet Theme identities; post-delete inventory/System Health/public regression PASS |
 | P2 Editorial Single-Post | PASS | PR #51 merged; native WordPress editorial presentation only; no SEO/domain/query takeover |
 | P3 Editorial Listing/Search | PASS | PR #52 merged; native thumbnail/date scan presentation + resilient long titles/excerpts; main query retained |
@@ -41,7 +41,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | P5 Publication/Deployment | PASS | Tag `v1.1.0` + GitHub Release and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
-Current canonical source baseline is `main@7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, Theme `1.1.0`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`. D-027 PR #63/#64 remain retained; P4 public QA PR #66, authenticated QA PR #67, P1 inspection PR #69, P1/P4 closure PR #70 and P5 technical closure PR #71 are merged. P5 run `35051428372` verified the final package; publication run `35052694111` published tag `v1.1.0` and the matching GitHub Release asset.
+Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` is `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`; publication closure PR #72 merged at `15f25e4f6d8e64c588866405629b793a85ee0323` and restored post-noop checkpoint `e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb`. Theme metadata is `1.1.0`. P5 run `35051428372` verified the final package, publication run `35052694111` published tag/Release, and production read-only run `35054176392` verified the owner-approved deployment disposition.
 
 The previous R6 package SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b` remains historical. Fresh P5 independently rebuilt the current canonical production file set as deterministic `aznet-theme-1.1.0.zip`, SHA-256 `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`, with exact 121-file source/package identity and 93 packaged PHP files linted.
 
@@ -271,7 +271,7 @@ No layer may be inferred from another.
 
 **Exit:** PASS — source PR #63 + implementation PR #64 merged; final-head L1-L4 and exact-package gates PASS; exact-main run `35042767873` PASS on `main@16563bdc88f172a1d7737b92293c7958670aac96`.
 
-**Next:** resume P4 pilot when access exists. P5 remains gated until P4 PASS and separate publication/deployment approval.
+**Historical next at D-027 closure:** resume P4 pilot when access existed, then seek separate P5 publication/deployment approvals. Those release-critical steps are now closed.
 
 ### P5 — Final Candidate / Publication / Deployment
 
