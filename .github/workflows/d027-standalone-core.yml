@@ -12,12 +12,11 @@ on:
       - 'inc/admin/control-center.php'
       - 'inc/admin/provisioning.php'
       - 'inc/admin/homepage.php'
-      - 'inc/theme/provisioning-plan.php'
-      - 'inc/theme/provisioning-runner.php'
-      - 'inc/theme/provisioning-media.php'
-      - 'tests/offline/d027-standalone-core-health-contract.php'
-      - 'tests/offline/d027-provisioning-independence-contract.php'
+      - 'inc/theme/provisioning-*.php'
+      - 'tests/offline/d027-*.php'
       - 'tests/offline/r5-control-center-static-contract.php'
+      - 'tests/runtime/d027-standalone-core.php'
+      - 'tests/runtime/law-site-provisioning-*.php'
       - '.github/workflows/d027-standalone-core.yml'
   workflow_dispatch:
 
@@ -46,8 +45,156 @@ jobs:
       - name: Run retained R5 Control Center contract
         run: php tests/offline/r5-control-center-static-contract.php
 
-      - name: Lint System Health
-        run: php -l inc/admin/system-health.php
+      - name: Lint changed production PHP
+        run: |
+          php -l inc/admin/system-health.php
+          php -l inc/admin/control-center.php
+          php -l tests/runtime/d027-standalone-core.php
 
-      - name: Lint Control Center
-        run: php -l inc/admin/control-center.php
+  clean-wordpress-runtime:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Checkout exact branch bytes
+        uses: actions/checkout@v4
+
+      - name: Record exact identity
+        run: git rev-parse HEAD | tee /tmp/d027-head-sha.txt
+
+      - name: Setup PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli, mbstring
+          coverage: none
+
+      - name: Install WordPress 6.9 and exact Theme source
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          rm -rf /tmp/wp-site /tmp/d027-runtime
+          mkdir -p /tmp/wp-site /tmp/d027-runtime
+          wp core download --version=6.9 --path=/tmp/wp-site --force --allow-root
+          wp config create --path=/tmp/wp-site --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp-site --url=http://127.0.0.1:8080 --title='AZnet D027 Standalone' --admin_user=admin --admin_password='d027-standalone-password' --admin_email=d027@example.test --skip-email --allow-root
+          mkdir -p /tmp/wp-site/wp-content/themes/aznet-theme
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
+            ./ /tmp/wp-site/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp-site --allow-root
+          wp plugin deactivate --all --path=/tmp/wp-site --allow-root || true
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-site --allow-root)"
+          test "$(wp core version --path=/tmp/wp-site --allow-root)" = '6.9'
+          wp theme status aznet-theme --path=/tmp/wp-site --allow-root | grep -F 'Status: Active'
+
+      - name: Run retained v1 provisioning runtime harnesses with clean database per scenario
+        run: |
+          set -euo pipefail
+          reset_site() {
+            wp db reset --yes --path=/tmp/wp-site --allow-root >/dev/null
+            wp core install --path=/tmp/wp-site --url=http://127.0.0.1:8080 --title='AZnet D027 Standalone' --admin_user=admin --admin_password='d027-standalone-password' --admin_email=d027@example.test --skip-email --allow-root >/dev/null
+            wp theme activate aznet-theme --path=/tmp/wp-site --allow-root >/dev/null
+            wp plugin deactivate --all --path=/tmp/wp-site --allow-root >/dev/null 2>&1 || true
+            test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-site --allow-root)"
+          }
+
+          wp eval-file tests/runtime/law-site-provisioning-empty.php --path=/tmp/wp-site --allow-root | tee /tmp/d027-runtime/v1-empty.txt
+          for scenario in existing rerun rollback user-edit; do
+            reset_site
+            AZNET_PROVISION_SCENARIO="$scenario" wp eval-file tests/runtime/law-site-provisioning-scenarios.php --path=/tmp/wp-site --allow-root | tee "/tmp/d027-runtime/v1-${scenario}.txt"
+          done
+
+      - name: Prove v1.1 clean-WP setup, provisioning and idempotency
+        run: |
+          set -euo pipefail
+          wp db reset --yes --path=/tmp/wp-site --allow-root >/dev/null
+          wp core install --path=/tmp/wp-site --url=http://127.0.0.1:8080 --title='AZnet D027 Standalone' --admin_user=admin --admin_password='d027-standalone-password' --admin_email=d027@example.test --skip-email --allow-root >/dev/null
+          wp theme activate aznet-theme --path=/tmp/wp-site --allow-root >/dev/null
+          wp plugin deactivate --all --path=/tmp/wp-site --allow-root >/dev/null 2>&1 || true
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-site --allow-root)"
+
+          AZNET_PROVISION_V11_SCENARIO=new wp eval-file tests/runtime/law-site-provisioning-v1-1.php --path=/tmp/wp-site --allow-root | tee /tmp/d027-runtime/v11-new.txt
+          wp eval-file tests/runtime/d027-standalone-core.php --path=/tmp/wp-site --allow-root | tee /tmp/d027-runtime/d027-after-new.txt
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-site --allow-root)"
+
+          AZNET_PROVISION_V11_SCENARIO=rerun wp eval-file tests/runtime/law-site-provisioning-v1-1.php --path=/tmp/wp-site --allow-root | tee /tmp/d027-runtime/v11-rerun.txt
+          wp eval-file tests/runtime/d027-standalone-core.php --path=/tmp/wp-site --allow-root | tee /tmp/d027-runtime/d027-after-rerun.txt
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-site --allow-root)"
+
+      - name: Start clean-WP runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp-site > /tmp/d027-runtime/server.log 2>&1 &
+          echo $! > /tmp/d027-runtime/server.pid
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/wp-login.php >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          exit 1
+
+      - name: Smoke representative native routes with zero active plugins
+        run: |
+          set -euo pipefail
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-site --allow-root)"
+          POST_ID=$(wp post list --post_type=post --post_status=publish --format=ids --path=/tmp/wp-site --allow-root | awk '{print $1}')
+          PAGE_ID=$(wp post list --post_type=page --post_status=publish --format=ids --path=/tmp/wp-site --allow-root | awk '{print $1}')
+          CAT_ID=$(wp term list category --format=ids --path=/tmp/wp-site --allow-root | awk '{print $1}')
+          test -n "$POST_ID"
+          test -n "$PAGE_ID"
+          test -n "$CAT_ID"
+
+          check_200() {
+            name="$1"; url="$2"
+            code=$(curl -sS -o "/tmp/d027-runtime/${name}.html" -w '%{http_code}' "$url")
+            test "$code" = '200'
+            grep -F '<main' "/tmp/d027-runtime/${name}.html" >/dev/null
+          }
+          check_200 home 'http://127.0.0.1:8080/'
+          check_200 post "http://127.0.0.1:8080/?p=${POST_ID}"
+          check_200 page "http://127.0.0.1:8080/?page_id=${PAGE_ID}"
+          check_200 category "http://127.0.0.1:8080/?cat=${CAT_ID}"
+          check_200 search 'http://127.0.0.1:8080/?s=luat'
+          code=$(curl -sS -o /tmp/d027-runtime/not-found.html -w '%{http_code}' 'http://127.0.0.1:8080/?p=99999999')
+          test "$code" = '404'
+          grep -F '<main' /tmp/d027-runtime/not-found.html >/dev/null
+
+      - name: Check Theme runtime error boundary
+        run: |
+          set -euo pipefail
+          if grep -E 'PHP (Fatal error|Parse error)|Uncaught' /tmp/d027-runtime/server.log; then
+            echo 'FAIL: Theme runtime fatal/uncaught marker found' >&2
+            exit 1
+          fi
+          unexpected="$(grep 'PHP Warning:' /tmp/d027-runtime/server.log | grep -v 'Undefined array key 0 in /tmp/wp-site/wp-includes/class-wp-query.php on line 3872' || true)"
+          printf '%s' "$unexpected" > /tmp/d027-runtime/unexpected-php-warnings.log
+          test -z "$unexpected"
+          echo 'PASS: D-027 clean WordPress L3 runtime route matrix'
+
+      - name: Stop runtime
+        if: always()
+        run: kill "$(cat /tmp/d027-runtime/server.pid)" || true
+
+      - name: Upload D-027 L3 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: d027-standalone-core-l3
+          path: |
+            /tmp/d027-runtime
+            /tmp/d027-head-sha.txt
+          if-no-files-found: warn
