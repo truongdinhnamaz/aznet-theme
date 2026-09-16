@@ -14,6 +14,10 @@ on:
       - 'tests/runtime/x1-comments-surface.php'
       - 'tests/browser/x1-comments-surface-l4.mjs'
       - '.github/workflows/x1-comments-surface.yml'
+      - 'docs/evidence/X1_COMMENTS_SURFACE_20260916.md'
+      - 'docs/source/AZT-04-roadmap-qa-decisions.md'
+      - 'docs/source/AZT-EXEC-MAP.md'
+      - 'docs/source/SOURCE_MANIFEST.md'
   pull_request:
     branches:
       - main
@@ -27,6 +31,10 @@ on:
       - 'tests/runtime/x1-comments-surface.php'
       - 'tests/browser/x1-comments-surface-l4.mjs'
       - '.github/workflows/x1-comments-surface.yml'
+      - 'docs/evidence/X1_COMMENTS_SURFACE_20260916.md'
+      - 'docs/source/AZT-04-roadmap-qa-decisions.md'
+      - 'docs/source/AZT-EXEC-MAP.md'
+      - 'docs/source/SOURCE_MANIFEST.md'
   workflow_dispatch:
 
 permissions:
@@ -49,6 +57,8 @@ jobs:
     steps:
       - name: Checkout exact X1 candidate
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Record exact identity
         run: |
@@ -63,14 +73,31 @@ jobs:
           extensions: mysqli, mbstring
           coverage: none
 
-      - name: Run X1 offline GREEN and retained editorial regression
+      - name: Verify X1 ownership, diff and retained static regressions
         run: |
           set -euo pipefail
+          git fetch origin main:refs/remotes/origin/main
+          git diff --check origin/main...HEAD
+          changed="$(git diff --name-only origin/main...HEAD)"
+          if printf '%s\n' "$changed" | grep -E '^(inc/integrations/|assets/css/integrations/)'; then
+            echo 'FAIL: X1 must not change provider integration files' >&2
+            exit 1
+          fi
+          if printf '%s\n' "$changed" | grep -E '^(functions\.php|style\.css)$'; then
+            echo 'FAIL: X1 must not change Theme version declarations' >&2
+            exit 1
+          fi
+          grep -F "define( 'AZNET_THEME_VERSION', '1.1.0' );" functions.php
+          grep -F 'Version: 1.1.0' style.css
           php tests/offline/x1-comments-surface-contract.php
           php tests/offline/editorial-single-post-contract.php
+          php tests/offline/editorial-listing-search-contract.php
+          php tests/offline/d027-provisioning-independence-contract.php
           php -l comments.php
           php -l single.php
           php -l inc/theme/assets.php
+          php -l tests/runtime/x1-comments-surface.php
+          echo 'PASS: X1 ownership, diff and retained static regressions'
 
       - name: Install clean WordPress 6.9 and exact Theme candidate
         run: |
