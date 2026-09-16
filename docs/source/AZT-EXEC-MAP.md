@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.41
+**Version:** v0.42
 **Status:** Working Execution Map / derived  
 **Date:** 16/09/2026
 
@@ -39,7 +39,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | P4-B Law Site Provisioning | PASS / MERGED | D-026 merged; Theme `1.1.0`; deterministic package/browser evidence retained; activation mutation-free and active-site overwrite/noindex takeover forbidden |
 | P4-C Standalone Core independence | PASS / MERGED | PR #63/#64 merged; zero-plugin L1-L4, exact-package and exact-main PASS; optional integrations remain additive |
 | P5 Publication/Deployment | PASS | Tag `v1.1.0` + GitHub Release and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
-| X v1.2 WordPress Experience Completion | X6 FINAL CANDIDATE PASS / MERGE GATED | X1-X5 retained; exact `1.2.0` X6 candidate synchronized to current main passed integrated L1-L4/L6, deterministic package/source identity and lifecycle; canonical merge + exact-main verification remain next; provider L5 stays separate |
+| X v1.2 WordPress Experience Completion | X6 TECHNICAL PASS / PUBLICATION GATED | X1-X5 retained; PR #87 merged exact `1.2.0` X6 bytes and exact-main V1 + X6 L1-L4/L6 verification PASS; publication/deployment remain separate owner gates; provider L5 stays separate |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
 Canonical `main` and verified production deployment remain Theme `1.1.0`. The isolated X6 candidate is exact `1.2.0`; candidate version does not become canonical/published/deployed merely by passing CI.
@@ -284,7 +284,7 @@ Owner-approved publication run `35052694111` published annotated tag `v1.1.0` at
 
 ## 13. v1.2 WordPress Experience Completion
 
-**State:** **X6 FINAL CANDIDATE PASS / CANONICAL MERGE + EXACT-MAIN VERIFICATION PENDING.**
+**State:** **X6 TECHNICAL PASS / PUBLICATION GATED.**
 
 **Milestone boundary:** WordPress Core surfaces only. Theme presentation/configuration remains in scope; WordPress-owned semantics/state remain authoritative; provider compatibility/certification tracks stay separate.
 
@@ -300,7 +300,7 @@ Owner-approved publication run `35052694111` published annotated tag `v1.1.0` at
 
 **X5 — Native Form Controls:** **PASS at L1-L4** — functional closure head `8aac300f805e83fb7a7e7243aa779fe37376838d`; dedicated workflow `35088686988` SUCCESS on WordPress 6.9 with zero active plugins, scoped `forms.css` on native Comment/Core-block/password/Search/404 surfaces and absent Archive/Home controls, plus a 16/16 Playwright/axe browser matrix across 1440/1024/390/320 widths. Artifact `10442863335`, digest `sha256:88d06c8b3449233e7a5b85421dc2be779eac51dc9cacbe4d694ceab86f2705ac`. WordPress owns form submission/validation semantics and submitted data; Theme adds bounded presentation only. All 26 exact-head PR workflows observed on the functional head completed SUCCESS. Evidence: `docs/evidence/X5_NATIVE_FORM_CONTROLS_20260916.md`.
 
-**X6 — Cross-surface QA & Release Closure:** **FINAL CANDIDATE PASS / MERGE GATED** — the exact `1.2.0` candidate was promoted only after the pre-promotion RED contract and explicit owner approval. After syncing to current `main`, X6 run `35126908185` completed SUCCESS on `c145f72cc7ac4783eb9f4a2f0b11c1d26e178445`, tree `3594fab0c89d015711e914325734646d1e7df159`: integrated 32/32 browser/axe, deterministic `aznet-theme-1.2.0.zip`, exact package/source identity, 95 packaged PHP lint checks, lifecycle/rollback continuity and ownership boundaries. Package SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`; artifact `10459925538`, digest `sha256:c6b480168282e7dc9eea8f749d303012763cabf16213a6e69619c62f96f16e03`. All 19 observed same-head PR workflows completed SUCCESS. Evidence: `docs/evidence/X6_CROSS_SURFACE_RELEASE_CLOSURE_20260916.md`.
+**X6 — Cross-surface QA & Release Closure:** **TECHNICAL PASS / PUBLICATION GATED** — the exact `1.2.0` candidate was promoted only after the pre-promotion RED contract and explicit owner approval. Final-head PR verification remained GREEN; owner-approved PR #87 merged to `main@c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`, tree `70c04929afe38e87d317bad3414157e9e2bd6f74` with expected-head protection. Fresh V1 Exact Main Verification `35129331899` and X6 push-to-main `35129331927` both completed SUCCESS on that exact merge SHA: integrated 32/32 browser/axe, deterministic `aznet-theme-1.2.0.zip`, exact package/source identity, 95 packaged PHP lint checks, lifecycle/rollback continuity and ownership boundaries. Package SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`; exact-main X6 artifact `10459889475`, digest `sha256:f537b5f6ed33a53dcad8041c3d8cc0aef32c5bb6dbd8c10c5102e76624128fb9`. Evidence: `docs/evidence/X6_CROSS_SURFACE_RELEASE_CLOSURE_20260916.md`.
 
 **Execution:** `X1 -> X2 -> X3 -> X4 -> X5 -> X6`. Every X1-X5 production slice used RED -> intended failure -> minimal GREEN -> regression and has a bounded rollback. X6 retains the separate canonical merge, publication and production deployment owner gates.
 
@@ -326,4 +326,4 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 16. Exact next
 
-**Complete fresh exact-final-head verification on PR #87 after this X6 source/evidence/hygiene closure. If all exact-head gates are GREEN and PR #87 remains mergeable with its head unchanged, request explicit product-owner approval to merge the exact verified PR #87 head. After a separately approved merge, require fresh `V1 Exact Main Verification` and X6 push-to-main PASS before claiming `X6 TECHNICAL PASS / PUBLICATION GATED`. Tag/GitHub Release publication and production deployment remain later separate owner gates; provider L5 is not opened or inferred.**
+**NEXT — request owner approval for v1.2.0 publication disposition (annotated tag + GitHub Release only). Production deployment remains a later separate approval; provider L5 is not opened or inferred.**
