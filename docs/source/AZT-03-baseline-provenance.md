@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.35
+**Version:** v0.36
 **Status:** Working Source  
 **Date:** 16/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -13,8 +13,9 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 
 ## 2. Current canonical baseline
 
-- Current canonical implementation head after owner-approved P1/P4 closure PR #70 merge: `main@f0b2d581b16a663e4b422234e6ac15568bcc7985`.
-- Current canonical implementation tree: `f21884f5989239858261721c5002c5158d6d9be0`.
+- Current canonical source head after owner-approved P5 technical closure PR #71 merge: `main@7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`.
+- Current canonical source tree: `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`.
+- Final published v1.1.0 production package bytes remain the P5-verified 121-file set; PR #71 changed documentation/evidence only.
 - Internal Theme version remains `1.1.0`.
 - WordPress floor: `6.9+`.
 - PHP floor: `8.1+`.
@@ -44,7 +45,7 @@ Current production state includes:
 - P4-B D-025/D-026 Law Site Provisioning with mutation-free activation, proposal-only recommendations, WordPress-owned starter content/media and index-safe publication boundaries.
 - P4-C D-027 Standalone Core independence with zero mandatory third-party runtime dependency, explicit Standalone Core vs Optional Integrations health presentation, and zero-plugin L1-L4/exact-package evidence.
 - P4 real-pilot QA with fresh public route/viewport verification plus authenticated, read-only WordPress Admin/System Health verification on the canonical D-027-capable Theme; P1 legacy duplicate cleanup is closed with fresh post-delete verification and final P4 pilot sign-off is PASS at the tested Theme-owned scope.
-- P5 final-candidate technical verification: exact canonical source, deterministic double-build, exact package/source byte match, packaged PHP lint, clean WordPress 6.9 zero-plugin runtime/browser verification and theme-switch rollback/switch-back reference all PASS; publication remains separately gated.
+- P5 final-candidate technical verification: exact canonical source, deterministic double-build, exact package/source byte match, packaged PHP lint, clean WordPress 6.9 zero-plugin runtime/browser verification and theme-switch rollback/switch-back reference all PASS. Owner-approved Git tag `v1.1.0` and GitHub Release publication are now complete; production deployment remains separately gated.
 
 PR #34 final verified head is `b2e5cca1461233bcb1a0333c5aa51879c3264756`. Its tree `b716b89f04e45c2012f8e191c7d0edf605c9dd11` is identical to the merge commit tree on canonical `main@f8e1a95c903c3f246528368ae9878eba780539ff`, so the v1.0 technical merge introduced no conflict-resolution production delta.
 
@@ -78,7 +79,9 @@ P2 Editorial Single-Post Hardening merged through PR #51 from final verified hea
 
 P3 Editorial Listing/Search Hardening merged through PR #52 from final verified head `d78091900451176c3815b23d1485036e784bdde9` to `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`. Head and merge share tree `8fc309ea8e01bfe727da943754c98164b3f92a58`. Fresh `V1 Exact Main Verification` run `34195248467` completed successfully on that exact merge SHA, covering reusable static/contracts plus clean WordPress 6.9 runtime/browser/a11y.
 
-Because P2/P3 changed production bytes after the R6 package, SHA-256 `000735...` is now **historical R6 candidate evidence**, not the final package for P4/P5. A new deterministic package/SHA must be produced from the final post-hardening bytes before publication.
+Because P2/P3 changed production bytes after the R6 package, SHA-256 `000735...` remains **historical R6 candidate evidence**. P5 later rebuilt and verified the final post-hardening package as `aznet-theme-1.1.0.zip`, SHA-256 `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`, which is now the published v1.1.0 release asset.
+
+Owner-approved P5 publication completed on 16/09/2026 through GitHub Actions run `35052694111`. Annotated tag `v1.1.0` (tag object `3c3e07fd0ba64037f7ec1d79fb6e6276308786a3`) dereferences to canonical `main@7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`. GitHub Release `389622362`, title `AZnet Theme 1.1.0`, is published (`draft=false`, `prerelease=false`) with release asset `aznet-theme-1.1.0.zip` (`asset 567100593`, 170944 bytes) and GitHub-reported digest `sha256:72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`. Publication workflow evidence artifact `10428918492` has digest `sha256:544895a168e12b7260e086b14f85ecfb3ae4505fcc600feff7d27bbbd6f88814`. The temporary publication workflow was removed after successful publication and its ops branch has zero net file delta from the tagged canonical commit. This publication does not authorize or imply production deployment or optional-provider L5 certification.
 
 No source statement above transfers domain ownership to the Theme.
 
