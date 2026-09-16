@@ -1,0 +1,44 @@
+name: X2 Search 404 Empty States
+
+on:
+  push:
+    branches:
+      - feat/v1.2-x2-search-404
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  retained-baseline:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Verify retained P3 and D-027 baseline
+        run: |
+          set -euo pipefail
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/editorial-listing-search-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/d027-provisioning-independence-contract.php
+
+  x2-red-contract:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Run X2 RED contract
+        run: |
+          set -euo pipefail
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/x2-search-404-empty-contract.php
