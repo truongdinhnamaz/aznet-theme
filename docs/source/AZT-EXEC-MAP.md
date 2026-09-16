@@ -19,7 +19,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | A Theme Foundation | PASS | WordPress-clean hybrid PHP + `theme.json` |
 | B Semantic Tokens | PASS / retained | `--aznet-theme-*` + `theme.json`; R1 extended semantics without silently repurposing public tokens |
 | C Header/Footer | PASS / retained | v1.0 Theme presentation owner; R3 adds the bounded v1.1 preset system |
-| D Generic Templates | PASS / editorial quality hardening active | Page/Post/Archive/Search/404 technical closure retained; P2/P3 merged, P4 proves professional pilot quality |
+| D Generic Templates | PASS / retained | Page/Post/Archive/Search/404 technical closure plus P2/P3 editorial hardening and P4 professional pilot quality evidence are retained |
 | W Woo presentation | PASS / retained | Woo owns commerce truth; R4 deepens presentation only |
 | E RootProfile Profile/Contact | OPTIONAL COMPAT ACTIVE | External E5-C blocker; E5-D takeover locked; not core-v1.1 critical path |
 | F Homepage | CORE PASS / COMPAT ACTIVE | Native Homepage on main; external F8 compatibility defect remains non-blocking under D-016 |

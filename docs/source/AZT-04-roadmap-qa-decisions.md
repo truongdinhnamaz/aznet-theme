@@ -18,7 +18,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | A | Theme Foundation | PASS | Hybrid PHP + `theme.json`, WordPress-clean foundation |
 | B | Semantic Design Tokens | PASS | Public `--aznet-theme-*` tokens + `theme.json` mapping |
 | C | Header / Footer | PASS | Theme-owned presentation with runtime/browser/a11y evidence |
-| D | Generic Templates | PASS / QUALITY HARDENING ACTIVE | Page/Post/Archive/Search/404 technical closure remains valid; P2/P3 hardening is merged and P4 must now prove professional editorial quality on the pilot |
+| D | Generic Templates | PASS / retained | Page/Post/Archive/Search/404 technical closure plus P2/P3 editorial hardening and P4 real-pilot quality evidence are retained |
 | W | WooCommerce presentation shell | PASS / retained | W1-W9 + R4; WooCommerce retains commerce truth |
 | E | RootProfile Profile / Contact | OPTIONAL COMPAT ACTIVE | E0-E4/E5-B retained PASS; E5-C external BLOCKED; E5-D takeover locked; non-blocking for core under D-016 |
 | F | Homepage | CORE PASS / COMPAT ACTIVE | Native Theme Homepage merged; ConvertFlow F6/F7 actual integration evidence retained; F8 integrated compatibility BLOCKED by provider nested `<main>` |
@@ -29,7 +29,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | R3 | Header System 2.0 | PASS | PR #41 merged; four bounded presets, three sticky modes, reusable primitives, mobile progressive enhancement and L1-L4 browser/a11y evidence |
 | R4 | WooCommerce Presentation 2.0 | PASS | PR #43 merged; catalog/card/product/cart/checkout/account presentation, clean-WP fail-soft and Woo-present L1-L4 evidence |
 | R5 | Control Center + System Health | PASS | PR #44 merged; bounded presentation admin, System Health, authenticated browser/a11y and update/theme-switch continuity evidence |
-| R6 | Performance + Release 2.0 | PASS / TECHNICAL CANDIDATE | PR #46-#48 complete; exact-main verification + deterministic `1.1.0` candidate PASS; tag/GitHub Release/deployment remain pending |
+| R6 | Performance + Release 2.0 | PASS / TECHNICAL CANDIDATE | PR #46-#48 technical candidate evidence retained; v1.1.0 publication later completed under P5, while production deployment remains separate |
 | P1 | Pilot identity cleanup | PASS | Owner-approved inactive legacy `aznet-theme-release-v1.0.0` deletion completed through WordPress core UI; fresh post-delete inventory proves only active `aznet-theme` `1.1.0` remains among AZnet Theme identities |
 | P2 | Editorial single-post hardening | PASS | PR #51 merged; native Post editorial presentation + singular-post scoped assets + retained regressions |
 | P3 | Editorial archive/search hardening | PASS | PR #52 merged; native thumbnail/date scan presentation + resilient long-title/excerpt styling; WordPress main query retained |
@@ -54,7 +54,7 @@ P2 merged through PR #51 from final verified head `dec498b997aec6bc8b08cf91f3e09
 
 P3 merged through PR #52 from final verified head `d78091900451176c3815b23d1485036e784bdde9` to `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`. Head and merge share tree `8fc309ea8e01bfe727da943754c98164b3f92a58`. Fresh exact-main verification succeeded after merge.
 
-A fresh GitHub release check on 08/09/2026 established no GitHub Release/tag publication. Publication therefore remains **PUBLICATION_PENDING**. Approval to execute P4 pilot QA does not clear P5 publication or final production deployment gates.
+A GitHub release check on 08/09/2026 historically established that publication had not yet occurred at that checkpoint. That historical `PUBLICATION_PENDING` state was superseded on 16/09/2026 by owner-approved publication run `35052694111`; final production deployment remains a separate gate.
 
 ## 3. v1.0 closure state
 
@@ -210,9 +210,9 @@ Core v1.1 is complete:
 Post-R6 production readiness:
 
 `P1 site-ops cleanup (parallel/destructive gate)`  
-`P2 Editorial Single-Post PASS -> P3 Editorial Listing/Search PASS -> P4-C Standalone Core PASS -> P4 Real Pilot QA ACCESS BLOCKED / APPROVED -> P5 only after P4 PASS`
+`P2 Editorial Single-Post PASS -> P3 Editorial Listing/Search PASS -> P4-C Standalone Core PASS -> P4 Real Pilot QA PASS -> P1 cleanup PASS -> P5 technical candidate PASS -> P5 publication PASS -> production deployment GATED`
 
-P1 does not block safe Theme-owned pilot QA setup, but P1 must close before final pilot production sign-off.
+P1/P4 pilot sign-off and P5 publication are closed; production deployment is the remaining explicit owner gate in this sequence.
 
 ## 7. QA layers
 
