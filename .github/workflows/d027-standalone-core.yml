@@ -10,7 +10,13 @@ on:
     paths:
       - 'inc/admin/system-health.php'
       - 'inc/admin/control-center.php'
+      - 'inc/admin/provisioning.php'
+      - 'inc/admin/homepage.php'
+      - 'inc/theme/provisioning-plan.php'
+      - 'inc/theme/provisioning-runner.php'
+      - 'inc/theme/provisioning-media.php'
       - 'tests/offline/d027-standalone-core-health-contract.php'
+      - 'tests/offline/d027-provisioning-independence-contract.php'
       - 'tests/offline/r5-control-center-static-contract.php'
       - '.github/workflows/d027-standalone-core.yml'
   workflow_dispatch:
@@ -33,6 +39,9 @@ jobs:
 
       - name: Run D-027 standalone health contract
         run: php tests/offline/d027-standalone-core-health-contract.php
+
+      - name: Run D-027 provisioning independence contract
+        run: php tests/offline/d027-provisioning-independence-contract.php
 
       - name: Run retained R5 Control Center contract
         run: php tests/offline/r5-control-center-static-contract.php
