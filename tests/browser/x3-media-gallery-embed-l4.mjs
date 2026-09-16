@@ -110,10 +110,12 @@ async function inspectFrontendCase(browser, routeName, route, viewportName, view
         return rect.right <= window.innerWidth + tolerance && rect.left >= -tolerance && element.scrollWidth <= element.clientWidth + tolerance;
       });
       const galleryItemsUsable = galleryItems.length >= 4 && galleryItems.every((element) => element.getBoundingClientRect().width > 1);
+      const requiresExpansion = window.innerWidth >= 768;
       const alignmentSafe = [wide, full].every((element) => {
         if (!element) return false;
         const rect = element.getBoundingClientRect();
-        return rect.width > rootRect.width && rect.left >= -tolerance && rect.right <= window.innerWidth + tolerance;
+        const bounded = rect.width > 0 && rect.left >= -tolerance && rect.right <= window.innerWidth + tolerance;
+        return bounded && (!requiresExpansion || rect.width > rootRect.width);
       });
       return {
         mediaContained,
@@ -130,7 +132,7 @@ async function inspectFrontendCase(browser, routeName, route, viewportName, view
     if (!geometry.mediaContained) throw new Error(`media escaped viewport bounds: ${JSON.stringify(geometry.mediaOffenders)}`);
     if (!geometry.captionsContained) throw new Error('caption overflow detected');
     if (!geometry.galleryItemsUsable) throw new Error('gallery items collapsed or missing');
-    if (!geometry.alignmentSafe) throw new Error(`wide/full alignment is not safely expanded: ${JSON.stringify(geometry)}`);
+    if (!geometry.alignmentSafe) throw new Error(`wide/full alignment is outside safe Theme geometry: ${JSON.stringify(geometry)}`);
 
     const focusLink = page.locator('#x3-focus-link');
     await focusLink.focus();

@@ -15,8 +15,9 @@
     display: block;
 }
 
-.aznet-theme-entry__content audio {
+.aznet-theme-entry__content .wp-block-audio audio {
     width: 100%;
+    min-width: 0;
 }
 
 .aznet-theme-entry__content :where(figcaption, .wp-caption-text, .gallery-caption) {
@@ -121,10 +122,11 @@ body#tinymce :where(img, video),
     height: auto;
 }
 
-.editor-styles-wrapper audio,
-body#tinymce audio,
-.mce-content-body audio {
+.editor-styles-wrapper .wp-block-audio audio,
+body#tinymce .wp-block-audio audio,
+.mce-content-body .wp-block-audio audio {
     width: 100%;
+    min-width: 0;
 }
 
 .editor-styles-wrapper :where(figcaption, .wp-caption-text, .gallery-caption),

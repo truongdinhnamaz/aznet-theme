@@ -19,6 +19,9 @@ if ( ! is_string( $image_one_url ) || '' === $image_one_url || ! is_string( $ima
     WP_CLI::error( 'X3 attachment URLs could not be resolved.' );
 }
 
+update_post_meta( $image_one_id, '_wp_attachment_image_alt', 'X3 legacy gallery image one' );
+update_post_meta( $image_two_id, '_wp_attachment_image_alt', 'X3 legacy gallery image two' );
+
 $embed_target_id = wp_insert_post(
     [
         'post_type'    => 'page',
