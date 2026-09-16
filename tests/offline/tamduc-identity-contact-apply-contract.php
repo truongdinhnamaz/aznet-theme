@@ -41,6 +41,16 @@ foreach ([
     assert(str_contains($browserText, $needle), "Harness missing required marker: {$needle}");
 }
 
+// AZnet Theme renders its WordPress-owned custom logo with the Theme header class,
+// not WordPress core's default img.custom-logo class. Verification must observe the
+// actual public presentation contract instead of creating a false negative.
+foreach ([
+    'aznet-theme-site-header__logo',
+    'logo_selector',
+] as $needle) {
+    assert(str_contains($browserText, $needle), "Harness missing AZnet logo-selector regression marker: {$needle}");
+}
+
 // WordPress can render the menu save input in a hidden header toolbar. The browser
 // harness must activate that native control without Playwright actionability checks.
 foreach ([
