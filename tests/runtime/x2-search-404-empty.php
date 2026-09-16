@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 $post_id = wp_insert_post([
     'post_type' => 'post',
     'post_status' => 'publish',
