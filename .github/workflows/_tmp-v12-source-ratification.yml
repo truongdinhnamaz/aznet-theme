@@ -34,7 +34,7 @@ jobs:
           spec = 'docs/superpowers/specs/2026-09-16-v1.2-wordpress-experience-completion-design.md'
           replace_once(spec,
               '**Status:** Owner-approved design / source ratification pending  ',
-              '**Status:** Owner-approved design / source-ratification artifact  ')
+              '**Status:** Owner-approved design / source-ratification artifact')
 
           p = 'docs/source/AZT-04-roadmap-qa-decisions.md'
           replace_once(p, '**Version:** v0.42', '**Version:** v0.43')
