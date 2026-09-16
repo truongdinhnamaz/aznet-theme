@@ -1,0 +1,30 @@
+name: Tâm Đức Homepage Inventory
+
+on:
+  push:
+    branches:
+      - ops/tamduc-homepage-completion
+    paths:
+      - 'tests/offline/tamduc-homepage-inventory-contract.php'
+      - 'tests/browser/tamduc-homepage-inventory.mjs'
+      - '.github/workflows/tamduc-homepage-inventory.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inventory-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Verify inventory contract
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/tamduc-homepage-inventory-contract.php
