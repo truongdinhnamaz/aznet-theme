@@ -523,16 +523,25 @@ $child_id = wp_insert_comment([
     'comment_approved'     => 1,
 ]);
 
-if (! $parent_id || ! $child_id) {
+$second_parent_id = wp_insert_comment([
+    'comment_post_ID'      => $post_id,
+    'comment_author'       => 'X1 Second Parent',
+    'comment_author_email' => 'x1-second@example.test',
+    'comment_content'      => 'X1 second parent comment',
+    'comment_approved'     => 1,
+]);
+
+if (! $parent_id || ! $child_id || ! $second_parent_id) {
     fwrite(STDERR, "FAIL: cannot create X1 comments\n");
     exit(1);
 }
 
 update_option('thread_comments', 1);
-update_option('page_comments', 0);
+update_option('page_comments', 1);
+update_option('comments_per_page', 1);
 
-if (2 !== (int) get_comments_number($post_id)) {
-    fwrite(STDERR, "FAIL: expected two approved X1 comments\n");
+if (3 !== (int) get_comments_number($post_id)) {
+    fwrite(STDERR, "FAIL: expected three approved X1 comments\n");
     exit(1);
 }
 
@@ -545,8 +554,9 @@ if (! is_string($url) || '' === $url) {
 echo wp_json_encode([
     'post_id'   => $post_id,
     'parent_id' => $parent_id,
-    'child_id'  => $child_id,
-    'url'       => $url,
+    'child_id'         => $child_id,
+    'second_parent_id' => $second_parent_id,
+    'url'              => $url,
 ], JSON_UNESCAPED_SLASHES) . "\n";
 ```
 
@@ -568,7 +578,7 @@ Create `.github/workflows/x1-comments-surface.yml` with `pull_request` + `workfl
 - name: Seed native comments fixture
   run: |
     wp eval-file tests/runtime/x1-comments-surface.php --path=/tmp/wordpress > /tmp/x1-fixture.json
-    jq -e '.post_id > 0 and .parent_id > 0 and .child_id > 0 and (.url | length > 0)' /tmp/x1-fixture.json
+    jq -e '.post_id > 0 and .parent_id > 0 and .child_id > 0 and .second_parent_id > 0 and (.url | length > 0)' /tmp/x1-fixture.json
     jq -r '.url' /tmp/x1-fixture.json > /tmp/x1-url.txt
 
 - name: Verify real WordPress comments HTML and scoped assets
@@ -580,6 +590,7 @@ Create `.github/workflows/x1-comments-surface.yml` with `pull_request` + `workfl
     grep -F 'X1 parent comment' /tmp/x1-comments.html
     grep -F 'X1 nested reply' /tmp/x1-comments.html
     grep -F 'comment-reply-link' /tmp/x1-comments.html
+    grep -F 'comments-pagination' /tmp/x1-comments.html
     grep -F 'id="respond"' /tmp/x1-comments.html
     grep -F 'aznet-theme-comments-css' /tmp/x1-comments.html
     grep -F 'comment-reply-js' /tmp/x1-comments.html
@@ -592,7 +603,8 @@ Also curl a non-Post route (for example `/`) and assert `aznet-theme-comments-cs
 Trigger through the PR or `workflow_dispatch` after the branch contains Tasks 1-3.
 
 Expected L3 result:
-- native Post renders two approved comments including one child reply;
+- native Post renders three approved comments including one child reply and a second top-level comment;
+- native comment pagination renders because `page_comments=1` and `comments_per_page=1`;
 - comment form is present because comments are open;
 - X1 stylesheet loads on the Post and not on Home;
 - Core `comment-reply` loads because threaded comments are enabled;
@@ -650,6 +662,9 @@ if (await page.getByText('X1 nested reply', { exact: true }).count() !== 1) {
 if (await page.locator('#respond textarea#comment').count() !== 1) {
   throw new Error('missing native comment textarea');
 }
+if (await page.locator('nav.comments-pagination').count() !== 1) {
+  throw new Error('missing native comments pagination');
+}
 
 const overflow = await page.evaluate(() =>
   Math.max(0, document.documentElement.scrollWidth - document.documentElement.clientWidth)
@@ -693,7 +708,7 @@ Expected fresh output:
 - 3/3 viewport cases PASS;
 - exactly one `main` landmark per case;
 - parent and nested reply present;
-- comment form present;
+- comment form and native comments pagination present;
 - horizontal overflow = 0;
 - visible focus indicator for reply link and textarea;
 - blocking axe violations = 0;
@@ -744,43 +759,24 @@ Also inspect the final diff and confirm no changes under:
 - provider-specific storage/contracts;
 - Theme version declarations.
 
-- [ ] **Step 2: Write the evidence record from actual run IDs/artifacts**
+- [ ] **Step 2: Write the evidence record from the observed final-head evidence**
 
-Create `docs/evidence/X1_COMMENTS_SURFACE_20260916.md` containing only facts supported by the fresh final-head run:
+Create `docs/evidence/X1_COMMENTS_SURFACE_20260916.md` only after the final implementation head has a successful X1 workflow. Record the exact values observed from GitHub rather than pre-writing synthetic values. The evidence file must include these fields and claims:
 
-```markdown
-# X1 Comments Surface — Verification Evidence
+- Date and scope: AZnet Theme v1.2 X1 — Comments Surface.
+- Exact final verified implementation SHA from the successful workflow run.
+- L2 RED checkpoint commit and the intended pre-change failure reason.
+- L2 GREEN implementation commit and retained offline regression results.
+- Exact X1 workflow run ID and conclusion.
+- Exact browser/runtime artifact ID and digest when GitHub reports a digest.
+- L3 WordPress 6.9 fixture result: three approved comments, one threaded child reply, one second top-level comment, comments form, and native comments pagination.
+- L4 result at 1440x1000, 1024x900, and 390x844: zero horizontal overflow, zero blocking axe violations, zero console/page errors, zero failed subresources, and visible keyboard focus.
+- Asset scope result: comments stylesheet present on the X1 Post fixture and absent on Home; Core `comment-reply` present under threaded-comment conditions.
+- Ownership result: no custom comment datastore/query/moderation/reply engine and no provider integration expansion.
+- Not claimed: provider L5, `1.2.0` release/package, publication, or deployment.
+- Exact Next: X2 — Search / 404 / Empty States.
 
-**Date:** 16/09/2026
-**Scope:** AZnet Theme v1.2 X1 — Comments Surface
-**Final verified head:** `<exact final implementation SHA from the successful run>`
-
-## PASS
-
-- L2: X1 native comments presentation contract PASS after verified RED on the pre-change tree.
-- L3: real WordPress 6.9 native Post/comments/threaded-reply fixture PASS.
-- L4: 1440x1000, 1024x900, 390x844 comments surface PASS with zero horizontal overflow, zero blocking axe violations, zero console/page errors, and zero failed subresources.
-- Asset scope: `comments.css` present on the X1 Post fixture and absent on Home; Core `comment-reply` present only under native threaded-comment conditions.
-- Ownership: no custom comment datastore/query/moderation/reply engine and no provider integration expansion.
-
-## EVIDENCE
-
-- X1 workflow run: `<actual run id>`
-- Browser/runtime artifact: `<actual artifact id and digest if available>`
-- RED checkpoint commit: `<actual RED commit>`
-- GREEN implementation commit: `<actual GREEN commit>`
-
-## UNKNOWN / NOT CLAIMED
-
-- Provider L5 compatibility/certification is outside X1.
-- `1.2.0` release/package/publication/deployment is not claimed.
-
-## NEXT
-
-X2 — Search / 404 / Empty States.
-```
-
-Replace each angle-bracket field with the actual verified value before committing; never commit the evidence document while those markers remain.
+Before committing, read the evidence file once against the successful run metadata and artifact metadata so every identifier is a real observed value.
 
 - [ ] **Step 3: Advance authoritative roadmap state only after evidence exists**
 
@@ -796,10 +792,13 @@ If live canonical source has advanced beyond those versions, stop the source edi
 
 ```bash
 git diff --check
-! grep -R -n -E '<actual |<exact |<verified |<run id>|<artifact id>|TBD|TODO|PLACEHOLDER' docs/evidence/X1_COMMENTS_SURFACE_20260916.md docs/source/AZT-04-roadmap-qa-decisions.md docs/source/AZT-EXEC-MAP.md docs/source/SOURCE_MANIFEST.md
+grep -F '**Final verified head:**' docs/evidence/X1_COMMENTS_SURFACE_20260916.md
+grep -F '**X1 workflow run:**' docs/evidence/X1_COMMENTS_SURFACE_20260916.md
+grep -F 'X2' docs/source/AZT-04-roadmap-qa-decisions.md
+grep -F 'X2' docs/source/AZT-EXEC-MAP.md
 ```
 
-Expected: exit code 0 and no placeholder markers.
+Expected: exit code 0; evidence contains the final verified head and workflow run fields populated from the observed GitHub run; authoritative source names X2 as the sole next implementation slice.
 
 - [ ] **Step 5: Commit X1 closure**
 
