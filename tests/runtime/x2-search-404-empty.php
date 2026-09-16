@@ -26,7 +26,7 @@ $result = [
     'result_url' => home_url('/?s=' . rawurlencode('X2 Recovery Search Target')),
     'empty_search_url' => home_url('/?s=' . rawurlencode('X2 Definitely Missing Phrase')),
     'empty_archive_url' => get_category_link($term_id),
-    'not_found_url' => home_url('/x2-definitely-not-a-real-route/'),
+    'not_found_url' => home_url('/?p=999999999'),
     'post_url' => get_permalink((int) $post_id),
     'home_url' => home_url('/'),
 ];
