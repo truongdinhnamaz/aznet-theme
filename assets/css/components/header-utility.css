@@ -1,0 +1,37 @@
+.aznet-theme-site-header__utility-nav {
+    display: flex;
+    align-items: center;
+}
+
+.aznet-theme-site-header__utility-menu {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.aznet-theme-site-header__utility-menu a {
+    display: inline-flex;
+    min-height: 38px;
+    align-items: center;
+    padding: 0 .75rem;
+    border: 1px solid var(--aznet-theme-header-border);
+    border-radius: 999px;
+    color: inherit;
+    font-size: .82rem;
+    font-weight: 750;
+    white-space: nowrap;
+}
+
+@media (max-width: 980px) {
+    .aznet-theme-site-header__mobile-actions .aznet-theme-site-header__utility-menu {
+        display: grid;
+        width: 100%;
+    }
+
+    .aznet-theme-site-header__mobile-actions .aznet-theme-site-header__utility-menu a {
+        justify-content: center;
+    }
+}
