@@ -1,0 +1,62 @@
+name: P1 Pilot Identity Inspection
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  p1-read-only-inspection:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Guard canonical main dispatch
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = "refs/heads/main"
+
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+
+      - name: Record exact identity
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/p1-pilot-identity
+          git rev-parse HEAD | tee /tmp/p1-pilot-identity/head-sha.txt
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Verify P1 read-only contract
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/p1-pilot-identity-inspection-contract.php
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Inspect pilot Theme identities read-only
+        env:
+          P1_BASE_URL: https://tamduchanoi.aznet.vn
+          P1_ADMIN_USER: ${{ secrets.PILOT_WP_USER }}
+          P1_ADMIN_PASS: ${{ secrets.PILOT_WP_PASSWORD }}
+          P1_STATE_DIR: /tmp/p1-pilot-identity
+        run: node tests/browser/p1-pilot-identity-inspection.mjs
+
+      - name: Upload P1 inspection evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p1-pilot-identity-inspection
+          path: /tmp/p1-pilot-identity
+          if-no-files-found: warn
