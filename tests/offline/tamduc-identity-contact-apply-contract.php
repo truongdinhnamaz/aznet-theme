@@ -41,6 +41,16 @@ foreach ([
     assert(str_contains($browserText, $needle), "Harness missing required marker: {$needle}");
 }
 
+// WordPress can render the menu save input in a hidden header toolbar. The browser
+// harness must activate that native control without Playwright actionability checks.
+foreach ([
+    'nativeClick',
+    "evaluate((element) => element.click())",
+    "'#save_menu_header'",
+] as $needle) {
+    assert(str_contains($browserText, $needle), "Harness missing hidden-control regression marker: {$needle}");
+}
+
 foreach ([
     'get_option(',
     'get_post_meta(',
