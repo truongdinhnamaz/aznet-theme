@@ -172,7 +172,7 @@ namespace {
         ],
         'clean-post-editorial' => [
             ['generic' => true, 'preset' => 'editorial', 'is_post' => true],
-            [...$coreStyles, 'aznet-theme-generic-content', 'aznet-theme-preset-editorial', 'aznet-theme-media', 'aznet-theme-article'],
+            [...$coreStyles, 'aznet-theme-generic-content', 'aznet-theme-preset-editorial', 'aznet-theme-navigation', 'aznet-theme-media', 'aznet-theme-article'],
             [],
         ],
         'woo-product' => [
