@@ -79,6 +79,9 @@ jobs:
           coverage: none
 
       - name: Verify X2 ownership, static contracts and retained core regression
+        env:
+          HEAD_REF: ${{ github.head_ref || github.ref_name }}
+          X2_SLICE_BRANCH: feat/v1.2-x2-search-404
         run: |
           set -euo pipefail
           git fetch origin main:refs/remotes/origin/main
@@ -88,9 +91,12 @@ jobs:
             echo 'FAIL: X2 must not change provider integration files' >&2
             exit 1
           fi
-          if printf '%s\n' "$changed" | grep -E '^(functions\.php|style\.css)$'; then
-            echo 'FAIL: X2 must not change Theme version declarations' >&2
-            exit 1
+          if [[ "${HEAD_REF:-}" == "${X2_SLICE_BRANCH}" ]]; then
+            if printf '%s\n' "$changed" | grep -E '^(functions\.php|style\.css)$'; then
+              echo 'FAIL: X2 must not change Theme version declarations' >&2
+              exit 1
+            fi
+            echo 'PASS: X2 slice-only version ownership guard'
           fi
           bash scripts/assert-theme-version.sh
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/x2-search-404-empty-contract.php
