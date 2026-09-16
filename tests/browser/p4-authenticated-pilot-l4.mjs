@@ -7,6 +7,7 @@ const P4_AUTH_BASE_URL = (process.env.P4_AUTH_BASE_URL || 'https://tamduchanoi.a
 const P4_AUTH_ADMIN_USER = process.env.P4_AUTH_ADMIN_USER || '';
 const P4_AUTH_ADMIN_PASS = process.env.P4_AUTH_ADMIN_PASS || '';
 const stateDir = process.env.P4_AUTH_STATE_DIR || '/tmp/p4-authenticated-pilot';
+const canonicalThemeVersion = '1.1.0';
 
 fs.mkdirSync(stateDir, { recursive: true });
 
@@ -129,23 +130,12 @@ try {
   if (!blocking_failures.length) {
     try {
       await gotoControlCenter(page, 'system-health');
+      await page.screenshot({ path: path.join(stateDir, 'system-health-1440.png'), fullPage: true });
+
       const center = page.locator('.aznet-theme-control-center');
       const text = await center.innerText();
-      for (const needle of [
-        'Standalone Core',
-        'READY',
-        'Optional Integrations',
-        'WooCommerce',
-        'RootProfile v1',
-        'RootProfile v2',
-        'RootProfile Current Surface',
-        'ConvertFlow',
-        'Support Snapshot',
-      ]) {
-        if (!text.includes(needle)) recordFailure('THEME_SYSTEM_HEALTH_UI', `System Health missing ${needle}`);
-      }
-
       const snapshotField = page.locator('textarea[readonly]');
+
       if ((await snapshotField.count()) !== 1) {
         recordFailure('THEME_SUPPORT_SNAPSHOT', 'Expected exactly one read-only Support Snapshot field');
       } else {
@@ -153,31 +143,60 @@ try {
         const report = snapshot?.report || {};
         const core = report?.standalone_core || {};
         const optional = report?.optional_integrations || {};
+        const configuration = report?.configuration || {};
+        const capabilities = report?.capabilities || {};
+        const hasCurrentShape = Object.hasOwn(report, 'standalone_core') && Object.hasOwn(report, 'optional_integrations');
+        const hasLegacyShape = Object.hasOwn(report, 'configuration') && Object.hasOwn(report, 'capabilities');
+        const reportShape = hasCurrentShape ? 'd027_current' : (hasLegacyShape ? 'legacy_pre_d027' : 'unknown');
 
         observations.system_health = {
           product: snapshot?.product || null,
+          report_shape: reportShape,
           environment: report?.environment || null,
           theme: report?.theme || null,
           standalone_core: core,
           optional_integrations: optional,
+          configuration,
+          capabilities,
         };
 
         if (snapshot?.product !== 'aznet-theme') recordFailure('THEME_SUPPORT_SNAPSHOT', 'Support Snapshot product marker mismatch');
         if (report?.theme?.name !== 'AZnet Theme') recordFailure('THEME_ACTIVE_IDENTITY', `Unexpected active Theme name: ${report?.theme?.name || 'missing'}`);
-        if (report?.theme?.version !== '1.1.0') recordFailure('THEME_ACTIVE_VERSION', `Unexpected active Theme version: ${report?.theme?.version || 'missing'}`);
         if (!versionAtLeast(report?.environment?.wordpress, 6, 9)) recordFailure('THEME_ENVIRONMENT', `WordPress below supported floor or unreadable: ${report?.environment?.wordpress || 'missing'}`);
         if (!versionAtLeast(report?.environment?.php, 8, 1)) recordFailure('THEME_ENVIRONMENT', `PHP below supported floor or unreadable: ${report?.environment?.php || 'missing'}`);
-        if (core?.status !== 'ready') recordFailure('THEME_STANDALONE_CORE', `Standalone Core status is ${core?.status || 'missing'}`);
-        if (!['default', 'editorial', 'commerce'].includes(core?.visual_preset)) recordFailure('THEME_CURRENT_CONFIG', `Invalid visual preset: ${core?.visual_preset || 'missing'}`);
-        if (!['standard', 'compact', 'commerce', 'overlay'].includes(core?.header_preset)) recordFailure('THEME_CURRENT_CONFIG', `Invalid header preset: ${core?.header_preset || 'missing'}`);
-        if (typeof core?.logo !== 'boolean') recordFailure('THEME_CURRENT_CONFIG', 'Logo continuity marker is not boolean');
-        if (typeof core?.primary_menu !== 'boolean') recordFailure('THEME_CURRENT_CONFIG', 'Primary menu continuity marker is not boolean');
 
-        const allowedOptionalStates = new Set(['available', 'not_present', 'unknown']);
-        for (const [key, value] of Object.entries(optional)) {
-          if (!allowedOptionalStates.has(value)) recordFailure('THEME_OPTIONAL_DIAGNOSTIC', `Invalid optional integration state ${key}=${value}`);
+        if (report?.theme?.version !== canonicalThemeVersion || !hasCurrentShape) {
+          recordFailure(
+            'PILOT_THEME_BITS_DRIFT',
+            `Pilot reports Theme ${report?.theme?.version || 'missing'} with System Health shape ${reportShape}; canonical P4 target is Theme ${canonicalThemeVersion} with D-027 standalone_core/optional_integrations`,
+          );
+        } else {
+          for (const needle of [
+            'Standalone Core',
+            'READY',
+            'Optional Integrations',
+            'WooCommerce',
+            'RootProfile v1',
+            'RootProfile v2',
+            'RootProfile Current Surface',
+            'ConvertFlow',
+            'Support Snapshot',
+          ]) {
+            if (!text.includes(needle)) recordFailure('THEME_SYSTEM_HEALTH_UI', `System Health missing ${needle}`);
+          }
+
+          if (core?.status !== 'ready') recordFailure('THEME_STANDALONE_CORE', `Standalone Core status is ${core?.status || 'missing'}`);
+          if (!['default', 'editorial', 'commerce'].includes(core?.visual_preset)) recordFailure('THEME_CURRENT_CONFIG', `Invalid visual preset: ${core?.visual_preset || 'missing'}`);
+          if (!['standard', 'compact', 'commerce', 'overlay'].includes(core?.header_preset)) recordFailure('THEME_CURRENT_CONFIG', `Invalid header preset: ${core?.header_preset || 'missing'}`);
+          if (typeof core?.logo !== 'boolean') recordFailure('THEME_CURRENT_CONFIG', 'Logo continuity marker is not boolean');
+          if (typeof core?.primary_menu !== 'boolean') recordFailure('THEME_CURRENT_CONFIG', 'Primary menu continuity marker is not boolean');
+
+          const allowedOptionalStates = new Set(['available', 'not_present', 'unknown']);
+          for (const [key, value] of Object.entries(optional)) {
+            if (!allowedOptionalStates.has(value)) recordFailure('THEME_OPTIONAL_DIAGNOSTIC', `Invalid optional integration state ${key}=${value}`);
+          }
+          if (optional?.convertflow !== 'unknown') recordFailure('THEME_CONVERTFLOW_BOUNDARY', `ConvertFlow must remain unknown without a public capability contract; got ${optional?.convertflow || 'missing'}`);
         }
-        if (optional?.convertflow !== 'unknown') recordFailure('THEME_CONVERTFLOW_BOUNDARY', `ConvertFlow must remain unknown without a public capability contract; got ${optional?.convertflow || 'missing'}`);
       }
     } catch (error) {
       recordFailure('THEME_SYSTEM_HEALTH', error instanceof Error ? error.message : String(error));
