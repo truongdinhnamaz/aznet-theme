@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.34  
+**Version:** v0.35  
 **Status:** Working Source  
-**Date:** 10/09/2026
+**Date:** 16/09/2026
 
 ## 1. Purpose
 
@@ -33,9 +33,10 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P1 | Pilot identity cleanup | SITE-OPS READY | Active pilot Theme `1.1.0` proven; only inactive legacy duplicates may be deleted through WordPress core UI after smoke/rollback confidence |
 | P2 | Editorial single-post hardening | PASS | PR #51 merged; native Post editorial presentation + singular-post scoped assets + retained regressions |
 | P3 | Editorial archive/search hardening | PASS | PR #52 merged; native thumbnail/date scan presentation + resilient long-title/excerpt styling; WordPress main query retained |
-| P4 | Real law-site pilot QA | READY / EXACT NEXT | Owner-approved pilot QA is now the exact next after canonical PR #58 integration and D-022 exact-main PASS |
+| P4 | Real law-site pilot QA | PILOT ACCESS BLOCKED / APPROVED | Execution remains approved, but the current QA environment cannot reach the pilot; this is an environment/access blocker, not a Theme runtime dependency |
 | P4-A | Homepage Composer + Law 01 | PASS / MERGED | Premium Law01 + Composer merged through PR #58; exact-main static/runtime/browser core verification PASS |
 | P4-B | Law Site Provisioning v1.1 | PASS / MERGED | D-026 smart setup merged through PR #58 with Theme metadata `1.1.0`; deterministic package/browser evidence retained and exact-main verification PASS |
+| P4-C | Standalone Core independence | READY / EXACT NEXT | D-027 accepted: zero mandatory third-party runtime dependencies; implementation must turn clean-WP independence into executable L1-L4 and final-package gates |
 | P5 | Publication & production deployment | GATED | Tag/GitHub Release and final production deployment remain separate explicit owner gates |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
@@ -268,6 +269,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-024** | **Homepage template switching uses a stable typed Content Map plus Theme-owned Presentation Preset; Classic Editor remains for native Post/Page; provisioning is separate from preset application; the Front Page keeps exactly one `the_content()` boundary and no provider/domain semantics are cloned into Theme.** | **Accepted** |
 | **D-025** | **Law Site Provisioning v1 is an explicit idempotent WordPress-native bootstrap workflow: activation is mutation-free; new/existing sites use a visible confirmed change plan; created content becomes WordPress-owned; failed-run rollback is current-run bounded; successful setup is not equivalent to Launch Ready.** | **Accepted** |
 | **D-026** | **Law Site Provisioning v1.1 may preselect non-authoritative exact-label recommendations, seed bounded WordPress-native starter editorial/media content, and temporarily discourage indexing only on a confirmed new/mostly-empty-site plan; active-site starter content fails safe to Draft without a public per-Post SEO contract, and all authoritative mapping/mutation remains explicit in the confirmed provisioning plan.** | **Accepted** |
+| **D-027** | **AZnet Theme Core has zero mandatory third-party runtime dependency. WordPress + Theme alone must complete install/activate/setup/provision/author/render on the support floor; optional providers are additive capability tracks, provider absence is not Core failure, and the exact final package must pass a zero-plugin standalone release path before Core Ready/publication. External development/QA tooling is allowed only outside deployed runtime.** | **Accepted** |
 
 ## 11. Open questions
 
@@ -300,8 +302,8 @@ The following remain explicit owner approval gates:
 - destructive retirement/deletion without proven rollback;
 - merge of future production hardening into canonical `main` after its own fresh verification when the active PR is explicitly owner-gated.
 
-Metadata promotion to `1.1.0` is a historical cleared gate completed through PR #48. Source closure and the post-R6 roadmap were explicitly approved by the product owner on 08/09/2026. P2 and P3 production merges were separately owner-approved. Owner-approved PR #58 canonical integration is cleared at `main@04edd8b312de70e6ee8339c461ae8f16f93e5859` and D-022 exact-main run `34414878827` is PASS. P4 pilot QA execution remains approved. None of these approvals include Git tag/GitHub Release, destructive duplicate-theme cleanup, L5 provider certification or final production deployment.
+Metadata promotion to `1.1.0` is a historical cleared gate completed through PR #48. Source closure and the post-R6 roadmap were explicitly approved by the product owner on 08/09/2026. P2 and P3 production merges were separately owner-approved. Owner-approved PR #58 canonical integration is cleared at `main@04edd8b312de70e6ee8339c461ae8f16f93e5859` and D-022 exact-main run `34414878827` is PASS. P4 pilot QA execution remains approved but is currently access-blocked from the available QA environment. D-027 Standalone Core architecture was explicitly approved on 16/09/2026 and its implementation may proceed on a bounded branch. None of these approvals include Git tag/GitHub Release, destructive duplicate-theme cleanup, L5 provider certification or final production deployment.
 
 ## 14. Exact next
 
-**P4 — Real law-site pilot QA on canonical `main@04edd8b312de70e6ee8339c461ae8f16f93e5859`. D-022 exact-main verification run `34414878827` is PASS. Prove the real current-stack route/responsive/a11y/Rank Math/RootProfile matrix and measured site behavior. P1 duplicate-theme cleanup remains a parallel destructive site-operations gate. Stop before tag/GitHub Release or final production deployment.**
+**P4-C / D-027 — implement the Standalone Core contract on a bounded work branch. Start from fresh L0 state, add an explicit RED for the currently missing standalone guarantee, preserve already-PASS zero-plugin behavior, and prove L1-L4 plus an exact-package zero-plugin path before P5. P4 real-pilot execution remains approved but `P4 PILOT ACCESS BLOCKED` until the QA environment can reach the pilot. Stop before tag/GitHub Release or final production deployment.**

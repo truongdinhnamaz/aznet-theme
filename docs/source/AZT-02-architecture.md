@@ -4,9 +4,9 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.8 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.9 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 09/09/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 16/09/2026 |
 
 | **Kiến trúc lõi: **Theme chỉ sở hữu presentation/configuration/reference cần thiết. Dữ liệu authoritative và business state ở lại owner. Boundary giữa hai bên là public/versioned provider contract hoặc adapter tối thiểu. |
 | --- |
@@ -264,3 +264,33 @@ Required constraints:
 - Existing/active sites must never receive whole-site noindex merely to publish starter content. Without an accepted public per-Post SEO-owner contract, starter Posts remain Draft.
 - Theme must not direct-write Rank Math, Yoast or other private SEO plugin storage/API.
 - Current explicit Content Map and WordPress publication/media state remain authoritative over recommendations and provisioning provenance.
+
+
+# 16. Standalone Core runtime independence — D-027
+
+AZnet Theme has **zero mandatory third-party runtime dependency**. WordPress + AZnet Theme alone must provide a complete Core product on the support floor. Optional providers may add presentation capabilities through approved public/versioned contracts but may not complete an otherwise partial Core.
+
+## 16.1 Core runtime invariant
+
+- Core install/activate/setup/author/render must work with zero active third-party plugins.
+- Core includes Design System, Header/Footer, native Logo/Menu/Search presentation, Homepage Composer, Theme-owned presets including `law-01`, Quick Setup/Law Site Provisioning, native Post/Page/Archive/Search/404 presentation, native author fallback, Control Center, System Health core readiness and Theme-owned settings portability.
+- Provider absence is a normal state, not a Core error. Core admin must not require, nag for or redirect users to install optional plugins.
+- Optional-provider UI is capability-driven: hide provider-specific workflows when the public capability is absent rather than rendering a disabled required-plugin surface.
+- System Health must separate **Standalone Core** readiness from **Optional Integrations** availability. Optional `Not present` must not downgrade Core readiness.
+
+## 16.2 Provisioning independence
+
+Law01 provisioning must complete from resources shipped with the Theme package plus WordPress public APIs. The supported setup path must not require an AZnet API, mandatory CDN, remote template repository, license server, AI service, plugin marketplace or third-party demo importer. Starter media may be bundled and imported into WordPress Media Library; created content remains WordPress-owned after successful provisioning.
+
+## 16.3 Optional provider boundary
+
+- WooCommerce absent => complete non-commerce Theme; present => additive commerce presentation only, with Woo retaining commerce truth.
+- RootProfile absent => WordPress-native author/site presentation; present => additive identity/Profile presentation through public contracts only.
+- ConvertFlow absent => native Homepage Composer remains complete; present => additive Journey projection only, with ConvertFlow retaining Journey/conversion semantics.
+- SEO plugins remain optional coexistence targets; Theme must not write private SEO-plugin storage to provide standalone behavior.
+
+## 16.4 QA/release invariant
+
+The exact final package must pass a zero-plugin standalone path before Core Ready/publication: install -> activate -> setup -> provision -> representative runtime/browser/a11y -> update/theme-switch continuity. Optional L5 compatibility certification is additive and cannot substitute for Standalone Core PASS. Development/QA tools such as GitHub Actions, WP-CLI, Playwright and axe are allowed because they are not website runtime dependencies.
+
+A QA runner's inability to resolve/authenticate to a pilot site is recorded as `P4 PILOT ACCESS BLOCKED`; it is not evidence that the Theme requires a connector/plugin.

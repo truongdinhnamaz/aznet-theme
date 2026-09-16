@@ -1,9 +1,9 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.26  
+**Version:** v0.27  
 **Status:** Working Execution Map / derived  
-**Date:** 10/09/2026
+**Date:** 16/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
@@ -34,9 +34,10 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | P1 Pilot identity cleanup | SITE-OPS READY | Active `1.1.0` proven; delete only inactive legacy theme identities through WordPress core UI after smoke |
 | P2 Editorial Single-Post | PASS | PR #51 merged; native WordPress editorial presentation only; no SEO/domain/query takeover |
 | P3 Editorial Listing/Search | PASS | PR #52 merged; native thumbnail/date scan presentation + resilient long titles/excerpts; main query retained |
-| P4 Real Pilot QA | READY / EXACT NEXT | Pilot QA remains approved; canonical-main integration and D-022 exact-main verification are complete |
+| P4 Real Pilot QA | PILOT ACCESS BLOCKED / APPROVED | Pilot QA remains approved; current QA environment cannot reach the pilot; no product dependency is inferred |
 | P4-A Homepage Composer + Law 01 | PASS / MERGED | PR #58 merged; exact-main static/runtime/browser core verification PASS |
 | P4-B Law Site Provisioning | PASS / MERGED | D-026 merged; Theme `1.1.0`; deterministic package/browser evidence retained; activation mutation-free and active-site overwrite/noindex takeover forbidden |
+| P4-C Standalone Core independence | READY / EXACT NEXT | D-027 accepted; zero-plugin WordPress + Theme path becomes an executable release invariant; optional integrations remain additive |
 | P5 Publication/Deployment | GATED | Tag/GitHub Release and final production deploy remain explicit owner actions |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
@@ -250,7 +251,25 @@ No layer may be inferred from another.
 
 **Exit:** PASS through canonical-main integration plus D-022 exact-main verification. P4 real-site pilot and P5 publication/deployment remain separate gates.
 
-**Next:** P4 Real Pilot QA under the existing owner approval; stop before P5 publication/deployment gates.
+**Next:** P4-C / D-027 Standalone Core implementation; pilot QA remains access-blocked in parallel.
+
+### P4-C — Standalone Core Independence
+
+**State:** READY / EXACT NEXT. D-027 architecture approved 16/09/2026.
+
+**Goal:** turn the existing WordPress-clean principle into an executable product/release contract: WordPress + AZnet Theme only must complete install/activate/setup/provision/author/render without mandatory third-party plugins or external runtime services.
+
+**Core boundary:** retain Theme-owned Design System, Header/Footer, native Homepage Composer, `law-01`, Quick Setup/Provisioning, native editorial templates, Control Center/System Health and settings portability as zero-plugin Core. Optional WooCommerce/RootProfile/ConvertFlow/SEO integrations stay additive and public-contract-based.
+
+**QA:** L1 dependency/nag scan; L2 provider-absent contracts; L3 full clean-WP provisioning/runtime; L4 setup/frontend responsive+a11y; final P5 package must repeat the zero-plugin path on exact package bytes.
+
+**UX:** System Health separates Standalone Core from Optional Integrations; optional `Not present` does not downgrade Core. No required-plugin nags, marketplace redirects or setup blockers for absent providers.
+
+**Rollback:** bounded tests/admin presentation only; preserve existing provider adapters and WordPress-owned provisioning outputs.
+
+**Exit:** Standalone Core matrix PASS through L1-L4 with exact-package gate wired for P5.
+
+**Next:** resume P4 pilot when access exists; otherwise continue P5 only after D-027 package gate is satisfied and separately approved.
 
 ### P5 — Final Candidate / Publication / Deployment
 
@@ -276,4 +295,4 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 15. Exact next
 
-**P4 — Real Pilot QA from canonical `main@04edd8b312de70e6ee8339c461ae8f16f93e5859` after D-022 exact-main PASS run `34414878827`. Verify the current-stack route/responsive/a11y/Rank Math/RootProfile matrix, record defects/evidence, and keep P1 duplicate-theme deletion as a separate destructive site-ops gate. Stop before tag/GitHub Release or final production deployment.**
+**P4-C / D-027 — implement Standalone Core independence from current canonical production bytes, beginning with a focused RED that proves the missing guarantee. Preserve existing PASS behavior, keep P4 pilot as `PILOT ACCESS BLOCKED / APPROVED`, and stop before tag/GitHub Release or final production deployment.**
