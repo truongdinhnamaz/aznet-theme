@@ -33,7 +33,15 @@ $shell_classes = \AZnet\Theme\content_shell_classes( false );
                     <?php the_posts_pagination(); ?>
                 </div>
             <?php else : ?>
-                <p class="aznet-theme-listing__empty"><?php esc_html_e( 'No content found.', 'aznet-theme' ); ?></p>
+                <div class="aznet-theme-recovery aznet-theme-recovery--empty" role="status">
+                    <h2 class="aznet-theme-recovery__title"><?php esc_html_e( 'No content is available here yet', 'aznet-theme' ); ?></h2>
+                    <p class="aznet-theme-recovery__description"><?php esc_html_e( 'You can return to the homepage and continue browsing from there.', 'aznet-theme' ); ?></p>
+                    <div class="aznet-theme-recovery__actions">
+                        <a class="aznet-theme-recovery__action" href="<?php echo esc_url( home_url( '/' ) ); ?>">
+                            <?php esc_html_e( 'Back to home', 'aznet-theme' ); ?>
+                        </a>
+                    </div>
+                </div>
             <?php endif; ?>
         </section>
     </div>
