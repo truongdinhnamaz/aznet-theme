@@ -1,0 +1,60 @@
+name: Tâm Đức Homepage Apply
+
+on:
+  push:
+    branches:
+      - ops/tamduc-homepage-completion
+    paths:
+      - 'tests/offline/tamduc-homepage-apply-contract.php'
+      - 'tests/browser/tamduc-homepage-apply.mjs'
+      - 'ops/tamduc-homepage/mutation-plan.json'
+      - '.github/workflows/tamduc-homepage-apply.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  safety-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Verify apply safety contract
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/tamduc-homepage-apply-contract.php
+
+  apply:
+    needs: safety-contract
+    if: contains(github.event.head_commit.message, '[apply-tamduc]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Check apply harness syntax
+        run: node --check tests/browser/tamduc-homepage-apply.mjs
+      - name: Apply bounded sourced mutations
+        env:
+          TAMDUC_BASE_URL: https://tamduchanoi.aznet.vn
+          PILOT_WP_USER: ${{ secrets.PILOT_WP_USER }}
+          PILOT_WP_PASSWORD: ${{ secrets.PILOT_WP_PASSWORD }}
+          TAMDUC_STATE_DIR: /tmp/tamduc-homepage-apply
+          TAMDUC_MUTATION_PLAN: ops/tamduc-homepage/mutation-plan.json
+        run: node tests/browser/tamduc-homepage-apply.mjs
+      - name: Upload apply evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tamduc-homepage-apply
+          path: /tmp/tamduc-homepage-apply
+          if-no-files-found: warn
