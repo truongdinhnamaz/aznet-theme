@@ -24,11 +24,16 @@ foreach ([
 foreach ([
     "const TARGET_VERSION = '1.2.0'",
     "const PHONE_HREF = 'tel:+842437164123'",
+    "const MENU_NAME = 'T\\u00e2m \\u0110\\u1ee9c - Li\\u00ean h\\u1ec7 ch\\u00ednh th\\u1ee9c'",
     "const UTILITY_LOCATION = 'header-utility'",
+    'locationState',
+    'approvedMenuFromLocation',
+    'menu_name: await page.locator(\'#menu-name\').inputValue()',
     'mutation: false',
 ] as $needle) {
     assert(str_contains($browserText, $needle), "Verification harness missing marker: {$needle}");
 }
+assert(!str_contains($browserText, '#select-menu-to-edit'), 'Verifier must not resolve authoritative menu identity from decorated dropdown labels');
 foreach ([
     'setInputFiles',
     'selectOption',
