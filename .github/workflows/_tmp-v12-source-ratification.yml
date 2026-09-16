@@ -1,0 +1,103 @@
+name: Temporary v1.2 Source Ratification
+
+on:
+  push:
+    branches: [docs/v1.2-wordpress-experience-design]
+    paths:
+      - '.github/workflows/_tmp-v12-source-ratification.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  ratify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reconcile v1.2 design with authoritative source
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              s = p.read_text()
+              n = s.count(old)
+              if n != 1:
+                  raise SystemExit(f'{path}: expected one match, found {n}: {old[:120]!r}')
+              p.write_text(s.replace(old, new, 1))
+
+          spec = 'docs/superpowers/specs/2026-09-16-v1.2-wordpress-experience-completion-design.md'
+          replace_once(spec,
+              '**Status:** Owner-approved design / source ratification pending  ',
+              '**Status:** Owner-approved design / source-ratification artifact  ')
+
+          p = 'docs/source/AZT-04-roadmap-qa-decisions.md'
+          replace_once(p, '**Version:** v0.42', '**Version:** v0.43')
+          replace_once(p,
+              '| P5 | Publication & production deployment | PASS | Tag `v1.1.0` + GitHub Release publication and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |\n| U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |',
+              '| P5 | Publication & production deployment | PASS | Tag `v1.1.0` + GitHub Release publication and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |\n| X | v1.2 WordPress Experience Completion | DESIGN APPROVED / SOURCE RATIFICATION | WordPress Core surfaces only; surface modules + shared primitives; deep polish Comments, Search/404/empty states, Media/gallery/embed; no new provider integration |\n| U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |')
+
+          v12_section = '''### X — v1.2 WordPress Experience Completion\n\n**State:** **DESIGN APPROVED / SOURCE RATIFICATION.**\n\n**Goal:** complete the native WordPress Core experience of AZnet Theme while keeping the Theme a presentation owner. v1.2 does not open a new provider/plugin integration program.\n\n**Architecture:** retain shared tokens/content primitives and the hybrid PHP + `theme.json` architecture; add bounded surface modules only where a surface has distinct markup/asset needs. WordPress continues to own comment/search/media/pagination/form semantics and state. Theme owns presentation, responsive behavior, accessibility presentation and surface-aware Theme assets.\n\n**Deep-polish surfaces:** Comments; Search + 404 + empty states; Media/gallery/embed. Pagination/navigation and native form controls reach production-ready quality without becoming large application subsystems.\n\n**Execution order:** `X1 Comments -> X2 Search/404 -> X3 Media -> X4 Navigation -> X5 Forms -> X6 Closure`.\n\n**Version discipline:** Theme metadata remains `1.1.0` during X1-X5. Promotion to exact `1.2.0` is an X6 action only after fresh final-candidate evidence and the applicable owner gate.\n\n**QA:** each production slice uses RED -> intended failure -> minimal GREEN -> retained regression, then L3 real WordPress runtime and L4 responsive/keyboard/focus/overflow/a11y. X6 adds L6 deterministic package/source identity, update/theme-switch continuity, rollback and exact-main verification. Provider L5 is outside v1.2 and is not inferred.\n\n**Forbidden:** provider integration expansion, private provider reads, custom search/ranking engine, custom comment engine/store, gallery/lightbox application engine, page builder/FSE takeover, SEO/domain ownership or a new build stack without a separate accepted decision.\n\n**Design record:** `docs/superpowers/specs/2026-09-16-v1.2-wordpress-experience-completion-design.md`.\n\n**Exact Next after source ratification:** write and review the implementation plan for **X1 — Comments Surface** before production implementation.\n\n'''
+          replace_once(p, '## 6. Dependency order\n', v12_section + '## 6. Dependency order\n')
+          replace_once(p,
+              '| **D-027** | **AZnet Theme Core has zero mandatory third-party runtime dependency. WordPress + Theme alone must complete install/activate/setup/provision/author/render on the support floor; optional providers are additive capability tracks, provider absence is not Core failure, and the exact final package must pass a zero-plugin standalone release path before Core Ready/publication. External development/QA tooling is allowed only outside deployed runtime.** | **Accepted** |',
+              '| **D-027** | **AZnet Theme Core has zero mandatory third-party runtime dependency. WordPress + Theme alone must complete install/activate/setup/provision/author/render on the support floor; optional providers are additive capability tracks, provider absence is not Core failure, and the exact final package must pass a zero-plugin standalone release path before Core Ready/publication. External development/QA tooling is allowed only outside deployed runtime.** | **Accepted** |\n| **D-028** | **v1.2 WordPress Experience Completion is a WordPress-Core-only Theme milestone using surface modules + shared primitives. No new provider integration is opened; Comments, Search/404/empty states and Media/gallery/embed receive deep polish; metadata remains 1.1.0 until X6 final-candidate promotion.** | **Accepted** |')
+          replace_once(p,
+              '**v1.1 release-critical path is complete through production deployment. Exact Next is an explicit owner decision on a new Theme milestone or a separately scoped optional-provider compatibility/certification track; provider L5 is not inferred from this release closure.**',
+              '**v1.2 WordPress Experience Completion is owner-approved at design level. Exact Next is to merge this source/design ratification, then write and review the X1 Comments Surface implementation plan. No provider L5 work is opened or inferred.**')
+
+          p = 'docs/source/AZT-EXEC-MAP.md'
+          replace_once(p, '**Version:** v0.34', '**Version:** v0.35')
+          replace_once(p,
+              '| P5 Publication/Deployment | PASS | Tag `v1.1.0` + GitHub Release and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |\n| U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |',
+              '| P5 Publication/Deployment | PASS | Tag `v1.1.0` + GitHub Release and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |\n| X v1.2 WordPress Experience Completion | DESIGN APPROVED / SOURCE RATIFICATION | Core WordPress surfaces only; X1-X6 sequence; no provider integration expansion |\n| U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |')
+
+          exec_v12 = '''## 13. v1.2 WordPress Experience Completion\n\n**State:** DESIGN APPROVED / SOURCE RATIFICATION.\n\n**Milestone boundary:** WordPress Core surfaces only. Theme presentation/configuration remains in scope; WordPress-owned semantics/state remain authoritative; provider compatibility/certification tracks stay separate.\n\n**Architecture:** existing shared content/design primitives remain the base. Add bounded surface modules rather than a monolithic experience layer. Use `theme.json` for editor/frontend parity where appropriate and PHP/CSS for native template surfaces where appropriate.\n\n**X1 — Comments Surface:** native comments template/list/form/reply/pagination presentation; no comment engine/store.\n\n**X2 — Search / 404 / Empty States:** recovery/discovery presentation over native query/routing truth; no custom ranking/query engine.\n\n**X3 — Media / Gallery / Embed:** robust native editorial media, caption/gallery/embed/alignment/overflow presentation; no gallery application engine.\n\n**X4 — Pagination & Navigation Completion:** archive/search pagination, Post page links, previous/next and comment pagination presentation; WordPress owns state/URLs.\n\n**X5 — Native Form Controls:** shared production-ready presentation for WordPress-native controls; no private plugin-form skinning contract.\n\n**X6 — Cross-surface QA & Release Closure:** L1-L4 retained regressions plus L6 deterministic package/source identity, lifecycle/rollback and exact-main verification; only then may the `1.2.0` promotion gate be considered.\n\n**Execution:** `X1 -> X2 -> X3 -> X4 -> X5 -> X6`. Every X1-X5 production slice uses RED -> intended failure -> minimal GREEN -> regression and has a bounded rollback.\n\n**Design record:** `docs/superpowers/specs/2026-09-16-v1.2-wordpress-experience-completion-design.md`.\n\n'''
+          replace_once(p, '## 13. Optional compatibility tracks\n', exec_v12 + '## 14. Optional compatibility tracks\n')
+          replace_once(p, '## 14. Recovery checkpoint\n', '## 15. Recovery checkpoint\n')
+          replace_once(p, '## 15. Exact next\n', '## 16. Exact next\n')
+          replace_once(p,
+              '**v1.1 release-critical path is complete through production deployment. Exact Next is an explicit owner decision on a new Theme milestone or a separately scoped optional-provider compatibility/certification track.**',
+              '**v1.2 WordPress Experience Completion design is owner-approved. Exact Next is source/design ratification merge, then a reviewed implementation plan for X1 Comments Surface before production code.**')
+
+          p = 'docs/source/SOURCE_MANIFEST.md'
+          replace_once(p,
+              'Canonical source is reconciled through the completed v1.1 R6 program, P2/P3 editorial hardening, PR #58 Homepage/Law01/Provisioning integration, D-027 Standalone Core closure, P4/P1 pilot sign-off, P5 final-candidate technical verification, owner-approved v1.1.0 Git tag + GitHub Release publication, and owner-approved production deployment verification.',
+              'Canonical source is reconciled through the completed v1.1 release-critical path and the owner-approved v1.2 WordPress Experience Completion design ratification. v1.2 remains a WordPress-Core-only Theme milestone; provider compatibility/certification tracks remain separate.')
+          replace_once(p,
+              '| `AZT-04-roadmap-qa-decisions.md` | v0.42 | R0-R6/P1-P4 PASS; P5 publication + production deployment PASS at the verified scope |',
+              '| `AZT-04-roadmap-qa-decisions.md` | v0.43 | v1.1 release-critical PASS retained; v1.2 WordPress Experience Completion X1-X6 design ratified |')
+          replace_once(p,
+              '| `AZT-EXEC-MAP.md` | v0.34 | Derived execution map with v1.1 release-critical path complete through production deployment |',
+              '| `AZT-EXEC-MAP.md` | v0.35 | Derived execution map with v1.2 X1-X6 sequence and Core-only boundaries |')
+          replace_once(p,
+              '| `AZT-EXEC-MAP.md` | v0.35 | Derived execution map with v1.2 X1-X6 sequence and Core-only boundaries |\n',
+              '| `AZT-EXEC-MAP.md` | v0.35 | Derived execution map with v1.2 X1-X6 sequence and Core-only boundaries |\n\nApproved design companion: `docs/superpowers/specs/2026-09-16-v1.2-wordpress-experience-completion-design.md`. It does not supersede AZT source ownership; AZT-04 owns roadmap/decisions and AZT-EXEC-MAP remains derived.\n')
+          replace_once(p,
+              '**Exact next:** v1.1 release-critical work is complete through owner-approved production deployment verification. Await an explicit owner decision on the next Theme milestone or on a separately scoped optional-provider compatibility/certification track; provider L5 is not inferred.',
+              '**Exact next:** v1.2 WordPress Experience Completion design is owner-approved. Merge the source/design ratification, then write and review the X1 Comments Surface implementation plan before production implementation. Provider L5 remains separate and is not inferred.')
+          PY
+
+          git diff --check
+          ! grep -R -n -E 'TBD|TODO|PLACEHOLDER' docs/superpowers/specs/2026-09-16-v1.2-wordpress-experience-completion-design.md
+          grep -F '**Version:** v0.43' docs/source/AZT-04-roadmap-qa-decisions.md
+          grep -F '**D-028**' docs/source/AZT-04-roadmap-qa-decisions.md
+          grep -F '**Version:** v0.35' docs/source/AZT-EXEC-MAP.md
+          grep -F 'X1 Comments Surface' docs/source/AZT-EXEC-MAP.md
+          grep -F '2026-09-16-v1.2-wordpress-experience-completion-design.md' docs/source/SOURCE_MANIFEST.md
+
+      - name: Commit source ratification and self-remove
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/_tmp-v12-source-ratification.yml
+          git add docs/superpowers/specs/2026-09-16-v1.2-wordpress-experience-completion-design.md docs/source/AZT-04-roadmap-qa-decisions.md docs/source/AZT-EXEC-MAP.md docs/source/SOURCE_MANIFEST.md
+          git diff --cached --check
+          git commit -m 'docs: ratify v1.2 WordPress experience design'
+          git push origin HEAD:docs/v1.2-wordpress-experience-design
