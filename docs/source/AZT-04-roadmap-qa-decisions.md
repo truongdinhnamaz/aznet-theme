@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.35  
+**Version:** v0.36
 **Status:** Working Source  
 **Date:** 16/09/2026
 
@@ -36,11 +36,11 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P4 | Real law-site pilot QA | PILOT ACCESS BLOCKED / APPROVED | Execution remains approved, but the current QA environment cannot reach the pilot; this is an environment/access blocker, not a Theme runtime dependency |
 | P4-A | Homepage Composer + Law 01 | PASS / MERGED | Premium Law01 + Composer merged through PR #58; exact-main static/runtime/browser core verification PASS |
 | P4-B | Law Site Provisioning v1.1 | PASS / MERGED | D-026 smart setup merged through PR #58 with Theme metadata `1.1.0`; deterministic package/browser evidence retained and exact-main verification PASS |
-| P4-C | Standalone Core independence | READY / EXACT NEXT | D-027 accepted: zero mandatory third-party runtime dependencies; implementation must turn clean-WP independence into executable L1-L4 and final-package gates |
+| P4-C | Standalone Core independence | PASS / MERGED | D-027 source + implementation merged through PR #63/#64; zero-plugin L1-L4, exact-package and exact-main gates PASS; optional integrations remain additive |
 | P5 | Publication & production deployment | GATED | Tag/GitHub Release and final production deployment remain separate explicit owner gates |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
-Current canonical implementation is `main@04edd8b312de70e6ee8339c461ae8f16f93e5859`, tree `28c30353e9f01bc51f4474347069738d410b5256`, Theme metadata `1.1.0`. Owner-approved PR #58 merge is complete. Fresh `V1 Exact Main Verification` run `34414878827` succeeded on that exact merge SHA; PR-head evidence is retained separately and is not substituted for exact-main evidence.
+Current canonical implementation is `main@16563bdc88f172a1d7737b92293c7958670aac96`, tree `d2c4128f2b860bfd59c5efa11565dba38a34458e`, Theme metadata `1.1.0`. D-027 source PR #63 and owner-approved implementation PR #64 are merged. Fresh `V1 Exact Main Verification` run `35042767873` succeeded on that exact merge SHA; pre-merge branch/package evidence is retained separately and is not substituted for exact-main evidence.
 
 The earlier deterministic R6 candidate SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b` remains historical release-provenance evidence only. P2/P3 changed production bytes, so P5 must build and verify a new deterministic package from the final post-hardening bytes before publication.
 
@@ -177,6 +177,18 @@ Pre-merge integrated QA remains retained: package run `34413505990` produced The
 
 **Next:** P4 Real Pilot QA under the already-approved pilot execution scope. No tag/GitHub Release, L5 provider certification, destructive duplicate-theme deletion or final production deployment is authorized by this merge.
 
+### P4-C — Standalone Core independence
+
+**State:** **PASS / MERGED TO CANONICAL MAIN.**
+
+D-027 source ratification merged through PR #63 to `main@5d6dc56a756028d696a269ed75dd762daf4b83f2`; owner-approved implementation PR #64 merged final head `4b38f792d7de575bc08733748dac0399372e18c2` to `main@16563bdc88f172a1d7737b92293c7958670aac96`. Head and merge share tree `d2c4128f2b860bfd59c5efa11565dba38a34458e`.
+
+Standalone Core now has executable evidence that WordPress 6.9 + AZnet Theme 1.1.0 alone can activate, provision, author/render and survive update/theme-switch continuity with zero active third-party plugins. Optional WooCommerce, RootProfile, ConvertFlow and SEO providers remain additive public-contract tracks; their absence is not Core failure.
+
+Fresh exact-main run `35042767873` passed reusable static/contracts plus clean WordPress 6.9 runtime/browser/a11y on the exact merge SHA. Pre-merge final-head runs `35042040619`, `35042040512`, `35042040532` and exact-package `35042040620` are retained; exact D-027 candidate ZIP SHA-256 is `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`.
+
+**Next:** P4 Real Pilot QA when pilot access is available. P5 publication/deployment remains gated and requires separate owner approval; no provider L5 certification is inferred from Core PASS.
+
 ### P5 — Publication and deployment
 
 Only after the final production-hardening candidate has fresh exact-main/package evidence may publication proceed. Git tag/GitHub Release and final production deployment remain separate explicit owner approvals.
@@ -190,7 +202,7 @@ Core v1.1 is complete:
 Post-R6 production readiness:
 
 `P1 site-ops cleanup (parallel/destructive gate)`  
-`P2 Editorial Single-Post PASS -> P3 Editorial Listing/Search PASS -> P4 Real Pilot QA READY -> P5 Publication/Deployment gates`
+`P2 Editorial Single-Post PASS -> P3 Editorial Listing/Search PASS -> P4-C Standalone Core PASS -> P4 Real Pilot QA ACCESS BLOCKED / APPROVED -> P5 only after P4 PASS`
 
 P1 does not block safe Theme-owned pilot QA setup, but P1 must close before final pilot production sign-off.
 
@@ -302,8 +314,8 @@ The following remain explicit owner approval gates:
 - destructive retirement/deletion without proven rollback;
 - merge of future production hardening into canonical `main` after its own fresh verification when the active PR is explicitly owner-gated.
 
-Metadata promotion to `1.1.0` is a historical cleared gate completed through PR #48. Source closure and the post-R6 roadmap were explicitly approved by the product owner on 08/09/2026. P2 and P3 production merges were separately owner-approved. Owner-approved PR #58 canonical integration is cleared at `main@04edd8b312de70e6ee8339c461ae8f16f93e5859` and D-022 exact-main run `34414878827` is PASS. P4 pilot QA execution remains approved but is currently access-blocked from the available QA environment. D-027 Standalone Core architecture was explicitly approved on 16/09/2026 and its implementation may proceed on a bounded branch. None of these approvals include Git tag/GitHub Release, destructive duplicate-theme cleanup, L5 provider certification or final production deployment.
+Metadata promotion to `1.1.0` is a historical cleared gate completed through PR #48. Source closure and the post-R6 roadmap were explicitly approved by the product owner on 08/09/2026. P2 and P3 production merges were separately owner-approved. Owner-approved PR #58 canonical integration remains historical PASS evidence. D-027 source PR #63 and owner-approved implementation PR #64 are merged to canonical `main@16563bdc88f172a1d7737b92293c7958670aac96`; exact-main run `35042767873` is PASS. P4 pilot QA execution remains approved but is currently access-blocked from the available QA environment. None of these approvals include Git tag/GitHub Release, destructive duplicate-theme cleanup, L5 provider certification or final production deployment.
 
 ## 14. Exact next
 
-**P4-C / D-027 — implement the Standalone Core contract on a bounded work branch. Start from fresh L0 state, add an explicit RED for the currently missing standalone guarantee, preserve already-PASS zero-plugin behavior, and prove L1-L4 plus an exact-package zero-plugin path before P5. P4 real-pilot execution remains approved but `P4 PILOT ACCESS BLOCKED` until the QA environment can reach the pilot. Stop before tag/GitHub Release or final production deployment.**
+**P4 Real Pilot QA — restore/obtain pilot access and execute the already-approved real-site matrix on the D-027-closed canonical Theme. P4-C is PASS / MERGED; do not reopen it without invalidation. Until pilot access exists, record `P4 PILOT ACCESS BLOCKED / APPROVED`. P5 remains gated; stop before tag/GitHub Release or final production deployment unless separately approved.**

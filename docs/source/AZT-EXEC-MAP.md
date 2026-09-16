@@ -1,15 +1,15 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.27  
+**Version:** v0.28
 **Status:** Working Execution Map / derived  
 **Date:** 16/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** Homepage Composer + Law 01 Premium + D-025/D-026 provisioning merged through PR #58 to `main@04edd8b312de70e6ee8339c461ae8f16f93e5859`. Theme metadata remains source-approved `1.1.0`; proposal-only recommendations, WordPress ownership and index-safety boundaries are retained.
+> **Canonical-main checkpoint:** D-027 source + Standalone Core implementation merged through PR #63/#64 to `main@16563bdc88f172a1d7737b92293c7958670aac96`, tree `d2c4128f2b860bfd59c5efa11565dba38a34458e`. Theme metadata remains source-approved `1.1.0`; optional integrations remain additive and ownership boundaries are unchanged.
 
-**Completed execution:** `stack integration -> G8 RED on unapproved 1.1.1 metadata -> minimal 1.1.0 GREEN -> R2 harness RED -> test-only server-restart GREEN -> 21/21 PR workflows -> owner-approved PR #58 merge -> D-022 exact-main PASS run 34414878827`.
+**Completed execution:** `PR #58 canonical integration -> D-022 exact-main PASS -> D-027 focused RED -> minimal GREEN -> zero-plugin L1-L4 + retained regression -> exact-package PASS -> PR #63 source merge -> owner-approved PR #64 implementation merge -> exact-main PASS run 35042767873`.
 
 ## 1. Current state
 
@@ -37,11 +37,11 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | P4 Real Pilot QA | PILOT ACCESS BLOCKED / APPROVED | Pilot QA remains approved; current QA environment cannot reach the pilot; no product dependency is inferred |
 | P4-A Homepage Composer + Law 01 | PASS / MERGED | PR #58 merged; exact-main static/runtime/browser core verification PASS |
 | P4-B Law Site Provisioning | PASS / MERGED | D-026 merged; Theme `1.1.0`; deterministic package/browser evidence retained; activation mutation-free and active-site overwrite/noindex takeover forbidden |
-| P4-C Standalone Core independence | READY / EXACT NEXT | D-027 accepted; zero-plugin WordPress + Theme path becomes an executable release invariant; optional integrations remain additive |
+| P4-C Standalone Core independence | PASS / MERGED | PR #63/#64 merged; zero-plugin L1-L4, exact-package and exact-main PASS; optional integrations remain additive |
 | P5 Publication/Deployment | GATED | Tag/GitHub Release and final production deploy remain explicit owner actions |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
-Current canonical implementation baseline is `main@04edd8b312de70e6ee8339c461ae8f16f93e5859`, Theme `1.1.0`, tree `28c30353e9f01bc51f4474347069738d410b5256`. PR #58 is merged and D-022 exact-main verification run `34414878827` succeeded on that exact SHA.
+Current canonical implementation baseline is `main@16563bdc88f172a1d7737b92293c7958670aac96`, Theme `1.1.0`, tree `d2c4128f2b860bfd59c5efa11565dba38a34458e`. D-027 source PR #63 and implementation PR #64 are merged; exact-main verification run `35042767873` succeeded on that exact SHA.
 
 The previous R6 package SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b` is retained as historical R6 candidate evidence only; P2/P3 changed production bytes, so P5 requires a new deterministic package/SHA.
 
@@ -251,11 +251,11 @@ No layer may be inferred from another.
 
 **Exit:** PASS through canonical-main integration plus D-022 exact-main verification. P4 real-site pilot and P5 publication/deployment remain separate gates.
 
-**Next:** P4-C / D-027 Standalone Core implementation; pilot QA remains access-blocked in parallel.
+**Next:** P4 Real Pilot QA when pilot access is restored; it remains access-blocked in parallel.
 
 ### P4-C — Standalone Core Independence
 
-**State:** READY / EXACT NEXT. D-027 architecture approved 16/09/2026.
+**State:** PASS / MERGED. D-027 source and implementation closed on canonical main 16/09/2026.
 
 **Goal:** turn the existing WordPress-clean principle into an executable product/release contract: WordPress + AZnet Theme only must complete install/activate/setup/provision/author/render without mandatory third-party plugins or external runtime services.
 
@@ -267,9 +267,9 @@ No layer may be inferred from another.
 
 **Rollback:** bounded tests/admin presentation only; preserve existing provider adapters and WordPress-owned provisioning outputs.
 
-**Exit:** Standalone Core matrix PASS through L1-L4 with exact-package gate wired for P5.
+**Exit:** PASS — source PR #63 + implementation PR #64 merged; final-head L1-L4 and exact-package gates PASS; exact-main run `35042767873` PASS on `main@16563bdc88f172a1d7737b92293c7958670aac96`.
 
-**Next:** resume P4 pilot when access exists; otherwise continue P5 only after D-027 package gate is satisfied and separately approved.
+**Next:** resume P4 pilot when access exists. P5 remains gated until P4 PASS and separate publication/deployment approval.
 
 ### P5 — Final Candidate / Publication / Deployment
 
@@ -295,4 +295,4 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 15. Exact next
 
-**P4-C / D-027 — implement Standalone Core independence from current canonical production bytes, beginning with a focused RED that proves the missing guarantee. Preserve existing PASS behavior, keep P4 pilot as `PILOT ACCESS BLOCKED / APPROVED`, and stop before tag/GitHub Release or final production deployment.**
+**P4 Real Pilot QA — obtain/restore pilot access and run the approved current-stack matrix against canonical `main@16563bdc88f172a1d7737b92293c7958670aac96`. Keep P4-C D-027 PASS unless invalidated. While access is unavailable, remain `PILOT ACCESS BLOCKED / APPROVED`; do not advance to P5 publication/deployment without P4 PASS and separate owner approval.**
