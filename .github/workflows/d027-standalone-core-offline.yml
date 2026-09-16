@@ -1,0 +1,42 @@
+name: D-027 Standalone Core Offline
+
+on:
+  push:
+    branches: [work/d027-standalone-core]
+  pull_request:
+    branches: [main]
+    paths:
+      - 'inc/admin/system-health.php'
+      - 'inc/admin/control-center.php'
+      - 'inc/admin/provisioning.php'
+      - 'inc/admin/homepage.php'
+      - 'inc/theme/provisioning-*.php'
+      - 'tests/offline/d027-*.php'
+      - 'tests/offline/r5-control-center-static-contract.php'
+      - 'tests/runtime/d027-standalone-core.php'
+      - '.github/workflows/d027-standalone-core-offline.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-contract:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: D-027 health contract
+        run: php tests/offline/d027-standalone-core-health-contract.php
+      - name: D-027 provisioning independence
+        run: php tests/offline/d027-provisioning-independence-contract.php
+      - name: Retained R5 Control Center contract
+        run: php tests/offline/r5-control-center-static-contract.php
+      - name: Lint changed PHP
+        run: |
+          php -l inc/admin/system-health.php
+          php -l inc/admin/control-center.php
+          php -l tests/runtime/d027-standalone-core.php

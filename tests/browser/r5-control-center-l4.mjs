@@ -168,13 +168,21 @@ async function resetSettings(page) {
 async function verifySystemHealth(page) {
   await gotoCenter(page, 'system-health');
   const text = await page.locator('.aznet-theme-control-center').innerText();
-  for (const needle of ['environment / wordpress', 'theme / version', 'capabilities / convertflow', 'unknown', 'Support Snapshot']) {
+  for (const needle of ['environment / wordpress', 'theme / version', 'Standalone Core', 'READY', 'Optional Integrations', 'WooCommerce', 'ConvertFlow', 'Support Snapshot']) {
     if (!text.includes(needle)) throw new Error(`System Health missing ${needle}`);
   }
+  const expectedWooText = expectWoo ? 'Available' : 'Not present';
+  const wooRow = page.locator('tr', { hasText: 'WooCommerce' });
+  if (!(await wooRow.count()) || !(await wooRow.innerText()).includes(expectedWooText)) throw new Error(`System Health WooCommerce status missing ${expectedWooText}`);
+  const convertFlowRow = page.locator('tr', { hasText: 'ConvertFlow' });
+  if (!(await convertFlowRow.count()) || !(await convertFlowRow.innerText()).includes('Unknown')) throw new Error('System Health ConvertFlow status must remain Unknown');
+
   const snapshot = page.locator('textarea[readonly]');
-  const snapshotValue = await snapshot.inputValue();
-  const parsed = JSON.parse(snapshotValue);
-  if (parsed.product !== 'aznet-theme' || parsed.report?.capabilities?.convertflow !== 'unknown') throw new Error('Support Snapshot markers invalid');
+  const parsed = JSON.parse(await snapshot.inputValue());
+  const expectedWoo = expectWoo ? 'available' : 'not_present';
+  if (parsed.product !== 'aznet-theme' || parsed.report?.standalone_core?.status !== 'ready') throw new Error('Support Snapshot Core markers invalid');
+  if (parsed.report?.optional_integrations?.woocommerce !== expectedWoo) throw new Error(`Support Snapshot WooCommerce status mismatch: ${parsed.report?.optional_integrations?.woocommerce}`);
+  if (parsed.report?.optional_integrations?.convertflow !== 'unknown') throw new Error('Support Snapshot ConvertFlow marker invalid');
 }
 
 async function verifyCommerceCapability(page) {

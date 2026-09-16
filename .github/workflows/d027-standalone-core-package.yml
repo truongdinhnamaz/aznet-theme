@@ -1,0 +1,290 @@
+name: D-027 Standalone Core Exact Package
+
+on:
+  push:
+    branches: [work/d027-standalone-core]
+  pull_request:
+    branches: [main]
+    paths:
+      - 'style.css'
+      - 'functions.php'
+      - 'theme.json'
+      - '*.php'
+      - 'inc/**'
+      - 'assets/**'
+      - 'template-parts/**'
+      - 'tests/offline/d027-*.php'
+      - 'tests/runtime/d027-standalone-core.php'
+      - 'tests/runtime/law-site-provisioning-v1-1.php'
+      - 'tests/browser/d027-standalone-core.spec.js'
+      - 'scripts/build-release-package.py'
+      - '.github/workflows/d027-standalone-core-package.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exact-package-standalone:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+
+    steps:
+      - name: Checkout exact candidate with approved predecessor history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Record candidate identity
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/d027-package /tmp/d027-prior-source /tmp/d027-unpacked /tmp/wp-site
+          mkdir -p /tmp/d027-package /tmp/d027-prior-source /tmp/d027-unpacked
+          git rev-parse HEAD | tee /tmp/d027-package/CANDIDATE_HEAD_SHA.txt
+          printf '%s\n' 'fa1df2dd79ee7740298bb2e5685764ed3279584a' > /tmp/d027-package/APPROVED_MAIN_PREDECESSOR.txt
+          git cat-file -e 'fa1df2dd79ee7740298bb2e5685764ed3279584a^{commit}'
+          git archive fa1df2dd79ee7740298bb2e5685764ed3279584a | tar -x -C /tmp/d027-prior-source
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli, mbstring
+          coverage: none
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build deterministic candidate twice and approved predecessor once
+        run: |
+          set -euo pipefail
+          VERSION=$(sed -n 's/^Version: //p' style.css | head -n 1)
+          PRIOR_VERSION=$(sed -n 's/^Version: //p' /tmp/d027-prior-source/style.css | head -n 1)
+          test -n "$VERSION"
+          test -n "$PRIOR_VERSION"
+          printf '%s\n' "$VERSION" | tee /tmp/d027-package/VERSION.txt
+          printf '%s\n' "$PRIOR_VERSION" > /tmp/d027-package/PRIOR_VERSION.txt
+
+          python3 scripts/build-release-package.py --source . --output "/tmp/d027-package/candidate-a.zip" --version "$VERSION"
+          python3 scripts/build-release-package.py --source . --output "/tmp/d027-package/candidate-b.zip" --version "$VERSION"
+          cmp /tmp/d027-package/candidate-a.zip /tmp/d027-package/candidate-b.zip
+          cp /tmp/d027-package/candidate-a.zip "/tmp/d027-package/aznet-theme-${VERSION}-d027-candidate.zip"
+          sha256sum "/tmp/d027-package/aznet-theme-${VERSION}-d027-candidate.zip" | tee /tmp/d027-package/CANDIDATE_SHA256.txt
+
+          python3 scripts/build-release-package.py --source /tmp/d027-prior-source --output "/tmp/d027-package/aznet-theme-${PRIOR_VERSION}-approved-predecessor.zip" --version "$PRIOR_VERSION"
+          sha256sum "/tmp/d027-package/aznet-theme-${PRIOR_VERSION}-approved-predecessor.zip" | tee /tmp/d027-package/PRIOR_SHA256.txt
+
+      - name: Verify exact candidate ZIP hygiene and source bytes
+        run: |
+          set -euo pipefail
+          VERSION=$(cat /tmp/d027-package/VERSION.txt)
+          ZIP="/tmp/d027-package/aznet-theme-${VERSION}-d027-candidate.zip"
+          unzip -t "$ZIP"
+          unzip -q "$ZIP" -d /tmp/d027-unpacked
+          test -f /tmp/d027-unpacked/aznet-theme/style.css
+          test -f /tmp/d027-unpacked/aznet-theme/functions.php
+          test -f /tmp/d027-unpacked/aznet-theme/theme.json
+          test -f /tmp/d027-unpacked/aznet-theme/front-page.php
+          test -f /tmp/d027-unpacked/aznet-theme/inc/admin/system-health.php
+          test -f /tmp/d027-unpacked/aznet-theme/inc/admin/control-center.php
+          test -f /tmp/d027-unpacked/aznet-theme/inc/theme/provisioning-runner.php
+          for f in hero editorial-1 editorial-2 editorial-3 editorial-4; do test -f "/tmp/d027-unpacked/aznet-theme/assets/starter/law01/${f}.webp"; done
+          test ! -e /tmp/d027-unpacked/aznet-theme/.github
+          test ! -e /tmp/d027-unpacked/aznet-theme/docs
+          test ! -e /tmp/d027-unpacked/aznet-theme/scripts
+          test ! -e /tmp/d027-unpacked/aznet-theme/tests
+
+          python3 - <<'PY'
+          from pathlib import Path
+          import sys
+          root = Path('.')
+          unpacked = Path('/tmp/d027-unpacked/aznet-theme')
+          excluded = {'.git', '.github', 'docs', 'scripts', 'tests'}
+          root_excluded = {'README.md', 'aznet-preview.png'}
+          source = []
+          for p in root.rglob('*'):
+              if not p.is_file():
+                  continue
+              rel = p.relative_to(root)
+              if any(part in excluded for part in rel.parts):
+                  continue
+              if len(rel.parts) == 1 and rel.name in root_excluded:
+                  continue
+              source.append(rel)
+          for rel in source:
+              target = unpacked / rel
+              if not target.is_file() or (root / rel).read_bytes() != target.read_bytes():
+                  print('FAIL exact candidate byte mismatch:', rel, file=sys.stderr)
+                  sys.exit(1)
+          packaged = sorted(p.relative_to(unpacked) for p in unpacked.rglob('*') if p.is_file())
+          if sorted(source) != packaged:
+              print('FAIL candidate package file-set mismatch', file=sys.stderr)
+              sys.exit(1)
+          print('PASS: D-027 exact candidate package byte-match', len(source))
+          PY
+
+          find /tmp/d027-unpacked/aznet-theme -type f -name '*.php' -print0 | sort -z | xargs -0 -n1 php -l | tee /tmp/d027-package/PACKAGE_PHP_LINT.txt
+
+      - name: Install clean WordPress 6.9 and approved predecessor package
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          mkdir -p /tmp/wp-site
+          wp core download --version=6.9 --path=/tmp/wp-site --force --allow-root
+          wp config create --path=/tmp/wp-site --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          ADMIN_PASS=$(openssl rand -hex 16)
+          echo "D027_ADMIN_PASS=$ADMIN_PASS" >> "$GITHUB_ENV"
+          wp core install --path=/tmp/wp-site --url=http://127.0.0.1:8080 --title='AZnet D027 Exact Package' --admin_user=admin --admin_password="$ADMIN_PASS" --admin_email=d027@example.test --skip-email --allow-root
+          PRIOR_VERSION=$(cat /tmp/d027-package/PRIOR_VERSION.txt)
+          wp theme install "/tmp/d027-package/aznet-theme-${PRIOR_VERSION}-approved-predecessor.zip" --activate --force --path=/tmp/wp-site --allow-root
+          wp plugin deactivate --all --path=/tmp/wp-site --allow-root || true
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-site --allow-root)"
+          test "$(wp core version --path=/tmp/wp-site --allow-root)" = '6.9'
+          wp theme status aznet-theme --path=/tmp/wp-site --allow-root | grep -F 'Status: Active'
+
+      - name: Provision on predecessor and capture WordPress-owned continuity sentinels
+        run: |
+          set -euo pipefail
+          AZNET_PROVISION_V11_SCENARIO=new wp eval-file tests/runtime/law-site-provisioning-v1-1.php --path=/tmp/wp-site --allow-root | tee /tmp/d027-package/PRIOR_PROVISIONING.txt
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-site --allow-root)"
+
+          FRONT_ID=$(wp option get page_on_front --path=/tmp/wp-site --allow-root)
+          POST_ID=$(wp post list --post_type=post --post_status=publish --format=ids --path=/tmp/wp-site --allow-root | awk '{print $1}')
+          PAGE_ID=$(wp post list --post_type=page --post_status=publish --format=ids --path=/tmp/wp-site --allow-root | tr ' ' '\n' | grep -vx "$FRONT_ID" | head -n1)
+          ATTACH_ID=$(wp post list --post_type=attachment --post_status=inherit --format=ids --path=/tmp/wp-site --allow-root | awk '{print $1}')
+          CAT_ID=$(wp term list category --format=ids --path=/tmp/wp-site --allow-root | awk '{print $1}')
+          MENU_ID=$(wp eval '$locations=get_nav_menu_locations(); echo (int)($locations["primary"] ?? 0);' --path=/tmp/wp-site --allow-root)
+          for value in "$FRONT_ID" "$POST_ID" "$PAGE_ID" "$ATTACH_ID" "$CAT_ID" "$MENU_ID"; do test -n "$value" && test "$value" != '0'; done
+
+          printf '%s\n' "$FRONT_ID" > /tmp/d027-package/FRONT_ID.txt
+          printf '%s\n' "$POST_ID" > /tmp/d027-package/POST_ID.txt
+          printf '%s\n' "$PAGE_ID" > /tmp/d027-package/PAGE_ID.txt
+          printf '%s\n' "$ATTACH_ID" > /tmp/d027-package/ATTACH_ID.txt
+          printf '%s\n' "$CAT_ID" > /tmp/d027-package/CAT_ID.txt
+          printf '%s\n' "$MENU_ID" > /tmp/d027-package/MENU_ID.txt
+          wp post meta update "$PAGE_ID" _d027_native_continuity_sentinel preserve-me --path=/tmp/wp-site --allow-root
+
+      - name: Update in place from exact candidate package bytes
+        run: |
+          set -euo pipefail
+          VERSION=$(cat /tmp/d027-package/VERSION.txt)
+          ZIP="/tmp/d027-package/aznet-theme-${VERSION}-d027-candidate.zip"
+          wp theme install "$ZIP" --force --path=/tmp/wp-site --allow-root
+          wp theme status aznet-theme --path=/tmp/wp-site --allow-root | grep -F 'Status: Active'
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-site --allow-root)"
+
+          FRONT_ID=$(cat /tmp/d027-package/FRONT_ID.txt)
+          POST_ID=$(cat /tmp/d027-package/POST_ID.txt)
+          PAGE_ID=$(cat /tmp/d027-package/PAGE_ID.txt)
+          ATTACH_ID=$(cat /tmp/d027-package/ATTACH_ID.txt)
+          MENU_ID=$(cat /tmp/d027-package/MENU_ID.txt)
+          test "$(wp option get page_on_front --path=/tmp/wp-site --allow-root)" = "$FRONT_ID"
+          test "$(wp post get "$POST_ID" --field=post_status --path=/tmp/wp-site --allow-root)" = 'publish'
+          test "$(wp post get "$PAGE_ID" --field=post_status --path=/tmp/wp-site --allow-root)" = 'publish'
+          test "$(wp post get "$ATTACH_ID" --field=post_type --path=/tmp/wp-site --allow-root)" = 'attachment'
+          test "$(wp post meta get "$PAGE_ID" _d027_native_continuity_sentinel --path=/tmp/wp-site --allow-root)" = 'preserve-me'
+          test "$(wp eval '$locations=get_nav_menu_locations(); echo (int)($locations["primary"] ?? 0);' --path=/tmp/wp-site --allow-root)" = "$MENU_ID"
+          wp eval-file tests/runtime/d027-standalone-core.php --path=/tmp/wp-site --allow-root | tee /tmp/d027-package/CANDIDATE_RUNTIME.txt
+
+      - name: Start exact-package runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp-site > /tmp/d027-package/server.log 2>&1 &
+          echo $! > /tmp/d027-package/server.pid
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/wp-login.php >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          exit 1
+
+      - name: Install Playwright and axe test tooling
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Run browser/a11y matrix against exact package bytes
+        env:
+          D027_BASE_URL: http://127.0.0.1:8080
+          D027_ADMIN_USER: admin
+          D027_STATE_DIR: /tmp/d027-package/browser
+        run: |
+          set -euo pipefail
+          echo "D027_POST_ID=$(cat /tmp/d027-package/POST_ID.txt)" >> "$GITHUB_ENV"
+          echo "D027_PAGE_ID=$(cat /tmp/d027-package/PAGE_ID.txt)" >> "$GITHUB_ENV"
+          echo "D027_CAT_ID=$(cat /tmp/d027-package/CAT_ID.txt)" >> "$GITHUB_ENV"
+          D027_POST_ID=$(cat /tmp/d027-package/POST_ID.txt) \
+          D027_PAGE_ID=$(cat /tmp/d027-package/PAGE_ID.txt) \
+          D027_CAT_ID=$(cat /tmp/d027-package/CAT_ID.txt) \
+          node tests/browser/d027-standalone-core.spec.js
+
+      - name: Switch to bundled WordPress default theme and prove native data survives
+        run: |
+          set -euo pipefail
+          DEFAULT_THEME=$(wp theme list --status=inactive --field=name --path=/tmp/wp-site --allow-root | grep '^twenty' | head -n1)
+          test -n "$DEFAULT_THEME"
+          printf '%s\n' "$DEFAULT_THEME" | tee /tmp/d027-package/SWITCH_THEME.txt
+          wp theme activate "$DEFAULT_THEME" --path=/tmp/wp-site --allow-root
+
+          FRONT_ID=$(cat /tmp/d027-package/FRONT_ID.txt)
+          POST_ID=$(cat /tmp/d027-package/POST_ID.txt)
+          PAGE_ID=$(cat /tmp/d027-package/PAGE_ID.txt)
+          ATTACH_ID=$(cat /tmp/d027-package/ATTACH_ID.txt)
+          MENU_ID=$(cat /tmp/d027-package/MENU_ID.txt)
+          test "$(wp option get page_on_front --path=/tmp/wp-site --allow-root)" = "$FRONT_ID"
+          test "$(wp post get "$POST_ID" --field=post_status --path=/tmp/wp-site --allow-root)" = 'publish'
+          test "$(wp post get "$PAGE_ID" --field=post_status --path=/tmp/wp-site --allow-root)" = 'publish'
+          test "$(wp post get "$ATTACH_ID" --field=post_type --path=/tmp/wp-site --allow-root)" = 'attachment'
+          test "$(wp post meta get "$PAGE_ID" _d027_native_continuity_sentinel --path=/tmp/wp-site --allow-root)" = 'preserve-me'
+          wp menu list --format=ids --path=/tmp/wp-site --allow-root | tr ' ' '\n' | grep -Fx "$MENU_ID"
+
+      - name: Switch back to exact candidate package and verify Theme continuity
+        run: |
+          set -euo pipefail
+          wp theme activate aznet-theme --path=/tmp/wp-site --allow-root
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-site --allow-root)"
+          FRONT_ID=$(cat /tmp/d027-package/FRONT_ID.txt)
+          PAGE_ID=$(cat /tmp/d027-package/PAGE_ID.txt)
+          MENU_ID=$(cat /tmp/d027-package/MENU_ID.txt)
+          test "$(wp option get page_on_front --path=/tmp/wp-site --allow-root)" = "$FRONT_ID"
+          test "$(wp post meta get "$PAGE_ID" _d027_native_continuity_sentinel --path=/tmp/wp-site --allow-root)" = 'preserve-me'
+          test "$(wp eval '$locations=get_nav_menu_locations(); echo (int)($locations["primary"] ?? 0);' --path=/tmp/wp-site --allow-root)" = "$MENU_ID"
+          wp eval-file tests/runtime/d027-standalone-core.php --path=/tmp/wp-site --allow-root | tee /tmp/d027-package/POST_SWITCH_RUNTIME.txt
+          curl -fsS http://127.0.0.1:8080/ > /tmp/d027-package/post-switch-home.html
+          grep -F 'aznet-theme-homepage--law-01' /tmp/d027-package/post-switch-home.html
+
+      - name: Verify exact-package runtime boundary
+        run: |
+          set -euo pipefail
+          if grep -E 'PHP (Fatal error|Parse error)|Uncaught' /tmp/d027-package/server.log; then
+            echo 'FAIL: Theme runtime fatal/uncaught marker found during exact-package gate' >&2
+            exit 1
+          fi
+          unexpected="$(grep 'PHP Warning:' /tmp/d027-package/server.log | grep -v 'Undefined array key 0 in /tmp/wp-site/wp-includes/class-wp-query.php on line 3872' || true)"
+          test -z "$unexpected"
+          echo 'PASS: D-027 exact-package install/update/browser/theme-switch continuity'
+
+      - name: Stop runtime
+        if: always()
+        run: test ! -f /tmp/d027-package/server.pid || kill "$(cat /tmp/d027-package/server.pid)" || true
+
+      - name: Upload exact-package evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: d027-standalone-core-exact-package
+          path: /tmp/d027-package
+          if-no-files-found: error
