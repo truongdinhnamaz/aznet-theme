@@ -1,0 +1,94 @@
+.aznet-theme-comments {
+    width: 100%;
+    max-width: var(--aznet-theme-container-content);
+    margin: var(--aznet-theme-space-6) auto 0;
+    color: var(--aznet-theme-text);
+}
+
+.aznet-theme-comments__title,
+.aznet-theme-comments .comment-reply-title {
+    margin-block: 0 var(--aznet-theme-space-4);
+}
+
+.aznet-theme-comments .comment-list,
+.aznet-theme-comments .children {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.aznet-theme-comments .comment-list {
+    display: grid;
+    gap: var(--aznet-theme-space-4);
+}
+
+.aznet-theme-comments .children {
+    margin-block-start: var(--aznet-theme-space-3);
+    margin-inline-start: clamp(0.75rem, 3vw, 2rem);
+}
+
+.aznet-theme-comments .comment-body {
+    min-width: 0;
+    padding: var(--aznet-theme-space-4);
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-surface);
+}
+
+.aznet-theme-comments .comment-author {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--aznet-theme-space-2);
+    align-items: center;
+}
+
+.aznet-theme-comments .avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+}
+
+.aznet-theme-comments .comment-meta {
+    margin-block: var(--aznet-theme-space-2);
+    color: var(--aznet-theme-muted);
+    font-size: var(--aznet-theme-font-size-sm);
+}
+
+.aznet-theme-comments .comment-content {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.aznet-theme-comments .comment-reply-link:focus-visible,
+.aznet-theme-comments a:focus-visible,
+.aznet-theme-comments button:focus-visible,
+.aznet-theme-comments input:focus-visible,
+.aznet-theme-comments textarea:focus-visible {
+    outline: 2px solid var(--aznet-theme-focus);
+    outline-offset: 2px;
+}
+
+.aznet-theme-comments .comment-respond {
+    margin-block-start: var(--aznet-theme-space-6);
+}
+
+.aznet-theme-comments :where(input[type="text"], input[type="email"], input[type="url"], textarea) {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+}
+
+.aznet-theme-comments textarea {
+    min-height: 9rem;
+    resize: vertical;
+}
+
+.aznet-theme-comments__closed {
+    color: var(--aznet-theme-muted);
+}
+
+@media (max-width: 47.999rem) {
+    .aznet-theme-comments .children {
+        margin-inline-start: var(--aznet-theme-space-2);
+    }
+}
