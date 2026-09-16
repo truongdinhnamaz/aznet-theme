@@ -1,0 +1,78 @@
+.aznet-theme-listing__pagination .nav-links,
+.aznet-theme-comments .comments-pagination .nav-links,
+.aznet-theme-article__page-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--aznet-theme-space-2);
+    align-items: center;
+    min-width: 0;
+}
+
+.aznet-theme-navigation__summary {
+    color: var(--aznet-theme-muted);
+    font-size: var(--aznet-theme-font-size-sm);
+    font-weight: 600;
+}
+
+.aznet-theme-listing__pagination .page-numbers,
+.aznet-theme-comments .comments-pagination .page-numbers,
+.aznet-theme-article__page-links .post-page-numbers {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    max-width: 100%;
+    padding: var(--aznet-theme-space-2) var(--aznet-theme-space-3);
+    color: var(--aznet-theme-text);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    background: var(--aznet-theme-surface);
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-control);
+}
+
+.aznet-theme-listing__pagination a.page-numbers:hover,
+.aznet-theme-comments .comments-pagination a.page-numbers:hover,
+.aznet-theme-article__page-links a.post-page-numbers:hover {
+    color: var(--aznet-theme-accent);
+    border-color: var(--aznet-theme-accent);
+}
+
+.aznet-theme-listing__pagination .page-numbers.current,
+.aznet-theme-comments .comments-pagination .page-numbers.current,
+.aznet-theme-article__page-links .post-page-numbers.current {
+    font-weight: 700;
+    border-color: var(--aznet-theme-accent);
+}
+
+.aznet-theme-listing__pagination a.page-numbers:focus-visible,
+.aznet-theme-comments .comments-pagination a.page-numbers:focus-visible,
+.aznet-theme-article__page-links a.post-page-numbers:focus-visible,
+.aznet-theme-article .post-navigation a:focus-visible {
+    outline: 2px solid var(--aznet-theme-focus);
+    outline-offset: 2px;
+}
+
+.aznet-theme-listing__pagination .prev,
+.aznet-theme-listing__pagination .next,
+.aznet-theme-comments .comments-pagination .prev,
+.aznet-theme-comments .comments-pagination .next {
+    min-width: 0;
+}
+
+@media (max-width: 47.999rem) {
+    .aznet-theme-listing__pagination .nav-links,
+    .aznet-theme-comments .comments-pagination .nav-links,
+    .aznet-theme-article__page-links {
+        gap: var(--aznet-theme-space-1) var(--aznet-theme-space-2);
+    }
+
+    .aznet-theme-listing__pagination .page-numbers,
+    .aznet-theme-comments .comments-pagination .page-numbers,
+    .aznet-theme-article__page-links .post-page-numbers {
+        min-width: 2.5rem;
+        min-height: 2.5rem;
+        padding-inline: var(--aznet-theme-space-2);
+    }
+}
