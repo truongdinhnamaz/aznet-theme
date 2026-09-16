@@ -1,15 +1,15 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.30
+**Version:** v0.31
 **Status:** Working Execution Map / derived  
 **Date:** 16/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** D-027 remains canonical through PR #63/#64; P4 public QA merged through PR #66 and authenticated read-only QA merged through owner-approved PR #67 to `main@bf45a315e93fa22c441c81377f98ff34901d7ca5`, tree `c7db15f585e181de3eb58f96ca388878964fe64a`. Theme metadata remains source-approved `1.1.0`; optional integrations remain additive and ownership boundaries are unchanged.
+> **Canonical-main checkpoint:** D-027 remains canonical through PR #63/#64; P4 public/authenticated QA remains retained; owner-approved P1 identity inspection PR #69 merged to `main@9ed7a586b06b4c6dd91e66c51b049caa86e0485b`, tree `313f6744066a1d94033d4b2868343a471fbc6a70`. P1 cleanup and final P4 pilot sign-off are closed by fresh post-delete run `35050519817`. Theme metadata remains source-approved `1.1.0`; optional integrations remain additive and ownership boundaries are unchanged.
 
-**Completed execution:** `PR #58 canonical integration -> D-027 source/implementation closure -> P4 public 28-check PASS -> authenticated RED/diagnostic -> PILOT_THEME_BITS_DRIFT isolated -> owner replaced historical 1.1.1 pilot bits with exact D-027 1.1.0 package -> authenticated PASS -> owner-approved PR #67 merge -> exact-main PASS run 35048609753`.
+**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public 28-check PASS -> authenticated PASS -> PR #67 -> P1 read-only identity proof -> owner-approved PR #69 -> backup-confirmed owner-approved deletion of inactive aznet-theme-release-v1.0.0 -> post-delete NO_DUPLICATES + System Health ready + public 28-check PASS run 35050519817 -> P1 PASS / P4 final pilot sign-off PASS`.
 
 ## 1. Current state
 
@@ -31,17 +31,17 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | R4 WooCommerce Presentation 2.0 | PASS | PR #43 merged; public Woo output -> Theme presentation only; clean-WP/Woo-present L1-L4 evidence |
 | R5 Control Center + System Health | PASS | PR #44 merged; bounded Theme settings admin, public/read-only health diagnostics and update/theme-switch continuity |
 | R6 Performance + Release 2.0 | PASS / TECHNICAL CANDIDATE | PR #46-#48 complete; exact-main + deterministic `1.1.0` R6 candidate verified; publication/deployment not implied |
-| P1 Pilot identity cleanup | SITE-OPS READY | Active `1.1.0` proven; delete only inactive legacy theme identities through WordPress core UI after smoke |
+| P1 Pilot identity cleanup | PASS | Only intended active `aznet-theme` v1.1.0 remains among AZnet Theme identities; post-delete inventory/System Health/public regression PASS |
 | P2 Editorial Single-Post | PASS | PR #51 merged; native WordPress editorial presentation only; no SEO/domain/query takeover |
 | P3 Editorial Listing/Search | PASS | PR #52 merged; native thumbnail/date scan presentation + resilient long titles/excerpts; main query retained |
-| P4 Real Pilot QA | PUBLIC + AUTHENTICATED QA PASS / P1 CLEANUP PENDING | 28-check public matrix and authenticated read-only Admin/System Health matrix PASS on canonical D-027-capable Theme; destructive duplicate-theme cleanup remains separate P1 gate |
+| P4 Real Pilot QA | PASS / PILOT SIGN-OFF CLOSED | Public + authenticated QA retained; P1 cleanup closed with fresh post-delete inventory/System Health and 28-check public regression PASS |
 | P4-A Homepage Composer + Law 01 | PASS / MERGED | PR #58 merged; exact-main static/runtime/browser core verification PASS |
 | P4-B Law Site Provisioning | PASS / MERGED | D-026 merged; Theme `1.1.0`; deterministic package/browser evidence retained; activation mutation-free and active-site overwrite/noindex takeover forbidden |
 | P4-C Standalone Core independence | PASS / MERGED | PR #63/#64 merged; zero-plugin L1-L4, exact-package and exact-main PASS; optional integrations remain additive |
 | P5 Publication/Deployment | GATED | Tag/GitHub Release and final production deploy remain explicit owner actions |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
-Current canonical implementation baseline is `main@bf45a315e93fa22c441c81377f98ff34901d7ca5`, Theme `1.1.0`, tree `c7db15f585e181de3eb58f96ca388878964fe64a`. D-027 PR #63/#64 remain retained; P4 public QA PR #66 and authenticated QA PR #67 are merged. Exact-main verification run `35048609753` succeeded on that exact SHA.
+Current canonical implementation baseline is `main@9ed7a586b06b4c6dd91e66c51b049caa86e0485b`, Theme `1.1.0`, tree `313f6744066a1d94033d4b2868343a471fbc6a70`. D-027 PR #63/#64 remain retained; P4 public QA PR #66, authenticated QA PR #67 and P1 inspection PR #69 are merged. Exact-main verification run `35049959237` succeeded on that exact SHA; post-delete site verification run `35050519817` closes P1/P4.
 
 The previous R6 package SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b` is retained as historical R6 candidate evidence only; P2/P3 changed production bytes, so P5 requires a new deterministic package/SHA.
 
@@ -179,11 +179,11 @@ No layer may be inferred from another.
 
 **Goal:** leave one intended active AZnet Theme install on the pilot without giving Theme code destructive lifecycle ownership.
 
-**Evidence:** System Health proves active `1.1.0` and primary menu continuity.
+**Evidence:** PR #69 read-only identity proof plus post-delete run `35050519817`. The owner confirmed backup availability and explicitly approved deletion of only inactive `aznet-theme-release-v1.0.0` v1.0.0 through WordPress core UI.
 
-**Steps:** smoke homepage/Page/Post; inspect inactive `AZnet Theme` cards; delete only inactive legacy versions through WordPress core UI; verify one active Theme remains and System Health still reports `1.1.0`.
+**Exit:** **PASS** — `NO_DUPLICATES`; active `aznet-theme` v1.1.0; zero inactive/ambiguous AZnet identities; Standalone Core `ready`; fresh 28-check public regression PASS.
 
-**Hard gate:** if any inactive duplicate also reports `1.1.0`, stop and inspect identity. Theme code must not auto-delete installed themes.
+**Boundary:** Theme code must not auto-delete installed themes; `flatsome` remains unrelated/outside P1 cleanup scope.
 
 ### P2 — Editorial Single-Post Hardening
 
@@ -219,7 +219,7 @@ No layer may be inferred from another.
 
 ### P4 — Real Pilot QA
 
-**State:** PUBLIC + AUTHENTICATED QA PASS / P1 CLEANUP PENDING.
+**State:** PASS / PILOT SIGN-OFF CLOSED.
 
 **Goal:** prove final editorial candidate on support-floor generic fixtures and the real current-stack pilot.
 
@@ -231,9 +231,9 @@ No layer may be inferred from another.
 
 **Allowed pilot action:** install/update a QA candidate on the approved pilot as needed for the matrix. This approval does not authorize tag/GitHub Release or final production deployment.
 
-**Exit:** public + authenticated current-stack pilot evidence is complete at the tested Theme-owned scope; final pilot production sign-off still requires P1 duplicate cleanup closure.
+**Exit:** PASS at the tested Theme-owned scope. Public + authenticated evidence is retained and P1 cleanup is closed by fresh post-delete inventory/System Health/public regression evidence. Provider L5 status remains separate.
 
-**Next:** P1 read-only duplicate-theme identity inspection. Any deletion requires separate explicit owner approval and rollback confidence. P5 remains gated until final P4 sign-off.
+**Next:** P5 final-candidate technical verification/package gates. Stop before Git tag, GitHub Release or final production deployment without separate owner approval.
 
 
 
@@ -297,4 +297,4 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 15. Exact next
 
-**P4 authenticated pilot QA — obtain a secure authenticated WordPress Admin path and complete the remaining System Health/admin-only verification. Preserve the fresh public-matrix PASS (`35045540722`) and P4-C D-027 PASS unless invalidated. While authenticated access is unavailable, remain `PUBLIC QA PASS / AUTHENTICATED QA BLOCKED`; do not advance to P5 publication/deployment without full P4 PASS and separate owner approval.**
+**P5 final-candidate technical verification — run exact-main verification, deterministic double-build byte identity, unzip/exact-compare/package hygiene, clean-WordPress activation smoke and rollback-reference checks from current canonical bytes. Stop before Git tag, GitHub Release or final production deployment; publication/deployment require separate explicit owner approval.**

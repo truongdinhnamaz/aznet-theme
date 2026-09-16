@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.33
+**Version:** v0.34
 **Status:** Working Source  
 **Date:** 16/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -13,8 +13,8 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 
 ## 2. Current canonical baseline
 
-- Current canonical implementation head after owner-approved P4 authenticated QA PR #67 merge: `main@bf45a315e93fa22c441c81377f98ff34901d7ca5`.
-- Current canonical implementation tree: `c7db15f585e181de3eb58f96ca388878964fe64a`.
+- Current canonical implementation head after owner-approved P1 read-only inspection PR #69 merge: `main@9ed7a586b06b4c6dd91e66c51b049caa86e0485b`.
+- Current canonical implementation tree: `313f6744066a1d94033d4b2868343a471fbc6a70`.
 - Internal Theme version remains `1.1.0`.
 - WordPress floor: `6.9+`.
 - PHP floor: `8.1+`.
@@ -43,7 +43,7 @@ Current production state includes:
 - P4-A Homepage Composer + Law 01 Premium presentation with typed WordPress Content Map, exactly one native `the_content()` boundary and Theme-owned presentation only.
 - P4-B D-025/D-026 Law Site Provisioning with mutation-free activation, proposal-only recommendations, WordPress-owned starter content/media and index-safe publication boundaries.
 - P4-C D-027 Standalone Core independence with zero mandatory third-party runtime dependency, explicit Standalone Core vs Optional Integrations health presentation, and zero-plugin L1-L4/exact-package evidence.
-- P4 real-pilot QA with fresh public route/viewport verification plus authenticated, read-only WordPress Admin/System Health verification on the canonical D-027-capable Theme; P1 destructive duplicate-theme cleanup remains separate.
+- P4 real-pilot QA with fresh public route/viewport verification plus authenticated, read-only WordPress Admin/System Health verification on the canonical D-027-capable Theme; P1 legacy duplicate cleanup is closed with fresh post-delete verification and final P4 pilot sign-off is PASS at the tested Theme-owned scope.
 
 PR #34 final verified head is `b2e5cca1461233bcb1a0333c5aa51879c3264756`. Its tree `b716b89f04e45c2012f8e191c7d0edf605c9dd11` is identical to the merge commit tree on canonical `main@f8e1a95c903c3f246528368ae9878eba780539ff`, so the v1.0 technical merge introduced no conflict-resolution production delta.
 
@@ -200,3 +200,12 @@ Every release candidate must have a concrete previous package/commit or restorat
 ## 11. Exact next
 
 **P4 — Real Pilot QA from canonical `main@04edd8b312de70e6ee8339c461ae8f16f93e5859` after owner-approved PR #58 merge and successful D-022 exact-main verification run `34414878827`. Prove current-stack routes/responsive/a11y/Rank Math/RootProfile compatibility and measured actual-site behavior. P1 duplicate-theme deletion remains a separate destructive site-operations gate. Stop before tag/GitHub Release or final production deployment.**
+
+
+### P1 pilot identity cleanup and final P4 sign-off
+
+Owner-approved PR #69 merged the read-only identity harness/evidence to canonical `main@9ed7a586b06b4c6dd91e66c51b049caa86e0485b`, tree `313f6744066a1d94033d4b2868343a471fbc6a70`. Fresh `V1 Exact Main Verification` run `35049959237` completed SUCCESS on that exact merge SHA.
+
+The pre-delete P1 inventory proved exactly one inactive legacy AZnet Theme candidate, folder `aznet-theme-release-v1.0.0` version `1.0.0`, distinct from active `aznet-theme` version `1.1.0`, with zero ambiguous AZnet identities. After the owner confirmed backup availability and explicitly approved deletion of only that inactive legacy identity through WordPress core UI, post-delete run `35050519817` completed SUCCESS. Its P1 artifact `10428552132` (`sha256:2f7598a663c1db1cca1952ce9afa6616b9cb53bf00c594094742f023840bba03`) reports `NO_DUPLICATES`, active `aznet-theme` `1.1.0`, zero inactive AZnet candidates, zero ambiguous identities and Standalone Core `ready`. The same run's public regression artifact `10428429083` (`sha256:a600f23ec48f3c1948a185d37ce47e63b2153f0f18fbc6d0a7a5f41b02d1704f`) passed the existing 28 route/viewport matrix with no Theme-owned blocker.
+
+P1 is therefore PASS and P4 final pilot sign-off is PASS at the tested Theme-owned scope. This does not create provider L5 certification and does not authorize Git tag, GitHub Release or final production deployment. Detailed evidence: `docs/evidence/P1_POST_DELETE_CLOSURE_20260916.md`.

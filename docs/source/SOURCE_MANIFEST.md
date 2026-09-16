@@ -1,6 +1,6 @@
 # AZnet Theme Source Manifest
 
-Canonical source is reconciled through the completed v1.1 R6 technical candidate, merged P2/P3 editorial hardening, PR #58 Homepage/Law01/Provisioning integration, D-027 Standalone Core closure, P4 public QA PR #66 and owner-approved authenticated QA PR #67 with fresh exact-main verification.
+Canonical source is reconciled through the completed v1.1 R6 technical candidate, merged P2/P3 editorial hardening, PR #58 Homepage/Law01/Provisioning integration, D-027 Standalone Core closure, P4 public/authenticated QA, owner-approved P1 identity inspection PR #69, and fresh post-delete P1/P4 closure evidence.
 
 | Source | Semantic version | Role |
 | --- | --- | --- |
@@ -8,11 +8,11 @@ Canonical source is reconciled through the completed v1.1 R6 technical candidate
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.9 | Theme architecture, public integration contracts and D-027 Standalone Core runtime-independence boundary |
-| `AZT-03-baseline-provenance.md` | v0.33 | Canonical implementation/provenance through D-027 plus P4 public + authenticated pilot evidence |
-| `AZT-04-roadmap-qa-decisions.md` | v0.38 | R0-R6/P2-P3/P4-A/P4-B/P4-C PASS; P4 public + authenticated QA PASS with P1 cleanup pending; P5 gates and D-001..D-027 |
-| `AZT-EXEC-MAP.md` | v0.30 | Derived execution map with P4 public + authenticated QA PASS and P1 duplicate cleanup as exact next |
+| `AZT-03-baseline-provenance.md` | v0.34 | Canonical implementation/provenance through D-027 plus P1 cleanup and final P4 pilot sign-off evidence |
+| `AZT-04-roadmap-qa-decisions.md` | v0.39 | R0-R6/P1-P4 PASS at defined scopes; final P4 pilot sign-off closed; P5 technical candidate next with publication/deployment gates retained |
+| `AZT-EXEC-MAP.md` | v0.31 | Derived execution map with P1/P4 closure and P5 final-candidate technical verification as exact next |
 
-Current canonical implementation baseline: `main@bf45a315e93fa22c441c81377f98ff34901d7ca5`, tree `c7db15f585e181de3eb58f96ca388878964fe64a`, Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.
+Current canonical implementation baseline: `main@9ed7a586b06b4c6dd91e66c51b049caa86e0485b`, tree `313f6744066a1d94033d4b2868343a471fbc6a70`, Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.
 
 Historical D-026 stacked evidence remains preserved at verified head `d564c6e8a43f458a493fe816c4fc768d4917065f`, package run `34362997863` and browser run `34362997879`. Its `1.1.1` candidate label is historical only and is not the current integration/release metadata baseline.
 
@@ -24,10 +24,10 @@ Owner-approved PR #58 merged to canonical `main@04edd8b312de70e6ee8339c461ae8f16
 
 D-027 source ratification PR #63 merged to `main@5d6dc56a756028d696a269ed75dd762daf4b83f2`; owner-approved implementation PR #64 merged final head `4b38f792d7de575bc08733748dac0399372e18c2` to `main@16563bdc88f172a1d7737b92293c7958670aac96`. Head and merge share tree `d2c4128f2b860bfd59c5efa11565dba38a34458e`. Fresh exact-main run `35042767873` completed SUCCESS; artifacts: static `10425656989`, runtime/browser `10426026827`. Final-head exact-package run `35042040620` also succeeded with D-027 candidate SHA-256 `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`.
 
-P4 public-pilot QA completed through GitHub Actions on functional head `758392b03227eb446627cc4669b0b0ddf56ed71e`. After the owner replaced historical pilot Theme `1.1.1` bits with the exact D-027 `1.1.0` package, authenticated read-only run `35047440842` completed SUCCESS with artifact `10427876863`, digest `sha256:96d2943661e27ef05ce5b16940a792fbd4727d635849a8f5e9e8589b03d2abe9`; the public workflow was rerun after replacement and again passed 28/28 checks with artifact `10427713118`, digest `sha256:c58d0efebe9fdeea14c2d9d1ba3fa8a4439f2bafffc1dc180cf3b1d1554cbadb`. Owner-approved PR #67 merged authenticated QA to canonical main, and exact-main run `35048609753` succeeded with artifacts `10427853326` (static) and `10427687863` (clean runtime/browser). P4 public + authenticated QA is PASS at tested Theme-owned scope; P1 duplicate-theme cleanup remains pending before final pilot sign-off. Evidence: `docs/evidence/P4_PUBLIC_PILOT_QA_20260916.md` and `docs/evidence/P4_AUTHENTICATED_PILOT_QA_20260916.md`.
+P4 public-pilot QA completed through GitHub Actions on functional head `758392b03227eb446627cc4669b0b0ddf56ed71e`. After the owner replaced historical pilot Theme `1.1.1` bits with the exact D-027 `1.1.0` package, authenticated read-only run `35047440842` completed SUCCESS with artifact `10427876863`, digest `sha256:96d2943661e27ef05ce5b16940a792fbd4727d635849a8f5e9e8589b03d2abe9`; the public workflow was rerun after replacement and again passed 28/28 checks with artifact `10427713118`, digest `sha256:c58d0efebe9fdeea14c2d9d1ba3fa8a4439f2bafffc1dc180cf3b1d1554cbadb`. Owner-approved PR #67 merged authenticated QA to canonical main, and exact-main run `35048609753` succeeded with artifacts `10427853326` (static) and `10427687863` (clean runtime/browser). P4 public + authenticated QA is retained. Owner-approved PR #69 proved the exact legacy duplicate identity; after backup confirmation the owner approved deletion of only `aznet-theme-release-v1.0.0` through WordPress core UI. Fresh post-delete run `35050519817` reports `NO_DUPLICATES`, active `aznet-theme` v1.1.0, Standalone Core `ready`, and a 28-check public regression PASS. P1 and final P4 pilot sign-off are therefore PASS at their defined Theme-owned/site-operations scopes. Evidence: `docs/evidence/P4_PUBLIC_PILOT_QA_20260916.md`, `docs/evidence/P4_AUTHENTICATED_PILOT_QA_20260916.md`, and `docs/evidence/P1_POST_DELETE_CLOSURE_20260916.md`.
 
 The known WordPress-core `WP_Query::rewind_posts()` warning remains UNKNOWN/non-blocking; no blanket PHP-log-clean claim is made. RootProfile E5-C/E5-D and ConvertFlow F8 remain separate optional compatibility gates under their existing ownership rules.
 
-**Exact next:** P1 pilot identity cleanup. First inspect installed Theme identities read-only and prove which duplicate AZnet Theme installs are inactive. Any deletion is destructive and requires separate explicit owner approval plus rollback confidence. After P1 closure, record final P4 pilot sign-off. Git tag/GitHub Release and final production deployment remain separate P5 owner gates.
+**Exact next:** P5 final-candidate technical verification/package gates from current canonical bytes. Build deterministically, verify exact package contents and clean-WordPress activation/runtime/browser behavior, and retain rollback evidence. Git tag/GitHub Release and final production deployment remain separate explicit owner gates.
 
 Derived DOCX source material remains archival/export evidence only. Canonical source changes occur in `docs/source/` through reviewed Git history.
