@@ -1,10 +1,10 @@
 # X3 — Media / Gallery / Embed Design
 
-**Project:** AZnet Theme  
-**Milestone:** v1.2 WordPress Experience Completion  
-**Slice:** X3 — Media / Gallery / Embed  
-**Status:** Approved design / pre-implementation  
-**Date:** 2026-09-16  
+**Project:** AZnet Theme
+**Milestone:** v1.2 WordPress Experience Completion
+**Slice:** X3 — Media / Gallery / Embed
+**Status:** Approved design / pre-implementation
+**Date:** 2026-09-16
 **Base:** `main@e33e3f1a2d48a8867e11a6fcc66eadd71d72da6e`
 
 ## 1. Goal
