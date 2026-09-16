@@ -1,0 +1,40 @@
+name: D-027 Standalone Core
+
+on:
+  push:
+    branches:
+      - work/d027-standalone-core
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'inc/admin/system-health.php'
+      - 'inc/admin/control-center.php'
+      - 'tests/offline/d027-standalone-core-health-contract.php'
+      - '.github/workflows/d027-standalone-core.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-contract:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact branch bytes
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Run D-027 standalone health contract
+        run: php tests/offline/d027-standalone-core-health-contract.php
+
+      - name: Lint System Health
+        run: php -l inc/admin/system-health.php
+
+      - name: Lint Control Center
+        run: php -l inc/admin/control-center.php
