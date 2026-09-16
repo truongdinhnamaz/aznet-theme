@@ -13,3 +13,5 @@ Boundaries:
 - No RootProfile, ConvertFlow, WooCommerce, private option/meta/CPT/table access.
 - Exact-before preconditions and rollback-on-error are enforced by the browser harness.
 - Header utility assignment occurs only if the active Theme actually registers the public WordPress menu location; otherwise display remains blocked by deployed presentation capability.
+
+Retry note: the first runtime attempt rolled back cleanly after WordPress exposed the menu save control in a hidden header toolbar. The regression now activates that native control directly; no scope or authoritative input changed.
