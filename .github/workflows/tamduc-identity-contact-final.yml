@@ -1,5 +1,6 @@
 # Read-only public verification retained for PR integration.
 # Post-cleanup verification target.
+# Integration branch must not retain one-shot mutation mechanics.
 name: Tâm Đức Identity Contact Final L4
 
 on:
