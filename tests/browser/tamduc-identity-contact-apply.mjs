@@ -25,6 +25,10 @@ const state = {
   error: null,
 };
 
+async function nativeClick(locator) {
+  await locator.evaluate((element) => element.click());
+}
+
 async function login(page) {
   if (!adminUser || !adminPass) throw new Error('Required pilot credentials are unavailable');
   await page.goto(`${baseUrl}/wp-login.php`, { waitUntil: 'domcontentloaded', timeout: 30000 });
@@ -116,7 +120,7 @@ async function createPhoneMenu(page) {
   await page.locator('#menu-name').fill(MENU_NAME);
   await Promise.all([
     page.waitForURL(/nav-menus\.php.*menu=\d+/, { timeout: 30000 }),
-    page.locator('#save_menu_header').click(),
+    nativeClick(page.locator('#save_menu_header')),
   ]);
   const menuId = new URL(page.url()).searchParams.get('menu');
   if (!menuId || !/^\d+$/.test(menuId)) throw new Error('Created menu id unavailable');
@@ -129,7 +133,7 @@ async function createPhoneMenu(page) {
   await customSection.locator('#submit-customlinkdiv').click();
   const item = page.locator('#menu-to-edit .menu-item').filter({ hasText: PHONE_DISPLAY });
   await item.waitFor({ state: 'visible', timeout: 15000 });
-  await page.locator('#save_menu_header').click();
+  await nativeClick(page.locator('#save_menu_header'));
   await page.waitForLoadState('domcontentloaded');
   return Number(menuId);
 }
