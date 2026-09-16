@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         <?php
         wp_link_pages(
             [
-                'before' => '<nav class="aznet-theme-article__page-links" aria-label="' . esc_attr__( 'Article pages', 'aznet-theme' ) . '">',
+                'before' => '<nav class="aznet-theme-article__page-links" aria-label="' . esc_attr__( 'Article pages', 'aznet-theme' ) . '"><span class="aznet-theme-navigation__summary">' . esc_html__( 'Pages:', 'aznet-theme' ) . '</span>',
                 'after'  => '</nav>',
             ]
         );
@@ -50,8 +50,9 @@ if ( ! defined( 'ABSPATH' ) ) {
     <?php
     the_post_navigation(
         [
-            'prev_text' => '<span class="nav-subtitle">' . esc_html__( 'Previous', 'aznet-theme' ) . '</span><span class="nav-title">%title</span>',
-            'next_text' => '<span class="nav-subtitle">' . esc_html__( 'Next', 'aznet-theme' ) . '</span><span class="nav-title">%title</span>',
+            'prev_text'  => '<span class="nav-subtitle">' . esc_html__( 'Previous', 'aznet-theme' ) . '</span><span class="nav-title">%title</span>',
+            'next_text'  => '<span class="nav-subtitle">' . esc_html__( 'Next', 'aznet-theme' ) . '</span><span class="nav-title">%title</span>',
+            'aria_label' => esc_attr__( 'Post navigation', 'aznet-theme' ),
         ]
     );
     ?>
