@@ -90,7 +90,35 @@ function provisioning_build_plan( string $blueprint_key, array $selections, arra
     $ops[] = [ 'id' => 'homepage:map', 'type' => 'map_homepage_sources', 'role' => 'homepage', 'object_id' => 0, 'page_sources' => $page_sources, 'category_sources' => $category_sources, 'effect' => 'MAP Homepage Content Map to confirmed WordPress sources' ];
     $ops[] = [ 'id' => 'homepage:preset:law-01', 'type' => 'set_homepage_preset', 'role' => 'homepage', 'object_id' => 0, 'preset' => 'law-01', 'effect' => 'SET Homepage preset → law-01' ];
 
-    if ( 'law01-v1-1' === $blueprint_key ) {
+    if ( 'law01-v1-2' === $blueprint_key ) {
+        $variant = (string) ( $blueprint['homepage_variant'] ?? '' );
+        if ( '' !== $variant ) {
+            $ops[] = [
+                'id' => 'homepage:variant:' . $variant,
+                'type' => 'set_homepage_variant',
+                'role' => 'homepage',
+                'object_id' => 0,
+                'variant' => $variant,
+                'effect' => sprintf( 'SET Law 01 presentation variant → %s', $variant ),
+            ];
+        }
+        $mode = function_exists( __NAMESPACE__ . '\\provisioning_site_mode' ) ? provisioning_site_mode( $discovery ) : 'EXISTING_ACTIVE';
+        $starter_defaults = (array) ( $selections['starter_site_defaults'] ?? [] );
+        if ( 'NEW_OR_MOSTLY_EMPTY' === $mode && ! empty( $starter_defaults['apply'] ) ) {
+            $site_defaults = (array) ( $blueprint['site_defaults'] ?? [] );
+            $ops[] = [
+                'id' => 'site-defaults:apply',
+                'type' => 'set_starter_site_defaults',
+                'role' => 'site_identity',
+                'object_id' => 0,
+                'blogname' => (string) ( $site_defaults['blogname'] ?? '' ),
+                'blogdescription' => (string) ( $site_defaults['blogdescription'] ?? '' ),
+                'effect' => sprintf( 'SET starter Site Title → %s and starter Site Tagline', (string) ( $site_defaults['blogname'] ?? '' ) ),
+            ];
+        }
+    }
+
+    if ( in_array( $blueprint_key, [ 'law01-v1-1', 'law01-v1-2' ], true ) ) {
         $mode = function_exists( __NAMESPACE__ . '\\provisioning_site_mode' ) ? provisioning_site_mode( $discovery ) : 'EXISTING_ACTIVE';
         $publication = (array) ( $selections['starter_publication'] ?? [] );
         $publish_requested = ! empty( $publication['publish'] );
@@ -199,7 +227,7 @@ function provisioning_validate_plan( array $plan ): array {
     if ( ! str_starts_with( (string) ( $plan['state_fingerprint'] ?? '' ), 'sha256:' ) ) { $errors[] = 'Missing state fingerprint.'; }
     $allowed_types = [
         'reuse_page','create_page','reuse_term','create_term','reuse_menu','create_menu','set_front_page','map_homepage_sources','set_homepage_preset',
-        'create_post','import_media','assign_featured_media','set_search_visibility',
+        'create_post','import_media','assign_featured_media','set_search_visibility','set_starter_site_defaults','set_homepage_variant',
     ];
     $seen = [];
     foreach ( (array) ( $plan['operations'] ?? [] ) as $op ) {
@@ -222,6 +250,14 @@ function provisioning_validate_plan( array $plan ): array {
         } elseif ( 'set_search_visibility' === $type ) {
             if ( 0 !== (int) ( $op['target'] ?? -1 ) || 'temporary_new_site_starter_publication' !== (string) ( $op['reason'] ?? '' ) ) {
                 $errors[] = 'Search-visibility operation is not an approved starter-publication guard.';
+            }
+        } elseif ( 'set_starter_site_defaults' === $type ) {
+            if ( '' === trim( (string) ( $op['blogname'] ?? '' ) ) || '' === trim( (string) ( $op['blogdescription'] ?? '' ) ) ) {
+                $errors[] = 'Starter site defaults require non-empty Site Title and Tagline.';
+            }
+        } elseif ( 'set_homepage_variant' === $type ) {
+            if ( ! in_array( (string) ( $op['variant'] ?? '' ), [ 'navy-gold', 'burgundy-gold' ], true ) ) {
+                $errors[] = 'Homepage variant is invalid.';
             }
         }
     }
