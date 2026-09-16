@@ -9,6 +9,7 @@ on:
       - 'single.php'
       - 'inc/theme/assets.php'
       - 'assets/css/components/comments.css'
+      - 'scripts/assert-theme-version.sh'
       - 'tests/offline/x1-comments-surface-contract.php'
       - 'tests/offline/editorial-single-post-contract.php'
       - 'tests/runtime/x1-comments-surface.php'
@@ -26,6 +27,7 @@ on:
       - 'single.php'
       - 'inc/theme/assets.php'
       - 'assets/css/components/comments.css'
+      - 'scripts/assert-theme-version.sh'
       - 'tests/offline/x1-comments-surface-contract.php'
       - 'tests/offline/editorial-single-post-contract.php'
       - 'tests/runtime/x1-comments-surface.php'
@@ -87,8 +89,7 @@ jobs:
             echo 'FAIL: X1 must not change Theme version declarations' >&2
             exit 1
           fi
-          grep -F "define( 'AZNET_THEME_VERSION', '1.1.0' );" functions.php
-          grep -F 'Version: 1.1.0' style.css
+          bash scripts/assert-theme-version.sh
           php tests/offline/x1-comments-surface-contract.php
           php tests/offline/editorial-single-post-contract.php
           php tests/offline/editorial-listing-search-contract.php
