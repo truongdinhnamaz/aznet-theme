@@ -66,11 +66,17 @@ async function readPageTitle142(page) {
   return (await row.locator('.row-title').innerText()).trim();
 }
 
+async function clickQuickEdit(row) {
+  const button = row.locator('.editinline');
+  if ((await button.count()) !== 1) throw new Error('Quick Edit button unavailable for Page #142');
+  await button.evaluate((button) => button.click());
+}
+
 async function setPageTitle142(page, value) {
   await page.goto(`${baseUrl}/wp-admin/edit.php?post_type=page`, { waitUntil: 'domcontentloaded', timeout: 30000 });
   const row = page.locator('#post-142');
   if ((await row.count()) !== 1) throw new Error('Page #142 row unavailable');
-  await row.locator('.editinline').click();
+  await clickQuickEdit(row);
   const editor = page.locator('#edit-142');
   await editor.waitFor({ state: 'visible', timeout: 10000 });
   const title = editor.locator('input[name="post_title"]');
