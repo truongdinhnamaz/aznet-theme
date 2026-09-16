@@ -1,0 +1,27 @@
+name: X6 Release Closure RED
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tests/offline/x6-release-closure-contract.php'
+      - '.github/workflows/_tmp-x6-red.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  x6-red:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Run intended X6 RED
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-release-closure-contract.php
