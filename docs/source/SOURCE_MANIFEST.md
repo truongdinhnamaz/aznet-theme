@@ -14,7 +14,7 @@ Canonical source is reconciled through the completed v1.1 release-critical path 
 
 Approved design companion: `docs/superpowers/specs/2026-09-16-v1.2-wordpress-experience-completion-design.md`. X1 closure evidence: `docs/evidence/X1_COMMENTS_SURFACE_20260916.md`. X2 closure evidence: `docs/evidence/X2_SEARCH_404_EMPTY_20260916.md`. Neither supersedes AZT source ownership; AZT-04 owns roadmap/decisions and AZT-EXEC-MAP remains derived.
 
-Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor: `v1.1.0` -> `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`; owner-approved publication closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`, and restored post-noop checkpoint `e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb`. Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.
+Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor: `v1.1.0` -> `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`; owner-approved publication closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`, and restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb`. Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.
 
 Historical D-026 stacked evidence remains preserved at verified head `d564c6e8a43f458a493fe816c4fc768d4917065f`, package run `34362997863` and browser run `34362997879`. Its `1.1.1` candidate label is historical only and is not the current integration/release metadata baseline.
 
