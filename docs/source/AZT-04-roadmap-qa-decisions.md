@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.48
+**Version:** v0.49
 **Status:** Working Source  
 **Date:** 16/09/2026
 
@@ -38,10 +38,12 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P4-B | Law Site Provisioning v1.1 | PASS / MERGED | D-026 smart setup merged through PR #58 with Theme metadata `1.1.0`; deterministic package/browser evidence retained and exact-main verification PASS |
 | P4-C | Standalone Core independence | PASS / MERGED | D-027 source + implementation merged through PR #63/#64; zero-plugin L1-L4, exact-package and exact-main gates PASS; optional integrations remain additive |
 | P5 | Publication & production deployment | PASS | Tag `v1.1.0` + GitHub Release publication and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
-| X | v1.2 WordPress Experience Completion | X5 PASS / X6 NEXT | X1 Comments, X2 Search/404/empty states, X3 Media/Gallery/Embed, X4 Pagination/Navigation and X5 Native Form Controls passed L1-L4 on verified functional heads; X6 Cross-surface QA & Release Closure plan/review is next after canonical X5 integration; no new provider integration |
+| X | v1.2 WordPress Experience Completion | X6 FINAL CANDIDATE PASS / MERGE GATED | X1-X5 retained; synchronized exact `1.2.0` X6 candidate passes integrated L1-L4/L6, deterministic package/source identity and lifecycle; canonical merge + exact-main verification remain separately gated; no provider L5 expansion |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
-Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` points to `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`. Publication source closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72. P5 technical run `35051428372` verified final package bytes, publication run `35052694111` published the matching tag/Release, and production read-only run `35054176392` closed deployment at the tested Theme-owned/site-operations scope.
+Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` points to `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb324b04cf6e538e38cb6cf7b78`. Publication source closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72. P5 technical run `35051428372` verified final package bytes, publication run `35052694111` published the matching tag/Release, and production read-only run `35054176392` closed deployment at the tested Theme-owned/site-operations scope.
+
+Current canonical integration base for X6 is `main@dddcee1cbd9a406f365ec57ece40097581e0bcf3` after owner-approved PR #89. `V1 Exact Main Verification` run `35126047491` completed SUCCESS on that exact SHA. The X6 branch was synchronized to this base by merge commit `c145f72cc7ac4783eb9f4a2f0b11c1d26e178445`, tree `3594fab0c89d015711e914325734646d1e7df159`, leaving the branch `behind_by=0` before source/evidence closure.
 
 The earlier deterministic R6 candidate SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b` remains historical release-provenance evidence only. P5 independently rebuilt and verified the final post-hardening production bytes as `aznet-theme-1.1.0.zip`, SHA-256 `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`; owner-approved publication and production deployment disposition are now complete, with fresh deployment evidence in run `35054176392`.
 
@@ -79,7 +81,7 @@ Publication/tag is not inferred from technical PASS and remains a separate owner
 
 ### R0 — Source reconciliation
 
-**Goal:** make canonical source agree with the v1.0 implementation baseline and ratify the approved v1.1 product/architecture direction.
+**Goal:** make canonical source agree with the v1.0 merged state and ratify the approved v1.1 Native Product System architecture.
 
 **Exit:** PASS — source-only PR #36 merged; AZT-05 remained unchanged.
 
@@ -89,7 +91,7 @@ Publication/tag is not inferred from technical PASS and remains a separate owner
 
 ### R2 — Native Pattern Library
 
-**Exit:** PASS — 18 patterns shipped; 16 core/native plus 2 public-Woo-block-gated patterns; L1-L4 and theme-switch portability proven; PR #39 merged.
+**Exit:** PASS — 18 patterns shipped; 16 core/native plus 2 public-Woo-block-gated patterns; L1-L4 + theme-switch portability proven; PR #39 merged.
 
 ### R3 — Header System 2.0
 
@@ -203,7 +205,7 @@ Owner-approved publication run `35052694111` then created annotated tag `v1.1.0`
 
 ### X — v1.2 WordPress Experience Completion
 
-**State:** **X5 PASS / X6 NEXT.**
+**State:** **X6 FINAL CANDIDATE PASS / CANONICAL MERGE + EXACT-MAIN VERIFICATION PENDING.**
 
 **Goal:** complete the native WordPress Core experience of AZnet Theme while keeping the Theme a presentation owner. v1.2 does not open a new provider/plugin integration program.
 
@@ -213,7 +215,7 @@ Owner-approved publication run `35052694111` then created annotated tag `v1.1.0`
 
 **Execution order:** `X1 Comments -> X2 Search/404 -> X3 Media -> X4 Navigation -> X5 Forms -> X6 Closure`.
 
-**Version discipline:** Theme metadata remains `1.1.0` during X1-X5. Promotion to exact `1.2.0` is an X6 action only after fresh final-candidate evidence and the applicable owner gate.
+**Version discipline:** X1-X5 remained at `1.1.0`. After fresh pre-promotion X6 evidence and explicit owner approval, the isolated X6 candidate was atomically promoted to exact `1.2.0`. Canonical `main` and the published/production release remain `1.1.0` until separately approved X6 merge/publication/deployment gates are crossed.
 
 **QA:** each production slice uses RED -> intended failure -> minimal GREEN -> retained regression, then L3 real WordPress runtime and L4 responsive/keyboard/focus/overflow/a11y. X6 adds L6 deterministic package/source identity, update/theme-switch continuity, rollback and exact-main verification. Provider L5 is outside v1.2 and is not inferred.
 
@@ -229,9 +231,11 @@ Owner-approved publication run `35052694111` then created annotated tag `v1.1.0`
 
 **X4 — Pagination & Navigation Completion:** **PASS at L1-L4** on functional closure head `f34db6f89cff505c16c2bb98f479eebba5661079`. Dedicated workflow `35083830374` completed SUCCESS on WordPress 6.9 with zero active plugins, native runtime/asset-boundary PASS and a 20/20 Playwright/axe browser matrix covering archive/search pagination, Post page links, adjacent Post navigation and comment pagination. Artifact `10440569415`, digest `sha256:16b1b4d69b81a5ce7403d081b565d80c67a4c4e79ddb50538abdc5771928fb84`. All 25 exact-head pull-request workflows observed on the functional head completed SUCCESS. WordPress retains pagination/navigation/comment state and URL authority; Theme metadata remains `1.1.0`; provider L5 is not inferred. Evidence: `docs/evidence/X4_PAGINATION_NAVIGATION_20260916.md`.
 
-**X5 — Native Form Controls:** **PASS at L1-L4** on functional closure head `8aac300f805e83fb7a7e7243aa779fe37376838d`. Dedicated workflow `35088686988` completed SUCCESS on WordPress 6.9 with zero active plugins, scoped `forms.css` presentation for native Comment, Core-block form-control, password-protected Page, Search and 404 surfaces, absence on Archive/Home controls, and a 16/16 responsive Playwright/axe matrix across 1440/1024/390/320 widths. Artifact `10442863335`, digest `sha256:88d06c8b3449233e7a5b85421dc2be779eac51dc9cacbe4d694ceab86f2705ac`. All 26 exact-head pull-request workflows observed on the functional head completed SUCCESS. WordPress retains form submission/validation semantics and submitted data authority; Theme metadata remains `1.1.0`; provider L5, X6 completion and v1.2 package/release/deployment are not inferred. Evidence: `docs/evidence/X5_NATIVE_FORM_CONTROLS_20260916.md`.
+**X5 — Native Form Controls:** **PASS at L1-L4** on functional closure head `8aac300f805e83fb7a7e7243aa779fe37376838d`. Dedicated workflow `35088686988` completed SUCCESS on WordPress 6.9 with zero active plugins, scoped `forms.css` presentation for native Comment, Core-block form-control, password-protected Page, Search and 404 surfaces, absence on Archive/Home controls, and a 16/16 responsive Playwright/axe matrix across 1440/1024/390/320 widths. Artifact `10442863335`, digest `sha256:88d06c8b3449233e7a5b85421dc2be779eac51dc9cacbe4d694ceab86f2705ac`. All 26 exact-head pull-request workflows observed on the functional head completed SUCCESS. WordPress retains form submission/validation semantics and submitted data authority; Theme metadata remains `1.1.0`; provider L5 is not inferred. Evidence: `docs/evidence/X5_NATIVE_FORM_CONTROLS_20260916.md`.
 
-**Exact Next:** owner approval for PR #85 canonical merge is granted. Complete fresh exact-final-head verification after this source closure, merge with expected-head protection, and complete fresh exact-main verification. After canonical X5 integration, create and review the bounded **X6 — Cross-surface QA & Release Closure** implementation plan before any X6 production/release action. Theme metadata remains `1.1.0`; provider L5 remains separate and is not inferred.
+**X6 — Cross-surface QA & Release Closure:** fresh synchronized candidate `c145f72cc7ac4783eb9f4a2f0b11c1d26e178445`, tree `3594fab0c89d015711e914325734646d1e7df159`, passed run `35126908185` across L1-L4 and L6: WordPress 6.9 zero-plugin runtime, integrated `32/32` Playwright/axe matrix, deterministic `aznet-theme-1.2.0.zip`, exact source/package identity, 95 packaged PHP lint checks, and switch-away/switch-back lifecycle continuity. Package SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`; artifact `10459925538`, digest `sha256:c6b480168282e7dc9eea8f749d303012763cabf16213a6e69619c62f96f16e03`. All 19 observed same-head PR workflows completed SUCCESS. Durable evidence: `docs/evidence/X6_CROSS_SURFACE_RELEASE_CLOSURE_20260916.md`.
+
+**Exact Next:** complete fresh exact-final-head verification after source/evidence/hygiene closure. If GREEN and PR #87 remains mergeable with the exact head unchanged, stop at the product-owner gate for canonical merge. After a separately approved merge, require fresh `V1 Exact Main Verification` and X6 push-to-main PASS on the exact merge SHA before claiming X6 technical closure. Tag/GitHub Release publication and production deployment remain later separate owner gates.
 
 ## 6. Dependency order
 
@@ -244,7 +248,7 @@ Post-R6 production readiness:
 `P1 site-ops cleanup (parallel/destructive gate)`  
 `P2 Editorial Single-Post PASS -> P3 Editorial Listing/Search PASS -> P4-C Standalone Core PASS -> P4 Real Pilot QA PASS -> P1 cleanup PASS -> P5 technical candidate PASS -> P5 publication PASS -> production deployment PASS`
 
-P1/P4 pilot sign-off, P5 publication and owner-approved production deployment verification are closed; the v1.1 release-critical path is complete.
+P1/P4 pilot sign-off, P5 publication and owner-approved production deployment verification are closed; the v1.1 release-critical path is complete. v1.2 X6 is now a final technical candidate pending canonical merge + exact-main verification.
 
 ## 7. QA layers
 
@@ -351,10 +355,12 @@ The following remain explicit owner approval gates:
 - any later product/architecture/public-contract change not already ratified here;
 - provider takeover paths such as E5-D;
 - destructive retirement/deletion without proven rollback;
-- merge of future production hardening into canonical `main` after its own fresh verification when the active PR is explicitly owner-gated.
+- canonical merge of the exact X6 final candidate into `main`;
+- v1.2.0 annotated tag/GitHub Release publication after technical merge closure;
+- production deployment of v1.2.0 after publication, as a later separate gate.
 
-Metadata promotion to `1.1.0` is a historical cleared gate completed through PR #48. Source closure and the post-R6 roadmap were explicitly approved by the product owner on 08/09/2026. P2 and P3 production merges were separately owner-approved. Owner-approved PR #58 canonical integration remains historical PASS evidence. D-027 source PR #63 and owner-approved implementation PR #64 remain canonical history. P4 public QA PR #66 and owner-approved authenticated QA PR #67 are merged; canonical `main@bf45a315e93fa22c441c81377f98ff34901d7ca5` passed exact-main run `35048609753`. P4 public + authenticated QA is retained and P1 cleanup is PASS after owner-approved deletion of only `aznet-theme-release-v1.0.0`; post-delete run `35050519817` closes final P4 pilot sign-off at the tested Theme-owned scope. P5 technical closure PR #71 was owner-approved and merged; the owner then separately approved publication as tag `v1.1.0` + GitHub Release, completed by run `35052694111`, and separately approved the existing-package production deployment disposition verified by run `35054176392`. Provider L5 certification remains separate/unproven. Owner approval for X4 production PR #83 canonical merge was granted on 16/09/2026 and is retained historical evidence. Owner approval for X5 production PR #85 canonical merge was granted on 16/09/2026; merge remains contingent on fresh exact-final-head GREEN evidence and exact expected-head protection, with fresh exact-main verification required after merge before claiming canonical X5 integration.
+Metadata promotion to `1.1.0` is a historical cleared gate completed through PR #48. Source closure and the post-R6 roadmap were explicitly approved by the product owner on 08/09/2026. P2 and P3 production merges were separately owner-approved. Owner-approved PR #58 canonical integration remains historical PASS evidence. D-027 source PR #63 and owner-approved implementation PR #64 remain canonical history. P4 public QA PR #66 and owner-approved authenticated QA PR #67 are merged; canonical `main@bf45a315e93fa22c441c81377f98ff34901d7ca5` passed exact-main run `35048609753`. P4 public + authenticated QA is retained and P1 cleanup is PASS after owner-approved deletion of only `aznet-theme-release-v1.0.0`; post-delete run `35050519817` closes final P4 pilot sign-off at the tested Theme-owned scope. P5 technical closure PR #71 was owner-approved and merged; the owner then separately approved publication as tag `v1.1.0` + GitHub Release, completed by run `35052694111`, and separately approved the existing-package production deployment disposition verified by run `35054176392`. Provider L5 certification remains separate/unproven. X4 PR #83 and X5 PR #85 canonical merges are retained historical owner-approved integration evidence. The X6 metadata-promotion gate was separately approved after fresh pre-promotion GREEN evidence; that approval did not authorize PR #87 canonical merge, v1.2.0 publication or production deployment.
 
 ## 14. Exact next
 
-**X5 Native Form Controls is PASS at L1-L4 on verified functional head `8aac300f805e83fb7a7e7243aa779fe37376838d`; dedicated run `35088686988` and all 26 observed exact-head PR workflows completed SUCCESS. Owner approval for PR #85 canonical merge is granted. Complete fresh exact-final-head verification after this source closure, merge PR #85 with expected-head protection, then require fresh exact-main verification before claiming canonical X5 integration. Exact Next after integration is to create and review the bounded X6 Cross-surface QA & Release Closure implementation plan. Theme metadata remains `1.1.0`; provider L5 work is not opened or inferred.**
+**X6 is a synchronized exact-`1.2.0` final technical candidate. Run `35126908185` passed integrated L1-L4/L6 on `c145f72cc7ac4783eb9f4a2f0b11c1d26e178445`, including 32/32 browser cases, deterministic package/source identity, 95 packaged PHP lint checks and lifecycle continuity; all 19 observed same-head PR workflows completed SUCCESS. Complete fresh exact-final-head verification after this source/evidence closure. If GREEN and PR #87 remains mergeable with the exact head unchanged, stop and request product-owner approval to merge PR #87. After separately approved merge, require fresh exact-main V1 + X6 verification before claiming technical closure. Publication and production deployment remain later separate owner gates.**
