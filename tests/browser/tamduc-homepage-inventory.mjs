@@ -169,7 +169,7 @@ try {
 
   const published_pages = await readPublicRest(
     page,
-    '/wp-json/wp/v2/pages?status=publish&per_page=100&_fields=id,parent,slug,link,title,excerpt,featured_media',
+    '/wp-json/wp/v2/pages?status=publish&per_page=100&_fields=id,parent,slug,link,title,excerpt,content,featured_media',
     'published_pages',
   );
   const published_posts = await readPublicRest(
@@ -193,12 +193,24 @@ try {
     ? published_pages.filter((item) => Number(item?.parent || 0) === serviceParentId)
     : [];
 
+  const mappedPageIds = new Set([
+    Number.parseInt(String(frontPage?.value || '0'), 10) || 0,
+    Number.parseInt(String(mappings?.homepage_services_page?.value || '0'), 10) || 0,
+    Number.parseInt(String(mappings?.homepage_about_page?.value || '0'), 10) || 0,
+    Number.parseInt(String(mappings?.homepage_team_page?.value || '0'), 10) || 0,
+    Number.parseInt(String(mappings?.homepage_process_page?.value || '0'), 10) || 0,
+    Number.parseInt(String(mappings?.homepage_faq_page?.value || '0'), 10) || 0,
+    Number.parseInt(String(mappings?.homepage_contact_page?.value || '0'), 10) || 0,
+  ].filter((id) => id > 0));
+  const page_content_inventory = published_pages.filter((item) => mappedPageIds.has(Number(item?.id || 0)));
+
   const wp_public_inventory = {
     published_pages,
     published_posts,
     categories,
     media_candidates,
     service_child_pages,
+    page_content_inventory,
   };
   recordValue('wp_public_inventory', wp_public_inventory);
 
