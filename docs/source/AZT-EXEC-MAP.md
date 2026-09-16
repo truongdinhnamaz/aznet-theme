@@ -1,15 +1,15 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.31
+**Version:** v0.32
 **Status:** Working Execution Map / derived  
 **Date:** 16/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** D-027 remains canonical through PR #63/#64; P4 public/authenticated QA remains retained; owner-approved P1 identity inspection PR #69 merged to `main@9ed7a586b06b4c6dd91e66c51b049caa86e0485b`, tree `313f6744066a1d94033d4b2868343a471fbc6a70`. P1 cleanup and final P4 pilot sign-off are closed by fresh post-delete run `35050519817`. Theme metadata remains source-approved `1.1.0`; optional integrations remain additive and ownership boundaries are unchanged.
+> **Canonical-main checkpoint:** D-027 remains canonical through PR #63/#64; P4 public/authenticated QA and P1 cleanup are retained; owner-approved P1/P4 source closure PR #70 merged to `main@f0b2d581b16a663e4b422234e6ac15568bcc7985`, tree `f21884f5989239858261721c5002c5158d6d9be0`. Fresh P5 technical run `35051428372` verifies those exact canonical bytes and the deterministic final `1.1.0` package. Optional integrations remain additive and ownership boundaries are unchanged.
 
-**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public 28-check PASS -> authenticated PASS -> PR #67 -> P1 read-only identity proof -> owner-approved PR #69 -> backup-confirmed owner-approved deletion of inactive aznet-theme-release-v1.0.0 -> post-delete NO_DUPLICATES + System Health ready + public 28-check PASS run 35050519817 -> P1 PASS / P4 final pilot sign-off PASS`.
+**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> owner-approved PR #70 -> canonical main f0b2d581... -> P5 exact-main + deterministic double-build + exact package/source compare + clean WP6.9 zero-plugin + browser/a11y + switch-away/switch-back PASS run 35051428372 -> P5 TECHNICAL CANDIDATE PASS / PUBLICATION GATED`.
 
 ## 1. Current state
 
@@ -38,12 +38,12 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | P4-A Homepage Composer + Law 01 | PASS / MERGED | PR #58 merged; exact-main static/runtime/browser core verification PASS |
 | P4-B Law Site Provisioning | PASS / MERGED | D-026 merged; Theme `1.1.0`; deterministic package/browser evidence retained; activation mutation-free and active-site overwrite/noindex takeover forbidden |
 | P4-C Standalone Core independence | PASS / MERGED | PR #63/#64 merged; zero-plugin L1-L4, exact-package and exact-main PASS; optional integrations remain additive |
-| P5 Publication/Deployment | GATED | Tag/GitHub Release and final production deploy remain explicit owner actions |
+| P5 Publication/Deployment | TECHNICAL CANDIDATE PASS / PUBLICATION GATED | Final deterministic `1.1.0` package and exact-canonical L1-L4/L6 lifecycle gates PASS; tag/GitHub Release and final production deploy remain explicit owner actions |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
-Current canonical implementation baseline is `main@9ed7a586b06b4c6dd91e66c51b049caa86e0485b`, Theme `1.1.0`, tree `313f6744066a1d94033d4b2868343a471fbc6a70`. D-027 PR #63/#64 remain retained; P4 public QA PR #66, authenticated QA PR #67 and P1 inspection PR #69 are merged. Exact-main verification run `35049959237` succeeded on that exact SHA; post-delete site verification run `35050519817` closes P1/P4.
+Current canonical implementation baseline is `main@f0b2d581b16a663e4b422234e6ac15568bcc7985`, Theme `1.1.0`, tree `f21884f5989239858261721c5002c5158d6d9be0`. D-027 PR #63/#64 remain retained; P4 public QA PR #66, authenticated QA PR #67, P1 inspection PR #69 and P1/P4 closure PR #70 are merged. P5 run `35051428372` freshly verifies this exact canonical source and final package; publication remains gated.
 
-The previous R6 package SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b` is retained as historical R6 candidate evidence only; P2/P3 changed production bytes, so P5 requires a new deterministic package/SHA.
+The previous R6 package SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b` remains historical. Fresh P5 independently rebuilt the current canonical production file set as deterministic `aznet-theme-1.1.0.zip`, SHA-256 `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`, with exact 121-file source/package identity and 93 packaged PHP files linted.
 
 Fresh authenticated pilot evidence proves active AZnet Theme `1.1.0` on WordPress `7.1` / PHP `8.4.25`, D-027 current System Health shape, Standalone Core `ready`, `primary_menu=yes`, RootProfile v1/v2 available, current-surface absent, Woo absent and ConvertFlow intentionally `unknown`.
 
@@ -233,7 +233,7 @@ No layer may be inferred from another.
 
 **Exit:** PASS at the tested Theme-owned scope. Public + authenticated evidence is retained and P1 cleanup is closed by fresh post-delete inventory/System Health/public regression evidence. Provider L5 status remains separate.
 
-**Next:** P5 final-candidate technical verification/package gates. Stop before Git tag, GitHub Release or final production deployment without separate owner approval.
+**Next:** P5 publication disposition. Technical package gates are PASS; stop before Git tag, GitHub Release or final production deployment without separate owner approval.
 
 
 
@@ -275,7 +275,11 @@ No layer may be inferred from another.
 
 ### P5 — Final Candidate / Publication / Deployment
 
-Run exact-main verification, deterministic double-build byte identity, unzip/exact-compare/lint/clean-WordPress activation smoke and rollback reference. Stop before tag/GitHub Release and final production deployment unless separately approved.
+**State:** **TECHNICAL CANDIDATE PASS / PUBLICATION GATED.**
+
+Fresh run `35051428372` verified exact canonical `main@f0b2d581b16a663e4b422234e6ac15568bcc7985`: reusable exact-main/core gates PASS; deterministic double-build PASS; 121 production files exact source/package match; 93 packaged PHP files lint PASS; final `aznet-theme-1.1.0.zip` SHA-256 `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`; clean WordPress `6.9` with zero active third-party plugins PASS; 18/18 browser/a11y PASS before theme switch and 18/18 after switch-back; WordPress-owned native data continuity PASS through bundled `twentytwentyfive`. Evidence: `docs/evidence/P5_FINAL_CANDIDATE_VERIFICATION_20260916.md`.
+
+Git tag, GitHub Release and final production deployment are not implied and remain separate explicit owner gates.
 
 ## 13. Optional compatibility tracks
 
@@ -297,4 +301,4 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 15. Exact next
 
-**P5 final-candidate technical verification — run exact-main verification, deterministic double-build byte identity, unzip/exact-compare/package hygiene, clean-WordPress activation smoke and rollback-reference checks from current canonical bytes. Stop before Git tag, GitHub Release or final production deployment; publication/deployment require separate explicit owner approval.**
+**P5 publication disposition — technical candidate verification is PASS. Obtain explicit owner approval before creating any Git tag or GitHub Release. Final production deployment remains a separate later owner gate; do not deploy without its own approval.**

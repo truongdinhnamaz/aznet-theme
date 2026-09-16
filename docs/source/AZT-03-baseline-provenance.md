@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.34
+**Version:** v0.35
 **Status:** Working Source  
 **Date:** 16/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -13,8 +13,8 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 
 ## 2. Current canonical baseline
 
-- Current canonical implementation head after owner-approved P1 read-only inspection PR #69 merge: `main@9ed7a586b06b4c6dd91e66c51b049caa86e0485b`.
-- Current canonical implementation tree: `313f6744066a1d94033d4b2868343a471fbc6a70`.
+- Current canonical implementation head after owner-approved P1/P4 closure PR #70 merge: `main@f0b2d581b16a663e4b422234e6ac15568bcc7985`.
+- Current canonical implementation tree: `f21884f5989239858261721c5002c5158d6d9be0`.
 - Internal Theme version remains `1.1.0`.
 - WordPress floor: `6.9+`.
 - PHP floor: `8.1+`.
@@ -44,6 +44,7 @@ Current production state includes:
 - P4-B D-025/D-026 Law Site Provisioning with mutation-free activation, proposal-only recommendations, WordPress-owned starter content/media and index-safe publication boundaries.
 - P4-C D-027 Standalone Core independence with zero mandatory third-party runtime dependency, explicit Standalone Core vs Optional Integrations health presentation, and zero-plugin L1-L4/exact-package evidence.
 - P4 real-pilot QA with fresh public route/viewport verification plus authenticated, read-only WordPress Admin/System Health verification on the canonical D-027-capable Theme; P1 legacy duplicate cleanup is closed with fresh post-delete verification and final P4 pilot sign-off is PASS at the tested Theme-owned scope.
+- P5 final-candidate technical verification: exact canonical source, deterministic double-build, exact package/source byte match, packaged PHP lint, clean WordPress 6.9 zero-plugin runtime/browser verification and theme-switch rollback/switch-back reference all PASS; publication remains separately gated.
 
 PR #34 final verified head is `b2e5cca1461233bcb1a0333c5aa51879c3264756`. Its tree `b716b89f04e45c2012f8e191c7d0edf605c9dd11` is identical to the merge commit tree on canonical `main@f8e1a95c903c3f246528368ae9878eba780539ff`, so the v1.0 technical merge introduced no conflict-resolution production delta.
 
@@ -209,3 +210,14 @@ Owner-approved PR #69 merged the read-only identity harness/evidence to canonica
 The pre-delete P1 inventory proved exactly one inactive legacy AZnet Theme candidate, folder `aznet-theme-release-v1.0.0` version `1.0.0`, distinct from active `aznet-theme` version `1.1.0`, with zero ambiguous AZnet identities. After the owner confirmed backup availability and explicitly approved deletion of only that inactive legacy identity through WordPress core UI, post-delete run `35050519817` completed SUCCESS. Its P1 artifact `10428552132` (`sha256:2f7598a663c1db1cca1952ce9afa6616b9cb53bf00c594094742f023840bba03`) reports `NO_DUPLICATES`, active `aznet-theme` `1.1.0`, zero inactive AZnet candidates, zero ambiguous identities and Standalone Core `ready`. The same run's public regression artifact `10428429083` (`sha256:a600f23ec48f3c1948a185d37ce47e63b2153f0f18fbc6d0a7a5f41b02d1704f`) passed the existing 28 route/viewport matrix with no Theme-owned blocker.
 
 P1 is therefore PASS and P4 final pilot sign-off is PASS at the tested Theme-owned scope. This does not create provider L5 certification and does not authorize Git tag, GitHub Release or final production deployment. Detailed evidence: `docs/evidence/P1_POST_DELETE_CLOSURE_20260916.md`.
+
+
+### P5 final-candidate technical verification
+
+Owner-approved P1/P4 closure PR #70 merged to canonical `main@f0b2d581b16a663e4b422234e6ac15568bcc7985`, tree `f21884f5989239858261721c5002c5158d6d9be0`. P5 run `35051428372` explicitly checked out and asserted those exact canonical bytes before both verification jobs.
+
+The `exact-main` job completed SUCCESS on WordPress `6.9` / PHP `8.1` with zero active third-party plugins. Reusable v1 core verification passed; clean runtime route smoke passed; the core browser/a11y harness passed 18/18 route/viewport cases with maximum overflow `0`, blocking axe findings `0`, failed subresources `0`, console errors `0`, page errors `0` and one main landmark per case. Exact-main artifact `10429087315`, digest `sha256:f95f6281d1d5daf729896cc24d42b786e7cb030ed9588b80600ce15287c7cb4d`.
+
+The `final-package` job independently built `aznet-theme-1.1.0.zip` twice with byte identity, verified one canonical top-level `aznet-theme/` directory, exact-matched 121 production files against canonical source, linted 93 packaged PHP files, installed the exact ZIP on clean WordPress `6.9` with zero active third-party plugins and passed the 18/18 browser/a11y matrix. WordPress-owned Page/Post/Category/Menu/meta continuity survived switching to bundled `twentytwentyfive`, switching back to `aznet-theme` restored active Theme `1.1.0`, and the 18/18 browser matrix passed again. Final ZIP SHA-256: `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`. Package artifact `10428893463`, digest `sha256:12e48cd836e4ab1a4e347749cc275ff555176930fad3987b702fc0d4192df61e`. Detailed evidence: `docs/evidence/P5_FINAL_CANDIDATE_VERIFICATION_20260916.md`.
+
+P5 technical state is therefore **TECHNICAL CANDIDATE PASS / PUBLICATION GATED**. This does not establish a Git tag, GitHub Release, production deployment or provider L5 certification; each publication/deployment action remains a separate explicit owner gate.
