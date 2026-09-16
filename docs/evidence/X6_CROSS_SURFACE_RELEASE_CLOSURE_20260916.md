@@ -2,13 +2,13 @@
 
 ## Scope
 
-Technical closure evidence for AZnet Theme v1.2 WordPress Experience Completion on the isolated branch `feat/v1.2-x6-cross-surface-release`.
+Technical closure evidence for AZnet Theme v1.2 WordPress Experience Completion on the isolated branch `feat/v1.2-x6-cross-surface-release` and its owner-approved canonical integration.
 
 X6 verifies the integrated WordPress-Core X1-X5 experience across L1-L4 and L6. Theme remains PRESENTATION OWNER. WordPress remains authoritative for comments, search/query/routing, content/media, pagination/navigation, native form submission/validation semantics and native data lifecycle. Provider L5 is outside this milestone.
 
 ## Canonical base revalidation
 
-After owner-approved PR #89 merged, canonical `main` advanced to:
+Before X6 integration, canonical `main` was:
 
 - `main`: `dddcee1cbd9a406f365ec57ece40097581e0bcf3`
 - merge title: `Merge pull request #89 from truongdinhnamaz/ops/tamduc-identity-contact`
@@ -56,7 +56,7 @@ Production metadata promotion was bounded to the two version declarations:
 - promotion commit: `682285c34e808bc4148702419fd857065a2a3bf1` — `release: promote Theme metadata to 1.2.0`
 - byte-preservation follow-up: `60186106769819f8f108dafade816b2441d48e79` — `fix: preserve metadata file trailing newlines`
 
-Current synchronized candidate retains matching exact `1.2.0` declarations in `style.css` and `AZNET_THEME_VERSION`.
+The promoted candidate retained matching exact `1.2.0` declarations in `style.css` and `AZNET_THEME_VERSION`.
 
 No provider integration, client/domain data, custom query/search/comment/gallery/form engine or private provider storage was introduced by the promotion.
 
@@ -99,40 +99,106 @@ Deterministic promoted candidate package:
 
 All 19 observed same-head pull-request workflows completed `SUCCESS`, including X1-X6, V1 Core PR CI, D-027 retained/package gates, R6 performance, lifecycle/rollback, release-version consistency, Homepage/Law provisioning regressions and retained browser quality gates.
 
+## Final source/evidence closure head before merge
+
+After the production candidate was proven, Task 9 added durable evidence, reconciled AZT-03/AZT-04/AZT-EXEC-MAP/SOURCE_MANIFEST, retired the temporary `_tmp-x6-red.yml`, and corrected the v1.1 release-tree provenance token. These were source/evidence/CI-hygiene changes and did not alter Theme production behavior.
+
+The exact final PR head was:
+
+- PR #87 head: `ff459b99a348d3004a3a4e11474b7c5ff19508f2`
+- X6 exact-final-head run: `35128572748` — `SUCCESS`
+- final-head artifact: `10460502819`
+- final-head artifact digest: `sha256:b8d7713003ae0245184242f48165b5a82e95d5bc696cd03d55992f8e330ba9be`
+- all 18 observed exact-head PR workflows: `SUCCESS`
+- PR state before merge: open, non-draft, mergeable, exact head unchanged.
+
+## Owner-approved canonical merge
+
+The product owner explicitly approved merge of PR #87 after the exact final head was GREEN.
+
+GitHub merged PR #87 using a normal merge with expected-head protection:
+
+- expected head: `ff459b99a348d3004a3a4e11474b7c5ff19508f2`
+- canonical merge SHA: `c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`
+- merge tree: `70c04929afe38e87d317bad3414157e9e2bd6f74`
+- parents: `dddcee1cbd9a406f365ec57ece40097581e0bcf3` + `ff459b99a348d3004a3a4e11474b7c5ff19508f2`
+- merge signature: GitHub verified.
+
+Canonical `main` now points to `c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`.
+
+## Fresh exact-main technical closure
+
+### V1 Exact Main Verification
+
+Run `35129331899` on exact `main@c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad` completed `SUCCESS`.
+
+Both jobs completed successfully:
+
+- `static-contracts` — `SUCCESS`;
+- `clean-runtime-browser` — `SUCCESS`, including WordPress 6.9 install, exact-main clean runtime routes, Playwright/axe browser verification and evidence upload.
+
+Artifacts:
+
+- `10460675823` — `v1-main-static-contracts`, digest `sha256:f24f0b6fba2f8cbb3aa1099ce225616b584113c590e912ed171a4ef8f97995b3`;
+- `10460660919` — `v1-main-clean-runtime-browser`, digest `sha256:7edf42b87e1d0d1c30743761bfa6292f83984af44c94e12b1f85333aba5ef709`.
+
+### X6 push-to-main release closure
+
+Run `35129331927` on the same exact merge SHA completed `SUCCESS`.
+
+Fresh exact-main X6 evidence confirms:
+
+- checkout SHA `c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`;
+- checkout tree `70c04929afe38e87d317bad3414157e9e2bd6f74`;
+- Theme metadata exact `1.2.0`;
+- WordPress `6.9` zero-plugin runtime;
+- integrated 32/32 Playwright/axe matrix PASS;
+- deterministic double-build PASS;
+- exact source/package identity PASS;
+- packaged PHP lint PASS for `95` files;
+- exact-package switch-away/switch-back lifecycle PASS;
+- ownership/promotion boundary PASS.
+
+Exact-main package:
+
+- file: `aznet-theme-1.2.0.zip`;
+- SHA-256: `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`;
+- X6 artifact: `10459889475`;
+- artifact digest: `sha256:f537b5f6ed33a53dcad8041c3d8cc0aef32c5bb6dbd8c10c5102e76624128fb9`.
+
 ## Integration hygiene
 
-The temporary `_tmp-x6-red.yml` workflow existed only to capture the earlier test-first RED phase. It is retired before the final integration head; historical RED provenance remains in commit history and this evidence record rather than as a misleading live `RED` workflow.
+The temporary `_tmp-x6-red.yml` workflow existed only to capture the earlier test-first RED phase. It was retired before final integration; historical RED provenance remains in Git history and this evidence record rather than as a misleading live `RED` workflow.
 
-No Tâm Đức business/client data is added to X6 production runtime. Tâm Đức site-operations files already canonical on `main` are retained through the clean branch synchronization without converting site data into Theme-owned state.
+No Tâm Đức business/client data is added to X6 production runtime. Tâm Đức site-operations files already canonical on `main` remain WordPress/site-operations evidence and are not converted into Theme-owned state.
 
 ## Rollback / recovery
 
-Before canonical merge, rollback is branch-local: revert the bounded X6 promotion/closure commits and both version declarations return together to `1.1.0`; canonical `main` remains unchanged.
+Before publication, X6 can be reverted at the canonical merge boundary if necessary. No v1.2.0 tag/GitHub Release or production deployment has been created by this technical closure.
 
-After a future owner-approved merge but before publication, the X6 merge can be reverted as one technical integration change. X6 creates no Git tag, GitHub Release or production deployment by itself.
-
-WordPress-owned content/state and external provider/domain data are not deleted or migrated by this closure.
+WordPress-owned content/state and external provider/domain data are not deleted or migrated by X6.
 
 ## PASS
 
-- X1-X5 integrated WordPress-Core experience: fresh L1-L4 PASS on synchronized final candidate.
-- X6 deterministic package/source identity/lifecycle: fresh L6 PASS.
-- Atomic Theme metadata: exact `1.2.0` on candidate bytes.
-- Branch synchronized to canonical `main@dddcee1c...` with `behind_by=0`.
+- X1-X5 integrated WordPress-Core experience: retained L1-L4 PASS.
+- X6 exact final candidate: fresh L1-L4/L6 PASS.
+- Canonical PR #87 merge: PASS with expected-head protection.
+- Exact-main V1 verification: PASS on merge SHA `c6b1ebac...`.
+- Exact-main X6 release closure: PASS on the same merge SHA.
+- Atomic Theme metadata: exact `1.2.0` on canonical main.
+- Deterministic exact-main package/source identity/lifecycle: PASS.
 - Provider/domain ownership boundaries retained.
 
 ## BLOCKED / NOT CLAIMED
 
-- Canonical X6 merge is not yet authorized by this evidence.
-- Exact-main X6 verification is pending until an owner-approved canonical merge occurs.
 - Provider L5 is not claimed.
 - No annotated tag or GitHub Release for v1.2.0 is claimed.
 - No production deployment of Theme 1.2.0 is claimed.
 
 ## State
 
-**X6 FINAL CANDIDATE PASS / CANONICAL MERGE + EXACT-MAIN VERIFICATION PENDING**
+**X6 TECHNICAL PASS / PUBLICATION GATED**
 
 ## NEXT
 
-Finalize source-state reconciliation and fresh exact-final-head verification after this evidence/hygiene closure; then stop at the separate product-owner gate for canonical merge of the exact verified PR #87 head.
+Request owner approval for **v1.2.0 publication disposition — annotated tag + GitHub Release only**. Production deployment remains a later separate approval.
