@@ -8,9 +8,9 @@ Canonical source is reconciled through the completed v1.1 R6 technical candidate
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.9 | Theme architecture, public integration contracts and D-027 Standalone Core runtime-independence boundary |
-| `AZT-03-baseline-provenance.md` | v0.31 | Canonical implementation/provenance through D-027 PR #63/#64 merge + exact-main evidence |
-| `AZT-04-roadmap-qa-decisions.md` | v0.36 | R0-R6/P2-P3/P4-A/P4-B/P4-C PASS, P4 pilot access-blocked/approved, P5 gates and D-001..D-027 |
-| `AZT-EXEC-MAP.md` | v0.28 | Derived execution map with D-027 canonical closure and P4 real-pilot access as exact next |
+| `AZT-03-baseline-provenance.md` | v0.32 | Canonical implementation/provenance through D-027 closure plus P4 public-pilot evidence |
+| `AZT-04-roadmap-qa-decisions.md` | v0.37 | R0-R6/P2-P3/P4-A/P4-B/P4-C PASS; P4 public QA PASS/authenticated QA BLOCKED; P5 gates and D-001..D-027 |
+| `AZT-EXEC-MAP.md` | v0.29 | Derived execution map with P4 public matrix PASS and authenticated pilot QA as exact next |
 
 Current canonical implementation baseline: `main@16563bdc88f172a1d7737b92293c7958670aac96`, tree `d2c4128f2b860bfd59c5efa11565dba38a34458e`, Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.
 
@@ -24,8 +24,10 @@ Owner-approved PR #58 merged to canonical `main@04edd8b312de70e6ee8339c461ae8f16
 
 D-027 source ratification PR #63 merged to `main@5d6dc56a756028d696a269ed75dd762daf4b83f2`; owner-approved implementation PR #64 merged final head `4b38f792d7de575bc08733748dac0399372e18c2` to `main@16563bdc88f172a1d7737b92293c7958670aac96`. Head and merge share tree `d2c4128f2b860bfd59c5efa11565dba38a34458e`. Fresh exact-main run `35042767873` completed SUCCESS; artifacts: static `10425656989`, runtime/browser `10426026827`. Final-head exact-package run `35042040620` also succeeded with D-027 candidate SHA-256 `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`.
 
+P4 public-pilot QA then completed through GitHub Actions on functional head `758392b03227eb446627cc4669b0b0ddf56ed71e`. Run `35045540722` passed 28 public route/viewport checks; artifact `10427345921`, digest `sha256:cf84a35e722f4b5b8c944c42dee3f1bdb344f191e07529b002636afb42420b78`. Authenticated Admin/System Health remains BLOCKED and full P4 PASS is not inferred. Evidence: `docs/evidence/P4_PUBLIC_PILOT_QA_20260916.md`.
+
 The known WordPress-core `WP_Query::rewind_posts()` warning remains UNKNOWN/non-blocking; no blanket PHP-log-clean claim is made. RootProfile E5-C/E5-D and ConvertFlow F8 remain separate optional compatibility gates under their existing ownership rules.
 
-**Exact next:** P4 Real Pilot QA remains owner-approved but `P4 PILOT ACCESS BLOCKED` from the current QA environment. Restore/obtain pilot access and execute the real-site matrix against the D-027-closed canonical Theme. P1 duplicate-theme cleanup remains a parallel destructive site-operations gate. Git tag/GitHub Release and final production deployment remain separate P5 owner gates.
+**Exact next:** P4 public pilot QA is PASS at unauthenticated scope. Obtain a secure authenticated WordPress Admin path and complete the remaining System Health/admin-only verification; until then record `P4 PUBLIC QA PASS / AUTHENTICATED QA BLOCKED`. P1 duplicate-theme cleanup remains a parallel destructive site-operations gate. Git tag/GitHub Release and final production deployment remain separate P5 owner gates.
 
 Derived DOCX source material remains archival/export evidence only. Canonical source changes occur in `docs/source/` through reviewed Git history.

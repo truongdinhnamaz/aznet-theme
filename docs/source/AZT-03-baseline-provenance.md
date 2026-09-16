@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.31
+**Version:** v0.32
 **Status:** Working Source  
 **Date:** 16/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -43,6 +43,7 @@ Current production state includes:
 - P4-A Homepage Composer + Law 01 Premium presentation with typed WordPress Content Map, exactly one native `the_content()` boundary and Theme-owned presentation only.
 - P4-B D-025/D-026 Law Site Provisioning with mutation-free activation, proposal-only recommendations, WordPress-owned starter content/media and index-safe publication boundaries.
 - P4-C D-027 Standalone Core independence with zero mandatory third-party runtime dependency, explicit Standalone Core vs Optional Integrations health presentation, and zero-plugin L1-L4/exact-package evidence.
+- P4 public-pilot QA with GitHub-hosted Chromium against the real unauthenticated pilot route matrix; authenticated/admin verification remains separately blocked.
 
 PR #34 final verified head is `b2e5cca1461233bcb1a0333c5aa51879c3264756`. Its tree `b716b89f04e45c2012f8e191c7d0edf605c9dd11` is identical to the merge commit tree on canonical `main@f8e1a95c903c3f246528368ae9878eba780539ff`, so the v1.0 technical merge introduced no conflict-resolution production delta.
 
@@ -101,7 +102,7 @@ Fresh `V1 Exact Main Verification` run `35042767873` completed SUCCESS on exact 
 
 Pre-merge final-head D-027 evidence remains retained separately: Offline `35042040619`, L3 `35042040512`, L4 `35042040532`, and exact-package run `35042040620` all succeeded on `4b38f792d7de575bc08733748dac0399372e18c2`. The exact D-027 candidate package SHA-256 is `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`; this proves the standalone package path but does not itself publish a release.
 
-D-027 does not authorize a Git tag, GitHub Release, final production deployment, destructive pilot cleanup or optional-provider L5 certification. P4 real-pilot QA remains separately approved and access-blocked.
+D-027 does not authorize a Git tag, GitHub Release, final production deployment, destructive pilot cleanup or optional-provider L5 certification. P4 public-pilot QA subsequently completed on GitHub Actions at functional head `758392b03227eb446627cc4669b0b0ddf56ed71e`: run `35045540722` passed 28 public route/viewport checks with no Theme-owned blocking failure; artifact `10427345921`, digest `sha256:cf84a35e722f4b5b8c944c42dee3f1bdb344f191e07529b002636afb42420b78`. This changes the prior access statement only for unauthenticated public routes. Authenticated WordPress Admin/System Health re-verification remains BLOCKED, RootProfile current public-surface/L5 certification is not inferred, and full P4 is not claimed PASS. Detailed evidence is `docs/evidence/P4_PUBLIC_PILOT_QA_20260916.md`.
 
 ## 3. Current release-path classification
 
