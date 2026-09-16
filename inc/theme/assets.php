@@ -235,6 +235,33 @@ function enqueue_recovery_assets( ?string $version = null ): void {
     );
 }
 
+/** Determine whether native authored Post/Page media presentation can render. */
+function should_enqueue_media_assets(): bool {
+    if ( function_exists( __NAMESPACE__ . '\\Integrations\\WooCommerce\\current_surface' )
+        && null !== \AZnet\Theme\Integrations\WooCommerce\current_surface() ) {
+        return false;
+    }
+
+    $is_post = function_exists( 'is_singular' ) && is_singular( 'post' );
+    $is_page = function_exists( 'is_page' ) && is_page();
+
+    return $is_post || $is_page;
+}
+
+/** Enqueue authored-media presentation only on native Post/Page surfaces. */
+function enqueue_media_assets( ?string $version = null ): void {
+    if ( ! should_enqueue_media_assets() ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'aznet-theme-media',
+        get_theme_file_uri( '/assets/css/components/media.css' ),
+        [ 'aznet-theme-tokens', 'aznet-theme-generic-content' ],
+        asset_content_version( '/assets/css/components/media.css', $version )
+    );
+}
+
 function enqueue_assets(): void {
     $version = defined( 'AZNET_THEME_VERSION' ) ? AZNET_THEME_VERSION : null;
 
@@ -291,6 +318,7 @@ function enqueue_assets(): void {
         );
     }
 
+    enqueue_media_assets( $version );
     enqueue_recovery_assets( $version );
 
     if ( function_exists( 'is_singular' ) && is_singular( 'post' ) ) {
