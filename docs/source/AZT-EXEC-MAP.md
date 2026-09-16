@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.36
+**Version:** v0.37
 **Status:** Working Execution Map / derived  
 **Date:** 16/09/2026
 
@@ -39,7 +39,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | P4-B Law Site Provisioning | PASS / MERGED | D-026 merged; Theme `1.1.0`; deterministic package/browser evidence retained; activation mutation-free and active-site overwrite/noindex takeover forbidden |
 | P4-C Standalone Core independence | PASS / MERGED | PR #63/#64 merged; zero-plugin L1-L4, exact-package and exact-main PASS; optional integrations remain additive |
 | P5 Publication/Deployment | PASS | Tag `v1.1.0` + GitHub Release and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
-| X v1.2 WordPress Experience Completion | X1 PASS / X2 NEXT | X1 Comments Surface L1-L4 PASS; X2 Search/404/empty states next; Core WordPress surfaces only and no provider integration expansion |
+| X v1.2 WordPress Experience Completion | X2 PASS / X3 NEXT | X1 Comments and X2 Search/404/empty states L1-L4 PASS; X3 Media/Gallery/Embed plan next; Core WordPress surfaces only and no provider integration expansion |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
 Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` is `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`; publication closure PR #72 merged at `15f25e4f6d8e64c588866405629b793a85ee0323` and restored post-noop checkpoint `e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb`. Theme metadata is `1.1.0`. P5 run `35051428372` verified the final package, publication run `35052694111` published tag/Release, and production read-only run `35054176392` verified the owner-approved deployment disposition.
@@ -236,8 +236,6 @@ No layer may be inferred from another.
 
 **Next:** P5 publication disposition. Technical package gates are PASS; stop before Git tag, GitHub Release or final production deployment without separate owner approval.
 
-
-
 ### P4-B — Law Site Provisioning v1.1
 
 **State:** PASS / MERGED. D-026 implementation integrated upward through PR #61 -> #60 -> #59 -> #58 and is canonical at `main@04edd8b312de70e6ee8339c461ae8f16f93e5859`.
@@ -284,7 +282,7 @@ Owner-approved publication run `35052694111` published annotated tag `v1.1.0` at
 
 ## 13. v1.2 WordPress Experience Completion
 
-**State:** X1 PASS / X2 NEXT.
+**State:** X2 PASS / X3 NEXT.
 
 **Milestone boundary:** WordPress Core surfaces only. Theme presentation/configuration remains in scope; WordPress-owned semantics/state remain authoritative; provider compatibility/certification tracks stay separate.
 
@@ -292,9 +290,9 @@ Owner-approved publication run `35052694111` published annotated tag `v1.1.0` at
 
 **X1 — Comments Surface:** **PASS at L1-L4** — native comments template/list/form/reply/pagination presentation; WordPress 6.9 zero-plugin runtime and 3/3 browser/a11y matrix verified by run `35060458118`; no comment engine/store. Evidence: `docs/evidence/X1_COMMENTS_SURFACE_20260916.md`.
 
-**X2 — Search / 404 / Empty States:** **NEXT** — recovery/discovery presentation over native query/routing truth; no custom ranking/query engine.
+**X2 — Search / 404 / Empty States:** **PASS at L1-L4** — native WordPress query/routing truth retained; functional closure head `c5c9415f851e2ed77c3069c08ff4f963b7c33c3c`, workflow `35071280839` SUCCESS on WordPress 6.9 with zero active plugins, native HTTP 404, scoped recovery assets and 16/16 Playwright/axe route/viewport cases; artifact `10436541455`, digest `sha256:c1e31a506172f90939d5688317aae0bd1b2ec9fa437dcd8726605c80fc191cd2`. All 23 retained PR workflows observed on that functional head also completed SUCCESS. Evidence: `docs/evidence/X2_SEARCH_404_EMPTY_20260916.md`.
 
-**X3 — Media / Gallery / Embed:** robust native editorial media, caption/gallery/embed/alignment/overflow presentation; no gallery application engine.
+**X3 — Media / Gallery / Embed:** **NEXT / PLAN GATE** — robust native editorial media, caption/gallery/embed/alignment/overflow presentation; no gallery application engine. Write and review the bounded implementation plan before production code.
 
 **X4 — Pagination & Navigation Completion:** archive/search pagination, Post page links, previous/next and comment pagination presentation; WordPress owns state/URLs.
 
@@ -326,4 +324,4 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 16. Exact next
 
-**X1 Comments Surface is PASS at L1-L4. Exact Next is a reviewed implementation plan for X2 Search / 404 / Empty States before production code.**
+**X2 Search / 404 / Empty States is PASS at L1-L4 on verified functional head `c5c9415f851e2ed77c3069c08ff4f963b7c33c3c`. Exact Next is a reviewed implementation plan for X3 Media / Gallery / Embed before production code. PR #80 merge remains a separate explicit owner gate.**

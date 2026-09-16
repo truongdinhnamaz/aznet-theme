@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.44
+**Version:** v0.45
 **Status:** Working Source  
 **Date:** 16/09/2026
 
@@ -38,7 +38,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P4-B | Law Site Provisioning v1.1 | PASS / MERGED | D-026 smart setup merged through PR #58 with Theme metadata `1.1.0`; deterministic package/browser evidence retained and exact-main verification PASS |
 | P4-C | Standalone Core independence | PASS / MERGED | D-027 source + implementation merged through PR #63/#64; zero-plugin L1-L4, exact-package and exact-main gates PASS; optional integrations remain additive |
 | P5 | Publication & production deployment | PASS | Tag `v1.1.0` + GitHub Release publication and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
-| X | v1.2 WordPress Experience Completion | X1 PASS / X2 NEXT | X1 Comments Surface passed L1-L4 with WordPress 6.9 zero-plugin runtime/browser evidence; X2 Search/404/empty states is next; no new provider integration |
+| X | v1.2 WordPress Experience Completion | X2 PASS / X3 NEXT | X1 Comments and X2 Search/404/empty states passed L1-L4 on verified functional heads; X3 Media/Gallery/Embed planning is next; no new provider integration |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
 Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` points to `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`. Publication source closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72. P5 technical run `35051428372` verified final package bytes, publication run `35052694111` published the matching tag/Release, and production read-only run `35054176392` closed deployment at the tested Theme-owned/site-operations scope.
@@ -159,7 +159,6 @@ Minimum quality: no Theme-caused PHP fatal/warning/uncaught, no horizontal overf
 
 P4 may install/update a test candidate on the pilot only as necessary to perform approved QA. It does **not** authorize tag/GitHub Release or final production deployment. Any destructive duplicate-theme deletion remains under P1's separate site-operations gate.
 
-
 ### P4-A — Homepage Composer + Law 01
 
 **State:** **PASS / MERGED TO CANONICAL MAIN.**
@@ -204,7 +203,7 @@ Owner-approved publication run `35052694111` then created annotated tag `v1.1.0`
 
 ### X — v1.2 WordPress Experience Completion
 
-**State:** **X1 PASS / X2 NEXT.**
+**State:** **X2 PASS / X3 NEXT.**
 
 **Goal:** complete the native WordPress Core experience of AZnet Theme while keeping the Theme a presentation owner. v1.2 does not open a new provider/plugin integration program.
 
@@ -224,7 +223,9 @@ Owner-approved publication run `35052694111` then created annotated tag `v1.1.0`
 
 **X1 — Comments Surface:** **PASS at L1-L4** on functional closure head `1b58012f78eab6525e5e8e424e8904995035f4ea`; final functional workflow `35060458118` completed SUCCESS with ownership/diff/version regressions, clean WordPress 6.9 zero-plugin runtime and 3/3 browser/a11y matrix. Evidence: `docs/evidence/X1_COMMENTS_SURFACE_20260916.md`. WordPress retains all comment data/lifecycle ownership; provider L5 is not inferred.
 
-**Exact Next:** write and review the bounded implementation plan for **X2 — Search / 404 / Empty States** before production implementation.
+**X2 — Search / 404 / Empty States:** **PASS at L1-L4** on functional closure head `c5c9415f851e2ed77c3069c08ff4f963b7c33c3c`; X2 workflow `35071280839` completed SUCCESS on WordPress 6.9 with zero active plugins, native HTTP 404 semantics, surface-scoped recovery CSS, and a 16/16 Playwright/axe route/viewport matrix. Artifact `10436541455`, digest `sha256:c1e31a506172f90939d5688317aae0bd1b2ec9fa437dcd8726605c80fc191cd2`. All 23 retained PR workflows observed on the same functional head completed SUCCESS. Evidence: `docs/evidence/X2_SEARCH_404_EMPTY_20260916.md`. WordPress retains search query/main-query/archive/404 authority; provider L5 is not inferred.
+
+**Exact Next:** write and review the bounded implementation plan for **X3 — Media / Gallery / Embed** before production implementation.
 
 ## 6. Dependency order
 
@@ -350,4 +351,4 @@ Metadata promotion to `1.1.0` is a historical cleared gate completed through PR 
 
 ## 14. Exact next
 
-**X1 Comments Surface is PASS at L1-L4. Exact Next is to write and review the X2 Search / 404 / Empty States implementation plan before production implementation. No provider L5 work is opened or inferred.**
+**X2 Search / 404 / Empty States is PASS at L1-L4 on verified functional head `c5c9415f851e2ed77c3069c08ff4f963b7c33c3c`. Exact Next is to write and review the bounded X3 Media / Gallery / Embed implementation plan before production implementation. PR #80 merge to canonical `main` remains a separate explicit owner gate, and provider L5 work is not opened or inferred.**
