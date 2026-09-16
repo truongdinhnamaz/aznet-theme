@@ -35,6 +35,7 @@ $mobile_menu = isset( $args['mobile_menu'] ) ? (string) $args['mobile_menu'] : '
             </nav>
         <?php endif; ?>
         <div class="aznet-theme-site-header__mobile-actions">
+            <?php get_template_part( 'template-parts/header/utility-navigation', null, $args ); ?>
             <?php get_template_part( 'template-parts/header/search', null, $args ); ?>
             <?php get_template_part( 'template-parts/header/commerce-actions', null, $args ); ?>
         </div>
