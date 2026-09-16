@@ -1,0 +1,55 @@
+{
+  "site": "https://tamduchanoi.aznet.vn",
+  "baseline_head": "8ad20ef6329d48c99651867dc7ab506fa0c8d581",
+  "baseline_run": 35110312656,
+  "baseline_artifact": 10452052349,
+  "scope": "wordpress-owned homepage completion changes only",
+  "mutations": [
+    {
+      "id": "site-tagline",
+      "owner": "wordpress_core",
+      "field": "blogdescription",
+      "target": "wp-admin/options-general.php#blogdescription",
+      "before": "",
+      "after": "Trọn Tâm với khách – Vẹn Đức với nghề",
+      "source": {
+        "status": "authoritative",
+        "kind": "owner_approved_copy",
+        "reference": "Tâm Đức homepage completion direction approved by owner on 2026-09-16"
+      },
+      "reversible": true,
+      "rollback": ""
+    },
+    {
+      "id": "team-page-title-typo",
+      "owner": "wordpress_core",
+      "field": "page_title_142",
+      "target": "wp-admin/post.php?post=142&action=edit",
+      "before": "Dội ngũ",
+      "after": "Đội ngũ",
+      "source": {
+        "status": "authoritative",
+        "kind": "observed_wordpress_state_typo_correction",
+        "reference": "Authenticated baseline run 35110312656; Page #142 slug doi-ngu"
+      },
+      "reversible": true,
+      "rollback": "Dội ngũ"
+    }
+  ],
+  "excluded_unknown_or_blocked": [
+    "site_title_punctuation_normalization",
+    "custom_logo_assignment",
+    "hero_media_assignment",
+    "phone_or_hotline",
+    "email",
+    "office_address",
+    "lawyer_roster_or_credentials",
+    "new_service_pages",
+    "process_page",
+    "faq_page",
+    "case_analysis_posts",
+    "legal_news_posts",
+    "homepage_law01_variant_burgundy_gold",
+    "theme_release_or_deployment"
+  ]
+}
