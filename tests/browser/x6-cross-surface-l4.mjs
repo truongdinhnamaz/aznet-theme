@@ -69,15 +69,41 @@ function requireVisibleFocus(name, state) {
   }
 }
 
+function browserErrorsForRoute(config, consoleErrors, pageErrors, httpErrors) {
+  const expectedNavigation404 = config.status === 404 && httpErrors.some(
+    (entry) => entry.status === 404 && entry.url === config.url
+  );
+  const unexpectedHttpErrors = httpErrors.filter(
+    (entry) => !(config.status === 404 && entry.status === 404 && entry.url === config.url)
+  );
+  const unexpectedConsoleErrors = consoleErrors.filter((message) => !(
+    expectedNavigation404
+    && message.includes('Failed to load resource')
+    && message.includes('404')
+  ));
+
+  return {
+    expectedNavigation404,
+    unexpectedHttpErrors,
+    unexpectedConsoleErrors,
+    pageErrors,
+    count: unexpectedHttpErrors.length + unexpectedConsoleErrors.length + pageErrors.length,
+  };
+}
+
 async function inspectCase(browser, routeName, config, viewportName, viewport) {
   const context = await browser.newContext({ viewport });
   const page = await context.newPage();
   const consoleErrors = [];
   const pageErrors = [];
+  const httpErrors = [];
   page.on('console', (message) => {
     if (message.type() === 'error') consoleErrors.push(message.text());
   });
   page.on('pageerror', (error) => pageErrors.push(error.message));
+  page.on('response', (response) => {
+    if (response.status() >= 400) httpErrors.push({ status: response.status(), url: response.url() });
+  });
 
   const result = {
     route: routeName,
@@ -87,8 +113,11 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
     overflowPx: null,
     blockingAxeViolations: null,
     focus: null,
-    consoleErrors,
-    pageErrors,
+    browserErrorCount: null,
+    unexpectedHttpErrorCount: null,
+    unexpectedConsoleErrorCount: null,
+    pageErrorCount: null,
+    expectedNavigation404: false,
     status: 'failed',
     error: null,
   };
@@ -157,13 +186,25 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
     result.blockingAxeViolations = blocking.length;
     fs.writeFileSync(path.join(outputDir, `axe-${routeName}-${viewportName}.json`), JSON.stringify(axe, null, 2));
     if (blocking.length) throw new Error(`blocking axe violations: ${blocking.map((item) => item.id).join(', ')}`);
-    if (consoleErrors.length) throw new Error(`console errors: ${JSON.stringify(consoleErrors)}`);
-    if (pageErrors.length) throw new Error(`page errors: ${JSON.stringify(pageErrors)}`);
+
+    const browserErrors = browserErrorsForRoute(config, consoleErrors, pageErrors, httpErrors);
+    result.expectedNavigation404 = browserErrors.expectedNavigation404;
+    result.unexpectedHttpErrorCount = browserErrors.unexpectedHttpErrors.length;
+    result.unexpectedConsoleErrorCount = browserErrors.unexpectedConsoleErrors.length;
+    result.pageErrorCount = browserErrors.pageErrors.length;
+    result.browserErrorCount = browserErrors.count;
+    if (browserErrors.count) throw new Error(`unexpected browser errors: ${browserErrors.count}`);
 
     await page.screenshot({ path: path.join(outputDir, `${routeName}-${viewportName}.png`), fullPage: true });
     result.status = 'passed';
   } catch (error) {
     result.error = error instanceof Error ? error.message : String(error);
+    const browserErrors = browserErrorsForRoute(config, consoleErrors, pageErrors, httpErrors);
+    result.expectedNavigation404 = browserErrors.expectedNavigation404;
+    result.unexpectedHttpErrorCount = browserErrors.unexpectedHttpErrors.length;
+    result.unexpectedConsoleErrorCount = browserErrors.unexpectedConsoleErrors.length;
+    result.pageErrorCount = browserErrors.pageErrors.length;
+    result.browserErrorCount = browserErrors.count;
     failures.push(`${routeName}/${viewportName}: ${result.error}`);
     await page.screenshot({ path: path.join(outputDir, `failure-${routeName}-${viewportName}.png`), fullPage: true }).catch(() => {});
   } finally {
