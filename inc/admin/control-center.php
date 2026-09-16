@@ -174,6 +174,13 @@ function render_control_center(): void {
         }
         echo '</tbody></table></div>';
 
+        $optional_labels = [
+            'woocommerce' => __( 'WooCommerce', 'aznet-theme' ),
+            'rootprofile_v1' => __( 'RootProfile v1', 'aznet-theme' ),
+            'rootprofile_v2' => __( 'RootProfile v2', 'aznet-theme' ),
+            'rootprofile_current_surface' => __( 'RootProfile Current Surface', 'aznet-theme' ),
+            'convertflow' => __( 'ConvertFlow', 'aznet-theme' ),
+        ];
         echo '<div class="aznet-theme-panel"><h2>' . esc_html__( 'Optional Integrations', 'aznet-theme' ) . '</h2><table class="widefat striped"><tbody>';
         foreach ( $optional as $key => $value ) {
             $display = [
@@ -181,7 +188,8 @@ function render_control_center(): void {
                 'not_present' => __( 'Not present', 'aznet-theme' ),
                 'unknown' => __( 'Unknown', 'aznet-theme' ),
             ][ (string) $value ] ?? (string) $value;
-            echo '<tr><th>' . esc_html( (string) $key ) . '</th><td><code>' . esc_html( $display ) . '</code></td></tr>';
+            $label = $optional_labels[ (string) $key ] ?? (string) $key;
+            echo '<tr><th>' . esc_html( $label ) . '</th><td><code>' . esc_html( $display ) . '</code></td></tr>';
         }
         echo '</tbody></table></div>';
 
