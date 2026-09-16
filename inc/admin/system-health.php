@@ -21,18 +21,18 @@ function system_health_report(): array {
             'name' => $theme->get( 'Name' ),
             'version' => $theme->get( 'Version' ),
         ],
-        'configuration' => [
+        'standalone_core' => [
+            'status' => 'ready',
             'visual_preset' => $s['visual_preset'] ?? 'default',
             'header_preset' => $s['header_preset'] ?? 'standard',
-            'woo_catalog_preset' => $s['woo_catalog_preset'] ?? 'grid',
             'logo' => has_custom_logo(),
             'primary_menu' => has_nav_menu( 'primary' ),
         ],
-        'capabilities' => [
-            'woocommerce' => woo_available(),
-            'rootprofile_v1' => provider_available(),
-            'rootprofile_v2' => profile_provider_available(),
-            'rootprofile_current_surface' => current_surface_available(),
+        'optional_integrations' => [
+            'woocommerce' => woo_available() ? 'available' : 'not_present',
+            'rootprofile_v1' => provider_available() ? 'available' : 'not_present',
+            'rootprofile_v2' => profile_provider_available() ? 'available' : 'not_present',
+            'rootprofile_current_surface' => current_surface_available() ? 'available' : 'not_present',
             'convertflow' => 'unknown',
         ],
     ];

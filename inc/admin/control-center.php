@@ -160,13 +160,31 @@ function render_control_center(): void {
         render_provisioning_wizard();
     } elseif ( 'system-health' === $section ) {
         $report = system_health_report();
-        echo '<div class="aznet-theme-panel"><h2>System Health</h2><table class="widefat striped"><tbody>';
-        foreach ( $report as $group => $items ) {
-            foreach ( $items as $key => $value ) {
+        $core = $report['standalone_core'] ?? [];
+        $optional = $report['optional_integrations'] ?? [];
+
+        echo '<div class="aznet-theme-panel"><h2>' . esc_html__( 'AZnet Theme Core', 'aznet-theme' ) . '</h2>';
+        echo '<p><strong>' . esc_html__( 'Standalone Core', 'aznet-theme' ) . ':</strong> <code>' . esc_html( strtoupper( (string) ( $core['status'] ?? 'unknown' ) ) ) . '</code></p>';
+        echo '<table class="widefat striped"><tbody>';
+        foreach ( [ 'environment', 'theme', 'standalone_core' ] as $group ) {
+            foreach ( (array) ( $report[ $group ] ?? [] ) as $key => $value ) {
+                if ( 'standalone_core' === $group && 'status' === $key ) { continue; }
                 echo '<tr><th>' . esc_html( $group . ' / ' . $key ) . '</th><td><code>' . esc_html( is_bool( $value ) ? ( $value ? 'yes' : 'no' ) : (string) $value ) . '</code></td></tr>';
             }
         }
         echo '</tbody></table></div>';
+
+        echo '<div class="aznet-theme-panel"><h2>' . esc_html__( 'Optional Integrations', 'aznet-theme' ) . '</h2><table class="widefat striped"><tbody>';
+        foreach ( $optional as $key => $value ) {
+            $display = [
+                'available' => __( 'Available', 'aznet-theme' ),
+                'not_present' => __( 'Not present', 'aznet-theme' ),
+                'unknown' => __( 'Unknown', 'aznet-theme' ),
+            ][ (string) $value ] ?? (string) $value;
+            echo '<tr><th>' . esc_html( (string) $key ) . '</th><td><code>' . esc_html( $display ) . '</code></td></tr>';
+        }
+        echo '</tbody></table></div>';
+
         $snapshot = wp_json_encode( support_snapshot(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
         echo '<div class="aznet-theme-panel"><h2>' . esc_html__( 'Support Snapshot', 'aznet-theme' ) . '</h2><textarea class="large-text code" rows="16" readonly aria-label="' . esc_attr__( 'Support Snapshot JSON', 'aznet-theme' ) . '">' . esc_textarea( is_string( $snapshot ) ? $snapshot : '{}' ) . '</textarea></div>';
     } else {
