@@ -1,0 +1,101 @@
+.aznet-theme-listing__eyebrow,
+.aznet-theme-recovery__code {
+    margin: 0 0 var(--aznet-theme-space-2);
+    color: var(--aznet-theme-accent);
+    font-size: var(--aznet-theme-font-size-sm);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.aznet-theme-search-header__form {
+    width: min(100%, 42rem);
+    margin-block-start: var(--aznet-theme-space-4);
+}
+
+.aznet-theme-recovery {
+    width: min(100%, var(--aznet-theme-container-content));
+    padding: clamp(var(--aznet-theme-space-4), 5vw, var(--aznet-theme-space-6));
+    color: var(--aznet-theme-text);
+    background: var(--aznet-theme-surface);
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+}
+
+.aznet-theme-recovery--404 {
+    margin-inline: auto;
+    margin-block: var(--aznet-theme-space-section);
+    text-align: center;
+}
+
+.aznet-theme-recovery__title {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.aznet-theme-recovery__description {
+    max-width: 42rem;
+    margin: var(--aznet-theme-space-3) auto 0;
+    color: var(--aznet-theme-muted);
+}
+
+.aznet-theme-recovery__search {
+    width: min(100%, 36rem);
+    margin: var(--aznet-theme-space-4) auto 0;
+}
+
+.aznet-theme-recovery__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--aznet-theme-space-2);
+    margin-block-start: var(--aznet-theme-space-4);
+}
+
+.aznet-theme-recovery__action {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-inline: var(--aznet-theme-space-4);
+    color: var(--aznet-theme-surface);
+    background: var(--aznet-theme-accent);
+    border-radius: var(--aznet-theme-radius-control);
+    text-decoration: none;
+}
+
+.aznet-theme-recovery__action:focus-visible,
+.aznet-theme-recovery .search-form :is(input, button):focus-visible,
+.aznet-theme-search-header__form .search-form :is(input, button):focus-visible {
+    outline: 2px solid var(--aznet-theme-focus);
+    outline-offset: 3px;
+}
+
+.aznet-theme-recovery .search-form,
+.aznet-theme-search-header__form .search-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--aznet-theme-space-2);
+}
+
+.aznet-theme-recovery .search-field,
+.aznet-theme-search-header__form .search-field {
+    min-width: min(100%, 16rem);
+    flex: 1 1 16rem;
+    min-height: 2.75rem;
+    max-width: 100%;
+}
+
+.aznet-theme-recovery .search-submit,
+.aznet-theme-search-header__form .search-submit {
+    min-height: 2.75rem;
+}
+
+@media (max-width: 30rem) {
+    .aznet-theme-recovery .search-field,
+    .aznet-theme-recovery .search-submit,
+    .aznet-theme-search-header__form .search-field,
+    .aznet-theme-search-header__form .search-submit {
+        width: 100%;
+        flex-basis: 100%;
+    }
+}
