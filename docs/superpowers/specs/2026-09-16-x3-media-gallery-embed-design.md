@@ -59,6 +59,8 @@ It does not broaden into Search, 404, Archive result cards, WooCommerce surfaces
 
 The Theme may share the same media presentation module across the three authored-content surfaces, but the module must remain independently gated rather than globally loaded across the ecosystem.
 
+All frontend X3 selectors must be rooted in the Theme's authored-content wrapper, primarily `.aznet-theme-entry__content` (and its Post specialization `.aznet-theme-article__content`). X3 must not style matching `.wp-block-*`, `.gallery`, `.wp-caption` or alignment classes globally outside authored content. This prevents Theme-generated Homepage Composer sections and unrelated/plugin surfaces from being accidentally captured by X3 selectors even when they appear on the same request.
+
 ## 4. Supported media output
 
 ### 4.1 Modern Core/Gutenberg output
@@ -110,6 +112,8 @@ The media module should load only when the current request can render authored P
 It must not become a globally enqueued stylesheet.
 
 WooCommerce and external provider surfaces remain outside this asset gate.
+
+The frontend asset gate and the CSS selector scope are both required. Request-level gating alone is not sufficient because a static Front Page may contain both WordPress-authored `the_content()` and Theme-generated Homepage Composer output.
 
 ### 5.3 Editor parity
 
@@ -163,9 +167,11 @@ If no `theme.json` change is needed after tests prove the existing layout values
 
 Normal content remains within the Theme content measure.
 
-`alignwide` may expand to the Theme wide container already represented by `--aznet-theme-container-wide` / `theme.json` wide size.
+`alignwide` expands only as far as the Theme wide container already represented by `--aznet-theme-container-wide` / `theme.json` wide size and the available safe viewport width.
 
-`alignfull` may expand beyond the normal content measure only inside a safe Theme-owned shell. It must not produce horizontal scroll at desktop, tablet or mobile widths.
+For X3, `alignfull` means full **Theme shell** width, not uncontrolled viewport-edge breakout. It may expand beyond the normal content measure up to the existing safe shell/viewport-with-gutters geometry, but must not use a `100vw` breakout pattern that can introduce scrollbar-width overflow. X3 does not require literal edge-to-edge browser-chrome rendering.
+
+Both wide/full alignments must remain bounded by mobile gutters and produce zero page-level horizontal scroll at desktop, tablet and mobile widths.
 
 Alignment support must be expressed from WordPress/Core classes and Theme layout primitives, not by inspecting media URLs or block content heuristically.
 
@@ -208,6 +214,7 @@ Verify at minimum:
 - no private storage/provider APIs;
 - no gallery/lightbox JavaScript application engine;
 - media stylesheet is surface-aware, not globally loaded;
+- selectors are rooted in authored-content wrappers rather than globally targeting WordPress/plugin markup;
 - Theme metadata remains `1.1.0`.
 
 ### L2 — Contract/TDD
@@ -220,6 +227,7 @@ GREEN contract should prove:
 - approved legacy selectors/output are covered;
 - Page/Post/front-page authored surfaces receive the media module;
 - Search/404/Archive/Woo/non-authored surfaces do not receive it;
+- Homepage Composer output on a static Front Page is not captured by authored-content selectors;
 - existing article/generic content behavior is retained;
 - no X3 JavaScript/lightbox engine is introduced.
 
