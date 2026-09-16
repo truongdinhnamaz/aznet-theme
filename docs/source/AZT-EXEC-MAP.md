@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.34
+**Version:** v0.35
 **Status:** Working Execution Map / derived  
 **Date:** 16/09/2026
 
@@ -39,6 +39,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | P4-B Law Site Provisioning | PASS / MERGED | D-026 merged; Theme `1.1.0`; deterministic package/browser evidence retained; activation mutation-free and active-site overwrite/noindex takeover forbidden |
 | P4-C Standalone Core independence | PASS / MERGED | PR #63/#64 merged; zero-plugin L1-L4, exact-package and exact-main PASS; optional integrations remain additive |
 | P5 Publication/Deployment | PASS | Tag `v1.1.0` + GitHub Release and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
+| X v1.2 WordPress Experience Completion | DESIGN RATIFIED / IMPLEMENTATION PLANNING | Core WordPress surfaces only; X1-X6 sequence; no provider integration expansion |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
 Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` is `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`; publication closure PR #72 merged at `15f25e4f6d8e64c588866405629b793a85ee0323` and restored post-noop checkpoint `e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb`. Theme metadata is `1.1.0`. P5 run `35051428372` verified the final package, publication run `35052694111` published tag/Release, and production read-only run `35054176392` verified the owner-approved deployment disposition.
@@ -281,7 +282,31 @@ Technical run `35051428372` verified the final `aznet-theme-1.1.0.zip`: determin
 
 Owner-approved publication run `35052694111` published annotated tag `v1.1.0` at release source anchor `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78` and GitHub Release `389622362` with exact verified asset `aznet-theme-1.1.0.zip` (`567100593`). Owner-approved existing-package production deployment disposition for `tamduchanoi.aznet.vn` then passed fresh read-only verification run `35054176392`. Evidence: `docs/evidence/P5_PUBLICATION_20260916.md` and `docs/evidence/P5_PRODUCTION_DEPLOYMENT_20260916.md`.
 
-## 13. Optional compatibility tracks
+## 13. v1.2 WordPress Experience Completion
+
+**State:** DESIGN RATIFIED / IMPLEMENTATION PLANNING.
+
+**Milestone boundary:** WordPress Core surfaces only. Theme presentation/configuration remains in scope; WordPress-owned semantics/state remain authoritative; provider compatibility/certification tracks stay separate.
+
+**Architecture:** existing shared content/design primitives remain the base. Add bounded surface modules rather than a monolithic experience layer. Use `theme.json` for editor/frontend parity where appropriate and PHP/CSS for native template surfaces where appropriate.
+
+**X1 — Comments Surface:** native comments template/list/form/reply/pagination presentation; no comment engine/store.
+
+**X2 — Search / 404 / Empty States:** recovery/discovery presentation over native query/routing truth; no custom ranking/query engine.
+
+**X3 — Media / Gallery / Embed:** robust native editorial media, caption/gallery/embed/alignment/overflow presentation; no gallery application engine.
+
+**X4 — Pagination & Navigation Completion:** archive/search pagination, Post page links, previous/next and comment pagination presentation; WordPress owns state/URLs.
+
+**X5 — Native Form Controls:** shared production-ready presentation for WordPress-native controls; no private plugin-form skinning contract.
+
+**X6 — Cross-surface QA & Release Closure:** L1-L4 retained regressions plus L6 deterministic package/source identity, lifecycle/rollback and exact-main verification; only then may the `1.2.0` promotion gate be considered.
+
+**Execution:** `X1 -> X2 -> X3 -> X4 -> X5 -> X6`. Every X1-X5 production slice uses RED -> intended failure -> minimal GREEN -> regression and has a bounded rollback.
+
+**Design record:** `docs/superpowers/specs/2026-09-16-v1.2-wordpress-experience-completion-design.md`.
+
+## 14. Optional compatibility tracks
 
 ### E — RootProfile
 
@@ -295,10 +320,10 @@ Native Homepage is part of the core. F6/F7 actual-package integration evidence i
 
 Retain W1-W9 ownership/fail-soft evidence plus R4 presentation evidence. WooCommerce continues to own product/price/stock/variation/cart/checkout/order/account truth.
 
-## 14. Recovery checkpoint
+## 15. Recovery checkpoint
 
 At every slice, commit bounded changes on a work/feature branch and retain a clear base SHA. If a deeper gate fails, reduce it to the shallowest reproducible regression before changing production behavior. Do not rerun retained PASS without an invalidation unless the active exit gate explicitly requires fresh final-candidate evidence.
 
-## 15. Exact next
+## 16. Exact next
 
-**v1.1 release-critical path is complete through production deployment. Exact Next is an explicit owner decision on a new Theme milestone or a separately scoped optional-provider compatibility/certification track.**
+**v1.2 WordPress Experience Completion design is ratified. Exact Next is a reviewed implementation plan for X1 Comments Surface before production code.**

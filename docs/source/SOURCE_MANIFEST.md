@@ -1,6 +1,6 @@
 # AZnet Theme Source Manifest
 
-Canonical source is reconciled through the completed v1.1 R6 program, P2/P3 editorial hardening, PR #58 Homepage/Law01/Provisioning integration, D-027 Standalone Core closure, P4/P1 pilot sign-off, P5 final-candidate technical verification, owner-approved v1.1.0 Git tag + GitHub Release publication, and owner-approved production deployment verification.
+Canonical source is reconciled through the completed v1.1 release-critical path and the owner-approved v1.2 WordPress Experience Completion design ratification. v1.2 remains a WordPress-Core-only Theme milestone; provider compatibility/certification tracks remain separate.
 
 | Source | Semantic version | Role |
 | --- | --- | --- |
@@ -9,8 +9,10 @@ Canonical source is reconciled through the completed v1.1 R6 program, P2/P3 edit
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.9 | Theme architecture, public integration contracts and D-027 Standalone Core runtime-independence boundary |
 | `AZT-03-baseline-provenance.md` | v0.37 | Canonical provenance through v1.1.0 publication and owner-approved production deployment verification |
-| `AZT-04-roadmap-qa-decisions.md` | v0.42 | R0-R6/P1-P4 PASS; P5 publication + production deployment PASS at the verified scope |
-| `AZT-EXEC-MAP.md` | v0.34 | Derived execution map with v1.1 release-critical path complete through production deployment |
+| `AZT-04-roadmap-qa-decisions.md` | v0.43 | v1.1 release-critical PASS retained; v1.2 WordPress Experience Completion X1-X6 design ratified |
+| `AZT-EXEC-MAP.md` | v0.35 | Derived execution map with v1.2 X1-X6 sequence and Core-only boundaries |
+
+Approved design companion: `docs/superpowers/specs/2026-09-16-v1.2-wordpress-experience-completion-design.md`. It does not supersede AZT source ownership; AZT-04 owns roadmap/decisions and AZT-EXEC-MAP remains derived.
 
 Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor: `v1.1.0` -> `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`; owner-approved publication closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`, and restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb`. Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.
 
@@ -32,6 +34,6 @@ Owner-approved production deployment disposition for `tamduchanoi.aznet.vn` is v
 
 The known WordPress-core `WP_Query::rewind_posts()` warning remains UNKNOWN/non-blocking; no blanket PHP-log-clean claim is made. RootProfile E5-C/E5-D and ConvertFlow F8 remain separate optional compatibility gates under their existing ownership rules.
 
-**Exact next:** v1.1 release-critical work is complete through owner-approved production deployment verification. Await an explicit owner decision on the next Theme milestone or on a separately scoped optional-provider compatibility/certification track; provider L5 is not inferred.
+**Exact next:** v1.2 WordPress Experience Completion design is ratified. Write and review the X1 Comments Surface implementation plan before production implementation. Provider L5 remains separate and is not inferred.
 
 Derived DOCX source material remains archival/export evidence only. Canonical source changes occur in `docs/source/` through reviewed Git history.
