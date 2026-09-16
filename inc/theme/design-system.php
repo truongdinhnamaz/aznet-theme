@@ -28,8 +28,11 @@ function visual_preset(): string {
  * @return array<int, string>
  */
 function editor_stylesheets(): array {
-    $stylesheets = [ 'assets/css/tokens.css' ];
-    $preset      = visual_preset();
+    $stylesheets = [
+        'assets/css/tokens.css',
+        'assets/css/components/media.css',
+    ];
+    $preset = visual_preset();
 
     if ( 'default' !== $preset ) {
         $stylesheets[] = 'assets/css/presets/' . $preset . '.css';
@@ -42,7 +45,7 @@ function editor_stylesheets(): array {
  * Add the active visual preset as a Theme-owned presentation body class.
  *
  * @param array<int, string> $classes Existing body classes.
- * @return array<int, string>
+ * @return string[]
  */
 function visual_preset_body_classes( array $classes ): array {
     $classes[] = 'aznet-theme-preset--' . visual_preset();
