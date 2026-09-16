@@ -49,7 +49,7 @@ $requiredLoopMarkers = [
     'have_posts()',
     'the_post()',
     "get_template_part( 'template-parts/content/card' )",
-    'the_posts_pagination()',
+    'the_posts_pagination(',
 ];
 
 foreach (['archive.php' => $archive, 'search.php' => $search] as $name => $source) {
