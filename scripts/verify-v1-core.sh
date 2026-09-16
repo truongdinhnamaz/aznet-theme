@@ -88,6 +88,9 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/x4-retained-workflo
 printf '%s\n' '==> X5 Native Form Controls contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x5-native-form-controls-contract.php
 
+printf '%s\n' '==> X5 retained workflow ownership contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/x5-retained-workflow-ownership-contract.php
+
 printf '%s\n' '==> X6 Cross-surface QA & Release Closure contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-release-closure-contract.php
 
