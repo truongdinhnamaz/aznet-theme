@@ -1,123 +1,119 @@
-# Tâm Đức Identity / Contact Evidence — 2026-09-16
+# Tâm Đức identity/contact — production apply and L4 evidence — 2026-09-16
 
 ## Scope
 
-Bounded WordPress-owned site-configuration slice for `https://tamduchanoi.aznet.vn/`.
+Bounded WordPress-owned identity/contact completion for `https://tamduchanoi.aznet.vn/`.
 
 Authoritative owner-approved inputs:
 
-- Official logo: the logo supplied and explicitly approved by the owner for Tâm Đức Hà Nội.
+- Official logo: the Tâm Đức – Hà Nội round logo supplied and explicitly approved in the project session.
 - Official phone: `024 3716 4123`.
 - Normalized phone link: `tel:+842437164123`.
 
 Ownership boundary:
 
-- WordPress owns Media, Custom Logo, and Menu data.
-- AZnet Theme only consumes/renders those WordPress-owned presentation inputs.
-- No RootProfile, ConvertFlow, WooCommerce, private option/meta/CPT/table access.
-- No production Theme PHP/CSS/JS change in this slice.
-- No Theme release, deploy, semantic-version promotion, or provider L5 claim.
+- WordPress Media / Custom Logo / Menu own the data.
+- AZnet Theme only renders public presentation capability.
+- No client identity/contact data is hardcoded into Theme runtime PHP/CSS/JS.
+- No RootProfile, ConvertFlow, WooCommerce, private option/meta/CPT/table inspection or mutation.
 
-## TDD / root-cause checkpoints
+## TDD / debugging history
 
-The bounded apply harness was hardened through RED → GREEN regressions before the successful production mutation:
+The bounded one-shot apply harness was developed with RED → GREEN and rollback-on-error.
 
-1. WordPress rendered the menu save control in a hidden toolbar. The regression uses native DOM activation rather than Playwright actionability for that native control.
-2. The menu-create screen already uses `menu=0`. The regression waits for an explicit nonzero WordPress menu ID before continuing.
-3. A partial menu from an interrupted attempt was recovered idempotently. Only an empty menu or a menu containing exactly the approved phone item may be adopted; unexpected content aborts before new mutation.
-4. AZnet Theme renders the WordPress-owned custom logo with `img.aznet-theme-site-header__logo`, not WordPress core's default `img.custom-logo`. The public assertion now verifies the actual Theme presentation selector while retaining the core selector as a compatibility fallback.
+Observed regressions and fixes:
 
-Failed attempts preserved the bounded rollback contract; no failed run is treated as PASS.
+1. WordPress exposed the menu save control in a hidden header toolbar. Playwright actionability timed out. Regression switched to native DOM activation for the specific WordPress control.
+2. The menu create screen already uses `menu=0`; the old numeric URL predicate could resolve before WordPress returned a real menu ID. Regression requires an explicit nonzero menu ID.
+3. A prior interrupted attempt left bounded menu `Tâm Đức - Liên hệ chính thức` as menu ID `15`. Recovery became idempotent: reuse only when the menu is empty or already contains exactly the approved phone link; unexpected contents abort before mutation.
+4. The deployed Theme renders Custom Logo through `wp_get_attachment_image()` with class `aznet-theme-site-header__logo`, not WordPress core class `custom-logo`. The public verification selector was corrected and locked by a regression test.
 
-## Production apply — PASS (L3 + bounded public assertion)
+Failed attempts either aborted before mutation or rolled back the newly uploaded logo/media. No provider/domain storage workaround was introduced.
 
-Workflow: `Tâm Đức Identity Contact Apply`
+## Successful bounded production apply
 
-- Run: `35122588708`
-- Head: `9f23c64a6c5163c7010a0708a12afab5ced99f71`
-- Artifact: `10457872916` (`tamduc-identity-contact-apply`)
-- Artifact digest: `sha256:43a148f0c0fd286489b15f407b81db9d84a725a92e69be46f4897eb8609cb8a5`
+Workflow run: `35122588708`
 
-Observed before state:
+Apply head: `9f23c64a6c5163c7010a0708a12afab5ced99f71`
 
-- Active production Theme version reported by System Health: `1.1.0`.
-- Custom Logo: absent.
-- Public logo count: `0`.
-- Public `tel:` links: none.
-- Existing bounded WordPress menu: ID `15`, `Tâm Đức - Liên hệ chính thức`.
-- Menu ID `15` already contained exactly one item: `024 3716 4123` → `tel:+842437164123`.
+Result: `SUCCESS`
 
-Applied/confirmed state:
+Artifact:
 
-- Official logo uploaded as WordPress Media ID `167`.
-- Native WordPress Custom Logo set to Media ID `167`.
-- Public logo rendered once at `https://tamduchanoi.aznet.vn/wp-content/uploads/2026/09/tam-duc-ha-noi-logo-official.jpg`.
-- Existing WordPress menu ID `15` was safely adopted; no duplicate phone item was created.
-- Menu ID `15` remains exactly one item: `024 3716 4123` → `tel:+842437164123`.
-- Rollback list: empty.
-- Error: null.
+- ID: `10457872916`
+- Name: `tamduc-identity-contact-apply`
+- Digest: `sha256:43a148f0c0fd286489b15f407b81db9d84a725a92e69be46f4897eb8609cb8a5`
 
-## Public final verification — PASS (L4)
+Verified effects:
 
-Workflow: `Tâm Đức Identity Contact Final L4`
+- Official logo was uploaded to WordPress Media and assigned through native Custom Logo.
+- The public homepage renders the approved logo through Theme-owned presentation.
+- WordPress menu ID `15` is retained as the authoritative WordPress-owned phone surface and contains the approved phone link.
+- No duplicate phone menu was created.
 
-- Run: `35122938067`
-- Head: `013f2ddc2449c2672c8867a26dff0adb7572d865`
-- Artifact: `10458372243` (`tamduc-identity-contact-final-l4`)
-- Artifact digest: `sha256:cd193316cc42db3f2d3ce4ab53ca774275ca375a4a5438ff4c9b29ce7471b959`
+## Deployed capability boundary
 
-Fresh public/read-only checks:
+The production site remains on AZnet Theme `1.1.0`.
 
-### 1440×1000
+The deployed version does not register the `header-utility` WordPress menu location. Therefore the approved phone can be stored correctly in WordPress but cannot yet be rendered in the Theme header through the accepted presentation path.
 
-- HTTP 200.
-- Official logo count: `1`.
-- Official logo source: `https://tamduchanoi.aznet.vn/wp-content/uploads/2026/09/tam-duc-ha-noi-logo-official.jpg`.
-- `<main>` count: `1`.
-- `<h1>` count: `1`.
-- Horizontal overflow: `0`.
-- Console errors: `0`.
-- Page errors: `0`.
-- Request failures: `0`.
+Classification: `BLOCKED_RELEASE_CAPABILITY`.
 
-### 390×844
+This is intentionally not worked around with hardcoding, private storage, URL heuristics, or client-specific Theme runtime logic.
 
-- HTTP 200.
-- Official logo count: `1`.
-- Official logo source: same official WordPress Media URL.
-- `<main>` count: `1`.
-- `<h1>` count: `1`.
-- Horizontal overflow: `0`.
-- Console errors: `0`.
-- Page errors: `0`.
-- Request failures: `0`.
-- Mobile navigation trigger visible.
-- Initial `aria-expanded=false`.
-- Enter opens panel and sets `aria-expanded=true`.
-- Open-panel horizontal overflow: `0`.
-- Escape closes panel and restores `aria-expanded=false`.
-- Focus returns to the trigger.
+## Public L4 final verification
 
-`blocking_failures: []` for the final public L4 run.
+TDD RED workflow run: `35122870552` — failed at the new static contract before the public final harness existed.
+
+TDD GREEN workflow run: `35122938067` — `SUCCESS`.
+
+GREEN head: `013f2ddc2449c2672c8867a26dff0adb7572d865`.
+
+Artifact:
+
+- ID: `10458372243`
+- Name: `tamduc-identity-contact-final-l4`
+- Digest: `sha256:cd193316cc42db3f2d3ce4ab53ca774275ca375a4a5438ff4c9b29ce7471b959`
+
+Public checks at `1440×1000` and `390×844`:
+
+- HTTP `200`.
+- `main` count = `1`.
+- H1 count = `1`.
+- horizontal overflow <= 1 px.
+- no page errors.
+- no console errors.
+- approved logo is visible with a non-empty image source.
+- approved `tel:+842437164123` is not public yet, matching the known deployed capability block rather than being misclassified as a data failure.
+
+Fresh evidence-checkpoint verification on final evidence tree:
+
+- run `35123270039`
+- head `3bb1ae33ad53cee7a551946268d8d48899cf49a2`
+- result `SUCCESS`.
+
+## Integration hygiene
+
+Before PR integration, the one-shot mutation workflow/harness/static apply contract and client logo payload were retired from the branch. Historical apply evidence is retained; only public/read-only L4 verification remains executable.
+
+Cleanup commit: `57c899dac3da0b87a80b4798990f437153c1a2e7`.
+
+No production Theme PHP/CSS/JS changes are part of this slice.
+
+## PASS
+
+- Owner-approved official logo applied through WordPress-owned Custom Logo.
+- Owner-approved phone stored in an exact WordPress-owned menu surface without duplicate menu creation.
+- Public logo rendering verified at desktop and mobile L4.
+- Ownership and fail-safe boundaries preserved.
+- One-shot mutation mechanics retired before integration.
 
 ## BLOCKED / UNKNOWN
 
-### BLOCKED_RELEASE_CAPABILITY — public phone rendering
+- `BLOCKED_RELEASE_CAPABILITY`: phone/header utility public rendering requires a separately approved compatible Theme release/deployment.
+- Provider L5 is not claimed.
+- Theme release/deploy/version promotion is not part of this slice.
 
-The approved phone is stored correctly in WordPress-owned menu ID `15`, but the active production Theme `1.1.0` does not register the `header-utility` menu location. Therefore no public `tel:` link is rendered by the deployed Theme.
+## NEXT
 
-This is intentionally **not** bypassed by hardcoding the phone into Theme runtime, moving it into an unrelated menu, reading private storage, or otherwise violating ownership. Public rendering remains gated on a compatible Theme release/deploy that exposes the already-accepted generic header-utility presentation capability.
-
-### UNKNOWN / not claimed
-
-- No provider L5 integration PASS is claimed.
-- No release/deploy PASS is claimed.
-- No v1.2 semantic-version promotion is claimed.
-
-## Checkpoint
-
-**PASS** — owner-approved official logo is applied through WordPress Custom Logo and freshly verified on desktop/mobile public surfaces; approved phone is preserved exactly in the WordPress-owned bounded menu.
-
-**BLOCKED** — public header rendering of the phone is blocked by deployed Theme 1.1.0 presentation capability, not by missing authoritative data.
-
-**NEXT** — integrate this evidence/QA branch through the normal review path; do not merge/release/deploy without the corresponding integration/release gate.
+Create a Pull Request from `ops/tamduc-identity-contact` to `main`; do not merge, release, or deploy without a separate explicit gate.
