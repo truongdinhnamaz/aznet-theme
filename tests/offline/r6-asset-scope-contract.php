@@ -13,6 +13,7 @@ namespace {
     $GLOBALS['r6_sticky_mode'] = 'off';
     $GLOBALS['r6_generic'] = false;
     $GLOBALS['r6_is_post'] = false;
+    $GLOBALS['r6_is_page'] = false;
     $GLOBALS['r6_woo_product'] = false;
     $GLOBALS['r6_woo_archive'] = false;
     $GLOBALS['r6_woo_cart'] = false;
@@ -41,12 +42,20 @@ namespace {
         return 'https://example.test/wp-content/themes/aznet-theme' . $path;
     }
 
+    function get_theme_file_path($path = ''): string {
+        return '/tmp/nonexistent-aznet-theme' . $path;
+    }
+
     function get_stylesheet_uri(): string {
         return 'https://example.test/wp-content/themes/aznet-theme/style.css';
     }
 
     function is_singular($post_types = ''): bool {
         return 'post' === $post_types && (bool) ($GLOBALS['r6_is_post'] ?? false);
+    }
+
+    function is_page(): bool {
+        return (bool) ($GLOBALS['r6_is_page'] ?? false);
     }
 }
 
@@ -105,6 +114,7 @@ namespace {
             'sticky_mode' => 'off',
             'generic' => false,
             'is_post' => false,
+            'is_page' => false,
             'woo_product' => false,
             'woo_archive' => false,
             'woo_cart' => false,
@@ -156,13 +166,13 @@ namespace {
 
     $cases = [
         'clean-page-default' => [
-            ['generic' => true],
-            [...$coreStyles, 'aznet-theme-generic-content'],
+            ['generic' => true, 'is_page' => true],
+            [...$coreStyles, 'aznet-theme-generic-content', 'aznet-theme-media'],
             [],
         ],
         'clean-post-editorial' => [
             ['generic' => true, 'preset' => 'editorial', 'is_post' => true],
-            [...$coreStyles, 'aznet-theme-generic-content', 'aznet-theme-preset-editorial', 'aznet-theme-article'],
+            [...$coreStyles, 'aznet-theme-generic-content', 'aznet-theme-preset-editorial', 'aznet-theme-media', 'aznet-theme-article'],
             [],
         ],
         'woo-product' => [
@@ -231,6 +241,15 @@ namespace {
             if (str_starts_with($handle, 'aznet-theme-woocommerce-')) {
                 fail_r6_asset_scope("{$label}: Woo presentation asset leaked onto clean route");
             }
+        }
+    }
+
+    foreach (['woo-product', 'woo-archive', 'woo-cart', 'woo-checkout', 'woo-account', 'woo-blocks'] as $label) {
+        [$state] = $cases[$label];
+        reset_r6_asset_scope($state);
+        \AZnet\Theme\enqueue_assets();
+        if (isset($GLOBALS['r6_styles']['aznet-theme-media'])) {
+            fail_r6_asset_scope("{$label}: X3 media asset leaked onto Woo route");
         }
     }
 
