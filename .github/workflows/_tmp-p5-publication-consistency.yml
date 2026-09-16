@@ -1,0 +1,65 @@
+name: Temporary P5 Publication Consistency
+
+on:
+  push:
+    branches: [docs/p5-publication-closure]
+    paths:
+      - '.github/workflows/_tmp-p5-publication-consistency.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fix remaining current-state contradictions
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def once(path, old, new):
+              p = Path(path)
+              s = p.read_text()
+              n = s.count(old)
+              if n != 1:
+                  raise SystemExit(f'{path}: expected one match, got {n}: {old[:100]!r}')
+              p.write_text(s.replace(old, new, 1))
+
+          p='docs/source/AZT-04-roadmap-qa-decisions.md'
+          once(p,
+              '| D | Generic Templates | PASS / QUALITY HARDENING ACTIVE | Page/Post/Archive/Search/404 technical closure remains valid; P2/P3 hardening is merged and P4 must now prove professional editorial quality on the pilot |',
+              '| D | Generic Templates | PASS / retained | Page/Post/Archive/Search/404 technical closure plus P2/P3 editorial hardening and P4 real-pilot quality evidence are retained |')
+          once(p,
+              '| R6 | Performance + Release 2.0 | PASS / TECHNICAL CANDIDATE | PR #46-#48 complete; exact-main verification + deterministic `1.1.0` candidate PASS; tag/GitHub Release/deployment remain pending |',
+              '| R6 | Performance + Release 2.0 | PASS / TECHNICAL CANDIDATE | PR #46-#48 technical candidate evidence retained; v1.1.0 publication later completed under P5, while production deployment remains separate |')
+          once(p,
+              'A fresh GitHub release check on 08/09/2026 established no GitHub Release/tag publication. Publication therefore remains **PUBLICATION_PENDING**. Approval to execute P4 pilot QA does not clear P5 publication or final production deployment gates.',
+              'A GitHub release check on 08/09/2026 historically established that publication had not yet occurred at that checkpoint. That historical `PUBLICATION_PENDING` state was superseded on 16/09/2026 by owner-approved publication run `35052694111`; final production deployment remains a separate gate.')
+          once(p,
+              '`P2 Editorial Single-Post PASS -> P3 Editorial Listing/Search PASS -> P4-C Standalone Core PASS -> P4 Real Pilot QA ACCESS BLOCKED / APPROVED -> P5 only after P4 PASS`\n\nP1 does not block safe Theme-owned pilot QA setup, but P1 must close before final pilot production sign-off.',
+              '`P2 Editorial Single-Post PASS -> P3 Editorial Listing/Search PASS -> P4-C Standalone Core PASS -> P4 Real Pilot QA PASS -> P1 cleanup PASS -> P5 technical candidate PASS -> P5 publication PASS -> production deployment GATED`\n\nP1/P4 pilot sign-off and P5 publication are closed; production deployment is the remaining explicit owner gate in this sequence.')
+
+          p='docs/source/AZT-EXEC-MAP.md'
+          once(p,
+              '| D Generic Templates | PASS / editorial quality hardening active | Page/Post/Archive/Search/404 technical closure retained; P2/P3 merged, P4 proves professional pilot quality |',
+              '| D Generic Templates | PASS / retained | Page/Post/Archive/Search/404 technical closure plus P2/P3 editorial hardening and P4 professional pilot quality evidence are retained |')
+          PY
+          git diff --check
+          grep -F 'PUBLICATION PASS / DEPLOYMENT GATED' docs/source/AZT-04-roadmap-qa-decisions.md docs/source/AZT-EXEC-MAP.md
+          ! grep -F 'Publication therefore remains **PUBLICATION_PENDING**' docs/source/AZT-04-roadmap-qa-decisions.md
+          ! grep -F 'P4 Real Pilot QA ACCESS BLOCKED / APPROVED' docs/source/AZT-04-roadmap-qa-decisions.md
+      - name: Commit consistency closure and self-remove
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/_tmp-p5-publication-consistency.yml
+          git add docs/source/AZT-04-roadmap-qa-decisions.md docs/source/AZT-EXEC-MAP.md
+          git diff --cached --check
+          git commit -m 'docs: align publication current state'
+          git push origin HEAD:docs/p5-publication-closure
