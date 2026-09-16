@@ -143,6 +143,12 @@ function enqueue_homepage_law01_asset( ?string $version = null ): void {
         [ 'aznet-theme-tokens' ],
         asset_content_version( '/assets/css/components/homepage-law-01.css', $version )
     );
+    wp_enqueue_style(
+        'aznet-theme-homepage-law-01-variants',
+        get_theme_file_uri( '/assets/css/components/homepage-law-01-variants.css' ),
+        [ 'aznet-theme-homepage-law-01' ],
+        asset_content_version( '/assets/css/components/homepage-law-01-variants.css', $version )
+    );
 }
 
 /** Determine whether the native Post comments surface will render. */
