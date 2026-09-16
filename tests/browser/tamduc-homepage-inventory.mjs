@@ -60,6 +60,21 @@ async function readMultiSelected(page, name) {
   })));
 }
 
+async function readPublicRest(page, route, key) {
+  const url = `${baseUrl}${route}`;
+  const response = await page.request.get(url, { failOnStatusCode: false, timeout: 30000 });
+  if (!response.ok()) {
+    snapshot.unknown.push({ key, reason: `Public REST ${response.status()} at ${route}` });
+    return [];
+  }
+  const data = await response.json();
+  if (!Array.isArray(data)) {
+    snapshot.unknown.push({ key, reason: `Public REST payload is not an array at ${route}` });
+    return [];
+  }
+  return data;
+}
+
 const browser = await chromium.launch({ headless: true });
 try {
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
@@ -151,6 +166,41 @@ try {
   }
   recordValue('homepage_slot_statuses', Object.keys(homepageStatuses).length ? homepageStatuses : null);
   await page.screenshot({ path: path.join(stateDir, 'admin-homepage-1440.png'), fullPage: true });
+
+  const published_pages = await readPublicRest(
+    page,
+    '/wp-json/wp/v2/pages?status=publish&per_page=100&_fields=id,parent,slug,link,title,excerpt,featured_media',
+    'published_pages',
+  );
+  const published_posts = await readPublicRest(
+    page,
+    '/wp-json/wp/v2/posts?status=publish&per_page=100&_fields=id,link,title,excerpt,featured_media,categories,date',
+    'published_posts',
+  );
+  const categories = await readPublicRest(
+    page,
+    '/wp-json/wp/v2/categories?per_page=100&_fields=id,name,count,link',
+    'categories',
+  );
+  const media = await readPublicRest(
+    page,
+    '/wp-json/wp/v2/media?per_page=100&_fields=id,slug,link,title,alt_text,caption,media_type,mime_type,source_url',
+    'media_candidates',
+  );
+  const media_candidates = media.filter((item) => item?.media_type === 'image' || String(item?.mime_type || '').startsWith('image/'));
+  const serviceParentId = Number.parseInt(String(mappings?.homepage_services_page?.value || '0'), 10) || 0;
+  const service_child_pages = serviceParentId > 0
+    ? published_pages.filter((item) => Number(item?.parent || 0) === serviceParentId)
+    : [];
+
+  const wp_public_inventory = {
+    published_pages,
+    published_posts,
+    categories,
+    media_candidates,
+    service_child_pages,
+  };
+  recordValue('wp_public_inventory', wp_public_inventory);
 
   await page.goto(baseUrl, { waitUntil: 'networkidle', timeout: 30000 });
   const publicInventory = await page.evaluate(() => {
