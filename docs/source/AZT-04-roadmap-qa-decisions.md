@@ -41,7 +41,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | X | v1.2 WordPress Experience Completion | X6 FINAL CANDIDATE PASS / MERGE GATED | X1-X5 retained; synchronized exact `1.2.0` X6 candidate passes integrated L1-L4/L6, deterministic package/source identity and lifecycle; canonical merge + exact-main verification remain separately gated; no provider L5 expansion |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
-Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` points to `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb324b04cf6e538e38cb6cf7b78`. Publication source closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72. P5 technical run `35051428372` verified final package bytes, publication run `35052694111` published the matching tag/Release, and production read-only run `35054176392` closed deployment at the tested Theme-owned/site-operations scope.
+Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` points to `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`. Publication source closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72. P5 technical run `35051428372` verified final package bytes, publication run `35052694111` published the matching tag/Release, and production read-only run `35054176392` closed deployment at the tested Theme-owned/site-operations scope.
 
 Current canonical integration base for X6 is `main@dddcee1cbd9a406f365ec57ece40097581e0bcf3` after owner-approved PR #89. `V1 Exact Main Verification` run `35126047491` completed SUCCESS on that exact SHA. The X6 branch was synchronized to this base by merge commit `c145f72cc7ac4783eb9f4a2f0b11c1d26e178445`, tree `3594fab0c89d015711e914325734646d1e7df159`, leaving the branch `behind_by=0` before source/evidence closure.
 
@@ -133,7 +133,7 @@ Pre-delete read-only evidence proved active `aznet-theme` v1.1.0 and exactly one
 
 **Goal:** production-grade generic long-form Post presentation for professional/editorial sites.
 
-**Allowed:** native WordPress author/date/taxonomy/featured-image/content-pagination/post-navigation APIs; existing Theme shell/tokens; existing public RootProfile consumer only when it can enhance presentation without a new contract.
+**Allowed:** native WordPress author/date/taxonomy/featured-image/content-pagination/post-navigation APIs; existing Theme shell/tokens; existing public RootProfile consumer only when it can enhance author presentation without a new contract.
 
 **Required presentation:** semantic article header, native author, published/modified dates, categories/tags, optional featured image, long-form typography, accessible headings/lists/blockquote/table/media behavior, content pagination, previous/next navigation and WordPress-native author fallback.
 
