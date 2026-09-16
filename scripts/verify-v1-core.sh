@@ -76,6 +76,9 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/x1-comments-surface
 printf '%s\n' '==> X2 Search / 404 / Empty States contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x2-search-404-empty-contract.php
 
+printf '%s\n' '==> X1/X2 retained workflow version ownership contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/x1-x2-retained-workflow-ownership-contract.php
+
 printf '%s\n' '==> X3 Media / Gallery / Embed contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x3-media-gallery-embed-contract.php
 
