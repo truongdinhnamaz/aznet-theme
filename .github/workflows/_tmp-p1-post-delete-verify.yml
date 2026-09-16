@@ -1,0 +1,81 @@
+name: Temporary P1 Post-Delete Verification
+
+on:
+  push:
+    branches: [work/p1-post-delete-verification]
+    paths:
+      - '.github/workflows/_tmp-p1-post-delete-verify.yml'
+      - 'tests/browser/p1-pilot-identity-inspection.mjs'
+      - 'tests/browser/p4-public-pilot-l4.mjs'
+      - 'tests/offline/p1-pilot-identity-inspection-contract.php'
+      - 'tests/offline/p4-public-pilot-contract.php'
+
+permissions:
+  contents: read
+
+jobs:
+  p1-post-delete:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Verify P1 read-only contract
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/p1-pilot-identity-inspection-contract.php
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Verify post-delete Theme inventory and System Health
+        env:
+          P1_BASE_URL: https://tamduchanoi.aznet.vn
+          P1_ADMIN_USER: ${{ secrets.PILOT_WP_USER }}
+          P1_ADMIN_PASS: ${{ secrets.PILOT_WP_PASSWORD }}
+          P1_STATE_DIR: /tmp/p1-post-delete
+        run: node tests/browser/p1-pilot-identity-inspection.mjs
+      - name: Upload P1 post-delete evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p1-post-delete-verification
+          path: /tmp/p1-post-delete
+          if-no-files-found: warn
+
+  p4-public-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Verify P4 public contract
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/p4-public-pilot-contract.php
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+      - name: Verify public pilot after duplicate deletion
+        env:
+          P4_BASE_URL: https://tamduchanoi.aznet.vn
+          P4_STATE_DIR: /tmp/p4-post-delete
+        run: node tests/browser/p4-public-pilot-l4.mjs
+      - name: Upload public post-delete evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p4-post-delete-public-smoke
+          path: /tmp/p4-post-delete
+          if-no-files-found: warn
