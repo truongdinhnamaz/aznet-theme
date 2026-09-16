@@ -9,6 +9,7 @@ on:
       - 'assets/css/components/comments.css'
       - 'assets/css/components/recovery.css'
       - 'inc/theme/assets.php'
+      - 'scripts/assert-theme-version.sh'
       - 'scripts/verify-v1-core.sh'
       - 'tests/offline/x1-comments-surface-contract.php'
       - 'tests/offline/x2-search-404-empty-contract.php'
@@ -66,9 +67,8 @@ jobs:
       - name: Run X5 static and retained contract gate
         run: |
           set -euo pipefail
+          bash scripts/assert-theme-version.sh
           bash scripts/verify-v1-core.sh
-          grep -F 'Version: 1.1.0' style.css
-          grep -F "define( 'AZNET_THEME_VERSION', '1.1.0' );" functions.php
 
       - name: Install WordPress 6.9 and exact Theme candidate
         run: |
@@ -89,8 +89,11 @@ jobs:
           wp core version --path=/tmp/wp --allow-root | grep -Fx '6.9'
           wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
           test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp --allow-root)"
-          grep -F 'Version: 1.1.0' /tmp/wp/wp-content/themes/aznet-theme/style.css
-          grep -F "define( 'AZNET_THEME_VERSION', '1.1.0' );" /tmp/wp/wp-content/themes/aznet-theme/functions.php
+          VERSION=$(sed -n 's/^Version:[[:space:]]*//p' style.css | head -n 1)
+          INSTALLED_STYLE_VERSION=$(sed -n 's/^Version:[[:space:]]*//p' /tmp/wp/wp-content/themes/aznet-theme/style.css | head -n 1)
+          INSTALLED_PHP_VERSION=$(sed -n "s/.*define( 'AZNET_THEME_VERSION', '\([^']*\)' );.*/\1/p" /tmp/wp/wp-content/themes/aznet-theme/functions.php | head -n 1)
+          test "$INSTALLED_STYLE_VERSION" = "$VERSION"
+          test "$INSTALLED_PHP_VERSION" = "$VERSION"
 
       - name: Seed native X5 fixture
         run: |
@@ -208,8 +211,7 @@ jobs:
             echo 'FAIL: X5 introduced forbidden state/query/provider/form-engine ownership' >&2
             exit 1
           fi
-          grep -F 'Version: 1.1.0' style.css
-          grep -F "define( 'AZNET_THEME_VERSION', '1.1.0' );" functions.php
+          bash scripts/assert-theme-version.sh
           echo 'PASS: X5 ownership and diff boundary'
 
       - name: Upload X5 evidence
