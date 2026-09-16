@@ -42,6 +42,8 @@ foreach ([
     'published_posts',
     'categories',
     'media_candidates',
+    'page_content_inventory',
+    '_fields=id,parent,slug,link,title,excerpt,content,featured_media',
     'observed',
     'not_observed',
     'unknown',
