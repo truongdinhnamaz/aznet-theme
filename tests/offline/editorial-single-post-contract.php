@@ -121,6 +121,7 @@ foreach ($requiredCssMarkers as $marker) {
 }
 
 $articleSources = $single . "\n" . $content . "\n" . $meta . "\n" . $author . "\n" . $assets;
+$articleSources = str_replace("get_option( 'thread_comments' )", '', $articleSources);
 $forbidden = [
     'new WP_Query',
     'WP_Query(',
