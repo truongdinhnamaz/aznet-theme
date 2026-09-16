@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.41
+**Version:** v0.42
 **Status:** Working Source  
 **Date:** 16/09/2026
 
@@ -37,7 +37,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P4-A | Homepage Composer + Law 01 | PASS / MERGED | Premium Law01 + Composer merged through PR #58; exact-main static/runtime/browser core verification PASS |
 | P4-B | Law Site Provisioning v1.1 | PASS / MERGED | D-026 smart setup merged through PR #58 with Theme metadata `1.1.0`; deterministic package/browser evidence retained and exact-main verification PASS |
 | P4-C | Standalone Core independence | PASS / MERGED | D-027 source + implementation merged through PR #63/#64; zero-plugin L1-L4, exact-package and exact-main gates PASS; optional integrations remain additive |
-| P5 | Publication & production deployment | PUBLICATION PASS / DEPLOYMENT GATED | Owner-approved tag `v1.1.0` + GitHub Release publication completed with the exact verified package digest; final production deployment remains a separate explicit owner gate |
+| P5 | Publication & production deployment | PASS | Tag `v1.1.0` + GitHub Release publication and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
 Current canonical source is `main@7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`, Theme metadata `1.1.0`. D-027 source/implementation closure remains retained through PR #63/#64; P4 public QA merged through PR #66, authenticated read-only QA through PR #67, P1 identity inspection through PR #69, P1/P4 closure through PR #70, and P5 technical closure through owner-approved PR #71. P5 technical run `35051428372` verified final package bytes; publication run `35052694111` then published tag `v1.1.0` and the matching GitHub Release asset.
@@ -193,13 +193,13 @@ Fresh exact-main run `35042767873` passed reusable static/contracts plus clean W
 
 ### P5 — Publication and deployment
 
-**State:** **PUBLICATION PASS / DEPLOYMENT GATED.**
+**State:** **PUBLICATION + PRODUCTION DEPLOYMENT PASS.**
 
 Technical run `35051428372` verified the final deterministic `aznet-theme-1.1.0.zip`: exact canonical production bytes, 121-file source/package identity, 93 packaged PHP files lint PASS, clean WordPress 6.9 zero-plugin runtime/browser, and switch-away/switch-back continuity. Final SHA-256: `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`. Evidence: `docs/evidence/P5_FINAL_CANDIDATE_VERIFICATION_20260916.md`.
 
 Owner-approved publication run `35052694111` then created annotated tag `v1.1.0` targeting canonical `main@7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78` and GitHub Release `389622362` (`AZnet Theme 1.1.0`). Attached asset `aznet-theme-1.1.0.zip` (`567100593`) reports the same SHA-256 and was downloaded/re-hashed by the publication workflow. Publication evidence artifact: `10428918492`. Evidence: `docs/evidence/P5_PUBLICATION_20260916.md`.
 
-**Exit:** Git tag + GitHub Release publication PASS. Final production deployment remains a separate explicit owner approval. No provider L5 certification is inferred.
+**Exit:** Git tag + GitHub Release publication PASS; owner-approved production deployment disposition for `tamduchanoi.aznet.vn` PASS with fresh read-only run `35054176392`. No provider L5 certification is inferred.
 
 ## 6. Dependency order
 
@@ -325,4 +325,4 @@ Metadata promotion to `1.1.0` is a historical cleared gate completed through PR 
 
 ## 14. Exact next
 
-**P5 production deployment disposition — v1.1.0 publication is PASS. The next action requiring owner approval is final production deployment. Until separately approved, do not deploy the release to production. Optional-provider L5 certification remains a separate track and is not implied by publication.**
+**v1.1 release-critical path is complete through production deployment. Exact Next is an explicit owner decision on a new Theme milestone or a separately scoped optional-provider compatibility/certification track; provider L5 is not inferred from this release closure.**

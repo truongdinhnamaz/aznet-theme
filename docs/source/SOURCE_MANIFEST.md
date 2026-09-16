@@ -8,11 +8,11 @@ Canonical source is reconciled through the completed v1.1 R6 program, P2/P3 edit
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.9 | Theme architecture, public integration contracts and D-027 Standalone Core runtime-independence boundary |
-| `AZT-03-baseline-provenance.md` | v0.36 | Canonical provenance through P5 technical verification and owner-approved v1.1.0 publication |
-| `AZT-04-roadmap-qa-decisions.md` | v0.41 | R0-R6/P1-P4 PASS; P5 publication PASS with production deployment gate retained |
-| `AZT-EXEC-MAP.md` | v0.33 | Derived execution map with v1.1.0 publication PASS and production deployment disposition as exact next hard gate |
+| `AZT-03-baseline-provenance.md` | v0.37 | Canonical provenance through v1.1.0 publication and owner-approved production deployment verification |
+| `AZT-04-roadmap-qa-decisions.md` | v0.42 | R0-R6/P1-P4 PASS; P5 publication + production deployment PASS at the verified scope |
+| `AZT-EXEC-MAP.md` | v0.34 | Derived execution map with v1.1 release-critical path complete through production deployment |
 
-Current canonical source baseline: `main@7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`, Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.
+Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor: `v1.1.0` -> `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`; owner-approved publication closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`, and restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb`. Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.
 
 Historical D-026 stacked evidence remains preserved at verified head `d564c6e8a43f458a493fe816c4fc768d4917065f`, package run `34362997863` and browser run `34362997879`. Its `1.1.1` candidate label is historical only and is not the current integration/release metadata baseline.
 
@@ -28,8 +28,10 @@ P4 public-pilot QA completed through GitHub Actions on functional head `758392b0
 
 P5 final-candidate technical verification run `35051428372` explicitly checked out canonical production bytes at `main@f0b2d581b16a663e4b422234e6ac15568bcc7985`, tree `f21884f5989239858261721c5002c5158d6d9be0`. Exact-main/core verification and clean WordPress `6.9` zero-plugin runtime/browser gates passed. The final package `aznet-theme-1.1.0.zip` was built twice byte-identically, exact-matched 121 production files, linted 93 packaged PHP files, passed clean WordPress/browser gates, preserved WordPress-owned continuity through `twentytwentyfive` switch-away and passed again after switching back. ZIP SHA-256 `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`; exact-main artifact `10429087315`; final-package artifact `10428893463`. Owner-approved PR #71 then merged technical source closure to `main@7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78` without production Theme byte changes. Owner-approved publication run `35052694111` published annotated tag `v1.1.0` and GitHub Release `389622362`; release asset `567100593` has GitHub digest `sha256:72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`, and publication evidence artifact `10428918492` has digest `sha256:544895a168e12b7260e086b14f85ecfb3ae4505fcc600feff7d27bbbd6f88814`. P5 state is PUBLICATION PASS / DEPLOYMENT GATED. Evidence: `docs/evidence/P5_FINAL_CANDIDATE_VERIFICATION_20260916.md` and `docs/evidence/P5_PUBLICATION_20260916.md`.
 
+Owner-approved production deployment disposition for `tamduchanoi.aznet.vn` is verified by fresh read-only run `35054176392`: active AZnet Theme `1.1.0`, no duplicate AZnet Theme installation, D-027 current System Health shape, Standalone Core `ready`, and retained public route/viewport regression 28/28 PASS. Evidence artifact `10430017585` (`sha256:c2066532e341f6243f466f5ed885822e5428d6ec344a0f74af20b9247921785b`). Evidence: `docs/evidence/P5_PRODUCTION_DEPLOYMENT_20260916.md`. No live filesystem checksum or provider L5 certification is inferred.
+
 The known WordPress-core `WP_Query::rewind_posts()` warning remains UNKNOWN/non-blocking; no blanket PHP-log-clean claim is made. RootProfile E5-C/E5-D and ConvertFlow F8 remain separate optional compatibility gates under their existing ownership rules.
 
-**Exact next:** P5 production deployment disposition. v1.1.0 Git tag + GitHub Release publication is PASS; final production deployment requires a separate explicit owner approval. Optional-provider L5 certification remains a separate track.
+**Exact next:** v1.1 release-critical work is complete through owner-approved production deployment verification. Await an explicit owner decision on the next Theme milestone or on a separately scoped optional-provider compatibility/certification track; provider L5 is not inferred.
 
 Derived DOCX source material remains archival/export evidence only. Canonical source changes occur in `docs/source/` through reviewed Git history.

@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.33
+**Version:** v0.34
 **Status:** Working Execution Map / derived  
 **Date:** 16/09/2026
 
@@ -38,7 +38,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | P4-A Homepage Composer + Law 01 | PASS / MERGED | PR #58 merged; exact-main static/runtime/browser core verification PASS |
 | P4-B Law Site Provisioning | PASS / MERGED | D-026 merged; Theme `1.1.0`; deterministic package/browser evidence retained; activation mutation-free and active-site overwrite/noindex takeover forbidden |
 | P4-C Standalone Core independence | PASS / MERGED | PR #63/#64 merged; zero-plugin L1-L4, exact-package and exact-main PASS; optional integrations remain additive |
-| P5 Publication/Deployment | PUBLICATION PASS / DEPLOYMENT GATED | Tag `v1.1.0` + GitHub Release publish the exact verified package; final production deployment remains an explicit owner action |
+| P5 Publication/Deployment | PASS | Tag `v1.1.0` + GitHub Release and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
 Current canonical source baseline is `main@7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, Theme `1.1.0`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`. D-027 PR #63/#64 remain retained; P4 public QA PR #66, authenticated QA PR #67, P1 inspection PR #69, P1/P4 closure PR #70 and P5 technical closure PR #71 are merged. P5 run `35051428372` verified the final package; publication run `35052694111` published tag `v1.1.0` and the matching GitHub Release asset.
@@ -275,11 +275,11 @@ No layer may be inferred from another.
 
 ### P5 — Final Candidate / Publication / Deployment
 
-**State:** **PUBLICATION PASS / DEPLOYMENT GATED.**
+**State:** **PUBLICATION + PRODUCTION DEPLOYMENT PASS.**
 
 Technical run `35051428372` verified the final `aznet-theme-1.1.0.zip`: deterministic double-build, 121 production files exact source/package match, 93 packaged PHP files lint PASS, clean WordPress `6.9` zero-plugin runtime/browser and switch-away/switch-back continuity. SHA-256: `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`. Evidence: `docs/evidence/P5_FINAL_CANDIDATE_VERIFICATION_20260916.md`.
 
-Owner-approved publication run `35052694111` published annotated tag `v1.1.0` at canonical `main@7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78` and GitHub Release `389622362` with exact verified asset `aznet-theme-1.1.0.zip` (`567100593`). Evidence: `docs/evidence/P5_PUBLICATION_20260916.md`. Production deployment remains a separate explicit owner gate.
+Owner-approved publication run `35052694111` published annotated tag `v1.1.0` at release source anchor `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78` and GitHub Release `389622362` with exact verified asset `aznet-theme-1.1.0.zip` (`567100593`). Owner-approved existing-package production deployment disposition for `tamduchanoi.aznet.vn` then passed fresh read-only verification run `35054176392`. Evidence: `docs/evidence/P5_PUBLICATION_20260916.md` and `docs/evidence/P5_PRODUCTION_DEPLOYMENT_20260916.md`.
 
 ## 13. Optional compatibility tracks
 
@@ -301,4 +301,4 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 15. Exact next
 
-**P5 production deployment disposition — v1.1.0 publication is PASS. Exact Next is an explicit owner decision on final production deployment. Do not deploy without separate approval; optional-provider L5 certification remains separate and is not implied by publication.**
+**v1.1 release-critical path is complete through production deployment. Exact Next is an explicit owner decision on a new Theme milestone or a separately scoped optional-provider compatibility/certification track.**

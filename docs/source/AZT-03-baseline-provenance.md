@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.36
+**Version:** v0.37
 **Status:** Working Source  
 **Date:** 16/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -13,9 +13,10 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 
 ## 2. Current canonical baseline
 
-- Current canonical source head after owner-approved P5 technical closure PR #71 merge: `main@7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`.
-- Current canonical source tree: `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`.
-- Final published v1.1.0 production package bytes remain the P5-verified 121-file set; PR #71 changed documentation/evidence only.
+- Live `main` HEAD is resolved from GitHub at execution time; stable provenance checkpoints are recorded below rather than treated as permanently current.
+- Published release `v1.1.0` source anchor: `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`.
+- Owner-approved publication closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has the same tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72.
+- Final published v1.1.0 production package remains the P5-verified 121-file set, SHA-256 `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`.
 - Internal Theme version remains `1.1.0`.
 - WordPress floor: `6.9+`.
 - PHP floor: `8.1+`.
@@ -82,6 +83,8 @@ P3 Editorial Listing/Search Hardening merged through PR #52 from final verified 
 Because P2/P3 changed production bytes after the R6 package, SHA-256 `000735...` remains **historical R6 candidate evidence**. P5 later rebuilt and verified the final post-hardening package as `aznet-theme-1.1.0.zip`, SHA-256 `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`, which is now the published v1.1.0 release asset.
 
 Owner-approved P5 publication completed on 16/09/2026 through GitHub Actions run `35052694111`. Annotated tag `v1.1.0` (tag object `3c3e07fd0ba64037f7ec1d79fb6e6276308786a3`) dereferences to canonical `main@7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`. GitHub Release `389622362`, title `AZnet Theme 1.1.0`, is published (`draft=false`, `prerelease=false`) with release asset `aznet-theme-1.1.0.zip` (`asset 567100593`, 170944 bytes) and GitHub-reported digest `sha256:72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`. Publication workflow evidence artifact `10428918492` has digest `sha256:544895a168e12b7260e086b14f85ecfb3ae4505fcc600feff7d27bbbd6f88814`. The temporary publication workflow was removed after successful publication and its ops branch has zero net file delta from the tagged canonical commit. This publication does not authorize or imply production deployment or optional-provider L5 certification.
+
+Owner-approved production deployment disposition for `tamduchanoi.aznet.vn` completed on 16/09/2026 without re-uploading identical package bytes. Fresh read-only run `35054176392` reverified release identity, Theme inventory, authenticated System Health and the retained public route/viewport matrix. The site reports active AZnet Theme `1.1.0`, `NO_DUPLICATES`, D-027 current System Health shape and Standalone Core `ready`; the public matrix passed 28/28 checks. Evidence artifact `10430017585` (`sha256:c2066532e341f6243f466f5ed885822e5428d6ec344a0f74af20b9247921785b`). This closes P5 deployment at the tested Theme-owned/site-operations scope without inferring provider L5 certification or live-filesystem checksum equivalence. Evidence: `docs/evidence/P5_PRODUCTION_DEPLOYMENT_20260916.md`.
 
 No source statement above transfers domain ownership to the Theme.
 
