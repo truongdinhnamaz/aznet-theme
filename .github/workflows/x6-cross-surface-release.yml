@@ -270,7 +270,7 @@ jobs:
           unzip -q "/tmp/x6/out/${ZIP_NAME}" -d /tmp/x6/extracted
           test "$(find /tmp/x6/extracted -mindepth 1 -maxdepth 1 -type d -printf '%f\n')" = 'aznet-theme'
           rsync -a --delete \
-            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='node_modules' \
             --exclude='README.md' --exclude='aznet-preview.png' \
             ./ /tmp/x6/expected/aznet-theme/
           diff -ru /tmp/x6/expected/aznet-theme /tmp/x6/extracted/aznet-theme
