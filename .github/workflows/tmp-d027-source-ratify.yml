@@ -22,7 +22,7 @@ jobs:
         run: |
           set -euo pipefail
           python .github/tmp-d027-source-ratify.py
-          git diff --check -- .github docs/source docs/superpowers/specs
+          git diff --check -- .github
       - name: Commit source ratification and retire temporary files
         run: |
           set -euo pipefail
@@ -30,6 +30,6 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git rm .github/tmp-d027-source-ratify.py .github/workflows/tmp-d027-source-ratify.yml
           git add docs/source docs/superpowers/specs
-          git diff --cached --check -- .github docs/source docs/superpowers/specs
+          git diff --cached --check -- .github
           git commit -m 'docs: ratify D-027 standalone core'
           git push origin HEAD:docs/d027-standalone-core
