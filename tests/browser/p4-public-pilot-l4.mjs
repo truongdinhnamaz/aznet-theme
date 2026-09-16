@@ -101,7 +101,8 @@ function axeRecord( violation, ownership = 'THEME_OR_UNATTRIBUTED' ) {
 }
 
 async function isAuthoredContentLabelViolation( page, violation ) {
-    if ( violation.id !== 'label' || ! violation.nodes.length ) {
+    const authoredLabelRule = violation.id === 'label';
+    if ( ! authoredLabelRule || ! violation.nodes.length ) {
         return false;
     }
 
