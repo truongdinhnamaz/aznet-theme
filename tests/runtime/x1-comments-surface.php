@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 $slug = 'x1-comments-surface';
 $post = get_page_by_path($slug, OBJECT, 'post');
 
