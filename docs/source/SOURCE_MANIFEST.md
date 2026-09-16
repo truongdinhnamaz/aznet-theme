@@ -34,6 +34,6 @@ Owner-approved production deployment disposition for `tamduchanoi.aznet.vn` is v
 
 The known WordPress-core `WP_Query::rewind_posts()` warning remains UNKNOWN/non-blocking; no blanket PHP-log-clean claim is made. RootProfile E5-C/E5-D and ConvertFlow F8 remain separate optional compatibility gates under their existing ownership rules.
 
-**Exact next:** v1.2 WordPress Experience Completion design is owner-approved. Merge the source/design ratification, then write and review the X1 Comments Surface implementation plan before production implementation. Provider L5 remains separate and is not inferred.
+**Exact next:** v1.2 WordPress Experience Completion design is ratified. Write and review the X1 Comments Surface implementation plan before production implementation. Provider L5 remains separate and is not inferred.
 
 Derived DOCX source material remains archival/export evidence only. Canonical source changes occur in `docs/source/` through reviewed Git history.
