@@ -1,0 +1,57 @@
+# Read-only public verification retained for PR integration.
+# Post-cleanup verification target.
+# Integration branch must not retain one-shot mutation mechanics.
+# Cleanup landed before this verification commit.
+name: Tâm Đức Identity Contact Final L4
+
+on:
+  push:
+    branches:
+      - ops/tamduc-identity-contact
+    paths:
+      - 'tests/offline/tamduc-identity-contact-final-contract.php'
+      - 'tests/browser/tamduc-identity-contact-final-l4.mjs'
+      - '.github/workflows/tamduc-identity-contact-final.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  final-identity-contact-l4:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Verify final identity/contact L4 static contract
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/tamduc-identity-contact-final-contract.php
+      - uses: actions/setup-node@v4
+        if: success()
+        with:
+          node-version: '22'
+      - name: Install Playwright
+        if: success()
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Check final L4 harness syntax
+        if: success()
+        run: node --check tests/browser/tamduc-identity-contact-final-l4.mjs
+      - name: Run final public identity/contact L4
+        if: success()
+        env:
+          TAMDUC_BASE_URL: https://tamduchanoi.aznet.vn
+          TAMDUC_STATE_DIR: /tmp/tamduc-identity-contact-final
+        run: node tests/browser/tamduc-identity-contact-final-l4.mjs
+      - name: Upload final L4 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tamduc-identity-contact-final-l4
+          path: /tmp/tamduc-identity-contact-final
+          if-no-files-found: warn
