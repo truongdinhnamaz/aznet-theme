@@ -1,0 +1,27 @@
+name: Tâm Đức Homepage Mutation Plan
+
+on:
+  push:
+    branches:
+      - ops/tamduc-homepage-completion
+    paths:
+      - 'tests/offline/tamduc-homepage-mutation-plan-contract.php'
+      - 'ops/tamduc-homepage/mutation-plan.json'
+      - '.github/workflows/tamduc-homepage-mutation-plan.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mutation-plan-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Verify sourced mutation plan RED/GREEN gate
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/tamduc-homepage-mutation-plan-contract.php
