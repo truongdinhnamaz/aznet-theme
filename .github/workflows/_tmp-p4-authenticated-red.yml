@@ -1,23 +1,60 @@
-name: Temporary P4 Authenticated RED
+name: Temporary P4 Authenticated GREEN
 
 on:
   push:
     branches: [work/p4-authenticated-pilot-qa]
     paths:
       - 'tests/offline/p4-authenticated-pilot-contract.php'
+      - 'tests/browser/p4-authenticated-pilot-l4.mjs'
+      - '.github/workflows/p4-authenticated-pilot.yml'
       - '.github/workflows/_tmp-p4-authenticated-red.yml'
 
 permissions:
   contents: read
 
 jobs:
-  red-contract:
+  authenticated-pilot:
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+
+      - name: Record exact identity
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/p4-authenticated-pilot
+          git rev-parse HEAD | tee /tmp/p4-authenticated-pilot/head-sha.txt
+
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
           coverage: none
-      - name: Run expected RED contract
+
+      - name: Verify authenticated pilot contract
         run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/p4-authenticated-pilot-contract.php
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Run authenticated read-only pilot QA
+        env:
+          P4_AUTH_BASE_URL: https://tamduchanoi.aznet.vn
+          P4_AUTH_ADMIN_USER: ${{ secrets.PILOT_WP_USER }}
+          P4_AUTH_ADMIN_PASS: ${{ secrets.PILOT_WP_PASSWORD }}
+          P4_AUTH_STATE_DIR: /tmp/p4-authenticated-pilot
+        run: node tests/browser/p4-authenticated-pilot-l4.mjs
+
+      - name: Upload authenticated pilot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p4-authenticated-pilot
+          path: /tmp/p4-authenticated-pilot
+          if-no-files-found: warn
