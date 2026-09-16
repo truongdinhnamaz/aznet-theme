@@ -54,6 +54,11 @@ foreach ([
     'textarea[readonly]',
     'standalone_core',
     'optional_integrations',
+    'configuration',
+    'capabilities',
+    'PILOT_THEME_BITS_DRIFT',
+    'legacy_pre_d027',
+    'system-health-1440.png',
     'blocking_failures',
     '@axe-core/playwright',
 ] as $marker) {
