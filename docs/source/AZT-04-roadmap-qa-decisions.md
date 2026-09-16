@@ -248,7 +248,7 @@ Post-R6 production readiness:
 `P1 site-ops cleanup (parallel/destructive gate)`  
 `P2 Editorial Single-Post PASS -> P3 Editorial Listing/Search PASS -> P4-C Standalone Core PASS -> P4 Real Pilot QA PASS -> P1 cleanup PASS -> P5 technical candidate PASS -> P5 publication PASS -> production deployment PASS`
 
-P1/P4 pilot sign-off, P5 publication and owner-approved production deployment verification are closed; the v1.1 release-critical path is complete. v1.2 X6 is now a final technical candidate pending canonical merge + exact-main verification.
+P1/P4 pilot sign-off, P5 publication and owner-approved production deployment verification are closed; the v1.1 release-critical path is complete. v1.2 X6 is TECHNICAL PASS on canonical main and is now gated on separate publication approval; production deployment remains later and separately gated.
 
 ## 7. QA layers
 

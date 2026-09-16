@@ -7,9 +7,9 @@
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** live `main` HEAD is resolved from GitHub at execution time. Current X6 integration base is `main@dddcee1cbd9a406f365ec57ece40097581e0bcf3` after owner-approved PR #89; exact-main run `35126047491` completed SUCCESS. Stable published release anchor `v1.1.0` is `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`; publication closure PR #72 merged at `15f25e4f6d8e64c588866405629b793a85ee0323`, and restored post-noop checkpoint `e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb`. P5 technical run `35051428372`, publication run `35052694111`, and production read-only run `35054176392` close the v1.1 release-critical path. Optional integrations remain additive and ownership boundaries are unchanged.
+> **Canonical-main checkpoint:** live `main` HEAD is resolved from GitHub at execution time. X6 technical integration is canonical at `main@c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`, tree `70c04929afe38e87d317bad3414157e9e2bd6f74`; fresh V1 exact-main run `35129331899` and X6 push-to-main run `35129331927` completed SUCCESS on that exact merge SHA. Stable published release anchor remains `v1.1.0` at `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`, and verified production deployment remains v1.1.0 until later approval. Optional integrations remain additive and ownership boundaries are unchanged.
 
-**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> PR #70 -> P5 exact-main + deterministic package/lifecycle PASS run 35051428372 -> owner-approved PR #71 -> publication run 35052694111 -> annotated tag v1.1.0 + GitHub Release PASS -> owner-approved production deployment disposition -> read-only run 35054176392 PASS -> P5 PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 synchronized final candidate PASS`.
+**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> owner-approved PR #87 merge -> exact-main V1 PASS -> exact-main X6 PASS`. Current state: `X6 TECHNICAL PASS / PUBLICATION GATED`.
 
 ## 1. Current state
 
@@ -42,7 +42,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | X v1.2 WordPress Experience Completion | X6 TECHNICAL PASS / PUBLICATION GATED | X1-X5 retained; PR #87 merged exact `1.2.0` X6 bytes and exact-main V1 + X6 L1-L4/L6 verification PASS; publication/deployment remain separate owner gates; provider L5 stays separate |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
-Canonical `main` and verified production deployment remain Theme `1.1.0`. The isolated X6 candidate is exact `1.2.0`; candidate version does not become canonical/published/deployed merely by passing CI.
+Canonical `main` is exact Theme `1.2.0` after owner-approved X6 technical integration. The published GitHub Release and verified production deployment remain `v1.1.0`; publication and deployment of v1.2.0 remain separate owner gates.
 
 X6 synchronization checkpoint: `c145f72cc7ac4783eb9f4a2f0b11c1d26e178445`, tree `3594fab0c89d015711e914325734646d1e7df159`, normal merge parented by prior X6 head plus `main@dddcee1c...`, leaving `behind_by=0` before source/evidence closure. Fresh X6 run `35126908185` passed WordPress 6.9 zero-plugin L1-L4/L6, integrated 32/32 browser/axe, deterministic `aznet-theme-1.2.0.zip` SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`, 95 packaged PHP lint checks and switch-away/switch-back lifecycle continuity. Artifact `10459925538`, digest `sha256:c6b480168282e7dc9eea8f749d303012763cabf16213a6e69619c62f96f16e03`; all 19 observed same-head PR workflows completed SUCCESS.
 
@@ -302,7 +302,7 @@ Owner-approved publication run `35052694111` published annotated tag `v1.1.0` at
 
 **X6 — Cross-surface QA & Release Closure:** **TECHNICAL PASS / PUBLICATION GATED** — the exact `1.2.0` candidate was promoted only after the pre-promotion RED contract and explicit owner approval. Final-head PR verification remained GREEN; owner-approved PR #87 merged to `main@c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`, tree `70c04929afe38e87d317bad3414157e9e2bd6f74` with expected-head protection. Fresh V1 Exact Main Verification `35129331899` and X6 push-to-main `35129331927` both completed SUCCESS on that exact merge SHA: integrated 32/32 browser/axe, deterministic `aznet-theme-1.2.0.zip`, exact package/source identity, 95 packaged PHP lint checks, lifecycle/rollback continuity and ownership boundaries. Package SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`; exact-main X6 artifact `10459889475`, digest `sha256:f537b5f6ed33a53dcad8041c3d8cc0aef32c5bb6dbd8c10c5102e76624128fb9`. Evidence: `docs/evidence/X6_CROSS_SURFACE_RELEASE_CLOSURE_20260916.md`.
 
-**Execution:** `X1 -> X2 -> X3 -> X4 -> X5 -> X6`. Every X1-X5 production slice used RED -> intended failure -> minimal GREEN -> regression and has a bounded rollback. X6 retains the separate canonical merge, publication and production deployment owner gates.
+**Execution:** `X1 -> X2 -> X3 -> X4 -> X5 -> X6`. Every X1-X5 production slice used RED -> intended failure -> minimal GREEN -> regression and has a bounded rollback. X6 canonical merge is complete; publication and production deployment remain later separate owner gates.
 
 **Design record:** `docs/superpowers/specs/2026-09-16-v1.2-wordpress-experience-completion-design.md`.
 
