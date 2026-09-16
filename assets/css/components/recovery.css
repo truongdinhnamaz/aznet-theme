@@ -63,9 +63,7 @@
     text-decoration: none;
 }
 
-.aznet-theme-recovery__action:focus-visible,
-.aznet-theme-recovery .search-form :is(input, button):focus-visible,
-.aznet-theme-search-header__form .search-form :is(input, button):focus-visible {
+.aznet-theme-recovery__action:focus-visible {
     outline: 2px solid var(--aznet-theme-focus);
     outline-offset: 3px;
 }
@@ -81,13 +79,7 @@
 .aznet-theme-search-header__form .search-field {
     min-width: min(100%, 16rem);
     flex: 1 1 16rem;
-    min-height: 2.75rem;
     max-width: 100%;
-}
-
-.aznet-theme-recovery .search-submit,
-.aznet-theme-search-header__form .search-submit {
-    min-height: 2.75rem;
 }
 
 @media (max-width: 30rem) {

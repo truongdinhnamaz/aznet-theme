@@ -26,6 +26,7 @@ $single   = source_x1_comments($root . '/single.php');
 $comments = source_x1_comments($root . '/comments.php');
 $assets   = source_x1_comments($root . '/inc/theme/assets.php');
 $css      = source_x1_comments($root . '/assets/css/components/comments.css');
+$forms    = source_x1_comments($root . '/assets/css/components/forms.css');
 
 foreach ([
     "is_singular( 'post' )",
@@ -59,6 +60,7 @@ foreach ([
     'post_password_required()',
     "'aznet-theme-comments'",
     "'/assets/css/components/comments.css'",
+    "'aznet-theme-forms'",
     "wp_enqueue_script( 'comment-reply' )",
     "get_option( 'thread_comments' )",
 ] as $marker) {
@@ -81,7 +83,6 @@ foreach ([
     '.comment-content',
     '.comment-reply-link',
     '.comment-respond',
-    ':focus-visible',
     'overflow-wrap',
 ] as $marker) {
     if (! str_contains($css, $marker)) {
@@ -89,7 +90,16 @@ foreach ([
     }
 }
 
-$sources = $single . "\n" . $comments . "\n" . $assetsWithoutThreadCommentsRead;
+foreach ([
+    '.aznet-theme-comments .comment-form',
+    ':focus-visible',
+] as $marker) {
+    if (! str_contains($forms, $marker)) {
+        fail_x1_comments('forms.css missing retained X1 control marker: ' . $marker);
+    }
+}
+
+$sources = $single . "\n" . $comments . "\n" . $assetsWithoutThreadCommentsRead . "\n" . $forms;
 foreach ([
     'new WP_Query',
     'WP_Query(',
