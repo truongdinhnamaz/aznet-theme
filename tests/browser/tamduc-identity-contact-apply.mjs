@@ -29,6 +29,16 @@ async function nativeClick(locator) {
   await locator.evaluate((element) => element.click());
 }
 
+async function waitForNonzeroMenuId(page) {
+  await page.waitForURL((url) => {
+    const id = url.searchParams.get('menu');
+    return id !== null && id !== '0' && /^\d+$/.test(id);
+  }, { timeout: 30000 });
+  const id = new URL(page.url()).searchParams.get('menu');
+  if (!id || id === '0' || !/^\d+$/.test(id)) throw new Error('Created menu id unavailable');
+  return Number(id);
+}
+
 async function login(page) {
   if (!adminUser || !adminPass) throw new Error('Required pilot credentials are unavailable');
   await page.goto(`${baseUrl}/wp-login.php`, { waitUntil: 'domcontentloaded', timeout: 30000 });
@@ -118,12 +128,9 @@ async function menuInventory(page) {
 async function createPhoneMenu(page) {
   await page.goto(`${baseUrl}/wp-admin/nav-menus.php?action=edit&menu=0`, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await page.locator('#menu-name').fill(MENU_NAME);
-  await Promise.all([
-    page.waitForURL(/nav-menus\.php.*menu=\d+/, { timeout: 30000 }),
-    nativeClick(page.locator('#save_menu_header')),
-  ]);
-  const menuId = new URL(page.url()).searchParams.get('menu');
-  if (!menuId || !/^\d+$/.test(menuId)) throw new Error('Created menu id unavailable');
+  const createdMenuId = waitForNonzeroMenuId(page);
+  await nativeClick(page.locator('#save_menu_header'));
+  const menuId = await createdMenuId;
 
   const customSection = page.locator('#add-custom-links');
   const title = customSection.locator('.accordion-section-title');
@@ -135,7 +142,7 @@ async function createPhoneMenu(page) {
   await item.waitFor({ state: 'visible', timeout: 15000 });
   await nativeClick(page.locator('#save_menu_header'));
   await page.waitForLoadState('domcontentloaded');
-  return Number(menuId);
+  return menuId;
 }
 
 async function phoneMenuState(page, menuId) {
