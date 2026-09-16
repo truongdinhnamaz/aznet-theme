@@ -89,12 +89,23 @@ Same mobile-navigation and public L4 gates as 390x844: all PASS.
 
 Comparison against `main` at `6d6459f4497d1b7612c36622a13e7c5c71ba2a73` shows this branch contains site-ops workflows, evidence, mutation plan, and test harnesses only. Production Theme PHP/CSS/JS files are unchanged.
 
+## PR review cleanup
+
+PR `#88` review found that the completed one-shot mutation mechanism was still present even though the site changes had already been applied and independently verified. Before merge readiness, the branch therefore removed:
+
+- `.github/workflows/tamduc-homepage-apply.yml`;
+- `tests/browser/tamduc-homepage-apply.mjs`;
+- `tests/offline/tamduc-homepage-apply-contract.php`.
+
+The historical mutation plan and evidence are retained for provenance and rollback history. Read-only inventory/final QA remain available. This cleanup removes the executable WordPress mutation path from the proposed `main` integration without rewriting historical evidence.
+
 ## PASS
 
 - Tâm Đức Homepage bounded site-owned corrections: PASS.
 - Public Homepage L4 across 1440/1024/390/320: PASS with fresh evidence.
 - Mobile navigation keyboard/open/close/focus/overflow contract: PASS.
 - Ownership boundary: PASS; no client data was hard-coded into production Theme source.
+- PR cleanup: completed one-shot mutation executable removed before merge.
 
 ## BLOCKED / UNKNOWN
 
@@ -105,4 +116,4 @@ Comparison against `main` at `6d6459f4497d1b7612c36622a13e7c5c71ba2a73` shows th
 
 ## EXACT NEXT
 
-Integration of this site-ops/evidence branch is a separate owner gate. Do not merge `main`, release, tag, or deploy Theme without explicit approval.
+PR `#88` must be green and mergeable before owner approval to merge. Do not merge `main`, release, tag, or deploy Theme merely from this evidence checkpoint.
