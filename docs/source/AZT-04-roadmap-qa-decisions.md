@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.46
+**Version:** v0.47
 **Status:** Working Source  
 **Date:** 16/09/2026
 
@@ -38,7 +38,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P4-B | Law Site Provisioning v1.1 | PASS / MERGED | D-026 smart setup merged through PR #58 with Theme metadata `1.1.0`; deterministic package/browser evidence retained and exact-main verification PASS |
 | P4-C | Standalone Core independence | PASS / MERGED | D-027 source + implementation merged through PR #63/#64; zero-plugin L1-L4, exact-package and exact-main gates PASS; optional integrations remain additive |
 | P5 | Publication & production deployment | PASS | Tag `v1.1.0` + GitHub Release publication and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
-| X | v1.2 WordPress Experience Completion | X3 PASS / X4 NEXT | X1 Comments, X2 Search/404/empty states and X3 Media/Gallery/Embed passed L1-L4 on verified functional heads; X4 Pagination/Navigation planning is next; no new provider integration |
+| X | v1.2 WordPress Experience Completion | X4 PASS / X5 NEXT | X1 Comments, X2 Search/404/empty states, X3 Media/Gallery/Embed and X4 Pagination/Navigation passed L1-L4 on verified functional heads; X5 Native Form Controls planning is next; no new provider integration |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
 Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` points to `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`. Publication source closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72. P5 technical run `35051428372` verified final package bytes, publication run `35052694111` published the matching tag/Release, and production read-only run `35054176392` closed deployment at the tested Theme-owned/site-operations scope.
@@ -107,7 +107,7 @@ Publication/tag is not inferred from technical PASS and remains a separate owner
 
 **Goal:** close v1.1 with measured asset/runtime behavior, reusable PR/exact-main CI, deterministic v1.x packaging and atomic metadata promotion.
 
-**Exit:** PASS — measured clean/Woo route/asset baseline established; Theme-owned surface-aware loading guarded; ConvertFlow projection optimization correctly recorded `BLOCKED_EXTERNAL_CONTRACT`; reusable PR/exact-main verification merged; deterministic main-only candidate builder merged; covered G workflows retired; final exact-main R1-R6 verification passed; owner-approved metadata promotion moved both `style.css` and `AZNET_THEME_VERSION` atomically to `1.1.0`; post-promotion exact-main/package verification passed.
+**Exit:** PASS — measured clean/Woo route/asset baseline established; Theme-owned surface-aware loading guarded; ConvertFlow projection optimization correctly recorded `BLOCKED_EXTERNAL_CONTRACT`; reusable PR/exact-main verification merged; deterministic main-only candidate builder merged; covered G workflows retired; final exact-main R1-R6 verification passed before metadata promotion; owner-approved metadata promotion moved both `style.css` and `AZNET_THEME_VERSION` atomically to `1.1.0`; post-promotion exact-main/package verification passed.
 
 **Historical candidate:** `aznet-theme-1.1.0.zip`, one canonical top-level `aznet-theme/` directory, SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b`.
 
@@ -203,7 +203,7 @@ Owner-approved publication run `35052694111` then created annotated tag `v1.1.0`
 
 ### X — v1.2 WordPress Experience Completion
 
-**State:** **X3 PASS / X4 NEXT.**
+**State:** **X4 PASS / X5 NEXT.**
 
 **Goal:** complete the native WordPress Core experience of AZnet Theme while keeping the Theme a presentation owner. v1.2 does not open a new provider/plugin integration program.
 
@@ -227,7 +227,9 @@ Owner-approved publication run `35052694111` then created annotated tag `v1.1.0`
 
 **X3 — Media / Gallery / Embed:** **PASS at L1-L4** on functional closure head `ff6d7a1a025a97d8710644a78b6dcf6d2b34aa69`. X3 workflow `35078254834` completed SUCCESS on WordPress 6.9 with zero active plugins: scoped authored-content media presentation for Post/Page/static Front Page, modern Core and approved legacy media output, native video/audio/embed controls, safe wide/full alignment, 12/12 responsive Playwright/axe cases across 1440/1024/390/320 widths, and Classic Editor parity PASS. Artifact `10439630267`, digest `sha256:2ee736d3b0e9e0182ab935367b55044df35d4c7e0234e56f3e9c273b968e9bd2`. All 24 triggered exact-head workflows completed SUCCESS after one R4 Woo browser retry reproduced as a transient disposable PHP-server empty reply rather than a Theme code regression. Evidence: `docs/evidence/X3_MEDIA_GALLERY_EMBED_20260916.md`. WordPress retains attachment/content/block/shortcode/embed semantics and lifecycle; Theme metadata remains `1.1.0`; provider L5 is not inferred.
 
-**Exact Next:** write and review the bounded implementation plan for **X4 — Pagination & Navigation Completion** before production implementation. Owner approval for PR #81 canonical merge was granted on 16/09/2026, but canonical-main integration is not inferred until the GitHub merge and fresh exact-main verification complete.
+**X4 — Pagination & Navigation Completion:** **PASS at L1-L4** on functional closure head `f34db6f89cff505c16c2bb98f479eebba5661079`. Dedicated workflow `35083830374` completed SUCCESS on WordPress 6.9 with zero active plugins, native runtime/asset-boundary PASS and a 20/20 Playwright/axe browser matrix covering archive/search pagination, Post page links, adjacent Post navigation and comment pagination. Artifact `10440569415`, digest `sha256:16b1b4d69b81a5ce7403d081b565d80c67a4c4e79ddb50538abdc5771928fb84`. All 25 exact-head pull-request workflows observed on the functional head completed SUCCESS. WordPress retains pagination/navigation/comment state and URL authority; Theme metadata remains `1.1.0`; provider L5 is not inferred. Evidence: `docs/evidence/X4_PAGINATION_NAVIGATION_20260916.md`.
+
+**Exact Next:** owner approval for PR #83 canonical merge is granted. Complete fresh exact-final-head verification after source closure, merge with expected-head protection, and complete fresh exact-main verification. After canonical X4 integration, write and review the bounded **X5 — Native Form Controls** implementation plan before production implementation.
 
 ## 6. Dependency order
 
@@ -349,8 +351,8 @@ The following remain explicit owner approval gates:
 - destructive retirement/deletion without proven rollback;
 - merge of future production hardening into canonical `main` after its own fresh verification when the active PR is explicitly owner-gated.
 
-Metadata promotion to `1.1.0` is a historical cleared gate completed through PR #48. Source closure and the post-R6 roadmap were explicitly approved by the product owner on 08/09/2026. P2 and P3 production merges were separately owner-approved. Owner-approved PR #58 canonical integration remains historical PASS evidence. D-027 source PR #63 and owner-approved implementation PR #64 remain canonical history. P4 public QA PR #66 and owner-approved authenticated QA PR #67 are merged; canonical `main@bf45a315e93fa22c441c81377f98ff34901d7ca5` passed exact-main run `35048609753`. P4 public + authenticated QA is retained and P1 cleanup is PASS after owner-approved deletion of only `aznet-theme-release-v1.0.0`; post-delete run `35050519817` closes final P4 pilot sign-off at the tested Theme-owned scope. P5 technical closure PR #71 was owner-approved and merged; the owner then separately approved publication as tag `v1.1.0` + GitHub Release, completed by run `35052694111`, and separately approved the existing-package production deployment disposition verified by run `35054176392`. Provider L5 certification remains separate/unproven.
+Metadata promotion to `1.1.0` is a historical cleared gate completed through PR #48. Source closure and the post-R6 roadmap were explicitly approved by the product owner on 08/09/2026. P2 and P3 production merges were separately owner-approved. Owner-approved PR #58 canonical integration remains historical PASS evidence. D-027 source PR #63 and owner-approved implementation PR #64 remain canonical history. P4 public QA PR #66 and owner-approved authenticated QA PR #67 are merged; canonical `main@bf45a315e93fa22c441c81377f98ff34901d7ca5` passed exact-main run `35048609753`. P4 public + authenticated QA is retained and P1 cleanup is PASS after owner-approved deletion of only `aznet-theme-release-v1.0.0`; post-delete run `35050519817` closes final P4 pilot sign-off at the tested Theme-owned scope. P5 technical closure PR #71 was owner-approved and merged; the owner then separately approved publication as tag `v1.1.0` + GitHub Release, completed by run `35052694111`, and separately approved the existing-package production deployment disposition verified by run `35054176392`. Provider L5 certification remains separate/unproven. Owner approval for X4 production PR #83 canonical merge was granted on 16/09/2026; merge remains contingent on fresh exact-final-head GREEN evidence and exact expected-head protection.
 
 ## 14. Exact next
 
-**X3 Media / Gallery / Embed is PASS at L1-L4 on verified functional head `ff6d7a1a025a97d8710644a78b6dcf6d2b34aa69`. Owner approval for PR #81 canonical merge was granted on 16/09/2026; integration is not inferred until GitHub merge plus fresh exact-main verification. Exact Next after integration is to write and review the bounded X4 Pagination & Navigation Completion implementation plan. Provider L5 work is not opened or inferred.**
+**X4 Pagination & Navigation Completion is PASS at L1-L4 on verified functional head `f34db6f89cff505c16c2bb98f479eebba5661079`; dedicated run `35083830374` and all 25 observed exact-head PR workflows completed SUCCESS. Owner approval for PR #83 canonical merge is granted. Complete fresh exact-final-head verification after this source closure, merge PR #83 with expected-head protection, then require fresh exact-main verification before claiming canonical X4 integration. Exact Next after integration is to write and review the bounded X5 Native Form Controls implementation plan. Provider L5 work is not opened or inferred.**
