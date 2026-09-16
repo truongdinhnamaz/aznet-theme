@@ -51,6 +51,27 @@ function enqueue_header_navigation_asset( ?string $version = null ): void {
 }
 
 /**
+ * Enqueue Header utility presentation only when the WordPress menu exists.
+ *
+ * @param string|null $version Asset version.
+ */
+function enqueue_header_utility_asset( ?string $version = null ): void {
+    if ( function_exists( __NAMESPACE__ . '\\setting' ) && true !== setting( 'header_utilities', true ) ) {
+        return;
+    }
+    if ( ! function_exists( 'has_nav_menu' ) || ! has_nav_menu( 'header-utility' ) ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'aznet-theme-header-utility',
+        get_theme_file_uri( '/assets/css/components/header-utility.css' ),
+        [ 'aznet-theme-site-header' ],
+        asset_content_version( '/assets/css/components/header-utility.css', $version )
+    );
+}
+
+/**
  * Enqueue sticky-compact enhancement only for that Header mode.
  *
  * @param string|null $version Asset version.
@@ -143,6 +164,12 @@ function enqueue_homepage_law01_asset( ?string $version = null ): void {
         [ 'aznet-theme-tokens' ],
         asset_content_version( '/assets/css/components/homepage-law-01.css', $version )
     );
+    wp_enqueue_style(
+        'aznet-theme-homepage-law-01-variants',
+        get_theme_file_uri( '/assets/css/components/homepage-law-01-variants.css' ),
+        [ 'aznet-theme-homepage-law-01' ],
+        asset_content_version( '/assets/css/components/homepage-law-01-variants.css', $version )
+    );
 }
 
 /** Determine whether the native Post comments surface will render. */
@@ -213,6 +240,7 @@ function enqueue_assets(): void {
         $version
     );
 
+    enqueue_header_utility_asset( $version );
     enqueue_header_navigation_asset( $version );
     enqueue_sticky_header_asset( $version );
 

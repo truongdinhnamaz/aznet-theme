@@ -19,6 +19,15 @@ function homepage_preset(): string {
 }
 
 /**
+ * Return the normalized Law 01 visual variant.
+ */
+function homepage_law01_variant(): string {
+    $variant = (string) setting( 'homepage_law01_variant', 'navy-gold' );
+
+    return in_array( $variant, [ 'navy-gold', 'burgundy-gold' ], true ) ? $variant : 'navy-gold';
+}
+
+/**
  * Whether Theme-owned Homepage composition is active for this request.
  */
 function homepage_composer_active(): bool {
@@ -81,7 +90,8 @@ function render_homepage_before_content(): void {
         return;
     }
 
-    echo '<div class="aznet-theme-homepage aznet-theme-homepage--law-01">';
+    $variant = homepage_law01_variant();
+    echo '<div class="aznet-theme-homepage aznet-theme-homepage--law-01 aznet-theme-homepage--law-01-' . esc_attr( $variant ) . '">';
     foreach ( [ 'hero', 'services', 'about', 'team' ] as $section ) {
         render_law01_part( $section );
     }

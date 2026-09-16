@@ -75,6 +75,8 @@ async function inspectViewport(browser, name, viewport) {
     mainCount: null,
     h1Count: null,
     serviceCards: null,
+    teamCards: null,
+    utilityLinks: null,
     articleLinks: null,
     overflowPx: null,
     focus: null,
@@ -91,11 +93,14 @@ async function inspectViewport(browser, name, viewport) {
 
     await page.locator('.aznet-theme-site-header').waitFor({ state: 'visible', timeout: 15000 });
     await page.locator('main#main.aznet-theme-main--front-page').waitFor({ state: 'visible' });
-    await page.locator('.aznet-theme-homepage--law-01').waitFor({ state: 'visible' });
+    await page.locator('.aznet-theme-homepage--law-01-burgundy-gold').waitFor({ state: 'visible' });
     await page.locator('.aznet-theme-site-footer').waitFor({ state: 'visible' });
 
     const lawCss = await page.locator('link[href*="/assets/css/components/homepage-law-01.css"]').count();
     if (lawCss !== 1) throw new Error(`expected exactly one Law 01 stylesheet, got ${lawCss}`);
+    const variantCss = await page.locator('link[href*="/assets/css/components/homepage-law-01-variants.css"]').count();
+    if (variantCss !== 1) throw new Error(`expected exactly one Law 01 variant stylesheet, got ${variantCss}`);
+    if (await page.locator('.aznet-theme-site-header--law01-burgundy-gold').count() !== 1) throw new Error('Burgundy Law01 header class missing');
 
     result.mainCount = await page.locator('main#main').count();
     if (result.mainCount !== 1) throw new Error(`expected one main#main, got ${result.mainCount}`);
@@ -109,8 +114,22 @@ async function inspectViewport(browser, name, viewport) {
       if (await page.locator(selector).count() < 1) throw new Error(`missing Law 01 section ${selector}`);
     }
 
+    const slogan = (await page.locator('.aznet-theme-law01-hero__slogan').textContent())?.trim() || '';
+    if (!slogan.includes('Tận tâm với khách hàng')) throw new Error(`Site Tagline slogan was not projected into Hero: ${slogan}`);
+
+    const servicesIntro = (await page.locator('.aznet-theme-law01-services__intro').textContent())?.trim() || '';
+    if (!servicesIntro.includes('cá nhân và doanh nghiệp')) throw new Error(`Services Page excerpt intro missing: ${servicesIntro}`);
+
     result.serviceCards = await page.locator('.aznet-theme-law01-services .aznet-theme-law01-card').count();
     if (result.serviceCards !== 6) throw new Error(`expected 6 mapped service cards, got ${result.serviceCards}`);
+
+    result.teamCards = await page.locator('.aznet-theme-law01-team-card').count();
+    if (result.teamCards !== 2) throw new Error(`expected 2 WordPress-owned team child Page cards, got ${result.teamCards}`);
+
+    result.utilityLinks = await page.locator('.aznet-theme-site-header__utility-menu a').count();
+    if (result.utilityLinks < 2) throw new Error(`expected header phone/hotline utility links, got ${result.utilityLinks}`);
+    const utilityHrefs = await page.locator('.aznet-theme-site-header__utility-menu a').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
+    if (utilityHrefs.some((href) => !href?.startsWith('tel:'))) throw new Error(`header utility links must remain WordPress-owned tel: links: ${JSON.stringify(utilityHrefs)}`);
 
     const emptyCards = await page.locator('.aznet-theme-law01-card:empty, .aznet-theme-law01-article-card:empty').count();
     if (emptyCards > 0) throw new Error(`empty public cards rendered: ${emptyCards}`);
@@ -146,6 +165,7 @@ async function inspectViewport(browser, name, viewport) {
       await page.keyboard.press('Enter');
       await panel.waitFor({ state: 'visible' });
       if (await trigger.getAttribute('aria-expanded') !== 'true') throw new Error('mobile nav did not expand');
+      if (await panel.locator('.aznet-theme-site-header__utility-menu a').count() < 2) throw new Error('mobile utility links missing from expanded navigation');
       const openOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       if (openOverflow > 1) throw new Error(`mobile nav caused horizontal overflow: ${openOverflow}px`);
       await page.keyboard.press('Escape');
@@ -187,4 +207,4 @@ try {
 fs.writeFileSync(path.join(outputDir, 'browser-summary.json'), JSON.stringify(summary, null, 2));
 if (summary.cases.length !== 4) failures.push(`expected 4 browser cases, got ${summary.cases.length}`);
 if (failures.length > 0) throw new Error(`Law 01 L4 verification failed:\n${failures.join('\n')}`);
-console.log('PASS: Homepage Composer Law 01 browser/visual/a11y automated verification 4/4');
+console.log('PASS: Homepage Composer Law 01 Burgundy browser/visual/a11y automated verification 4/4');

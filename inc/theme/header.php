@@ -62,6 +62,10 @@ function header_mobile_panel_enabled(): bool {
         return false;
     }
 
+    if ( function_exists( 'has_nav_menu' ) && has_nav_menu( 'header-utility' ) ) {
+        return true;
+    }
+
     if ( function_exists( 'wc_get_page_permalink' ) ) {
         $account_url = wc_get_page_permalink( 'myaccount' );
         if ( is_string( $account_url ) && '' !== trim( $account_url ) ) {

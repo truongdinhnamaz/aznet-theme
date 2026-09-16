@@ -48,4 +48,44 @@ assert(str_contains($all, 'homepage_latest_posts'));
 assert(str_contains($all, 'homepage_ledger_ids'));
 assert(str_contains($all, 'homepage_ledger_add'));
 assert(str_contains($all, 'contact_surface_model'));
+
+// Client-variant contract: generic presentation capability, never a Tâm Đức data fork.
+$settingsSource = file_get_contents($root . '/inc/theme/settings.php');
+assert(str_contains($settingsSource, "'homepage_law01_variant'"), 'Law 01 must expose a Theme-owned presentation variant setting.');
+assert(str_contains($settingsSource, "'navy-gold'"));
+assert(str_contains($settingsSource, "'burgundy-gold'"));
+
+$homepageAdmin = file_get_contents($root . '/inc/admin/homepage.php');
+assert(str_contains($homepageAdmin, 'homepage_law01_variant'), 'Homepage admin must expose the Law 01 variant selector.');
+assert(str_contains($homepageAdmin, 'Burgundy + Gold'));
+assert(str_contains($composer, 'homepage_law01_variant()'), 'Composer must project the normalized variant into presentation markup.');
+$variantPath = $root . '/assets/css/components/homepage-law-01-variants.css';
+assert(is_file($variantPath), 'Law 01 variant stylesheet must exist.');
+$variantCss = file_get_contents($variantPath);
+assert(str_contains($variantCss, '.aznet-theme-homepage--law-01-burgundy-gold'), 'Burgundy variant styling must be scoped to Law 01.');
+assert(str_contains($assets, 'homepage-law-01-variants.css'), 'Variant asset must be surface-aware and loaded only with Law 01.');
+
+$setupSource = file_get_contents($root . '/inc/theme/setup.php');
+$headerTemplate = file_get_contents($root . '/template-parts/header/site-header.php');
+$utilityCssPath = $root . '/assets/css/components/header-utility.css';
+assert(str_contains($setupSource, "'header-utility'"), 'WordPress must own hotline/contact links through a native menu location.');
+assert(str_contains($headerTemplate, "header/utility-navigation"), 'Header must render the optional utility menu without storing contact truth in Theme settings.');
+assert(is_file($utilityCssPath), 'Header utility presentation must have its own surface-aware asset.');
+$utilityCss = file_get_contents($utilityCssPath);
+assert(str_contains($utilityCss, '.aznet-theme-site-header__utility-menu'), 'Header utility links need presentation on every surface where the menu is present.');
+assert(str_contains($utilityCss, '.aznet-theme-site-header__utility-nav'), 'Header utility navigation layout must be isolated in its component asset.');
+assert(str_contains($assets, 'enqueue_header_utility_asset'), 'Header utility asset must use capability-driven loading.');
+assert(str_contains($assets, "has_nav_menu( 'header-utility' )"), 'Header utility CSS must not load when its WordPress menu is absent.');
+
+$heroSource = file_get_contents($root . '/template-parts/homepage/law-01/hero.php');
+$servicesSource = file_get_contents($root . '/template-parts/homepage/law-01/services.php');
+$teamSource = file_get_contents($root . '/template-parts/homepage/law-01/team.php');
+assert(str_contains($heroSource, "get_bloginfo( 'description' )"), 'Hero slogan must come from WordPress Site Tagline.');
+assert(str_contains($servicesSource, 'get_the_excerpt( $parent )'), 'Services intro must come from the mapped Services Page excerpt.');
+assert(str_contains($teamSource, 'homepage_direct_published_children'), 'Team presentation must use WordPress-owned child Pages when available.');
+assert(str_contains($teamSource, 'get_the_post_thumbnail'), 'Team cards must support WordPress featured images.');
+foreach (['Tâm Đức', 'Tam Duc', 'Trọn Tâm với khách', 'Vẹn Đức với nghề'] as $clientString) {
+    assert(! str_contains($settingsSource . $composer . $setupSource . $headerTemplate . $all, $clientString), "Client data must not be hard-coded into Theme production code: {$clientString}");
+}
+
 echo "PASS: Law 01 presentation contract\n";

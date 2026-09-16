@@ -7,14 +7,18 @@ on:
     paths:
       - 'front-page.php'
       - 'inc/theme/homepage-*.php'
+      - 'inc/theme/header.php'
+      - 'inc/theme/setup.php'
       - 'inc/theme/settings.php'
       - 'inc/theme/assets.php'
       - 'inc/theme/bootstrap.php'
       - 'inc/admin/homepage.php'
       - 'inc/admin/control-center.php'
       - 'inc/admin/bootstrap.php'
+      - 'template-parts/header/**'
       - 'template-parts/homepage/law-01/**'
       - 'assets/css/components/homepage-law-01.css'
+      - 'assets/css/components/homepage-law-01-variants.css'
       - 'tests/offline/homepage-*.php'
       - 'tests/browser/homepage-law-01-l4.mjs'
       - 'scripts/verify-v1-core.sh'
@@ -143,7 +147,7 @@ jobs:
               '<p id="law01-native-body">Native Front Page body sentinel</p>'
           );
           $about = law01_page( 'Giới thiệu', 'gioi-thieu', 'Một đội ngũ hướng tới tư vấn rõ ràng, bảo mật và giải pháp thực tiễn.' );
-          $services = law01_page( 'Dịch vụ pháp lý', 'dich-vu-phap-ly', 'Các lĩnh vực hỗ trợ pháp lý chính.' );
+          $services = law01_page( 'Dịch vụ pháp lý', 'dich-vu-phap-ly', 'Các dịch vụ pháp lý dành cho cá nhân và doanh nghiệp.' );
           $service_titles = [
               'Luật Doanh nghiệp' => 'luat-doanh-nghiep',
               'Dân sự và Tranh chấp' => 'dan-su-tranh-chap',
@@ -157,6 +161,8 @@ jobs:
               law01_page( $title, $slug, 'Nội dung mô tả dịch vụ được quản lý bằng Page WordPress.', '', $services, $order++ );
           }
           $team = law01_page( 'Đội ngũ luật sư', 'doi-ngu-luat-su', 'Tìm hiểu đội ngũ và cách chúng tôi phối hợp trong quá trình tư vấn.' );
+          law01_page( 'Luật sư tư vấn doanh nghiệp', 'luat-su-doanh-nghiep', 'Hồ sơ nhân sự mẫu kiểm thử được quản lý bằng Page WordPress.', '', $team, 1 );
+          law01_page( 'Luật sư tư vấn dân sự', 'luat-su-dan-su', 'Hồ sơ nhân sự mẫu kiểm thử thứ hai được quản lý bằng Page WordPress.', '', $team, 2 );
           $process = law01_page( 'Quy trình tư vấn', 'quy-trinh-tu-van', 'Tiếp nhận thông tin, đánh giá phạm vi và thống nhất phương án phù hợp.' );
           $faq = law01_page( 'Câu hỏi thường gặp', 'cau-hoi-thuong-gap', 'Các câu hỏi phổ biến trước khi bắt đầu trao đổi pháp lý.' );
           $contact = law01_page( 'Liên hệ', 'lien-he', 'Gửi thông tin để bắt đầu trao đổi.' );
@@ -177,6 +183,7 @@ jobs:
               law01_post( "Tin pháp luật số {$i}", "tin-phap-luat-{$i}", [ $news ], sprintf( '2026-09-%02d 08:00:00', 7 - $i ) );
           }
 
+          update_option( 'blogdescription', 'Tận tâm với khách hàng — Vững vàng với nghề nghiệp.' );
           update_option( 'show_on_front', 'page' );
           update_option( 'page_on_front', $front );
           set_theme_mod( 'aznet_theme_settings', [
@@ -190,6 +197,7 @@ jobs:
               'woo_product_card_density' => 'balanced',
               'woo_product_preset' => 'classic',
               'homepage_preset' => 'law-01',
+              'homepage_law01_variant' => 'burgundy-gold',
               'homepage_services_page' => $services,
               'homepage_about_page' => $about,
               'homepage_team_page' => $team,
@@ -215,6 +223,12 @@ jobs:
           CONTACT_ID=$(php -r '$j=json_decode(file_get_contents("/tmp/homepage-law01/fixture.json"), true); echo $j["contact"];')
           wp menu item add-post "$MENU_ID" "$CONTACT_ID" --title='Liên hệ' --path=/tmp/wp --allow-root >/dev/null
           wp menu location assign "$MENU_ID" primary --path=/tmp/wp --allow-root
+
+          UTILITY_MENU_ID=$(wp menu create 'Header Utility Law01' --porcelain --path=/tmp/wp --allow-root)
+          wp menu item add-custom "$UTILITY_MENU_ID" 'Điện thoại: 024 0000 0000' 'tel:+842400000000' --path=/tmp/wp --allow-root >/dev/null
+          wp menu item add-custom "$UTILITY_MENU_ID" 'Hotline: 0900 000 000' 'tel:+84900000000' --path=/tmp/wp --allow-root >/dev/null
+          wp menu location assign "$UTILITY_MENU_ID" header-utility --path=/tmp/wp --allow-root
+
           wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
           wp rewrite flush --hard --path=/tmp/wp --allow-root
 
@@ -228,17 +242,23 @@ jobs:
             sleep 1
           done
           curl -fsS http://127.0.0.1:8080/ > /tmp/homepage-law01/homepage.html
-          grep -F 'aznet-theme-homepage--law-01' /tmp/homepage-law01/homepage.html
+          grep -F 'aznet-theme-homepage--law-01-burgundy-gold' /tmp/homepage-law01/homepage.html
+          grep -F 'aznet-theme-site-header--law01-burgundy-gold' /tmp/homepage-law01/homepage.html
           grep -F 'aznet-theme-law01-services' /tmp/homepage-law01/homepage.html
+          grep -F 'aznet-theme-law01-team-card' /tmp/homepage-law01/homepage.html
           grep -F 'aznet-theme-law01-analysis' /tmp/homepage-law01/homepage.html
           grep -F 'aznet-theme-law01-news' /tmp/homepage-law01/homepage.html
+          grep -F 'Tận tâm với khách hàng' /tmp/homepage-law01/homepage.html
+          grep -F 'cá nhân và doanh nghiệp' /tmp/homepage-law01/homepage.html
+          grep -F 'tel:+842400000000' /tmp/homepage-law01/homepage.html
           grep -F 'law01-native-body' /tmp/homepage-law01/homepage.html
           grep -F '/assets/css/components/homepage-law-01.css' /tmp/homepage-law01/homepage.html
+          grep -F '/assets/css/components/homepage-law-01-variants.css' /tmp/homepage-law01/homepage.html
           if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/homepage-law01/server.log; then
             echo 'Theme runtime error marker found before browser verification' >&2
             exit 1
           fi
-          echo 'PASS: Homepage Composer Law 01 L3 runtime surface'
+          echo 'PASS: Homepage Composer Law 01 Burgundy L3 runtime surface'
 
       - name: Install Playwright and axe
         run: |
@@ -258,7 +278,7 @@ jobs:
             exit 1
           fi
           test -f /tmp/homepage-law01/browser-summary.json
-          echo 'PASS: Homepage Composer Law 01 L3-L4 verification'
+          echo 'PASS: Homepage Composer Law 01 Burgundy L3-L4 verification'
 
       - name: Upload Law 01 evidence
         if: always()
