@@ -13,8 +13,10 @@ assert(is_file($planPath), 'Tâm Đức checked-in mutation plan must exist');
 
 $workflow = file_get_contents($workflowPath);
 $browser = file_get_contents($browserPath);
+$plan = file_get_contents($planPath);
 assert(is_string($workflow));
 assert(is_string($browser));
+assert(is_string($plan));
 
 foreach ([
     'ops/tamduc-homepage-completion',
@@ -39,11 +41,16 @@ foreach ([
     'blogdescription',
     'page_title_142',
     'post-142',
+] as $needle) {
+    assert(str_contains($browser, $needle), "Apply harness missing safety marker: {$needle}");
+}
+
+foreach ([
     'Dội ngũ',
     'Đội ngũ',
     'Trọn Tâm với khách – Vẹn Đức với nghề',
 ] as $needle) {
-    assert(str_contains($browser, $needle), "Apply harness missing safety marker: {$needle}");
+    assert(str_contains($plan, $needle), "Checked-in mutation plan missing approved value: {$needle}");
 }
 
 foreach ([
