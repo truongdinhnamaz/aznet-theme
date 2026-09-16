@@ -41,6 +41,8 @@ foreach ([
     'blogdescription',
     'page_title_142',
     'post-142',
+    'clickQuickEdit',
+    'button.click()',
 ] as $needle) {
     assert(str_contains($browser, $needle), "Apply harness missing safety marker: {$needle}");
 }
