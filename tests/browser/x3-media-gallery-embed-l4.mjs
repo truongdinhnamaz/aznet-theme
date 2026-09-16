@@ -88,10 +88,23 @@ async function inspectFrontendCase(browser, routeName, route, viewportName, view
       const wide = root.querySelector('#x3-alignwide');
       const full = root.querySelector('#x3-alignfull');
       const tolerance = 1;
-      const mediaContained = media.every((element) => {
+      const mediaOffenders = media.flatMap((element) => {
         const rect = element.getBoundingClientRect();
-        return rect.width >= 0 && rect.right <= window.innerWidth + tolerance && rect.left >= -tolerance;
+        const contained = rect.width >= 0 && rect.right <= window.innerWidth + tolerance && rect.left >= -tolerance;
+        if (contained) return [];
+        return [{
+          tag: element.tagName.toLowerCase(),
+          id: element.id || '',
+          className: typeof element.className === 'string' ? element.className : '',
+          left: rect.left,
+          right: rect.right,
+          width: rect.width,
+          clientWidth: element.clientWidth,
+          scrollWidth: element.scrollWidth,
+          viewportWidth: window.innerWidth,
+        }];
       });
+      const mediaContained = mediaOffenders.length === 0;
       const captionsContained = captions.every((element) => {
         const rect = element.getBoundingClientRect();
         return rect.right <= window.innerWidth + tolerance && rect.left >= -tolerance && element.scrollWidth <= element.clientWidth + tolerance;
@@ -104,6 +117,7 @@ async function inspectFrontendCase(browser, routeName, route, viewportName, view
       });
       return {
         mediaContained,
+        mediaOffenders,
         captionsContained,
         galleryItemsUsable,
         alignmentSafe,
@@ -113,7 +127,7 @@ async function inspectFrontendCase(browser, routeName, route, viewportName, view
       };
     });
 
-    if (!geometry.mediaContained) throw new Error('media escaped viewport bounds');
+    if (!geometry.mediaContained) throw new Error(`media escaped viewport bounds: ${JSON.stringify(geometry.mediaOffenders)}`);
     if (!geometry.captionsContained) throw new Error('caption overflow detected');
     if (!geometry.galleryItemsUsable) throw new Error('gallery items collapsed or missing');
     if (!geometry.alignmentSafe) throw new Error(`wide/full alignment is not safely expanded: ${JSON.stringify(geometry)}`);
