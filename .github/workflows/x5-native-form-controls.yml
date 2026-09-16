@@ -13,9 +13,11 @@ on:
       - 'tests/offline/x1-comments-surface-contract.php'
       - 'tests/offline/x2-search-404-empty-contract.php'
       - 'tests/offline/r6-asset-scope-contract.php'
+      - 'tests/offline/x4-retained-workflow-ownership-contract.php'
       - 'tests/offline/x5-native-form-controls-contract.php'
       - 'tests/runtime/x5-native-form-controls.php'
       - 'tests/browser/x5-native-form-controls-l4.mjs'
+      - '.github/workflows/x4-pagination-navigation.yml'
       - '.github/workflows/x5-native-form-controls.yml'
       - 'docs/evidence/X5_NATIVE_FORM_CONTROLS_20260916.md'
       - 'docs/source/AZT-04-roadmap-qa-decisions.md'
@@ -194,7 +196,7 @@ jobs:
           fi
           git diff --check "$base"...HEAD
           git diff --name-only "$base"...HEAD | tee /tmp/x5/changed-files.txt
-          if grep -Ev '^(assets/css/components/forms\.css|assets/css/components/comments\.css|assets/css/components/recovery\.css|inc/theme/assets\.php|scripts/verify-v1-core\.sh|tests/offline/x1-comments-surface-contract\.php|tests/offline/x2-search-404-empty-contract\.php|tests/offline/r6-asset-scope-contract\.php|tests/offline/x5-native-form-controls-contract\.php|tests/runtime/x5-native-form-controls\.php|tests/browser/x5-native-form-controls-l4\.mjs|\.github/workflows/x5-native-form-controls\.yml|docs/evidence/X5_NATIVE_FORM_CONTROLS_20260916\.md|docs/source/AZT-04-roadmap-qa-decisions\.md|docs/source/AZT-EXEC-MAP\.md|docs/source/SOURCE_MANIFEST\.md)$' /tmp/x5/changed-files.txt; then
+          if grep -Ev '^(assets/css/components/forms\.css|assets/css/components/comments\.css|assets/css/components/recovery\.css|inc/theme/assets\.php|scripts/verify-v1-core\.sh|tests/offline/x1-comments-surface-contract\.php|tests/offline/x2-search-404-empty-contract\.php|tests/offline/r6-asset-scope-contract\.php|tests/offline/x4-retained-workflow-ownership-contract\.php|tests/offline/x5-native-form-controls-contract\.php|tests/runtime/x5-native-form-controls\.php|tests/browser/x5-native-form-controls-l4\.mjs|\.github/workflows/x4-pagination-navigation\.yml|\.github/workflows/x5-native-form-controls\.yml|docs/evidence/X5_NATIVE_FORM_CONTROLS_20260916\.md|docs/source/AZT-04-roadmap-qa-decisions\.md|docs/source/AZT-EXEC-MAP\.md|docs/source/SOURCE_MANIFEST\.md)$' /tmp/x5/changed-files.txt; then
             echo 'FAIL: unplanned X5 file changed' >&2
             exit 1
           fi
