@@ -28,7 +28,7 @@ foreach ([
     "const UTILITY_LOCATION = 'header-utility'",
     'locationState',
     'approvedMenuFromLocation',
-    'menu_name: await page.locator(\'#menu-name\').inputValue()',
+    "const menu_name = await page.locator('#menu-name').inputValue();",
     'mutation: false',
 ] as $needle) {
     assert(str_contains($browserText, $needle), "Verification harness missing marker: {$needle}");
