@@ -67,6 +67,12 @@ foreach ([
     }
 }
 
+$threadCommentsRead = "get_option( 'thread_comments' )";
+if (1 !== substr_count($assets, $threadCommentsRead)) {
+    fail_x1_comments('comments asset gate must contain exactly one native thread_comments option read');
+}
+$assetsWithoutThreadCommentsRead = str_replace($threadCommentsRead, '', $assets);
+
 foreach ([
     '.aznet-theme-comments',
     '.comment-list',
@@ -83,11 +89,12 @@ foreach ([
     }
 }
 
-$sources = $single . "\n" . $comments . "\n" . $assets;
+$sources = $single . "\n" . $comments . "\n" . $assetsWithoutThreadCommentsRead;
 foreach ([
     'new WP_Query',
     'WP_Query(',
     'get_posts(',
+    'get_option(',
     '$wpdb',
     'get_post_meta(',
     'choiceguide_',
