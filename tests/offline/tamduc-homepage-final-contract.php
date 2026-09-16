@@ -39,6 +39,13 @@ foreach ([
     'request_failures',
     'blocking_failures',
     'screenshots',
+    'data-aznet-theme-nav-trigger',
+    'data-aznet-theme-nav-panel',
+    'aria-expanded',
+    "page.keyboard.press('Enter')",
+    "page.keyboard.press('Escape')",
+    'viewport.width <= 390',
+    'mobile_navigation',
 ] as $needle) {
     assert(str_contains($browser, $needle), "Final browser harness missing required marker: {$needle}");
 }
