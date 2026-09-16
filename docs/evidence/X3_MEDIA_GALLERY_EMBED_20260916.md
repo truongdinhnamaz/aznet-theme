@@ -3,6 +3,7 @@
 **Status:** PASS at L1-L4 on verified functional head; canonical merge approved and pending at time of this checkpoint.
 **Date:** 2026-09-16
 **Functional head:** `ff6d7a1a025a97d8710644a78b6dcf6d2b34aa69`
+**Source closure checkpoint:** `326a5d6e86c5e67efaf065a1d98f047112dd3b54`
 **PR:** #81
 
 ## Scope and ownership
@@ -35,6 +36,8 @@ Evidence artifact: `10439630267`, digest `sha256:2ee736d3b0e9e0182ab935367b55044
 
 All **24** pull-request workflows triggered on functional head `ff6d7a1a025a97d8710644a78b6dcf6d2b34aa69` completed SUCCESS, including X1, X2, R1-R6/Core, Homepage, provisioning, D-027 and WooCommerce presentation gates. R4 WooCommerce Browser Quality had one first-attempt `curl: (52) Empty reply from server` during its disposable PHP-server fixture; the server artifact contained no Theme PHP fatal/warning marker, and rerunning the failed job on the same exact commit completed every step successfully without code change. This is recorded as transient CI/runtime evidence, not a Theme regression.
 
+The source-closure checkpoint is documentation-only. A fresh exact-head workflow set is required on the final PR head before merge; no L1-L4 PASS is inferred merely from the documentation commit.
+
 ## Rollback
 
 Rollback reverts the X3 scoped media stylesheet, its surface-aware enqueue/editor-style references and focused tests/workflow. No WordPress Post/Page/attachment data is owned or mutated by Theme production code, so content/media state survives Theme rollback or switching.
@@ -45,4 +48,4 @@ Provider L5 certification, X4 implementation, Theme metadata `1.2.0`, v1.2 packa
 
 ## Exact next
 
-Owner approval for PR #81 canonical merge was granted on 2026-09-16. Complete canonical merge plus fresh exact-main verification; after integration, write and review the bounded X4 Pagination & Navigation Completion implementation plan before production code.
+Owner approval for PR #81 canonical merge was granted on 2026-09-16. Complete fresh exact-head verification, canonical merge and fresh exact-main verification; after integration, write and review the bounded X4 Pagination & Navigation Completion implementation plan before production code.
