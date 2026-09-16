@@ -37,6 +37,7 @@ function setup(): void {
     register_nav_menus(
         [
             'primary'        => __( 'Primary Menu', 'aznet-theme' ),
+            'header-utility' => __( 'Header Utility Menu', 'aznet-theme' ),
             'footer'         => __( 'Footer Menu', 'aznet-theme' ),
             'footer-contact' => __( 'Footer Contact Menu', 'aznet-theme' ),
             'footer-social'  => __( 'Footer Social Menu', 'aznet-theme' ),
