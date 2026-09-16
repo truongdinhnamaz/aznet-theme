@@ -1,6 +1,6 @@
 # AZnet Theme Source Manifest
 
-Canonical source is reconciled through the completed v1.1 release-critical path and v1.2 X2 Search / 404 / Empty States functional closure. v1.2 remains a WordPress-Core-only Theme milestone; X1 Comments and X2 Search/404/empty states are PASS at L1-L4 on their verified functional heads, X3 Media/Gallery/Embed planning is next, and provider compatibility/certification tracks remain separate.
+Canonical source is reconciled through the completed v1.1 release-critical path and v1.2 X3 Media / Gallery / Embed functional closure. v1.2 remains a WordPress-Core-only Theme milestone; X1 Comments, X2 Search/404/empty states and X3 Media/Gallery/Embed are PASS at L1-L4 on their verified functional heads, X4 Pagination/Navigation planning is next, and provider compatibility/certification tracks remain separate.
 
 | Source | Semantic version | Role |
 | --- | --- | --- |
@@ -9,10 +9,10 @@ Canonical source is reconciled through the completed v1.1 release-critical path 
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.9 | Theme architecture, public integration contracts and D-027 Standalone Core runtime-independence boundary |
 | `AZT-03-baseline-provenance.md` | v0.37 | Canonical provenance through v1.1.0 publication and owner-approved production deployment verification |
-| `AZT-04-roadmap-qa-decisions.md` | v0.45 | v1.1 release-critical PASS retained; v1.2 X1 and X2 PASS at L1-L4 with X3 exact next |
-| `AZT-EXEC-MAP.md` | v0.37 | Derived execution map with X1/X2 PASS, X3 NEXT and retained Core-only boundaries |
+| `AZT-04-roadmap-qa-decisions.md` | v0.46 | v1.1 release-critical PASS retained; v1.2 X1-X3 PASS at L1-L4 with X4 exact next |
+| `AZT-EXEC-MAP.md` | v0.38 | Derived execution map with X1-X3 PASS, X4 NEXT and retained Core-only boundaries |
 
-Approved design companion: `docs/superpowers/specs/2026-09-16-v1.2-wordpress-experience-completion-design.md`. X1 closure evidence: `docs/evidence/X1_COMMENTS_SURFACE_20260916.md`. X2 closure evidence: `docs/evidence/X2_SEARCH_404_EMPTY_20260916.md`. Neither supersedes AZT source ownership; AZT-04 owns roadmap/decisions and AZT-EXEC-MAP remains derived.
+Approved design companion: `docs/superpowers/specs/2026-09-16-v1.2-wordpress-experience-completion-design.md`. X1 closure evidence: `docs/evidence/X1_COMMENTS_SURFACE_20260916.md`. X2 closure evidence: `docs/evidence/X2_SEARCH_404_EMPTY_20260916.md`. X3 closure evidence: `docs/evidence/X3_MEDIA_GALLERY_EMBED_20260916.md`. None supersedes AZT source ownership; AZT-04 owns roadmap/decisions and AZT-EXEC-MAP remains derived.
 
 Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor: `v1.1.0` -> `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`; owner-approved publication closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`, and restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb`. Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.
 
@@ -34,8 +34,10 @@ Owner-approved production deployment disposition for `tamduchanoi.aznet.vn` is v
 
 X2 Search / 404 / Empty States functional closure is verified on head `c5c9415f851e2ed77c3069c08ff4f963b7c33c3c`. X2 workflow run `35071280839` completed SUCCESS on WordPress 6.9 with zero active plugins and a 16/16 browser matrix across Search result, empty Search, empty Archive and native HTTP 404 at 1440/1024/390/320 widths. Artifact `10436541455`, digest `sha256:c1e31a506172f90939d5688317aae0bd1b2ec9fa437dcd8726605c80fc191cd2`. All 23 retained PR workflows observed on that functional head also completed SUCCESS. Evidence: `docs/evidence/X2_SEARCH_404_EMPTY_20260916.md`. Provider L5, X3 implementation and v1.2 package/release/deployment are not inferred.
 
+X3 Media / Gallery / Embed functional closure is verified on head `ff6d7a1a025a97d8710644a78b6dcf6d2b34aa69`. X3 workflow run `35078254834` completed SUCCESS on WordPress 6.9 with zero active plugins, surface-aware authored-content media assets, modern Core plus approved legacy media coverage, safe native audio/video/embed presentation, 12/12 responsive Playwright/axe cases at 1440/1024/390/320 and Classic Editor parity PASS. Artifact `10439630267`, digest `sha256:2ee736d3b0e9e0182ab935367b55044df35d4c7e0234e56f3e9c273b968e9bd2`. All 24 triggered exact-head workflows completed SUCCESS after a single R4 Woo browser retry closed a transient disposable PHP-server empty reply without Theme-code workaround. Evidence: `docs/evidence/X3_MEDIA_GALLERY_EMBED_20260916.md`. WordPress retains media/content semantics and lifecycle; provider L5, X4 implementation and v1.2 package/release/deployment are not inferred.
+
 The known WordPress-core `WP_Query::rewind_posts()` warning remains UNKNOWN/non-blocking; no blanket PHP-log-clean claim is made. RootProfile E5-C/E5-D and ConvertFlow F8 remain separate optional compatibility gates under their existing ownership rules.
 
-**Exact next:** X2 Search / 404 / Empty States is PASS at L1-L4 on the verified functional head. Write and review the bounded X3 Media / Gallery / Embed implementation plan before production implementation. Provider L5 remains separate and is not inferred.
+**Exact next:** X3 Media / Gallery / Embed is PASS at L1-L4 on the verified functional head. Owner approval for PR #81 canonical merge is granted; complete the GitHub merge and fresh exact-main verification, then write and review the bounded X4 Pagination & Navigation Completion implementation plan before production implementation. Provider L5 remains separate and is not inferred.
 
 Derived DOCX source material remains archival/export evidence only. Canonical source changes occur in `docs/source/` through reviewed Git history.

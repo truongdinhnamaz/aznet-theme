@@ -73,6 +73,9 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/editorial-listing-s
 printf '%s\n' '==> X2 Search / 404 / Empty States contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x2-search-404-empty-contract.php
 
+printf '%s\n' '==> X3 Media / Gallery / Embed contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/x3-media-gallery-embed-contract.php
+
 printf '%s\n' '==> P4 Native Editable Homepage blueprint contracts'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-asset-contract.php

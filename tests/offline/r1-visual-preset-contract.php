@@ -63,6 +63,7 @@ assert('editorial' === \AZnet\Theme\visual_preset());
 assert(in_array('aznet-theme-preset--editorial', \AZnet\Theme\visual_preset_body_classes([]), true));
 assert([
     'assets/css/tokens.css',
+    'assets/css/components/media.css',
     'assets/css/presets/editorial.css',
 ] === \AZnet\Theme\editor_stylesheets());
 
@@ -74,7 +75,10 @@ assert(in_array('aznet-theme-tokens', $GLOBALS['r1_enqueued_styles']['aznet-them
 
 $GLOBALS['r1_theme_mod']['visual_preset'] = 'default';
 $GLOBALS['r1_enqueued_styles'] = [];
-assert(['assets/css/tokens.css'] === \AZnet\Theme\editor_stylesheets());
+assert([
+    'assets/css/tokens.css',
+    'assets/css/components/media.css',
+] === \AZnet\Theme\editor_stylesheets());
 \AZnet\Theme\enqueue_assets();
 foreach (array_keys($GLOBALS['r1_enqueued_styles']) as $handle) {
     assert(! str_starts_with($handle, 'aznet-theme-preset-'));
