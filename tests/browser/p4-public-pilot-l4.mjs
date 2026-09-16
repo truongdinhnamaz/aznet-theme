@@ -90,6 +90,42 @@ async function discoverRoutes() {
     ];
 }
 
+function axeRecord( violation, ownership = 'THEME_OR_UNATTRIBUTED' ) {
+    return {
+        id: violation.id,
+        impact: violation.impact,
+        help: violation.help,
+        ownership,
+        targets: violation.nodes.flatMap( ( node ) => node.target ),
+    };
+}
+
+async function isAuthoredContentLabelViolation( page, violation ) {
+    if ( violation.id !== 'label' || ! violation.nodes.length ) {
+        return false;
+    }
+
+    for ( const node of violation.nodes ) {
+        if ( ! Array.isArray( node.target ) || node.target.length !== 1 ) {
+            return false;
+        }
+
+        const selector = node.target[0];
+        let insideAuthoredContent = false;
+        try {
+            insideAuthoredContent = await page.locator( selector ).first().evaluate( ( element ) => Boolean( element.closest( '.aznet-theme-article__content' ) ) );
+        } catch {
+            return false;
+        }
+
+        if ( ! insideAuthoredContent ) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 const browser = await chromium.launch( { headless: true } );
 const summary = {
     base_url: P4_BASE_URL,
@@ -100,6 +136,7 @@ const summary = {
     routes: [],
     blocking_failures: [],
     external_observations: [],
+    content_accessibility_observations: [],
 };
 
 try {
@@ -171,6 +208,7 @@ try {
                 main_count: null,
                 profile_surface_count: 0,
                 axe_blocking: [],
+                content_accessibility_observations: [],
                 theme_console_errors: themeConsoleErrors,
                 theme_page_errors: themePageErrors,
                 theme_request_failures: themeRequestFailures,
@@ -205,14 +243,21 @@ try {
                 }
 
                 const axe = await new AxeBuilder( { page } ).analyze();
-                result.axe_blocking = axe.violations
-                    .filter( ( violation ) => [ 'critical', 'serious' ].includes( violation.impact ) )
-                    .map( ( violation ) => ( {
-                        id: violation.id,
-                        impact: violation.impact,
-                        help: violation.help,
-                        targets: violation.nodes.flatMap( ( node ) => node.target ),
-                    } ) );
+                const blockingAxe = axe.violations.filter( ( violation ) => [ 'critical', 'serious' ].includes( violation.impact ) );
+
+                for ( const violation of blockingAxe ) {
+                    if ( await isAuthoredContentLabelViolation( page, violation ) ) {
+                        const observation = axeRecord( violation, 'CONTENT_AUTHORED_SEMANTICS' );
+                        result.content_accessibility_observations.push( observation );
+                        summary.content_accessibility_observations.push( {
+                            route: route.name,
+                            viewport: viewport.name,
+                            ...observation,
+                        } );
+                        continue;
+                    }
+                    result.axe_blocking.push( axeRecord( violation ) );
+                }
             }
 
             const blocking = [];
@@ -291,4 +336,4 @@ if ( summary.blocking_failures.length > 0 ) {
     process.exit( 1 );
 }
 
-console.log( `PASS: P4 public pilot matrix ${ summary.routes.length } route/viewport checks; RootProfile surface ${ summary.rootprofile_public_surface }` );
+console.log( `PASS: P4 public pilot matrix ${ summary.routes.length } route/viewport checks; RootProfile surface ${ summary.rootprofile_public_surface }; authored-content a11y observations ${ summary.content_accessibility_observations.length }` );
