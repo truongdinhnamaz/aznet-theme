@@ -46,15 +46,45 @@ async function focusEvidence(page, selector) {
   });
 }
 
+function browserErrorsForRoute(route, consoleErrors, pageErrors, httpErrors) {
+  const expectedNavigation404 = route.expectedStatus === 404 && httpErrors.some(
+    (entry) => entry.status === 404 && entry.url === route.url
+  );
+  const unexpectedHttpErrors = httpErrors.filter(
+    (entry) => !(route.expectedStatus === 404 && entry.status === 404 && entry.url === route.url)
+  );
+  const unexpectedConsoleErrors = consoleErrors.filter((message) => {
+    return !(
+      expectedNavigation404
+      && message.includes('Failed to load resource')
+      && message.includes('404')
+    );
+  });
+
+  return {
+    expectedNavigation404,
+    unexpectedHttpErrors,
+    unexpectedConsoleErrors,
+    pageErrors,
+    count: unexpectedHttpErrors.length + unexpectedConsoleErrors.length + pageErrors.length,
+  };
+}
+
 async function inspectCase(browser, routeName, route, viewportName, viewport) {
   const context = await browser.newContext({ viewport });
   const page = await context.newPage();
   const consoleErrors = [];
   const pageErrors = [];
+  const httpErrors = [];
   page.on('console', (message) => {
     if (message.type() === 'error') consoleErrors.push(message.text());
   });
   page.on('pageerror', (error) => pageErrors.push(error.message));
+  page.on('response', (response) => {
+    if (response.status() >= 400) {
+      httpErrors.push({ status: response.status(), url: response.url() });
+    }
+  });
 
   const result = {
     route: routeName,
@@ -64,6 +94,10 @@ async function inspectCase(browser, routeName, route, viewportName, viewport) {
     overflowPx: null,
     blockingAxeViolations: null,
     browserErrorCount: null,
+    unexpectedHttpErrorCount: null,
+    unexpectedConsoleErrorCount: null,
+    pageErrorCount: null,
+    expectedNavigation404: false,
     status: 'failed',
     error: null,
   };
@@ -125,14 +159,26 @@ async function inspectCase(browser, routeName, route, viewportName, viewport) {
       }
     }
 
-    result.browserErrorCount = consoleErrors.length + pageErrors.length;
-    if (result.browserErrorCount) throw new Error(`browser errors: ${result.browserErrorCount}`);
+    const browserErrors = browserErrorsForRoute(route, consoleErrors, pageErrors, httpErrors);
+    result.expectedNavigation404 = browserErrors.expectedNavigation404;
+    result.unexpectedHttpErrorCount = browserErrors.unexpectedHttpErrors.length;
+    result.unexpectedConsoleErrorCount = browserErrors.unexpectedConsoleErrors.length;
+    result.pageErrorCount = browserErrors.pageErrors.length;
+    result.browserErrorCount = browserErrors.count;
+    if (result.browserErrorCount) {
+      throw new Error(`unexpected browser errors: ${result.browserErrorCount}`);
+    }
 
     await page.screenshot({ path: path.join(outputDir, `${routeName}-${viewportName}.png`), fullPage: true });
     result.status = 'passed';
   } catch (error) {
     result.error = error instanceof Error ? error.message : String(error);
-    result.browserErrorCount = consoleErrors.length + pageErrors.length;
+    const browserErrors = browserErrorsForRoute(route, consoleErrors, pageErrors, httpErrors);
+    result.expectedNavigation404 = browserErrors.expectedNavigation404;
+    result.unexpectedHttpErrorCount = browserErrors.unexpectedHttpErrors.length;
+    result.unexpectedConsoleErrorCount = browserErrors.unexpectedConsoleErrors.length;
+    result.pageErrorCount = browserErrors.pageErrors.length;
+    result.browserErrorCount = browserErrors.count;
     failures.push(`${routeName}/${viewportName}: ${result.error}`);
     await page.screenshot({ path: path.join(outputDir, `failure-${routeName}-${viewportName}.png`), fullPage: true }).catch(() => {});
   } finally {
