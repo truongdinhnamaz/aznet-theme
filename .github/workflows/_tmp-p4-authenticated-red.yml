@@ -1,0 +1,23 @@
+name: Temporary P4 Authenticated RED
+
+on:
+  push:
+    branches: [work/p4-authenticated-pilot-qa]
+    paths:
+      - 'tests/offline/p4-authenticated-pilot-contract.php'
+      - '.github/workflows/_tmp-p4-authenticated-red.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  red-contract:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Run expected RED contract
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/p4-authenticated-pilot-contract.php
