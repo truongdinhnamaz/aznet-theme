@@ -51,6 +51,16 @@ foreach ([
     assert(str_contains($browserText, $needle), "Harness missing hidden-control regression marker: {$needle}");
 }
 
+// The create screen itself is menu=0, so waiting for /menu=\\d+/ is a false positive.
+// Require an explicit nonzero menu-id predicate before the harness can continue.
+foreach ([
+    'waitForNonzeroMenuId',
+    "id !== '0'",
+    "url.searchParams.get('menu')",
+] as $needle) {
+    assert(str_contains($browserText, $needle), "Harness missing nonzero-menu regression marker: {$needle}");
+}
+
 foreach ([
     'get_option(',
     'get_post_meta(',
