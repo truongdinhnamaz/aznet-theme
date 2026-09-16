@@ -1,3 +1,4 @@
+// Bounded one-shot site mutation harness. The workflow executes only on an explicit [apply-tamduc] commit.
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
