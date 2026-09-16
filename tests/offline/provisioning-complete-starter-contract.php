@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+// RED contract for the owner-approved Complete Starter Site behavior.
 if ( ! defined( 'ABSPATH' ) ) { define( 'ABSPATH', __DIR__ . '/' ); }
 $root = dirname( __DIR__, 2 );
 require_once $root . '/inc/theme/provisioning-blueprints.php';
