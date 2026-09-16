@@ -26,6 +26,9 @@ $main_classes   = 'aznet-theme-main' . ( $is_native_post ? ' aznet-theme-main--a
             <div class="<?php echo esc_attr( implode( ' ', $shell_classes ) ); ?>">
                 <?php if ( $is_native_post ) : ?>
                     <?php get_template_part( 'template-parts/content/content', 'single' ); ?>
+                    <?php if ( comments_open() || get_comments_number() ) : ?>
+                        <?php comments_template(); ?>
+                    <?php endif; ?>
                 <?php else : ?>
                     <article id="post-<?php the_ID(); ?>" <?php post_class( 'aznet-theme-entry aznet-theme-entry--post' ); ?>>
                         <header class="aznet-theme-entry__header">

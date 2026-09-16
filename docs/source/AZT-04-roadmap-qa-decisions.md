@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.43
+**Version:** v0.44
 **Status:** Working Source  
 **Date:** 16/09/2026
 
@@ -38,7 +38,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P4-B | Law Site Provisioning v1.1 | PASS / MERGED | D-026 smart setup merged through PR #58 with Theme metadata `1.1.0`; deterministic package/browser evidence retained and exact-main verification PASS |
 | P4-C | Standalone Core independence | PASS / MERGED | D-027 source + implementation merged through PR #63/#64; zero-plugin L1-L4, exact-package and exact-main gates PASS; optional integrations remain additive |
 | P5 | Publication & production deployment | PASS | Tag `v1.1.0` + GitHub Release publication and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
-| X | v1.2 WordPress Experience Completion | DESIGN RATIFIED / IMPLEMENTATION PLANNING | WordPress Core surfaces only; surface modules + shared primitives; deep polish Comments, Search/404/empty states, Media/gallery/embed; no new provider integration |
+| X | v1.2 WordPress Experience Completion | X1 PASS / X2 NEXT | X1 Comments Surface passed L1-L4 with WordPress 6.9 zero-plugin runtime/browser evidence; X2 Search/404/empty states is next; no new provider integration |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
 Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` points to `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`. Publication source closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72. P5 technical run `35051428372` verified final package bytes, publication run `35052694111` published the matching tag/Release, and production read-only run `35054176392` closed deployment at the tested Theme-owned/site-operations scope.
@@ -204,7 +204,7 @@ Owner-approved publication run `35052694111` then created annotated tag `v1.1.0`
 
 ### X — v1.2 WordPress Experience Completion
 
-**State:** **DESIGN RATIFIED / IMPLEMENTATION PLANNING.**
+**State:** **X1 PASS / X2 NEXT.**
 
 **Goal:** complete the native WordPress Core experience of AZnet Theme while keeping the Theme a presentation owner. v1.2 does not open a new provider/plugin integration program.
 
@@ -222,7 +222,9 @@ Owner-approved publication run `35052694111` then created annotated tag `v1.1.0`
 
 **Design record:** `docs/superpowers/specs/2026-09-16-v1.2-wordpress-experience-completion-design.md`.
 
-**Exact Next after source ratification:** write and review the implementation plan for **X1 — Comments Surface** before production implementation.
+**X1 — Comments Surface:** **PASS at L1-L4** on functional closure head `1b58012f78eab6525e5e8e424e8904995035f4ea`; final functional workflow `35060458118` completed SUCCESS with ownership/diff/version regressions, clean WordPress 6.9 zero-plugin runtime and 3/3 browser/a11y matrix. Evidence: `docs/evidence/X1_COMMENTS_SURFACE_20260916.md`. WordPress retains all comment data/lifecycle ownership; provider L5 is not inferred.
+
+**Exact Next:** write and review the bounded implementation plan for **X2 — Search / 404 / Empty States** before production implementation.
 
 ## 6. Dependency order
 
@@ -348,4 +350,4 @@ Metadata promotion to `1.1.0` is a historical cleared gate completed through PR 
 
 ## 14. Exact next
 
-**v1.2 WordPress Experience Completion design is ratified. Exact Next is to write and review the X1 Comments Surface implementation plan before production implementation. No provider L5 work is opened or inferred.**
+**X1 Comments Surface is PASS at L1-L4. Exact Next is to write and review the X2 Search / 404 / Empty States implementation plan before production implementation. No provider L5 work is opened or inferred.**

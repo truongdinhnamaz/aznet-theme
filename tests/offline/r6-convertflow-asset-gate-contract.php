@@ -20,6 +20,13 @@ if (! str_contains($assets, "'/assets/css/integrations/convertflow.css'")) {
     fail_r6_convertflow_gate('Theme-owned ConvertFlow bridge path is missing');
 }
 
+$assetsForProviderDetection = $assets;
+$threadCommentsRead = "get_option( 'thread_comments' )";
+if (1 < substr_count($assetsForProviderDetection, $threadCommentsRead)) {
+    fail_r6_convertflow_gate('multiple native thread_comments option reads entered Theme asset loading');
+}
+$assetsForProviderDetection = str_replace($threadCommentsRead, '', $assetsForProviderDetection);
+
 $forbiddenDetection = [
     'ChoiceGuide\\',
     'CHOICEGUIDE_',
@@ -33,7 +40,7 @@ $forbiddenDetection = [
 ];
 
 foreach ($forbiddenDetection as $forbidden) {
-    if (str_contains($assets, $forbidden)) {
+    if (str_contains($assetsForProviderDetection, $forbidden)) {
         fail_r6_convertflow_gate("private/heuristic provider detection entered Theme asset loading: {$forbidden}");
     }
 }

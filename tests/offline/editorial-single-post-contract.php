@@ -121,6 +121,11 @@ foreach ($requiredCssMarkers as $marker) {
 }
 
 $articleSources = $single . "\n" . $content . "\n" . $meta . "\n" . $author . "\n" . $assets;
+$threadCommentsRead = "get_option( 'thread_comments' )";
+if (1 < substr_count($articleSources, $threadCommentsRead)) {
+    fail_editorial_single('multiple native thread_comments option reads found');
+}
+$articleSources = str_replace($threadCommentsRead, '', $articleSources);
 $forbidden = [
     'new WP_Query',
     'WP_Query(',

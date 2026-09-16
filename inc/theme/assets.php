@@ -145,6 +145,41 @@ function enqueue_homepage_law01_asset( ?string $version = null ): void {
     );
 }
 
+/** Determine whether the native Post comments surface will render. */
+function should_enqueue_comments_assets(): bool {
+    if ( ! function_exists( 'is_singular' ) || ! is_singular( 'post' ) ) {
+        return false;
+    }
+
+    if ( function_exists( 'post_password_required' ) && post_password_required() ) {
+        return false;
+    }
+
+    if ( ! function_exists( 'comments_open' ) || ! function_exists( 'get_comments_number' ) ) {
+        return false;
+    }
+
+    return comments_open() || 0 < get_comments_number();
+}
+
+/** Enqueue native comments presentation and Core threaded-reply enhancement. */
+function enqueue_comments_assets( ?string $version = null ): void {
+    if ( ! should_enqueue_comments_assets() ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'aznet-theme-comments',
+        get_theme_file_uri( '/assets/css/components/comments.css' ),
+        [ 'aznet-theme-tokens', 'aznet-theme-generic-content' ],
+        $version
+    );
+
+    if ( comments_open() && function_exists( 'get_option' ) && get_option( 'thread_comments' ) ) {
+        wp_enqueue_script( 'comment-reply' );
+    }
+}
+
 function enqueue_assets(): void {
     $version = defined( 'AZNET_THEME_VERSION' ) ? AZNET_THEME_VERSION : null;
 
@@ -208,6 +243,8 @@ function enqueue_assets(): void {
             $version
         );
     }
+
+    enqueue_comments_assets( $version );
 
     if ( should_enqueue_woocommerce_product_assets() ) {
         wp_enqueue_style(
