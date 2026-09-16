@@ -49,7 +49,7 @@ foreach ([
     '#user_pass',
     '#wp-submit',
     'admin.php?page=aznet-theme',
-    'section=system-health',
+    "gotoControlCenter(page, 'system-health')",
     '.aznet-theme-control-center',
     'textarea[readonly]',
     'standalone_core',
