@@ -29,11 +29,11 @@ jobs:
         if: success()
         with:
           node-version: '22'
-      - name: Install Playwright
+      - name: Install Playwright and Axe
         if: success()
         run: |
           set -euo pipefail
-          npm install --no-save --no-package-lock playwright@1.55.0
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright
           npx playwright install --with-deps chromium
       - name: Check final L4 harness syntax
         if: success()
