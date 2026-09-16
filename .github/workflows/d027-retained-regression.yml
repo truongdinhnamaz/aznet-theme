@@ -1,0 +1,55 @@
+name: D-027 Retained Full Regression
+
+on:
+  push:
+    branches: [work/d027-standalone-core]
+    paths:
+      - '**/*.php'
+      - 'theme.json'
+      - 'style.css'
+      - 'assets/**'
+      - 'patterns/**'
+      - 'template-parts/**'
+      - 'scripts/verify-v1-core.sh'
+      - 'scripts/verify-g3-core.sh'
+      - '.github/workflows/d027-retained-regression.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - '**/*.php'
+      - 'theme.json'
+      - 'style.css'
+      - 'assets/**'
+      - 'patterns/**'
+      - 'template-parts/**'
+      - 'scripts/verify-v1-core.sh'
+      - 'scripts/verify-g3-core.sh'
+      - '.github/workflows/d027-retained-regression.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  retained-v1-core:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+
+      - name: Record exact identity
+        run: git rev-parse HEAD
+
+      - name: Setup PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Run reusable v1 core verification
+        run: bash scripts/verify-v1-core.sh
+
+      - name: Run D-027-specific offline contracts
+        run: |
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/d027-standalone-core-health-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/d027-provisioning-independence-contract.php
