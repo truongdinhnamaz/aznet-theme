@@ -1,0 +1,88 @@
+name: Temporary X1 Plan Review
+
+on:
+  push:
+    branches: [plan/v1.2-x1-comments-surface]
+    paths:
+      - '.github/workflows/_tmp-x1-plan-review.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  review:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reconcile plan self-review findings
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path('docs/superpowers/plans/2026-09-16-x1-comments-surface.md')
+          s = p.read_text()
+
+          def once(old, new):
+              global s
+              count = s.count(old)
+              if count != 1:
+                  raise SystemExit(f'expected one match, found {count}: {old[:100]!r}')
+              s = s.replace(old, new, 1)
+
+          once("$child_id = wp_insert_comment([\n    'comment_post_ID'      => $post_id,\n    'comment_parent'       => $parent_id,\n    'comment_author'       => 'X1 Child',\n    'comment_author_email' => 'x1-child@example.test',\n    'comment_content'      => 'X1 nested reply',\n    'comment_approved'     => 1,\n]);\n\nif (! $parent_id || ! $child_id) {",
+               "$child_id = wp_insert_comment([\n    'comment_post_ID'      => $post_id,\n    'comment_parent'       => $parent_id,\n    'comment_author'       => 'X1 Child',\n    'comment_author_email' => 'x1-child@example.test',\n    'comment_content'      => 'X1 nested reply',\n    'comment_approved'     => 1,\n]);\n\n$second_parent_id = wp_insert_comment([\n    'comment_post_ID'      => $post_id,\n    'comment_author'       => 'X1 Second Parent',\n    'comment_author_email' => 'x1-second@example.test',\n    'comment_content'      => 'X1 second parent comment',\n    'comment_approved'     => 1,\n]);\n\nif (! $parent_id || ! $child_id || ! $second_parent_id) {")
+
+          once("update_option('page_comments', 0);\n\nif (2 !== (int) get_comments_number($post_id)) {\n    fwrite(STDERR, \"FAIL: expected two approved X1 comments\\n\");",
+               "update_option('page_comments', 1);\nupdate_option('comments_per_page', 1);\n\nif (3 !== (int) get_comments_number($post_id)) {\n    fwrite(STDERR, \"FAIL: expected three approved X1 comments\\n\");")
+
+          once("    'child_id'  => $child_id,\n    'url'       => $url,",
+               "    'child_id'         => $child_id,\n    'second_parent_id' => $second_parent_id,\n    'url'              => $url,")
+
+          once("jq -e '.post_id > 0 and .parent_id > 0 and .child_id > 0 and (.url | length > 0)' /tmp/x1-fixture.json",
+               "jq -e '.post_id > 0 and .parent_id > 0 and .child_id > 0 and .second_parent_id > 0 and (.url | length > 0)' /tmp/x1-fixture.json")
+
+          once("    grep -F 'comment-reply-link' /tmp/x1-comments.html\n    grep -F 'id=\"respond\"' /tmp/x1-comments.html",
+               "    grep -F 'comment-reply-link' /tmp/x1-comments.html\n    grep -F 'comments-pagination' /tmp/x1-comments.html\n    grep -F 'id=\"respond\"' /tmp/x1-comments.html")
+
+          once("- native Post renders two approved comments including one child reply;\n- comment form is present because comments are open;",
+               "- native Post renders three approved comments including one child reply and a second top-level comment;\n- native comment pagination renders because `page_comments=1` and `comments_per_page=1`;\n- comment form is present because comments are open;")
+
+          once("if (await page.locator('#respond textarea#comment').count() !== 1) {\n  throw new Error('missing native comment textarea');\n}\n\nconst overflow",
+               "if (await page.locator('#respond textarea#comment').count() !== 1) {\n  throw new Error('missing native comment textarea');\n}\nif (await page.locator('nav.comments-pagination').count() !== 1) {\n  throw new Error('missing native comments pagination');\n}\n\nconst overflow")
+
+          once("- comment form present;\n- horizontal overflow = 0;",
+               "- comment form and native comments pagination present;\n- horizontal overflow = 0;")
+
+          start = s.index('- [ ] **Step 2: Write the evidence record from actual run IDs/artifacts**')
+          end = s.index('- [ ] **Step 3: Advance authoritative roadmap state only after evidence exists**')
+          replacement = '''- [ ] **Step 2: Write the evidence record from the observed final-head evidence**\n\nCreate `docs/evidence/X1_COMMENTS_SURFACE_20260916.md` only after the final implementation head has a successful X1 workflow. Record the exact values observed from GitHub rather than pre-writing synthetic values. The evidence file must include these fields and claims:\n\n- Date and scope: AZnet Theme v1.2 X1 — Comments Surface.\n- Exact final verified implementation SHA from the successful workflow run.\n- L2 RED checkpoint commit and the intended pre-change failure reason.\n- L2 GREEN implementation commit and retained offline regression results.\n- Exact X1 workflow run ID and conclusion.\n- Exact browser/runtime artifact ID and digest when GitHub reports a digest.\n- L3 WordPress 6.9 fixture result: three approved comments, one threaded child reply, one second top-level comment, comments form, and native comments pagination.\n- L4 result at 1440x1000, 1024x900, and 390x844: zero horizontal overflow, zero blocking axe violations, zero console/page errors, zero failed subresources, and visible keyboard focus.\n- Asset scope result: comments stylesheet present on the X1 Post fixture and absent on Home; Core `comment-reply` present under threaded-comment conditions.\n- Ownership result: no custom comment datastore/query/moderation/reply engine and no provider integration expansion.\n- Not claimed: provider L5, `1.2.0` release/package, publication, or deployment.\n- Exact Next: X2 — Search / 404 / Empty States.\n\nBefore committing, read the evidence file once against the successful run metadata and artifact metadata so every identifier is a real observed value.\n\n'''
+          s = s[:start] + replacement + s[end:]
+
+          old_step4 = '''- [ ] **Step 4: Run source/evidence consistency checks**\n\n```bash\ngit diff --check\n! grep -R -n -E '<actual |<exact |<verified |<run id>|<artifact id>|TBD|TODO|PLACEHOLDER' docs/evidence/X1_COMMENTS_SURFACE_20260916.md docs/source/AZT-04-roadmap-qa-decisions.md docs/source/AZT-EXEC-MAP.md docs/source/SOURCE_MANIFEST.md\n```\n\nExpected: exit code 0 and no placeholder markers.\n'''
+          new_step4 = '''- [ ] **Step 4: Run source/evidence consistency checks**\n\n```bash\ngit diff --check\ngrep -F '**Final verified head:**' docs/evidence/X1_COMMENTS_SURFACE_20260916.md\ngrep -F '**X1 workflow run:**' docs/evidence/X1_COMMENTS_SURFACE_20260916.md\ngrep -F 'X2' docs/source/AZT-04-roadmap-qa-decisions.md\ngrep -F 'X2' docs/source/AZT-EXEC-MAP.md\n```\n\nExpected: exit code 0; evidence contains the final verified head and workflow run fields populated from the observed GitHub run; authoritative source names X2 as the sole next implementation slice.\n'''
+          once(old_step4, new_step4)
+
+          p.write_text(s)
+          PY
+
+          git diff --check
+          grep -F "update_option('page_comments', 1);" docs/superpowers/plans/2026-09-16-x1-comments-surface.md
+          grep -F "update_option('comments_per_page', 1);" docs/superpowers/plans/2026-09-16-x1-comments-surface.md
+          grep -F "X1 second parent comment" docs/superpowers/plans/2026-09-16-x1-comments-surface.md
+          grep -F "comments-pagination" docs/superpowers/plans/2026-09-16-x1-comments-surface.md
+          ! grep -n -E 'TBD|TODO|PLACEHOLDER|<actual |<exact |<verified |<run id>|<artifact id>' docs/superpowers/plans/2026-09-16-x1-comments-surface.md
+
+      - name: Commit plan reconciliation and self-remove
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/_tmp-x1-plan-review.yml
+          git add docs/superpowers/plans/2026-09-16-x1-comments-surface.md
+          git diff --cached --check
+          git commit -m 'docs: reconcile X1 comments implementation plan'
+          git push origin HEAD:plan/v1.2-x1-comments-surface
