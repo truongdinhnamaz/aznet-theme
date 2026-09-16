@@ -79,6 +79,9 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/x3-media-gallery-em
 printf '%s\n' '==> X4 Pagination & Navigation Completion contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x4-pagination-navigation-contract.php
 
+printf '%s\n' '==> X4 retained workflow ownership contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/x4-retained-workflow-ownership-contract.php
+
 printf '%s\n' '==> X5 Native Form Controls contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x5-native-form-controls-contract.php
 
