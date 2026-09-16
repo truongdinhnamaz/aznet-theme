@@ -27,7 +27,6 @@ function render_provisioning_invitation(): void {
     echo '<p><a class="button button-primary" href="' . esc_url( provisioning_url( 1 ) ) . '">' . esc_html__( 'Thiết lập website nhanh', 'aznet-theme' ) . '</a></p></div>';
 }
 
-/** @return string */
 function provisioning_candidate_label( int $id, array $candidates ): string {
     foreach ( $candidates as $candidate ) {
         if ( ! is_array( $candidate ) || $id !== (int) ( $candidate['id'] ?? 0 ) ) { continue; }
@@ -36,7 +35,6 @@ function provisioning_candidate_label( int $id, array $candidates ): string {
     return '';
 }
 
-/** Keep full typed controls available for advanced correction while defaulting to a proposal-only recommendation. */
 function provisioning_action_select( string $kind, string $role, array $candidates, bool $new_site, bool $required, ?array $recommendation = null ): void {
     $default = $new_site || $required ? 'create' : 'skip';
     $default_id = 0;
@@ -90,7 +88,6 @@ function provisioning_render_recommendation_card( string $kind, string $role, ar
     echo '</div></article>';
 }
 
-/** @return array<string,array{action:string,object_id:int}> */
 function provisioning_sanitize_choices( array $raw ): array {
     $out = [];
     foreach ( $raw as $role => $choice ) {
@@ -107,7 +104,7 @@ function handle_provisioning_plan(): void {
     if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Bạn không có quyền thực hiện thao tác này.', 'aznet-theme' ) ); }
     check_admin_referer( 'aznet_theme_provisioning' );
     $blueprint = isset( $_POST['blueprint'] ) ? sanitize_key( wp_unslash( $_POST['blueprint'] ) ) : '';
-    if ( ! in_array( $blueprint, [ 'law01-v1', 'law01-v1-1' ], true ) ) { wp_die( esc_html__( 'Blueprint không hợp lệ.', 'aznet-theme' ) ); }
+    if ( ! in_array( $blueprint, [ 'law01-v1', 'law01-v1-1', 'law01-v1-2' ], true ) ) { wp_die( esc_html__( 'Blueprint không hợp lệ.', 'aznet-theme' ) ); }
     $raw_pages = isset( $_POST['pages'] ) && is_array( $_POST['pages'] ) ? wp_unslash( $_POST['pages'] ) : [];
     $raw_categories = isset( $_POST['categories'] ) && is_array( $_POST['categories'] ) ? wp_unslash( $_POST['categories'] ) : [];
     $menu_action = isset( $_POST['menu_action'] ) ? sanitize_key( wp_unslash( $_POST['menu_action'] ) ) : 'skip';
@@ -119,14 +116,14 @@ function handle_provisioning_plan(): void {
         'front_page' => [ 'action' => 'set_to_role', 'role' => 'home' ],
     ];
 
-    if ( 'law01-v1-1' === $blueprint ) {
+    if ( in_array( $blueprint, [ 'law01-v1-1', 'law01-v1-2' ], true ) ) {
         $starter_posts = [];
         $raw_starter_posts = isset( $_POST['starter_posts'] ) && is_array( $_POST['starter_posts'] ) ? wp_unslash( $_POST['starter_posts'] ) : [];
         foreach ( $raw_starter_posts as $role => $value ) {
             $role = sanitize_key( (string) $role );
             $starter_posts[ $role ] = [ 'action' => ! empty( $value ) ? 'create' : 'skip' ];
         }
-        $coverage = provisioning_editorial_coverage_recommendations( [ 'categories' => $selections['categories'] ], provisioning_discovery() );
+        $coverage = provisioning_editorial_coverage_recommendations( [ 'categories' => $selections['categories'] ], provisioning_discovery(), $blueprint );
         foreach ( $coverage as $role => $recommendation ) {
             if ( 'SKIP_HAS_PUBLIC_CONTENT' === (string) ( $recommendation['state'] ?? '' ) ) { $starter_posts[ $role ] = [ 'action' => 'skip' ]; }
         }
@@ -141,6 +138,9 @@ function handle_provisioning_plan(): void {
             'publish' => ! empty( $_POST['publish_starter_posts'] ),
             'discourage_indexing' => ! empty( $_POST['discourage_indexing'] ),
         ];
+    }
+    if ( 'law01-v1-2' === $blueprint ) {
+        $selections['starter_site_defaults'] = [ 'apply' => ! empty( $_POST['apply_starter_site_defaults'] ) ];
     }
 
     $plan = provisioning_build_plan( $blueprint, $selections, provisioning_discovery() );
@@ -179,7 +179,6 @@ function handle_provisioning_restore_indexing(): void {
     exit;
 }
 
-/** @return string */
 function provisioning_summary_group( string $type ): string {
     if ( in_array( $type, [ 'reuse_page','reuse_term','reuse_menu' ], true ) ) { return 'existing'; }
     if ( in_array( $type, [ 'create_page','create_term','create_menu','create_post' ], true ) ) { return 'create'; }
@@ -210,7 +209,7 @@ function render_provisioning_wizard(): void {
     if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Bạn không có quyền thực hiện thao tác này.', 'aznet-theme' ) ); }
     $step = isset( $_GET['step'] ) ? max( 1, min( 4, (int) $_GET['step'] ) ) : 1;
     $state = provisioning_discovery();
-    $blueprint = provisioning_blueprint( 'law01-v1-1' );
+    $blueprint = provisioning_blueprint( 'law01-v1-2' );
     echo '<div class="aznet-theme-panel aznet-theme-provisioning"><h2>' . esc_html__( 'Thiết lập website nhanh', 'aznet-theme' ) . '</h2><p class="description">' . esc_html( sprintf( 'Bước %d/4', $step ) ) . '</p>';
     if ( 1 === $step ) {
         echo '<h3>' . esc_html__( 'Kiểm tra website', 'aznet-theme' ) . '</h3><dl><dt>Pages</dt><dd>' . esc_html( (string) $state['page_count'] ) . '</dd><dt>Categories</dt><dd>' . esc_html( (string) $state['category_count'] ) . '</dd><dt>Posts</dt><dd>' . esc_html( (string) $state['post_count'] ) . '</dd></dl>';
@@ -219,10 +218,10 @@ function render_provisioning_wizard(): void {
     } elseif ( 2 === $step && is_array( $blueprint ) ) {
         $mode = provisioning_site_mode( $state );
         $new_site = 'NEW_OR_MOSTLY_EMPTY' === $mode;
-        $recommendations = provisioning_recommendations( 'law01-v1-1', $state );
-        $editorial = provisioning_editorial_coverage_recommendations( $recommendations, $state );
-        echo '<h3>' . esc_html__( 'Thiết lập được khuyến nghị', 'aznet-theme' ) . '</h3><p>' . esc_html__( 'Theme chỉ chuẩn bị gợi ý. Không có mapping hoặc dữ liệu nào được thay đổi trước khi bạn xem và xác nhận kế hoạch ở bước tiếp theo.', 'aznet-theme' ) . '</p>';
-        echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="aznet_theme_provisioning_plan"><input type="hidden" name="blueprint" value="law01-v1-1">';
+        $recommendations = provisioning_recommendations( 'law01-v1-2', $state );
+        $editorial = provisioning_editorial_coverage_recommendations( $recommendations, $state, 'law01-v1-2' );
+        echo '<h3>' . esc_html__( 'Thiết lập được khuyến nghị', 'aznet-theme' ) . '</h3><p>' . esc_html__( 'Theme chuẩn bị một website mẫu đầy đủ để có thể xem ngay. Mọi Page, Post, Menu và Media tạo ra sẽ trở thành nội dung WordPress bình thường và có thể chỉnh sửa sau khi thiết lập.', 'aznet-theme' ) . '</p>';
+        echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="aznet_theme_provisioning_plan"><input type="hidden" name="blueprint" value="law01-v1-2">';
         wp_nonce_field( 'aznet_theme_provisioning' );
         echo '<div class="aznet-theme-provision-recommendations">';
         foreach ( $blueprint['pages'] as $role => $definition ) { provisioning_render_recommendation_card( 'pages', $role, $definition, (array) ( $recommendations['pages'][ $role ] ?? [] ), $state['pages'] ); }
@@ -246,13 +245,16 @@ function render_provisioning_wizard(): void {
         }
         echo '</section>';
         if ( $new_site ) {
+            $site_defaults = (array) ( $blueprint['site_defaults'] ?? [] );
+            echo '<section class="aznet-theme-provision-site-defaults"><h4>' . esc_html__( 'Tên và slogan mẫu', 'aznet-theme' ) . '</h4>';
+            echo '<label><input type="checkbox" name="apply_starter_site_defaults" value="1" checked> ' . esc_html( sprintf( __( 'Dùng tên mẫu “%s” và slogan mẫu để website hoàn chỉnh ngay; có thể sửa sau trong WordPress.', 'aznet-theme' ), (string) ( $site_defaults['blogname'] ?? 'ABC Lawyer' ) ) ) . '</label></section>';
             echo '<section class="aznet-theme-provision-index-safety"><h4>' . esc_html__( 'Hiển thị bài mẫu trong giai đoạn hoàn thiện', 'aznet-theme' ) . '</h4>';
             echo '<label><input type="checkbox" name="publish_starter_posts" value="1" checked> ' . esc_html__( 'Publish các bài starter để Trang chủ hiển thị đầy đủ ngay', 'aznet-theme' ) . '</label><br>';
             echo '<label><input type="checkbox" name="discourage_indexing" value="1" checked> ' . esc_html__( 'Tạm thời ngăn công cụ tìm kiếm lập chỉ mục website', 'aznet-theme' ) . '</label>';
             echo '<p class="description">' . esc_html__( 'Nếu bỏ lựa chọn ngăn lập chỉ mục, các bài starter sẽ tự chuyển sang Draft thay vì Publish.', 'aznet-theme' ) . '</p></section>';
         } else {
-            echo '<input type="hidden" name="publish_starter_posts" value="0"><input type="hidden" name="discourage_indexing" value="0">';
-            echo '<p class="description">' . esc_html__( 'Website đang hoạt động: starter Posts mới sẽ giữ Draft. Theme không noindex toàn site và không ghi private SEO meta.', 'aznet-theme' ) . '</p>';
+            echo '<input type="hidden" name="apply_starter_site_defaults" value="0"><input type="hidden" name="publish_starter_posts" value="0"><input type="hidden" name="discourage_indexing" value="0">';
+            echo '<p class="description">' . esc_html__( 'Website đang hoạt động: giữ nguyên Site Title/Tagline; starter Posts mới sẽ giữ Draft. Theme không noindex toàn site và không ghi private SEO meta.', 'aznet-theme' ) . '</p>';
         }
         submit_button( __( 'Dùng các thiết lập được khuyến nghị', 'aznet-theme' ) ); echo '</form>';
     } elseif ( 3 === $step ) {
