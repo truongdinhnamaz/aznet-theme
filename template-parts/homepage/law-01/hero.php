@@ -7,6 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 $front_id = (int) get_the_ID();
 $title = trim( (string) get_the_title( $front_id ) );
 $excerpt = trim( (string) get_the_excerpt( $front_id ) );
+$slogan = trim( (string) get_bloginfo( 'description' ) );
 $contact = homepage_page_reference( (int) setting( 'homepage_contact_page', 0 ) );
 $image = has_post_thumbnail( $front_id ) ? get_the_post_thumbnail( $front_id, 'large', [ 'class' => 'aznet-theme-law01-hero__image' ] ) : '';
 if ( '' === $title ) { return; }
@@ -21,6 +22,9 @@ if ( '' === $title ) { return; }
                 <p class="aznet-theme-law01-actions"><a class="aznet-theme-law01-button" href="<?php echo esc_url( get_permalink( $contact ) ); ?>"><?php esc_html_e( 'Liên hệ tư vấn', 'aznet-theme' ); ?></a></p>
             <?php endif; ?>
         </div>
-        <?php if ( '' !== $image ) : ?><div class="aznet-theme-law01-hero__media"><?php echo wp_kses_post( $image ); ?></div><?php endif; ?>
+        <div class="aznet-theme-law01-hero__visual">
+            <?php if ( '' !== $image ) : ?><div class="aznet-theme-law01-hero__media"><?php echo wp_kses_post( $image ); ?></div><?php endif; ?>
+            <?php if ( '' !== $slogan ) : ?><p class="aznet-theme-law01-hero__slogan"><?php echo esc_html( $slogan ); ?></p><?php endif; ?>
+        </div>
     </div>
 </section>
