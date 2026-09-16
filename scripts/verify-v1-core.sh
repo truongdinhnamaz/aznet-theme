@@ -97,6 +97,9 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-release-closure-
 printf '%s\n' '==> X6 exact 1.2.0 metadata promotion contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-version-promotion-contract.php
 
+printf '%s\n' '==> X6 promotion-aware workflow ownership contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-promotion-workflow-boundary-contract.php
+
 printf '%s\n' '==> P4 Native Editable Homepage blueprint contracts'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-asset-contract.php
