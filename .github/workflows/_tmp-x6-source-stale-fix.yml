@@ -1,0 +1,104 @@
+name: Temporary X6 Source Stale Wording Fix
+
+on:
+  push:
+    branches:
+      - docs/x6-post-merge-closure
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    if: contains(github.event.head_commit.message, '[x6-source-stale-fix]')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: docs/x6-post-merge-closure
+          fetch-depth: 0
+      - name: Repair stale current-state wording
+        shell: python
+        run: |
+          from pathlib import Path
+
+          MERGE = 'c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad'
+          TREE = '70c04929afe38e87d317bad3414157e9e2bd6f74'
+
+          def replace_exact(path, old, new):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              if old not in text:
+                  raise SystemExit(f'Expected stale text not found in {path}: {old[:140]!r}')
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          # AZT-04: remove one stale pre-merge current-state sentence.
+          replace_exact(
+              'docs/source/AZT-04-roadmap-qa-decisions.md',
+              'P1/P4 pilot sign-off, P5 publication and owner-approved production deployment verification are closed; the v1.1 release-critical path is complete. v1.2 X6 is now a final technical candidate pending canonical merge + exact-main verification.',
+              'P1/P4 pilot sign-off, P5 publication and owner-approved production deployment verification are closed; the v1.1 release-critical path is complete. v1.2 X6 is TECHNICAL PASS on canonical main and is now gated on separate publication approval; production deployment remains later and separately gated.'
+          )
+
+          # Derived execution map: align top checkpoint, completed sequence and boundary wording.
+          replace_exact(
+              'docs/source/AZT-EXEC-MAP.md',
+              '> **Canonical-main checkpoint:** live `main` HEAD is resolved from GitHub at execution time. Current X6 integration base is `main@dddcee1cbd9a406f365ec57ece40097581e0bcf3` after owner-approved PR #89; exact-main run `35126047491` completed SUCCESS. Stable published release anchor `v1.1.0` is `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`; publication closure PR #72 merged at `15f25e4f6d8e64c588866405629b793a85ee0323`, and restored post-noop checkpoint `e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb`. P5 technical run `35051428372`, publication run `35052694111`, and production read-only run `35054176392` close the v1.1 release-critical path. Optional integrations remain additive and ownership boundaries are unchanged.',
+              f'> **Canonical-main checkpoint:** live `main` HEAD is resolved from GitHub at execution time. X6 technical integration is canonical at `main@{MERGE}`, tree `{TREE}`; fresh V1 exact-main run `35129331899` and X6 push-to-main run `35129331927` completed SUCCESS on that exact merge SHA. Stable published release anchor remains `v1.1.0` at `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`, and verified production deployment remains v1.1.0 until later approval. Optional integrations remain additive and ownership boundaries are unchanged.'
+          )
+          replace_exact(
+              'docs/source/AZT-EXEC-MAP.md',
+              '**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> PR #70 -> P5 exact-main + deterministic package/lifecycle PASS run 35051428372 -> owner-approved PR #71 -> publication run 35052694111 -> annotated tag v1.1.0 + GitHub Release PASS -> owner-approved production deployment disposition -> read-only run 35054176392 PASS -> P5 PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 synchronized final candidate PASS`.',
+              '**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> owner-approved PR #87 merge -> exact-main V1 PASS -> exact-main X6 PASS`. Current state: `X6 TECHNICAL PASS / PUBLICATION GATED`.'
+          )
+          replace_exact(
+              'docs/source/AZT-EXEC-MAP.md',
+              'Canonical `main` and verified production deployment remain Theme `1.1.0`. The isolated X6 candidate is exact `1.2.0`; candidate version does not become canonical/published/deployed merely by passing CI.',
+              'Canonical `main` is exact Theme `1.2.0` after owner-approved X6 technical integration. The published GitHub Release and verified production deployment remain `v1.1.0`; publication and deployment of v1.2.0 remain separate owner gates.'
+          )
+          replace_exact(
+              'docs/source/AZT-EXEC-MAP.md',
+              '**Execution:** `X1 -> X2 -> X3 -> X4 -> X5 -> X6`. Every X1-X5 production slice used RED -> intended failure -> minimal GREEN -> regression and has a bounded rollback. X6 retains the separate canonical merge, publication and production deployment owner gates.',
+              '**Execution:** `X1 -> X2 -> X3 -> X4 -> X5 -> X6`. Every X1-X5 production slice used RED -> intended failure -> minimal GREEN -> regression and has a bounded rollback. X6 canonical merge is complete; publication and production deployment remain later separate owner gates.'
+          )
+
+          # Manifest labels should describe the now-canonical technical closure, not only its prior candidate phase.
+          replace_exact(
+              'docs/source/SOURCE_MANIFEST.md',
+              '| `AZT-03-baseline-provenance.md` | v0.39 | Canonical provenance through v1.1.0 publication/deployment plus X6 v1.2 final-candidate provenance |',
+              '| `AZT-03-baseline-provenance.md` | v0.39 | Canonical provenance through v1.1.0 publication/deployment plus X6 v1.2 technical integration provenance |'
+          )
+          replace_exact(
+              'docs/source/SOURCE_MANIFEST.md',
+              'X6 final-candidate evidence: `docs/evidence/X6_CROSS_SURFACE_RELEASE_CLOSURE_20260916.md`.',
+              'X6 technical-closure evidence: `docs/evidence/X6_CROSS_SURFACE_RELEASE_CLOSURE_20260916.md`.'
+          )
+
+          # Guard against current-state wording that would contradict the post-merge checkpoint.
+          forbidden = [
+              'X6 FINAL CANDIDATE PASS / MERGE GATED',
+              'X6 FINAL CANDIDATE PASS / CANONICAL MERGE + EXACT-MAIN VERIFICATION PENDING',
+              'v1.2 X6 is now a final technical candidate pending canonical merge + exact-main verification',
+              'Current X6 integration base is `main@dddcee1cbd9a406f365ec57ece40097581e0bcf3`',
+              'Canonical `main` and verified production deployment remain Theme `1.1.0`. The isolated X6 candidate',
+              'X6 retains the separate canonical merge, publication and production deployment owner gates',
+              'X6 synchronized final candidate PASS',
+          ]
+          for path in [
+              'docs/source/AZT-03-baseline-provenance.md',
+              'docs/source/AZT-04-roadmap-qa-decisions.md',
+              'docs/source/AZT-EXEC-MAP.md',
+              'docs/source/SOURCE_MANIFEST.md',
+          ]:
+              text = Path(path).read_text(encoding='utf-8')
+              hits = [needle for needle in forbidden if needle in text]
+              if hits:
+                  raise SystemExit(f'Stale current-state wording remains in {path}: {hits}')
+      - name: Commit source wording repair
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/source/AZT-04-roadmap-qa-decisions.md docs/source/AZT-EXEC-MAP.md docs/source/SOURCE_MANIFEST.md
+          git diff --cached --check
+          git commit -m "docs: remove stale X6 pre-merge wording"
+          git push origin HEAD:docs/x6-post-merge-closure
