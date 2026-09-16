@@ -1,8 +1,8 @@
 # X4 Pagination & Navigation Completion — Closure Evidence
 
-**Status:** PASS at L1-L4 on verified functional head; canonical merge owner-approved and pending at time of this checkpoint.  
-**Date:** 2026-09-16  
-**Functional head:** `f34db6f89cff505c16c2bb98f479eebba5661079`  
+**Status:** PASS at L1-L4 on verified functional head; canonical merge owner-approved and pending at time of this checkpoint.
+**Date:** 2026-09-16
+**Functional head:** `f34db6f89cff505c16c2bb98f479eebba5661079`
 **PR:** #83
 
 ## Scope and ownership
