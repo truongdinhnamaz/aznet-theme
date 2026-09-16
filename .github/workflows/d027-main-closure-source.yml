@@ -1,0 +1,176 @@
+name: D-027 Main Closure Source Reconciliation
+
+on:
+  push:
+    branches: [docs/d027-main-closure]
+    paths:
+      - '.github/workflows/d027-main-closure-source.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile-source:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: docs/d027-main-closure
+          fetch-depth: 0
+
+      - name: Reconcile authoritative source state
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{path}: expected exactly one match, found {count}: {old[:120]!r}')
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          azt03 = 'docs/source/AZT-03-baseline-provenance.md'
+          replace_once(azt03, '**Version:** v0.30  ', '**Version:** v0.31  ')
+          replace_once(azt03, '**Date:** 10/09/2026  ', '**Date:** 16/09/2026  ')
+          replace_once(
+              azt03,
+              '- Current canonical repository/implementation head after owner-approved PR #58 merge: `main@04edd8b312de70e6ee8339c461ae8f16f93e5859`.',
+              '- Current canonical implementation head after owner-approved D-027 PR #64 merge: `main@16563bdc88f172a1d7737b92293c7958670aac96`.'
+          )
+          replace_once(
+              azt03,
+              '- Current canonical implementation tree: `28c30353e9f01bc51f4474347069738d410b5256`.',
+              '- Current canonical implementation tree: `d2c4128f2b860bfd59c5efa11565dba38a34458e`.'
+          )
+          replace_once(
+              azt03,
+              '- P4-B D-025/D-026 Law Site Provisioning with mutation-free activation, proposal-only recommendations, WordPress-owned starter content/media and index-safe publication boundaries.\n',
+              '- P4-B D-025/D-026 Law Site Provisioning with mutation-free activation, proposal-only recommendations, WordPress-owned starter content/media and index-safe publication boundaries.\n- P4-C D-027 Standalone Core independence with zero mandatory third-party runtime dependency, explicit Standalone Core vs Optional Integrations health presentation, and zero-plugin L1-L4/exact-package evidence.\n'
+          )
+          d027_section = '''\n### D-027 Standalone Core — canonical main closure\n\nD-027 source ratification merged through PR #63 to `main@5d6dc56a756028d696a269ed75dd762daf4b83f2`. Owner-approved implementation PR #64 then merged final branch head `4b38f792d7de575bc08733748dac0399372e18c2` to canonical `main@16563bdc88f172a1d7737b92293c7958670aac96`. The final branch head and merge commit share tree `d2c4128f2b860bfd59c5efa11565dba38a34458e`, so the merge introduced no conflict-resolution byte delta.\n\nFresh `V1 Exact Main Verification` run `35042767873` completed SUCCESS on exact `main@16563bdc88f172a1d7737b92293c7958670aac96`: reusable static/contracts passed on PHP 8.1 and clean WordPress 6.9 runtime/browser/a11y passed. Exact-main artifacts are static `10425656989` and runtime/browser `10426026827`.\n\nPre-merge final-head D-027 evidence remains retained separately: Offline `35042040619`, L3 `35042040512`, L4 `35042040532`, and exact-package run `35042040620` all succeeded on `4b38f792d7de575bc08733748dac0399372e18c2`. The exact D-027 candidate package SHA-256 is `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`; this proves the standalone package path but does not itself publish a release.\n\nD-027 does not authorize a Git tag, GitHub Release, final production deployment, destructive pilot cleanup or optional-provider L5 certification. P4 real-pilot QA remains separately approved and access-blocked.\n'''
+          replace_once(azt03, '\n## 3. Current release-path classification', d027_section + '\n## 3. Current release-path classification')
+          replace_once(
+              azt03,
+              'Current product-development next is governed by AZT-04. P2/P3 and P4-A/P4-B canonical integration are closed through exact-main verification on `main@04edd8b312de70e6ee8339c461ae8f16f93e5859`; the exact next is P4 Real Pilot QA. Duplicate-theme cleanup on the pilot remains a separate destructive site-operations gate until completed.',
+              'Current product-development next is governed by AZT-04. P2/P3 and P4-A/P4-B/P4-C canonical implementation are closed through exact-main verification on `main@16563bdc88f172a1d7737b92293c7958670aac96`; the exact next is P4 Real Pilot QA, currently `PILOT ACCESS BLOCKED / APPROVED`. Duplicate-theme cleanup on the pilot remains a separate destructive site-operations gate until completed.'
+          )
+
+          azt04 = 'docs/source/AZT-04-roadmap-qa-decisions.md'
+          replace_once(azt04, '**Version:** v0.35  ', '**Version:** v0.36  ')
+          replace_once(
+              azt04,
+              '| P4-C | Standalone Core independence | READY / EXACT NEXT | D-027 accepted: zero mandatory third-party runtime dependencies; implementation must turn clean-WP independence into executable L1-L4 and final-package gates |',
+              '| P4-C | Standalone Core independence | PASS / MERGED | D-027 source + implementation merged through PR #63/#64; zero-plugin L1-L4, exact-package and exact-main gates PASS; optional integrations remain additive |'
+          )
+          replace_once(
+              azt04,
+              'Current canonical implementation is `main@04edd8b312de70e6ee8339c461ae8f16f93e5859`, tree `28c30353e9f01bc51f4474347069738d410b5256`, Theme metadata `1.1.0`. Owner-approved PR #58 merge is complete. Fresh `V1 Exact Main Verification` run `34414878827` succeeded on that exact merge SHA; PR-head evidence is retained separately and is not substituted for exact-main evidence.',
+              'Current canonical implementation is `main@16563bdc88f172a1d7737b92293c7958670aac96`, tree `d2c4128f2b860bfd59c5efa11565dba38a34458e`, Theme metadata `1.1.0`. D-027 source PR #63 and owner-approved implementation PR #64 are merged. Fresh `V1 Exact Main Verification` run `35042767873` succeeded on that exact merge SHA; pre-merge branch/package evidence is retained separately and is not substituted for exact-main evidence.'
+          )
+          p4c = '''\n### P4-C — Standalone Core independence\n\n**State:** **PASS / MERGED TO CANONICAL MAIN.**\n\nD-027 source ratification merged through PR #63 to `main@5d6dc56a756028d696a269ed75dd762daf4b83f2`; owner-approved implementation PR #64 merged final head `4b38f792d7de575bc08733748dac0399372e18c2` to `main@16563bdc88f172a1d7737b92293c7958670aac96`. Head and merge share tree `d2c4128f2b860bfd59c5efa11565dba38a34458e`.\n\nStandalone Core now has executable evidence that WordPress 6.9 + AZnet Theme 1.1.0 alone can activate, provision, author/render and survive update/theme-switch continuity with zero active third-party plugins. Optional WooCommerce, RootProfile, ConvertFlow and SEO providers remain additive public-contract tracks; their absence is not Core failure.\n\nFresh exact-main run `35042767873` passed reusable static/contracts plus clean WordPress 6.9 runtime/browser/a11y on the exact merge SHA. Pre-merge final-head runs `35042040619`, `35042040512`, `35042040532` and exact-package `35042040620` are retained; exact D-027 candidate ZIP SHA-256 is `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`.\n\n**Next:** P4 Real Pilot QA when pilot access is available. P5 publication/deployment remains gated and requires separate owner approval; no provider L5 certification is inferred from Core PASS.\n\n'''
+          replace_once(azt04, '\n### P5 — Publication and deployment', p4c + '### P5 — Publication and deployment')
+          replace_once(
+              azt04,
+              '`P2 Editorial Single-Post PASS -> P3 Editorial Listing/Search PASS -> P4 Real Pilot QA READY -> P5 Publication/Deployment gates`',
+              '`P2 Editorial Single-Post PASS -> P3 Editorial Listing/Search PASS -> P4-C Standalone Core PASS -> P4 Real Pilot QA ACCESS BLOCKED / APPROVED -> P5 only after P4 PASS`'
+          )
+          replace_once(
+              azt04,
+              'Owner-approved PR #58 canonical integration is cleared at `main@04edd8b312de70e6ee8339c461ae8f16f93e5859` and D-022 exact-main run `34414878827` is PASS. P4 pilot QA execution remains approved but is currently access-blocked from the available QA environment. D-027 Standalone Core architecture was explicitly approved on 16/09/2026 and its implementation may proceed on a bounded branch. None of these approvals include Git tag/GitHub Release, destructive duplicate-theme cleanup, L5 provider certification or final production deployment.',
+              'Owner-approved PR #58 canonical integration remains historical PASS evidence. D-027 source PR #63 and owner-approved implementation PR #64 are merged to canonical `main@16563bdc88f172a1d7737b92293c7958670aac96`; exact-main run `35042767873` is PASS. P4 pilot QA execution remains approved but is currently access-blocked from the available QA environment. None of these approvals include Git tag/GitHub Release, destructive duplicate-theme cleanup, L5 provider certification or final production deployment.'
+          )
+          replace_once(
+              azt04,
+              '**P4-C / D-027 — implement the Standalone Core contract on a bounded work branch. Start from fresh L0 state, add an explicit RED for the currently missing standalone guarantee, preserve already-PASS zero-plugin behavior, and prove L1-L4 plus an exact-package zero-plugin path before P5. P4 real-pilot execution remains approved but `P4 PILOT ACCESS BLOCKED` until the QA environment can reach the pilot. Stop before tag/GitHub Release or final production deployment.**',
+              '**P4 Real Pilot QA — restore/obtain pilot access and execute the already-approved real-site matrix on the D-027-closed canonical Theme. P4-C is PASS / MERGED; do not reopen it without invalidation. Until pilot access exists, record `P4 PILOT ACCESS BLOCKED / APPROVED`. P5 remains gated; stop before tag/GitHub Release or final production deployment unless separately approved.**'
+          )
+
+          exec_map = 'docs/source/AZT-EXEC-MAP.md'
+          replace_once(exec_map, '**Version:** v0.27  ', '**Version:** v0.28  ')
+          replace_once(
+              exec_map,
+              '> **Canonical-main checkpoint:** Homepage Composer + Law 01 Premium + D-025/D-026 provisioning merged through PR #58 to `main@04edd8b312de70e6ee8339c461ae8f16f93e5859`. Theme metadata remains source-approved `1.1.0`; proposal-only recommendations, WordPress ownership and index-safety boundaries are retained.',
+              '> **Canonical-main checkpoint:** D-027 source + Standalone Core implementation merged through PR #63/#64 to `main@16563bdc88f172a1d7737b92293c7958670aac96`, tree `d2c4128f2b860bfd59c5efa11565dba38a34458e`. Theme metadata remains source-approved `1.1.0`; optional integrations remain additive and ownership boundaries are unchanged.'
+          )
+          replace_once(
+              exec_map,
+              '**Completed execution:** `stack integration -> G8 RED on unapproved 1.1.1 metadata -> minimal 1.1.0 GREEN -> R2 harness RED -> test-only server-restart GREEN -> 21/21 PR workflows -> owner-approved PR #58 merge -> D-022 exact-main PASS run 34414878827`.',
+              '**Completed execution:** `PR #58 canonical integration -> D-022 exact-main PASS -> D-027 focused RED -> minimal GREEN -> zero-plugin L1-L4 + retained regression -> exact-package PASS -> PR #63 source merge -> owner-approved PR #64 implementation merge -> exact-main PASS run 35042767873`.'
+          )
+          replace_once(
+              exec_map,
+              '| P4-C Standalone Core independence | READY / EXACT NEXT | D-027 accepted; zero-plugin WordPress + Theme path becomes an executable release invariant; optional integrations remain additive |',
+              '| P4-C Standalone Core independence | PASS / MERGED | PR #63/#64 merged; zero-plugin L1-L4, exact-package and exact-main PASS; optional integrations remain additive |'
+          )
+          replace_once(
+              exec_map,
+              'Current canonical implementation baseline is `main@04edd8b312de70e6ee8339c461ae8f16f93e5859`, Theme `1.1.0`, tree `28c30353e9f01bc51f4474347069738d410b5256`. PR #58 is merged and D-022 exact-main verification run `34414878827` succeeded on that exact SHA.',
+              'Current canonical implementation baseline is `main@16563bdc88f172a1d7737b92293c7958670aac96`, Theme `1.1.0`, tree `d2c4128f2b860bfd59c5efa11565dba38a34458e`. D-027 source PR #63 and implementation PR #64 are merged; exact-main verification run `35042767873` succeeded on that exact SHA.'
+          )
+          replace_once(
+              exec_map,
+              '**Next:** P4-C / D-027 Standalone Core implementation; pilot QA remains access-blocked in parallel.',
+              '**Next:** P4 Real Pilot QA when pilot access is restored; it remains access-blocked in parallel.'
+          )
+          replace_once(
+              exec_map,
+              '**State:** READY / EXACT NEXT. D-027 architecture approved 16/09/2026.',
+              '**State:** PASS / MERGED. D-027 source and implementation closed on canonical main 16/09/2026.'
+          )
+          replace_once(
+              exec_map,
+              '**Exit:** Standalone Core matrix PASS through L1-L4 with exact-package gate wired for P5.',
+              '**Exit:** PASS — source PR #63 + implementation PR #64 merged; final-head L1-L4 and exact-package gates PASS; exact-main run `35042767873` PASS on `main@16563bdc88f172a1d7737b92293c7958670aac96`.'
+          )
+          replace_once(
+              exec_map,
+              '**Next:** resume P4 pilot when access exists; otherwise continue P5 only after D-027 package gate is satisfied and separately approved.',
+              '**Next:** resume P4 pilot when access exists. P5 remains gated until P4 PASS and separate publication/deployment approval.'
+          )
+          replace_once(
+              exec_map,
+              '**P4-C / D-027 — implement Standalone Core independence from current canonical production bytes, beginning with a focused RED that proves the missing guarantee. Preserve existing PASS behavior, keep P4 pilot as `PILOT ACCESS BLOCKED / APPROVED`, and stop before tag/GitHub Release or final production deployment.**',
+              '**P4 Real Pilot QA — obtain/restore pilot access and run the approved current-stack matrix against canonical `main@16563bdc88f172a1d7737b92293c7958670aac96`. Keep P4-C D-027 PASS unless invalidated. While access is unavailable, remain `PILOT ACCESS BLOCKED / APPROVED`; do not advance to P5 publication/deployment without P4 PASS and separate owner approval.**'
+          )
+
+          manifest = 'docs/source/SOURCE_MANIFEST.md'
+          replace_once(
+              manifest,
+              'Canonical source is reconciled through the completed v1.1 R6 technical candidate, merged P2/P3 editorial hardening, and owner-approved PR #58 Homepage/Law01/Provisioning canonical integration with D-022 exact-main verification.',
+              'Canonical source is reconciled through the completed v1.1 R6 technical candidate, merged P2/P3 editorial hardening, PR #58 Homepage/Law01/Provisioning integration, and D-027 Standalone Core closure through source PR #63 + owner-approved implementation PR #64 with fresh exact-main verification.'
+          )
+          replace_once(manifest, '| `AZT-03-baseline-provenance.md` | v0.30 | Canonical implementation/provenance including PR #58 merge + exact-main evidence |', '| `AZT-03-baseline-provenance.md` | v0.31 | Canonical implementation/provenance through D-027 PR #63/#64 merge + exact-main evidence |')
+          replace_once(manifest, '| `AZT-04-roadmap-qa-decisions.md` | v0.35 | R0-R6/P2-P3/P4-A/P4-B PASS, D-027/P4-C Standalone Core exact next, P4 pilot access-blocked, P5 gates and D-001..D-027 |', '| `AZT-04-roadmap-qa-decisions.md` | v0.36 | R0-R6/P2-P3/P4-A/P4-B/P4-C PASS, P4 pilot access-blocked/approved, P5 gates and D-001..D-027 |')
+          replace_once(manifest, '| `AZT-EXEC-MAP.md` | v0.27 | Derived execution map with canonical PR #58 checkpoint and D-027/P4-C exact next |', '| `AZT-EXEC-MAP.md` | v0.28 | Derived execution map with D-027 canonical closure and P4 real-pilot access as exact next |')
+          replace_once(
+              manifest,
+              'Current canonical implementation baseline: `main@04edd8b312de70e6ee8339c461ae8f16f93e5859`, tree `28c30353e9f01bc51f4474347069738d410b5256`, Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.',
+              'Current canonical implementation baseline: `main@16563bdc88f172a1d7737b92293c7958670aac96`, tree `d2c4128f2b860bfd59c5efa11565dba38a34458e`, Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.'
+          )
+          closure = '''\nD-027 source ratification PR #63 merged to `main@5d6dc56a756028d696a269ed75dd762daf4b83f2`; owner-approved implementation PR #64 merged final head `4b38f792d7de575bc08733748dac0399372e18c2` to `main@16563bdc88f172a1d7737b92293c7958670aac96`. Head and merge share tree `d2c4128f2b860bfd59c5efa11565dba38a34458e`. Fresh exact-main run `35042767873` completed SUCCESS; artifacts: static `10425656989`, runtime/browser `10426026827`. Final-head exact-package run `35042040620` also succeeded with D-027 candidate SHA-256 `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`.\n'''
+          replace_once(manifest, '\nThe known WordPress-core `WP_Query::rewind_posts()` warning remains UNKNOWN/non-blocking;', closure + '\nThe known WordPress-core `WP_Query::rewind_posts()` warning remains UNKNOWN/non-blocking;')
+          replace_once(
+              manifest,
+              '**Exact next:** D-027 / P4-C Standalone Core implementation on a bounded work branch. P4 Real Pilot QA remains owner-approved but `P4 PILOT ACCESS BLOCKED` from the current QA environment; this does not create any Theme runtime dependency. P1 duplicate-theme cleanup remains a parallel destructive site-operations gate. Git tag/GitHub Release and final production deployment remain separate P5 owner gates.',
+              '**Exact next:** P4 Real Pilot QA remains owner-approved but `P4 PILOT ACCESS BLOCKED` from the current QA environment. Restore/obtain pilot access and execute the real-site matrix against the D-027-closed canonical Theme. P1 duplicate-theme cleanup remains a parallel destructive site-operations gate. Git tag/GitHub Release and final production deployment remain separate P5 owner gates.'
+          )
+          PY
+
+          git diff --check
+          changed="$(git diff --name-only | sort)"
+          expected="$(printf '%s\n' \
+            docs/source/AZT-03-baseline-provenance.md \
+            docs/source/AZT-04-roadmap-qa-decisions.md \
+            docs/source/AZT-EXEC-MAP.md \
+            docs/source/SOURCE_MANIFEST.md | sort)"
+          test "$changed" = "$expected"
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/source/AZT-03-baseline-provenance.md docs/source/AZT-04-roadmap-qa-decisions.md docs/source/AZT-EXEC-MAP.md docs/source/SOURCE_MANIFEST.md
+          git commit -m 'docs: close D-027 canonical source state'
+          git push origin HEAD:docs/d027-main-closure
