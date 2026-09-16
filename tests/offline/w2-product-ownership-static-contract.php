@@ -30,6 +30,15 @@ foreach ( $paths as $relative ) {
     }
 
     $contents = file_get_contents( $path );
+    if ( 'inc/theme/assets.php' === $relative ) {
+        $thread_comments_read = "get_option( 'thread_comments' )";
+        if ( 1 < substr_count( $contents, $thread_comments_read ) ) {
+            fwrite( STDERR, "multiple native thread_comments option reads in {$relative}\n" );
+            exit( 10 );
+        }
+        $contents = str_replace( $thread_comments_read, '', $contents );
+    }
+
     foreach ( $forbidden as $needle ) {
         if ( false !== stripos( $contents, $needle ) ) {
             fwrite( STDERR, "forbidden token {$needle} in {$relative}\n" );
