@@ -43,6 +43,16 @@ foreach ([
     }
 }
 
+$formGateStart = strpos($assets, 'function should_enqueue_form_assets(): bool {');
+$formEnqueueStart = false === $formGateStart ? false : strpos($assets, 'function enqueue_form_assets(', $formGateStart);
+if (false === $formGateStart || false === $formEnqueueStart) {
+    x5_fail('unable to isolate X5 form asset gate');
+}
+$formGate = substr($assets, $formGateStart, $formEnqueueStart - $formGateStart);
+if (str_contains($formGate, 'is_archive')) {
+    x5_fail('X5 shared forms must not load on generic archive surfaces');
+}
+
 foreach ([
     '.aznet-theme-comments .comment-form',
     '.aznet-theme-search-header__form .search-form',
