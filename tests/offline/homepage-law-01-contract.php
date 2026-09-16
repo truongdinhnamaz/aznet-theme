@@ -67,8 +67,11 @@ assert(str_contains($assets, 'homepage-law-01-variants.css'), 'Variant asset mus
 
 $setupSource = file_get_contents($root . '/inc/theme/setup.php');
 $headerTemplate = file_get_contents($root . '/template-parts/header/site-header.php');
+$headerCss = file_get_contents($root . '/assets/css/components/site-header.css');
 assert(str_contains($setupSource, "'header-utility'"), 'WordPress must own hotline/contact links through a native menu location.');
 assert(str_contains($headerTemplate, "header/utility-navigation"), 'Header must render the optional utility menu without storing contact truth in Theme settings.');
+assert(str_contains($headerCss, '.aznet-theme-site-header__utility-menu'), 'Header utility links need generic presentation on every surface, not only Law 01.');
+assert(str_contains($headerCss, '.aznet-theme-site-header__utility-nav'), 'Header utility navigation layout must belong to the global Header surface.');
 
 $heroSource = file_get_contents($root . '/template-parts/homepage/law-01/hero.php');
 $servicesSource = file_get_contents($root . '/template-parts/homepage/law-01/services.php');
