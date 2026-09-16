@@ -52,6 +52,7 @@ $valid_expected = [
     'woo_product_card_density' => 'balanced',
     'woo_product_preset'       => 'classic',
     'homepage_preset'               => 'off',
+    'homepage_law01_variant'        => 'navy-gold',
     'homepage_services_page'        => 0,
     'homepage_about_page'           => 0,
     'homepage_team_page'            => 0,
