@@ -60,27 +60,13 @@
 }
 
 .aznet-theme-comments .comment-reply-link:focus-visible,
-.aznet-theme-comments a:focus-visible,
-.aznet-theme-comments button:focus-visible,
-.aznet-theme-comments input:focus-visible,
-.aznet-theme-comments textarea:focus-visible {
+.aznet-theme-comments a:focus-visible {
     outline: 2px solid var(--aznet-theme-focus);
     outline-offset: 2px;
 }
 
 .aznet-theme-comments .comment-respond {
     margin-block-start: var(--aznet-theme-space-6);
-}
-
-.aznet-theme-comments :where(input[type="text"], input[type="email"], input[type="url"], textarea) {
-    box-sizing: border-box;
-    width: 100%;
-    max-width: 100%;
-}
-
-.aznet-theme-comments textarea {
-    min-height: 9rem;
-    resize: vertical;
 }
 
 .aznet-theme-comments__closed {
