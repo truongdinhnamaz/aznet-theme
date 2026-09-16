@@ -35,12 +35,19 @@ $required_browser_tokens = [
     'requestfailed',
     'aznet-theme-profile-surface',
     'summary.json',
+    'aznet-theme-article__content',
+    'CONTENT_AUTHORED_SEMANTICS',
+    'content_accessibility_observations',
 ];
 
 foreach ( $required_browser_tokens as $token ) {
     if ( false === strpos( $browser, $token ) ) {
         $fail( "browser harness must contain {$token}" );
     }
+}
+
+if ( false === strpos( $browser, "violation.id === 'label'" ) ) {
+    $fail( 'browser harness must narrowly attribute unlabeled authored-content form controls by axe label rule' );
 }
 
 foreach ( [ '/wp-admin', 'wp-login.php', '/ho-so/', '/gioi-thieu/' ] as $forbidden ) {
