@@ -56,7 +56,7 @@ function enqueue_header_navigation_asset( ?string $version = null ): void {
  * @param string|null $version Asset version.
  */
 function enqueue_header_utility_asset( ?string $version = null ): void {
-    if ( true !== setting( 'header_utilities', true ) ) {
+    if ( function_exists( __NAMESPACE__ . '\\setting' ) && true !== setting( 'header_utilities', true ) ) {
         return;
     }
     if ( ! function_exists( 'has_nav_menu' ) || ! has_nav_menu( 'header-utility' ) ) {
