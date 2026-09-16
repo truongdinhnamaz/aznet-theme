@@ -1,0 +1,38 @@
+name: Temporary P5 Deployment Consistency
+
+on:
+  push:
+    branches: [qa/p5-production-readonly-verification]
+    paths:
+      - '.github/workflows/_tmp-p5-deployment-consistency.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reconcile deployment current state
+        run: |
+          set -euo pipefail
+          python3 scripts/_tmp_p5_deployment_consistency.py
+          git diff --check
+          grep -F '| P5 | Publication & production deployment | PASS |' docs/source/AZT-04-roadmap-qa-decisions.md
+          grep -F '| P5 Publication/Deployment | PASS |' docs/source/AZT-EXEC-MAP.md
+          grep -F 'v1.1 release-critical path is complete through production deployment' docs/source/AZT-04-roadmap-qa-decisions.md docs/source/AZT-EXEC-MAP.md
+
+      - name: Commit consistency closure and self-remove
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/_tmp-p5-deployment-consistency.yml scripts/_tmp_p5_deployment_consistency.py
+          git add docs/source/AZT-03-baseline-provenance.md docs/source/AZT-04-roadmap-qa-decisions.md docs/source/AZT-EXEC-MAP.md docs/source/SOURCE_MANIFEST.md
+          git diff --cached --check
+          git commit -m 'docs: align v1.1 deployment current state'
+          git push origin HEAD:qa/p5-production-readonly-verification
