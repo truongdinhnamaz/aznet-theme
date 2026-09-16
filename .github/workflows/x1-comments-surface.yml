@@ -9,6 +9,7 @@ on:
       - 'single.php'
       - 'inc/theme/assets.php'
       - 'assets/css/components/comments.css'
+      - 'scripts/assert-theme-version.sh'
       - 'tests/offline/x1-comments-surface-contract.php'
       - 'tests/offline/editorial-single-post-contract.php'
       - 'tests/runtime/x1-comments-surface.php'
@@ -26,6 +27,7 @@ on:
       - 'single.php'
       - 'inc/theme/assets.php'
       - 'assets/css/components/comments.css'
+      - 'scripts/assert-theme-version.sh'
       - 'tests/offline/x1-comments-surface-contract.php'
       - 'tests/offline/editorial-single-post-contract.php'
       - 'tests/runtime/x1-comments-surface.php'
@@ -59,6 +61,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Record exact identity
         run: |
@@ -74,6 +77,9 @@ jobs:
           coverage: none
 
       - name: Verify X1 ownership, diff and retained static regressions
+        env:
+          HEAD_REF: ${{ github.head_ref || github.ref_name }}
+          X1_SLICE_BRANCH: feat/v1.2-x1-comments-surface
         run: |
           set -euo pipefail
           git fetch origin main:refs/remotes/origin/main
@@ -83,12 +89,14 @@ jobs:
             echo 'FAIL: X1 must not change provider integration files' >&2
             exit 1
           fi
-          if printf '%s\n' "$changed" | grep -E '^(functions\.php|style\.css)$'; then
-            echo 'FAIL: X1 must not change Theme version declarations' >&2
-            exit 1
+          if [[ "${HEAD_REF:-}" == "${X1_SLICE_BRANCH}" ]]; then
+            if printf '%s\n' "$changed" | grep -E '^(functions\.php|style\.css)$'; then
+              echo 'FAIL: X1 must not change Theme version declarations' >&2
+              exit 1
+            fi
+            echo 'PASS: X1 slice-only version ownership guard'
           fi
-          grep -F "define( 'AZNET_THEME_VERSION', '1.1.0' );" functions.php
-          grep -F 'Version: 1.1.0' style.css
+          bash scripts/assert-theme-version.sh
           php tests/offline/x1-comments-surface-contract.php
           php tests/offline/editorial-single-post-contract.php
           php tests/offline/editorial-listing-search-contract.php

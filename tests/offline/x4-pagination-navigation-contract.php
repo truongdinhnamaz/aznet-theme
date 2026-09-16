@@ -79,11 +79,12 @@ foreach ( [
     }
 }
 
-if ( false === strpos( $style, 'Version: 1.1.0' ) ) {
-    throw new RuntimeException( 'X4 must not promote style.css metadata before X6.' );
-}
-if ( false === strpos( $funcs, "define( 'AZNET_THEME_VERSION', '1.1.0' );" ) ) {
-    throw new RuntimeException( 'X4 must not promote AZNET_THEME_VERSION before X6.' );
+preg_match( '/^Version:\s*([^\r\n]+)/m', $style, $styleMatch );
+preg_match( "/define\\( 'AZNET_THEME_VERSION', '([^']+)' \\);/", $funcs, $phpMatch );
+$styleVersion = trim( $styleMatch[1] ?? '' );
+$phpVersion = $phpMatch[1] ?? '';
+if ( '' === $styleVersion || '' === $phpVersion || $styleVersion !== $phpVersion ) {
+    throw new RuntimeException( 'Theme version declarations must remain present and equal.' );
 }
 
 echo "PASS: X4 pagination/navigation ownership and presentation contract\n";

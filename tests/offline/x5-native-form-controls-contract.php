@@ -108,11 +108,12 @@ foreach ([
     }
 }
 
-if (! str_contains($functions, "define( 'AZNET_THEME_VERSION', '1.1.0' );")) {
-    x5_fail('AZNET_THEME_VERSION must remain 1.1.0 during X5');
-}
-if (! str_contains($style, 'Version: 1.1.0')) {
-    x5_fail('Theme stylesheet version must remain 1.1.0 during X5');
+preg_match('/^Version:\s*([^\r\n]+)/m', $style, $styleMatch);
+preg_match("/define\\( 'AZNET_THEME_VERSION', '([^']+)' \\);/", $functions, $phpMatch);
+$styleVersion = trim($styleMatch[1] ?? '');
+$phpVersion = $phpMatch[1] ?? '';
+if ($styleVersion === '' || $phpVersion === '' || $styleVersion !== $phpVersion) {
+    x5_fail('Theme version declarations must remain present and equal.');
 }
 
 echo "PASS: X5 native form controls ownership and presentation contract\n";

@@ -1,0 +1,408 @@
+name: X6 Cross-surface Release Closure
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'style.css'
+      - 'functions.php'
+      - 'comments.php'
+      - 'search.php'
+      - 'archive.php'
+      - '404.php'
+      - 'single.php'
+      - 'inc/theme/**'
+      - 'assets/css/components/comments.css'
+      - 'assets/css/components/recovery.css'
+      - 'assets/css/components/media.css'
+      - 'assets/css/components/navigation.css'
+      - 'assets/css/components/forms.css'
+      - 'scripts/assert-theme-version.sh'
+      - 'scripts/verify-v1-core.sh'
+      - 'scripts/build-release-package.py'
+      - 'tests/offline/x*-*.php'
+      - 'tests/runtime/x6-cross-surface.php'
+      - 'tests/browser/x6-cross-surface-l4.mjs'
+      - '.github/workflows/x*-*.yml'
+      - '.github/workflows/g8-release-version.yml'
+      - '.github/workflows/x6-cross-surface-release.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'style.css'
+      - 'functions.php'
+      - 'comments.php'
+      - 'search.php'
+      - 'archive.php'
+      - '404.php'
+      - 'single.php'
+      - 'inc/theme/**'
+      - 'assets/css/components/**'
+      - 'scripts/assert-theme-version.sh'
+      - 'scripts/verify-v1-core.sh'
+      - 'scripts/build-release-package.py'
+      - 'tests/offline/x*-*.php'
+      - 'tests/runtime/x6-cross-surface.php'
+      - 'tests/browser/x6-cross-surface-l4.mjs'
+      - '.github/workflows/x6-cross-surface-release.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  x6-release-closure:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout exact X6 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Record exact X6 identity
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/x6 /tmp/x6-l4
+          mkdir -p /tmp/x6 /tmp/x6-l4 /tmp/x6/out
+          git rev-parse HEAD | tee /tmp/x6/checkout-sha.txt
+          git rev-parse HEAD^{tree} | tee /tmp/x6/checkout-tree.txt
+          test "$(git rev-parse HEAD)" = '${{ github.event.pull_request.head.sha || github.sha }}'
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Run X6 L1-L2 static and retained contracts
+        run: |
+          set -euo pipefail
+          bash scripts/assert-theme-version.sh
+          bash scripts/verify-v1-core.sh
+          git diff --check
+
+      - name: Install WordPress 6.9 and exact Theme candidate
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          rm -rf /tmp/wp
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='AZnet X6 Runtime' --admin_user=admin --admin_password='x6-runtime-password' --admin_email=x6@example.test --skip-email --allow-root
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
+            ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          wp plugin deactivate --all --path=/tmp/wp --allow-root || true
+          wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+          wp core version --path=/tmp/wp --allow-root | tee /tmp/x6/wordpress-version.txt | grep -Fx '6.9'
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp --allow-root)"
+          VERSION=$(sed -n 's/^Version:[[:space:]]*//p' style.css | head -n 1)
+          INSTALLED_STYLE_VERSION=$(sed -n 's/^Version:[[:space:]]*//p' /tmp/wp/wp-content/themes/aznet-theme/style.css | head -n 1)
+          INSTALLED_PHP_VERSION=$(sed -n "s/.*define( 'AZNET_THEME_VERSION', '\([^']*\)' );.*/\1/p" /tmp/wp/wp-content/themes/aznet-theme/functions.php | head -n 1)
+          test "$INSTALLED_STYLE_VERSION" = "$VERSION"
+          test "$INSTALLED_PHP_VERSION" = "$VERSION"
+          printf '%s\n' "$VERSION" | tee /tmp/x6/theme-version.txt
+
+      - name: Seed native X6 cross-surface fixture
+        run: |
+          set -euo pipefail
+          printf '%s' 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=' | base64 -d > /tmp/x6-one.png
+          cp /tmp/x6-one.png /tmp/x6-two.png
+          MEDIA_ONE=$(wp media import /tmp/x6-one.png --title='X6 Media One' --porcelain --path=/tmp/wp --allow-root)
+          MEDIA_TWO=$(wp media import /tmp/x6-two.png --title='X6 Media Two' --porcelain --path=/tmp/wp --allow-root)
+          test -n "$MEDIA_ONE"
+          test -n "$MEDIA_TWO"
+          X6_MEDIA_ONE_ID="$MEDIA_ONE" X6_MEDIA_TWO_ID="$MEDIA_TWO" \
+            wp eval-file "$GITHUB_WORKSPACE/tests/runtime/x6-cross-surface.php" --path=/tmp/wp --allow-root > /tmp/x6/fixture.json
+          jq -e '.sentinel_post_id > 0 and .category_id > 0 and .image_one_id > 0 and .image_two_id > 0' /tmp/x6/fixture.json
+          jq -e '(.comment_url | length > 0) and (.archive_page_2_url | length > 0) and (.search_result_url | length > 0) and (.search_empty_url | length > 0) and (.multipage_url | length > 0) and (.media_url | length > 0) and (.controls_url | length > 0) and (.password_url | length > 0) and (.missing_url | length > 0) and (.home_url | length > 0)' /tmp/x6/fixture.json
+
+      - name: Start X6 WordPress runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/x6/server.log 2>&1 &
+          echo $! > /tmp/x6/server.pid
+          for attempt in $(seq 1 30); do
+            curl -sS http://127.0.0.1:8080/ >/dev/null && break
+            sleep 1
+          done
+          curl -sS http://127.0.0.1:8080/ >/dev/null
+
+      - name: Verify X6 runtime surfaces and asset boundaries
+        run: |
+          set -euo pipefail
+          request() {
+            local name="$1" url="$2" expected="$3"
+            local file="/tmp/x6/${name}.html"
+            local code
+            code=$(curl -sS -o "$file" -w '%{http_code}' "$url")
+            test "$code" = "$expected"
+            grep -F 'aznet-theme-site-header' "$file"
+            grep -F 'id="main"' "$file"
+            grep -F 'aznet-theme-site-footer' "$file"
+          }
+          COMMENT_URL=$(jq -r '.comment_url' /tmp/x6/fixture.json)
+          ARCHIVE_URL=$(jq -r '.archive_page_2_url' /tmp/x6/fixture.json)
+          SEARCH_RESULT_URL=$(jq -r '.search_result_url' /tmp/x6/fixture.json)
+          SEARCH_EMPTY_URL=$(jq -r '.search_empty_url' /tmp/x6/fixture.json)
+          MULTIPAGE_URL=$(jq -r '.multipage_url' /tmp/x6/fixture.json)
+          MEDIA_URL=$(jq -r '.media_url' /tmp/x6/fixture.json)
+          CONTROLS_URL=$(jq -r '.controls_url' /tmp/x6/fixture.json)
+          PASSWORD_URL=$(jq -r '.password_url' /tmp/x6/fixture.json)
+          MISSING_URL=$(jq -r '.missing_url' /tmp/x6/fixture.json)
+          HOME_URL=$(jq -r '.home_url' /tmp/x6/fixture.json)
+
+          request comments "$COMMENT_URL" 200
+          grep -F 'aznet-theme-comments-css' /tmp/x6/comments.html
+          grep -F 'aznet-theme-forms-css' /tmp/x6/comments.html
+          grep -F 'id="comments"' /tmp/x6/comments.html
+
+          request archive "$ARCHIVE_URL" 200
+          grep -F 'aznet-theme-navigation-css' /tmp/x6/archive.html
+          grep -F 'page-numbers current' /tmp/x6/archive.html
+
+          request search-result "$SEARCH_RESULT_URL" 200
+          grep -F 'aznet-theme-navigation-css' /tmp/x6/search-result.html
+          grep -F 'aznet-theme-forms-css' /tmp/x6/search-result.html
+          grep -F 'X6 Cross Surface Target' /tmp/x6/search-result.html
+
+          request search-empty "$SEARCH_EMPTY_URL" 200
+          grep -F 'aznet-theme-recovery-css' /tmp/x6/search-empty.html
+          grep -F 'aznet-theme-forms-css' /tmp/x6/search-empty.html
+          grep -F 'aznet-theme-recovery--search' /tmp/x6/search-empty.html
+
+          request multipage "$MULTIPAGE_URL" 200
+          grep -F 'aznet-theme-navigation-css' /tmp/x6/multipage.html
+          grep -F 'aznet-theme-article__page-links' /tmp/x6/multipage.html
+
+          request media "$MEDIA_URL" 200
+          grep -F 'aznet-theme-media-css' /tmp/x6/media.html
+          grep -F 'x6-media-sentinel' /tmp/x6/media.html
+          grep -F 'wp-block-gallery' /tmp/x6/media.html
+
+          request controls "$CONTROLS_URL" 200
+          grep -F 'aznet-theme-forms-css' /tmp/x6/controls.html
+          grep -F 'wp-block-search__input' /tmp/x6/controls.html
+          grep -F '<select' /tmp/x6/controls.html
+
+          request password "$PASSWORD_URL" 200
+          grep -F 'aznet-theme-forms-css' /tmp/x6/password.html
+          grep -F 'post-password-form' /tmp/x6/password.html
+
+          request missing "$MISSING_URL" 404
+          grep -F 'aznet-theme-recovery-css' /tmp/x6/missing.html
+          grep -F 'aznet-theme-forms-css' /tmp/x6/missing.html
+          grep -F 'aznet-theme-recovery--404' /tmp/x6/missing.html
+
+          request home "$HOME_URL" 200
+          for handle in aznet-theme-comments-css aznet-theme-recovery-css aznet-theme-navigation-css aznet-theme-forms-css aznet-theme-media-css; do
+            if grep -F "$handle" /tmp/x6/home.html; then
+              echo "FAIL: scoped X6 surface asset leaked to Home: $handle" >&2
+              exit 1
+            fi
+          done
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/x6/server.log; then
+            echo 'FAIL: Theme-caused PHP error marker found in X6 runtime' >&2
+            exit 1
+          fi
+          echo 'PASS: X6 WordPress 6.9 runtime and asset boundaries'
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Run X6 integrated browser verification
+        env:
+          X6_STATE_DIR: /tmp/x6
+          X6_L4_DIR: /tmp/x6-l4
+        run: |
+          set -euo pipefail
+          node tests/browser/x6-cross-surface-l4.mjs
+          jq -e '.total_cases == 32 and .blocking_failures == 0' /tmp/x6-l4/summary.json
+
+      - name: Build deterministic current-version package twice
+        run: |
+          set -euo pipefail
+          VERSION=$(cat /tmp/x6/theme-version.txt)
+          ZIP_NAME="aznet-theme-${VERSION}.zip"
+          mkdir -p /tmp/x6/build-a /tmp/x6/build-b /tmp/x6/out
+          python3 scripts/build-release-package.py --source . --output "/tmp/x6/build-a/${ZIP_NAME}" --version "$VERSION"
+          python3 scripts/build-release-package.py --source . --output "/tmp/x6/build-b/${ZIP_NAME}" --version "$VERSION"
+          cmp "/tmp/x6/build-a/${ZIP_NAME}" "/tmp/x6/build-b/${ZIP_NAME}"
+          cp "/tmp/x6/build-a/${ZIP_NAME}" "/tmp/x6/out/${ZIP_NAME}"
+          printf '%s\n' "$ZIP_NAME" > /tmp/x6/out/zip-name.txt
+          sha256sum "/tmp/x6/out/${ZIP_NAME}" | tee /tmp/x6/out/SHA256SUMS.txt
+
+      - name: Verify exact package source identity and packaged PHP lint
+        run: |
+          set -euo pipefail
+          ZIP_NAME=$(cat /tmp/x6/out/zip-name.txt)
+          rm -rf /tmp/x6/extracted /tmp/x6/expected
+          mkdir -p /tmp/x6/extracted /tmp/x6/expected/aznet-theme
+          unzip -q "/tmp/x6/out/${ZIP_NAME}" -d /tmp/x6/extracted
+          test "$(find /tmp/x6/extracted -mindepth 1 -maxdepth 1 -type d -printf '%f\n')" = 'aznet-theme'
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='node_modules' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
+            ./ /tmp/x6/expected/aznet-theme/
+          diff -ru /tmp/x6/expected/aznet-theme /tmp/x6/extracted/aznet-theme
+          unzip -Z1 "/tmp/x6/out/${ZIP_NAME}" | LC_ALL=C sort > /tmp/x6/out/package-manifest.txt
+          test "$(cut -d/ -f1 /tmp/x6/out/package-manifest.txt | sort -u)" = 'aznet-theme'
+          PHP_COUNT=0
+          while IFS= read -r -d '' file; do
+            php -l "$file" >/dev/null
+            PHP_COUNT=$((PHP_COUNT + 1))
+          done < <(find /tmp/x6/extracted/aznet-theme -type f -name '*.php' -print0)
+          test "$PHP_COUNT" -gt 0
+          printf '%s\n' "$PHP_COUNT" | tee /tmp/x6/out/php-file-count.txt
+          echo 'PASS: X6 exact package/source identity and PHP lint'
+
+      - name: Verify exact-package lifecycle and rollback
+        run: |
+          set -euo pipefail
+          VERSION=$(cat /tmp/x6/theme-version.txt)
+          rm -rf /tmp/wp-package
+          mkdir -p /tmp/wp-package/wp-content/themes/aznet-theme
+          wp core download --version=6.9 --path=/tmp/wp-package --force --allow-root
+          wp config create --path=/tmp/wp-package --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --dbprefix=x6pkg_ --skip-check --allow-root
+          wp core install --path=/tmp/wp-package --url=http://127.0.0.1:8081 --title='AZnet X6 Package' --admin_user=admin --admin_password='x6-package-password' --admin_email=x6-package@example.test --skip-email --allow-root
+          rsync -a --delete /tmp/x6/extracted/aznet-theme/ /tmp/wp-package/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp-package --allow-root
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-package --allow-root)"
+          wp core version --path=/tmp/wp-package --allow-root | grep -Fx '6.9'
+          PACKAGE_STYLE_VERSION=$(sed -n 's/^Version:[[:space:]]*//p' /tmp/wp-package/wp-content/themes/aznet-theme/style.css | head -n 1)
+          PACKAGE_PHP_VERSION=$(sed -n "s/.*define( 'AZNET_THEME_VERSION', '\([^']*\)' );.*/\1/p" /tmp/wp-package/wp-content/themes/aznet-theme/functions.php | head -n 1)
+          test "$PACKAGE_STYLE_VERSION" = "$VERSION"
+          test "$PACKAGE_PHP_VERSION" = "$VERSION"
+
+          SENTINEL_ID=$(wp post create --post_type=post --post_status=publish --post_title='X6 Package Lifecycle Sentinel' --post_name='x6-package-lifecycle-sentinel' --post_content='<p>X6 package lifecycle sentinel content.</p>' --porcelain --path=/tmp/wp-package --allow-root)
+          test -n "$SENTINEL_ID"
+          wp eval "set_theme_mod( 'aznet_theme_settings', [ 'schema_version' => 1, 'visual_preset' => 'editorial' ] );" --path=/tmp/wp-package --allow-root
+          wp post get "$SENTINEL_ID" --field=post_title --path=/tmp/wp-package --allow-root > /tmp/x6/package-sentinel-title.txt
+          wp post get "$SENTINEL_ID" --field=post_content --path=/tmp/wp-package --allow-root > /tmp/x6/package-sentinel-content.txt
+          wp eval "echo wp_json_encode( get_theme_mod( 'aznet_theme_settings', [] ) );" --path=/tmp/wp-package --allow-root > /tmp/x6/package-theme-mod.json
+
+          nohup php -S 127.0.0.1:8081 -t /tmp/wp-package > /tmp/x6/package-server.log 2>&1 &
+          echo $! > /tmp/x6/package-server.pid
+          for attempt in $(seq 1 30); do
+            curl -sS "http://127.0.0.1:8081/?p=${SENTINEL_ID}" >/tmp/x6/package-post-before.html && break
+            sleep 1
+          done
+          grep -F 'aznet-theme-site-header' /tmp/x6/package-post-before.html
+          grep -F 'X6 package lifecycle sentinel content.' /tmp/x6/package-post-before.html
+          grep -F 'aznet-theme-site-footer' /tmp/x6/package-post-before.html
+
+          wp theme is-installed twentytwentyfive --path=/tmp/wp-package --allow-root || wp theme install twentytwentyfive --path=/tmp/wp-package --allow-root
+          wp theme activate twentytwentyfive --path=/tmp/wp-package --allow-root
+          test "$(wp post get "$SENTINEL_ID" --field=post_title --path=/tmp/wp-package --allow-root)" = "$(cat /tmp/x6/package-sentinel-title.txt)"
+          test "$(wp post get "$SENTINEL_ID" --field=post_content --path=/tmp/wp-package --allow-root)" = "$(cat /tmp/x6/package-sentinel-content.txt)"
+
+          wp theme activate aznet-theme --path=/tmp/wp-package --allow-root
+          test "$(wp post get "$SENTINEL_ID" --field=post_title --path=/tmp/wp-package --allow-root)" = "$(cat /tmp/x6/package-sentinel-title.txt)"
+          test "$(wp post get "$SENTINEL_ID" --field=post_content --path=/tmp/wp-package --allow-root)" = "$(cat /tmp/x6/package-sentinel-content.txt)"
+          CURRENT_THEME_MOD=$(wp eval "echo wp_json_encode( get_theme_mod( 'aznet_theme_settings', [] ) );" --path=/tmp/wp-package --allow-root)
+          test "$CURRENT_THEME_MOD" = "$(cat /tmp/x6/package-theme-mod.json)"
+          curl -sS "http://127.0.0.1:8081/?p=${SENTINEL_ID}" > /tmp/x6/package-post-after.html
+          grep -F 'aznet-theme-site-header' /tmp/x6/package-post-after.html
+          grep -F 'X6 package lifecycle sentinel content.' /tmp/x6/package-post-after.html
+          grep -F 'aznet-theme-site-footer' /tmp/x6/package-post-after.html
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/x6/package-server.log; then
+            echo 'FAIL: exact-package lifecycle runtime error marker found' >&2
+            exit 1
+          fi
+          echo 'PASS: X6 exact-package lifecycle, theme switch and rollback continuity'
+
+      - name: Verify X6 ownership and promotion boundary
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          set -euo pipefail
+          bash scripts/assert-theme-version.sh
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-release-closure-contract.php
+          git diff --check
+          VERSION=$(sed -n 's/^Version:[[:space:]]*//p' style.css | head -n 1)
+          base="${BASE_SHA:-}"
+          if [[ -z "$base" || "$base" =~ ^0+$ ]]; then
+            base=$(git rev-parse HEAD^)
+          fi
+          metadata_changes=$(git diff --unified=0 "$base"...HEAD -- style.css functions.php | grep -E '^[+-][^-+]' || true)
+
+          case "$VERSION" in
+            1.1.0)
+              if [[ -n "$metadata_changes" ]]; then
+                echo 'FAIL: X6 pre-promotion branch changed Theme metadata before owner approval' >&2
+                exit 1
+              fi
+              echo 'PASS: X6 pre-promotion ownership boundary'
+              ;;
+            1.2.0)
+              php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-version-promotion-contract.php
+              if [[ -n "$metadata_changes" ]]; then
+                unexpected=$(printf '%s\n' "$metadata_changes" | grep -Ev "^(-Version: 1\.1\.0|\+Version: 1\.2\.0|-    define\( 'AZNET_THEME_VERSION', '1\.1\.0' \);|\+    define\( 'AZNET_THEME_VERSION', '1\.2\.0' \);)$" || true)
+                if [[ -n "$unexpected" ]]; then
+                  echo 'FAIL: X6 promoted metadata diff exceeds approved 1.2.0 boundary' >&2
+                  printf '%s\n' "$unexpected" >&2
+                  exit 1
+                fi
+                for expected in \
+                  '-Version: 1.1.0' \
+                  '+Version: 1.2.0' \
+                  "-    define( 'AZNET_THEME_VERSION', '1.1.0' );" \
+                  "+    define( 'AZNET_THEME_VERSION', '1.2.0' );"; do
+                  if [[ "$(printf '%s\n' "$metadata_changes" | grep -Fxc -- "$expected")" != '1' ]]; then
+                    echo 'FAIL: X6 promoted metadata diff exceeds approved 1.2.0 boundary' >&2
+                    exit 1
+                  fi
+                done
+              fi
+              echo 'PASS: X6 promoted 1.2.0 ownership boundary'
+              ;;
+            *)
+              echo 'FAIL: unsupported X6 Theme version state' >&2
+              exit 1
+              ;;
+          esac
+
+      - name: Upload X6 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: x6-cross-surface-release-evidence
+          path: |
+            /tmp/x6
+            /tmp/x6-l4
+          if-no-files-found: error
+
+      - name: Stop X6 runtimes
+        if: always()
+        run: |
+          if [[ -f /tmp/x6/server.pid ]]; then kill "$(cat /tmp/x6/server.pid)" || true; fi
+          if [[ -f /tmp/x6/package-server.pid ]]; then kill "$(cat /tmp/x6/package-server.pid)" || true; fi
