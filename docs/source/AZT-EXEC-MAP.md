@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.38
+**Version:** v0.39
 **Status:** Working Execution Map / derived  
 **Date:** 16/09/2026
 
@@ -39,7 +39,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | P4-B Law Site Provisioning | PASS / MERGED | D-026 merged; Theme `1.1.0`; deterministic package/browser evidence retained; activation mutation-free and active-site overwrite/noindex takeover forbidden |
 | P4-C Standalone Core independence | PASS / MERGED | PR #63/#64 merged; zero-plugin L1-L4, exact-package and exact-main PASS; optional integrations remain additive |
 | P5 Publication/Deployment | PASS | Tag `v1.1.0` + GitHub Release and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
-| X v1.2 WordPress Experience Completion | X3 PASS / X4 NEXT | X1 Comments, X2 Search/404/empty states and X3 Media/Gallery/Embed L1-L4 PASS; X4 Pagination/Navigation plan next; Core WordPress surfaces only and no provider integration expansion |
+| X v1.2 WordPress Experience Completion | X4 PASS / X5 NEXT | X1 Comments, X2 Search/404/empty states, X3 Media/Gallery/Embed and X4 Pagination/Navigation L1-L4 PASS; X5 Native Form Controls plan next; Core WordPress surfaces only and no provider integration expansion |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
 Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` is `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`; publication closure PR #72 merged at `15f25e4f6d8e64c588866405629b793a85ee0323` and restored post-noop checkpoint `e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb`. Theme metadata is `1.1.0`. P5 run `35051428372` verified the final package, publication run `35052694111` published tag/Release, and production read-only run `35054176392` verified the owner-approved deployment disposition.
@@ -282,7 +282,7 @@ Owner-approved publication run `35052694111` published annotated tag `v1.1.0` at
 
 ## 13. v1.2 WordPress Experience Completion
 
-**State:** X3 PASS / X4 NEXT.
+**State:** X4 PASS / X5 NEXT.
 
 **Milestone boundary:** WordPress Core surfaces only. Theme presentation/configuration remains in scope; WordPress-owned semantics/state remain authoritative; provider compatibility/certification tracks stay separate.
 
@@ -294,7 +294,7 @@ Owner-approved publication run `35052694111` published annotated tag `v1.1.0` at
 
 **X3 — Media / Gallery / Embed:** **PASS at L1-L4** — functional closure head `ff6d7a1a025a97d8710644a78b6dcf6d2b34aa69`; X3 workflow `35078254834` SUCCESS on WordPress 6.9 zero-plugin runtime; 12/12 responsive browser/axe cases plus Classic Editor parity PASS; artifact `10439630267`, digest `sha256:2ee736d3b0e9e0182ab935367b55044df35d4c7e0234e56f3e9c273b968e9bd2`. WordPress media/content semantics remain authoritative; no gallery application engine or provider expansion.
 
-**X4 — Pagination & Navigation Completion:** archive/search pagination, Post page links, previous/next and comment pagination presentation; WordPress owns state/URLs.
+**X4 — Pagination & Navigation Completion:** **PASS at L1-L4** — functional closure head `f34db6f89cff505c16c2bb98f479eebba5661079`; dedicated workflow `35083830374` SUCCESS on WordPress 6.9 zero-plugin runtime and 20/20 browser/axe cases; artifact `10440569415`, digest `sha256:16b1b4d69b81a5ce7403d081b565d80c67a4c4e79ddb50538abdc5771928fb84`. WordPress owns main-query pagination state/URLs, Post page splitting, adjacent-Post targets and comment pagination; Theme adds bounded labels/CSS/focus/responsive presentation only. All 25 exact-head PR workflows observed on the functional head completed SUCCESS. Evidence: `docs/evidence/X4_PAGINATION_NAVIGATION_20260916.md`.
 
 **X5 — Native Form Controls:** shared production-ready presentation for WordPress-native controls; no private plugin-form skinning contract.
 
@@ -324,4 +324,4 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 16. Exact next
 
-**X3 Media / Gallery / Embed is PASS at L1-L4 on verified functional head `ff6d7a1a025a97d8710644a78b6dcf6d2b34aa69`. Owner approval for PR #81 canonical merge is granted; canonical integration awaits the GitHub merge plus fresh exact-main verification. Exact Next after integration is a reviewed implementation plan for X4 Pagination & Navigation Completion before production code.**
+**X4 Pagination & Navigation Completion is PASS at L1-L4 on verified functional head `f34db6f89cff505c16c2bb98f479eebba5661079`; dedicated run `35083830374` and all 25 observed exact-head PR workflows completed SUCCESS. Owner approval for PR #83 canonical merge is granted. Complete fresh exact-final-head verification after source closure, merge PR #83 with expected-head protection, and complete fresh exact-main verification. Exact Next after integration is a reviewed implementation plan for X5 Native Form Controls before production code.**
