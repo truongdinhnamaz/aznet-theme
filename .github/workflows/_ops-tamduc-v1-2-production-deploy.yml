@@ -1,0 +1,75 @@
+name: OPS Tam Duc v1.2.0 Production Deploy
+
+on:
+  push:
+    branches:
+      - ops/deploy-v1.2.0-tamduc
+    paths:
+      - 'tests/offline/tamduc-v1-2-production-deploy-contract.php'
+      - 'tests/browser/tamduc-v1-2-production-deploy.mjs'
+      - 'ops/deploy-v1.2.0-tamduc/DEPLOY.md'
+      - '.github/workflows/_ops-tamduc-v1-2-production-deploy.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    if: contains(github.event.head_commit.message, '[deploy-tamduc-v1.2.0]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Verify deployment static contract
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/tamduc-v1-2-production-deploy-contract.php
+
+      - name: Download and verify exact release and rollback packages
+        run: |
+          set -euo pipefail
+          curl -fL --retry 3 --retry-delay 2 \
+            https://github.com/truongdinhnamaz/aznet-theme/releases/download/v1.2.0/aznet-theme-1.2.0.zip \
+            -o /tmp/aznet-theme-1.2.0.zip
+          echo 'cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798  /tmp/aznet-theme-1.2.0.zip' | sha256sum -c -
+          curl -fL --retry 3 --retry-delay 2 \
+            https://github.com/truongdinhnamaz/aznet-theme/releases/download/v1.1.0/aznet-theme-1.1.0.zip \
+            -o /tmp/aznet-theme-1.1.0.zip
+          echo '72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258  /tmp/aznet-theme-1.1.0.zip' | sha256sum -c -
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Check deployment harness syntax
+        run: node --check tests/browser/tamduc-v1-2-production-deploy.mjs
+
+      - name: Deploy exact published Theme and verify production
+        env:
+          TAMDUC_BASE_URL: https://tamduchanoi.aznet.vn
+          PILOT_WP_USER: ${{ secrets.PILOT_WP_USER }}
+          PILOT_WP_PASSWORD: ${{ secrets.PILOT_WP_PASSWORD }}
+          TARGET_THEME_ZIP: /tmp/aznet-theme-1.2.0.zip
+          ROLLBACK_THEME_ZIP: /tmp/aznet-theme-1.1.0.zip
+          TAMDUC_STATE_DIR: /tmp/tamduc-v1-2-production-deploy
+        run: node tests/browser/tamduc-v1-2-production-deploy.mjs
+
+      - name: Upload deployment evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tamduc-v1-2-production-deploy
+          path: /tmp/tamduc-v1-2-production-deploy
+          if-no-files-found: error
