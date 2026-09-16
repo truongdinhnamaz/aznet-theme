@@ -1,0 +1,139 @@
+name: Temporary P1 Source Closure
+
+on:
+  push:
+    branches: [work/p1-post-delete-verification]
+    paths:
+      - '.github/workflows/_tmp-p1-source-closure.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile-source:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/p1-post-delete-verification
+      - name: Reconcile P1/P4 source state
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def replace(path, old, new):
+              p = Path(path)
+              s = p.read_text()
+              if old not in s:
+                  raise SystemExit(f'missing expected text in {path}: {old[:120]!r}')
+              p.write_text(s.replace(old, new, 1))
+
+          # AZT-03
+          path = 'docs/source/AZT-03-baseline-provenance.md'
+          replace(path, '**Version:** v0.33', '**Version:** v0.34')
+          replace(path,
+              '- Current canonical implementation head after owner-approved P4 authenticated QA PR #67 merge: `main@bf45a315e93fa22c441c81377f98ff34901d7ca5`.',
+              '- Current canonical implementation head after owner-approved P1 read-only inspection PR #69 merge: `main@9ed7a586b06b4c6dd91e66c51b049caa86e0485b`.')
+          replace(path,
+              '- Current canonical implementation tree: `c7db15f585e181de3eb58f96ca388878964fe64a`.',
+              '- Current canonical implementation tree: `313f6744066a1d94033d4b2868343a471fbc6a70`.')
+          replace(path,
+              '- P4 real-pilot QA with fresh public route/viewport verification plus authenticated, read-only WordPress Admin/System Health verification on the canonical D-027-capable Theme; P1 destructive duplicate-theme cleanup remains separate.',
+              '- P4 real-pilot QA with fresh public route/viewport verification plus authenticated, read-only WordPress Admin/System Health verification on the canonical D-027-capable Theme; P1 legacy duplicate cleanup is closed with fresh post-delete verification and final P4 pilot sign-off is PASS at the tested Theme-owned scope.')
+          p = Path(path)
+          p.write_text(p.read_text() + '''\n\n### P1 pilot identity cleanup and final P4 sign-off\n\nOwner-approved PR #69 merged the read-only identity harness/evidence to canonical `main@9ed7a586b06b4c6dd91e66c51b049caa86e0485b`, tree `313f6744066a1d94033d4b2868343a471fbc6a70`. Fresh `V1 Exact Main Verification` run `35049959237` completed SUCCESS on that exact merge SHA.\n\nThe pre-delete P1 inventory proved exactly one inactive legacy AZnet Theme candidate, folder `aznet-theme-release-v1.0.0` version `1.0.0`, distinct from active `aznet-theme` version `1.1.0`, with zero ambiguous AZnet identities. After the owner confirmed backup availability and explicitly approved deletion of only that inactive legacy identity through WordPress core UI, post-delete run `35050519817` completed SUCCESS. Its P1 artifact `10428552132` (`sha256:2f7598a663c1db1cca1952ce9afa6616b9cb53bf00c594094742f023840bba03`) reports `NO_DUPLICATES`, active `aznet-theme` `1.1.0`, zero inactive AZnet candidates, zero ambiguous identities and Standalone Core `ready`. The same run's public regression artifact `10428429083` (`sha256:a600f23ec48f3c1948a185d37ce47e63b2153f0f18fbc6d0a7a5f41b02d1704f`) passed the existing 28 route/viewport matrix with no Theme-owned blocker.\n\nP1 is therefore PASS and P4 final pilot sign-off is PASS at the tested Theme-owned scope. This does not create provider L5 certification and does not authorize Git tag, GitHub Release or final production deployment. Detailed evidence: `docs/evidence/P1_POST_DELETE_CLOSURE_20260916.md`.\n''')
+
+          # AZT-04
+          path = 'docs/source/AZT-04-roadmap-qa-decisions.md'
+          replace(path, '**Version:** v0.38', '**Version:** v0.39')
+          replace(path,
+              '| P1 | Pilot identity cleanup | SITE-OPS READY | Active pilot Theme `1.1.0` proven; only inactive legacy duplicates may be deleted through WordPress core UI after smoke/rollback confidence |',
+              '| P1 | Pilot identity cleanup | PASS | Owner-approved inactive legacy `aznet-theme-release-v1.0.0` deletion completed through WordPress core UI; fresh post-delete inventory proves only active `aznet-theme` `1.1.0` remains among AZnet Theme identities |')
+          replace(path,
+              '| P4 | Real law-site pilot QA | PUBLIC + AUTHENTICATED QA PASS / P1 CLEANUP PENDING | Fresh public 28-check matrix and authenticated read-only Admin/System Health matrix PASS on canonical D-027-capable Theme bytes; destructive duplicate-theme cleanup remains a separate P1 gate before final pilot sign-off |',
+              '| P4 | Real law-site pilot QA | PASS / PILOT SIGN-OFF CLOSED | Public + authenticated QA retained; P1 cleanup is closed and fresh post-delete inventory/System Health plus 28-check public regression PASS with no Theme-owned blocker |')
+          replace(path,
+              'Current canonical implementation is `main@bf45a315e93fa22c441c81377f98ff34901d7ca5`, tree `c7db15f585e181de3eb58f96ca388878964fe64a`, Theme metadata `1.1.0`. D-027 source/implementation closure remains retained through PR #63/#64; P4 public QA merged through PR #66 and authenticated read-only QA merged through owner-approved PR #67. Fresh `V1 Exact Main Verification` run `35048609753` succeeded on exact `main@bf45a315e93fa22c441c81377f98ff34901d7ca5`; artifacts: static `10427853326`, clean runtime/browser `10427687863`.',
+              'Current canonical implementation is `main@9ed7a586b06b4c6dd91e66c51b049caa86e0485b`, tree `313f6744066a1d94033d4b2868343a471fbc6a70`, Theme metadata `1.1.0`. D-027 source/implementation closure remains retained through PR #63/#64; P4 public QA merged through PR #66, authenticated read-only QA through PR #67, and P1 identity inspection through owner-approved PR #69. Fresh `V1 Exact Main Verification` run `35049959237` succeeded on exact `main@9ed7a586b06b4c6dd91e66c51b049caa86e0485b`.')
+          replace(path,
+              'System Health evidence proves the active pilot is AZnet Theme `1.1.0` on WordPress `7.1` / PHP `8.4.24`, with `primary_menu=yes`. The multiple `AZnet Theme` cards therefore represent installed legacy folder identities, not multiple active runtimes.\n\n**Exit:** smoke active frontend; inspect inactive cards; delete only inactive legacy versions through WordPress core UI; verify one intended AZnet Theme remains and System Health still reports `1.1.0` + primary menu continuity.\n\n**Hard gate:** deletion is destructive and must not be automated by Theme code. If any inactive card also reports `1.1.0`, stop and inspect identity before deletion.',
+              'Pre-delete read-only evidence proved active `aznet-theme` v1.1.0 and exactly one distinct inactive legacy candidate, `aznet-theme-release-v1.0.0` v1.0.0, with zero ambiguous AZnet identities. The owner confirmed backup availability and separately approved deletion of only that inactive identity through WordPress core UI.\n\n**Exit:** **PASS** — post-delete run `35050519817` reports `NO_DUPLICATES`, active `aznet-theme` v1.1.0, zero inactive/ambiguous AZnet identities, Standalone Core `ready`, plus a fresh 28-check public regression PASS. Evidence: `docs/evidence/P1_POST_DELETE_CLOSURE_20260916.md`.\n\n**Boundary retained:** installed-Theme deletion remains WordPress/site-operations ownership and is never automated by Theme runtime code.')
+          replace(path,
+              '**State:** **PUBLIC + AUTHENTICATED QA PASS / P1 CLEANUP PENDING.** The real pilot public matrix and authenticated read-only Admin/System Health matrix are complete on canonical D-027-capable Theme bytes. Final pilot sign-off still depends on the separate P1 duplicate-theme cleanup gate.',
+              '**State:** **PASS / PILOT SIGN-OFF CLOSED.** The real pilot public matrix and authenticated read-only Admin/System Health matrix are retained, and P1 cleanup is now closed with fresh post-delete inventory/System Health plus a fresh 28-check public regression.')
+          replace(path,
+              'P4 public + authenticated QA is PASS at the tested Theme-owned scope, while P1 destructive duplicate-theme cleanup remains pending before final pilot sign-off. None of these approvals include Git tag/GitHub Release, destructive duplicate-theme cleanup, L5 provider certification or final production deployment.',
+              'P4 public + authenticated QA is retained and P1 cleanup is PASS after owner-approved deletion of only `aznet-theme-release-v1.0.0`; post-delete run `35050519817` closes final P4 pilot sign-off at the tested Theme-owned scope. None of these approvals include Git tag/GitHub Release, L5 provider certification or final production deployment.')
+          replace(path,
+              '**P1 pilot identity cleanup — inspect the remaining installed Theme identities through WordPress core lifecycle tooling and prove which duplicates are inactive. Read-only inspection is the safe next action. Any deletion is destructive and requires separate explicit owner approval plus rollback confidence. After P1 cleanup closes, record final P4 pilot sign-off; P5 remains gated and no tag/GitHub Release/final production deployment is authorized without separate approval.**',
+              '**P5 final-candidate technical verification — build and verify the final deterministic package from the current canonical bytes, including exact-main/static/runtime/browser gates, deterministic double-build identity, unzip/exact-compare/package hygiene, clean-WordPress activation smoke and rollback reference. Stop before Git tag, GitHub Release or final production deployment; those remain separate explicit owner gates.**')
+
+          # EXEC MAP
+          path = 'docs/source/AZT-EXEC-MAP.md'
+          replace(path, '**Version:** v0.30', '**Version:** v0.31')
+          replace(path,
+              '> **Canonical-main checkpoint:** D-027 remains canonical through PR #63/#64; P4 public QA merged through PR #66 and authenticated read-only QA merged through owner-approved PR #67 to `main@bf45a315e93fa22c441c81377f98ff34901d7ca5`, tree `c7db15f585e181de3eb58f96ca388878964fe64a`. Theme metadata remains source-approved `1.1.0`; optional integrations remain additive and ownership boundaries are unchanged.',
+              '> **Canonical-main checkpoint:** D-027 remains canonical through PR #63/#64; P4 public/authenticated QA remains retained; owner-approved P1 identity inspection PR #69 merged to `main@9ed7a586b06b4c6dd91e66c51b049caa86e0485b`, tree `313f6744066a1d94033d4b2868343a471fbc6a70`. P1 cleanup and final P4 pilot sign-off are closed by fresh post-delete run `35050519817`. Theme metadata remains source-approved `1.1.0`; optional integrations remain additive and ownership boundaries are unchanged.')
+          replace(path,
+              '**Completed execution:** `PR #58 canonical integration -> D-027 source/implementation closure -> P4 public 28-check PASS -> authenticated RED/diagnostic -> PILOT_THEME_BITS_DRIFT isolated -> owner replaced historical 1.1.1 pilot bits with exact D-027 1.1.0 package -> authenticated PASS -> owner-approved PR #67 merge -> exact-main PASS run 35048609753`.',
+              '**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public 28-check PASS -> authenticated PASS -> PR #67 -> P1 read-only identity proof -> owner-approved PR #69 -> backup-confirmed owner-approved deletion of inactive aznet-theme-release-v1.0.0 -> post-delete NO_DUPLICATES + System Health ready + public 28-check PASS run 35050519817 -> P1 PASS / P4 final pilot sign-off PASS`.')
+          replace(path,
+              '| P1 Pilot identity cleanup | SITE-OPS READY | Active `1.1.0` proven; delete only inactive legacy theme identities through WordPress core UI after smoke |',
+              '| P1 Pilot identity cleanup | PASS | Only intended active `aznet-theme` v1.1.0 remains among AZnet Theme identities; post-delete inventory/System Health/public regression PASS |')
+          replace(path,
+              '| P4 Real Pilot QA | PUBLIC + AUTHENTICATED QA PASS / P1 CLEANUP PENDING | 28-check public matrix and authenticated read-only Admin/System Health matrix PASS on canonical D-027-capable Theme; destructive duplicate-theme cleanup remains separate P1 gate |',
+              '| P4 Real Pilot QA | PASS / PILOT SIGN-OFF CLOSED | Public + authenticated QA retained; P1 cleanup closed with fresh post-delete inventory/System Health and 28-check public regression PASS |')
+          replace(path,
+              'Current canonical implementation baseline is `main@bf45a315e93fa22c441c81377f98ff34901d7ca5`, Theme `1.1.0`, tree `c7db15f585e181de3eb58f96ca388878964fe64a`. D-027 PR #63/#64 remain retained; P4 public QA PR #66 and authenticated QA PR #67 are merged. Exact-main verification run `35048609753` succeeded on that exact SHA.',
+              'Current canonical implementation baseline is `main@9ed7a586b06b4c6dd91e66c51b049caa86e0485b`, Theme `1.1.0`, tree `313f6744066a1d94033d4b2868343a471fbc6a70`. D-027 PR #63/#64 remain retained; P4 public QA PR #66, authenticated QA PR #67 and P1 inspection PR #69 are merged. Exact-main verification run `35049959237` succeeded on that exact SHA; post-delete site verification run `35050519817` closes P1/P4.')
+          replace(path,
+              '**Evidence:** System Health proves active `1.1.0` and primary menu continuity.\n\n**Steps:** smoke homepage/Page/Post; inspect inactive `AZnet Theme` cards; delete only inactive legacy versions through WordPress core UI; verify one active Theme remains and System Health still reports `1.1.0`.\n\n**Hard gate:** if any inactive duplicate also reports `1.1.0`, stop and inspect identity. Theme code must not auto-delete installed themes.',
+              '**Evidence:** PR #69 read-only identity proof plus post-delete run `35050519817`. The owner confirmed backup availability and explicitly approved deletion of only inactive `aznet-theme-release-v1.0.0` v1.0.0 through WordPress core UI.\n\n**Exit:** **PASS** — `NO_DUPLICATES`; active `aznet-theme` v1.1.0; zero inactive/ambiguous AZnet identities; Standalone Core `ready`; fresh 28-check public regression PASS.\n\n**Boundary:** Theme code must not auto-delete installed themes; `flatsome` remains unrelated/outside P1 cleanup scope.')
+          replace(path,
+              '**State:** PUBLIC + AUTHENTICATED QA PASS / P1 CLEANUP PENDING.',
+              '**State:** PASS / PILOT SIGN-OFF CLOSED.')
+          replace(path,
+              '**Exit:** public + authenticated current-stack pilot evidence is complete at the tested Theme-owned scope; final pilot production sign-off still requires P1 duplicate cleanup closure.\n\n**Next:** P1 read-only duplicate-theme identity inspection. Any deletion requires separate explicit owner approval and rollback confidence. P5 remains gated until final P4 sign-off.',
+              '**Exit:** PASS at the tested Theme-owned scope. Public + authenticated evidence is retained and P1 cleanup is closed by fresh post-delete inventory/System Health/public regression evidence. Provider L5 status remains separate.\n\n**Next:** P5 final-candidate technical verification/package gates. Stop before Git tag, GitHub Release or final production deployment without separate owner approval.')
+          replace(path,
+              '**P4 authenticated pilot QA — obtain a secure authenticated WordPress Admin path and complete the remaining System Health/admin-only verification. Preserve the fresh public-matrix PASS (`35045540722`) and P4-C D-027 PASS unless invalidated. While authenticated access is unavailable, remain `PUBLIC QA PASS / AUTHENTICATED QA BLOCKED`; do not advance to P5 publication/deployment without full P4 PASS and separate owner approval.**',
+              '**P5 final-candidate technical verification — run exact-main verification, deterministic double-build byte identity, unzip/exact-compare/package hygiene, clean-WordPress activation smoke and rollback-reference checks from current canonical bytes. Stop before Git tag, GitHub Release or final production deployment; publication/deployment require separate explicit owner approval.**')
+
+          # MANIFEST
+          path = 'docs/source/SOURCE_MANIFEST.md'
+          replace(path,
+              'Canonical source is reconciled through the completed v1.1 R6 technical candidate, merged P2/P3 editorial hardening, PR #58 Homepage/Law01/Provisioning integration, D-027 Standalone Core closure, P4 public QA PR #66 and owner-approved authenticated QA PR #67 with fresh exact-main verification.',
+              'Canonical source is reconciled through the completed v1.1 R6 technical candidate, merged P2/P3 editorial hardening, PR #58 Homepage/Law01/Provisioning integration, D-027 Standalone Core closure, P4 public/authenticated QA, owner-approved P1 identity inspection PR #69, and fresh post-delete P1/P4 closure evidence.')
+          replace(path, '| `AZT-03-baseline-provenance.md` | v0.33 | Canonical implementation/provenance through D-027 plus P4 public + authenticated pilot evidence |', '| `AZT-03-baseline-provenance.md` | v0.34 | Canonical implementation/provenance through D-027 plus P1 cleanup and final P4 pilot sign-off evidence |')
+          replace(path, '| `AZT-04-roadmap-qa-decisions.md` | v0.38 | R0-R6/P2-P3/P4-A/P4-B/P4-C PASS; P4 public + authenticated QA PASS with P1 cleanup pending; P5 gates and D-001..D-027 |', '| `AZT-04-roadmap-qa-decisions.md` | v0.39 | R0-R6/P1-P4 PASS at defined scopes; final P4 pilot sign-off closed; P5 technical candidate next with publication/deployment gates retained |')
+          replace(path, '| `AZT-EXEC-MAP.md` | v0.30 | Derived execution map with P4 public + authenticated QA PASS and P1 duplicate cleanup as exact next |', '| `AZT-EXEC-MAP.md` | v0.31 | Derived execution map with P1/P4 closure and P5 final-candidate technical verification as exact next |')
+          replace(path,
+              'Current canonical implementation baseline: `main@bf45a315e93fa22c441c81377f98ff34901d7ca5`, tree `c7db15f585e181de3eb58f96ca388878964fe64a`, Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.',
+              'Current canonical implementation baseline: `main@9ed7a586b06b4c6dd91e66c51b049caa86e0485b`, tree `313f6744066a1d94033d4b2868343a471fbc6a70`, Theme metadata `1.1.0`, WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.')
+          replace(path,
+              'P4 public + authenticated QA is PASS at tested Theme-owned scope; P1 duplicate-theme cleanup remains pending before final pilot sign-off. Evidence: `docs/evidence/P4_PUBLIC_PILOT_QA_20260916.md` and `docs/evidence/P4_AUTHENTICATED_PILOT_QA_20260916.md`.',
+              'P4 public + authenticated QA is retained. Owner-approved PR #69 proved the exact legacy duplicate identity; after backup confirmation the owner approved deletion of only `aznet-theme-release-v1.0.0` through WordPress core UI. Fresh post-delete run `35050519817` reports `NO_DUPLICATES`, active `aznet-theme` v1.1.0, Standalone Core `ready`, and a 28-check public regression PASS. P1 and final P4 pilot sign-off are therefore PASS at their defined Theme-owned/site-operations scopes. Evidence: `docs/evidence/P4_PUBLIC_PILOT_QA_20260916.md`, `docs/evidence/P4_AUTHENTICATED_PILOT_QA_20260916.md`, and `docs/evidence/P1_POST_DELETE_CLOSURE_20260916.md`.')
+          replace(path,
+              '**Exact next:** P1 pilot identity cleanup. First inspect installed Theme identities read-only and prove which duplicate AZnet Theme installs are inactive. Any deletion is destructive and requires separate explicit owner approval plus rollback confidence. After P1 closure, record final P4 pilot sign-off. Git tag/GitHub Release and final production deployment remain separate P5 owner gates.',
+              '**Exact next:** P5 final-candidate technical verification/package gates from current canonical bytes. Build deterministically, verify exact package contents and clean-WordPress activation/runtime/browser behavior, and retain rollback evidence. Git tag/GitHub Release and final production deployment remain separate explicit owner gates.')
+
+          # Guard against stale current-state markers that should have been closed.
+          checks = {
+              'docs/source/AZT-04-roadmap-qa-decisions.md': ['P1 CLEANUP PENDING', '**P1 pilot identity cleanup — inspect'],
+              'docs/source/AZT-EXEC-MAP.md': ['P1 CLEANUP PENDING', 'AUTHENTICATED QA BLOCKED'],
+              'docs/source/SOURCE_MANIFEST.md': ['P1 duplicate-theme cleanup remains pending'],
+          }
+          for fn, needles in checks.items():
+              text = Path(fn).read_text()
+              for needle in needles:
+                  if needle in text:
+                      raise SystemExit(f'stale marker remains in {fn}: {needle}')
+          PY
+
+          git diff --check
+          git diff -- docs/source/AZT-03-baseline-provenance.md docs/source/AZT-04-roadmap-qa-decisions.md docs/source/AZT-EXEC-MAP.md docs/source/SOURCE_MANIFEST.md
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/source/AZT-03-baseline-provenance.md docs/source/AZT-04-roadmap-qa-decisions.md docs/source/AZT-EXEC-MAP.md docs/source/SOURCE_MANIFEST.md
+          git commit -m 'docs: close P1 and final P4 pilot sign-off'
+          git push origin HEAD:work/p1-post-delete-verification
