@@ -8,6 +8,7 @@ on:
       - 'tests/offline/tamduc-identity-contact-apply-contract.php'
       - 'tests/browser/tamduc-identity-contact-apply.mjs'
       - 'ops/tamduc-identity-contact/logo-official.jpg'
+      - 'ops/tamduc-identity-contact/APPLY.md'
       - '.github/workflows/tamduc-identity-contact-apply.yml'
   workflow_dispatch:
 
