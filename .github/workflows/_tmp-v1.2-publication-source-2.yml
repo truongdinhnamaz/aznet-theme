@@ -1,0 +1,94 @@
+name: Temporary v1.2.0 Publication Source Reconciliation Retry
+
+on:
+  push:
+    branches: [docs/v1.2.0-publication-closure]
+    paths:
+      - '.github/workflows/_tmp-v1.2-publication-source-2.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    if: contains(github.event.head_commit.message, '[v1.2-publication-source-2]')
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: docs/v1.2.0-publication-closure
+          fetch-depth: 0
+
+      - name: Reconcile authoritative source state
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+
+          def sub1(path, pattern, replacement, flags=0):
+              p = Path(path)
+              text = p.read_text()
+              new, n = re.subn(pattern, replacement, text, count=1, flags=flags)
+              if n != 1:
+                  raise SystemExit(f'{path}: expected one substitution, got {n}: {pattern[:120]!r}')
+              p.write_text(new)
+
+          # AZT-03
+          p='docs/source/AZT-03-baseline-provenance.md'
+          sub1(p, r'^\*\*Version:\*\* v0\.39$', '**Version:** v0.40', re.M)
+          sub1(p, r'^\*\*Date:\*\* 16/09/2026$', '**Date:** 17/09/2026', re.M)
+          sub1(p, r'^- Canonical `main` is now Theme version `1\.2\.0`.*\n- X6 technical integration is exact Theme `1\.2\.0`.*$', '- Canonical `main` is Theme version `1.2.0` after X6 technical integration and docs-only source closure.\n- Published release `v1.2.0` is PASS at exact technical source `c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`; production deployment remains `v1.1.0` until a later, separately approved deployment action.', re.M)
+          sub1(p, r'X6 state is therefore \*\*TECHNICAL PASS / PUBLICATION GATED\*\*; no v1\.2\.0 tag/GitHub Release or production deployment is inferred\.', 'X6 technical state is **TECHNICAL PASS**. Owner-approved publication run `35131383107` published annotated tag `v1.2.0` (tag object `62b701ed9e371b23d76b3259d459e76e824206c1`) dereferencing to this exact technical commit and GitHub Release `390148740`; release asset `568495178` (`aznet-theme-1.2.0.zip`) reports SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`. Publication evidence artifact `10461657247` has digest `sha256:57c1400145ac09559e9b8974045b31d6fff3b3349e4cf702480df50fffc5b59c`. v1.2.0 state is therefore **PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED**; no production deployment or provider L5 certification is inferred.')
+          sub1(p, r'^\*\*NEXT — request owner approval for v1\.2\.0 publication disposition.*\*\*$', '**NEXT — request separate product-owner approval before any production deployment of AZnet Theme `1.2.0`. Revalidate the target site and exact published release asset before deployment; require fresh read-only authenticated/public verification afterward.**', re.M)
+
+          # AZT-04
+          p='docs/source/AZT-04-roadmap-qa-decisions.md'
+          sub1(p, r'^\*\*Version:\*\* v0\.50$', '**Version:** v0.51', re.M)
+          sub1(p, r'^\*\*Date:\*\* 16/09/2026$', '**Date:** 17/09/2026', re.M)
+          sub1(p, r'^\| X \| v1\.2 WordPress Experience Completion \|.*$', '| X | v1.2 WordPress Experience Completion | PUBLICATION PASS / DEPLOYMENT GATED | X1-X5 retained; PR #87 technical integration and exact-main V1 + X6 L1-L4/L6 PASS; owner-approved `v1.2.0` annotated tag + GitHub Release publication PASS; production deployment remains a separate owner gate; no provider L5 expansion |', re.M)
+          sub1(p, r'^Canonical X6 technical integration is now .*$', 'Canonical X6 technical integration is `main@c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`, tree `70c04929afe38e87d317bad3414157e9e2bd6f74`, after owner-approved PR #87. Fresh `V1 Exact Main Verification` run `35129331899` and X6 push-to-main run `35129331927` both completed SUCCESS on that exact merge SHA. Owner-approved publication run `35131383107` published annotated tag `v1.2.0` and GitHub Release `390148740` with exact package SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`. Production deployment remains separately gated.', re.M)
+          sub1(p, r'^- v1\.2\.0 annotated tag/GitHub Release publication after technical merge closure;\n', '', re.M)
+          sub1(p, r'The X6 metadata-promotion gate was separately approved after fresh pre-promotion GREEN evidence\. The owner later separately approved PR #87 canonical merge; it merged to `main@c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad` and fresh exact-main V1 \+ X6 verification passed\. Neither approval authorizes v1\.2\.0 publication or production deployment\.', 'The X6 metadata-promotion gate was separately approved after fresh pre-promotion GREEN evidence. The owner later separately approved PR #87 canonical merge; it merged to `main@c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad` and fresh exact-main V1 + X6 verification passed. The owner then separately approved v1.2.0 annotated-tag/GitHub-Release publication, completed by run `35131383107`. Production deployment remains unapproved and separately gated.')
+          sub1(p, r'^\*\*X6 is TECHNICAL PASS on canonical .*$', '**v1.2.0 PUBLICATION PASS. Annotated tag `v1.2.0` dereferences to exact verified technical commit `c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`; GitHub Release `390148740` carries `aznet-theme-1.2.0.zip` with SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`, reverified by publication run `35131383107`. NEXT — request separate product-owner approval before production deployment of `1.2.0`; provider L5 remains separate.**', re.M)
+
+          # AZT-EXEC-MAP
+          p='docs/source/AZT-EXEC-MAP.md'
+          sub1(p, r'^\*\*Version:\*\* v0\.42$', '**Version:** v0.43', re.M)
+          sub1(p, r'^\*\*Date:\*\* 16/09/2026$', '**Date:** 17/09/2026', re.M)
+          sub1(p, r'^> \*\*Canonical-main checkpoint:\*\*.*$', '> **Canonical-main checkpoint:** live `main` HEAD is resolved from GitHub at execution time. X6 technical integration is verified at `main@c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`, tree `70c04929afe38e87d317bad3414157e9e2bd6f74`; fresh V1 exact-main run `35129331899` and X6 push-to-main run `35129331927` completed SUCCESS. Published release anchor is annotated `v1.2.0` -> exact technical commit `c6b1ebac...`; GitHub Release `390148740` carries package SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`. Verified production deployment remains v1.1.0 until later approval. Optional integrations remain additive and ownership boundaries are unchanged.', re.M)
+          sub1(p, r'^\*\*Completed execution:\*\*.*$', '**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS`. Current state: `v1.2.0 PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED`.', re.M)
+          sub1(p, r'^\| X v1\.2 WordPress Experience Completion \|.*$', '| X v1.2 WordPress Experience Completion | PUBLICATION PASS / DEPLOYMENT GATED | X1-X5 retained; PR #87 exact-main V1 + X6 L1-L4/L6 PASS; annotated `v1.2.0` + GitHub Release publication PASS; production deployment remains separate; provider L5 stays separate |', re.M)
+          sub1(p, r'^Canonical `main` is exact Theme `1\.2\.0`.*$', 'Canonical `main` is exact Theme `1.2.0` after owner-approved X6 technical integration. GitHub publication `v1.2.0` is PASS with exact verified package bytes; verified production deployment remains `v1.1.0`, and deployment of v1.2.0 remains a separate owner gate.', re.M)
+          sub1(p, r'^\*\*X6 — Cross-surface QA & Release Closure:\*\* \*\*TECHNICAL PASS / PUBLICATION GATED\*\*.*$', '**X6 — Cross-surface QA & Release Closure:** **PUBLICATION PASS / DEPLOYMENT GATED** — exact `1.2.0` technical bytes passed PR-head and exact-main X6 verification; owner-approved publication run `35131383107` then published annotated tag `v1.2.0` and GitHub Release `390148740` carrying the exact verified `aznet-theme-1.2.0.zip` SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`. Publication evidence: `docs/evidence/V1_2_PUBLICATION_20260917.md`. Production deployment remains separately gated; provider L5 is not inferred.', re.M)
+          sub1(p, r'^\*\*Execution:\*\* `X1 -> X2 -> X3 -> X4 -> X5 -> X6`.*$', '**Execution:** `X1 -> X2 -> X3 -> X4 -> X5 -> X6 -> publication`. X1-X5 retained RED -> GREEN production discipline; X6 technical merge/exact-main closure is PASS; v1.2.0 publication is PASS; production deployment remains a later separate owner gate.', re.M)
+          sub1(p, r'^\*\*NEXT — request owner approval for v1\.2\.0 publication disposition.*$', '**NEXT — request separate product-owner approval before production deployment of AZnet Theme `1.2.0`. Revalidate target site + exact release asset first, then require fresh read-only post-deployment verification. Provider L5 remains separate.**', re.M)
+
+          # SOURCE_MANIFEST
+          p='docs/source/SOURCE_MANIFEST.md'
+          sub1(p, r'^Canonical source is reconciled through.*$', 'Canonical source is reconciled through the completed v1.1 release-critical path and the v1.2 publication checkpoint. v1.2 remains a WordPress-Core-only Theme milestone; X1-X6 technical closure is retained PASS and annotated `v1.2.0` + GitHub Release publication is **PASS / PRODUCTION DEPLOYMENT GATED**. Provider compatibility/certification tracks remain separate.', re.M)
+          sub1(p, r'^\| `AZT-03-baseline-provenance\.md` \|.*$', '| `AZT-03-baseline-provenance.md` | v0.40 | Canonical provenance through v1.2.0 publication; production deployment remains separately gated |', re.M)
+          sub1(p, r'^\| `AZT-04-roadmap-qa-decisions\.md` \|.*$', '| `AZT-04-roadmap-qa-decisions.md` | v0.51 | v1.2.0 publication PASS; production deployment is the next owner gate |', re.M)
+          sub1(p, r'^\| `AZT-EXEC-MAP\.md` \|.*$', '| `AZT-EXEC-MAP.md` | v0.43 | Derived execution map with v1.2.0 publication PASS and production deployment gate next |', re.M)
+          sub1(p, r'X6 technical-closure evidence: `docs/evidence/X6_CROSS_SURFACE_RELEASE_CLOSURE_20260916\.md`\.', 'X6 technical-closure evidence: `docs/evidence/X6_CROSS_SURFACE_RELEASE_CLOSURE_20260916.md`. v1.2 publication evidence: `docs/evidence/V1_2_PUBLICATION_20260917.md`.')
+          sub1(p, r'^Live `main` HEAD is resolved from GitHub at execution time\..*$', 'Live `main` HEAD is resolved from GitHub at execution time. Canonical X6 technical integration is `main@c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`, tree `70c04929afe38e87d317bad3414157e9e2bd6f74`; exact-main V1 run `35129331899` and X6 push-to-main run `35129331927` completed SUCCESS. Published release anchor is annotated `v1.2.0` -> exact technical commit `c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`; publication run `35131383107` and GitHub Release `390148740` verified package SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`. Current production deployment remains v1.1.0. WordPress floor `6.9+`, PHP floor `8.1+`, hybrid PHP + `theme.json`.', re.M)
+          sub1(p, r'X6 is therefore TECHNICAL PASS / PUBLICATION GATED\. No v1\.2\.0 tag/GitHub Release or production deployment is inferred\.', 'X6 technical integration is PASS. Owner-approved publication run `35131383107` published annotated tag `v1.2.0` and GitHub Release `390148740` with exact verified asset SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`. v1.2.0 is therefore PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED; provider L5 is not inferred.')
+          sub1(p, r'^\*\*Exact next:\*\* request owner approval for v1\.2\.0 publication disposition.*$', '**Exact next:** request separate product-owner approval before production deployment of AZnet Theme `1.2.0`; revalidate the target site and exact published release asset first, then require fresh read-only post-deployment verification. Provider L5 remains separate.', re.M)
+          PY
+
+          git diff --check
+          grep -F '**Version:** v0.40' docs/source/AZT-03-baseline-provenance.md
+          grep -F '**Version:** v0.51' docs/source/AZT-04-roadmap-qa-decisions.md
+          grep -F '**Version:** v0.43' docs/source/AZT-EXEC-MAP.md
+          grep -F 'PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED' docs/source/AZT-03-baseline-provenance.md
+          grep -F 'PUBLICATION PASS / DEPLOYMENT GATED' docs/source/AZT-04-roadmap-qa-decisions.md
+          grep -F 'v1.2.0 PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED' docs/source/AZT-EXEC-MAP.md
+          grep -F 'v1.2 publication evidence' docs/source/SOURCE_MANIFEST.md
+
+      - name: Commit reconciled source state
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/source/AZT-03-baseline-provenance.md docs/source/AZT-04-roadmap-qa-decisions.md docs/source/AZT-EXEC-MAP.md docs/source/SOURCE_MANIFEST.md
+          git commit -m 'docs: advance source to v1.2.0 publication pass'
+          git push origin HEAD:docs/v1.2.0-publication-closure
