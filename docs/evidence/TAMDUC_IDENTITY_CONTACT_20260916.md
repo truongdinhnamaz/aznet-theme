@@ -86,7 +86,7 @@ Public checks at `1440×1000` and `390×844`:
 - approved logo is visible with a non-empty image source.
 - approved `tel:+842437164123` is not public yet, matching the known deployed capability block rather than being misclassified as a data failure.
 
-Fresh evidence-checkpoint verification on final evidence tree:
+Fresh evidence-checkpoint verification:
 
 - run `35123270039`
 - head `3bb1ae33ad53cee7a551946268d8d48899cf49a2`
@@ -95,8 +95,6 @@ Fresh evidence-checkpoint verification on final evidence tree:
 ## Integration hygiene
 
 Before PR integration, the one-shot mutation workflow/harness/static apply contract and client logo payload were retired from the branch. Historical apply evidence is retained; only public/read-only L4 verification remains executable.
-
-Cleanup commit: `57c899dac3da0b87a80b4798990f437153c1a2e7`.
 
 No production Theme PHP/CSS/JS changes are part of this slice.
 
