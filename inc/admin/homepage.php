@@ -100,7 +100,7 @@ function render_homepage_settings(): void {
     $pages = get_pages( [ 'post_status' => 'publish', 'sort_column' => 'post_title' ] );
     $categories = get_categories( [ 'hide_empty' => false ] );
     $visible = [
-        'homepage_preset', 'homepage_services_page', 'homepage_about_page', 'homepage_team_page',
+        'homepage_preset', 'homepage_law01_variant', 'homepage_services_page', 'homepage_about_page', 'homepage_team_page',
         'homepage_knowledge_terms', 'homepage_case_analysis_term', 'homepage_legal_news_term',
         'homepage_process_page', 'homepage_faq_page', 'homepage_contact_page',
     ];
@@ -111,6 +111,7 @@ function render_homepage_settings(): void {
     render_hidden_settings( $visible );
     echo '<h2>' . esc_html__( 'Mẫu trang chủ', 'aznet-theme' ) . '</h2>';
     field_select( 'homepage_preset', __( 'Mẫu', 'aznet-theme' ), [ 'off' => 'Tắt Composer', 'law-01' => 'Luật 01' ], (string) $s['homepage_preset'] );
+    field_select( 'homepage_law01_variant', __( 'Biến thể Luật 01', 'aznet-theme' ), [ 'navy-gold' => 'Navy + Gold', 'burgundy-gold' => 'Burgundy + Gold' ], (string) $s['homepage_law01_variant'] );
     echo '<p class="description">' . esc_html__( 'Luật 01: website dịch vụ pháp lý kết hợp nội dung chuyên môn. Áp dụng mẫu chỉ đổi presentation, không sửa nội dung WordPress.', 'aznet-theme' ) . '</p>';
 
     echo '<h2>' . esc_html__( 'Nguồn nội dung', 'aznet-theme' ) . '</h2>';
