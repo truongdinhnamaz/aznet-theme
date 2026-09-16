@@ -84,7 +84,7 @@ $result = [
     'post_url'    => $post_url,
     'page_url'    => $page_url,
     'home_url'    => home_url( '/' ),
-    'missing_url' => home_url( '/x4-navigation-definitely-missing/' ),
+    'missing_url' => home_url( '/?p=999999999' ),
     'post_id'     => $target_post_id,
     'category_id' => $category_id,
 ];
