@@ -207,6 +207,34 @@ function enqueue_comments_assets( ?string $version = null ): void {
     }
 }
 
+/** Determine whether the native Search/404/archive recovery presentation can render. */
+function should_enqueue_recovery_assets(): bool {
+    if ( ! function_exists( 'is_search' ) || ! function_exists( 'is_404' ) || ! function_exists( 'is_archive' ) ) {
+        return false;
+    }
+
+    if ( function_exists( __NAMESPACE__ . '\\Integrations\\WooCommerce\\current_surface' )
+        && null !== \AZnet\Theme\Integrations\WooCommerce\current_surface() ) {
+        return false;
+    }
+
+    return is_search() || is_404() || is_archive();
+}
+
+/** Enqueue Search/404/archive recovery presentation only on its native surfaces. */
+function enqueue_recovery_assets( ?string $version = null ): void {
+    if ( ! should_enqueue_recovery_assets() ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'aznet-theme-recovery',
+        get_theme_file_uri( '/assets/css/components/recovery.css' ),
+        [ 'aznet-theme-tokens', 'aznet-theme-generic-content' ],
+        asset_content_version( '/assets/css/components/recovery.css', $version )
+    );
+}
+
 function enqueue_assets(): void {
     $version = defined( 'AZNET_THEME_VERSION' ) ? AZNET_THEME_VERSION : null;
 
@@ -262,6 +290,8 @@ function enqueue_assets(): void {
             $version
         );
     }
+
+    enqueue_recovery_assets( $version );
 
     if ( function_exists( 'is_singular' ) && is_singular( 'post' ) ) {
         wp_enqueue_style(
