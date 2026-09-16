@@ -1,0 +1,194 @@
+name: X3 Media Gallery Embed
+
+on:
+  push:
+    branches:
+      - feat/v1.2-x3-media
+    paths:
+      - 'assets/css/components/media.css'
+      - 'inc/theme/assets.php'
+      - 'inc/theme/design-system.php'
+      - 'tests/offline/x3-media-gallery-embed-contract.php'
+      - 'tests/runtime/x3-media-gallery-embed.php'
+      - 'tests/browser/x3-media-gallery-embed-l4.mjs'
+      - 'tests/offline/r1-visual-preset-contract.php'
+      - 'tests/offline/r6-asset-scope-contract.php'
+      - 'scripts/verify-v1-core.sh'
+      - '.github/workflows/x3-media-gallery-embed.yml'
+      - 'docs/evidence/X3_MEDIA_GALLERY_EMBED_20260916.md'
+      - 'docs/source/AZT-04-roadmap-qa-decisions.md'
+      - 'docs/source/AZT-EXEC-MAP.md'
+      - 'docs/source/SOURCE_MANIFEST.md'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  x3-quality:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Checkout exact X3 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Record exact candidate SHA
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/x3 /tmp/x3-l4
+          git rev-parse HEAD | tee /tmp/x3/checkout-sha.txt
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Run X3 static and retained contract gate
+        run: bash scripts/verify-v1-core.sh
+
+      - name: Install WordPress 6.9 and exact Theme candidate
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/wp
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='AZnet X3 Runtime' --admin_user=admin --admin_password='x3-media-password' --admin_email=ci@example.test --skip-email --allow-root
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
+            ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          wp core version --path=/tmp/wp --allow-root | grep -Fx '6.9'
+          wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp --allow-root)"
+          grep -F 'Version: 1.1.0' /tmp/wp/wp-content/themes/aznet-theme/style.css
+          grep -F "define( 'AZNET_THEME_VERSION', '1.1.0' );" /tmp/wp/wp-content/themes/aznet-theme/functions.php
+
+      - name: Seed native and legacy media fixture
+        run: |
+          set -euo pipefail
+          printf '%s' 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=' | base64 -d > /tmp/x3-one.png
+          cp /tmp/x3-one.png /tmp/x3-two.png
+          MEDIA_ONE=$(wp media import /tmp/x3-one.png --title='X3 Media One' --porcelain --path=/tmp/wp --allow-root)
+          MEDIA_TWO=$(wp media import /tmp/x3-two.png --title='X3 Media Two' --porcelain --path=/tmp/wp --allow-root)
+          test -n "$MEDIA_ONE"
+          test -n "$MEDIA_TWO"
+          X3_MEDIA_ONE_ID="$MEDIA_ONE" X3_MEDIA_TWO_ID="$MEDIA_TWO" \
+            wp eval-file "$GITHUB_WORKSPACE/tests/runtime/x3-media-gallery-embed.php" --path=/tmp/wp --allow-root > /tmp/x3/fixture.json
+          jq -e '.post_id > 0 and .page_id > 0 and .front_id > 0 and .image_one_id > 0 and .image_two_id > 0' /tmp/x3/fixture.json
+
+      - name: Start WordPress runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/x3/server.log 2>&1 &
+          echo $! > /tmp/x3/server.pid
+          for attempt in $(seq 1 30); do
+            curl -sS http://127.0.0.1:8080/ >/dev/null && break
+            sleep 1
+          done
+          curl -sS http://127.0.0.1:8080/ >/dev/null
+
+      - name: Verify X3 runtime surfaces and asset boundary
+        run: |
+          set -euo pipefail
+          request() {
+            local name="$1" url="$2" expected="$3" media="$4"
+            local file="/tmp/x3/${name}.html"
+            local code
+            code=$(curl -sS -o "$file" -w '%{http_code}' "$url")
+            test "$code" = "$expected"
+            grep -F 'aznet-theme-site-header' "$file"
+            grep -F 'id="main"' "$file"
+            grep -F 'aznet-theme-site-footer' "$file"
+            if [[ "$media" = yes ]]; then
+              grep -F 'aznet-theme-media-css' "$file"
+              grep -F 'x3-media-sentinel' "$file"
+              grep -F 'wp-block-gallery' "$file"
+              grep -F 'gallery-item' "$file"
+              grep -F 'wp-caption' "$file"
+              grep -F 'x3-video' "$file"
+              grep -F 'x3-audio' "$file"
+              grep -F 'x3-embed' "$file"
+            else
+              if grep -F 'aznet-theme-media-css' "$file"; then
+                echo "FAIL: X3 media asset leaked onto ${name}" >&2
+                exit 1
+              fi
+            fi
+          }
+          POST_URL=$(jq -r '.post_url' /tmp/x3/fixture.json)
+          PAGE_URL=$(jq -r '.page_url' /tmp/x3/fixture.json)
+          FRONT_URL=$(jq -r '.front_url' /tmp/x3/fixture.json)
+          SEARCH_URL=$(jq -r '.search_url' /tmp/x3/fixture.json)
+          ARCHIVE_URL=$(jq -r '.archive_url' /tmp/x3/fixture.json)
+          NOT_FOUND_URL=$(jq -r '.not_found_url' /tmp/x3/fixture.json)
+          request post "$POST_URL" 200 yes
+          request page "$PAGE_URL" 200 yes
+          request front "$FRONT_URL" 200 yes
+          request search "$SEARCH_URL" 200 no
+          request archive "$ARCHIVE_URL" 200 no
+          request not-found "$NOT_FOUND_URL" 404 no
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/x3/server.log; then
+            echo 'FAIL: Theme-caused PHP error marker found in X3 runtime' >&2
+            exit 1
+          fi
+          echo 'PASS: X3 WordPress 6.9 runtime and asset boundary'
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Run X3 browser responsive and editor verification
+        env:
+          X3_STATE_DIR: /tmp/x3
+          X3_L4_DIR: /tmp/x3-l4
+          X3_ADMIN_USER: admin
+          X3_ADMIN_PASSWORD: x3-media-password
+        run: node tests/browser/x3-media-gallery-embed-l4.mjs
+
+      - name: Upload X3 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: x3-media-gallery-embed-evidence
+          path: |
+            /tmp/x3
+            /tmp/x3-l4
+          if-no-files-found: error
+
+      - name: Stop runtime
+        if: always()
+        run: |
+          if [[ -f /tmp/x3/server.pid ]]; then
+            kill "$(cat /tmp/x3/server.pid)" || true
+          fi
