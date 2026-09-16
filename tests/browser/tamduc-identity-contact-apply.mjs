@@ -20,6 +20,7 @@ const state = {
   before_state: {},
   after_state: {},
   mutations: [],
+  recovery: [],
   rollback: [],
   blocked: [],
   error: null,
@@ -125,13 +126,49 @@ async function menuInventory(page) {
   return menus;
 }
 
-async function createPhoneMenu(page) {
-  await page.goto(`${baseUrl}/wp-admin/nav-menus.php?action=edit&menu=0`, { waitUntil: 'domcontentloaded', timeout: 30000 });
-  await page.locator('#menu-name').fill(MENU_NAME);
-  const createdMenuId = waitForNonzeroMenuId(page);
-  await nativeClick(page.locator('#save_menu_header'));
-  const menuId = await createdMenuId;
+async function menuState(page, menuId) {
+  await page.goto(`${baseUrl}/wp-admin/nav-menus.php?action=edit&menu=${menuId}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  const rows = page.locator('#menu-to-edit .menu-item');
+  const items = [];
+  for (let index = 0; index < await rows.count(); index += 1) {
+    const row = rows.nth(index);
+    const titleField = row.locator('input.edit-menu-item-title');
+    const urlField = row.locator('input.edit-menu-item-url');
+    items.push({
+      title: (await titleField.count()) ? await titleField.inputValue() : '',
+      href: (await urlField.count()) ? await urlField.inputValue() : '',
+    });
+  }
+  return { menu_id: menuId, item_count: items.length, items };
+}
 
+async function resolveExistingPhoneMenu(page, menus) {
+  const matches = menus.filter((item) => item.label === MENU_NAME);
+  if (matches.length > 1) throw new Error(`Precondition drift: multiple matching menus: ${JSON.stringify(matches)}`);
+  if (matches.length === 0) return { menu_id: 0, existing_menu_state: null, adopted_existing_menu: false, needs_phone_item: false };
+
+  const menuId = Number(matches[0].value || 0);
+  if (!Number.isInteger(menuId) || menuId <= 0) throw new Error(`Precondition drift: invalid existing menu id: ${matches[0].value}`);
+  const existing_menu_state = await menuState(page, menuId);
+  const isEmpty = existing_menu_state.item_count === 0;
+  const isExact = existing_menu_state.item_count === 1
+    && existing_menu_state.items[0]?.title === PHONE_DISPLAY
+    && existing_menu_state.items[0]?.href === PHONE_HREF;
+
+  if (!isEmpty && !isExact) {
+    throw new Error(`Precondition drift: unexpected existing menu contents: ${JSON.stringify(existing_menu_state)}`);
+  }
+
+  return {
+    menu_id: menuId,
+    existing_menu_state,
+    adopted_existing_menu: true,
+    needs_phone_item: isEmpty,
+  };
+}
+
+async function addPhoneItem(page, menuId) {
+  await page.goto(`${baseUrl}/wp-admin/nav-menus.php?action=edit&menu=${menuId}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
   const customSection = page.locator('#add-custom-links');
   const title = customSection.locator('.accordion-section-title');
   if ((await title.getAttribute('aria-expanded')) !== 'true') await title.click();
@@ -141,20 +178,17 @@ async function createPhoneMenu(page) {
   const item = page.locator('#menu-to-edit .menu-item').filter({ hasText: PHONE_DISPLAY });
   await item.waitFor({ state: 'visible', timeout: 15000 });
   await nativeClick(page.locator('#save_menu_header'));
-  await page.waitForLoadState('domcontentloaded');
-  return menuId;
+  await page.waitForTimeout(1500);
 }
 
-async function phoneMenuState(page, menuId) {
-  await page.goto(`${baseUrl}/wp-admin/nav-menus.php?action=edit&menu=${menuId}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
-  const item = page.locator('#menu-to-edit .menu-item').filter({ hasText: PHONE_DISPLAY });
-  const count = await item.count();
-  let href = '';
-  if (count > 0) {
-    const urlField = item.first().locator('input.edit-menu-item-url');
-    href = (await urlField.count()) ? await urlField.inputValue() : '';
-  }
-  return { menu_id: menuId, item_count: count, href };
+async function createPhoneMenu(page) {
+  await page.goto(`${baseUrl}/wp-admin/nav-menus.php?action=edit&menu=0`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await page.locator('#menu-name').fill(MENU_NAME);
+  const createdMenuId = waitForNonzeroMenuId(page);
+  await nativeClick(page.locator('#save_menu_header'));
+  const menuId = await createdMenuId;
+  await addPhoneItem(page, menuId);
+  return menuId;
 }
 
 async function maybeAssignHeaderUtility(page, menuId) {
@@ -208,12 +242,29 @@ async function deleteCreatedMenu(page, menuId) {
   }
 }
 
+async function restoreAdoptedEmptyMenu(page, menuId) {
+  try {
+    await page.goto(`${baseUrl}/wp-admin/nav-menus.php?action=edit&menu=${menuId}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    const item = page.locator('#menu-to-edit .menu-item').filter({ hasText: PHONE_DISPLAY });
+    if ((await item.count()) === 1) {
+      const remove = item.first().locator('.item-delete');
+      await nativeClick(remove);
+      await nativeClick(page.locator('#save_menu_header'));
+      await page.waitForTimeout(1500);
+      state.rollback.push(`adopted_menu_restored_empty:${menuId}`);
+    }
+  } catch (error) {
+    state.rollback.push(`adopted_menu_restore_failed:${error.message}`);
+  }
+}
+
 const browser = await chromium.launch({ headless: true });
 let mediaId = 0;
 let menuId = 0;
 let nonce = '';
 let logoApplied = false;
 let menuCreated = false;
+let adoptedEmptyMenuMutated = false;
 try {
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
   const page = await context.newPage();
@@ -231,7 +282,12 @@ try {
 
   if (state.before_state.custom_logo !== false) throw new Error(`Precondition drift: custom_logo expected false, got ${state.before_state.custom_logo}`);
   if (beforePublic.tel_links.some((item) => item.href === PHONE_HREF)) throw new Error(`Precondition drift: ${PHONE_HREF} already public`);
-  if (beforeMenus.some((item) => item.label === MENU_NAME)) throw new Error(`Precondition drift: menu already exists: ${MENU_NAME}`);
+
+  const existingMenu = await resolveExistingPhoneMenu(page, beforeMenus);
+  state.before_state.existing_menu_state = existingMenu.existing_menu_state;
+  if (existingMenu.adopted_existing_menu) {
+    state.recovery.push(`adopted_existing_menu:${existingMenu.menu_id}`);
+  }
 
   nonce = await restNonce(page);
   mediaId = await uploadLogo(page, nonce);
@@ -241,10 +297,19 @@ try {
   logoApplied = true;
   state.mutations.push(`custom_logo:${mediaId}`);
 
-  menuId = await createPhoneMenu(page);
-  menuCreated = true;
-  state.mutations.push(`menu_created:${menuId}:${MENU_NAME}`);
-  state.mutations.push(`phone_link:${PHONE_DISPLAY}:${PHONE_HREF}`);
+  if (existingMenu.adopted_existing_menu) {
+    menuId = existingMenu.menu_id;
+    if (existingMenu.needs_phone_item) {
+      await addPhoneItem(page, menuId);
+      adoptedEmptyMenuMutated = true;
+      state.mutations.push(`phone_link:${PHONE_DISPLAY}:${PHONE_HREF}`);
+    }
+  } else {
+    menuId = await createPhoneMenu(page);
+    menuCreated = true;
+    state.mutations.push(`menu_created:${menuId}:${MENU_NAME}`);
+    state.mutations.push(`phone_link:${PHONE_DISPLAY}:${PHONE_HREF}`);
+  }
 
   const headerUtility = await maybeAssignHeaderUtility(page, menuId);
   if (headerUtility.registered && headerUtility.assigned) {
@@ -253,11 +318,14 @@ try {
     state.blocked.push('header_utility_rendering: active Theme does not register header-utility; menu retained WordPress-owned for later compatible Theme deployment');
   }
 
-  const menu = await phoneMenuState(page, menuId);
+  const menu = await menuState(page, menuId);
   const afterPublic = await publicState(page);
   state.after_state = { menu, header_utility: headerUtility, public: afterPublic };
 
-  if (menu.item_count !== 1 || menu.href !== PHONE_HREF) throw new Error(`Phone menu verification failed: ${JSON.stringify(menu)}`);
+  const exactPhoneMenu = menu.item_count === 1
+    && menu.items[0]?.title === PHONE_DISPLAY
+    && menu.items[0]?.href === PHONE_HREF;
+  if (!exactPhoneMenu) throw new Error(`Phone menu verification failed: ${JSON.stringify(menu)}`);
   if (afterPublic.logo_count < 1 || !afterPublic.logo_src) throw new Error('Public custom logo did not render after save');
   if (headerUtility.registered && !afterPublic.tel_links.some((item) => item.href === PHONE_HREF)) throw new Error('Registered header utility did not expose official phone publicly');
 
@@ -270,6 +338,7 @@ try {
   const page = pages[0];
   if (page) {
     if (menuCreated && menuId) await deleteCreatedMenu(page, menuId);
+    if (adoptedEmptyMenuMutated && menuId) await restoreAdoptedEmptyMenu(page, menuId);
     if (logoApplied) await rollbackCustomLogo(page);
     if (mediaId && nonce) await deleteUploadedMedia(page, nonce, mediaId);
   }
