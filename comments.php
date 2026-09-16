@@ -39,8 +39,9 @@ if ( post_password_required() ) {
         <?php
         the_comments_pagination(
             [
-                'prev_text' => esc_html__( 'Previous comments', 'aznet-theme' ),
-                'next_text' => esc_html__( 'Next comments', 'aznet-theme' ),
+                'prev_text'  => esc_html__( 'Previous comments', 'aznet-theme' ),
+                'next_text'  => esc_html__( 'Next comments', 'aznet-theme' ),
+                'aria_label' => esc_attr__( 'Comments pagination', 'aznet-theme' ),
             ]
         );
         ?>

@@ -262,6 +262,34 @@ function enqueue_media_assets( ?string $version = null ): void {
     );
 }
 
+/** Determine whether native pagination/navigation presentation can render. */
+function should_enqueue_navigation_assets(): bool {
+    if ( function_exists( __NAMESPACE__ . '\\Integrations\\WooCommerce\\current_surface' )
+        && null !== \AZnet\Theme\Integrations\WooCommerce\current_surface() ) {
+        return false;
+    }
+
+    $is_archive = function_exists( 'is_archive' ) && is_archive();
+    $is_search  = function_exists( 'is_search' ) && is_search();
+    $is_post    = function_exists( 'is_singular' ) && is_singular( 'post' );
+
+    return $is_archive || $is_search || $is_post;
+}
+
+/** Enqueue shared native pagination/navigation presentation only on X4 surfaces. */
+function enqueue_navigation_assets( ?string $version = null ): void {
+    if ( ! should_enqueue_navigation_assets() ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'aznet-theme-navigation',
+        get_theme_file_uri( '/assets/css/components/navigation.css' ),
+        [ 'aznet-theme-tokens', 'aznet-theme-generic-content' ],
+        asset_content_version( '/assets/css/components/navigation.css', $version )
+    );
+}
+
 function enqueue_assets(): void {
     $version = defined( 'AZNET_THEME_VERSION' ) ? AZNET_THEME_VERSION : null;
 
@@ -318,6 +346,7 @@ function enqueue_assets(): void {
         );
     }
 
+    enqueue_navigation_assets( $version );
     enqueue_media_assets( $version );
     enqueue_recovery_assets( $version );
 

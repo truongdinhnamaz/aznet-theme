@@ -40,7 +40,16 @@ $shell_classes = \AZnet\Theme\content_shell_classes( false );
                 </div>
 
                 <div class="aznet-theme-listing__pagination">
-                    <?php the_posts_pagination(); ?>
+                    <?php
+                    the_posts_pagination(
+                        [
+                            'mid_size'   => 1,
+                            'prev_text'  => esc_html__( 'Previous', 'aznet-theme' ),
+                            'next_text'  => esc_html__( 'Next', 'aznet-theme' ),
+                            'aria_label' => esc_attr__( 'Search results pagination', 'aznet-theme' ),
+                        ]
+                    );
+                    ?>
                 </div>
             <?php else : ?>
                 <div class="aznet-theme-recovery aznet-theme-recovery--search" role="status">
