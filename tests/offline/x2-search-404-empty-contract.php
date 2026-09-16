@@ -28,6 +28,7 @@ $assets = x2_source('inc/theme/assets.php');
 $style = x2_source('style.css');
 $functions = x2_source('functions.php');
 $recovery = x2_source('assets/css/components/recovery.css');
+$forms = x2_source('assets/css/components/forms.css');
 
 foreach ([
     'have_posts()',
@@ -80,7 +81,7 @@ foreach ([
     }
 }
 
-$production = $search . "\n" . $error404 . "\n" . $archive . "\n" . $assets;
+$production = $search . "\n" . $error404 . "\n" . $archive . "\n" . $assets . "\n" . $forms;
 foreach ([
     'new WP_Query', 'WP_Query(', 'query_posts(', 'get_posts(', 'pre_get_posts',
     '$wpdb', 'get_post_meta(', 'wp_redirect(', 'wp_safe_redirect(',
@@ -101,11 +102,19 @@ if (!str_contains($style, 'Version: 1.1.0')) {
 foreach ([
     '.aznet-theme-recovery',
     '.aznet-theme-recovery__actions',
-    '.aznet-theme-recovery .search-form',
-    ':focus-visible',
 ] as $marker) {
     if (!str_contains($recovery, $marker)) {
         x2_fail('recovery.css missing presentation marker: ' . $marker);
+    }
+}
+
+foreach ([
+    '.aznet-theme-recovery .search-form',
+    '.aznet-theme-search-header__form .search-form',
+    ':focus-visible',
+] as $marker) {
+    if (!str_contains($forms, $marker)) {
+        x2_fail('forms.css missing retained X2 control marker: ' . $marker);
     }
 }
 
