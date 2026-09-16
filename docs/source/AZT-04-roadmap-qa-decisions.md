@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.42
+**Version:** v0.43
 **Status:** Working Source  
 **Date:** 16/09/2026
 
@@ -38,6 +38,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P4-B | Law Site Provisioning v1.1 | PASS / MERGED | D-026 smart setup merged through PR #58 with Theme metadata `1.1.0`; deterministic package/browser evidence retained and exact-main verification PASS |
 | P4-C | Standalone Core independence | PASS / MERGED | D-027 source + implementation merged through PR #63/#64; zero-plugin L1-L4, exact-package and exact-main gates PASS; optional integrations remain additive |
 | P5 | Publication & production deployment | PASS | Tag `v1.1.0` + GitHub Release publication and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
+| X | v1.2 WordPress Experience Completion | DESIGN APPROVED / SOURCE RATIFICATION | WordPress Core surfaces only; surface modules + shared primitives; deep polish Comments, Search/404/empty states, Media/gallery/embed; no new provider integration |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
 Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` points to `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`. Publication source closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72. P5 technical run `35051428372` verified final package bytes, publication run `35052694111` published the matching tag/Release, and production read-only run `35054176392` closed deployment at the tested Theme-owned/site-operations scope.
@@ -201,6 +202,28 @@ Owner-approved publication run `35052694111` then created annotated tag `v1.1.0`
 
 **Exit:** Git tag + GitHub Release publication PASS; owner-approved production deployment disposition for `tamduchanoi.aznet.vn` PASS with fresh read-only run `35054176392`. No provider L5 certification is inferred.
 
+### X — v1.2 WordPress Experience Completion
+
+**State:** **DESIGN APPROVED / SOURCE RATIFICATION.**
+
+**Goal:** complete the native WordPress Core experience of AZnet Theme while keeping the Theme a presentation owner. v1.2 does not open a new provider/plugin integration program.
+
+**Architecture:** retain shared tokens/content primitives and the hybrid PHP + `theme.json` architecture; add bounded surface modules only where a surface has distinct markup/asset needs. WordPress continues to own comment/search/media/pagination/form semantics and state. Theme owns presentation, responsive behavior, accessibility presentation and surface-aware Theme assets.
+
+**Deep-polish surfaces:** Comments; Search + 404 + empty states; Media/gallery/embed. Pagination/navigation and native form controls reach production-ready quality without becoming large application subsystems.
+
+**Execution order:** `X1 Comments -> X2 Search/404 -> X3 Media -> X4 Navigation -> X5 Forms -> X6 Closure`.
+
+**Version discipline:** Theme metadata remains `1.1.0` during X1-X5. Promotion to exact `1.2.0` is an X6 action only after fresh final-candidate evidence and the applicable owner gate.
+
+**QA:** each production slice uses RED -> intended failure -> minimal GREEN -> retained regression, then L3 real WordPress runtime and L4 responsive/keyboard/focus/overflow/a11y. X6 adds L6 deterministic package/source identity, update/theme-switch continuity, rollback and exact-main verification. Provider L5 is outside v1.2 and is not inferred.
+
+**Forbidden:** provider integration expansion, private provider reads, custom search/ranking engine, custom comment engine/store, gallery/lightbox application engine, page builder/FSE takeover, SEO/domain ownership or a new build stack without a separate accepted decision.
+
+**Design record:** `docs/superpowers/specs/2026-09-16-v1.2-wordpress-experience-completion-design.md`.
+
+**Exact Next after source ratification:** write and review the implementation plan for **X1 — Comments Surface** before production implementation.
+
 ## 6. Dependency order
 
 Core v1.1 is complete:
@@ -290,6 +313,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-025** | **Law Site Provisioning v1 is an explicit idempotent WordPress-native bootstrap workflow: activation is mutation-free; new/existing sites use a visible confirmed change plan; created content becomes WordPress-owned; failed-run rollback is current-run bounded; successful setup is not equivalent to Launch Ready.** | **Accepted** |
 | **D-026** | **Law Site Provisioning v1.1 may preselect non-authoritative exact-label recommendations, seed bounded WordPress-native starter editorial/media content, and temporarily discourage indexing only on a confirmed new/mostly-empty-site plan; active-site starter content fails safe to Draft without a public per-Post SEO contract, and all authoritative mapping/mutation remains explicit in the confirmed provisioning plan.** | **Accepted** |
 | **D-027** | **AZnet Theme Core has zero mandatory third-party runtime dependency. WordPress + Theme alone must complete install/activate/setup/provision/author/render on the support floor; optional providers are additive capability tracks, provider absence is not Core failure, and the exact final package must pass a zero-plugin standalone release path before Core Ready/publication. External development/QA tooling is allowed only outside deployed runtime.** | **Accepted** |
+| **D-028** | **v1.2 WordPress Experience Completion is a WordPress-Core-only Theme milestone using surface modules + shared primitives. No new provider integration is opened; Comments, Search/404/empty states and Media/gallery/embed receive deep polish; metadata remains 1.1.0 until X6 final-candidate promotion.** | **Accepted** |
 
 ## 11. Open questions
 
@@ -324,4 +348,4 @@ Metadata promotion to `1.1.0` is a historical cleared gate completed through PR 
 
 ## 14. Exact next
 
-**v1.1 release-critical path is complete through production deployment. Exact Next is an explicit owner decision on a new Theme milestone or a separately scoped optional-provider compatibility/certification track; provider L5 is not inferred from this release closure.**
+**v1.2 WordPress Experience Completion is owner-approved at design level. Exact Next is to merge this source/design ratification, then write and review the X1 Comments Surface implementation plan. No provider L5 work is opened or inferred.**
