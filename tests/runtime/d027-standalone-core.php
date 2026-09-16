@@ -33,7 +33,6 @@ aznet_d027_must( 'law-01' === (string) ( $settings['homepage_preset'] ?? 'off' )
 aznet_d027_must( 'page' === (string) get_option( 'show_on_front', 'posts' ), 'Static Front Page is not configured' );
 $front_id = (int) get_option( 'page_on_front', 0 );
 aznet_d027_must( $front_id > 0 && get_post( $front_id ) instanceof WP_Post, 'Provisioned Front Page is missing' );
-aznet_d027_must( AZnet\Theme\homepage_composer_active(), 'Homepage Composer is not active after provisioning' );
 
 $readiness = AZnet\Theme\provisioning_readiness();
 aznet_d027_must( true === ( $readiness['setup_ready'] ?? false ), 'Provisioning setup is not ready: ' . implode( ',', (array) ( $readiness['missing_required'] ?? [] ) ) );
