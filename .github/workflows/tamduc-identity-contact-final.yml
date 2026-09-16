@@ -1,3 +1,4 @@
+# Read-only public verification retained for PR integration.
 name: Tâm Đức Identity Contact Final L4
 
 on:
@@ -8,7 +9,6 @@ on:
       - 'tests/offline/tamduc-identity-contact-final-contract.php'
       - 'tests/browser/tamduc-identity-contact-final-l4.mjs'
       - '.github/workflows/tamduc-identity-contact-final.yml'
-      - 'docs/evidence/TAMDUC_IDENTITY_CONTACT_20260916.md'
   workflow_dispatch:
 
 permissions:
