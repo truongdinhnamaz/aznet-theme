@@ -60,14 +60,19 @@ async function supportSnapshot(page) {
 
 async function publicState(page) {
   await page.goto(baseUrl, { waitUntil: 'networkidle', timeout: 30000 });
-  return page.evaluate(() => ({
-    logo_count: document.querySelectorAll('img.custom-logo').length,
-    logo_src: document.querySelector('img.custom-logo')?.getAttribute('src') || '',
-    tel_links: Array.from(document.querySelectorAll('a[href^="tel:"]')).map((node) => ({
-      href: node.getAttribute('href') || '',
-      text: (node.textContent || '').trim(),
-    })),
-  }));
+  return page.evaluate(() => {
+    const logo_selector = 'img.aznet-theme-site-header__logo, img.custom-logo';
+    const logo = document.querySelector(logo_selector);
+    return {
+      logo_selector,
+      logo_count: document.querySelectorAll(logo_selector).length,
+      logo_src: logo?.getAttribute('src') || '',
+      tel_links: Array.from(document.querySelectorAll('a[href^="tel:"]')).map((node) => ({
+        href: node.getAttribute('href') || '',
+        text: (node.textContent || '').trim(),
+      })),
+    };
+  });
 }
 
 async function restNonce(page) {
