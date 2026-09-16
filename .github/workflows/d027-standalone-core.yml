@@ -11,6 +11,7 @@ on:
       - 'inc/admin/system-health.php'
       - 'inc/admin/control-center.php'
       - 'tests/offline/d027-standalone-core-health-contract.php'
+      - 'tests/offline/r5-control-center-static-contract.php'
       - '.github/workflows/d027-standalone-core.yml'
   workflow_dispatch:
 
@@ -32,6 +33,9 @@ jobs:
 
       - name: Run D-027 standalone health contract
         run: php tests/offline/d027-standalone-core-health-contract.php
+
+      - name: Run retained R5 Control Center contract
+        run: php tests/offline/r5-control-center-static-contract.php
 
       - name: Lint System Health
         run: php -l inc/admin/system-health.php
