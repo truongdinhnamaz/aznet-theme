@@ -85,14 +85,16 @@
 .aznet-theme-entry__content .alignwide {
     width: min(var(--aznet-theme-container-wide), calc(100dvw - (var(--aznet-theme-gutter) * 2)));
     max-width: none;
-    margin-inline: 50%;
+    margin-inline-start: 50%;
+    margin-inline-end: 0;
     transform: translateX(-50%);
 }
 
 .aznet-theme-entry__content .alignfull {
     width: min(var(--aznet-theme-container-shell), calc(100dvw - (var(--aznet-theme-gutter) * 2)));
     max-width: none;
-    margin-inline: 50%;
+    margin-inline-start: 50%;
+    margin-inline-end: 0;
     transform: translateX(-50%);
 }
 
