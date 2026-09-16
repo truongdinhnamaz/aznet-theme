@@ -13,6 +13,7 @@ on:
       - 'tests/offline/x2-search-404-empty-contract.php'
       - 'tests/runtime/x2-search-404-empty.php'
       - 'tests/browser/x2-search-404-empty-l4.mjs'
+      - 'scripts/assert-theme-version.sh'
       - 'scripts/verify-v1-core.sh'
       - '.github/workflows/x2-search-404-empty.yml'
       - 'docs/evidence/X2_SEARCH_404_EMPTY_20260916.md'
@@ -31,6 +32,7 @@ on:
       - 'tests/offline/x2-search-404-empty-contract.php'
       - 'tests/runtime/x2-search-404-empty.php'
       - 'tests/browser/x2-search-404-empty-l4.mjs'
+      - 'scripts/assert-theme-version.sh'
       - 'scripts/verify-v1-core.sh'
       - '.github/workflows/x2-search-404-empty.yml'
       - 'docs/evidence/X2_SEARCH_404_EMPTY_20260916.md'
@@ -90,8 +92,7 @@ jobs:
             echo 'FAIL: X2 must not change Theme version declarations' >&2
             exit 1
           fi
-          grep -F "define( 'AZNET_THEME_VERSION', '1.1.0' );" functions.php
-          grep -F 'Version: 1.1.0' style.css
+          bash scripts/assert-theme-version.sh
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/x2-search-404-empty-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/editorial-listing-search-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/d027-provisioning-independence-contract.php
