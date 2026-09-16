@@ -33,7 +33,7 @@ foreach ([
     'have_posts()',
     'the_post()',
     "get_template_part( 'template-parts/content/card' )",
-    'the_posts_pagination()',
+    'the_posts_pagination(',
     'get_search_form()',
     'aznet-theme-recovery',
 ] as $marker) {
@@ -58,7 +58,7 @@ foreach ([
     'have_posts()',
     'the_post()',
     "get_template_part( 'template-parts/content/card' )",
-    'the_posts_pagination()',
+    'the_posts_pagination(',
     'aznet-theme-recovery',
 ] as $marker) {
     if (!str_contains($archive, $marker)) {
