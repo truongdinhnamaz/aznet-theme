@@ -1,8 +1,8 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.39
+**Version:** v0.40
 **Status:** Working Source  
-**Date:** 16/09/2026
+**Date:** 17/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
 
 ## 1. Source ownership
@@ -18,8 +18,8 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 - Published release `v1.1.0` source anchor: `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`.
 - Owner-approved publication closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has the same tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72.
 - Final published v1.1.0 production package remains the P5-verified 121-file set, SHA-256 `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`.
-- Canonical `main` is now Theme version `1.2.0` after X6 technical integration; the published GitHub Release and verified production deployment remain `v1.1.0` until later, separately approved publication/deployment actions.
-- X6 technical integration is exact Theme `1.2.0` on canonical `main`; it is not yet published as tag/GitHub Release and is not yet production-deployed.
+- Canonical `main` is Theme version `1.2.0` after X6 technical integration and docs-only source closure.
+- Published release `v1.2.0` is PASS at exact technical source `c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`; production deployment remains `v1.1.0` until a later, separately approved deployment action.
 - WordPress floor: `6.9+`.
 - PHP floor: `8.1+`.
 - Architecture: hybrid PHP theme + `theme.json`.
@@ -54,7 +54,7 @@ X6 technical candidate provenance is distinct from current production state. Pre
 
 After `main` advanced through PR #88/#89, the X6 branch was synchronized by a normal two-parent merge rather than history rewrite. Synchronized candidate `c145f72cc7ac4783eb9f4a2f0b11c1d26e178445`, tree `3594fab0c89d015711e914325734646d1e7df159`, was `behind_by=0` against canonical `main@dddcee1cbd9a406f365ec57ece40097581e0bcf3` before source/evidence closure. Fresh X6 run `35126908185` completed SUCCESS: WordPress 6.9 zero-plugin runtime, integrated 32/32 Playwright/axe, deterministic exact-`1.2.0` package/source identity, 95 packaged PHP lint checks and exact-package switch-away/switch-back lifecycle continuity. `aznet-theme-1.2.0.zip` SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`; artifact `10459925538`, digest `sha256:c6b480168282e7dc9eea8f749d303012763cabf16213a6e69619c62f96f16e03`. All 19 observed same-head PR workflows completed SUCCESS. Durable evidence: `docs/evidence/X6_CROSS_SURFACE_RELEASE_CLOSURE_20260916.md`.
 
-Owner-approved PR #87 merged exact final head `ff459b99a348d3004a3a4e11474b7c5ff19508f2` to canonical `main@c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`, tree `70c04929afe38e87d317bad3414157e9e2bd6f74`, using expected-head protection. Fresh `V1 Exact Main Verification` run `35129331899` completed SUCCESS on the exact merge SHA; artifacts `10460675823` (`sha256:f24f0b6fba2f8cbb3aa1099ce225616b584113c590e912ed171a4ef8f97995b3`) and `10460660919` (`sha256:7edf42b87e1d0d1c30743761bfa6292f83984af44c94e12b1f85333aba5ef709`) retain exact-main static and clean runtime/browser evidence. X6 push-to-main run `35129331927` also completed SUCCESS on the same merge SHA with WordPress 6.9 zero-plugin runtime, 32/32 integrated browser/axe, exact `1.2.0` metadata, 95 packaged PHP lint checks and lifecycle continuity. Exact-main package `aznet-theme-1.2.0.zip` SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`; artifact `10459889475`, digest `sha256:f537b5f6ed33a53dcad8041c3d8cc0aef32c5bb6dbd8c10c5102e76624128fb9`. X6 state is therefore **TECHNICAL PASS / PUBLICATION GATED**; no v1.2.0 tag/GitHub Release or production deployment is inferred.
+Owner-approved PR #87 merged exact final head `ff459b99a348d3004a3a4e11474b7c5ff19508f2` to canonical `main@c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`, tree `70c04929afe38e87d317bad3414157e9e2bd6f74`, using expected-head protection. Fresh `V1 Exact Main Verification` run `35129331899` completed SUCCESS on the exact merge SHA; artifacts `10460675823` (`sha256:f24f0b6fba2f8cbb3aa1099ce225616b584113c590e912ed171a4ef8f97995b3`) and `10460660919` (`sha256:7edf42b87e1d0d1c30743761bfa6292f83984af44c94e12b1f85333aba5ef709`) retain exact-main static and clean runtime/browser evidence. X6 push-to-main run `35129331927` also completed SUCCESS on the same merge SHA with WordPress 6.9 zero-plugin runtime, 32/32 integrated browser/axe, exact `1.2.0` metadata, 95 packaged PHP lint checks and lifecycle continuity. Exact-main package `aznet-theme-1.2.0.zip` SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`; artifact `10459889475`, digest `sha256:f537b5f6ed33a53dcad8041c3d8cc0aef32c5bb6dbd8c10c5102e76624128fb9`. X6 technical state is **TECHNICAL PASS**. Owner-approved publication run `35131383107` published annotated tag `v1.2.0` (tag object `62b701ed9e371b23d76b3259d459e76e824206c1`) dereferencing to this exact technical commit and GitHub Release `390148740`; release asset `568495178` (`aznet-theme-1.2.0.zip`) reports SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`. Publication evidence artifact `10461657247` has digest `sha256:57c1400145ac09559e9b8974045b31d6fff3b3349e4cf702480df50fffc5b59c`. v1.2.0 state is therefore **PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED**; no production deployment or provider L5 certification is inferred.
 
 PR #34 final verified head is `b2e5cca1461233bcb1a0333c5aa51879c3264756`. Its tree `b716b89f04e45c2012f8e191c7d0edf605c9dd11` is identical to the merge commit tree on canonical `main@f8e1a95c903c3f246528368ae9878eba780539ff`, so the v1.0 technical merge introduced no conflict-resolution production delta.
 
@@ -208,7 +208,7 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**NEXT — request owner approval for v1.2.0 publication disposition (annotated tag + GitHub Release only). Production deployment remains a later separate approval.**
+**NEXT — request separate product-owner approval before any production deployment of AZnet Theme `1.2.0`. Revalidate the target site and exact published release asset before deployment; require fresh read-only authenticated/public verification afterward.**
 
 ### P1 pilot identity cleanup and final P4 sign-off
 

@@ -1,15 +1,15 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.42
+**Version:** v0.43
 **Status:** Working Execution Map / derived  
-**Date:** 16/09/2026
+**Date:** 17/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** live `main` HEAD is resolved from GitHub at execution time. X6 technical integration is canonical at `main@c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`, tree `70c04929afe38e87d317bad3414157e9e2bd6f74`; fresh V1 exact-main run `35129331899` and X6 push-to-main run `35129331927` completed SUCCESS on that exact merge SHA. Stable published release anchor remains `v1.1.0` at `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`, and verified production deployment remains v1.1.0 until later approval. Optional integrations remain additive and ownership boundaries are unchanged.
+> **Canonical-main checkpoint:** live `main` HEAD is resolved from GitHub at execution time. X6 technical integration is verified at `main@c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`, tree `70c04929afe38e87d317bad3414157e9e2bd6f74`; fresh V1 exact-main run `35129331899` and X6 push-to-main run `35129331927` completed SUCCESS. Published release anchor is annotated `v1.2.0` -> exact technical commit `c6b1ebac...`; GitHub Release `390148740` carries package SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`. Verified production deployment remains v1.1.0 until later approval. Optional integrations remain additive and ownership boundaries are unchanged.
 
-**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> owner-approved PR #87 merge -> exact-main V1 PASS -> exact-main X6 PASS`. Current state: `X6 TECHNICAL PASS / PUBLICATION GATED`.
+**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS`. Current state: `v1.2.0 PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED`.
 
 ## 1. Current state
 
@@ -39,10 +39,10 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | P4-B Law Site Provisioning | PASS / MERGED | D-026 merged; Theme `1.1.0`; deterministic package/browser evidence retained; activation mutation-free and active-site overwrite/noindex takeover forbidden |
 | P4-C Standalone Core independence | PASS / MERGED | PR #63/#64 merged; zero-plugin L1-L4, exact-package and exact-main PASS; optional integrations remain additive |
 | P5 Publication/Deployment | PASS | Tag `v1.1.0` + GitHub Release and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
-| X v1.2 WordPress Experience Completion | X6 TECHNICAL PASS / PUBLICATION GATED | X1-X5 retained; PR #87 merged exact `1.2.0` X6 bytes and exact-main V1 + X6 L1-L4/L6 verification PASS; publication/deployment remain separate owner gates; provider L5 stays separate |
+| X v1.2 WordPress Experience Completion | PUBLICATION PASS / DEPLOYMENT GATED | X1-X5 retained; PR #87 exact-main V1 + X6 L1-L4/L6 PASS; annotated `v1.2.0` + GitHub Release publication PASS; production deployment remains separate; provider L5 stays separate |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
-Canonical `main` is exact Theme `1.2.0` after owner-approved X6 technical integration. The published GitHub Release and verified production deployment remain `v1.1.0`; publication and deployment of v1.2.0 remain separate owner gates.
+Canonical `main` is exact Theme `1.2.0` after owner-approved X6 technical integration. GitHub publication `v1.2.0` is PASS with exact verified package bytes; verified production deployment remains `v1.1.0`, and deployment of v1.2.0 remains a separate owner gate.
 
 X6 synchronization checkpoint: `c145f72cc7ac4783eb9f4a2f0b11c1d26e178445`, tree `3594fab0c89d015711e914325734646d1e7df159`, normal merge parented by prior X6 head plus `main@dddcee1c...`, leaving `behind_by=0` before source/evidence closure. Fresh X6 run `35126908185` passed WordPress 6.9 zero-plugin L1-L4/L6, integrated 32/32 browser/axe, deterministic `aznet-theme-1.2.0.zip` SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`, 95 packaged PHP lint checks and switch-away/switch-back lifecycle continuity. Artifact `10459925538`, digest `sha256:c6b480168282e7dc9eea8f749d303012763cabf16213a6e69619c62f96f16e03`; all 19 observed same-head PR workflows completed SUCCESS.
 
@@ -300,9 +300,9 @@ Owner-approved publication run `35052694111` published annotated tag `v1.1.0` at
 
 **X5 — Native Form Controls:** **PASS at L1-L4** — functional closure head `8aac300f805e83fb7a7e7243aa779fe37376838d`; dedicated workflow `35088686988` SUCCESS on WordPress 6.9 with zero active plugins, scoped `forms.css` on native Comment/Core-block/password/Search/404 surfaces and absent Archive/Home controls, plus a 16/16 Playwright/axe browser matrix across 1440/1024/390/320 widths. Artifact `10442863335`, digest `sha256:88d06c8b3449233e7a5b85421dc2be779eac51dc9cacbe4d694ceab86f2705ac`. WordPress owns form submission/validation semantics and submitted data; Theme adds bounded presentation only. All 26 exact-head PR workflows observed on the functional head completed SUCCESS. Evidence: `docs/evidence/X5_NATIVE_FORM_CONTROLS_20260916.md`.
 
-**X6 — Cross-surface QA & Release Closure:** **TECHNICAL PASS / PUBLICATION GATED** — the exact `1.2.0` candidate was promoted only after the pre-promotion RED contract and explicit owner approval. Final-head PR verification remained GREEN; owner-approved PR #87 merged to `main@c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`, tree `70c04929afe38e87d317bad3414157e9e2bd6f74` with expected-head protection. Fresh V1 Exact Main Verification `35129331899` and X6 push-to-main `35129331927` both completed SUCCESS on that exact merge SHA: integrated 32/32 browser/axe, deterministic `aznet-theme-1.2.0.zip`, exact package/source identity, 95 packaged PHP lint checks, lifecycle/rollback continuity and ownership boundaries. Package SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`; exact-main X6 artifact `10459889475`, digest `sha256:f537b5f6ed33a53dcad8041c3d8cc0aef32c5bb6dbd8c10c5102e76624128fb9`. Evidence: `docs/evidence/X6_CROSS_SURFACE_RELEASE_CLOSURE_20260916.md`.
+**X6 — Cross-surface QA & Release Closure:** **PUBLICATION PASS / DEPLOYMENT GATED** — exact `1.2.0` technical bytes passed PR-head and exact-main X6 verification; owner-approved publication run `35131383107` then published annotated tag `v1.2.0` and GitHub Release `390148740` carrying the exact verified `aznet-theme-1.2.0.zip` SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`. Publication evidence: `docs/evidence/V1_2_PUBLICATION_20260917.md`. Production deployment remains separately gated; provider L5 is not inferred.
 
-**Execution:** `X1 -> X2 -> X3 -> X4 -> X5 -> X6`. Every X1-X5 production slice used RED -> intended failure -> minimal GREEN -> regression and has a bounded rollback. X6 canonical merge is complete; publication and production deployment remain later separate owner gates.
+**Execution:** `X1 -> X2 -> X3 -> X4 -> X5 -> X6 -> publication`. X1-X5 retained RED -> GREEN production discipline; X6 technical merge/exact-main closure is PASS; v1.2.0 publication is PASS; production deployment remains a later separate owner gate.
 
 **Design record:** `docs/superpowers/specs/2026-09-16-v1.2-wordpress-experience-completion-design.md`.
 
@@ -326,4 +326,4 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 16. Exact next
 
-**NEXT — request owner approval for v1.2.0 publication disposition (annotated tag + GitHub Release only). Production deployment remains a later separate approval; provider L5 is not opened or inferred.**
+**NEXT — request separate product-owner approval before production deployment of AZnet Theme `1.2.0`. Revalidate target site + exact release asset first, then require fresh read-only post-deployment verification. Provider L5 remains separate.**
