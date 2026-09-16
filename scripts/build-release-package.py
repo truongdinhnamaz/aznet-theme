@@ -12,7 +12,7 @@ from pathlib import Path, PurePosixPath
 
 PACKAGE_ROOT = 'aznet-theme'
 FIXED_ZIP_TIME = (2020, 1, 1, 0, 0, 0)
-EXCLUDED_DIRS = {'.git', '.github', 'docs', 'scripts', 'tests'}
+EXCLUDED_DIRS = {'.git', '.github', 'docs', 'scripts', 'tests', 'node_modules'}
 EXCLUDED_ROOT_FILES = {'README.md', 'aznet-preview.png'}
 REQUIRED_PRODUCTION_PATHS = {'style.css', 'functions.php', 'theme.json', 'front-page.php', 'index.php'}
 
