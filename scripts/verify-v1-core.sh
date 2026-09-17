@@ -113,6 +113,12 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/y2-professional-pag
 printf '%s\n' '==> Y3 Footer System contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y3-footer-system-contract.php
 
+printf '%s\n' '==> Y4 Professional Services provisioning contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/y4-professional-services-provisioning-contract.php
+
+printf '%s\n' '==> Y5 Client Delivery pre-promotion release contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/y5-client-delivery-release-contract.php
+
 printf '%s\n' '==> P4 Native Editable Homepage blueprint contracts'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-asset-contract.php
