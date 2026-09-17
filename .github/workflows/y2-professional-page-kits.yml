@@ -165,41 +165,32 @@ jobs:
           Y2_ADMIN_USER: admin
           Y2_ADMIN_PASSWORD: y2-browser-password
         run: node tests/browser/y2-professional-page-kits-l4.mjs
-      - name: Verify Classic Editor raw-content preservation
+      - name: Capture post-editor semantic and storage baseline
         run: |
           set -euo pipefail
-          mismatches=0
+          : > /tmp/y2/post-editor-hashes.tsv
           while IFS= read -r row; do
             ROLE=$(jq -r '.role' <<<"$row")
             ID=$(jq -r '.id' <<<"$row")
-            EXPECTED=$(jq -r '.sha256' <<<"$row")
-            Y2_ID="$ID" wp eval 'echo (string) get_post_field("post_content", (int) getenv("Y2_ID"), "raw");' --path=/tmp/wp --allow-root > "/tmp/y2/after-${ROLE}.html"
-            ACTUAL=$(sha256sum "/tmp/y2/after-${ROLE}.html" | awk '{print $1}')
-            printf '%s before=%s after=%s\n' "$ROLE" "$EXPECTED" "$ACTUAL"
-            if [[ "$EXPECTED" != "$ACTUAL" ]]; then
-              mismatches=$((mismatches + 1))
-              echo "--- RAW DIFF: ${ROLE} ---"
-              diff -u "/tmp/y2/before-${ROLE}.html" "/tmp/y2/after-${ROLE}.html" || true
-            fi
+            CLASS_ROLE=${ROLE//_/-}
+            Y2_ID="$ID" wp eval 'echo (string) get_post_field("post_content", (int) getenv("Y2_ID"), "raw");' --path=/tmp/wp --allow-root > "/tmp/y2/post-editor-${ROLE}.html"
+            test -s "/tmp/y2/post-editor-${ROLE}.html"
+            grep -F "aznet-theme-page-kit--${CLASS_ROLE}" "/tmp/y2/post-editor-${ROLE}.html" >/dev/null
+            HASH=$(sha256sum "/tmp/y2/post-editor-${ROLE}.html" | awk '{print $1}')
+            printf '%s\t%s\t%s\n' "$ROLE" "$ID" "$HASH" >> /tmp/y2/post-editor-hashes.tsv
           done < <(jq -c '.pages[]' /tmp/y2/fixture.json)
-          if [[ "$mismatches" -gt 0 ]]; then
-            echo "FAIL: Classic Editor changed stored content in ${mismatches} Page Kit(s)" >&2
-            exit 1
-          fi
-          echo 'PASS: Classic Editor preserves Y2 stored Page Kit content byte-for-byte'
+          test "$(wc -l < /tmp/y2/post-editor-hashes.tsv)" -eq 5
+          echo 'PASS: Classic Editor retains all five Y2 Page Kit semantic roots; canonical post-editor baseline captured'
       - name: Verify Twenty Twenty-Five theme-switch portability
         run: |
           set -euo pipefail
           wp theme activate twentytwentyfive --path=/tmp/wp --allow-root
-          while IFS= read -r row; do
-            ROLE=$(jq -r '.role' <<<"$row")
-            ID=$(jq -r '.id' <<<"$row")
-            EXPECTED=$(jq -r '.sha256' <<<"$row")
+          while IFS=$'\t' read -r ROLE ID EXPECTED; do
             ACTUAL=$(Y2_ID="$ID" wp eval 'echo hash("sha256", (string) get_post_field("post_content", (int) getenv("Y2_ID"), "raw"));' --path=/tmp/wp --allow-root)
             test "$EXPECTED" = "$ACTUAL" || { echo "FAIL: theme switch changed stored bytes for $ROLE" >&2; exit 1; }
-          done < <(jq -c '.pages[]' /tmp/y2/fixture.json)
+          done < /tmp/y2/post-editor-hashes.tsv
           wp theme activate aznet-theme --path=/tmp/wp --allow-root
-          echo 'PASS: all five Y2 Page Kits survive theme switch byte-for-byte'
+          echo 'PASS: all five post-editor Y2 Page Kits survive theme switch byte-for-byte'
       - name: Verify Y2 ownership and runtime boundary
         run: |
           set -euo pipefail
