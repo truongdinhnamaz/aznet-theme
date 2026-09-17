@@ -30,6 +30,7 @@ require_once __DIR__ . '/design-system.php';
 require_once __DIR__ . '/setup.php';
 require_once __DIR__ . '/patterns.php';
 require_once __DIR__ . '/header.php';
+require_once __DIR__ . '/footer.php';
 require_once __DIR__ . '/../integrations/woocommerce.php';
 require_once __DIR__ . '/woocommerce-presentation.php';
 require_once __DIR__ . '/woocommerce-product.php';
