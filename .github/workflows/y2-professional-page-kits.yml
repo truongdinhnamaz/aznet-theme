@@ -165,7 +165,7 @@ jobs:
           Y2_ADMIN_USER: admin
           Y2_ADMIN_PASSWORD: y2-browser-password
         run: node tests/browser/y2-professional-page-kits-l4.mjs
-      - name: Diagnose Classic Editor raw-content normalization
+      - name: Verify Classic Editor raw-content preservation
         run: |
           set -euo pipefail
           mismatches=0
@@ -173,7 +173,7 @@ jobs:
             ROLE=$(jq -r '.role' <<<"$row")
             ID=$(jq -r '.id' <<<"$row")
             EXPECTED=$(jq -r '.sha256' <<<"$row")
-            Y2_ID="$ID" wp eval 'echo (string) get_post_field((int) getenv("Y2_ID"), "post_content", "raw");' --path=/tmp/wp --allow-root > "/tmp/y2/after-${ROLE}.html"
+            Y2_ID="$ID" wp eval 'echo (string) get_post_field("post_content", (int) getenv("Y2_ID"), "raw");' --path=/tmp/wp --allow-root > "/tmp/y2/after-${ROLE}.html"
             ACTUAL=$(sha256sum "/tmp/y2/after-${ROLE}.html" | awk '{print $1}')
             printf '%s before=%s after=%s\n' "$ROLE" "$EXPECTED" "$ACTUAL"
             if [[ "$EXPECTED" != "$ACTUAL" ]]; then
@@ -183,7 +183,7 @@ jobs:
             fi
           done < <(jq -c '.pages[]' /tmp/y2/fixture.json)
           if [[ "$mismatches" -gt 0 ]]; then
-            echo "FAIL: Classic Editor raw-content normalization observed in ${mismatches} Page Kit(s)" >&2
+            echo "FAIL: Classic Editor changed stored content in ${mismatches} Page Kit(s)" >&2
             exit 1
           fi
           echo 'PASS: Classic Editor preserves Y2 stored Page Kit content byte-for-byte'
@@ -195,7 +195,7 @@ jobs:
             ROLE=$(jq -r '.role' <<<"$row")
             ID=$(jq -r '.id' <<<"$row")
             EXPECTED=$(jq -r '.sha256' <<<"$row")
-            ACTUAL=$(Y2_ID="$ID" wp eval 'echo hash("sha256", (string) get_post_field((int) getenv("Y2_ID"), "post_content", "raw"));' --path=/tmp/wp --allow-root)
+            ACTUAL=$(Y2_ID="$ID" wp eval 'echo hash("sha256", (string) get_post_field("post_content", (int) getenv("Y2_ID"), "raw"));' --path=/tmp/wp --allow-root)
             test "$EXPECTED" = "$ACTUAL" || { echo "FAIL: theme switch changed stored bytes for $ROLE" >&2; exit 1; }
           done < <(jq -c '.pages[]' /tmp/y2/fixture.json)
           wp theme activate aznet-theme --path=/tmp/wp --allow-root
