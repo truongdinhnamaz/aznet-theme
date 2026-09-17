@@ -1,0 +1,39 @@
+name: Y1 Page Experience
+
+on:
+  push:
+    branches:
+      - work/v1.3-y1-page-experience
+  pull_request:
+    paths:
+      - 'page.php'
+      - 'page-templates/**'
+      - 'template-parts/content/page.php'
+      - 'inc/theme/page-experience.php'
+      - 'inc/theme/settings.php'
+      - 'inc/theme/bootstrap.php'
+      - 'inc/admin/control-center.php'
+      - 'inc/theme/assets.php'
+      - 'assets/css/components/page.css'
+      - 'tests/offline/y1-page-experience-contract.php'
+      - 'tests/runtime/y1-page-experience.php'
+      - 'tests/browser/y1-page-experience-l4.mjs'
+      - '.github/workflows/y1-page-experience.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  y1-offline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Verify Y1 offline contract
+        run: |
+          set -euo pipefail
+          git diff --check
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-page-experience-contract.php
