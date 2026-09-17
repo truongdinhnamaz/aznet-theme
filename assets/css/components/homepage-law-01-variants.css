@@ -124,6 +124,11 @@
     margin-bottom: 1.75rem;
 }
 
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-services {
+    border-top: 1px solid rgba(143, 17, 27, .1);
+    background: #fffdf8;
+}
+
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--services {
     grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: .75rem;
@@ -139,6 +144,15 @@
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--services .aznet-theme-law01-card::before {
     margin-bottom: 1.6rem;
     color: var(--law01-brand-red);
+}
+
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-editorial {
+    background: linear-gradient(180deg, #fffdf8 0%, #fff8ee 100%);
+}
+
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card {
+    border-color: rgba(143, 17, 27, .11);
+    box-shadow: 0 .55rem 1.6rem rgba(74, 46, 31, .06);
 }
 
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-team {
