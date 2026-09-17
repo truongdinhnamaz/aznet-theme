@@ -176,6 +176,7 @@ function provisioning_apply_plan( array $plan ): array {
 
     $blueprint = provisioning_blueprint( (string) $plan['blueprint'] );
     if ( null === $blueprint ) { return [ 'ok' => false, 'run_id' => '', 'created' => [], 'reused' => [], 'errors' => [ 'Blueprint unavailable.' ] ]; }
+    $site_mode = function_exists( __NAMESPACE__ . '\\provisioning_site_mode' ) ? provisioning_site_mode( provisioning_discovery() ) : 'EXISTING_ACTIVE';
     $receipt = provisioning_initial_receipt( provisioning_run_id() );
     $page_ids = [];
     $term_ids = [];
@@ -196,7 +197,8 @@ function provisioning_apply_plan( array $plan ): array {
                 } else {
                     $definition = $blueprint['pages'][ $role ] ?? null; if ( ! is_array( $definition ) ) { throw new \RuntimeException( 'Unknown Page role: ' . $role ); }
                     $parent_id = isset( $op['parent_role'] ) && $op['parent_role'] ? (int) ( $page_ids[ (string) $op['parent_role'] ] ?? 0 ) : 0;
-                    $id = wp_insert_post( [ 'post_type' => 'page', 'post_status' => (string) $definition['status'], 'post_title' => (string) $definition['title'], 'post_excerpt' => (string) $definition['excerpt'], 'post_content' => (string) $definition['content'], 'post_parent' => $parent_id ], true );
+                    $page_status = 'professional-services-v1' === (string) $plan['blueprint'] && 'EXISTING_ACTIVE' === $site_mode ? 'draft' : (string) $definition['status'];
+                    $id = wp_insert_post( [ 'post_type' => 'page', 'post_status' => $page_status, 'post_title' => (string) $definition['title'], 'post_excerpt' => (string) $definition['excerpt'], 'post_content' => (string) $definition['content'], 'post_parent' => $parent_id ], true );
                     if ( is_wp_error( $id ) || (int) $id <= 0 ) { throw new \RuntimeException( is_wp_error( $id ) ? $id->get_error_message() : 'Page creation failed.' ); }
                     $id = (int) $id; if ( ! provisioning_mark_post( $id, (string) $plan['blueprint'], $role, (string) $receipt['run_id'] ) ) { throw new \RuntimeException( 'Page provenance failed for #' . $id ); }
                     $page_ids[ $role ] = $id; $receipt['created'][] = [ 'type' => 'page', 'id' => $id, 'role' => $role ];
