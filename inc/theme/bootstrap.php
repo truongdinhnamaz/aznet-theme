@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once __DIR__ . '/settings.php';
+require_once __DIR__ . '/page-experience.php';
 require_once __DIR__ . '/homepage-content-map.php';
 require_once __DIR__ . '/homepage-composer.php';
 require_once __DIR__ . '/provisioning-blueprints.php';
