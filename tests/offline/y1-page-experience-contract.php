@@ -43,9 +43,38 @@ foreach (['get_post_meta(', 'get_option(', 'parse_url(', 'REQUEST_URI'] as $forb
     assert(!str_contains($helper, $forbidden));
 }
 
+$shared_path = $root . '/template-parts/content/page.php';
+$wide_path = $root . '/page-templates/wide.php';
+$landing_path = $root . '/page-templates/landing.php';
+$css_path = $root . '/assets/css/components/page.css';
+foreach ([$shared_path, $wide_path, $landing_path, $css_path] as $required) {
+    assert(is_file($required), 'Y1 renderer/template/CSS file must exist: ' . $required);
+}
+
+$shared = file_get_contents($shared_path);
+$wide = file_get_contents($wide_path);
+$landing = file_get_contents($landing_path);
+assert(is_string($shared) && is_string($wide) && is_string($landing));
+
+foreach ([$page, $wide, $landing] as $wrapper) {
+    assert(str_contains($wrapper, "get_template_part( 'template-parts/content/page' )"));
+    assert(substr_count($wrapper, '<main id="main"') === 1);
+}
+assert(!str_contains($shared, '<main id="main"'));
+assert(str_contains($shared, 'aznet-theme-page__breadcrumbs'));
+assert(str_contains($shared, 'wp_link_pages'));
+assert(!str_contains($shared, 'application/ld+json'));
+assert(!str_contains($shared, 'schema.org'));
+
+$assets = file_get_contents($root . '/inc/theme/assets.php');
+assert(is_string($assets));
+assert(str_contains($assets, 'function should_enqueue_page_assets(): bool'));
+assert(str_contains($assets, "'aznet-theme-page'"));
+assert(str_contains($assets, "'/assets/css/components/page.css'"));
+
 $style = file_get_contents($root . '/style.css');
 $functions = file_get_contents($root . '/functions.php');
 assert(is_string($style) && preg_match('/^Version:\s*1\.2\.0\s*$/mi', $style) === 1);
 assert(is_string($functions) && preg_match("/define\(\s*'AZNET_THEME_VERSION'\s*,\s*'1\.2\.0'\s*\)/", $functions) === 1);
 
-echo "PASS: Y1 Page Experience ownership/settings contract\n";
+echo "PASS: Y1 Page Experience ownership/settings/renderer contract\n";
