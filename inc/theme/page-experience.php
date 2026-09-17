@@ -29,6 +29,29 @@ function page_variant( ?int $post_id = null ): string {
 }
 
 /**
+ * Return the native Page excerpt without pre-consuming plugin-owned dynamic content.
+ *
+ * WooCommerce surfaces can render their authoritative content through the WordPress
+ * content filter. Calling get_the_excerpt() first would execute that filtered content
+ * once while building an automatic excerpt and leave the later content render empty.
+ * The public current-surface adapter is therefore used only as a presentation guard;
+ * generic WordPress Pages retain their existing excerpt behavior unchanged.
+ */
+function page_excerpt( ?int $post_id = null ): string {
+    $surface_function = __NAMESPACE__ . '\\Integrations\\WooCommerce\\current_surface';
+    if (
+        function_exists( $surface_function )
+        && null !== \AZnet\Theme\Integrations\WooCommerce\current_surface()
+    ) {
+        return '';
+    }
+
+    $excerpt = null === $post_id ? get_the_excerpt() : get_the_excerpt( $post_id );
+
+    return trim( (string) $excerpt );
+}
+
+/**
  * Return breadcrumb ancestors derived only from native WordPress Page hierarchy.
  *
  * @return array<int, array{title:string,url:string}>
