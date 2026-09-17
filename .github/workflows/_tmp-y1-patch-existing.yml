@@ -1,4 +1,5 @@
 name: Temporary Y1 Existing File Patch
+# Retry after retaining X3 authored-content compatibility in the shared Page renderer.
 
 on:
   push:
@@ -121,6 +122,7 @@ jobs:
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-page-experience-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/r1-visual-preset-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/r6-asset-scope-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/x3-media-gallery-embed-contract.php
           bash scripts/assert-theme-version.sh
           bash scripts/verify-v1-core.sh
           php -l inc/theme/assets.php
