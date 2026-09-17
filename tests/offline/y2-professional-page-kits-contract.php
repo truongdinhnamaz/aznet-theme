@@ -167,6 +167,24 @@ foreach ($patternFiles as $filename => $slug) {
     }
 }
 
+$pageCss = file_get_contents($root . '/assets/css/components/page.css');
+if (false === $pageCss) {
+    y2_fail('unable to read Page stylesheet');
+}
+foreach ([
+    '.aznet-theme-page-kit',
+    '.aznet-theme-page-kit__section',
+    '.aznet-theme-page-kit__card',
+    '.aznet-theme-page-kit__cta',
+] as $selector) {
+    if (! str_contains($pageCss, $selector)) {
+        y2_fail('Page Kit stylesheet missing shared selector ' . $selector);
+    }
+}
+if (preg_match('/#[0-9a-f]{3,8}\b|rgba?\s*\(/i', $pageCss)) {
+    y2_fail('Page Kit presentation must use existing Theme tokens instead of hard-coded brand colors');
+}
+
 $style = file_get_contents($root . '/style.css');
 $functions = file_get_contents($root . '/functions.php');
 if (false === $style || false === $functions) {
