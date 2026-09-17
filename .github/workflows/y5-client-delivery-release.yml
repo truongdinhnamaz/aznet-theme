@@ -1,0 +1,46 @@
+name: Y5 Client Delivery Release
+
+on:
+  push:
+    branches:
+      - work/v1.3-y5-client-delivery
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'tests/offline/y5-client-delivery-release-contract.php'
+      - 'tests/runtime/y5-client-delivery.php'
+      - 'tests/browser/y5-client-delivery-l4.mjs'
+      - 'scripts/verify-v1-core.sh'
+      - 'scripts/build-release-package.py'
+      - '.github/workflows/y5-client-delivery-release.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Pre-promotion target: WordPress 6.9 / PHP 8.1 / zero active third-party plugins.
+# The exact package remains aznet-theme-1.2.0.zip until the separate metadata gate.
+# Final lifecycle must switch to twentytwentyfive and back and use build-release-package.py.
+
+jobs:
+  y5-red-contract:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact Y5 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Verify Y5 RED contract
+        run: |
+          set -euo pipefail
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/y5-client-delivery-release-contract.php
+
+# GREEN jobs will execute tests/runtime/y5-client-delivery.php and
+# tests/browser/y5-client-delivery-l4.mjs after the RED gate is observed.
