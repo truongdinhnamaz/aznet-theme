@@ -6,8 +6,6 @@
  * AZNET_Y5_STATE_DIR controls the evidence/state directory.
  */
 
-declare( strict_types=1 );
-
 function aznet_y5_must( bool $condition, string $message ): void {
     if ( ! $condition ) {
         throw new RuntimeException( $message );
