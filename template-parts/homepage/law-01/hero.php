@@ -28,7 +28,7 @@ $trust_items = [
             <?php if ( $contact instanceof \WP_Post || $services instanceof \WP_Post ) : ?>
                 <p class="aznet-theme-law01-actions">
                     <?php if ( $contact instanceof \WP_Post ) : ?><a class="aznet-theme-law01-button" href="<?php echo esc_url( get_permalink( $contact ) ); ?>"><?php esc_html_e( 'Liên hệ tư vấn', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a><?php endif; ?>
-                    <?php if ( $services instanceof \WP_Post ) : ?><a class="aznet-theme-law01-button aznet-theme-law01-button--secondary" href="<?php echo esc_url( get_permalink( $services ) ); ?>"><?php esc_html_e( 'Xem dịch vụ', 'aznet-theme' ); ?></a><?php endif; ?>
+                    <?php if ( $services instanceof \WP_Post ) : ?><a class="aznet-theme-law01-hero__secondary-action" href="<?php echo esc_url( get_permalink( $services ) ); ?>"><?php esc_html_e( 'Xem dịch vụ', 'aznet-theme' ); ?></a><?php endif; ?>
                 </p>
             <?php endif; ?>
         </div>
