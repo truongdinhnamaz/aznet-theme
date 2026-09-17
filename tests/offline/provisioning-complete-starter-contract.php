@@ -118,9 +118,8 @@ $readiness = file_get_contents( $root . '/inc/theme/provisioning-readiness.php' 
 foreach ( [ "'set_starter_site_defaults'", "'set_homepage_variant'", "'blogname'", "'blogdescription'", "'starter_identity_changed'" ] as $needle ) {
     assert( str_contains( (string) $runner, $needle ), "Runner must support and roll back Complete Starter Site state: {$needle}" );
 }
-assert( str_contains( (string) $admin, "provisioning_blueprint( 'law01-v1-2' )" ), 'Provisioning wizard must recommend the Complete Starter Site blueprint.' );
+assert( str_contains( (string) $admin, "'law01-v1-2'" ) && str_contains( (string) $admin, "provisioning_blueprint( \$blueprint_key )" ), 'Provisioning wizard must keep Complete Starter Site as the default while supporting explicit blueprint selection.' );
 assert( str_contains( (string) $admin, 'apply_starter_site_defaults' ), 'Provisioning wizard must visibly opt in to example Site Title/Tagline on new sites.' );
-assert( str_contains( (string) $admin, "'law01-v1-2'" ) );
 assert( str_contains( (string) $readiness, "'law01-v1-2'" ), 'Launch warnings must continue to recognize v1.2 starter provenance.' );
 
 echo "PASS: Law 01 Complete Starter Site blueprint + plan + apply boundary contract\n";
