@@ -2,7 +2,7 @@
 /** Law 01 Latest knowledge. */
 namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-$posts = homepage_latest_posts( (array) setting( 'homepage_knowledge_terms', [] ), 5, homepage_ledger_ids() );
+$posts = homepage_latest_posts( (array) setting( 'homepage_knowledge_terms', [] ), 3, homepage_ledger_ids() );
 if ( [] === $posts ) { return; }
 homepage_ledger_add( array_map( static fn( $post ): int => (int) $post->ID, $posts ) );
 ?>
