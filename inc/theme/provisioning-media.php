@@ -52,7 +52,7 @@ function provisioning_import_media( string $media_role, string $blueprint, strin
     if ( '' === $run_id ) { throw new \RuntimeException( 'Provisioning run ID is required for media import.' ); }
 
     $provenance_role = provisioning_media_role_provenance( $media_role );
-    $owned = provisioning_find_owned_role( $blueprint, 'attachment', $provenance_role );
+    $owned = provisioning_find_compatible_owned_role( $blueprint, 'attachment', $provenance_role );
     if ( $owned > 0 ) {
         $post = get_post( $owned );
         if ( $post instanceof \WP_Post && 'attachment' === $post->post_type ) { return $owned; }

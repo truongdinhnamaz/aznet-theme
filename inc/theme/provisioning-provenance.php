@@ -55,3 +55,15 @@ function provisioning_find_owned_role( string $blueprint, string $object_type, s
     }
     return 0;
 }
+
+function provisioning_find_compatible_owned_role( string $blueprint, string $object_type, string $role ): int {
+    if ( '' === $role || ! in_array( $blueprint, provisioning_blueprint_keys(), true ) ) { return 0; }
+    $candidates = in_array( $blueprint, [ 'law01-v1', 'law01-v1-1', 'law01-v1-2' ], true )
+        ? array_values( array_unique( [ $blueprint, 'law01-v1-2', 'law01-v1-1', 'law01-v1' ] ) )
+        : [ $blueprint ];
+    foreach ( $candidates as $candidate ) {
+        $id = provisioning_find_owned_role( $candidate, $object_type, $role );
+        if ( $id > 0 ) { return $id; }
+    }
+    return 0;
+}

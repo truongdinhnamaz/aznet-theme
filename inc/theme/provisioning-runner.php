@@ -260,14 +260,14 @@ function provisioning_apply_plan( array $plan ): array {
             } elseif ( 'import_media' === $type ) {
                 $media_role = (string) ( $op['media_role'] ?? $role );
                 $provenance_role = function_exists( __NAMESPACE__ . '\\provisioning_media_role_provenance' ) ? provisioning_media_role_provenance( $media_role ) : 'starter_media:' . $media_role;
-                $before = provisioning_find_owned_role( (string) $plan['blueprint'], 'attachment', $provenance_role );
+                $before = provisioning_find_compatible_owned_role( (string) $plan['blueprint'], 'attachment', $provenance_role );
                 $id = provisioning_import_media( $media_role, (string) $plan['blueprint'], (string) $receipt['run_id'] );
                 $media_ids[ $media_role ] = $id;
                 if ( $before > 0 ) { $receipt['reused'][] = [ 'type' => 'attachment', 'id' => $id, 'role' => $provenance_role ]; }
                 else { $receipt['created'][] = [ 'type' => 'attachment', 'id' => $id, 'role' => $provenance_role ]; }
             } elseif ( 'create_post' === $type ) {
                 $editorial_role = (string) ( $op['editorial_role'] ?? '' );
-                $owned = provisioning_find_owned_role( (string) $plan['blueprint'], 'post', $role );
+                $owned = provisioning_find_compatible_owned_role( (string) $plan['blueprint'], 'post', $role );
                 if ( $owned > 0 && get_post( $owned ) instanceof \WP_Post ) {
                     $post_ids[ $role ] = $owned; $receipt['reused'][] = [ 'type' => 'post', 'id' => $owned, 'role' => $role ];
                 } else {

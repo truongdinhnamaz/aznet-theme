@@ -14,6 +14,8 @@ use function AZnet\Theme\provisioning_editorial_coverage_recommendations;
 use function AZnet\Theme\provisioning_site_mode;
 use function AZnet\Theme\provisioning_index_restore_available;
 use function AZnet\Theme\provisioning_restore_search_visibility;
+use function AZnet\Theme\provisioning_find_compatible_owned_role;
+use function AZnet\Theme\provisioning_media_role_provenance;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
@@ -179,8 +181,32 @@ function handle_provisioning_restore_indexing(): void {
     exit;
 }
 
+function provisioning_preview_operation( array $operation, array $plan ): array {
+    $blueprint = (string) ( $plan['blueprint'] ?? '' );
+    $type = (string) ( $operation['type'] ?? '' );
+    $role = (string) ( $operation['role'] ?? '' );
+    if ( 'create_post' === $type && str_starts_with( $role, 'starter_post:' ) ) {
+        $id = provisioning_find_compatible_owned_role( $blueprint, 'post', $role );
+        if ( $id > 0 ) {
+            $operation['type'] = 'reuse_post';
+            $operation['effect'] = 'REUSE starter Post #' . $id . ' → ' . (string) ( $operation['editorial_role'] ?? $role );
+        }
+        return $operation;
+    }
+    if ( 'import_media' === $type ) {
+        $media_role = (string) ( $operation['media_role'] ?? $role );
+        $provenance_role = provisioning_media_role_provenance( $media_role );
+        $id = provisioning_find_compatible_owned_role( $blueprint, 'attachment', $provenance_role );
+        if ( $id > 0 ) {
+            $operation['type'] = 'reuse_attachment';
+            $operation['effect'] = 'REUSE starter media #' . $id . ' → ' . $media_role;
+        }
+    }
+    return $operation;
+}
+
 function provisioning_summary_group( string $type ): string {
-    if ( in_array( $type, [ 'reuse_page','reuse_term','reuse_menu' ], true ) ) { return 'existing'; }
+    if ( in_array( $type, [ 'reuse_page','reuse_term','reuse_menu','reuse_post','reuse_attachment' ], true ) ) { return 'existing'; }
     if ( in_array( $type, [ 'create_page','create_term','create_menu','create_post' ], true ) ) { return 'create'; }
     if ( in_array( $type, [ 'import_media','assign_featured_media' ], true ) ) { return 'media'; }
     return 'config';
@@ -194,6 +220,7 @@ function provisioning_render_plan_summary( array $plan ): void {
         'config' => [ 'label' => __( 'Sẽ thay đổi cấu hình', 'aznet-theme' ), 'items' => [] ],
     ];
     foreach ( (array) ( $plan['operations'] ?? [] ) as $op ) {
+        $op = provisioning_preview_operation( (array) $op, $plan );
         $group = provisioning_summary_group( (string) ( $op['type'] ?? '' ) );
         $groups[ $group ]['items'][] = (string) ( $op['effect'] ?? '' );
     }
