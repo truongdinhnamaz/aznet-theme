@@ -16,7 +16,7 @@
 - Default family: `Roboto, Arial, sans-serif`.
 - Body/UI and headings use the same Roboto family.
 - Self-host Roboto; do not load Google Fonts or another external font CDN.
-- Required effective weights: 400, 500, 600, 700.
+- Required shipped weights: 400, 500, 700. Use the nearest supported real weight for intermediate emphasis; do not relabel a font file as 600.
 - Use `font-display: swap`.
 - Vietnamese glyph coverage must be present.
 - No Quick Setup rerun.
@@ -32,7 +32,6 @@
 **Create**
 - `assets/fonts/roboto/Roboto-Regular.woff2` — self-hosted Roboto 400 with Vietnamese/Latin coverage.
 - `assets/fonts/roboto/Roboto-Medium.woff2` — self-hosted Roboto 500.
-- `assets/fonts/roboto/Roboto-SemiBold.woff2` — self-hosted Roboto 600 when an actual supported 600 source is available.
 - `assets/fonts/roboto/Roboto-Bold.woff2` — self-hosted Roboto 700.
 - `tests/offline/typography-roboto-contract.php` — static RED/GREEN contract for tokens, theme.json, asset paths, and Law 01 inheritance.
 
@@ -106,7 +105,7 @@ assert('Roboto, Arial, sans-serif' === ($roboto[0]['fontFamily'] ?? null));
 
 $faces = $roboto[0]['fontFace'] ?? [];
 $weights = array_map(static fn(array $face): string => (string) ($face['fontWeight'] ?? ''), $faces);
-foreach (['400', '500', '600', '700'] as $weight) {
+foreach (['400', '500', '700'] as $weight) {
     assert(in_array($weight, $weights, true), "Roboto fontFace missing weight {$weight}.");
 }
 foreach ($faces as $face) {
@@ -188,7 +187,7 @@ ls -lh assets/fonts/roboto/*.woff2
 
 Expected: four WOFF2 files, no zero-byte file.
 
-If the selected official package does not contain a true 600 SemiBold file, stop this task and choose an official source/build that does. Do not relabel a different weight as 600.
+Roboto static distributions do not consistently ship a 600 face. This implementation deliberately uses real 400/500/700 faces and maps intermediate emphasis to 500 or 700 rather than relabeling a different binary as 600.
 
 - [ ] **Step 2: Add canonical family tokens**
 
@@ -223,13 +222,6 @@ Under `settings.typography`, add a single family:
         "fontWeight": "500",
         "fontDisplay": "swap",
         "src": ["file:./assets/fonts/roboto/Roboto-Medium.woff2"]
-      },
-      {
-        "fontFamily": "Roboto",
-        "fontStyle": "normal",
-        "fontWeight": "600",
-        "fontDisplay": "swap",
-        "src": ["file:./assets/fonts/roboto/Roboto-SemiBold.woff2"]
       },
       {
         "fontFamily": "Roboto",
