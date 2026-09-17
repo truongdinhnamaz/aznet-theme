@@ -24,8 +24,8 @@ foreach ([
     'Tôi đã xem các thay đổi trên và đồng ý áp dụng.',
     'name="confirm_plan"',
     'function provisioning_preview_operation( array $operation, array $plan ): array',
-    'provisioning_find_owned_role( (string) ( $plan[\'blueprint\'] ?? \'\' ), \'post\'',
-    'provisioning_find_owned_role( (string) ( $plan[\'blueprint\'] ?? \'\' ), \'attachment\'',
+    'provisioning_find_compatible_owned_role( $blueprint, \'post\', $role )',
+    'provisioning_find_compatible_owned_role( $blueprint, \'attachment\', $provenance_role )',
     'REUSE starter Post #',
     'REUSE starter media #',
 ] as $needle) {
