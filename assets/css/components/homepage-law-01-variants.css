@@ -24,35 +24,17 @@
     border-bottom: 1px solid rgba(143, 17, 27, .12);
     box-shadow: 0 .35rem 1.4rem rgba(68, 42, 26, .055);
 }
-
-.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__brand {
-    color: var(--law01-brand-red, #8f111b);
-}
-
+.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__brand { color: var(--law01-brand-red, #8f111b); }
 .aznet-theme-site-header--law01-burgundy-gold a { color: #2c241f; }
-
 .aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__menu a:hover,
 .aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__menu a:focus-visible,
 .aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__utility:hover,
-.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__utility:focus-visible {
-    color: var(--law01-brand-red, #8f111b);
-}
-
-.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__search {
-    border-color: rgba(143, 17, 27, .2);
-    background: #fff;
-}
+.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__utility:focus-visible { color: var(--law01-brand-red, #8f111b); }
+.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__search { border-color: rgba(143, 17, 27, .2); background: #fff; }
 .aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__search input[type="search"] { color: #2c241f; }
 .aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__search input[type="search"]::placeholder { color: #6f675f; }
-.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__search button {
-    border-left-color: rgba(143, 17, 27, .2);
-    color: var(--law01-brand-red, #8f111b);
-}
-.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__utility-menu a {
-    border-color: rgba(143, 17, 27, .22);
-    background: #fff;
-    color: var(--law01-brand-red, #8f111b);
-}
+.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__search button { border-left-color: rgba(143, 17, 27, .2); color: var(--law01-brand-red, #8f111b); }
+.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__utility-menu a { border-color: rgba(143, 17, 27, .22); background: #fff; color: var(--law01-brand-red, #8f111b); }
 
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero {
     min-height: clamp(31rem, 64vh, 44rem);
@@ -63,16 +45,10 @@
     color: #231c18;
 }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero::before { border-color: rgba(143, 17, 27, .16); }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero h1 {
-    color: var(--law01-brand-red);
-    font-size: clamp(2.85rem, 5vw, 5rem);
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero h1 { color: var(--law01-brand-red); font-size: clamp(2.85rem, 5vw, 5rem); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero .aznet-theme-law01-eyebrow { color: var(--law01-gold-text); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero .aznet-theme-law01-lede { color: #554a42; }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__media {
-    border-color: rgba(143, 17, 27, .18);
-    box-shadow: 1.15rem 1.15rem 0 rgba(208, 162, 76, .13);
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__media { border-color: rgba(143, 17, 27, .18); box-shadow: 1.15rem 1.15rem 0 rgba(208, 162, 76, .13); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__image { aspect-ratio: 5 / 4; }
 .aznet-theme-law01-hero__visual { display: grid; gap: 1rem; }
 .aznet-theme-law01-hero__slogan {
@@ -85,57 +61,21 @@
     font-style: italic;
     line-height: 1.55;
 }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-button {
-    border-color: var(--law01-brand-red);
-    background: var(--law01-brand-red);
-    color: #fff;
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-button { border-color: var(--law01-brand-red); background: var(--law01-brand-red); color: #fff; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-button:hover { background: var(--law01-brand-red-deep); }
 .aznet-theme-law01-services__intro { margin-bottom: 1.75rem; }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-services {
-    border-top: 1px solid rgba(143, 17, 27, .1);
-    background: #fffdf8;
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--services {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: .75rem;
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--services .aznet-theme-law01-card {
-    min-height: 13.5rem;
-    padding: 1.2rem 1rem;
-    border-top-width: 2px;
-    text-align: center;
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--services .aznet-theme-law01-card::before {
-    margin-bottom: 1.6rem;
-    color: var(--law01-brand-red);
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-editorial {
-    background: linear-gradient(180deg, #fffdf8 0%, #fff8ee 100%);
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card {
-    border-color: rgba(143, 17, 27, .11);
-    box-shadow: 0 .55rem 1.6rem rgba(74, 46, 31, .06);
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-services { border-top: 1px solid rgba(143, 17, 27, .1); background: #fffdf8; }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--services { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .75rem; }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--services .aznet-theme-law01-card { min-height: 13.5rem; padding: 1.2rem 1rem; border-top-width: 2px; text-align: center; }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--services .aznet-theme-law01-card::before { margin-bottom: 1.6rem; color: var(--law01-brand-red); }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-editorial { background: linear-gradient(180deg, #fffdf8 0%, #fff8ee 100%); }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card { border-color: rgba(143, 17, 27, .11); box-shadow: 0 .55rem 1.6rem rgba(74, 46, 31, .06); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-team { background: #fffaf2; color: #241d19; }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-team .aznet-theme-law01-panel {
-    border-color: rgba(143, 17, 27, .12);
-    background: transparent;
-    color: inherit;
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-team .aznet-theme-law01-panel { border-color: rgba(143, 17, 27, .12); background: transparent; color: inherit; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-team .aznet-theme-law01-eyebrow { color: var(--law01-gold-text); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-team .aznet-theme-law01-lede { color: #655a51; }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--team {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    margin: 2rem 0;
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-team-card {
-    overflow: hidden;
-    border: 1px solid rgba(143, 17, 27, .12);
-    border-radius: .35rem;
-    background: #fff;
-    box-shadow: 0 .65rem 1.8rem rgba(74, 46, 31, .07);
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--team { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 2rem 0; }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-team-card { overflow: hidden; border: 1px solid rgba(143, 17, 27, .12); border-radius: .35rem; background: #fff; box-shadow: 0 .65rem 1.8rem rgba(74, 46, 31, .07); }
 .aznet-theme-law01-team-card__media,
 .aznet-theme-law01-team-card__image { display: block; width: 100%; }
 .aznet-theme-law01-team-card__image { aspect-ratio: 4 / 3; height: auto; object-fit: cover; }
@@ -146,79 +86,32 @@
 
 /* Client-ready Law 01 refinement: layout and presentation only. */
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-section { padding-block: clamp(2.6rem, 4.5vw, 4.6rem); }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-section-heading {
-    display: flex;
-    align-items: end;
-    justify-content: space-between;
-    gap: 2rem;
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-section-heading { display: flex; align-items: end; justify-content: space-between; gap: 2rem; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-section-heading > div { min-width: 0; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-section-heading h2 { margin-bottom: 0; }
 
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero {
-    padding: 0;
-    overflow: visible;
-    background: var(--law01-client-cream);
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero { padding: 0; overflow: visible; background: var(--law01-client-cream); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero::before { display: none; }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__grid {
-    width: min(100%, 96rem);
-    grid-template-columns: minmax(0, .95fr) minmax(28rem, 1.05fr);
-    gap: 0;
-    align-items: stretch;
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__grid { width: min(100%, 96rem); grid-template-columns: minmax(0, .95fr) minmax(28rem, 1.05fr); gap: 0; align-items: stretch; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__content {
     display: flex;
     flex-direction: column;
     justify-content: center;
     max-width: none;
     padding: clamp(3.25rem, 6vw, 6.5rem) clamp(2rem, 5vw, 5rem);
-    background:
-        radial-gradient(circle at 4% 15%, rgba(185, 137, 47, .11), transparent 17rem),
-        var(--law01-client-cream);
+    background: radial-gradient(circle at 4% 15%, rgba(185, 137, 47, .11), transparent 17rem), var(--law01-client-cream);
 }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero h1 {
-    max-width: 13ch;
-    margin-block: .55rem 1rem;
-    color: var(--law01-client-burgundy);
-    font-size: clamp(2.8rem, 4.8vw, 5.15rem);
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero .aznet-theme-law01-lede {
-    max-width: 45rem;
-    color: #4f443d;
-    font-size: clamp(1.05rem, 1.45vw, 1.24rem);
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__quote {
-    max-width: 38rem;
-    margin: 1rem 0 0;
-    color: var(--law01-client-burgundy);
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: clamp(1.15rem, 1.8vw, 1.55rem);
-    font-style: italic;
-    font-weight: 700;
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__visual {
-    min-height: clamp(31rem, 58vw, 43rem);
-    background: #efe3d2;
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero h1 { max-width: 13ch; margin-block: .55rem 1rem; color: var(--law01-client-burgundy); font-size: clamp(2.8rem, 4.8vw, 5.15rem); }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero .aznet-theme-law01-lede { max-width: 45rem; color: #4f443d; font-size: clamp(1.05rem, 1.45vw, 1.24rem); }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__quote { max-width: 38rem; margin: 1rem 0 0; color: var(--law01-client-burgundy); font-family: Georgia, 'Times New Roman', serif; font-size: clamp(1.15rem, 1.8vw, 1.55rem); font-style: italic; font-weight: 700; }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__visual { min-height: clamp(31rem, 58vw, 43rem); background: #efe3d2; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__media,
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__image {
-    width: 100%;
-    height: 100%;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__image { width: 100%; height: 100%; border: 0; border-radius: 0; box-shadow: none; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__image { aspect-ratio: auto; object-fit: cover; }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-button--secondary {
-    border-color: rgba(122, 14, 24, .38);
-    background: transparent;
-    color: var(--law01-client-ink);
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-button--secondary:hover {
-    background: #fff;
-    color: var(--law01-client-burgundy);
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-button--secondary { border-color: rgba(122, 14, 24, .38); background: transparent; color: var(--law01-client-ink); }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-button--secondary:hover { background: #fff; color: var(--law01-client-burgundy); }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-team .aznet-theme-law01-button--secondary { border-color: rgba(122, 14, 24, .38); background: transparent; color: var(--law01-client-ink); }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-team .aznet-theme-law01-button--secondary:hover { background: #fff; color: var(--law01-client-burgundy); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__secondary-action {
     display: inline-flex;
     min-height: 3.2rem;
@@ -233,151 +126,45 @@
     text-decoration: none;
     transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
 }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__secondary-action:hover {
-    transform: translateY(-2px);
-    background: #fff;
-    color: var(--law01-client-burgundy);
-    box-shadow: 0 .75rem 1.75rem rgba(68, 42, 26, .1);
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__secondary-action:focus-visible {
-    outline: 3px solid var(--aznet-theme-color-focus);
-    outline-offset: 4px;
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust {
-    position: relative;
-    z-index: 2;
-    border-top: 1px solid rgba(122, 14, 24, .09);
-    border-bottom: 1px solid rgba(122, 14, 24, .09);
-    background: rgba(255, 253, 248, .97);
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust-item {
-    display: flex;
-    min-height: 5.5rem;
-    align-items: center;
-    gap: .9rem;
-    padding: 1rem 1.35rem;
-    color: #352b26;
-    font-family: Georgia, 'Times New Roman', serif;
-    font-weight: 700;
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__secondary-action:hover { transform: translateY(-2px); background: #fff; color: var(--law01-client-burgundy); box-shadow: 0 .75rem 1.75rem rgba(68, 42, 26, .1); }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__secondary-action:focus-visible { outline: 3px solid var(--aznet-theme-color-focus); outline-offset: 4px; }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust { position: relative; z-index: 2; border-top: 1px solid rgba(122, 14, 24, .09); border-bottom: 1px solid rgba(122, 14, 24, .09); background: rgba(255, 253, 248, .97); }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust-item { display: flex; min-height: 5.5rem; align-items: center; gap: .9rem; padding: 1rem 1.35rem; color: #352b26; font-family: Georgia, 'Times New Roman', serif; font-weight: 700; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust-item + .aznet-theme-law01-hero__trust-item { border-inline-start: 1px solid rgba(122, 14, 24, .1); }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust-mark {
-    display: inline-grid;
-    width: 2.55rem;
-    height: 2.55rem;
-    flex: 0 0 auto;
-    place-items: center;
-    border: 1px solid var(--law01-client-gold);
-    border-radius: 50%;
-    color: var(--law01-client-gold);
-    font: 800 .78rem/1 system-ui, sans-serif;
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust-mark { display: inline-grid; width: 2.55rem; height: 2.55rem; flex: 0 0 auto; place-items: center; border: 1px solid var(--law01-client-gold); border-radius: 50%; color: var(--law01-client-gold); font: 800 .78rem/1 system-ui, sans-serif; }
 
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-services { background: #fff; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--services { margin-top: 2rem; }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--services .aznet-theme-law01-card {
-    min-height: 15rem;
-    padding: 1.4rem 1.05rem 1.25rem;
-    border: 1px solid rgba(122, 14, 24, .1);
-    border-radius: .2rem;
-    background: #fff;
-    text-align: center;
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--services .aznet-theme-law01-card { min-height: 15rem; padding: 1.4rem 1.05rem 1.25rem; border: 1px solid rgba(122, 14, 24, .1); border-radius: .2rem; background: #fff; text-align: center; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--services .aznet-theme-law01-card::before { display: none; }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-card__badge {
-    display: grid;
-    width: 3.25rem;
-    height: 3.25rem;
-    place-items: center;
-    margin: 0 auto 1rem;
-    border: 1px solid var(--law01-client-gold);
-    border-radius: 50%;
-    color: var(--law01-client-gold);
-    font-family: Georgia, 'Times New Roman', serif;
-    font-weight: 800;
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-card__link {
-    margin-top: auto;
-    color: var(--law01-client-burgundy);
-    font-weight: 750;
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-card__badge { display: grid; width: 3.25rem; height: 3.25rem; place-items: center; margin: 0 auto 1rem; border: 1px solid var(--law01-client-gold); border-radius: 50%; color: var(--law01-client-gold); font-family: Georgia, 'Times New Roman', serif; font-weight: 800; }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-card__link { margin-top: auto; color: var(--law01-client-burgundy); font-weight: 750; }
 
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile {
-    background:
-        linear-gradient(90deg, rgba(255,250,241,.98), rgba(255,255,255,.98)),
-        #fffaf1;
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__grid {
-    display: grid;
-    grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
-    border-top: 1px solid rgba(122, 14, 24, .1);
-    border-bottom: 1px solid rgba(122, 14, 24, .1);
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile { background: linear-gradient(90deg, rgba(255,250,241,.98), rgba(255,255,255,.98)), #fffaf1; }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__grid { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); border-top: 1px solid rgba(122, 14, 24, .1); border-bottom: 1px solid rgba(122, 14, 24, .1); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__about,
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__team { padding: clamp(2rem, 4vw, 4rem); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__team { border-inline-start: 1px solid rgba(122, 14, 24, .1); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__about-media { margin-top: 2rem; overflow: hidden; border-radius: .25rem; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__about-image { display: block; width: 100%; aspect-ratio: 16 / 9; height: auto; object-fit: cover; }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__members {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: .75rem;
-    margin: 1.5rem 0;
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__members { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .75rem; margin: 1.5rem 0; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__member { min-width: 0; }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__member-image {
-    display: block;
-    width: 100%;
-    aspect-ratio: 4 / 5;
-    height: auto;
-    object-fit: cover;
-    border-radius: .22rem;
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__member-image { display: block; width: 100%; aspect-ratio: 4 / 5; height: auto; object-fit: cover; border-radius: .22rem; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__member h3 { margin: .75rem 0 .35rem; font-size: 1rem; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__member h3 a { color: var(--law01-client-ink); text-decoration: none; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__member p { margin: 0; color: #6b5e55; font-size: .86rem; line-height: 1.5; }
 
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-articles { background: #fff; }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--articles {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--articles .aznet-theme-law01-article-card:first-child {
-    grid-column: auto;
-    padding: 0;
-    border-top: 1px solid rgba(122, 14, 24, .1);
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--articles .aznet-theme-law01-article-card {
-    overflow: hidden;
-    padding: 0;
-    border: 1px solid rgba(122, 14, 24, .1);
-    border-radius: .2rem;
-    box-shadow: none;
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--articles { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--articles .aznet-theme-law01-article-card:first-child { grid-column: auto; padding: 0; border-top: 1px solid rgba(122, 14, 24, .1); }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--articles .aznet-theme-law01-article-card { overflow: hidden; padding: 0; border: 1px solid rgba(122, 14, 24, .1); border-radius: .2rem; box-shadow: none; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card__media,
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card__image { display: block; width: 100%; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card__image { aspect-ratio: 16 / 9; height: auto; object-fit: cover; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card__body { padding: 1.1rem 1.15rem 1.25rem; }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card__meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: .75rem;
-    color: #76685f;
-    font-size: .78rem;
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card__meta span {
-    padding: .22rem .5rem;
-    border-radius: 999px;
-    background: #f5ead2;
-    color: #674812;
-    font-weight: 700;
-}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card__meta { display: flex; align-items: center; justify-content: space-between; gap: .75rem; color: #76685f; font-size: .78rem; }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card__meta span { padding: .22rem .5rem; border-radius: 999px; background: #f5ead2; color: #674812; font-weight: 700; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card h3 { margin-top: 1rem; font-size: clamp(1.15rem, 1.7vw, 1.45rem); }
 
 .aznet-theme-site-header--law01-burgundy-gold.aznet-theme-site-header { backdrop-filter: blur(12px); }
@@ -387,12 +174,10 @@
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--services { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__members { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-
 @media (max-width: 980px) {
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero { background: var(--law01-warm-paper); }
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-
 @media (max-width: 960px) {
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__grid,
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__grid { grid-template-columns: 1fr; }
@@ -403,7 +188,6 @@
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust-item:nth-child(4) { border-top: 1px solid rgba(122, 14, 24, .1); }
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--articles { grid-template-columns: 1fr; }
 }
-
 @media (max-width: 640px) {
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--services,
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--team,
@@ -415,7 +199,6 @@
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust-item + .aznet-theme-law01-hero__trust-item { border-inline-start: 0; border-top: 1px solid rgba(122, 14, 24, .1); }
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-section-heading { align-items: flex-start; flex-direction: column; gap: .75rem; }
 }
-
 @media (prefers-reduced-motion: reduce) {
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-card,
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card,
