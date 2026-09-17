@@ -1,17 +1,20 @@
 <?php
-/** Immutable Law 01 provisioning blueprint definitions. */
+/** Immutable provisioning blueprint definitions. */
 namespace AZnet\Theme;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 /** @return array<int,string> */
 function provisioning_blueprint_keys(): array {
-    return [ 'law01-v1', 'law01-v1-1', 'law01-v1-2' ];
+    return [ 'law01-v1', 'law01-v1-1', 'law01-v1-2', 'professional-services-v1' ];
 }
 
 /** @return array<string,mixed>|null */
 function provisioning_blueprint( string $key ): ?array {
     if ( ! in_array( $key, provisioning_blueprint_keys(), true ) ) { return null; }
+    if ( 'professional-services-v1' === $key ) {
+        return function_exists( __NAMESPACE__ . '\\professional_services_blueprint' ) ? professional_services_blueprint() : null;
+    }
 
     $page = static fn( string $title, string $excerpt, string $content, ?string $parent = null ): array => [
         'title' => $title,
