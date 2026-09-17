@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.52
+**Version:** v0.53
 **Status:** Working Source  
 **Date:** 17/09/2026
 
@@ -39,6 +39,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P4-C | Standalone Core independence | PASS / MERGED | D-027 source + implementation merged through PR #63/#64; zero-plugin L1-L4, exact-package and exact-main gates PASS; optional integrations remain additive |
 | P5 | Publication & production deployment | PASS | Tag `v1.1.0` + GitHub Release publication and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
 | X | v1.2 WordPress Experience Completion | PUBLICATION + PRODUCTION DEPLOYMENT PASS | X1-X5 retained; PR #87 technical integration and exact-main V1 + X6 L1-L4/L6 PASS; owner-approved `v1.2.0` publication PASS; owner-approved production deployment run `35135759389` plus fresh independent read-only run `35136876330` PASS; no provider L5 expansion |
+| Y | v1.3 Client Delivery System | RATIFIED / Y1 READY | Approved design + implementation plan define Y1 Page Experience 2.0 -> Y2 Professional Page Kits -> Y3 Footer System 2.0 -> Y4 Professional Services Starter Blueprint -> Y5 Client Delivery QA & Release Closure; Theme stays presentation owner, WordPress keeps native content/state, provider L5 remains separate |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
 Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` points to `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`. Publication source closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72. P5 technical run `35051428372` verified final package bytes, publication run `35052694111` published the matching tag/Release, and production read-only run `35054176392` closed deployment at the tested Theme-owned/site-operations scope.
@@ -327,6 +328,29 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-026** | **Law Site Provisioning v1.1 may preselect non-authoritative exact-label recommendations, seed bounded WordPress-native starter editorial/media content, and temporarily discourage indexing only on a confirmed new/mostly-empty-site plan; active-site starter content fails safe to Draft without a public per-Post SEO contract, and all authoritative mapping/mutation remains explicit in the confirmed provisioning plan.** | **Accepted** |
 | **D-027** | **AZnet Theme Core has zero mandatory third-party runtime dependency. WordPress + Theme alone must complete install/activate/setup/provision/author/render on the support floor; optional providers are additive capability tracks, provider absence is not Core failure, and the exact final package must pass a zero-plugin standalone release path before Core Ready/publication. External development/QA tooling is allowed only outside deployed runtime.** | **Accepted** |
 | **D-028** | **v1.2 WordPress Experience Completion is a WordPress-Core-only Theme milestone using surface modules + shared primitives. No new provider integration is opened; Comments, Search/404/empty states and Media/gallery/embed receive deep polish; metadata remains 1.1.0 until X6 final-candidate promotion.** | **Accepted** |
+| **D-029** | **v1.3 Client Delivery System prioritizes fast, professional client handoff through WordPress-native inner Page presentation, five portable professional Page kits, bounded Footer presets, and a generic confirmed professional-services provisioning blueprint. It preserves Classic Editor policy for native Post/Page, the single `aznet_theme_settings` store, zero mandatory provider runtime dependency, and keeps metadata at 1.2.0 until a separately approved Y5 promotion gate.** | **Accepted** |
+
+## 10A. v1.3 Client Delivery System
+
+**State:** **RATIFIED / Y1 READY.**
+
+**Goal:** materially reduce the time from clean WordPress to a professional, client-ready service/business website without introducing a proprietary builder or domain engine.
+
+**Design record:** `docs/superpowers/specs/2026-09-17-v1.3-client-delivery-system-design.md`.
+
+**Implementation plan:** `docs/superpowers/plans/2026-09-17-v1.3-client-delivery-system.md`.
+
+**Y1 — Page Experience 2.0:** upgrade native inner Page presentation with WordPress-owned title/excerpt/featured image/hierarchy, child-Page breadcrumb presentation, Standard/Wide/Landing Page variants, surface-aware assets and L1-L4 evidence. Breadcrumbs use real WordPress ancestors only; no URL/slug/menu heuristics and no SEO schema ownership.
+
+**Y2 — Professional Page Kits:** ship five portable WordPress-native compositions for About, Services, Team/Expertise, Contact and Content Landing. Patterns may use neutral replaceable copy but must not fabricate identity/contact/credentials/service truth. Native Post/Page Classic Editor policy remains in force; stored WordPress content must remain portable through theme switch.
+
+**Y3 — Footer System 2.0:** provide Standard/Professional/Compact Theme-owned presentation presets over existing WordPress site identity and Footer menu locations. Empty data sources fail soft; no contact/social store is added.
+
+**Y4 — Professional Services Starter Blueprint:** extend the existing D-025/D-026 confirmed/idempotent provisioning engine with a generic professional-services blueprint. Activation stays mutation-free; the user reviews and confirms a visible change plan; created content becomes WordPress-owned; current-run rollback remains bounded; active sites are not silently overwritten.
+
+**Y5 — Client Delivery QA & Release Closure:** prove the full clean-site journey on WordPress 6.9+/PHP 8.1+, zero mandatory third-party plugins, responsive/a11y browser matrix, deterministic exact-package identity, packaged-PHP lint, theme-switch/update/rollback continuity and exact-main verification. Metadata remains `1.2.0` through Y1-Y4; promotion to `1.3.0`, publication and production deployment are separate explicit owner gates.
+
+**Provider boundary:** v1.3 Core opens no RootProfile/ConvertFlow/Woo provider L5 expansion. Existing optional compatibility tracks remain separate and fail-soft.
 
 ## 11. Open questions
 
@@ -360,4 +384,4 @@ Metadata promotion to `1.1.0` is a historical cleared gate completed through PR 
 
 ## 14. Exact next
 
-**v1.2.0 PUBLICATION + PRODUCTION DEPLOYMENT PASS. Annotated tag `v1.2.0` dereferences to exact verified technical commit `c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`; GitHub Release `390148740` carries `aznet-theme-1.2.0.zip` with SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`. Owner-approved deployment run `35135759389` and fresh independent read-only verification run `35136876330` are PASS. NEXT — no v1.2 Core release gate remains open; any new Theme milestone or provider L5 certification requires a new approved slice.**
+**v1.2.0 remains the published and verified production release. v1.3 Client Delivery System is now RATIFIED under D-029 with Y1-Y5 sequence and implementation plan approved for execution after this source-ratification merge. NEXT — execute Y1 Page Experience 2.0 using RED -> intended failure -> minimal GREEN -> L3/L4 retained regression. Theme metadata stays 1.2.0; provider L5, metadata promotion, publication and deployment remain separate gates.**
