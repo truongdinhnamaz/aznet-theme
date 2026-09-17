@@ -1,3 +1,4 @@
+# verification trigger: v1.3 post-deploy read-only
 name: OPS Tam Duc v1.3.0 Post-Deploy Verify
 
 on:
