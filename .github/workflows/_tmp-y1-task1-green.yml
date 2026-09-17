@@ -65,6 +65,14 @@ jobs:
               raise SystemExit('control design field anchor mismatch')
           control.write_text(text.replace(old, new, 1))
 
+          r3 = Path('tests/offline/r3-header-settings-contract.php')
+          text = r3.read_text()
+          old = "    'header_utilities'         => false,\n"
+          new = old + "    'page_breadcrumbs'         => true,\n"
+          if text.count(old) != 1:
+              raise SystemExit('R3 exact normalized array anchor mismatch')
+          r3.write_text(text.replace(old, new, 1))
+
           plan = Path('docs/superpowers/plans/2026-09-17-v1.3-client-delivery-system.md')
           text = plan.read_text()
           old = "$excerpt = trim((string) get_the_excerpt());"
@@ -169,12 +177,13 @@ jobs:
           php -l inc/theme/settings.php
           php -l inc/admin/control-center.php
           php -l inc/theme/bootstrap.php
+          php -l tests/offline/r3-header-settings-contract.php
       - name: Commit verified Task 1 GREEN
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'truongdinhnamaz'
           git config user.email 'truongnam151@gmail.com'
-          git add inc/theme/settings.php inc/theme/bootstrap.php inc/theme/page-experience.php inc/admin/control-center.php tests/offline/y1-page-experience-contract.php docs/superpowers/plans/2026-09-17-v1.3-client-delivery-system.md
+          git add inc/theme/settings.php inc/theme/bootstrap.php inc/theme/page-experience.php inc/admin/control-center.php tests/offline/y1-page-experience-contract.php tests/offline/r3-header-settings-contract.php docs/superpowers/plans/2026-09-17-v1.3-client-delivery-system.md
           git commit -m 'feat: add v1.3 page presentation context'
           git push origin HEAD:feat/v1.3-y1-page-experience
