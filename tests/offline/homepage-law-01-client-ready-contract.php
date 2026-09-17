@@ -58,8 +58,10 @@ assert(str_contains($css, '.aznet-theme-law01-hero__secondary-action'), 'Client-
 
 assert(str_contains($services, 'aznet-theme-law01-card__badge'), 'Service cards must expose a presentation-only badge hook.');
 assert(str_contains($profile, 'aznet-theme-law01-profile__grid'), 'Profile band must combine About and Team presentation.');
+assert(str_contains($latest, "homepage_latest_posts( (array) setting( 'homepage_knowledge_terms', [] ), 3, homepage_ledger_ids() )"), 'Latest presentation must stay at three client-ready cards.');
 assert(str_contains($latest, 'aznet-theme-law01-article-card__media'), 'Latest cards must render featured media when available.');
 assert(str_contains($latest, 'get_the_category'), 'Latest cards must expose WordPress-owned taxonomy labels.');
+assert(! str_contains($latest, '<a class="aznet-theme-law01-article-card__media"'), 'Latest media must not duplicate the canonical article URL.');
 
 foreach (['500+', '95%', '98%', '1.000+', '1000+', 'Nguyễn Văn A', 'Nguyễn Văn Minh', 'Trần Thị Lan', 'Phạm Anh Tuấn', 'Lê Thị Hoa'] as $forbidden) {
     foreach ([$hero, $services, $profile, $latest, $css] as $surface) {
