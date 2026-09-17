@@ -4,9 +4,9 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.9 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.10 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 16/09/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 18/09/2026 |
 
 | **Kiến trúc lõi: **Theme chỉ sở hữu presentation/configuration/reference cần thiết. Dữ liệu authoritative và business state ở lại owner. Boundary giữa hai bên là public/versioned provider contract hoặc adapter tối thiểu. |
 | --- |
@@ -66,6 +66,17 @@ Global theme tokens là integration surface chiều ngược lại: plugin prese
 
 | Decision D-009 đã khóa prefix family: aznet-theme. Public CSS custom properties dùng --aznet-theme-*; PHP namespace dùng AZnet\\Theme; procedural functions dùng aznet_theme_; constants dùng AZNET_THEME_. |
 | --- |
+
+## 5.1. Typography mặc định của Theme
+
+AZnet Theme sở hữu font presentation và semantic typography tokens. Font mặc định toàn Theme là `Roboto, Arial, sans-serif`; body/UI và heading cùng tiêu thụ Theme-owned family tokens thay vì mỗi surface tự hard-code font riêng.
+
+- `--aznet-theme-font-family-base` là family mặc định cho body/UI.
+- `--aznet-theme-font-family-heading` là semantic heading family và mặc định tham chiếu family base.
+- Roboto được self-host trong Theme; runtime không phụ thuộc Google Fonts/CDN bên ngoài.
+- Chỉ ship các weight thực sự dùng; implementation hiện dùng 400 Regular, 500 Medium và 700 Bold. Selector cần emphasis trung gian phải chọn weight gần nhất có chủ đích, không relabel/synthesize font file.
+- `theme.json` và frontend phải dùng cùng family để giữ editor/frontend parity.
+- Provider/plugin có thể consume semantic typography token khi cần presentation alignment nhưng không sở hữu, lưu hoặc mutation Theme typography.
 
 # 6. Cấu trúc source tree - baseline
 

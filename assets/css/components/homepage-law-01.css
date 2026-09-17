@@ -30,22 +30,25 @@
 .aznet-theme-homepage--law-01 .aznet-theme-law01-section h1,
 .aznet-theme-homepage--law-01 .aznet-theme-law01-section h2,
 .aznet-theme-homepage--law-01 .aznet-theme-law01-section h3 {
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--aznet-theme-font-family-heading);
     line-height: 1.06;
     letter-spacing: -.025em;
     text-wrap: balance;
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-section h1 {
+    font-weight: 700;
     margin: .65rem 0 1.35rem;
     max-width: 12ch;
     font-size: clamp(3rem, 5.6vw, 5.75rem);
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-section h2 {
+    font-weight: 700;
     margin: .55rem 0 1.5rem;
     max-width: 18ch;
     font-size: clamp(2.2rem, 3.7vw, 3.8rem);
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-section h3 {
+    font-weight: 500;
     margin: 0 0 .85rem;
     font-size: clamp(1.2rem, 2vw, 1.55rem);
 }
@@ -256,7 +259,7 @@
     margin-bottom: 2.3rem;
     color: var(--law01-gold-text);
     content: counter(law01-service, decimal-leading-zero);
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--aznet-theme-font-family-heading);
     font-size: 1.05rem;
     font-weight: 700;
     letter-spacing: .08em;

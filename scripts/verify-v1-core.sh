@@ -121,6 +121,9 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-asset-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-control-center-contract.php
 
+printf '%s\n' '==> Theme default typography contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/typography-roboto-contract.php
+
 printf '%s\n' '==> Homepage Composer + Law 01 contracts'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-settings-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-content-map-contract.php
