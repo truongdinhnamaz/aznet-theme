@@ -1,0 +1,234 @@
+name: Temporary Law01 Source Refresh
+
+on:
+  push:
+    branches:
+      - docs/law01-source-refresh-20260918
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    if: ${{ !contains(github.event.head_commit.message, '[source-refresh-applied]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Reconcile authoritative source state
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_one(text, old, new, label):
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"{label}: expected exactly one match, found {count}")
+              return text.replace(old, new, 1)
+
+          # AZT-03 current baseline / provenance.
+          p = Path('docs/source/AZT-03-baseline-provenance.md')
+          t = p.read_text(encoding='utf-8')
+          t = replace_one(t, '**Version:** v0.44', '**Version:** v0.45', 'AZT-03 version')
+          t = replace_one(t, '**Date:** 17/09/2026', '**Date:** 18/09/2026', 'AZT-03 date')
+          marker = 'X6 technical candidate provenance is distinct from current production state.'
+          block = '''## 2.1 Current post-release / pilot delta — 18/09/2026
+
+- Live canonical GitHub `main` is `371e09035a23664cf38f52f70aa3189e5c10f2cf` after owner-approved PR #111. PR #110 merged earlier at `45073221ba1f243cc95692c002ddfb34ede7a1d6`. PR #109 remains draft/open/unmerged and is not canonical state.
+- PR #110 closes the bounded Law 01 Quick Setup rerun/provenance-reuse gap: compatible Law provenance is reused instead of creating duplicate starter Post/media objects; Step 3 preview reflects reuse. Exact PR head `d5e58c4941bec144f05ec8de6a675eb86ebff74f` merged through #110.
+- PR #111 adds bounded Law 01 homepage editorial presentation only, using WordPress-owned content and preserving the existing ownership boundary. Exact head `e9afe7a36b4f5d4f0a0f5f6e8c5e8f6ca4765648` merged through #111.
+- The live pilot `tamduchanoi.aznet.vn` reports active AZnet Theme `1.3.0`. After owner preview/backup approval, a WPVibe draft was published and the previous live theme files were retained as `aznet-theme-wpvibe-backup`. The live Theme therefore has post-release local file changes; those bytes were behaviorally verified but were not proven byte-identical to canonical `main` or to the published `v1.3.0` package. Do not use the published package SHA as identity for the current live Theme files.
+- Fresh live rerun evidence: Quick Setup reached Step 4/4 with `READY_WITH_WARNINGS`, `Created: 0 · Reused: 36`; a read-only database duplicate check returned zero duplicate starter roles for `law01-v1-2`. This proves the rerun/idempotency behavior at the tested runtime scope without claiming byte parity.
+- Fresh live homepage evidence after content classification: five real published Posts render in `Mới cập nhật`; About excerpt renders; `blog_public=1`; Rank Math homepage meta description is present; fresh mobile Lighthouse returned Performance 98/100, Accessibility 100/100, Best Practices 100/100 and SEO 100/100.
+- ConvertFlow F9/provider L5 certification is separately PASS at the exact tested compatibility scope recorded in `docs/evidence/F9_PROVIDER_L5_SOURCE_SYNC_20260918.md`: WordPress 6.9, PHP 8.1, AZnet Theme `v1.3.0` reference producer, ConvertFlow Core P5.244 + Pro P5.164, and Twenty Twenty-Five alternate-theme coverage. This does not promote the ConvertFlow released baseline or change Theme ownership.
+- RootProfile remains an independent optional-integration boundary. On the pilot, public routes expose person-by-ID, organization and readiness reads, but no public/versioned organization-team collection/projection is available; `GET /rootprofile/v1/organization` currently returns `404 rootprofile_not_found`. Homepage Team authoritative rendering is therefore `BLOCKED` under issue #112. Theme must not infer membership from WordPress users/authors/posts/slugs/URLs or read RootProfile private storage.
+
+'''
+          t = replace_one(t, marker, block + marker, 'AZT-03 current delta insertion')
+          p.write_text(t, encoding='utf-8')
+
+          # AZT-04 roadmap / QA / decisions.
+          p = Path('docs/source/AZT-04-roadmap-qa-decisions.md')
+          t = p.read_text(encoding='utf-8')
+          t = replace_one(t, '**Version:** v0.57', '**Version:** v0.58', 'AZT-04 version')
+          t = replace_one(t, '**Date:** 17/09/2026', '**Date:** 18/09/2026', 'AZT-04 date')
+          old_e = '| E | RootProfile Profile / Contact | OPTIONAL COMPAT ACTIVE | E0-E4/E5-B retained PASS; E5-C external BLOCKED; E5-D takeover locked; non-blocking for core under D-016 |'
+          new_e = '| E | RootProfile Profile / Contact | OPTIONAL COMPAT ACTIVE / TEAM PROJECTION BLOCKED | E0-E4/E5-B retained PASS; E5-C remains external-blocked and E5-D takeover locked. Pilot evidence confirms no public/versioned organization-team projection and no organization profile on the target site; issue #112 records the blocker. Non-blocking for core under D-016. |'
+          t = replace_one(t, old_e, new_e, 'AZT-04 E row')
+          old_f = '| F | Homepage | CORE PASS / F8 INTEGRATED PASS | Native Theme Homepage merged; F6/F7 evidence retained; exact ConvertFlow Core P5.242 + Pro P5.164 integration passed L3-L4 on Theme `252554961bc81d22427363aee0048365fb4e116b`; F9/provider L5 remains separate and unclaimed |'
+          new_f = '| F | Homepage | CORE PASS / F9 PROVIDER L5 PASS | Native Theme Homepage remains core PASS; F8 L3-L4 evidence is retained. ConvertFlow F9-A..E plus retained C1 are PASS at the exact Theme `v1.3.0` reference-producer / Core P5.244 + Pro P5.164 scope recorded in `F9_PROVIDER_L5_SOURCE_SYNC_20260918.md`. Law 01 live presentation/rerun QA is PASS at the tested site scope; RootProfile-backed Team projection remains separately external-blocked under issue #112 and does not reopen core Homepage PASS. |'
+          t = replace_one(t, old_f, new_f, 'AZT-04 F row')
+          marker = '## 3. v1.0 closure state'
+          block = '''## 2.1 Current checkpoint — 18/09/2026
+
+- Canonical GitHub `main` is `371e09035a23664cf38f52f70aa3189e5c10f2cf` after owner-approved PR #111. PR #110 and #111 are merged; PR #109 remains a draft/open presentation candidate and is not canonical.
+- ConvertFlow F9/provider L5 is PASS only at the exact certified compatibility boundary in `docs/evidence/F9_PROVIDER_L5_SOURCE_SYNC_20260918.md`. This closes the Theme-side optional-provider certification question for that tested producer/consumer path; it does not release/deploy ConvertFlow or change the released ConvertFlow baseline.
+- The Tâm Đức Hà Nội pilot is live on Theme metadata `1.3.0`. Owner-approved WPVibe publishing applied bounded post-release Theme-file changes with automatic `aznet-theme-wpvibe-backup`; byte identity to the published `v1.3.0` release asset or current GitHub `main` was not established, so runtime PASS must not be restated as package-byte PASS.
+- Law 01 Quick Setup rerun is runtime PASS at the tested scope: Step 4/4, `READY_WITH_WARNINGS`, `Created: 0 · Reused: 36`, plus zero duplicate `law01-v1-2` starter roles in the read-only duplicate query.
+- Live Homepage/content readiness at the tested scope: five published Posts render in `Mới cập nhật`; About excerpt renders; indexing is enabled; homepage meta description is present; fresh mobile Lighthouse is 98 Performance / 100 Accessibility / 100 Best Practices / 100 SEO.
+- RootProfile Team remains `BLOCKED_EXTERNAL_CONTRACT`: no public/versioned organization-team projection exists on the pilot and the organization endpoint currently returns not-found. Issue #112 is the durable Theme-side blocker record. No user/author/post heuristic or private-storage fallback is allowed.
+
+**Exact next:** no new Theme implementation slice is opened by this checkpoint. Preserve the completed core/release state. Team rendering may resume only after the RootProfile owner publishes a suitable public/versioned projection; any further release/deploy/takeover or new roadmap slice requires its own gate.
+
+'''
+          t = replace_one(t, marker, block + marker, 'AZT-04 current checkpoint insertion')
+          p.write_text(t, encoding='utf-8')
+
+          # Derived execution map.
+          p = Path('docs/source/AZT-EXEC-MAP.md')
+          t = p.read_text(encoding='utf-8')
+          t = replace_one(t, '**Version:** v0.49', '**Version:** v0.50', 'EXEC version')
+          t = replace_one(t, '**Date:** 17/09/2026', '**Date:** 18/09/2026', 'EXEC date')
+          old_f = '| F Homepage | CORE PASS / F8 INTEGRATED PASS | Native Homepage on main; exact Core P5.242 + Pro P5.164 integration passed L3-L4 against Theme `252554961bc81d22427363aee0048365fb4e116b`; F9/provider L5 remains separate |'
+          new_f = '| F Homepage | CORE PASS / F9 PROVIDER L5 PASS | Native Homepage remains core PASS; F8 L3-L4 retained; ConvertFlow F9-A..E + C1 provider/theme L5 certification PASS at the exact Theme `v1.3.0` reference-producer / Core P5.244 + Pro P5.164 scope. Law 01 live presentation/rerun QA PASS at tested scope. RootProfile-backed Team projection remains separate external blocker #112. |'
+          t = replace_one(t, old_f, new_f, 'EXEC F row')
+          marker = '## 2. Slice discipline'
+          block = '''## 1.1 Exact current checkpoint — 18/09/2026
+
+- Canonical `main`: `371e09035a23664cf38f52f70aa3189e5c10f2cf` after PR #111; PR #110/#111 merged. PR #109 is draft/open/unmerged and is not part of canonical state.
+- F9 optional ConvertFlow provider L5: PASS at the exact certified scope in `docs/evidence/F9_PROVIDER_L5_SOURCE_SYNC_20260918.md`; no ConvertFlow release/deploy or public-contract change is inferred.
+- Pilot live Theme metadata: `1.3.0`, with owner-approved post-release WPVibe Theme-file publish and `aznet-theme-wpvibe-backup`. Runtime behavior is verified; live byte identity to release/main is UNKNOWN.
+- Law 01 rerun: PASS at L3/L4 evidence available for the tested live flow (`Created: 0 · Reused: 36`, no duplicate current-blueprint starter roles). Homepage content/indexability/Lighthouse readiness is PASS at the tested scope.
+- RootProfile Team/member discovery: BLOCKED_EXTERNAL_CONTRACT under issue #112. Theme has no safe authoritative current action until a public/versioned organization-team projection exists.
+
+**Exact Next:** hold Team implementation at #112 and do not invent a workaround. No new Theme core slice is opened by this checkpoint. A future safe Next requires either the RootProfile public contract becoming available or a separately approved Theme roadmap slice.
+
+'''
+          t = replace_one(t, marker, block + marker, 'EXEC checkpoint insertion')
+          p.write_text(t, encoding='utf-8')
+
+          # Source manifest pointers/current state.
+          p = Path('docs/source/SOURCE_MANIFEST.md')
+          t = p.read_text(encoding='utf-8')
+          old_intro = 'Canonical source is reconciled through owner-approved v1.3 Client Delivery System technical closure, publication and production deployment. Technical source remains `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`; annotated `v1.3.0` + GitHub Release publication is PASS via run `35211254633`; owner-approved production deployment to `tamduchanoi.aznet.vn` is PASS via run `35222200660` plus fresh independent read-only verification run `35223053733`. Provider compatibility/certification tracks remain separate.'
+          new_intro = 'Canonical source is reconciled through the owner-approved v1.3 Client Delivery System release/deployment plus the 18/09/2026 post-release Law 01/F9 source checkpoint. Published technical source remains `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e` for the `v1.3.0` release asset, while live GitHub `main` has advanced to `371e09035a23664cf38f52f70aa3189e5c10f2cf` through PR #111. The Tâm Đức Hà Nội pilot remains active Theme metadata `1.3.0` but has owner-approved post-release WPVibe Theme-file changes whose byte identity to the published package/current main is UNKNOWN. ConvertFlow F9 provider L5 is separately PASS at its exact certified compatibility scope; RootProfile Team projection remains external-blocked under issue #112.'
+          t = replace_one(t, old_intro, new_intro, 'manifest intro')
+          t = replace_one(t, '| `AZT-03-baseline-provenance.md` | v0.44 | Canonical provenance through v1.3 technical merge, exact-main verification, publication and owner-approved production deployment |', '| `AZT-03-baseline-provenance.md` | v0.45 | Canonical provenance through v1.3 release/deployment plus PR #110/#111, live post-release Theme-file delta, Law 01 rerun/runtime evidence and RootProfile Team blocker #112 |', 'manifest AZT-03')
+          t = replace_one(t, '| `AZT-04-roadmap-qa-decisions.md` | v0.57 | D-029 v1.3 Client Delivery System PUBLICATION + PRODUCTION DEPLOYMENT PASS plus F8 integrated compatibility PASS; provider L5 remains separate |', '| `AZT-04-roadmap-qa-decisions.md` | v0.58 | v1.3 release/deployment retained; F9 ConvertFlow provider L5 PASS at exact certified scope; Law 01 live checkpoint recorded; RootProfile Team projection remains external-blocked |', 'manifest AZT-04')
+          t = replace_one(t, '| `AZT-EXEC-MAP.md` | v0.49 | Derived execution map with v1.3 Y1-Y5 closure and exact ConvertFlow F8 integrated compatibility PASS; provider L5 remains separate |', '| `AZT-EXEC-MAP.md` | v0.50 | Derived execution map with F9 ConvertFlow provider L5 PASS, current Law 01 live checkpoint and exact Next held at RootProfile blocker #112 |', 'manifest EXEC')
+          marker = 'Approved design companion:'
+          block = '18/09/2026 source-sync evidence: `docs/evidence/F9_PROVIDER_L5_SOURCE_SYNC_20260918.md` and `docs/evidence/LAW01_LIVE_CHECKPOINT_20260918.md`. These supersede earlier statements that ConvertFlow F9/provider L5 was unclaimed, while preserving historical F8 and release/deployment evidence. RootProfile Team remains separately blocked; no provider/domain ownership transfer is implied.\n\n'
+          t = replace_one(t, marker, block + marker, 'manifest evidence insertion')
+          p.write_text(t, encoding='utf-8')
+
+          # Durable F9 evidence, copied from the already-verified source-sync checkpoint.
+          Path('docs/evidence/F9_PROVIDER_L5_SOURCE_SYNC_20260918.md').write_text('''# F9 Provider L5 Source Sync — 18/09/2026
+
+## Scope
+
+Docs/state-only closure for AZnet Theme after the separately approved ConvertFlow provider L5 certification completed and the provider candidate became canonical. No production AZnet Theme code changes.
+
+## Canonical provider evidence
+
+- ConvertFlow PR #35 merged exact verified head `7bffb2326d4d8e680fd535419157c02657c29b6c` to `truongdinhnamaz/convert-flow` `main@53b17e5f7fea77414701a8b8b8ac630fee1f8ce0`.
+- Compare from exact verified head to the merge commit reports no changed files; canonical merge tree preserves the verified candidate bytes.
+- F9-A workflow `35262104796`: SUCCESS — Product Journey narrow-host containment, horizontal overflow `0`.
+- F9-B workflow `35262104903`: SUCCESS — P5.244 build identity.
+- F9-C workflow `35262104962`: SUCCESS — deterministic Core P5.244 + Pro P5.164 package/source identity.
+- F9-D workflow `35262104841`: SUCCESS — AZnet Theme -> Twenty Twenty-Five -> AZnet Theme with ConvertFlow module/Homepage state byte-stable.
+- F9-E workflow `35262104970`: SUCCESS — AZnet public token producer -> alternate-theme scoped fail-soft fallback -> AZnet token restoration, with runtime error gate.
+- Retained C1 workflow `35262104837`: SUCCESS.
+- Core package SHA-256 `0ccede3ee740e85acd3cb1b70ad23b25ea88882a0c3d5e4425e43a876557a084`.
+- Exact Pro P5.164 package SHA-256 `c2d2c54ab6897987db484fea7138b13103c8e77785a0c9213970e4f0284a4e44`.
+- Package artifact `10509242591`, digest `sha256:64f85878b5f922112832c4ba040967dd7c5ea92a80508c394252e3b0d556265c`.
+- F9-E artifact `10508647965`, digest `sha256:d883a1b809382b0239225e600331dce158f383610ef0da99ecdc851667be598e`.
+- Exact integration environment: WordPress 6.9, PHP 8.1, AZnet Theme `v1.3.0` reference producer, ConvertFlow Core P5.244 + Pro P5.164, and Twenty Twenty-Five as alternate compatible block theme.
+
+## Provider source authority
+
+- ConvertFlow CF-03 v1.29 source-state sync PR #38 merged to canonical `main@e91c33765e9af0cd23948e10b21e86bd380e90e5`.
+- CF-03 records Core P5.244 + Pro P5.164 as the active verified QA/development candidate.
+- ConvertFlow released baseline remains Core P5.207 + Pro P5.160.
+- CF-07 remains v1.20 because F9 did not change architecture, ownership, dependency semantics or Theme Integration Contract v1.
+
+## Theme source change
+
+- AZT-04 records F9/provider L5 PASS at the exact tested scope and retains AZnet Theme v1.3.0 publication/production deployment state unchanged.
+- AZT-EXEC-MAP mirrors the same exact L5 evidence as derived execution state.
+- SOURCE_MANIFEST advances the active source-version pointers accordingly.
+- Historical F8 P5.242/P5.164 L3-L4 evidence remains retained provenance; it is not rewritten as F9 evidence.
+
+## Boundary
+
+This checkpoint proves only the exact provider/theme L5 certification boundary above: public Theme Integration Contract behavior, ownership separation, theme-switch provider-state continuity, scoped fail-soft fallback and token restoration. It does not promote ConvertFlow released baseline, perform ConvertFlow release/deployment, claim Product v1 completion, or authorize a new Theme milestone/public contract/provider certification slice.
+
+## Next
+
+No new Theme milestone, architecture/public-contract change or additional optional-provider certification starts without a separately approved slice.
+''', encoding='utf-8')
+
+          Path('docs/evidence/LAW01_LIVE_CHECKPOINT_20260918.md').write_text('''# Law 01 Live Checkpoint — 18/09/2026
+
+## Scope
+
+Durable evidence for the Tâm Đức Hà Nội Law 01 pilot after owner-approved post-release Theme-file publication, Quick Setup rerun verification, bounded WordPress-owned content classification and indexability/SEO readiness work. This is not a new Theme release and does not claim byte identity to the published `v1.3.0` package.
+
+## Canonical repository state
+
+- Canonical AZnet Theme `main`: `371e09035a23664cf38f52f70aa3189e5c10f2cf` after PR #111.
+- PR #110 merge: `45073221ba1f243cc95692c002ddfb34ede7a1d6`; exact head `d5e58c4941bec144f05ec8de6a675eb86ebff74f`.
+- PR #111 merge: `371e09035a23664cf38f52f70aa3189e5c10f2cf`; exact head `e9afe7a36b4f5d4f0a0f5f6e8c5e8f6ca4765648`.
+- PR #109 remains draft/open/unmerged; it is not canonical state.
+
+## Live Theme provenance
+
+- Target: `https://tamduchanoi.aznet.vn`.
+- Fresh authenticated site metadata: WordPress `7.1.1`, PHP `8.4.25`, active AZnet Theme `1.3.0`.
+- The owner previewed and approved WPVibe draft publication after confirming backup availability. WPVibe published the draft to `aznet-theme` and retained the prior live Theme directory as `aznet-theme-wpvibe-backup`.
+- The live Theme includes post-release local Theme-file changes. The Quick Setup fix was reproduced behaviorally in the WPVibe draft; byte-for-byte identity with canonical GitHub main or the published `v1.3.0` release asset was not established. Runtime evidence therefore proves behavior, not package identity.
+
+## Quick Setup rerun / idempotency
+
+- Logged-in admin evidence reached Quick Setup Step 4/4.
+- Status: `READY_WITH_WARNINGS`.
+- Result: `Created: 0 · Reused: 36`.
+- Fresh read-only duplicate query for `law01-v1-2` starter Post/media provenance roles returned zero duplicate roles.
+- `READY_WITH_WARNINGS` reflected content-launch checklist items, not a provisioning failure.
+
+## WordPress-owned content / homepage state
+
+- Five existing published Posts were additionally classified into the existing Law 01 child categories without removing their prior category assignments.
+- Homepage `Mới cập nhật` then rendered all five real Posts.
+- About Page #34 received a bounded excerpt describing only service areas already represented by the site.
+- No fictional team member, trust statistic, certification or identity data was created.
+
+## Indexability / SEO readiness
+
+- WordPress `blog_public` was changed from `0` to `1` only after explicit owner approval to open indexing.
+- Rank Math homepage meta description was added through the installed SEO provider.
+- Fresh mobile Lighthouse after the change: Performance `98/100`, Accessibility `100/100`, Best Practices `100/100`, SEO `100/100`; LCP about `1.6s`, CLS `0`, TBT `0ms`.
+- CrUX field data was unavailable; these are lab measurements.
+
+## RootProfile Team blocker
+
+- Public RootProfile routes available on the pilot include person-by-ID, organization and readiness reads.
+- No public/versioned collection/projection exists for organization team membership.
+- Fresh `GET /rootprofile/v1/organization` returns `404 rootprofile_not_found` / `Organization profile not found.`
+- Theme issue #112 records the external dependency: `BLOCKED: Law 01 team section needs authoritative RootProfile projection`.
+- Theme must not substitute WordPress user/author enumeration, post/slug/URL/title heuristics, private RootProfile storage reads or a parallel team store.
+
+## Exit / Next
+
+Law 01 live presentation, rerun behavior, indexability and Lighthouse SEO are PASS at the exact tested scope. Team authoritative rendering remains BLOCKED_EXTERNAL_CONTRACT at issue #112. No further Theme implementation is opened by this checkpoint until the RootProfile owner supplies a suitable public/versioned projection or another separately approved roadmap slice is opened.
+''', encoding='utf-8')
+
+          # Remove temporary reconciler before committing durable state.
+          Path('.github/workflows/_tmp-law01-source-refresh.yml').unlink()
+          PY
+      - name: Verify bounded diff and source markers
+        run: |
+          git diff --check
+          grep -F '**Version:** v0.45' docs/source/AZT-03-baseline-provenance.md
+          grep -F '**Version:** v0.58' docs/source/AZT-04-roadmap-qa-decisions.md
+          grep -F '**Version:** v0.50' docs/source/AZT-EXEC-MAP.md
+          grep -F 'CORE PASS / F9 PROVIDER L5 PASS' docs/source/AZT-04-roadmap-qa-decisions.md
+          grep -F 'BLOCKED_EXTERNAL_CONTRACT' docs/evidence/LAW01_LIVE_CHECKPOINT_20260918.md
+          test ! -e .github/workflows/_tmp-law01-source-refresh.yml
+      - name: Commit source refresh
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add docs/source docs/evidence .github/workflows/_tmp-law01-source-refresh.yml
+          git commit -m 'docs: refresh Law01 and provider current source state [source-refresh-applied]'
+          git push origin HEAD:docs/law01-source-refresh-20260918
