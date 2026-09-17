@@ -8,7 +8,7 @@ use function AZnet\Theme\Integrations\WooCommerce\available as woo_available;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 function control_center_section(): string {
-    $allowed = [ 'overview', 'design', 'header', 'homepage', 'provisioning', 'commerce', 'system-health' ];
+    $allowed = [ 'overview', 'design', 'header', 'footer', 'homepage', 'provisioning', 'commerce', 'system-health' ];
     $value = isset( $_GET['section'] ) ? sanitize_key( wp_unslash( $_GET['section'] ) ) : 'overview';
     if ( 'commerce' === $value && ! woo_available() ) { return 'overview'; }
     return in_array( $value, $allowed, true ) ? $value : 'overview';
@@ -51,6 +51,8 @@ function render_settings_form( string $section ): void {
         $visible_keys = [ 'visual_preset', 'page_breadcrumbs' ];
     } elseif ( 'header' === $section ) {
         $visible_keys = [ 'header_preset', 'header_sticky', 'header_search', 'header_utilities' ];
+    } elseif ( 'footer' === $section ) {
+        $visible_keys = [ 'footer_preset' ];
     } elseif ( 'commerce' === $section ) {
         $visible_keys = [ 'woo_catalog_preset', 'woo_product_card_density', 'woo_product_preset' ];
     }
@@ -68,6 +70,8 @@ function render_settings_form( string $section ): void {
         field_select( 'header_sticky', __( 'Sticky', 'aznet-theme' ), [ 'off' => 'Off', 'sticky' => 'Sticky', 'sticky-compact' => 'Sticky Compact' ], (string) $s['header_sticky'] );
         field_checkbox( 'header_search', __( 'Hiển thị tìm kiếm', 'aznet-theme' ), (bool) $s['header_search'] );
         field_checkbox( 'header_utilities', __( 'Hiển thị tiện ích Header', 'aznet-theme' ), (bool) $s['header_utilities'] );
+    } elseif ( 'footer' === $section ) {
+        field_select( 'footer_preset', __( 'Kiểu Footer', 'aznet-theme' ), [ 'standard' => 'Standard', 'professional' => 'Professional', 'compact' => 'Compact' ], (string) $s['footer_preset'] );
     } elseif ( 'commerce' === $section ) {
         field_select( 'woo_catalog_preset', __( 'Catalog', 'aznet-theme' ), [ 'grid' => 'Grid', 'compact-grid' => 'Compact Grid', 'editorial' => 'Editorial' ], (string) $s['woo_catalog_preset'] );
         field_select( 'woo_product_card_density', __( 'Mật độ thẻ sản phẩm', 'aznet-theme' ), [ 'comfortable' => 'Comfortable', 'balanced' => 'Balanced', 'compact' => 'Compact' ], (string) $s['woo_product_card_density'] );
@@ -119,9 +123,9 @@ function render_homepage_setup_card(): void {
 function render_control_center(): void {
     if ( ! current_user_can( 'edit_theme_options' ) ) { return; }
     $section = control_center_section();
-    $tabs = [ 'overview' => 'Tổng quan', 'design' => 'Thiết kế', 'header' => 'Header', 'homepage' => 'Trang chủ', 'provisioning' => 'Thiết lập nhanh', 'system-health' => 'System Health' ];
+    $tabs = [ 'overview' => 'Tổng quan', 'design' => 'Thiết kế', 'header' => 'Header', 'footer' => 'Footer', 'homepage' => 'Trang chủ', 'provisioning' => 'Thiết lập nhanh', 'system-health' => 'System Health' ];
     if ( woo_available() ) {
-        $tabs = [ 'overview' => 'Tổng quan', 'design' => 'Thiết kế', 'header' => 'Header', 'homepage' => 'Trang chủ', 'provisioning' => 'Thiết lập nhanh', 'commerce' => 'Commerce', 'system-health' => 'System Health' ];
+        $tabs = [ 'overview' => 'Tổng quan', 'design' => 'Thiết kế', 'header' => 'Header', 'footer' => 'Footer', 'homepage' => 'Trang chủ', 'provisioning' => 'Thiết lập nhanh', 'commerce' => 'Commerce', 'system-health' => 'System Health' ];
     }
     echo '<div class="wrap aznet-theme-control-center"><h1>AZnet Theme</h1><nav class="nav-tab-wrapper">';
     foreach ( $tabs as $slug => $label ) {
