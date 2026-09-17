@@ -153,7 +153,13 @@
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero__grid--text {
     grid-template-columns: minmax(0, 1fr) minmax(18rem, .72fr);
 }
+.aznet-theme-homepage--law-01 .aznet-theme-law01-hero__grid--text .aznet-theme-law01-hero__content {
+    grid-column: 1;
+    grid-row: 1;
+}
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero__grid--text::after {
+    grid-column: 2;
+    grid-row: 1;
     min-height: clamp(18rem, 31vw, 27rem);
     border: 1px solid rgba(184, 139, 69, .66);
     border-radius: .4rem;
@@ -432,6 +438,11 @@
     .aznet-theme-homepage--law-01 .aznet-theme-law01-hero__grid--text,
     .aznet-theme-homepage--law-01 .aznet-theme-law01-editorial__grid {
         grid-template-columns: minmax(0, 1fr);
+    }
+    .aznet-theme-homepage--law-01 .aznet-theme-law01-hero__grid--text .aznet-theme-law01-hero__content,
+    .aznet-theme-homepage--law-01 .aznet-theme-law01-hero__grid--text::after {
+        grid-column: 1;
+        grid-row: auto;
     }
     .aznet-theme-homepage--law-01 .aznet-theme-law01-hero__grid--text::after {
         min-height: 12rem;
