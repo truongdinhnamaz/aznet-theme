@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.55
+**Version:** v0.56
 **Status:** Working Source  
 **Date:** 17/09/2026
 
@@ -39,12 +39,14 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P4-C | Standalone Core independence | PASS / MERGED | D-027 source + implementation merged through PR #63/#64; zero-plugin L1-L4, exact-package and exact-main gates PASS; optional integrations remain additive |
 | P5 | Publication & production deployment | PASS | Tag `v1.1.0` + GitHub Release publication and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
 | X | v1.2 WordPress Experience Completion | PUBLICATION + PRODUCTION DEPLOYMENT PASS | X1-X5 retained; PR #87 technical integration and exact-main V1 + X6 L1-L4/L6 PASS; owner-approved `v1.2.0` publication PASS; owner-approved production deployment run `35135759389` plus fresh independent read-only run `35136876330` PASS; no provider L5 expansion |
-| Y | v1.3 Client Delivery System | PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED | Y1-Y5 merged through owner-approved PR #98 at `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`; exact-main V1 + X6 release-path verification PASS; owner-approved publication run `35211254633` published annotated `v1.3.0` + GitHub Release `390623960` with exact asset SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`; production deployment remains a separate owner gate; provider L5 remains separate |
+| Y | v1.3 Client Delivery System | PUBLICATION + PRODUCTION DEPLOYMENT PASS | Y1-Y5 merged through owner-approved PR #98 at `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`; exact-main V1 + X6 release-path verification PASS; owner-approved publication run `35211254633` published annotated `v1.3.0` + GitHub Release `390623960`; owner-approved production deployment run `35222200660` plus fresh independent read-only run `35223053733` PASS on `tamduchanoi.aznet.vn`; provider L5 remains separate |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
 Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` points to `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`. Publication source closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72. P5 technical run `35051428372` verified final package bytes, publication run `35052694111` published the matching tag/Release, and production read-only run `35054176392` closed deployment at the tested Theme-owned/site-operations scope.
 
 Canonical X6 technical integration is `main@c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`, tree `70c04929afe38e87d317bad3414157e9e2bd6f74`, after owner-approved PR #87. Fresh `V1 Exact Main Verification` run `35129331899` and X6 push-to-main run `35129331927` both completed SUCCESS on that exact merge SHA. Owner-approved publication run `35131383107` published annotated tag `v1.2.0` and GitHub Release `390148740` with exact package SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`. Owner-approved production deployment then completed through run `35135759389`; fresh independent read-only verification run `35136876330` reverified active Theme `1.2.0`, Standalone Core `ready`, retained WordPress-owned logo/menu identity and the public regression matrix. Evidence: `docs/evidence/V1_2_PRODUCTION_DEPLOYMENT_20260917.md`.
+
+Canonical v1.3 technical source is `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`. Fresh exact-main V1 run `35206627102` and X6 release-path run `35206626992` completed SUCCESS; owner-approved publication run `35211254633` published annotated `v1.3.0` and GitHub Release `390623960` with exact package SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`. Owner-approved production deployment run `35222200660` installed that published release on `tamduchanoi.aznet.vn`; independent read-only run `35223053733` then verified active Theme `1.3.0`, Standalone Core `ready`, retained WordPress-owned menu/phone identity and the 28/28 public regression. Evidence: `docs/evidence/V1_3_PRODUCTION_DEPLOYMENT_20260917.md`.
 
 The earlier deterministic R6 candidate SHA-256 `000735630403c4b31a1385b7206b5e4433c62fbdd72b91728ad1aaec93625e7b` remains historical release-provenance evidence only. P5 independently rebuilt and verified the final post-hardening production bytes as `aznet-theme-1.1.0.zip`, SHA-256 `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`; owner-approved publication and production deployment disposition are now complete, with fresh deployment evidence in run `35054176392`.
 
@@ -332,7 +334,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 
 ## 10A. v1.3 Client Delivery System
 
-**State:** **PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED.**
+**State:** **PUBLICATION + PRODUCTION DEPLOYMENT PASS.**
 
 **Goal:** materially reduce the time from clean WordPress to a professional, client-ready service/business website without introducing a proprietary builder or domain engine.
 
@@ -348,7 +350,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 
 **Y4 — Professional Services Starter Blueprint:** extend the existing D-025/D-026 confirmed/idempotent provisioning engine with a generic professional-services blueprint. Activation stays mutation-free; the user reviews and confirms a visible change plan; created content becomes WordPress-owned; current-run rollback remains bounded; active sites are not silently overwritten.
 
-**Y5 — Client Delivery QA & Release Closure:** prove the full clean-site journey on WordPress 6.9+/PHP 8.1+, zero mandatory third-party plugins, responsive/a11y browser matrix, deterministic exact-package identity, packaged-PHP lint, theme-switch/update/rollback continuity and exact-main verification. Metadata remained `1.2.0` through Y1-Y4; promotion to `1.3.0` and publication were separately owner-approved and completed; production deployment remains a separate explicit owner gate.
+**Y5 — Client Delivery QA & Release Closure:** prove the full clean-site journey on WordPress 6.9+/PHP 8.1+, zero mandatory third-party plugins, responsive/a11y browser matrix, deterministic exact-package identity, packaged-PHP lint, theme-switch/update/rollback continuity and exact-main verification. Metadata remained `1.2.0` through Y1-Y4; promotion to `1.3.0`, publication and production deployment were separately owner-approved and completed.
 
 **Provider boundary:** v1.3 Core opens no RootProfile/ConvertFlow/Woo provider L5 expansion. Existing optional compatibility tracks remain separate and fail-soft.
 
@@ -390,8 +392,14 @@ Owner-approved PR #98 merged Y5/v1.3 to canonical `main@afa8f4eb80d83d6c8111a9dc
 
 Owner-approved publication run `35211254633` completed SUCCESS and published annotated tag `v1.3.0` (tag object `56f2ae2e8ba6e1fb4e8359447656e88ab6411ba6`) dereferencing to exact technical commit `afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, plus GitHub Release `390623960`. Release asset `570039299` is `aznet-theme-1.3.0.zip`, SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`; publication evidence artifact `10492411096` has digest `sha256:0a18d2169ad8d92a587421289ede773031e56d3646ddac44ba326ebe4ea6fd75`. Publication is PASS without production deployment. Evidence: `docs/evidence/V1_3_PUBLICATION_20260917.md`.
 
-Published/GitHub-Release release is now `v1.3.0`; production-deployed release remains verified `v1.2.0` until a separate v1.3 deployment approval and fresh deployment verification.
+### v1.3 production deployment closure checkpoint — 17/09/2026
+
+The product owner separately approved production deployment of the exact published v1.3.0 asset to `tamduchanoi.aznet.vn`. Deployment run `35222200660` completed SUCCESS and upgraded the active Theme from `1.2.0` to `1.3.0` while retaining Standalone Core `ready`, approved WordPress-owned menu/location data, logo and phone presentation; rollback remained unused. Deployment artifact `10497483290` has digest `sha256:84d041445b606279a0caebef60b9c38206f5a9a88b8e1b759453484dfad1c6b1`.
+
+Fresh independent read-only run `35223053733` then completed SUCCESS: active Theme `1.3.0`, Standalone Core `ready`, `header-utility` retained on menu ID `15`, exact phone retained, desktop/mobile public shell PASS and broad public matrix `28/28` with no Theme-owned blocking failure. Post-deploy artifact `10497925626` has digest `sha256:756f765fe70f2ca61978111678853204808ea4cb4cd44fdd3453d50e177313b2`. Temporary ops workflows/harnesses were removed at cleanup commit `6ef53f0bd20c69c65b88a753627436e31976d606`; the cleaned ops branch had zero net file delta versus `main@2c4e6f0442335ac3e690e97beaca4d4bf6405fa5`. Evidence: `docs/evidence/V1_3_PRODUCTION_DEPLOYMENT_20260917.md`.
+
+Published/GitHub-Release release and current verified production deployment are now both `v1.3.0`. Provider L5 remains separate and unclaimed.
 
 ## 14. Exact next
 
-**NEXT — request separate product-owner approval for production deployment of the exact published `v1.3.0` release asset. Do not deploy without that approval. Before deployment, revalidate the target site and release asset; after deployment, require fresh read-only authenticated/public verification. Provider L5 remains separate and unclaimed.**
+**NEXT — v1.3 Core is closed at TECHNICAL + PUBLICATION + PRODUCTION DEPLOYMENT PASS. Begin no new Theme milestone, architecture/public-contract change or optional-provider certification without a separately approved slice; provider L5 remains separate and unclaimed.**
