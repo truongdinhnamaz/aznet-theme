@@ -23,6 +23,11 @@ foreach ([
     'Sẽ thay đổi cấu hình',
     'Tôi đã xem các thay đổi trên và đồng ý áp dụng.',
     'name="confirm_plan"',
+    'function provisioning_preview_operation( array $operation, array $plan ): array',
+    "provisioning_find_owned_role( (string) ( $plan['blueprint'] ?? '' ), 'post'",
+    "provisioning_find_owned_role( (string) ( $plan['blueprint'] ?? '' ), 'attachment'",
+    'REUSE starter Post #',
+    'REUSE starter media #',
 ] as $needle) {
     if (!str_contains($admin, $needle)) { throw new RuntimeException('missing accessible/recommendation provisioning marker: ' . $needle); }
 }
