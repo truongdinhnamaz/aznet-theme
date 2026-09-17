@@ -1,0 +1,42 @@
+name: Y2 Professional Page Kits
+
+on:
+  push:
+    branches:
+      - work/v1.3-y2-professional-page-kits
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'inc/theme/professional-page-kits.php'
+      - 'inc/theme/bootstrap.php'
+      - 'patterns/page-*.php'
+      - 'assets/css/components/page.css'
+      - 'scripts/verify-v1-core.sh'
+      - 'tests/offline/y2-professional-page-kits-contract.php'
+      - 'tests/browser/y2-professional-page-kits-l4.mjs'
+      - '.github/workflows/y2-professional-page-kits.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  y2-red-green:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact Y2 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Verify Y2 contract
+        run: |
+          set -euo pipefail
+          git diff --check
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/y2-professional-page-kits-contract.php
