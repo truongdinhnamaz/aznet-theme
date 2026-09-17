@@ -101,8 +101,9 @@ jobs:
           wp core version --path=/tmp/wp --allow-root | grep -Fx '6.9'
           wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
           test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp --allow-root)"
-          grep -Fx 'Version: 1.2.0' style.css
-          grep -F "define( 'AZNET_THEME_VERSION', '1.2.0' );" functions.php
+          THEME_VERSION="$(awk -F': ' '/^Version: / { print $2; exit }' style.css)"
+          test -n "$THEME_VERSION"
+          grep -F "define( 'AZNET_THEME_VERSION', '${THEME_VERSION}' );" functions.php
       - name: Seed native Y1 fixtures
         run: |
           set -euo pipefail

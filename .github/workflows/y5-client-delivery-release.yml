@@ -1,0 +1,284 @@
+name: Y5 Client Delivery Release
+
+on:
+  push:
+    branches:
+      - work/v1.3-y5-client-delivery
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'style.css'
+      - 'functions.php'
+      - 'tests/offline/y5-client-delivery-release-contract.php'
+      - 'tests/runtime/y5-client-delivery.php'
+      - 'tests/browser/y5-client-delivery-l4.mjs'
+      - 'scripts/verify-v1-core.sh'
+      - 'scripts/build-release-package.py'
+      - '.github/workflows/y5-client-delivery-release.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Promoted target: WordPress 6.9 / PHP 8.1 / zero active third-party plugins.
+# The exact package is aznet-theme-1.3.0.zip after the approved metadata gate.
+# Final lifecycle switches to twentytwentyfive and back and uses build-release-package.py.
+
+jobs:
+  y5-offline:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact Y5 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Verify Y5 promoted ownership and retained Core
+        run: |
+          set -euo pipefail
+          git diff --check
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/y5-client-delivery-release-contract.php
+          bash scripts/verify-v1-core.sh
+
+  y5-runtime-browser:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Checkout exact Y5 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install WordPress 6.9 and exact source Theme with zero active third-party plugins
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          rm -rf /tmp/wp-y5 /tmp/y5-client-delivery
+          mkdir -p /tmp/wp-y5 /tmp/y5-client-delivery
+          wp core download --version=6.9 --path=/tmp/wp-y5 --force --allow-root
+          wp config create --path=/tmp/wp-y5 --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp-y5 --url=http://127.0.0.1:8080 --title='AZnet Y5 Client Delivery' --admin_user=admin --admin_password='y5-client-delivery-password' --admin_email=y5@example.test --skip-email --allow-root
+          mkdir -p /tmp/wp-y5/wp-content/themes/aznet-theme
+          rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='node_modules' --exclude='README.md' --exclude='aznet-preview.png' ./ /tmp/wp-y5/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp-y5 --allow-root
+          wp core version --path=/tmp/wp-y5 --allow-root | grep -Fx '6.9'
+          wp theme get aznet-theme --field=version --path=/tmp/wp-y5 --allow-root | grep -Fx '1.3.0'
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-y5 --allow-root)"
+      - name: Build integrated clean-site runtime fixture
+        env:
+          AZNET_Y5_MODE: setup
+          AZNET_Y5_STATE_DIR: /tmp/y5-client-delivery
+        run: |
+          set -euo pipefail
+          wp eval-file tests/runtime/y5-client-delivery.php --path=/tmp/wp-y5 --allow-root | tee /tmp/y5-client-delivery/runtime-setup.txt
+          AZNET_Y5_MODE=smoke AZNET_Y5_STATE_DIR=/tmp/y5-client-delivery wp eval-file tests/runtime/y5-client-delivery.php --path=/tmp/wp-y5 --allow-root | tee /tmp/y5-client-delivery/runtime-smoke.txt
+      - name: Start source WordPress runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp-y5 > /tmp/y5-client-delivery/server.log 2>&1 &
+          echo $! > /tmp/y5-client-delivery/server.pid
+          for attempt in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:8080/wp-login.php >/dev/null && exit 0
+            sleep 1
+          done
+          exit 1
+      - name: Install Playwright and axe
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+      - name: Verify full Y5 browser matrix with Standard Footer
+        env:
+          Y5_BASE_URL: http://127.0.0.1:8080
+          Y5_STATE_DIR: /tmp/y5-client-delivery
+          Y5_EXPECT_FOOTER: standard
+          Y5_MATRIX_MODE: full
+        run: node tests/browser/y5-client-delivery-l4.mjs
+      - name: Verify Professional Footer controlled iteration
+        run: |
+          set -euo pipefail
+          wp eval '$s=(array)get_theme_mod("aznet_theme_settings",[]);$s["footer_preset"]="professional";set_theme_mod("aznet_theme_settings",AZnet\Theme\normalize_settings($s));' --path=/tmp/wp-y5 --allow-root
+          Y5_BASE_URL=http://127.0.0.1:8080 Y5_STATE_DIR=/tmp/y5-client-delivery Y5_EXPECT_FOOTER=professional Y5_MATRIX_MODE=footer node tests/browser/y5-client-delivery-l4.mjs
+      - name: Verify Compact Footer controlled iteration
+        run: |
+          set -euo pipefail
+          wp eval '$s=(array)get_theme_mod("aznet_theme_settings",[]);$s["footer_preset"]="compact";set_theme_mod("aznet_theme_settings",AZnet\Theme\normalize_settings($s));' --path=/tmp/wp-y5 --allow-root
+          Y5_BASE_URL=http://127.0.0.1:8080 Y5_STATE_DIR=/tmp/y5-client-delivery Y5_EXPECT_FOOTER=compact Y5_MATRIX_MODE=footer node tests/browser/y5-client-delivery-l4.mjs
+          wp eval '$s=(array)get_theme_mod("aznet_theme_settings",[]);$s["footer_preset"]="standard";set_theme_mod("aznet_theme_settings",AZnet\Theme\normalize_settings($s));' --path=/tmp/wp-y5 --allow-root
+      - name: Verify source runtime error boundary
+        run: |
+          set -euo pipefail
+          if grep -E 'PHP (Fatal error|Parse error)|Uncaught' /tmp/y5-client-delivery/server.log; then exit 1; fi
+          warnings="$(grep 'PHP Warning:' /tmp/y5-client-delivery/server.log || true)"
+          printf '%s' "$warnings" > /tmp/y5-client-delivery/unexpected-php-warnings.log
+          test -z "$warnings"
+      - name: Stop source WordPress runtime
+        if: always()
+        run: kill "$(cat /tmp/y5-client-delivery/server.pid)" || true
+      - name: Upload Y5 source runtime and browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: y5-client-delivery-source-evidence
+          path: /tmp/y5-client-delivery
+          if-no-files-found: error
+
+  y5-exact-package-lifecycle:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Checkout exact Y5 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build deterministic aznet-theme-1.3.0.zip twice and prove source/package identity
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/y5-package /tmp/y5-unpack /tmp/y5-source-snapshot
+          mkdir -p /tmp/y5-package/evidence /tmp/y5-unpack /tmp/y5-source-snapshot/aznet-theme
+          python3 scripts/build-release-package.py --source . --output /tmp/y5-package/aznet-theme-1.3.0-a.zip --version 1.3.0 | tee /tmp/y5-package/evidence/package-a.txt
+          python3 scripts/build-release-package.py --source . --output /tmp/y5-package/aznet-theme-1.3.0-b.zip --version 1.3.0 | tee /tmp/y5-package/evidence/package-b.txt
+          cmp /tmp/y5-package/aznet-theme-1.3.0-a.zip /tmp/y5-package/aznet-theme-1.3.0-b.zip
+          cp /tmp/y5-package/aznet-theme-1.3.0-a.zip /tmp/y5-package/aznet-theme-1.3.0.zip
+          sha256sum /tmp/y5-package/aznet-theme-1.3.0.zip | tee /tmp/y5-package/evidence/package-sha256.txt
+          unzip -q /tmp/y5-package/aznet-theme-1.3.0.zip -d /tmp/y5-unpack
+          rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='node_modules' --exclude='README.md' --exclude='aznet-preview.png' ./ /tmp/y5-source-snapshot/aznet-theme/
+          if ! diff -qr /tmp/y5-source-snapshot/aznet-theme /tmp/y5-unpack/aznet-theme > /tmp/y5-package/evidence/source-package-diff.txt; then
+            cat /tmp/y5-package/evidence/source-package-diff.txt
+            exit 1
+          fi
+          mapfile -t packaged_php < <(find /tmp/y5-unpack/aznet-theme -type f -name '*.php' | LC_ALL=C sort)
+          test "${#packaged_php[@]}" -gt 0
+          for file in "${packaged_php[@]}"; do php -l "$file" >/dev/null; done
+          printf 'PASS: packaged PHP lint %s files\n' "${#packaged_php[@]}" | tee /tmp/y5-package/evidence/php-lint-count.txt
+      - name: Install clean WordPress 6.9 with exact package and zero active third-party plugins
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          rm -rf /tmp/wp-y5-package /tmp/y5-package/state
+          mkdir -p /tmp/wp-y5-package /tmp/y5-package/state
+          wp core download --version=6.9 --path=/tmp/wp-y5-package --force --allow-root
+          wp config create --path=/tmp/wp-y5-package --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp-y5-package --url=http://127.0.0.1:8081 --title='AZnet Y5 Exact Package' --admin_user=admin --admin_password='y5-package-password' --admin_email=y5-package@example.test --skip-email --allow-root
+          rm -rf /tmp/wp-y5-package/wp-content/themes/aznet-theme
+          cp -a /tmp/y5-unpack/aznet-theme /tmp/wp-y5-package/wp-content/themes/aznet-theme
+          wp theme activate aznet-theme --path=/tmp/wp-y5-package --allow-root
+          wp core version --path=/tmp/wp-y5-package --allow-root | grep -Fx '6.9'
+          wp theme get aznet-theme --field=version --path=/tmp/wp-y5-package --allow-root | grep -Fx '1.3.0'
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-y5-package --allow-root)"
+      - name: Execute exact-package client-delivery runtime smoke
+        run: |
+          set -euo pipefail
+          AZNET_Y5_MODE=setup AZNET_Y5_STATE_DIR=/tmp/y5-package/state wp eval-file tests/runtime/y5-client-delivery.php --path=/tmp/wp-y5-package --allow-root | tee /tmp/y5-package/evidence/runtime-setup.txt
+          AZNET_Y5_MODE=smoke AZNET_Y5_STATE_DIR=/tmp/y5-package/state wp eval-file tests/runtime/y5-client-delivery.php --path=/tmp/wp-y5-package --allow-root | tee /tmp/y5-package/evidence/runtime-before-switch.txt
+      - name: Start exact-package WordPress runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8081 -t /tmp/wp-y5-package > /tmp/y5-package/evidence/server.log 2>&1 &
+          echo $! > /tmp/y5-package/evidence/server.pid
+          for attempt in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:8081/wp-login.php >/dev/null && exit 0
+            sleep 1
+          done
+          exit 1
+      - name: Install Playwright and axe for exact-package smoke
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+      - name: Verify exact package browser smoke before switch
+        env:
+          Y5_BASE_URL: http://127.0.0.1:8081
+          Y5_STATE_DIR: /tmp/y5-package/state
+          Y5_EXPECT_FOOTER: standard
+          Y5_MATRIX_MODE: smoke
+        run: |
+          node tests/browser/y5-client-delivery-l4.mjs
+          cp /tmp/y5-package/state/browser-summary-smoke-standard.json /tmp/y5-package/evidence/browser-before-switch.json
+      - name: Switch to twentytwentyfive and prove WordPress content continuity
+        run: |
+          set -euo pipefail
+          wp theme is-installed twentytwentyfive --path=/tmp/wp-y5-package --allow-root
+          wp theme activate twentytwentyfive --path=/tmp/wp-y5-package --allow-root
+          test "$(wp theme list --status=active --field=name --path=/tmp/wp-y5-package --allow-root)" = "twentytwentyfive"
+          AZNET_Y5_MODE=continuity AZNET_Y5_STATE_DIR=/tmp/y5-package/state wp eval-file tests/runtime/y5-client-delivery.php --path=/tmp/wp-y5-package --allow-root | tee /tmp/y5-package/evidence/continuity-away.txt
+      - name: Switch back to exact AZnet package and rerun smoke matrix
+        run: |
+          set -euo pipefail
+          wp theme activate aznet-theme --path=/tmp/wp-y5-package --allow-root
+          AZNET_Y5_MODE=smoke AZNET_Y5_STATE_DIR=/tmp/y5-package/state wp eval-file tests/runtime/y5-client-delivery.php --path=/tmp/wp-y5-package --allow-root | tee /tmp/y5-package/evidence/runtime-after-switch.txt
+          Y5_BASE_URL=http://127.0.0.1:8081 Y5_STATE_DIR=/tmp/y5-package/state Y5_EXPECT_FOOTER=standard Y5_MATRIX_MODE=smoke node tests/browser/y5-client-delivery-l4.mjs
+          cp /tmp/y5-package/state/browser-summary-smoke-standard.json /tmp/y5-package/evidence/browser-after-switch.json
+      - name: Verify exact-package runtime error boundary
+        run: |
+          set -euo pipefail
+          if grep -E 'PHP (Fatal error|Parse error)|Uncaught' /tmp/y5-package/evidence/server.log; then exit 1; fi
+          warnings="$(grep 'PHP Warning:' /tmp/y5-package/evidence/server.log || true)"
+          printf '%s' "$warnings" > /tmp/y5-package/evidence/unexpected-php-warnings.log
+          test -z "$warnings"
+      - name: Stop exact-package WordPress runtime
+        if: always()
+        run: kill "$(cat /tmp/y5-package/evidence/server.pid)" || true
+      - name: Upload exact promoted package and lifecycle evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: y5-client-delivery-promoted-package
+          path: |
+            /tmp/y5-package/aznet-theme-1.3.0.zip
+            /tmp/y5-package/evidence
+            /tmp/y5-package/state
+          if-no-files-found: error

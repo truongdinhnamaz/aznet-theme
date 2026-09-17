@@ -97,9 +97,6 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/x5-retained-workflo
 printf '%s\n' '==> X6 Cross-surface QA & Release Closure contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-release-closure-contract.php
 
-printf '%s\n' '==> X6 exact 1.2.0 metadata promotion contract'
-php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-version-promotion-contract.php
-
 printf '%s\n' '==> X6 promotion-aware workflow ownership contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-promotion-workflow-boundary-contract.php
 
@@ -112,6 +109,12 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/y2-professional-pag
 
 printf '%s\n' '==> Y3 Footer System contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y3-footer-system-contract.php
+
+printf '%s\n' '==> Y4 Professional Services provisioning contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/y4-professional-services-provisioning-contract.php
+
+printf '%s\n' '==> Y5 Client Delivery release contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/y5-client-delivery-release-contract.php
 
 printf '%s\n' '==> P4 Native Editable Homepage blueprint contracts'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-contract.php

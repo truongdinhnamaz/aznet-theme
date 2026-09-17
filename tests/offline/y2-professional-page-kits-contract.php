@@ -190,11 +190,14 @@ $functions = file_get_contents($root . '/functions.php');
 if (false === $style || false === $functions) {
     y2_fail('unable to read Theme version declarations');
 }
-if (! preg_match('/^Version:\s*1\.2\.0\s*$/m', $style)) {
-    y2_fail('Y2 must keep style.css version at 1.2.0');
+if (! preg_match('/^Version:\s*([0-9]+\.[0-9]+\.[0-9]+)\s*$/m', $style, $styleVersion)) {
+    y2_fail('Y2 retained contract requires a semantic style.css Theme version');
 }
-if (! str_contains($functions, "define( 'AZNET_THEME_VERSION', '1.2.0' );")) {
-    y2_fail('Y2 must keep AZNET_THEME_VERSION at 1.2.0');
+if (! preg_match("/define\(\s*'AZNET_THEME_VERSION'\s*,\s*'([0-9]+\.[0-9]+\.[0-9]+)'\s*\)/", $functions, $functionVersion)) {
+    y2_fail('Y2 retained contract requires AZNET_THEME_VERSION');
+}
+if ($styleVersion[1] !== $functionVersion[1]) {
+    y2_fail('Theme version declarations must remain consistent');
 }
 
 echo "PASS: Y2 Professional Page Kits ownership/registry/content contract\n";
