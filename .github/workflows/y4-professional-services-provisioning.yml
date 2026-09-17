@@ -104,3 +104,91 @@ jobs:
           name: y4-professional-services-runtime
           path: /tmp/y4-evidence
           if-no-files-found: error
+
+  y4-browser:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Checkout exact Y4 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install WordPress 6.9 and exact Theme browser fixture
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          rm -rf /tmp/wp-y4-browser /tmp/y4-browser
+          mkdir -p /tmp/wp-y4-browser /tmp/y4-browser
+          wp core download --version=6.9 --path=/tmp/wp-y4-browser --force --allow-root
+          wp config create --path=/tmp/wp-y4-browser --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp-y4-browser --url=http://127.0.0.1:8080 --title='AZnet Y4 Browser' --admin_user=admin --admin_password='y4-provisioning-password' --admin_email=y4-browser@example.test --skip-email --allow-root
+          mkdir -p /tmp/wp-y4-browser/wp-content/themes/aznet-theme
+          rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='README.md' --exclude='aznet-preview.png' ./ /tmp/wp-y4-browser/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp-y4-browser --allow-root
+          for id in $(wp post list --post_type=post --post_status=publish --format=ids --path=/tmp/wp-y4-browser --allow-root); do
+            wp post update "$id" --post_status=draft --path=/tmp/wp-y4-browser --allow-root >/dev/null
+          done
+          test "$(wp post list --post_type=post --post_status=publish --format=count --path=/tmp/wp-y4-browser --allow-root)" = "0"
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-y4-browser --allow-root)"
+      - name: Start WordPress browser runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp-y4-browser > /tmp/y4-browser/server.log 2>&1 &
+          echo $! > /tmp/y4-browser/server.pid
+          for attempt in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:8080/wp-login.php >/dev/null && exit 0
+            sleep 1
+          done
+          exit 1
+      - name: Install Playwright and axe
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+      - name: Drive confirmed Professional Services wizard and verify L4
+        env:
+          Y4_BASE_URL: http://127.0.0.1:8080
+          Y4_STATE_DIR: /tmp/y4-browser
+          Y4_ADMIN_PASSWORD: y4-provisioning-password
+        run: node tests/browser/y4-professional-services-provisioning-l4.mjs
+      - name: Verify browser runtime boundary
+        run: |
+          set -euo pipefail
+          if grep -E 'PHP (Fatal error|Parse error)|Uncaught' /tmp/y4-browser/server.log; then exit 1; fi
+          unexpected="$(grep 'PHP Warning:' /tmp/y4-browser/server.log || true)"
+          printf '%s' "$unexpected" > /tmp/y4-browser/unexpected-php-warnings.log
+          test -z "$unexpected"
+      - name: Stop browser runtime
+        if: always()
+        run: kill "$(cat /tmp/y4-browser/server.pid)" || true
+      - name: Upload Y4 browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: y4-professional-services-browser
+          path: /tmp/y4-browser
+          if-no-files-found: error
