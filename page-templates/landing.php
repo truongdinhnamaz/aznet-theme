@@ -1,6 +1,7 @@
 <?php
 /**
- * Native WordPress Page template.
+ * Template Name: Landing
+ * Template Post Type: page
  *
  * @package AZnetTheme
  */

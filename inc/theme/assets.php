@@ -267,6 +267,38 @@ function enqueue_media_assets( ?string $version = null ): void {
     );
 }
 
+/** Determine whether the native Page presentation module should render. */
+function should_enqueue_page_assets(): bool {
+    if ( ! function_exists( 'is_page' ) || ! is_page() ) {
+        return false;
+    }
+
+    if ( function_exists( 'is_front_page' ) && is_front_page() ) {
+        return false;
+    }
+
+    if ( function_exists( __NAMESPACE__ . '\\Integrations\\WooCommerce\\current_surface' )
+        && null !== \AZnet\Theme\Integrations\WooCommerce\current_surface() ) {
+        return false;
+    }
+
+    return true;
+}
+
+/** Enqueue Y1 native Page presentation only on non-front, non-Woo Page surfaces. */
+function enqueue_page_assets( ?string $version = null ): void {
+    if ( ! should_enqueue_page_assets() ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'aznet-theme-page',
+        get_theme_file_uri( '/assets/css/components/page.css' ),
+        [ 'aznet-theme-tokens', 'aznet-theme-generic-content' ],
+        asset_content_version( '/assets/css/components/page.css', $version )
+    );
+}
+
 /** Determine whether shared native form presentation can render. */
 function should_enqueue_form_assets(): bool {
     if ( function_exists( __NAMESPACE__ . '\\Integrations\\WooCommerce\\current_surface' )
@@ -380,6 +412,7 @@ function enqueue_assets(): void {
         );
     }
 
+    enqueue_page_assets( $version );
     enqueue_form_assets( $version );
     enqueue_navigation_assets( $version );
     enqueue_media_assets( $version );

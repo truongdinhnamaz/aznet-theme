@@ -31,6 +31,7 @@ function editor_stylesheets(): array {
     $stylesheets = [
         'assets/css/tokens.css',
         'assets/css/components/media.css',
+        'assets/css/components/page.css',
     ];
     $preset = visual_preset();
 
