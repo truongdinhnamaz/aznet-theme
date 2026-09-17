@@ -26,6 +26,14 @@ $required = [
     '.aznet-theme-law01-team { background: var(--law01-navy-deep); color: #fff; }',
     '.aznet-theme-law01-team .aznet-theme-law01-panel',
     'background: transparent;',
+    '.aznet-theme-law01-topics .aznet-theme-law01-topic::after',
+    "content: '→';",
+    '.aznet-theme-law01-grid--articles .aznet-theme-law01-article-card:first-child',
+    'grid-column: span 2;',
+    '.aznet-theme-law01-article-card:first-child h3',
+    'font-size: clamp(1.55rem',
+    '.aznet-theme-law01-final-cta .aznet-theme-law01-actions',
+    'margin-top: 2rem;',
 ];
 
 foreach ($required as $needle) {
