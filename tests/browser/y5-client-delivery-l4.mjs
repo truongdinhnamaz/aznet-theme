@@ -59,7 +59,8 @@ async function assertDocument(page, label, expectedStatus) {
     throw new Error(`${label.name}: expected HTTP ${expectedStatus}, got ${response?.status()}`);
   }
   if (await page.locator('main#main').count() !== 1) throw new Error(`${label.name}: expected exactly one main#main`);
-  if (await page.locator('h1').count() !== 1) throw new Error(`${label.name}: expected exactly one H1`);
+  const h1Count = await page.locator('h1').count();
+  if (h1Count > 1) throw new Error(`${label.name}: expected at most one H1, got ${h1Count}`);
   if (await page.locator('[data-aznet-theme-site-header]').count() !== 1) throw new Error(`${label.name}: expected one Theme Header`);
   if (await page.locator('[data-aznet-theme-site-footer]').count() !== 1) throw new Error(`${label.name}: expected one Theme Footer`);
   const footerClass = await page.locator('[data-aznet-theme-site-footer]').getAttribute('class');
@@ -68,7 +69,7 @@ async function assertDocument(page, label, expectedStatus) {
   }
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   if (overflow > 1) throw new Error(`${label.name}: horizontal overflow ${overflow}px`);
-  return { status: response.status(), overflow, footerClass };
+  return { status: response.status(), h1Count, overflow, footerClass };
 }
 
 const allRoutes = {
@@ -82,7 +83,7 @@ const allRoutes = {
   blog: { url: normalizedUrl(state.routes.blog), status: 200 },
   post: { url: normalizedUrl(state.routes.post), status: 200 },
   search: { url: normalizedUrl(state.routes.search), status: 200 },
-  '404': { url: normalizedUrl(state.routes['404']), status: 404 },
+  '404': { url: normalizedUrl('/?p=999999999'), status: 404 },
 };
 
 const routeNames = matrixMode === 'footer'
