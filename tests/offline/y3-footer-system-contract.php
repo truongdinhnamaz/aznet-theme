@@ -244,11 +244,14 @@ $functions = file_get_contents($root . '/functions.php');
 if (false === $style || false === $functions) {
     y3_fail('unable to read Theme version declarations');
 }
-if (! preg_match('/^Version:\s*1\.2\.0\s*$/m', $style)) {
-    y3_fail('Y3 must keep style.css version at 1.2.0');
+if (! preg_match('/^Version:\s*([0-9]+\.[0-9]+\.[0-9]+)\s*$/m', $style, $styleVersion)) {
+    y3_fail('Y3 retained contract requires a semantic style.css Theme version');
 }
-if (! str_contains($functions, "define( 'AZNET_THEME_VERSION', '1.2.0' );")) {
-    y3_fail('Y3 must keep AZNET_THEME_VERSION at 1.2.0');
+if (! preg_match("/define\(\s*'AZNET_THEME_VERSION'\s*,\s*'([0-9]+\.[0-9]+\.[0-9]+)'\s*\)/", $functions, $functionVersion)) {
+    y3_fail('Y3 retained contract requires AZNET_THEME_VERSION');
+}
+if ($styleVersion[1] !== $functionVersion[1]) {
+    y3_fail('Theme version declarations must remain consistent');
 }
 
 echo "PASS: Y3 Footer System 2.0 ownership/settings/presentation contract\n";
