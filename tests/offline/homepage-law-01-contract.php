@@ -64,6 +64,16 @@ assert(is_file($variantPath), 'Law 01 variant stylesheet must exist.');
 $variantCss = file_get_contents($variantPath);
 assert(str_contains($variantCss, '.aznet-theme-homepage--law-01-burgundy-gold'), 'Burgundy variant styling must be scoped to Law 01.');
 assert(str_contains($assets, 'homepage-law-01-variants.css'), 'Variant asset must be surface-aware and loaded only with Law 01.');
+foreach ([
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-services {',
+    'border-top: 1px solid rgba(143, 17, 27, .1);',
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-editorial {',
+    'background: linear-gradient(180deg, #fffdf8 0%, #fff8ee 100%);',
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card {',
+    'box-shadow: 0 .55rem 1.6rem rgba(74, 46, 31, .06);',
+] as $needle) {
+    assert(str_contains($variantCss, $needle), "Final Law 01 visual polish contract missing: {$needle}");
+}
 
 $setupSource = file_get_contents($root . '/inc/theme/setup.php');
 $headerTemplate = file_get_contents($root . '/template-parts/header/site-header.php');
