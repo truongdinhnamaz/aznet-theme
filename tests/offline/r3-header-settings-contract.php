@@ -44,6 +44,7 @@ $valid = AZnet\Theme\normalize_settings([
 $valid_expected = [
     'schema_version'           => 2,
     'visual_preset'            => 'editorial',
+    'page_breadcrumbs'         => true,
     'header_preset'            => 'commerce',
     'header_sticky'            => 'sticky-compact',
     'header_search'            => false,

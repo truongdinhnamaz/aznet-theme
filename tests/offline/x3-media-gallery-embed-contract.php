@@ -25,7 +25,7 @@ function x3_source(string $relative): string {
 
 $assets = x3_source('inc/theme/assets.php');
 $design = x3_source('inc/theme/design-system.php');
-$page = x3_source('page.php');
+$page = x3_source('template-parts/content/page.php');
 $front = x3_source('front-page.php');
 $content = x3_source('template-parts/content/content-single.php');
 $style = x3_source('style.css');
