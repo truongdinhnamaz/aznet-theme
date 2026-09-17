@@ -36,7 +36,7 @@ $shell_classes = \AZnet\Theme\content_shell_classes( false );
                 <figure class="aznet-theme-page__featured"><?php the_post_thumbnail( 'large' ); ?></figure>
             <?php endif; ?>
         </header>
-        <div class="aznet-theme-page__content">
+        <div class="aznet-theme-entry__content aznet-theme-page__content">
             <?php the_content(); ?>
             <?php wp_link_pages(); ?>
         </div>
