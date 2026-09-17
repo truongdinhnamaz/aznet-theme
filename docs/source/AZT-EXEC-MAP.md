@@ -1,15 +1,15 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.46
+**Version:** v0.47
 **Status:** Working Execution Map / derived  
 **Date:** 17/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** live `main` HEAD is resolved from GitHub at execution time. The current repository technical baseline is Theme `1.3.0` at owner-approved PR #98 merge `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`; V1 exact-main run `35206627102` and the pre-existing X6 push-to-main release path run `35206626992` completed SUCCESS on that exact merge SHA. Published/GitHub-Release and production-deployed release remain verified `v1.2.0` until separate v1.3 owner approvals. Optional integrations remain additive, provider L5 remains unclaimed, and ownership boundaries are unchanged.
+> **Canonical-main checkpoint:** live `main` HEAD is resolved from GitHub at execution time. The current repository technical baseline is Theme `1.3.0` at owner-approved PR #98 merge `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`; V1 exact-main run `35206627102` and the pre-existing X6 push-to-main release path run `35206626992` completed SUCCESS on that exact merge SHA. Owner-approved publication run `35211254633` published annotated `v1.3.0` + GitHub Release `390623960`; production-deployed release remains verified `v1.2.0` until separate v1.3 deployment approval. Optional integrations remain additive, provider L5 remains unclaimed, and ownership boundaries are unchanged.
 
-**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS`. Current repository technical state: `v1.3 TECHNICAL PASS / PUBLICATION GATED` at `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`. Published and production-deployed release remains `v1.2.0`; v1.3 publication and production deployment remain separate owner gates.
+**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS`. Current v1.3 state: `PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED`; published/GitHub-Release release is `v1.3.0`, while production-deployed release remains `v1.2.0` until separate owner approval and fresh deployment verification.
 
 ## 1. Current state
 
@@ -40,10 +40,10 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | P4-C Standalone Core independence | PASS / MERGED | PR #63/#64 merged; zero-plugin L1-L4, exact-package and exact-main PASS; optional integrations remain additive |
 | P5 Publication/Deployment | PASS | Tag `v1.1.0` + GitHub Release and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
 | X v1.2 WordPress Experience Completion | PUBLICATION + PRODUCTION DEPLOYMENT PASS | X1-X5 retained; PR #87 exact-main V1 + X6 L1-L4/L6 PASS; annotated `v1.2.0` + GitHub Release publication PASS; owner-approved production deployment run `35135759389` + fresh read-only run `35136876330` PASS; provider L5 stays separate |
-| Y v1.3 Client Delivery System | TECHNICAL PASS / PUBLICATION GATED | Y1-Y5 merged through PR #98; exact-main V1 + X6 release-path PASS at `afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`; Theme `1.3.0`; deterministic package SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`; publication/deployment remain separate gates; provider L5 stays separate |
+| Y v1.3 Client Delivery System | PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED | Y1-Y5 merged through PR #98; exact-main V1 + X6 release-path PASS at `afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`; owner-approved publication run `35211254633` published annotated `v1.3.0` + GitHub Release `390623960` with exact package SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`; production deployment remains separate; provider L5 stays separate |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
-Canonical repository technical baseline is exact Theme `1.3.0` at owner-approved PR #98 merge `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`. Fresh exact-main V1 + X6 release-path verification is PASS. GitHub publication and production deployment remain at verified `v1.2.0` until separate v1.3 owner approvals.
+Canonical repository technical baseline is exact Theme `1.3.0` at owner-approved PR #98 merge `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`. Fresh exact-main V1 + X6 release-path verification is PASS. GitHub publication is now verified `v1.3.0` through run `35211254633`; production deployment remains verified `v1.2.0` until separate v1.3 owner approval.
 
 X6 synchronization checkpoint: `c145f72cc7ac4783eb9f4a2f0b11c1d26e178445`, tree `3594fab0c89d015711e914325734646d1e7df159`, normal merge parented by prior X6 head plus `main@dddcee1c...`, leaving `behind_by=0` before source/evidence closure. Fresh X6 run `35126908185` passed WordPress 6.9 zero-plugin L1-L4/L6, integrated 32/32 browser/axe, deterministic `aznet-theme-1.2.0.zip` SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`, 95 packaged PHP lint checks and switch-away/switch-back lifecycle continuity. Artifact `10459925538`, digest `sha256:c6b480168282e7dc9eea8f749d303012763cabf16213a6e69619c62f96f16e03`; all 19 observed same-head PR workflows completed SUCCESS.
 
@@ -309,7 +309,7 @@ Owner-approved publication run `35052694111` published annotated tag `v1.1.0` at
 
 ## 13A. v1.3 Client Delivery System
 
-**State:** **TECHNICAL PASS / PUBLICATION GATED.**
+**State:** **PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED.**
 
 **Dependency order:** `Y1 Page Experience 2.0 -> Y2 Professional Page Kits -> Y3 Footer System 2.0 -> Y4 Professional Services Starter Blueprint -> Y5 Client Delivery QA & Release Closure`.
 
@@ -323,11 +323,13 @@ Owner-approved publication run `35052694111` published annotated tag `v1.1.0` at
 
 **Y4 exit:** generic Professional Services blueprint reusing the existing confirmed/idempotent provisioning engine; clean-site creation/reuse, active-site fail-safe and current-run rollback proven; no fabricated client truth.
 
-**Y5 exit:** zero-plugin clean-site client-delivery matrix, deterministic exact package/source identity, packaged PHP lint, update/theme-switch/rollback, exact-final-head and exact-main gates. Promotion to `1.3.0`, tag/Release and production deploy remain separate owner approvals.
+**Y5 exit:** zero-plugin clean-site client-delivery matrix, deterministic exact package/source identity, packaged PHP lint, update/theme-switch/rollback, exact-final-head and exact-main gates. Promotion to `1.3.0` and tag/Release publication were separately owner-approved and completed; production deploy remains a separate owner approval.
 
 **Y1-Y5 technical closure:** PASS. PR #98 merged to `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`. V1 Exact Main `35206627102` and X6 exact-main release path `35206626992` SUCCESS; `aznet-theme-1.3.0.zip` SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`, 144 files, 107 packaged PHP lint PASS, 32/32 browser/axe PASS, lifecycle continuity PASS. Evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`.
 
-**Exact Next:** request separate owner approval for `v1.3.0` annotated-tag + GitHub-Release publication only. Production deployment remains a later separate gate; provider L5 remains separate.
+**v1.3 publication closure:** PASS. Publication run `35211254633` published annotated tag `v1.3.0` (tag object `56f2ae2e8ba6e1fb4e8359447656e88ab6411ba6`) and GitHub Release `390623960`; release asset `570039299` matches exact verified package SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`. Evidence: `docs/evidence/V1_3_PUBLICATION_20260917.md`.
+
+**Exact Next:** request separate owner approval for production deployment of the exact published `v1.3.0` asset. Before deployment revalidate target-site state and release bytes; after deployment require fresh read-only authenticated/public verification. Provider L5 remains separate.
 
 ## 14. Optional compatibility tracks
 

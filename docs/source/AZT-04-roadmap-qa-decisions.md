@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.54
+**Version:** v0.55
 **Status:** Working Source  
 **Date:** 17/09/2026
 
@@ -39,7 +39,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P4-C | Standalone Core independence | PASS / MERGED | D-027 source + implementation merged through PR #63/#64; zero-plugin L1-L4, exact-package and exact-main gates PASS; optional integrations remain additive |
 | P5 | Publication & production deployment | PASS | Tag `v1.1.0` + GitHub Release publication and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
 | X | v1.2 WordPress Experience Completion | PUBLICATION + PRODUCTION DEPLOYMENT PASS | X1-X5 retained; PR #87 technical integration and exact-main V1 + X6 L1-L4/L6 PASS; owner-approved `v1.2.0` publication PASS; owner-approved production deployment run `35135759389` plus fresh independent read-only run `35136876330` PASS; no provider L5 expansion |
-| Y | v1.3 Client Delivery System | TECHNICAL PASS / PUBLICATION GATED | Y1-Y5 merged through owner-approved PR #98 at `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`; fresh exact-main V1 + X6 release-path verification PASS; exact deterministic `aznet-theme-1.3.0.zip` SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`; publication/deployment remain separate owner gates; provider L5 remains separate |
+| Y | v1.3 Client Delivery System | PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED | Y1-Y5 merged through owner-approved PR #98 at `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`; exact-main V1 + X6 release-path verification PASS; owner-approved publication run `35211254633` published annotated `v1.3.0` + GitHub Release `390623960` with exact asset SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`; production deployment remains a separate owner gate; provider L5 remains separate |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
 Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` points to `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`. Publication source closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72. P5 technical run `35051428372` verified final package bytes, publication run `35052694111` published the matching tag/Release, and production read-only run `35054176392` closed deployment at the tested Theme-owned/site-operations scope.
@@ -332,7 +332,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 
 ## 10A. v1.3 Client Delivery System
 
-**State:** **TECHNICAL PASS / PUBLICATION GATED.**
+**State:** **PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED.**
 
 **Goal:** materially reduce the time from clean WordPress to a professional, client-ready service/business website without introducing a proprietary builder or domain engine.
 
@@ -348,7 +348,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 
 **Y4 — Professional Services Starter Blueprint:** extend the existing D-025/D-026 confirmed/idempotent provisioning engine with a generic professional-services blueprint. Activation stays mutation-free; the user reviews and confirms a visible change plan; created content becomes WordPress-owned; current-run rollback remains bounded; active sites are not silently overwritten.
 
-**Y5 — Client Delivery QA & Release Closure:** prove the full clean-site journey on WordPress 6.9+/PHP 8.1+, zero mandatory third-party plugins, responsive/a11y browser matrix, deterministic exact-package identity, packaged-PHP lint, theme-switch/update/rollback continuity and exact-main verification. Metadata remains `1.2.0` through Y1-Y4; promotion to `1.3.0`, publication and production deployment are separate explicit owner gates.
+**Y5 — Client Delivery QA & Release Closure:** prove the full clean-site journey on WordPress 6.9+/PHP 8.1+, zero mandatory third-party plugins, responsive/a11y browser matrix, deterministic exact-package identity, packaged-PHP lint, theme-switch/update/rollback continuity and exact-main verification. Metadata remained `1.2.0` through Y1-Y4; promotion to `1.3.0` and publication were separately owner-approved and completed; production deployment remains a separate explicit owner gate.
 
 **Provider boundary:** v1.3 Core opens no RootProfile/ConvertFlow/Woo provider L5 expansion. Existing optional compatibility tracks remain separate and fail-soft.
 
@@ -386,8 +386,12 @@ Metadata promotion to `1.1.0` is a historical cleared gate completed through PR 
 
 Owner-approved PR #98 merged Y5/v1.3 to canonical `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`. Fresh exact-main V1 run `35206627102` and the pre-existing X6 push-to-main release path run `35206626992` both completed SUCCESS. The exact main package is deterministic `aznet-theme-1.3.0.zip`, SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`, with 144 files, 107 packaged PHP files linted, 32/32 browser/axe cases PASS and switch-away/switch-back lifecycle continuity PASS. This closes D-029 implementation technically without changing domain ownership or claiming provider L5. Evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`.
 
-The published and production-deployed release remains `v1.2.0`. v1.3 publication and production deployment are not implied by technical closure.
+### v1.3 publication closure checkpoint — 17/09/2026
+
+Owner-approved publication run `35211254633` completed SUCCESS and published annotated tag `v1.3.0` (tag object `56f2ae2e8ba6e1fb4e8359447656e88ab6411ba6`) dereferencing to exact technical commit `afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, plus GitHub Release `390623960`. Release asset `570039299` is `aznet-theme-1.3.0.zip`, SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`; publication evidence artifact `10492411096` has digest `sha256:0a18d2169ad8d92a587421289ede773031e56d3646ddac44ba326ebe4ea6fd75`. Publication is PASS without production deployment. Evidence: `docs/evidence/V1_3_PUBLICATION_20260917.md`.
+
+Published/GitHub-Release release is now `v1.3.0`; production-deployed release remains verified `v1.2.0` until a separate v1.3 deployment approval and fresh deployment verification.
 
 ## 14. Exact next
 
-**NEXT — request separate product-owner approval for v1.3.0 publication disposition: annotated tag + GitHub Release only. Do not publish or deploy without that approval. Production deployment remains a later separate owner gate; provider L5 remains separate and unclaimed.**
+**NEXT — request separate product-owner approval for production deployment of the exact published `v1.3.0` release asset. Do not deploy without that approval. Before deployment, revalidate the target site and release asset; after deployment, require fresh read-only authenticated/public verification. Provider L5 remains separate and unclaimed.**
