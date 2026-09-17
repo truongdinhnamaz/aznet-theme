@@ -25,6 +25,7 @@ function settings_defaults(): array {
         'header_sticky'                 => 'sticky',
         'header_search'                 => true,
         'header_utilities'              => true,
+        'footer_preset'                 => 'standard',
         'woo_catalog_preset'            => 'grid',
         'woo_product_card_density'      => 'balanced',
         'woo_product_preset'            => 'classic',
@@ -60,6 +61,10 @@ function normalize_settings( array $raw ): array {
     $header_sticky = isset( $raw['header_sticky'] ) && in_array( $raw['header_sticky'], [ 'off', 'sticky', 'sticky-compact' ], true )
         ? (string) $raw['header_sticky']
         : 'sticky';
+
+    $footer_preset = isset( $raw['footer_preset'] ) && in_array( $raw['footer_preset'], [ 'standard', 'professional', 'compact' ], true )
+        ? (string) $raw['footer_preset']
+        : 'standard';
 
     $woo_catalog_preset = isset( $raw['woo_catalog_preset'] ) && in_array( $raw['woo_catalog_preset'], [ 'grid', 'compact-grid', 'editorial' ], true )
         ? (string) $raw['woo_catalog_preset']
@@ -128,6 +133,7 @@ function normalize_settings( array $raw ): array {
         'header_sticky'                 => $header_sticky,
         'header_search'                 => $normalize_boolean( 'header_search', true ),
         'header_utilities'              => $normalize_boolean( 'header_utilities', true ),
+        'footer_preset'                 => $footer_preset,
         'woo_catalog_preset'            => $woo_catalog_preset,
         'woo_product_card_density'      => $woo_product_card_density,
         'woo_product_preset'            => $woo_product_preset,

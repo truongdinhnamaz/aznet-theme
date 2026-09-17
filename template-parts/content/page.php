@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $variant = \AZnet\Theme\page_variant( (int) get_the_ID() );
 $crumbs  = \AZnet\Theme\page_breadcrumb_items( (int) get_the_ID() );
-$excerpt = trim( (string) get_the_excerpt() );
+$excerpt = \AZnet\Theme\page_excerpt( (int) get_the_ID() );
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'aznet-theme-page aznet-theme-page--' . $variant ); ?>>
     <header class="aznet-theme-page__header">

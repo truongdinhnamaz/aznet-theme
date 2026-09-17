@@ -1,0 +1,165 @@
+name: Y3 Footer System
+
+on:
+  push:
+    branches:
+      - work/v1.3-y3-footer-system
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'inc/theme/footer.php'
+      - 'inc/theme/bootstrap.php'
+      - 'inc/theme/settings.php'
+      - 'inc/admin/control-center.php'
+      - 'template-parts/footer/site-footer.php'
+      - 'assets/css/components/site-footer.css'
+      - 'scripts/verify-v1-core.sh'
+      - 'tests/offline/y3-footer-system-contract.php'
+      - 'tests/runtime/y3-footer-system.php'
+      - 'tests/browser/y3-footer-system-l4.mjs'
+      - '.github/workflows/y3-footer-system.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  y3-offline:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact Y3 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Verify Y3 and retained settings contracts
+        run: |
+          set -euo pipefail
+          git diff --check
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/y3-footer-system-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/r3-header-settings-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/r4-woocommerce-settings-contract.php
+          bash scripts/verify-v1-core.sh
+
+  y3-runtime-browser:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Checkout exact Y3 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Record exact candidate SHA
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/y3 /tmp/y3-footer-l4
+          git rev-parse HEAD | tee /tmp/y3/checkout-sha.txt
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+      - name: Install WordPress 6.9 and exact Theme candidate
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/wp
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='AZnet Y3 Runtime' --admin_user=admin --admin_password='y3-browser-password' --admin_email=ci@example.test --skip-email --allow-root
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
+            ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          wp core version --path=/tmp/wp --allow-root | grep -Fx '6.9'
+          wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp --allow-root)"
+          grep -Fx 'Version: 1.2.0' style.css
+          grep -F "define( 'AZNET_THEME_VERSION', '1.2.0' );" functions.php
+      - name: Start WordPress runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/y3/server.log 2>&1 &
+          echo $! > /tmp/y3/server.pid
+          for attempt in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:8080/ >/dev/null && break
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:8080/ >/dev/null
+      - name: Seed and verify Y3 runtime matrix
+        run: |
+          set -euo pipefail
+          wp eval-file tests/runtime/y3-footer-system.php --path=/tmp/wp --allow-root > /tmp/y3/fixture.json
+          jq -e '.front_id > 0 and (.front_url | length > 0)' /tmp/y3/fixture.json >/dev/null
+          jq -e '(.menu_ids | keys | sort) == (["footer","footer-contact","footer-policy","footer-social"] | sort)' /tmp/y3/fixture.json >/dev/null
+          jq -e '.locations | length == 4' /tmp/y3/fixture.json >/dev/null
+          echo 'PASS: Y3 runtime fixture, presets and empty-menu states verified'
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+      - name: Run Y3 Footer browser and accessibility matrix
+        env:
+          Y3_BASE_URL: http://127.0.0.1:8080
+          Y3_FIXTURE_PATH: /tmp/y3/fixture.json
+          Y3_STATE_DIR: /tmp/y3-footer-l4
+          Y3_WP_PATH: /tmp/wp
+        run: node tests/browser/y3-footer-system-l4.mjs
+      - name: Verify Y3 ownership and runtime boundary
+        run: |
+          set -euo pipefail
+          BASE="${{ github.event.pull_request.base.sha || 'origin/main' }}"
+          git diff --check "$BASE"...HEAD || git diff --check
+          if git diff -U0 "$BASE"...HEAD -- inc/theme/footer.php inc/theme/settings.php inc/admin/control-center.php template-parts/footer/site-footer.php assets/css/components/site-footer.css | grep -E '^\+.*(get_post_meta\(|\$wpdb|WP_Query|query_posts\(|get_posts\(|wp_insert_post\(|register_post_type\(|choiceguide_|rootprofile_)'; then
+            echo 'FAIL: Y3 introduced forbidden domain/provider/storage behavior' >&2
+            exit 1
+          fi
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/y3/server.log; then
+            echo 'FAIL: Theme-caused PHP error marker found in Y3 runtime' >&2
+            exit 1
+          fi
+          echo 'PASS: Y3 ownership and runtime boundary'
+      - name: Upload Y3 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: y3-footer-system-evidence
+          path: |
+            /tmp/y3
+            /tmp/y3-footer-l4
+          if-no-files-found: error
+      - name: Stop runtime
+        if: always()
+        run: |
+          if [[ -f /tmp/y3/server.pid ]]; then
+            kill "$(cat /tmp/y3/server.pid)" || true
+          fi

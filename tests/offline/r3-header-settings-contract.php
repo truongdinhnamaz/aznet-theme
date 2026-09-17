@@ -49,6 +49,7 @@ $valid_expected = [
     'header_sticky'            => 'sticky-compact',
     'header_search'            => false,
     'header_utilities'         => false,
+    'footer_preset'            => 'standard',
     'woo_catalog_preset'       => 'grid',
     'woo_product_card_density' => 'balanced',
     'woo_product_preset'       => 'classic',
