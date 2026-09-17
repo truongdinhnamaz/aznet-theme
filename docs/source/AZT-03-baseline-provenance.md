@@ -1,8 +1,8 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.44
+**Version:** v0.45
 **Status:** Working Source  
-**Date:** 17/09/2026
+**Date:** 18/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
 
 ## 1. Source ownership
@@ -54,6 +54,17 @@ Current production state includes:
 - P5 final-candidate technical verification, owner-approved Git tag/GitHub Release publication, and owner-approved v1.1 production deployment disposition for `tamduchanoi.aznet.vn` are complete. Fresh read-only deployment verification run `35054176392` PASS at the tested Theme-owned/site-operations scope.
 - v1.2.0 publication and owner-approved production deployment are complete at the verified Theme-owned/site-operations scope. Deployment run `35135759389` installed the exact published `1.2.0` package and assigned the existing WordPress-owned menu ID `15` to the new `header-utility` location; fresh independent read-only run `35136876330` reverified active Theme `1.2.0`, Standalone Core `ready`, retained logo/menu identity and a 28/28 public regression with zero Theme-owned blocker. Provider L5 remains separate and unproven.
 - v1.3.0 technical integration, owner-approved publication and owner-approved production deployment are complete at their separately verified scopes. Deployment run `35222200660` installed the exact published `1.3.0` package on `tamduchanoi.aznet.vn`; fresh independent read-only run `35223053733` reverified active Theme `1.3.0`, Standalone Core `ready`, retained WordPress-owned menu/phone identity and a 28/28 public regression with zero Theme-owned blocker. Provider L5 remains separate and unproven.
+
+## 2.1 Current post-release / pilot delta — 18/09/2026
+
+- Live canonical GitHub `main` is `371e09035a23664cf38f52f70aa3189e5c10f2cf` after owner-approved PR #111. PR #110 merged earlier at `45073221ba1f243cc95692c002ddfb34ede7a1d6`. PR #109 remains draft/open/unmerged and is not canonical state.
+- PR #110 closes the bounded Law 01 Quick Setup rerun/provenance-reuse gap: compatible Law provenance is reused instead of creating duplicate starter Post/media objects; Step 3 preview reflects reuse. Exact PR head `d5e58c4941bec144f05ec8de6a675eb86ebff74f` merged through #110.
+- PR #111 adds bounded Law 01 homepage editorial presentation only, using WordPress-owned content and preserving the existing ownership boundary. Exact head `e9afe7a36b4f5d4f0a0f5f6e8c5e8f6ca4765648` merged through #111.
+- The live pilot `tamduchanoi.aznet.vn` reports active AZnet Theme `1.3.0`. After owner preview/backup approval, a WPVibe draft was published and the previous live theme files were retained as `aznet-theme-wpvibe-backup`. The live Theme therefore has post-release local file changes; those bytes were behaviorally verified but were not proven byte-identical to canonical `main` or to the published `v1.3.0` package. Do not use the published package SHA as identity for the current live Theme files.
+- Fresh live rerun evidence: Quick Setup reached Step 4/4 with `READY_WITH_WARNINGS`, `Created: 0 · Reused: 36`; a read-only database duplicate check returned zero duplicate starter roles for `law01-v1-2`. This proves the rerun/idempotency behavior at the tested runtime scope without claiming byte parity.
+- Fresh live homepage evidence after content classification: five real published Posts render in `Mới cập nhật`; About excerpt renders; `blog_public=1`; Rank Math homepage meta description is present; fresh mobile Lighthouse returned Performance 98/100, Accessibility 100/100, Best Practices 100/100 and SEO 100/100.
+- ConvertFlow F9/provider L5 certification is separately PASS at the exact tested compatibility scope recorded in `docs/evidence/F9_PROVIDER_L5_SOURCE_SYNC_20260918.md`: WordPress 6.9, PHP 8.1, AZnet Theme `v1.3.0` reference producer, ConvertFlow Core P5.244 + Pro P5.164, and Twenty Twenty-Five alternate-theme coverage. This does not promote the ConvertFlow released baseline or change Theme ownership.
+- RootProfile remains an independent optional-integration boundary. On the pilot, public routes expose person-by-ID, organization and readiness reads, but no public/versioned organization-team collection/projection is available; `GET /rootprofile/v1/organization` currently returns `404 rootprofile_not_found`. Homepage Team authoritative rendering is therefore `BLOCKED` under issue #112. Theme must not infer membership from WordPress users/authors/posts/slugs/URLs or read RootProfile private storage.
 
 X6 technical candidate provenance is distinct from current production state. Pre-promotion head `08e12fa7d4feee3930b2ce12d4713dc425d1aada` retained exact `1.1.0`; X6 run `35098577606` completed SUCCESS with integrated 32/32 browser verification, deterministic `aznet-theme-1.1.0.zip` SHA-256 `9c8b24416d1692fb2f4e67e1557ffd539dd00ddaeaa05bace97d6605875962c6`, 95 packaged PHP lint checks and artifact `10447571392` digest `sha256:71a909cb839b43b38efa74424f992063f0ef88f0b0bc1e26da7e3b9995694807`. The exact-`1.2.0` promotion contract was written RED before the version change. After explicit owner approval of the metadata-promotion gate, commit `682285c34e808bc4148702419fd857065a2a3bf1` promoted both declarations atomically; `60186106769819f8f108dafade816b2441d48e79` preserved metadata-file trailing newlines.
 

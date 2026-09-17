@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.57
+**Version:** v0.58
 **Status:** Working Source  
-**Date:** 17/09/2026
+**Date:** 18/09/2026
 
 ## 1. Purpose
 
@@ -20,8 +20,8 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | C | Header / Footer | PASS | Theme-owned presentation with runtime/browser/a11y evidence |
 | D | Generic Templates | PASS / retained | Page/Post/Archive/Search/404 technical closure plus P2/P3 editorial hardening and P4 real-pilot quality evidence are retained |
 | W | WooCommerce presentation shell | PASS / retained | W1-W9 + R4; WooCommerce retains commerce truth |
-| E | RootProfile Profile / Contact | OPTIONAL COMPAT ACTIVE | E0-E4/E5-B retained PASS; E5-C external BLOCKED; E5-D takeover locked; non-blocking for core under D-016 |
-| F | Homepage | CORE PASS / F8 INTEGRATED PASS | Native Theme Homepage merged; F6/F7 evidence retained; exact ConvertFlow Core P5.242 + Pro P5.164 integration passed L3-L4 on Theme `252554961bc81d22427363aee0048365fb4e116b`; F9/provider L5 remains separate and unclaimed |
+| E | RootProfile Profile / Contact | OPTIONAL COMPAT ACTIVE / TEAM PROJECTION BLOCKED | E0-E4/E5-B retained PASS; E5-C remains external-blocked and E5-D takeover locked. Pilot evidence confirms no public/versioned organization-team projection and no organization profile on the target site; issue #112 records the blocker. Non-blocking for core under D-016. |
+| F | Homepage | CORE PASS / F9 PROVIDER L5 PASS | Native Theme Homepage remains core PASS; F8 L3-L4 evidence is retained. ConvertFlow F9-A..E plus retained C1 are PASS at the exact Theme `v1.3.0` reference-producer / Core P5.244 + Pro P5.164 scope recorded in `F9_PROVIDER_L5_SOURCE_SYNC_20260918.md`. Law 01 live presentation/rerun QA is PASS at the tested site scope; RootProfile-backed Team projection remains separately external-blocked under issue #112 and does not reopen core Homepage PASS. |
 | G | Core v1.0 Cleanup / Release | TECHNICAL PASS | G0-G8 production/release-candidate closure merged; publication is a separate live GitHub state |
 | R0 | v1.0 -> v1.1 Source Reconciliation | PASS | Source-only reconciliation merged through PR #36; v1.1 product/architecture ratified |
 | R1 | Design System 2.0 | PASS | PR #37 merged; settings/tokens + Default/Editorial/Commerce outcomes + editor/frontend parity L1-L4 |
@@ -61,6 +61,17 @@ P2 merged through PR #51 from final verified head `dec498b997aec6bc8b08cf91f3e09
 P3 merged through PR #52 from final verified head `d78091900451176c3815b23d1485036e784bdde9` to `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`. Head and merge share tree `8fc309ea8e01bfe727da943754c98164b3f92a58`. Fresh exact-main verification succeeded after merge.
 
 A GitHub release check on 08/09/2026 historically established that publication had not yet occurred at that checkpoint. That historical `PUBLICATION_PENDING` state was superseded on 16/09/2026 by owner-approved publication run `35052694111`; final production deployment was then separately owner-approved and verified by read-only run `35054176392`.
+
+## 2.1 Current checkpoint — 18/09/2026
+
+- Canonical GitHub `main` is `371e09035a23664cf38f52f70aa3189e5c10f2cf` after owner-approved PR #111. PR #110 and #111 are merged; PR #109 remains a draft/open presentation candidate and is not canonical.
+- ConvertFlow F9/provider L5 is PASS only at the exact certified compatibility boundary in `docs/evidence/F9_PROVIDER_L5_SOURCE_SYNC_20260918.md`. This closes the Theme-side optional-provider certification question for that tested producer/consumer path; it does not release/deploy ConvertFlow or change the released ConvertFlow baseline.
+- The Tâm Đức Hà Nội pilot is live on Theme metadata `1.3.0`. Owner-approved WPVibe publishing applied bounded post-release Theme-file changes with automatic `aznet-theme-wpvibe-backup`; byte identity to the published `v1.3.0` release asset or current GitHub `main` was not established, so runtime PASS must not be restated as package-byte PASS.
+- Law 01 Quick Setup rerun is runtime PASS at the tested scope: Step 4/4, `READY_WITH_WARNINGS`, `Created: 0 · Reused: 36`, plus zero duplicate `law01-v1-2` starter roles in the read-only duplicate query.
+- Live Homepage/content readiness at the tested scope: five published Posts render in `Mới cập nhật`; About excerpt renders; indexing is enabled; homepage meta description is present; fresh mobile Lighthouse is 98 Performance / 100 Accessibility / 100 Best Practices / 100 SEO.
+- RootProfile Team remains `BLOCKED_EXTERNAL_CONTRACT`: no public/versioned organization-team projection exists on the pilot and the organization endpoint currently returns not-found. Issue #112 is the durable Theme-side blocker record. No user/author/post heuristic or private-storage fallback is allowed.
+
+**Exact next:** no new Theme implementation slice is opened by this checkpoint. Preserve the completed core/release state. Team rendering may resume only after the RootProfile owner publishes a suitable public/versioned projection; any further release/deploy/takeover or new roadmap slice requires its own gate.
 
 ## 3. v1.0 closure state
 
