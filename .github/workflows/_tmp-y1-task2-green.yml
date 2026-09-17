@@ -1,0 +1,696 @@
+name: Temporary Y1 Task2 GREEN
+
+on:
+  push:
+    branches:
+      - feat/v1.3-y1-page-experience
+    paths:
+      - .github/workflows/_tmp-y1-task2-green.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply-and-verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/v1.3-y1-page-experience
+          fetch-depth: 0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Apply Y1 Task 2 implementation and QA harness
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p template-parts/content page-templates assets/css/components tests/runtime tests/browser
+
+          cat > page.php <<'PHP'
+          <?php
+          /**
+           * Native WordPress Page template.
+           *
+           * @package AZnetTheme
+           */
+
+          get_header();
+          ?>
+          <main id="main" class="aznet-theme-main">
+              <?php while ( have_posts() ) : the_post(); ?>
+                  <?php get_template_part( 'template-parts/content/page' ); ?>
+              <?php endwhile; ?>
+          </main>
+          <?php
+          get_footer();
+          PHP
+
+          cat > page-templates/wide.php <<'PHP'
+          <?php
+          /**
+           * Template Name: Wide
+           * Template Post Type: page
+           *
+           * @package AZnetTheme
+           */
+
+          get_header();
+          ?>
+          <main id="main" class="aznet-theme-main">
+              <?php while ( have_posts() ) : the_post(); ?>
+                  <?php get_template_part( 'template-parts/content/page' ); ?>
+              <?php endwhile; ?>
+          </main>
+          <?php
+          get_footer();
+          PHP
+
+          cat > page-templates/landing.php <<'PHP'
+          <?php
+          /**
+           * Template Name: Landing
+           * Template Post Type: page
+           *
+           * @package AZnetTheme
+           */
+
+          get_header();
+          ?>
+          <main id="main" class="aznet-theme-main">
+              <?php while ( have_posts() ) : the_post(); ?>
+                  <?php get_template_part( 'template-parts/content/page' ); ?>
+              <?php endwhile; ?>
+          </main>
+          <?php
+          get_footer();
+          PHP
+
+          cat > template-parts/content/page.php <<'PHP'
+          <?php
+          /**
+           * Shared native Page presentation.
+           *
+           * @package AZnetTheme
+           */
+
+          $page_id = (int) get_the_ID();
+          $variant = \AZnet\Theme\page_variant( $page_id );
+          $crumbs  = \AZnet\Theme\page_breadcrumb_items( $page_id );
+          $excerpt = trim( (string) get_post_field( 'post_excerpt', $page_id ) );
+          $shell_classes = \AZnet\Theme\content_shell_classes( false );
+          ?>
+          <div class="<?php echo esc_attr( implode( ' ', $shell_classes ) ); ?>">
+              <article <?php post_class( 'aznet-theme-page aznet-theme-page--' . $variant ); ?>>
+                  <header class="aznet-theme-page__header">
+                      <?php if ( [] !== $crumbs ) : ?>
+                          <nav class="aznet-theme-page__breadcrumbs" aria-label="<?php echo esc_attr__( 'Breadcrumb', 'aznet-theme' ); ?>">
+                              <ol>
+                                  <?php foreach ( $crumbs as $item ) : ?>
+                                      <li><a href="<?php echo esc_url( $item['url'] ); ?>"><?php echo esc_html( $item['title'] ); ?></a></li>
+                                  <?php endforeach; ?>
+                                  <li aria-current="page"><?php the_title(); ?></li>
+                              </ol>
+                          </nav>
+                      <?php endif; ?>
+                      <h1 class="aznet-theme-page__title"><?php the_title(); ?></h1>
+                      <?php if ( '' !== $excerpt ) : ?>
+                          <p class="aznet-theme-page__lead"><?php echo esc_html( $excerpt ); ?></p>
+                      <?php endif; ?>
+                      <?php if ( has_post_thumbnail() ) : ?>
+                          <figure class="aznet-theme-page__featured"><?php the_post_thumbnail( 'large' ); ?></figure>
+                      <?php endif; ?>
+                  </header>
+                  <div class="aznet-theme-page__content">
+                      <?php the_content(); ?>
+                      <?php wp_link_pages(); ?>
+                  </div>
+              </article>
+          </div>
+          PHP
+
+          cat > assets/css/components/page.css <<'CSS'
+          .aznet-theme-page {
+              min-width: 0;
+              width: 100%;
+              margin-inline: auto;
+              padding-block: var(--aznet-theme-space-section);
+              color: var(--aznet-theme-text);
+          }
+
+          .aznet-theme-page--standard {
+              max-width: var(--aznet-theme-container-content);
+          }
+
+          .aznet-theme-page--wide,
+          .aznet-theme-page--landing {
+              max-width: var(--aznet-theme-container-wide);
+          }
+
+          .aznet-theme-page__header {
+              margin-block-end: var(--aznet-theme-space-6);
+              padding: clamp(var(--aznet-theme-space-4), 4vw, var(--aznet-theme-space-6));
+              background: var(--aznet-theme-surface-subtle);
+              border: 1px solid var(--aznet-theme-border);
+              border-radius: var(--aznet-theme-radius-card);
+          }
+
+          .aznet-theme-page--landing .aznet-theme-page__header {
+              padding-inline: 0;
+              background: transparent;
+              border: 0;
+              border-radius: 0;
+          }
+
+          .aznet-theme-page__title {
+              margin: 0;
+              color: var(--aznet-theme-text);
+              overflow-wrap: anywhere;
+          }
+
+          .aznet-theme-page__lead {
+              max-width: var(--aznet-theme-container-content);
+              margin: var(--aznet-theme-space-3) 0 0;
+              color: var(--aznet-theme-muted);
+              font-size: var(--aznet-theme-font-size-lg);
+          }
+
+          .aznet-theme-page__breadcrumbs {
+              margin-block-end: var(--aznet-theme-space-3);
+              color: var(--aznet-theme-muted);
+              font-size: var(--aznet-theme-font-size-sm);
+          }
+
+          .aznet-theme-page__breadcrumbs ol {
+              display: flex;
+              flex-wrap: wrap;
+              gap: var(--aznet-theme-space-2);
+              margin: 0;
+              padding: 0;
+              list-style: none;
+          }
+
+          .aznet-theme-page__breadcrumbs li:not(:last-child)::after {
+              content: '/';
+              margin-inline-start: var(--aznet-theme-space-2);
+              color: var(--aznet-theme-muted);
+          }
+
+          .aznet-theme-page__breadcrumbs a {
+              color: inherit;
+          }
+
+          .aznet-theme-page__breadcrumbs a:focus-visible {
+              outline: 2px solid var(--aznet-theme-focus);
+              outline-offset: 2px;
+          }
+
+          .aznet-theme-page__featured {
+              margin: var(--aznet-theme-space-4) 0 0;
+              overflow: hidden;
+              border-radius: var(--aznet-theme-radius-card);
+          }
+
+          .aznet-theme-page__featured img {
+              display: block;
+              width: 100%;
+              max-width: 100%;
+              height: auto;
+          }
+
+          .aznet-theme-page__content {
+              min-width: 0;
+              max-width: var(--aznet-theme-container-content);
+              margin-inline: auto;
+              overflow-wrap: anywhere;
+          }
+
+          .aznet-theme-page--wide .aznet-theme-page__content,
+          .aznet-theme-page--landing .aznet-theme-page__content {
+              max-width: 100%;
+          }
+
+          .aznet-theme-page__content :where(img, video, svg, iframe) {
+              max-width: 100%;
+          }
+
+          @media (max-width: 47.999rem) {
+              .aznet-theme-page {
+                  padding-block: var(--aznet-theme-space-6);
+              }
+
+              .aznet-theme-page__header {
+                  margin-block-end: var(--aznet-theme-space-4);
+                  padding: var(--aznet-theme-space-4);
+              }
+
+              .aznet-theme-page--landing .aznet-theme-page__header {
+                  padding-inline: 0;
+              }
+          }
+          CSS
+
+          python - <<'PY'
+          from pathlib import Path
+
+          assets = Path('inc/theme/assets.php')
+          text = assets.read_text()
+          marker = "/** Determine whether native authored Post/Page media presentation can render. */\n"
+          block = r'''/** Determine whether native non-Front-Page Page presentation can render. */
+          function should_enqueue_page_assets(): bool {
+              if ( ! function_exists( 'is_page' ) || ! is_page() ) {
+                  return false;
+              }
+
+              if ( function_exists( 'is_front_page' ) && is_front_page() ) {
+                  return false;
+              }
+
+              if ( function_exists( __NAMESPACE__ . '\\Integrations\\WooCommerce\\current_surface' )
+                  && null !== \AZnet\Theme\Integrations\WooCommerce\current_surface() ) {
+                  return false;
+              }
+
+              return true;
+          }
+
+          /** Enqueue Page Experience presentation only on native non-Front-Page Pages. */
+          function enqueue_page_assets( ?string $version = null ): void {
+              if ( ! should_enqueue_page_assets() ) {
+                  return;
+              }
+
+              wp_enqueue_style(
+                  'aznet-theme-page',
+                  get_theme_file_uri( '/assets/css/components/page.css' ),
+                  [ 'aznet-theme-tokens', 'aznet-theme-generic-content' ],
+                  asset_content_version( '/assets/css/components/page.css', $version )
+              );
+          }
+
+          '''
+          if text.count(marker) != 1:
+              raise SystemExit('assets Page insertion marker mismatch')
+          text = text.replace(marker, block + marker, 1)
+          marker2 = "    enqueue_form_assets( $version );\n"
+          replacement2 = "    enqueue_page_assets( $version );\n" + marker2
+          if text.count(marker2) != 1:
+              raise SystemExit('assets enqueue marker mismatch')
+          assets.write_text(text.replace(marker2, replacement2, 1))
+
+          design = Path('inc/theme/design-system.php')
+          text = design.read_text()
+          marker = "        'assets/css/components/media.css',\n"
+          replacement = marker + "        'assets/css/components/page.css',\n"
+          if text.count(marker) != 1:
+              raise SystemExit('editor stylesheet marker mismatch')
+          design.write_text(text.replace(marker, replacement, 1))
+
+          r1 = Path('tests/offline/r1-visual-preset-contract.php')
+          text = r1.read_text()
+          old = "    'assets/css/components/media.css',\n    'assets/css/presets/editorial.css',"
+          new = "    'assets/css/components/media.css',\n    'assets/css/components/page.css',\n    'assets/css/presets/editorial.css',"
+          if text.count(old) != 1:
+              raise SystemExit('R1 editorial stylesheet expectation mismatch')
+          text = text.replace(old, new, 1)
+          old = "    'assets/css/tokens.css',\n    'assets/css/components/media.css',\n] === \\AZnet\\Theme\\editor_stylesheets());"
+          new = "    'assets/css/tokens.css',\n    'assets/css/components/media.css',\n    'assets/css/components/page.css',\n] === \\AZnet\\Theme\\editor_stylesheets());"
+          if text.count(old) != 1:
+              raise SystemExit('R1 default stylesheet expectation mismatch')
+          r1.write_text(text.replace(old, new, 1))
+
+          verify = Path('scripts/verify-v1-core.sh')
+          text = verify.read_text()
+          old = '    for dir in inc template-parts patterns; do\n'
+          new = '    for dir in inc template-parts patterns page-templates; do\n'
+          if text.count(old) != 1:
+              raise SystemExit('verify production dir marker mismatch')
+          text = text.replace(old, new, 1)
+          marker = "printf '%s\\n' '==> Classic Editor policy contract'\n"
+          insert = "printf '%s\\n' '==> Y1 Page Experience 2.0 contract'\nphp -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-page-experience-contract.php\n\n"
+          if text.count(marker) != 1:
+              raise SystemExit('verify Y1 insertion marker mismatch')
+          verify.write_text(text.replace(marker, insert + marker, 1))
+          PY
+
+          cat > tests/runtime/y1-page-experience.php <<'PHP'
+          <?php
+          /**
+           * Seed real WordPress fixtures for Y1 Page Experience.
+           *
+           * @package AZnetTheme
+           */
+
+          $image_id = (int) getenv( 'Y1_IMAGE_ID' );
+          if ( $image_id <= 0 ) {
+              fwrite( STDERR, "FAIL: Y1_IMAGE_ID is required\n" );
+              exit( 1 );
+          }
+
+          $create_page = static function ( array $args ): int {
+              $defaults = [
+                  'post_type'    => 'page',
+                  'post_status'  => 'publish',
+                  'post_excerpt' => '',
+                  'post_content' => '<p>Y1 native Page content sentinel.</p>',
+              ];
+              $id = wp_insert_post( array_merge( $defaults, $args ), true );
+              if ( is_wp_error( $id ) ) {
+                  fwrite( STDERR, 'FAIL: ' . $id->get_error_message() . "\n" );
+                  exit( 1 );
+              }
+              return (int) $id;
+          };
+
+          $parent_id = $create_page( [
+              'post_title'   => 'Y1 Parent Page',
+              'post_name'    => 'y1-parent',
+              'post_excerpt' => 'Explicitly authored parent lead.',
+              'post_content' => '<p id="y1-parent-content">Parent content sentinel.</p>',
+          ] );
+          set_post_thumbnail( $parent_id, $image_id );
+
+          $child_id = $create_page( [
+              'post_title'  => 'Y1 Child Page',
+              'post_name'   => 'y1-child',
+              'post_parent' => $parent_id,
+              'post_excerpt' => 'Explicitly authored child lead.',
+              'post_content' => '<p id="y1-child-content">Child content sentinel.</p>',
+          ] );
+
+          $wide_id = $create_page( [
+              'post_title'   => 'Y1 Wide Page',
+              'post_name'    => 'y1-wide',
+              'post_content' => '<p id="y1-wide-content">This body text must not become a generated lead.</p>',
+          ] );
+          update_post_meta( $wide_id, '_wp_page_template', 'page-templates/wide.php' );
+
+          $landing_id = $create_page( [
+              'post_title'   => 'Y1 Landing Page',
+              'post_name'    => 'y1-landing',
+              'post_excerpt' => 'Explicitly authored landing lead.',
+              'post_content' => '<p id="y1-landing-content">Landing content sentinel.</p>',
+          ] );
+          update_post_meta( $landing_id, '_wp_page_template', 'page-templates/landing.php' );
+
+          $plain_slug_id = $create_page( [
+              'post_title'   => 'Cart',
+              'post_name'    => 'cart',
+              'post_content' => '<p id="y1-plain-slug-content">Ordinary native Page despite commerce-like slug.</p>',
+          ] );
+
+          echo wp_json_encode( [
+              'parent_id'       => $parent_id,
+              'parent_url'      => get_permalink( $parent_id ),
+              'child_id'        => $child_id,
+              'child_url'       => get_permalink( $child_id ),
+              'wide_id'         => $wide_id,
+              'wide_url'        => get_permalink( $wide_id ),
+              'landing_id'      => $landing_id,
+              'landing_url'     => get_permalink( $landing_id ),
+              'plain_slug_id'   => $plain_slug_id,
+              'plain_slug_url'  => get_permalink( $plain_slug_id ),
+              'front_url'       => home_url( '/' ),
+          ], JSON_UNESCAPED_SLASHES );
+          PHP
+
+          cat > tests/browser/y1-page-experience-l4.mjs <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { chromium } from 'playwright';
+          import AxeBuilder from '@axe-core/playwright';
+
+          const stateDir = process.env.Y1_STATE_DIR || '/tmp/y1';
+          const outputDir = process.env.Y1_L4_DIR || '/tmp/y1-l4';
+          const fixture = JSON.parse(fs.readFileSync(path.join(stateDir, 'fixture.json'), 'utf8'));
+          fs.mkdirSync(outputDir, { recursive: true });
+
+          const viewports = {
+            '1440x1000': { width: 1440, height: 1000 },
+            '1024x900': { width: 1024, height: 900 },
+            '390x844': { width: 390, height: 844 },
+            '320x760': { width: 320, height: 760 },
+          };
+
+          const routes = {
+            parent: { url: fixture.parent_url, variant: 'standard', breadcrumb: false, lead: true, featured: true },
+            child: { url: fixture.child_url, variant: 'standard', breadcrumb: true, lead: true, featured: false },
+            wide: { url: fixture.wide_url, variant: 'wide', breadcrumb: false, lead: false, featured: false },
+            landing: { url: fixture.landing_url, variant: 'landing', breadcrumb: false, lead: true, featured: false },
+            plainSlug: { url: fixture.plain_slug_url, variant: 'standard', breadcrumb: false, lead: false, featured: false },
+          };
+
+          const browser = await chromium.launch();
+          const failures = [];
+          const summary = { fixture, cases: [] };
+
+          try {
+            for (const [viewportName, viewport] of Object.entries(viewports)) {
+              for (const [routeName, route] of Object.entries(routes)) {
+                const context = await browser.newContext({ viewport });
+                const page = await context.newPage();
+                const consoleErrors = [];
+                const pageErrors = [];
+                page.on('console', (message) => { if (message.type() === 'error') consoleErrors.push(message.text()); });
+                page.on('pageerror', (error) => pageErrors.push(error.message));
+                const result = { route: routeName, viewport: viewportName, status: 'failed', error: null };
+
+                try {
+                  const response = await page.goto(route.url, { waitUntil: 'networkidle' });
+                  if ((response?.status() ?? null) !== 200) throw new Error(`HTTP ${response?.status()}`);
+                  if (await page.locator('main#main').count() !== 1) throw new Error('expected one Theme main');
+                  if (await page.locator('h1').count() !== 1) throw new Error('expected one H1');
+                  if (await page.locator('#aznet-theme-page-css').count() !== 1) throw new Error('page.css missing');
+                  if (await page.locator(`.aznet-theme-page--${route.variant}`).count() !== 1) throw new Error(`variant ${route.variant} missing`);
+                  if ((await page.locator('.aznet-theme-page__breadcrumbs').count() === 1) !== route.breadcrumb) throw new Error('breadcrumb presence mismatch');
+                  if ((await page.locator('.aznet-theme-page__lead').count() === 1) !== route.lead) throw new Error('authored lead presence mismatch');
+                  if ((await page.locator('.aznet-theme-page__featured img').count() === 1) !== route.featured) throw new Error('featured image presence mismatch');
+
+                  if (routeName === 'child') {
+                    const parentLink = page.locator('.aznet-theme-page__breadcrumbs a', { hasText: 'Y1 Parent Page' });
+                    if (await parentLink.count() !== 1) throw new Error('real parent breadcrumb missing');
+                    await parentLink.focus();
+                    const focus = await parentLink.evaluate((el) => {
+                      const style = getComputedStyle(el);
+                      return { visible: el.matches(':focus-visible'), outline: style.outlineStyle, width: parseFloat(style.outlineWidth || '0') };
+                    });
+                    if (!focus.visible || focus.outline === 'none' || focus.width < 1) throw new Error(`breadcrumb focus not visible: ${JSON.stringify(focus)}`);
+                  }
+
+                  if (routeName === 'wide' && await page.getByText('This body text must not become a generated lead.').count() !== 1) throw new Error('wide body sentinel missing');
+                  if (routeName === 'wide' && await page.locator('.aznet-theme-page__lead').count() !== 0) throw new Error('generated excerpt leaked into lead');
+
+                  const overflow = await page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - document.documentElement.clientWidth));
+                  if (overflow > 1) throw new Error(`horizontal overflow ${overflow}px`);
+
+                  const axe = await new AxeBuilder({ page }).analyze();
+                  const blocking = axe.violations.filter((v) => ['critical', 'serious'].includes(v.impact));
+                  fs.writeFileSync(path.join(outputDir, `axe-${routeName}-${viewportName}.json`), JSON.stringify(axe, null, 2));
+                  if (blocking.length) throw new Error(`blocking axe: ${blocking.map((v) => v.id).join(',')}`);
+                  if (consoleErrors.length || pageErrors.length) throw new Error(`browser errors: ${JSON.stringify({ consoleErrors, pageErrors })}`);
+
+                  await page.screenshot({ path: path.join(outputDir, `${routeName}-${viewportName}.png`), fullPage: true });
+                  result.status = 'passed';
+                } catch (error) {
+                  result.error = error instanceof Error ? error.message : String(error);
+                  failures.push(`${routeName}/${viewportName}: ${result.error}`);
+                  await page.screenshot({ path: path.join(outputDir, `failure-${routeName}-${viewportName}.png`), fullPage: true }).catch(() => {});
+                } finally {
+                  summary.cases.push(result);
+                  await context.close();
+                }
+              }
+            }
+          } finally {
+            await browser.close();
+          }
+
+          fs.writeFileSync(path.join(outputDir, 'summary.json'), JSON.stringify(summary, null, 2));
+          if (failures.length) {
+            failures.forEach((failure) => console.error(`FAIL: ${failure}`));
+            process.exit(1);
+          }
+          console.log(`PASS: Y1 browser matrix ${summary.cases.length}/${summary.cases.length}`);
+          JS
+
+          cat > .github/workflows/y1-page-experience.yml <<'YAML'
+          name: Y1 Page Experience 2.0
+
+          on:
+            push:
+              branches:
+                - feat/v1.3-y1-page-experience
+              paths:
+                - 'page.php'
+                - 'page-templates/**'
+                - 'template-parts/content/page.php'
+                - 'assets/css/components/page.css'
+                - 'inc/theme/page-experience.php'
+                - 'inc/theme/settings.php'
+                - 'inc/theme/assets.php'
+                - 'inc/theme/design-system.php'
+                - 'inc/theme/bootstrap.php'
+                - 'inc/admin/control-center.php'
+                - 'tests/offline/y1-page-experience-contract.php'
+                - 'tests/runtime/y1-page-experience.php'
+                - 'tests/browser/y1-page-experience-l4.mjs'
+                - 'tests/offline/r1-visual-preset-contract.php'
+                - 'tests/offline/r3-header-settings-contract.php'
+                - 'scripts/verify-v1-core.sh'
+                - '.github/workflows/y1-page-experience.yml'
+            pull_request:
+              branches:
+                - main
+            workflow_dispatch:
+
+          permissions:
+            contents: read
+
+          jobs:
+            y1-quality:
+              runs-on: ubuntu-24.04
+              services:
+                mysql:
+                  image: mysql:8.0
+                  env:
+                    MYSQL_ROOT_PASSWORD: root
+                    MYSQL_DATABASE: wordpress
+                  ports: ['3306:3306']
+                  options: >-
+                    --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+                    --health-interval=10s
+                    --health-timeout=5s
+                    --health-retries=10
+              steps:
+                - name: Checkout exact Y1 candidate
+                  uses: actions/checkout@v4
+                  with:
+                    ref: ${{ github.event.pull_request.head.sha || github.sha }}
+                    fetch-depth: 0
+                - name: Record exact candidate SHA
+                  run: |
+                    set -euo pipefail
+                    mkdir -p /tmp/y1 /tmp/y1-l4
+                    git rev-parse HEAD | tee /tmp/y1/checkout-sha.txt
+                - name: Set up PHP 8.1
+                  uses: shivammathur/setup-php@v2
+                  with:
+                    php-version: '8.1'
+                    extensions: mysqli
+                    coverage: none
+                - name: Run Y1 static and retained regression gate
+                  run: |
+                    set -euo pipefail
+                    git diff --check
+                    bash scripts/assert-theme-version.sh
+                    bash scripts/verify-v1-core.sh
+                - name: Install WordPress 6.9 and exact Theme candidate
+                  run: |
+                    set -euo pipefail
+                    rm -rf /tmp/wp
+                    mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+                    curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+                    chmod +x /tmp/wp-cli.phar
+                    sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+                    wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+                    wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+                    wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='AZnet Y1 Runtime' --admin_user=admin --admin_password='y1-page-password' --admin_email=ci@example.test --skip-email --allow-root
+                    rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='README.md' --exclude='aznet-preview.png' ./ /tmp/wp/wp-content/themes/aznet-theme/
+                    wp theme activate aznet-theme --path=/tmp/wp --allow-root
+                    wp core version --path=/tmp/wp --allow-root | grep -Fx '6.9'
+                    test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp --allow-root)"
+                    wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+                - name: Seed Y1 native Page fixtures
+                  run: |
+                    set -euo pipefail
+                    printf '%s' 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=' | base64 -d > /tmp/y1-featured.png
+                    IMAGE_ID=$(wp media import /tmp/y1-featured.png --title='Y1 Featured' --porcelain --path=/tmp/wp --allow-root)
+                    test -n "$IMAGE_ID"
+                    Y1_IMAGE_ID="$IMAGE_ID" wp eval-file "$GITHUB_WORKSPACE/tests/runtime/y1-page-experience.php" --path=/tmp/wp --allow-root > /tmp/y1/fixture.json
+                    jq -e '.parent_id > 0 and .child_id > 0 and .wide_id > 0 and .landing_id > 0 and .plain_slug_id > 0' /tmp/y1/fixture.json
+                    wp post meta get "$(jq -r '.wide_id' /tmp/y1/fixture.json)" _wp_page_template --path=/tmp/wp --allow-root | grep -Fx 'page-templates/wide.php'
+                    wp post meta get "$(jq -r '.landing_id' /tmp/y1/fixture.json)" _wp_page_template --path=/tmp/wp --allow-root | grep -Fx 'page-templates/landing.php'
+                - name: Start WordPress runtime
+                  run: |
+                    set -euo pipefail
+                    nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/y1/server.log 2>&1 &
+                    echo $! > /tmp/y1/server.pid
+                    for attempt in $(seq 1 30); do
+                      curl -sS http://127.0.0.1:8080/ >/dev/null && break
+                      sleep 1
+                    done
+                    curl -sS http://127.0.0.1:8080/ >/dev/null
+                - name: Verify Y1 real WordPress presentation and asset boundary
+                  run: |
+                    set -euo pipefail
+                    check_page() {
+                      local name="$1" url="$2" variant="$3" breadcrumb="$4" lead="$5" featured="$6"
+                      local file="/tmp/y1/${name}.html"
+                      test "$(curl -sS -o "$file" -w '%{http_code}' "$url")" = 200
+                      test "$(grep -o '<main id="main" class="aznet-theme-main">' "$file" | wc -l)" = 1
+                      grep -F "aznet-theme-page--${variant}" "$file"
+                      grep -F 'aznet-theme-page-css' "$file"
+                      if [[ "$breadcrumb" = yes ]]; then grep -F 'aznet-theme-page__breadcrumbs' "$file"; else ! grep -F 'aznet-theme-page__breadcrumbs' "$file"; fi
+                      if [[ "$lead" = yes ]]; then grep -F 'aznet-theme-page__lead' "$file"; else ! grep -F 'aznet-theme-page__lead' "$file"; fi
+                      if [[ "$featured" = yes ]]; then grep -F 'aznet-theme-page__featured' "$file"; else ! grep -F 'aznet-theme-page__featured' "$file"; fi
+                    }
+                    check_page parent "$(jq -r '.parent_url' /tmp/y1/fixture.json)" standard no yes yes
+                    check_page child "$(jq -r '.child_url' /tmp/y1/fixture.json)" standard yes yes no
+                    grep -F 'Y1 Parent Page' /tmp/y1/child.html
+                    check_page wide "$(jq -r '.wide_url' /tmp/y1/fixture.json)" wide no no no
+                    grep -F 'This body text must not become a generated lead.' /tmp/y1/wide.html
+                    check_page landing "$(jq -r '.landing_url' /tmp/y1/fixture.json)" landing no yes no
+                    check_page plain-slug "$(jq -r '.plain_slug_url' /tmp/y1/fixture.json)" standard no no no
+                    curl -sS "$(jq -r '.front_url' /tmp/y1/fixture.json)" > /tmp/y1/front.html
+                    if grep -F 'aznet-theme-page-css' /tmp/y1/front.html; then echo 'FAIL: page.css leaked onto non-Page front request' >&2; exit 1; fi
+                    if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/y1/server.log; then echo 'FAIL: Theme-caused PHP error marker in Y1 runtime' >&2; exit 1; fi
+                    echo 'PASS: Y1 WordPress 6.9 runtime presentation and asset boundary'
+                - name: Set up Node 22
+                  uses: actions/setup-node@v4
+                  with:
+                    node-version: '22'
+                - name: Install Playwright and axe
+                  run: |
+                    set -euo pipefail
+                    npm install --no-save playwright@1.55.0 @axe-core/playwright@4.10.2
+                    npx playwright install --with-deps chromium
+                - name: Run Y1 browser responsive and a11y matrix
+                  env:
+                    Y1_STATE_DIR: /tmp/y1
+                    Y1_L4_DIR: /tmp/y1-l4
+                  run: node tests/browser/y1-page-experience-l4.mjs
+                - name: Upload Y1 evidence
+                  if: always()
+                  uses: actions/upload-artifact@v4
+                  with:
+                    name: y1-page-experience-evidence
+                    path: |
+                      /tmp/y1
+                      /tmp/y1-l4
+                    if-no-files-found: error
+                - name: Stop runtime
+                  if: always()
+                  run: |
+                    if [[ -f /tmp/y1/server.pid ]]; then kill "$(cat /tmp/y1/server.pid)" || true; fi
+          YAML
+
+      - name: Verify Task 2 static GREEN before commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-page-experience-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/r1-visual-preset-contract.php
+          bash scripts/assert-theme-version.sh
+          bash scripts/verify-v1-core.sh
+          for file in page.php page-templates/wide.php page-templates/landing.php template-parts/content/page.php inc/theme/assets.php inc/theme/design-system.php tests/runtime/y1-page-experience.php; do php -l "$file"; done
+      - name: Commit verified Y1 Task 2 candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'truongdinhnamaz'
+          git config user.email 'truongnam151@gmail.com'
+          git add page.php page-templates template-parts/content/page.php assets/css/components/page.css inc/theme/assets.php inc/theme/design-system.php tests/offline/y1-page-experience-contract.php tests/offline/r1-visual-preset-contract.php tests/runtime/y1-page-experience.php tests/browser/y1-page-experience-l4.mjs scripts/verify-v1-core.sh .github/workflows/y1-page-experience.yml
+          git commit -m 'feat: add v1.3 native page experience'
+          git push origin HEAD:feat/v1.3-y1-page-experience
