@@ -103,7 +103,7 @@ try {
   await adminContext.close();
 
   const routes = [
-    ['home', '/', 'Giải pháp chuyên nghiệp cho nhu cầu của bạn'],
+    ['home', '/', 'Giúp khách hàng hiểu vấn đề và chọn bước tiếp theo phù hợp'],
     ['about', '/gioi-thieu/', 'Giới thiệu'],
     ['services', '/dich-vu/', 'Dịch vụ'],
     ['team', '/doi-ngu/', 'Đội ngũ'],
