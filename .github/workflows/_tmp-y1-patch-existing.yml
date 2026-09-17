@@ -89,6 +89,19 @@ jobs:
               raise SystemExit('R1 default list mismatch')
           r1.write_text(text.replace(old, new, 1))
 
+          r6 = Path('tests/offline/r6-asset-scope-contract.php')
+          text = r6.read_text()
+          old = "[...$coreStyles, 'aznet-theme-generic-content', 'aznet-theme-forms', 'aznet-theme-media'],"
+          new = "[...$coreStyles, 'aznet-theme-generic-content', 'aznet-theme-forms', 'aznet-theme-media', 'aznet-theme-page'],"
+          if text.count(old) != 1:
+              raise SystemExit('R6 clean Page fixture mismatch')
+          text = text.replace(old, new, 1)
+          old = "        if (isset($GLOBALS['r6_styles']['aznet-theme-forms'])) {\n            fail_r6_asset_scope(\"{$label}: X5 form asset leaked onto Woo route\");\n        }\n"
+          new = old + "        if (isset($GLOBALS['r6_styles']['aznet-theme-page'])) {\n            fail_r6_asset_scope(\"{$label}: Y1 Page asset leaked onto Woo route\");\n        }\n"
+          if text.count(old) != 1:
+              raise SystemExit('R6 Woo leak assertion marker mismatch')
+          r6.write_text(text.replace(old, new, 1))
+
           verify = Path('scripts/verify-v1-core.sh')
           text = verify.read_text()
           old = '    for dir in inc template-parts patterns; do\n'
@@ -107,6 +120,7 @@ jobs:
           git diff --check
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-page-experience-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/r1-visual-preset-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/r6-asset-scope-contract.php
           bash scripts/assert-theme-version.sh
           bash scripts/verify-v1-core.sh
           php -l inc/theme/assets.php
@@ -120,6 +134,6 @@ jobs:
           set -euo pipefail
           git config user.name 'truongdinhnamaz'
           git config user.email 'truongnam151@gmail.com'
-          git add inc/theme/assets.php inc/theme/design-system.php tests/offline/r1-visual-preset-contract.php scripts/verify-v1-core.sh
+          git add inc/theme/assets.php inc/theme/design-system.php tests/offline/r1-visual-preset-contract.php tests/offline/r6-asset-scope-contract.php scripts/verify-v1-core.sh
           git commit -m 'feat: scope v1.3 Page assets and editor styles'
           git push origin HEAD:feat/v1.3-y1-page-experience
