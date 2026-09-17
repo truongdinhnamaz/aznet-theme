@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.48
+**Version:** v0.49
 **Status:** Working Execution Map / derived  
 **Date:** 17/09/2026
 
@@ -22,7 +22,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | D Generic Templates | PASS / retained | Page/Post/Archive/Search/404 technical closure plus P2/P3 editorial hardening and P4 professional pilot quality evidence are retained |
 | W Woo presentation | PASS / retained | Woo owns commerce truth; R4 deepens presentation only |
 | E RootProfile Profile/Contact | OPTIONAL COMPAT ACTIVE | External E5-C blocker; E5-D takeover locked; not core-v1.1 critical path |
-| F Homepage | CORE PASS / COMPAT ACTIVE | Native Homepage on main; external F8 compatibility defect remains non-blocking under D-016 |
+| F Homepage | CORE PASS / F8 INTEGRATED PASS | Native Homepage on main; exact Core P5.242 + Pro P5.164 integration passed L3-L4 against Theme `252554961bc81d22427363aee0048365fb4e116b`; F9/provider L5 remains separate |
 | G Core v1.0 closure | TECHNICAL PASS | G0-G8 merged; publication/tag is separate live state |
 | R0 v1.1 Source Reconciliation | PASS | Source-only reconciliation merged through PR #36 |
 | R1 Design System 2.0 | PASS | PR #37 merged; stable Theme settings/tokens/visual presets and L1-L4 parity evidence |
@@ -341,7 +341,7 @@ Keep E0-E4/E5-B retained evidence. E5-C remains BLOCKED on the external current-
 
 ### F — ConvertFlow integrated Homepage
 
-Native Homepage is part of the core. F6/F7 actual-package integration evidence is retained. F8 integrated compatibility remains BLOCKED because provider output introduces a nested document-level `<main>`. Track provider fix; do not alter Theme ownership or use heuristic/private workarounds.
+Native Homepage is part of the core. F6/F7 actual-package integration evidence is retained. F8 integrated compatibility is PASS for exact ConvertFlow Core P5.242 + Pro P5.164 against Theme `252554961bc81d22427363aee0048365fb4e116b`: L3 proved exactly one Theme-owned document-level `<main>` and L4 desktop/tablet/mobile + keyboard/focus + console + Axe passed 4/4. Provider merge is canonical at `truongdinhnamaz/convert-flow@64cf2e66d41e6619e2bbcf53c12d8831e2852442`; artifact `10501317335` digest `sha256:a353d11b456e31974be4b5362005a1e02ddad2a5770e2f2c62efd4bea87fbdda`. Historical P5.239 nested-main evidence remains provenance. F9/provider L5 remains separate and unclaimed; do not alter Theme ownership or use heuristic/private workarounds.
 
 ### W — WooCommerce
 

@@ -9,8 +9,8 @@ Canonical source is reconciled through owner-approved v1.3 Client Delivery Syste
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.9 | Theme architecture, public integration contracts and D-027 Standalone Core runtime-independence boundary |
 | `AZT-03-baseline-provenance.md` | v0.44 | Canonical provenance through v1.3 technical merge, exact-main verification, publication and owner-approved production deployment |
-| `AZT-04-roadmap-qa-decisions.md` | v0.56 | D-029 v1.3 Client Delivery System PUBLICATION + PRODUCTION DEPLOYMENT PASS; provider L5 remains separate |
-| `AZT-EXEC-MAP.md` | v0.48 | Derived execution map with v1.3 Y1-Y5 technical closure, publication PASS and production-deployment PASS |
+| `AZT-04-roadmap-qa-decisions.md` | v0.57 | D-029 v1.3 Client Delivery System PUBLICATION + PRODUCTION DEPLOYMENT PASS plus F8 integrated compatibility PASS; provider L5 remains separate |
+| `AZT-EXEC-MAP.md` | v0.49 | Derived execution map with v1.3 Y1-Y5 closure and exact ConvertFlow F8 integrated compatibility PASS; provider L5 remains separate |
 
 v1.3 technical closure evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`. v1.3 publication evidence: `docs/evidence/V1_3_PUBLICATION_20260917.md`. v1.3 production deployment evidence: `docs/evidence/V1_3_PRODUCTION_DEPLOYMENT_20260917.md`. Canonical technical baseline is `1.3.0` at `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e` with exact-main V1 + X6 release-path PASS and deterministic package SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`. Published/GitHub-Release release and verified production deployment are now both `v1.3.0`; provider L5 remains unclaimed.
 
