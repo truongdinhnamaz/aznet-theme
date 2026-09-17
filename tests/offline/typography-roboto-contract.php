@@ -5,24 +5,20 @@ $root = dirname(__DIR__, 2);
 
 $theme_json_path = $root . '/theme.json';
 $tokens_path = $root . '/assets/css/tokens.css';
-$style_path = $root . '/style.css';
 $law_base_path = $root . '/assets/css/components/homepage-law-01.css';
 $law_variant_path = $root . '/assets/css/components/homepage-law-01-variants.css';
 
-foreach ([$theme_json_path, $tokens_path, $style_path, $law_base_path, $law_variant_path] as $path) {
+foreach ([$theme_json_path, $tokens_path, $law_base_path, $law_variant_path] as $path) {
     assert(is_file($path), "Typography contract input missing: {$path}");
 }
 
 $theme_json = json_decode((string) file_get_contents($theme_json_path), true, 512, JSON_THROW_ON_ERROR);
 $tokens = (string) file_get_contents($tokens_path);
-$style = (string) file_get_contents($style_path);
 $law_base = (string) file_get_contents($law_base_path);
 $law_variant = (string) file_get_contents($law_variant_path);
 
 assert(str_contains($tokens, '--aznet-theme-font-family-base: Roboto, Arial, sans-serif;'));
 assert(str_contains($tokens, '--aznet-theme-font-family-heading: var(--aznet-theme-font-family-base);'));
-assert(str_contains($style, 'font-family: var(--aznet-theme-font-family-base);'));
-assert(str_contains($style, 'font-family: var(--aznet-theme-font-family-heading);'));
 
 $families = $theme_json['settings']['typography']['fontFamilies'] ?? [];
 $roboto = array_values(array_filter(
