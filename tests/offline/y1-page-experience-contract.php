@@ -1,6 +1,6 @@
 <?php
 /**
- * Y1 Page Experience ownership and settings contract.
+ * Y1 Page Experience ownership and presentation contract.
  *
  * @package AZnetTheme
  */
@@ -68,9 +68,76 @@ foreach (['get_post_meta(', 'get_option(', 'parse_url(', 'REQUEST_URI'] as $forb
     assert(! str_contains($helper, $forbidden));
 }
 
+$renderer_file = $root . '/template-parts/content/page.php';
+$wide_file = $root . '/page-templates/wide.php';
+$landing_file = $root . '/page-templates/landing.php';
+$page_css_file = $root . '/assets/css/components/page.css';
+foreach ([$renderer_file, $wide_file, $landing_file, $page_css_file] as $required_file) {
+    if (! is_file($required_file)) {
+        fwrite(STDERR, 'FAIL: missing Y1 renderer asset ' . str_replace($root . '/', '', $required_file) . "\n");
+        exit(1);
+    }
+}
+
+foreach ([$root . '/page.php', $wide_file, $landing_file] as $wrapper_file) {
+    $wrapper = (string) file_get_contents($wrapper_file);
+    if (! str_contains($wrapper, "get_template_part( 'template-parts/content/page' );")) {
+        fwrite(STDERR, 'FAIL: Y1 wrapper must use shared Page template part: ' . basename($wrapper_file) . "\n");
+        exit(1);
+    }
+    if (1 !== substr_count($wrapper, '<main id="main" class="aznet-theme-main">')) {
+        fwrite(STDERR, 'FAIL: Y1 wrapper must own exactly one Theme main: ' . basename($wrapper_file) . "\n");
+        exit(1);
+    }
+}
+
+$renderer = (string) file_get_contents($renderer_file);
+if (str_contains($renderer, '<main')) {
+    fwrite(STDERR, "FAIL: shared Page renderer must not create a second main landmark\n");
+    exit(1);
+}
+foreach (['page_variant(', 'page_breadcrumb_items(', "get_post_field( 'post_excerpt'", 'has_post_thumbnail()', 'the_post_thumbnail(', 'the_content()', 'wp_link_pages()'] as $required) {
+    if (! str_contains($renderer, $required)) {
+        fwrite(STDERR, "FAIL: shared Page renderer missing {$required}\n");
+        exit(1);
+    }
+}
+if (str_contains($renderer, 'get_the_excerpt(')) {
+    fwrite(STDERR, "FAIL: Y1 must render only explicitly-authored Page excerpt, not generated excerpt\n");
+    exit(1);
+}
+foreach (['application/ld+json', 'BreadcrumbList', 'schema.org'] as $forbidden) {
+    assert(! str_contains($renderer, $forbidden));
+}
+
+$assets = (string) file_get_contents($root . '/inc/theme/assets.php');
+foreach (['function should_enqueue_page_assets(): bool', 'function enqueue_page_assets( ?string $version = null ): void', "'/assets/css/components/page.css'", 'enqueue_page_assets( $version );'] as $required) {
+    if (! str_contains($assets, $required)) {
+        fwrite(STDERR, "FAIL: Y1 Page asset boundary missing {$required}\n");
+        exit(1);
+    }
+}
+foreach (['REQUEST_URI', 'parse_url(', 'post_name', "is_page( '"] as $forbidden) {
+    assert(! str_contains($assets, $forbidden));
+}
+
+$design = (string) file_get_contents($root . '/inc/theme/design-system.php');
+if (! str_contains($design, "'assets/css/components/page.css'")) {
+    fwrite(STDERR, "FAIL: page.css must use the existing editor_stylesheets path\n");
+    exit(1);
+}
+
+$css = (string) file_get_contents($page_css_file);
+foreach (['.aznet-theme-page--standard', '.aznet-theme-page--wide', '.aznet-theme-page--landing', '.aznet-theme-page__breadcrumbs', '.aznet-theme-page__featured img'] as $selector) {
+    if (! str_contains($css, $selector)) {
+        fwrite(STDERR, "FAIL: page.css missing {$selector}\n");
+        exit(1);
+    }
+}
+
 $style = (string) file_get_contents($root . '/style.css');
 $functions = (string) file_get_contents($root . '/functions.php');
 assert(1 === preg_match('/^Version:\s*1\.2\.0\s*$/m', $style));
 assert(str_contains($functions, "define( 'AZNET_THEME_VERSION', '1.2.0' );"));
 
-echo "PASS: Y1 Page Experience ownership and settings contract\n";
+echo "PASS: Y1 Page Experience ownership and presentation contract\n";
