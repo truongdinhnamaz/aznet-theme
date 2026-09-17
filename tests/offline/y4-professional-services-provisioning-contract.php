@@ -58,6 +58,14 @@ assert(is_string($planner));
 assert(str_contains($planner, "['homepage_preset']"), 'Planner must derive Homepage preset from blueprint');
 assert(!preg_match('/set_homepage_preset[^\n]{0,240}law-01/s', $planner), 'Planner must not unconditionally force law-01');
 
+$admin = file_get_contents($root . '/inc/admin/provisioning.php');
+assert(is_string($admin));
+assert(str_contains($admin, 'professional-services-v1'), 'Provisioning wizard must allow selecting the Y4 blueprint');
+assert(str_contains($admin, 'Professional Services'), 'Provisioning wizard must expose the Professional Services label');
+assert(str_contains($admin, 'law01-v1-2'), 'Y4 must preserve the existing Law01 wizard path');
+assert(str_contains($admin, 'Bước %d/4'), 'Y4 must preserve the four-step confirmation flow');
+assert(str_contains($admin, 'confirm_plan'), 'Y4 must preserve explicit plan confirmation before mutation');
+
 $style = file_get_contents($root . '/style.css');
 $functions = file_get_contents($root . '/functions.php');
 assert(is_string($style) && preg_match('/^Version:\s*1\.2\.0\s*$/mi', $style) === 1);
