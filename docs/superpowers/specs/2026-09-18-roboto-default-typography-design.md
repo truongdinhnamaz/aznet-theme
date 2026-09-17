@@ -1,7 +1,7 @@
 # AZnet Theme Default Typography — Roboto Design
 
-Date: 2026-09-18  
-Status: Proposed for owner review  
+Date: 2026-09-18
+Status: Proposed for owner review
 Scope: AZnet Theme only
 
 ## 1. Goal
