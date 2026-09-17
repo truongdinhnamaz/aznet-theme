@@ -1,5 +1,5 @@
 <?php
-/** Pure change-plan model for Law Site Provisioning. */
+/** Pure change-plan model for Theme starter provisioning. */
 namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
@@ -87,8 +87,18 @@ function provisioning_build_plan( string $blueprint_key, array $selections, arra
         $ops[] = [ 'id' => 'front-page:set:' . $role, 'type' => 'set_front_page', 'role' => $role, 'object_id' => 0, 'effect' => sprintf( 'SET Front Page → %s', $role ) ];
     }
 
-    $ops[] = [ 'id' => 'homepage:map', 'type' => 'map_homepage_sources', 'role' => 'homepage', 'object_id' => 0, 'page_sources' => $page_sources, 'category_sources' => $category_sources, 'effect' => 'MAP Homepage Content Map to confirmed WordPress sources' ];
-    $ops[] = [ 'id' => 'homepage:preset:law-01', 'type' => 'set_homepage_preset', 'role' => 'homepage', 'object_id' => 0, 'preset' => 'law-01', 'effect' => 'SET Homepage preset → law-01' ];
+    $preset = (string) ( $blueprint['homepage_preset'] ?? 'off' );
+    if ( 'law-01' === $preset ) {
+        $ops[] = [ 'id' => 'homepage:map', 'type' => 'map_homepage_sources', 'role' => 'homepage', 'object_id' => 0, 'page_sources' => $page_sources, 'category_sources' => $category_sources, 'effect' => 'MAP Homepage Content Map to confirmed WordPress sources' ];
+    }
+    $ops[] = [
+        'id' => 'homepage:preset:' . $preset,
+        'type' => 'set_homepage_preset',
+        'role' => 'homepage',
+        'object_id' => 0,
+        'preset' => $preset,
+        'effect' => sprintf( 'SET Homepage preset → %s', $preset ),
+    ];
 
     if ( 'law01-v1-2' === $blueprint_key ) {
         $variant = (string) ( $blueprint['homepage_variant'] ?? '' );
@@ -126,7 +136,6 @@ function provisioning_build_plan( string $blueprint_key, array $selections, arra
         $may_publish = 'NEW_OR_MOSTLY_EMPTY' === $mode && $publish_requested && $discourage_requested;
         $post_status = $may_publish ? 'publish' : 'draft';
 
-        // Search visibility must be applied before any public starter Post is created.
         if ( $may_publish ) {
             $ops[] = [
                 'id' => 'search-visibility:discourage',
