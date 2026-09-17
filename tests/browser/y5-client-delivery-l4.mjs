@@ -124,7 +124,14 @@ try {
     for (const routeName of routeNames) {
       const route = allRoutes[routeName];
       const label = `${matrixMode}-${expectedFooter}-${viewportName}-${routeName}`;
+      const consoleStart = consoleErrors.length;
       const result = await assertDocument(page, { name: label, url: route.url }, route.status);
+      if (route.status === 404) {
+        const expectedDocument404 = 'Failed to load resource: the server responded with a status of 404 (Not Found)';
+        for (let i = consoleErrors.length - 1; i >= consoleStart; i -= 1) {
+          if (consoleErrors[i] === expectedDocument404) consoleErrors.splice(i, 1);
+        }
+      }
 
       if (routeName === 'about' && await page.locator('.aznet-theme-page--standard').count() !== 1) throw new Error(`${label}: About Standard presentation missing`);
       if (routeName === 'services' && await page.locator('.aznet-theme-page--wide').count() !== 1) throw new Error(`${label}: Services Wide presentation missing`);
