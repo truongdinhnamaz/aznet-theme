@@ -13,6 +13,10 @@ $css = file_get_contents($cssPath);
 $required = [
     '.aznet-theme-law01-hero__grid--text::after',
     'min-height: clamp(18rem',
+    'grid-column: 2;',
+    'grid-row: 1;',
+    '.aznet-theme-law01-hero__grid--text .aznet-theme-law01-hero__content',
+    'grid-column: 1;',
     '.aznet-theme-law01-editorial__grid > :only-child',
     'max-width: 48rem;',
     'counter-reset: law01-service;',
