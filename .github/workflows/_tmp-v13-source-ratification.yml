@@ -1,0 +1,89 @@
+name: Temporary v1.3 source ratification
+
+on:
+  push:
+    branches:
+      - docs/v1.3-client-delivery-system-design
+
+permissions:
+  contents: write
+
+jobs:
+  ratify-source:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: docs/v1.3-client-delivery-system-design
+          fetch-depth: 0
+      - name: Reconcile v1.3 roadmap sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def replace_once(text, old, new, label):
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{label}: expected one match, found {count}')
+              return text.replace(old, new, 1)
+
+          # AZT-04 — authoritative roadmap/decision owner.
+          p = Path('docs/source/AZT-04-roadmap-qa-decisions.md')
+          s = p.read_text()
+          s = replace_once(s, '**Version:** v0.52', '**Version:** v0.53', 'AZT-04 version')
+          xrow = '| X | v1.2 WordPress Experience Completion | PUBLICATION + PRODUCTION DEPLOYMENT PASS | X1-X5 retained; PR #87 technical integration and exact-main V1 + X6 L1-L4/L6 PASS; owner-approved `v1.2.0` publication PASS; owner-approved production deployment run `35135759389` plus fresh independent read-only run `35136876330` PASS; no provider L5 expansion |'
+          yrow = '| Y | v1.3 Client Delivery System | RATIFIED / Y1 READY | Approved design + implementation plan define Y1 Page Experience 2.0 -> Y2 Professional Page Kits -> Y3 Footer System 2.0 -> Y4 Professional Services Starter Blueprint -> Y5 Client Delivery QA & Release Closure; Theme stays presentation owner, WordPress keeps native content/state, provider L5 remains separate |'
+          s = replace_once(s, xrow, xrow + '\n' + yrow, 'AZT-04 Y row')
+          d28 = '| **D-028** | **v1.2 WordPress Experience Completion is a WordPress-Core-only Theme milestone using surface modules + shared primitives. No new provider integration is opened; Comments, Search/404/empty states and Media/gallery/embed receive deep polish; metadata remains 1.1.0 until X6 final-candidate promotion.** | **Accepted** |'
+          d29 = '| **D-029** | **v1.3 Client Delivery System prioritizes fast, professional client handoff through WordPress-native inner Page presentation, five portable professional Page kits, bounded Footer presets, and a generic confirmed professional-services provisioning blueprint. It preserves Classic Editor policy for native Post/Page, the single `aznet_theme_settings` store, zero mandatory provider runtime dependency, and keeps metadata at 1.2.0 until a separately approved Y5 promotion gate.** | **Accepted** |'
+          s = replace_once(s, d28, d28 + '\n' + d29, 'AZT-04 D-029')
+          y_section = '''## 10A. v1.3 Client Delivery System\n\n**State:** **RATIFIED / Y1 READY.**\n\n**Goal:** materially reduce the time from clean WordPress to a professional, client-ready service/business website without introducing a proprietary builder or domain engine.\n\n**Design record:** `docs/superpowers/specs/2026-09-17-v1.3-client-delivery-system-design.md`.\n\n**Implementation plan:** `docs/superpowers/plans/2026-09-17-v1.3-client-delivery-system.md`.\n\n**Y1 — Page Experience 2.0:** upgrade native inner Page presentation with WordPress-owned title/excerpt/featured image/hierarchy, child-Page breadcrumb presentation, Standard/Wide/Landing Page variants, surface-aware assets and L1-L4 evidence. Breadcrumbs use real WordPress ancestors only; no URL/slug/menu heuristics and no SEO schema ownership.\n\n**Y2 — Professional Page Kits:** ship five portable WordPress-native compositions for About, Services, Team/Expertise, Contact and Content Landing. Patterns may use neutral replaceable copy but must not fabricate identity/contact/credentials/service truth. Native Post/Page Classic Editor policy remains in force; stored WordPress content must remain portable through theme switch.\n\n**Y3 — Footer System 2.0:** provide Standard/Professional/Compact Theme-owned presentation presets over existing WordPress site identity and Footer menu locations. Empty data sources fail soft; no contact/social store is added.\n\n**Y4 — Professional Services Starter Blueprint:** extend the existing D-025/D-026 confirmed/idempotent provisioning engine with a generic professional-services blueprint. Activation stays mutation-free; the user reviews and confirms a visible change plan; created content becomes WordPress-owned; current-run rollback remains bounded; active sites are not silently overwritten.\n\n**Y5 — Client Delivery QA & Release Closure:** prove the full clean-site journey on WordPress 6.9+/PHP 8.1+, zero mandatory third-party plugins, responsive/a11y browser matrix, deterministic exact-package identity, packaged-PHP lint, theme-switch/update/rollback continuity and exact-main verification. Metadata remains `1.2.0` through Y1-Y4; promotion to `1.3.0`, publication and production deployment are separate explicit owner gates.\n\n**Provider boundary:** v1.3 Core opens no RootProfile/ConvertFlow/Woo provider L5 expansion. Existing optional compatibility tracks remain separate and fail-soft.\n\n'''
+          s = replace_once(s, '## 11. Open questions', y_section + '## 11. Open questions', 'AZT-04 Y section')
+          old_next = '**v1.2.0 PUBLICATION + PRODUCTION DEPLOYMENT PASS. Annotated tag `v1.2.0` dereferences to exact verified technical commit `c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`; GitHub Release `390148740` carries `aznet-theme-1.2.0.zip` with SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`. Owner-approved deployment run `35135759389` and fresh independent read-only verification run `35136876330` are PASS. NEXT — no v1.2 Core release gate remains open; any new Theme milestone or provider L5 certification requires a new approved slice.**'
+          new_next = '**v1.2.0 remains the published and verified production release. v1.3 Client Delivery System is now RATIFIED under D-029 with Y1-Y5 sequence and implementation plan approved for execution after this source-ratification merge. NEXT — execute Y1 Page Experience 2.0 using RED -> intended failure -> minimal GREEN -> L3/L4 retained regression. Theme metadata stays 1.2.0; provider L5, metadata promotion, publication and deployment remain separate gates.**'
+          s = replace_once(s, old_next, new_next, 'AZT-04 exact next')
+          p.write_text(s)
+
+          # AZT-EXEC-MAP — derived execution map.
+          p = Path('docs/source/AZT-EXEC-MAP.md')
+          s = p.read_text()
+          s = replace_once(s, '**Version:** v0.44', '**Version:** v0.45', 'EXEC version')
+          xrow = '| X v1.2 WordPress Experience Completion | PUBLICATION + PRODUCTION DEPLOYMENT PASS | X1-X5 retained; PR #87 exact-main V1 + X6 L1-L4/L6 PASS; annotated `v1.2.0` + GitHub Release publication PASS; owner-approved production deployment run `35135759389` + fresh read-only run `35136876330` PASS; provider L5 stays separate |'
+          yrow = '| Y v1.3 Client Delivery System | RATIFIED / Y1 READY | Y1 Page Experience -> Y2 Page Kits -> Y3 Footer -> Y4 generic Professional Services provisioning -> Y5 integrated delivery/release closure; WordPress-native data ownership retained; metadata remains `1.2.0` until Y5 owner gate |'
+          s = replace_once(s, xrow, xrow + '\n' + yrow, 'EXEC Y row')
+          s = replace_once(s, 'Current state: `v1.2.0 PUBLICATION + PRODUCTION DEPLOYMENT PASS`.', 'Current state: `v1.2.0 PUBLICATION + PRODUCTION DEPLOYMENT PASS`; v1.3 Client Delivery System is source-ratified and Y1-ready after this source slice merges.', 'EXEC current state')
+          y_exec = '''## 13A. v1.3 Client Delivery System\n\n**State:** **RATIFIED / Y1 READY.**\n\n**Dependency order:** `Y1 Page Experience 2.0 -> Y2 Professional Page Kits -> Y3 Footer System 2.0 -> Y4 Professional Services Starter Blueprint -> Y5 Client Delivery QA & Release Closure`.\n\n**Source:** D-029 in AZT-04. Design: `docs/superpowers/specs/2026-09-17-v1.3-client-delivery-system-design.md`. Plan: `docs/superpowers/plans/2026-09-17-v1.3-client-delivery-system.md`.\n\n**Y1 exit:** native inner Page header/hero, real-ancestor child breadcrumb, Standard/Wide/Landing variants, surface-aware Page CSS, backward-compatible content, fresh L1-L4.\n\n**Y2 exit:** five portable native professional Page kits, neutral placeholders only, Classic Editor content preservation/editor evidence, theme-switch content portability and responsive/a11y evidence.\n\n**Y3 exit:** Standard/Professional/Compact Footer presets through the existing Theme settings store, WordPress-native identity/menu sources only, empty-region fail-soft and L1-L4 evidence.\n\n**Y4 exit:** generic Professional Services blueprint reusing the existing confirmed/idempotent provisioning engine; clean-site creation/reuse, active-site fail-safe and current-run rollback proven; no fabricated client truth.\n\n**Y5 exit:** zero-plugin clean-site client-delivery matrix, deterministic exact package/source identity, packaged PHP lint, update/theme-switch/rollback, exact-final-head and exact-main gates. Promotion to `1.3.0`, tag/Release and production deploy remain separate owner approvals.\n\n**Exact Next:** after source-ratification merge, execute Y1 only; do not start Y2 before Y1 exit is evidenced unless a bounded dependency change is required.\n\n'''
+          s = replace_once(s, '## 14. Optional compatibility tracks', y_exec + '## 14. Optional compatibility tracks', 'EXEC Y section')
+          old_next = '**NEXT — v1.2.0 Core release execution is closed at PUBLICATION + PRODUCTION DEPLOYMENT PASS. Start no new Theme milestone, architecture/public-contract change or optional-provider certification without a separately approved slice; provider L5 remains separate.**'
+          new_next = '**NEXT — v1.3 Client Delivery System is source-ratified under D-029. Execute Y1 Page Experience 2.0 from the approved spec/plan with RED -> GREEN and fresh L3/L4 evidence. Keep Theme metadata at `1.2.0`; do not open provider L5, `1.3.0` promotion, publication or production deployment before their later explicit gates.**'
+          s = replace_once(s, old_next, new_next, 'EXEC exact next')
+          p.write_text(s)
+
+          # SOURCE_MANIFEST — align authoritative versions/current execution target.
+          p = Path('docs/source/SOURCE_MANIFEST.md')
+          s = p.read_text()
+          old_intro = 'Canonical source is reconciled through the completed v1.1 release-critical path and the v1.2 production-deployment checkpoint. v1.2 remains a WordPress-Core-only Theme milestone; X1-X6 technical closure, annotated `v1.2.0` + GitHub Release publication, and owner-approved production deployment are **PASS** at their separately verified scopes. Provider compatibility/certification tracks remain separate.'
+          new_intro = 'Canonical source is reconciled through the completed v1.2 publication/production-deployment checkpoint and the approved v1.3 Client Delivery System design. v1.2 remains the published and verified production release; v1.3 is source-ratified as a WordPress-native Theme milestone with Y1-Y5 implementation still pending. Provider compatibility/certification tracks remain separate.'
+          s = replace_once(s, old_intro, new_intro, 'manifest intro')
+          s = replace_once(s, '| `AZT-04-roadmap-qa-decisions.md` | v0.52 | v1.2.0 publication + production deployment PASS; no open v1.2 Core release gate |', '| `AZT-04-roadmap-qa-decisions.md` | v0.53 | v1.2.0 release/deployment PASS + D-029 v1.3 Client Delivery System ratified; Y1 next |', 'manifest AZT-04')
+          s = replace_once(s, '| `AZT-EXEC-MAP.md` | v0.44 | Derived execution map with v1.2.0 publication + production deployment PASS |', '| `AZT-EXEC-MAP.md` | v0.45 | Derived execution map with v1.3 Y1-Y5 sequence ratified and Y1 ready |', 'manifest exec')
+          marker = 'v1.2 production-deployment evidence: `docs/evidence/V1_2_PRODUCTION_DEPLOYMENT_20260917.md`.'
+          insertion = marker + ' v1.3 approved design: `docs/superpowers/specs/2026-09-17-v1.3-client-delivery-system-design.md`. v1.3 implementation plan: `docs/superpowers/plans/2026-09-17-v1.3-client-delivery-system.md`.'
+          s = replace_once(s, marker, insertion, 'manifest v1.3 refs')
+          p.write_text(s)
+          PY
+
+          git diff --check
+          git diff -- docs/source/AZT-04-roadmap-qa-decisions.md docs/source/AZT-EXEC-MAP.md docs/source/SOURCE_MANIFEST.md
+          git add docs/source/AZT-04-roadmap-qa-decisions.md docs/source/AZT-EXEC-MAP.md docs/source/SOURCE_MANIFEST.md
+          if git diff --cached --quiet; then
+            echo 'No source changes needed.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'docs: ratify v1.3 client delivery system'
+          git push origin HEAD:docs/v1.3-client-delivery-system-design
