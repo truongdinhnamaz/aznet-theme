@@ -19,217 +19,23 @@ jobs:
           ref: docs/v1.3-publication-closure
           fetch-depth: 0
 
-      - name: Guard canonical base
+      - name: Guard canonical base and temporary inputs
         run: |
           set -euo pipefail
           git fetch origin main
           test "$(git rev-parse origin/main)" = "22e822a50c2f8ab764f6044838e8acce69f50846"
           git merge-base --is-ancestor origin/main HEAD
-          unexpected="$(git diff --name-only origin/main...HEAD | grep -v '^.github/workflows/_ops-v1.3-publication-source-closure.yml$' || true)"
+          unexpected="$(git diff --name-only origin/main...HEAD | grep -Ev '^(\.github/workflows/_ops-v1\.3-publication-source-closure\.yml|scripts/v1-3-publication-source-closure-temp\.py)$' || true)"
           test -z "$unexpected"
+          python3 -m py_compile scripts/v1-3-publication-source-closure-temp.py
 
       - name: Reconcile publication evidence and source state
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-
-          def replace_once(path, old, new):
-              p = Path(path)
-              text = p.read_text()
-              if text.count(old) != 1:
-                  raise SystemExit(f"{path}: expected exactly one occurrence, found {text.count(old)} for {old!r}")
-              p.write_text(text.replace(old, new, 1))
-
-          def replace_at_least_once(path, old, new):
-              p = Path(path)
-              text = p.read_text()
-              count = text.count(old)
-              if count < 1:
-                  raise SystemExit(f"{path}: expected at least one occurrence for {old!r}")
-              p.write_text(text.replace(old, new))
-
-          evidence = Path('docs/evidence/V1_3_PUBLICATION_20260917.md')
-          if evidence.exists():
-              raise SystemExit('publication evidence file already exists unexpectedly')
-          evidence.write_text('''# AZnet Theme v1.3.0 Publication Closure — 2026-09-17
-
-## Scope
-
-Owner-approved publication semantics for AZnet Theme `1.3.0`: annotated Git tag + GitHub Release only. Production deployment remains a separate owner gate. Provider L5 certification/takeover remains outside this publication action.
-
-## Canonical publication target
-
-- exact verified v1.3 technical source commit: `afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`;
-- exact technical source tree: `020db34ca6f360d5af12e6f15abf4c9ba51179f0`;
-- post-technical docs-only canonical main before publication: `22e822a50c2f8ab764f6044838e8acce69f50846`, tree `d5ae69b1f96119afe3be72723e9ecdee978af91e`;
-- Theme metadata: exact `1.3.0`;
-- verified package: `aznet-theme-1.3.0.zip`;
-- expected/final SHA-256: `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`;
-- package inventory: `144` files, including `107` PHP files linted successfully.
-
-The publication workflow proved that the technical source commit is an ancestor of the docs-only canonical main and that no production/package-relevant bytes changed between them outside `docs/**`.
-
-## Publication execution
-
-Temporary isolated branch: `ops/publish-v1.3.0`.
-
-Publication workflow run `35211254633` completed `SUCCESS`. All publication job steps completed successfully, including:
-
-- exact technical target checkout and canonical-main freshness guard;
-- exact `1.3.0` metadata verification;
-- reusable Core verification;
-- deterministic package rebuild twice with byte identity;
-- exact package/source comparison;
-- exact 144-file inventory and 107 packaged PHP lint checks;
-- immutable annotated tag creation/verification;
-- GitHub Release creation/verification;
-- release-asset download and SHA-256 re-verification.
-
-## Published public state
-
-Fresh GitHub readback confirms:
-
-- annotated tag: `v1.3.0`;
-- annotated tag object: `56f2ae2e8ba6e1fb4e8359447656e88ab6411ba6`;
-- tag object type: `tag`;
-- tag dereferenced commit: `afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`;
-- tag message: `AZnet Theme 1.3.0`;
-- GitHub Release ID: `390623960`;
-- release title: `AZnet Theme 1.3.0`;
-- release state: `draft=false`, `prerelease=false`;
-- release asset ID: `570039299`;
-- release asset: `aznet-theme-1.3.0.zip`;
-- release asset size: `196953` bytes;
-- GitHub asset digest: `sha256:4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`;
-- publication evidence artifact: `10492411096`;
-- publication evidence artifact digest: `sha256:0a18d2169ad8d92a587421289ede773031e56d3646ddac44ba326ebe4ea6fd75`.
-
-Release notes preserve the accepted boundary: WordPress owns Page/Post/Menu/Media/query state and lifecycle; AZnet Theme owns presentation/composition and bounded consumer adapters only; optional RootProfile, ConvertFlow and WooCommerce integrations remain additive; provider L5 is not claimed.
-
-## Operational cleanup
-
-The temporary publication workflow was removed from the `ops/publish-v1.3.0` branch after publication. The cleanup head has zero net file delta relative to its publication branch base outside commit history, and canonical `main` was not modified by the publication helper.
-
-## Boundary
-
-Publication PASS does **not** imply production deployment. The currently verified production deployment remains AZnet Theme `1.2.0` on the previously verified production site until a separate deployment action is explicitly authorized and revalidated. Provider L5 certification/takeover, destructive site operations and external-product code remain unclaimed.
-
-## PASS
-
-- annotated `v1.3.0` tag exists and dereferences to the exact verified v1.3 technical source commit;
-- GitHub Release `AZnet Theme 1.3.0` is published and is not draft/prerelease;
-- attached `aznet-theme-1.3.0.zip` digest equals the exact verified v1.3 package digest;
-- publication workflow completed SUCCESS with fresh release-asset readback;
-- publication did not deploy to production or alter provider/domain ownership.
-
-## State
-
-**v1.3.0 PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED.**
-
-## NEXT
-
-Before any v1.3.0 production deployment, revalidate the intended target site and exact published release asset, require explicit deployment authorization for that target, then perform fresh authenticated/public read-only verification after deployment before claiming production PASS.
-''')
-
-          # AZT-03 — provenance/current baseline owner.
-          replace_once('docs/source/AZT-03-baseline-provenance.md', '**Version:** v0.42', '**Version:** v0.43')
-          replace_once(
-              'docs/source/AZT-03-baseline-provenance.md',
-              '- Canonical repository technical baseline is Theme version `1.3.0` at owner-approved PR #98 merge `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`; v1.3 is TECHNICAL PASS / PUBLICATION GATED.',
-              '- Canonical repository technical baseline is Theme version `1.3.0` at owner-approved PR #98 merge `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`; v1.3 technical closure is retained and publication is now PASS, while production deployment remains separately gated.'
-          )
-          exact_main_line = '- v1.3 exact-main verification: V1 Exact Main run `35206627102` SUCCESS plus pre-existing X6 push-to-main release path run `35206626992` SUCCESS on `afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`; exact `aznet-theme-1.3.0.zip` SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`, 144 package files, 107 packaged PHP lint PASS, 32/32 browser/axe PASS, switch-away/switch-back lifecycle PASS. Evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`.'
-          replace_once(
-              'docs/source/AZT-03-baseline-provenance.md',
-              exact_main_line,
-              exact_main_line + '\n- Owner-approved v1.3.0 publication run `35211254633` completed SUCCESS and published annotated tag `v1.3.0` (tag object `56f2ae2e8ba6e1fb4e8359447656e88ab6411ba6`) dereferencing to exact technical source `afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, plus GitHub Release `390623960`. Release asset `570039299` (`aznet-theme-1.3.0.zip`, 196953 bytes) reports SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`; publication evidence artifact `10492411096` digest `sha256:0a18d2169ad8d92a587421289ede773031e56d3646ddac44ba326ebe4ea6fd75`. Evidence: `docs/evidence/V1_3_PUBLICATION_20260917.md`.'
-          )
-          replace_once(
-              'docs/source/AZT-03-baseline-provenance.md',
-              '- Published/GitHub-Release and production-deployed release remain `v1.2.0`; v1.3 publication and deployment are separate future owner gates. Provider L5 remains unproven.',
-              '- Published/GitHub-Release release is now `v1.3.0`; the verified production-deployed release remains `v1.2.0` until a separate v1.3.0 deployment action is explicitly authorized and verified. Provider L5 remains unproven.'
-          )
-
-          # AZT-04 — roadmap/QA/release-state owner.
-          replace_once('docs/source/AZT-04-roadmap-qa-decisions.md', '**Version:** v0.54', '**Version:** v0.55')
-          old_y = '| Y | v1.3 Client Delivery System | TECHNICAL PASS / PUBLICATION GATED | Y1-Y5 merged through owner-approved PR #98 at `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`; fresh exact-main V1 + X6 release-path verification PASS; exact deterministic `aznet-theme-1.3.0.zip` SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`; publication/deployment remain separate owner gates; provider L5 remains separate |'
-          new_y = '| Y | v1.3 Client Delivery System | PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED | Y1-Y5 technical closure retained at PR #98 / `afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`; owner-approved publication run `35211254633` published annotated `v1.3.0` + GitHub Release `390623960`; release asset digest matches `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`; production deployment remains a separate explicit gate; provider L5 remains separate |'
-          replace_once('docs/source/AZT-04-roadmap-qa-decisions.md', old_y, new_y)
-          replace_at_least_once('docs/source/AZT-04-roadmap-qa-decisions.md', '**State:** **TECHNICAL PASS / PUBLICATION GATED.**', '**State:** **PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED.**')
-          replace_at_least_once(
-              'docs/source/AZT-04-roadmap-qa-decisions.md',
-              '**Y5 exit:** zero-plugin clean-site client-delivery matrix, deterministic exact package/source identity, packaged PHP lint, update/theme-switch/rollback, exact-final-head and exact-main gates. Promotion to `1.3.0`, tag/Release and production deploy remain separate owner approvals.',
-              '**Y5 exit:** zero-plugin clean-site client-delivery matrix, deterministic exact package/source identity, packaged PHP lint, update/theme-switch/rollback, exact-final-head and exact-main gates are retained. Metadata promotion to `1.3.0` and annotated tag/GitHub Release publication are now PASS; production deployment remains a separate explicit owner gate.'
-          )
-          impl_plan = '**Implementation plan:** `docs/superpowers/plans/2026-09-17-v1.3-client-delivery-system.md`.'
-          replace_once(
-              'docs/source/AZT-04-roadmap-qa-decisions.md',
-              impl_plan,
-              impl_plan + '\n\n**Publication closure:** owner-approved run `35211254633` PASS; annotated tag `v1.3.0` -> exact technical source `afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`; GitHub Release `390623960`; release asset `aznet-theme-1.3.0.zip` SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`; evidence `docs/evidence/V1_3_PUBLICATION_20260917.md`. Production deployment is not implied and remains separately gated.'
-          )
-
-          # Derived execution map.
-          replace_once('docs/source/AZT-EXEC-MAP.md', '**Version:** v0.46', '**Version:** v0.47')
-          replace_once(
-              'docs/source/AZT-EXEC-MAP.md',
-              '> **Canonical-main checkpoint:** live `main` HEAD is resolved from GitHub at execution time. The current repository technical baseline is Theme `1.3.0` at owner-approved PR #98 merge `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`; V1 exact-main run `35206627102` and the pre-existing X6 push-to-main release path run `35206626992` completed SUCCESS on that exact merge SHA. Published/GitHub-Release and production-deployed release remain verified `v1.2.0` until separate v1.3 owner approvals. Optional integrations remain additive, provider L5 remains unclaimed, and ownership boundaries are unchanged.',
-              '> **Canonical-main checkpoint:** live `main` HEAD is resolved from GitHub at execution time. The current repository technical baseline is Theme `1.3.0` at owner-approved PR #98 merge `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`; V1 exact-main run `35206627102` and the pre-existing X6 push-to-main release path run `35206626992` completed SUCCESS on that exact merge SHA. Owner-approved publication run `35211254633` published annotated `v1.3.0` and GitHub Release `390623960` with the exact verified package digest. Production-deployed release remains verified `v1.2.0` until a separate v1.3.0 deployment action is explicitly authorized and verified. Optional integrations remain additive, provider L5 remains unclaimed, and ownership boundaries are unchanged.'
-          )
-          replace_once(
-              'docs/source/AZT-EXEC-MAP.md',
-              '**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS`. Current repository technical state: `v1.3 TECHNICAL PASS / PUBLICATION GATED` at `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`. Published and production-deployed release remains `v1.2.0`; v1.3 publication and production deployment remain separate owner gates.',
-              '**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS`. Current v1.3 state: `PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED`; annotated `v1.3.0` and GitHub Release `390623960` publish the exact verified package. Production-deployed release remains `v1.2.0` until a separate v1.3.0 deployment action is explicitly authorized and verified.'
-          )
-          replace_once(
-              'docs/source/AZT-EXEC-MAP.md',
-              '| Y v1.3 Client Delivery System | TECHNICAL PASS / PUBLICATION GATED | Y1-Y5 merged through PR #98; exact-main V1 + X6 release-path PASS at `afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`; Theme `1.3.0`; deterministic package SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`; publication/deployment remain separate gates; provider L5 stays separate |',
-              '| Y v1.3 Client Delivery System | PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED | Y1-Y5 technical closure retained at `afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`; owner-approved publication run `35211254633` published annotated `v1.3.0` + GitHub Release `390623960`; release asset digest `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`; deployment remains separately gated; provider L5 stays separate |'
-          )
-          replace_once(
-              'docs/source/AZT-EXEC-MAP.md',
-              'Canonical repository technical baseline is exact Theme `1.3.0` at owner-approved PR #98 merge `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`. Fresh exact-main V1 + X6 release-path verification is PASS. GitHub publication and production deployment remain at verified `v1.2.0` until separate v1.3 owner approvals.',
-              'Canonical repository technical baseline is exact Theme `1.3.0` at owner-approved PR #98 merge `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`. Fresh exact-main V1 + X6 release-path verification is PASS. GitHub publication is now `v1.3.0` PASS through run `35211254633`, annotated tag `v1.3.0` and Release `390623960`; production deployment remains verified `v1.2.0` until a separate v1.3.0 deployment action is authorized and verified.'
-          )
-          replace_at_least_once('docs/source/AZT-EXEC-MAP.md', '**State:** **TECHNICAL PASS / PUBLICATION GATED.**', '**State:** **PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED.**')
-          replace_once(
-              'docs/source/AZT-EXEC-MAP.md',
-              '**Exact Next:** request separate owner approval for `v1.3.0` annotated-tag + GitHub-Release publication only. Production deployment remains a later separate gate; provider L5 remains separate.',
-              '**Exact Next:** before any v1.3.0 production deployment, revalidate the intended target site and exact published release asset, require explicit deployment authorization for that target, then perform fresh authenticated/public read-only verification before claiming production PASS. Provider L5 remains separate.'
-          )
-          y5_exit = '**Y5 exit:** zero-plugin clean-site client-delivery matrix, deterministic exact package/source identity, packaged PHP lint, update/theme-switch/rollback, exact-final-head and exact-main gates. Promotion to `1.3.0`, tag/Release and production deploy remain separate owner approvals.'
-          if y5_exit in Path('docs/source/AZT-EXEC-MAP.md').read_text():
-              replace_once(
-                  'docs/source/AZT-EXEC-MAP.md',
-                  y5_exit,
-                  '**Y5 exit:** zero-plugin clean-site client-delivery matrix, deterministic exact package/source identity, packaged PHP lint, update/theme-switch/rollback, exact-final-head and exact-main gates are retained. Metadata promotion and annotated tag/GitHub Release publication are PASS; production deployment remains a separate explicit owner gate.'
-              )
-          tech_closure = '**Y1-Y5 technical closure:** PASS. PR #98 merged to `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`. V1 Exact Main `35206627102` and X6 exact-main release path `35206626992` SUCCESS; `aznet-theme-1.3.0.zip` SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`, 144 files, 107 packaged PHP lint PASS, 32/32 browser/axe PASS, lifecycle continuity PASS. Evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`.'
-          replace_once(
-              'docs/source/AZT-EXEC-MAP.md',
-              tech_closure,
-              tech_closure + '\n\n**v1.3.0 publication closure:** PASS. Owner-approved run `35211254633` published annotated tag `v1.3.0` -> exact technical source `afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, GitHub Release `390623960`, and `aznet-theme-1.3.0.zip` asset ID `570039299` with SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`. Evidence: `docs/evidence/V1_3_PUBLICATION_20260917.md`. Production deployment remains gated.'
-          )
-
-          # Source manifest/current-source index.
-          replace_once(
-              'docs/source/SOURCE_MANIFEST.md',
-              'Canonical source is reconciled through the completed v1.3 Client Delivery System technical closure at `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`. v1.3 is TECHNICAL PASS / PUBLICATION GATED; v1.2 remains the published and verified production release until separate v1.3 publication/deployment approvals. Provider compatibility/certification tracks remain separate.',
-              'Canonical source is reconciled through the owner-approved v1.3.0 publication closure. The verified technical source remains `afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`; canonical docs-only main before publication is `22e822a50c2f8ab764f6044838e8acce69f50846`. v1.3.0 is PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED; the verified production-deployed release remains v1.2.0 until a separate v1.3.0 deployment action is explicitly authorized and verified. Provider compatibility/certification tracks remain separate.'
-          )
-          replace_once('docs/source/SOURCE_MANIFEST.md', '| `AZT-03-baseline-provenance.md` | v0.42 | Canonical provenance through v1.3 technical merge + exact-main verification; v1.2.0 remains published/production |', '| `AZT-03-baseline-provenance.md` | v0.43 | Canonical provenance through v1.3 technical closure + v1.3.0 publication; production deployment remains v1.2.0 |')
-          replace_once('docs/source/SOURCE_MANIFEST.md', '| `AZT-04-roadmap-qa-decisions.md` | v0.54 | D-029 v1.3 Client Delivery System TECHNICAL PASS / PUBLICATION GATED; v1.2.0 release/deployment retained |', '| `AZT-04-roadmap-qa-decisions.md` | v0.55 | D-029 v1.3 Client Delivery System PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED; provider L5 separate |')
-          replace_once('docs/source/SOURCE_MANIFEST.md', '| `AZT-EXEC-MAP.md` | v0.46 | Derived execution map with v1.3 Y1-Y5 technical closure and publication gate |', '| `AZT-EXEC-MAP.md` | v0.47 | Derived execution map with v1.3 Y1-Y5 technical closure + v1.3.0 publication PASS and deployment gate |')
-          replace_once(
-              'docs/source/SOURCE_MANIFEST.md',
-              'v1.3 technical closure evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`. Canonical repository technical baseline is `1.3.0` at `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e` with exact-main V1 + X6 release-path PASS and deterministic package SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`. Published/GitHub-Release and production-deployed release remain `v1.2.0` until separate owner approvals; provider L5 remains unclaimed.',
-              'v1.3 technical closure evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`. v1.3 publication evidence: `docs/evidence/V1_3_PUBLICATION_20260917.md`. Canonical repository technical baseline is `1.3.0` at `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e` with exact-main V1 + X6 release-path PASS and deterministic package SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`. Annotated `v1.3.0` + GitHub Release `390623960` are PUBLICATION PASS via run `35211254633`; production-deployed release remains `v1.2.0` until a separate v1.3.0 deployment action is explicitly authorized and verified; provider L5 remains unclaimed.'
-          )
-          PY
+        run: python3 scripts/v1-3-publication-source-closure-temp.py
 
       - name: Remove temporary reconciler and verify bounded docs-only diff
         run: |
           set -euo pipefail
-          rm .github/workflows/_ops-v1.3-publication-source-closure.yml
+          rm .github/workflows/_ops-v1.3-publication-source-closure.yml scripts/v1-3-publication-source-closure-temp.py
           git diff --check
           mapfile -t files < <(git diff --name-only origin/main | LC_ALL=C sort)
           expected=(
@@ -242,7 +48,7 @@ Before any v1.3.0 production deployment, revalidate the intended target site and
           test "${#files[@]}" = "${#expected[@]}"
           for i in "${!expected[@]}"; do test "${files[$i]}" = "${expected[$i]}"; done
           grep -Fq '**v1.3.0 PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED.**' docs/evidence/V1_3_PUBLICATION_20260917.md
-          grep -Fq 'v1.3.0` publication run `35211254633` completed SUCCESS' docs/source/AZT-03-baseline-provenance.md
+          grep -Fq 'v1.3.0 publication run `35211254633` completed SUCCESS' docs/source/AZT-03-baseline-provenance.md
           grep -Fq 'PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED' docs/source/AZT-04-roadmap-qa-decisions.md
           grep -Fq 'owner-approved v1.3.0 publication PASS' docs/source/AZT-EXEC-MAP.md
           grep -Fq 'v1.3 publication evidence: `docs/evidence/V1_3_PUBLICATION_20260917.md`' docs/source/SOURCE_MANIFEST.md
@@ -253,6 +59,6 @@ Before any v1.3.0 production deployment, revalidate the intended target site and
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add docs/evidence/V1_3_PUBLICATION_20260917.md docs/source/AZT-03-baseline-provenance.md docs/source/AZT-04-roadmap-qa-decisions.md docs/source/AZT-EXEC-MAP.md docs/source/SOURCE_MANIFEST.md .github/workflows/_ops-v1.3-publication-source-closure.yml
+          git add -A
           git commit -m 'docs: close v1.3 publication source state'
           git push origin HEAD:docs/v1.3-publication-closure
