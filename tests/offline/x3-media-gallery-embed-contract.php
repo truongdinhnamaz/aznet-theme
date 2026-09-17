@@ -25,12 +25,18 @@ function x3_source(string $relative): string {
 
 $assets = x3_source('inc/theme/assets.php');
 $design = x3_source('inc/theme/design-system.php');
-$page = x3_source('page.php');
+$page_wrapper = x3_source('page.php');
+$page_content = x3_source('template-parts/content/page.php');
+$page = $page_wrapper . "\n" . $page_content;
 $front = x3_source('front-page.php');
 $content = x3_source('template-parts/content/content-single.php');
 $style = x3_source('style.css');
 $functions = x3_source('functions.php');
 $media = x3_source('assets/css/components/media.css');
+
+if (! str_contains($page_wrapper, "get_template_part( 'template-parts/content/page' );")) {
+    x3_fail('native Page wrapper must delegate to the shared authored-content renderer');
+}
 
 foreach ([$page, $front, $content] as $surface) {
     if (! str_contains($surface, 'aznet-theme-entry__content')) {
