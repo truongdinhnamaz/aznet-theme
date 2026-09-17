@@ -167,7 +167,7 @@ namespace {
     $cases = [
         'clean-page-default' => [
             ['generic' => true, 'is_page' => true],
-            [...$coreStyles, 'aznet-theme-generic-content', 'aznet-theme-forms', 'aznet-theme-media'],
+            [...$coreStyles, 'aznet-theme-generic-content', 'aznet-theme-forms', 'aznet-theme-media', 'aznet-theme-page'],
             [],
         ],
         'clean-post-editorial' => [
@@ -253,6 +253,9 @@ namespace {
         }
         if (isset($GLOBALS['r6_styles']['aznet-theme-forms'])) {
             fail_r6_asset_scope("{$label}: X5 form asset leaked onto Woo route");
+        }
+        if (isset($GLOBALS['r6_styles']['aznet-theme-page'])) {
+            fail_r6_asset_scope("{$label}: Y1 Page asset leaked onto Woo route");
         }
     }
 

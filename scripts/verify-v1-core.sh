@@ -8,7 +8,7 @@ printf '%s\n' '==> PHP lint: production Theme tree'
 mapfile -t production_php < <(
   {
     find . -maxdepth 1 -type f -name '*.php' -print
-    for dir in inc template-parts patterns; do
+    for dir in inc template-parts patterns page-templates; do
       if [[ -d "$dir" ]]; then
         find "$dir" -type f -name '*.php' -print
       fi
@@ -130,6 +130,9 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-runner
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-idempotency-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-readiness-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-admin-a11y-contract.php
+
+printf '%s\n' '==> Y1 Page Experience 2.0 contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-page-experience-contract.php
 
 printf '%s\n' '==> Classic Editor policy contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/classic-editor-policy-contract.php
