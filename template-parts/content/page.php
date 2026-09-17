@@ -39,7 +39,7 @@ $excerpt = trim( (string) get_the_excerpt() );
         <?php endif; ?>
     </header>
 
-    <div class="aznet-theme-page__content">
+    <div class="aznet-theme-page__content aznet-theme-entry__content">
         <?php the_content(); ?>
         <?php wp_link_pages(); ?>
     </div>
