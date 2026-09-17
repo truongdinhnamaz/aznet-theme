@@ -16,6 +16,7 @@ require_once __DIR__ . '/page-experience.php';
 require_once __DIR__ . '/professional-page-kits.php';
 require_once __DIR__ . '/homepage-content-map.php';
 require_once __DIR__ . '/homepage-composer.php';
+require_once __DIR__ . '/provisioning-professional-services.php';
 require_once __DIR__ . '/provisioning-blueprints.php';
 require_once __DIR__ . '/provisioning-provenance.php';
 require_once __DIR__ . '/provisioning-discovery.php';
