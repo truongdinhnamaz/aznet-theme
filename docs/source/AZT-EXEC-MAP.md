@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.44
+**Version:** v0.45
 **Status:** Working Execution Map / derived  
 **Date:** 17/09/2026
 
@@ -9,7 +9,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 
 > **Canonical-main checkpoint:** live `main` HEAD is resolved from GitHub at execution time. X6 technical integration is verified at `main@c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`, tree `70c04929afe38e87d317bad3414157e9e2bd6f74`; fresh V1 exact-main run `35129331899` and X6 push-to-main run `35129331927` completed SUCCESS. Published release anchor is annotated `v1.2.0` -> exact technical commit `c6b1ebac...`; GitHub Release `390148740` carries package SHA-256 `cb9f58f91b5eb8d3204aa7a6fb1d5807303ea66767968bba3b827470934d8798`. Owner-approved production deployment of the exact published `1.2.0` package is verified PASS on `tamduchanoi.aznet.vn` by deployment run `35135759389` plus fresh independent read-only run `35136876330`. Optional integrations remain additive and ownership boundaries are unchanged.
 
-**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS`. Current state: `v1.2.0 PUBLICATION + PRODUCTION DEPLOYMENT PASS`.
+**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS`. Current state: `v1.2.0 PUBLICATION + PRODUCTION DEPLOYMENT PASS`; v1.3 Client Delivery System is source-ratified and Y1-ready after this source slice merges.
 
 ## 1. Current state
 
@@ -40,6 +40,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | P4-C Standalone Core independence | PASS / MERGED | PR #63/#64 merged; zero-plugin L1-L4, exact-package and exact-main PASS; optional integrations remain additive |
 | P5 Publication/Deployment | PASS | Tag `v1.1.0` + GitHub Release and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
 | X v1.2 WordPress Experience Completion | PUBLICATION + PRODUCTION DEPLOYMENT PASS | X1-X5 retained; PR #87 exact-main V1 + X6 L1-L4/L6 PASS; annotated `v1.2.0` + GitHub Release publication PASS; owner-approved production deployment run `35135759389` + fresh read-only run `35136876330` PASS; provider L5 stays separate |
+| Y v1.3 Client Delivery System | RATIFIED / Y1 READY | Y1 Page Experience -> Y2 Page Kits -> Y3 Footer -> Y4 generic Professional Services provisioning -> Y5 integrated delivery/release closure; WordPress-native data ownership retained; metadata remains `1.2.0` until Y5 owner gate |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
 Canonical `main` is exact Theme `1.2.0` after owner-approved X6 technical integration. GitHub publication `v1.2.0` is PASS with exact verified package bytes, and owner-approved production deployment of those published `1.2.0` bytes is PASS at the verified Theme-owned/site-operations scope.
@@ -306,6 +307,26 @@ Owner-approved publication run `35052694111` published annotated tag `v1.1.0` at
 
 **Design record:** `docs/superpowers/specs/2026-09-16-v1.2-wordpress-experience-completion-design.md`.
 
+## 13A. v1.3 Client Delivery System
+
+**State:** **RATIFIED / Y1 READY.**
+
+**Dependency order:** `Y1 Page Experience 2.0 -> Y2 Professional Page Kits -> Y3 Footer System 2.0 -> Y4 Professional Services Starter Blueprint -> Y5 Client Delivery QA & Release Closure`.
+
+**Source:** D-029 in AZT-04. Design: `docs/superpowers/specs/2026-09-17-v1.3-client-delivery-system-design.md`. Plan: `docs/superpowers/plans/2026-09-17-v1.3-client-delivery-system.md`.
+
+**Y1 exit:** native inner Page header/hero, real-ancestor child breadcrumb, Standard/Wide/Landing variants, surface-aware Page CSS, backward-compatible content, fresh L1-L4.
+
+**Y2 exit:** five portable native professional Page kits, neutral placeholders only, Classic Editor content preservation/editor evidence, theme-switch content portability and responsive/a11y evidence.
+
+**Y3 exit:** Standard/Professional/Compact Footer presets through the existing Theme settings store, WordPress-native identity/menu sources only, empty-region fail-soft and L1-L4 evidence.
+
+**Y4 exit:** generic Professional Services blueprint reusing the existing confirmed/idempotent provisioning engine; clean-site creation/reuse, active-site fail-safe and current-run rollback proven; no fabricated client truth.
+
+**Y5 exit:** zero-plugin clean-site client-delivery matrix, deterministic exact package/source identity, packaged PHP lint, update/theme-switch/rollback, exact-final-head and exact-main gates. Promotion to `1.3.0`, tag/Release and production deploy remain separate owner approvals.
+
+**Exact Next:** after source-ratification merge, execute Y1 only; do not start Y2 before Y1 exit is evidenced unless a bounded dependency change is required.
+
 ## 14. Optional compatibility tracks
 
 ### E — RootProfile
@@ -326,4 +347,4 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 16. Exact next
 
-**NEXT — v1.2.0 Core release execution is closed at PUBLICATION + PRODUCTION DEPLOYMENT PASS. Start no new Theme milestone, architecture/public-contract change or optional-provider certification without a separately approved slice; provider L5 remains separate.**
+**NEXT — v1.3 Client Delivery System is source-ratified under D-029. Execute Y1 Page Experience 2.0 from the approved spec/plan with RED -> GREEN and fresh L3/L4 evidence. Keep Theme metadata at `1.2.0`; do not open provider L5, `1.3.0` promotion, publication or production deployment before their later explicit gates.**
