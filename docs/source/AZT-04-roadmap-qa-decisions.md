@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.56
+**Version:** v0.57
 **Status:** Working Source  
 **Date:** 17/09/2026
 
@@ -21,7 +21,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | D | Generic Templates | PASS / retained | Page/Post/Archive/Search/404 technical closure plus P2/P3 editorial hardening and P4 real-pilot quality evidence are retained |
 | W | WooCommerce presentation shell | PASS / retained | W1-W9 + R4; WooCommerce retains commerce truth |
 | E | RootProfile Profile / Contact | OPTIONAL COMPAT ACTIVE | E0-E4/E5-B retained PASS; E5-C external BLOCKED; E5-D takeover locked; non-blocking for core under D-016 |
-| F | Homepage | CORE PASS / COMPAT ACTIVE | Native Theme Homepage merged; ConvertFlow F6/F7 actual integration evidence retained; F8 integrated compatibility BLOCKED by provider nested `<main>` |
+| F | Homepage | CORE PASS / F8 INTEGRATED PASS | Native Theme Homepage merged; F6/F7 evidence retained; exact ConvertFlow Core P5.242 + Pro P5.164 integration passed L3-L4 on Theme `252554961bc81d22427363aee0048365fb4e116b`; F9/provider L5 remains separate and unclaimed |
 | G | Core v1.0 Cleanup / Release | TECHNICAL PASS | G0-G8 production/release-candidate closure merged; publication is a separate live GitHub state |
 | R0 | v1.0 -> v1.1 Source Reconciliation | PASS | Source-only reconciliation merged through PR #36; v1.1 product/architecture ratified |
 | R1 | Design System 2.0 | PASS | PR #37 merged; settings/tokens + Default/Editorial/Commerce outcomes + editor/frontend parity L1-L4 |
@@ -399,6 +399,14 @@ The product owner separately approved production deployment of the exact publish
 Fresh independent read-only run `35223053733` then completed SUCCESS: active Theme `1.3.0`, Standalone Core `ready`, `header-utility` retained on menu ID `15`, exact phone retained, desktop/mobile public shell PASS and broad public matrix `28/28` with no Theme-owned blocking failure. Post-deploy artifact `10497925626` has digest `sha256:756f765fe70f2ca61978111678853204808ea4cb4cd44fdd3453d50e177313b2`. Temporary ops workflows/harnesses were removed at cleanup commit `6ef53f0bd20c69c65b88a753627436e31976d606`; the cleaned ops branch had zero net file delta versus `main@2c4e6f0442335ac3e690e97beaca4d4bf6405fa5`. Evidence: `docs/evidence/V1_3_PRODUCTION_DEPLOYMENT_20260917.md`.
 
 Published/GitHub-Release release and current verified production deployment are now both `v1.3.0`. Provider L5 remains separate and unclaimed.
+
+### F8 integrated compatibility closure checkpoint — 17/09/2026
+
+ConvertFlow owner-side compatibility fix PR #31 was merged to canonical `truongdinhnamaz/convert-flow` `main@64cf2e66d41e6619e2bbcf53c12d8831e2852442` from exact verified head `7cad02091ce12ef0c146fd6e0837a653169ca753`. Comparison from verified head to merge commit reports no file delta, so the canonical merge tree preserves the exact verified candidate bytes.
+
+Fresh exact integration evidence used AZnet Theme `252554961bc81d22427363aee0048365fb4e116b`, WordPress 6.9, PHP 8.1, ConvertFlow Core P5.242 and Pro P5.164. F8 workflow `35231522317` and retained C1 workflow `35231522361` completed SUCCESS. L3 proved exactly one document-level `<main>` owned by the Theme while the ConvertFlow Homepage Journey rendered through `the_content()` with a neutral root. L4 desktop/tablet/mobile + keyboard/focus + console + Axe matrix passed 4/4. Artifact `10501317335` has digest `sha256:a353d11b456e31974be4b5362005a1e02ddad2a5770e2f2c62efd4bea87fbdda`.
+
+This closes the historical F8 nested-main compatibility blocker only. It does not promote ConvertFlow release/deployment state and does not infer F9/provider L5 certification beyond the verified L3-L4 compatibility scope. Historical P5.239 blocker evidence remains provenance.
 
 ## 14. Exact next
 
