@@ -4,7 +4,6 @@ declare(strict_types=1);
 $root = dirname(__DIR__, 2);
 
 $files = [
-    'base_css' => $root . '/assets/css/components/homepage-law-01.css',
     'css' => $root . '/assets/css/components/homepage-law-01-variants.css',
     'composer' => $root . '/inc/theme/homepage-composer.php',
     'hero' => $root . '/template-parts/homepage/law-01/hero.php',
@@ -17,7 +16,6 @@ foreach ($files as $label => $path) {
     assert(is_file($path), "Client-ready Law 01 {$label} file missing: {$path}");
 }
 
-$base_css = file_get_contents($files['base_css']);
 $css = file_get_contents($files['css']);
 $composer = file_get_contents($files['composer']);
 $hero = file_get_contents($files['hero']);
@@ -40,15 +38,6 @@ foreach ([
     '@media (prefers-reduced-motion: reduce)',
 ] as $needle) {
     assert(str_contains($css, $needle), "Client-ready Law 01 CSS contract missing: {$needle}");
-}
-
-foreach ([
-    '.aznet-theme-law01-article-card__media',
-    '.aznet-theme-law01-article-card__image',
-    'width: 100%;',
-    'height: auto;',
-] as $needle) {
-    assert(str_contains($base_css, $needle), "Shared Law 01 article-media contract missing: {$needle}");
 }
 
 assert(str_contains($composer, "[ 'hero', 'services', 'profile' ]"), 'Composer must render the combined client-ready profile band.');
@@ -74,6 +63,7 @@ assert(str_contains($profile, 'aznet-theme-law01-profile__grid'), 'Profile band 
 assert(str_contains($latest, "homepage_latest_posts( (array) setting( 'homepage_knowledge_terms', [] ), 3, homepage_ledger_ids() )"), 'Latest presentation must stay at three client-ready cards.');
 assert(str_contains($latest, 'aznet-theme-law01-article-card__media'), 'Latest cards must render featured media when available.');
 assert(str_contains($latest, 'get_the_category'), 'Latest cards must expose WordPress-owned taxonomy labels.');
+assert(str_contains($latest, "'style' => 'display:block;width:100%;height:auto;'"), 'Latest featured media must constrain intrinsic image width for every Law 01 visual variant.');
 assert(! str_contains($latest, '<a class="aznet-theme-law01-article-card__media"'), 'Latest media must not duplicate the canonical article URL.');
 
 foreach (['500+', '95%', '98%', '1.000+', '1000+', 'Nguyễn Văn A', 'Nguyễn Văn Minh', 'Trần Thị Lan', 'Phạm Anh Tuấn', 'Lê Thị Hoa'] as $forbidden) {
