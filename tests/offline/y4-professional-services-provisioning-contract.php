@@ -12,6 +12,7 @@ if (!defined('ABSPATH')) {
     define('ABSPATH', $root . '/');
 }
 
+require_once $root . '/inc/theme/provisioning-professional-services.php';
 require_once $root . '/inc/theme/provisioning-blueprints.php';
 
 $historical = [];
