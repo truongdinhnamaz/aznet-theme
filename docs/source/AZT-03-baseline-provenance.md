@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.41
+**Version:** v0.42
 **Status:** Working Source  
 **Date:** 17/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -18,8 +18,10 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 - Published release `v1.1.0` source anchor: `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`.
 - Owner-approved publication closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has the same tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72.
 - Final published v1.1.0 production package remains the P5-verified 121-file set, SHA-256 `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`.
-- Canonical `main` is Theme version `1.2.0` after X6 technical integration and docs-only source closure.
+- Canonical repository technical baseline is Theme version `1.3.0` at owner-approved PR #98 merge `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`; v1.3 is TECHNICAL PASS / PUBLICATION GATED.
 - Published release `v1.2.0` is PASS at exact technical source `c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`; owner-approved production deployment to `tamduchanoi.aznet.vn` is also PASS at the verified Theme-owned/site-operations scope via deployment run `35135759389` and fresh independent read-only verification run `35136876330`.
+- v1.3 exact-main verification: V1 Exact Main run `35206627102` SUCCESS plus pre-existing X6 push-to-main release path run `35206626992` SUCCESS on `afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`; exact `aznet-theme-1.3.0.zip` SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`, 144 package files, 107 packaged PHP lint PASS, 32/32 browser/axe PASS, switch-away/switch-back lifecycle PASS. Evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`.
+- Published/GitHub-Release and production-deployed release remain `v1.2.0`; v1.3 publication and deployment are separate future owner gates. Provider L5 remains unproven.
 - WordPress floor: `6.9+`.
 - PHP floor: `8.1+`.
 - Architecture: hybrid PHP theme + `theme.json`.

@@ -8,9 +8,11 @@ Canonical source is reconciled through the completed v1.2 publication/production
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.9 | Theme architecture, public integration contracts and D-027 Standalone Core runtime-independence boundary |
-| `AZT-03-baseline-provenance.md` | v0.41 | Canonical provenance through v1.2.0 publication + verified production deployment |
-| `AZT-04-roadmap-qa-decisions.md` | v0.53 | v1.2.0 release/deployment PASS + D-029 v1.3 Client Delivery System ratified; Y1 next |
-| `AZT-EXEC-MAP.md` | v0.45 | Derived execution map with v1.3 Y1-Y5 sequence ratified and Y1 ready |
+| `AZT-03-baseline-provenance.md` | v0.42 | Canonical provenance through v1.3 technical merge + exact-main verification; v1.2.0 remains published/production |
+| `AZT-04-roadmap-qa-decisions.md` | v0.54 | D-029 v1.3 Client Delivery System TECHNICAL PASS / PUBLICATION GATED; v1.2.0 release/deployment retained |
+| `AZT-EXEC-MAP.md` | v0.46 | Derived execution map with v1.3 Y1-Y5 technical closure and publication gate |
+
+v1.3 technical closure evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`. Canonical repository technical baseline is `1.3.0` at `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e` with exact-main V1 + X6 release-path PASS and deterministic package SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`. Published/GitHub-Release and production-deployed release remain `v1.2.0` until separate owner approvals; provider L5 remains unclaimed.
 
 Approved design companion: `docs/superpowers/specs/2026-09-16-v1.2-wordpress-experience-completion-design.md`. X1 closure evidence: `docs/evidence/X1_COMMENTS_SURFACE_20260916.md`. X2 closure evidence: `docs/evidence/X2_SEARCH_404_EMPTY_20260916.md`. X3 closure evidence: `docs/evidence/X3_MEDIA_GALLERY_EMBED_20260916.md`. X4 closure evidence: `docs/evidence/X4_PAGINATION_NAVIGATION_20260916.md`. X5 closure evidence: `docs/evidence/X5_NATIVE_FORM_CONTROLS_20260916.md`. X6 technical-closure evidence: `docs/evidence/X6_CROSS_SURFACE_RELEASE_CLOSURE_20260916.md`. v1.2 publication evidence: `docs/evidence/V1_2_PUBLICATION_20260917.md`. v1.2 production-deployment evidence: `docs/evidence/V1_2_PRODUCTION_DEPLOYMENT_20260917.md`. v1.3 approved design: `docs/superpowers/specs/2026-09-17-v1.3-client-delivery-system-design.md`. v1.3 implementation plan: `docs/superpowers/plans/2026-09-17-v1.3-client-delivery-system.md`. None supersedes AZT source ownership; AZT-03 owns provenance/version facts, AZT-04 owns roadmap/decisions and AZT-EXEC-MAP remains derived.
 
