@@ -11,6 +11,9 @@
     --aznet-theme-color-warning: #9a6700;
     --aznet-theme-color-danger: #b42318;
 
+    --aznet-theme-font-family-base: Roboto, Arial, sans-serif;
+    --aznet-theme-font-family-heading: var(--aznet-theme-font-family-base);
+
     --aznet-theme-font-size-sm: 0.875rem;
     --aznet-theme-font-size-base: 1rem;
     --aznet-theme-font-size-lg: 1.125rem;
