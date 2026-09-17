@@ -1,0 +1,45 @@
+name: Y3 Footer System
+
+on:
+  push:
+    branches:
+      - work/v1.3-y3-footer-system
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'inc/theme/footer.php'
+      - 'inc/theme/bootstrap.php'
+      - 'inc/theme/settings.php'
+      - 'inc/admin/control-center.php'
+      - 'template-parts/footer/site-footer.php'
+      - 'assets/css/components/site-footer.css'
+      - 'scripts/verify-v1-core.sh'
+      - 'tests/offline/y3-footer-system-contract.php'
+      - 'tests/runtime/y3-footer-system.php'
+      - 'tests/browser/y3-footer-system-l4.mjs'
+      - '.github/workflows/y3-footer-system.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  y3-offline:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact Y3 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Verify Y3 contract
+        run: |
+          set -euo pipefail
+          git diff --check
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/y3-footer-system-contract.php
