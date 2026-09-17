@@ -1,0 +1,55 @@
+name: Temporary v1.3 Source Coherence Gate
+
+on:
+  push:
+    branches:
+      - docs/v1.3-technical-closure
+
+permissions:
+  contents: write
+
+jobs:
+  source-coherence:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout closure branch
+        uses: actions/checkout@v4
+        with:
+          ref: docs/v1.3-technical-closure
+          fetch-depth: 0
+
+      - name: Reconcile stale current-state markers
+        env:
+          BASE_SHA: afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e
+        run: |
+          set -euo pipefail
+          python3 scripts/v1-3-source-coherence-temp.py
+          git diff --check
+
+          grep -F 'TECHNICAL PASS / PUBLICATION GATED' docs/source/SOURCE_MANIFEST.md
+          grep -F '**State:** **TECHNICAL PASS / PUBLICATION GATED.**' docs/source/AZT-04-roadmap-qa-decisions.md
+          grep -F 'PR #98 merge -> exact-main V1/X6 release-path PASS' docs/source/AZT-EXEC-MAP.md
+          ! grep -Fq 'Y1-Y5 implementation still pending' docs/source/SOURCE_MANIFEST.md
+          ! grep -Fq '**State:** **RATIFIED / Y1 READY.**' docs/source/AZT-04-roadmap-qa-decisions.md
+
+          git rm .github/workflows/v1-3-source-coherence-temp.yml scripts/v1-3-source-coherence-temp.py
+          git add docs/source/SOURCE_MANIFEST.md docs/source/AZT-04-roadmap-qa-decisions.md docs/source/AZT-EXEC-MAP.md
+
+          expected=$(cat <<'EOF'
+          docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md
+          docs/source/AZT-03-baseline-provenance.md
+          docs/source/AZT-04-roadmap-qa-decisions.md
+          docs/source/AZT-EXEC-MAP.md
+          docs/source/SOURCE_MANIFEST.md
+          EOF
+          )
+          actual=$(git diff --cached --name-only "$BASE_SHA" | LC_ALL=C sort)
+          expected=$(printf '%s\n' "$expected" | LC_ALL=C sort)
+          printf 'Expected closure files:\n%s\nActual closure files:\n%s\n' "$expected" "$actual"
+          test "$actual" = "$expected"
+          git diff --cached --check
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'docs: reconcile v1.3 current source state'
+          git push origin HEAD:docs/v1.3-technical-closure
