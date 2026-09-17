@@ -39,8 +39,68 @@ jobs:
         with:
           php-version: '8.1'
           coverage: none
-      - name: Verify Y4 ownership contract
+      - name: Verify Y4 ownership contract and retained Core
         run: |
           set -euo pipefail
           git diff --check
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/y4-professional-services-provisioning-contract.php
+          bash scripts/verify-v1-core.sh
+
+  y4-runtime:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Checkout exact Y4 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+      - name: Install WordPress 6.9 and exact Theme
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          rm -rf /tmp/wp-y4 /tmp/y4-evidence
+          mkdir -p /tmp/wp-y4 /tmp/y4-evidence
+          wp core download --version=6.9 --path=/tmp/wp-y4 --force --allow-root
+          wp config create --path=/tmp/wp-y4 --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          ADMIN_PASS=$(openssl rand -hex 16)
+          wp core install --path=/tmp/wp-y4 --url=http://127.0.0.1:8080 --title='AZnet Y4 Fixture' --admin_user=admin --admin_password="$ADMIN_PASS" --admin_email=y4@example.test --skip-email --allow-root
+          mkdir -p /tmp/wp-y4/wp-content/themes/aznet-theme
+          rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='README.md' --exclude='aznet-preview.png' ./ /tmp/wp-y4/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp-y4 --allow-root
+          wp core version --path=/tmp/wp-y4 --allow-root | grep -Fx '6.9'
+          wp theme status aznet-theme --path=/tmp/wp-y4 --allow-root | grep -F 'Status: Active'
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-y4 --allow-root)"
+      - name: Verify Y4 clean, rerun, rollback and existing-active safety
+        run: |
+          set -euo pipefail
+          for scenario in clean rerun rollback active; do
+            AZNET_Y4_SCENARIO="$scenario" wp eval-file tests/runtime/y4-professional-services-provisioning.php --path=/tmp/wp-y4 --allow-root | tee "/tmp/y4-evidence/${scenario}.txt"
+          done
+      - name: Upload Y4 runtime evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: y4-professional-services-runtime
+          path: /tmp/y4-evidence
+          if-no-files-found: error
