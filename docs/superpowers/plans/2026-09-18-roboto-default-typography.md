@@ -38,7 +38,6 @@
 **Modify**
 - `theme.json` — register Roboto family/font faces and make it the WordPress-native default.
 - `assets/css/tokens.css` — add canonical Theme typography family tokens.
-- `style.css` — apply Theme typography tokens to body and headings without product-specific selectors.
 - `assets/css/components/homepage-law-01.css` — remove hardcoded Georgia/Times family and consume Theme heading token.
 - `assets/css/components/homepage-law-01-variants.css` — remove Law 01 slogan/quote serif hardcodes and retain approved weights/italic treatment through Theme tokens.
 - `inc/theme/design-system.php` — ensure editor styles include the same base typography inputs if runtime verification shows theme.json alone is insufficient for editor parity; do not add duplicate font registration if theme.json already supplies it.
@@ -162,7 +161,6 @@ git commit -m "test: define Roboto default typography contract"
 - Create: `assets/fonts/roboto/Roboto-Bold.woff2`
 - Modify: `theme.json`
 - Modify: `assets/css/tokens.css`
-- Modify: `style.css`
 
 **Interfaces:**
 - Consumes: Theme-owned design-token layer and WordPress `theme.json` fontFace support.
@@ -243,27 +241,9 @@ Set the global `styles.typography.fontFamily` to:
 
 Keep existing font-size and line-height values intact.
 
-- [ ] **Step 4: Apply the Theme token at the shell level**
+- [ ] **Step 4: Keep the release metadata stylesheet untouched**
 
-Update `style.css`:
-
-```css
-body {
-    margin: 0;
-    font-family: var(--aznet-theme-font-family-base);
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-family: var(--aznet-theme-font-family-heading);
-}
-```
-
-Do not add customer- or product-specific selectors here.
+Do not modify `style.css`. The WordPress-native global font default is supplied by `theme.json`; Law 01 consumes the Theme semantic family token directly. This preserves the retained X6 promoted-release metadata boundary.
 
 - [ ] **Step 5: Run the contract**
 
@@ -278,7 +258,7 @@ Expected at this stage: still FAIL only on the retained Law 01 Georgia/Times ass
 - [ ] **Step 6: Commit Theme-wide typography infrastructure**
 
 ```bash
-git add theme.json style.css assets/css/tokens.css assets/fonts/roboto
+git add theme.json assets/css/tokens.css assets/fonts/roboto
 git commit -m "feat: add self-hosted Roboto typography"
 ```
 
