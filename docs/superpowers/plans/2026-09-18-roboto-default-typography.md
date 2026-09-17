@@ -540,6 +540,6 @@ PR body must summarize:
 
 Do not merge the PR and do not overwrite/publish the existing WPVibe Law 01 draft without explicit owner approval.
 
-Rollback before merge: close PR/delete feature branch if explicitly requested.  
-Rollback after merge but before live publish: revert the typography merge commit.  
+Rollback before merge: close PR/delete feature branch if explicitly requested.
+Rollback after merge but before live publish: revert the typography merge commit.
 Live rollback remains separate and must use the WPVibe/theme backup path only after explicit approval.
