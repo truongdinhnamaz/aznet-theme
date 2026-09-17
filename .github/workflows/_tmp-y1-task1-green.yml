@@ -1,0 +1,180 @@
+name: Temporary Y1 Task1 GREEN
+
+on:
+  push:
+    branches:
+      - feat/v1.3-y1-page-experience
+    paths:
+      - .github/workflows/_tmp-y1-task1-green.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply-and-verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/v1.3-y1-page-experience
+          fetch-depth: 0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Apply minimal Y1 Task 1 implementation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          settings = Path('inc/theme/settings.php')
+          text = settings.read_text()
+          old = "        'header_utilities'              => true,\n"
+          new = old + "        'page_breadcrumbs'              => true,\n"
+          if text.count(old) != 1:
+              raise SystemExit('settings defaults anchor mismatch')
+          text = text.replace(old, new, 1)
+
+          old = "        'header_utilities'              => $normalize_boolean( 'header_utilities', true ),\n"
+          new = old + "        'page_breadcrumbs'              => $normalize_boolean( 'page_breadcrumbs', true ),\n"
+          if text.count(old) != 1:
+              raise SystemExit('settings normalized anchor mismatch')
+          text = text.replace(old, new, 1)
+          settings.write_text(text)
+
+          bootstrap = Path('inc/theme/bootstrap.php')
+          text = bootstrap.read_text()
+          old = "require_once __DIR__ . '/settings.php';\n"
+          new = old + "require_once __DIR__ . '/page-experience.php';\n"
+          if text.count(old) != 1:
+              raise SystemExit('bootstrap anchor mismatch')
+          bootstrap.write_text(text.replace(old, new, 1))
+
+          control = Path('inc/admin/control-center.php')
+          text = control.read_text()
+          old = "        $visible_keys = [ 'visual_preset' ];\n"
+          new = "        $visible_keys = [ 'visual_preset', 'page_breadcrumbs' ];\n"
+          if text.count(old) != 1:
+              raise SystemExit('control visible keys anchor mismatch')
+          text = text.replace(old, new, 1)
+          old = "        field_select( 'visual_preset', __( 'Phong cách', 'aznet-theme' ), [ 'default' => 'Default', 'editorial' => 'Editorial', 'commerce' => 'Commerce' ], (string) $s['visual_preset'] );\n"
+          new = old + "        field_checkbox( 'page_breadcrumbs', __( 'Hiển thị breadcrumb cho Page con', 'aznet-theme' ), (bool) $s['page_breadcrumbs'] );\n"
+          if text.count(old) != 1:
+              raise SystemExit('control design field anchor mismatch')
+          control.write_text(text.replace(old, new, 1))
+
+          plan = Path('docs/superpowers/plans/2026-09-17-v1.3-client-delivery-system.md')
+          text = plan.read_text()
+          old = "$excerpt = trim((string) get_the_excerpt());"
+          new = "$excerpt = trim((string) get_post_field( 'post_excerpt', (int) get_the_ID() ));"
+          if text.count(old) != 1:
+              raise SystemExit(f'plan authored excerpt anchor count={text.count(old)}')
+          text = text.replace(old, new, 1)
+          old2 = "- Consumes: `page_variant()`, `page_breadcrumb_items()`, WordPress Page title/excerpt/featured image/content."
+          new2 = "- Consumes: `page_variant()`, `page_breadcrumb_items()`, WordPress Page title/explicitly-authored excerpt/featured image/content."
+          if text.count(old2) != 1:
+              raise SystemExit('plan interface anchor mismatch')
+          plan.write_text(text.replace(old2, new2, 1))
+          PY
+
+          cat > inc/theme/page-experience.php <<'PHP'
+          <?php
+          /**
+           * Native WordPress Page presentation context.
+           *
+           * @package AZnetTheme
+           */
+
+          namespace AZnet\Theme;
+
+          if ( ! defined( 'ABSPATH' ) ) {
+              exit;
+          }
+
+          /**
+           * Whether Theme breadcrumbs are enabled for native Pages.
+           */
+          function page_breadcrumbs_enabled(): bool {
+              return true === setting( 'page_breadcrumbs', true );
+          }
+
+          /**
+           * Return the bounded presentation variant selected through native Page Template state.
+           */
+          function page_variant( ?int $post_id = null ): string {
+              $post_id  = $post_id ?: (int) get_queried_object_id();
+              $template = $post_id > 0 ? (string) get_page_template_slug( $post_id ) : '';
+
+              return match ( $template ) {
+                  'page-templates/wide.php'    => 'wide',
+                  'page-templates/landing.php' => 'landing',
+                  default                      => 'standard',
+              };
+          }
+
+          /**
+           * Return breadcrumb ancestors from real WordPress Page hierarchy only.
+           *
+           * @return array<int, array{title:string,url:string}>
+           */
+          function page_breadcrumb_items( ?int $post_id = null ): array {
+              if ( ! page_breadcrumbs_enabled() ) {
+                  return [];
+              }
+
+              $post_id = $post_id ?: (int) get_queried_object_id();
+              if ( $post_id <= 0 ) {
+                  return [];
+              }
+
+              $ancestors = array_reverse( array_map( 'intval', get_post_ancestors( $post_id ) ) );
+              $items     = [];
+
+              foreach ( $ancestors as $ancestor_id ) {
+                  $ancestor = get_post( $ancestor_id );
+                  if ( ! $ancestor instanceof \WP_Post || 'page' !== $ancestor->post_type ) {
+                      continue;
+                  }
+
+                  $url   = get_permalink( $ancestor_id );
+                  $title = trim( (string) get_the_title( $ancestor_id ) );
+                  if ( ! is_string( $url ) || '' === $url || '' === $title ) {
+                      continue;
+                  }
+
+                  $items[] = [
+                      'title' => $title,
+                      'url'   => $url,
+                  ];
+              }
+
+              return $items;
+          }
+          PHP
+
+      - name: Verify Task 1 GREEN and retained core
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-page-experience-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/r1-settings-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/r3-header-settings-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/r4-woocommerce-settings-contract.php
+          bash scripts/assert-theme-version.sh
+          bash scripts/verify-v1-core.sh
+          php -l inc/theme/page-experience.php
+          php -l inc/theme/settings.php
+          php -l inc/admin/control-center.php
+          php -l inc/theme/bootstrap.php
+      - name: Commit verified Task 1 GREEN
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'truongdinhnamaz'
+          git config user.email 'truongnam151@gmail.com'
+          git add inc/theme/settings.php inc/theme/bootstrap.php inc/theme/page-experience.php inc/admin/control-center.php tests/offline/y1-page-experience-contract.php docs/superpowers/plans/2026-09-17-v1.3-client-delivery-system.md
+          git commit -m 'feat: add v1.3 page presentation context'
+          git push origin HEAD:feat/v1.3-y1-page-experience
