@@ -68,7 +68,8 @@ assert(str_contains($admin, 'confirm_plan'), 'Y4 must preserve explicit plan con
 
 $style = file_get_contents($root . '/style.css');
 $functions = file_get_contents($root . '/functions.php');
-assert(is_string($style) && preg_match('/^Version:\s*1\.2\.0\s*$/mi', $style) === 1);
-assert(is_string($functions) && preg_match("/define\(\s*'AZNET_THEME_VERSION'\s*,\s*'1\.2\.0'\s*\)/", $functions) === 1);
+assert(is_string($style) && preg_match('/^Version:\s*([0-9]+\.[0-9]+\.[0-9]+)\s*$/mi', $style, $styleVersion) === 1);
+assert(is_string($functions) && preg_match("/define\(\s*'AZNET_THEME_VERSION'\s*,\s*'([0-9]+\.[0-9]+\.[0-9]+)'\s*\)/", $functions, $functionVersion) === 1);
+assert($styleVersion[1] === $functionVersion[1], 'Theme version declarations must remain consistent');
 
 echo "PASS: Y4 Professional Services provisioning ownership contract\n";
