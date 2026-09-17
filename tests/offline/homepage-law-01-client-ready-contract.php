@@ -4,6 +4,7 @@ declare(strict_types=1);
 $root = dirname(__DIR__, 2);
 
 $files = [
+    'base_css' => $root . '/assets/css/components/homepage-law-01.css',
     'css' => $root . '/assets/css/components/homepage-law-01-variants.css',
     'composer' => $root . '/inc/theme/homepage-composer.php',
     'hero' => $root . '/template-parts/homepage/law-01/hero.php',
@@ -16,6 +17,7 @@ foreach ($files as $label => $path) {
     assert(is_file($path), "Client-ready Law 01 {$label} file missing: {$path}");
 }
 
+$base_css = file_get_contents($files['base_css']);
 $css = file_get_contents($files['css']);
 $composer = file_get_contents($files['composer']);
 $hero = file_get_contents($files['hero']);
@@ -38,6 +40,15 @@ foreach ([
     '@media (prefers-reduced-motion: reduce)',
 ] as $needle) {
     assert(str_contains($css, $needle), "Client-ready Law 01 CSS contract missing: {$needle}");
+}
+
+foreach ([
+    '.aznet-theme-law01-article-card__media',
+    '.aznet-theme-law01-article-card__image',
+    'width: 100%;',
+    'height: auto;',
+] as $needle) {
+    assert(str_contains($base_css, $needle), "Shared Law 01 article-media contract missing: {$needle}");
 }
 
 assert(str_contains($composer, "[ 'hero', 'services', 'profile' ]"), 'Composer must render the combined client-ready profile band.');
