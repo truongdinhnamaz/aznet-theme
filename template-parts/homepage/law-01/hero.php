@@ -24,7 +24,7 @@ $trust_items = [
             <p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Văn phòng luật sư', 'aznet-theme' ); ?></p>
             <h1 id="aznet-law01-title"><?php echo esc_html( $title ); ?></h1>
             <?php if ( '' !== $excerpt ) : ?><p class="aznet-theme-law01-lede"><?php echo esc_html( $excerpt ); ?></p><?php endif; ?>
-            <?php if ( '' !== $slogan ) : ?><p class="aznet-theme-law01-hero__quote"><?php echo esc_html( $slogan ); ?></p><?php endif; ?>
+            <?php if ( '' !== $slogan ) : ?><p class="aznet-theme-law01-hero__quote aznet-theme-law01-hero__slogan"><?php echo esc_html( $slogan ); ?></p><?php endif; ?>
             <?php if ( $contact instanceof \WP_Post || $services instanceof \WP_Post ) : ?>
                 <p class="aznet-theme-law01-actions">
                     <?php if ( $contact instanceof \WP_Post ) : ?><a class="aznet-theme-law01-button" href="<?php echo esc_url( get_permalink( $contact ) ); ?>"><?php esc_html_e( 'Liên hệ tư vấn', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a><?php endif; ?>
