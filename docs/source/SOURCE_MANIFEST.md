@@ -1,6 +1,6 @@
 # AZnet Theme Source Manifest
 
-Canonical source is reconciled through the completed v1.2 publication/production-deployment checkpoint and the approved v1.3 Client Delivery System design. v1.2 remains the published and verified production release; v1.3 is source-ratified as a WordPress-native Theme milestone with Y1-Y5 implementation still pending. Provider compatibility/certification tracks remain separate.
+Canonical source is reconciled through the completed v1.3 Client Delivery System technical closure at `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`. v1.3 is TECHNICAL PASS / PUBLICATION GATED; v1.2 remains the published and verified production release until separate v1.3 publication/deployment approvals. Provider compatibility/certification tracks remain separate.
 
 | Source | Semantic version | Role |
 | --- | --- | --- |

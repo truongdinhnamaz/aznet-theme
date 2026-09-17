@@ -332,7 +332,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 
 ## 10A. v1.3 Client Delivery System
 
-**State:** **RATIFIED / Y1 READY.**
+**State:** **TECHNICAL PASS / PUBLICATION GATED.**
 
 **Goal:** materially reduce the time from clean WordPress to a professional, client-ready service/business website without introducing a proprietary builder or domain engine.
 
