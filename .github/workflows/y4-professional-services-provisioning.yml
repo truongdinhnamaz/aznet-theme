@@ -1,0 +1,46 @@
+name: Y4 Professional Services Provisioning
+
+on:
+  push:
+    branches:
+      - work/v1.3-y4-professional-services-blueprint
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'inc/theme/provisioning-professional-services.php'
+      - 'inc/theme/provisioning-blueprints.php'
+      - 'inc/theme/provisioning-plan.php'
+      - 'inc/theme/provisioning-runner.php'
+      - 'inc/theme/provisioning-readiness.php'
+      - 'inc/admin/provisioning.php'
+      - 'inc/theme/bootstrap.php'
+      - 'tests/offline/y4-professional-services-provisioning-contract.php'
+      - 'tests/runtime/y4-professional-services-provisioning.php'
+      - 'tests/browser/y4-professional-services-provisioning-l4.mjs'
+      - 'scripts/verify-v1-core.sh'
+      - '.github/workflows/y4-professional-services-provisioning.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  y4-offline:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact Y4 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Verify Y4 ownership contract
+        run: |
+          set -euo pipefail
+          git diff --check
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/y4-professional-services-provisioning-contract.php
