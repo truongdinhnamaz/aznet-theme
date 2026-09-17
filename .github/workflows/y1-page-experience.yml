@@ -1,0 +1,202 @@
+name: Y1 Page Experience 2.0
+
+on:
+  push:
+    branches:
+      - feat/v1.3-y1-page-experience
+    paths:
+      - 'page.php'
+      - 'page-templates/**'
+      - 'template-parts/content/page.php'
+      - 'assets/css/components/page.css'
+      - 'inc/theme/page-experience.php'
+      - 'inc/theme/settings.php'
+      - 'inc/theme/assets.php'
+      - 'inc/theme/design-system.php'
+      - 'inc/theme/bootstrap.php'
+      - 'inc/admin/control-center.php'
+      - 'tests/offline/y1-page-experience-contract.php'
+      - 'tests/runtime/y1-page-experience.php'
+      - 'tests/browser/y1-page-experience-l4.mjs'
+      - 'tests/offline/r1-visual-preset-contract.php'
+      - 'tests/offline/r3-header-settings-contract.php'
+      - 'tests/offline/r6-asset-scope-contract.php'
+      - 'tests/offline/x3-media-gallery-embed-contract.php'
+      - 'scripts/verify-v1-core.sh'
+      - '.github/workflows/y1-page-experience.yml'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  y1-quality:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Checkout exact Y1 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Record exact candidate SHA
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/y1 /tmp/y1-l4
+          git rev-parse HEAD | tee /tmp/y1/checkout-sha.txt
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Run Y1 static and retained regression gate
+        run: |
+          set -euo pipefail
+          git diff --check
+          bash scripts/assert-theme-version.sh
+          bash scripts/verify-v1-core.sh
+
+      - name: Install WordPress 6.9 and exact Theme candidate
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/wp
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='AZnet Y1 Runtime' --admin_user=admin --admin_password='y1-page-password' --admin_email=ci@example.test --skip-email --allow-root
+          rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='README.md' --exclude='aznet-preview.png' ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          wp core version --path=/tmp/wp --allow-root | grep -Fx '6.9'
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp --allow-root)"
+          wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+
+      - name: Seed Y1 native Page fixtures
+        run: |
+          set -euo pipefail
+          printf '%s' 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=' | base64 -d > /tmp/y1-featured.png
+          IMAGE_ID=$(wp media import /tmp/y1-featured.png --title='Y1 Featured' --porcelain --path=/tmp/wp --allow-root)
+          test -n "$IMAGE_ID"
+          Y1_IMAGE_ID="$IMAGE_ID" wp eval-file "$GITHUB_WORKSPACE/tests/runtime/y1-page-experience.php" --path=/tmp/wp --allow-root > /tmp/y1/fixture.json
+          jq -e '.parent_id > 0 and .child_id > 0 and .wide_id > 0 and .landing_id > 0 and .plain_slug_id > 0' /tmp/y1/fixture.json
+          wp post meta get "$(jq -r '.wide_id' /tmp/y1/fixture.json)" _wp_page_template --path=/tmp/wp --allow-root | grep -Fx 'page-templates/wide.php'
+          wp post meta get "$(jq -r '.landing_id' /tmp/y1/fixture.json)" _wp_page_template --path=/tmp/wp --allow-root | grep -Fx 'page-templates/landing.php'
+
+      - name: Start WordPress runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/y1/server.log 2>&1 &
+          echo $! > /tmp/y1/server.pid
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/ >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:8080/ >/dev/null
+
+      - name: Verify Y1 real WordPress presentation and asset boundary
+        run: |
+          set -euo pipefail
+          check_page() {
+            local name="$1" url="$2" variant="$3" breadcrumb="$4" lead="$5" featured="$6"
+            local file="/tmp/y1/${name}.html"
+            test "$(curl -sS -o "$file" -w '%{http_code}' "$url")" = 200
+            test "$(grep -o '<main id="main" class="aznet-theme-main">' "$file" | wc -l)" = 1
+            grep -F "aznet-theme-page--${variant}" "$file" >/dev/null
+            grep -F 'aznet-theme-page-css' "$file" >/dev/null
+            grep -F 'aznet-theme-entry__content aznet-theme-page__content' "$file" >/dev/null
+            if [[ "$breadcrumb" = yes ]]; then grep -F 'aznet-theme-page__breadcrumbs' "$file" >/dev/null; else ! grep -F 'aznet-theme-page__breadcrumbs' "$file" >/dev/null; fi
+            if [[ "$lead" = yes ]]; then grep -F 'aznet-theme-page__lead' "$file" >/dev/null; else ! grep -F 'aznet-theme-page__lead' "$file" >/dev/null; fi
+            if [[ "$featured" = yes ]]; then grep -F 'aznet-theme-page__featured' "$file" >/dev/null; else ! grep -F 'aznet-theme-page__featured' "$file" >/dev/null; fi
+          }
+          check_page parent "$(jq -r '.parent_url' /tmp/y1/fixture.json)" standard no yes yes
+          check_page child "$(jq -r '.child_url' /tmp/y1/fixture.json)" standard yes yes no
+          grep -F 'Y1 Parent Page' /tmp/y1/child.html >/dev/null
+          check_page wide "$(jq -r '.wide_url' /tmp/y1/fixture.json)" wide no no no
+          grep -F 'This body text must not become a generated lead.' /tmp/y1/wide.html >/dev/null
+          check_page landing "$(jq -r '.landing_url' /tmp/y1/fixture.json)" landing no yes no
+          check_page plain-slug "$(jq -r '.plain_slug_url' /tmp/y1/fixture.json)" standard no no no
+          curl -fsS "$(jq -r '.front_url' /tmp/y1/fixture.json)" > /tmp/y1/front.html
+          if grep -F 'aznet-theme-page-css' /tmp/y1/front.html; then
+            echo 'FAIL: page.css leaked onto non-Page front request' >&2
+            exit 1
+          fi
+
+          wp eval "set_theme_mod( 'aznet_theme_settings', array_merge( \AZnet\Theme\settings(), [ 'page_breadcrumbs' => false ] ) );" --path=/tmp/wp --allow-root
+          curl -fsS "$(jq -r '.child_url' /tmp/y1/fixture.json)" > /tmp/y1/child-breadcrumb-disabled.html
+          if grep -F 'aznet-theme-page__breadcrumbs' /tmp/y1/child-breadcrumb-disabled.html; then
+            echo 'FAIL: page_breadcrumbs=false did not disable the Theme breadcrumb' >&2
+            exit 1
+          fi
+          wp eval "set_theme_mod( 'aznet_theme_settings', array_merge( \AZnet\Theme\settings(), [ 'page_breadcrumbs' => true ] ) );" --path=/tmp/wp --allow-root
+
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/y1/server.log; then
+            echo 'FAIL: Theme-caused PHP error marker in Y1 runtime' >&2
+            exit 1
+          fi
+          echo 'PASS: Y1 WordPress 6.9 runtime presentation and asset boundary'
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Run Y1 browser responsive and accessibility matrix
+        env:
+          Y1_STATE_DIR: /tmp/y1
+          Y1_L4_DIR: /tmp/y1-l4
+        run: node tests/browser/y1-page-experience-l4.mjs
+
+      - name: Verify runtime boundary
+        if: always()
+        run: |
+          set -euo pipefail
+          if [[ -f /tmp/y1/server.log ]] && grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/y1/server.log; then
+            echo 'FAIL: runtime log contains PHP error markers' >&2
+            exit 1
+          fi
+
+      - name: Upload Y1 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: y1-page-experience-evidence
+          path: |
+            /tmp/y1
+            /tmp/y1-l4
+          if-no-files-found: error
+
+      - name: Stop runtime
+        if: always()
+        run: |
+          if [[ -f /tmp/y1/server.pid ]]; then
+            kill "$(cat /tmp/y1/server.pid)" || true
+          fi
