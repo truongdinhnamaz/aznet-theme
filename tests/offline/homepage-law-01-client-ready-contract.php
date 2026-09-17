@@ -44,7 +44,7 @@ assert(str_contains($composer, "[ 'hero', 'services', 'profile' ]"), 'Composer m
 assert(! str_contains($composer, "[ 'hero', 'services', 'about', 'team' ]"), 'Composer must not render duplicate legacy About/Team sections.');
 
 foreach ([
-    'aznet-theme-law01-button--secondary',
+    'aznet-theme-law01-hero__secondary-action',
     'aznet-theme-law01-hero__trust',
     'Tư vấn rõ ràng',
     'Giải pháp thực tiễn',
@@ -53,6 +53,8 @@ foreach ([
 ] as $needle) {
     assert(str_contains($hero, $needle), "Client-ready Law 01 hero contract missing: {$needle}");
 }
+assert(! str_contains($hero, 'aznet-theme-law01-button aznet-theme-law01-button--secondary'), 'Hero Services CTA must not share the primary button selector used by retained browser verification.');
+assert(str_contains($css, '.aznet-theme-law01-hero__secondary-action'), 'Client-ready Law 01 CSS must style the dedicated hero secondary CTA.');
 
 assert(str_contains($services, 'aznet-theme-law01-card__badge'), 'Service cards must expose a presentation-only badge hook.');
 assert(str_contains($profile, 'aznet-theme-law01-profile__grid'), 'Profile band must combine About and Team presentation.');
