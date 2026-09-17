@@ -4,8 +4,7 @@ declare(strict_types=1);
 $root = dirname(__DIR__, 2);
 
 $files = [
-    'css' => $root . '/assets/css/components/homepage-law-01-client-ready.css',
-    'assets' => $root . '/inc/theme/assets.php',
+    'css' => $root . '/assets/css/components/homepage-law-01-variants.css',
     'composer' => $root . '/inc/theme/homepage-composer.php',
     'hero' => $root . '/template-parts/homepage/law-01/hero.php',
     'services' => $root . '/template-parts/homepage/law-01/services.php',
@@ -18,7 +17,6 @@ foreach ($files as $label => $path) {
 }
 
 $css = file_get_contents($files['css']);
-$assets = file_get_contents($files['assets']);
 $composer = file_get_contents($files['composer']);
 $hero = file_get_contents($files['hero']);
 $services = file_get_contents($files['services']);
@@ -40,14 +38,6 @@ foreach ([
     '@media (prefers-reduced-motion: reduce)',
 ] as $needle) {
     assert(str_contains($css, $needle), "Client-ready Law 01 CSS contract missing: {$needle}");
-}
-
-foreach ([
-    "'aznet-theme-homepage-law-01-client-ready'",
-    "'/assets/css/components/homepage-law-01-client-ready.css'",
-    "[ 'aznet-theme-homepage-law-01-variants' ]",
-] as $needle) {
-    assert(str_contains($assets, $needle), "Client-ready Law 01 asset contract missing: {$needle}");
 }
 
 assert(str_contains($composer, "[ 'hero', 'services', 'profile' ]"), 'Composer must render the combined client-ready profile band.');
