@@ -61,10 +61,14 @@ try {
   await page.getByRole('heading', { name: 'Thiết lập được khuyến nghị' }).waitFor();
   const cards = await page.locator('.aznet-theme-provision-recommendation').count();
   if (cards !== 5) throw new Error(`expected five Professional Services recommendation cards, got ${cards}`);
-  const step2Text = await page.locator('.aznet-theme-provisioning').innerText();
-  for (const expected of ['Professional Services', 'home', 'about', 'services', 'team', 'contact']) {
-    if (!step2Text.toLowerCase().includes(expected.toLowerCase())) throw new Error(`step 2 missing ${expected}`);
+  const selectedBlueprint = page.locator('input[name="blueprint"]');
+  if ((await selectedBlueprint.inputValue()) !== 'professional-services-v1') throw new Error('step 2 lost the selected Professional Services blueprint');
+  for (const title of ['Giải pháp chuyên nghiệp cho nhu cầu của bạn', 'Giới thiệu', 'Dịch vụ', 'Đội ngũ', 'Liên hệ']) {
+    if (await page.locator('.aznet-theme-provision-recommendation h4', { hasText: title }).count() !== 1) {
+      throw new Error(`step 2 missing visible recommendation title: ${title}`);
+    }
   }
+  const step2Text = await page.locator('.aznet-theme-provisioning').innerText();
   if (!step2Text.includes('không tạo dữ liệu chuyên ngành')) throw new Error('Professional Services ownership warning missing');
   if (await page.locator('input[name^="starter_posts["]').count() !== 0) throw new Error('generic Professional Services wizard exposed Law starter Posts');
   await assertAxe(page, 'y4-admin-step2');
