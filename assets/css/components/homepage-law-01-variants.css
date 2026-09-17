@@ -212,6 +212,10 @@
     color: #655a51;
 }
 
+.aznet-theme-site-footer {
+    background: var(--law01-brand-red-deep, #6d0b13);
+}
+
 @media (max-width: 1180px) {
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--services {
         grid-template-columns: repeat(3, minmax(0, 1fr));
