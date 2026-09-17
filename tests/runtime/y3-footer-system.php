@@ -124,7 +124,7 @@ foreach ( [ 'standard', 'professional', 'compact' ] as $preset ) {
     $html = y3_runtime_home_html();
     $footer = y3_runtime_footer_html( $html );
 
-    if ( 1 !== substr_count( $html, 'role="contentinfo"' ) ) {
+    if ( 1 !== substr_count( $html, 'role="contentinfo"' ) && 1 !== substr_count( $html, 'role="contentinfo"' ) ) {
         y3_runtime_fail( 'expected exactly one contentinfo landmark for preset ' . $preset );
     }
     if ( ! str_contains( $footer, 'aznet-theme-site-footer--' . $preset ) ) {
