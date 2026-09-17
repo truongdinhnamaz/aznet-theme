@@ -1,9 +1,9 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.49
+**Version:** v0.50
 **Status:** Working Execution Map / derived  
-**Date:** 17/09/2026
+**Date:** 18/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
@@ -22,7 +22,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | D Generic Templates | PASS / retained | Page/Post/Archive/Search/404 technical closure plus P2/P3 editorial hardening and P4 professional pilot quality evidence are retained |
 | W Woo presentation | PASS / retained | Woo owns commerce truth; R4 deepens presentation only |
 | E RootProfile Profile/Contact | OPTIONAL COMPAT ACTIVE | External E5-C blocker; E5-D takeover locked; not core-v1.1 critical path |
-| F Homepage | CORE PASS / F8 INTEGRATED PASS | Native Homepage on main; exact Core P5.242 + Pro P5.164 integration passed L3-L4 against Theme `252554961bc81d22427363aee0048365fb4e116b`; F9/provider L5 remains separate |
+| F Homepage | CORE PASS / F9 PROVIDER L5 PASS | Native Homepage remains core PASS; F8 L3-L4 retained; ConvertFlow F9-A..E + C1 provider/theme L5 certification PASS at the exact Theme `v1.3.0` reference-producer / Core P5.244 + Pro P5.164 scope. Law 01 live presentation/rerun QA PASS at tested scope. RootProfile-backed Team projection remains separate external blocker #112. |
 | G Core v1.0 closure | TECHNICAL PASS | G0-G8 merged; publication/tag is separate live state |
 | R0 v1.1 Source Reconciliation | PASS | Source-only reconciliation merged through PR #36 |
 | R1 Design System 2.0 | PASS | PR #37 merged; stable Theme settings/tokens/visual presets and L1-L4 parity evidence |
@@ -56,6 +56,16 @@ Fresh P4 public evidence after Theme replacement retains run `35045540722` with 
 P2 final verified head `dec498b997aec6bc8b08cf91f3e09c42611bbd66` merged through PR #51 to `main@a863da861b6a299920568b2b0c9ca57924727431` after Theme-owned author-fallback and CPT/Woo scope regressions were fixed.
 
 P3 final verified head `d78091900451176c3815b23d1485036e784bdde9` merged through PR #52 to `main@a1dd42dd9672bd6b7cb07be90ae5fd64a6dd14e0`; head and merge share tree `8fc309ea8e01bfe727da943754c98164b3f92a58`.
+
+## 1.1 Exact current checkpoint — 18/09/2026
+
+- Canonical `main`: `371e09035a23664cf38f52f70aa3189e5c10f2cf` after PR #111; PR #110/#111 merged. PR #109 is draft/open/unmerged and is not part of canonical state.
+- F9 optional ConvertFlow provider L5: PASS at the exact certified scope in `docs/evidence/F9_PROVIDER_L5_SOURCE_SYNC_20260918.md`; no ConvertFlow release/deploy or public-contract change is inferred.
+- Pilot live Theme metadata: `1.3.0`, with owner-approved post-release WPVibe Theme-file publish and `aznet-theme-wpvibe-backup`. Runtime behavior is verified; live byte identity to release/main is UNKNOWN.
+- Law 01 rerun: PASS at L3/L4 evidence available for the tested live flow (`Created: 0 · Reused: 36`, no duplicate current-blueprint starter roles). Homepage content/indexability/Lighthouse readiness is PASS at the tested scope.
+- RootProfile Team/member discovery: BLOCKED_EXTERNAL_CONTRACT under issue #112. Theme has no safe authoritative current action until a public/versioned organization-team projection exists.
+
+**Exact Next:** hold Team implementation at #112 and do not invent a workaround. No new Theme core slice is opened by this checkpoint. A future safe Next requires either the RootProfile public contract becoming available or a separately approved Theme roadmap slice.
 
 ## 2. Slice discipline
 
