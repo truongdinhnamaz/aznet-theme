@@ -1,0 +1,25 @@
+name: Temporary Y1 Task2 RED
+
+on:
+  push:
+    branches:
+      - feat/v1.3-y1-page-experience
+    paths:
+      - .github/workflows/_tmp-y1-task2-red.yml
+
+permissions:
+  contents: read
+
+jobs:
+  y1-task2-red:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Run intended Task 2 RED contract
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-page-experience-contract.php
