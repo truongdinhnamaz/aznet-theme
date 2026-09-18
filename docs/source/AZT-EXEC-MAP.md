@@ -1,13 +1,13 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.57
+**Version:** v0.58
 **Status:** Working Execution Map / derived  
 **Date:** 18/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** live `main` is Theme metadata `1.3.6` at `main@9781d29a9d1ba32a643ffe3cfe9d47c8c4ba4c1c` after PR #143 and the intermediate PR #145 Hero-width correction. PR #147 is the current owner-approved Law 01 screenshot-reference presentation candidate; exact production head `aacd6fe4abc4d5f3d49b6bfd85570df66688db46` completed 18/18 triggered workflows SUCCESS. Published GitHub Release remains `v1.3.0`; no new package/release/deployment is authorized by this visual slice.
+> **Canonical-main checkpoint:** live `main` is Theme metadata `1.3.6` at `main@f608c7ec98587b61da570871bb304a9e76d09bbd` after owner-approved PR #147 closed the Law 01 screenshot-reference presentation slice. Final verified PR head `225e36af27193358b2a252ac7edce4d9867d61ba` completed 21/21 triggered workflows SUCCESS and has zero file delta to the merge commit. Published GitHub Release remains `v1.3.0`; no new package/release/deployment is authorized by this visual closure.
 
 **Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS`. Current v1.3 state: `PUBLICATION + PRODUCTION DEPLOYMENT PASS`; published/GitHub-Release release and verified production deployment are both `v1.3.0` at their respective verified scopes.
 
@@ -402,6 +402,17 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - No fabricated business statistics.
 - RootProfile Team remains BLOCKED at issue #112; WordPress Page/direct-child fixtures are presentation inputs only.
 
+## 15.5 Law 01 screenshot-reference canonical merge closure — 18/09/2026
+
+- Owner-approved PR #147 final head: `225e36af27193358b2a252ac7edce4d9867d61ba`.
+- Final-head verification: 21/21 triggered workflows SUCCESS, 0 failure.
+- Canonical merge: `main@f608c7ec98587b61da570871bb304a9e76d09bbd`.
+- Git comparison from verified head to merge commit: zero file delta.
+- No fresh post-merge exact-main workflow run is claimed.
+- Theme metadata remains `1.3.6`; published GitHub Release remains `v1.3.0`.
+- New package/version, tag/GitHub Release and production deployment remain separate approval gates.
+- RootProfile Team remains BLOCKED at issue #112.
+
 ## 16. Exact next
 
-**NEXT — merge PR #147 only after the explicit merge gate. After canonical merge, refresh exact-main provenance before creating any new installable package. Tag/GitHub Release and production deployment remain separate approval gates.**
+**NEXT — Law 01 screenshot-reference presentation closure is complete on canonical main. A new installable package/version is not authorized by this closure. Tag/GitHub Release and production deployment remain separate approval gates.**
