@@ -78,6 +78,17 @@ foreach ([
     assert(str_contains($css, $needle), "Law 01 hero composition v2 missing: {$needle}");
 }
 
+
+foreach ([
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-section h2 {',
+    'max-width: none;',
+    'font-size: var(--law01-type-section-title);',
+    'white-space: nowrap;',
+    'text-wrap: nowrap;',
+] as $needle) {
+    assert(str_contains($css, $needle), "Law 01 homepage section heading system missing: {$needle}");
+}
+
 assert(str_contains($css, '.aznet-theme-law01-team .aznet-theme-law01-button--secondary'), 'Burgundy variant must override the higher-specificity Team secondary-button rule.');
 assert(str_contains($css, 'color: var(--law01-client-ink);'), 'Burgundy Team secondary CTA must use a readable ink color on the light Team surface.');
 
