@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.64
+**Version:** v0.65
 **Status:** Working Source  
 **Date:** 18/09/2026
 
@@ -459,6 +459,16 @@ Deterministic package `aznet-theme-1.3.6.zip`: 145 files; 108 packaged PHP lint 
 
 This checkpoint does not change Theme/provider ownership and does not authorize tag/GitHub Release or production deployment. RootProfile Team remains BLOCKED at issue #112. Evidence: `docs/evidence/V1_3_6_CLIENT_DELIVERY_20260918.md`.
 
+### Law 01 Hero full-bleed correction and 1.3.7 client-delivery candidate — 18/09/2026
+
+The client screenshot proved a presentation regression that was not visible in the earlier <=1440px target matrix: Burgundy Law 01 Hero content stopped at the shared `96rem` shell on wider screens. PR #145 added a 1920px regression case and changed only the Theme-owned Hero width boundary to full-bleed. Final head `0e2fa28b72f88af3af2f0f1bcc668ff90d117c50` completed 14/14 workflows SUCCESS and merged to `main@9781d29a9d1ba32a643ffe3cfe9d47c8c4ba4c1c`.
+
+Because the resulting production bytes post-date the 1.3.6 package, PR #146 promotes the client-delivery version to 1.3.7. RED head `63041afb1161bf6b136a665957c71ea262ad20e1` failed the intended Y5 1.3.7 metadata assertion. Minimal GREEN changed only `style.css` and `AZNET_THEME_VERSION`, while X6/Y5 release guards now recognize the exact 1.3.6 -> 1.3.7 boundary.
+
+Exact release head `57d2b5a87c08d5fbb54d6960feed677837e33087` completed **14/14 triggered workflows SUCCESS, 0 failure**. Deterministic package `aznet-theme-1.3.7.zip`: 145 files, 108 packaged PHP lint PASS, SHA-256 `890e94eb1a69abad4e94e4914e3628b83a491d91636d33c9036070d6ee35b3ab`. Y5 run `35357088021`; artifact `10552241981`; digest `sha256:93ed2484c7eeb1add18d4a582386c01ab536ec0141e0bdcd1dc8102b0570faa7`.
+
+This correction remains Theme presentation only. No provider/domain ownership changes. RootProfile Team remains BLOCKED at issue #112. Tag/GitHub Release and production deployment remain separate explicit approval gates.
+
 ## 14. Exact next
 
-**NEXT — canonical merge of PR #143 is the next approval gate for the verified 1.3.6 client-delivery candidate. Do not start tag/GitHub Release or production deployment without separate explicit approval. Preserve the completed Law 01 presentation baseline and keep RootProfile Team BLOCKED at issue #112.**
+**NEXT — canonical merge of PR #146 is the next approval gate for the verified 1.3.7 client-delivery candidate. Do not tag, publish a GitHub Release or deploy production without separate explicit approval.**
