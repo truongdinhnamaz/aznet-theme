@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.52
+**Version:** v0.53
 **Status:** Working Source  
 **Date:** 18/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -229,7 +229,7 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**NEXT — PR #147 is the current owner-approved Law 01 screenshot-reference presentation candidate. Exact production head `aacd6fe4abc4d5f3d49b6bfd85570df66688db46` completed 18/18 triggered workflows SUCCESS. Canonical merge remains the next approval gate. No new package/tag/GitHub Release/production deployment is authorized by this visual slice; RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
+**NEXT — Law 01 screenshot-reference parity is now canonical at `main@f608c7ec98587b61da570871bb304a9e76d09bbd`. No new package/version, Git tag, GitHub Release or production deployment is authorized by this closure. RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
 
 ### AZnet Theme 1.3.6 client-delivery candidate — 18/09/2026
 
@@ -251,6 +251,12 @@ The accepted candidate keeps full-width section surfaces but restores one shared
 Exact production head `aacd6fe4abc4d5f3d49b6bfd85570df66688db46` completed **18/18 triggered workflows SUCCESS, 0 failure**. Homepage Composer Law 01 Browser Quality run `35363025279` passed the 1920/1440/1024/390/320 matrix; artifact `10555328476`, digest `sha256:4c0af3b17d8d38768f994f2dacd3dbe20f5da5b693ec28c331df7fc632d520ba`. The 1440 screenshot was manually inspected against the owner-supplied reference. Evidence: `docs/evidence/LAW01_REFERENCE_PARITY_FINAL_20260918.md`.
 
 RootProfile authoritative Team membership remains blocked at issue #112. The WordPress Page/direct-child fixture remains presentation input only and does not become authoritative identity or membership.
+
+### Law 01 screenshot-reference canonical merge closure — 18/09/2026
+
+Owner-approved PR #147 merged final verified head `225e36af27193358b2a252ac7edce4d9867d61ba` to canonical `main@f608c7ec98587b61da570871bb304a9e76d09bbd`. The final PR head completed **21/21 triggered workflows SUCCESS, 0 failure**. Git comparison from final verified head to the merge commit has zero file delta, so the merged repository tree is byte-identical to the verified PR head.
+
+No fresh post-merge workflow run was emitted for `f608c7e...`; no independent exact-main rerun is claimed. Theme metadata remains `1.3.6`. Published GitHub Release remains `v1.3.0`. This closure does not authorize a new package/version, tag/GitHub Release or production deployment. Evidence: `docs/evidence/LAW01_REFERENCE_PARITY_MERGE_CLOSURE_20260918.md`.
 
 ### Law 01 About/Profile + Latest visual-parity closure — 18/09/2026
 
