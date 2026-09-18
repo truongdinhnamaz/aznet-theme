@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.46
+**Version:** v0.47
 **Status:** Working Source  
 **Date:** 18/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -20,6 +20,7 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 - Final published v1.1.0 production package remains the P5-verified 121-file set, SHA-256 `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`.
 - Canonical repository technical baseline is Theme version `1.3.0` at owner-approved PR #98 merge `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`; v1.3 technical closure, publication and production deployment are now PASS at their separately verified scopes.
 - Post-release live repository checkpoint: PR #129/#130/#131 closed the Law 01 Burgundy Homepage presentation sequence, media-rich visual QA/Team portrait link accessibility, and Professional Footer column order. Canonical `main@8238248f0d97383d0e43461c481ad6bbc1f480a7` passed `V1 Exact Main Verification` run `35315451153` on exact merged bytes. Theme metadata/released baseline remains `1.3.0`; no new release publication/deployment is inferred. Evidence: `docs/evidence/LAW01_HOMEPAGE_CLOSURE_20260918.md`.
+- Corrective inheritance checkpoint: owner-approved PR #133 merged to `main@a66ef1639c299a06e62e9797aa2f44fe4e26cd8d` with Theme metadata `1.3.3`. It restores the approved v1.3.2 Law 01 unified-heading system while retaining the later #129-#131 closure. Final-head Y5 run `35318352870` and X6 run `35318352677` PASS; deterministic `aznet-theme-1.3.3.zip` has 145 production files, 108/108 packaged PHP lint PASS and SHA-256 `172a98dc00a52228fbb44a6ad24b79d568b7b543faa484c1ded59511b33e35d7`. Fresh exact-main V1 run `35318696376` and X6 run `35318696388` PASS. Published GitHub Release/deployment remain historical `v1.3.0`; no v1.3.3 tag/Release/deploy is inferred. Evidence: `docs/evidence/V1_3_3_CORRECTIVE_INHERITANCE_20260918.md`.
 - Published release `v1.2.0` remains retained historical PASS at exact technical source `c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`; its owner-approved production deployment to `tamduchanoi.aznet.vn` remains retained evidence via deployment run `35135759389` and independent read-only verification run `35136876330`.
 - v1.3 exact-main verification: V1 Exact Main run `35206627102` SUCCESS plus pre-existing X6 push-to-main release path run `35206626992` SUCCESS on `afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`; exact `aznet-theme-1.3.0.zip` SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`, 144 package files, 107 packaged PHP lint PASS, 32/32 browser/axe PASS, switch-away/switch-back lifecycle PASS. Evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`.
 - Published/GitHub-Release release is `v1.3.0`: owner-approved publication run `35211254633` published annotated tag `v1.3.0` (tag object `56f2ae2e8ba6e1fb4e8359447656e88ab6411ba6`) dereferencing to exact technical commit `afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, GitHub Release `390623960`, and asset `570039299` (`aznet-theme-1.3.0.zip`) with SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`; publication evidence artifact `10492411096` has digest `sha256:0a18d2169ad8d92a587421289ede773031e56d3646ddac44ba326ebe4ea6fd75`. Evidence: `docs/evidence/V1_3_PUBLICATION_20260917.md`.
@@ -225,7 +226,7 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**NEXT — preserve the completed v1.3 core/release and post-release Law 01 Homepage closure state. RootProfile-backed Team/member discovery remains `BLOCKED_EXTERNAL_CONTRACT` under issue #112; resume only when the RootProfile owner exposes a suitable public/versioned projection. Otherwise, no new Theme milestone, architecture/public-contract change, release/deploy/takeover action or optional-provider slice begins without a separately approved gate.**
+**NEXT — provide the exact verified `aznet-theme-1.3.3.zip` to the product owner for the requested manual website update. Do not use the previously delivered 1.3.1-lineage ZIP. Publication/tag and automated production deployment remain separate gates; RootProfile Team remains `BLOCKED_EXTERNAL_CONTRACT` under issue #112.**
 
 ### P1 pilot identity cleanup and final P4 sign-off
 
