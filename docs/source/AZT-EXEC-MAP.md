@@ -1,13 +1,13 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.56
+**Version:** v0.57
 **Status:** Working Execution Map / derived  
 **Date:** 18/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** live `main` remains Theme metadata `1.3.5` at `main@a60cd71437375a564444c181780f5e38ec37067b` after Law 01 visual-parity source closure. Owner-approved PR #143 is the verified `1.3.6` client-delivery candidate; exact production head `7db436b316ef5a9f9264fa9dd71f6cfad4d7ad80` completed 14/14 triggered workflows SUCCESS and produced deterministic `aznet-theme-1.3.6.zip` SHA-256 `25271cd4c68f0bc88e236f084acb73d7661a618d1ae1d737f0f2a5202307a84a`. Canonical merge remains approval-gated. Published GitHub Release and verified production deployment remain historical `v1.3.0`. RootProfile Team remains blocked under issue #112.
+> **Canonical-main checkpoint:** live `main` contains the owner-approved Law 01 Hero full-bleed fix at `main@9781d29a9d1ba32a643ffe3cfe9d47c8c4ba4c1c` with Theme metadata `1.3.6`. PR #146 is the verified `1.3.7` client-delivery candidate; exact release head `57d2b5a87c08d5fbb54d6960feed677837e33087` completed 14/14 triggered workflows SUCCESS and produced deterministic `aznet-theme-1.3.7.zip` SHA-256 `890e94eb1a69abad4e94e4914e3628b83a491d91636d33c9036070d6ee35b3ab`. Canonical merge remains approval-gated. Published GitHub Release and verified production deployment remain historical `v1.3.0`. RootProfile Team remains blocked under issue #112.
 
 **Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS`. Current v1.3 state: `PUBLICATION + PRODUCTION DEPLOYMENT PASS`; published/GitHub-Release release and verified production deployment are both `v1.3.0` at their respective verified scopes.
 
@@ -390,6 +390,18 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - Package creation does not imply tag/GitHub Release or production deployment.
 - RootProfile Team remains BLOCKED at issue #112.
 
+## 15.4 Law 01 Hero full-bleed correction + AZnet Theme 1.3.7 candidate — 18/09/2026
+
+- PR #145 reproduced the wide-screen Hero gutter defect with a full-bleed static contract and 1920px browser case.
+- Minimal production fix removed the `96rem` Hero-grid cap while preserving the 48/52 split.
+- PR #145 final head `0e2fa28b72f88af3af2f0f1bcc668ff90d117c50` completed 14/14 workflows SUCCESS and merged to `main@9781d29a9d1ba32a643ffe3cfe9d47c8c4ba4c1c`.
+- PR #146 RED head `63041afb1161bf6b136a665957c71ea262ad20e1` failed the intended 1.3.7 Y5 metadata contract.
+- PR #146 exact GREEN release head `57d2b5a87c08d5fbb54d6960feed677837e33087` completed 14/14 triggered workflows SUCCESS.
+- Deterministic package: `aznet-theme-1.3.7.zip`, 145 files, 108 packaged PHP lint PASS, SHA-256 `890e94eb1a69abad4e94e4914e3628b83a491d91636d33c9036070d6ee35b3ab`.
+- Y5 run `35357088021`; promoted-package artifact `10552241981`; artifact digest `sha256:93ed2484c7eeb1add18d4a582386c01ab536ec0141e0bdcd1dc8102b0570faa7`.
+- RootProfile Team remains BLOCKED at issue #112.
+- Tag/GitHub Release and production deployment remain separate approval gates.
+
 ## 16. Exact next
 
-**NEXT — merge PR #143 only after the explicit merge gate. After canonical merge, refresh exact-main/package provenance as required before any tag/GitHub Release or production deployment. No further Law 01 visual expansion is authorized by this release slice.**
+**NEXT — merge PR #146 only after the explicit merge gate. Do not tag, publish or deploy as part of this candidate closure.**
