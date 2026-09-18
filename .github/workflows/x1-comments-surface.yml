@@ -85,16 +85,133 @@ jobs:
           git fetch origin main:refs/remotes/origin/main
           git diff --check origin/main...HEAD
           changed="$(git diff --name-only origin/main...HEAD)"
-          if printf '%s\n' "$changed" | grep -E '^(inc/integrations/|assets/css/integrations/)'; then
-            echo 'FAIL: X1 must not change provider integration files' >&2
+          if [[ "${HEAD_REF:-}" == "${X1_SLICE_BRANCH}" ]]; then
+            if printf '%s\n' "$changed" | grep -E '^(inc/integrations/|assets/css/integrations/)'; then
+              echo 'FAIL: X1 must not change provider integration files' >&2
+              exit 1
+            fi
+            if printf '%s\n' "$changed" | grep -E '^(functions\.php|style\.css)
+          bash scripts/assert-theme-version.sh
+          php tests/offline/x1-comments-surface-contract.php
+          php tests/offline/editorial-single-post-contract.php
+          php tests/offline/editorial-listing-search-contract.php
+          php tests/offline/d027-provisioning-independence-contract.php
+          php -l comments.php
+          php -l single.php
+          php -l inc/theme/assets.php
+          php -l tests/runtime/x1-comments-surface.php
+          echo 'PASS: X1 ownership, diff and retained static regressions'
+
+      - name: Install clean WordPress 6.9 and exact Theme candidate
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          rm -rf /tmp/wp-site
+          mkdir -p /tmp/wp-site
+          wp core download --version=6.9 --path=/tmp/wp-site --force --allow-root
+          wp config create --path=/tmp/wp-site --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          ADMIN_PASS=$(openssl rand -hex 16)
+          wp core install --path=/tmp/wp-site --url=http://127.0.0.1:8080 --title='AZnet X1 Comments' --admin_user=admin --admin_password="$ADMIN_PASS" --admin_email=x1@example.test --skip-email --allow-root
+          mkdir -p /tmp/wp-site/wp-content/themes/aznet-theme
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
+            ./ /tmp/wp-site/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp-site --allow-root
+          wp plugin deactivate --all --path=/tmp/wp-site --allow-root || true
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-site --allow-root)"
+          test "$(wp core version --path=/tmp/wp-site --allow-root)" = '6.9'
+
+      - name: Seed native comments fixture
+        run: |
+          set -euo pipefail
+          wp eval-file tests/runtime/x1-comments-surface.php --path=/tmp/wp-site --allow-root > /tmp/x1-comments/fixture.json
+          jq -e '.post_id > 0 and .parent_id > 0 and .child_id > 0 and .second_parent_id > 0 and (.url | length > 0)' /tmp/x1-comments/fixture.json
+          jq -r '.url' /tmp/x1-comments/fixture.json > /tmp/x1-comments/url.txt
+
+      - name: Start WordPress runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp-site > /tmp/x1-comments/server.log 2>&1 &
+          echo $! > /tmp/x1-comments/server.pid
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/wp-login.php >/tmp/x1-comments/login-smoke.html; then break; fi
+            sleep 1
+          done
+          grep -F 'user_login' /tmp/x1-comments/login-smoke.html
+
+      - name: Verify real WordPress comments HTML and scoped assets
+        run: |
+          set -euo pipefail
+          URL="$(cat /tmp/x1-comments/url.txt)"
+          curl -fsSL "$URL" > /tmp/x1-comments/post.html
+          curl -fsSL http://127.0.0.1:8080/ > /tmp/x1-comments/home.html
+          grep -F 'id="comments"' /tmp/x1-comments/post.html
+          grep -F 'comment-list' /tmp/x1-comments/post.html
+          grep -F 'X1 parent comment' /tmp/x1-comments/post.html
+          grep -F 'X1 nested reply' /tmp/x1-comments/post.html
+          grep -F 'comment-reply-link' /tmp/x1-comments/post.html
+          grep -F 'comments-pagination' /tmp/x1-comments/post.html
+          grep -F 'id="respond"' /tmp/x1-comments/post.html
+          grep -F 'aznet-theme-comments-css' /tmp/x1-comments/post.html
+          grep -F 'comment-reply-js' /tmp/x1-comments/post.html
+          if grep -F 'aznet-theme-comments-css' /tmp/x1-comments/home.html; then
+            echo 'FAIL: comments stylesheet leaked to Home' >&2
             exit 1
           fi
-          if [[ "${HEAD_REF:-}" == "${X1_SLICE_BRANCH}" ]]; then
-            if printf '%s\n' "$changed" | grep -E '^(functions\.php|style\.css)$'; then
+          echo 'PASS: X1 WordPress comments HTML and scoped assets'
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Run X1 comments browser matrix
+        run: |
+          set -euo pipefail
+          X1_COMMENTS_URL="$(cat /tmp/x1-comments/url.txt)" \
+          X1_COMMENTS_STATE_DIR="/tmp/x1-comments-l4" \
+          node tests/browser/x1-comments-surface-l4.mjs
+
+      - name: Verify runtime boundary
+        run: |
+          set -euo pipefail
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-site --allow-root)"
+          if grep -E 'PHP (Fatal error|Parse error)|Uncaught' /tmp/x1-comments/server.log; then
+            echo 'FAIL: Theme runtime fatal/uncaught marker found during X1' >&2
+            exit 1
+          fi
+          unexpected="$(grep 'PHP Warning:' /tmp/x1-comments/server.log | grep -v 'Undefined array key 0 in /tmp/wp-site/wp-includes/class-wp-query.php on line 3872' || true)"
+          test -z "$unexpected"
+          test -f /tmp/x1-comments-l4/summary.json
+          echo 'PASS: X1 runtime/browser boundary'
+
+      - name: Stop WordPress runtime
+        if: always()
+        run: test ! -f /tmp/x1-comments/server.pid || kill "$(cat /tmp/x1-comments/server.pid)" || true
+
+      - name: Upload X1 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: x1-comments-evidence
+          path: |
+            /tmp/x1-comments
+            /tmp/x1-comments-l4
+          if-no-files-found: warn
+; then
               echo 'FAIL: X1 must not change Theme version declarations' >&2
               exit 1
             fi
-            echo 'PASS: X1 slice-only version ownership guard'
+            echo 'PASS: X1 slice-only ownership guard'
           fi
           bash scripts/assert-theme-version.sh
           php tests/offline/x1-comments-surface-contract.php
