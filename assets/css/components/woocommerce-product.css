@@ -103,7 +103,8 @@
 
 .single-product .aznet-theme-main .product_title {
     color: var(--aznet-theme-text, #17181b);
-    font-size: var(--aznet-theme-text-h1);\n    line-height: var(--aznet-theme-line-height-h1);
+    font-size: var(--aznet-theme-text-h1);
+    line-height: var(--aznet-theme-line-height-h1);
 }
 
 .single-product .aznet-theme-main .woocommerce-product-rating {
