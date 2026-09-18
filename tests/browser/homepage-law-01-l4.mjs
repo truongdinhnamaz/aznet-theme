@@ -241,6 +241,10 @@ async function inspectViewport(browser, name, viewport) {
       const visualRatio = parityMetrics.visual.width / heroTotal;
       if (visualRatio < 0.50 || visualRatio > 0.54) throw new Error(`desktop Hero visual ratio must stay near approved 52% target, got ${visualRatio.toFixed(3)}`);
       if (Math.abs(parityMetrics.content.y - parityMetrics.visual.y) > 2) throw new Error('desktop Hero columns must align on one row');
+      const visualRight = parityMetrics.visual.x + parityMetrics.visual.width;
+      if (Math.abs(visualRight - viewport.width) > 2) {
+        throw new Error(`desktop Hero image surface must blend to the viewport edge without a right gutter, got right=${visualRight.toFixed(1)} viewport=${viewport.width}`);
+      }
       if (parityMetrics.trust.length !== 4 || new Set(parityMetrics.trust.map((item) => Math.round(item.y))).size !== 1) {
         throw new Error('desktop trust strip must remain one four-item row');
       }
@@ -264,6 +268,10 @@ async function inspectViewport(browser, name, viewport) {
     }
     if (viewport.width <= 390) {
       if (parityMetrics.visual.y <= parityMetrics.content.y) throw new Error('mobile Hero visual must stack after Hero content');
+      const mobileVisualRight = parityMetrics.visual.x + parityMetrics.visual.width;
+      if (Math.abs(parityMetrics.visual.x) > 2 || Math.abs(mobileVisualRight - viewport.width) > 2) {
+        throw new Error(`mobile Hero image surface must bleed naturally to both viewport edges, got x=${parityMetrics.visual.x.toFixed(1)} right=${mobileVisualRight.toFixed(1)} viewport=${viewport.width}`);
+      }
       if (new Set(parityMetrics.trust.map((item) => Math.round(item.y))).size !== 4) throw new Error('mobile trust strip must stack to one item per row');
       if (new Set(parityMetrics.services.map((item) => Math.round(item.y))).size !== 6) throw new Error('mobile Services cards must stack to one card per row');
       if (!parityMetrics.aboutCopy || !parityMetrics.teamBand || parityMetrics.teamBand.y <= parityMetrics.aboutCopy.y) throw new Error('mobile Profile must stack Team after About');
