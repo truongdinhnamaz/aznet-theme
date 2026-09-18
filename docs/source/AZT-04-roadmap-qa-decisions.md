@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.63
+**Version:** v0.64
 **Status:** Working Source  
 **Date:** 18/09/2026
 
@@ -449,6 +449,16 @@ Final-head verification completed **25/25 workflows SUCCESS** with zero failure,
 
 RootProfile-backed authoritative Team integration remains BLOCKED under issue #112. No architecture/public-contract change is introduced.
 
+### AZnet Theme 1.3.6 client-delivery candidate checkpoint — 18/09/2026
+
+The product owner approved creation of the newest installable Theme package for client delivery. PR #143 uses a patch promotion from 1.3.5 to 1.3.6 because the current client-delivery bytes include the completed Law 01 visual-parity work merged after the earlier 1.3.5 package.
+
+The release slice followed RED -> GREEN. RED head `120cd35e7d245f6a7e564f544df76d987fec2ddd` failed the intended Y5 1.3.6 metadata assertion. Minimal GREEN promoted only `style.css` and `AZNET_THEME_VERSION`. Exact production head `7db436b316ef5a9f9264fa9dd71f6cfad4d7ad80` completed 14/14 triggered workflows SUCCESS with zero failure, including Y5, X6, V1, Release Version Consistency, D-027 Exact Package/retained regression, R6 and retained browser/runtime gates.
+
+Deterministic package `aznet-theme-1.3.6.zip`: 145 files; 108 packaged PHP lint PASS; SHA-256 `25271cd4c68f0bc88e236f084acb73d7661a618d1ae1d737f0f2a5202307a84a`. Y5 run `35353852165`, promoted-package artifact `10550649207`, artifact digest `sha256:7efe3e575a46950e85abd703bad87e05daac32bd2346265fa2e148569de48cfc`.
+
+This checkpoint does not change Theme/provider ownership and does not authorize tag/GitHub Release or production deployment. RootProfile Team remains BLOCKED at issue #112. Evidence: `docs/evidence/V1_3_6_CLIENT_DELIVERY_20260918.md`.
+
 ## 14. Exact next
 
-**NEXT — hold the now-completed approved Law 01 visual-parity sequence as the current presentation baseline. Any additional visual expansion requires a new owner-approved bounded slice; RootProfile Team remains BLOCKED at issue #112. Git tag/GitHub Release and production deployment remain separate approval gates.**
+**NEXT — canonical merge of PR #143 is the next approval gate for the verified 1.3.6 client-delivery candidate. Do not start tag/GitHub Release or production deployment without separate explicit approval. Preserve the completed Law 01 presentation baseline and keep RootProfile Team BLOCKED at issue #112.**
