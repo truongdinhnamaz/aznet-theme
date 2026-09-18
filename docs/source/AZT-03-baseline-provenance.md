@@ -229,17 +229,15 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**NEXT — PR #146 is the verified AZnet Theme 1.3.7 client-delivery candidate created after the owner-approved Law 01 Hero full-bleed correction merged in PR #145. Exact release head `57d2b5a87c08d5fbb54d6960feed677837e33087` has a clean 14/14 workflow matrix and deterministic installable package evidence. Canonical merge remains the next approval gate. Git tag/GitHub Release and production deployment remain separate gates; RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
+**NEXT — PR #146 is the AZnet Theme 1.3.7 client-delivery candidate after client visual QA clarified the Law 01 layout contract: section surfaces may be full-width, but inner objects must align to the shared content shell. Production head `e0e2cd9376ab81dbcea4853581627e48361b76bd` passes the new static and browser geometry regression and produced the deterministic 1.3.7 package. Final docs-head CI must be green before canonical merge is considered. Git tag/GitHub Release and production deployment remain separate gates; RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
 
 ### AZnet Theme 1.3.7 client-delivery candidate — 18/09/2026
 
-Client visual QA exposed that the Burgundy Law 01 Hero still used a `96rem` capped grid on wide screens, leaving cream gutters instead of full-bleed presentation. PR #145 reproduced that defect through a new static full-bleed contract and 1920px browser geometry check, then changed only the Hero presentation width boundary while preserving the approved 48/52 split.
+Client visual QA first led PR #145 to widen the inner Hero grid, but the subsequent screenshot clarified the actual design rule: **full-width applies to the section surface, not to bypassing the common inner shell**. The Theme's existing base contract already states that Law 01 section surfaces may be full width while inner content remains constrained by `--aznet-theme-container-shell`.
 
-PR #145 final head `0e2fa28b72f88af3af2f0f1bcc668ff90d117c50` completed **14/14 workflows SUCCESS** and owner-approved merge produced `main@9781d29a9d1ba32a643ffe3cfe9d47c8c4ba4c1c`; Git comparison showed zero file delta between verified head and merge commit.
+PR #146 adds a regression that compares Hero inner-grid geometry against Trust and Services at desktop widths, including 1920px. RED head `d0a3b87144d7f4f09342d38d256162debed29b5f` failed because the Burgundy variant still overrode the shared container with `width: 100%; max-width: none`. Minimal GREEN head `e0e2cd9376ab81dbcea4853581627e48361b76bd` removes that override only; the section remains viewport-wide and the approved 48/52 Hero split is preserved.
 
-Because the full-bleed production bytes were merged after the earlier 1.3.6 client-delivery package, PR #146 promotes package identity to 1.3.7 rather than reusing 1.3.6. RED head `63041afb1161bf6b136a665957c71ea262ad20e1` failed the intended Y5 assertion `Y5 promoted style.css must be exactly 1.3.7`. Minimal GREEN changed only the two Theme version declarations and extended Y5/X6 release guards to the exact 1.3.6 -> 1.3.7 promotion boundary.
-
-Exact release head `57d2b5a87c08d5fbb54d6960feed677837e33087` completed **14/14 triggered workflows SUCCESS, 0 failure**. Y5 produced deterministic `aznet-theme-1.3.7.zip`, 145 production files, 108/108 packaged PHP lint PASS, SHA-256 `890e94eb1a69abad4e94e4914e3628b83a491d91636d33c9036070d6ee35b3ab`. Run `35357088021`; promoted-package artifact `10552241981`, digest `sha256:93ed2484c7eeb1add18d4a582386c01ab536ec0141e0bdcd1dc8102b0570faa7`.
+The 1.3.7 release identity remains correct because these production bytes post-date the 1.3.6 package. Y5 on `e0e2cd9...` produced deterministic `aznet-theme-1.3.7.zip`, 145 production files, 108/108 packaged PHP lint PASS, SHA-256 `aa1f2a4798b81c7b579c8a1b2a03adaa1932837fd3c277a0b7cbb72d5fe23e4a`. Run `35358986591`; promoted-package artifact `10553996265`, digest `sha256:328948807a5e40a6ece314ca1eb78965c0a3f519839935ff8fb8bf8ab0141bc0`.
 
 Canonical `main` currently contains the PR #145 fix at Theme metadata 1.3.6 until PR #146 is merged. Tag/GitHub Release and production deployment are not claimed. Evidence: `docs/evidence/V1_3_7_CLIENT_DELIVERY_20260918.md`.
 
