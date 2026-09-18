@@ -10,8 +10,8 @@
 
 .aznet-theme-navigation__summary {
     color: var(--aznet-theme-muted);
-    font-size: var(--aznet-theme-font-size-sm);
-    font-weight: 600;
+    font-size: var(--aznet-theme-text-meta);
+    font-weight: var(--aznet-theme-font-weight-semibold);
 }
 
 .aznet-theme-listing__pagination .page-numbers,
@@ -42,7 +42,7 @@
 .aznet-theme-listing__pagination .page-numbers.current,
 .aznet-theme-comments .comments-pagination .page-numbers.current,
 .aznet-theme-article__page-links .post-page-numbers.current {
-    font-weight: 700;
+    font-weight: var(--aznet-theme-font-weight-bold);
     border-color: var(--aznet-theme-accent);
 }
 
