@@ -114,38 +114,9 @@
       ],
       "fontFamilies": [
         {
-          "slug": "roboto",
-          "name": "Roboto",
-          "fontFamily": "Roboto, Arial, sans-serif",
-          "fontFace": [
-            {
-              "fontFamily": "Roboto",
-              "fontStyle": "normal",
-              "fontWeight": "400",
-              "fontDisplay": "swap",
-              "src": [
-                "file:./assets/fonts/roboto/Roboto-Regular.woff2"
-              ]
-            },
-            {
-              "fontFamily": "Roboto",
-              "fontStyle": "normal",
-              "fontWeight": "500",
-              "fontDisplay": "swap",
-              "src": [
-                "file:./assets/fonts/roboto/Roboto-Medium.woff2"
-              ]
-            },
-            {
-              "fontFamily": "Roboto",
-              "fontStyle": "normal",
-              "fontWeight": "700",
-              "fontDisplay": "swap",
-              "src": [
-                "file:./assets/fonts/roboto/Roboto-Bold.woff2"
-              ]
-            }
-          ]
+          "slug": "system",
+          "name": "System UI",
+          "fontFamily": "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif"
         }
       ]
     }
@@ -161,7 +132,37 @@
     "typography": {
       "fontSize": "var(--aznet-theme-font-size-base)",
       "lineHeight": "var(--aznet-theme-line-height-body)",
-      "fontFamily": "var:preset|font-family|roboto"
+      "fontFamily": "var:preset|font-family|system"
+    },
+    "elements": {
+      "h1": {
+        "typography": {
+          "fontSize": "var(--aznet-theme-text-h1)",
+          "lineHeight": "var(--aznet-theme-line-height-h1)",
+          "fontWeight": "var(--aznet-theme-font-weight-bold)"
+        }
+      },
+      "h2": {
+        "typography": {
+          "fontSize": "var(--aznet-theme-text-h2)",
+          "lineHeight": "var(--aznet-theme-line-height-h2)",
+          "fontWeight": "var(--aznet-theme-font-weight-bold)"
+        }
+      },
+      "h3": {
+        "typography": {
+          "fontSize": "var(--aznet-theme-text-h3)",
+          "lineHeight": "var(--aznet-theme-line-height-h3)",
+          "fontWeight": "var(--aznet-theme-font-weight-semibold)"
+        }
+      },
+      "h4": {
+        "typography": {
+          "fontSize": "var(--aznet-theme-text-h4)",
+          "lineHeight": "var(--aznet-theme-line-height-h4)",
+          "fontWeight": "var(--aznet-theme-font-weight-semibold)"
+        }
+      }
     }
   }
 }

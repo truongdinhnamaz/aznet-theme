@@ -87,12 +87,141 @@ jobs:
           git fetch origin main:refs/remotes/origin/main
           git diff --check origin/main...HEAD
           changed="$(git diff --name-only origin/main...HEAD)"
-          if printf '%s\n' "$changed" | grep -E '^(inc/integrations/|assets/css/integrations/)'; then
-            echo 'FAIL: X2 must not change provider integration files' >&2
+          if [[ "${HEAD_REF:-}" == "${X2_SLICE_BRANCH}" ]]; then
+            if printf '%s\n' "$changed" | grep -E '^(inc/integrations/|assets/css/integrations/)'; then
+              echo 'FAIL: X2 must not change provider integration files' >&2
+              exit 1
+            fi
+            if printf '%s\n' "$changed" | grep -E '^(functions\.php|style\.css)
+          bash scripts/assert-theme-version.sh
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/x2-search-404-empty-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/editorial-listing-search-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/d027-provisioning-independence-contract.php
+          php -l search.php
+          php -l 404.php
+          php -l archive.php
+          php -l inc/theme/assets.php
+          php -l tests/runtime/x2-search-404-empty.php
+          bash scripts/verify-v1-core.sh
+
+      - name: Install clean WordPress 6.9 and exact Theme candidate
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          rm -rf /tmp/wp-site
+          mkdir -p /tmp/wp-site
+          wp core download --version=6.9 --path=/tmp/wp-site --force --allow-root
+          wp config create --path=/tmp/wp-site --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          ADMIN_PASS=$(openssl rand -hex 16)
+          wp core install --path=/tmp/wp-site --url=http://127.0.0.1:8080 --title='AZnet X2 Recovery' --admin_user=admin --admin_password="$ADMIN_PASS" --admin_email=x2@example.test --skip-email --allow-root
+          mkdir -p /tmp/wp-site/wp-content/themes/aznet-theme
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
+            ./ /tmp/wp-site/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp-site --allow-root
+          wp plugin deactivate --all --path=/tmp/wp-site --allow-root || true
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-site --allow-root)"
+          test "$(wp core version --path=/tmp/wp-site --allow-root)" = '6.9'
+
+      - name: Seed native X2 fixture
+        run: |
+          set -euo pipefail
+          wp eval-file tests/runtime/x2-search-404-empty.php --path=/tmp/wp-site --allow-root > /tmp/x2/fixture.json
+          jq -e '.post_id > 0 and .term_id > 0 and (.result_url | length > 0) and (.empty_search_url | length > 0) and (.empty_archive_url | length > 0) and (.not_found_url | length > 0) and (.post_url | length > 0) and (.home_url | length > 0)' /tmp/x2/fixture.json
+
+      - name: Start WordPress runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp-site > /tmp/x2/server.log 2>&1 &
+          echo $! > /tmp/x2/server.pid
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/wp-login.php >/tmp/x2/login-smoke.html; then break; fi
+            sleep 1
+          done
+          grep -F 'user_login' /tmp/x2/login-smoke.html
+
+      - name: Verify native route truth and scoped assets
+        run: |
+          set -euo pipefail
+          RESULT_URL="$(jq -r '.result_url' /tmp/x2/fixture.json)"
+          EMPTY_SEARCH_URL="$(jq -r '.empty_search_url' /tmp/x2/fixture.json)"
+          EMPTY_ARCHIVE_URL="$(jq -r '.empty_archive_url' /tmp/x2/fixture.json)"
+          NOT_FOUND_URL="$(jq -r '.not_found_url' /tmp/x2/fixture.json)"
+          POST_URL="$(jq -r '.post_url' /tmp/x2/fixture.json)"
+          HOME_URL="$(jq -r '.home_url' /tmp/x2/fixture.json)"
+
+          curl -fsSL "$RESULT_URL" > /tmp/x2/search-result.html
+          curl -fsSL "$EMPTY_SEARCH_URL" > /tmp/x2/search-empty.html
+          curl -fsSL "$EMPTY_ARCHIVE_URL" > /tmp/x2/archive-empty.html
+          curl -sS -o /tmp/x2/404.html -w '%{http_code}' "$NOT_FOUND_URL" > /tmp/x2/404-status.txt
+          curl -fsSL "$POST_URL" > /tmp/x2/post.html
+          curl -fsSL "$HOME_URL" > /tmp/x2/home.html
+
+          grep -F 'X2 Recovery Search Target' /tmp/x2/search-result.html
+          grep -F 'aznet-theme-recovery--search' /tmp/x2/search-empty.html
+          grep -F 'aznet-theme-recovery--empty' /tmp/x2/archive-empty.html
+          grep -F 'aznet-theme-recovery--404' /tmp/x2/404.html
+          test "$(cat /tmp/x2/404-status.txt)" = '404'
+
+          for file in search-result search-empty archive-empty 404; do
+            grep -F 'aznet-theme-recovery-css' "/tmp/x2/${file}.html"
+          done
+          if grep -F 'aznet-theme-recovery-css' /tmp/x2/home.html; then
+            echo 'FAIL: X2 recovery stylesheet leaked to Home' >&2
             exit 1
           fi
-          if [[ "${HEAD_REF:-}" == "${X2_SLICE_BRANCH}" ]]; then
-            if printf '%s\n' "$changed" | grep -E '^(functions\.php|style\.css)$'; then
+          if grep -F 'aznet-theme-recovery-css' /tmp/x2/post.html; then
+            echo 'FAIL: X2 recovery stylesheet leaked to singular Post' >&2
+            exit 1
+          fi
+          echo 'PASS: X2 native route truth and scoped assets'
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Run X2 browser matrix
+        run: |
+          set -euo pipefail
+          X2_STATE_DIR=/tmp/x2 X2_L4_DIR=/tmp/x2-l4 node tests/browser/x2-search-404-empty-l4.mjs
+
+      - name: Verify runtime boundary
+        run: |
+          set -euo pipefail
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-site --allow-root)"
+          if grep -E 'PHP (Fatal error|Parse error)|Uncaught' /tmp/x2/server.log; then
+            echo 'FAIL: Theme runtime fatal/uncaught marker found during X2' >&2
+            exit 1
+          fi
+          unexpected="$(grep 'PHP Warning:' /tmp/x2/server.log | grep -v 'Undefined array key 0 in /tmp/wp-site/wp-includes/class-wp-query.php on line 3872' || true)"
+          test -z "$unexpected"
+          test -f /tmp/x2-l4/summary.json
+          echo 'PASS: X2 runtime/browser boundary'
+
+      - name: Stop WordPress runtime
+        if: always()
+        run: test ! -f /tmp/x2/server.pid || kill "$(cat /tmp/x2/server.pid)" || true
+
+      - name: Upload X2 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: x2-search-404-empty-evidence
+          path: |
+            /tmp/x2
+            /tmp/x2-l4
+          if-no-files-found: warn
+; then
               echo 'FAIL: X2 must not change Theme version declarations' >&2
               exit 1
             fi

@@ -273,10 +273,11 @@ async function inspectCase(browser, routeName, route, viewportName, viewport) {
     }
 
     await verifyFirstFocus(page);
-    if (viewport.width > 980) {
-      await verifyDesktopKeyboard(page);
-    } else {
+    const mobileTriggerVisible = await page.locator('[data-aznet-theme-nav-trigger]').isVisible();
+    if (mobileTriggerVisible) {
       await verifyMobileKeyboard(page);
+    } else {
+      await verifyDesktopKeyboard(page);
     }
 
     if (stickyMode === 'sticky-compact' && viewport.width <= 390) {

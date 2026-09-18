@@ -8,8 +8,8 @@
     --convertflow-theme-font-heading: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     --convertflow-theme-font-body: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     --convertflow-theme-heading-weight: 700;
-    --convertflow-theme-heading-line-height: 1.2;
-    --convertflow-theme-body-line-height: 1.6;
+    --convertflow-theme-heading-line-height: var(--aznet-theme-line-height-h2);
+    --convertflow-theme-body-line-height: var(--aznet-theme-line-height-body);
 
     --convertflow-theme-color-primary: var(--aznet-theme-accent);
     --convertflow-theme-color-accent: var(--aznet-theme-accent);

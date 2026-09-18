@@ -22,14 +22,14 @@
     max-width: var(--aznet-theme-container-content);
     margin-block: var(--aznet-theme-space-3) 0;
     color: var(--aznet-theme-muted);
-    font-size: var(--aznet-theme-font-size-lg);
-    line-height: var(--aznet-theme-line-height-body);
+    font-size: var(--aznet-theme-text-lead);
+    line-height: var(--aznet-theme-line-height-lead);
 }
 
 .aznet-theme-page__breadcrumbs {
     margin-block-end: var(--aznet-theme-space-4);
     color: var(--aznet-theme-muted);
-    font-size: var(--aznet-theme-font-size-sm);
+    font-size: var(--aznet-theme-text-meta);
 }
 
 .aznet-theme-page__breadcrumbs ol {

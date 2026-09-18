@@ -31,7 +31,7 @@ $required = [
     '.aznet-theme-law01-grid--articles .aznet-theme-law01-article-card:first-child',
     'grid-column: span 2;',
     '.aznet-theme-law01-article-card:first-child h3',
-    'font-size: clamp(1.55rem',
+    'font-size: var(--aznet-theme-text-h2);',
     '.aznet-theme-law01-final-cta .aznet-theme-law01-actions',
     'margin-top: 2rem;',
 ];

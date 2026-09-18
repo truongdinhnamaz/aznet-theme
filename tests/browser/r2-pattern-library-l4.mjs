@@ -16,8 +16,8 @@ fs.mkdirSync(axeDir, { recursive: true });
 if (!fixtureId) throw new Error('R2_FIXTURE_ID is required');
 
 const expectedVariables = {
-  default: { '--aznet-theme-container-content': '45rem', '--aznet-theme-line-height-body': '1.6', '--aznet-theme-space-section': '3.25rem' },
-  editorial: { '--aznet-theme-container-content': '42rem', '--aznet-theme-line-height-body': '1.7', '--aznet-theme-space-section': '3.75rem' },
+  default: { '--aznet-theme-container-content': '45rem', '--aznet-theme-line-height-body': '1.65', '--aznet-theme-space-section': '3.25rem' },
+  editorial: { '--aznet-theme-container-content': '42rem', '--aznet-theme-line-height-body': '1.65', '--aznet-theme-space-section': '3.75rem' },
 };
 if (!Object.hasOwn(expectedVariables, preset)) throw new Error(`Unsupported R2 preset ${preset}`);
 

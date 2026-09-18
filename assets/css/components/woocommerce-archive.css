@@ -33,6 +33,11 @@ body.aznet-theme-woo-card--compact {
     margin-bottom: var(--aznet-theme-space-4, 1.5rem);
 }
 
+.woocommerce .woocommerce-result-count {
+    font-size: var(--aznet-theme-text-meta);
+    line-height: var(--aznet-theme-line-height-meta);
+}
+
 .woocommerce .woocommerce-ordering select {
     max-width: 100%;
     min-height: 2.75rem;
@@ -40,6 +45,10 @@ body.aznet-theme-woo-card--compact {
     border-radius: var(--aznet-theme-radius-card, 0.875rem);
     background: var(--aznet-theme-surface, #ffffff);
     color: var(--aznet-theme-text, #17181b);
+    font-family: var(--aznet-theme-font-family-base);
+    font-size: var(--aznet-theme-text-form);
+    font-weight: var(--aznet-theme-font-weight-regular);
+    line-height: var(--aznet-theme-line-height-form);
     padding: 0 var(--aznet-theme-space-3, 1rem);
 }
 
@@ -85,21 +94,19 @@ body.aznet-theme-woo-card--compact {
 
 .woocommerce ul.products li.product .woocommerce-loop-product__title {
     color: var(--aznet-theme-text, #17181b);
-    font-size: 1rem;
-    line-height: 1.45;
+    font-size: var(--aznet-theme-text-h4);
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    line-height: var(--aznet-theme-line-height-h4);
     margin: 0 0 var(--aznet-theme-space-2, 0.5rem);
     padding: 0;
-}
-
-body.aznet-theme-woo-catalog--editorial .woocommerce ul.products li.product .woocommerce-loop-product__title {
-    font-size: var(--aznet-theme-font-size-lg, 1.125rem);
-    line-height: var(--aznet-theme-line-height-heading, 1.25);
 }
 
 .woocommerce ul.products li.product .price {
     display: block;
     color: var(--aznet-theme-text, #17181b);
-    font-weight: 700;
+    font-size: var(--aznet-theme-text-price);
+    font-weight: var(--aznet-theme-font-weight-bold);
+    line-height: var(--aznet-theme-line-height-price);
     margin-bottom: var(--aznet-theme-space-3, 1rem);
 }
 
@@ -110,6 +117,9 @@ body.aznet-theme-woo-catalog--editorial .woocommerce ul.products li.product .woo
 .woocommerce ul.products li.product .button {
     min-height: var(--aznet-theme-control-height, 2.75rem);
     margin-top: 0;
+    font-size: var(--aznet-theme-text-button);
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    line-height: var(--aznet-theme-line-height-button);
 }
 
 .woocommerce a:focus-visible,

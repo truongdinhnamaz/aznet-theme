@@ -51,7 +51,7 @@
 .aznet-theme-comments .comment-meta {
     margin-block: var(--aznet-theme-space-2);
     color: var(--aznet-theme-muted);
-    font-size: var(--aznet-theme-font-size-sm);
+    font-size: var(--aznet-theme-text-meta);
 }
 
 .aznet-theme-comments .comment-content {

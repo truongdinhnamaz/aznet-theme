@@ -19,12 +19,12 @@
 .wp-block-woocommerce-product-collection .wc-block-components-product-name,
 .wp-block-woocommerce-product-collection .wp-block-post-title {
     color: var(--aznet-theme-text, #17181b);
-    line-height: var(--aznet-theme-line-height-heading, 1.2);
+    line-height: var(--aznet-theme-line-height-h3);
 }
 
 .wp-block-woocommerce-product-collection .wc-block-components-product-price {
     color: var(--aznet-theme-text, #17181b);
-    font-weight: 700;
+    font-weight: var(--aznet-theme-font-weight-bold);
 }
 
 .wp-block-woocommerce-product-collection .wp-block-button,

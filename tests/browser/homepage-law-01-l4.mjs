@@ -108,6 +108,13 @@ async function inspectViewport(browser, name, viewport) {
     result.h1Count = await page.locator('.aznet-theme-homepage--law-01 h1').count();
     if (result.h1Count !== 1) throw new Error(`expected one Law 01 H1, got ${result.h1Count}`);
 
+    const heroTitle = (await page.locator('.aznet-theme-law01-hero h1').textContent())?.trim() || '';
+    if (heroTitle !== 'AZnet Law 01') throw new Error(`Hero H1 must use WordPress site title, got: ${heroTitle}`);
+    const heroValue = (await page.locator('.aznet-theme-law01-hero__value').textContent())?.trim() || '';
+    if (!heroValue.includes('Bảo vệ quyền lợi của bạn bằng giải pháp pháp lý rõ ràng')) throw new Error(`Front Page title value proposition missing: ${heroValue}`);
+    const heroLede = (await page.locator('.aznet-theme-law01-hero .aznet-theme-law01-lede').textContent())?.trim() || '';
+    if (!heroLede.includes('Dịch vụ pháp lý chuyên nghiệp')) throw new Error(`Front Page excerpt support copy missing: ${heroLede}`);
+
     if (await page.locator('#law01-native-body').count() !== 1) throw new Error('native Front Page the_content() sentinel missing');
 
     for (const selector of requiredSelectors) {

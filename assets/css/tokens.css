@@ -11,15 +11,52 @@
     --aznet-theme-color-warning: #9a6700;
     --aznet-theme-color-danger: #b42318;
 
-    --aznet-theme-font-family-base: Roboto, Arial, sans-serif;
+    --aznet-theme-font-family-base: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --aznet-theme-font-family-heading: var(--aznet-theme-font-family-base);
 
-    --aznet-theme-font-size-sm: 0.875rem;
-    --aznet-theme-font-size-base: 1rem;
-    --aznet-theme-font-size-lg: 1.125rem;
-    --aznet-theme-font-size-xl: 1.5rem;
-    --aznet-theme-line-height-body: 1.6;
-    --aznet-theme-line-height-heading: 1.2;
+    --aznet-theme-text-display: clamp(2.75rem, 5vw, 4.5rem);
+    --aznet-theme-text-h1: 2.5rem;
+    --aznet-theme-text-h2: 2rem;
+    --aznet-theme-text-h3: 1.5rem;
+    --aznet-theme-text-h4: 1.25rem;
+    --aznet-theme-text-lead: 1.125rem;
+    --aznet-theme-text-body: 1rem;
+    --aznet-theme-text-small: 0.9375rem;
+    --aznet-theme-text-navigation: 0.9375rem;
+    --aznet-theme-text-button: 0.9375rem;
+    --aznet-theme-text-label: 0.8125rem;
+    --aznet-theme-text-meta: 0.875rem;
+    --aznet-theme-text-caption: 0.8125rem;
+    --aznet-theme-text-form: 1rem;
+    --aznet-theme-text-price: clamp(1.25rem, 2vw, 1.5rem);
+
+    --aznet-theme-font-weight-regular: 400;
+    --aznet-theme-font-weight-medium: 500;
+    --aznet-theme-font-weight-semibold: 600;
+    --aznet-theme-font-weight-bold: 700;
+
+    --aznet-theme-line-height-display: 1.08;
+    --aznet-theme-line-height-h1: 1.15;
+    --aznet-theme-line-height-h2: 1.2;
+    --aznet-theme-line-height-h3: 1.3;
+    --aznet-theme-line-height-h4: 1.35;
+    --aznet-theme-line-height-lead: 1.7;
+    --aznet-theme-line-height-body: 1.65;
+    --aznet-theme-line-height-small: 1.6;
+    --aznet-theme-line-height-navigation: 1.35;
+    --aznet-theme-line-height-button: 1.2;
+    --aznet-theme-line-height-label: 1.3;
+    --aznet-theme-line-height-meta: 1.45;
+    --aznet-theme-line-height-caption: 1.45;
+    --aznet-theme-line-height-form: 1.4;
+    --aznet-theme-line-height-price: 1.2;
+
+    /* Compatibility aliases retained for existing consumers. */
+    --aznet-theme-font-size-sm: var(--aznet-theme-text-meta);
+    --aznet-theme-font-size-base: var(--aznet-theme-text-body);
+    --aznet-theme-font-size-lg: var(--aznet-theme-text-lead);
+    --aznet-theme-font-size-xl: var(--aznet-theme-text-h3);
+    --aznet-theme-line-height-heading: var(--aznet-theme-line-height-h2);
 
     --aznet-theme-container-content: 45rem;
     --aznet-theme-container-wide: 72rem;
@@ -55,6 +92,18 @@
     --aznet-theme-focus: var(--aznet-theme-color-focus);
     --aznet-theme-surface-inverse: #111722;
     --aznet-theme-on-inverse: #f7f8fa;
+}
+
+@media (max-width: 48rem) {
+    :root {
+        --aznet-theme-text-h1: 2rem;
+        --aznet-theme-text-h2: 1.625rem;
+        --aznet-theme-text-h3: 1.25rem;
+        --aznet-theme-text-h4: 1.125rem;
+        --aznet-theme-text-lead: 1.0625rem;
+        --aznet-theme-text-navigation: 1rem;
+        --aznet-theme-text-price: clamp(1.125rem, 5vw, 1.375rem);
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
