@@ -42,7 +42,7 @@ $valid = AZnet\Theme\normalize_settings([
 ]);
 
 $valid_expected = [
-    'schema_version'           => 2,
+    'schema_version'           => 3,
     'visual_preset'            => 'editorial',
     'page_breadcrumbs'         => true,
     'header_preset'            => 'commerce',
@@ -55,6 +55,7 @@ $valid_expected = [
     'woo_product_preset'       => 'classic',
     'homepage_preset'               => 'off',
     'homepage_law01_variant'        => 'navy-gold',
+    'homepage_hero_page'            => 0,
     'homepage_services_page'        => 0,
     'homepage_about_page'           => 0,
     'homepage_team_page'            => 0,
