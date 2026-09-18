@@ -119,6 +119,11 @@
     font-weight: 700;
 }
 
+.single-product .aznet-theme-main ul.products li.product .price {
+    color: var(--aznet-theme-text, #17181b);
+    font-weight: 700;
+}
+
 .single-product .aznet-theme-main .woocommerce-product-details__short-description,
 .single-product .aznet-theme-main .product_meta {
     color: var(--aznet-theme-muted, #626873);
