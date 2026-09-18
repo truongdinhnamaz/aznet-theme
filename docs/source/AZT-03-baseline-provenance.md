@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.51
+**Version:** v0.52
 **Status:** Working Source  
 **Date:** 18/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -229,7 +229,7 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**NEXT — PR #143 is the owner-approved AZnet Theme 1.3.6 client-delivery candidate. Its exact production head `7db436b316ef5a9f9264fa9dd71f6cfad4d7ad80` has a clean 14/14 workflow matrix and deterministic installable package evidence. Canonical merge remains the next approval gate. Git tag/GitHub Release and production deployment remain separate gates; RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
+**NEXT — PR #147 is the current owner-approved Law 01 screenshot-reference presentation candidate. Exact production head `aacd6fe4abc4d5f3d49b6bfd85570df66688db46` completed 18/18 triggered workflows SUCCESS. Canonical merge remains the next approval gate. No new package/tag/GitHub Release/production deployment is authorized by this visual slice; RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
 
 ### AZnet Theme 1.3.6 client-delivery candidate — 18/09/2026
 
@@ -240,6 +240,17 @@ RED head `120cd35e7d245f6a7e564f544df76d987fec2ddd` failed the intended Y5 metad
 Y5 built `aznet-theme-1.3.6.zip` twice with byte identity, 145 production files, 108/108 packaged PHP lint PASS and SHA-256 `25271cd4c68f0bc88e236f084acb73d7661a618d1ae1d737f0f2a5202307a84a`. Exact-package lifecycle verified clean WordPress 6.9 installation with zero active third-party plugins plus switch-away/switch-back continuity. Run `35353852165`; promoted-package artifact `10550649207`, digest `sha256:7efe3e575a46950e85abd703bad87e05daac32bd2346265fa2e148569de48cfc`.
 
 This is a technically verified client-delivery candidate. Canonical `main` remains Theme metadata 1.3.5 until PR #143 is merged. No tag/GitHub Release or production deployment is claimed. Evidence: `docs/evidence/V1_3_6_CLIENT_DELIVERY_20260918.md`.
+
+
+### Law 01 screenshot-reference parity candidate — 18/09/2026
+
+Canonical `main@9781d29a9d1ba32a643ffe3cfe9d47c8c4ba4c1c` is Theme metadata `1.3.6` after PR #143 and the intermediate PR #145 Hero-width correction. The owner then clarified that the supplied Tâm Đức - Hà Nội homepage screenshot is the canonical visual reference for the next presentation slice. PR #146 was closed unmerged as superseded; PR #147 carries the replacement bounded presentation work.
+
+The accepted candidate keeps full-width section surfaces but restores one shared `96rem` inner shell across Header, Hero, Trust, Services, Profile, Latest and Footer. The Hero remains 48/52 on wide desktop. About and Team now share a 48/52 Profile band, About is text-led for this reference variant, Team retains up to four WordPress-owned direct child Page portrait slots with CTA below, Services remains six compact cards, Latest remains three WordPress-native Posts, and Header/Footer can render WordPress logo + site-title lockups. The Hero may reuse the WordPress-owned `header-utility` menu for phone/hotline links. No fabricated business statistics are introduced.
+
+Exact production head `aacd6fe4abc4d5f3d49b6bfd85570df66688db46` completed **18/18 triggered workflows SUCCESS, 0 failure**. Homepage Composer Law 01 Browser Quality run `35363025279` passed the 1920/1440/1024/390/320 matrix; artifact `10555328476`, digest `sha256:4c0af3b17d8d38768f994f2dacd3dbe20f5da5b693ec28c331df7fc632d520ba`. The 1440 screenshot was manually inspected against the owner-supplied reference. Evidence: `docs/evidence/LAW01_REFERENCE_PARITY_FINAL_20260918.md`.
+
+RootProfile authoritative Team membership remains blocked at issue #112. The WordPress Page/direct-child fixture remains presentation input only and does not become authoritative identity or membership.
 
 ### Law 01 About/Profile + Latest visual-parity closure — 18/09/2026
 
