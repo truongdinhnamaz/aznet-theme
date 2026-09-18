@@ -213,6 +213,10 @@
 .aznet-theme-site-header--law01-burgundy-gold.aznet-theme-site-header { backdrop-filter: blur(12px); }
 .aznet-theme-site-footer { background: linear-gradient(180deg, #7a0e18 0%, #560912 100%); }
 
+.aznet-theme-site-footer {
+    background: var(--law01-brand-red-deep, #6d0b13);
+}
+
 @media (max-width: 1180px) {
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--services { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__members { grid-template-columns: repeat(2, minmax(0, 1fr)); }
