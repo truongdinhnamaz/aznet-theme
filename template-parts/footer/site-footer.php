@@ -32,6 +32,7 @@ $year         = (string) ( $context['year'] ?? '' );
                 <a class="aznet-theme-site-footer__brand" href="<?php echo esc_url( $home_url ); ?>" rel="home" aria-label="<?php echo esc_attr( $site_title ); ?>">
                     <?php if ( '' !== $logo_html ) : ?>
                         <?php echo $logo_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WordPress attachment HTML from Theme context. ?>
+                        <?php if ( '' !== $site_title ) : ?><strong class="aznet-theme-site-footer__brand-title"><?php echo esc_html( $site_title ); ?></strong><?php endif; ?>
                     <?php else : ?>
                         <strong><?php echo esc_html( $site_title ); ?></strong>
                     <?php endif; ?>
