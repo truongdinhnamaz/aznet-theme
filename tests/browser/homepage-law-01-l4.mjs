@@ -130,6 +130,26 @@ async function inspectViewport(browser, name, viewport) {
     result.serviceCards = await page.locator('.aznet-theme-law01-services .aznet-theme-law01-card').count();
     if (result.serviceCards !== 6) throw new Error(`expected 6 mapped service cards, got ${result.serviceCards}`);
 
+    if (viewport.width >= 1024) {
+      const headingMetrics = await page.locator('.aznet-theme-law01-services__heading').evaluate((element) => {
+        const style = window.getComputedStyle(element);
+        const lineHeight = Number.parseFloat(style.lineHeight);
+        const fontSize = Number.parseFloat(style.fontSize);
+        const height = element.getBoundingClientRect().height;
+        return {
+          fontSize,
+          lineHeight,
+          height,
+          lines: lineHeight > 0 ? height / lineHeight : null,
+          whiteSpace: style.whiteSpace,
+        };
+      });
+      if (headingMetrics.fontSize > 27.2) throw new Error(`Law 01 Services heading too large on desktop: ${JSON.stringify(headingMetrics)}`);
+      if (headingMetrics.whiteSpace !== 'nowrap' || headingMetrics.lines === null || headingMetrics.lines > 1.15) {
+        throw new Error(`Law 01 Services heading must stay on one desktop line: ${JSON.stringify(headingMetrics)}`);
+      }
+    }
+
     result.teamCards = await page.locator('.aznet-theme-law01-team-card').count();
     if (result.teamCards !== 2) throw new Error(`expected 2 WordPress-owned team child Page cards, got ${result.teamCards}`);
 
