@@ -211,7 +211,7 @@ foreach (['get_bloginfo(', 'home_url(', 'get_theme_mod(', 'wp_nav_menu(', 'wp_da
 if (1 !== substr_count($template, 'role="contentinfo"')) {
     y3_fail('Footer template must keep exactly one semantic contentinfo region');
 }
-foreach (['aznet-theme-site-footer__social-column', "'professional' === $preset", 'Kết nối với chúng tôi'] as $needle) {
+foreach (['aznet-theme-site-footer__social-column', "'professional' === \$preset", 'Kết nối với chúng tôi'] as $needle) {
     if (! str_contains($template, $needle)) {
         y3_fail('Professional Footer demo composition missing: ' . $needle);
     }
