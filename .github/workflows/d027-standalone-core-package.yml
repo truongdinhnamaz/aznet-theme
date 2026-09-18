@@ -186,7 +186,19 @@ jobs:
           wp theme status aznet-theme --path=/tmp/wp-site --allow-root | grep -F 'Status: Active'
           test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-site --allow-root)"
 
+          # The predecessor fixture intentionally retains the historical v1.1 blueprint.
+          # After updating to the current candidate, add a WordPress-owned dedicated Hero
+          # Page so D-027 validates current Standalone Core presentation rather than a
+          # superseded Hero source contract.
           FRONT_ID=$(cat /tmp/d027-package/FRONT_ID.txt)
+          HERO_ID=$(wp post create --post_type=page --post_status=publish --post_title='Standalone Hero' --post_excerpt='Standalone Hero Value' --post_content='<p>Standalone Hero Body</p>' --porcelain --path=/tmp/wp-site --allow-root)
+          HERO_MEDIA_ID=$(wp post meta get "$FRONT_ID" _thumbnail_id --path=/tmp/wp-site --allow-root)
+          test -n "$HERO_ID" && test -n "$HERO_MEDIA_ID"
+          wp post meta update "$HERO_ID" _thumbnail_id "$HERO_MEDIA_ID" --path=/tmp/wp-site --allow-root
+          D027_HERO_ID="$HERO_ID" wp eval '$s=AZnet\\Theme\\settings(); $s["homepage_hero_page"]=(int)getenv("D027_HERO_ID"); set_theme_mod("aznet_theme_settings", AZnet\\Theme\\normalize_settings($s));' --path=/tmp/wp-site --allow-root
+          test "$(D027_HERO_ID="$HERO_ID" wp eval 'echo (int) AZnet\\Theme\\setting("homepage_hero_page", 0);' --path=/tmp/wp-site --allow-root)" = "$HERO_ID"
+          printf '%s\n' "$HERO_ID" > /tmp/d027-package/HERO_ID.txt
+
           POST_ID=$(cat /tmp/d027-package/POST_ID.txt)
           PAGE_ID=$(cat /tmp/d027-package/PAGE_ID.txt)
           ATTACH_ID=$(cat /tmp/d027-package/ATTACH_ID.txt)
