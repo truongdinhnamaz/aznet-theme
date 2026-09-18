@@ -55,6 +55,16 @@ foreach ([
 }
 assert(! str_contains($hero, 'aznet-theme-law01-button aznet-theme-law01-button--secondary'), 'Hero Services CTA must not share the primary button selector used by retained browser verification.');
 assert(str_contains($css, '.aznet-theme-law01-hero__secondary-action'), 'Client-ready Law 01 CSS must style the dedicated hero secondary CTA.');
+
+foreach ([
+    'grid-template-columns: minmax(0, 44%) minmax(0, 56%);',
+    'min-height: clamp(27rem, 33vw, 35rem);',
+    'font-size: min(var(--aznet-theme-text-display), 4rem);',
+    'object-position: center 48%;',
+] as $needle) {
+    assert(str_contains($css, $needle), "Law 01 hero composition v2 missing: {$needle}");
+}
+
 assert(str_contains($css, '.aznet-theme-law01-team .aznet-theme-law01-button--secondary'), 'Burgundy variant must override the higher-specificity Team secondary-button rule.');
 assert(str_contains($css, 'color: var(--law01-client-ink);'), 'Burgundy Team secondary CTA must use a readable ink color on the light Team surface.');
 
