@@ -5,6 +5,8 @@ $root = dirname(__DIR__, 2);
 $css = (string) file_get_contents($root . '/assets/css/components/homepage-law-01-variants.css');
 $brand = (string) file_get_contents($root . '/template-parts/header/brand.php');
 $profile = (string) file_get_contents($root . '/template-parts/homepage/law-01/profile.php');
+$hero = (string) file_get_contents($root . '/template-parts/homepage/law-01/hero.php');
+$footer = (string) file_get_contents($root . '/template-parts/footer/site-footer.php');
 
 $must = static function (bool $condition, string $message): void {
     assert($condition, $message);
@@ -81,6 +83,24 @@ $teamCtaPos = strpos($profile, 'aznet-theme-law01-team-more');
 $must(
     false !== $membersPos && false !== $teamCtaPos && $teamCtaPos > $membersPos,
     'Law 01 reference Team CTA must follow the portrait row rather than sit in the heading.'
+);
+
+$must(
+    str_contains($hero, 'aznet-theme-law01-hero__contact-nav') && str_contains($hero, "has_nav_menu( 'header-utility' )"),
+    'Law 01 reference Hero must be able to reuse the WordPress-owned phone/hotline menu below its CTAs.'
+);
+$must(
+    str_contains($css, '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-services__intro { display: none; }'),
+    'Law 01 reference Services band must visually omit the mapped excerpt in the compact reference composition.'
+);
+$must(
+    str_contains($css, '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__body > :last-child'),
+    'Law 01 reference Hero body must support a normal description followed by an emphasized slogan.'
+);
+$must(
+    str_contains($footer, 'aznet-theme-site-footer__brand-title') &&
+    str_contains($css, '.aznet-theme-site-footer__brand-title'),
+    'Law 01 reference Footer must support a WordPress logo + site-title lockup.'
 );
 
 echo "PASS: Law 01 Hero/Trust/Services visual parity contract\n";
