@@ -189,6 +189,8 @@
     outline: 0;
     background: transparent;
     color: var(--aznet-theme-on-inverse);
+    font-size: var(--aznet-theme-text-form);
+    line-height: var(--aznet-theme-line-height-form);
     box-shadow: none;
 }
 
