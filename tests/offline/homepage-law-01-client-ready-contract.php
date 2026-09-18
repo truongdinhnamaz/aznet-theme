@@ -93,7 +93,7 @@ foreach ([
     '.aznet-theme-law01-services > .aznet-theme-law01-container',
     'max-width: 96rem;',
     'min-height: 24rem;',
-    'font-size: var(--aznet-theme-text-h4);',
+    'font-size: var(--law01-type-card-title);',
     'line-height: 1.65;',
 ] as $needle) {
     assert(str_contains($css, $needle), "Law 01 balanced services presentation missing: {$needle}");
