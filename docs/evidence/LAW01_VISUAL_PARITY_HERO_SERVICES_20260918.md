@@ -1,7 +1,7 @@
 # Law 01 visual parity — Hero / Trust / Services closure
 
-**Date:** 18/09/2026  
-**Scope:** Presentation-only visual parity against the owner-approved law-firm homepage reference.  
+**Date:** 18/09/2026
+**Scope:** Presentation-only visual parity against the owner-approved law-firm homepage reference.
 **Canonical PR:** #139
 
 ## Target
