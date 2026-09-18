@@ -1,13 +1,13 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.51
+**Version:** v0.52
 **Status:** Working Execution Map / derived  
 **Date:** 18/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** live `main` HEAD is resolved from GitHub at execution time. The published/released technical baseline remains Theme `1.3.0` at owner-approved PR #98 merge `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`; publication/deployment remain PASS at their verified scopes. Post-release Law 01 presentation closure advanced live GitHub main through PR #129/#130/#131 to `main@8238248f0d97383d0e43461c481ad6bbc1f480a7`; exact-main V1 run `35315451153` completed SUCCESS. RootProfile Team projection remains external-blocked under issue #112 and ownership boundaries are unchanged.
+> **Canonical-main checkpoint:** live `main` is corrective Theme `1.3.3` at `main@a66ef1639c299a06e62e9797aa2f44fe4e26cd8d` after PR #133. This source inherits the approved v1.3.2 Law 01 unified-heading work plus later PR #129-#131 closure. Final-head Y5/X6 and exact-main V1/X6 PASS; deterministic package SHA-256 `172a98dc00a52228fbb44a6ad24b79d568b7b543faa484c1ded59511b33e35d7`. Published GitHub Release and previously verified production deployment remain historical `v1.3.0`. RootProfile Team remains blocked under issue #112.
 
 **Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS`. Current v1.3 state: `PUBLICATION + PRODUCTION DEPLOYMENT PASS`; published/GitHub-Release release and verified production deployment are both `v1.3.0` at their respective verified scopes.
 
@@ -59,7 +59,7 @@ P3 final verified head `d78091900451176c3815b23d1485036e784bdde9` merged through
 
 ## 1.1 Exact current checkpoint — 18/09/2026
 
-- Canonical `main`: `8238248f0d97383d0e43461c481ad6bbc1f480a7` after PR #131. PR #129-#131 are merged and exact-main V1 run `35315451153` completed SUCCESS. Earlier PR #110/#111 checkpoint remains retained provenance.
+- Canonical `main`: `a66ef1639c299a06e62e9797aa2f44fe4e26cd8d` after corrective PR #133. Theme metadata `1.3.3`; inherited v1.3.2 Law 01 heading system + PR #129-#131 closure; exact-main V1 `35318696376` and X6 `35318696388` PASS.
 - F9 optional ConvertFlow provider L5: PASS at the exact certified scope in `docs/evidence/F9_PROVIDER_L5_SOURCE_SYNC_20260918.md`; no ConvertFlow release/deploy or public-contract change is inferred.
 - Pilot live Theme metadata: `1.3.0`, with owner-approved post-release WPVibe Theme-file publish and `aznet-theme-wpvibe-backup`. Runtime behavior is verified; live byte identity to release/main is UNKNOWN.
 - Law 01 rerun: PASS at L3/L4 evidence available for the tested live flow (`Created: 0 · Reused: 36`, no duplicate current-blueprint starter roles). Homepage content/indexability/Lighthouse readiness is PASS at the tested scope.
@@ -363,4 +363,4 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 16. Exact next
 
-**NEXT — v1.3 Core and post-release Law 01 Homepage presentation closure are PASS at their verified scopes. Hold RootProfile-backed Team/member integration at issue #112. Begin no new Theme milestone, architecture/public-contract change, release/deploy/takeover action or optional-provider slice without a separately approved gate.**
+**NEXT — hand off the verified `aznet-theme-1.3.3.zip` for the requested manual website update. Do not use the erroneous 1.3.1-lineage package. Publication/deployment remain separate gates; RootProfile Team remains blocked at issue #112.**
