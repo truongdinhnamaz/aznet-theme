@@ -1,8 +1,8 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.53
+**Version:** v0.54
 **Status:** Working Source  
-**Date:** 18/09/2026
+**Date:** 19/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
 
 ## 1. Source ownership
@@ -229,7 +229,17 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**NEXT — Law 01 screenshot-reference parity is now canonical at `main@f608c7ec98587b61da570871bb304a9e76d09bbd`. No new package/version, Git tag, GitHub Release or production deployment is authorized by this closure. RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
+**NEXT — PR #149 is the owner-approved AZnet Theme 1.3.8 client-delivery candidate built from canonical `main@9ad2faa9141f9aca93f2c6b2a0a37731143ccd44`. Exact production head `5f3dcf00f0a619b58a966078b2cd969cb7fec45d` completed 14/14 triggered workflows SUCCESS and produced the deterministic installable package. Canonical merge remains the next approval gate. Git tag/GitHub Release and production deployment remain separate gates; RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
+
+### AZnet Theme 1.3.8 final client-delivery candidate — 19/09/2026
+
+The owner explicitly approved creation of a new installable package after the Law 01 screenshot-reference presentation closure. Version `1.3.8` is used instead of reusing `1.3.7`, because a 1.3.7 package had already been generated from a superseded, unmerged intermediate candidate. Skipping that identity preserves package provenance.
+
+RED head `5f188f3fcca6fd32122a1799aff703d4837b89e9` failed the intended Y5 assertion while production still declared 1.3.6: `Y5 promoted style.css must be exactly 1.3.8`. Minimal GREEN changed only `style.css` and `AZNET_THEME_VERSION`, with Y5/X6 guards extended for the exact approved `1.3.6 -> 1.3.8` boundary.
+
+Exact production head `5f3dcf00f0a619b58a966078b2cd969cb7fec45d` completed **14/14 triggered workflows SUCCESS, 0 failure**. Y5 produced deterministic `aznet-theme-1.3.8.zip`, 145 production files, 108/108 packaged PHP lint PASS, SHA-256 `0aba4cf0e213150319c8288d62d06cb136481670cd8f53fd0edbfd9276a03238`. Run `35403751052`; promoted-package artifact `10571900478`, digest `sha256:2f8b380f8ffa6e88d481d99a14ea1d248f86243ebd1c213bdccb49fda0fc9da4`.
+
+Canonical `main` remains Theme metadata 1.3.6 until PR #149 is merged. Tag/GitHub Release and production deployment are not claimed. Evidence: `docs/evidence/V1_3_8_CLIENT_DELIVERY_20260919.md`.
 
 ### AZnet Theme 1.3.6 client-delivery candidate — 18/09/2026
 
