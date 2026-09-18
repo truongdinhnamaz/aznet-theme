@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.61
+**Version:** v0.62
 **Status:** Working Source  
 **Date:** 18/09/2026
 
@@ -425,6 +425,20 @@ Owner-approved PR #135 merged final verified head `d0781a2c25a3b15bbc535184e0b03
 
 All 34 triggered workflows on the final PR head completed SUCCESS. This includes D-027 Standalone Core L3/L4/Exact Package/Retained Regression, V1 Core PR CI, Homepage Composer Law 01 Browser Quality, Law Site Provisioning Browser Quality + Candidate Package, F Homepage Native Runtime + Regression Package, X6 Cross-surface Release Closure, Y5 Client Delivery Release and Release Version Consistency. Y5 deterministic package evidence produced `aznet-theme-1.3.4.zip`, 145 files, SHA-256 `5cf0041ab09a6b9718e4354d2aa9c00850aa93e83c9ae775a640dc613caf3f83`. No fresh exact-main workflow run is claimed for merge commit `d008f66...`; merged-byte identity is supported by zero file delta from the verified final head. Publication/tag and production deployment remain historical `v1.3.0` until separately approved and executed. RootProfile Team remains external-blocked under issue #112.
 
+### v1.3.5 Hero backward-compatibility closure checkpoint — 18/09/2026
+
+Owner-approved PR #138 merged final verified head `949e9dd97ce805eed43811ce633739ed1934c1c2` to canonical `main@a9a3578516971abd9a9223c1e8dac69da5657bea`. Theme metadata is `1.3.5`. The dedicated Hero Page remains the preferred source; upgraded sites with no valid mapping may retain the previous public WordPress-native Hero projection so the presentation does not disappear. This does not create a parallel domain store or provider heuristic.
+
+Final-head 25/25 workflows completed SUCCESS. Fresh exact-main `V1 Exact Main Verification` run `35335680576` and `X6 Cross-surface Release Closure` run `35335680518` completed SUCCESS. Y5 deterministic `aznet-theme-1.3.5.zip` contains 145 files, 108 packaged PHP files lint PASS and SHA-256 `ec9cf5c35dd3de8c7cff5673c5e3f392abdc3894cd676738e746b354c70e1564`. Publication/tag and verified production deployment remain historical `v1.3.0`. Evidence: `docs/evidence/V1_3_5_HERO_COMPATIBILITY_20260918.md`.
+
+### Law 01 Hero / Trust / Services visual-parity closure checkpoint — 18/09/2026
+
+The product owner approved the supplied law-firm homepage reference as the visual target for the first Law 01 presentation band. PR #139 implemented only Theme-owned presentation changes and merged final verified head `b7947bf2722db6bde8fd1c29ae377318b8e99c9c` to `main@ffafe55b90db1d5313b36a5151110ca1e3f67789`.
+
+The verified target now includes a 48/52 wide-desktop Hero split, compact four-item trust strip and Services geometry of 6-up wide desktop, 3+3 compact desktop and 1-up mobile. Final-head 24/24 workflows completed SUCCESS; Homepage Composer Law 01 Browser Quality passed the 1440/1024/390/320 matrix. Fresh exact-main V1 run `35343960510` and X6 run `35343960430` completed SUCCESS.
+
+This decision is presentation-only. RootProfile-backed authoritative Team membership remains BLOCKED under issue #112; the Theme must not infer Team identity/membership from WordPress users/authors/slugs/URLs or private provider storage. Evidence: `docs/evidence/LAW01_VISUAL_PARITY_HERO_SERVICES_20260918.md`.
+
 ## 14. Exact next
 
-**NEXT — hand off the exact verified `aznet-theme-1.3.4.zip` from PR #135 final-head evidence for the product owner's requested manual website update. Git tag/GitHub Release and automated deployment remain separate approval gates; RootProfile Team stays blocked at issue #112.**
+**NEXT — continue the approved Law 01 visual-parity sequence with a bounded About/Profile + Latest Posts presentation slice. Team shell/card styling may be refined only where it remains presentation-only and does not create or infer authoritative membership; provider-backed Team integration remains BLOCKED at issue #112. Git tag/GitHub Release and production deployment remain separate approval gates.**
