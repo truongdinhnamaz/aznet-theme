@@ -38,7 +38,9 @@
 
 .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__eyebrow {
     margin-bottom: var(--aznet-theme-space-3);
+    font-size: var(--aznet-theme-text-label);
     font-weight: var(--aznet-theme-font-weight-bold);
+    line-height: var(--aznet-theme-line-height-label);
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
@@ -72,7 +74,9 @@
     justify-content: center;
     padding: 0.78rem 1.3rem;
     border-radius: var(--aznet-theme-radius-control);
-    font-weight: var(--aznet-theme-font-weight-bold);
+    font-size: var(--aznet-theme-text-button);
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    line-height: var(--aznet-theme-line-height-button);
     text-decoration: none;
     transition: transform var(--aznet-theme-motion-fast) ease, box-shadow var(--aznet-theme-motion-fast) ease;
 }
@@ -114,7 +118,9 @@
 .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__services > p:first-child,
 .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__about p.has-primary-color,
 .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__process p.has-primary-color {
+    font-size: var(--aznet-theme-text-label);
     font-weight: var(--aznet-theme-font-weight-bold);
+    line-height: var(--aznet-theme-line-height-label);
     letter-spacing: 0.06em;
     text-transform: uppercase;
 }
@@ -210,6 +216,8 @@
 
 .aznet-theme-homepage-blueprint .wp-block-post-title {
     margin-block: 0.6rem;
+    font-size: var(--aznet-theme-text-h3);
+    font-weight: var(--aznet-theme-font-weight-semibold);
     line-height: var(--aznet-theme-line-height-h3);
 }
 
@@ -221,6 +229,8 @@
 
 .aznet-theme-homepage-blueprint .wp-block-post-date {
     color: var(--aznet-theme-color-text-muted);
+    font-size: var(--aznet-theme-text-meta);
+    line-height: var(--aznet-theme-line-height-meta);
 }
 
 .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__faq {
@@ -239,7 +249,8 @@
 
 .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__faq summary {
     cursor: pointer;
-    font-weight: var(--aznet-theme-font-weight-bold);
+    font-size: var(--aznet-theme-text-h4);
+    font-weight: var(--aznet-theme-font-weight-semibold);
     line-height: var(--aznet-theme-line-height-h4);
 }
 

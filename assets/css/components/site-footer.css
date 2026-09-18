@@ -93,7 +93,7 @@
     margin: 14px 0 0;
     color: var(--aznet-theme-footer-muted);
     font-size: var(--aznet-theme-text-small);
-    line-height: var(--aznet-theme-line-height-body);
+    line-height: var(--aznet-theme-line-height-small);
 }
 
 .aznet-theme-site-footer__heading {
@@ -128,7 +128,7 @@
 .aznet-theme-site-footer__contact-menu a {
     color: var(--aznet-theme-footer-muted);
     font-size: var(--aznet-theme-text-small);
-    line-height: var(--aznet-theme-line-height-body);
+    line-height: var(--aznet-theme-line-height-small);
 }
 
 .aznet-theme-site-footer__menu .sub-menu {
@@ -176,6 +176,7 @@
 .aznet-theme-site-footer__social-menu a {
     color: var(--aznet-theme-footer-muted);
     font-size: var(--aznet-theme-text-meta);
+    line-height: var(--aznet-theme-line-height-meta);
 }
 
 @media (max-width: 1100px) {

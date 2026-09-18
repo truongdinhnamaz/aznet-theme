@@ -37,6 +37,9 @@ $required = [
         'font-size: var(--aznet-theme-text-display);',
         'font-size: var(--aznet-theme-text-lead);',
         'font-size: var(--aznet-theme-text-h2);',
+        'font-size: var(--aznet-theme-text-label);',
+        'font-size: var(--aznet-theme-text-button);',
+        'line-height: var(--aznet-theme-line-height-button);',
     ],
     'law-01' => [
         'font-size: var(--aznet-theme-text-display);',
@@ -44,6 +47,9 @@ $required = [
         'font-size: var(--aznet-theme-text-h3);',
         'font-size: var(--aznet-theme-text-label);',
         'font-size: var(--aznet-theme-text-meta);',
+        'font-size: var(--aznet-theme-text-button);',
+        'line-height: var(--aznet-theme-line-height-button);',
+        'line-height: var(--aznet-theme-line-height-meta);',
     ],
     'page' => [
         'font-size: var(--aznet-theme-text-lead);',
@@ -52,6 +58,7 @@ $required = [
     'article' => [
         'font-size: var(--aznet-theme-text-body);',
         'font-size: var(--aznet-theme-text-meta);',
+        'line-height: var(--aznet-theme-line-height-h1);',
     ],
     'forms' => [
         'font-size: var(--aznet-theme-text-form);',
@@ -60,10 +67,18 @@ $required = [
     'woo-archive' => [
         'font-size: var(--aznet-theme-text-h4);',
         'font-size: var(--aznet-theme-text-price);',
+        'font-size: var(--aznet-theme-text-form);',
+        'font-size: var(--aznet-theme-text-button);',
+        'font-size: var(--aznet-theme-text-meta);',
     ],
     'woo-product' => [
         'font-size: var(--aznet-theme-text-h1);',
         'font-size: var(--aznet-theme-text-price);',
+        'font-size: var(--aznet-theme-text-body);',
+        'font-size: var(--aznet-theme-text-form);',
+        'font-size: var(--aznet-theme-text-button);',
+        'font-size: var(--aznet-theme-text-meta);',
+        'font-size: var(--aznet-theme-text-label);',
     ],
 ];
 

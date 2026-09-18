@@ -18,6 +18,8 @@ assert(str_contains(
     '--aznet-theme-font-family-base: ' . $systemStack . ';'
 ));
 
+assert(str_contains($tokens, '--aznet-theme-line-height-small: 1.6;'));
+
 foreach ([
     '--aznet-theme-text-display:',
     '--aznet-theme-text-h1:',

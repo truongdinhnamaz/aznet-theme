@@ -128,9 +128,17 @@
     line-height: var(--aznet-theme-line-height-price);
 }
 
-.single-product .aznet-theme-main .woocommerce-product-details__short-description,
-.single-product .aznet-theme-main .product_meta {
+.single-product .aznet-theme-main .woocommerce-product-details__short-description {
     color: var(--aznet-theme-muted, #626873);
+    font-size: var(--aznet-theme-text-body);
+    line-height: var(--aznet-theme-line-height-body);
+}
+
+.single-product .aznet-theme-main .product_meta,
+.single-product .aznet-theme-main .woocommerce-product-rating {
+    color: var(--aznet-theme-muted, #626873);
+    font-size: var(--aznet-theme-text-meta);
+    line-height: var(--aznet-theme-line-height-meta);
 }
 
 .single-product .aznet-theme-main form.cart,
@@ -152,6 +160,12 @@
     text-align: start;
 }
 
+.single-product .aznet-theme-main .variations th {
+    font-size: var(--aznet-theme-text-label);
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    line-height: var(--aznet-theme-line-height-label);
+}
+
 .single-product .aznet-theme-main .variations select,
 .single-product .aznet-theme-main .quantity .qty {
     min-height: var(--aznet-theme-woo-purchase-control-height);
@@ -159,6 +173,10 @@
     border-radius: var(--aznet-theme-radius-control, 0.5rem);
     background: var(--aznet-theme-surface, #ffffff);
     color: var(--aznet-theme-text, #17181b);
+    font-family: var(--aznet-theme-font-family-base);
+    font-size: var(--aznet-theme-text-form);
+    font-weight: var(--aznet-theme-font-weight-regular);
+    line-height: var(--aznet-theme-line-height-form);
 }
 
 .single-product .aznet-theme-main .variations select {
@@ -175,10 +193,15 @@
 .single-product .aznet-theme-main .single_add_to_cart_button {
     min-height: var(--aznet-theme-woo-purchase-control-height);
     padding-inline: var(--aznet-theme-space-4, 1.5rem);
+    font-size: var(--aznet-theme-text-button);
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    line-height: var(--aznet-theme-line-height-button);
 }
 
 .single-product .aznet-theme-main .reset_variations {
     color: var(--aznet-theme-muted, #626873);
+    font-size: var(--aznet-theme-text-meta);
+    line-height: var(--aznet-theme-line-height-meta);
     text-underline-offset: 0.2em;
 }
 
