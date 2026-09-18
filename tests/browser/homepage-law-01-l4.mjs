@@ -116,11 +116,12 @@ async function inspectViewport(browser, name, viewport) {
     if (result.h1Count !== 1) throw new Error(`expected one Law 01 H1, got ${result.h1Count}`);
 
     const heroTitle = (await page.locator('.aznet-theme-law01-hero h1').textContent())?.trim() || '';
-    if (heroTitle !== 'AZnet Law 01') throw new Error(`Hero H1 must use WordPress site title, got: ${heroTitle}`);
+    if (heroTitle !== 'Văn phòng luật sư kiểm soát độc lập') throw new Error(`Hero H1 must come from the dedicated Hero Page, got: ${heroTitle}`);
     const heroValue = (await page.locator('.aznet-theme-law01-hero__value').textContent())?.trim() || '';
-    if (!heroValue.includes('Bảo vệ quyền lợi của bạn bằng giải pháp pháp lý rõ ràng')) throw new Error(`Front Page title value proposition missing: ${heroValue}`);
-    const heroLede = (await page.locator('.aznet-theme-law01-hero .aznet-theme-law01-lede').textContent())?.trim() || '';
-    if (!heroLede.includes('Dịch vụ pháp lý chuyên nghiệp')) throw new Error(`Front Page excerpt support copy missing: ${heroLede}`);
+    if (!heroValue.includes('Bảo vệ quyền lợi của bạn bằng giải pháp pháp lý rõ ràng')) throw new Error(`Dedicated Hero Page excerpt missing: ${heroValue}`);
+    const heroBody = (await page.locator('.aznet-theme-law01-hero__body').textContent())?.trim() || '';
+    if (!heroBody.includes('Trọn tâm với khách')) throw new Error(`Dedicated Hero Page body missing: ${heroBody}`);
+    if (heroTitle === 'AZnet Law 01' || heroTitle === 'Trang chủ nội dung') throw new Error('Hero H1 leaked Site Title or Front Page title dependency');
 
     if (await page.locator('#law01-native-body').count() !== 1) throw new Error('native Front Page the_content() sentinel missing');
 
@@ -130,9 +131,6 @@ async function inspectViewport(browser, name, viewport) {
     for (const selector of forbiddenBurgundySelectors) {
       if (await page.locator(selector).count() > 0) throw new Error(`Burgundy visual closure rendered excluded section ${selector}`);
     }
-
-    const slogan = (await page.locator('.aznet-theme-law01-hero__slogan').textContent())?.trim() || '';
-    if (!slogan.includes('Tận tâm với khách hàng')) throw new Error(`Site Tagline slogan was not projected into Hero: ${slogan}`);
 
     if (viewport.width > 960) {
       const headingMetrics = await page.locator('.aznet-theme-law01-section h2').evaluateAll((nodes) => nodes.map((node) => {
