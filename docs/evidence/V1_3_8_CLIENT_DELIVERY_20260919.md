@@ -1,9 +1,9 @@
 # AZnet Theme 1.3.8 — Final Client Delivery Candidate
 
-**Date:** 19/09/2026  
-**Repository:** `truongdinhnamaz/aznet-theme`  
-**Canonical base:** `main@9ad2faa9141f9aca93f2c6b2a0a37731143ccd44`  
-**PR:** #149  
+**Date:** 19/09/2026
+**Repository:** `truongdinhnamaz/aznet-theme`
+**Canonical base:** `main@9ad2faa9141f9aca93f2c6b2a0a37731143ccd44`
+**PR:** #149
 **Verified production head:** `5f3dcf00f0a619b58a966078b2cd969cb7fec45d`
 
 ## Purpose
@@ -52,13 +52,13 @@ Y5 exact-package lifecycle built the package twice and proved byte identity, exa
 
 ## Installable package
 
-File: `aznet-theme-1.3.8.zip`  
-Production files: **145**  
-Packaged PHP lint: **108/108 PASS**  
+File: `aznet-theme-1.3.8.zip`
+Production files: **145**
+Packaged PHP lint: **108/108 PASS**
 SHA-256: `0aba4cf0e213150319c8288d62d06cb136481670cd8f53fd0edbfd9276a03238`
 
-Y5 run: `35403751052`  
-Promoted-package artifact ID: `10571900478`  
+Y5 run: `35403751052`
+Promoted-package artifact ID: `10571900478`
 Artifact digest: `sha256:2f8b380f8ffa6e88d481d99a14ea1d248f86243ebd1c213bdccb49fda0fc9da4`
 
 The direct WordPress-installable ZIP has been extracted from the GitHub Actions artifact wrapper and independently checked to contain `aznet-theme/style.css` declaring version 1.3.8.
