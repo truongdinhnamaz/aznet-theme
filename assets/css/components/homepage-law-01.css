@@ -373,6 +373,13 @@
 .aznet-theme-homepage--law-01 .aznet-theme-law01-team .aznet-theme-law01-lede {
     color: #cbd6e1;
 }
+.aznet-theme-homepage--law-01 .aznet-theme-law01-team .aznet-theme-law01-text-link,
+.aznet-theme-homepage--law-01 .aznet-theme-law01-team-card__body a {
+    color: #fff;
+}
+.aznet-theme-homepage--law-01 .aznet-theme-law01-team-card__body p {
+    color: #cbd6e1;
+}
 .aznet-theme-homepage--law-01 .aznet-theme-law01-team .aznet-theme-law01-button--secondary {
     border-color: rgba(212,170,104,.85);
     color: #fff;
