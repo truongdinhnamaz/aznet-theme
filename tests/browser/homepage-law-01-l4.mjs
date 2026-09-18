@@ -159,7 +159,10 @@ async function inspectViewport(browser, name, viewport) {
     if (result.serviceCards !== 6) throw new Error(`expected 6 mapped service cards, got ${result.serviceCards}`);
 
     const parityMetrics = await page.evaluate(() => {
+      const heroSection = document.querySelector('.aznet-theme-law01-hero')?.getBoundingClientRect();
       const heroGrid = document.querySelector('.aznet-theme-law01-hero__grid')?.getBoundingClientRect();
+      const trustGrid = document.querySelector('.aznet-theme-law01-hero__trust-grid')?.getBoundingClientRect();
+      const servicesContainer = document.querySelector('.aznet-theme-law01-services > .aznet-theme-law01-container')?.getBoundingClientRect();
       const content = document.querySelector('.aznet-theme-law01-hero__content')?.getBoundingClientRect();
       const visual = document.querySelector('.aznet-theme-law01-hero__visual')?.getBoundingClientRect();
       const trust = [...document.querySelectorAll('.aznet-theme-law01-hero__trust-item')].map((node) => node.getBoundingClientRect());
@@ -169,7 +172,10 @@ async function inspectViewport(browser, name, viewport) {
       const teamBand = document.querySelector('.aznet-theme-law01-profile__team-band')?.getBoundingClientRect();
       const articles = [...document.querySelectorAll('.aznet-theme-law01-articles .aznet-theme-law01-article-card')].map((node) => node.getBoundingClientRect());
       return {
+        heroSection: heroSection ? { x: heroSection.x, y: heroSection.y, width: heroSection.width, height: heroSection.height } : null,
         heroGrid: heroGrid ? { x: heroGrid.x, y: heroGrid.y, width: heroGrid.width, height: heroGrid.height } : null,
+        trustGrid: trustGrid ? { x: trustGrid.x, y: trustGrid.y, width: trustGrid.width, height: trustGrid.height } : null,
+        servicesContainer: servicesContainer ? { x: servicesContainer.x, y: servicesContainer.y, width: servicesContainer.width, height: servicesContainer.height } : null,
         content: content ? { x: content.x, y: content.y, width: content.width, height: content.height } : null,
         visual: visual ? { x: visual.x, y: visual.y, width: visual.width, height: visual.height } : null,
         trust: trust.map((rect) => ({ x: rect.x, y: rect.y, width: rect.width, height: rect.height })),
@@ -183,9 +189,16 @@ async function inspectViewport(browser, name, viewport) {
 
     if (!parityMetrics.content || !parityMetrics.visual) throw new Error('Hero visual-parity metrics unavailable');
     if (viewport.width >= 1024) {
-      if (!parityMetrics.heroGrid) throw new Error('Hero grid geometry unavailable');
-      if (Math.abs(parityMetrics.heroGrid.x) > 1 || Math.abs(parityMetrics.heroGrid.width - viewport.width) > 2) {
-        throw new Error(`desktop Hero grid must span the viewport, got x=${parityMetrics.heroGrid.x.toFixed(1)} width=${parityMetrics.heroGrid.width.toFixed(1)} viewport=${viewport.width}`);
+      if (!parityMetrics.heroSection || !parityMetrics.heroGrid || !parityMetrics.trustGrid || !parityMetrics.servicesContainer) {
+        throw new Error('Hero/shared-shell geometry unavailable');
+      }
+      if (Math.abs(parityMetrics.heroSection.x) > 1 || Math.abs(parityMetrics.heroSection.width - viewport.width) > 2) {
+        throw new Error(`desktop Hero section must span the viewport, got x=${parityMetrics.heroSection.x.toFixed(1)} width=${parityMetrics.heroSection.width.toFixed(1)} viewport=${viewport.width}`);
+      }
+      for (const [label, rect] of [['Trust', parityMetrics.trustGrid], ['Services', parityMetrics.servicesContainer]]) {
+        if (Math.abs(parityMetrics.heroGrid.x - rect.x) > 2 || Math.abs(parityMetrics.heroGrid.width - rect.width) > 2) {
+          throw new Error(`desktop Hero inner grid must align with the common content shell used by ${label}: hero x=${parityMetrics.heroGrid.x.toFixed(1)} width=${parityMetrics.heroGrid.width.toFixed(1)}; ${label.toLowerCase()} x=${rect.x.toFixed(1)} width=${rect.width.toFixed(1)}`);
+        }
       }
       const heroTotal = parityMetrics.content.width + parityMetrics.visual.width;
       const visualRatio = parityMetrics.visual.width / heroTotal;
