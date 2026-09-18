@@ -75,8 +75,9 @@
     display: inline-flex;
     align-items: center;
     max-width: 240px;
-    font-size: 22px;
-    line-height: 1.2;
+    font-size: var(--aznet-theme-text-h4);
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    line-height: var(--aznet-theme-line-height-h4);
 }
 
 .aznet-theme-site-footer__logo {
