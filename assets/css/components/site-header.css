@@ -110,7 +110,7 @@
     flex: 0 0 auto;
     align-items: center;
     font-weight: var(--aznet-theme-font-weight-bold);
-    letter-spacing: -0.02em;
+    letter-spacing: normal;
 }
 
 .aznet-theme-site-header__brand img,
