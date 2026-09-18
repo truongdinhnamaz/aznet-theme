@@ -91,7 +91,8 @@
     max-width: 38em;
     margin: 14px 0 0;
     color: var(--aznet-theme-footer-muted);
-    font-size: var(--aznet-theme-text-small);\n    line-height: var(--aznet-theme-line-height-body);
+    font-size: var(--aznet-theme-text-small);
+    line-height: var(--aznet-theme-line-height-body);
 }
 
 .aznet-theme-site-footer__heading {
@@ -149,7 +150,8 @@
 .aznet-theme-site-footer__copyright {
     margin: 0;
     color: var(--aznet-theme-footer-muted);
-    font-size: var(--aznet-theme-text-meta);\n    line-height: var(--aznet-theme-line-height-meta);
+    font-size: var(--aznet-theme-text-meta);
+    line-height: var(--aznet-theme-line-height-meta);
 }
 
 .aznet-theme-site-footer__bottom-nav {
