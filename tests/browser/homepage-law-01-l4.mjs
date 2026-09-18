@@ -79,6 +79,10 @@ async function inspectViewport(browser, name, viewport) {
     h1Count: null,
     serviceCards: null,
     teamCards: null,
+    heroImages: null,
+    teamImages: null,
+    articleImages: null,
+    footerColumns: null,
     utilityLinks: null,
     articleLinks: null,
     overflowPx: null,
@@ -138,6 +142,19 @@ async function inspectViewport(browser, name, viewport) {
 
     result.teamCards = await page.locator('.aznet-theme-law01-team-card').count();
     if (result.teamCards !== 2) throw new Error(`expected 2 WordPress-owned team child Page cards, got ${result.teamCards}`);
+
+    result.heroImages = await page.locator('.aznet-theme-law01-hero__media img').count();
+    if (result.heroImages !== 1) throw new Error(`visual QA fixture must provide 1 Hero featured image, got ${result.heroImages}`);
+    result.teamImages = await page.locator('.aznet-theme-law01-team-card__media img').count();
+    if (result.teamImages !== 2) throw new Error(`visual QA fixture must provide 2 Team featured images, got ${result.teamImages}`);
+    result.articleImages = await page.locator('.aznet-theme-law01-article-card__media img').count();
+    if (result.articleImages !== 3) throw new Error(`visual QA fixture must provide 3 Latest Posts featured images, got ${result.articleImages}`);
+
+    if (await page.locator('.aznet-theme-site-footer--professional').count() !== 1) throw new Error('visual QA fixture must exercise the professional Footer preset');
+    for (const selector of ['.aznet-theme-site-footer__navigation', '.aznet-theme-site-footer__contact', '.aznet-theme-site-footer__social-column']) {
+      if (await page.locator(selector).count() !== 1) throw new Error(`visual QA fixture missing populated Footer column ${selector}`);
+    }
+    result.footerColumns = 4;
 
     result.utilityLinks = await page.locator('.aznet-theme-site-header__utility-menu a').count();
     if (result.utilityLinks < 2) throw new Error(`expected header phone/hotline utility links, got ${result.utilityLinks}`);

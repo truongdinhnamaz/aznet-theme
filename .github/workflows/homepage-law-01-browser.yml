@@ -56,7 +56,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-          extensions: mysqli
+          extensions: mysqli, gd
           coverage: none
 
       - name: Verify Homepage Composer offline contracts
@@ -105,6 +105,38 @@ jobs:
           set -euo pipefail
           cat > /tmp/law01-fixture.php <<'PHP'
           <?php
+          function law01_featured_fixture( int $post_id, string $key, int $width = 1200, int $height = 800 ): int {
+              $upload = wp_upload_dir();
+              if ( ! empty( $upload['error'] ) ) { throw new RuntimeException( (string) $upload['error'] ); }
+              $filename = sanitize_file_name( 'law01-' . $key . '.png' );
+              $path = trailingslashit( $upload['path'] ) . $filename;
+              $image = imagecreatetruecolor( $width, $height );
+              if ( false === $image ) { throw new RuntimeException( 'Unable to create fixture image.' ); }
+              $seed = (int) sprintf( '%u', crc32( $key ) );
+              $base = imagecolorallocate( $image, 74 + ( $seed % 36 ), 28 + ( ( $seed >> 3 ) % 28 ), 36 + ( ( $seed >> 6 ) % 32 ) );
+              $warm = imagecolorallocate( $image, 205, 170, 105 );
+              $soft = imagecolorallocate( $image, 240, 232, 220 );
+              imagefilledrectangle( $image, 0, 0, $width, $height, $base );
+              imagefilledrectangle( $image, (int) ( $width * 0.08 ), (int) ( $height * 0.12 ), (int) ( $width * 0.92 ), (int) ( $height * 0.88 ), $soft );
+              imagefilledrectangle( $image, (int) ( $width * 0.12 ), (int) ( $height * 0.18 ), (int) ( $width * 0.52 ), (int) ( $height * 0.82 ), $base );
+              imagefilledellipse( $image, (int) ( $width * 0.72 ), (int) ( $height * 0.44 ), (int) ( $width * 0.24 ), (int) ( $height * 0.34 ), $warm );
+              imagefilledrectangle( $image, (int) ( $width * 0.62 ), (int) ( $height * 0.64 ), (int) ( $width * 0.84 ), (int) ( $height * 0.82 ), $warm );
+              if ( ! imagepng( $image, $path, 6 ) ) { imagedestroy( $image ); throw new RuntimeException( 'Unable to write fixture image.' ); }
+              imagedestroy( $image );
+
+              $attachment_id = wp_insert_attachment( [
+                  'post_mime_type' => 'image/png',
+                  'post_title' => 'Law 01 visual fixture ' . $key,
+                  'post_status' => 'inherit',
+              ], $path, $post_id, true );
+              if ( is_wp_error( $attachment_id ) ) { throw new RuntimeException( $attachment_id->get_error_message() ); }
+              require_once ABSPATH . 'wp-admin/includes/image.php';
+              $metadata = wp_generate_attachment_metadata( (int) $attachment_id, $path );
+              if ( is_array( $metadata ) ) { wp_update_attachment_metadata( (int) $attachment_id, $metadata ); }
+              set_post_thumbnail( $post_id, (int) $attachment_id );
+              return (int) $attachment_id;
+          }
+
           function law01_page( string $title, string $slug, string $excerpt, string $content = '', int $parent = 0, int $menu_order = 0 ): int {
               $id = wp_insert_post( [
                   'post_type' => 'page',
@@ -137,6 +169,7 @@ jobs:
               ], true );
               if ( is_wp_error( $id ) ) { throw new RuntimeException( $id->get_error_message() ); }
               wp_set_post_categories( (int) $id, $cats );
+              law01_featured_fixture( (int) $id, $slug, 1200, 675 );
               return (int) $id;
           }
 
@@ -146,6 +179,7 @@ jobs:
               'Dịch vụ pháp lý chuyên nghiệp kết hợp hệ thống kiến thức giúp khách hàng hiểu vấn đề trước khi đưa ra quyết định.',
               '<p id="law01-native-body">Native Front Page body sentinel</p>'
           );
+          law01_featured_fixture( $front, 'hero', 1400, 900 );
           $about = law01_page( 'Giới thiệu', 'gioi-thieu', 'Một đội ngũ hướng tới tư vấn rõ ràng, bảo mật và giải pháp thực tiễn.' );
           $services = law01_page( 'Dịch vụ pháp lý', 'dich-vu-phap-ly', 'Các dịch vụ pháp lý dành cho cá nhân và doanh nghiệp.' );
           $service_titles = [
@@ -161,8 +195,10 @@ jobs:
               law01_page( $title, $slug, 'Nội dung mô tả dịch vụ được quản lý bằng Page WordPress.', '', $services, $order++ );
           }
           $team = law01_page( 'Đội ngũ luật sư', 'doi-ngu-luat-su', 'Tìm hiểu đội ngũ và cách chúng tôi phối hợp trong quá trình tư vấn.' );
-          law01_page( 'Luật sư tư vấn doanh nghiệp', 'luat-su-doanh-nghiep', 'Hồ sơ nhân sự mẫu kiểm thử được quản lý bằng Page WordPress.', '', $team, 1 );
-          law01_page( 'Luật sư tư vấn dân sự', 'luat-su-dan-su', 'Hồ sơ nhân sự mẫu kiểm thử thứ hai được quản lý bằng Page WordPress.', '', $team, 2 );
+          $member_a = law01_page( 'Luật sư tư vấn doanh nghiệp', 'luat-su-doanh-nghiep', 'Hồ sơ nhân sự mẫu kiểm thử được quản lý bằng Page WordPress.', '', $team, 1 );
+          $member_b = law01_page( 'Luật sư tư vấn dân sự', 'luat-su-dan-su', 'Hồ sơ nhân sự mẫu kiểm thử thứ hai được quản lý bằng Page WordPress.', '', $team, 2 );
+          law01_featured_fixture( $member_a, 'team-a', 800, 1000 );
+          law01_featured_fixture( $member_b, 'team-b', 800, 1000 );
           $process = law01_page( 'Quy trình tư vấn', 'quy-trinh-tu-van', 'Tiếp nhận thông tin, đánh giá phạm vi và thống nhất phương án phù hợp.' );
           $faq = law01_page( 'Câu hỏi thường gặp', 'cau-hoi-thuong-gap', 'Các câu hỏi phổ biến trước khi bắt đầu trao đổi pháp lý.' );
           $contact = law01_page( 'Liên hệ', 'lien-he', 'Gửi thông tin để bắt đầu trao đổi.' );
@@ -193,6 +229,7 @@ jobs:
               'header_sticky' => 'sticky',
               'header_search' => true,
               'header_utilities' => true,
+              'footer_preset' => 'professional',
               'woo_catalog_preset' => 'grid',
               'woo_product_card_density' => 'balanced',
               'woo_product_preset' => 'classic',
@@ -229,6 +266,27 @@ jobs:
           wp menu item add-custom "$UTILITY_MENU_ID" 'Hotline: 0900 000 000' 'tel:+84900000000' --path=/tmp/wp --allow-root >/dev/null
           wp menu location assign "$UTILITY_MENU_ID" header-utility --path=/tmp/wp --allow-root
 
+          ABOUT_ID=$(php -r '$j=json_decode(file_get_contents("/tmp/homepage-law01/fixture.json"), true); echo $j["about"];')
+          SERVICES_ID=$(php -r '$j=json_decode(file_get_contents("/tmp/homepage-law01/fixture.json"), true); echo $j["services"];')
+
+          FOOTER_MENU_ID=$(wp menu create 'Footer Law01' --porcelain --path=/tmp/wp --allow-root)
+          wp menu item add-post "$FOOTER_MENU_ID" "$ABOUT_ID" --title='Giới thiệu' --path=/tmp/wp --allow-root >/dev/null
+          wp menu item add-post "$FOOTER_MENU_ID" "$SERVICES_ID" --title='Dịch vụ pháp lý' --path=/tmp/wp --allow-root >/dev/null
+          wp menu item add-post "$FOOTER_MENU_ID" "$CONTACT_ID" --title='Liên hệ' --path=/tmp/wp --allow-root >/dev/null
+          wp menu location assign "$FOOTER_MENU_ID" footer --path=/tmp/wp --allow-root
+
+          FOOTER_CONTACT_ID=$(wp menu create 'Footer Contact Law01' --porcelain --path=/tmp/wp --allow-root)
+          wp menu item add-custom "$FOOTER_CONTACT_ID" 'Điện thoại: 024 0000 0000' 'tel:+842400000000' --path=/tmp/wp --allow-root >/dev/null
+          wp menu item add-custom "$FOOTER_CONTACT_ID" 'Email: law01@example.test' 'mailto:law01@example.test' --path=/tmp/wp --allow-root >/dev/null
+          wp menu item add-post "$FOOTER_CONTACT_ID" "$CONTACT_ID" --title='Văn phòng Hà Nội' --path=/tmp/wp --allow-root >/dev/null
+          wp menu location assign "$FOOTER_CONTACT_ID" footer-contact --path=/tmp/wp --allow-root
+
+          FOOTER_SOCIAL_ID=$(wp menu create 'Footer Social Law01' --porcelain --path=/tmp/wp --allow-root)
+          wp menu item add-custom "$FOOTER_SOCIAL_ID" 'Facebook' 'https://example.test/facebook' --path=/tmp/wp --allow-root >/dev/null
+          wp menu item add-custom "$FOOTER_SOCIAL_ID" 'LinkedIn' 'https://example.test/linkedin' --path=/tmp/wp --allow-root >/dev/null
+          wp menu item add-custom "$FOOTER_SOCIAL_ID" 'YouTube' 'https://example.test/youtube' --path=/tmp/wp --allow-root >/dev/null
+          wp menu location assign "$FOOTER_SOCIAL_ID" footer-social --path=/tmp/wp --allow-root
+
           wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
           wp rewrite flush --hard --path=/tmp/wp --allow-root
 
@@ -247,6 +305,11 @@ jobs:
           grep -F 'aznet-theme-law01-services' /tmp/homepage-law01/homepage.html
           grep -F 'aznet-theme-law01-team-card' /tmp/homepage-law01/homepage.html
           grep -F 'aznet-theme-law01-articles' /tmp/homepage-law01/homepage.html
+          grep -F 'aznet-theme-law01-hero__media' /tmp/homepage-law01/homepage.html
+          grep -F 'aznet-theme-law01-team-card__media' /tmp/homepage-law01/homepage.html
+          grep -F 'aznet-theme-law01-article-card__media' /tmp/homepage-law01/homepage.html
+          grep -F 'aznet-theme-site-footer--professional' /tmp/homepage-law01/homepage.html
+          grep -F 'aznet-theme-site-footer__social-column' /tmp/homepage-law01/homepage.html
           if grep -F 'aznet-theme-law01-analysis' /tmp/homepage-law01/homepage.html; then
             echo 'Burgundy visual closure must not render Analysis section' >&2
             exit 1

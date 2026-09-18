@@ -32,7 +32,7 @@ $members = $team instanceof \WP_Post ? homepage_direct_published_children( (int)
         <?php if ( [] !== $members ) : ?><div class="aznet-theme-law01-profile__members">
             <?php foreach ( $members as $member ) : if ( ! $member instanceof \WP_Post ) { continue; } $member_image = has_post_thumbnail( $member ) ? get_the_post_thumbnail( $member, 'medium_large', [ 'class' => 'aznet-theme-law01-profile__member-image aznet-theme-law01-team-card__image' ] ) : ''; $member_summary = trim( (string) get_the_excerpt( $member ) ); ?>
             <article class="aznet-theme-law01-profile__member aznet-theme-law01-team-card">
-                <?php if ( '' !== $member_image ) : ?><a class="aznet-theme-law01-team-card__media" href="<?php echo esc_url( get_permalink( $member ) ); ?>"><?php echo wp_kses_post( $member_image ); ?></a><?php endif; ?>
+                <?php if ( '' !== $member_image ) : ?><a class="aznet-theme-law01-team-card__media" href="<?php echo esc_url( get_permalink( $member ) ); ?>" aria-label="<?php echo esc_attr( get_the_title( $member ) ); ?>"><?php echo wp_kses_post( $member_image ); ?></a><?php endif; ?>
                 <div class="aznet-theme-law01-team-card__body"><h3><a href="<?php echo esc_url( get_permalink( $member ) ); ?>"><?php echo esc_html( get_the_title( $member ) ); ?></a></h3>
                 <?php if ( '' !== $member_summary ) : ?><p><?php echo esc_html( $member_summary ); ?></p><?php endif; ?></div>
             </article>
