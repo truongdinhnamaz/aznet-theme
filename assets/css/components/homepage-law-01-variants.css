@@ -226,7 +226,7 @@
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust-grid { grid-template-columns: 1fr; }
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust-item + .aznet-theme-law01-hero__trust-item { border-inline-start: 0; border-top: 1px solid rgba(122, 14, 24, .1); }
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-section-heading { align-items: flex-start; flex-direction: column; gap: .75rem; }
-    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-section h2.aznet-theme-law01-services__heading { text-wrap: balance; white-space: normal; }
+    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-section h2.aznet-theme-law01-services__heading { inline-size: auto; max-width: 100%; text-wrap: balance; white-space: normal; }
 }
 @media (prefers-reduced-motion: reduce) {
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-card,
