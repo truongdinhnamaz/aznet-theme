@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.64
+**Version:** v0.65
 **Status:** Working Source  
 **Date:** 18/09/2026
 
@@ -459,6 +459,12 @@ Deterministic package `aznet-theme-1.3.6.zip`: 145 files; 108 packaged PHP lint 
 
 This checkpoint does not change Theme/provider ownership and does not authorize tag/GitHub Release or production deployment. RootProfile Team remains BLOCKED at issue #112. Evidence: `docs/evidence/V1_3_6_CLIENT_DELIVERY_20260918.md`.
 
+### AZnet Theme 1.3.6 canonical merge closure — 18/09/2026
+
+PR #143 merged final verified head `3fef7235d39ef5a19e3a5fb173a8bc915bcfce58` to `main@e44e541c760bf585ac72f16242dace6039664a1b`. The final head completed **17/17 triggered workflows SUCCESS** and Git comparison to the merge commit shows zero file delta.
+
+The verified installable package remains `aznet-theme-1.3.6.zip`, 145 files, 108 packaged PHP lint PASS, SHA-256 `25271cd4c68f0bc88e236f084acb73d7661a618d1ae1d737f0f2a5202307a84a`. No fresh post-merge exact-main workflow is claimed. Evidence: `docs/evidence/V1_3_6_MERGE_CLOSURE_20260918.md`.
+
 ## 14. Exact next
 
-**NEXT — canonical merge of PR #143 is the next approval gate for the verified 1.3.6 client-delivery candidate. Do not start tag/GitHub Release or production deployment without separate explicit approval. Preserve the completed Law 01 presentation baseline and keep RootProfile Team BLOCKED at issue #112.**
+**NEXT — AZnet Theme 1.3.6 client-delivery closure is complete at canonical `main@e44e541c760bf585ac72f16242dace6039664a1b`. Do not start tag/GitHub Release or production deployment without separate explicit approval. Preserve the completed Law 01 presentation baseline and keep RootProfile Team BLOCKED at issue #112.**
