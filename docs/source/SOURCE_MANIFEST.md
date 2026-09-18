@@ -7,7 +7,7 @@ Canonical source is reconciled through the owner-approved v1.3 Client Delivery S
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
-| `AZT-02-architecture.md` | v0.10 | Theme architecture, public integration contracts and D-027 Standalone Core runtime-independence boundary |
+| `AZT-02-architecture.md` | v0.11 | Theme architecture, public integration contracts and D-027 Standalone Core runtime-independence boundary |
 | `AZT-03-baseline-provenance.md` | v0.47 | Canonical provenance through v1.3 release/deployment plus PR #110/#111, live post-release Theme-file delta, Law 01 rerun/runtime evidence and RootProfile Team blocker #112 |
 | `AZT-04-roadmap-qa-decisions.md` | v0.60 | v1.3 release/deployment retained; F9 ConvertFlow provider L5 PASS at exact certified scope; Law 01 live checkpoint recorded; RootProfile Team projection remains external-blocked |
 | `AZT-EXEC-MAP.md` | v0.52 | Derived execution map with F9 ConvertFlow provider L5 PASS, current Law 01 live checkpoint and exact Next held at RootProfile blocker #112 |
