@@ -179,8 +179,13 @@ async function inspectViewport(browser, name, viewport) {
       if (parityMetrics.trust.length !== 4 || new Set(parityMetrics.trust.map((item) => Math.round(item.y))).size !== 1) {
         throw new Error('desktop trust strip must remain one four-item row');
       }
-      if (parityMetrics.services.length !== 6 || new Set(parityMetrics.services.map((item) => Math.round(item.y))).size !== 1) {
-        throw new Error('desktop Services must remain one six-card row');
+      const serviceRows = new Set(parityMetrics.services.map((item) => Math.round(item.y))).size;
+      if (viewport.width > 1180) {
+        if (parityMetrics.services.length !== 6 || serviceRows !== 1) {
+          throw new Error('wide desktop Services must remain one six-card row');
+        }
+      } else if (parityMetrics.services.length !== 6 || serviceRows !== 2) {
+        throw new Error('compact desktop Services must retain the responsive two-row 3+3 layout');
       }
     }
     if (viewport.width <= 390) {
