@@ -103,7 +103,7 @@
 
 .single-product .aznet-theme-main .product_title {
     color: var(--aznet-theme-text, #17181b);
-    line-height: 1.15;
+    font-size: var(--aznet-theme-text-h1);\n    line-height: var(--aznet-theme-line-height-h1);
 }
 
 .single-product .aznet-theme-main .woocommerce-product-rating {
@@ -116,12 +116,12 @@
 .single-product .aznet-theme-main .price {
     color: var(--aznet-theme-text, #17181b);
     font-size: var(--aznet-theme-font-size-xl, 1.375rem);
-    font-weight: 700;
+    font-weight: var(--aznet-theme-font-weight-bold);
 }
 
 .single-product .aznet-theme-main ul.products li.product .price {
     color: var(--aznet-theme-text, #17181b);
-    font-weight: 700;
+    font-weight: var(--aznet-theme-font-weight-bold);
 }
 
 .single-product .aznet-theme-main .woocommerce-product-details__short-description,
