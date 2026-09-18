@@ -211,7 +211,7 @@ jobs:
               echo 'FAIL: X1 must not change Theme version declarations' >&2
               exit 1
             fi
-            echo 'PASS: X1 slice-only ownership guard'
+            echo 'PASS: X1 slice-only version ownership guard'
           fi
           bash scripts/assert-theme-version.sh
           php tests/offline/x1-comments-surface-contract.php

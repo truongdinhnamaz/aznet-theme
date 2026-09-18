@@ -225,7 +225,7 @@ jobs:
               echo 'FAIL: X2 must not change Theme version declarations' >&2
               exit 1
             fi
-            echo 'PASS: X2 slice-only ownership guard'
+            echo 'PASS: X2 slice-only version ownership guard'
           fi
           bash scripts/assert-theme-version.sh
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/x2-search-404-empty-contract.php
