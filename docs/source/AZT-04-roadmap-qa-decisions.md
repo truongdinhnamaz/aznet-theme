@@ -459,13 +459,13 @@ Deterministic package `aznet-theme-1.3.6.zip`: 145 files; 108 packaged PHP lint 
 
 This checkpoint does not change Theme/provider ownership and does not authorize tag/GitHub Release or production deployment. RootProfile Team remains BLOCKED at issue #112. Evidence: `docs/evidence/V1_3_6_CLIENT_DELIVERY_20260918.md`.
 
-### Law 01 Hero full-bleed correction and 1.3.7 client-delivery candidate — 18/09/2026
+### Law 01 Hero shared-shell correction and 1.3.7 client-delivery candidate — 18/09/2026
 
-The client screenshot proved a presentation regression that was not visible in the earlier <=1440px target matrix: Burgundy Law 01 Hero content stopped at the shared `96rem` shell on wider screens. PR #145 added a 1920px regression case and changed only the Theme-owned Hero width boundary to full-bleed. Final head `0e2fa28b72f88af3af2f0f1bcc668ff90d117c50` completed 14/14 workflows SUCCESS and merged to `main@9781d29a9d1ba32a643ffe3cfe9d47c8c4ba4c1c`.
+The client clarified the layout rule after reviewing the PR #145 result: the **Hero section background/surface is full-width**, but its text/image objects must align to the same constrained vertical shell used by comparable Header, Trust, Services and downstream content. This is also consistent with the pre-existing Law 01 core contract that full-width surfaces retain constrained inner content.
 
-Because the resulting production bytes post-date the 1.3.6 package, PR #146 promotes the client-delivery version to 1.3.7. RED head `63041afb1161bf6b136a665957c71ea262ad20e1` failed the intended Y5 1.3.7 metadata assertion. Minimal GREEN changed only `style.css` and `AZNET_THEME_VERSION`, while X6/Y5 release guards now recognize the exact 1.3.6 -> 1.3.7 boundary.
+PR #146 therefore supersedes the inner full-bleed interpretation with a geometry regression at 1920px and other retained desktop widths. RED head `d0a3b87144d7f4f09342d38d256162debed29b5f` failed the intended shared-shell assertion. Minimal GREEN head `e0e2cd9376ab81dbcea4853581627e48361b76bd` removes only the Burgundy Hero inner-grid width override, allowing the existing `.aznet-theme-law01-container` shell to align Hero, Trust and Services while preserving the 48/52 split.
 
-Exact release head `57d2b5a87c08d5fbb54d6960feed677837e33087` completed **14/14 triggered workflows SUCCESS, 0 failure**. Deterministic package `aznet-theme-1.3.7.zip`: 145 files, 108 packaged PHP lint PASS, SHA-256 `890e94eb1a69abad4e94e4914e3628b83a491d91636d33c9036070d6ee35b3ab`. Y5 run `35357088021`; artifact `10552241981`; digest `sha256:93ed2484c7eeb1add18d4a582386c01ab536ec0141e0bdcd1dc8102b0570faa7`.
+The client-delivery version remains 1.3.7. Y5 on the corrected production head produced deterministic `aznet-theme-1.3.7.zip`: 145 files, 108 packaged PHP lint PASS, SHA-256 `aa1f2a4798b81c7b579c8a1b2a03adaa1932837fd3c277a0b7cbb72d5fe23e4a`. Run `35358986591`; artifact `10553996265`; digest `sha256:328948807a5e40a6ece314ca1eb78965c0a3f519839935ff8fb8bf8ab0141bc0`.
 
 This correction remains Theme presentation only. No provider/domain ownership changes. RootProfile Team remains BLOCKED at issue #112. Tag/GitHub Release and production deployment remain separate explicit approval gates.
 
