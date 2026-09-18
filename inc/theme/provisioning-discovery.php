@@ -83,6 +83,7 @@ function provisioning_discovery(): array {
     $s = settings();
     $locations = function_exists( 'get_nav_menu_locations' ) ? get_nav_menu_locations() : [];
     $slot_keys = [
+        'hero' => 'homepage_hero_page',
         'services' => 'homepage_services_page',
         'about' => 'homepage_about_page',
         'team' => 'homepage_team_page',
