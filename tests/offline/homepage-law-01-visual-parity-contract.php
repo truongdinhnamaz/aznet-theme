@@ -45,9 +45,9 @@ $must(
     'Law 01 reference Profile band must keep the About side text-led instead of introducing a second large image panel.'
 );
 $must(
-    str_contains(
-        $css,
-        '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__team-band { margin-top: 0;'
+    1 === preg_match(
+        '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-profile__team-band\\s*\\{[^}]*margin-top:\\s*0;/s',
+        $css
     ),
     'Law 01 reference Team band must sit beside About rather than below it.'
 );
