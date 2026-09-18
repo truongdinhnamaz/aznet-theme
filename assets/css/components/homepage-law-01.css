@@ -31,8 +31,7 @@
 .aznet-theme-homepage--law-01 .aznet-theme-law01-section h2,
 .aznet-theme-homepage--law-01 .aznet-theme-law01-section h3 {
     font-family: var(--aznet-theme-font-family-heading);
-    line-height: 1.06;
-    letter-spacing: -.025em;
+    letter-spacing: normal;
     text-wrap: balance;
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-section h1 {
