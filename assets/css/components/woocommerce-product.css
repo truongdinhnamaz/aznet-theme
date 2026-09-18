@@ -123,7 +123,9 @@
 
 .single-product .aznet-theme-main ul.products li.product .price {
     color: var(--aznet-theme-text, #17181b);
+    font-size: var(--aznet-theme-text-price);
     font-weight: var(--aznet-theme-font-weight-bold);
+    line-height: var(--aznet-theme-line-height-price);
 }
 
 .single-product .aznet-theme-main .woocommerce-product-details__short-description,
