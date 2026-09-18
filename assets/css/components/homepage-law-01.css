@@ -42,10 +42,11 @@
     line-height: var(--aznet-theme-line-height-display);
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-section h2 {
-    font-weight: 700;
+    font-weight: var(--aznet-theme-font-weight-bold);
     margin: .55rem 0 1.5rem;
     max-width: 18ch;
-    font-size: clamp(2.2rem, 3.7vw, 3.8rem);
+    font-size: var(--aznet-theme-text-h2);
+    line-height: var(--aznet-theme-line-height-h2);
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-section h3 {
     font-weight: 500;
