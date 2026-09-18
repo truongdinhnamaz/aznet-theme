@@ -98,6 +98,8 @@ foreach ([
     'white-space: nowrap;',
     'width: max-content;',
     'flex: 1 1 auto;',
+    '.aznet-theme-law01-section h2.aznet-theme-law01-services__heading',
+    'text-wrap: nowrap;',
 ] as $needle) {
     assert(str_contains($css, $needle), "Law 01 balanced services presentation missing: {$needle}");
 }
