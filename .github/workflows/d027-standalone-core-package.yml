@@ -195,8 +195,8 @@ jobs:
           HERO_MEDIA_ID=$(wp post meta get "$FRONT_ID" _thumbnail_id --path=/tmp/wp-site --allow-root)
           test -n "$HERO_ID" && test -n "$HERO_MEDIA_ID"
           wp post meta update "$HERO_ID" _thumbnail_id "$HERO_MEDIA_ID" --path=/tmp/wp-site --allow-root
-          D027_HERO_ID="$HERO_ID" wp eval '$s=AZnet\\Theme\\settings(); $s["homepage_hero_page"]=(int)getenv("D027_HERO_ID"); set_theme_mod("aznet_theme_settings", AZnet\\Theme\\normalize_settings($s));' --path=/tmp/wp-site --allow-root
-          test "$(D027_HERO_ID="$HERO_ID" wp eval 'echo (int) AZnet\\Theme\\setting("homepage_hero_page", 0);' --path=/tmp/wp-site --allow-root)" = "$HERO_ID"
+          D027_HERO_ID="$HERO_ID" wp eval '$s=AZnet\Theme\settings(); $s["homepage_hero_page"]=(int)getenv("D027_HERO_ID"); set_theme_mod("aznet_theme_settings", AZnet\Theme\normalize_settings($s));' --path=/tmp/wp-site --allow-root
+          test "$(D027_HERO_ID="$HERO_ID" wp eval 'echo (int) AZnet\Theme\setting("homepage_hero_page", 0);' --path=/tmp/wp-site --allow-root)" = "$HERO_ID"
           printf '%s\n' "$HERO_ID" > /tmp/d027-package/HERO_ID.txt
 
           POST_ID=$(cat /tmp/d027-package/POST_ID.txt)
