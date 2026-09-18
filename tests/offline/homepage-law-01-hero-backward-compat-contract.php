@@ -13,6 +13,6 @@ assert(str_contains($hero, "get_bloginfo( 'name' )"), 'Legacy Site Title fallbac
 assert(str_contains($hero, "get_bloginfo( 'description' )"), 'Legacy Site Tagline fallback must retain the previous Hero slogan when no dedicated Hero Page is mapped.');
 assert(str_contains($hero, 'get_the_ID()'), 'Legacy fallback must retain the existing Front Page presentation source.');
 assert(str_contains($hero, 'has_post_thumbnail( $front_id )'), 'Legacy fallback must retain the existing Front Page Hero image.');
-assert(str_contains($hero, "if ( $hero instanceof \\WP_Post )"), 'Dedicated source must be preferred before the legacy compatibility path.');
+assert(str_contains($hero, 'if ( $hero instanceof \\WP_Post )'), 'Dedicated source must be preferred before the legacy compatibility path.');
 
 echo "PASS: Law 01 Hero backward compatibility contract\n";
