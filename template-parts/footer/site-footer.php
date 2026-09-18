@@ -41,6 +41,13 @@ $year         = (string) ( $context['year'] ?? '' );
                 <?php endif; ?>
             </div>
 
+            <?php if ( 'professional' === $preset && '' !== $contact_menu ) : ?>
+                <nav class="aznet-theme-site-footer__contact" aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
+                    <h2 class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Liên hệ', 'aznet-theme' ); ?></h2>
+                    <?php echo $contact_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
+                </nav>
+            <?php endif; ?>
+
             <?php if ( '' !== $primary_menu ) : ?>
                 <nav class="aznet-theme-site-footer__navigation" aria-label="<?php echo esc_attr__( 'Điều hướng Footer', 'aznet-theme' ); ?>">
                     <h2 class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Khám phá', 'aznet-theme' ); ?></h2>
@@ -48,7 +55,7 @@ $year         = (string) ( $context['year'] ?? '' );
                 </nav>
             <?php endif; ?>
 
-            <?php if ( '' !== $contact_menu ) : ?>
+            <?php if ( 'professional' !== $preset && '' !== $contact_menu ) : ?>
                 <nav class="aznet-theme-site-footer__contact" aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
                     <h2 class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Liên hệ', 'aznet-theme' ); ?></h2>
                     <?php echo $contact_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
