@@ -79,8 +79,10 @@
     background: var(--aznet-theme-accent);
     border: 1px solid var(--aznet-theme-accent);
     border-radius: var(--aznet-theme-radius-control);
-    font: inherit;
-    font-weight: var(--aznet-theme-font-weight-bold);
+    font-family: var(--aznet-theme-font-family-base);
+    font-size: var(--aznet-theme-text-button);
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    line-height: var(--aznet-theme-line-height-button);
     cursor: pointer;
 }
 
