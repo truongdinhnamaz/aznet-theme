@@ -61,7 +61,8 @@
     max-width: 46rem;
     margin-block-start: var(--aznet-theme-space-2);
     color: color-mix(in srgb, var(--aznet-theme-on-inverse) 76%, transparent);
-    font-size: var(--aznet-theme-text-body);\n    line-height: var(--aznet-theme-line-height-body);
+    font-size: var(--aznet-theme-text-body);
+    line-height: var(--aznet-theme-line-height-body);
 }
 
 .aznet-theme-contact-surface__profile-link {
