@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.66
+**Version:** v0.67
 **Status:** Working Source  
-**Date:** 18/09/2026
+**Date:** 19/09/2026
 
 ## 1. Purpose
 
@@ -477,6 +477,16 @@ PR #147 merged final verified head `225e36af27193358b2a252ac7edce4d9867d61ba` to
 
 No fresh post-merge exact-main workflow is claimed. Theme metadata remains `1.3.6`; published GitHub Release remains `v1.3.0`. A new installable package/version is a separate approval-gated slice. Evidence: `docs/evidence/LAW01_REFERENCE_PARITY_MERGE_CLOSURE_20260918.md`.
 
+### AZnet Theme 1.3.8 final client-delivery candidate checkpoint — 19/09/2026
+
+The product owner explicitly approved creation of a new installable package after the Law 01 screenshot-reference closure. PR #149 promotes canonical Theme metadata from 1.3.6 to 1.3.8. The 1.3.7 identity is intentionally skipped because a 1.3.7 package had already been generated from a superseded, unmerged intermediate candidate; reusing that version for different bytes would weaken provenance.
+
+The release slice followed RED -> GREEN. RED head `5f188f3fcca6fd32122a1799aff703d4837b89e9` failed the intended Y5 1.3.8 metadata assertion. Minimal GREEN changed only the two Theme version declarations and extended Y5/X6 promotion guards for the exact `1.3.6 -> 1.3.8` boundary.
+
+Exact production head `5f3dcf00f0a619b58a966078b2cd969cb7fec45d` completed **14/14 triggered workflows SUCCESS, 0 failure**. Deterministic package `aznet-theme-1.3.8.zip`: 145 production files, 108 packaged PHP lint PASS, SHA-256 `0aba4cf0e213150319c8288d62d06cb136481670cd8f53fd0edbfd9276a03238`. Y5 run `35403751052`; promoted-package artifact `10571900478`; artifact digest `sha256:2f8b380f8ffa6e88d481d99a14ea1d248f86243ebd1c213bdccb49fda0fc9da4`.
+
+This checkpoint does not change Theme/provider ownership. RootProfile authoritative Team remains BLOCKED at issue #112. Tag/GitHub Release and production deployment remain separate explicit approval gates.
+
 ## 14. Exact next
 
-**NEXT — Law 01 screenshot-reference parity is closed on canonical `main@f608c7ec98587b61da570871bb304a9e76d09bbd`. Do not start a new package version, tag/GitHub Release or production deployment without separate explicit approval. Keep RootProfile Team BLOCKED at issue #112.**
+**NEXT — canonical merge of PR #149 is the next approval gate for the verified 1.3.8 client-delivery candidate. Do not tag, publish a GitHub Release or deploy production without separate explicit approval.**
