@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.65
+**Version:** v0.66
 **Status:** Working Source  
 **Date:** 18/09/2026
 
@@ -471,6 +471,12 @@ Exact production head `aacd6fe4abc4d5f3d49b6bfd85570df66688db46` completed **18/
 
 This is a presentation-only decision. RootProfile authoritative Team membership remains BLOCKED under issue #112; the existing WordPress Page/direct-child fixture is presentation input only.
 
+### Law 01 screenshot-reference canonical merge closure — 18/09/2026
+
+PR #147 merged final verified head `225e36af27193358b2a252ac7edce4d9867d61ba` to `main@f608c7ec98587b61da570871bb304a9e76d09bbd`. Final-head verification completed **21/21 workflows SUCCESS**; Git comparison shows zero file delta between the verified head and merge commit.
+
+No fresh post-merge exact-main workflow is claimed. Theme metadata remains `1.3.6`; published GitHub Release remains `v1.3.0`. A new installable package/version is a separate approval-gated slice. Evidence: `docs/evidence/LAW01_REFERENCE_PARITY_MERGE_CLOSURE_20260918.md`.
+
 ## 14. Exact next
 
-**NEXT — canonical merge of PR #147 is the next approval gate for the verified Law 01 screenshot-reference presentation candidate. Do not start a new package version, tag/GitHub Release or production deployment without a separate explicit approval. Keep RootProfile Team BLOCKED at issue #112.**
+**NEXT — Law 01 screenshot-reference parity is closed on canonical `main@f608c7ec98587b61da570871bb304a9e76d09bbd`. Do not start a new package version, tag/GitHub Release or production deployment without separate explicit approval. Keep RootProfile Team BLOCKED at issue #112.**
