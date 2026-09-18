@@ -124,6 +124,16 @@ foreach ([
 }
 
 assert(str_contains($profile, 'aznet-theme-law01-profile__grid'), 'Profile band must combine About and Team presentation.');
+foreach ([
+    'grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);',
+    '.aznet-theme-law01-profile__member-image {',
+    'aspect-ratio: 4 / 5;',
+    'object-position: center top;',
+    '.aznet-theme-law01-profile__member {',
+    'box-shadow: none;',
+] as $needle) {
+    assert(str_contains($css, $needle), "Law 01 demo-aligned Profile/Team presentation missing: {$needle}");
+}
 assert(str_contains($latest, "homepage_latest_posts( (array) setting( 'homepage_knowledge_terms', [] ), 3, homepage_ledger_ids() )"), 'Latest presentation must stay at three client-ready cards.');
 assert(str_contains($latest, 'aznet-theme-law01-article-card__media'), 'Latest cards must render featured media when available.');
 assert(str_contains($latest, 'get_the_category'), 'Latest cards must expose WordPress-owned taxonomy labels.');
