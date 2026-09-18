@@ -136,6 +136,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-con
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-premium-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-client-ready-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-hero-backward-compat-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-visual-parity-contract.php
 
 printf '%s\n' '==> Law Site Provisioning contracts'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/provisioning-blueprint-contract.php
