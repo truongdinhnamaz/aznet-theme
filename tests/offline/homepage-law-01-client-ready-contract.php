@@ -72,10 +72,11 @@ foreach ([
 foreach ([
     'grid-template-columns: minmax(0, 44%) minmax(0, 56%);',
     'min-height: clamp(27rem, 33vw, 35rem);',
-    'font-size: min(var(--aznet-theme-text-display), 4rem);',
+    '--law01-type-hero-title: clamp(2.7rem, 4.2vw, 3.4rem);',
+    'font-size: var(--law01-type-hero-title);',
     'object-position: center 48%;',
 ] as $needle) {
-    assert(str_contains($css, $needle), "Law 01 hero composition v2 missing: {$needle}");
+    assert(str_contains($css, $needle), "Law 01 approved hero hierarchy missing: {$needle}");
 }
 
 assert(str_contains($css, '.aznet-theme-law01-team .aznet-theme-law01-button--secondary'), 'Burgundy variant must override the higher-specificity Team secondary-button rule.');
