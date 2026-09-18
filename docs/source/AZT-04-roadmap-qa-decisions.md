@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.62
+**Version:** v0.63
 **Status:** Working Source  
 **Date:** 18/09/2026
 
@@ -439,6 +439,16 @@ The verified target now includes a 48/52 wide-desktop Hero split, compact four-i
 
 This decision is presentation-only. RootProfile-backed authoritative Team membership remains BLOCKED under issue #112; the Theme must not infer Team identity/membership from WordPress users/authors/slugs/URLs or private provider storage. Evidence: `docs/evidence/LAW01_VISUAL_PARITY_HERO_SERVICES_20260918.md`.
 
+### Law 01 About/Profile + Latest visual-parity closure checkpoint — 18/09/2026
+
+PR #141 implemented the second approved Law 01 visual-parity slice using Theme-owned presentation only and merged final verified head `0a2826dfc52343f187dc6198d61d83a6608b62d4` to `main@afbef3d0adc39e4b1595cf2f3506f58bb567bcff`.
+
+The accepted presentation state now uses a dedicated 44/56 About editorial band, a distinct Team presentation band and a three-card Latest Posts row with 3:2 media on wide desktop plus responsive stacking. The existing WordPress-owned Team Page/direct child Page fixture remains presentation input only and is not promoted to authoritative identity/membership.
+
+Final-head verification completed **25/25 workflows SUCCESS** with zero failure, including Homepage Composer Law 01 Browser Quality, D-027 Standalone Core L4 and V1/X6/R6 retained gates. The intermediate D-027 contrast failure was reproduced and fixed in the shallow CSS layer before final closure. Evidence: `docs/evidence/LAW01_PROFILE_LATEST_VISUAL_PARITY_20260918.md`.
+
+RootProfile-backed authoritative Team integration remains BLOCKED under issue #112. No architecture/public-contract change is introduced.
+
 ## 14. Exact next
 
-**NEXT — continue the approved Law 01 visual-parity sequence with a bounded About/Profile + Latest Posts presentation slice. Team shell/card styling may be refined only where it remains presentation-only and does not create or infer authoritative membership; provider-backed Team integration remains BLOCKED at issue #112. Git tag/GitHub Release and production deployment remain separate approval gates.**
+**NEXT — hold the now-completed approved Law 01 visual-parity sequence as the current presentation baseline. Any additional visual expansion requires a new owner-approved bounded slice; RootProfile Team remains BLOCKED at issue #112. Git tag/GitHub Release and production deployment remain separate approval gates.**
