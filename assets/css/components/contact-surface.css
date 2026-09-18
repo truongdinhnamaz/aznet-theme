@@ -41,8 +41,8 @@
 
 .aznet-theme-contact-surface__eyebrow {
     margin-block-end: var(--aznet-theme-space-2);
-    font-size: 0.78rem;
-    font-weight: 700;
+    font-size: var(--aznet-theme-text-label);
+    font-weight: var(--aznet-theme-font-weight-bold);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: color-mix(in srgb, var(--aznet-theme-on-inverse) 72%, transparent);
@@ -51,9 +51,9 @@
 .aznet-theme-contact-surface__title {
     margin: 0;
     color: var(--aznet-theme-on-inverse);
-    font-size: clamp(1.9rem, 4vw, 3rem);
-    line-height: 1.12;
-    letter-spacing: -0.03em;
+    font-size: var(--aznet-theme-text-h1);
+    line-height: var(--aznet-theme-line-height-h1);
+    letter-spacing: normal;
 }
 
 .aznet-theme-contact-surface__legal-name,
@@ -61,14 +61,14 @@
     max-width: 46rem;
     margin-block-start: var(--aznet-theme-space-2);
     color: color-mix(in srgb, var(--aznet-theme-on-inverse) 76%, transparent);
-    line-height: 1.65;
+    font-size: var(--aznet-theme-text-body);\n    line-height: var(--aznet-theme-line-height-body);
 }
 
 .aznet-theme-contact-surface__profile-link {
     display: inline-flex;
     margin-block-start: var(--aznet-theme-space-3);
     color: var(--aznet-theme-on-inverse);
-    font-weight: 700;
+    font-weight: var(--aznet-theme-font-weight-bold);
     text-underline-offset: 0.2em;
 }
 
@@ -98,12 +98,12 @@
 
 .aznet-theme-contact-surface__card h3 {
     margin-block-end: var(--aznet-theme-space-3);
-    font-size: 1.05rem;
+    font-size: var(--aznet-theme-text-h3);
 }
 
 .aznet-theme-contact-surface__card h4 {
     margin-block-end: var(--aznet-theme-space-1);
-    font-size: 1rem;
+    font-size: var(--aznet-theme-text-h4);
 }
 
 .aznet-theme-contact-surface__list,
@@ -130,8 +130,8 @@
 
 .aznet-theme-contact-surface__label {
     color: var(--aznet-theme-muted);
-    font-size: 0.8rem;
-    font-weight: 700;
+    font-size: var(--aznet-theme-text-label);
+    font-weight: var(--aznet-theme-font-weight-bold);
     letter-spacing: 0.03em;
 }
 
@@ -171,7 +171,7 @@
 
 .aznet-theme-contact-surface__hours dt {
     color: var(--aznet-theme-text);
-    font-weight: 600;
+    font-weight: var(--aznet-theme-font-weight-semibold);
 }
 
 .aznet-theme-contact-surface__hours dd {
@@ -196,13 +196,13 @@
 .aznet-theme-contact-surface__person p {
     margin-block-start: var(--aznet-theme-space-1);
     color: var(--aznet-theme-muted);
-    line-height: 1.55;
+    line-height: var(--aznet-theme-line-height-body);
 }
 
 .aznet-theme-contact-surface__person a {
     display: inline-flex;
     margin-block-start: var(--aznet-theme-space-2);
-    font-weight: 600;
+    font-weight: var(--aznet-theme-font-weight-semibold);
 }
 
 .aznet-theme-contact-surface__link-list--inline {
