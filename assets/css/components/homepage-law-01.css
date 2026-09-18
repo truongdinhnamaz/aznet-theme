@@ -263,7 +263,7 @@
     content: counter(law01-service, decimal-leading-zero);
     font-family: var(--aznet-theme-font-family-heading);
     font-size: var(--aznet-theme-text-label);
-    font-weight: 700;
+    font-weight: var(--aznet-theme-font-weight-bold);
     letter-spacing: .08em;
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-card > span[aria-hidden='true'] {
