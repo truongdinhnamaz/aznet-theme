@@ -93,8 +93,8 @@ body.aznet-theme-woo-card--compact {
 }
 
 body.aznet-theme-woo-catalog--editorial .woocommerce ul.products li.product .woocommerce-loop-product__title {
-    font-size: var(--aznet-theme-font-size-lg, 1.125rem);
-    line-height: var(--aznet-theme-line-height-heading, 1.25);
+    font-size: var(--aznet-theme-text-h3);
+    line-height: var(--aznet-theme-line-height-h3);
 }
 
 .woocommerce ul.products li.product .price {
