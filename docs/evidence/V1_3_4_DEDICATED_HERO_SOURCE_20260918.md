@@ -1,7 +1,7 @@
 # AZnet Theme v1.3.4 — Dedicated Law 01 Hero Source Closure
 
-**Date:** 18/09/2026  
-**Scope:** Theme-owned Law 01 presentation/reference slice only.  
+**Date:** 18/09/2026
+**Scope:** Theme-owned Law 01 presentation/reference slice only.
 **Canonical repository:** `truongdinhnamaz/aznet-theme`
 
 ## 1. Ownership outcome
