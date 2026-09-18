@@ -38,7 +38,7 @@
 
 .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__eyebrow {
     margin-bottom: var(--aznet-theme-space-3);
-    font-weight: 700;
+    font-weight: var(--aznet-theme-font-weight-bold);
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
@@ -47,9 +47,9 @@
     max-width: 19ch;
     margin-top: 0;
     margin-bottom: var(--aznet-theme-space-4);
-    font-size: clamp(2.5rem, 6vw, 5.25rem);
-    line-height: 1.03;
-    letter-spacing: -0.045em;
+    font-size: var(--aznet-theme-text-display);
+    line-height: var(--aznet-theme-line-height-display);
+    letter-spacing: normal;
     text-wrap: balance;
 }
 
@@ -57,7 +57,7 @@
     max-width: 44rem;
     margin-bottom: var(--aznet-theme-space-6);
     color: var(--aznet-theme-color-text-muted);
-    font-size: clamp(1.08rem, 2vw, 1.3rem);
+    font-size: var(--aznet-theme-text-lead);\n    line-height: var(--aznet-theme-line-height-lead);
 }
 
 .aznet-theme-homepage-blueprint .wp-block-buttons {
@@ -71,7 +71,7 @@
     justify-content: center;
     padding: 0.78rem 1.3rem;
     border-radius: var(--aznet-theme-radius-control);
-    font-weight: 700;
+    font-weight: var(--aznet-theme-font-weight-bold);
     text-decoration: none;
     transition: transform var(--aznet-theme-motion-fast) ease, box-shadow var(--aznet-theme-motion-fast) ease;
 }
@@ -113,7 +113,7 @@
 .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__services > p:first-child,
 .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__about p.has-primary-color,
 .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__process p.has-primary-color {
-    font-weight: 700;
+    font-weight: var(--aznet-theme-font-weight-bold);
     letter-spacing: 0.06em;
     text-transform: uppercase;
 }
@@ -126,9 +126,9 @@
 .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__contact > h2 {
     margin-top: 0.4rem;
     margin-bottom: var(--aznet-theme-space-4);
-    font-size: clamp(2rem, 4vw, 3.25rem);
-    line-height: 1.08;
-    letter-spacing: -0.03em;
+    font-size: var(--aznet-theme-text-h2);
+    line-height: var(--aznet-theme-line-height-h2);
+    letter-spacing: normal;
     text-wrap: balance;
 }
 
@@ -209,7 +209,7 @@
 
 .aznet-theme-homepage-blueprint .wp-block-post-title {
     margin-block: 0.6rem;
-    line-height: 1.25;
+    line-height: var(--aznet-theme-line-height-h3);
 }
 
 .aznet-theme-homepage-blueprint .wp-block-post-title a {
@@ -238,8 +238,8 @@
 
 .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__faq summary {
     cursor: pointer;
-    font-weight: 700;
-    line-height: 1.35;
+    font-weight: var(--aznet-theme-font-weight-bold);
+    line-height: var(--aznet-theme-line-height-h4);
 }
 
 .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__faq summary:focus-visible {
@@ -306,7 +306,7 @@
 
 @media (max-width: 480px) {
     .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__hero h1 {
-        font-size: clamp(2.15rem, 11vw, 3.1rem);
+        font-size: var(--aznet-theme-text-h1);
     }
 
     .aznet-theme-homepage-blueprint .aznet-theme-homepage-blueprint__hero::after {
