@@ -32,6 +32,25 @@ $must(
     ),
     'Law 01 reference Hero surface may be full-width, but its inner grid must inherit the shared shell.'
 );
+
+$must(
+    1 === preg_match(
+        '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-hero__content\\s*\\{[^}]*background:\\s*transparent;/s',
+        $css
+    ),
+    'Law 01 Hero text column must not paint its own boxed background against the full-width section surface.'
+);
+$must(
+    str_contains($css, '--law01-hero-inline-bleed: max(var(--aznet-theme-gutter), calc((100vw - 96rem) / 2));'),
+    'Law 01 Hero must derive the viewport bleed from the shared 96rem shell instead of hardcoding a second layout width.'
+);
+$must(
+    1 === preg_match(
+        '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-hero__visual\\s*\\{[^}]*width:\\s*calc\\(100% \\+ var\\(--law01-hero-inline-bleed\\)\\);[^}]*margin-inline-end:\\s*calc\\(-1 \\* var\\(--law01-hero-inline-bleed\\)\\);/s',
+        $css
+    ),
+    'Law 01 Hero image surface must bleed to the viewport edge while the content grid stays on the shared shell.'
+);
 $must(
     str_contains(
         $css,
