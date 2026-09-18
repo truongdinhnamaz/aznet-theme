@@ -93,6 +93,10 @@
     object-fit: contain;
 }
 
+.aznet-theme-site-footer__brand-title {
+    display: none;
+}
+
 .aznet-theme-site-footer__identity p {
     max-width: 38em;
     margin: 14px 0 0;

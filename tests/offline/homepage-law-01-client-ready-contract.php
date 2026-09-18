@@ -134,8 +134,8 @@ foreach ([
     assert(str_contains($services, $needle), "Law 01 balanced services content hierarchy missing: {$needle}");
 }
 foreach ([
-    '.aznet-theme-law01-services > .aznet-theme-law01-container',
-    'max-width: 96rem;',
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-container',
+    'width: min(calc(100% - (2 * var(--aznet-theme-gutter))), 96rem);',
     'min-height: 12.25rem;',
     'font-size: var(--law01-type-card-title);',
     'line-height: 1.65;',
@@ -148,9 +148,12 @@ foreach ([
     assert(str_contains($css, $needle), "Law 01 demo-aligned services presentation missing: {$needle}");
 }
 
-assert(str_contains($profile, 'aznet-theme-law01-profile__about-grid') && str_contains($profile, 'aznet-theme-law01-profile__team-band'), 'Profile band must retain both About and Team presentation in distinct target bands.');
+assert(str_contains($profile, 'aznet-theme-law01-profile__about-grid') && str_contains($profile, 'aznet-theme-law01-profile__team-band'), 'Profile band must retain both About and Team presentation in the shared reference band.');
 foreach ([
-    'grid-template-columns: minmax(0, 44%) minmax(0, 56%);',
+    '.aznet-theme-law01-profile > .aznet-theme-law01-container { display: grid; grid-template-columns: minmax(0, 48%) minmax(0, 52%);',
+    '.aznet-theme-law01-profile__about-media { display: none; }',
+    '.aznet-theme-law01-profile__team-band {',
+    'margin-top: 0;',
     '.aznet-theme-law01-profile__member-image {',
     'aspect-ratio: 4 / 5;',
     'object-position: center top;',

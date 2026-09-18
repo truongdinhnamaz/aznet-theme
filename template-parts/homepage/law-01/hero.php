@@ -52,6 +52,22 @@ $trust_items = [
                     <?php if ( $services instanceof \WP_Post ) : ?><a class="aznet-theme-law01-hero__secondary-action" href="<?php echo esc_url( get_permalink( $services ) ); ?>"><?php esc_html_e( 'Xem dịch vụ', 'aznet-theme' ); ?></a><?php endif; ?>
                 </p>
             <?php endif; ?>
+            <?php if ( true === setting( 'header_utilities', true ) && has_nav_menu( 'header-utility' ) ) : ?>
+                <nav class="aznet-theme-law01-hero__contact-nav" aria-label="<?php echo esc_attr__( 'Liên hệ nhanh', 'aznet-theme' ); ?>">
+                    <?php
+                    wp_nav_menu(
+                        [
+                            'theme_location' => 'header-utility',
+                            'container'      => false,
+                            'menu_class'     => 'aznet-theme-law01-hero__contact-list',
+                            'menu_id'        => 'aznet-theme-law01-hero-contact-menu',
+                            'fallback_cb'    => false,
+                            'depth'          => 1,
+                        ]
+                    );
+                    ?>
+                </nav>
+            <?php endif; ?>
         </div>
         <div class="aznet-theme-law01-hero__visual">
             <?php if ( '' !== $image ) : ?><div class="aznet-theme-law01-hero__media"><?php echo wp_kses_post( $image ); ?></div><?php endif; ?>

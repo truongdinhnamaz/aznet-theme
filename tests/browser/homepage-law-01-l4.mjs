@@ -154,12 +154,37 @@ async function inspectViewport(browser, name, viewport) {
 
     const servicesIntro = (await page.locator('.aznet-theme-law01-services__intro').textContent())?.trim() || '';
     if (!servicesIntro.includes('cá nhân và doanh nghiệp')) throw new Error(`Services Page excerpt intro missing: ${servicesIntro}`);
+    if (await page.locator('.aznet-theme-law01-services__intro').isVisible()) throw new Error('reference Services excerpt must be visually omitted while remaining source-backed in markup');
+
+    const heroContactLinks = page.locator('.aznet-theme-law01-hero__contact-nav a');
+    if (await heroContactLinks.count() !== 2) throw new Error(`reference Hero must render 2 WordPress-owned phone/hotline links, got ${await heroContactLinks.count()}`);
+    const heroContactHrefs = await heroContactLinks.evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
+    if (heroContactHrefs.some((href) => !href?.startsWith('tel:'))) throw new Error(`Hero contact links must remain WordPress-owned tel: links: ${JSON.stringify(heroContactHrefs)}`);
+
+    const heroBodyParagraphs = page.locator('.aznet-theme-law01-hero__body > p');
+    if (await heroBodyParagraphs.count() !== 2) throw new Error('reference Hero fixture must exercise description + slogan body presentation');
+    const heroBodyStyles = await heroBodyParagraphs.evaluateAll((nodes) => nodes.map((node) => getComputedStyle(node).fontStyle));
+    if (heroBodyStyles[0] === 'italic' || heroBodyStyles[1] !== 'italic') throw new Error(`Hero body must present description normally and final slogan in italic: ${JSON.stringify(heroBodyStyles)}`);
+
+    if (await page.locator('.aznet-theme-site-header__logo').count() !== 1 || await page.locator('.aznet-theme-site-header__brand-title').count() !== 1) {
+      throw new Error('reference Header must render logo + WordPress site-title lockup');
+    }
+    if (await page.locator('.aznet-theme-site-footer__logo').count() !== 1 || await page.locator('.aznet-theme-site-footer__brand-title').count() !== 1) {
+      throw new Error('reference Footer must render logo + WordPress site-title lockup');
+    }
 
     result.serviceCards = await page.locator('.aznet-theme-law01-services .aznet-theme-law01-card').count();
     if (result.serviceCards !== 6) throw new Error(`expected 6 mapped service cards, got ${result.serviceCards}`);
 
     const parityMetrics = await page.evaluate(() => {
+      const heroSection = document.querySelector('.aznet-theme-law01-hero')?.getBoundingClientRect();
       const heroGrid = document.querySelector('.aznet-theme-law01-hero__grid')?.getBoundingClientRect();
+      const trustGrid = document.querySelector('.aznet-theme-law01-hero__trust-grid')?.getBoundingClientRect();
+      const servicesContainer = document.querySelector('.aznet-theme-law01-services > .aznet-theme-law01-container')?.getBoundingClientRect();
+      const profileContainer = document.querySelector('.aznet-theme-law01-profile > .aznet-theme-law01-container')?.getBoundingClientRect();
+      const articlesContainer = document.querySelector('.aznet-theme-law01-articles > .aznet-theme-law01-container')?.getBoundingClientRect();
+      const headerInner = document.querySelector('.aznet-theme-site-header__inner')?.getBoundingClientRect();
+      const footerInner = document.querySelector('.aznet-theme-site-footer__inner')?.getBoundingClientRect();
       const content = document.querySelector('.aznet-theme-law01-hero__content')?.getBoundingClientRect();
       const visual = document.querySelector('.aznet-theme-law01-hero__visual')?.getBoundingClientRect();
       const trust = [...document.querySelectorAll('.aznet-theme-law01-hero__trust-item')].map((node) => node.getBoundingClientRect());
@@ -169,7 +194,14 @@ async function inspectViewport(browser, name, viewport) {
       const teamBand = document.querySelector('.aznet-theme-law01-profile__team-band')?.getBoundingClientRect();
       const articles = [...document.querySelectorAll('.aznet-theme-law01-articles .aznet-theme-law01-article-card')].map((node) => node.getBoundingClientRect());
       return {
+        heroSection: heroSection ? { x: heroSection.x, y: heroSection.y, width: heroSection.width, height: heroSection.height } : null,
         heroGrid: heroGrid ? { x: heroGrid.x, y: heroGrid.y, width: heroGrid.width, height: heroGrid.height } : null,
+        trustGrid: trustGrid ? { x: trustGrid.x, y: trustGrid.y, width: trustGrid.width, height: trustGrid.height } : null,
+        servicesContainer: servicesContainer ? { x: servicesContainer.x, y: servicesContainer.y, width: servicesContainer.width, height: servicesContainer.height } : null,
+        profileContainer: profileContainer ? { x: profileContainer.x, y: profileContainer.y, width: profileContainer.width, height: profileContainer.height } : null,
+        articlesContainer: articlesContainer ? { x: articlesContainer.x, y: articlesContainer.y, width: articlesContainer.width, height: articlesContainer.height } : null,
+        headerInner: headerInner ? { x: headerInner.x, y: headerInner.y, width: headerInner.width, height: headerInner.height } : null,
+        footerInner: footerInner ? { x: footerInner.x, y: footerInner.y, width: footerInner.width, height: footerInner.height } : null,
         content: content ? { x: content.x, y: content.y, width: content.width, height: content.height } : null,
         visual: visual ? { x: visual.x, y: visual.y, width: visual.width, height: visual.height } : null,
         trust: trust.map((rect) => ({ x: rect.x, y: rect.y, width: rect.width, height: rect.height })),
@@ -183,9 +215,27 @@ async function inspectViewport(browser, name, viewport) {
 
     if (!parityMetrics.content || !parityMetrics.visual) throw new Error('Hero visual-parity metrics unavailable');
     if (viewport.width >= 1024) {
-      if (!parityMetrics.heroGrid) throw new Error('Hero grid geometry unavailable');
-      if (Math.abs(parityMetrics.heroGrid.x) > 1 || Math.abs(parityMetrics.heroGrid.width - viewport.width) > 2) {
-        throw new Error(`desktop Hero grid must span the viewport, got x=${parityMetrics.heroGrid.x.toFixed(1)} width=${parityMetrics.heroGrid.width.toFixed(1)} viewport=${viewport.width}`);
+      if (!parityMetrics.heroSection || !parityMetrics.heroGrid || !parityMetrics.trustGrid || !parityMetrics.servicesContainer || !parityMetrics.profileContainer || !parityMetrics.articlesContainer) {
+        throw new Error('Law 01 reference shell geometry unavailable');
+      }
+      if (Math.abs(parityMetrics.heroSection.x) > 1 || Math.abs(parityMetrics.heroSection.width - viewport.width) > 2) {
+        throw new Error(`desktop Hero section must span the viewport, got x=${parityMetrics.heroSection.x.toFixed(1)} width=${parityMetrics.heroSection.width.toFixed(1)} viewport=${viewport.width}`);
+      }
+      for (const [label, rect] of [
+        ['Trust', parityMetrics.trustGrid],
+        ['Services', parityMetrics.servicesContainer],
+        ['Profile', parityMetrics.profileContainer],
+        ['Articles', parityMetrics.articlesContainer],
+      ]) {
+        if (Math.abs(parityMetrics.heroGrid.x - rect.x) > 2 || Math.abs(parityMetrics.heroGrid.width - rect.width) > 2) {
+          throw new Error(`desktop Law 01 sections must share one vertical shell: Hero x=${parityMetrics.heroGrid.x.toFixed(1)} width=${parityMetrics.heroGrid.width.toFixed(1)}; ${label} x=${rect.x.toFixed(1)} width=${rect.width.toFixed(1)}`);
+        }
+      }
+      if (parityMetrics.headerInner && (Math.abs(parityMetrics.heroGrid.x - parityMetrics.headerInner.x) > 2 || Math.abs(parityMetrics.heroGrid.width - parityMetrics.headerInner.width) > 2)) {
+        throw new Error('desktop Header and Law 01 content must align to the same reference shell');
+      }
+      if (parityMetrics.footerInner && (Math.abs(parityMetrics.heroGrid.x - parityMetrics.footerInner.x) > 2 || Math.abs(parityMetrics.heroGrid.width - parityMetrics.footerInner.width) > 2)) {
+        throw new Error('desktop Footer and Law 01 content must align to the same reference shell');
       }
       const heroTotal = parityMetrics.content.width + parityMetrics.visual.width;
       const visualRatio = parityMetrics.visual.width / heroTotal;
@@ -202,12 +252,12 @@ async function inspectViewport(browser, name, viewport) {
       } else if (parityMetrics.services.length !== 6 || serviceRows !== 2) {
         throw new Error('compact desktop Services must retain the responsive two-row 3+3 layout');
       }
-      if (!parityMetrics.aboutCopy || !parityMetrics.aboutMedia || !parityMetrics.teamBand) throw new Error('Profile visual-parity metrics unavailable');
-      if (Math.abs(parityMetrics.aboutCopy.y - parityMetrics.aboutMedia.y) > 2) throw new Error('desktop About copy and media must align on one row');
-      const aboutTotal = parityMetrics.aboutCopy.width + parityMetrics.aboutMedia.width;
-      const aboutMediaRatio = parityMetrics.aboutMedia.width / aboutTotal;
-      if (aboutMediaRatio < 0.54 || aboutMediaRatio > 0.58) throw new Error(`desktop About media ratio must stay near approved 56% target, got ${aboutMediaRatio.toFixed(3)}`);
-      if (parityMetrics.teamBand.y <= parityMetrics.aboutCopy.y + parityMetrics.aboutCopy.height) throw new Error('Team band must follow the About band as a distinct section');
+      if (!parityMetrics.aboutCopy || !parityMetrics.teamBand) throw new Error('Profile visual-parity metrics unavailable');
+      if (Math.abs(parityMetrics.aboutCopy.y - parityMetrics.teamBand.y) > 2) throw new Error('desktop About and Team must share one horizontal reference band');
+      const profilePairWidth = parityMetrics.aboutCopy.width + parityMetrics.teamBand.width;
+      const teamRatio = parityMetrics.teamBand.width / profilePairWidth;
+      if (teamRatio < 0.50 || teamRatio > 0.54) throw new Error(`desktop Team width must stay near the reference 52% target, got ${teamRatio.toFixed(3)}`);
+      if (parityMetrics.aboutMedia && parityMetrics.aboutMedia.width > 1) throw new Error('desktop reference About column must remain text-led without a second large media panel');
       if (parityMetrics.articles.length !== 3 || new Set(parityMetrics.articles.map((item) => Math.round(item.y))).size !== 1) {
         throw new Error('desktop Latest Posts must remain one three-card row');
       }
@@ -216,17 +266,17 @@ async function inspectViewport(browser, name, viewport) {
       if (parityMetrics.visual.y <= parityMetrics.content.y) throw new Error('mobile Hero visual must stack after Hero content');
       if (new Set(parityMetrics.trust.map((item) => Math.round(item.y))).size !== 4) throw new Error('mobile trust strip must stack to one item per row');
       if (new Set(parityMetrics.services.map((item) => Math.round(item.y))).size !== 6) throw new Error('mobile Services cards must stack to one card per row');
-      if (!parityMetrics.aboutCopy || !parityMetrics.aboutMedia || parityMetrics.aboutMedia.y <= parityMetrics.aboutCopy.y) throw new Error('mobile About media must stack after About copy');
+      if (!parityMetrics.aboutCopy || !parityMetrics.teamBand || parityMetrics.teamBand.y <= parityMetrics.aboutCopy.y) throw new Error('mobile Profile must stack Team after About');
       if (new Set(parityMetrics.articles.map((item) => Math.round(item.y))).size !== 3) throw new Error('mobile Latest Posts cards must stack to one card per row');
     }
 
     result.teamCards = await page.locator('.aznet-theme-law01-team-card').count();
-    if (result.teamCards !== 2) throw new Error(`expected 2 WordPress-owned team child Page cards, got ${result.teamCards}`);
+    if (result.teamCards !== 4) throw new Error(`expected 4 WordPress-owned team child Page cards for the reference portrait row, got ${result.teamCards}`);
 
     result.heroImages = await page.locator('.aznet-theme-law01-hero__media img').count();
     if (result.heroImages !== 1) throw new Error(`visual QA fixture must provide 1 Hero featured image, got ${result.heroImages}`);
     result.teamImages = await page.locator('.aznet-theme-law01-team-card__media img').count();
-    if (result.teamImages !== 2) throw new Error(`visual QA fixture must provide 2 Team featured images, got ${result.teamImages}`);
+    if (result.teamImages !== 4) throw new Error(`visual QA fixture must provide 4 Team featured images, got ${result.teamImages}`);
     result.articleImages = await page.locator('.aznet-theme-law01-article-card__media img').count();
     if (result.articleImages !== 3) throw new Error(`visual QA fixture must provide 3 Latest Posts featured images, got ${result.articleImages}`);
 
