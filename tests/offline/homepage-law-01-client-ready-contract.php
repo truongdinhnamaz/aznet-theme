@@ -41,6 +41,7 @@ foreach ([
 }
 
 assert(str_contains($composer, "[ 'hero', 'services', 'profile' ]"), 'Composer must render the combined client-ready profile band.');
+assert(str_contains($composer, "'burgundy-gold' === \$variant ? [ 'latest' ] : [ 'topics', 'latest', 'analysis', 'news', 'process', 'faq', 'final-cta' ]"), 'Burgundy Law 01 visual closure must match the approved demo section sequence after native content.');
 assert(! str_contains($composer, "[ 'hero', 'services', 'about', 'team' ]"), 'Composer must not render duplicate legacy About/Team sections.');
 
 foreach ([

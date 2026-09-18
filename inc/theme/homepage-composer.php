@@ -64,6 +64,8 @@ function render_homepage_before_content(): void {
 /** Render Law 01 sections after the native Front Page body boundary. */
 function render_homepage_after_content(): void {
     if ( ! homepage_composer_active() ) { return; }
-    foreach ( [ 'topics', 'latest', 'analysis', 'news', 'process', 'faq', 'final-cta' ] as $section ) { render_law01_part( $section ); }
+    $variant = homepage_law01_variant();
+    $sections = 'burgundy-gold' === $variant ? [ 'latest' ] : [ 'topics', 'latest', 'analysis', 'news', 'process', 'faq', 'final-cta' ];
+    foreach ( $sections as $section ) { render_law01_part( $section ); }
     echo '</div>';
 }
