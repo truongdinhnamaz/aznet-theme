@@ -58,6 +58,20 @@ foreach ([
 assert(! str_contains($hero, 'aznet-theme-law01-button aznet-theme-law01-button--secondary'), 'Hero Services CTA must not share the primary button selector used by retained browser verification.');
 assert(str_contains($css, '.aznet-theme-law01-hero__secondary-action'), 'Client-ready Law 01 CSS must style the dedicated hero secondary CTA.');
 assert(str_contains($css, '.aznet-theme-law01-hero__value'), 'Law 01 Hero must style the WordPress-native value proposition separately from the site title.');
+foreach ([
+    'aznet-theme-law01-hero__trust-icon',
+    '<svg',
+    'viewBox="0 0 24 24"',
+] as $needle) {
+    assert(str_contains($hero, $needle), "Law 01 demo-aligned trust strip icon contract missing: {$needle}");
+}
+foreach ([
+    'min-height: 4.4rem;',
+    'font-size: var(--aznet-theme-text-small);',
+    '.aznet-theme-law01-hero__trust-icon {',
+] as $needle) {
+    assert(str_contains($css, $needle), "Law 01 demo-aligned trust strip presentation missing: {$needle}");
+}
 
 foreach ([
     '--law01-type-section-title: clamp(1.45rem, 1.8vw, 1.85rem);',
