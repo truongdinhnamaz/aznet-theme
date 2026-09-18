@@ -7,12 +7,14 @@ Canonical source is reconciled through the owner-approved v1.3 Client Delivery S
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
-| `AZT-02-architecture.md` | v0.11 | Theme architecture, public integration contracts and D-027 Standalone Core runtime-independence boundary |
+| `AZT-02-architecture.md` | v0.12 | Theme architecture, public integration contracts and D-027 Standalone Core runtime-independence boundary |
 | `AZT-03-baseline-provenance.md` | v0.48 | Canonical provenance through v1.3 release/deployment plus PR #110/#111, live post-release Theme-file delta, Law 01 rerun/runtime evidence and RootProfile Team blocker #112 |
 | `AZT-04-roadmap-qa-decisions.md` | v0.61 | v1.3 release/deployment retained; F9 ConvertFlow provider L5 PASS at exact certified scope; Law 01 live checkpoint recorded; RootProfile Team projection remains external-blocked |
 | `AZT-EXEC-MAP.md` | v0.53 | Derived execution map with F9 ConvertFlow provider L5 PASS, current Law 01 live checkpoint and exact Next held at RootProfile blocker #112 |
 
 v1.3 technical closure evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`. v1.3 publication evidence: `docs/evidence/V1_3_PUBLICATION_20260917.md`. v1.3 production deployment evidence: `docs/evidence/V1_3_PRODUCTION_DEPLOYMENT_20260917.md`. Canonical technical baseline is `1.3.0` at `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e` with exact-main V1 + X6 release-path PASS and deterministic package SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`. Published/GitHub-Release release and verified production deployment are now both `v1.3.0`; provider L5 remains unclaimed.
+
+18/09/2026 architecture correction: AZT-02 v0.12 adds the Law 01 Hero backward-compatibility rule so an unmapped/invalid dedicated Hero Page no longer removes the pre-v1.3.4 WordPress-native Hero presentation on upgraded sites. Dedicated `homepage_hero_page` remains preferred and no duplicate/domain store is introduced.
 
 18/09/2026 source-sync evidence: `docs/evidence/F9_PROVIDER_L5_SOURCE_SYNC_20260918.md`, `docs/evidence/LAW01_LIVE_CHECKPOINT_20260918.md`, `docs/evidence/LAW01_HOMEPAGE_CLOSURE_20260918.md`, `docs/evidence/V1_3_3_CORRECTIVE_INHERITANCE_20260918.md`, and `docs/evidence/V1_3_4_DEDICATED_HERO_SOURCE_20260918.md`. These supersede earlier statements that ConvertFlow F9/provider L5 was unclaimed and earlier live-main checkpoints below 1.3.4, while preserving historical F8 and release/deployment evidence. RootProfile Team remains separately blocked; no provider/domain ownership transfer is implied.
 
