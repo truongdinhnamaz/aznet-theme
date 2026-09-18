@@ -163,16 +163,17 @@ function provisioning_build_plan( string $blueprint_key, array $selections, arra
             ];
         }
 
-        if ( isset( $media_selected['hero'] ) && isset( $page_sources['home'] ) ) {
+        $hero_target_role = isset( $page_sources['hero'] ) ? 'hero' : ( isset( $page_sources['home'] ) ? 'home' : '' );
+        if ( isset( $media_selected['hero'] ) && '' !== $hero_target_role ) {
             $ops[] = [
-                'id' => 'media:hero:assign:home',
+                'id' => 'media:hero:assign:' . $hero_target_role,
                 'type' => 'assign_featured_media',
-                'role' => 'featured_media:home',
+                'role' => 'featured_media:' . $hero_target_role,
                 'object_id' => 0,
                 'target_type' => 'page_role',
-                'target_role' => 'home',
+                'target_role' => $hero_target_role,
                 'media_role' => 'hero',
-                'effect' => 'SET starter Hero as Front Page featured image only when no featured image exists',
+                'effect' => sprintf( 'SET starter Hero media → %s featured image only when no featured image exists', $hero_target_role ),
             ];
         }
 
