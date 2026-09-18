@@ -58,10 +58,10 @@ foreach ([
 ] as $needle) {
     assert(str_contains($hero, $needle), "Client-ready Law 01 hero contract missing: {$needle}");
 }
-assert(str_contains($hero, "if ( $hero instanceof \\WP_Post )"), 'Dedicated Hero Page must remain the preferred source.');
+assert(str_contains($hero, 'if ( $hero instanceof \\WP_Post )'), 'Dedicated Hero Page must remain the preferred source.');
 assert(str_contains($hero, "get_bloginfo( 'name' )"), 'Legacy Site Title fallback must preserve existing Hero presentation when the dedicated mapping is absent.');
 assert(str_contains($hero, "get_bloginfo( 'description' )"), 'Legacy Site Tagline fallback must preserve the previous Hero slogan when the dedicated mapping is absent.');
-assert(str_contains($hero, "get_the_title( $front_id )"), 'Legacy Front Page title fallback must remain available for backward compatibility.');
+assert(str_contains($hero, 'get_the_title( $front_id )'), 'Legacy Front Page title fallback must remain available for backward compatibility.');
 assert(! str_contains($hero, "apply_filters( 'the_content'"), 'Hero source body must not re-enter global the_content filters.');
 assert(str_contains($hero, 'do_blocks( $body )'), 'Hero Page body should render WordPress blocks without hijacking Front Page content filters.');
 
