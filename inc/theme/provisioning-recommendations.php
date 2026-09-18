@@ -106,6 +106,7 @@ function provisioning_recommendations( string $blueprint_key, array $discovery )
     $terms = (array) ( $discovery['categories'] ?? [] );
     $slots = (array) ( $discovery['homepage_slots'] ?? [] );
     $page_slot = [
+        'hero' => 'hero',
         'services' => 'services', 'about' => 'about', 'team' => 'team',
         'process' => 'process', 'faq' => 'faq', 'contact' => 'contact',
     ];
