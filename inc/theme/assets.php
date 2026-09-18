@@ -118,7 +118,7 @@ function enqueue_homepage_blueprint_editor_asset(): void {
         'aznet-theme-tokens',
         get_theme_file_uri( '/assets/css/tokens.css' ),
         [],
-        $version
+        asset_content_version( '/assets/css/tokens.css', $version )
     );
 
     wp_enqueue_style(
@@ -363,7 +363,7 @@ function enqueue_assets(): void {
         'aznet-theme-tokens',
         get_theme_file_uri( '/assets/css/tokens.css' ),
         [],
-        $version
+        asset_content_version( '/assets/css/tokens.css', $version )
     );
 
     enqueue_visual_preset_asset( $version );
