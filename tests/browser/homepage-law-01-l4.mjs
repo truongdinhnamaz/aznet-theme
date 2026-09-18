@@ -154,6 +154,24 @@ async function inspectViewport(browser, name, viewport) {
 
     const servicesIntro = (await page.locator('.aznet-theme-law01-services__intro').textContent())?.trim() || '';
     if (!servicesIntro.includes('cá nhân và doanh nghiệp')) throw new Error(`Services Page excerpt intro missing: ${servicesIntro}`);
+    if (await page.locator('.aznet-theme-law01-services__intro').isVisible()) throw new Error('reference Services excerpt must be visually omitted while remaining source-backed in markup');
+
+    const heroContactLinks = page.locator('.aznet-theme-law01-hero__contact-nav a');
+    if (await heroContactLinks.count() !== 2) throw new Error(`reference Hero must render 2 WordPress-owned phone/hotline links, got ${await heroContactLinks.count()}`);
+    const heroContactHrefs = await heroContactLinks.evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
+    if (heroContactHrefs.some((href) => !href?.startsWith('tel:'))) throw new Error(`Hero contact links must remain WordPress-owned tel: links: ${JSON.stringify(heroContactHrefs)}`);
+
+    const heroBodyParagraphs = page.locator('.aznet-theme-law01-hero__body > p');
+    if (await heroBodyParagraphs.count() !== 2) throw new Error('reference Hero fixture must exercise description + slogan body presentation');
+    const heroBodyStyles = await heroBodyParagraphs.evaluateAll((nodes) => nodes.map((node) => getComputedStyle(node).fontStyle));
+    if (heroBodyStyles[0] === 'italic' || heroBodyStyles[1] !== 'italic') throw new Error(`Hero body must present description normally and final slogan in italic: ${JSON.stringify(heroBodyStyles)}`);
+
+    if (await page.locator('.aznet-theme-site-header__logo').count() !== 1 || await page.locator('.aznet-theme-site-header__brand-title').count() !== 1) {
+      throw new Error('reference Header must render logo + WordPress site-title lockup');
+    }
+    if (await page.locator('.aznet-theme-site-footer__logo').count() !== 1 || await page.locator('.aznet-theme-site-footer__brand-title').count() !== 1) {
+      throw new Error('reference Footer must render logo + WordPress site-title lockup');
+    }
 
     result.serviceCards = await page.locator('.aznet-theme-law01-services .aznet-theme-law01-card').count();
     if (result.serviceCards !== 6) throw new Error(`expected 6 mapped service cards, got ${result.serviceCards}`);
