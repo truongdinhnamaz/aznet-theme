@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.53
+**Version:** v0.54
 **Status:** Working Execution Map / derived  
 **Date:** 18/09/2026
 
@@ -361,6 +361,14 @@ Retain W1-W9 ownership/fail-soft evidence plus R4 presentation evidence. WooComm
 
 At every slice, commit bounded changes on a work/feature branch and retain a clear base SHA. If a deeper gate fails, reduce it to the shallowest reproducible regression before changing production behavior. Do not rerun retained PASS without an invalidation unless the active exit gate explicitly requires fresh final-candidate evidence.
 
+## 15.1 Law 01 post-1.3.4 corrective and visual-parity checkpoint — 18/09/2026
+
+- PR #138 closed the 1.3.4 upgrade regression by promoting Theme metadata to `1.3.5` and preserving the legacy public WordPress-native Hero projection when no valid dedicated Hero Page mapping exists.
+- PR #138 exact-main closure: `main@a9a3578516971abd9a9223c1e8dac69da5657bea`, V1 run `35335680576` SUCCESS, X6 run `35335680518` SUCCESS.
+- PR #139 closed the approved Hero / Trust / Services visual-parity slice at `main@ffafe55b90db1d5313b36a5151110ca1e3f67789`.
+- PR #139 final head completed 24/24 workflows SUCCESS; exact-main V1 run `35343960510` and X6 run `35343960430` SUCCESS.
+- RootProfile Team integration remains BLOCKED at issue #112. Do not convert WordPress-native starter/reference content into authoritative Team identity or membership.
+
 ## 16. Exact next
 
-**NEXT — hand off the verified `aznet-theme-1.3.4.zip` from PR #135 final-head evidence for the requested manual website update. Publication/tag/deployment remain separate approval gates; RootProfile Team remains blocked at issue #112.**
+**NEXT — implement the next bounded Law 01 visual-parity slice for About/Profile + Latest Posts using Theme-owned presentation only. Preserve current PASS behavior, keep provider-backed Team integration BLOCKED at issue #112, and do not start publication/tag/deployment.**
