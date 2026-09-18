@@ -136,6 +136,10 @@ function enqueue_homepage_blueprint_editor_asset(): void {
  * @param string|null $fallback      Theme/version fallback.
  */
 function asset_content_version( string $relative_path, ?string $fallback = null ): ?string {
+    if ( ! function_exists( 'get_theme_file_path' ) ) {
+        return $fallback;
+    }
+
     $path = get_theme_file_path( $relative_path );
     if ( ! is_file( $path ) ) {
         return $fallback;
