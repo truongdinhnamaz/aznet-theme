@@ -390,15 +390,14 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - Package creation does not imply tag/GitHub Release or production deployment.
 - RootProfile Team remains BLOCKED at issue #112.
 
-## 15.4 Law 01 Hero full-bleed correction + AZnet Theme 1.3.7 candidate — 18/09/2026
+## 15.4 Law 01 Hero shared-shell correction + AZnet Theme 1.3.7 candidate — 18/09/2026
 
-- PR #145 reproduced the wide-screen Hero gutter defect with a full-bleed static contract and 1920px browser case.
-- Minimal production fix removed the `96rem` Hero-grid cap while preserving the 48/52 split.
-- PR #145 final head `0e2fa28b72f88af3af2f0f1bcc668ff90d117c50` completed 14/14 workflows SUCCESS and merged to `main@9781d29a9d1ba32a643ffe3cfe9d47c8c4ba4c1c`.
-- PR #146 RED head `63041afb1161bf6b136a665957c71ea262ad20e1` failed the intended 1.3.7 Y5 metadata contract.
-- PR #146 exact GREEN release head `57d2b5a87c08d5fbb54d6960feed677837e33087` completed 14/14 triggered workflows SUCCESS.
-- Deterministic package: `aznet-theme-1.3.7.zip`, 145 files, 108 packaged PHP lint PASS, SHA-256 `890e94eb1a69abad4e94e4914e3628b83a491d91636d33c9036070d6ee35b3ab`.
-- Y5 run `35357088021`; promoted-package artifact `10552241981`; artifact digest `sha256:93ed2484c7eeb1add18d4a582386c01ab536ec0141e0bdcd1dc8102b0570faa7`.
+- PR #145 is retained as an intermediate, owner-approved checkpoint, but the subsequent client screenshot clarified that only the Hero **section surface** should be full-width; inner objects must use the common shell.
+- PR #146 adds a 1920px geometry regression comparing Hero inner-grid x/width with Trust and Services containers.
+- RED head `d0a3b87144d7f4f09342d38d256162debed29b5f` failed the intended shared-shell assertion against the PR #145 CSS state.
+- Minimal GREEN production head `e0e2cd9376ab81dbcea4853581627e48361b76bd` removes the Burgundy inner-grid width override and preserves the 48/52 split.
+- Deterministic package: `aznet-theme-1.3.7.zip`, 145 files, 108 packaged PHP lint PASS, SHA-256 `aa1f2a4798b81c7b579c8a1b2a03adaa1932837fd3c277a0b7cbb72d5fe23e4a`.
+- Y5 run `35358986591`; promoted-package artifact `10553996265`; artifact digest `sha256:328948807a5e40a6ece314ca1eb78965c0a3f519839935ff8fb8bf8ab0141bc0`.
 - RootProfile Team remains BLOCKED at issue #112.
 - Tag/GitHub Release and production deployment remain separate approval gates.
 
