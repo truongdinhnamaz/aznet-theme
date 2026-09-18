@@ -105,7 +105,7 @@
 
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero { padding: 0; overflow: visible; background: var(--law01-client-cream); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero::before { display: none; }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__grid { width: min(100%, 96rem); grid-template-columns: minmax(0, 48%) minmax(0, 52%); gap: 0; align-items: stretch; }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__grid { width: 100%; max-width: none; grid-template-columns: minmax(0, 48%) minmax(0, 52%); gap: 0; align-items: stretch; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__content {
     display: flex;
     flex-direction: column;

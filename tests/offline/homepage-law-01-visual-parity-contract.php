@@ -15,6 +15,13 @@ $must(
     'Law 01 target Hero must use the approved near-balanced 48/52 desktop split.'
 );
 $must(
+    1 === preg_match(
+        '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-hero__grid\\s*\\{[^}]*width:\\s*100%;[^}]*max-width:\\s*none;/s',
+        $css
+    ),
+    'Law 01 target Hero grid must be full-bleed on wide desktop instead of stopping at the shared shell width.'
+);
+$must(
     str_contains($css, 'min-height: clamp(29rem, 32vw, 34rem);'),
     'Law 01 target Hero visual must keep the approved desktop image band proportion.'
 );
