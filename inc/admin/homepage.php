@@ -20,6 +20,7 @@ function homepage_slot_statuses(): array {
     $s = settings();
     $statuses = [];
     $page_slots = [
+        'hero'     => 'homepage_hero_page',
         'services' => 'homepage_services_page',
         'about'    => 'homepage_about_page',
         'team'     => 'homepage_team_page',
@@ -100,7 +101,7 @@ function render_homepage_settings(): void {
     $pages = get_pages( [ 'post_status' => 'publish', 'sort_column' => 'post_title' ] );
     $categories = get_categories( [ 'hide_empty' => false ] );
     $visible = [
-        'homepage_preset', 'homepage_law01_variant', 'homepage_services_page', 'homepage_about_page', 'homepage_team_page',
+        'homepage_preset', 'homepage_law01_variant', 'homepage_hero_page', 'homepage_services_page', 'homepage_about_page', 'homepage_team_page',
         'homepage_knowledge_terms', 'homepage_case_analysis_term', 'homepage_legal_news_term',
         'homepage_process_page', 'homepage_faq_page', 'homepage_contact_page',
     ];
@@ -115,6 +116,8 @@ function render_homepage_settings(): void {
     echo '<p class="description">' . esc_html__( 'Luật 01: website dịch vụ pháp lý kết hợp nội dung chuyên môn. Áp dụng mẫu chỉ đổi presentation, không sửa nội dung WordPress.', 'aznet-theme' ) . '</p>';
 
     echo '<h2>' . esc_html__( 'Nguồn nội dung', 'aznet-theme' ) . '</h2>';
+    echo '<p class="description">' . esc_html__( 'Hero dùng một Page WordPress riêng để kiểm soát Tiêu đề, Mô tả ngắn, Nội dung và Ảnh đại diện; không lấy lại Site Title hoặc tiêu đề Trang chủ.', 'aznet-theme' ) . '</p>';
+    homepage_page_select( 'homepage_hero_page', 'Hero trang chủ', (int) $s['homepage_hero_page'], $pages );
     homepage_page_select( 'homepage_services_page', 'Dịch vụ pháp lý', (int) $s['homepage_services_page'], $pages );
     homepage_page_select( 'homepage_about_page', 'Giới thiệu', (int) $s['homepage_about_page'], $pages );
     homepage_page_select( 'homepage_team_page', 'Đội ngũ', (int) $s['homepage_team_page'], $pages );
