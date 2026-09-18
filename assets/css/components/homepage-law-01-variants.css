@@ -143,9 +143,10 @@
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__secondary-action:focus-visible { outline: 3px solid var(--aznet-theme-color-focus); outline-offset: 4px; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust { position: relative; z-index: 2; border-top: 1px solid rgba(122, 14, 24, .09); border-bottom: 1px solid rgba(122, 14, 24, .09); background: rgba(255, 253, 248, .97); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust-item { display: flex; min-height: 5.5rem; align-items: center; gap: .9rem; padding: 1rem 1.35rem; color: #352b26; font-family: var(--aznet-theme-font-family-heading); font-weight: var(--aznet-theme-font-weight-bold); }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust-item { display: flex; min-height: 4.4rem; align-items: center; gap: .8rem; padding: .8rem 1.25rem; color: #352b26; font-family: var(--aznet-theme-font-family-heading); font-size: var(--aznet-theme-text-small); font-weight: var(--aznet-theme-font-weight-semibold); line-height: 1.35; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust-item + .aznet-theme-law01-hero__trust-item { border-inline-start: 1px solid rgba(122, 14, 24, .1); }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust-mark { display: inline-grid; width: 2.55rem; height: 2.55rem; flex: 0 0 auto; place-items: center; border: 1px solid var(--law01-client-gold); border-radius: 50%; color: var(--law01-client-gold); font: 800 .78rem/1 system-ui, sans-serif; }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust-icon { display: inline-grid; width: 2rem; height: 2rem; flex: 0 0 auto; place-items: center; color: var(--law01-client-gold); }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust-icon svg { width: 1.55rem; height: 1.55rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-services { background: #fff; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-services > .aznet-theme-law01-container { max-width: 96rem; }
