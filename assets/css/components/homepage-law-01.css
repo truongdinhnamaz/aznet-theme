@@ -38,7 +38,8 @@
     font-weight: var(--aznet-theme-font-weight-bold);
     margin: .65rem 0 1.35rem;
     max-width: 12ch;
-    font-size: clamp(3rem, 5.6vw, 5.75rem);
+    font-size: var(--aznet-theme-text-display);
+    line-height: var(--aznet-theme-line-height-display);
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-section h2 {
     font-weight: 700;
