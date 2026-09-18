@@ -10,24 +10,28 @@ $must = static function (bool $condition, string $message): void {
     assert($condition, $message);
 };
 
-// Second owner-approved visual-parity slice:
-// About/Profile becomes its own editorial band, Team follows as a distinct presentation band,
-// and Latest Posts keeps a disciplined three-card editorial row on wide desktop.
+// Latest owner-approved visual target:
+// About and Team share one reference band on wide desktop, while Latest Posts retains
+// a disciplined three-card editorial row. Source ownership remains unchanged.
 $must(
     str_contains($profile, 'aznet-theme-law01-profile__about-grid'),
-    'Law 01 target About presentation must use a dedicated two-column editorial grid.'
+    'Law 01 target About presentation must retain its dedicated presentation hook.'
 );
 $must(
     str_contains($profile, 'aznet-theme-law01-profile__team-band'),
-    'Law 01 target Team presentation must follow About as a distinct presentation band.'
+    'Law 01 target Team presentation must retain its dedicated presentation hook.'
 );
 $must(
-    str_contains($css, 'grid-template-columns: minmax(0, 44%) minmax(0, 56%);'),
-    'Law 01 target About band must use the approved 44/56 desktop editorial split.'
+    str_contains($css, '.aznet-theme-law01-profile > .aznet-theme-law01-container { display: grid; grid-template-columns: minmax(0, 48%) minmax(0, 52%);'),
+    'Law 01 reference Profile band must place About and Team side-by-side at the approved 48/52 desktop ratio.'
+);
+$must(
+    str_contains($css, '.aznet-theme-law01-profile__about-media { display: none; }'),
+    'Law 01 reference About column must remain text-led instead of adding a second large media panel.'
 );
 $must(
     str_contains($css, '.aznet-theme-law01-profile__team-band {'),
-    'Law 01 target Team band styling must be explicit and presentation-only.'
+    'Law 01 target Team band styling must remain explicit and presentation-only.'
 );
 $must(
     str_contains($css, 'grid-template-columns: repeat(4, minmax(0, 1fr));'),
