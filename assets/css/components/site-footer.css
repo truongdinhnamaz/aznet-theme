@@ -127,7 +127,8 @@
 .aznet-theme-site-footer__menu a,
 .aznet-theme-site-footer__contact-menu a {
     color: var(--aznet-theme-footer-muted);
-    line-height: 1.5;
+    font-size: var(--aznet-theme-text-small);
+    line-height: var(--aznet-theme-line-height-body);
 }
 
 .aznet-theme-site-footer__menu .sub-menu {
