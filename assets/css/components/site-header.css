@@ -216,8 +216,9 @@
     min-height: 38px;
     padding: 0 6px;
     color: var(--aznet-theme-header-muted);
-    font-size: 13px;
-    font-weight: 600;
+    font-size: var(--aznet-theme-text-meta);
+    font-weight: var(--aznet-theme-font-weight-medium);
+    line-height: var(--aznet-theme-line-height-meta);
 }
 
 .aznet-theme-site-header__mobile {
