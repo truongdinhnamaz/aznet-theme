@@ -38,7 +38,7 @@
 
 .woocommerce-cart .shop_table .product-subtotal {
     color: var(--aznet-theme-text, #17181b);
-    font-weight: 700;
+    font-weight: var(--aznet-theme-font-weight-bold);
 }
 
 .woocommerce-cart .coupon {
