@@ -157,6 +157,38 @@ async function inspectViewport(browser, name, viewport) {
     result.serviceCards = await page.locator('.aznet-theme-law01-services .aznet-theme-law01-card').count();
     if (result.serviceCards !== 6) throw new Error(`expected 6 mapped service cards, got ${result.serviceCards}`);
 
+    const parityMetrics = await page.evaluate(() => {
+      const content = document.querySelector('.aznet-theme-law01-hero__content')?.getBoundingClientRect();
+      const visual = document.querySelector('.aznet-theme-law01-hero__visual')?.getBoundingClientRect();
+      const trust = [...document.querySelectorAll('.aznet-theme-law01-hero__trust-item')].map((node) => node.getBoundingClientRect());
+      const services = [...document.querySelectorAll('.aznet-theme-law01-services .aznet-theme-law01-card')].map((node) => node.getBoundingClientRect());
+      return {
+        content: content ? { x: content.x, y: content.y, width: content.width, height: content.height } : null,
+        visual: visual ? { x: visual.x, y: visual.y, width: visual.width, height: visual.height } : null,
+        trust: trust.map((rect) => ({ x: rect.x, y: rect.y, width: rect.width, height: rect.height })),
+        services: services.map((rect) => ({ x: rect.x, y: rect.y, width: rect.width, height: rect.height })),
+      };
+    });
+
+    if (!parityMetrics.content || !parityMetrics.visual) throw new Error('Hero visual-parity metrics unavailable');
+    if (viewport.width >= 1024) {
+      const heroTotal = parityMetrics.content.width + parityMetrics.visual.width;
+      const visualRatio = parityMetrics.visual.width / heroTotal;
+      if (visualRatio < 0.50 || visualRatio > 0.54) throw new Error(`desktop Hero visual ratio must stay near approved 52% target, got ${visualRatio.toFixed(3)}`);
+      if (Math.abs(parityMetrics.content.y - parityMetrics.visual.y) > 2) throw new Error('desktop Hero columns must align on one row');
+      if (parityMetrics.trust.length !== 4 || new Set(parityMetrics.trust.map((item) => Math.round(item.y))).size !== 1) {
+        throw new Error('desktop trust strip must remain one four-item row');
+      }
+      if (parityMetrics.services.length !== 6 || new Set(parityMetrics.services.map((item) => Math.round(item.y))).size !== 1) {
+        throw new Error('desktop Services must remain one six-card row');
+      }
+    }
+    if (viewport.width <= 390) {
+      if (parityMetrics.visual.y <= parityMetrics.content.y) throw new Error('mobile Hero visual must stack after Hero content');
+      if (new Set(parityMetrics.trust.map((item) => Math.round(item.y))).size !== 4) throw new Error('mobile trust strip must stack to one item per row');
+      if (new Set(parityMetrics.services.map((item) => Math.round(item.y))).size !== 6) throw new Error('mobile Services cards must stack to one card per row');
+    }
+
     result.teamCards = await page.locator('.aznet-theme-law01-team-card').count();
     if (result.teamCards !== 2) throw new Error(`expected 2 WordPress-owned team child Page cards, got ${result.teamCards}`);
 
