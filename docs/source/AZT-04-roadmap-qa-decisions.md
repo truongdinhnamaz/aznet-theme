@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.67
+**Version:** v0.68
 **Status:** Working Source  
 **Date:** 19/09/2026
 
@@ -487,6 +487,12 @@ Exact production head `5f3dcf00f0a619b58a966078b2cd969cb7fec45d` completed **14/
 
 This checkpoint does not change Theme/provider ownership. RootProfile authoritative Team remains BLOCKED at issue #112. Tag/GitHub Release and production deployment remain separate explicit approval gates.
 
+### AZnet Theme 1.3.8 canonical merge closure — 19/09/2026
+
+Owner-approved PR #149 final head `14bd511023e5bac5c61eabca16d89f8cac8be3d8` completed **17/17 triggered workflows SUCCESS, 0 failure** and merged to `main@597639e26a2cb242c3c0a71e5459ab5d66a0701d`. Git comparison shows zero file delta between verified head and merge commit. No fresh post-merge exact-main workflow run was emitted, so no independent exact-main rerun is claimed.
+
+Canonical Theme metadata is now `1.3.8`. Deterministic package identity remains SHA-256 `0aba4cf0e213150319c8288d62d06cb136481670cd8f53fd0edbfd9276a03238`. Git tag/GitHub Release and production deployment remain separate explicit approval gates. Evidence: `docs/evidence/V1_3_8_MERGE_CLOSURE_20260919.md`.
+
 ## 14. Exact next
 
-**NEXT — canonical merge of PR #149 is the next approval gate for the verified 1.3.8 client-delivery candidate. Do not tag, publish a GitHub Release or deploy production without separate explicit approval.**
+**NEXT — AZnet Theme 1.3.8 canonical merge is complete at `main@597639e26a2cb242c3c0a71e5459ab5d66a0701d`. Do not tag, publish a GitHub Release or deploy production without separate explicit approval.**
