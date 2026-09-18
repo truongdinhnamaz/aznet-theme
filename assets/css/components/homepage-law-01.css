@@ -79,8 +79,8 @@
     max-width: 58ch;
     margin-block: 0 1rem;
     color: var(--aznet-theme-color-text-muted);
-    font-size: clamp(1rem, 1.35vw, 1.18rem);
-    line-height: 1.75;
+    font-size: var(--aznet-theme-text-lead);
+    line-height: var(--aznet-theme-line-height-lead);
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-actions {
     display: flex;
