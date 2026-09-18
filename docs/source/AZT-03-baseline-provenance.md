@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.49
+**Version:** v0.50
 **Status:** Working Source  
 **Date:** 18/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -229,7 +229,17 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**NEXT — continue the owner-approved Law 01 visual-parity sequence with the About/Profile band and Latest Posts on a bounded Theme-owned presentation slice. Team shell/card presentation may be refined only without inventing or inferring authoritative membership; RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112. Git tag/GitHub Release and automated production deployment remain separate approval gates.**
+**NEXT — the currently approved Law 01 visual-parity sequence is technically closed at the Theme-owned presentation scope through PR #141. Do not invent a further visual slice from implementation momentum alone. Preserve the merged presentation baseline, keep RootProfile-backed Team integration `BLOCKED_EXTERNAL_CONTRACT` at issue #112, and treat any additional design expansion, Git tag/GitHub Release or production deployment as a separate approval gate.**
+
+### Law 01 About/Profile + Latest visual-parity closure — 18/09/2026
+
+Owner-approved PR #141 merged final verified head `0a2826dfc52343f187dc6198d61d83a6608b62d4` to canonical `main@afbef3d0adc39e4b1595cf2f3506f58bb567bcff`.
+
+The slice is presentation-only: About uses a dedicated 44/56 desktop editorial copy/media band with responsive stacking; Team follows as a distinct presentation band over the existing WordPress-owned mapped Team Page/direct published child Page fixtures; Latest remains three WordPress-native posts with equal-height cards and 3:2 media. No authoritative Team identity/membership is inferred.
+
+The final PR head completed **25/25 workflows SUCCESS, 0 failure**, including V1 Core PR CI, Homepage Composer Law 01 Browser Quality, D-027 L3/L4/Exact Package/retained regression, X6, R6 and retained Y-series/browser gates. A Navy Team contrast regression exposed by D-027 L4 was corrected at the CSS presentation layer before final verification.
+
+No fresh post-merge workflow run was emitted for merge SHA `afbef3d...` at the time of closure, so no independent exact-main rerun is claimed. Evidence: `docs/evidence/LAW01_PROFILE_LATEST_VISUAL_PARITY_20260918.md`.
 
 ### P1 pilot identity cleanup and final P4 sign-off
 
