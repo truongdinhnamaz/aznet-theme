@@ -22,17 +22,17 @@ const viewports = {
 const expectedVariables = {
   default: {
     '--aznet-theme-container-content': '45rem',
-    '--aznet-theme-line-height-body': '1.6',
+    '--aznet-theme-line-height-body': '1.65',
     '--aznet-theme-space-section': '3.25rem',
   },
   editorial: {
     '--aznet-theme-container-content': '42rem',
-    '--aznet-theme-line-height-body': '1.7',
+    '--aznet-theme-line-height-body': '1.65',
     '--aznet-theme-space-section': '3.75rem',
   },
   commerce: {
-    '--aznet-theme-font-size-sm': '0.8125rem',
-    '--aznet-theme-line-height-body': '1.5',
+    '--aznet-theme-font-size-sm': '0.875rem',
+    '--aznet-theme-line-height-body': '1.65',
     '--aznet-theme-radius-card': '0.75rem',
     '--aznet-theme-space-section': '2.75rem',
   },
