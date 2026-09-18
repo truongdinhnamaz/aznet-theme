@@ -212,6 +212,7 @@
 }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__team-band .aznet-theme-law01-section-heading { align-items: flex-end; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__team-band .aznet-theme-law01-lede { max-width: 48rem; margin-bottom: 0; color: #655a51; }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__team-band .aznet-theme-law01-text-link { color: var(--law01-client-burgundy); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__members { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin: 1.75rem 0 0; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__member { min-width: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__member-image { display: block; width: 100%; aspect-ratio: 4 / 5; height: auto; object-fit: cover; object-position: center top; border-radius: .22rem; }
