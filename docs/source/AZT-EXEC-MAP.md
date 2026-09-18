@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.54
+**Version:** v0.55
 **Status:** Working Execution Map / derived  
 **Date:** 18/09/2026
 
@@ -369,6 +369,17 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - PR #139 final head completed 24/24 workflows SUCCESS; exact-main V1 run `35343960510` and X6 run `35343960430` SUCCESS.
 - RootProfile Team integration remains BLOCKED at issue #112. Do not convert WordPress-native starter/reference content into authoritative Team identity or membership.
 
+## 15.2 Law 01 About/Profile + Latest visual-parity closure — 18/09/2026
+
+- PR #141 closed the second approved Law 01 visual-parity slice at `main@afbef3d0adc39e4b1595cf2f3506f58bb567bcff`.
+- Final verified PR head `0a2826dfc52343f187dc6198d61d83a6608b62d4` completed 25/25 workflows SUCCESS.
+- About: dedicated 44/56 editorial copy/media composition with responsive stacking.
+- Team: distinct presentation band over existing WordPress-owned mapped Team Page/direct child Page fixtures only; this does not certify or infer RootProfile membership.
+- Latest: three WordPress-native posts, equal-height card rhythm, 3:2 media.
+- D-027 L4 contrast regression was reduced to Team text/link CSS and fixed before the final clean matrix.
+- No fresh post-merge workflow run was emitted for the merge SHA; no independent exact-main rerun is claimed.
+- RootProfile Team remains BLOCKED at issue #112.
+
 ## 16. Exact next
 
-**NEXT — implement the next bounded Law 01 visual-parity slice for About/Profile + Latest Posts using Theme-owned presentation only. Preserve current PASS behavior, keep provider-backed Team integration BLOCKED at issue #112, and do not start publication/tag/deployment.**
+**NEXT — no further Law 01 visual slice is authorized by the current source. Preserve the completed visual-parity baseline and stop at the design/roadmap gate for any new visual expansion. Continue to keep RootProfile Team BLOCKED at issue #112 and do not start publication/tag/deployment without separate approval.**
