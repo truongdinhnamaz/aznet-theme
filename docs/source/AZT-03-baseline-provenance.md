@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.54
+**Version:** v0.55
 **Status:** Working Source  
 **Date:** 19/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -229,7 +229,7 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**NEXT — PR #149 is the owner-approved AZnet Theme 1.3.8 client-delivery candidate built from canonical `main@9ad2faa9141f9aca93f2c6b2a0a37731143ccd44`. Exact production head `5f3dcf00f0a619b58a966078b2cd969cb7fec45d` completed 14/14 triggered workflows SUCCESS and produced the deterministic installable package. Canonical merge remains the next approval gate. Git tag/GitHub Release and production deployment remain separate gates; RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
+**NEXT — AZnet Theme 1.3.8 is now canonical at `main@597639e26a2cb242c3c0a71e5459ab5d66a0701d`. Git tag/GitHub Release and production deployment remain separate approval gates; RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
 
 ### AZnet Theme 1.3.8 final client-delivery candidate — 19/09/2026
 
@@ -239,7 +239,9 @@ RED head `5f188f3fcca6fd32122a1799aff703d4837b89e9` failed the intended Y5 asser
 
 Exact production head `5f3dcf00f0a619b58a966078b2cd969cb7fec45d` completed **14/14 triggered workflows SUCCESS, 0 failure**. Y5 produced deterministic `aznet-theme-1.3.8.zip`, 145 production files, 108/108 packaged PHP lint PASS, SHA-256 `0aba4cf0e213150319c8288d62d06cb136481670cd8f53fd0edbfd9276a03238`. Run `35403751052`; promoted-package artifact `10571900478`, digest `sha256:2f8b380f8ffa6e88d481d99a14ea1d248f86243ebd1c213bdccb49fda0fc9da4`.
 
-Canonical `main` remains Theme metadata 1.3.6 until PR #149 is merged. Tag/GitHub Release and production deployment are not claimed. Evidence: `docs/evidence/V1_3_8_CLIENT_DELIVERY_20260919.md`.
+Canonical merge is now complete. Owner-approved PR #149 final head `14bd511023e5bac5c61eabca16d89f8cac8be3d8` completed **17/17 triggered workflows SUCCESS, 0 failure** and merged to `main@597639e26a2cb242c3c0a71e5459ab5d66a0701d`. Git comparison from verified head to merge commit shows zero file delta. No fresh post-merge exact-main workflow was emitted, so no independent exact-main rerun is claimed. Theme metadata on canonical main is now `1.3.8`.
+
+Tag/GitHub Release and production deployment are not claimed. Candidate evidence: `docs/evidence/V1_3_8_CLIENT_DELIVERY_20260919.md`. Merge closure: `docs/evidence/V1_3_8_MERGE_CLOSURE_20260919.md`.
 
 ### AZnet Theme 1.3.6 client-delivery candidate — 18/09/2026
 
