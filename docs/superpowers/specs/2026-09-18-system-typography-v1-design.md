@@ -1,7 +1,7 @@
 # AZnet Theme System Typography v1 — Design
 
-Date: 2026-09-18  
-Status: Approved design, pending implementation-plan review  
+Date: 2026-09-18
+Status: Approved design, pending implementation-plan review
 Scope: AZnet Theme only
 
 ## 1. Goal
