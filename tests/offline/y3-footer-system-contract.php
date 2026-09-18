@@ -211,6 +211,11 @@ foreach (['get_bloginfo(', 'home_url(', 'get_theme_mod(', 'wp_nav_menu(', 'wp_da
 if (1 !== substr_count($template, 'role="contentinfo"')) {
     y3_fail('Footer template must keep exactly one semantic contentinfo region');
 }
+foreach (['aznet-theme-site-footer__social-column', "'professional' === $preset", 'Kết nối với chúng tôi'] as $needle) {
+    if (! str_contains($template, $needle)) {
+        y3_fail('Professional Footer demo composition missing: ' . $needle);
+    }
+}
 if (str_contains($template, 'aznet-theme-site-footer--standard"')) {
     y3_fail('Footer template must derive preset class from normalized context instead of hard-coding standard');
 }
@@ -227,6 +232,11 @@ if (false === $css) {
 foreach (['.aznet-theme-site-footer--professional', '.aznet-theme-site-footer--compact'] as $selector) {
     if (! str_contains($css, $selector)) {
         y3_fail('Footer stylesheet missing preset selector ' . $selector);
+    }
+}
+foreach (['repeat(3, minmax(140px, .75fr))', '.aznet-theme-site-footer__social-column'] as $needle) {
+    if (! str_contains($css, $needle)) {
+        y3_fail('Professional Footer demo grid missing: ' . $needle);
     }
 }
 if (! str_contains($css, '@media (max-width: 48rem)')) {
