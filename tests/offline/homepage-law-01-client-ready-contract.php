@@ -72,6 +72,23 @@ assert(str_contains($css, '.aznet-theme-law01-team .aznet-theme-law01-button--se
 assert(str_contains($css, 'color: var(--law01-client-ink);'), 'Burgundy Team secondary CTA must use a readable ink color on the light Team surface.');
 
 assert(str_contains($services, 'aznet-theme-law01-card__badge'), 'Service cards must expose a presentation-only badge hook.');
+
+foreach ([
+    'Các dịch vụ pháp lý dành cho bạn',
+    'aznet-theme-law01-services__heading',
+] as $needle) {
+    assert(str_contains($services, $needle), "Law 01 balanced services content hierarchy missing: {$needle}");
+}
+foreach ([
+    '.aznet-theme-law01-services > .aznet-theme-law01-container',
+    'max-width: 96rem;',
+    'min-height: 24rem;',
+    'font-size: var(--aznet-theme-text-h4);',
+    'line-height: 1.65;',
+] as $needle) {
+    assert(str_contains($css, $needle), "Law 01 balanced services presentation missing: {$needle}");
+}
+
 assert(str_contains($profile, 'aznet-theme-law01-profile__grid'), 'Profile band must combine About and Team presentation.');
 assert(str_contains($latest, "homepage_latest_posts( (array) setting( 'homepage_knowledge_terms', [] ), 3, homepage_ledger_ids() )"), 'Latest presentation must stay at three client-ready cards.');
 assert(str_contains($latest, 'aznet-theme-law01-article-card__media'), 'Latest cards must render featured media when available.');
