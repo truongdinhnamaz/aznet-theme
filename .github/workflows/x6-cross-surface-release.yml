@@ -427,6 +427,48 @@ jobs:
               fi
               echo 'PASS: X6 promoted 1.3.1 ownership boundary'
               ;;
+            1.3.2)
+              if [[ -n "$metadata_changes" ]]; then
+                unexpected=$(printf '%s\n' "$metadata_changes" | grep -Ev "^(-Version: 1\\.3\\.1|\\+Version: 1\\.3\\.2|-    define\\( 'AZNET_THEME_VERSION', '1\\.3\\.1' \\);|\\+    define\\( 'AZNET_THEME_VERSION', '1\\.3\\.2' \\);)$" || true)
+                if [[ -n "$unexpected" ]]; then
+                  echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.2 boundary' >&2
+                  printf '%s\n' "$unexpected" >&2
+                  exit 1
+                fi
+                for expected in \
+                  '-Version: 1.3.1' \
+                  '+Version: 1.3.2' \
+                  "-    define( 'AZNET_THEME_VERSION', '1.3.1' );" \
+                  "+    define( 'AZNET_THEME_VERSION', '1.3.2' );"; do
+                  if [[ "$(printf '%s\n' "$metadata_changes" | grep -Fxc -- "$expected")" != '1' ]]; then
+                    echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.2 boundary' >&2
+                    exit 1
+                  fi
+                done
+              fi
+              echo 'PASS: X6 promoted 1.3.2 ownership boundary'
+              ;;
+            1.3.3)
+              if [[ -n "$metadata_changes" ]]; then
+                unexpected=$(printf '%s\n' "$metadata_changes" | grep -Ev "^(-Version: 1\\.3\\.1|\\+Version: 1\\.3\\.3|-    define\\( 'AZNET_THEME_VERSION', '1\\.3\\.1' \\);|\\+    define\\( 'AZNET_THEME_VERSION', '1\\.3\\.3' \\);)$" || true)
+                if [[ -n "$unexpected" ]]; then
+                  echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.3 boundary' >&2
+                  printf '%s\n' "$unexpected" >&2
+                  exit 1
+                fi
+                for expected in \
+                  '-Version: 1.3.1' \
+                  '+Version: 1.3.3' \
+                  "-    define( 'AZNET_THEME_VERSION', '1.3.1' );" \
+                  "+    define( 'AZNET_THEME_VERSION', '1.3.3' );"; do
+                  if [[ "$(printf '%s\n' "$metadata_changes" | grep -Fxc -- "$expected")" != '1' ]]; then
+                    echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.3 boundary' >&2
+                    exit 1
+                  fi
+                done
+              fi
+              echo 'PASS: X6 promoted 1.3.3 ownership boundary'
+              ;;
             *)
               echo 'FAIL: unsupported X6 Theme version state' >&2
               exit 1

@@ -75,7 +75,7 @@ foreach ([
 }
 
 foreach ([
-    '--law01-type-section-title: clamp(1.45rem, 1.8vw, 1.85rem);',
+    '--law01-type-section-title: clamp(1.35rem, 1.55vw, 1.65rem);',
     '--law01-type-card-title: clamp(1.05rem, 1.25vw, 1.2rem);',
     '--law01-type-article-title: clamp(1.15rem, 1.5vw, 1.35rem);',
     '--law01-type-hero-value: clamp(1.45rem, 2vw, 1.9rem);',
@@ -92,6 +92,16 @@ foreach ([
     'object-position: center 48%;',
 ] as $needle) {
     assert(str_contains($css, $needle), "Law 01 approved hero hierarchy missing: {$needle}");
+}
+
+foreach ([
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-section h2 {',
+    'max-width: none;',
+    'font-size: var(--law01-type-section-title);',
+    'white-space: nowrap;',
+    'text-wrap: nowrap;',
+] as $needle) {
+    assert(str_contains($css, $needle), "Law 01 homepage section heading system missing: {$needle}");
 }
 
 assert(str_contains($css, '.aznet-theme-law01-team .aznet-theme-law01-button--secondary'), 'Burgundy variant must override the higher-specificity Team secondary-button rule.');
@@ -120,6 +130,10 @@ foreach ([
     'font-size: var(--law01-type-card-title);',
     'line-height: 1.65;',
     'white-space: nowrap;',
+    'width: max-content;',
+    'flex: 1 1 auto;',
+    '.aznet-theme-law01-section h2.aznet-theme-law01-services__heading',
+    'text-wrap: nowrap;',
 ] as $needle) {
     assert(str_contains($css, $needle), "Law 01 demo-aligned services presentation missing: {$needle}");
 }
