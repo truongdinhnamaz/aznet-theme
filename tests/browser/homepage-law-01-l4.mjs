@@ -22,8 +22,11 @@ const requiredSelectors = [
   '.aznet-theme-law01-services',
   '.aznet-theme-law01-editorial',
   '.aznet-theme-law01-team',
-  '.aznet-theme-law01-topics',
   '.aznet-theme-law01-articles',
+];
+
+const forbiddenBurgundySelectors = [
+  '.aznet-theme-law01-topics',
   '.aznet-theme-law01-analysis',
   '.aznet-theme-law01-news',
   '.aznet-theme-law01-process',
@@ -120,6 +123,9 @@ async function inspectViewport(browser, name, viewport) {
     for (const selector of requiredSelectors) {
       if (await page.locator(selector).count() < 1) throw new Error(`missing Law 01 section ${selector}`);
     }
+    for (const selector of forbiddenBurgundySelectors) {
+      if (await page.locator(selector).count() > 0) throw new Error(`Burgundy visual closure rendered excluded section ${selector}`);
+    }
 
     const slogan = (await page.locator('.aznet-theme-law01-hero__slogan').textContent())?.trim() || '';
     if (!slogan.includes('Tận tâm với khách hàng')) throw new Error(`Site Tagline slogan was not projected into Hero: ${slogan}`);
@@ -141,16 +147,9 @@ async function inspectViewport(browser, name, viewport) {
     const emptyCards = await page.locator('.aznet-theme-law01-card:empty, .aznet-theme-law01-article-card:empty').count();
     if (emptyCards > 0) throw new Error(`empty public cards rendered: ${emptyCards}`);
 
-    const editorialHrefs = await page.evaluate(() => {
-      const selectors = [
-        '.aznet-theme-law01-articles article a',
-        '.aznet-theme-law01-analysis article a',
-        '.aznet-theme-law01-news article a',
-      ];
-      return selectors.flatMap((selector) => [...document.querySelectorAll(selector)].map((node) => node.href));
-    });
+    const editorialHrefs = await page.evaluate(() => [...document.querySelectorAll('.aznet-theme-law01-articles article a')].map((node) => node.href));
     result.articleLinks = editorialHrefs.length;
-    if (editorialHrefs.length < 8) throw new Error(`expected a substantial editorial feed, got ${editorialHrefs.length} links`);
+    if (editorialHrefs.length !== 3) throw new Error(`expected 3 Latest Posts links in Burgundy demo closure, got ${editorialHrefs.length}`);
     if (new Set(editorialHrefs).size !== editorialHrefs.length) throw new Error('request-local display ledger did not prevent repeated editorial links');
 
     const contactHref = await page.locator('.aznet-theme-law01-hero .aznet-theme-law01-button').getAttribute('href');
