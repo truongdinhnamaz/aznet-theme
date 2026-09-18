@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.58
+**Version:** v0.59
 **Status:** Working Source  
 **Date:** 18/09/2026
 
@@ -64,7 +64,7 @@ A GitHub release check on 08/09/2026 historically established that publication h
 
 ## 2.1 Current checkpoint — 18/09/2026
 
-- Canonical GitHub `main` is `371e09035a23664cf38f52f70aa3189e5c10f2cf` after owner-approved PR #111. PR #110 and #111 are merged; PR #109 remains a draft/open presentation candidate and is not canonical.
+- Canonical GitHub `main` is `8238248f0d97383d0e43461c481ad6bbc1f480a7` after owner-approved PR #131. PR #129-#131 close the post-release Law 01 Homepage presentation sequence, media-rich visual QA/linked-portrait accessibility, and Professional Footer column order; exact-main run `35315451153` completed SUCCESS. Earlier PR #110/#111 state remains retained provenance.
 - ConvertFlow F9/provider L5 is PASS only at the exact certified compatibility boundary in `docs/evidence/F9_PROVIDER_L5_SOURCE_SYNC_20260918.md`. This closes the Theme-side optional-provider certification question for that tested producer/consumer path; it does not release/deploy ConvertFlow or change the released ConvertFlow baseline.
 - The Tâm Đức Hà Nội pilot is live on Theme metadata `1.3.0`. Owner-approved WPVibe publishing applied bounded post-release Theme-file changes with automatic `aznet-theme-wpvibe-backup`; byte identity to the published `v1.3.0` release asset or current GitHub `main` was not established, so runtime PASS must not be restated as package-byte PASS.
 - Law 01 Quick Setup rerun is runtime PASS at the tested scope: Step 4/4, `READY_WITH_WARNINGS`, `Created: 0 · Reused: 36`, plus zero duplicate `law01-v1-2` starter roles in the read-only duplicate query.
@@ -421,4 +421,4 @@ This closes the historical F8 nested-main compatibility blocker only. It does no
 
 ## 14. Exact next
 
-**NEXT — v1.3 Core is closed at TECHNICAL + PUBLICATION + PRODUCTION DEPLOYMENT PASS. Begin no new Theme milestone, architecture/public-contract change or optional-provider certification without a separately approved slice; provider L5 remains separate and unclaimed.**
+**NEXT — v1.3 Core and the post-release Law 01 Homepage presentation closure are PASS at their verified scopes. Hold RootProfile-backed Team/member integration at issue #112 until a public/versioned projection exists. Begin no new Theme milestone, architecture/public-contract change, release/deploy/takeover action or optional-provider slice without a separately approved gate.**
