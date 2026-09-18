@@ -126,6 +126,7 @@ function provisioning_apply_homepage_mapping( array $page_ids, array $term_ids, 
     $page_sources = (array) ( $operation['page_sources'] ?? [] );
     $category_sources = (array) ( $operation['category_sources'] ?? [] );
     $page_map = [
+        'hero' => 'homepage_hero_page',
         'services' => 'homepage_services_page', 'about' => 'homepage_about_page', 'team' => 'homepage_team_page',
         'process' => 'homepage_process_page', 'faq' => 'homepage_faq_page', 'contact' => 'homepage_contact_page',
     ];
