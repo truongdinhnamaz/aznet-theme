@@ -184,7 +184,7 @@ jobs:
               'Văn phòng luật sư kiểm soát độc lập',
               'hero-trang-chu',
               'Bảo vệ quyền lợi của bạn bằng giải pháp pháp lý rõ ràng',
-              '<p>Trọn tâm với khách – Vẹn đức với nghề</p>'
+              '<p>Đồng hành cùng bạn trên mọi vấn đề pháp lý với sự tận tâm, chuyên nghiệp và minh bạch.</p><p>Trọn tâm với khách – Vẹn đức với nghề</p>'
           );
           law01_featured_fixture( $hero, 'hero', 1400, 900 );
           $about = law01_page( 'Giới thiệu', 'gioi-thieu', 'Một đội ngũ hướng tới tư vấn rõ ràng, bảo mật và giải pháp thực tiễn.' );
@@ -211,6 +211,8 @@ jobs:
           law01_featured_fixture( $member_b, 'team-b', 800, 1000 );
           law01_featured_fixture( $member_c, 'team-c', 800, 1000 );
           law01_featured_fixture( $member_d, 'team-d', 800, 1000 );
+          $brand_logo = law01_featured_fixture( $team, 'brand-logo', 300, 300 );
+          set_theme_mod( 'custom_logo', $brand_logo );
           $process = law01_page( 'Quy trình tư vấn', 'quy-trinh-tu-van', 'Tiếp nhận thông tin, đánh giá phạm vi và thống nhất phương án phù hợp.' );
           $faq = law01_page( 'Câu hỏi thường gặp', 'cau-hoi-thuong-gap', 'Các câu hỏi phổ biến trước khi bắt đầu trao đổi pháp lý.' );
           $contact = law01_page( 'Liên hệ', 'lien-he', 'Gửi thông tin để bắt đầu trao đổi.' );
