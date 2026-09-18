@@ -15,11 +15,11 @@ $must(
     'Law 01 target Hero must use the approved near-balanced 48/52 desktop split.'
 );
 $must(
-    1 === preg_match(
-        '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-hero__grid\\s*\\{[^}]*width:\\s*100%;[^}]*max-width:\\s*none;/s',
+    0 === preg_match(
+        '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-hero__grid\\s*\\{[^}]*(?:width|max-width)\\s*:/s',
         $css
     ),
-    'Law 01 target Hero grid must be full-bleed on wide desktop instead of stopping at the shared shell width.'
+    'Law 01 Hero section may be full-width, but its inner grid must inherit the shared shell width and align with peer section content.'
 );
 $must(
     str_contains($css, 'min-height: clamp(29rem, 32vw, 34rem);'),
