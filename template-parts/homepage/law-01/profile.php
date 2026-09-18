@@ -34,7 +34,6 @@ $members = $team instanceof \WP_Post ? homepage_direct_published_children( (int)
                 <h2><?php echo esc_html( get_the_title( $team ) ); ?></h2>
                 <?php if ( '' !== $team_summary ) : ?><p class="aznet-theme-law01-lede"><?php echo esc_html( $team_summary ); ?></p><?php endif; ?>
             </div>
-            <a class="aznet-theme-law01-text-link" href="<?php echo esc_url( get_permalink( $team ) ); ?>"><?php esc_html_e( 'Xem thêm về đội ngũ', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a>
         </div>
         <?php if ( [] !== $members ) : ?><div class="aznet-theme-law01-profile__members">
             <?php foreach ( $members as $member ) : if ( ! $member instanceof \WP_Post ) { continue; } $member_image = has_post_thumbnail( $member ) ? get_the_post_thumbnail( $member, 'medium_large', [ 'class' => 'aznet-theme-law01-profile__member-image aznet-theme-law01-team-card__image' ] ) : ''; $member_summary = trim( (string) get_the_excerpt( $member ) ); ?>
@@ -45,6 +44,7 @@ $members = $team instanceof \WP_Post ? homepage_direct_published_children( (int)
             </article>
             <?php endforeach; ?>
         </div><?php endif; ?>
+        <p class="aznet-theme-law01-team-more"><a class="aznet-theme-law01-button aznet-theme-law01-button--secondary" href="<?php echo esc_url( get_permalink( $team ) ); ?>"><?php esc_html_e( 'Xem thêm về đội ngũ', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a></p>
     </div>
     <?php endif; ?>
 </div>
