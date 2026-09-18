@@ -179,6 +179,7 @@ jobs:
               'Front Page excerpt must stay independent from the Hero source.',
               '<p id="law01-native-body">Native Front Page body sentinel</p>'
           );
+          law01_featured_fixture( $front, 'legacy-hero', 1400, 900 );
           $hero = law01_page(
               'Văn phòng luật sư kiểm soát độc lập',
               'hero-trang-chu',
@@ -336,6 +337,30 @@ jobs:
             exit 1
           fi
           echo 'PASS: Homepage Composer Law 01 Burgundy L3 runtime surface'
+
+      - name: Verify backward-compatible Hero runtime after upgrade
+        run: |
+          set -euo pipefail
+          HERO_ID=$(php -r '$j=json_decode(file_get_contents("/tmp/homepage-law01/fixture.json"), true); echo $j["hero"];')
+          test -n "$HERO_ID"
+
+          wp eval '$s=get_theme_mod("aznet_theme_settings", []); $s["homepage_hero_page"]=0; set_theme_mod("aznet_theme_settings", $s);' --path=/tmp/wp --allow-root
+          curl -fsS http://127.0.0.1:8080/ > /tmp/homepage-law01/homepage-legacy-hero.html
+          grep -F '<h1 id="aznet-law01-title">AZnet Law 01</h1>' /tmp/homepage-law01/homepage-legacy-hero.html
+          grep -F 'Trang chủ nội dung' /tmp/homepage-law01/homepage-legacy-hero.html
+          grep -F 'Front Page excerpt must stay independent from the Hero source.' /tmp/homepage-law01/homepage-legacy-hero.html
+          grep -F 'Tận tâm với khách hàng' /tmp/homepage-law01/homepage-legacy-hero.html
+          grep -F 'aznet-theme-law01-hero__media' /tmp/homepage-law01/homepage-legacy-hero.html
+
+          LAW01_HERO_ID="$HERO_ID" wp eval '$s=get_theme_mod("aznet_theme_settings", []); $s["homepage_hero_page"]=(int)getenv("LAW01_HERO_ID"); set_theme_mod("aznet_theme_settings", $s);' --path=/tmp/wp --allow-root
+          curl -fsS http://127.0.0.1:8080/ > /tmp/homepage-law01/homepage-restored-dedicated-hero.html
+          grep -F '<h1 id="aznet-law01-title">Văn phòng luật sư kiểm soát độc lập</h1>' /tmp/homepage-law01/homepage-restored-dedicated-hero.html
+
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/homepage-law01/server.log; then
+            echo 'Theme runtime error marker found during Hero compatibility verification' >&2
+            exit 1
+          fi
+          echo 'PASS: Law 01 Hero backward-compatible runtime fallback and dedicated-source precedence'
 
       - name: Install Playwright and axe
         run: |
