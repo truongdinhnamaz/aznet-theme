@@ -229,8 +229,8 @@ $css = file_get_contents($root . '/assets/css/components/site-footer.css');
 if (false === $css) {
     y3_fail('unable to read Footer stylesheet');
 }
-$professionalContactPos = strpos($template, "if ( 'professional' === $preset && '' !== $contact_menu )");
-$professionalNavigationPos = strpos($template, "if ( '' !== $primary_menu )");
+$professionalContactPos = strpos($template, "if ( 'professional' === \$preset && '' !== \$contact_menu )");
+$professionalNavigationPos = strpos($template, "if ( '' !== \$primary_menu )");
 if (false === $professionalContactPos || false === $professionalNavigationPos || $professionalContactPos > $professionalNavigationPos) {
     y3_fail('Professional Footer must render Contact before primary navigation to match approved demo composition');
 }
