@@ -253,12 +253,12 @@ async function inspectViewport(browser, name, viewport) {
     }
 
     result.teamCards = await page.locator('.aznet-theme-law01-team-card').count();
-    if (result.teamCards !== 2) throw new Error(`expected 2 WordPress-owned team child Page cards, got ${result.teamCards}`);
+    if (result.teamCards !== 4) throw new Error(`expected 4 WordPress-owned team child Page cards for the reference portrait row, got ${result.teamCards}`);
 
     result.heroImages = await page.locator('.aznet-theme-law01-hero__media img').count();
     if (result.heroImages !== 1) throw new Error(`visual QA fixture must provide 1 Hero featured image, got ${result.heroImages}`);
     result.teamImages = await page.locator('.aznet-theme-law01-team-card__media img').count();
-    if (result.teamImages !== 2) throw new Error(`visual QA fixture must provide 2 Team featured images, got ${result.teamImages}`);
+    if (result.teamImages !== 4) throw new Error(`visual QA fixture must provide 4 Team featured images, got ${result.teamImages}`);
     result.articleImages = await page.locator('.aznet-theme-law01-article-card__media img').count();
     if (result.articleImages !== 3) throw new Error(`visual QA fixture must provide 3 Latest Posts featured images, got ${result.articleImages}`);
 
