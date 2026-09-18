@@ -1,9 +1,9 @@
 # AZnet Theme 1.3.6 — Client Delivery Candidate
 
-**Date:** 18/09/2026  
-**Repository:** `truongdinhnamaz/aznet-theme`  
-**PR:** #143  
-**Base:** `main@a60cd71437375a564444c181780f5e38ec37067b`  
+**Date:** 18/09/2026
+**Repository:** `truongdinhnamaz/aznet-theme`
+**PR:** #143
+**Base:** `main@a60cd71437375a564444c181780f5e38ec37067b`
 **Verified production head:** `7db436b316ef5a9f9264fa9dd71f6cfad4d7ad80`
 
 ## Purpose
@@ -60,13 +60,13 @@ Y5 exact-package lifecycle independently built the package twice and proved byte
 
 ## Installable package
 
-File: `aznet-theme-1.3.6.zip`  
-Production files: **145**  
-Packaged PHP lint: **108/108 PASS**  
+File: `aznet-theme-1.3.6.zip`
+Production files: **145**
+Packaged PHP lint: **108/108 PASS**
 SHA-256: `25271cd4c68f0bc88e236f084acb73d7661a618d1ae1d737f0f2a5202307a84a`
 
-GitHub Actions run: `35353852165`  
-Promoted-package artifact ID: `10550649207`  
+GitHub Actions run: `35353852165`
+Promoted-package artifact ID: `10550649207`
 Artifact digest: `sha256:7efe3e575a46950e85abd703bad87e05daac32bd2346265fa2e148569de48cfc`
 
 ## Current gate
