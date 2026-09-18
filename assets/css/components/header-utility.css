@@ -22,6 +22,7 @@
     color: inherit;
     font-size: var(--aznet-theme-text-button);
     font-weight: var(--aznet-theme-font-weight-semibold);
+    line-height: var(--aznet-theme-line-height-button);
     white-space: nowrap;
 }
 
