@@ -6,7 +6,7 @@ $assets_path = $root . '/inc/theme/assets.php';
 assert(is_file($assets_path), 'Theme asset registration file must exist.');
 
 $assets = (string) file_get_contents($assets_path);
-$needle = "asset_content_version( '/assets/css/tokens.css', $version )";
+$needle = 'asset_content_version( \'/assets/css/tokens.css\', $version )';
 $count = substr_count($assets, $needle);
 
 assert(
