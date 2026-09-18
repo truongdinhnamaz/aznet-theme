@@ -99,7 +99,9 @@ body.aznet-theme-woo-catalog--editorial .woocommerce ul.products li.product .woo
 .woocommerce ul.products li.product .price {
     display: block;
     color: var(--aznet-theme-text, #17181b);
-    font-size: var(--aznet-theme-text-price);\n    font-weight: var(--aznet-theme-font-weight-bold);\n    line-height: var(--aznet-theme-line-height-price);
+    font-size: var(--aznet-theme-text-price);
+    font-weight: var(--aznet-theme-font-weight-bold);
+    line-height: var(--aznet-theme-line-height-price);
     margin-bottom: var(--aznet-theme-space-3, 1rem);
 }
 
