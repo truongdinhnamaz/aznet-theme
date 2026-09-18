@@ -20,8 +20,8 @@
     border: 1px solid var(--aznet-theme-header-border);
     border-radius: 999px;
     color: inherit;
-    font-size: .82rem;
-    font-weight: 750;
+    font-size: var(--aznet-theme-text-button);
+    font-weight: var(--aznet-theme-font-weight-semibold);
     white-space: nowrap;
 }
 
