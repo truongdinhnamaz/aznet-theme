@@ -109,7 +109,7 @@
     display: inline-flex;
     flex: 0 0 auto;
     align-items: center;
-    font-weight: 700;
+    font-weight: var(--aznet-theme-font-weight-bold);
     letter-spacing: -0.02em;
 }
 
@@ -201,7 +201,7 @@
     border-left: 1px solid var(--aznet-theme-header-border);
     background: transparent;
     color: var(--aznet-theme-on-inverse);
-    font-weight: 700;
+    font-weight: var(--aznet-theme-font-weight-bold);
     cursor: pointer;
 }
 
@@ -231,7 +231,7 @@
     background: transparent;
     color: inherit;
     font: inherit;
-    font-weight: 700;
+    font-weight: var(--aznet-theme-font-weight-bold);
     cursor: pointer;
 }
 
