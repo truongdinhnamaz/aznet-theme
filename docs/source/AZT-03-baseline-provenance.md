@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.51
+**Version:** v0.52
 **Status:** Working Source  
 **Date:** 18/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -229,7 +229,7 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**NEXT — PR #143 is the owner-approved AZnet Theme 1.3.6 client-delivery candidate. Its exact production head `7db436b316ef5a9f9264fa9dd71f6cfad4d7ad80` has a clean 14/14 workflow matrix and deterministic installable package evidence. Canonical merge remains the next approval gate. Git tag/GitHub Release and production deployment remain separate gates; RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
+**NEXT — AZnet Theme 1.3.6 is now canonical at `main@e44e541c760bf585ac72f16242dace6039664a1b` and the installable client-delivery package is verified. No further implementation is implied by this closure. Git tag/GitHub Release and production deployment remain separate approval gates; RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
 
 ### AZnet Theme 1.3.6 client-delivery candidate — 18/09/2026
 
@@ -240,6 +240,14 @@ RED head `120cd35e7d245f6a7e564f544df76d987fec2ddd` failed the intended Y5 metad
 Y5 built `aznet-theme-1.3.6.zip` twice with byte identity, 145 production files, 108/108 packaged PHP lint PASS and SHA-256 `25271cd4c68f0bc88e236f084acb73d7661a618d1ae1d737f0f2a5202307a84a`. Exact-package lifecycle verified clean WordPress 6.9 installation with zero active third-party plugins plus switch-away/switch-back continuity. Run `35353852165`; promoted-package artifact `10550649207`, digest `sha256:7efe3e575a46950e85abd703bad87e05daac32bd2346265fa2e148569de48cfc`.
 
 This is a technically verified client-delivery candidate. Canonical `main` remains Theme metadata 1.3.5 until PR #143 is merged. No tag/GitHub Release or production deployment is claimed. Evidence: `docs/evidence/V1_3_6_CLIENT_DELIVERY_20260918.md`.
+
+### AZnet Theme 1.3.6 canonical merge closure — 18/09/2026
+
+Owner-approved PR #143 merged final verified head `3fef7235d39ef5a19e3a5fb173a8bc915bcfce58` to canonical `main@e44e541c760bf585ac72f16242dace6039664a1b`. Final-head verification completed **17/17 triggered workflows SUCCESS, 0 failure**. Git comparison from the verified head to the merge commit has zero file delta, so the merged repository tree is byte-identical to the verified PR head.
+
+Final-head Y5 produced `aznet-theme-1.3.6.zip`, 145 production files, 108/108 packaged PHP lint PASS and SHA-256 `25271cd4c68f0bc88e236f084acb73d7661a618d1ae1d737f0f2a5202307a84a`. Run `35354606062`; promoted-package artifact `10551670737`, digest `sha256:36b7ff45d5f52219132c582ed306f5b76d0214f3aeab76b60906e4b44aeec58b`.
+
+No fresh post-merge workflow run was emitted for `e44e541...`, so no independent exact-main rerun is claimed. Published GitHub Release and verified production deployment remain historical `v1.3.0`. Evidence: `docs/evidence/V1_3_6_MERGE_CLOSURE_20260918.md`.
 
 ### Law 01 About/Profile + Latest visual-parity closure — 18/09/2026
 
