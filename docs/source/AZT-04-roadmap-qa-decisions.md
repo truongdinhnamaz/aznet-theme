@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.64
+**Version:** v0.65
 **Status:** Working Source  
 **Date:** 18/09/2026
 
@@ -459,6 +459,18 @@ Deterministic package `aznet-theme-1.3.6.zip`: 145 files; 108 packaged PHP lint 
 
 This checkpoint does not change Theme/provider ownership and does not authorize tag/GitHub Release or production deployment. RootProfile Team remains BLOCKED at issue #112. Evidence: `docs/evidence/V1_3_6_CLIENT_DELIVERY_20260918.md`.
 
+### Law 01 screenshot-reference parity candidate checkpoint — 18/09/2026
+
+After canonical main advanced to `main@9781d29a9d1ba32a643ffe3cfe9d47c8c4ba4c1c` with Theme metadata `1.3.6`, the product owner clarified that the supplied Tâm Đức - Hà Nội homepage screenshot is the visual authority for this Law 01 presentation slice. The earlier intermediate client-delivery PR #146 was closed unmerged as superseded.
+
+PR #147 is the replacement bounded presentation candidate. It preserves full-width section surfaces while aligning Header, Hero inner content, Trust, Services, Profile, Latest and Footer to one shared `96rem` shell. Wide desktop keeps a 48/52 Hero; Services remains six compact cards; About + Team share a 48/52 band; Team retains four presentation slots with CTA below; Latest remains three cards; Header/Footer support WordPress logo + site-title lockups; Hero may reuse the WordPress-owned Header Utility menu for phone/hotline presentation.
+
+The screenshot contains business statistics, but this decision does not authorize fabricated values. Such values remain omitted unless supplied by a legitimate public owner/source.
+
+Exact production head `aacd6fe4abc4d5f3d49b6bfd85570df66688db46` completed **18/18 triggered workflows SUCCESS, 0 failure**. Law 01 browser run `35363025279` passed 1920/1440/1024/390/320 coverage. Artifact `10555328476`, digest `sha256:4c0af3b17d8d38768f994f2dacd3dbe20f5da5b693ec28c331df7fc632d520ba`. Evidence: `docs/evidence/LAW01_REFERENCE_PARITY_FINAL_20260918.md`.
+
+This is a presentation-only decision. RootProfile authoritative Team membership remains BLOCKED under issue #112; the existing WordPress Page/direct-child fixture is presentation input only.
+
 ## 14. Exact next
 
-**NEXT — canonical merge of PR #143 is the next approval gate for the verified 1.3.6 client-delivery candidate. Do not start tag/GitHub Release or production deployment without separate explicit approval. Preserve the completed Law 01 presentation baseline and keep RootProfile Team BLOCKED at issue #112.**
+**NEXT — canonical merge of PR #147 is the next approval gate for the verified Law 01 screenshot-reference presentation candidate. Do not start a new package version, tag/GitHub Release or production deployment without a separate explicit approval. Keep RootProfile Team BLOCKED at issue #112.**
