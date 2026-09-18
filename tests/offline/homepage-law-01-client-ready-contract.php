@@ -45,7 +45,9 @@ assert(str_contains($composer, "'burgundy-gold' === \$variant ? [ 'latest' ] : [
 assert(! str_contains($composer, "[ 'hero', 'services', 'about', 'team' ]"), 'Composer must not render duplicate legacy About/Team sections.');
 
 foreach ([
-    "get_bloginfo( 'name' )",
+    "setting( 'homepage_hero_page', 0 )",
+    'homepage_page_reference',
+    'post_content',
     'aznet-theme-law01-hero__value',
     'aznet-theme-law01-hero__secondary-action',
     'aznet-theme-law01-hero__trust',
@@ -56,6 +58,12 @@ foreach ([
 ] as $needle) {
     assert(str_contains($hero, $needle), "Client-ready Law 01 hero contract missing: {$needle}");
 }
+assert(! str_contains($hero, "get_bloginfo( 'name' )"), 'Hero H1 must not depend on global Site Title.');
+assert(! str_contains($hero, "get_bloginfo( 'description' )"), 'Hero copy must not depend on global Site Tagline.');
+assert(! str_contains($hero, "get_the_title( $front_id )"), 'Hero H1 must not depend on Front Page title.');
+assert(! str_contains($hero, "apply_filters( 'the_content'"), 'Hero source body must not re-enter global the_content filters.');
+assert(str_contains($hero, 'do_blocks( $body )'), 'Hero Page body should render WordPress blocks without hijacking Front Page content filters.');
+
 assert(! str_contains($hero, 'aznet-theme-law01-button aznet-theme-law01-button--secondary'), 'Hero Services CTA must not share the primary button selector used by retained browser verification.');
 assert(str_contains($css, '.aznet-theme-law01-hero__secondary-action'), 'Client-ready Law 01 CSS must style the dedicated hero secondary CTA.');
 assert(str_contains($css, '.aznet-theme-law01-hero__value'), 'Law 01 Hero must style the WordPress-native value proposition separately from the site title.');

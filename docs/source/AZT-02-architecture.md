@@ -4,7 +4,7 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.10 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.11 |
 | --- | --- | --- | --- |
 | **Trạng thái** | Working Source | **Ngày** | 18/09/2026 |
 
@@ -166,6 +166,13 @@ Trên WordPress 6.9 support floor, R1 phải chứng minh liệu native style-va
 Outcome v1.1 được khóa ở ba visual preset: `default`, `editorial`, `commerce`; implementation mechanism phải evidence-gated.
 
 ## 11.2. Theme-owned presentation settings
+
+### Homepage Hero source rule
+
+Law 01 Hero content MUST remain WordPress-owned but independently addressable from the Front Page and global site identity. The Theme stores only a typed Page reference in the normalized presentation schema (`homepage_hero_page`). The referenced Page owns Hero title, excerpt, authored body and featured image. The renderer MUST NOT silently reuse Site Title, Site Tagline or the Front Page title/excerpt as Hero copy. An unmapped/invalid Hero source fails soft by omitting the Hero surface rather than inventing or inferring content.
+
+This keeps editing explicit while preserving the ownership rule: WordPress owns content; Theme owns composition/reference selection. Theme switching therefore does not delete Hero content because the source remains an ordinary WordPress Page.
+
 
 Theme-owned presentation settings dùng **một** versioned Theme Mod schema: `aznet_theme_settings`.
 

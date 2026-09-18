@@ -22,7 +22,7 @@ assert( 'burgundy-gold' === ( $bp['homepage_variant'] ?? '' ), 'Complete Starter
 assert( 'ABC Lawyer' === ( $bp['site_defaults']['blogname'] ?? '' ), 'Starter site needs a visible example firm name without requiring a Site Title edit.' );
 assert( '' !== trim( (string) ( $bp['site_defaults']['blogdescription'] ?? '' ) ), 'Starter site needs a non-empty example slogan/tagline.' );
 
-$page_roles = [ 'home','about','services','service_business','service_civil','service_criminal','service_real_estate','service_family','service_labor','team','process','faq','contact' ];
+$page_roles = [ 'hero','home','about','services','service_business','service_civil','service_criminal','service_real_estate','service_family','service_labor','team','process','faq','contact' ];
 assert( array_keys( (array) $bp['pages'] ) === $page_roles );
 foreach ( $page_roles as $role ) {
     $page = (array) ( $bp['pages'][ $role ] ?? [] );
@@ -62,7 +62,7 @@ function aznet_complete_starter_discovery( bool $active = false ): array {
         'prior_blueprints' => [],
         'homepage_preset' => 'off',
         'homepage_slots' => [
-            'services' => 0, 'about' => 0, 'team' => 0, 'knowledge' => [],
+            'hero' => 0, 'services' => 0, 'about' => 0, 'team' => 0, 'knowledge' => [],
             'case_analysis' => 0, 'legal_news' => 0, 'process' => 0, 'faq' => 0, 'contact' => 0,
         ],
         'primary_menu_id' => 0,
@@ -103,6 +103,10 @@ $variant_ops = array_values( array_filter( $new_plan['operations'], static fn( a
 assert( 1 === count( $variant_ops ) );
 assert( 'burgundy-gold' === ( $variant_ops[0]['variant'] ?? '' ) );
 assert( true === \AZnet\Theme\provisioning_validate_plan( $new_plan )['ok'] );
+$hero_media_ops = array_values( array_filter( $new_plan['operations'], static fn( array $op ): bool => 'assign_featured_media' === ( $op['type'] ?? '' ) && 'hero' === ( $op['media_role'] ?? '' ) ) );
+assert( 1 === count( $hero_media_ops ) );
+assert( 'hero' === ( $hero_media_ops[0]['target_role'] ?? '' ), 'Complete Starter Site Hero media must target the dedicated Hero Page, not the Front Page.' );
+
 
 $active_plan = \AZnet\Theme\provisioning_build_plan( 'law01-v1-2', aznet_complete_starter_selections(), aznet_complete_starter_discovery( true ) );
 assert( ! in_array( 'set_starter_site_defaults', array_column( $active_plan['operations'], 'type' ), true ), 'Existing active sites must not receive starter identity defaults.' );

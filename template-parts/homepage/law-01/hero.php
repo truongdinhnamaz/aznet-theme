@@ -3,16 +3,16 @@
 namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-$front_id = (int) get_the_ID();
-$site_title = trim( (string) get_bloginfo( 'name' ) );
-$page_title = trim( (string) get_the_title( $front_id ) );
-$title = '' !== $site_title ? $site_title : $page_title;
-$value_proposition = '' !== $page_title && 0 !== strcasecmp( $page_title, $title ) ? $page_title : '';
-$excerpt = trim( (string) get_the_excerpt( $front_id ) );
-$slogan = trim( (string) get_bloginfo( 'description' ) );
+$hero = homepage_page_reference( (int) setting( 'homepage_hero_page', 0 ) );
+if ( ! $hero instanceof \WP_Post ) { return; }
+
+$title = trim( (string) get_the_title( $hero ) );
+$value_proposition = trim( (string) get_the_excerpt( $hero ) );
+$body = trim( (string) $hero->post_content );
+$body_html = '' !== $body ? wpautop( do_blocks( $body ) ) : '';
 $contact = homepage_page_reference( (int) setting( 'homepage_contact_page', 0 ) );
 $services = homepage_page_reference( (int) setting( 'homepage_services_page', 0 ) );
-$image = has_post_thumbnail( $front_id ) ? get_the_post_thumbnail( $front_id, 'large', [ 'class' => 'aznet-theme-law01-hero__image' ] ) : '';
+$image = has_post_thumbnail( $hero ) ? get_the_post_thumbnail( $hero, 'large', [ 'class' => 'aznet-theme-law01-hero__image' ] ) : '';
 if ( '' === $title ) { return; }
 $trust_items = [
     __( 'Tư vấn rõ ràng', 'aznet-theme' ),
@@ -27,8 +27,7 @@ $trust_items = [
             <p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Văn phòng luật sư', 'aznet-theme' ); ?></p>
             <h1 id="aznet-law01-title"><?php echo esc_html( $title ); ?></h1>
             <?php if ( '' !== $value_proposition ) : ?><p class="aznet-theme-law01-hero__value"><?php echo esc_html( $value_proposition ); ?></p><?php endif; ?>
-            <?php if ( '' !== $excerpt ) : ?><p class="aznet-theme-law01-lede"><?php echo esc_html( $excerpt ); ?></p><?php endif; ?>
-            <?php if ( '' !== $slogan ) : ?><p class="aznet-theme-law01-hero__quote aznet-theme-law01-hero__slogan"><?php echo esc_html( $slogan ); ?></p><?php endif; ?>
+            <?php if ( '' !== $body_html ) : ?><div class="aznet-theme-law01-hero__body"><?php echo wp_kses_post( $body_html ); ?></div><?php endif; ?>
             <?php if ( $contact instanceof \WP_Post || $services instanceof \WP_Post ) : ?>
                 <p class="aznet-theme-law01-actions">
                     <?php if ( $contact instanceof \WP_Post ) : ?><a class="aznet-theme-law01-button" href="<?php echo esc_url( get_permalink( $contact ) ); ?>"><?php esc_html_e( 'Liên hệ tư vấn', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a><?php endif; ?>

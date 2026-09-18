@@ -90,7 +90,9 @@ assert(str_contains($assets, "has_nav_menu( 'header-utility' )"), 'Header utilit
 $heroSource = file_get_contents($root . '/template-parts/homepage/law-01/hero.php');
 $servicesSource = file_get_contents($root . '/template-parts/homepage/law-01/services.php');
 $teamSource = file_get_contents($root . '/template-parts/homepage/law-01/team.php');
-assert(str_contains($heroSource, "get_bloginfo( 'description' )"), 'Hero slogan must come from WordPress Site Tagline.');
+assert(str_contains($heroSource, "setting( 'homepage_hero_page', 0 )"), 'Hero must consume the dedicated WordPress-native Hero Page reference.');
+assert(str_contains($heroSource, 'homepage_page_reference'), 'Hero source must resolve through the bounded WordPress Page reference helper.');
+assert(! str_contains($heroSource, "get_bloginfo( 'description' )"), 'Hero copy must not depend on global Site Tagline.');
 assert(str_contains($servicesSource, 'get_the_excerpt( $parent )'), 'Services intro must come from the mapped Services Page excerpt.');
 assert(str_contains($teamSource, 'homepage_direct_published_children'), 'Team presentation must use WordPress-owned child Pages when available.');
 assert(str_contains($teamSource, 'get_the_post_thumbnail'), 'Team cards must support WordPress featured images.');

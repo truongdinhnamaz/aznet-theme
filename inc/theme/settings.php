@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function settings_defaults(): array {
     return [
-        'schema_version'                => 2,
+        'schema_version'                => 3,
         'visual_preset'                 => 'default',
         'page_breadcrumbs'              => true,
         'header_preset'                 => 'standard',
@@ -31,6 +31,7 @@ function settings_defaults(): array {
         'woo_product_preset'            => 'classic',
         'homepage_preset'               => 'off',
         'homepage_law01_variant'        => 'navy-gold',
+        'homepage_hero_page'            => 0,
         'homepage_services_page'        => 0,
         'homepage_about_page'           => 0,
         'homepage_team_page'            => 0,
@@ -126,7 +127,7 @@ function normalize_settings( array $raw ): array {
     };
 
     return [
-        'schema_version'                => 2,
+        'schema_version'                => 3,
         'visual_preset'                 => $preset,
         'page_breadcrumbs'              => $normalize_boolean( 'page_breadcrumbs', true ),
         'header_preset'                 => $header_preset,
@@ -139,6 +140,7 @@ function normalize_settings( array $raw ): array {
         'woo_product_preset'            => $woo_product_preset,
         'homepage_preset'               => $homepage_preset,
         'homepage_law01_variant'        => $homepage_law01_variant,
+        'homepage_hero_page'            => $normalize_id( $raw['homepage_hero_page'] ?? 0 ),
         'homepage_services_page'        => $normalize_id( $raw['homepage_services_page'] ?? 0 ),
         'homepage_about_page'           => $normalize_id( $raw['homepage_about_page'] ?? 0 ),
         'homepage_team_page'            => $normalize_id( $raw['homepage_team_page'] ?? 0 ),

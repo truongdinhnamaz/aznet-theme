@@ -181,6 +181,14 @@ function provisioning_blueprint( string $key ): ?array {
 
     if ( 'law01-v1-1' === $key ) { return $blueprint; }
 
+    $blueprint['pages'] = [
+        'hero' => $page(
+            'Văn phòng luật sư',
+            'Giải pháp pháp lý rõ ràng, thực tiễn và minh bạch cho từng nhu cầu cụ thể.',
+            '<p>Trọn tâm với khách – Vẹn đức với nghề</p>'
+        ),
+    ] + $blueprint['pages'];
+
     // v1.2 is a complete example site, not a runtime fallback. These values are copied into
     // ordinary WordPress-owned fields only after the visible provisioning plan is confirmed.
     $blueprint['homepage_variant'] = 'burgundy-gold';

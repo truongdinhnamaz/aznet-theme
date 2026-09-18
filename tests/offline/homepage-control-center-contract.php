@@ -6,7 +6,7 @@ if (! is_file($admin)) { fwrite(STDERR, "FAIL: Homepage admin module missing\n")
 $source = file_get_contents($admin);
 $control = file_get_contents($root . '/inc/admin/control-center.php');
 $bootstrap = file_get_contents($root . '/inc/admin/bootstrap.php');
-foreach (['render_homepage_settings', 'homepage_slot_statuses', 'READY', 'EMPTY', 'UNMAPPED', 'INVALID', 'PROVIDER_UNAVAILABLE', 'law-01', 'homepage_knowledge_terms][', 'get_pages(', 'get_categories('] as $required) {
+foreach (['render_homepage_settings', 'homepage_slot_statuses', 'READY', 'EMPTY', 'UNMAPPED', 'INVALID', 'PROVIDER_UNAVAILABLE', 'law-01', 'homepage_hero_page', 'Hero trang chủ', 'homepage_knowledge_terms][', 'get_pages(', 'get_categories('] as $required) {
     assert(str_contains($source, $required), "Missing Homepage admin contract: {$required}");
 }
 assert(str_contains($control, "'homepage'"));

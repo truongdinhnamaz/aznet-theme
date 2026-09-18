@@ -174,12 +174,18 @@ jobs:
           }
 
           $front = law01_page(
-              'Bảo vệ quyền lợi của bạn bằng giải pháp pháp lý rõ ràng',
+              'Trang chủ nội dung',
               'trang-chu',
-              'Dịch vụ pháp lý chuyên nghiệp kết hợp hệ thống kiến thức giúp khách hàng hiểu vấn đề trước khi đưa ra quyết định.',
+              'Front Page excerpt must stay independent from the Hero source.',
               '<p id="law01-native-body">Native Front Page body sentinel</p>'
           );
-          law01_featured_fixture( $front, 'hero', 1400, 900 );
+          $hero = law01_page(
+              'Văn phòng luật sư kiểm soát độc lập',
+              'hero-trang-chu',
+              'Bảo vệ quyền lợi của bạn bằng giải pháp pháp lý rõ ràng',
+              '<p>Trọn tâm với khách – Vẹn đức với nghề</p>'
+          );
+          law01_featured_fixture( $hero, 'hero', 1400, 900 );
           $about = law01_page( 'Giới thiệu', 'gioi-thieu', 'Một đội ngũ hướng tới tư vấn rõ ràng, bảo mật và giải pháp thực tiễn.' );
           $services = law01_page( 'Dịch vụ pháp lý', 'dich-vu-phap-ly', 'Các dịch vụ pháp lý dành cho cá nhân và doanh nghiệp.' );
           $service_titles = [
@@ -223,7 +229,7 @@ jobs:
           update_option( 'show_on_front', 'page' );
           update_option( 'page_on_front', $front );
           set_theme_mod( 'aznet_theme_settings', [
-              'schema_version' => 2,
+              'schema_version' => 3,
               'visual_preset' => 'default',
               'header_preset' => 'standard',
               'header_sticky' => 'sticky',
@@ -235,6 +241,7 @@ jobs:
               'woo_product_preset' => 'classic',
               'homepage_preset' => 'law-01',
               'homepage_law01_variant' => 'burgundy-gold',
+              'homepage_hero_page' => $hero,
               'homepage_services_page' => $services,
               'homepage_about_page' => $about,
               'homepage_team_page' => $team,
@@ -246,7 +253,7 @@ jobs:
               'homepage_contact_page' => $contact,
           ] );
 
-          echo wp_json_encode( compact( 'front', 'about', 'services', 'team', 'process', 'faq', 'contact', 'knowledge_a', 'knowledge_b', 'analysis', 'news' ) );
+          echo wp_json_encode( compact( 'front', 'hero', 'about', 'services', 'team', 'process', 'faq', 'contact', 'knowledge_a', 'knowledge_b', 'analysis', 'news' ) );
           PHP
 
           wp eval-file /tmp/law01-fixture.php --path=/tmp/wp --allow-root | tee /tmp/homepage-law01/fixture.json
