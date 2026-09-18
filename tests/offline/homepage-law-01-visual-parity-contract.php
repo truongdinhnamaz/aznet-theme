@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 $root = dirname(__DIR__, 2);
 $css = (string) file_get_contents($root . '/assets/css/components/homepage-law-01-variants.css');
+$brand = (string) file_get_contents($root . '/template-parts/header/brand.php');
+$profile = (string) file_get_contents($root . '/template-parts/homepage/law-01/profile.php');
 
 $must = static function (bool $condition, string $message): void {
     assert($condition, $message);
@@ -64,6 +66,21 @@ $must(
 $must(
     str_contains($css, 'min-height: 12.25rem;'),
     'Law 01 target service cards must use the approved compact card density.'
+);
+
+$must(
+    str_contains($brand, 'aznet-theme-site-header__brand-title'),
+    'Law 01 reference Header must be able to show the WordPress site title beside a logo mark.'
+);
+$must(
+    str_contains($css, '.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__brand-title'),
+    'Law 01 reference Header must style the site-title lockup beside the logo.'
+);
+$membersPos = strpos($profile, 'aznet-theme-law01-profile__members');
+$teamCtaPos = strpos($profile, 'aznet-theme-law01-team-more');
+$must(
+    false !== $membersPos && false !== $teamCtaPos && $teamCtaPos > $membersPos,
+    'Law 01 reference Team CTA must follow the portrait row rather than sit in the heading.'
 );
 
 echo "PASS: Law 01 Hero/Trust/Services visual parity contract\n";
