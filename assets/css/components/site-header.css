@@ -147,8 +147,9 @@
     align-items: center;
     min-height: 44px;
     color: var(--aznet-theme-header-muted);
-    font-size: 14px;
-    font-weight: 600;
+    font-size: var(--aznet-theme-text-navigation);
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    line-height: var(--aznet-theme-line-height-navigation);
 }
 
 .aznet-theme-site-header__menu a:hover,
