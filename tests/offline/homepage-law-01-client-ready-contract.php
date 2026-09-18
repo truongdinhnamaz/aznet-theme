@@ -44,6 +44,8 @@ assert(str_contains($composer, "[ 'hero', 'services', 'profile' ]"), 'Composer m
 assert(! str_contains($composer, "[ 'hero', 'services', 'about', 'team' ]"), 'Composer must not render duplicate legacy About/Team sections.');
 
 foreach ([
+    "get_bloginfo( 'name' )",
+    'aznet-theme-law01-hero__value',
     'aznet-theme-law01-hero__secondary-action',
     'aznet-theme-law01-hero__trust',
     'Tư vấn rõ ràng',
@@ -55,6 +57,7 @@ foreach ([
 }
 assert(! str_contains($hero, 'aznet-theme-law01-button aznet-theme-law01-button--secondary'), 'Hero Services CTA must not share the primary button selector used by retained browser verification.');
 assert(str_contains($css, '.aznet-theme-law01-hero__secondary-action'), 'Client-ready Law 01 CSS must style the dedicated hero secondary CTA.');
+assert(str_contains($css, '.aznet-theme-law01-hero__value'), 'Law 01 Hero must style the WordPress-native value proposition separately from the site title.');
 
 foreach ([
     'grid-template-columns: minmax(0, 44%) minmax(0, 56%);',
