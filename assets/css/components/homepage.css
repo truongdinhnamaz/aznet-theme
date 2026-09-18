@@ -57,7 +57,8 @@
     max-width: 44rem;
     margin-bottom: var(--aznet-theme-space-6);
     color: var(--aznet-theme-color-text-muted);
-    font-size: var(--aznet-theme-text-lead);\n    line-height: var(--aznet-theme-line-height-lead);
+    font-size: var(--aznet-theme-text-lead);
+    line-height: var(--aznet-theme-line-height-lead);
 }
 
 .aznet-theme-homepage-blueprint .wp-block-buttons {
