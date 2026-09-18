@@ -15,11 +15,39 @@ $must(
     'Law 01 target Hero must use the approved near-balanced 48/52 desktop split.'
 );
 $must(
-    1 === preg_match(
-        '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-hero__grid\\s*\\{[^}]*width:\\s*100%;[^}]*max-width:\\s*none;/s',
+    str_contains(
+        $css,
+        '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-container { width: min(calc(100% - (2 * var(--aznet-theme-gutter))), 96rem);'
+    ),
+    'Law 01 reference composition must use one wide shared inner shell across the homepage.'
+);
+$must(
+    0 === preg_match(
+        '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-hero__grid\\s*\\{[^}]*(?:width|max-width)\\s*:/s',
         $css
     ),
-    'Law 01 target Hero grid must be full-bleed on wide desktop instead of stopping at the shared shell width.'
+    'Law 01 reference Hero surface may be full-width, but its inner grid must inherit the shared shell.'
+);
+$must(
+    str_contains(
+        $css,
+        '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile > .aznet-theme-law01-container { display: grid; grid-template-columns: minmax(0, 48%) minmax(0, 52%);'
+    ),
+    'Law 01 reference Profile band must place About and Team side-by-side on wide desktop.'
+);
+$must(
+    str_contains(
+        $css,
+        '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__about-media { display: none; }'
+    ),
+    'Law 01 reference Profile band must keep the About side text-led instead of introducing a second large image panel.'
+);
+$must(
+    str_contains(
+        $css,
+        '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__team-band { margin-top: 0;'
+    ),
+    'Law 01 reference Team band must sit beside About rather than below it.'
 );
 $must(
     str_contains($css, 'min-height: clamp(29rem, 32vw, 34rem);'),
