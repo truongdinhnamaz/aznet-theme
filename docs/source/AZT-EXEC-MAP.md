@@ -1,13 +1,13 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.55
+**Version:** v0.56
 **Status:** Working Execution Map / derived  
 **Date:** 18/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** live `main` is Theme `1.3.4` at `main@d008f66cfa7357f3d6e4bede492e41a5d49a4112` after owner-approved PR #135. Final verified PR head `d0781a2c25a3b15bbc535184e0b03bafa2141a9b` has zero file delta to the merge commit; all 34 triggered final-head workflows PASS. Deterministic Y5 package `aznet-theme-1.3.4.zip` has 145 files and SHA-256 `5cf0041ab09a6b9718e4354d2aa9c00850aa93e83c9ae775a640dc613caf3f83`. No fresh exact-main rerun is claimed for the merge commit. Published GitHub Release and previously verified production deployment remain historical `v1.3.0`. RootProfile Team remains blocked under issue #112.
+> **Canonical-main checkpoint:** live `main` remains Theme metadata `1.3.5` at `main@a60cd71437375a564444c181780f5e38ec37067b` after Law 01 visual-parity source closure. Owner-approved PR #143 is the verified `1.3.6` client-delivery candidate; exact production head `7db436b316ef5a9f9264fa9dd71f6cfad4d7ad80` completed 14/14 triggered workflows SUCCESS and produced deterministic `aznet-theme-1.3.6.zip` SHA-256 `25271cd4c68f0bc88e236f084acb73d7661a618d1ae1d737f0f2a5202307a84a`. Canonical merge remains approval-gated. Published GitHub Release and verified production deployment remain historical `v1.3.0`. RootProfile Team remains blocked under issue #112.
 
 **Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS`. Current v1.3 state: `PUBLICATION + PRODUCTION DEPLOYMENT PASS`; published/GitHub-Release release and verified production deployment are both `v1.3.0` at their respective verified scopes.
 
@@ -380,6 +380,16 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - No fresh post-merge workflow run was emitted for the merge SHA; no independent exact-main rerun is claimed.
 - RootProfile Team remains BLOCKED at issue #112.
 
+## 15.3 AZnet Theme 1.3.6 client-delivery candidate — 18/09/2026
+
+- Owner-approved PR #143 promotes Theme metadata from 1.3.5 to 1.3.6 for client-delivery provenance.
+- RED head `120cd35e7d245f6a7e564f544df76d987fec2ddd` failed the intended Y5 1.3.6 metadata contract.
+- Exact GREEN production head `7db436b316ef5a9f9264fa9dd71f6cfad4d7ad80` completed 14/14 triggered workflows SUCCESS.
+- Deterministic package: `aznet-theme-1.3.6.zip`, 145 files, 108 packaged PHP lint PASS, SHA-256 `25271cd4c68f0bc88e236f084acb73d7661a618d1ae1d737f0f2a5202307a84a`.
+- Y5 run `35353852165`; promoted-package artifact `10550649207`; artifact digest `sha256:7efe3e575a46950e85abd703bad87e05daac32bd2346265fa2e148569de48cfc`.
+- Package creation does not imply tag/GitHub Release or production deployment.
+- RootProfile Team remains BLOCKED at issue #112.
+
 ## 16. Exact next
 
-**NEXT — no further Law 01 visual slice is authorized by the current source. Preserve the completed visual-parity baseline and stop at the design/roadmap gate for any new visual expansion. Continue to keep RootProfile Team BLOCKED at issue #112 and do not start publication/tag/deployment without separate approval.**
+**NEXT — merge PR #143 only after the explicit merge gate. After canonical merge, refresh exact-main/package provenance as required before any tag/GitHub Release or production deployment. No further Law 01 visual expansion is authorized by this release slice.**
