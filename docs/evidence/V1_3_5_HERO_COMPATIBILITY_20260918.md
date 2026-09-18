@@ -1,7 +1,7 @@
 # AZnet Theme 1.3.5 — Law 01 Hero backward-compatibility closure
 
-**Date:** 18/09/2026  
-**Scope:** Theme-owned Law 01 Homepage presentation and backward compatibility only.  
+**Date:** 18/09/2026
+**Scope:** Theme-owned Law 01 Homepage presentation and backward compatibility only.
 **Owner boundary:** WordPress remains the source of native Page/Site data; AZnet Theme only composes presentation.
 
 ## Problem
