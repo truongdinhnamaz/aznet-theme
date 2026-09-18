@@ -162,11 +162,19 @@ async function inspectViewport(browser, name, viewport) {
       const visual = document.querySelector('.aznet-theme-law01-hero__visual')?.getBoundingClientRect();
       const trust = [...document.querySelectorAll('.aznet-theme-law01-hero__trust-item')].map((node) => node.getBoundingClientRect());
       const services = [...document.querySelectorAll('.aznet-theme-law01-services .aznet-theme-law01-card')].map((node) => node.getBoundingClientRect());
+      const aboutCopy = document.querySelector('.aznet-theme-law01-profile__about-copy')?.getBoundingClientRect();
+      const aboutMedia = document.querySelector('.aznet-theme-law01-profile__about-media')?.getBoundingClientRect();
+      const teamBand = document.querySelector('.aznet-theme-law01-profile__team-band')?.getBoundingClientRect();
+      const articles = [...document.querySelectorAll('.aznet-theme-law01-articles .aznet-theme-law01-article-card')].map((node) => node.getBoundingClientRect());
       return {
         content: content ? { x: content.x, y: content.y, width: content.width, height: content.height } : null,
         visual: visual ? { x: visual.x, y: visual.y, width: visual.width, height: visual.height } : null,
         trust: trust.map((rect) => ({ x: rect.x, y: rect.y, width: rect.width, height: rect.height })),
         services: services.map((rect) => ({ x: rect.x, y: rect.y, width: rect.width, height: rect.height })),
+        aboutCopy: aboutCopy ? { x: aboutCopy.x, y: aboutCopy.y, width: aboutCopy.width, height: aboutCopy.height } : null,
+        aboutMedia: aboutMedia ? { x: aboutMedia.x, y: aboutMedia.y, width: aboutMedia.width, height: aboutMedia.height } : null,
+        teamBand: teamBand ? { x: teamBand.x, y: teamBand.y, width: teamBand.width, height: teamBand.height } : null,
+        articles: articles.map((rect) => ({ x: rect.x, y: rect.y, width: rect.width, height: rect.height })),
       };
     });
 
@@ -187,11 +195,22 @@ async function inspectViewport(browser, name, viewport) {
       } else if (parityMetrics.services.length !== 6 || serviceRows !== 2) {
         throw new Error('compact desktop Services must retain the responsive two-row 3+3 layout');
       }
+      if (!parityMetrics.aboutCopy || !parityMetrics.aboutMedia || !parityMetrics.teamBand) throw new Error('Profile visual-parity metrics unavailable');
+      if (Math.abs(parityMetrics.aboutCopy.y - parityMetrics.aboutMedia.y) > 2) throw new Error('desktop About copy and media must align on one row');
+      const aboutTotal = parityMetrics.aboutCopy.width + parityMetrics.aboutMedia.width;
+      const aboutMediaRatio = parityMetrics.aboutMedia.width / aboutTotal;
+      if (aboutMediaRatio < 0.54 || aboutMediaRatio > 0.58) throw new Error(`desktop About media ratio must stay near approved 56% target, got ${aboutMediaRatio.toFixed(3)}`);
+      if (parityMetrics.teamBand.y <= parityMetrics.aboutCopy.y + parityMetrics.aboutCopy.height) throw new Error('Team band must follow the About band as a distinct section');
+      if (parityMetrics.articles.length !== 3 || new Set(parityMetrics.articles.map((item) => Math.round(item.y))).size !== 1) {
+        throw new Error('desktop Latest Posts must remain one three-card row');
+      }
     }
     if (viewport.width <= 390) {
       if (parityMetrics.visual.y <= parityMetrics.content.y) throw new Error('mobile Hero visual must stack after Hero content');
       if (new Set(parityMetrics.trust.map((item) => Math.round(item.y))).size !== 4) throw new Error('mobile trust strip must stack to one item per row');
       if (new Set(parityMetrics.services.map((item) => Math.round(item.y))).size !== 6) throw new Error('mobile Services cards must stack to one card per row');
+      if (!parityMetrics.aboutCopy || !parityMetrics.aboutMedia || parityMetrics.aboutMedia.y <= parityMetrics.aboutCopy.y) throw new Error('mobile About media must stack after About copy');
+      if (new Set(parityMetrics.articles.map((item) => Math.round(item.y))).size !== 3) throw new Error('mobile Latest Posts cards must stack to one card per row');
     }
 
     result.teamCards = await page.locator('.aznet-theme-law01-team-card').count();

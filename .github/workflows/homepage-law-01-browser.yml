@@ -188,6 +188,7 @@ jobs:
           );
           law01_featured_fixture( $hero, 'hero', 1400, 900 );
           $about = law01_page( 'Giới thiệu', 'gioi-thieu', 'Một đội ngũ hướng tới tư vấn rõ ràng, bảo mật và giải pháp thực tiễn.' );
+          law01_featured_fixture( $about, 'about', 1200, 800 );
           $services = law01_page( 'Dịch vụ pháp lý', 'dich-vu-phap-ly', 'Các dịch vụ pháp lý dành cho cá nhân và doanh nghiệp.' );
           $service_titles = [
               'Luật Doanh nghiệp' => 'luat-doanh-nghiep',

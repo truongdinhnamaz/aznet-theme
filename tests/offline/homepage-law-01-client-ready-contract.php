@@ -28,7 +28,8 @@ foreach ([
     '--law01-client-gold:',
     '.aznet-theme-law01-hero__trust',
     'grid-template-columns: repeat(6, minmax(0, 1fr));',
-    '.aznet-theme-law01-profile__grid',
+    '.aznet-theme-law01-profile__about-grid',
+    '.aznet-theme-law01-profile__team-band',
     '.aznet-theme-law01-grid--articles',
     'grid-column: auto;',
     '.aznet-theme-site-header',
@@ -147,9 +148,9 @@ foreach ([
     assert(str_contains($css, $needle), "Law 01 demo-aligned services presentation missing: {$needle}");
 }
 
-assert(str_contains($profile, 'aznet-theme-law01-profile__grid'), 'Profile band must combine About and Team presentation.');
+assert(str_contains($profile, 'aznet-theme-law01-profile__about-grid') && str_contains($profile, 'aznet-theme-law01-profile__team-band'), 'Profile band must retain both About and Team presentation in distinct target bands.');
 foreach ([
-    'grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);',
+    'grid-template-columns: minmax(0, 44%) minmax(0, 56%);',
     '.aznet-theme-law01-profile__member-image {',
     'aspect-ratio: 4 / 5;',
     'object-position: center top;',
