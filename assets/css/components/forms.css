@@ -22,7 +22,7 @@
     display: block;
     margin-block-end: var(--aznet-theme-space-1);
     color: var(--aznet-theme-text);
-    font-weight: 600;
+    font-weight: var(--aznet-theme-font-weight-semibold);
 }
 
 :is(
@@ -46,7 +46,7 @@
     border: 1px solid var(--aznet-theme-border);
     border-radius: var(--aznet-theme-radius-control);
     font: inherit;
-    line-height: 1.35;
+    line-height: var(--aznet-theme-line-height-form);
 }
 
 :is(
@@ -78,7 +78,7 @@
     border: 1px solid var(--aznet-theme-accent);
     border-radius: var(--aznet-theme-radius-control);
     font: inherit;
-    font-weight: 700;
+    font-weight: var(--aznet-theme-font-weight-bold);
     cursor: pointer;
 }
 
@@ -135,7 +135,7 @@
 
 .aznet-theme-comments :where(.comment-notes, .required-field-message, .must-log-in, .logged-in-as) {
     color: var(--aznet-theme-muted);
-    font-size: var(--aznet-theme-font-size-sm);
+    font-size: var(--aznet-theme-text-meta);
 }
 
 @media (max-width: 30rem) {
