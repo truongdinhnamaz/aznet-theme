@@ -67,7 +67,8 @@
     max-width: 50rem;
     margin-block-start: var(--aznet-theme-space-2);
     color: color-mix(in srgb, var(--aznet-theme-on-inverse) 78%, transparent);
-    font-size: var(--aznet-theme-text-body);\n    line-height: var(--aznet-theme-line-height-body);
+    font-size: var(--aznet-theme-text-body);
+    line-height: var(--aznet-theme-line-height-body);
 }
 
 .aznet-theme-profile-surface__context a,
