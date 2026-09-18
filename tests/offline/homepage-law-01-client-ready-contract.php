@@ -76,7 +76,7 @@ foreach ([
     assert(str_contains($hero, $needle), "Law 01 demo-aligned trust strip icon contract missing: {$needle}");
 }
 foreach ([
-    'min-height: 4.4rem;',
+    'min-height: 4.8rem;',
     'font-size: var(--aznet-theme-text-small);',
     '.aznet-theme-law01-hero__trust-icon {',
 ] as $needle) {
@@ -94,8 +94,8 @@ foreach ([
 
 
 foreach ([
-    'grid-template-columns: minmax(0, 44%) minmax(0, 56%);',
-    'min-height: clamp(27rem, 33vw, 35rem);',
+    'grid-template-columns: minmax(0, 48%) minmax(0, 52%);',
+    'min-height: clamp(29rem, 32vw, 34rem);',
     '--law01-type-hero-title: clamp(2.7rem, 4.2vw, 3.4rem);',
     'font-size: var(--law01-type-hero-title);',
     'object-position: center 48%;',
@@ -135,7 +135,7 @@ foreach ([
 foreach ([
     '.aznet-theme-law01-services > .aznet-theme-law01-container',
     'max-width: 96rem;',
-    'min-height: 13.5rem;',
+    'min-height: 12.25rem;',
     'font-size: var(--law01-type-card-title);',
     'line-height: 1.65;',
     'white-space: nowrap;',
