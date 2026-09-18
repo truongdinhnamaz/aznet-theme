@@ -124,6 +124,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-
 printf '%s\n' '==> Theme system typography contracts'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/typography-system-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/typography-hardcode-audit-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/typography-role-mapping-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/typography-token-cache-contract.php
 
 printf '%s\n' '==> Homepage Composer + Law 01 contracts'
