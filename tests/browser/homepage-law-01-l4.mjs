@@ -124,6 +124,17 @@ async function inspectViewport(browser, name, viewport) {
     const slogan = (await page.locator('.aznet-theme-law01-hero__slogan').textContent())?.trim() || '';
     if (!slogan.includes('Tận tâm với khách hàng')) throw new Error(`Site Tagline slogan was not projected into Hero: ${slogan}`);
 
+    if (viewport.width > 960) {
+      const headingMetrics = await page.locator('.aznet-theme-law01-services__heading').evaluate((node) => {
+        const rect = node.getBoundingClientRect();
+        const style = window.getComputedStyle(node);
+        return { height: rect.height, lineHeight: Number.parseFloat(style.lineHeight || '0'), whiteSpace: style.whiteSpace };
+      });
+      if (headingMetrics.whiteSpace !== 'nowrap' || headingMetrics.height > headingMetrics.lineHeight * 1.25) {
+        throw new Error(`Services heading must stay on one desktop line: ${JSON.stringify(headingMetrics)}`);
+      }
+    }
+
     const servicesIntro = (await page.locator('.aznet-theme-law01-services__intro').textContent())?.trim() || '';
     if (!servicesIntro.includes('cá nhân và doanh nghiệp')) throw new Error(`Services Page excerpt intro missing: ${servicesIntro}`);
 
