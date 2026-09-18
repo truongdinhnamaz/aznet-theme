@@ -1,15 +1,15 @@
 # AZnet Theme Source Manifest
 
-Canonical source is reconciled through the owner-approved v1.3 release/deployment, v1.3.5 Hero compatibility correction, v1.3.6 canonical merge, PR #147 Law 01 screenshot-reference closure, and the owner-approved PR #149 1.3.8 client-delivery candidate. Published technical/release source remains `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e` for GitHub Release `v1.3.0`. Live canonical `main` is Theme metadata `1.3.6` at `main@9ad2faa9141f9aca93f2c6b2a0a37731143ccd44` until PR #149 is merged. PR #149 exact production head `5f3dcf00f0a619b58a966078b2cd969cb7fec45d` is the verified `1.3.8` client-delivery candidate: 14/14 triggered workflows SUCCESS and deterministic `aznet-theme-1.3.8.zip` SHA-256 `0aba4cf0e213150319c8288d62d06cb136481670cd8f53fd0edbfd9276a03238`. Version 1.3.7 is intentionally not reused because a package carrying that identity was generated from a superseded, unmerged intermediate candidate. RootProfile-backed authoritative Team membership remains blocked at issue #112.
+Canonical source is reconciled through the owner-approved v1.3 release/deployment, v1.3.5 Hero compatibility correction, v1.3.6 canonical merge, PR #147 Law 01 screenshot-reference closure, and owner-approved PR #149 AZnet Theme 1.3.8 canonical merge. Published technical/release source remains `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e` for GitHub Release `v1.3.0`. Live canonical `main` is Theme metadata `1.3.8` at `main@597639e26a2cb242c3c0a71e5459ab5d66a0701d`. PR #149 final verified head `14bd511023e5bac5c61eabca16d89f8cac8be3d8` completed 17/17 triggered workflows SUCCESS and has zero file delta to the merge commit. Deterministic `aznet-theme-1.3.8.zip` SHA-256 is `0aba4cf0e213150319c8288d62d06cb136481670cd8f53fd0edbfd9276a03238`. Version 1.3.7 remains superseded/unmerged provenance and is not reused. RootProfile-backed authoritative Team membership remains blocked at issue #112.
 | Source | Semantic version | Role |
 | --- | --- | --- |
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.12 | Theme architecture, public integration contracts and D-027 Standalone Core runtime-independence boundary |
-| `AZT-03-baseline-provenance.md` | v0.54 | Canonical provenance through the verified 1.3.8 client-delivery candidate on PR #149; canonical merge pending; published/deployed release remains v1.3.0; RootProfile Team blocker #112 retained |
-| `AZT-04-roadmap-qa-decisions.md` | v0.67 | Roadmap/QA through the verified 1.3.8 client-delivery candidate; PR #149 merge is the next gate and tag/Release/deploy remain separate; RootProfile Team remains external-blocked |
-| `AZT-EXEC-MAP.md` | v0.59 | Derived execution map through the verified 1.3.8 client-delivery candidate; PR #149 merge is approval-gated and RootProfile Team remains blocked at #112 |
+| `AZT-03-baseline-provenance.md` | v0.55 | Canonical provenance through the merged AZnet Theme 1.3.8 client-delivery closure; published/deployed release remains v1.3.0; RootProfile Team blocker #112 retained |
+| `AZT-04-roadmap-qa-decisions.md` | v0.68 | Roadmap/QA through the merged AZnet Theme 1.3.8 client-delivery closure; tag/Release/deploy remain separate; RootProfile Team remains external-blocked |
+| `AZT-EXEC-MAP.md` | v0.60 | Derived execution map through the AZnet Theme 1.3.8 canonical merge closure; release/deploy remain approval-gated and RootProfile Team remains blocked at #112 |
 
 v1.3 technical closure evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`. v1.3 publication evidence: `docs/evidence/V1_3_PUBLICATION_20260917.md`. v1.3 production deployment evidence: `docs/evidence/V1_3_PRODUCTION_DEPLOYMENT_20260917.md`. Canonical technical baseline is `1.3.0` at `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e` with exact-main V1 + X6 release-path PASS and deterministic package SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`. Published/GitHub-Release release and verified production deployment are now both `v1.3.0`; provider L5 remains unclaimed.
 
@@ -57,6 +57,6 @@ Owner-approved PR #87 subsequently merged exact final head `ff459b99a348d3004a3a
 
 The known WordPress-core `WP_Query::rewind_posts()` warning remains UNKNOWN/non-blocking; no blanket PHP-log-clean claim is made. RootProfile E5-C/E5-D and ConvertFlow F8 remain separate optional compatibility gates under their existing ownership rules.
 
-**Exact next:** PR #149 canonical merge is the next approval gate for the verified `1.3.8` client-delivery candidate. The installable package is technically verified, but tag/GitHub Release and production deployment remain separately approval-gated. RootProfile-backed Team integration remains held at issue #112. Evidence: `docs/evidence/V1_3_8_CLIENT_DELIVERY_20260919.md`.
+**Exact next:** AZnet Theme 1.3.8 is canonical at `main@597639e26a2cb242c3c0a71e5459ab5d66a0701d`. Git tag/GitHub Release and production deployment remain separately approval-gated. RootProfile-backed Team integration remains held at issue #112. Evidence: `docs/evidence/V1_3_8_MERGE_CLOSURE_20260919.md`.
 
 Derived DOCX source material remains archival/export evidence only. Canonical source changes occur in `docs/source/` through reviewed Git history.
