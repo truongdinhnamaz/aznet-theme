@@ -123,6 +123,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-blueprint-
 
 printf '%s\n' '==> Theme default typography contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/typography-roboto-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/typography-token-cache-contract.php
 
 printf '%s\n' '==> Homepage Composer + Law 01 contracts'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-settings-contract.php
