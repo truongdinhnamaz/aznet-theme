@@ -22,14 +22,19 @@
 }
 
 .aznet-theme-site-footer--professional .aznet-theme-site-footer__main {
-    grid-template-columns: minmax(260px, 1.5fr) repeat(2, minmax(180px, 0.8fr));
+    grid-template-columns: minmax(260px, 1.35fr) repeat(3, minmax(140px, .75fr));
     gap: var(--aznet-theme-space-6);
 }
 
 .aznet-theme-site-footer--professional .aznet-theme-site-footer__navigation,
-.aznet-theme-site-footer--professional .aznet-theme-site-footer__contact {
+.aznet-theme-site-footer--professional .aznet-theme-site-footer__contact,
+.aznet-theme-site-footer--professional .aznet-theme-site-footer__social-column {
     padding-inline-start: var(--aznet-theme-space-4);
     border-inline-start: 1px solid var(--aznet-theme-footer-border);
+}
+
+.aznet-theme-site-footer__social-column .aznet-theme-site-footer__social-menu {
+    justify-content: flex-start;
 }
 
 .aznet-theme-site-footer--compact .aznet-theme-site-footer__inner {
@@ -210,7 +215,8 @@
     }
 
     .aznet-theme-site-footer--professional .aznet-theme-site-footer__navigation,
-    .aznet-theme-site-footer--professional .aznet-theme-site-footer__contact {
+    .aznet-theme-site-footer--professional .aznet-theme-site-footer__contact,
+    .aznet-theme-site-footer--professional .aznet-theme-site-footer__social-column {
         padding-inline-start: 0;
         border-inline-start: 0;
     }
