@@ -45,7 +45,9 @@
     background: var(--aznet-theme-surface);
     border: 1px solid var(--aznet-theme-border);
     border-radius: var(--aznet-theme-radius-control);
-    font: inherit;
+    font-family: var(--aznet-theme-font-family-base);
+    font-size: var(--aznet-theme-text-form);
+    font-weight: var(--aznet-theme-font-weight-regular);
     line-height: var(--aznet-theme-line-height-form);
 }
 
