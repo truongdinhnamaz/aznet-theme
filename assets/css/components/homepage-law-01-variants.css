@@ -18,6 +18,7 @@
     --law01-type-card-title: clamp(1.05rem, 1.25vw, 1.2rem);
     --law01-type-article-title: clamp(1.15rem, 1.5vw, 1.35rem);
     --law01-type-hero-value: clamp(1.45rem, 2vw, 1.9rem);
+    --law01-type-hero-title: clamp(2.7rem, 4.2vw, 3.4rem);
 }
 
 .aznet-theme-site-header--law01-burgundy-gold {
@@ -105,7 +106,7 @@
     padding: clamp(2.75rem, 4.8vw, 5rem) clamp(2.25rem, 5vw, 5.5rem);
     background: radial-gradient(circle at 4% 15%, rgba(185, 137, 47, .11), transparent 17rem), var(--law01-client-cream);
 }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero h1 { max-width: 13ch; margin-block: .55rem 1rem; color: var(--law01-client-burgundy); font-size: min(var(--aznet-theme-text-display), 4rem); }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero h1 { max-width: 13ch; margin-block: .55rem 1rem; color: var(--law01-client-burgundy); font-size: var(--law01-type-hero-title); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__value {
     max-width: 24ch;
     margin: 0 0 .75rem;
