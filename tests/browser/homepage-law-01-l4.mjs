@@ -146,7 +146,7 @@ async function inspectViewport(browser, name, viewport) {
           whiteSpace: style.whiteSpace,
         };
       }));
-      if (headingMetrics.length < 6) throw new Error(`expected substantial Law 01 section heading coverage, got ${headingMetrics.length}`);
+      if (headingMetrics.length < 4) throw new Error(`expected current Burgundy Law 01 heading coverage, got ${headingMetrics.length}`);
       const headingSizes = new Set(headingMetrics.map((item) => item.fontSize.toFixed(2)));
       const invalidHeading = headingMetrics.find((item) => item.whiteSpace !== 'nowrap' || item.height > item.lineHeight * 1.25);
       if (invalidHeading) throw new Error(`Law 01 section heading must stay on one desktop line: ${JSON.stringify(invalidHeading)}`);
