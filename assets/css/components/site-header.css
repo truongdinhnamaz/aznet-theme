@@ -204,7 +204,9 @@
     border-left: 1px solid var(--aznet-theme-header-border);
     background: transparent;
     color: var(--aznet-theme-on-inverse);
-    font-weight: var(--aznet-theme-font-weight-bold);
+    font-size: var(--aznet-theme-text-button);
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    line-height: var(--aznet-theme-line-height-button);
     cursor: pointer;
 }
 
