@@ -125,14 +125,22 @@ async function inspectViewport(browser, name, viewport) {
     if (!slogan.includes('Tận tâm với khách hàng')) throw new Error(`Site Tagline slogan was not projected into Hero: ${slogan}`);
 
     if (viewport.width > 960) {
-      const headingMetrics = await page.locator('.aznet-theme-law01-services__heading').evaluate((node) => {
+      const headingMetrics = await page.locator('.aznet-theme-law01-section h2').evaluateAll((nodes) => nodes.map((node) => {
         const rect = node.getBoundingClientRect();
         const style = window.getComputedStyle(node);
-        return { height: rect.height, lineHeight: Number.parseFloat(style.lineHeight || '0'), whiteSpace: style.whiteSpace };
-      });
-      if (headingMetrics.whiteSpace !== 'nowrap' || headingMetrics.height > headingMetrics.lineHeight * 1.25) {
-        throw new Error(`Services heading must stay on one desktop line: ${JSON.stringify(headingMetrics)}`);
-      }
+        return {
+          text: node.textContent?.trim() || '',
+          height: rect.height,
+          lineHeight: Number.parseFloat(style.lineHeight || '0'),
+          fontSize: Number.parseFloat(style.fontSize || '0'),
+          whiteSpace: style.whiteSpace,
+        };
+      }));
+      if (headingMetrics.length < 6) throw new Error(`expected substantial Law 01 section heading coverage, got ${headingMetrics.length}`);
+      const headingSizes = new Set(headingMetrics.map((item) => item.fontSize.toFixed(2)));
+      const invalidHeading = headingMetrics.find((item) => item.whiteSpace !== 'nowrap' || item.height > item.lineHeight * 1.25);
+      if (invalidHeading) throw new Error(`Law 01 section heading must stay on one desktop line: ${JSON.stringify(invalidHeading)}`);
+      if (headingSizes.size !== 1) throw new Error(`Law 01 section headings must use one consistent size: ${JSON.stringify(headingMetrics)}`);
     }
 
     const servicesIntro = (await page.locator('.aznet-theme-law01-services__intro').textContent())?.trim() || '';
