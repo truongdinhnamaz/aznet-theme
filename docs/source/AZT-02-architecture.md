@@ -4,7 +4,7 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.11 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.12 |
 | --- | --- | --- | --- |
 | **Trạng thái** | Working Source | **Ngày** | 18/09/2026 |
 
@@ -169,9 +169,11 @@ Outcome v1.1 được khóa ở ba visual preset: `default`, `editorial`, `comme
 
 ### Homepage Hero source rule
 
-Law 01 Hero content MUST remain WordPress-owned but independently addressable from the Front Page and global site identity. The Theme stores only a typed Page reference in the normalized presentation schema (`homepage_hero_page`). The referenced Page owns Hero title, excerpt, authored body and featured image. The renderer MUST NOT silently reuse Site Title, Site Tagline or the Front Page title/excerpt as Hero copy. An unmapped/invalid Hero source fails soft by omitting the Hero surface rather than inventing or inferring content.
+Law 01 Hero content MUST remain WordPress-owned. The preferred v1.3.4+ source is an independently addressable WordPress Page selected through the typed presentation reference `homepage_hero_page`; that Page owns Hero title, excerpt, authored body and featured image.
 
-This keeps editing explicit while preserving the ownership rule: WordPress owns content; Theme owns composition/reference selection. Theme switching therefore does not delete Hero content because the source remains an ordinary WordPress Page.
+Backward compatibility is also a presentation requirement. If `homepage_hero_page` is unmapped or invalid on a site upgraded from the earlier Law 01 model, the Theme MAY render the pre-v1.3.4 WordPress-native Hero projection from Site Title, Front Page title/excerpt/featured image and Site Tagline instead of removing the Hero surface. This compatibility path is not authoritative domain inference: every value comes from public WordPress site/Page state already used by the previous Theme version, and no duplicate content store is created. A valid dedicated Hero Page always takes precedence.
+
+This preserves existing-site presentation across Theme updates while keeping ownership clean: WordPress owns both the dedicated Page data and the legacy site/Page fallback values; Theme owns only source selection and presentation composition. Theme switching does not delete either source.
 
 
 Theme-owned presentation settings dùng **một** versioned Theme Mod schema: `aznet_theme_settings`.
