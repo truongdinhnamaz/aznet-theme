@@ -848,7 +848,7 @@ Theme-owned design tokens, theme.json mapping, component presentation and tests.
 No RootProfile, ConvertFlow, Nagavia, WooCommerce domain ownership change.
 
 ## Exact implementation head
-<replace at execution time with the verified exact PR head SHA>
+Write the exact SHA returned by `git rev-parse HEAD` after the final verified implementation commit.
 
 ## PASS
 - L1 static contracts: system family, semantic tokens, no obsolete default font binaries.
@@ -866,7 +866,7 @@ No RootProfile, ConvertFlow, Nagavia, WooCommerce domain ownership change.
 Revert the bounded typography merge commit or restore the previous verified Theme package.
 ```
 
-During execution, replace the exact SHA placeholder before commit; the final evidence file must contain no placeholder.
+During execution, resolve the SHA with `git rev-parse HEAD` and write that exact value into the evidence file before committing it.
 
 - [ ] **Step 4: Re-run source-sensitive verification**
 
