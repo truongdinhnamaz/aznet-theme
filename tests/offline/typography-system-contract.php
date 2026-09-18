@@ -49,6 +49,24 @@ assert(
     'Global theme.json typography must use the system preset.'
 );
 
+
+foreach ([
+    'h1' => ['--aznet-theme-text-h1', '--aznet-theme-line-height-h1'],
+    'h2' => ['--aznet-theme-text-h2', '--aznet-theme-line-height-h2'],
+    'h3' => ['--aznet-theme-text-h3', '--aznet-theme-line-height-h3'],
+    'h4' => ['--aznet-theme-text-h4', '--aznet-theme-line-height-h4'],
+] as $element => [$sizeToken, $lineHeightToken]) {
+    $typography = $themeJson['styles']['elements'][$element]['typography'] ?? [];
+    assert(
+        "var({$sizeToken})" === ($typography['fontSize'] ?? null),
+        "theme.json {$element} fontSize must mirror {$sizeToken}."
+    );
+    assert(
+        "var({$lineHeightToken})" === ($typography['lineHeight'] ?? null),
+        "theme.json {$element} lineHeight must mirror {$lineHeightToken}."
+    );
+}
+
 foreach ([
     $root . '/assets/fonts/roboto/Roboto-Regular.woff2',
     $root . '/assets/fonts/roboto/Roboto-Medium.woff2',
