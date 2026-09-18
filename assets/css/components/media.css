@@ -23,8 +23,8 @@
 .aznet-theme-entry__content :where(figcaption, .wp-caption-text, .gallery-caption) {
     margin-block-start: var(--aznet-theme-space-2);
     color: var(--aznet-theme-muted);
-    font-size: var(--aznet-theme-font-size-sm);
-    line-height: var(--aznet-theme-line-height-body);
+    font-size: var(--aznet-theme-text-caption);
+    line-height: var(--aznet-theme-line-height-caption);
     overflow-wrap: anywhere;
 }
 
@@ -134,8 +134,8 @@ body#tinymce :where(figcaption, .wp-caption-text, .gallery-caption),
 .mce-content-body :where(figcaption, .wp-caption-text, .gallery-caption) {
     margin-block-start: var(--aznet-theme-space-2);
     color: var(--aznet-theme-muted);
-    font-size: var(--aznet-theme-font-size-sm);
-    line-height: var(--aznet-theme-line-height-body);
+    font-size: var(--aznet-theme-text-caption);
+    line-height: var(--aznet-theme-line-height-caption);
     overflow-wrap: anywhere;
 }
 
