@@ -1,13 +1,13 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.59
+**Version:** v0.60
 **Status:** Working Execution Map / derived  
 **Date:** 19/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** live `main` is Theme metadata `1.3.6` at `main@9ad2faa9141f9aca93f2c6b2a0a37731143ccd44` after Law 01 screenshot-reference source closure. PR #149 is the owner-approved `1.3.8` client-delivery candidate; exact production head `5f3dcf00f0a619b58a966078b2cd969cb7fec45d` completed 14/14 triggered workflows SUCCESS and produced deterministic `aznet-theme-1.3.8.zip` SHA-256 `0aba4cf0e213150319c8288d62d06cb136481670cd8f53fd0edbfd9276a03238`. Canonical merge remains approval-gated. Published GitHub Release remains historical `v1.3.0`; RootProfile Team remains blocked under issue #112.
+> **Canonical-main checkpoint:** live `main` is Theme metadata `1.3.8` at `main@597639e26a2cb242c3c0a71e5459ab5d66a0701d` after owner-approved PR #149. Final verified PR head `14bd511023e5bac5c61eabca16d89f8cac8be3d8` completed 17/17 triggered workflows SUCCESS and has zero file delta to the merge commit. Deterministic `aznet-theme-1.3.8.zip` SHA-256 is `0aba4cf0e213150319c8288d62d06cb136481670cd8f53fd0edbfd9276a03238`. Published GitHub Release remains historical `v1.3.0`; RootProfile Team remains blocked under issue #112.
 
 **Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS`. Current v1.3 state: `PUBLICATION + PRODUCTION DEPLOYMENT PASS`; published/GitHub-Release release and verified production deployment are both `v1.3.0` at their respective verified scopes.
 
@@ -424,6 +424,18 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - RootProfile Team remains BLOCKED at issue #112.
 - Tag/GitHub Release and production deployment remain separate approval gates.
 
+## 15.7 AZnet Theme 1.3.8 canonical merge closure — 19/09/2026
+
+- Owner-approved PR #149 final verified head: `14bd511023e5bac5c61eabca16d89f8cac8be3d8`.
+- Final-head verification: 17/17 triggered workflows SUCCESS, 0 failure.
+- Canonical merge: `main@597639e26a2cb242c3c0a71e5459ab5d66a0701d`.
+- Git comparison from verified head to merge commit: zero file delta.
+- No fresh post-merge exact-main workflow run is claimed.
+- Canonical Theme metadata: `1.3.8`.
+- Deterministic package SHA-256: `0aba4cf0e213150319c8288d62d06cb136481670cd8f53fd0edbfd9276a03238`.
+- Tag/GitHub Release and production deployment remain separate approval gates.
+- RootProfile Team remains BLOCKED at issue #112.
+
 ## 16. Exact next
 
-**NEXT — merge PR #149 only after the explicit merge gate. Do not tag, publish or deploy as part of this candidate closure.**
+**NEXT — AZnet Theme 1.3.8 is canonical. Do not tag, publish a GitHub Release or deploy production without a separate explicit approval.**
