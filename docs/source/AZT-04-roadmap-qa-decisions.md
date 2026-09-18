@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.60
+**Version:** v0.61
 **Status:** Working Source  
 **Date:** 18/09/2026
 
@@ -419,6 +419,12 @@ Fresh exact integration evidence used AZnet Theme `252554961bc81d22427363aee0048
 
 This closes the historical F8 nested-main compatibility blocker only. It does not promote ConvertFlow release/deployment state and does not infer F9/provider L5 certification beyond the verified L3-L4 compatibility scope. Historical P5.239 blocker evidence remains provenance.
 
+### v1.3.4 dedicated Hero source closure checkpoint — 18/09/2026
+
+Owner-approved PR #135 merged final verified head `d0781a2c25a3b15bbc535184e0b03bafa2141a9b` to canonical `main@d008f66cfa7357f3d6e4bede492e41a5d49a4112` with zero file delta between final head and merge commit. The slice introduces a dedicated WordPress-owned Hero Page reference (`homepage_hero_page`) for Law 01 and removes Site Title/Site Tagline/Front Page title as implicit Hero copy sources. Theme remains presentation/composition owner only; WordPress owns Hero content/media.
+
+All 34 triggered workflows on the final PR head completed SUCCESS. This includes D-027 Standalone Core L3/L4/Exact Package/Retained Regression, V1 Core PR CI, Homepage Composer Law 01 Browser Quality, Law Site Provisioning Browser Quality + Candidate Package, F Homepage Native Runtime + Regression Package, X6 Cross-surface Release Closure, Y5 Client Delivery Release and Release Version Consistency. Y5 deterministic package evidence produced `aznet-theme-1.3.4.zip`, 145 files, SHA-256 `5cf0041ab09a6b9718e4354d2aa9c00850aa93e83c9ae775a640dc613caf3f83`. No fresh exact-main workflow run is claimed for merge commit `d008f66...`; merged-byte identity is supported by zero file delta from the verified final head. Publication/tag and production deployment remain historical `v1.3.0` until separately approved and executed. RootProfile Team remains external-blocked under issue #112.
+
 ## 14. Exact next
 
-**NEXT — hand off the exact verified `aznet-theme-1.3.3.zip` corrective package for the product owner's requested manual website update. Do not reuse the erroneous 1.3.1-lineage ZIP. Git tag/GitHub Release and automated deployment remain separate gates; RootProfile Team stays blocked at issue #112.**
+**NEXT — hand off the exact verified `aznet-theme-1.3.4.zip` from PR #135 final-head evidence for the product owner's requested manual website update. Git tag/GitHub Release and automated deployment remain separate approval gates; RootProfile Team stays blocked at issue #112.**
