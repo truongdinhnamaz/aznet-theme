@@ -60,6 +60,16 @@ assert(str_contains($css, '.aznet-theme-law01-hero__secondary-action'), 'Client-
 assert(str_contains($css, '.aznet-theme-law01-hero__value'), 'Law 01 Hero must style the WordPress-native value proposition separately from the site title.');
 
 foreach ([
+    '--law01-type-section-title: clamp(1.65rem, 2.25vw, 2.15rem);',
+    '--law01-type-card-title: clamp(1.05rem, 1.25vw, 1.2rem);',
+    '--law01-type-article-title: clamp(1.15rem, 1.5vw, 1.35rem);',
+    '--law01-type-hero-value: clamp(1.45rem, 2vw, 1.9rem);',
+] as $needle) {
+    assert(str_contains($css, $needle), "Law 01 compact heading scale missing: {$needle}");
+}
+
+
+foreach ([
     'grid-template-columns: minmax(0, 44%) minmax(0, 56%);',
     'min-height: clamp(27rem, 33vw, 35rem);',
     'font-size: min(var(--aznet-theme-text-display), 4rem);',
