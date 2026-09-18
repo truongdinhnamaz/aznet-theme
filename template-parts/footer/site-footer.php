@@ -56,7 +56,7 @@ $year         = (string) ( $context['year'] ?? '' );
             <?php endif; ?>
 
             <?php if ( 'professional' === $preset && '' !== $social_menu ) : ?>
-                <nav class="aznet-theme-site-footer__social-column" aria-label="<?php echo esc_attr__( 'Kết nối với chúng tôi', 'aznet-theme' ); ?>">
+                <nav class="aznet-theme-site-footer__social-column aznet-theme-site-footer__social" aria-label="<?php echo esc_attr__( 'Kết nối với chúng tôi', 'aznet-theme' ); ?>">
                     <h2 class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Kết nối với chúng tôi', 'aznet-theme' ); ?></h2>
                     <?php echo $social_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
                 </nav>
