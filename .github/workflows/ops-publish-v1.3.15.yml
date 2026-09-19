@@ -1,0 +1,123 @@
+name: OPS Publish v1.3.15
+
+on:
+  push:
+    branches:
+      - ops/publish-v1.3.15
+    paths:
+      - .github/workflows/ops-publish-v1.3.15.yml
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout publication workflow branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout exact release source
+        run: |
+          set -euo pipefail
+          git checkout --detach 6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3
+          test "$(git rev-parse HEAD)" = "6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3"
+
+      - name: Verify release identity
+        run: |
+          set -euo pipefail
+          grep -Fx 'Version: 1.3.15' style.css
+          grep -F "define( 'AZNET_THEME_VERSION', '1.3.15' );" functions.php
+          if git rev-parse -q --verify refs/tags/v1.3.15 >/dev/null; then
+            test "$(git rev-parse v1.3.15^{commit})" = "6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3"
+          fi
+
+      - name: Build deterministic release package twice
+        run: |
+          set -euo pipefail
+          python3 scripts/build-release-package.py --source . --output /tmp/aznet-theme-1.3.15-a.zip --version 1.3.15 | tee /tmp/build-a.txt
+          python3 scripts/build-release-package.py --source . --output /tmp/aznet-theme-1.3.15-b.zip --version 1.3.15 | tee /tmp/build-b.txt
+          sha_a="$(sha256sum /tmp/aznet-theme-1.3.15-a.zip | awk '{print $1}')"
+          sha_b="$(sha256sum /tmp/aznet-theme-1.3.15-b.zip | awk '{print $1}')"
+          test "$sha_a" = "$sha_b"
+          test "$sha_a" = "8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8"
+          mv /tmp/aznet-theme-1.3.15-a.zip /tmp/aznet-theme-1.3.15.zip
+          unzip -l /tmp/aznet-theme-1.3.15.zip > /tmp/package-files.txt
+          unzip -q /tmp/aznet-theme-1.3.15.zip -d /tmp/package-lint
+          find /tmp/package-lint/aznet-theme -type f -name '*.php' -print0 | sort -z | xargs -0 -n1 php -l > /tmp/php-lint.txt
+          production_files="$(find /tmp/package-lint/aznet-theme -type f | wc -l | tr -d ' ')"
+          php_files="$(find /tmp/package-lint/aznet-theme -type f -name '*.php' | wc -l | tr -d ' ')"
+          test "$production_files" = "148"
+          test "$php_files" = "111"
+          {
+            echo "source_sha=6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3"
+            echo "version=1.3.15"
+            echo "package_sha256=$sha_a"
+            echo "production_files=$production_files"
+            echo "php_files=$php_files"
+          } | tee /tmp/publication-evidence.txt
+
+      - name: Create or verify annotated tag
+        run: |
+          set -euo pipefail
+          if git rev-parse -q --verify refs/tags/v1.3.15 >/dev/null; then
+            test "$(git rev-parse v1.3.15^{commit})" = "6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag -a v1.3.15 6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3 -m "AZnet Theme v1.3.15"
+            git push origin refs/tags/v1.3.15
+          fi
+
+      - name: Publish or verify GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if gh release view v1.3.15 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo 'Release v1.3.15 already exists; verifying readback.'
+          else
+            gh release create v1.3.15 /tmp/aznet-theme-1.3.15.zip \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "AZnet Theme 1.3.15" \
+              --notes "Law 01 client-delivery release completing the approved homepage presentation without crossing domain ownership. The release preserves the approved Header, Hero, trust strip, Services, Latest Posts and Footer composition, keeps a legitimate mapped Team teaser visible without fabricating member identity or business metrics, and retains fail-soft behavior when authoritative Team data is unavailable. RootProfile organization-team membership remains external under issue #112. Publication only; no production deployment is performed by this release."
+          fi
+
+      - name: Verify published release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag_sha="$(git rev-parse v1.3.15^{commit})"
+          test "$tag_sha" = "6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3"
+          gh release view v1.3.15 --repo "$GITHUB_REPOSITORY" --json isDraft,isPrerelease,tagName,name > /tmp/release.json
+          python3 - <<'PY'
+          import json
+          data=json.load(open('/tmp/release.json', encoding='utf-8'))
+          assert data['tagName']=='v1.3.15'
+          assert data['name']=='AZnet Theme 1.3.15'
+          assert data['isDraft'] is False
+          assert data['isPrerelease'] is False
+          PY
+          mkdir -p /tmp/release-readback
+          gh release download v1.3.15 --repo "$GITHUB_REPOSITORY" --pattern 'aznet-theme-1.3.15.zip' --dir /tmp/release-readback
+          sha_local="$(sha256sum /tmp/aznet-theme-1.3.15.zip | awk '{print $1}')"
+          sha_release="$(sha256sum /tmp/release-readback/aznet-theme-1.3.15.zip | awk '{print $1}')"
+          test "$sha_local" = "$sha_release"
+          test "$sha_release" = "8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8"
+          echo "release_readback_sha256=$sha_release" >> /tmp/publication-evidence.txt
+
+      - name: Upload publication evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: v1.3.15-publication-evidence
+          path: |
+            /tmp/publication-evidence.txt
+            /tmp/build-a.txt
+            /tmp/build-b.txt
+            /tmp/package-files.txt
+            /tmp/php-lint.txt
+            /tmp/release.json
+          if-no-files-found: error
