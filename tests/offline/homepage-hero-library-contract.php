@@ -37,6 +37,8 @@ foreach ([
 }
 foreach ([
     'handle_homepage_hero_apply',
+    'homepage_hero_candidate_reference',
+    "'post_status'  => 'draft'",
     'wp_insert_post(',
     'current_user_can(',
     'check_admin_referer(',
@@ -47,6 +49,8 @@ foreach ([
     assert(str_contains($hero_action, $needle), "D-030 explicit Hero action contract missing: {$needle}");
 }
 assert(str_contains($bootstrap, "admin_post_aznet_theme_apply_homepage_hero"), 'D-030 Hero action must be wired explicitly.');
+assert(str_contains($admin, 'Hero WordPress đang soạn'), 'Control Center must expose draft-first Hero state.');
+assert(str_contains($admin, 'website hiện tại chưa đổi cho đến khi Hero mới được xuất bản'), 'Draft-first Hero UX must preserve current public output.');
 
 foreach ([
     "setting( 'homepage_hero_block', 0 )",
