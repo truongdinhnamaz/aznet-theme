@@ -226,9 +226,9 @@ $must(
     'Law 01 Footer must keep empty WordPress menu projections fail-soft with no placeholder data.'
 );
 $must(
-    str_contains($footer, "$contact_heading = $law01_homepage") &&
+    str_contains($footer, '$contact_heading = $law01_homepage') &&
     str_contains($footer, 'Thông tin liên hệ') &&
-    str_contains($footer, "$navigation_heading = $law01_homepage") &&
+    str_contains($footer, '$navigation_heading = $law01_homepage') &&
     str_contains($footer, 'Liên kết nhanh'),
     'Law 01 Footer must use the approved reference headings without changing generic Footer copy.'
 );
