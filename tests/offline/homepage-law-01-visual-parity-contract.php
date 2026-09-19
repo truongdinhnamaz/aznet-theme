@@ -158,8 +158,8 @@ $must(
 
 $must(
     str_contains($footer, '$law01_homepage =') &&
-    str_contains($footer, "( 'professional' === $preset || $law01_homepage ) && '' !== $social_menu") &&
-    str_contains($footer, "'' !== $social_menu && 'professional' !== $preset && ! $law01_homepage"),
+    str_contains($footer, '( \'professional\' === $preset || $law01_homepage ) && \'\' !== $social_menu') &&
+    str_contains($footer, '\'\' !== $social_menu && \'professional\' !== $preset && ! $law01_homepage'),
     'Law 01 Footer must place a real social menu in the main reference grid for any Footer preset and avoid duplicating it in the bottom row.'
 );
 
