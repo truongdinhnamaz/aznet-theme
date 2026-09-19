@@ -1,13 +1,13 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.61
+**Version:** v0.62
 **Status:** Working Execution Map / derived  
 **Date:** 19/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** live `main` is Theme metadata `1.3.8` at `main@597639e26a2cb242c3c0a71e5459ab5d66a0701d` after owner-approved PR #149. PR #150 is now the owner-approved `1.3.10` polished-Hero client-delivery candidate; exact production head `a4c3621ec6d651b7e4c4d1085a2b900f8c94454b` completed 22/22 triggered workflows SUCCESS and produced deterministic `aznet-theme-1.3.10.zip` SHA-256 `9eb8a3ad1c24b7e75a695199de3e45bf3e196bebd7fff8774f7390969283c92d`. The prior unmerged 1.3.9 package is superseded provenance. Canonical merge remains approval-gated. Published GitHub Release remains historical `v1.3.0`; RootProfile Team remains blocked under issue #112.
+> **Canonical-main checkpoint:** live `main` is Theme metadata `1.3.10` at owner-approved PR #150 merge `main@55ca349c8808d0d6a3c96d5201983ae966b1d822`. Fresh exact-main V1 run `35412045895` and X6 run `35412045904` completed SUCCESS. PR #151 is the verified Homepage Hero editing UX follow-up: reconciled production/test head `82073e715be349f29fe84dbd0405c5af6e1b5c93`, ahead-only / behind-by-zero against canonical main, 19/19 triggered workflows SUCCESS at final disposition. Published GitHub Release and verified production deployment remain historical `v1.3.0`; RootProfile Team remains blocked under issue #112.
 
 **Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS`. Current v1.3 state: `PUBLICATION + PRODUCTION DEPLOYMENT PASS`; published/GitHub-Release release and verified production deployment are both `v1.3.0` at their respective verified scopes.
 
@@ -454,4 +454,18 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 16. Exact next
 
-**NEXT — merge PR #150 only after the explicit merge gate for the verified 1.3.10 candidate. Do not tag, publish or deploy as part of this candidate closure.**
+**NEXT — merge PR #151 only after the explicit owner merge gate for the verified Homepage Hero editing UX candidate on canonical 1.3.10. Do not tag, publish or deploy as part of this candidate closure.**
+
+
+## 15.9 Homepage Hero editing UX follow-up — 19/09/2026
+
+- Canonical prerequisite closed: owner-approved PR #150 merged 1.3.10 to `main@55ca349c8808d0d6a3c96d5201983ae966b1d822`; fresh exact-main V1 `35412045895` and X6 `35412045904` SUCCESS.
+- PR #151 branch: `feat/homepage-hero-editor-ux`.
+- Ownership: WordPress owns Hero Page title/excerpt/body/media; Theme owns typed source selection and admin/presentation bridge only.
+- RED: `2d63c0c2b1d993e63ccb0a22efcdacd6fc16a373` failed for missing `render_homepage_hero_editor`.
+- Reconciled production/test head: `82073e715be349f29fe84dbd0405c5af6e1b5c93`.
+- Verification: 19/19 triggered workflows SUCCESS at final disposition. Homepage Composer `35412090957`, R5 Control Center Browser `35412090873`, D-027 L3/L4/Exact Package/retained regression, V1 PR CI and R6 PASS.
+- R2 `35412090864`: first attempt hit transient disposable-runtime `ERR_CONNECTION_RESET`; single retry attempt 2 PASS without source changes.
+- No Theme-owned Hero copy fields, no WordPress content mutation, no provider ownership transfer.
+- Rollback: revert PR #151; no data migration required.
+- Merge remains approval-gated; tag/GitHub Release/deploy remain separate gates.

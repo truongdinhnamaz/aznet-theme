@@ -165,6 +165,41 @@ async function resetSettings(page) {
   if (await page.locator('select[name="aznet_theme_settings[header_preset]"]').inputValue() !== 'standard') throw new Error('Reset did not restore default header preset');
 }
 
+async function verifyHomepageHeroEditingBridge(page, viewportName) {
+  await gotoCenter(page, 'homepage');
+  const center = page.locator('.aznet-theme-control-center');
+  const text = await center.innerText();
+  for (const needle of ['Nguồn Hero hiện tại:', 'Dữ liệu dự phòng', 'Hero hiện đang dùng dữ liệu dự phòng', 'Tạo Page Hero mới']) {
+    if (!text.includes(needle)) throw new Error(`Homepage Hero fallback UX missing ${needle}`);
+  }
+  const createLink = page.getByRole('link', { name: 'Tạo Page Hero mới' });
+  const createHref = await createLink.getAttribute('href');
+  if (!createHref?.includes('post-new.php?post_type=page')) throw new Error('Homepage Hero create-Page action must use native WordPress Page authoring');
+
+  for (const forbidden of ['homepage_hero_title', 'homepage_hero_subtitle', 'homepage_hero_slogan', 'homepage_hero_body']) {
+    if (await page.locator(`[name*="${forbidden}"]`).count()) throw new Error(`Theme-owned Hero copy input must not exist: ${forbidden}`);
+  }
+
+  const form = page.locator('form.aznet-theme-panel').first();
+  const selector = form.locator('select[name="aznet_theme_settings[homepage_hero_page]"]');
+  await selector.selectOption({ label: 'R5 Continuity Page' });
+  await Promise.all([
+    page.waitForURL(/updated=1/, { timeout: 20000 }),
+    form.getByRole('button', { name: 'Lưu Trang chủ' }).click(),
+  ]);
+
+  await gotoCenter(page, 'homepage');
+  const mappedText = await center.innerText();
+  for (const needle of ['Nguồn Hero hiện tại:', 'Hero riêng', 'R5 Continuity Page', 'Sửa nội dung Hero']) {
+    if (!mappedText.includes(needle)) throw new Error(`Homepage Hero mapped UX missing ${needle}`);
+  }
+  const editHref = await page.getByRole('link', { name: 'Sửa nội dung Hero' }).getAttribute('href');
+  if (!editHref?.includes('post.php?post=') || !editHref.includes('action=edit')) throw new Error('Homepage Hero edit action must link to the native WordPress Page editor');
+
+  const layout = await checkLayoutAndA11y(page, `${viewportName}-homepage-hero-${expectWoo ? 'woo' : 'clean'}`);
+  return layout;
+}
+
 async function verifySystemHealth(page) {
   await gotoCenter(page, 'system-health');
   const text = await page.locator('.aznet-theme-control-center').innerText();
@@ -224,9 +259,10 @@ try {
       await saveHeaderBooleans(page);
       await exportImport(page, viewportName);
       await resetSettings(page);
+      const homepageHero = await verifyHomepageHeroEditingBridge(page, viewportName);
       await verifySystemHealth(page);
       const layout = await checkLayoutAndA11y(page, `${viewportName}-${expectWoo ? 'woo' : 'clean'}`);
-      results.push({ viewportName, ...layout });
+      results.push({ viewportName, homepageHero, ...layout });
     } catch (error) {
       failures.push(`${viewportName}: ${error instanceof Error ? error.message : String(error)}`);
       await page.screenshot({ path: path.join(outputDir, `${viewportName}-failure.png`), fullPage: true }).catch(() => {});

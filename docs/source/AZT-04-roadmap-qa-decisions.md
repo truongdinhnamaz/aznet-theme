@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.69
+**Version:** v0.70
 **Status:** Working Source  
 **Date:** 19/09/2026
 
@@ -513,4 +513,15 @@ This remains Theme presentation only. RootProfile authoritative Team remains BLO
 
 ## 14. Exact next
 
-**NEXT — canonical merge of PR #150 is the next approval gate for the verified 1.3.10 polished-Hero client-delivery candidate. Do not tag, publish a GitHub Release or deploy production without separate explicit approval.**
+**NEXT — canonical merge of PR #151 is the next explicit approval gate for the verified Homepage Hero editing UX follow-up on canonical Theme metadata 1.3.10. Do not tag, publish a GitHub Release or deploy production without separate explicit approval.**
+
+
+### Canonical 1.3.10 merge and Homepage Hero editing UX candidate — 19/09/2026
+
+The product owner approved PR #150 canonical merge. Verified 1.3.10 polished-Hero bytes merged to `main@55ca349c8808d0d6a3c96d5201983ae966b1d822`; fresh exact-main V1 run `35412045895` and X6 run `35412045904` completed SUCCESS. This closes the PR #150 merge gate only; tag/GitHub Release and production deployment remain separate gates.
+
+The owner also approved proceeding with the follow-up Hero authoring UX slice. PR #151 preserves the accepted WordPress-content ownership model: no Hero title/subtitle/body is copied into `aznet_theme_settings`. The Theme exposes the typed `homepage_hero_page` selection, current-source/fallback status, mapped-content preview and native WordPress Page edit/create actions.
+
+TDD RED was recorded at `2d63c0c2b1d993e63ccb0a22efcdacd6fc16a373`. After reconciliation with canonical 1.3.10, exact production/test head `82073e715be349f29fe84dbd0405c5af6e1b5c93` completed 19/19 triggered workflows SUCCESS at final disposition. R2 Pattern Library run `35412090864` required one retry after a disposable-runtime `net::ERR_CONNECTION_RESET`; retry attempt 2 passed the previously failing Woo-present step and the remaining gates with no byte changes.
+
+PR #151 canonical merge remains an explicit owner approval gate. This candidate does not authorize publication or deployment and does not alter RootProfile/ConvertFlow/WooCommerce ownership.
