@@ -164,9 +164,13 @@ $must(
 );
 
 $must(
+    str_contains($profile, '$has_about = $about instanceof \\WP_Post;') &&
     str_contains($profile, '$section_label = $has_members') &&
+    str_contains($profile, "__( 'Giới thiệu và đội ngũ', 'aznet-theme' )") &&
+    str_contains($profile, "__( 'Đội ngũ luật sư', 'aznet-theme' )") &&
+    str_contains($profile, "__( 'Giới thiệu', 'aznet-theme' )") &&
     str_contains($profile, 'aria-label="<?php echo esc_attr( $section_label ); ?>"'),
-    'Law 01 About-only fail-soft state must not expose an accessibility label that claims a Team section is present.'
+    'Law 01 Profile accessibility label must match all three valid source-backed states: About+Team, Team-only, or About-only.'
 );
 
 $membersPos = strpos($profile, 'aznet-theme-law01-profile__members');
