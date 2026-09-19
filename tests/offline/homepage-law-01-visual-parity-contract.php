@@ -156,6 +156,12 @@ $must(
     'Law 01 Profile CSS must expand the inherited About presentation when the Team source is empty.'
 );
 
+$must(
+    str_contains($profile, '$section_label = $has_members') &&
+    str_contains($profile, 'aria-label="<?php echo esc_attr( $section_label ); ?>"'),
+    'Law 01 About-only fail-soft state must not expose an accessibility label that claims a Team section is present.'
+);
+
 $membersPos = strpos($profile, 'aznet-theme-law01-profile__members');
 $teamCtaPos = strpos($profile, 'aznet-theme-law01-team-more');
 $must(
@@ -197,6 +203,13 @@ $must(
     str_contains($footer, 'if ( \'professional\' !== $preset && \'\' !== $contact_menu )') &&
     str_contains($footer, 'if ( \'\' !== $social_menu || \'\' !== $policy_menu )'),
     'Law 01 Footer must keep empty WordPress menu projections fail-soft with no placeholder data.'
+);
+
+$must(
+    str_contains($footer, '$law01_homepage =') &&
+    str_contains($footer, "( 'professional' === $preset || $law01_homepage ) && '' !== $social_menu") &&
+    str_contains($footer, "'' !== $social_menu && 'professional' !== $preset && ! $law01_homepage"),
+    'Law 01 Footer must place a real social menu in the main reference grid for any Footer preset and avoid duplicating it in the bottom row.'
 );
 
 
