@@ -3,7 +3,7 @@ declare(strict_types=1);
 if (! defined('ABSPATH')) { define('ABSPATH', __DIR__ . '/'); }
 class WP_Post { public int $ID; public string $post_type; public string $post_status; public int $post_parent = 0; public function __construct(int $id,string $type='page',string $status='publish'){ $this->ID=$id; $this->post_type=$type; $this->post_status=$status; } }
 class WP_Term { public int $term_id; public string $taxonomy; public function __construct(int $id,string $taxonomy='category'){ $this->term_id=$id; $this->taxonomy=$taxonomy; } }
-$GLOBALS['hc_posts'] = [1=>new WP_Post(1,'page','publish'),2=>new WP_Post(2,'post','publish'),3=>new WP_Post(3,'page','draft')];
+$GLOBALS['hc_posts'] = [1=>new WP_Post(1,'page','publish'),2=>new WP_Post(2,'post','publish'),3=>new WP_Post(3,'page','draft'),4=>new WP_Post(4,'wp_block','publish'),5=>new WP_Post(5,'wp_block','draft')];
 $GLOBALS['hc_terms'] = [8=>new WP_Term(8,'category'),9=>new WP_Term(9,'post_tag')];
 function get_post($id){ return $GLOBALS['hc_posts'][$id] ?? null; }
 function get_term($id){ return $GLOBALS['hc_terms'][$id] ?? null; }
@@ -15,6 +15,9 @@ require_once $path;
 assert(AZnet\Theme\homepage_page_reference(1) instanceof WP_Post);
 assert(AZnet\Theme\homepage_page_reference(2) === null);
 assert(AZnet\Theme\homepage_page_reference(3) === null);
+assert(AZnet\Theme\homepage_block_reference(4) instanceof WP_Post);
+assert(AZnet\Theme\homepage_block_reference(5) === null);
+assert(AZnet\Theme\homepage_block_reference(1) === null);
 assert(AZnet\Theme\homepage_category_reference(8) instanceof WP_Term);
 assert(AZnet\Theme\homepage_category_reference(9) === null);
 AZnet\Theme\homepage_latest_posts([8], 5, [99]);
