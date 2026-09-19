@@ -67,8 +67,8 @@ if (array_key_exists('unknown_woo_key', $normalized)) {
     fwrite(STDERR, "FAIL: unknown Woo key escaped the Theme settings allow-list\n");
     exit(1);
 }
-if (($normalized['schema_version'] ?? null) !== 3) {
-    fwrite(STDERR, "FAIL: additive R4 settings must retain schema_version 3\n");
+if (($normalized['schema_version'] ?? null) !== 4) {
+    fwrite(STDERR, "FAIL: additive R4 settings must retain schema_version 4\n");
     exit(1);
 }
 
