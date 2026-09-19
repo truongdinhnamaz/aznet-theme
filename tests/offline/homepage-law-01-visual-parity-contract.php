@@ -54,10 +54,10 @@ $must(
 
 $must(
     1 === preg_match(
-        '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-hero h1\\s*\\{[^}]*max-width:\\s*10\\.5ch;[^}]*line-height:\\s*0\\.98;[^}]*letter-spacing:\\s*-\\.03em;[^}]*text-wrap:\\s*balance;/s',
+        '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-hero h1\\s*\\{[^}]*width:\\s*100%;[^}]*max-width:\\s*none;[^}]*font-size:\\s*clamp\\(2\\.55rem,\\s*3\\.6vw,\\s*3\\.4rem\\);[^}]*line-height:\\s*1\\.02;[^}]*letter-spacing:\\s*-\\.025em;[^}]*overflow-wrap:\\s*normal;[^}]*word-break:\\s*normal;[^}]*text-wrap:\\s*balance;/s',
         $css
     ),
-    'Law 01 Hero title must use the approved compact editorial typography instead of a blocky default heading.'
+    'Law 01 Hero title must use the approved compact responsive typography without an artificial character-width cap.'
 );
 $must(
     1 === preg_match(
