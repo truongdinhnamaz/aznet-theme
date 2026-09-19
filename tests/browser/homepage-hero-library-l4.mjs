@@ -25,6 +25,7 @@ try {
       if (title !== 'Hero Library WordPress') throw new Error('Synced Hero block content did not win source precedence: ' + title);
       if (await hero.locator('.aznet-theme-law01-hero__grid').count()) throw new Error('Legacy Hero grid must not render when synced Hero content is valid');
       if (await hero.locator('.aznet-theme-law01-hero__trust-item').count() !== 4) throw new Error('Law 01 trust presentation must remain below Hero Library content');
+      if (await hero.locator('.aznet-theme-homepage-hero-content__media-help').isVisible()) throw new Error('Hero media authoring hint must not leak into public presentation');
 
       const metrics = await hero.evaluate((node) => {
         const layout = node.querySelector('.aznet-theme-homepage-hero-content__layout');
