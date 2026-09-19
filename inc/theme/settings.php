@@ -133,7 +133,7 @@ function normalize_settings( array $raw ): array {
     };
 
     return [
-        'schema_version'                => 3,
+        'schema_version'                => 4,
         'visual_preset'                 => $preset,
         'page_breadcrumbs'              => $normalize_boolean( 'page_breadcrumbs', true ),
         'header_preset'                 => $header_preset,
