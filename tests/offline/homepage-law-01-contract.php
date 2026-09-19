@@ -65,6 +65,19 @@ $variantCss = file_get_contents($variantPath);
 assert(str_contains($variantCss, '.aznet-theme-homepage--law-01-burgundy-gold'), 'Burgundy variant styling must be scoped to Law 01.');
 assert(str_contains($assets, 'homepage-law-01-variants.css'), 'Variant asset must be surface-aware and loaded only with Law 01.');
 foreach ([
+    'grid-template-columns: minmax(0, 54%) minmax(0, 46%);',
+    'padding: clamp(2.75rem, 4.2vw, 4.5rem) clamp(2rem, 3.4vw, 4.25rem);',
+    'font-size: clamp(2.55rem, 3.6vw, 3.4rem);',
+    'overflow-wrap: normal;',
+    'word-break: normal;',
+] as $needle) {
+    assert(str_contains($variantCss, $needle), "Law 01 Hero title responsive-wrap regression missing: {$needle}");
+}
+assert(! str_contains($variantCss, 'max-width: 10.5ch;'), 'Legacy Law 01 Hero title must not be artificially capped to a narrow character width.');
+assert(! str_contains($variantCss, 'max-width: 13ch;'), 'D-030 Hero Library title must not inherit the old narrow character cap.');
+assert(str_contains($variantCss, '.aznet-theme-law01-hero--media-left .aznet-theme-homepage-hero-content__layout { grid-template-columns: minmax(0, 46%) minmax(0, 54%); }'), 'Media-left Hero must preserve the wider copy column after reversing media/copy order.');
+
+foreach ([
     '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-services {',
     'border-top: 1px solid rgba(143, 17, 27, .1);',
     '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-editorial {',
