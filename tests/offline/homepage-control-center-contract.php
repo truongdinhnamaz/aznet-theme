@@ -8,28 +8,30 @@ $control = file_get_contents($root . '/inc/admin/control-center.php');
 $bootstrap = file_get_contents($root . '/inc/admin/bootstrap.php');
 $css = file_get_contents($root . '/assets/css/admin/control-center.css');
 
-foreach (['render_homepage_settings', 'homepage_slot_statuses', 'READY', 'EMPTY', 'UNMAPPED', 'INVALID', 'PROVIDER_UNAVAILABLE', 'law-01', 'homepage_hero_page', 'Hero trang chủ', 'homepage_knowledge_terms][', 'get_pages(', 'get_categories('] as $required) {
+foreach (['render_homepage_settings', 'homepage_slot_statuses', 'READY', 'EMPTY', 'UNMAPPED', 'INVALID', 'PROVIDER_UNAVAILABLE', 'law-01', 'homepage_hero_page', 'homepage_hero_block', 'homepage_hero_variant', 'homepage_knowledge_terms][', 'get_pages(', 'get_categories('] as $required) {
     assert(str_contains($source, $required), "Missing Homepage admin contract: {$required}");
 }
 
 foreach ([
-    'render_homepage_hero_editor',
+    'render_homepage_hero_library',
+    'Thư viện Hero',
     'Nguồn Hero hiện tại',
-    'Hero riêng',
+    'Hero WordPress',
+    'Hero Page cũ',
+    'Dùng mẫu này',
     'Sửa nội dung Hero',
-    'Tạo Page Hero mới',
-    'Hero hiện đang dùng dữ liệu dự phòng',
+    'không cần tạo Page',
     'get_edit_post_link',
-    'get_the_excerpt',
-    'post_content',
+    'aznet_theme_apply_homepage_hero',
 ] as $required) {
-    assert(str_contains($source, $required), "Missing Homepage Hero editing UX contract: {$required}");
+    assert(str_contains($source, $required), "Missing Homepage Hero Library UX contract: {$required}");
 }
 
 foreach ([
     '.aznet-theme-homepage-hero-editor',
     '.aznet-theme-homepage-hero-editor__status',
-    '.aznet-theme-homepage-hero-editor__preview',
+    '.aznet-theme-homepage-hero-library__grid',
+    '.aznet-theme-homepage-hero-library__card',
     '.aznet-theme-homepage-hero-editor__actions',
 ] as $required) {
     assert(str_contains($css, $required), "Missing Homepage Hero editing UX presentation: {$required}");
@@ -38,7 +40,9 @@ foreach ([
 assert(str_contains($control, "'homepage'"));
 assert(str_contains($control, "'Trang chủ'"));
 assert(str_contains($control, 'render_homepage_settings()'));
+assert(str_contains($bootstrap, "require_once __DIR__ . '/homepage-hero.php';"));
 assert(str_contains($bootstrap, "require_once __DIR__ . '/homepage.php';"));
+assert(str_contains($bootstrap, 'admin_post_aznet_theme_apply_homepage_hero'));
 assert(str_contains($source, "AZnet\\\\Theme\\\\Integrations\\\\RootProfile\\\\provider_available"), 'Homepage diagnostics must use the accepted RootProfile v1 public provider capability');
 assert(! str_contains($source, "AZnet\\\\Theme\\\\Integrations\\\\RootProfile\\\\available"), 'Homepage diagnostics must not probe a nonexistent RootProfile capability');
 
