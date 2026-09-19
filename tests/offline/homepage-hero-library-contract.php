@@ -104,7 +104,7 @@ foreach ([
 }
 assert(str_contains($admin, 'Một nơi để sửa toàn bộ Hero'), 'Control Center must explain the single WordPress-owned Hero authoring surface.');
 assert(str_contains($admin, 'chữ, nút, ảnh và cam kết'), 'Control Center must identify the complete editable Hero content scope.');
-assert(str_contains($hero, "if ( '' === $hero_block_html )"), 'Legacy hard-coded trust copy must be isolated to the fallback path.');
+assert(str_contains($hero, "if ( '' === \$hero_block_html )"), 'Legacy hard-coded trust copy must be isolated to the fallback path.');
 assert(str_contains($hero, 'Legacy compatibility only.'), 'Hero template must document legacy-only hard-coded trust copy.');
 foreach ([
     '.aznet-theme-homepage-hero-content__value',
