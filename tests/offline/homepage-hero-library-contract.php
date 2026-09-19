@@ -41,6 +41,7 @@ foreach ([
     "'post_status'  => 'draft'",
     'wp_insert_post(',
     'current_user_can(',
+    "current_user_can( 'publish_posts' )",
     'check_admin_referer(',
     'WP_Block_Patterns_Registry',
     'homepage_hero_block',
