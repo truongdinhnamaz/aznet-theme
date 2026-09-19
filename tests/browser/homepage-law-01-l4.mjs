@@ -24,15 +24,15 @@ const requiredSelectors = [
   '.aznet-theme-law01-editorial',
   '.aznet-theme-law01-team',
   '.aznet-theme-law01-articles',
-  '.aznet-theme-law01-process',
-  '.aznet-theme-law01-faq',
-  '.aznet-theme-law01-final-cta',
 ];
 
 const forbiddenBurgundySelectors = [
   '.aznet-theme-law01-topics',
   '.aznet-theme-law01-analysis',
   '.aznet-theme-law01-news',
+  '.aznet-theme-law01-process',
+  '.aznet-theme-law01-faq',
+  '.aznet-theme-law01-final-cta',
 ];
 
 const summary = { baseUrl, cases: [] };
