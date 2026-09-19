@@ -367,6 +367,26 @@
     border: 0;
     background: transparent;
 }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__about-grid {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__about-grid::after {
+    position: absolute;
+    z-index: -1;
+    right: clamp(.5rem, 2vw, 2rem);
+    bottom: -.5rem;
+    width: clamp(9rem, 18vw, 16rem);
+    aspect-ratio: 1 / 1;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23b9892f' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M60 18v78M33 99h54M24 38h72M36 38 22 68h28L36 38Zm48 0L70 68h28L84 38ZM22 68c4 7 9 10 14 10s10-3 14-10m20 0c4 7 9 10 14 10s10-3 14-10M48 26h24'/%3E%3C/g%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    content: '';
+    opacity: .09;
+}
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__about-copy {
     display: flex;
     min-width: 0;
