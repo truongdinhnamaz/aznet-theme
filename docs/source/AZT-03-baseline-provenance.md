@@ -229,7 +229,7 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**NEXT — PR #151 is merged to canonical `main@39df23c3385118888e262c27a2331de34dda430d`. Fresh exact-main run `35412829723` is in progress; do not claim exact-main PASS until it completes SUCCESS. Git tag/GitHub Release and production deployment remain separate gates; RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
+**NEXT — PR #151 is merged and fresh exact-main V1 run `35412829723` completed SUCCESS on `main@39df23c3385118888e262c27a2331de34dda430d`. Merge the source-only closure PR after explicit owner approval. Git tag/GitHub Release and production deployment remain separate gates; RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
 
 ### AZnet Theme 1.3.10 polished-Hero client-delivery candidate — 19/09/2026
 
@@ -338,6 +338,6 @@ PR #151 remains unmerged. Tag/GitHub Release and production deployment are not a
 
 Owner-approved PR #151 merged final verified head `b17532c0bc7348317c5044fa25262d28cb9fef54` to canonical `main@39df23c3385118888e262c27a2331de34dda430d`. Git comparison reports zero file delta between final head and merge commit, so the canonical tree preserves the verified candidate bytes.
 
-Final PR head completed 22/22 triggered workflows SUCCESS. Fresh exact-main V1 run `35412829723` was emitted on the merge SHA; its static/core job is SUCCESS and clean runtime/browser remains IN PROGRESS at this checkpoint, so exact-main PASS is not yet claimed.
+Final PR head completed 22/22 triggered workflows SUCCESS. Fresh exact-main V1 run `35412829723` completed SUCCESS on exact merge SHA `39df23c3385118888e262c27a2331de34dda430d`. Artifacts: static `10575125302` (`sha256:0fae4559000ac195e6f58a5fd50b1070b232c74bd472dd90c36d6abb0a15cb92`) and clean runtime/browser `10575290283` (`sha256:a2609a4ffee6f7c538402a4850103d5c14f6baa51fe6dceea4f61030ecba9e89`).
 
 Theme metadata remains `1.3.10`. Published GitHub Release and verified production deployment remain historical `v1.3.0`. Evidence: `docs/evidence/HOMEPAGE_HERO_EDITOR_UX_MERGE_CLOSURE_20260919.md`.
