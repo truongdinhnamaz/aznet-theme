@@ -4,7 +4,7 @@ if (! defined('ABSPATH')) { define('ABSPATH', __DIR__ . '/'); }
 $root = dirname(__DIR__, 2);
 require_once $root . '/inc/theme/settings.php';
 $defaults = AZnet\Theme\settings_defaults();
-assert($defaults['schema_version'] === 4);
+assert($defaults['schema_version'] === 3);
 assert($defaults['homepage_preset'] === 'off');
 assert($defaults['homepage_law01_variant'] === 'navy-gold');
 assert($defaults['homepage_hero_variant'] === 'split');
