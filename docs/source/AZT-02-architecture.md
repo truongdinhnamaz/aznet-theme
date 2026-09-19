@@ -4,7 +4,7 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.13 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.14 |
 | --- | --- | --- | --- |
 | **Trạng thái** | Working Source | **Ngày** | 19/09/2026 |
 
@@ -176,6 +176,9 @@ Law 01 Hero no longer requires a dedicated WordPress Page as the primary authori
 - Theme stores only a typed `homepage_hero_block` reference plus allow-listed `homepage_hero_variant` presentation state.
 - These two keys are backward-compatible additions to the existing `aznet_theme_settings` family; `schema_version` remains `3` and no second Theme Mod or migration store is introduced.
 - The Theme MUST NOT copy Hero heading/body/image/CTA content into `aznet_theme_settings`.
+- For the primary Hero Library authoring path, **all user-editable Hero copy belongs to the same WordPress-owned synced Hero**: eyebrow/label, H1, value/supporting copy, CTA labels/links, media and trust/supporting messages. Theme code may style these elements but must not become the authoritative content source.
+- The legacy Site Title / Front Page title / Site Tagline projection and legacy generic trust strings are compatibility-only. Once a valid published `homepage_hero_block` exists, the rendered Hero must not depend on those fallback strings.
+- Control Center must expose the synced Hero as the single authoring destination for new UX; changing Site Title, Tagline or Front Page title is not the supported way to edit a configured Hero.
 - Changing `homepage_hero_variant` MUST change presentation only and MUST NOT rewrite the synced Hero block content.
 - The Theme MAY create the initial synced Hero block only through an explicit, nonce/capability-protected user action from the Hero Library. Initialization is **draft-first**: the new `wp_block` is stored as a draft and the typed reference may point to it, but public Hero resolution still requires `publish`, so the existing legacy/fallback Hero remains live until the user explicitly publishes the new Hero in the native block editor. Generic Theme activation, preset switching and ordinary settings save remain content-mutation free.
 - The created `wp_block` content must use ordinary Core blocks and remain editable in the native WordPress editor. No proprietary block type, opaque serialized builder schema or second content store is allowed.
