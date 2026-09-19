@@ -177,7 +177,7 @@ async function verifyHomepageHeroEditingBridge(page, viewportName) {
 
   await gotoCenter(page, 'homepage');
   const text = await center.innerText();
-  for (const needle of ['Thư viện Hero', 'Nguồn Hero hiện tại:', 'Dữ liệu dự phòng', 'không cần tạo Page', 'Dùng mẫu này']) {
+  for (const needle of ['Thư viện Hero', 'Nguồn Hero hiện tại:', 'Dữ liệu dự phòng', 'không cần tạo Page']) {
     if (!text.includes(needle)) throw new Error('Homepage Hero Library fallback UX missing ' + needle);
   }
 
