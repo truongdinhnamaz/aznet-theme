@@ -9,6 +9,7 @@ $mobilePanel = (string) file_get_contents($root . '/template-parts/header/mobile
 $law01ConsultationPath = $root . '/template-parts/header/law01-consultation.php';
 $law01Consultation = is_file($law01ConsultationPath) ? (string) file_get_contents($law01ConsultationPath) : '';
 $profile = (string) file_get_contents($root . '/template-parts/homepage/law-01/profile.php');
+$latest = (string) file_get_contents($root . '/template-parts/homepage/law-01/latest.php');
 $hero = (string) file_get_contents($root . '/template-parts/homepage/law-01/hero.php');
 $footer = (string) file_get_contents($root . '/template-parts/footer/site-footer.php');
 
@@ -107,6 +108,15 @@ $must(
     'Law 01 target trust strip must stay compact while retaining comfortable icon/text rhythm.'
 );
 $must(
+    str_contains($hero, '$trust_icon_names = [ \'shield\', \'people\', \'scales\', \'handshake\' ];') &&
+    str_contains($hero, 'aznet-theme-law01-hero__trust-icon--<?php echo esc_attr( $trust_icon_name ); ?>'),
+    'Law 01 trust strip must use the approved shield, people, scales and handshake presentation icon set without changing source messages.'
+);
+$must(
+    str_contains($css, '.aznet-theme-law01-hero__trust-icon--handshake svg'),
+    'Law 01 trust strip must include the reference handshake icon sizing hook.'
+);
+$must(
     str_contains($css, 'grid-template-columns: repeat(6, minmax(0, 1fr));'),
     'Law 01 target services must retain six cards in one desktop row.'
 );
@@ -154,6 +164,11 @@ $must(
 $must(
     str_contains($css, '.aznet-theme-law01-profile__container--about-only'),
     'Law 01 Profile CSS must expand the inherited About presentation when the Team source is empty.'
+);
+$must(
+    str_contains($css, '.aznet-theme-law01-profile__about-grid::after') &&
+    str_contains($css, 'data:image/svg+xml'),
+    'Law 01 About presentation must carry the approved decorative legal-scales watermark without introducing client-domain data.'
 );
 
 $must(
@@ -215,6 +230,20 @@ $must(
     str_contains($footer, 'if ( \'\' !== $social_menu || \'\' !== $policy_menu )'),
     'Law 01 Footer must keep empty WordPress menu projections fail-soft with no placeholder data.'
 );
+$must(
+    str_contains($footer, '$contact_heading = $law01_homepage') &&
+    str_contains($footer, 'Thông tin liên hệ') &&
+    str_contains($footer, '$navigation_heading = $law01_homepage') &&
+    str_contains($footer, 'Liên kết nhanh'),
+    'Law 01 Footer must use the approved reference headings without changing generic Footer copy.'
+);
+$must(
+    str_contains($css, '.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__identity { order: 1; }') &&
+    str_contains($css, '.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__contact { order: 2; }') &&
+    str_contains($css, '.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__navigation { order: 3; }') &&
+    str_contains($css, '.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__social-column { order: 4; }'),
+    'Law 01 Footer must visually order populated columns as Identity, Contact, Quick links, Social.'
+);
 
 
 $must(
@@ -237,6 +266,16 @@ $must(
         '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card__body'
     ) && str_contains($css, 'min-height: 100%;'),
     'Law 01 inherited Latest cards must retain an equal-height body rhythm while continuing to render WordPress-native posts.'
+);
+$must(
+    str_contains($latest, 'get_option( \'page_for_posts\', 0 )') &&
+    str_contains($latest, 'get_post_status( $posts_page_id )') &&
+    str_contains($latest, 'Xem tất cả bài viết'),
+    'Law 01 Latest heading must expose a fail-soft WordPress Posts Page link instead of inventing an archive URL.'
+);
+$must(
+    str_contains($latest, 'aznet-theme-law01-article-card__media-link'),
+    'Law 01 Latest featured media must be part of the source-backed post link surface.'
 );
 
 echo "PASS: Law 01 Hero/Trust/Services visual parity contract\n";
