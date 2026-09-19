@@ -51,5 +51,9 @@
     "legal_news_posts",
     "homepage_law01_variant_burgundy_gold",
     "theme_release_or_deployment"
-  ]
+  ],
+  "status": "historical_retired_pilot",
+  "retired_on": "2026-09-19",
+  "replacement_pilot": "https://lstamduchn.vn",
+  "reuse_policy": "Do not execute this mutation plan against the replacement pilot; recapture a fresh baseline and create a new bounded plan."
 }
