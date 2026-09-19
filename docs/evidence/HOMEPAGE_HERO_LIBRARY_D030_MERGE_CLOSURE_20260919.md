@@ -1,10 +1,10 @@
 # D-030 Homepage Hero Library — canonical merge closure
 
-**Date:** 19/09/2026  
-**Repository:** `truongdinhnamaz/aznet-theme`  
-**Merged PR:** #156  
-**Final verified PR head:** `c8a14556706a49bb380669b72bffd5b6f0cd98d5`  
-**Canonical merge:** `main@01ddbff1843dfd8a0e1cc276be34144f35aeba35`  
+**Date:** 19/09/2026
+**Repository:** `truongdinhnamaz/aznet-theme`
+**Merged PR:** #156
+**Final verified PR head:** `c8a14556706a49bb380669b72bffd5b6f0cd98d5`
+**Canonical merge:** `main@01ddbff1843dfd8a0e1cc276be34144f35aeba35`
 **Theme metadata:** `1.3.11`
 
 ## Result
