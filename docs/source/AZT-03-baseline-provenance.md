@@ -144,7 +144,7 @@ D-027 does not authorize a Git tag, GitHub Release, final production deployment,
 Under AZT-05 v1.0 and D-016:
 
 - WordPress-clean core Theme readiness is release-critical.
-- v1.1.0 and v1.2.0 publication/deployment remain retained historical PASS; current published release and verified production Theme on `tamduchanoi.aznet.vn` are `1.3.0` at their respective verified scopes.
+- v1.1.0 and v1.2.0 publication/deployment remain retained historical PASS; current published GitHub Release is `v1.3.10`, canonical repository Theme metadata is `1.3.11` after D-030 merge, and the verified production Theme on `tamduchanoi.aznet.vn` remains `1.3.0`.
 - v1.2 X1-X5 functional closure and X6 technical/publication/deployment evidence are retained.
 - v1.3 Y1-Y5 technical closure, exact-main/package verification, publication and owner-approved production deployment are PASS at their separately verified scopes.
 - Provider L5 is outside v1.3 Core and is not inferred from technical/publication/deployment PASS.
