@@ -70,6 +70,10 @@ function handle_homepage_hero_apply(): void {
     $created = false;
 
     if ( ! $hero instanceof \WP_Post ) {
+        if ( ! current_user_can( 'publish_posts' ) ) {
+            wp_die( esc_html__( 'Bạn không có quyền tạo nội dung Hero WordPress.', 'aznet-theme' ) );
+        }
+
         $content = homepage_hero_scaffold_content();
         if ( '' === $content ) {
             wp_die( esc_html__( 'Không thể khởi tạo nội dung Hero WordPress.', 'aznet-theme' ) );
