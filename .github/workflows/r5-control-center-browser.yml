@@ -7,6 +7,8 @@ on:
       - '.github/workflows/r5-control-center-browser.yml'
       - 'tests/browser/r5-control-center-l4.mjs'
       - 'tests/offline/r5-control-center-static-contract.php'
+      - 'tests/offline/homepage-hero-library-contract.php'
+      - 'patterns/homepage-hero-content.php'
       - 'inc/admin/**'
       - 'inc/theme/settings.php'
       - 'inc/theme/setup.php'
@@ -52,7 +54,9 @@ jobs:
           node-version: '22'
 
       - name: Verify R5 static contract first
-        run: php tests/offline/r5-control-center-static-contract.php
+        run: |
+          php tests/offline/r5-control-center-static-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-library-contract.php
 
       - name: Prepare prior R4 theme and exact R5 candidate
         run: |
