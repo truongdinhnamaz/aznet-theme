@@ -68,10 +68,17 @@ jobs:
             git push origin refs/tags/v1.3.12
           fi
 
-      - name: Publish GitHub Release
+      - name: Publish or verify GitHub Release
         run: |
           set -euo pipefail
-          gh release create v1.3.12 /tmp/aznet-theme-1.3.12.zip             --repo "$GITHUB_REPOSITORY"             --title "AZnet Theme 1.3.12"             --notes "Corrective D-030 release for responsive Homepage Hero title layout and complete WordPress-owned Hero authoring. The Hero title no longer uses narrow character-width caps; configured Hero content can be edited from one WordPress-owned synced Hero surface. Publication only; no production site deployment is performed by this release."
+          if gh release view v1.3.12 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo 'Release v1.3.12 already exists; verifying readback.'
+          else
+            gh release create v1.3.12 /tmp/aznet-theme-1.3.12.zip \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "AZnet Theme 1.3.12" \
+              --notes "Corrective D-030 release for responsive Homepage Hero title layout and complete WordPress-owned Hero authoring. The Hero title no longer uses narrow character-width caps; configured Hero content can be edited from one WordPress-owned synced Hero surface. Publication only; no production site deployment is performed by this release."
+          fi
         env:
           GH_TOKEN: ${{ github.token }}
 
