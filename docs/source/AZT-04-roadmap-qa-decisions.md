@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.72
+**Version:** v0.73
 **Status:** Working Source  
 **Date:** 19/09/2026
 
@@ -39,7 +39,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P4-C | Standalone Core independence | PASS / MERGED | D-027 source + implementation merged through PR #63/#64; zero-plugin L1-L4, exact-package and exact-main gates PASS; optional integrations remain additive |
 | P5 | Publication & production deployment | PASS | Tag `v1.1.0` + GitHub Release publication and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
 | X | v1.2 WordPress Experience Completion | PUBLICATION + PRODUCTION DEPLOYMENT PASS | X1-X5 retained; PR #87 technical integration and exact-main V1 + X6 L1-L4/L6 PASS; owner-approved `v1.2.0` publication PASS; owner-approved production deployment run `35135759389` plus fresh independent read-only run `35136876330` PASS; no provider L5 expansion |
-| Y | v1.3 Client Delivery System | PUBLICATION + PRODUCTION DEPLOYMENT PASS | Y1-Y5 merged through owner-approved PR #98 at `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`; exact-main V1 + X6 release-path verification PASS; owner-approved publication run `35211254633` published annotated `v1.3.0` + GitHub Release `390623960`; owner-approved production deployment run `35222200660` plus fresh independent read-only run `35223053733` PASS on `tamduchanoi.aznet.vn`; provider L5 remains separate |
+| Y | v1.3 Client Delivery System | v1.3.10 PUBLICATION PASS / v1.3.10 PRODUCTION DEPLOYMENT GATED | Current public release is owner-approved `v1.3.10` from exact verified implementation `39df23c...`, publication run `35413516574`, release `391877350`, asset SHA-256 `5ff6c486...`; currently verified production deployment remains historical `v1.3.0` on `tamduchanoi.aznet.vn` until a separate v1.3.10 deployment gate; provider L5 remains separate |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
 Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` points to `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`. Publication source closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72. P5 technical run `35051428372` verified final package bytes, publication run `35052694111` published the matching tag/Release, and production read-only run `35054176392` closed deployment at the tested Theme-owned/site-operations scope.
@@ -513,7 +513,7 @@ This remains Theme presentation only. RootProfile authoritative Team remains BLO
 
 ## 14. Exact next
 
-**NEXT — No new AZnet Theme implementation slice is opened by this closure. Preserve canonical Theme metadata `1.3.10`. Any tag/GitHub Release, production deployment, takeover or new roadmap slice requires a separate explicit owner gate. RootProfile-backed authoritative Team remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
+**NEXT — v1.3.10 publication is PASS. Production deployment of the exact published `v1.3.10` asset is the next release-path hard gate and requires separate explicit owner approval. Revalidate target-site local Theme modifications and rollback before deployment. No new Theme implementation slice is opened; RootProfile Team remains externally blocked at issue #112.**
 
 
 ### Canonical 1.3.10 merge and Homepage Hero editing UX candidate — 19/09/2026
@@ -541,3 +541,20 @@ No release/deployment authorization is created by this merge. RootProfile author
 Owner-approved source/evidence PR #152 merged to `main@27e6a2bc3d68bfa4aa51b22c0e1fda2867cec174`. The PR was documentation/evidence only, completed 7/7 triggered workflows SUCCESS and has zero file delta between its final head and merge commit. The implementation verification anchor remains PR #151 merge `main@39df23c3385118888e262c27a2331de34dda430d` plus fresh exact-main V1 run `35412829723` SUCCESS.
 
 No new Theme implementation slice is opened by this closure. Release/deployment/takeover remain separately approval-gated; RootProfile Team remains externally blocked at issue #112.
+
+
+### AZnet Theme 1.3.10 publication — 19/09/2026
+
+The product owner explicitly approved release 1.3.10. Isolated publication run `35413516574` completed SUCCESS against exact verified implementation source `39df23c3385118888e262c27a2331de34dda430d`.
+
+The publication workflow rebuilt the exact post-PR #151 package twice and verified deterministic byte identity, 145 production files, 108/108 packaged PHP lint, exact source/package identity, clean WordPress 6.9 package activation/render, annotated tag and GitHub Release state, and published-asset SHA rehash.
+
+Published state:
+- annotated `v1.3.10` tag object `c4d295acb6e849415ac5a228656e361660298e12`;
+- tag target `39df23c3385118888e262c27a2331de34dda430d`;
+- GitHub Release `391877350`;
+- asset `573847909` / `aznet-theme-1.3.10.zip`;
+- published SHA-256 `5ff6c4862839dcdb6dfbbb77a71cb8bd87259b83cfbf308aa6b04279396bd572`;
+- publication evidence artifact `10574826580`, digest `sha256:822d07e3908400c0357d9497695ea88fb82468c684944a9d95cc24aa49a14e21`.
+
+The earlier pre-PR #151 1.3.10 candidate package is superseded and not reused as the release asset. Publication does not deploy any production site. The currently verified production deployment remains v1.3.0 until a separate owner-approved v1.3.10 deployment operation is executed and independently reverified.
