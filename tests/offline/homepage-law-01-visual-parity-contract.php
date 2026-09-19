@@ -32,6 +32,47 @@ $must(
     ),
     'Law 01 reference Hero surface may be full-width, but its inner grid must inherit the shared shell.'
 );
+
+$must(
+    1 === preg_match(
+        '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-hero__content\\s*\\{[^}]*background:\\s*transparent;/s',
+        $css
+    ),
+    'Law 01 Hero text column must not paint its own boxed background against the full-width section surface.'
+);
+$must(
+    str_contains($css, '--law01-hero-inline-bleed: max(var(--aznet-theme-gutter), calc((100vw - 96rem) / 2));'),
+    'Law 01 Hero must derive the viewport bleed from the shared 96rem shell instead of hardcoding a second layout width.'
+);
+$must(
+    1 === preg_match(
+        '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-hero__visual\\s*\\{[^}]*width:\\s*calc\\(100% \\+ var\\(--law01-hero-inline-bleed\\)\\);[^}]*margin-inline-end:\\s*calc\\(-1 \\* var\\(--law01-hero-inline-bleed\\)\\);/s',
+        $css
+    ),
+    'Law 01 Hero image surface must bleed to the viewport edge while the content grid stays on the shared shell.'
+);
+
+$must(
+    1 === preg_match(
+        '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-hero h1\\s*\\{[^}]*max-width:\\s*10\\.5ch;[^}]*line-height:\\s*0\\.98;[^}]*letter-spacing:\\s*-\\.03em;[^}]*text-wrap:\\s*balance;/s',
+        $css
+    ),
+    'Law 01 Hero title must use the approved compact editorial typography instead of a blocky default heading.'
+);
+$must(
+    1 === preg_match(
+        '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-hero__visual::before\\s*\\{[^}]*width:\\s*clamp\\(5rem,\\s*8vw,\\s*9rem\\);[^}]*linear-gradient\\(90deg,[^}]*var\\(--law01-client-cream\\)[^}]*transparent/s',
+        $css
+    ),
+    'Law 01 Hero image must use a soft cream-to-transparent transition layer so the image edge does not read as a hard seam.'
+);
+$must(
+    1 === preg_match(
+        '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-hero__image\\s*\\{[^}]*transform:\\s*scale\\(1\\.02\\);[^}]*transform-origin:\\s*center;/s',
+        $css
+    ),
+    'Law 01 Hero image must use the approved subtle crop polish so the visual reads as part of the scene rather than a pasted rectangle.'
+);
 $must(
     str_contains(
         $css,

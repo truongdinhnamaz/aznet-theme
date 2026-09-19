@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.67
+**Version:** v0.69
 **Status:** Working Source  
 **Date:** 19/09/2026
 
@@ -487,6 +487,30 @@ Exact production head `5f3dcf00f0a619b58a966078b2cd969cb7fec45d` completed **14/
 
 This checkpoint does not change Theme/provider ownership. RootProfile authoritative Team remains BLOCKED at issue #112. Tag/GitHub Release and production deployment remain separate explicit approval gates.
 
+### Law 01 seamless-Hero correction and AZnet Theme 1.3.9 client-delivery candidate — 19/09/2026
+
+The owner clarified a visual requirement not fully captured by the prior reference-parity slice: the Hero must not expose visible boxed boundaries between the text/image region and the page background. The section surface stays full-width; the shared 96rem shell still owns content alignment; the text column no longer paints a separate background; the image surface bleeds to the viewport edge. On mobile, the stacked image surface reaches both viewport edges.
+
+Visual RED head `ffd2c8e48498bf0849ec8fa022feddb52da80806` failed the intended no-boxed-background assertion. Exact visual head `8cf81cb0ec7955d7605e32913aa36af7fe31b20d` completed 14/14 workflows SUCCESS after the retained 48/52 check was correctly measured against the shared grid rather than the bleeding image width.
+
+Because 1.3.8 is already canonical and packaged, the improved bytes are promoted to 1.3.9. Release RED head `886c3d751326d16a90bddfa54bcaafa7b9af31d4` failed the intended 1.3.9 metadata contract. Exact production head `b4ead6ea541074fa76b1657d20de07828c5bfde9` completed **19/19 triggered workflows SUCCESS, 0 failure**.
+
+Deterministic package `aznet-theme-1.3.9.zip`: 145 production files, 108 packaged PHP lint PASS, SHA-256 `33a70a1d63ae96c21d6efe381f8a0fea299ac0c14a49df56c5edfe8c2eb9404a`. Y5 run `35406199947`; promoted-package artifact `10571874751`; artifact digest `sha256:892e96890c189950000367c886bccd70b697de6c0ed442bcbb3527480ae7d9d9`.
+
+This is Theme presentation only. RootProfile authoritative Team remains BLOCKED under issue #112. Tag/GitHub Release and production deployment remain separate explicit approval gates.
+
+### Law 01 Hero typography/transition polish + AZnet Theme 1.3.10 candidate — 19/09/2026
+
+The owner approved a bounded visual polish after the seamless-Hero correction: retain the full-width section and shared-shell geometry, but improve the title's editorial rhythm and soften the cream-to-image transition so the image no longer reads as a hard pasted rectangle.
+
+Visual RED `f95fba80020db53c126c41fe52f6fa8020c516eb` failed the intended title-polish assertion. Minimal production change tightened title measure/line-height/tracking, added a non-interactive cream-to-transparent transition overlay at the image edge and a subtle image crop. Browser geometry/no-overflow checks remain retained.
+
+Because 1.3.9 had already been packaged from the still-unmerged candidate before this extra polish, it is superseded and not reused. The current package is 1.3.10, with canonical promotion guarded as `1.3.8 -> 1.3.10`.
+
+Exact production head `a4c3621ec6d651b7e4c4d1085a2b900f8c94454b` completed **22/22 triggered workflows SUCCESS, 0 failure**. Deterministic package `aznet-theme-1.3.10.zip`: 145 production files, 108 packaged PHP lint PASS, SHA-256 `9eb8a3ad1c24b7e75a695199de3e45bf3e196bebd7fff8774f7390969283c92d`. Y5 run `35410299118`; artifact `10574586211`; digest `sha256:dadb066567c2b6c6d3c1f28f338a22441903fed03a55ad47433ac2d164f58132`.
+
+This remains Theme presentation only. RootProfile authoritative Team remains BLOCKED under issue #112. Tag/GitHub Release and production deployment remain separate explicit approval gates.
+
 ## 14. Exact next
 
-**NEXT — canonical merge of PR #149 is the next approval gate for the verified 1.3.8 client-delivery candidate. Do not tag, publish a GitHub Release or deploy production without separate explicit approval.**
+**NEXT — canonical merge of PR #150 is the next approval gate for the verified 1.3.10 polished-Hero client-delivery candidate. Do not tag, publish a GitHub Release or deploy production without separate explicit approval.**
