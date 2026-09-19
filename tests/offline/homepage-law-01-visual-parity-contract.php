@@ -107,6 +107,17 @@ $must(
     'Law 01 target trust strip must stay compact while retaining comfortable icon/text rhythm.'
 );
 $must(
+    str_contains($hero, 'aznet-theme-law01-hero__trust-icon--shield') &&
+    str_contains($hero, 'aznet-theme-law01-hero__trust-icon--people') &&
+    str_contains($hero, 'aznet-theme-law01-hero__trust-icon--scales') &&
+    str_contains($hero, 'aznet-theme-law01-hero__trust-icon--handshake'),
+    'Law 01 trust strip must use the approved shield, people, scales and handshake presentation icon set without changing source messages.'
+);
+$must(
+    str_contains($css, '.aznet-theme-law01-hero__trust-icon--handshake svg'),
+    'Law 01 trust strip must include the reference handshake icon sizing hook.'
+);
+$must(
     str_contains($css, 'grid-template-columns: repeat(6, minmax(0, 1fr));'),
     'Law 01 target services must retain six cards in one desktop row.'
 );
