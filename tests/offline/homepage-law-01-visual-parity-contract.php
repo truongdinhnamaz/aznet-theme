@@ -165,6 +165,11 @@ $must(
     str_contains($css, '.aznet-theme-law01-profile__container--about-only'),
     'Law 01 Profile CSS must expand the inherited About presentation when the Team source is empty.'
 );
+$must(
+    str_contains($css, '.aznet-theme-law01-profile__about-grid::after') &&
+    str_contains($css, 'data:image/svg+xml'),
+    'Law 01 About presentation must carry the approved decorative legal-scales watermark without introducing client-domain data.'
+);
 
 $must(
     str_contains($footer, '$law01_homepage =') &&
