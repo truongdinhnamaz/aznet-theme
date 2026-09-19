@@ -1,4 +1,4 @@
-name: OPS Tam Duc v1.3.11 Deployment Preflight
+name: OPS lstamduchn.vn v1.3.11 Deployment Preflight
 
 on:
   push:
@@ -28,15 +28,19 @@ jobs:
       - name: Verify preflight static contract
         run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/tamduc-v1-3-11-preflight-contract.php
 
-      - name: Download and verify exact published v1.3.11 package
+      - name: Download and verify exact target and rollback packages
         run: |
           set -euo pipefail
           curl -fL --retry 3 --retry-delay 2             https://github.com/truongdinhnamaz/aznet-theme/releases/download/v1.3.11/aznet-theme-1.3.11.zip             -o /tmp/aznet-theme-1.3.11.zip
           echo '723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0  /tmp/aznet-theme-1.3.11.zip' | sha256sum -c -
-          rm -rf /tmp/aznet-v1-3-11-package
-          mkdir -p /tmp/aznet-v1-3-11-package
-          unzip -q /tmp/aznet-theme-1.3.11.zip -d /tmp/aznet-v1-3-11-package
-          test "$(find /tmp/aznet-v1-3-11-package/aznet-theme -type f | wc -l | tr -d ' ')" = '147'
+          curl -fL --retry 3 --retry-delay 2             https://github.com/truongdinhnamaz/aznet-theme/releases/download/v1.3.10/aznet-theme-1.3.10.zip             -o /tmp/aznet-theme-1.3.10.zip
+          echo '5ff6c4862839dcdb6dfbbb77a71cb8bd87259b83cfbf308aa6b04279396bd572  /tmp/aznet-theme-1.3.10.zip' | sha256sum -c -
+          rm -rf /tmp/aznet-target /tmp/aznet-rollback
+          mkdir -p /tmp/aznet-target /tmp/aznet-rollback
+          unzip -q /tmp/aznet-theme-1.3.11.zip -d /tmp/aznet-target
+          unzip -q /tmp/aznet-theme-1.3.10.zip -d /tmp/aznet-rollback
+          test "$(find /tmp/aznet-target/aznet-theme -type f | wc -l | tr -d ' ')" = '147'
+          test "$(find /tmp/aznet-rollback/aznet-theme -type f | wc -l | tr -d ' ')" = '145'
 
       - name: Set up Node 22
         uses: actions/setup-node@v4
@@ -52,29 +56,18 @@ jobs:
       - name: Check preflight harness syntax
         run: node --check tests/browser/tamduc-v1-3-11-preflight.mjs
 
-      - name: Revalidate live site and capture exact pre-deploy Theme rollback snapshot
+      - name: Revalidate lstamduchn.vn without mutation
         env:
-          TAMDUC_BASE_URL: https://tamduchanoi.aznet.vn
+          TAMDUC_BASE_URL: https://lstamduchn.vn
           PILOT_WP_USER: ${{ secrets.PILOT_WP_USER }}
           PILOT_WP_PASSWORD: ${{ secrets.PILOT_WP_PASSWORD }}
-          EXPECTED_LIVE_VERSION: 1.3.1
-          TAMDUC_STATE_DIR: /tmp/tamduc-v1-3-11-preflight
+          TAMDUC_STATE_DIR: /tmp/lstamduchn-v1-3-11-preflight
         run: node tests/browser/tamduc-v1-3-11-preflight.mjs
 
-      - name: Build rollback package from exact live Theme snapshot
-        run: |
-          set -euo pipefail
-          cd /tmp/tamduc-v1-3-11-preflight/rollback
-          zip -qr ../aznet-theme-live-predeploy-1.3.1.zip aznet-theme
-          cd ..
-          sha256sum aznet-theme-live-predeploy-1.3.1.zip | tee rollback-sha256.txt
-          unzip -t aznet-theme-live-predeploy-1.3.1.zip >/dev/null
-          test "$(find rollback/aznet-theme -type f | wc -l | tr -d ' ')" = '140'
-
-      - name: Upload preflight and rollback evidence
+      - name: Upload preflight evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: tamduc-v1-3-11-preflight
-          path: /tmp/tamduc-v1-3-11-preflight
+          name: lstamduchn-v1-3-11-preflight
+          path: /tmp/lstamduchn-v1-3-11-preflight
           if-no-files-found: error
