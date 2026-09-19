@@ -87,6 +87,33 @@ foreach (['wp:group', 'wp:columns', 'wp:heading', 'wp:paragraph', 'wp:buttons'] 
 assert(! preg_match('/<!--\s+wp:aznet-theme\//', $pattern_source), 'Hero content pattern must not introduce a proprietary AZnet block type.');
 assert(! str_contains($pattern_source, '<!-- wp:image'), 'Hero scaffold must not serialize an empty Core Image block; users insert a valid Core Image through the editor.');
 assert(str_contains($pattern_source, 'Chèn block Ảnh vào cột này để chọn ảnh Hero.'), 'Hero scaffold must explain where to insert the WordPress Core Image block.');
+foreach ([
+    'aznet-theme-homepage-hero-content__value',
+    'aznet-theme-homepage-hero-content__secondary',
+    'aznet-theme-homepage-hero-content__trust',
+    'aznet-theme-homepage-hero-content__trust-grid',
+    'aznet-theme-homepage-hero-content__trust-item',
+    'Liên hệ tư vấn',
+    'Xem dịch vụ',
+    'Tư vấn rõ ràng',
+    'Giải pháp thực tiễn',
+    'Bảo mật thông tin',
+    'Đồng hành tận tâm',
+] as $needle) {
+    assert(str_contains($pattern_source, $needle), "Complete WordPress-owned Hero authoring scaffold missing: {$needle}");
+}
+assert(str_contains($admin, 'Một nơi để sửa toàn bộ Hero'), 'Control Center must explain the single WordPress-owned Hero authoring surface.');
+assert(str_contains($admin, 'chữ, nút, ảnh và cam kết'), 'Control Center must identify the complete editable Hero content scope.');
+assert(str_contains($hero, "if ( '' === $hero_block_html )"), 'Legacy hard-coded trust copy must be isolated to the fallback path.');
+assert(str_contains($hero, 'Legacy compatibility only.'), 'Hero template must document legacy-only hard-coded trust copy.');
+foreach ([
+    '.aznet-theme-homepage-hero-content__value',
+    '.aznet-theme-homepage-hero-content__secondary',
+    '.aznet-theme-homepage-hero-content__trust-grid',
+    '.aznet-theme-homepage-hero-content__trust-item',
+] as $needle) {
+    assert(str_contains($css, $needle), "Complete Hero Library presentation missing: {$needle}");
+}
 
 
 assert(1 === preg_match('/homepage-hero-content__eyebrow\\s*\\{[^}]*color:\\s*var\\(--law01-gold-text,\\s*#8a632b\\);/s', $css), 'Hero Library eyebrow must use an accessible dark-gold text token on the light Hero surface.');
