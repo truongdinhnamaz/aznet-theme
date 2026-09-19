@@ -25,6 +25,8 @@ function homepage_slot_statuses(): array {
     $legacy_hero_page_id = (int) ( $s['homepage_hero_page'] ?? 0 );
     if ( null !== homepage_block_reference( $hero_block_id ) ) {
         $statuses['hero'] = 'READY';
+    } elseif ( null !== homepage_hero_candidate_reference( $hero_block_id ) ) {
+        $statuses['hero'] = 'DRAFT';
     } elseif ( null !== homepage_page_reference( $legacy_hero_page_id ) ) {
         $statuses['hero'] = 'LEGACY_PAGE';
     } else {
