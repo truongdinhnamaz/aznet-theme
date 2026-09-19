@@ -145,6 +145,17 @@ $must(
     str_contains($law01Consultation, 'Yêu cầu tư vấn'),
     'Law 01 consultation action must resolve only the mapped public WordPress Contact Page and fail-soft when it is absent.'
 );
+$must(
+    str_contains($profile, '$has_members = [] !== $members;') &&
+    str_contains($profile, 'aznet-theme-law01-profile__container--about-only') &&
+    str_contains($profile, '$team instanceof \\WP_Post && $has_members'),
+    'Law 01 Profile must fail-soft to an About-only composition when no legitimate mapped Team members exist.'
+);
+$must(
+    str_contains($css, '.aznet-theme-law01-profile__container--about-only'),
+    'Law 01 Profile CSS must expand the inherited About presentation when the Team source is empty.'
+);
+
 $membersPos = strpos($profile, 'aznet-theme-law01-profile__members');
 $teamCtaPos = strpos($profile, 'aznet-theme-law01-team-more');
 $must(
