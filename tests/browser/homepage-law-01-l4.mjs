@@ -133,6 +133,29 @@ async function inspectViewport(browser, name, viewport) {
       if (await page.locator(selector).count() > 0) throw new Error(`Burgundy Homepage rendered non-approved section ${selector}`);
     }
 
+    const compositionOrder = [
+      '.aznet-theme-law01-hero',
+      '.aznet-theme-law01-hero__trust-grid',
+      '.aznet-theme-law01-services',
+      '.aznet-theme-law01-profile',
+      '.aznet-theme-law01-process',
+      '.aznet-theme-law01-faq',
+      '.aznet-theme-law01-articles',
+      '.aznet-theme-law01-final-cta',
+      '.aznet-theme-site-footer',
+    ];
+    const compositionTops = [];
+    for (const selector of compositionOrder) {
+      const box = await page.locator(selector).first().boundingBox();
+      if (!box) throw new Error(`Burgundy composition order probe missing ${selector}`);
+      compositionTops.push({ selector, y: box.y });
+    }
+    for (let index = 1; index < compositionTops.length; index += 1) {
+      if (compositionTops[index].y <= compositionTops[index - 1].y) {
+        throw new Error(`Burgundy composition order mismatch: ${JSON.stringify(compositionTops)}`);
+      }
+    }
+
     if (viewport.width > 960) {
       const headingMetrics = await page.locator('.aznet-theme-law01-section h2').evaluateAll((nodes) => nodes.map((node) => {
         const rect = node.getBoundingClientRect();
