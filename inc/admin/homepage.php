@@ -116,6 +116,7 @@ function render_homepage_hero_library( array $settings ): void {
 
     if ( $hero_block instanceof \WP_Post ) {
         echo '<div class="aznet-theme-homepage-hero-editor__status aznet-theme-homepage-hero-editor__status--ready"><strong>' . esc_html__( 'Nguồn Hero hiện tại:', 'aznet-theme' ) . '</strong> ' . esc_html__( 'Hero WordPress', 'aznet-theme' ) . '</div>';
+        echo '<p class="description">' . esc_html__( 'Muốn tạm quay lại Hero cũ/dự phòng mà không xóa nội dung, hãy chuyển Hero WordPress này về trạng thái Bản nháp.', 'aznet-theme' ) . '</p>';
     } elseif ( $hero_candidate instanceof \WP_Post && 'draft' === $hero_candidate->post_status ) {
         echo '<div class="aznet-theme-homepage-hero-editor__status aznet-theme-homepage-hero-editor__status--warning"><strong>' . esc_html__( 'Nguồn Hero hiện tại:', 'aznet-theme' ) . '</strong> ' . esc_html__( 'Hero WordPress đang soạn', 'aznet-theme' ) . '</div>';
         echo '<p class="notice notice-info inline aznet-theme-homepage-hero-editor__notice">' . esc_html__( 'Hero mới vẫn là bản nháp nên website tiếp tục hiển thị Hero cũ/dự phòng. Hoàn thiện nội dung và xuất bản Hero để chuyển nguồn an toàn.', 'aznet-theme' ) . '</p>';
