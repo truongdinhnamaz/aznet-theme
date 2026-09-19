@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.77
+**Version:** v0.78
 **Status:** Working Source  
 **Date:** 19/09/2026
 
@@ -22,7 +22,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | W | WooCommerce presentation shell | PASS / retained | W1-W9 + R4; WooCommerce retains commerce truth |
 | E | RootProfile Profile / Contact | OPTIONAL COMPAT ACTIVE / TEAM PROJECTION BLOCKED | E0-E4/E5-B retained PASS; E5-C remains external-blocked and E5-D takeover locked. Pilot evidence confirms no public/versioned organization-team projection and no organization profile on the target site; issue #112 records the blocker. Non-blocking for core under D-016. |
 | F | Homepage | CORE PASS / F9 PROVIDER L5 PASS | Native Theme Homepage remains core PASS; F8 L3-L4 evidence is retained. ConvertFlow F9-A..E plus retained C1 are PASS at the exact Theme `v1.3.0` reference-producer / Core P5.244 + Pro P5.164 scope recorded in `F9_PROVIDER_L5_SOURCE_SYNC_20260918.md`. Law 01 live presentation/rerun QA is PASS at the tested site scope; RootProfile-backed Team projection remains separately external-blocked under issue #112 and does not reopen core Homepage PASS. |
-| D-030 | Homepage Hero Library | PASS / MERGED / PUBLISHED | PR #156 merged the WordPress-owned synced Hero + Theme-owned variant library to `main@01ddbff1843dfd8a0e1cc276be34144f35aeba35`; 37/37 final-head workflows and fresh exact-main V1 run `35422599658` PASS. Owner-approved `v1.3.11` publication is PASS; production deployment remains separately gated. |
+| D-030 | Homepage Hero Library | PASS / MERGED / PUBLISHED 1.3.12 | Base D-030 PR #156 remains retained; owner-approved corrective PR #159 removed stale Hero title width caps and completed the single WordPress-owned Hero authoring surface. Final head `4b8fc7c78fb17e32fbc9c4fb9399bdeaf3f98744` completed 28/28 workflows SUCCESS and merged to `main@7c73f7e050e95c23c5c968b2365b643753431246` with zero file delta. Exact-main V1 `35434502224` + X6 `35434502232` PASS. Owner-approved `v1.3.12` publication is PASS; production deployment remains separately gated. |
 | G | Core v1.0 Cleanup / Release | TECHNICAL PASS | G0-G8 production/release-candidate closure merged; publication is a separate live GitHub state |
 | R0 | v1.0 -> v1.1 Source Reconciliation | PASS | Source-only reconciliation merged through PR #36; v1.1 product/architecture ratified |
 | R1 | Design System 2.0 | PASS | PR #37 merged; settings/tokens + Default/Editorial/Commerce outcomes + editor/frontend parity L1-L4 |
@@ -594,6 +594,20 @@ Accepted refinement:
 - Because `v1.3.11` is already published and immutable, this corrective implementation advances candidate metadata to `1.3.12`; it does not rewrite the published `v1.3.11` artifact.
 
 Implementation/QA is tracked in PR #159. Publication and production deployment remain separate owner gates after implementation merge and exact-main verification.
+
+### D-030 corrective v1.3.12 publication closure — 19/09/2026
+
+Owner-approved corrective release `v1.3.12` is published.
+
+- PR #159 final head `4b8fc7c78fb17e32fbc9c4fb9399bdeaf3f98744`: 28/28 workflows SUCCESS.
+- Canonical merge: `main@7c73f7e050e95c23c5c968b2365b643753431246`; final-head -> merge comparison has zero changed files.
+- Fresh exact-main V1 run `35434502224`: SUCCESS; X6 push closure `35434502232`: SUCCESS.
+- Annotated tag `v1.3.12` object `dcdca2f199049bbb025dce18e8f9b322b6a46c00` dereferences to the exact merge commit.
+- GitHub Release `392012403`, asset `574476748` `aznet-theme-1.3.12.zip`: 147 production files, 110 packaged PHP lint PASS, SHA-256 `e9299f51bcedb6da781ab60c6c1570ebf7f2633557040ed3368389483b0078b6`.
+- Final publication/readback run `35434785751`: SUCCESS; evidence artifact `10581698277`, digest `sha256:4e6e98a56873b9080d634b12dfc0417f7060a8325ea5e749133d2af0e1e7330b`.
+- Publication does not authorize production deployment. Fresh read-only state on current target `lstamduchn.vn` remains active Theme `1.3.10`; older `tamduchanoi.aznet.vn` records are historical only.
+
+Evidence: `docs/evidence/V1_3_12_PUBLICATION_20260919.md`.
 
 ### D-030 canonical merge closure — 19/09/2026
 

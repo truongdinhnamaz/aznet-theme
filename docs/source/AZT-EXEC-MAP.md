@@ -1,15 +1,15 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.68
+**Version:** v0.69
 **Status:** Working Execution Map / derived  
 **Date:** 19/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** publication-time live `main` is `f2f20e1e67407a0b259e90cbf7063f94d887bada`; exact D-030 implementation remains `01ddbff1843dfd8a0e1cc276be34144f35aeba35`, final head `c8a14556706a49bb380669b72bffd5b6f0cd98d5` completed 37/37 workflows SUCCESS and exact-main V1 run `35422599658` is SUCCESS. Canonical Theme metadata and current published GitHub Release are both `1.3.11`; published asset SHA-256 is `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`. Verified production remains historical `v1.3.0`; RootProfile Team remains blocked under issue #112.
+> **Canonical-main checkpoint:** current canonical implementation is `main@7c73f7e050e95c23c5c968b2365b643753431246` after owner-approved corrective PR #159. Final head `4b8fc7c78fb17e32fbc9c4fb9399bdeaf3f98744` completed 28/28 workflows SUCCESS; exact-main V1 run `35434502224` and X6 push closure `35434502232` are SUCCESS. Canonical Theme metadata and current published GitHub Release are both `1.3.12`; published asset SHA-256 is `e9299f51bcedb6da781ab60c6c1570ebf7f2633557040ed3368389483b0078b6`. Current production target `lstamduchn.vn` remains active Theme `1.3.10`; v1.3.12 deployment is separately gated. RootProfile Team remains blocked under issue #112.
 
-**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS`. Current v1.3 state: `PUBLICATION + PRODUCTION DEPLOYMENT PASS`; published/GitHub-Release release and verified production deployment are both `v1.3.0` at their respective verified scopes.
+**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS`. Current corrective-release state: `v1.3.12 PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED`. Historical v1.3.0 deployment evidence is retained, but `tamduchanoi.aznet.vn` is no longer the current production target; fresh read-only state on `lstamduchn.vn` remains Theme `1.3.10`.
 
 ## 1. Current state
 
@@ -527,6 +527,17 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - Deterministic 1.3.11 package from Y5 run `35422400222`: 147 production files, 110 packaged PHP lint PASS, SHA-256 `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`.
 - D-030 state: **PASS / MERGED**. Tag/GitHub Release and production deployment remain separate approval gates.
 
+
+## 15.15 v1.3.12 corrective publication closure — 19/09/2026
+
+- Owner-approved corrective PR #159 final head `4b8fc7c78fb17e32fbc9c4fb9399bdeaf3f98744`: 28/28 workflows SUCCESS.
+- Merge: `main@7c73f7e050e95c23c5c968b2365b643753431246`; final head -> merge has zero changed files.
+- Exact-main V1 `35434502224` and X6 `35434502232`: SUCCESS.
+- Published annotated tag `v1.3.12` -> exact merge commit; GitHub Release `392012403`.
+- Asset `aznet-theme-1.3.12.zip`: 147 production files, 110 packaged PHP lint PASS, SHA-256 `e9299f51bcedb6da781ab60c6c1570ebf7f2633557040ed3368389483b0078b6`.
+- Final publication/readback run `35434785751`: SUCCESS; artifact `10581698277` digest `sha256:4e6e98a56873b9080d634b12dfc0417f7060a8325ea5e749133d2af0e1e7330b`.
+- Current production target `lstamduchn.vn` remains live Theme `1.3.10`; deployment of 1.3.12 is not claimed.
+- Evidence: `docs/evidence/V1_3_12_PUBLICATION_20260919.md`.
 
 ## 15.14 v1.3.11 publication closure — 19/09/2026
 
