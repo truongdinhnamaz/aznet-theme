@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.55
+**Version:** v0.56
 **Status:** Working Source  
 **Date:** 19/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -229,7 +229,21 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**NEXT — PR #150 is the owner-approved AZnet Theme 1.3.9 seamless-Hero client-delivery candidate built from canonical `main@597639e26a2cb242c3c0a71e5459ab5d66a0701d`. Exact production head `b4ead6ea541074fa76b1657d20de07828c5bfde9` completed 19/19 triggered workflows SUCCESS and produced the deterministic installable package. Canonical merge remains the next approval gate. Git tag/GitHub Release and production deployment remain separate gates; RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
+**NEXT — PR #150 is now the owner-approved AZnet Theme 1.3.10 polished-Hero client-delivery candidate built from canonical `main@597639e26a2cb242c3c0a71e5459ab5d66a0701d`. Exact production head `a4c3621ec6d651b7e4c4d1085a2b900f8c94454b` completed 22/22 triggered workflows SUCCESS and produced the deterministic installable package. Canonical merge remains the next approval gate. Git tag/GitHub Release and production deployment remain separate gates; RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
+
+### AZnet Theme 1.3.10 polished-Hero client-delivery candidate — 19/09/2026
+
+After the seamless-Hero correction, the owner approved one more presentation polish pass: improve the Hero title rhythm and soften the visual seam where the cream text surface meets the Hero image, without changing the shared 96rem shell, 48/52 desktop composition or any provider/domain ownership boundary.
+
+Visual RED head `f95fba80020db53c126c41fe52f6fa8020c516eb` failed the intended compact-title assertion. Minimal production polish at `bd811fec2619e3a28806540d1b86affa20c36dd6` tightened the title measure/line-height/tracking, added a decorative cream-to-transparent image-edge transition, and applied a subtle 1.02 image crop. The rendered browser contract confirms the pseudo-element exists, remains non-interactive and preserves the retained edge-bleed/no-overflow geometry.
+
+Because a 1.3.9 package had already been generated from this still-unmerged PR before the extra polish was approved, 1.3.9 is retained as superseded/unmerged provenance and the improved bytes are promoted to 1.3.10. Release RED head `0070f8103ee6b508e2b637983ab1e20b3fd76695` failed the intended Y5 assertion `Y5 promoted style.css must be exactly 1.3.10`. Canonical main remains 1.3.8, so the X6 promotion guard correctly validates the eventual `1.3.8 -> 1.3.10` metadata boundary.
+
+Exact production head `a4c3621ec6d651b7e4c4d1085a2b900f8c94454b` completed **22/22 triggered workflows SUCCESS, 0 failure**. Law 01 Browser Quality run `35410299157` produced artifact `10574376317`, digest `sha256:87c3d01aabc47c3b92ca673887d8eb1454fe7a88795cfa9900f41c8acb1729eb`; the 1440 screenshot was manually inspected and shows the cream-to-image transition without a hard vertical seam while retaining shared-shell alignment.
+
+Y5 produced deterministic `aznet-theme-1.3.10.zip`, 145 production files, 108/108 packaged PHP lint PASS, SHA-256 `9eb8a3ad1c24b7e75a695199de3e45bf3e196bebd7fff8774f7390969283c92d`. Run `35410299118`; promoted-package artifact `10574586211`, digest `sha256:dadb066567c2b6c6d3c1f28f338a22441903fed03a55ad47433ac2d164f58132`.
+
+Canonical `main` remains Theme metadata 1.3.8 until PR #150 is merged. Tag/GitHub Release and production deployment are not claimed. Evidence: `docs/evidence/V1_3_10_POLISHED_HERO_CLIENT_DELIVERY_20260919.md`.
 
 ### AZnet Theme 1.3.9 seamless-Hero client-delivery candidate — 19/09/2026
 
