@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.80
+**Version:** v0.81
 **Status:** Working Source  
 **Date:** 20/09/2026
 
@@ -21,7 +21,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | D | Generic Templates | PASS / retained | Page/Post/Archive/Search/404 technical closure plus P2/P3 editorial hardening and P4 real-pilot quality evidence are retained |
 | W | WooCommerce presentation shell | PASS / retained | W1-W9 + R4; WooCommerce retains commerce truth |
 | E | RootProfile Profile / Contact | OPTIONAL COMPAT ACTIVE / TEAM PROJECTION BLOCKED | E0-E4/E5-B retained PASS; E5-C remains external-blocked and E5-D takeover locked. Pilot evidence confirms no public/versioned organization-team projection and no organization profile on the target site; issue #112 records the blocker. Non-blocking for core under D-016. |
-| F | Homepage | CORE PASS / LAW 01 1.3.15 PUBLISHED / F9 PROVIDER L5 RETAINED | Native Theme Homepage remains core PASS; ConvertFlow F9 provider L5 remains retained at its separately certified scope. Owner-approved Law 01 PR #167 merged exact implementation `6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3`, Theme `1.3.15`; exact-main V1/X6 PASS and owner-approved publication run `35474494290` published annotated `v1.3.15` + GitHub Release `392243619` with exact package SHA-256 `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`. RootProfile-backed authoritative Team membership remains external-blocked under open issue #112. Production deployment remains a separate owner gate. |
+| F | Homepage | CORE PASS / LAW 01 1.3.15 PUBLISHED / PROD DEPLOY BLOCKED_EXTERNAL_ACCESS / F9 PROVIDER L5 RETAINED | Native Theme Homepage remains core PASS; ConvertFlow F9 provider L5 remains retained at its separately certified scope. Exact implementation `6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3` and owner-approved `v1.3.15` publication remain PASS. Owner-approved production deployment to `lstamduchn.vn` is blocked before mutation because all observed HTTPS backends stall after TLS ClientHello from GitHub-hosted runners under TLS 1.2 and 1.3; WPVibe fallback is temporarily rate-limited. No live deployment is claimed. RootProfile Team membership remains independently blocked under issue #112. |
 | D-030 | Homepage Hero Library | PASS / MERGED / PUBLISHED 1.3.12 | Base D-030 PR #156 remains retained; owner-approved corrective PR #159 removed stale Hero title width caps and completed the single WordPress-owned Hero authoring surface. Final head `4b8fc7c78fb17e32fbc9c4fb9399bdeaf3f98744` completed 28/28 workflows SUCCESS and merged to `main@7c73f7e050e95c23c5c968b2365b643753431246` with zero file delta. Exact-main V1 `35434502224` + X6 `35434502232` PASS. Owner-approved `v1.3.12` publication is PASS; production deployment remains separately gated. |
 | G | Core v1.0 Cleanup / Release | TECHNICAL PASS | G0-G8 production/release-candidate closure merged; publication is a separate live GitHub state |
 | R0 | v1.0 -> v1.1 Source Reconciliation | PASS | Source-only reconciliation merged through PR #36; v1.1 product/architecture ratified |
@@ -658,3 +658,20 @@ Owner-approved GitHub publication is PASS.
 - RootProfile authoritative Team membership remains BLOCKED_EXTERNAL_CONTRACT under issue #112.
 
 Evidence: `docs/evidence/V1_3_15_PUBLICATION_20260920.md`.
+
+
+### v1.3.15 lstamduchn.vn deployment preflight — BLOCKED_EXTERNAL_ACCESS — 20/09/2026
+
+Owner-approved production deployment was stopped safely at preflight.
+
+- Initial authenticated read-only preflight run `35474904344`: FAILURE before login due HTTPS navigation timeout.
+- Network diagnostic run `35475064743`: DNS PASS; TCP/80 and TCP/443 reachable; HTTP redirects to HTTPS; TLS handshake stalls after ClientHello on each observed IPv4 backend.
+- TLS isolation run `35475224372`: forced TLS 1.2 and TLS 1.3 both time out on all three IPv4 backends.
+- WPVibe authenticated fallback: temporarily unavailable due rolling daily usage cap.
+- Production mutation: none.
+- Fresh active Theme version: UNKNOWN.
+- Last verified live Theme: `1.3.10`, retained as historical operational evidence only.
+- Safe rollback identity remains UNKNOWN until current live version is freshly verified; published `v1.3.10` is not assumed to be current.
+- RootProfile issue #112 is unrelated and remains separately external-blocked.
+
+Evidence: `docs/evidence/V1_3_15_LSTAMDUCHN_DEPLOYMENT_PREFLIGHT_BLOCKED_20260920.md`.

@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.65
+**Version:** v0.66
 **Status:** Working Source  
 **Date:** 20/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -17,7 +17,7 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 - Current canonical Law 01 / client-delivery technical baseline: owner-approved PR #167 final head `a47e2f371db3de6c85eb43f34db7ae360f482458` completed 24/24 exact-head checks SUCCESS and merged with zero file delta to `main@6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3`, tree `09a00e9d930a18f600859aa58f5a4d2a6731962e`, Theme metadata `1.3.15`. Fresh exact-main V1 run `35473959243` and X6 run `35473959238` both completed SUCCESS. Deterministic `aznet-theme-1.3.15.zip` SHA-256 is `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`, 148 production files, 111 packaged PHP files; X6 evidence artifact `10593342179` digest `sha256:e2561025314574c12ad63af1fd9b4db80e9c78165e833e850fbd490075ddf5f3`. Evidence: `docs/evidence/V1_3_15_TECHNICAL_CLOSURE_20260920.md`.
 - Previous published corrective baseline: owner-approved PR #159 final head `4b8fc7c78fb17e32fbc9c4fb9399bdeaf3f98744` completed 28/28 workflows SUCCESS and merged with zero file delta to `main@7c73f7e050e95c23c5c968b2365b643753431246`, Theme metadata `1.3.12`. Fresh exact-main V1 run `35434502224` and X6 push closure `35434502232` both completed SUCCESS.
 - Current published GitHub Release is `v1.3.15`: annotated tag object `a0895fc339b1020d7147b00eac243340691fde23` dereferences to exact verified implementation `6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3`; Release `392243619`; asset `575623879` `aznet-theme-1.3.15.zip`, 148 production files, 111 packaged PHP files, SHA-256 `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`. Owner-approved publication run `35474494290` completed SUCCESS; artifact `10593402386` digest `sha256:cf35664008ef75b2a93dca455e14987c571949e826d0bda97b000ad86f6dff67`. Evidence: `docs/evidence/V1_3_15_PUBLICATION_20260920.md`.
-- Current production target remains `lstamduchn.vn`. No `v1.3.15` production deployment is claimed. A fresh authenticated read-only check was attempted after publication but was blocked by the external WPVibe rolling daily fair-use limit, so fresh live Theme version is UNKNOWN in this closure. The last source-backed production verification remains AZnet Theme `1.3.10`; earlier `tamduchanoi.aznet.vn` deployment records remain historical provenance only.
+- Current production target remains `lstamduchn.vn`. Owner approved `v1.3.15` production deployment, but mandatory preflight is **BLOCKED_EXTERNAL_ACCESS** before mutation: GitHub-hosted runner DNS and TCP/80/443 reach the host, while TLS stalls after ClientHello on all three observed IPv4 backends (`103.166.183.10`, `103.56.163.10`, `103.216.118.10`) under both forced TLS 1.2 and TLS 1.3. The connected WPVibe authenticated fallback is temporarily unavailable due its rolling daily usage cap. Therefore no production mutation occurred; fresh live Theme version remains UNKNOWN and `1.3.10` remains only the last verified state. Evidence: `docs/evidence/V1_3_15_LSTAMDUCHN_DEPLOYMENT_PREFLIGHT_BLOCKED_20260920.md`.
 - Canonical X6 technical integration is `main@c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`, tree `70c04929afe38e87d317bad3414157e9e2bd6f74`, after owner-approved PR #87; `V1 Exact Main Verification` run `35129331899` and X6 push-to-main run `35129331927` both completed SUCCESS on that exact merge SHA.
 - Published release `v1.1.0` source anchor: `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`.
 - Owner-approved publication closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has the same tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72.
@@ -409,3 +409,14 @@ Owner-approved publication run `35474494290` completed SUCCESS from temporary br
 Annotated tag object `a0895fc339b1020d7147b00eac243340691fde23` dereferences to the exact implementation commit. Publication evidence artifact `10593402386` has digest `sha256:cf35664008ef75b2a93dca455e14987c571949e826d0bda97b000ad86f6dff67`. Temporary workflow cleanup commit `efcfa1cd3a64470808f98d01ec9911dddd87298b` leaves the ops branch with zero net file delta from publication-time `main@79fcf11f043129a4ce82629a77fc1267802b2bba`.
 
 Production deployment is not part of this publication closure. Fresh post-publication live readback on `lstamduchn.vn` is UNKNOWN because the connected WPVibe account reached its rolling daily fair-use limit; the earlier Theme `1.3.10` observation is retained only as the last verified production state. RootProfile Team membership remains external-blocked under issue #112. Evidence: `docs/evidence/V1_3_15_PUBLICATION_20260920.md`.
+
+
+### AZnet Theme 1.3.15 production deployment preflight blocked — 20/09/2026
+
+Owner approval for deployment was received, but deployment did not proceed because the required secure read-only preflight could not reach the WordPress login surface over HTTPS.
+
+Operational branch `ops/deploy-v1.3.15-lstamduchn` reproduced the failure before authentication. Initial run `35474904344` timed out navigating to `/wp-login.php`. Diagnostic run `35475064743` resolved three IPv4 backends and proved TCP/80 returned a normal HTTPS redirect while TCP/443 accepted connections but every backend stalled after TLS ClientHello. Protocol-isolation run `35475224372` then reproduced the same timeout with forced TLS 1.2 and TLS 1.3 on every backend. WPVibe was separately unavailable due its rolling daily usage cap.
+
+No production mutation was performed, WordPress credentials were not sent over HTTP, and no rollback package was selected from stale state. Published `v1.3.10` (asset `573847909`, SHA-256 `5ff6c4862839dcdb6dfbbb77a71cb8bd87259b83cfbf308aa6b04279396bd572`) is only a potential rollback if fresh preflight reconfirms the active pre-deploy version is still `1.3.10`.
+
+Evidence: `docs/evidence/V1_3_15_LSTAMDUCHN_DEPLOYMENT_PREFLIGHT_BLOCKED_20260920.md`.
