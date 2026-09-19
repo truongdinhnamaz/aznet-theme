@@ -1,6 +1,6 @@
 # AZnet Theme Source Manifest
 
-Canonical source is reconciled through owner-approved PR #151. Live canonical `main` is Theme metadata `1.3.10` at `main@39df23c3385118888e262c27a2331de34dda430d`; final PR head `b17532c0bc7348317c5044fa25262d28cb9fef54` completed 22/22 triggered workflows SUCCESS and has zero file delta to the merge commit. Fresh exact-main V1 run `35412829723` is in progress and exact-main PASS is not yet claimed. Published GitHub Release and verified production deployment remain historical `v1.3.0`. RootProfile-backed authoritative Team membership remains blocked at issue #112.
+Canonical source is reconciled through owner-approved PR #151. Live canonical `main` is Theme metadata `1.3.10` at `main@39df23c3385118888e262c27a2331de34dda430d`; final PR head `b17532c0bc7348317c5044fa25262d28cb9fef54` completed 22/22 triggered workflows SUCCESS and has zero file delta to the merge commit. Fresh exact-main V1 run `35412829723` completed SUCCESS on the merge SHA. Published GitHub Release and verified production deployment remain historical `v1.3.0`. RootProfile-backed authoritative Team membership remains blocked at issue #112.
 | Source | Semantic version | Role |
 | --- | --- | --- |
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
@@ -69,7 +69,7 @@ Derived DOCX source material remains archival/export evidence only. Canonical so
 
 19/09/2026 Homepage Hero editing UX evidence: `docs/evidence/HOMEPAGE_HERO_EDITOR_UX_20260919.md` records PR #150 canonical merge + exact-main V1/X6 PASS, PR #151 RED->GREEN authoring bridge, reconciliation to canonical 1.3.10 and 19/19 final workflow success. Hero copy remains WordPress-owned; Theme does not create a parallel Hero content store.
 
-**Exact next:** PR #151 is merged. Wait for fresh exact-main V1 run `35412829723`; exact-main PASS requires the full run to complete SUCCESS. Tag/GitHub Release and production deployment remain separate explicit gates.
+**Exact next:** merge the source-only PR carrying the PR #151 merge closure after explicit owner approval. Tag/GitHub Release and production deployment remain separate explicit gates.
 
 
-19/09/2026 PR #151 merge-closure evidence: `docs/evidence/HOMEPAGE_HERO_EDITOR_UX_MERGE_CLOSURE_20260919.md` records owner-approved merge to `main@39df23c3...`, zero file delta from the 22/22-verified final head and the fresh exact-main V1 run currently in progress.
+19/09/2026 PR #151 merge-closure evidence: `docs/evidence/HOMEPAGE_HERO_EDITOR_UX_MERGE_CLOSURE_20260919.md` records owner-approved merge to `main@39df23c3...`, zero file delta from the 22/22-verified final head and fresh exact-main V1 run `35412829723` SUCCESS.
