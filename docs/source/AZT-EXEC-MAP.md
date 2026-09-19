@@ -1,15 +1,15 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.70
+**Version:** v0.71
 **Status:** Working Execution Map / derived  
 **Date:** 20/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** current canonical implementation is `main@6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3` after owner-approved PR #167. Final head `a47e2f371db3de6c85eb43f34db7ae360f482458` completed 24/24 exact-head checks SUCCESS; exact-main V1 run `35473959243` and X6 run `35473959238` are SUCCESS. Theme metadata is `1.3.15`; deterministic package SHA-256 is `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8` with 148 production files and 111 packaged PHP files. Current published GitHub Release remains `v1.3.12`; v1.3.15 publication and production deployment are separate owner gates. RootProfile Team remains blocked under open issue #112.
+> **Canonical-main checkpoint:** exact verified implementation remains `6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3` after owner-approved PR #167; source/evidence closure is merged through `main@79fcf11f043129a4ce82629a77fc1267802b2bba`. Theme metadata is `1.3.15`; exact-main V1 `35473959243` and X6 `35473959238` are SUCCESS. Owner-approved publication run `35474494290` published annotated `v1.3.15` and GitHub Release `392243619`; public package SHA-256 is `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`, 148 production files, 111 packaged PHP files. Production deployment remains separately gated. RootProfile Team remains blocked under open issue #112.
 
-**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS -> corrective releases through v1.3.12 publication PASS -> Law 01 PR #166/#167 -> v1.3.15 exact-main technical closure PASS`. Current release boundary: `v1.3.15 TECHNICAL PASS / PUBLICATION GATED / PRODUCTION DEPLOYMENT GATED`; latest public GitHub Release remains `v1.3.12`.
+**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS -> corrective releases through v1.3.12 publication PASS -> Law 01 PR #166/#167 -> v1.3.15 exact-main technical closure PASS -> owner-approved v1.3.15 publication PASS`. Current release boundary: `v1.3.15 TECHNICAL + PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED`.
 
 ## 1. Current state
 
@@ -59,14 +59,14 @@ P3 final verified head `d78091900451176c3815b23d1485036e784bdde9` merged through
 
 ## 1.1 Exact current checkpoint — 20/09/2026
 
-- Canonical `main`: `6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3` after owner-approved PR #167. Theme metadata `1.3.15`; final PR head `a47e2f371db3de6c85eb43f34db7ae360f482458` completed 24/24 exact-head checks SUCCESS and has zero file delta to the merge tree.
-- Fresh exact-main V1 `35473959243`: SUCCESS. Fresh exact-main X6 `35473959238`: SUCCESS, including 32/32 browser/axe cases, deterministic double-build, source/package identity, packaged PHP verification and lifecycle/rollback.
-- Deterministic package: `aznet-theme-1.3.15.zip`, SHA-256 `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`, 148 production files, 111 packaged PHP files. X6 artifact `10593342179`, digest `sha256:e2561025314574c12ad63af1fd9b4db80e9c78165e833e850fbd490075ddf5f3`.
-- Latest public GitHub Release remains `v1.3.12`; no `v1.3.15` tag/Release is claimed by this checkpoint.
+- Exact verified implementation: `6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3`, Theme `1.3.15`; source/evidence technical closure is merged through `main@79fcf11f043129a4ce82629a77fc1267802b2bba`.
+- Exact-main V1 `35473959243`: SUCCESS. Exact-main X6 `35473959238`: SUCCESS, including 32/32 browser/axe, deterministic double-build, source/package identity, packaged PHP verification and lifecycle/rollback.
+- Published release: annotated `v1.3.15` object `a0895fc339b1020d7147b00eac243340691fde23` -> exact implementation; GitHub Release `392243619`; asset `575623879`; SHA-256 `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`.
+- Publication run `35474494290`: SUCCESS; evidence artifact `10593402386`, digest `sha256:cf35664008ef75b2a93dca455e14987c571949e826d0bda97b000ad86f6dff67`.
 - RootProfile Team/member discovery remains BLOCKED_EXTERNAL_CONTRACT under open issue #112. Theme must not self-unblock through private storage, WordPress-user enumeration or heuristic identity inference.
-- No production deployment/live-site mutation is claimed by this technical closure.
+- No production deployment/live-site mutation is claimed. Fresh post-publication read-only verification on `lstamduchn.vn` is UNKNOWN because the external WPVibe daily fair-use cap was reached; Theme `1.3.10` remains only the last verified live state.
 
-**Exact Next:** owner decision on GitHub publication of the exact verified `v1.3.15` package. Publication is a hard gate; production deployment remains a separate later gate. If publication is not approved, preserve this recoverable technical checkpoint and do not start a new Theme core slice merely to bypass issue #112.
+**Exact Next:** owner decision on production deployment of the exact published `v1.3.15` asset to `lstamduchn.vn`. Deployment is a hard gate and must preserve rollback/continuity. If deployment is not approved or current site access remains unavailable, preserve this publication checkpoint; do not infer live `1.3.15`.
 
 ## 2. Slice discipline
 
@@ -528,6 +528,19 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - Deterministic 1.3.11 package from Y5 run `35422400222`: 147 production files, 110 packaged PHP lint PASS, SHA-256 `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`.
 - D-030 state: **PASS / MERGED**. Tag/GitHub Release and production deployment remain separate approval gates.
 
+
+## 15.17 v1.3.15 publication closure — 20/09/2026
+
+- Exact release source: `6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3`.
+- Publication run `35474494290`: SUCCESS.
+- Annotated tag `v1.3.15` object `a0895fc339b1020d7147b00eac243340691fde23` -> exact implementation.
+- GitHub Release `392243619`; asset `575623879` `aznet-theme-1.3.15.zip`.
+- Asset SHA-256 `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`; 148 production files; 111 packaged PHP files.
+- Publication evidence artifact `10593402386`, digest `sha256:cf35664008ef75b2a93dca455e14987c571949e826d0bda97b000ad86f6dff67`.
+- Temporary workflow cleanup `efcfa1cd3a64470808f98d01ec9911dddd87298b`; zero net file delta against publication-time `main@79fcf11f043129a4ce82629a77fc1267802b2bba`.
+- State: **v1.3.15 TECHNICAL PASS / PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED**.
+- Fresh post-publication live readback: UNKNOWN due external WPVibe daily fair-use cap; prior Theme `1.3.10` is last verified live state only.
+- Evidence: `docs/evidence/V1_3_15_PUBLICATION_20260920.md`.
 
 ## 15.16 v1.3.15 technical closure — 20/09/2026
 
