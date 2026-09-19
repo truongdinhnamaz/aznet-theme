@@ -249,8 +249,8 @@ $must(
     'Law 01 inherited Latest cards must retain an equal-height body rhythm while continuing to render WordPress-native posts.'
 );
 $must(
-    str_contains($latest, "get_option( 'page_for_posts', 0 )") &&
-    str_contains($latest, "get_post_status( $posts_page_id )") &&
+    str_contains($latest, 'get_option( \'page_for_posts\', 0 )') &&
+    str_contains($latest, 'get_post_status( $posts_page_id )') &&
     str_contains($latest, 'Xem tất cả bài viết'),
     'Law 01 Latest heading must expose a fail-soft WordPress Posts Page link instead of inventing an archive URL.'
 );
