@@ -1,13 +1,13 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.62
+**Version:** v0.63
 **Status:** Working Execution Map / derived  
 **Date:** 19/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** live `main` is Theme metadata `1.3.10` at owner-approved PR #150 merge `main@55ca349c8808d0d6a3c96d5201983ae966b1d822`. Fresh exact-main V1 run `35412045895` and X6 run `35412045904` completed SUCCESS. PR #151 is the verified Homepage Hero editing UX follow-up: reconciled production/test head `82073e715be349f29fe84dbd0405c5af6e1b5c93`, ahead-only / behind-by-zero against canonical main, 19/19 triggered workflows SUCCESS at final disposition. Published GitHub Release and verified production deployment remain historical `v1.3.0`; RootProfile Team remains blocked under issue #112.
+> **Canonical-main checkpoint:** live `main` is Theme metadata `1.3.10` at owner-approved PR #151 merge `main@39df23c3385118888e262c27a2331de34dda430d`. Final PR head `b17532c0bc7348317c5044fa25262d28cb9fef54` completed 22/22 triggered workflows SUCCESS and has zero file delta to the merge commit. Fresh exact-main V1 run `35412829723` is in progress; exact-main PASS is not yet claimed. Published GitHub Release and verified production deployment remain historical `v1.3.0`; RootProfile Team remains blocked under issue #112.
 
 **Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS`. Current v1.3 state: `PUBLICATION + PRODUCTION DEPLOYMENT PASS`; published/GitHub-Release release and verified production deployment are both `v1.3.0` at their respective verified scopes.
 
@@ -454,7 +454,7 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 16. Exact next
 
-**NEXT — merge PR #151 only after the explicit owner merge gate for the verified Homepage Hero editing UX candidate on canonical 1.3.10. Do not tag, publish or deploy as part of this candidate closure.**
+**NEXT — PR #151 merge is complete. Wait for exact-main V1 run `35412829723`; if it completes SUCCESS, record exact-main closure. Do not tag, publish or deploy without a separate explicit gate.**
 
 
 ## 15.9 Homepage Hero editing UX follow-up — 19/09/2026
@@ -469,3 +469,15 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - No Theme-owned Hero copy fields, no WordPress content mutation, no provider ownership transfer.
 - Rollback: revert PR #151; no data migration required.
 - Merge remains approval-gated; tag/GitHub Release/deploy remain separate gates.
+
+
+## 15.10 Homepage Hero editing UX canonical merge — 19/09/2026
+
+- Owner-approved PR #151 merged final head `b17532c0bc7348317c5044fa25262d28cb9fef54` to `main@39df23c3385118888e262c27a2331de34dda430d`.
+- Final-head verification: 22/22 triggered workflows SUCCESS.
+- Git comparison final head -> merge commit: zero file delta.
+- Fresh exact-main V1 run `35412829723`: static/core SUCCESS; clean runtime/browser IN PROGRESS at this checkpoint.
+- Theme metadata: `1.3.10`.
+- Published release/deployment: historical `v1.3.0`.
+- RootProfile Team: BLOCKED at issue #112.
+- Release/tag/deploy: separate approval gates.
