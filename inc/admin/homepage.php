@@ -6,6 +6,7 @@ use function AZnet\Theme\homepage_category_reference;
 use function AZnet\Theme\homepage_category_references;
 use function AZnet\Theme\homepage_direct_published_children;
 use function AZnet\Theme\homepage_latest_posts;
+use function AZnet\Theme\homepage_block_reference;
 use function AZnet\Theme\homepage_page_reference;
 use function AZnet\Theme\settings;
 
@@ -19,8 +20,18 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 function homepage_slot_statuses(): array {
     $s = settings();
     $statuses = [];
+
+    $hero_block_id = (int) ( $s['homepage_hero_block'] ?? 0 );
+    $legacy_hero_page_id = (int) ( $s['homepage_hero_page'] ?? 0 );
+    if ( null !== homepage_block_reference( $hero_block_id ) ) {
+        $statuses['hero'] = 'READY';
+    } elseif ( null !== homepage_page_reference( $legacy_hero_page_id ) ) {
+        $statuses['hero'] = 'LEGACY_PAGE';
+    } else {
+        $statuses['hero'] = 'FALLBACK';
+    }
+
     $page_slots = [
-        'hero'     => 'homepage_hero_page',
         'services' => 'homepage_services_page',
         'about'    => 'homepage_about_page',
         'team'     => 'homepage_team_page',
@@ -85,75 +96,58 @@ function homepage_page_select( string $key, string $label, int $current, array $
 }
 
 /**
- * Render the Homepage Hero authoring bridge without duplicating WordPress content.
+ * Render the D-030 Hero Library without storing Hero copy in Theme settings.
  *
- * @param array<string, mixed> $settings Normalized Theme presentation settings.
- * @param array<int, \WP_Post> $pages Published WordPress Pages.
+ * @param array<string, mixed> $settings Normalized Theme presentation/reference settings.
  */
-function render_homepage_hero_editor( array $settings, array $pages ): void {
-    $hero_id = (int) ( $settings['homepage_hero_page'] ?? 0 );
-    $hero = homepage_page_reference( $hero_id );
+function render_homepage_hero_library( array $settings ): void {
+    $hero_block = homepage_block_reference( (int) ( $settings['homepage_hero_block'] ?? 0 ) );
+    $legacy_page = homepage_page_reference( (int) ( $settings['homepage_hero_page'] ?? 0 ) );
+    $current_variant = (string) ( $settings['homepage_hero_variant'] ?? 'split' );
+    $variants = homepage_hero_library_variants();
 
-    echo '<div class="aznet-theme-homepage-hero-editor">';
-    echo '<div class="aznet-theme-homepage-hero-editor__heading"><div><h3>' . esc_html__( 'Hero trang chủ', 'aznet-theme' ) . '</h3>';
-    echo '<p class="description">' . esc_html__( 'Nội dung Hero thuộc WordPress. Theme chỉ chọn nguồn và trình bày, vì vậy anh/chị có thể sửa copy riêng cho Hero mà không phải đổi Tên website hoặc tiêu đề Trang chủ.', 'aznet-theme' ) . '</p></div></div>';
+    echo '<div class="aznet-theme-panel aznet-theme-homepage-hero-editor">';
+    echo '<div class="aznet-theme-homepage-hero-editor__heading"><div><h2>' . esc_html__( 'Thư viện Hero', 'aznet-theme' ) . '</h2>';
+    echo '<p class="description">' . esc_html__( 'Chọn cách trình bày Hero. Nội dung được lưu trong WordPress dưới dạng Hero đồng bộ bằng block lõi; Theme không lưu bản sao tiêu đề, mô tả, ảnh hay CTA.', 'aznet-theme' ) . '</p></div></div>';
 
-    homepage_page_select( 'homepage_hero_page', __( 'Nguồn Hero', 'aznet-theme' ), $hero_id, $pages );
-
-    if ( $hero instanceof \WP_Post ) {
-        $title = trim( (string) get_the_title( $hero ) );
-        $excerpt = trim( (string) get_the_excerpt( $hero ) );
-        $body = trim( (string) wp_strip_all_tags( strip_shortcodes( (string) $hero->post_content ) ) );
-        $summary = '' !== $excerpt ? $excerpt : wp_trim_words( $body, 34, '…' );
-        $edit_link = get_edit_post_link( $hero->ID, 'raw' );
-        $view_link = get_permalink( $hero );
-        $image = has_post_thumbnail( $hero )
-            ? get_the_post_thumbnail( $hero, 'medium', [ 'class' => 'aznet-theme-homepage-hero-editor__image' ] )
-            : '';
-
-        echo '<div class="aznet-theme-homepage-hero-editor__status aznet-theme-homepage-hero-editor__status--ready"><strong>' . esc_html__( 'Nguồn Hero hiện tại:', 'aznet-theme' ) . '</strong> ' . esc_html__( 'Hero riêng', 'aznet-theme' ) . '</div>';
-        echo '<div class="aznet-theme-homepage-hero-editor__preview">';
-        if ( '' !== $image ) {
-            echo '<div class="aznet-theme-homepage-hero-editor__media">' . wp_kses_post( $image ) . '</div>';
-        }
-        echo '<div class="aznet-theme-homepage-hero-editor__copy">';
-        echo '<span class="aznet-theme-homepage-hero-editor__label">' . esc_html__( 'Tiêu đề Hero', 'aznet-theme' ) . '</span>';
-        echo '<strong class="aznet-theme-homepage-hero-editor__title">' . esc_html( '' !== $title ? $title : __( '(Chưa có tiêu đề)', 'aznet-theme' ) ) . '</strong>';
-        if ( '' !== $summary ) {
-            echo '<p>' . esc_html( $summary ) . '</p>';
-        } else {
-            echo '<p class="description">' . esc_html__( 'Page Hero chưa có Mô tả ngắn hoặc Nội dung.', 'aznet-theme' ) . '</p>';
-        }
-        echo '</div></div>';
-
-        echo '<div class="aznet-theme-homepage-hero-editor__actions">';
-        if ( is_string( $edit_link ) && '' !== $edit_link ) {
-            echo '<a class="button button-primary" href="' . esc_url( $edit_link ) . '">' . esc_html__( 'Sửa nội dung Hero', 'aznet-theme' ) . '</a>';
-        }
-        if ( is_string( $view_link ) && '' !== $view_link ) {
-            echo '<a class="button" href="' . esc_url( $view_link ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Xem Page Hero', 'aznet-theme' ) . '</a>';
-        }
-        echo '</div>';
+    if ( $hero_block instanceof \WP_Post ) {
+        echo '<div class="aznet-theme-homepage-hero-editor__status aznet-theme-homepage-hero-editor__status--ready"><strong>' . esc_html__( 'Nguồn Hero hiện tại:', 'aznet-theme' ) . '</strong> ' . esc_html__( 'Hero WordPress', 'aznet-theme' ) . '</div>';
+    } elseif ( $legacy_page instanceof \WP_Post ) {
+        echo '<div class="aznet-theme-homepage-hero-editor__status aznet-theme-homepage-hero-editor__status--warning"><strong>' . esc_html__( 'Nguồn Hero hiện tại:', 'aznet-theme' ) . '</strong> ' . esc_html__( 'Hero Page cũ', 'aznet-theme' ) . '</div>';
+        echo '<p class="notice notice-warning inline aznet-theme-homepage-hero-editor__notice">' . esc_html__( 'Website vẫn đang dùng Page Hero cũ để tương thích. Chọn một mẫu bên dưới và bấm “Dùng mẫu này” để khởi tạo Hero WordPress mới; Page cũ không bị xóa.', 'aznet-theme' ) . '</p>';
     } else {
-        $front_id = (int) get_option( 'page_on_front', 0 );
-        $site_title = trim( (string) get_bloginfo( 'name' ) );
-        $front_title = $front_id > 0 ? trim( (string) get_the_title( $front_id ) ) : '';
-        $fallback_title = '' !== $site_title ? $site_title : $front_title;
-
         echo '<div class="aznet-theme-homepage-hero-editor__status aznet-theme-homepage-hero-editor__status--warning"><strong>' . esc_html__( 'Nguồn Hero hiện tại:', 'aznet-theme' ) . '</strong> ' . esc_html__( 'Dữ liệu dự phòng', 'aznet-theme' ) . '</div>';
-        echo '<p class="notice notice-warning inline aznet-theme-homepage-hero-editor__notice">' . esc_html__( 'Hero hiện đang dùng dữ liệu dự phòng từ Tên website và Trang chủ. Hãy chọn hoặc tạo một Page Hero riêng để viết tiêu đề, mô tả và nội dung đúng cho phần mở đầu.', 'aznet-theme' ) . '</p>';
-        if ( '' !== $fallback_title ) {
-            echo '<div class="aznet-theme-homepage-hero-editor__preview aznet-theme-homepage-hero-editor__preview--fallback"><div class="aznet-theme-homepage-hero-editor__copy">';
-            echo '<span class="aznet-theme-homepage-hero-editor__label">' . esc_html__( 'Tiêu đề đang hiển thị theo fallback', 'aznet-theme' ) . '</span>';
-            echo '<strong class="aznet-theme-homepage-hero-editor__title">' . esc_html( $fallback_title ) . '</strong>';
-            echo '</div></div>';
-        }
-        echo '<div class="aznet-theme-homepage-hero-editor__actions">';
-        echo '<a class="button button-primary" href="' . esc_url( admin_url( 'post-new.php?post_type=page' ) ) . '">' . esc_html__( 'Tạo Page Hero mới', 'aznet-theme' ) . '</a>';
-        echo '</div>';
+        echo '<p class="notice notice-warning inline aznet-theme-homepage-hero-editor__notice">' . esc_html__( 'Chưa có Hero WordPress riêng. Chọn một mẫu bên dưới để bắt đầu mà không cần tạo Page.', 'aznet-theme' ) . '</p>';
     }
 
-    echo '<p class="description aznet-theme-homepage-hero-editor__ownership">' . esc_html__( 'Theme không lưu bản sao tiêu đề, mô tả hoặc nội dung Hero. Sau khi sửa Page, nội dung mới sẽ được dùng tại Hero khi Page đó được chọn làm nguồn.', 'aznet-theme' ) . '</p>';
+    echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="aznet-theme-homepage-hero-library">';
+    echo '<input type="hidden" name="action" value="aznet_theme_apply_homepage_hero">';
+    wp_nonce_field( 'aznet_theme_apply_homepage_hero' );
+    echo '<div class="aznet-theme-homepage-hero-library__grid">';
+    foreach ( $variants as $slug => $label ) {
+        $checked = checked( $current_variant, $slug, false );
+        echo '<label class="aznet-theme-homepage-hero-library__card aznet-theme-homepage-hero-library__card--' . esc_attr( $slug ) . '">';
+        echo '<input type="radio" name="homepage_hero_variant" value="' . esc_attr( $slug ) . '"' . $checked . '>';
+        echo '<span class="aznet-theme-homepage-hero-library__preview" aria-hidden="true"><span></span><span></span></span>';
+        echo '<strong>' . esc_html( $label ) . '</strong>';
+        echo '</label>';
+    }
+    echo '</div>';
+    echo '<div class="aznet-theme-homepage-hero-editor__actions">';
+    submit_button( __( 'Dùng mẫu này', 'aznet-theme' ), 'primary', 'submit', false );
+    if ( $hero_block instanceof \WP_Post ) {
+        $edit_link = get_edit_post_link( $hero_block->ID, 'raw' );
+        if ( is_string( $edit_link ) && '' !== $edit_link ) {
+            echo '<a class="button" href="' . esc_url( $edit_link ) . '">' . esc_html__( 'Sửa nội dung Hero', 'aznet-theme' ) . '</a>';
+        }
+    } elseif ( $legacy_page instanceof \WP_Post ) {
+        $legacy_edit = get_edit_post_link( $legacy_page->ID, 'raw' );
+        if ( is_string( $legacy_edit ) && '' !== $legacy_edit ) {
+            echo '<a class="button" href="' . esc_url( $legacy_edit ) . '">' . esc_html__( 'Sửa Hero Page cũ', 'aznet-theme' ) . '</a>';
+        }
+    }
+    echo '</div></form>';
+    echo '<p class="description aznet-theme-homepage-hero-editor__ownership">' . esc_html__( 'Đổi mẫu chỉ đổi presentation. Nội dung Hero WordPress không bị viết lại và vẫn còn khi đổi Theme.', 'aznet-theme' ) . '</p>';
     echo '</div>';
 }
 
@@ -173,23 +167,31 @@ function render_homepage_settings(): void {
     $s = settings();
     $pages = get_pages( [ 'post_status' => 'publish', 'sort_column' => 'post_title' ] );
     $categories = get_categories( [ 'hide_empty' => false ] );
-    $visible = [
-        'homepage_preset', 'homepage_law01_variant', 'homepage_hero_page', 'homepage_services_page', 'homepage_about_page', 'homepage_team_page',
-        'homepage_knowledge_terms', 'homepage_case_analysis_term', 'homepage_legal_news_term',
-        'homepage_process_page', 'homepage_faq_page', 'homepage_contact_page',
-    ];
 
+    $preset_visible = [ 'homepage_preset', 'homepage_law01_variant' ];
     echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="aznet-theme-panel">';
     echo '<input type="hidden" name="action" value="aznet_theme_save_settings">';
     wp_nonce_field( 'aznet_theme_save_settings' );
-    render_hidden_settings( $visible );
+    render_hidden_settings( $preset_visible );
     echo '<h2>' . esc_html__( 'Mẫu trang chủ', 'aznet-theme' ) . '</h2>';
     field_select( 'homepage_preset', __( 'Mẫu', 'aznet-theme' ), [ 'off' => 'Tắt Composer', 'law-01' => 'Luật 01' ], (string) $s['homepage_preset'] );
     field_select( 'homepage_law01_variant', __( 'Biến thể Luật 01', 'aznet-theme' ), [ 'navy-gold' => 'Navy + Gold', 'burgundy-gold' => 'Burgundy + Gold' ], (string) $s['homepage_law01_variant'] );
     echo '<p class="description">' . esc_html__( 'Luật 01: website dịch vụ pháp lý kết hợp nội dung chuyên môn. Áp dụng mẫu chỉ đổi presentation, không sửa nội dung WordPress.', 'aznet-theme' ) . '</p>';
+    submit_button( __( 'Lưu mẫu trang chủ', 'aznet-theme' ) );
+    echo '</form>';
 
+    render_homepage_hero_library( $s );
+
+    $source_visible = [
+        'homepage_services_page', 'homepage_about_page', 'homepage_team_page',
+        'homepage_knowledge_terms', 'homepage_case_analysis_term', 'homepage_legal_news_term',
+        'homepage_process_page', 'homepage_faq_page', 'homepage_contact_page',
+    ];
+    echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="aznet-theme-panel">';
+    echo '<input type="hidden" name="action" value="aznet_theme_save_settings">';
+    wp_nonce_field( 'aznet_theme_save_settings' );
+    render_hidden_settings( $source_visible );
     echo '<h2>' . esc_html__( 'Nguồn nội dung', 'aznet-theme' ) . '</h2>';
-    render_homepage_hero_editor( $s, $pages );
     homepage_page_select( 'homepage_services_page', 'Dịch vụ pháp lý', (int) $s['homepage_services_page'], $pages );
     homepage_page_select( 'homepage_about_page', 'Giới thiệu', (int) $s['homepage_about_page'], $pages );
     homepage_page_select( 'homepage_team_page', 'Đội ngũ', (int) $s['homepage_team_page'], $pages );
@@ -207,7 +209,7 @@ function render_homepage_settings(): void {
     homepage_page_select( 'homepage_process_page', 'Quy trình tư vấn', (int) $s['homepage_process_page'], $pages );
     homepage_page_select( 'homepage_faq_page', 'Câu hỏi thường gặp', (int) $s['homepage_faq_page'], $pages );
     homepage_page_select( 'homepage_contact_page', 'Liên hệ', (int) $s['homepage_contact_page'], $pages );
-    submit_button( __( 'Lưu Trang chủ', 'aznet-theme' ) );
+    submit_button( __( 'Lưu nguồn nội dung', 'aznet-theme' ) );
     echo '</form>';
 
     echo '<div class="aznet-theme-panel"><h2>' . esc_html__( 'Tình trạng trang chủ', 'aznet-theme' ) . '</h2><table class="widefat striped"><tbody>';
