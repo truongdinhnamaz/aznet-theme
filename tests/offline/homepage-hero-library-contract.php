@@ -5,6 +5,8 @@ $root = dirname(__DIR__, 2);
 $settings = (string) file_get_contents($root . '/inc/theme/settings.php');
 $map = (string) file_get_contents($root . '/inc/theme/homepage-content-map.php');
 $admin = (string) file_get_contents($root . '/inc/admin/homepage.php');
+$hero_action = (string) file_get_contents($root . '/inc/admin/homepage-hero.php');
+$bootstrap = (string) file_get_contents($root . '/inc/admin/bootstrap.php');
 $hero = (string) file_get_contents($root . '/template-parts/homepage/law-01/hero.php');
 $css = (string) file_get_contents($root . '/assets/css/components/homepage-law-01-variants.css');
 $pattern = $root . '/patterns/homepage-hero-content.php';
@@ -29,14 +31,22 @@ foreach ([
     'Thư viện Hero',
     'Dùng mẫu này',
     'Sửa nội dung Hero',
-    'aznet_theme_create_homepage_hero',
+    'aznet_theme_apply_homepage_hero',
+] as $needle) {
+    assert(str_contains($admin, $needle), "D-030 Hero Library UI contract missing: {$needle}");
+}
+foreach ([
+    'handle_homepage_hero_apply',
     'wp_insert_post(',
     'current_user_can(',
     'check_admin_referer(',
     'WP_Block_Patterns_Registry',
+    'homepage_hero_block',
+    'homepage_hero_variant',
 ] as $needle) {
-    assert(str_contains($admin, $needle), "D-030 Hero Library admin contract missing: {$needle}");
+    assert(str_contains($hero_action, $needle), "D-030 explicit Hero action contract missing: {$needle}");
 }
+assert(str_contains($bootstrap, "admin_post_aznet_theme_apply_homepage_hero"), 'D-030 Hero action must be wired explicitly.');
 
 foreach ([
     "setting( 'homepage_hero_block', 0 )",
