@@ -74,7 +74,7 @@ function render_homepage_before_content(): void {
 function render_homepage_after_content(): void {
     if ( ! homepage_composer_active() ) { return; }
     $variant = homepage_law01_variant();
-    $sections = 'burgundy-gold' === $variant ? [ 'latest' ] : [ 'topics', 'latest', 'analysis', 'news', 'process', 'faq', 'final-cta' ];
+    $sections = 'burgundy-gold' === $variant ? [ 'latest', 'process', 'faq', 'final-cta' ] : [ 'topics', 'latest', 'analysis', 'news', 'process', 'faq', 'final-cta' ];
     foreach ( $sections as $section ) { render_law01_part( $section ); }
     echo '</div>';
 }
