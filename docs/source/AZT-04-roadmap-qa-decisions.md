@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.73
+**Version:** v0.74
 **Status:** Working Source  
 **Date:** 19/09/2026
 
@@ -342,6 +342,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-027** | **AZnet Theme Core has zero mandatory third-party runtime dependency. WordPress + Theme alone must complete install/activate/setup/provision/author/render on the support floor; optional providers are additive capability tracks, provider absence is not Core failure, and the exact final package must pass a zero-plugin standalone release path before Core Ready/publication. External development/QA tooling is allowed only outside deployed runtime.** | **Accepted** |
 | **D-028** | **v1.2 WordPress Experience Completion is a WordPress-Core-only Theme milestone using surface modules + shared primitives. No new provider integration is opened; Comments, Search/404/empty states and Media/gallery/embed receive deep polish; metadata remains 1.1.0 until X6 final-candidate promotion.** | **Accepted** |
 | **D-029** | **v1.3 Client Delivery System prioritizes fast, professional client handoff through WordPress-native inner Page presentation, five portable professional Page kits, bounded Footer presets, and a generic confirmed professional-services provisioning blueprint. It preserves Classic Editor policy for native Post/Page, the single `aznet_theme_settings` store, zero mandatory provider runtime dependency, and keeps metadata at 1.2.0 until a separately approved Y5 promotion gate.** | **Accepted** |
+| **D-030** | **Homepage Hero authoring uses a Theme-owned visual library over one WordPress-owned Core-block synced Hero (`wp_block`). Theme stores only the typed block reference and presentation variant; Page Hero is legacy compatibility only. Explicit Hero initialization may create the synced block, while ordinary settings/preset saves remain content-mutation free.** | **Accepted** |
 
 ## 10A. v1.3 Client Delivery System
 
@@ -513,7 +514,7 @@ This remains Theme presentation only. RootProfile authoritative Team remains BLO
 
 ## 14. Exact next
 
-**NEXT — v1.3.10 publication is PASS. Production deployment of the exact published `v1.3.10` asset is the next release-path hard gate and requires separate explicit owner approval. Revalidate target-site local Theme modifications and rollback before deployment. No new Theme implementation slice is opened; RootProfile Team remains externally blocked at issue #112.**
+**NEXT — D-030 is owner-approved. Implement the Homepage Hero Library as a bounded Theme-owned presentation slice on a new 1.3.11 candidate: RED must prove the current Page-required UX, then GREEN must add a WordPress-native synced Hero source, variant library and legacy Page fallback without a Theme copy store. Production deployment remains separate; RootProfile Team remains externally blocked at issue #112.**
 
 
 ### Canonical 1.3.10 merge and Homepage Hero editing UX candidate — 19/09/2026
@@ -558,3 +559,20 @@ Published state:
 - publication evidence artifact `10574826580`, digest `sha256:822d07e3908400c0357d9497695ea88fb82468c684944a9d95cc24aa49a14e21`.
 
 The earlier pre-PR #151 1.3.10 candidate package is superseded and not reused as the release asset. Publication does not deploy any production site. The currently verified production deployment remains v1.3.0 until a separate owner-approved v1.3.10 deployment operation is executed and independently reverified.
+
+
+### D-030 Homepage Hero Library approval — 19/09/2026
+
+The product owner rejected the dedicated-Page authoring friction for a Homepage-only Hero and approved a Hero Library model.
+
+Accepted boundary:
+- WordPress owns Hero content in one normal `wp_block` synced-pattern entity made only from Core blocks.
+- Theme owns Hero visual variants/library, the typed block reference and presentation composition.
+- New authoring UX must not require a dedicated Page.
+- Ordinary Theme settings save and preset selection remain content-mutation free.
+- Initial Hero block creation is allowed only through an explicit user action protected by capability + nonce and implemented through public WordPress APIs.
+- Variant changes must not rewrite WordPress Hero content.
+- Legacy `homepage_hero_page` and the older Site/Front Page projection remain compatibility fallbacks; neither is auto-deleted or silently migrated.
+- No proprietary block type, page-builder schema, provider storage read or domain ownership transfer is introduced.
+
+Implementation is a new post-release candidate and must not mutate the already-published v1.3.10 release identity. The implementation metadata target is 1.3.11 unless a later release gate explicitly changes it.
