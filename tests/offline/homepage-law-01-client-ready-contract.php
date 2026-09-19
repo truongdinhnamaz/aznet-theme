@@ -46,6 +46,9 @@ assert(str_contains($composer, "'burgundy-gold' === \$variant ? [ 'latest' ] : [
 assert(! str_contains($composer, "[ 'hero', 'services', 'about', 'team' ]"), 'Composer must not render duplicate legacy About/Team sections.');
 
 foreach ([
+    "setting( 'homepage_hero_block', 0 )",
+    "setting( 'homepage_hero_variant', 'split' )",
+    'homepage_block_reference',
     "setting( 'homepage_hero_page', 0 )",
     'homepage_page_reference',
     'post_content',
@@ -59,7 +62,8 @@ foreach ([
 ] as $needle) {
     assert(str_contains($hero, $needle), "Client-ready Law 01 hero contract missing: {$needle}");
 }
-assert(str_contains($hero, 'if ( $hero instanceof \\WP_Post )'), 'Dedicated Hero Page must remain the preferred source.');
+assert(str_contains($hero, 'if ( $hero_block instanceof \\WP_Post )'), 'WordPress synced Hero block must be the preferred source.');
+assert(str_contains($hero, 'if ( $hero instanceof \\WP_Post )'), 'Legacy dedicated Hero Page must remain as a compatibility source.');
 assert(str_contains($hero, "get_bloginfo( 'name' )"), 'Legacy Site Title fallback must preserve existing Hero presentation when the dedicated mapping is absent.');
 assert(str_contains($hero, "get_bloginfo( 'description' )"), 'Legacy Site Tagline fallback must preserve the previous Hero slogan when the dedicated mapping is absent.');
 assert(str_contains($hero, 'get_the_title( $front_id )'), 'Legacy Front Page title fallback must remain available for backward compatibility.');
