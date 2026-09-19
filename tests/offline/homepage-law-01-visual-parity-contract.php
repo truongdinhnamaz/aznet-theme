@@ -181,6 +181,24 @@ $must(
     'Law 01 reference Footer must support a WordPress logo + site-title lockup.'
 );
 
+$must(
+    str_contains($footer, 'aznet-theme-site-footer--law01-') &&
+    str_contains($footer, "homepage_composer_active()") &&
+    str_contains($footer, "homepage_law01_variant()"),
+    'Law 01 Footer must expose a homepage-only variant modifier while preserving the generic Footer elsewhere.'
+);
+$must(
+    str_contains($css, '.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__main') &&
+    str_contains($css, 'repeat(auto-fit, minmax(10rem, .75fr))'),
+    'Law 01 Footer must use a source-backed adaptive reference grid instead of requiring fabricated empty columns.'
+);
+$must(
+    str_contains($footer, "if ( '' !== $primary_menu )") &&
+    str_contains($footer, "if ( 'professional' !== $preset && '' !== $contact_menu )") &&
+    str_contains($footer, "if ( '' !== $social_menu || '' !== $policy_menu )"),
+    'Law 01 Footer must keep empty WordPress menu projections fail-soft with no placeholder data.'
+);
+
 
 $must(
     1 === preg_match(
