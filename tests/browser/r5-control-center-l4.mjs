@@ -184,27 +184,31 @@ async function verifyHomepageHeroEditingBridge(page, viewportName) {
 
   await libraryForm.locator('input[name="homepage_hero_variant"][value="inverse"]').check();
   await Promise.all([
-    page.waitForURL(/hero=ready/, { timeout: 20000 }),
+    page.waitForURL(/post\.php\?post=\d+&action=edit/, { timeout: 20000 }),
     libraryForm.getByRole('button', { name: 'Dùng mẫu này' }).click(),
   ]);
+  const firstEditUrl = page.url();
+
+  await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded' });
+  if (await page.locator('.aznet-theme-law01-hero--library').count()) throw new Error('Draft Hero must not replace the current public Hero before publication');
 
   await gotoCenter(page, 'homepage');
-  const mappedText = await center.innerText();
-  for (const needle of ['Thư viện Hero', 'Nguồn Hero hiện tại:', 'Hero WordPress', 'Sửa nội dung Hero']) {
-    if (!mappedText.includes(needle)) throw new Error('Homepage synced Hero UX missing ' + needle);
+  const draftText = await center.innerText();
+  for (const needle of ['Thư viện Hero', 'Hero WordPress đang soạn', 'Tiếp tục sửa Hero']) {
+    if (!draftText.includes(needle)) throw new Error('Homepage draft-first Hero UX missing ' + needle);
   }
-  const firstEditHref = await page.getByRole('link', { name: 'Sửa nội dung Hero' }).getAttribute('href');
-  if (!firstEditHref?.includes('post.php?post=') || !firstEditHref.includes('action=edit')) throw new Error('Hero edit action must link to the native WordPress synced-pattern editor');
+  if (!(await page.locator('input[name="homepage_hero_variant"][value="inverse"]').isChecked())) throw new Error('Initial Hero presentation variant did not persist');
 
-  const mappedForm = page.locator('form.aznet-theme-homepage-hero-library');
-  await mappedForm.locator('input[name="homepage_hero_variant"][value="media-left"]').check();
+  const draftForm = page.locator('form.aznet-theme-homepage-hero-library');
+  await draftForm.locator('input[name="homepage_hero_variant"][value="media-left"]').check();
   await Promise.all([
-    page.waitForURL(/hero=ready/, { timeout: 20000 }),
-    mappedForm.getByRole('button', { name: 'Dùng mẫu này' }).click(),
+    page.waitForURL(/post\.php\?post=\d+&action=edit/, { timeout: 20000 }),
+    draftForm.getByRole('button', { name: 'Dùng mẫu này' }).click(),
   ]);
+  const secondEditUrl = page.url();
+  if (secondEditUrl !== firstEditUrl) throw new Error('Changing a draft Hero variant must reuse the same WordPress content source');
+
   await gotoCenter(page, 'homepage');
-  const secondEditHref = await page.getByRole('link', { name: 'Sửa nội dung Hero' }).getAttribute('href');
-  if (secondEditHref !== firstEditHref) throw new Error('Changing Hero presentation variant must reuse the same WordPress content source');
   if (!(await page.locator('input[name="homepage_hero_variant"][value="media-left"]').isChecked())) throw new Error('Hero presentation variant did not persist');
 
   return await checkLayoutAndA11y(page, viewportName + '-homepage-hero-' + (expectWoo ? 'woo' : 'clean'));
