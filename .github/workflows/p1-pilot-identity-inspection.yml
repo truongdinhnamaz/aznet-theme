@@ -47,7 +47,7 @@ jobs:
 
       - name: Inspect pilot Theme identities read-only
         env:
-          P1_BASE_URL: https://tamduchanoi.aznet.vn
+          P1_BASE_URL: https://lstamduchn.vn
           P1_ADMIN_USER: ${{ secrets.PILOT_WP_USER }}
           P1_ADMIN_PASS: ${{ secrets.PILOT_WP_PASSWORD }}
           P1_STATE_DIR: /tmp/p1-pilot-identity
