@@ -69,7 +69,7 @@ Derived DOCX source material remains archival/export evidence only. Canonical so
 
 19/09/2026 Homepage Hero editing UX evidence: `docs/evidence/HOMEPAGE_HERO_EDITOR_UX_20260919.md` records PR #150 canonical merge + exact-main V1/X6 PASS, PR #151 RED->GREEN authoring bridge, reconciliation to canonical 1.3.10 and 19/19 final workflow success. Hero copy remains WordPress-owned; Theme does not create a parallel Hero content store.
 
-**Exact next:** D-030 Homepage Hero Library is approved. Implement RED->GREEN on `feat/homepage-hero-library` with WordPress-owned synced Hero content, Theme-owned variants, legacy compatibility fallback and 1.3.11 candidate metadata. Production deployment remains a separate gate; RootProfile Team remains blocked at issue #112.
+**Exact next:** D-030 Homepage Hero Library is approved. Complete RED->GREEN on `feat/homepage-hero-library` with draft-first WordPress-owned synced Hero content, Theme-owned variants, legacy compatibility fallback and 1.3.11 candidate metadata. Production deployment remains a separate gate; RootProfile Team remains blocked at issue #112.
 
 
 19/09/2026 PR #151 merge-closure evidence: `docs/evidence/HOMEPAGE_HERO_EDITOR_UX_MERGE_CLOSURE_20260919.md` records owner-approved merge to `main@39df23c3...`, zero file delta from the 22/22-verified final head and fresh exact-main V1 run `35412829723` SUCCESS.
@@ -80,4 +80,4 @@ Derived DOCX source material remains archival/export evidence only. Canonical so
 Current release boundary: **GitHub publication v1.3.10 PASS / verified production deployment v1.3.0**.
 
 
-19/09/2026 architecture decision: AZT-02 v0.13 + AZT-04 D-030 replace the dedicated-Page-first Homepage Hero authoring model for new UX with **Hero Library + WordPress-native synced Hero content**. Theme owns visual variants/reference/composition only; WordPress owns the Core-block `wp_block` content. Legacy Hero Page/Site fallback is retained for compatibility and no automatic migration/deletion is authorized.
+19/09/2026 architecture decision: AZT-02 v0.13 + AZT-04 D-030 replace the dedicated-Page-first Homepage Hero authoring model for new UX with **Hero Library + WordPress-native synced Hero content**. Theme owns visual variants/reference/composition only; WordPress owns the Core-block `wp_block` content. Initialization is draft-first so the current public Hero remains on its legacy/fallback source until the new synced Hero is explicitly published. Legacy Hero Page/Site fallback is retained for compatibility and no automatic migration/deletion is authorized.
