@@ -1,15 +1,15 @@
 # AZnet Theme Source Manifest
 
-Canonical source is reconciled through the owner-approved v1.3 release/deployment, v1.3.5 Hero compatibility correction, v1.3.6/v1.3.8 package promotions, PR #147 Law 01 screenshot-reference closure and owner-approved PR #150 canonical 1.3.10 merge. Live canonical `main` is Theme metadata `1.3.10` at `main@55ca349c8808d0d6a3c96d5201983ae966b1d822`; fresh exact-main V1 run `35412045895` and X6 run `35412045904` completed SUCCESS. PR #151 is the verified Homepage Hero editing UX follow-up on reconciled head `82073e715be349f29fe84dbd0405c5af6e1b5c93`, with 19/19 triggered workflows SUCCESS at final disposition; canonical merge remains approval-gated. Published technical/release source remains `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e` for GitHub Release `v1.3.0`, and verified production deployment remains historical `v1.3.0`. RootProfile-backed authoritative Team membership remains blocked at issue #112.
+Canonical source is reconciled through owner-approved PR #151. Live canonical `main` is Theme metadata `1.3.10` at `main@39df23c3385118888e262c27a2331de34dda430d`; final PR head `b17532c0bc7348317c5044fa25262d28cb9fef54` completed 22/22 triggered workflows SUCCESS and has zero file delta to the merge commit. Fresh exact-main V1 run `35412829723` completed SUCCESS on the merge SHA. Published GitHub Release and verified production deployment remain historical `v1.3.0`. RootProfile-backed authoritative Team membership remains blocked at issue #112.
 | Source | Semantic version | Role |
 | --- | --- | --- |
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.12 | Theme architecture, public integration contracts and D-027 Standalone Core runtime-independence boundary |
-| `AZT-03-baseline-provenance.md` | v0.57 | Canonical provenance through PR #150 merged 1.3.10 plus the verified PR #151 Hero authoring-bridge candidate; published/deployed release remains v1.3.0; RootProfile Team blocker #112 retained |
-| `AZT-04-roadmap-qa-decisions.md` | v0.70 | Roadmap/QA through canonical 1.3.10 merge and verified PR #151 Hero editing UX candidate; PR #151 merge is the next gate and tag/Release/deploy remain separate; RootProfile Team remains external-blocked |
-| `AZT-EXEC-MAP.md` | v0.62 | Derived execution map through canonical 1.3.10 merge and verified PR #151 Hero editing UX candidate; PR #151 merge is approval-gated and RootProfile Team remains blocked at #112 |
+| `AZT-03-baseline-provenance.md` | v0.58 | Canonical provenance through PR #150 merged 1.3.10 plus the verified PR #151 Hero authoring-bridge candidate; published/deployed release remains v1.3.0; RootProfile Team blocker #112 retained |
+| `AZT-04-roadmap-qa-decisions.md` | v0.71 | Roadmap/QA through canonical 1.3.10 merge and verified PR #151 Hero editing UX candidate; PR #151 merge is the next gate and tag/Release/deploy remain separate; RootProfile Team remains external-blocked |
+| `AZT-EXEC-MAP.md` | v0.63 | Derived execution map through canonical 1.3.10 merge and verified PR #151 Hero editing UX candidate; PR #151 merge is approval-gated and RootProfile Team remains blocked at #112 |
 
 v1.3 technical closure evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`. v1.3 publication evidence: `docs/evidence/V1_3_PUBLICATION_20260917.md`. v1.3 production deployment evidence: `docs/evidence/V1_3_PRODUCTION_DEPLOYMENT_20260917.md`. Canonical technical baseline is `1.3.0` at `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e` with exact-main V1 + X6 release-path PASS and deterministic package SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`. Published/GitHub-Release release and verified production deployment are now both `v1.3.0`; provider L5 remains unclaimed.
 
@@ -57,7 +57,7 @@ Owner-approved PR #87 subsequently merged exact final head `ff459b99a348d3004a3a
 
 The known WordPress-core `WP_Query::rewind_posts()` warning remains UNKNOWN/non-blocking; no blanket PHP-log-clean claim is made. RootProfile E5-C/E5-D and ConvertFlow F8 remain separate optional compatibility gates under their existing ownership rules.
 
-**Exact next:** PR #150 canonical merge is the next approval gate for the verified `1.3.10` polished-Hero client-delivery candidate. The installable package is technically verified, but tag/GitHub Release and production deployment remain separately approval-gated. RootProfile-backed Team integration remains held at issue #112. Evidence: `docs/evidence/V1_3_10_POLISHED_HERO_CLIENT_DELIVERY_20260919.md`.
+
 
 
 19/09/2026 polished-Hero client-delivery evidence: `docs/evidence/V1_3_10_POLISHED_HERO_CLIENT_DELIVERY_20260919.md` records the title/image-edge visual RED->GREEN polish, the supersession of unmerged 1.3.9 package provenance, the canonical 1.3.8 -> 1.3.10 promotion boundary, exact production head `a4c3621e...` with 22/22 triggered workflows SUCCESS, and deterministic installable package `aznet-theme-1.3.10.zip` (145 production files, 108 packaged PHP lint PASS, SHA-256 `9eb8a3ad1c24b7e75a695199de3e45bf3e196bebd7fff8774f7390969283c92d`).
@@ -69,4 +69,7 @@ Derived DOCX source material remains archival/export evidence only. Canonical so
 
 19/09/2026 Homepage Hero editing UX evidence: `docs/evidence/HOMEPAGE_HERO_EDITOR_UX_20260919.md` records PR #150 canonical merge + exact-main V1/X6 PASS, PR #151 RED->GREEN authoring bridge, reconciliation to canonical 1.3.10 and 19/19 final workflow success. Hero copy remains WordPress-owned; Theme does not create a parallel Hero content store.
 
-**Exact next:** PR #151 canonical merge is the next explicit owner approval gate. Tag/GitHub Release and production deployment remain separate explicit gates.
+**Exact next:** merge the source-only PR carrying the PR #151 merge closure after explicit owner approval. Tag/GitHub Release and production deployment remain separate explicit gates.
+
+
+19/09/2026 PR #151 merge-closure evidence: `docs/evidence/HOMEPAGE_HERO_EDITOR_UX_MERGE_CLOSURE_20260919.md` records owner-approved merge to `main@39df23c3...`, zero file delta from the 22/22-verified final head and fresh exact-main V1 run `35412829723` SUCCESS.

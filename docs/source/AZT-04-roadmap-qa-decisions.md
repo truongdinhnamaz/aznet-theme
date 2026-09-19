@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.70
+**Version:** v0.71
 **Status:** Working Source  
 **Date:** 19/09/2026
 
@@ -513,7 +513,7 @@ This remains Theme presentation only. RootProfile authoritative Team remains BLO
 
 ## 14. Exact next
 
-**NEXT — canonical merge of PR #151 is the next explicit approval gate for the verified Homepage Hero editing UX follow-up on canonical Theme metadata 1.3.10. Do not tag, publish a GitHub Release or deploy production without separate explicit approval.**
+**NEXT — PR #151 canonical merge and fresh exact-main V1 are PASS. Merge the source-only closure PR after explicit owner approval. Do not tag, publish a GitHub Release or deploy production without separate explicit approval.**
 
 
 ### Canonical 1.3.10 merge and Homepage Hero editing UX candidate — 19/09/2026
@@ -525,3 +525,12 @@ The owner also approved proceeding with the follow-up Hero authoring UX slice. P
 TDD RED was recorded at `2d63c0c2b1d993e63ccb0a22efcdacd6fc16a373`. After reconciliation with canonical 1.3.10, exact production/test head `82073e715be349f29fe84dbd0405c5af6e1b5c93` completed 19/19 triggered workflows SUCCESS at final disposition. R2 Pattern Library run `35412090864` required one retry after a disposable-runtime `net::ERR_CONNECTION_RESET`; retry attempt 2 passed the previously failing Woo-present step and the remaining gates with no byte changes.
 
 PR #151 canonical merge remains an explicit owner approval gate. This candidate does not authorize publication or deployment and does not alter RootProfile/ConvertFlow/WooCommerce ownership.
+
+
+### Homepage Hero editing UX canonical merge checkpoint — 19/09/2026
+
+The product owner approved PR #151 canonical merge. Final verified head `b17532c0bc7348317c5044fa25262d28cb9fef54` merged to `main@39df23c3385118888e262c27a2331de34dda430d` with zero file delta from the verified head.
+
+Final-head QA: 22/22 triggered workflows SUCCESS. Fresh exact-main V1 run `35412829723` completed SUCCESS on exact merge SHA `39df23c3385118888e262c27a2331de34dda430d`. Artifacts: static `10575125302` (`sha256:0fae4559000ac195e6f58a5fd50b1070b232c74bd472dd90c36d6abb0a15cb92`) and clean runtime/browser `10575290283` (`sha256:a2609a4ffee6f7c538402a4850103d5c14f6baa51fe6dceea4f61030ecba9e89`).
+
+No release/deployment authorization is created by this merge. RootProfile authoritative Team remains separately blocked at issue #112.
