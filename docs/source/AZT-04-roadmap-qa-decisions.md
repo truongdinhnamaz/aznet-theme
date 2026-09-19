@@ -342,7 +342,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-027** | **AZnet Theme Core has zero mandatory third-party runtime dependency. WordPress + Theme alone must complete install/activate/setup/provision/author/render on the support floor; optional providers are additive capability tracks, provider absence is not Core failure, and the exact final package must pass a zero-plugin standalone release path before Core Ready/publication. External development/QA tooling is allowed only outside deployed runtime.** | **Accepted** |
 | **D-028** | **v1.2 WordPress Experience Completion is a WordPress-Core-only Theme milestone using surface modules + shared primitives. No new provider integration is opened; Comments, Search/404/empty states and Media/gallery/embed receive deep polish; metadata remains 1.1.0 until X6 final-candidate promotion.** | **Accepted** |
 | **D-029** | **v1.3 Client Delivery System prioritizes fast, professional client handoff through WordPress-native inner Page presentation, five portable professional Page kits, bounded Footer presets, and a generic confirmed professional-services provisioning blueprint. It preserves Classic Editor policy for native Post/Page, the single `aznet_theme_settings` store, zero mandatory provider runtime dependency, and keeps metadata at 1.2.0 until a separately approved Y5 promotion gate.** | **Accepted** |
-| **D-030** | **Homepage Hero authoring uses a Theme-owned visual library over one WordPress-owned Core-block synced Hero (`wp_block`). Theme stores only the typed block reference and presentation variant; Page Hero is legacy compatibility only. Explicit Hero initialization may create the synced block, while ordinary settings/preset saves remain content-mutation free.** | **Accepted** |
+| **D-030** | **Homepage Hero authoring uses a Theme-owned visual library over one WordPress-owned Core-block synced Hero (`wp_block`). Theme stores only the typed block reference and presentation variant; Page Hero is legacy compatibility only. Explicit Hero initialization is draft-first so current public Hero output remains unchanged until the user publishes the new synced Hero; ordinary settings/preset saves remain content-mutation free.** | **Accepted** |
 
 ## 10A. v1.3 Client Delivery System
 
@@ -570,7 +570,7 @@ Accepted boundary:
 - Theme owns Hero visual variants/library, the typed block reference and presentation composition.
 - New authoring UX must not require a dedicated Page.
 - Ordinary Theme settings save and preset selection remain content-mutation free.
-- Initial Hero block creation is allowed only through an explicit user action protected by capability + nonce and implemented through public WordPress APIs.
+- Initial Hero block creation is allowed only through an explicit user action protected by capability + nonce and implemented through public WordPress APIs. The created block starts as `draft`; the current public Hero remains on the legacy/fallback path until the user publishes that block.
 - Variant changes must not rewrite WordPress Hero content.
 - Legacy `homepage_hero_page` and the older Site/Front Page projection remain compatibility fallbacks; neither is auto-deleted or silently migrated.
 - No proprietary block type, page-builder schema, provider storage read or domain ownership transfer is introduced.
