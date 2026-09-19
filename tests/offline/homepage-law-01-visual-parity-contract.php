@@ -4,6 +4,10 @@ declare(strict_types=1);
 $root = dirname(__DIR__, 2);
 $css = (string) file_get_contents($root . '/assets/css/components/homepage-law-01-variants.css');
 $brand = (string) file_get_contents($root . '/template-parts/header/brand.php');
+$siteHeader = (string) file_get_contents($root . '/template-parts/header/site-header.php');
+$mobilePanel = (string) file_get_contents($root . '/template-parts/header/mobile-panel.php');
+$law01ConsultationPath = $root . '/template-parts/header/law01-consultation.php';
+$law01Consultation = is_file($law01ConsultationPath) ? (string) file_get_contents($law01ConsultationPath) : '';
 $profile = (string) file_get_contents($root . '/template-parts/homepage/law-01/profile.php');
 $hero = (string) file_get_contents($root . '/template-parts/homepage/law-01/hero.php');
 $footer = (string) file_get_contents($root . '/template-parts/footer/site-footer.php');
@@ -118,6 +122,28 @@ $must(
 $must(
     str_contains($css, '.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__brand-title'),
     'Law 01 reference Header must style the site-title lockup beside the logo.'
+);
+$must(
+    str_contains($brand, 'aznet-theme-site-header__brand-copy') &&
+    str_contains($brand, 'aznet-theme-site-header__brand-kicker'),
+    'Law 01 Header brand must support a second presentation line without splitting or duplicating WordPress site identity.'
+);
+$must(
+    str_contains($siteHeader, "get_template_part( 'template-parts/header/law01-consultation'") &&
+    str_contains($siteHeader, "get_template_part( 'template-parts/header/utility-navigation'"),
+    'Law 01 desktop Header must use a mapped consultation action while retaining generic Header utility navigation outside the Law01 homepage.'
+);
+$must(
+    str_contains($mobilePanel, "get_template_part( 'template-parts/header/law01-consultation'") &&
+    str_contains($mobilePanel, "get_template_part( 'template-parts/header/utility-navigation'"),
+    'Law 01 mobile Header must preserve the same fail-soft consultation/generic utility split.'
+);
+$must(
+    '' !== $law01Consultation &&
+    str_contains($law01Consultation, "setting( 'homepage_contact_page', 0 )") &&
+    str_contains($law01Consultation, 'homepage_page_reference') &&
+    str_contains($law01Consultation, 'Yêu cầu tư vấn'),
+    'Law 01 consultation action must resolve only the mapped public WordPress Contact Page and fail-soft when it is absent.'
 );
 $membersPos = strpos($profile, 'aznet-theme-law01-profile__members');
 $teamCtaPos = strpos($profile, 'aznet-theme-law01-team-more');
