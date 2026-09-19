@@ -193,9 +193,9 @@ $must(
     'Law 01 Footer must use a source-backed adaptive reference grid instead of requiring fabricated empty columns.'
 );
 $must(
-    str_contains($footer, "if ( '' !== $primary_menu )") &&
-    str_contains($footer, "if ( 'professional' !== $preset && '' !== $contact_menu )") &&
-    str_contains($footer, "if ( '' !== $social_menu || '' !== $policy_menu )"),
+    str_contains($footer, 'if ( \'\' !== $primary_menu )') &&
+    str_contains($footer, 'if ( \'professional\' !== $preset && \'\' !== $contact_menu )') &&
+    str_contains($footer, 'if ( \'\' !== $social_menu || \'\' !== $policy_menu )'),
     'Law 01 Footer must keep empty WordPress menu projections fail-soft with no placeholder data.'
 );
 
