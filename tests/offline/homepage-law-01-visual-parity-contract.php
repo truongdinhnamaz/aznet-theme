@@ -51,6 +51,28 @@ $must(
     ),
     'Law 01 Hero image surface must bleed to the viewport edge while the content grid stays on the shared shell.'
 );
+
+$must(
+    1 === preg_match(
+        '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-hero h1\\s*\\{[^}]*max-width:\\s*10\\.5ch;[^}]*line-height:\\s*0\\.98;[^}]*letter-spacing:\\s*-\\.03em;[^}]*text-wrap:\\s*balance;/s',
+        $css
+    ),
+    'Law 01 Hero title must use the approved compact editorial typography instead of a blocky default heading.'
+);
+$must(
+    1 === preg_match(
+        '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-hero__visual::before\\s*\\{[^}]*width:\\s*clamp\\(5rem,\\s*8vw,\\s*9rem\\);[^}]*linear-gradient\\(90deg,[^}]*var\\(--law01-client-cream\\)[^}]*transparent/s',
+        $css
+    ),
+    'Law 01 Hero image must use a soft cream-to-transparent transition layer so the image edge does not read as a hard seam.'
+);
+$must(
+    1 === preg_match(
+        '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-hero__image\\s*\\{[^}]*transform:\\s*scale\\(1\\.02\\);[^}]*transform-origin:\\s*center;/s',
+        $css
+    ),
+    'Law 01 Hero image must use the approved subtle crop polish so the visual reads as part of the scene rather than a pasted rectangle.'
+);
 $must(
     str_contains(
         $css,
