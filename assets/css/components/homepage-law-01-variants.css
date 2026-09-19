@@ -426,6 +426,10 @@
     grid-template-columns: minmax(17rem, 1.35fr) repeat(auto-fit, minmax(10rem, .75fr));
     gap: clamp(1.5rem, 3vw, 3rem);
 }
+.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__identity { order: 1; }
+.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__contact { order: 2; }
+.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__navigation { order: 3; }
+.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__social-column { order: 4; }
 .aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__brand { gap: .8rem; max-width: 21rem; }
 .aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__brand-title { display: block; max-width: 14rem; color: #fff; font-family: var(--aznet-theme-font-family-heading); font-size: 1.05rem; font-weight: var(--aznet-theme-font-weight-bold); line-height: 1.2; }
 .aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__navigation,
