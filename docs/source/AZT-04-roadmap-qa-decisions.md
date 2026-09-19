@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.79
+**Version:** v0.80
 **Status:** Working Source  
 **Date:** 20/09/2026
 
@@ -21,7 +21,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | D | Generic Templates | PASS / retained | Page/Post/Archive/Search/404 technical closure plus P2/P3 editorial hardening and P4 real-pilot quality evidence are retained |
 | W | WooCommerce presentation shell | PASS / retained | W1-W9 + R4; WooCommerce retains commerce truth |
 | E | RootProfile Profile / Contact | OPTIONAL COMPAT ACTIVE / TEAM PROJECTION BLOCKED | E0-E4/E5-B retained PASS; E5-C remains external-blocked and E5-D takeover locked. Pilot evidence confirms no public/versioned organization-team projection and no organization profile on the target site; issue #112 records the blocker. Non-blocking for core under D-016. |
-| F | Homepage | CORE PASS / LAW 01 1.3.15 TECHNICAL PASS / F9 PROVIDER L5 RETAINED | Native Theme Homepage remains core PASS; ConvertFlow F9 provider L5 remains retained at its separately certified scope. Owner-approved Law 01 PR #167 merged exact final head `a47e2f371db3de6c85eb43f34db7ae360f482458` to `main@6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3`, Theme `1.3.15`; exact-main V1 `35473959243` + X6 `35473959238` PASS and deterministic package SHA-256 `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`. RootProfile-backed authoritative Team membership remains separately external-blocked under open issue #112 and does not reopen core Homepage PASS. Publication/deployment remain separate gates. |
+| F | Homepage | CORE PASS / LAW 01 1.3.15 PUBLISHED / F9 PROVIDER L5 RETAINED | Native Theme Homepage remains core PASS; ConvertFlow F9 provider L5 remains retained at its separately certified scope. Owner-approved Law 01 PR #167 merged exact implementation `6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3`, Theme `1.3.15`; exact-main V1/X6 PASS and owner-approved publication run `35474494290` published annotated `v1.3.15` + GitHub Release `392243619` with exact package SHA-256 `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`. RootProfile-backed authoritative Team membership remains external-blocked under open issue #112. Production deployment remains a separate owner gate. |
 | D-030 | Homepage Hero Library | PASS / MERGED / PUBLISHED 1.3.12 | Base D-030 PR #156 remains retained; owner-approved corrective PR #159 removed stale Hero title width caps and completed the single WordPress-owned Hero authoring surface. Final head `4b8fc7c78fb17e32fbc9c4fb9399bdeaf3f98744` completed 28/28 workflows SUCCESS and merged to `main@7c73f7e050e95c23c5c968b2365b643753431246` with zero file delta. Exact-main V1 `35434502224` + X6 `35434502232` PASS. Owner-approved `v1.3.12` publication is PASS; production deployment remains separately gated. |
 | G | Core v1.0 Cleanup / Release | TECHNICAL PASS | G0-G8 production/release-candidate closure merged; publication is a separate live GitHub state |
 | R0 | v1.0 -> v1.1 Source Reconciliation | PASS | Source-only reconciliation merged through PR #36; v1.1 product/architecture ratified |
@@ -639,3 +639,22 @@ Owner-approved PR #167 closed the remaining source-safe Law 01 demo Team present
 - Latest public GitHub Release remains `v1.3.12`. Publication of `v1.3.15` and production deployment are separate owner gates.
 
 Evidence: `docs/evidence/V1_3_15_TECHNICAL_CLOSURE_20260920.md`.
+
+
+### Law 01 v1.3.15 publication closure — 20/09/2026
+
+Owner-approved GitHub publication is PASS.
+
+- Exact release source: `6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3`.
+- Publication workflow: `35474494290` — SUCCESS.
+- Annotated tag `v1.3.15` object `a0895fc339b1020d7147b00eac243340691fde23` -> exact implementation commit.
+- GitHub Release `392243619`, asset `575623879` `aznet-theme-1.3.15.zip`.
+- Public asset SHA-256: `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`.
+- Package: 148 production files, 111 packaged PHP files.
+- Publication evidence artifact `10593402386`, digest `sha256:cf35664008ef75b2a93dca455e14987c571949e826d0bda97b000ad86f6dff67`.
+- Temporary workflow cleanup `efcfa1cd3a64470808f98d01ec9911dddd87298b`; cleaned ops branch has zero net file delta from publication-time `main@79fcf11f043129a4ce82629a77fc1267802b2bba`.
+- Production deployment is not authorized or claimed by this publication step.
+- Fresh post-publication live readback is UNKNOWN because WPVibe hit its rolling daily fair-use cap; prior Theme `1.3.10` remains the last verified production state, not a fresh observation.
+- RootProfile authoritative Team membership remains BLOCKED_EXTERNAL_CONTRACT under issue #112.
+
+Evidence: `docs/evidence/V1_3_15_PUBLICATION_20260920.md`.
