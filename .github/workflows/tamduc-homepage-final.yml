@@ -41,7 +41,7 @@ jobs:
       - name: Run final public Homepage L4
         if: success()
         env:
-          TAMDUC_BASE_URL: https://tamduchanoi.aznet.vn
+          TAMDUC_BASE_URL: https://lstamduchn.vn
           TAMDUC_STATE_DIR: /tmp/tamduc-homepage-final
         run: node tests/browser/tamduc-homepage-final-l4.mjs
       - name: Upload final L4 evidence
