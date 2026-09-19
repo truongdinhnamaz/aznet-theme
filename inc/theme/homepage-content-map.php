@@ -28,6 +28,22 @@ function homepage_page_reference( int $id ): ?\WP_Post {
 }
 
 /**
+ * Resolve one public WordPress synced-pattern block by exact ID.
+ */
+function homepage_block_reference( int $id ): ?\WP_Post {
+    if ( $id <= 0 ) {
+        return null;
+    }
+
+    $post = get_post( $id );
+    if ( ! $post instanceof \WP_Post || 'wp_block' !== $post->post_type || 'publish' !== $post->post_status ) {
+        return null;
+    }
+
+    return $post;
+}
+
+/**
  * Resolve one native Category by exact term ID.
  */
 function homepage_category_reference( int $id ): ?\WP_Term {

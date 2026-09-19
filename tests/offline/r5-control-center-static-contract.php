@@ -23,6 +23,7 @@ $setup = file_get_contents( $root . '/inc/theme/setup.php' );
 $bootstrap = file_get_contents( $root . '/inc/theme/bootstrap.php' );
 $control = file_get_contents( $root . '/inc/admin/control-center.php' );
 $health = file_get_contents( $root . '/inc/admin/system-health.php' );
+$browser_workflow = file_get_contents( $root . '/.github/workflows/r5-control-center-browser.yml' );
 $admin = implode( "\n", array_map( static fn( $p ) => file_get_contents( $root . '/' . $p ), array_slice( $required, 0, 5 ) ) );
 
 $must = [
@@ -46,6 +47,19 @@ $must = [
 foreach ( $must as [ $haystack, $needle ] ) {
     if ( false === strpos( $haystack, $needle ) ) {
         fwrite( STDERR, "FAIL: missing contract {$needle}\n" );
+        exit( 1 );
+    }
+}
+
+foreach ( [
+    'PHP (Fatal error|Warning|Parse error)|Uncaught',
+    'WP_Query::rewind_posts known core warning',
+    'Undefined array key 0 in /tmp/wp/wp-includes/class-wp-query.php on line 3872',
+    'r5-known-wp-core-warnings.log',
+    'r5-unexpected-php-errors.log',
+] as $needle ) {
+    if ( false === strpos( $browser_workflow, $needle ) ) {
+        fwrite( STDERR, "FAIL: R5 runtime-boundary warning policy missing {$needle}\n" );
         exit( 1 );
     }
 }

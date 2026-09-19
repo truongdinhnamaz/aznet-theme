@@ -314,7 +314,7 @@ if ( 'smoke' === $mode ) {
     $state = aznet_y5_read_state();
     aznet_y5_assert_continuity( $state );
     aznet_y5_must( 'aznet-theme' === wp_get_theme()->get_stylesheet(), 'Y5 smoke requires AZnet Theme active' );
-    aznet_y5_must( defined( 'AZNET_THEME_VERSION' ) && '1.3.10' === AZNET_THEME_VERSION, 'Y5 promoted Theme version must be 1.3.10' );
+    aznet_y5_must( defined( 'AZNET_THEME_VERSION' ) && '1.3.11' === AZNET_THEME_VERSION, 'Y5 promoted Theme version must be 1.3.11' );
     aznet_y5_must( 'off' === AZnet\Theme\setting( 'homepage_preset', 'off' ), 'Professional Services Front Page must remain WordPress-native with homepage preset off' );
     aznet_y5_must( in_array( AZnet\Theme\footer_preset(), [ 'standard', 'professional', 'compact' ], true ), 'Footer preset normalization failed' );
     aznet_y5_must( [] === array_values( array_filter( (array) get_option( 'active_plugins', [] ) ) ), 'Y5 smoke must remain zero-plugin Standalone Core' );

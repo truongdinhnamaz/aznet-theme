@@ -31,6 +31,8 @@ function settings_defaults(): array {
         'woo_product_preset'            => 'classic',
         'homepage_preset'               => 'off',
         'homepage_law01_variant'        => 'navy-gold',
+        'homepage_hero_variant'          => 'split',
+        'homepage_hero_block'            => 0,
         'homepage_hero_page'            => 0,
         'homepage_services_page'        => 0,
         'homepage_about_page'           => 0,
@@ -87,6 +89,10 @@ function normalize_settings( array $raw ): array {
         ? (string) $raw['homepage_law01_variant']
         : 'navy-gold';
 
+    $homepage_hero_variant = isset( $raw['homepage_hero_variant'] ) && in_array( $raw['homepage_hero_variant'], [ 'split', 'centered', 'inverse', 'media-left' ], true )
+        ? (string) $raw['homepage_hero_variant']
+        : 'split';
+
     $normalize_boolean = static function ( string $key, bool $default ) use ( $raw ): bool {
         if ( ! array_key_exists( $key, $raw ) ) {
             return $default;
@@ -140,6 +146,8 @@ function normalize_settings( array $raw ): array {
         'woo_product_preset'            => $woo_product_preset,
         'homepage_preset'               => $homepage_preset,
         'homepage_law01_variant'        => $homepage_law01_variant,
+        'homepage_hero_variant'          => $homepage_hero_variant,
+        'homepage_hero_block'            => $normalize_id( $raw['homepage_hero_block'] ?? 0 ),
         'homepage_hero_page'            => $normalize_id( $raw['homepage_hero_page'] ?? 0 ),
         'homepage_services_page'        => $normalize_id( $raw['homepage_services_page'] ?? 0 ),
         'homepage_about_page'           => $normalize_id( $raw['homepage_about_page'] ?? 0 ),

@@ -168,36 +168,69 @@ async function resetSettings(page) {
 async function verifyHomepageHeroEditingBridge(page, viewportName) {
   await gotoCenter(page, 'homepage');
   const center = page.locator('.aznet-theme-control-center');
-  const text = await center.innerText();
-  for (const needle of ['Nguồn Hero hiện tại:', 'Dữ liệu dự phòng', 'Hero hiện đang dùng dữ liệu dự phòng', 'Tạo Page Hero mới']) {
-    if (!text.includes(needle)) throw new Error(`Homepage Hero fallback UX missing ${needle}`);
-  }
-  const createLink = page.getByRole('link', { name: 'Tạo Page Hero mới' });
-  const createHref = await createLink.getAttribute('href');
-  if (!createHref?.includes('post-new.php?post_type=page')) throw new Error('Homepage Hero create-Page action must use native WordPress Page authoring');
-
-  for (const forbidden of ['homepage_hero_title', 'homepage_hero_subtitle', 'homepage_hero_slogan', 'homepage_hero_body']) {
-    if (await page.locator(`[name*="${forbidden}"]`).count()) throw new Error(`Theme-owned Hero copy input must not exist: ${forbidden}`);
-  }
-
-  const form = page.locator('form.aznet-theme-panel').first();
-  const selector = form.locator('select[name="aznet_theme_settings[homepage_hero_page]"]');
-  await selector.selectOption({ label: 'R5 Continuity Page' });
+  const presetForm = page.locator('form.aznet-theme-panel').filter({ has: page.getByRole('heading', { name: 'Mẫu trang chủ' }) });
+  await presetForm.locator('select[name="aznet_theme_settings[homepage_preset]"]').selectOption('law-01');
   await Promise.all([
     page.waitForURL(/updated=1/, { timeout: 20000 }),
-    form.getByRole('button', { name: 'Lưu Trang chủ' }).click(),
+    presetForm.getByRole('button', { name: 'Lưu mẫu trang chủ' }).click(),
   ]);
 
   await gotoCenter(page, 'homepage');
-  const mappedText = await center.innerText();
-  for (const needle of ['Nguồn Hero hiện tại:', 'Hero riêng', 'R5 Continuity Page', 'Sửa nội dung Hero']) {
-    if (!mappedText.includes(needle)) throw new Error(`Homepage Hero mapped UX missing ${needle}`);
+  const text = await center.innerText();
+  for (const needle of ['Thư viện Hero', 'Nguồn Hero hiện tại:', 'Dữ liệu dự phòng', 'không cần tạo Page']) {
+    if (!text.includes(needle)) throw new Error('Homepage Hero Library fallback UX missing ' + needle);
   }
-  const editHref = await page.getByRole('link', { name: 'Sửa nội dung Hero' }).getAttribute('href');
-  if (!editHref?.includes('post.php?post=') || !editHref.includes('action=edit')) throw new Error('Homepage Hero edit action must link to the native WordPress Page editor');
 
-  const layout = await checkLayoutAndA11y(page, `${viewportName}-homepage-hero-${expectWoo ? 'woo' : 'clean'}`);
-  return layout;
+  await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded' });
+  const legacyHero = page.locator('.aznet-theme-law01-hero');
+  if (await legacyHero.count() !== 1) throw new Error('Law 01 fallback Hero must render before D-030 initialization');
+  if (await page.locator('.aznet-theme-law01-hero--library').count()) throw new Error('Library Hero must not exist before explicit initialization');
+  const legacyTitleBefore = ((await legacyHero.locator('h1').textContent()) || '').trim();
+  if (!legacyTitleBefore) throw new Error('Fallback Hero title must remain visible before D-030 initialization');
+
+  await gotoCenter(page, 'homepage');
+  const libraryForm = page.locator('form.aznet-theme-homepage-hero-library');
+  if (await libraryForm.count() !== 1) throw new Error('Homepage Hero Library form missing');
+  if (await libraryForm.locator('input[name="homepage_hero_variant"]').count() !== 4) throw new Error('Homepage Hero Library must expose exactly four bounded variants');
+  if (await page.locator('select[name="aznet_theme_settings[homepage_hero_page]"]').count()) throw new Error('New Hero UX must not require a dedicated Page selector');
+
+  for (const forbidden of ['homepage_hero_title', 'homepage_hero_subtitle', 'homepage_hero_slogan', 'homepage_hero_body', 'homepage_hero_image']) {
+    if (await page.locator('[name*="' + forbidden + '"]').count()) throw new Error('Theme-owned Hero copy input must not exist: ' + forbidden);
+  }
+
+  await libraryForm.locator('input[name="homepage_hero_variant"][value="inverse"]').check();
+  await Promise.all([
+    page.waitForURL(/admin\.php\?page=aznet-theme&section=homepage&hero=draft/, { timeout: 20000 }),
+    libraryForm.getByRole('button', { name: 'Dùng mẫu này' }).click(),
+  ]);
+  const firstEditUrl = await page.getByRole('link', { name: 'Tiếp tục sửa Hero' }).getAttribute('href');
+  if (!firstEditUrl || !/post\.php\?post=\d+&action=edit/.test(firstEditUrl)) throw new Error('Draft Hero native edit link missing');
+
+  await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded' });
+  if (await page.locator('.aznet-theme-law01-hero--library').count()) throw new Error('Draft Hero must not replace the current public Hero before publication');
+  const legacyTitleAfter = ((await page.locator('.aznet-theme-law01-hero h1').textContent()) || '').trim();
+  if (legacyTitleAfter !== legacyTitleBefore) throw new Error('Draft-first initialization changed the public fallback Hero title');
+
+  await gotoCenter(page, 'homepage');
+  const draftText = await center.innerText();
+  for (const needle of ['Thư viện Hero', 'Hero WordPress đang soạn', 'Tiếp tục sửa Hero']) {
+    if (!draftText.includes(needle)) throw new Error('Homepage draft-first Hero UX missing ' + needle);
+  }
+  if (!(await page.locator('input[name="homepage_hero_variant"][value="inverse"]').isChecked())) throw new Error('Initial Hero presentation variant did not persist');
+
+  const draftForm = page.locator('form.aznet-theme-homepage-hero-library');
+  await draftForm.locator('input[name="homepage_hero_variant"][value="media-left"]').check();
+  await Promise.all([
+    page.waitForURL(/admin\.php\?page=aznet-theme&section=homepage&hero=draft/, { timeout: 20000 }),
+    draftForm.getByRole('button', { name: 'Dùng mẫu này' }).click(),
+  ]);
+  const secondEditUrl = await page.getByRole('link', { name: 'Tiếp tục sửa Hero' }).getAttribute('href');
+  if (!secondEditUrl || secondEditUrl !== firstEditUrl) throw new Error('Changing a draft Hero variant must reuse the same WordPress content source');
+
+  await gotoCenter(page, 'homepage');
+  if (!(await page.locator('input[name="homepage_hero_variant"][value="media-left"]').isChecked())) throw new Error('Hero presentation variant did not persist');
+
+  return await checkLayoutAndA11y(page, viewportName + '-homepage-hero-' + (expectWoo ? 'woo' : 'clean'));
 }
 
 async function verifySystemHealth(page) {

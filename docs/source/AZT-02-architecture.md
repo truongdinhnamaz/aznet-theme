@@ -4,9 +4,9 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.12 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.13 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 18/09/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 19/09/2026 |
 
 | **Kiến trúc lõi: **Theme chỉ sở hữu presentation/configuration/reference cần thiết. Dữ liệu authoritative và business state ở lại owner. Boundary giữa hai bên là public/versioned provider contract hoặc adapter tối thiểu. |
 | --- |
@@ -169,12 +169,29 @@ Outcome v1.1 được khóa ở ba visual preset: `default`, `editorial`, `comme
 
 ### Homepage Hero source rule
 
-Law 01 Hero content MUST remain WordPress-owned. The preferred v1.3.4+ source is an independently addressable WordPress Page selected through the typed presentation reference `homepage_hero_page`; that Page owns Hero title, excerpt, authored body and featured image.
+Law 01 Hero no longer requires a dedicated WordPress Page as the primary authoring model. The accepted model is **Hero Library + WordPress-native synced Hero content**:
 
-Backward compatibility is also a presentation requirement. If `homepage_hero_page` is unmapped or invalid on a site upgraded from the earlier Law 01 model, the Theme MAY render the pre-v1.3.4 WordPress-native Hero projection from Site Title, Front Page title/excerpt/featured image and Site Tagline instead of removing the Hero surface. This compatibility path is not authoritative domain inference: every value comes from public WordPress site/Page state already used by the previous Theme version, and no duplicate content store is created. A valid dedicated Hero Page always takes precedence.
+- Theme owns the Hero visual library and presentation variant only.
+- WordPress owns the actual Hero content as one ordinary `wp_block` synced-pattern entity containing Core blocks only.
+- Theme stores only a typed `homepage_hero_block` reference plus allow-listed `homepage_hero_variant` presentation state.
+- These two keys are backward-compatible additions to the existing `aznet_theme_settings` family; `schema_version` remains `3` and no second Theme Mod or migration store is introduced.
+- The Theme MUST NOT copy Hero heading/body/image/CTA content into `aznet_theme_settings`.
+- Changing `homepage_hero_variant` MUST change presentation only and MUST NOT rewrite the synced Hero block content.
+- The Theme MAY create the initial synced Hero block only through an explicit, nonce/capability-protected user action from the Hero Library. Initialization is **draft-first**: the new `wp_block` is stored as a draft and the typed reference may point to it, but public Hero resolution still requires `publish`, so the existing legacy/fallback Hero remains live until the user explicitly publishes the new Hero in the native block editor. Generic Theme activation, preset switching and ordinary settings save remain content-mutation free.
+- The created `wp_block` content must use ordinary Core blocks and remain editable in the native WordPress editor. No proprietary block type, opaque serialized builder schema or second content store is allowed.
+- Theme switching must not delete the synced Hero block. The content remains WordPress data even when another Theme no longer renders AZnet-specific presentation classes.
+- Rollback is content-safe: changing the referenced Hero `wp_block` back to `draft` makes public resolution fall through to the retained legacy Page/Site path while keeping the block ID/reference and authored content intact.
+- The Hero Library may provide presentation variants such as split, centered, inverse and media-left over the same WordPress-owned content source.
 
-This preserves existing-site presentation across Theme updates while keeping ownership clean: WordPress owns both the dedicated Page data and the legacy site/Page fallback values; Theme owns only source selection and presentation composition. Theme switching does not delete either source.
+Backward compatibility remains required. Resolution precedence is:
 
+1. valid `homepage_hero_block` synced Hero content;
+2. legacy valid `homepage_hero_page` mapping for sites already using the v1.3.4-v1.3.10 Page model;
+3. legacy pre-v1.3.4 public WordPress Site/Front Page projection when neither explicit Hero source is valid.
+
+The legacy Page reference is compatibility-only for new UX. The Theme MUST NOT auto-delete, auto-migrate or overwrite that Page. A future explicit migration action may copy content into a WordPress-native synced Hero block only after separate source/UX approval.
+
+This keeps ownership clean while reducing authoring friction: WordPress owns Hero content/media; AZnet Theme owns Hero presentation, the visual library and typed source selection.
 
 Theme-owned presentation settings dùng **một** versioned Theme Mod schema: `aznet_theme_settings`.
 
