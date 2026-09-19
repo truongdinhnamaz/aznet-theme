@@ -144,4 +144,27 @@ $must(
     'Law 01 reference Footer must support a WordPress logo + site-title lockup.'
 );
 
+
+$must(
+    1 === preg_match(
+        '/\\.aznet-theme-site-header--law01-burgundy-gold \\.aznet-theme-site-header__utility-menu a\\s*\\{[^}]*background:\\s*var\\(--law01-client-burgundy\\);[^}]*color:\\s*#fff;/s',
+        $css
+    ),
+    'Law 01 inherited Header utility action must read as the burgundy consultation CTA from the reference while preserving WordPress menu ownership.'
+);
+$must(
+    str_contains(
+        $css,
+        '.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__search button::before'
+    ),
+    'Law 01 inherited Header search must use a compact visual search affordance without replacing the semantic WordPress search form.'
+);
+$must(
+    str_contains(
+        $css,
+        '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card__body'
+    ) && str_contains($css, 'min-height: 100%;'),
+    'Law 01 inherited Latest cards must retain an equal-height body rhythm while continuing to render WordPress-native posts.'
+);
+
 echo "PASS: Law 01 Hero/Trust/Services visual parity contract\n";
