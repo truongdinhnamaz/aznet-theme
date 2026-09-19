@@ -168,11 +168,27 @@ async function resetSettings(page) {
 async function verifyHomepageHeroEditingBridge(page, viewportName) {
   await gotoCenter(page, 'homepage');
   const center = page.locator('.aznet-theme-control-center');
+  const presetForm = page.locator('form.aznet-theme-panel').filter({ has: page.getByRole('heading', { name: 'Mẫu trang chủ' }) });
+  await presetForm.locator('select[name="aznet_theme_settings[homepage_preset]"]').selectOption('law-01');
+  await Promise.all([
+    page.waitForURL(/updated=1/, { timeout: 20000 }),
+    presetForm.getByRole('button', { name: 'Lưu mẫu trang chủ' }).click(),
+  ]);
+
+  await gotoCenter(page, 'homepage');
   const text = await center.innerText();
   for (const needle of ['Thư viện Hero', 'Nguồn Hero hiện tại:', 'Dữ liệu dự phòng', 'không cần tạo Page', 'Dùng mẫu này']) {
     if (!text.includes(needle)) throw new Error('Homepage Hero Library fallback UX missing ' + needle);
   }
 
+  await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded' });
+  const legacyHero = page.locator('.aznet-theme-law01-hero');
+  if (await legacyHero.count() !== 1) throw new Error('Law 01 fallback Hero must render before D-030 initialization');
+  if (await page.locator('.aznet-theme-law01-hero--library').count()) throw new Error('Library Hero must not exist before explicit initialization');
+  const legacyTitleBefore = ((await legacyHero.locator('h1').textContent()) || '').trim();
+  if (!legacyTitleBefore) throw new Error('Fallback Hero title must remain visible before D-030 initialization');
+
+  await gotoCenter(page, 'homepage');
   const libraryForm = page.locator('form.aznet-theme-homepage-hero-library');
   if (await libraryForm.count() !== 1) throw new Error('Homepage Hero Library form missing');
   if (await libraryForm.locator('input[name="homepage_hero_variant"]').count() !== 4) throw new Error('Homepage Hero Library must expose exactly four bounded variants');
@@ -191,6 +207,8 @@ async function verifyHomepageHeroEditingBridge(page, viewportName) {
 
   await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded' });
   if (await page.locator('.aznet-theme-law01-hero--library').count()) throw new Error('Draft Hero must not replace the current public Hero before publication');
+  const legacyTitleAfter = ((await page.locator('.aznet-theme-law01-hero h1').textContent()) || '').trim();
+  if (legacyTitleAfter !== legacyTitleBefore) throw new Error('Draft-first initialization changed the public fallback Hero title');
 
   await gotoCenter(page, 'homepage');
   const draftText = await center.innerText();
