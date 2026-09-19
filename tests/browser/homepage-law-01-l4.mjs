@@ -193,6 +193,10 @@ async function inspectViewport(browser, name, viewport) {
       const aboutMedia = document.querySelector('.aznet-theme-law01-profile__about-media')?.getBoundingClientRect();
       const teamBand = document.querySelector('.aznet-theme-law01-profile__team-band')?.getBoundingClientRect();
       const articles = [...document.querySelectorAll('.aznet-theme-law01-articles .aznet-theme-law01-article-card')].map((node) => node.getBoundingClientRect());
+      const heroVisualNode = document.querySelector('.aznet-theme-law01-hero__visual');
+      const heroBlend = heroVisualNode ? getComputedStyle(heroVisualNode, '::before') : null;
+      const heroTitleNode = document.querySelector('.aznet-theme-law01-hero h1');
+      const heroTitleStyle = heroTitleNode ? getComputedStyle(heroTitleNode) : null;
       return {
         heroSection: heroSection ? { x: heroSection.x, y: heroSection.y, width: heroSection.width, height: heroSection.height } : null,
         heroGrid: heroGrid ? { x: heroGrid.x, y: heroGrid.y, width: heroGrid.width, height: heroGrid.height } : null,
@@ -210,6 +214,17 @@ async function inspectViewport(browser, name, viewport) {
         aboutMedia: aboutMedia ? { x: aboutMedia.x, y: aboutMedia.y, width: aboutMedia.width, height: aboutMedia.height } : null,
         teamBand: teamBand ? { x: teamBand.x, y: teamBand.y, width: teamBand.width, height: teamBand.height } : null,
         articles: articles.map((rect) => ({ x: rect.x, y: rect.y, width: rect.width, height: rect.height })),
+        heroBlend: heroBlend ? {
+          content: heroBlend.content,
+          backgroundImage: heroBlend.backgroundImage,
+          pointerEvents: heroBlend.pointerEvents,
+          width: heroBlend.width,
+        } : null,
+        heroTitleStyle: heroTitleStyle ? {
+          lineHeight: heroTitleStyle.lineHeight,
+          fontSize: heroTitleStyle.fontSize,
+          letterSpacing: heroTitleStyle.letterSpacing,
+        } : null,
       };
     });
 
@@ -244,6 +259,14 @@ async function inspectViewport(browser, name, viewport) {
       if (Math.abs(visualRight - viewport.width) > 2) {
         throw new Error(`desktop Hero image surface must blend to the viewport edge without a right gutter, got right=${visualRight.toFixed(1)} viewport=${viewport.width}`);
       }
+      if (!parityMetrics.heroBlend || parityMetrics.heroBlend.content === 'none' || !parityMetrics.heroBlend.backgroundImage.includes('linear-gradient')) {
+        throw new Error('desktop Hero image must render the decorative edge-blend transition');
+      }
+      if (parityMetrics.heroBlend.pointerEvents !== 'none') throw new Error('Hero edge-blend transition must remain non-interactive');
+      if (!parityMetrics.heroTitleStyle) throw new Error('Hero title computed style unavailable');
+      const heroTitleFont = Number.parseFloat(parityMetrics.heroTitleStyle.fontSize);
+      const heroTitleLine = Number.parseFloat(parityMetrics.heroTitleStyle.lineHeight);
+      if (!(heroTitleLine / heroTitleFont < 1.05)) throw new Error(`Hero title line-height must stay editorially compact, got ${parityMetrics.heroTitleStyle.lineHeight} / ${parityMetrics.heroTitleStyle.fontSize}`);
       if (parityMetrics.trust.length !== 4 || new Set(parityMetrics.trust.map((item) => Math.round(item.y))).size !== 1) {
         throw new Error('desktop trust strip must remain one four-item row');
       }
