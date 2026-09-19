@@ -425,8 +425,7 @@
     object-fit: cover;
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__media-help {
-    margin-top: .75rem;
-    color: var(--aznet-theme-color-text-muted);
+    display: none;
 }
 
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--split .aznet-theme-homepage-hero-content__copy { order: 1; }
