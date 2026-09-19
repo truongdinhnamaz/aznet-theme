@@ -32,6 +32,19 @@ jobs:
       - name: Check preflight harness syntax
         run: node --check tests/browser/lstamduchn-v1-3-15-preflight.mjs
 
+      - name: Diagnose target network and HTTP reachability
+        shell: bash
+        run: |
+          set +e
+          echo '=== DNS ==='
+          getent ahosts lstamduchn.vn || true
+          echo '=== HTTPS root IPv4 ==='
+          curl -4 -vIL --connect-timeout 10 --max-time 30 https://lstamduchn.vn/ 2>&1 || true
+          echo '=== HTTPS wp-login IPv4 ==='
+          curl -4 -vIL --connect-timeout 10 --max-time 30 https://lstamduchn.vn/wp-login.php 2>&1 || true
+          echo '=== HTTPS root IPv6 ==='
+          curl -6 -vIL --connect-timeout 10 --max-time 20 https://lstamduchn.vn/ 2>&1 || true
+
       - name: Run authenticated read-only preflight
         env:
           LSTAMDUCHN_BASE_URL: https://lstamduchn.vn
