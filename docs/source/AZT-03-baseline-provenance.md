@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.59
+**Version:** v0.60
 **Status:** Working Source  
 **Date:** 19/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -26,7 +26,7 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 - Law 01 visual-parity checkpoint: owner-approved PR #139 merged final verified head `b7947bf2722db6bde8fd1c29ae377318b8e99c9c` to canonical `main@ffafe55b90db1d5313b36a5151110ca1e3f67789`. The Theme-owned Burgundy Law 01 presentation now uses the approved Hero 48/52 desktop proportion, compact trust-strip rhythm and responsive Services geometry (6-up wide desktop, 3+3 compact desktop, 1-up mobile). Final-head 24/24 workflows PASS, including Homepage Composer Law 01 Browser Quality; exact-main V1 run `35343960510` and X6 run `35343960430` PASS. This is presentation-only and does not resolve RootProfile Team issue #112. Evidence: `docs/evidence/LAW01_VISUAL_PARITY_HERO_SERVICES_20260918.md`.
 - Published release `v1.2.0` remains retained historical PASS at exact technical source `c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`; its owner-approved production deployment to `tamduchanoi.aznet.vn` remains retained evidence via deployment run `35135759389` and independent read-only verification run `35136876330`.
 - v1.3 exact-main verification: V1 Exact Main run `35206627102` SUCCESS plus pre-existing X6 push-to-main release path run `35206626992` SUCCESS on `afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`; exact `aznet-theme-1.3.0.zip` SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`, 144 package files, 107 packaged PHP lint PASS, 32/32 browser/axe PASS, switch-away/switch-back lifecycle PASS. Evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`.
-- Published/GitHub-Release release is `v1.3.0`: owner-approved publication run `35211254633` published annotated tag `v1.3.0` (tag object `56f2ae2e8ba6e1fb4e8359447656e88ab6411ba6`) dereferencing to exact technical commit `afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, GitHub Release `390623960`, and asset `570039299` (`aznet-theme-1.3.0.zip`) with SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`; publication evidence artifact `10492411096` has digest `sha256:0a18d2169ad8d92a587421289ede773031e56d3646ddac44ba326ebe4ea6fd75`. Evidence: `docs/evidence/V1_3_PUBLICATION_20260917.md`.
+- Published/GitHub-Release release is now `v1.3.10`: owner-approved publication run `35413516574` published annotated tag `v1.3.10` (tag object `c4d295acb6e849415ac5a228656e361660298e12`) dereferencing to exact verified implementation commit `39df23c3385118888e262c27a2331de34dda430d`, GitHub Release `391877350`, and asset `573847909` (`aznet-theme-1.3.10.zip`) with SHA-256 `5ff6c4862839dcdb6dfbbb77a71cb8bd87259b83cfbf308aa6b04279396bd572`; publication evidence artifact `10574826580` has digest `sha256:822d07e3908400c0357d9497695ea88fb82468c684944a9d95cc24aa49a14e21`. The older pre-PR #151 1.3.10 candidate package digest is superseded and is not the public release identity. Evidence: `docs/evidence/V1_3_10_PUBLICATION_20260919.md`.
 - Owner-approved v1.3.0 production deployment to `tamduchanoi.aznet.vn` is PASS at the verified Theme-owned/site-operations scope. Deployment run `35222200660` upgraded active Theme `1.2.0 -> 1.3.0` using the exact published asset and completed SUCCESS; deployment artifact `10497483290` has digest `sha256:84d041445b606279a0caebef60b9c38206f5a9a88b8e1b759453484dfad1c6b1`. Fresh independent read-only run `35223053733` then completed SUCCESS, verifying active Theme `1.3.0`, Standalone Core `ready`, retained `header-utility` menu ID `15`, approved phone presentation and the 28/28 public matrix; artifact `10497925626` has digest `sha256:756f765fe70f2ca61978111678853204808ea4cb4cd44fdd3453d50e177313b2`. Temporary ops files were removed at cleanup commit `6ef53f0bd20c69c65b88a753627436e31976d606`; the cleaned ops branch had zero net file delta from `main@2c4e6f0442335ac3e690e97beaca4d4bf6405fa5`. Provider L5 remains unproven. Evidence: `docs/evidence/V1_3_PRODUCTION_DEPLOYMENT_20260917.md`.
 - WordPress floor: `6.9+`.
 - PHP floor: `8.1+`.
@@ -229,7 +229,7 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**NEXT — No new AZnet Theme implementation slice is opened by this closure. Preserve canonical Theme metadata `1.3.10`. Any tag/GitHub Release, production deployment, takeover or new roadmap slice requires a separate explicit owner gate. RootProfile-backed authoritative Team remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
+**NEXT — v1.3.10 PUBLICATION is PASS. Production deployment of `v1.3.10` remains a separate explicit owner gate. Before deployment, revalidate the target site's current active Theme/local modifications and rollback path, then use only the exact published asset. No new Theme implementation slice is opened; RootProfile-backed authoritative Team remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
 
 ### AZnet Theme 1.3.10 polished-Hero client-delivery candidate — 19/09/2026
 
@@ -348,3 +348,24 @@ Theme metadata remains `1.3.10`. Published GitHub Release and verified productio
 Owner-approved source/evidence PR #152 merged to canonical `main@27e6a2bc3d68bfa4aa51b22c0e1fda2867cec174`. PR #152 changed documentation/evidence only; its final head `489cf1ee64751690d793144c56b37c0b16699457` completed 7/7 triggered workflows SUCCESS and has zero file delta to the merge commit. No new production Theme bytes were introduced after the PR #151 canonical implementation merge at `main@39df23c3385118888e262c27a2331de34dda430d`, whose fresh exact-main V1 run `35412829723` remains the implementation verification anchor.
 
 Canonical repository Theme metadata remains `1.3.10`. Published GitHub Release and verified production deployment remain historical `v1.3.0`.
+
+
+### AZnet Theme 1.3.10 publication closure — 19/09/2026
+
+Owner-approved publication run `35413516574` completed SUCCESS against exact verified implementation source `39df23c3385118888e262c27a2331de34dda430d`. Publication-time canonical main `e9133708713671584731c002f4d2947ea7adbbde` differs from that implementation anchor only under `docs/**`.
+
+The workflow rebuilt the post-PR #151 package twice, proved byte identity, exact source/package production-file identity, **145** packaged production files, **108/108** packaged PHP lint PASS, clean WordPress 6.9 activation/render with zero active third-party plugins, immutable annotated tag creation, GitHub Release creation and published-asset rehash.
+
+Public release identity:
+- tag `v1.3.10`;
+- tag object `c4d295acb6e849415ac5a228656e361660298e12` -> commit `39df23c3385118888e262c27a2331de34dda430d`;
+- GitHub Release `391877350`;
+- asset `573847909`, `aznet-theme-1.3.10.zip`, 207131 bytes;
+- SHA-256 `5ff6c4862839dcdb6dfbbb77a71cb8bd87259b83cfbf308aa6b04279396bd572`;
+- publication evidence artifact `10574826580`, digest `sha256:822d07e3908400c0357d9497695ea88fb82468c684944a9d95cc24aa49a14e21`.
+
+The older pre-PR #151 1.3.10 package SHA-256 `9eb8a3ad1c24b7e75a695199de3e45bf3e196bebd7fff8774f7390969283c92d` is superseded package provenance because PR #151 changed production Theme bytes while retaining metadata 1.3.10. It must not be used as the published release identity.
+
+Temporary publication helper cleanup commit `9a51fa49c56bb8d27009cf17f942197df819aff5` leaves the ops branch with zero net file delta against publication-time main.
+
+Published release is now `v1.3.10`; verified production deployment remains historical `v1.3.0` until separately approved and executed. Evidence: `docs/evidence/V1_3_10_PUBLICATION_20260919.md`.
