@@ -93,6 +93,8 @@ foreach ([
     'aznet-theme-law01-hero--inverse',
     'aznet-theme-law01-hero--media-left',
     'aznet-theme-homepage-hero-content__media .wp-block-image',
+    '.aznet-theme-homepage-hero-content__media-help',
+    'display: none;',
 ] as $needle) {
     assert(str_contains($css, $needle), "Hero Library presentation variant missing: {$needle}");
 }
