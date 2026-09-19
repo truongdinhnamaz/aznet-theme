@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.60
+**Version:** v0.61
 **Status:** Working Source  
 **Date:** 19/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -60,7 +60,13 @@ Current production state includes:
 - v1.2.0 publication and owner-approved production deployment are complete at the verified Theme-owned/site-operations scope. Deployment run `35135759389` installed the exact published `1.2.0` package and assigned the existing WordPress-owned menu ID `15` to the new `header-utility` location; fresh independent read-only run `35136876330` reverified active Theme `1.2.0`, Standalone Core `ready`, retained logo/menu identity and a 28/28 public regression with zero Theme-owned blocker. Provider L5 remains separate and unproven.
 - v1.3.0 technical integration, owner-approved publication and owner-approved production deployment are complete at their separately verified scopes. Deployment run `35222200660` installed the exact published `1.3.0` package on `tamduchanoi.aznet.vn`; fresh independent read-only run `35223053733` reverified active Theme `1.3.0`, Standalone Core `ready`, retained WordPress-owned menu/phone identity and a 28/28 public regression with zero Theme-owned blocker. Provider L5 remains separate and unproven.
 
-## 2.1 Current post-release / pilot delta — 18/09/2026
+## 2.1 Current pilot target — 19/09/2026
+
+- Operational pilot target is now `https://lstamduchn.vn/`, replacing `tamduchanoi.aznet.vn` completely for future AZnet Theme pilot QA/site-operations work.
+- Historical runs, deployment records and site-specific findings against `tamduchanoi.aznet.vn` remain immutable provenance for that retired pilot only; they do not establish current state or PASS on `lstamduchn.vn`.
+- Fresh replacement-pilot runtime/browser/a11y/integration/deployment evidence is **UNKNOWN** until verified directly on `lstamduchn.vn`. Canonical source/package/support-floor evidence that is not site-specific remains retained.
+
+### Historical post-release / pilot delta — 18/09/2026
 
 - Live canonical GitHub `main` is `371e09035a23664cf38f52f70aa3189e5c10f2cf` after owner-approved PR #111. PR #110 merged earlier at `45073221ba1f243cc95692c002ddfb34ede7a1d6`. PR #109 remains draft/open/unmerged and is not canonical state.
 - PR #110 closes the bounded Law 01 Quick Setup rerun/provenance-reuse gap: compatible Law provenance is reused instead of creating duplicate starter Post/media objects; Step 3 preview reflects reuse. Exact PR head `d5e58c4941bec144f05ec8de6a675eb86ebff74f` merged through #110.
