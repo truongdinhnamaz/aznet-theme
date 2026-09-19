@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.61
+**Version:** v0.62
 **Status:** Working Source  
 **Date:** 19/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -144,7 +144,7 @@ D-027 does not authorize a Git tag, GitHub Release, final production deployment,
 Under AZT-05 v1.0 and D-016:
 
 - WordPress-clean core Theme readiness is release-critical.
-- v1.1.0 and v1.2.0 publication/deployment remain retained historical PASS; current published GitHub Release is `v1.3.10`, canonical repository Theme metadata is `1.3.11` after D-030 merge, and the verified production Theme on `tamduchanoi.aznet.vn` remains `1.3.0`.
+- v1.1.0 and v1.2.0 publication/deployment remain retained historical PASS; current published GitHub Release is `v1.3.11`, canonical repository Theme metadata is `1.3.11`, and the verified production Theme on `tamduchanoi.aznet.vn` remains `1.3.0`.
 - v1.2 X1-X5 functional closure and X6 technical/publication/deployment evidence are retained.
 - v1.3 Y1-Y5 technical closure, exact-main/package verification, publication and owner-approved production deployment are PASS at their separately verified scopes.
 - Provider L5 is outside v1.3 Core and is not inferred from technical/publication/deployment PASS.
@@ -229,7 +229,7 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**NEXT — D-030 is PASS / MERGED on canonical `main@01ddbff1843dfd8a0e1cc276be34144f35aeba35` with fresh exact-main V1 verification PASS. Canonical Theme metadata is now `1.3.11`; published GitHub Release remains `v1.3.10` and verified production remains `v1.3.0`. The next release action, if desired, is a separate owner approval for `v1.3.11` publication; production deployment remains independently gated. RootProfile-backed authoritative Team remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
+**NEXT — `v1.3.11` PUBLICATION is PASS. Published tag `v1.3.11` targets exact verified implementation `01ddbff1843dfd8a0e1cc276be34144f35aeba35`; public asset SHA-256 is `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`. Verified production remains `v1.3.0`. Merge the publication source/evidence closure PR after owner approval; any production deployment of `v1.3.11` remains a separate explicit owner gate with target-site revalidation and rollback. RootProfile-backed authoritative Team remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
 
 ### AZnet Theme 1.3.10 polished-Hero client-delivery candidate — 19/09/2026
 
@@ -380,3 +380,12 @@ D-030 replaces the new-UX Page-required Hero authoring path with a Theme-owned v
 Y5 run `35422400222` produced deterministic candidate `aznet-theme-1.3.11.zip`: 147 production files, 110 packaged PHP lint PASS, SHA-256 `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`. Candidate-package evidence does not imply publication.
 
 Fresh push-triggered `V1 Exact Main Verification` run `35422599658` completed SUCCESS on exact merge SHA, with static artifact `10577094776` and clean runtime/browser artifact `10578340381`. Canonical Theme metadata is `1.3.11`; published GitHub Release remains `v1.3.10`; verified production remains `v1.3.0`. Evidence: `docs/evidence/HOMEPAGE_HERO_LIBRARY_D030_MERGE_CLOSURE_20260919.md`.
+
+
+### AZnet Theme 1.3.11 publication closure — 19/09/2026
+
+Owner-approved publication run `35423516185` created annotated tag `v1.3.11`, GitHub Release `391924224` and exact asset `aznet-theme-1.3.11.zip` from verified implementation source `01ddbff1843dfd8a0e1cc276be34144f35aeba35`. A release-notes shell-rendering defect was then corrected without changing tag or package bytes; repair run `35424304502` completed SUCCESS and fresh public readback confirms the corrected notes.
+
+Published identity: tag object `87122bfc4ffa12d8e9781c57908328c434a3977c` -> implementation commit `01ddbff1843dfd8a0e1cc276be34144f35aeba35`; Release `391924224`; asset `574135564`; SHA-256 `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`; 147 production files; 110/110 packaged PHP lint PASS; clean WordPress 6.9 activation/render PASS. Repair-run evidence artifact `10579042492`, digest `sha256:93e41bea89dee8be2f7be80f8338aac45016acb7457fc57565ecd7f38b220ac9`.
+
+Temporary publication helper cleanup commit `b585dfbf03d559a6e19b09ca756774d49b5fd157` leaves the ops branch with zero net changed files from publication-time `main@f2f20e1e67407a0b259e90cbf7063f94d887bada`. Published release is now `v1.3.11`; verified production remains `v1.3.0`. Evidence: `docs/evidence/V1_3_11_PUBLICATION_20260919.md`.
