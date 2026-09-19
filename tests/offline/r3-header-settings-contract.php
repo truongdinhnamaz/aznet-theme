@@ -42,7 +42,7 @@ $valid = AZnet\Theme\normalize_settings([
 ]);
 
 $valid_expected = [
-    'schema_version'           => 4,
+    'schema_version'           => 3,
     'visual_preset'            => 'editorial',
     'page_breadcrumbs'         => true,
     'header_preset'            => 'commerce',
