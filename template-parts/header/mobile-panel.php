@@ -35,9 +35,14 @@ $mobile_menu = isset( $args['mobile_menu'] ) ? (string) $args['mobile_menu'] : '
             </nav>
         <?php endif; ?>
         <div class="aznet-theme-site-header__mobile-actions">
-            <?php get_template_part( 'template-parts/header/utility-navigation', null, $args ); ?>
-            <?php get_template_part( 'template-parts/header/search', null, $args ); ?>
-            <?php get_template_part( 'template-parts/header/commerce-actions', null, $args ); ?>
+            <?php if ( ! empty( $args['law01_homepage'] ) ) : ?>
+                <?php get_template_part( 'template-parts/header/search', null, $args ); ?>
+                <?php get_template_part( 'template-parts/header/law01-consultation', null, $args ); ?>
+            <?php else : ?>
+                <?php get_template_part( 'template-parts/header/utility-navigation', null, $args ); ?>
+                <?php get_template_part( 'template-parts/header/search', null, $args ); ?>
+                <?php get_template_part( 'template-parts/header/commerce-actions', null, $args ); ?>
+            <?php endif; ?>
         </div>
     </div>
 </div>
