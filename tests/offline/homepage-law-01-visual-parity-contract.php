@@ -156,10 +156,11 @@ $must(
     'Law 01 consultation action must resolve only the mapped public WordPress Contact Page and fail-soft when it is absent.'
 );
 $must(
-    str_contains($profile, '$has_members = [] !== $members;') &&
+    str_contains($profile, '$has_team = $team instanceof \\WP_Post;') &&
     str_contains($profile, 'aznet-theme-law01-profile__container--about-only') &&
-    str_contains($profile, '$team instanceof \\WP_Post && $has_members'),
-    'Law 01 Profile must fail-soft to an About-only composition when no legitimate mapped Team members exist.'
+    str_contains($profile, 'if ( $team instanceof \\WP_Post ) :') &&
+    str_contains($profile, 'if ( [] !== $members ) :'),
+    'Law 01 Profile must keep the mapped Team category visible without fabricating member cards when no legitimate members exist.'
 );
 $must(
     str_contains($css, '.aznet-theme-law01-profile__container--about-only'),
@@ -180,12 +181,13 @@ $must(
 
 $must(
     str_contains($profile, '$has_about = $about instanceof \\WP_Post;') &&
-    str_contains($profile, '$section_label = $has_members') &&
+    str_contains($profile, '$has_team = $team instanceof \\WP_Post;') &&
+    str_contains($profile, '$section_label = $has_team') &&
     str_contains($profile, "__( 'Giới thiệu và đội ngũ', 'aznet-theme' )") &&
     str_contains($profile, "__( 'Đội ngũ luật sư', 'aznet-theme' )") &&
     str_contains($profile, "__( 'Giới thiệu', 'aznet-theme' )") &&
     str_contains($profile, 'aria-label="<?php echo esc_attr( $section_label ); ?>"'),
-    'Law 01 Profile accessibility label must match all three valid source-backed states: About+Team, Team-only, or About-only.'
+    'Law 01 Profile accessibility label must describe the source-backed About/Team sections even when Team member cards are unavailable.'
 );
 
 $membersPos = strpos($profile, 'aznet-theme-law01-profile__members');
