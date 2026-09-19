@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.65
+**Version:** v0.66
 **Status:** Working Execution Map / derived  
 **Date:** 19/09/2026
 
@@ -10,6 +10,8 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 > **Canonical-main checkpoint:** live `main` is `e9133708713671584731c002f4d2947ea7adbbde` after owner-approved post-closure source sync PR #153. Canonical implementation bytes remain anchored at owner-approved PR #151 merge `main@39df23c3385118888e262c27a2331de34dda430d`, Theme metadata `1.3.10`, with fresh exact-main V1 run `35412829723` SUCCESS. Owner-approved publication run `35413516574` published annotated `v1.3.10` + GitHub Release `391877350`; exact published asset SHA-256 is `5ff6c4862839dcdb6dfbbb77a71cb8bd87259b83cfbf308aa6b04279396bd572`. Verified production deployment remains historical `v1.3.0`; RootProfile Team remains blocked under issue #112.
 
 **Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS`. Current v1.3 state: `PUBLICATION + PRODUCTION DEPLOYMENT PASS`; published/GitHub-Release release and verified production deployment are both `v1.3.0` at their respective verified scopes.
+
+> **Operational pilot target (D-030):** `https://lstamduchn.vn/` is the sole active AZnet Theme pilot. `tamduchanoi.aznet.vn` is retired from active QA/deployment use; its prior runs remain historical evidence only. No site-specific PASS transfers to the replacement pilot. Fresh L3-L5 evidence on `lstamduchn.vn` is required before current-pilot claims.
 
 ## 1. Current state
 
