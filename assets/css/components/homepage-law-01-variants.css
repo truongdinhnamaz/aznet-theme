@@ -387,7 +387,7 @@
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__eyebrow {
     margin: 0 0 .75rem;
-    color: var(--law01-client-gold, var(--law01-gold));
+    color: var(--law01-gold-text, #8a632b);
     font-size: var(--aznet-theme-text-small);
     font-weight: 700;
     letter-spacing: .08em;
@@ -455,6 +455,9 @@
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--inverse {
     background: var(--law01-client-burgundy, var(--law01-navy));
     color: #fff;
+}
+.aznet-theme-homepage--law-01 .aznet-theme-law01-hero--inverse .aznet-theme-homepage-hero-content__eyebrow {
+    color: var(--law01-client-cream, #fffaf1);
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--inverse .aznet-theme-homepage-hero-content__lead,
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--inverse .aznet-theme-homepage-hero-content__media-help {
