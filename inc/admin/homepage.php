@@ -114,7 +114,8 @@ function render_homepage_hero_library( array $settings ): void {
 
     echo '<div class="aznet-theme-panel aznet-theme-homepage-hero-editor">';
     echo '<div class="aznet-theme-homepage-hero-editor__heading"><div><h2>' . esc_html__( 'Thư viện Hero', 'aznet-theme' ) . '</h2>';
-    echo '<p class="description">' . esc_html__( 'Chọn cách trình bày Hero. Nội dung được lưu trong WordPress dưới dạng Hero đồng bộ bằng block lõi; Theme không lưu bản sao tiêu đề, mô tả, ảnh hay CTA.', 'aznet-theme' ) . '</p></div></div>';
+    echo '<p class="description">' . esc_html__( 'Chọn cách trình bày Hero. Nội dung được lưu trong WordPress dưới dạng Hero đồng bộ bằng block lõi; Theme không lưu bản sao tiêu đề, mô tả, ảnh hay CTA.', 'aznet-theme' ) . '</p>';
+    echo '<p class="description"><strong>' . esc_html__( 'Một nơi để sửa toàn bộ Hero:', 'aznet-theme' ) . '</strong> ' . esc_html__( 'chữ, nút, ảnh và cam kết đều được chỉnh trong chính Hero WordPress; Site Title, Tagline và tiêu đề Trang chủ chỉ còn là nguồn dự phòng tương thích.', 'aznet-theme' ) . '</p></div></div>';
 
     if ( $hero_block instanceof \WP_Post && $hero_block_has_content ) {
         echo '<div class="aznet-theme-homepage-hero-editor__status aznet-theme-homepage-hero-editor__status--ready"><strong>' . esc_html__( 'Nguồn Hero hiện tại:', 'aznet-theme' ) . '</strong> ' . esc_html__( 'Hero WordPress', 'aznet-theme' ) . '</div>';

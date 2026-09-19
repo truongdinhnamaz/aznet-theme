@@ -24,23 +24,30 @@ try {
       const title = ((await hero.locator('h1').textContent()) || '').trim();
       if (title !== 'Hero Library WordPress') throw new Error('Synced Hero block content did not win source precedence: ' + title);
       if (await hero.locator('.aznet-theme-law01-hero__grid').count()) throw new Error('Legacy Hero grid must not render when synced Hero content is valid');
-      if (await hero.locator('.aznet-theme-law01-hero__trust-item').count() !== 4) throw new Error('Law 01 trust presentation must remain below Hero Library content');
+      if (await hero.locator('.aznet-theme-law01-hero__trust-item').count() !== 0) throw new Error('Legacy hard-coded trust strip must not render for Hero Library content');
+      if (await hero.locator('.aznet-theme-homepage-hero-content__trust-item').count() !== 4) throw new Error('WordPress-owned editable Hero trust items must render from the synced Hero block');
       if (await hero.locator('.aznet-theme-homepage-hero-content__media-help').isVisible()) throw new Error('Hero media authoring hint must not leak into public presentation');
 
       const metrics = await hero.evaluate((node) => {
         const layout = node.querySelector('.aznet-theme-homepage-hero-content__layout');
         const copy = node.querySelector('.aznet-theme-homepage-hero-content__copy');
         const media = node.querySelector('.aznet-theme-homepage-hero-content__media');
+        const titleNode = node.querySelector('.aznet-theme-homepage-hero-content__title');
+        const trust = node.querySelector('.aznet-theme-homepage-hero-content__trust-grid');
         return {
           overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
           columns: layout ? getComputedStyle(layout).gridTemplateColumns : '',
           copyOrder: copy ? getComputedStyle(copy).order : '',
           mediaOrder: media ? getComputedStyle(media).order : '',
+          titleMaxWidth: titleNode ? getComputedStyle(titleNode).maxWidth : '',
+          trustColumns: trust ? getComputedStyle(trust).gridTemplateColumns : '',
         };
       });
       if (metrics.overflow > 1) throw new Error('Hero Library horizontal overflow: ' + metrics.overflow);
       if (metrics.copyOrder !== '2' || metrics.mediaOrder !== '1') throw new Error('media-left variant order mismatch: ' + JSON.stringify(metrics));
       if (item.width >= 960 && !metrics.columns.includes('px')) throw new Error('desktop Hero Library grid columns unavailable');
+      if (item.width >= 960 && metrics.titleMaxWidth !== 'none') throw new Error('desktop Hero title must not retain a narrow character cap: ' + metrics.titleMaxWidth);
+      if (item.width >= 960 && !metrics.trustColumns.includes('px')) throw new Error('desktop editable trust grid columns unavailable');
       if (item.width < 960 && metrics.columns.split(' ').length > 1) throw new Error('mobile Hero Library must collapse to one column');
 
       const axe = await new AxeBuilder({ page }).include('.aznet-theme-law01-hero--library').analyze();

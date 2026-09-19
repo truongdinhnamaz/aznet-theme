@@ -6,9 +6,9 @@ Canonical implementation baseline is owner-approved D-030 PR #156 at `main@01ddb
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
-| `AZT-02-architecture.md` | v0.13 | Theme architecture, public integration contracts and D-027 Standalone Core runtime-independence boundary |
+| `AZT-02-architecture.md` | v0.14 | Theme architecture, public integration contracts, D-027 Standalone Core boundary and complete WordPress-owned D-030 Hero authoring rule |
 | `AZT-03-baseline-provenance.md` | v0.62 | Canonical provenance through D-030 merge and owner-approved v1.3.11 publication; verified production remains v1.3.0; RootProfile Team blocker #112 retained |
-| `AZT-04-roadmap-qa-decisions.md` | v0.76 | Roadmap/QA through D-030 PASS / MERGED / PUBLISHED at v1.3.11; production deployment remains separately gated; RootProfile Team remains external-blocked |
+| `AZT-04-roadmap-qa-decisions.md` | v0.77 | Roadmap/QA through published D-030 v1.3.11 plus the owner-approved 1.3.12 Hero authoring corrective slice; publication/deployment remain separate gates |
 | `AZT-EXEC-MAP.md` | v0.68 | Derived execution map through owner-approved v1.3.11 publication closure; source sync is current bounded slice and production deployment remains separately gated |
 
 v1.3 technical closure evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`. v1.3 publication evidence: `docs/evidence/V1_3_PUBLICATION_20260917.md`. v1.3 production deployment evidence: `docs/evidence/V1_3_PRODUCTION_DEPLOYMENT_20260917.md`. Historical v1.3.0 technical baseline is `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e` with exact-main V1 + X6 release-path PASS and deterministic package SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`. Current published release is `v1.3.11`; verified production deployment remains `v1.3.0`. Provider L5 remains unclaimed.

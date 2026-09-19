@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.76
+**Version:** v0.77
 **Status:** Working Source  
 **Date:** 19/09/2026
 
@@ -579,6 +579,21 @@ Accepted boundary:
 
 Implementation is a new post-release candidate and must not mutate the already-published v1.3.10 release identity. The implementation metadata target is 1.3.11 unless a later release gate explicitly changes it.
 
+
+### D-030 authoring completion refinement — 19/09/2026
+
+The product owner approved a corrective authoring refinement after live preview exposed two issues: avoidable Hero-title wrapping caused by narrow Theme-owned width caps, and legacy visible Hero copy being assembled from multiple unrelated WordPress sources.
+
+Accepted refinement:
+- Hero title layout must use responsive available-width rules; no client-specific line breaks and no narrow `ch` cap that wastes an otherwise available copy column.
+- The primary Hero Library path remains one WordPress-owned synced `wp_block`, but its scaffold must now cover the complete user-editable Hero surface: eyebrow/label, H1, value/supporting copy, CTA labels/links, media and trust/supporting messages.
+- Theme-owned code may provide structure, icons/decoration, variants and responsive presentation only; it must not own the authoritative text for those Hero fields.
+- Site Title, Front Page title, Site Tagline and generic legacy trust strings remain fallback/compatibility sources only. They must not remain dependencies once a valid published Hero block is configured.
+- Control Center must identify the synced Hero as the single editing destination for the configured Hero.
+- Existing draft-first creation, no-auto-migration, no-auto-delete, variant-does-not-rewrite-content, and theme-switch content-retention rules remain unchanged.
+- Because `v1.3.11` is already published and immutable, this corrective implementation advances candidate metadata to `1.3.12`; it does not rewrite the published `v1.3.11` artifact.
+
+Implementation/QA is tracked in PR #159. Publication and production deployment remain separate owner gates after implementation merge and exact-main verification.
 
 ### D-030 canonical merge closure — 19/09/2026
 

@@ -51,12 +51,16 @@ $contact = homepage_page_reference( (int) setting( 'homepage_contact_page', 0 ) 
 $services = homepage_page_reference( (int) setting( 'homepage_services_page', 0 ) );
 if ( '' === $hero_block_html && '' === $title ) { return; }
 
-$trust_items = [
-    __( 'Tư vấn rõ ràng', 'aznet-theme' ),
-    __( 'Giải pháp thực tiễn', 'aznet-theme' ),
-    __( 'Bảo mật thông tin', 'aznet-theme' ),
-    __( 'Đồng hành tận tâm', 'aznet-theme' ),
-];
+$trust_items = [];
+if ( '' === $hero_block_html ) {
+    // Legacy compatibility only. New Hero Library content owns these editable messages in WordPress.
+    $trust_items = [
+        __( 'Tư vấn rõ ràng', 'aznet-theme' ),
+        __( 'Giải pháp thực tiễn', 'aznet-theme' ),
+        __( 'Bảo mật thông tin', 'aznet-theme' ),
+        __( 'Đồng hành tận tâm', 'aznet-theme' ),
+    ];
+}
 
 $section_classes = 'aznet-theme-law01-section aznet-theme-law01-hero';
 if ( '' !== $hero_block_html ) {
@@ -106,24 +110,26 @@ if ( '' !== $hero_block_html ) {
         </div>
     <?php endif; ?>
 
-    <div class="aznet-theme-law01-hero__trust" aria-label="<?php esc_attr_e( 'Cam kết dịch vụ', 'aznet-theme' ); ?>">
-        <div class="aznet-theme-law01-container aznet-theme-law01-hero__trust-grid">
-            <?php foreach ( $trust_items as $index => $item ) : ?>
-                <div class="aznet-theme-law01-hero__trust-item">
-                    <span class="aznet-theme-law01-hero__trust-icon" aria-hidden="true">
-                        <?php if ( 0 === $index ) : ?>
-                            <svg viewBox="0 0 24 24" focusable="false"><path d="M4 4h16v11H8l-4 4V4Zm4 5h8M8 12h5"/></svg>
-                        <?php elseif ( 1 === $index ) : ?>
-                            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 3 4 7v5c0 4.5 3.4 7.7 8 9 4.6-1.3 8-4.5 8-9V7l-8-4Zm-3 9 2 2 4-4"/></svg>
-                        <?php elseif ( 2 === $index ) : ?>
-                            <svg viewBox="0 0 24 24" focusable="false"><path d="M7 10V8a5 5 0 0 1 10 0v2m-11 0h12v10H6V10Zm6 4v3"/></svg>
-                        <?php else : ?>
-                            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm-4-9 2.5 2.5L16 9"/></svg>
-                        <?php endif; ?>
-                    </span>
-                    <span><?php echo esc_html( $item ); ?></span>
-                </div>
-            <?php endforeach; ?>
+    <?php if ( [] !== $trust_items ) : ?>
+        <div class="aznet-theme-law01-hero__trust" aria-label="<?php esc_attr_e( 'Cam kết dịch vụ', 'aznet-theme' ); ?>">
+            <div class="aznet-theme-law01-container aznet-theme-law01-hero__trust-grid">
+                <?php foreach ( $trust_items as $index => $item ) : ?>
+                    <div class="aznet-theme-law01-hero__trust-item">
+                        <span class="aznet-theme-law01-hero__trust-icon" aria-hidden="true">
+                            <?php if ( 0 === $index ) : ?>
+                                <svg viewBox="0 0 24 24" focusable="false"><path d="M4 4h16v11H8l-4 4V4Zm4 5h8M8 12h5"/></svg>
+                            <?php elseif ( 1 === $index ) : ?>
+                                <svg viewBox="0 0 24 24" focusable="false"><path d="M12 3 4 7v5c0 4.5 3.4 7.7 8 9 4.6-1.3 8-4.5 8-9V7l-8-4Zm-3 9 2 2 4-4"/></svg>
+                            <?php elseif ( 2 === $index ) : ?>
+                                <svg viewBox="0 0 24 24" focusable="false"><path d="M7 10V8a5 5 0 0 1 10 0v2m-11 0h12v10H6V10Zm6 4v3"/></svg>
+                            <?php else : ?>
+                                <svg viewBox="0 0 24 24" focusable="false"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm-4-9 2.5 2.5L16 9"/></svg>
+                            <?php endif; ?>
+                        </span>
+                        <span><?php echo esc_html( $item ); ?></span>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         </div>
-    </div>
+    <?php endif; ?>
 </section>
