@@ -568,6 +568,7 @@ The product owner rejected the dedicated-Page authoring friction for a Homepage-
 Accepted boundary:
 - WordPress owns Hero content in one normal `wp_block` synced-pattern entity made only from Core blocks.
 - Theme owns Hero visual variants/library, the typed block reference and presentation composition.
+- `homepage_hero_block` + `homepage_hero_variant` are additive settings in the existing `aznet_theme_settings` schema; schema version remains `3`.
 - New authoring UX must not require a dedicated Page.
 - Ordinary Theme settings save and preset selection remain content-mutation free.
 - Initial Hero block creation is allowed only through an explicit user action protected by capability + nonce and implemented through public WordPress APIs. The created block starts as `draft`; the current public Hero remains on the legacy/fallback path until the user publishes that block.
