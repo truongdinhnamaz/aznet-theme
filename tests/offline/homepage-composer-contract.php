@@ -24,6 +24,9 @@ foreach (['set_transient(', 'update_option(', 'update_post_meta(', 'wp_insert_po
     assert(! str_contains($composer, $forbidden), "Composer must not persist/mutate content: {$forbidden}");
 }
 
+assert(str_contains($composer, "get_option( 'show_on_front' )"), 'Law 01 Composer must require WordPress static Front Page mode.');
+assert(str_contains($composer, "get_option( 'page_on_front' )"), 'Law 01 Composer must require a configured static Front Page ID.');
+assert(str_contains($composer, 'homepage_page_reference'), 'Law 01 Composer must validate the configured static Front Page through the typed WordPress Page boundary.');
 assert(str_contains($composer, "'law-01'"));
 assert(str_contains($composer, 'homepage_ledger_reset'));
 assert(str_contains($composer, 'homepage_ledger_add'));
