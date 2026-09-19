@@ -20,7 +20,7 @@ $section_label = $has_team
     : __( 'Giới thiệu', 'aznet-theme' );
 
 $container_classes = 'aznet-theme-law01-container aznet-theme-law01-profile__container';
-if ( ! $has_members ) {
+if ( ! $has_team ) {
     $container_classes .= ' aznet-theme-law01-profile__container--about-only';
 }
 ?>
