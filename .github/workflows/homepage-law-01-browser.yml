@@ -21,6 +21,7 @@ on:
       - 'assets/css/components/homepage-law-01-variants.css'
       - 'tests/offline/homepage-*.php'
       - 'tests/browser/homepage-law-01-l4.mjs'
+      - 'tests/browser/homepage-hero-library-l4.mjs'
       - 'scripts/verify-v1-core.sh'
       - '.github/workflows/homepage-law-01-browser.yml'
   workflow_dispatch:
@@ -389,6 +390,62 @@ jobs:
           fi
           test -f /tmp/homepage-law01/browser-summary.json
           echo 'PASS: Homepage Composer Law 01 Burgundy L3-L4 verification'
+
+      - name: Verify D-030 synced Hero block precedence
+        run: |
+          set -euo pipefail
+          cat > /tmp/create-hero-library.php <<'PHP'
+          <?php
+          $registry = WP_Block_Patterns_Registry::get_instance();
+          $pattern = $registry->get_registered( 'aznet-theme/homepage-hero-content' );
+          if ( ! is_array( $pattern ) || empty( $pattern['content'] ) ) {
+              fwrite( STDERR, "Hero Library scaffold pattern unavailable\n" );
+              exit( 1 );
+          }
+          $content = str_replace( 'Viết tiêu đề Hero của bạn tại đây', 'Hero Library WordPress', (string) $pattern['content'] );
+          $block = wp_insert_post(
+              [
+                  'post_type' => 'wp_block',
+                  'post_status' => 'publish',
+                  'post_title' => 'D-030 Hero Library Fixture',
+                  'post_content' => $content,
+              ],
+              true
+          );
+          if ( is_wp_error( $block ) || (int) $block <= 0 ) {
+              fwrite( STDERR, "Unable to create synced Hero block\n" );
+              exit( 1 );
+          }
+          $s = get_theme_mod( 'aznet_theme_settings', [] );
+          $s['homepage_hero_block'] = (int) $block;
+          $s['homepage_hero_variant'] = 'media-left';
+          set_theme_mod( 'aznet_theme_settings', AZnet\Theme\normalize_settings( $s ) );
+          echo (int) $block;
+          PHP
+          HERO_BLOCK_ID=$(wp eval-file /tmp/create-hero-library.php --path=/tmp/wp --allow-root)
+          test -n "$HERO_BLOCK_ID"
+          curl -fsS http://127.0.0.1:8080/ > /tmp/homepage-law01/homepage-hero-library.html
+          grep -F 'aznet-theme-law01-hero--library' /tmp/homepage-law01/homepage-hero-library.html
+          grep -F 'aznet-theme-law01-hero--media-left' /tmp/homepage-law01/homepage-hero-library.html
+          grep -F 'Hero Library WordPress' /tmp/homepage-law01/homepage-hero-library.html
+          if grep -F '<h1 id="aznet-law01-title">Văn phòng luật sư kiểm soát độc lập</h1>' /tmp/homepage-law01/homepage-hero-library.html; then
+            echo 'Legacy Hero Page must not win when synced Hero block is valid' >&2
+            exit 1
+          fi
+          echo 'PASS: D-030 synced Hero block precedence at runtime'
+
+      - name: Run D-030 Hero Library browser verification
+        env:
+          LAW01_BASE_URL: http://127.0.0.1:8080
+          LAW01_STATE_DIR: /tmp/homepage-law01
+        run: |
+          set -euo pipefail
+          node tests/browser/homepage-hero-library-l4.mjs
+          test -f /tmp/homepage-law01/hero-library-browser-summary.json
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/homepage-law01/server.log; then
+            echo 'Theme runtime error marker found after Hero Library browser verification' >&2
+            exit 1
+          fi
 
       - name: Upload Law 01 evidence
         if: always()
