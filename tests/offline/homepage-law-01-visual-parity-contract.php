@@ -108,7 +108,7 @@ $must(
     'Law 01 target trust strip must stay compact while retaining comfortable icon/text rhythm.'
 );
 $must(
-    str_contains($hero, "$trust_icon_names = [ 'shield', 'people', 'scales', 'handshake' ];") &&
+    str_contains($hero, '$trust_icon_names = [ \'shield\', \'people\', \'scales\', \'handshake\' ];') &&
     str_contains($hero, 'aznet-theme-law01-hero__trust-icon--<?php echo esc_attr( $trust_icon_name ); ?>'),
     'Law 01 trust strip must use the approved shield, people, scales and handshake presentation icon set without changing source messages.'
 );
