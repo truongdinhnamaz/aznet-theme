@@ -16,6 +16,11 @@ if (false === $workflow) {
     exit(1);
 }
 
+if (str_contains($workflow, 'git fetch origin main --depth=1')) {
+    fwrite(STDERR, "FAIL: X4 retained workflow must not re-shallow main before merge-base diff\n");
+    exit(1);
+}
+
 $required = [
     'HEAD_REF: ${{ github.head_ref || github.ref_name }}',
     'X4_SLICE_BRANCH: feat/v1.2-x4-pagination-navigation',

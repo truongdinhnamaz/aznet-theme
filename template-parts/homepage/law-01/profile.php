@@ -6,22 +6,24 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 $about = homepage_page_reference( (int) setting( 'homepage_about_page', 0 ) );
 $team = homepage_page_reference( (int) setting( 'homepage_team_page', 0 ) );
 $has_about = $about instanceof \WP_Post;
-if ( ! $has_about && ! $team instanceof \WP_Post ) { return; }
+$has_team = $team instanceof \WP_Post;
+if ( ! $has_about && ! $has_team ) { return; }
 
 $about_summary = $about instanceof \WP_Post ? trim( (string) get_the_excerpt( $about ) ) : '';
 $about_image = $about instanceof \WP_Post && has_post_thumbnail( $about ) ? get_the_post_thumbnail( $about, 'large', [ 'class' => 'aznet-theme-law01-profile__about-image' ] ) : '';
 $team_summary = $team instanceof \WP_Post ? trim( (string) get_the_excerpt( $team ) ) : '';
-$members = $team instanceof \WP_Post ? homepage_direct_published_children( (int) $team->ID, 4 ) : [];
+$members = $has_team ? homepage_direct_published_children( (int) $team->ID, 4 ) : [];
 $has_members = [] !== $members;
-if ( ! $has_about && ! $has_members ) { return; }
 
-$section_label = $has_members
+$section_label = $has_team
     ? ( $has_about ? __( 'Giới thiệu và đội ngũ', 'aznet-theme' ) : __( 'Đội ngũ luật sư', 'aznet-theme' ) )
     : __( 'Giới thiệu', 'aznet-theme' );
 
 $container_classes = 'aznet-theme-law01-container aznet-theme-law01-profile__container';
-if ( ! $has_members ) {
+if ( ! $has_team ) {
     $container_classes .= ' aznet-theme-law01-profile__container--about-only';
+} elseif ( ! $has_about ) {
+    $container_classes .= ' aznet-theme-law01-profile__container--team-only';
 }
 ?>
 <section class="aznet-theme-law01-section aznet-theme-law01-profile" aria-label="<?php echo esc_attr( $section_label ); ?>">
@@ -38,7 +40,7 @@ if ( ! $has_members ) {
     </div>
     <?php endif; ?>
 
-    <?php if ( $team instanceof \WP_Post && $has_members ) : ?>
+    <?php if ( $team instanceof \WP_Post ) : ?>
     <div class="aznet-theme-law01-profile__team-band aznet-theme-law01-team">
         <div class="aznet-theme-law01-section-heading">
             <div>
