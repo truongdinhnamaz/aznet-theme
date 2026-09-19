@@ -513,7 +513,7 @@ This remains Theme presentation only. RootProfile authoritative Team remains BLO
 
 ## 14. Exact next
 
-**NEXT — PR #151 canonical merge is complete. Wait for fresh exact-main run `35412829723`; claim exact-main PASS only if the full workflow completes SUCCESS. Do not tag, publish a GitHub Release or deploy production without separate explicit approval.**
+**NEXT — PR #151 canonical merge and fresh exact-main V1 are PASS. Merge the source-only closure PR after explicit owner approval. Do not tag, publish a GitHub Release or deploy production without separate explicit approval.**
 
 
 ### Canonical 1.3.10 merge and Homepage Hero editing UX candidate — 19/09/2026
@@ -531,6 +531,6 @@ PR #151 canonical merge remains an explicit owner approval gate. This candidate 
 
 The product owner approved PR #151 canonical merge. Final verified head `b17532c0bc7348317c5044fa25262d28cb9fef54` merged to `main@39df23c3385118888e262c27a2331de34dda430d` with zero file delta from the verified head.
 
-Final-head QA: 22/22 triggered workflows SUCCESS. Fresh exact-main V1 run `35412829723` is currently incomplete: static/core is SUCCESS while clean runtime/browser remains IN PROGRESS. No exact-main completion claim is made yet.
+Final-head QA: 22/22 triggered workflows SUCCESS. Fresh exact-main V1 run `35412829723` completed SUCCESS on exact merge SHA `39df23c3385118888e262c27a2331de34dda430d`. Artifacts: static `10575125302` (`sha256:0fae4559000ac195e6f58a5fd50b1070b232c74bd472dd90c36d6abb0a15cb92`) and clean runtime/browser `10575290283` (`sha256:a2609a4ffee6f7c538402a4850103d5c14f6baa51fe6dceea4f61030ecba9e89`).
 
 No release/deployment authorization is created by this merge. RootProfile authoritative Team remains separately blocked at issue #112.
