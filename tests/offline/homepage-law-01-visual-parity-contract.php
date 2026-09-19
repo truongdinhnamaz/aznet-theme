@@ -15,8 +15,8 @@ $must = static function (bool $condition, string $message): void {
 // Visual target approved from the supplied law-firm homepage reference:
 // balanced light split Hero, compact four-item trust strip, and six-card services row.
 $must(
-    str_contains($css, 'grid-template-columns: minmax(0, 48%) minmax(0, 52%);'),
-    'Law 01 target Hero must use the approved near-balanced 48/52 desktop split.'
+    str_contains($css, 'grid-template-columns: minmax(0, 54%) minmax(0, 46%);'),
+    'Law 01 target Hero must use the approved responsive 54/46 desktop split with the copy column wider than media.'
 );
 $must(
     str_contains(
