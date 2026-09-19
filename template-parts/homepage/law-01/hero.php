@@ -113,17 +113,21 @@ if ( '' !== $hero_block_html ) {
     <?php if ( [] !== $trust_items ) : ?>
         <div class="aznet-theme-law01-hero__trust" aria-label="<?php esc_attr_e( 'Cam kết dịch vụ', 'aznet-theme' ); ?>">
             <div class="aznet-theme-law01-container aznet-theme-law01-hero__trust-grid">
-                <?php foreach ( $trust_items as $index => $item ) : ?>
+                <?php
+                $trust_icon_names = [ 'shield', 'people', 'scales', 'handshake' ];
+                foreach ( $trust_items as $index => $item ) :
+                    $trust_icon_name = $trust_icon_names[ $index ] ?? 'shield';
+                    ?>
                     <div class="aznet-theme-law01-hero__trust-item">
-                        <span class="aznet-theme-law01-hero__trust-icon" aria-hidden="true">
-                            <?php if ( 0 === $index ) : ?>
-                                <svg viewBox="0 0 24 24" focusable="false"><path d="M4 4h16v11H8l-4 4V4Zm4 5h8M8 12h5"/></svg>
-                            <?php elseif ( 1 === $index ) : ?>
-                                <svg viewBox="0 0 24 24" focusable="false"><path d="M12 3 4 7v5c0 4.5 3.4 7.7 8 9 4.6-1.3 8-4.5 8-9V7l-8-4Zm-3 9 2 2 4-4"/></svg>
-                            <?php elseif ( 2 === $index ) : ?>
-                                <svg viewBox="0 0 24 24" focusable="false"><path d="M7 10V8a5 5 0 0 1 10 0v2m-11 0h12v10H6V10Zm6 4v3"/></svg>
+                        <span class="aznet-theme-law01-hero__trust-icon aznet-theme-law01-hero__trust-icon--<?php echo esc_attr( $trust_icon_name ); ?>" aria-hidden="true">
+                            <?php if ( 'shield' === $trust_icon_name ) : ?>
+                                <svg viewBox="0 0 24 24" focusable="false"><path d="M12 3 5 6v5c0 4.4 2.8 7.8 7 9.5 4.2-1.7 7-5.1 7-9.5V6l-7-3Zm-3 8.5 2 2 4-4"/></svg>
+                            <?php elseif ( 'people' === $trust_icon_name ) : ?>
+                                <svg viewBox="0 0 24 24" focusable="false"><path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm7-1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM3.5 20v-2.2A4.8 4.8 0 0 1 8.3 13h1.4a4.8 4.8 0 0 1 4.8 4.8V20m-1.7-6.2a4.2 4.2 0 0 1 2.9-1.2h.8a4 4 0 0 1 4 4V20"/></svg>
+                            <?php elseif ( 'scales' === $trust_icon_name ) : ?>
+                                <svg viewBox="0 0 24 24" focusable="false"><path d="M12 3v17M7 21h10M5 7h14M7 7l-3 6h6L7 7Zm10 0-3 6h6l-3-6ZM4 13c.8 1.4 2 2 3 2s2.2-.6 3-2m4 0c.8 1.4 2 2 3 2s2.2-.6 3-2"/></svg>
                             <?php else : ?>
-                                <svg viewBox="0 0 24 24" focusable="false"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm-4-9 2.5 2.5L16 9"/></svg>
+                                <svg viewBox="0 0 24 24" focusable="false"><path d="m3 12 4-4 4 2 2-1 4 3 4-1M5 14l3 3 2-1 2 2 2-1 2 1 4-4M8 9l2-2h3l2 2M2 10l3-3m14 1 3 3"/></svg>
                             <?php endif; ?>
                         </span>
                         <span><?php echo esc_html( $item ); ?></span>
