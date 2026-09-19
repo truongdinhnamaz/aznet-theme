@@ -523,13 +523,27 @@
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--inverse .aznet-theme-homepage-hero-content__eyebrow {
     color: var(--law01-client-cream, #fffaf1);
 }
+.aznet-theme-homepage--law-01 .aznet-theme-law01-hero--inverse .aznet-theme-homepage-hero-content__value {
+    color: #fff;
+}
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--inverse .aznet-theme-homepage-hero-content__lead,
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--inverse .aznet-theme-homepage-hero-content__media-help {
     color: rgba(255,255,255,.82);
 }
+.aznet-theme-homepage--law-01 .aznet-theme-law01-hero--inverse .aznet-theme-homepage-hero-content__trust {
+    border-top-color: rgba(255,255,255,.18);
+}
+.aznet-theme-homepage--law-01 .aznet-theme-law01-hero--inverse .aznet-theme-homepage-hero-content__trust-item {
+    color: rgba(255,255,255,.9);
+}
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--inverse .wp-block-button__link {
     background: var(--law01-client-gold, var(--law01-gold)) !important;
     color: var(--law01-client-burgundy, var(--law01-navy-deep)) !important;
+}
+.aznet-theme-homepage--law-01 .aznet-theme-law01-hero--inverse .aznet-theme-homepage-hero-content__secondary .wp-block-button__link {
+    border-color: rgba(255,255,255,.62);
+    background: transparent !important;
+    color: #fff !important;
 }
 
 @media (max-width: 960px) {
