@@ -515,7 +515,7 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - Owner-approved architecture: Hero Library + WordPress-native synced Hero content.
 - Content source: ordinary Core-block `wp_block` entity.
 - Theme presentation state: typed `homepage_hero_block` reference + allow-listed `homepage_hero_variant`.
-- Initial source creation: explicit capability/nonce-protected action only.
+- Initial source creation: explicit capability/nonce-protected **draft-first** action only; public resolution remains on legacy/fallback until the new `wp_block` is published.
 - Variant switch: presentation-only; no synced-block rewrite.
 - Backward compatibility: synced block -> legacy Hero Page -> legacy Site/Front Page projection.
 - Forbidden: Theme-owned Hero copy fields/store, proprietary block type, silent Page deletion/migration, provider/private storage reads.
