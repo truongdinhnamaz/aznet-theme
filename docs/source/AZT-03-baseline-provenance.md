@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.60
+**Version:** v0.61
 **Status:** Working Source  
 **Date:** 19/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -144,7 +144,7 @@ D-027 does not authorize a Git tag, GitHub Release, final production deployment,
 Under AZT-05 v1.0 and D-016:
 
 - WordPress-clean core Theme readiness is release-critical.
-- v1.1.0 and v1.2.0 publication/deployment remain retained historical PASS; current published release and verified production Theme on `tamduchanoi.aznet.vn` are `1.3.0` at their respective verified scopes.
+- v1.1.0 and v1.2.0 publication/deployment remain retained historical PASS; current published GitHub Release is `v1.3.10`, canonical repository Theme metadata is `1.3.11` after D-030 merge, and the verified production Theme on `tamduchanoi.aznet.vn` remains `1.3.0`.
 - v1.2 X1-X5 functional closure and X6 technical/publication/deployment evidence are retained.
 - v1.3 Y1-Y5 technical closure, exact-main/package verification, publication and owner-approved production deployment are PASS at their separately verified scopes.
 - Provider L5 is outside v1.3 Core and is not inferred from technical/publication/deployment PASS.
@@ -229,7 +229,7 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**NEXT — v1.3.10 PUBLICATION is PASS. Production deployment of `v1.3.10` remains a separate explicit owner gate. Before deployment, revalidate the target site's current active Theme/local modifications and rollback path, then use only the exact published asset. No new Theme implementation slice is opened; RootProfile-backed authoritative Team remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
+**NEXT — D-030 is PASS / MERGED on canonical `main@01ddbff1843dfd8a0e1cc276be34144f35aeba35` with fresh exact-main V1 verification PASS. Canonical Theme metadata is now `1.3.11`; published GitHub Release remains `v1.3.10` and verified production remains `v1.3.0`. The next release action, if desired, is a separate owner approval for `v1.3.11` publication; production deployment remains independently gated. RootProfile-backed authoritative Team remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
 
 ### AZnet Theme 1.3.10 polished-Hero client-delivery candidate — 19/09/2026
 
@@ -369,3 +369,14 @@ The older pre-PR #151 1.3.10 package SHA-256 `9eb8a3ad1c24b7e75a695199de3e45bf3e
 Temporary publication helper cleanup commit `9a51fa49c56bb8d27009cf17f942197df819aff5` leaves the ops branch with zero net file delta against publication-time main.
 
 Published release is now `v1.3.10`; verified production deployment remains historical `v1.3.0` until separately approved and executed. Evidence: `docs/evidence/V1_3_10_PUBLICATION_20260919.md`.
+
+
+### D-030 Homepage Hero Library canonical merge closure — 19/09/2026
+
+Owner-approved PR #156 merged final verified head `c8a14556706a49bb380669b72bffd5b6f0cd98d5` to canonical `main@01ddbff1843dfd8a0e1cc276be34144f35aeba35`. Git comparison reports zero changed files from final head to merge commit, so canonical production/test/source bytes are identical to the 37/37-success final PR head.
+
+D-030 replaces the new-UX Page-required Hero authoring path with a Theme-owned visual library over one WordPress-owned Core-block synced Hero (`wp_block`). Theme stores only typed `homepage_hero_block` plus allow-listed `homepage_hero_variant`; initialization remains explicit/draft-first; variant changes do not rewrite WordPress content; legacy Hero Page and Site/Front Page projection remain compatibility fallbacks. No parallel Hero copy store or provider/domain ownership transfer is introduced.
+
+Y5 run `35422400222` produced deterministic candidate `aznet-theme-1.3.11.zip`: 147 production files, 110 packaged PHP lint PASS, SHA-256 `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`. Candidate-package evidence does not imply publication.
+
+Fresh push-triggered `V1 Exact Main Verification` run `35422599658` completed SUCCESS on exact merge SHA, with static artifact `10577094776` and clean runtime/browser artifact `10578340381`. Canonical Theme metadata is `1.3.11`; published GitHub Release remains `v1.3.10`; verified production remains `v1.3.0`. Evidence: `docs/evidence/HOMEPAGE_HERO_LIBRARY_D030_MERGE_CLOSURE_20260919.md`.

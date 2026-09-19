@@ -1,13 +1,13 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.66
+**Version:** v0.67
 **Status:** Working Execution Map / derived  
 **Date:** 19/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** live `main` is `e9133708713671584731c002f4d2947ea7adbbde` after owner-approved post-closure source sync PR #153. Canonical implementation bytes remain anchored at owner-approved PR #151 merge `main@39df23c3385118888e262c27a2331de34dda430d`, Theme metadata `1.3.10`, with fresh exact-main V1 run `35412829723` SUCCESS. Owner-approved publication run `35413516574` published annotated `v1.3.10` + GitHub Release `391877350`; exact published asset SHA-256 is `5ff6c4862839dcdb6dfbbb77a71cb8bd87259b83cfbf308aa6b04279396bd572`. Verified production deployment remains historical `v1.3.0`; RootProfile Team remains blocked under issue #112.
+> **Canonical-main checkpoint:** live `main` is `01ddbff1843dfd8a0e1cc276be34144f35aeba35` after owner-approved PR #156 D-030 merge. Final head `c8a14556706a49bb380669b72bffd5b6f0cd98d5` completed 37/37 triggered workflows SUCCESS, has zero changed files to the merge commit, and fresh exact-main V1 run `35422599658` is SUCCESS. Canonical Theme metadata is `1.3.11`. Published GitHub Release remains `v1.3.10` (asset SHA-256 `5ff6c4862839dcdb6dfbbb77a71cb8bd87259b83cfbf308aa6b04279396bd572`); verified production remains historical `v1.3.0`; RootProfile Team remains blocked under issue #112.
 
 **Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS`. Current v1.3 state: `PUBLICATION + PRODUCTION DEPLOYMENT PASS`; published/GitHub-Release release and verified production deployment are both `v1.3.0` at their respective verified scopes.
 
@@ -454,7 +454,7 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 16. Exact next
 
-**NEXT — implement D-030 Homepage Hero Library on `feat/homepage-hero-library`: first add RED contracts for `homepage_hero_block` + `homepage_hero_variant`, synced-block resolution and the no-Page-required Control Center UX; then minimal GREEN while retaining legacy Page/Site fallback. Target candidate metadata: 1.3.11.**
+**NEXT — D-030 implementation is PASS / MERGED and exact-main V1 is PASS. Merge this source/evidence closure PR after owner approval. After source sync, `v1.3.11` publication is the next possible release gate only if separately approved; production deployment remains independently gated.**
 
 
 ## 15.9 Homepage Hero editing UX follow-up — 19/09/2026
@@ -522,3 +522,7 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - Forbidden: Theme-owned Hero copy fields/store, proprietary block type, silent Page deletion/migration, provider/private storage reads.
 - Candidate metadata target: 1.3.11 because v1.3.10 is already published and immutable.
 - QA path: L0 source -> L2 RED/GREEN -> L3 WordPress 6.9 runtime -> L4 Control Center + Homepage browser/a11y -> package/release gates only if separately approved.
+- Implementation closure: PR #156 final head `c8a14556706a49bb380669b72bffd5b6f0cd98d5` completed 37/37 triggered workflows SUCCESS and merged owner-approved to `main@01ddbff1843dfd8a0e1cc276be34144f35aeba35` with zero changed files from the verified head.
+- Fresh exact-main V1 run `35422599658`: SUCCESS; static artifact `10577094776`, runtime/browser artifact `10578340381`.
+- Deterministic 1.3.11 package from Y5 run `35422400222`: 147 production files, 110 packaged PHP lint PASS, SHA-256 `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`.
+- D-030 state: **PASS / MERGED**. Tag/GitHub Release and production deployment remain separate approval gates.
