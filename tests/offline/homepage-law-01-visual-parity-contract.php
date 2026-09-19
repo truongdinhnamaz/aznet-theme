@@ -4,6 +4,10 @@ declare(strict_types=1);
 $root = dirname(__DIR__, 2);
 $css = (string) file_get_contents($root . '/assets/css/components/homepage-law-01-variants.css');
 $brand = (string) file_get_contents($root . '/template-parts/header/brand.php');
+$siteHeader = (string) file_get_contents($root . '/template-parts/header/site-header.php');
+$mobilePanel = (string) file_get_contents($root . '/template-parts/header/mobile-panel.php');
+$law01ConsultationPath = $root . '/template-parts/header/law01-consultation.php';
+$law01Consultation = is_file($law01ConsultationPath) ? (string) file_get_contents($law01ConsultationPath) : '';
 $profile = (string) file_get_contents($root . '/template-parts/homepage/law-01/profile.php');
 $hero = (string) file_get_contents($root . '/template-parts/homepage/law-01/hero.php');
 $footer = (string) file_get_contents($root . '/template-parts/footer/site-footer.php');
@@ -119,6 +123,56 @@ $must(
     str_contains($css, '.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__brand-title'),
     'Law 01 reference Header must style the site-title lockup beside the logo.'
 );
+$must(
+    str_contains($brand, 'aznet-theme-site-header__brand-copy') &&
+    str_contains($brand, 'aznet-theme-site-header__brand-kicker'),
+    'Law 01 Header brand must support a second presentation line without splitting or duplicating WordPress site identity.'
+);
+$must(
+    str_contains($siteHeader, "get_template_part( 'template-parts/header/law01-consultation'") &&
+    str_contains($siteHeader, "get_template_part( 'template-parts/header/utility-navigation'"),
+    'Law 01 desktop Header must use a mapped consultation action while retaining generic Header utility navigation outside the Law01 homepage.'
+);
+$must(
+    str_contains($mobilePanel, "get_template_part( 'template-parts/header/law01-consultation'") &&
+    str_contains($mobilePanel, "get_template_part( 'template-parts/header/utility-navigation'"),
+    'Law 01 mobile Header must preserve the same fail-soft consultation/generic utility split.'
+);
+$must(
+    '' !== $law01Consultation &&
+    str_contains($law01Consultation, "setting( 'homepage_contact_page', 0 )") &&
+    str_contains($law01Consultation, 'homepage_page_reference') &&
+    str_contains($law01Consultation, 'Yêu cầu tư vấn'),
+    'Law 01 consultation action must resolve only the mapped public WordPress Contact Page and fail-soft when it is absent.'
+);
+$must(
+    str_contains($profile, '$has_members = [] !== $members;') &&
+    str_contains($profile, 'aznet-theme-law01-profile__container--about-only') &&
+    str_contains($profile, '$team instanceof \\WP_Post && $has_members'),
+    'Law 01 Profile must fail-soft to an About-only composition when no legitimate mapped Team members exist.'
+);
+$must(
+    str_contains($css, '.aznet-theme-law01-profile__container--about-only'),
+    'Law 01 Profile CSS must expand the inherited About presentation when the Team source is empty.'
+);
+
+$must(
+    str_contains($footer, '$law01_homepage =') &&
+    str_contains($footer, '( \'professional\' === $preset || $law01_homepage ) && \'\' !== $social_menu') &&
+    str_contains($footer, '\'\' !== $social_menu && \'professional\' !== $preset && ! $law01_homepage'),
+    'Law 01 Footer must place a real social menu in the main reference grid for any Footer preset and avoid duplicating it in the bottom row.'
+);
+
+$must(
+    str_contains($profile, '$has_about = $about instanceof \\WP_Post;') &&
+    str_contains($profile, '$section_label = $has_members') &&
+    str_contains($profile, "__( 'Giới thiệu và đội ngũ', 'aznet-theme' )") &&
+    str_contains($profile, "__( 'Đội ngũ luật sư', 'aznet-theme' )") &&
+    str_contains($profile, "__( 'Giới thiệu', 'aznet-theme' )") &&
+    str_contains($profile, 'aria-label="<?php echo esc_attr( $section_label ); ?>"'),
+    'Law 01 Profile accessibility label must match all three valid source-backed states: About+Team, Team-only, or About-only.'
+);
+
 $membersPos = strpos($profile, 'aznet-theme-law01-profile__members');
 $teamCtaPos = strpos($profile, 'aznet-theme-law01-team-more');
 $must(
@@ -142,6 +196,24 @@ $must(
     str_contains($footer, 'aznet-theme-site-footer__brand-title') &&
     str_contains($css, '.aznet-theme-site-footer__brand-title'),
     'Law 01 reference Footer must support a WordPress logo + site-title lockup.'
+);
+
+$must(
+    str_contains($footer, 'aznet-theme-site-footer--law01-') &&
+    str_contains($footer, "homepage_composer_active()") &&
+    str_contains($footer, "homepage_law01_variant()"),
+    'Law 01 Footer must expose a homepage-only variant modifier while preserving the generic Footer elsewhere.'
+);
+$must(
+    str_contains($css, '.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__main') &&
+    str_contains($css, 'repeat(auto-fit, minmax(10rem, .75fr))'),
+    'Law 01 Footer must use a source-backed adaptive reference grid instead of requiring fabricated empty columns.'
+);
+$must(
+    str_contains($footer, 'if ( \'\' !== $primary_menu )') &&
+    str_contains($footer, 'if ( \'professional\' !== $preset && \'\' !== $contact_menu )') &&
+    str_contains($footer, 'if ( \'\' !== $social_menu || \'\' !== $policy_menu )'),
+    'Law 01 Footer must keep empty WordPress menu projections fail-soft with no placeholder data.'
 );
 
 
