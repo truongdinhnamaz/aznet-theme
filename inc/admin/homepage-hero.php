@@ -7,7 +7,6 @@
 
 namespace AZnet\Theme\Admin;
 
-use function AZnet\Theme\homepage_block_reference;
 use function AZnet\Theme\normalize_settings;
 use function AZnet\Theme\settings;
 
