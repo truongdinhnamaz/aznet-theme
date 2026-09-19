@@ -43,6 +43,14 @@ foreach ([
 
 assert(str_contains($composer, "[ 'hero', 'services', 'profile' ]"), 'Composer must render the combined client-ready profile band.');
 assert(str_contains($composer, "'burgundy-gold' === \$variant ? [ 'latest', 'process', 'faq', 'final-cta' ] : [ 'topics', 'latest', 'analysis', 'news', 'process', 'faq', 'final-cta' ]"), 'Burgundy Law 01 content-completion sequence must preserve Latest and add only source-backed Process, FAQ and final Contact CTA surfaces.');
+foreach ([
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process',
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-faq',
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-final-cta',
+] as $needle) {
+    assert(str_contains($css, $needle), "Burgundy Law 01 additive content surface styling missing: {$needle}");
+}
+
 assert(! str_contains($composer, "[ 'hero', 'services', 'about', 'team' ]"), 'Composer must not render duplicate legacy About/Team sections.');
 
 foreach ([
