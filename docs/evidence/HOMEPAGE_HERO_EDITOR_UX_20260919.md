@@ -1,10 +1,10 @@
 # Homepage Hero editing UX — verified reconciled checkpoint
 
-**Date:** 19/09/2026  
-**Repository:** `truongdinhnamaz/aznet-theme`  
-**Branch:** `feat/homepage-hero-editor-ux`  
-**PR:** #151  
-**Canonical base after PR #150:** `main@55ca349c8808d0d6a3c96d5201983ae966b1d822`  
+**Date:** 19/09/2026
+**Repository:** `truongdinhnamaz/aznet-theme`
+**Branch:** `feat/homepage-hero-editor-ux`
+**PR:** #151
+**Canonical base after PR #150:** `main@55ca349c8808d0d6a3c96d5201983ae966b1d822`
 **Verified reconciled production/test head:** `82073e715be349f29fe84dbd0405c5af6e1b5c93`
 
 ## Goal
