@@ -331,10 +331,18 @@ async function inspectViewport(browser, name, viewport) {
     const emptyCards = await page.locator('.aznet-theme-law01-card:empty, .aznet-theme-law01-article-card:empty').count();
     if (emptyCards > 0) throw new Error(`empty public cards rendered: ${emptyCards}`);
 
-    const editorialHrefs = await page.evaluate(() => [...document.querySelectorAll('.aznet-theme-law01-articles article a')].map((node) => node.href));
+    const editorialCards = page.locator('.aznet-theme-law01-articles article');
+    if (await editorialCards.count() !== 3) throw new Error(`expected 3 Latest Posts cards in Burgundy demo closure, got ${await editorialCards.count()}`);
+    const editorialHrefs = [];
+    for (let index = 0; index < 3; index += 1) {
+      const card = editorialCards.nth(index);
+      const mediaHref = await card.locator('.aznet-theme-law01-article-card__media-link').getAttribute('href');
+      const titleHref = await card.locator('h3 a').getAttribute('href');
+      if (!mediaHref || mediaHref !== titleHref) throw new Error(`Latest Post card ${index + 1} media/title links must target the same WordPress Post`);
+      editorialHrefs.push(titleHref);
+    }
     result.articleLinks = editorialHrefs.length;
-    if (editorialHrefs.length !== 3) throw new Error(`expected 3 Latest Posts links in Burgundy demo closure, got ${editorialHrefs.length}`);
-    if (new Set(editorialHrefs).size !== editorialHrefs.length) throw new Error('request-local display ledger did not prevent repeated editorial links');
+    if (new Set(editorialHrefs).size !== editorialHrefs.length) throw new Error('request-local display ledger did not prevent repeated editorial Posts');
 
     const contactHref = await page.locator('.aznet-theme-law01-hero .aznet-theme-law01-button').getAttribute('href');
     if (!contactHref || !contactHref.includes('/lien-he/')) throw new Error(`Hero contact CTA is not mapped to Contact Page: ${contactHref}`);

@@ -34,6 +34,13 @@ $footer_classes = [
 if ( $law01_homepage ) {
     $footer_classes[] = 'aznet-theme-site-footer--law01-' . \AZnet\Theme\homepage_law01_variant();
 }
+
+$contact_heading = $law01_homepage
+    ? __( 'Thông tin liên hệ', 'aznet-theme' )
+    : __( 'Liên hệ', 'aznet-theme' );
+$navigation_heading = $law01_homepage
+    ? __( 'Liên kết nhanh', 'aznet-theme' )
+    : __( 'Khám phá', 'aznet-theme' );
 ?>
 <footer class="<?php echo esc_attr( implode( ' ', $footer_classes ) ); ?>" data-aznet-theme-site-footer role="contentinfo">
     <div class="aznet-theme-site-footer__inner">
@@ -54,21 +61,21 @@ if ( $law01_homepage ) {
 
             <?php if ( 'professional' === $preset && '' !== $contact_menu ) : ?>
                 <nav class="aznet-theme-site-footer__contact" aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
-                    <h2 class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Liên hệ', 'aznet-theme' ); ?></h2>
+                    <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $contact_heading ); ?></h2>
                     <?php echo $contact_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
                 </nav>
             <?php endif; ?>
 
             <?php if ( '' !== $primary_menu ) : ?>
                 <nav class="aznet-theme-site-footer__navigation" aria-label="<?php echo esc_attr__( 'Điều hướng Footer', 'aznet-theme' ); ?>">
-                    <h2 class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Khám phá', 'aznet-theme' ); ?></h2>
+                    <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $navigation_heading ); ?></h2>
                     <?php echo $primary_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
                 </nav>
             <?php endif; ?>
 
             <?php if ( 'professional' !== $preset && '' !== $contact_menu ) : ?>
                 <nav class="aznet-theme-site-footer__contact" aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
-                    <h2 class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Liên hệ', 'aznet-theme' ); ?></h2>
+                    <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $contact_heading ); ?></h2>
                     <?php echo $contact_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
                 </nav>
             <?php endif; ?>
