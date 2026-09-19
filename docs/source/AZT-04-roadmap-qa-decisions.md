@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.78
+**Version:** v0.79
 **Status:** Working Source  
-**Date:** 19/09/2026
+**Date:** 20/09/2026
 
 ## 1. Purpose
 
@@ -21,7 +21,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | D | Generic Templates | PASS / retained | Page/Post/Archive/Search/404 technical closure plus P2/P3 editorial hardening and P4 real-pilot quality evidence are retained |
 | W | WooCommerce presentation shell | PASS / retained | W1-W9 + R4; WooCommerce retains commerce truth |
 | E | RootProfile Profile / Contact | OPTIONAL COMPAT ACTIVE / TEAM PROJECTION BLOCKED | E0-E4/E5-B retained PASS; E5-C remains external-blocked and E5-D takeover locked. Pilot evidence confirms no public/versioned organization-team projection and no organization profile on the target site; issue #112 records the blocker. Non-blocking for core under D-016. |
-| F | Homepage | CORE PASS / F9 PROVIDER L5 PASS | Native Theme Homepage remains core PASS; F8 L3-L4 evidence is retained. ConvertFlow F9-A..E plus retained C1 are PASS at the exact Theme `v1.3.0` reference-producer / Core P5.244 + Pro P5.164 scope recorded in `F9_PROVIDER_L5_SOURCE_SYNC_20260918.md`. Law 01 live presentation/rerun QA is PASS at the tested site scope; RootProfile-backed Team projection remains separately external-blocked under issue #112 and does not reopen core Homepage PASS. |
+| F | Homepage | CORE PASS / LAW 01 1.3.15 TECHNICAL PASS / F9 PROVIDER L5 RETAINED | Native Theme Homepage remains core PASS; ConvertFlow F9 provider L5 remains retained at its separately certified scope. Owner-approved Law 01 PR #167 merged exact final head `a47e2f371db3de6c85eb43f34db7ae360f482458` to `main@6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3`, Theme `1.3.15`; exact-main V1 `35473959243` + X6 `35473959238` PASS and deterministic package SHA-256 `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`. RootProfile-backed authoritative Team membership remains separately external-blocked under open issue #112 and does not reopen core Homepage PASS. Publication/deployment remain separate gates. |
 | D-030 | Homepage Hero Library | PASS / MERGED / PUBLISHED 1.3.12 | Base D-030 PR #156 remains retained; owner-approved corrective PR #159 removed stale Hero title width caps and completed the single WordPress-owned Hero authoring surface. Final head `4b8fc7c78fb17e32fbc9c4fb9399bdeaf3f98744` completed 28/28 workflows SUCCESS and merged to `main@7c73f7e050e95c23c5c968b2365b643753431246` with zero file delta. Exact-main V1 `35434502224` + X6 `35434502232` PASS. Owner-approved `v1.3.12` publication is PASS; production deployment remains separately gated. |
 | G | Core v1.0 Cleanup / Release | TECHNICAL PASS | G0-G8 production/release-candidate closure merged; publication is a separate live GitHub state |
 | R0 | v1.0 -> v1.1 Source Reconciliation | PASS | Source-only reconciliation merged through PR #36; v1.1 product/architecture ratified |
@@ -623,3 +623,19 @@ Y5 run `35422400222` produced deterministic candidate `aznet-theme-1.3.11.zip`, 
 Owner-approved publication is PASS. Annotated tag `v1.3.11` targets exact verified D-030 implementation `01ddbff1843dfd8a0e1cc276be34144f35aeba35`; GitHub Release `391924224` is public/non-prerelease; asset `574135564` is `aznet-theme-1.3.11.zip` with SHA-256 `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`. The package has 147 production files and 110/110 packaged PHP lint PASS and activated/rendered cleanly on WordPress 6.9.
 
 Initial publication run `35423516185` created correct immutable tag/package bytes but malformed release-note inline literals via shell command substitution. Repair run `35424304502` corrected the notes idempotently and reverified tag/release/asset bytes without changing release identity. Temporary workflow cleanup leaves zero net file delta. Publication does not authorize production deployment. Evidence: `docs/evidence/V1_3_11_PUBLICATION_20260919.md`.
+
+
+### Law 01 v1.3.15 technical closure — 20/09/2026
+
+Owner-approved PR #167 closed the remaining source-safe Law 01 demo Team presentation and promoted the technical candidate to Theme metadata `1.3.15` without changing domain ownership.
+
+- Final head `a47e2f371db3de6c85eb43f34db7ae360f482458`: 24/24 exact-head checks SUCCESS.
+- Merge: `main@6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3`; final-head -> merge comparison has zero changed files.
+- Exact-main V1 run `35473959243`: SUCCESS.
+- Exact-main X6 run `35473959238`: SUCCESS; 32/32 integrated browser/axe cases PASS.
+- Deterministic package: `aznet-theme-1.3.15.zip`, SHA-256 `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`, 148 production files, 111 packaged PHP files.
+- X6 artifact `10593342179`, digest `sha256:e2561025314574c12ad63af1fd9b4db80e9c78165e833e850fbd490075ddf5f3`.
+- RootProfile Team membership remains BLOCKED_EXTERNAL_CONTRACT under open issue #112; no workaround or parallel authoritative Team store is authorized.
+- Latest public GitHub Release remains `v1.3.12`. Publication of `v1.3.15` and production deployment are separate owner gates.
+
+Evidence: `docs/evidence/V1_3_15_TECHNICAL_CLOSURE_20260920.md`.

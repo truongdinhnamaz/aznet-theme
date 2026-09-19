@@ -1,8 +1,8 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.63
+**Version:** v0.64
 **Status:** Working Source  
-**Date:** 19/09/2026
+**Date:** 20/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
 
 ## 1. Source ownership
@@ -14,8 +14,9 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 ## 2. Current canonical baseline
 
 - Live `main` HEAD is resolved from GitHub at execution time; stable provenance checkpoints are recorded below rather than treated as permanently current.
-- Current canonical corrective baseline: owner-approved PR #159 final head `4b8fc7c78fb17e32fbc9c4fb9399bdeaf3f98744` completed 28/28 workflows SUCCESS and merged with zero file delta to `main@7c73f7e050e95c23c5c968b2365b643753431246`, Theme metadata `1.3.12`. Fresh exact-main V1 run `35434502224` and X6 push closure `35434502232` both completed SUCCESS.
-- Current published GitHub Release is `v1.3.12`: annotated tag object `dcdca2f199049bbb025dce18e8f9b322b6a46c00` dereferences to `7c73f7e050e95c23c5c968b2365b643753431246`; Release `392012403`; asset `574476748` `aznet-theme-1.3.12.zip`, 147 production files, 110 packaged PHP lint PASS, SHA-256 `e9299f51bcedb6da781ab60c6c1570ebf7f2633557040ed3368389483b0078b6`. Evidence: `docs/evidence/V1_3_12_PUBLICATION_20260919.md`.
+- Current canonical Law 01 / client-delivery technical baseline: owner-approved PR #167 final head `a47e2f371db3de6c85eb43f34db7ae360f482458` completed 24/24 exact-head checks SUCCESS and merged with zero file delta to `main@6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3`, tree `09a00e9d930a18f600859aa58f5a4d2a6731962e`, Theme metadata `1.3.15`. Fresh exact-main V1 run `35473959243` and X6 run `35473959238` both completed SUCCESS. Deterministic `aznet-theme-1.3.15.zip` SHA-256 is `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`, 148 production files, 111 packaged PHP files; X6 evidence artifact `10593342179` digest `sha256:e2561025314574c12ad63af1fd9b4db80e9c78165e833e850fbd490075ddf5f3`. Evidence: `docs/evidence/V1_3_15_TECHNICAL_CLOSURE_20260920.md`.
+- Previous published corrective baseline: owner-approved PR #159 final head `4b8fc7c78fb17e32fbc9c4fb9399bdeaf3f98744` completed 28/28 workflows SUCCESS and merged with zero file delta to `main@7c73f7e050e95c23c5c968b2365b643753431246`, Theme metadata `1.3.12`. Fresh exact-main V1 run `35434502224` and X6 push closure `35434502232` both completed SUCCESS.
+- Current published GitHub Release remains `v1.3.12`: annotated tag object `dcdca2f199049bbb025dce18e8f9b322b6a46c00` dereferences to `7c73f7e050e95c23c5c968b2365b643753431246`; Release `392012403`; asset `574476748` `aznet-theme-1.3.12.zip`, 147 production files, 110 packaged PHP lint PASS, SHA-256 `e9299f51bcedb6da781ab60c6c1570ebf7f2633557040ed3368389483b0078b6`. The v1.3.15 technical closure does not itself publish a tag/Release or deploy production; publication and production deployment remain separate owner gates. Evidence: `docs/evidence/V1_3_12_PUBLICATION_20260919.md`.
 - Current production target is `lstamduchn.vn`. Fresh authenticated read-only verification after publication reports active AZnet Theme `1.3.10`; `v1.3.12` production deployment is not claimed. Earlier `tamduchanoi.aznet.vn` deployment records remain historical provenance only and are not the current target.
 - Canonical X6 technical integration is `main@c6b1ebacbf848b5a5e6b2d2f792d6aa0a8daefad`, tree `70c04929afe38e87d317bad3414157e9e2bd6f74`, after owner-approved PR #87; `V1 Exact Main Verification` run `35129331899` and X6 push-to-main run `35129331927` both completed SUCCESS on that exact merge SHA.
 - Published release `v1.1.0` source anchor: `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`.
@@ -392,3 +393,10 @@ Owner-approved publication run `35423516185` created annotated tag `v1.3.11`, Gi
 Published identity: tag object `87122bfc4ffa12d8e9781c57908328c434a3977c` -> implementation commit `01ddbff1843dfd8a0e1cc276be34144f35aeba35`; Release `391924224`; asset `574135564`; SHA-256 `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`; 147 production files; 110/110 packaged PHP lint PASS; clean WordPress 6.9 activation/render PASS. Repair-run evidence artifact `10579042492`, digest `sha256:93e41bea89dee8be2f7be80f8338aac45016acb7457fc57565ecd7f38b220ac9`.
 
 Temporary publication helper cleanup commit `b585dfbf03d559a6e19b09ca756774d49b5fd157` leaves the ops branch with zero net changed files from publication-time `main@f2f20e1e67407a0b259e90cbf7063f94d887bada`. Published release is now `v1.3.11`; verified production remains `v1.3.0`. Evidence: `docs/evidence/V1_3_11_PUBLICATION_20260919.md`.
+
+
+### AZnet Theme 1.3.15 technical closure — 20/09/2026
+
+Owner-approved PR #167 final head `a47e2f371db3de6c85eb43f34db7ae360f482458` completed 24/24 exact-head checks SUCCESS and merged with zero file delta to canonical `main@6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3`. Theme metadata is `1.3.15`. Fresh exact-main V1 run `35473959243` and X6 run `35473959238` both completed SUCCESS; X6 integrated browser/axe is 32/32 PASS and the two independent package builds are byte-identical at SHA-256 `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8` with 148 production files and 111 packaged PHP files.
+
+Latest public GitHub Release remains `v1.3.12`. No `v1.3.15` publication or production deployment is claimed. RootProfile authoritative Team membership remains external-blocked under open issue #112. Evidence: `docs/evidence/V1_3_15_TECHNICAL_CLOSURE_20260920.md`.

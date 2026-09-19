@@ -1,15 +1,17 @@
 # AZnet Theme Source Manifest
 
-Canonical implementation baseline is owner-approved corrective D-030 PR #159 at `main@7c73f7e050e95c23c5c968b2365b643753431246`, Theme metadata `1.3.12`. Final head `4b8fc7c78fb17e32fbc9c4fb9399bdeaf3f98744` completed 28/28 workflows SUCCESS; fresh exact-main V1 run `35434502224` and X6 push closure `35434502232` completed SUCCESS. Published GitHub Release is now `v1.3.12`; public asset `aznet-theme-1.3.12.zip` has SHA-256 `e9299f51bcedb6da781ab60c6c1570ebf7f2633557040ed3368389483b0078b6`. Current production target `lstamduchn.vn` remains active Theme `1.3.10`; v1.3.12 production deployment is separately gated. RootProfile-backed authoritative Team membership remains blocked at issue #112.
+Canonical implementation baseline is owner-approved Law 01 PR #167 at `main@6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3`, Theme metadata `1.3.15`. Final head `a47e2f371db3de6c85eb43f34db7ae360f482458` completed 24/24 exact-head checks SUCCESS; fresh exact-main V1 run `35473959243` and X6 run `35473959238` completed SUCCESS. Deterministic `aznet-theme-1.3.15.zip` SHA-256 is `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`, 148 production files, 111 packaged PHP files. Published GitHub Release remains `v1.3.12`; v1.3.15 publication and production deployment are separately gated. RootProfile-backed authoritative Team membership remains blocked at open issue #112.
 | Source | Semantic version | Role |
 | --- | --- | --- |
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.14 | Theme architecture, public integration contracts, D-027 Standalone Core boundary and complete WordPress-owned D-030 Hero authoring rule |
-| `AZT-03-baseline-provenance.md` | v0.63 | Canonical provenance through corrective D-030 PR #159 merge and owner-approved v1.3.12 publication; current production target remains lstamduchn.vn Theme 1.3.10 |
-| `AZT-04-roadmap-qa-decisions.md` | v0.78 | Roadmap/QA through owner-approved corrective D-030 v1.3.12 publication; production deployment remains separate |
-| `AZT-EXEC-MAP.md` | v0.69 | Derived execution map through owner-approved v1.3.12 publication closure; current production target remains lstamduchn.vn 1.3.10 and deployment is separately gated |
+| `AZT-03-baseline-provenance.md` | v0.64 | Canonical provenance through owner-approved Law 01 PR #167 merge and v1.3.15 exact-main technical closure; publication/deployment remain separate gates |
+| `AZT-04-roadmap-qa-decisions.md` | v0.79 | Roadmap/QA through Law 01 v1.3.15 technical closure; RootProfile Team #112 and publication/deployment gates retained |
+| `AZT-EXEC-MAP.md` | v0.70 | Derived execution map through v1.3.15 technical closure; exact Next is owner publication decision, with deployment separately gated |
+
+v1.3.15 technical closure evidence: `docs/evidence/V1_3_15_TECHNICAL_CLOSURE_20260920.md`. Exact canonical main `6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3`; V1 `35473959243` + X6 `35473959238` SUCCESS; deterministic package SHA-256 `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`. Latest public GitHub Release remains `v1.3.12`; publication/deployment of 1.3.15 are not inferred.
 
 v1.3.12 corrective publication evidence: `docs/evidence/V1_3_12_PUBLICATION_20260919.md`. v1.3 technical closure evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`. v1.3 publication evidence: `docs/evidence/V1_3_PUBLICATION_20260917.md`. v1.3 production deployment evidence: `docs/evidence/V1_3_PRODUCTION_DEPLOYMENT_20260917.md`. Historical v1.3.0 technical baseline is `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e` with exact-main V1 + X6 release-path PASS and deterministic package SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`. Current published release is `v1.3.12`; current production target `lstamduchn.vn` remains active Theme `1.3.10`. Historical production evidence on `tamduchanoi.aznet.vn` is retained as provenance only. Provider L5 remains unclaimed.
 
