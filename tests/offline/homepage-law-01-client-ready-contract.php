@@ -18,7 +18,8 @@ foreach ($files as $label => $path) {
 
 $css = file_get_contents($files['css']);
 $composer = file_get_contents($files['composer']);
-// 1.3.15 additive homepage content-completion scope: preserve approved surfaces and expose only source-backed additions.\n$hero = file_get_contents($files['hero']);
+// 1.3.15 additive homepage content-completion scope: preserve approved surfaces and expose only source-backed additions.
+$hero = file_get_contents($files['hero']);
 $services = file_get_contents($files['services']);
 $profile = file_get_contents($files['profile']);
 $latest = file_get_contents($files['latest']);
