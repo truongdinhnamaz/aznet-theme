@@ -3,7 +3,7 @@ import path from 'node:path';
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 
-const P4_AUTH_BASE_URL = (process.env.P4_AUTH_BASE_URL || 'https://tamduchanoi.aznet.vn').replace(/\/$/, '');
+const P4_AUTH_BASE_URL = (process.env.P4_AUTH_BASE_URL || 'https://lstamduchn.vn').replace(/\/$/, '');
 const P4_AUTH_ADMIN_USER = process.env.P4_AUTH_ADMIN_USER || '';
 const P4_AUTH_ADMIN_PASS = process.env.P4_AUTH_ADMIN_PASS || '';
 const stateDir = process.env.P4_AUTH_STATE_DIR || '/tmp/p4-authenticated-pilot';
