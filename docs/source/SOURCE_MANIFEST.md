@@ -1,15 +1,15 @@
 # AZnet Theme Source Manifest
 
-Canonical source is reconciled through owner-approved PR #153 at `main@e9133708713671584731c002f4d2947ea7adbbde`. Canonical implementation bytes remain the PR #151 merge at `main@39df23c3385118888e262c27a2331de34dda430d`, Theme metadata `1.3.10`, with fresh exact-main V1 run `35412829723` SUCCESS. Owner-approved publication run `35413516574` published annotated `v1.3.10` and GitHub Release `391877350`; public asset `aznet-theme-1.3.10.zip` has SHA-256 `5ff6c4862839dcdb6dfbbb77a71cb8bd87259b83cfbf308aa6b04279396bd572`. Verified production deployment remains historical `v1.3.0`. RootProfile-backed authoritative Team membership remains blocked at issue #112.
+Canonical implementation baseline is owner-approved D-030 PR #156 at `main@01ddbff1843dfd8a0e1cc276be34144f35aeba35`, Theme metadata `1.3.11`. Final head `c8a14556706a49bb380669b72bffd5b6f0cd98d5` completed 37/37 triggered workflows SUCCESS and fresh exact-main V1 run `35422599658` completed SUCCESS. Published GitHub Release remains `v1.3.10`; public asset `aznet-theme-1.3.10.zip` has SHA-256 `5ff6c4862839dcdb6dfbbb77a71cb8bd87259b83cfbf308aa6b04279396bd572`. Verified production deployment remains historical `v1.3.0`. RootProfile-backed authoritative Team membership remains blocked at issue #112.
 | Source | Semantic version | Role |
 | --- | --- | --- |
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.13 | Theme architecture, public integration contracts and D-027 Standalone Core runtime-independence boundary |
-| `AZT-03-baseline-provenance.md` | v0.60 | Canonical provenance through PR #150 merged 1.3.10 plus the verified PR #151 Hero authoring-bridge candidate; published/deployed release remains v1.3.0; RootProfile Team blocker #112 retained |
-| `AZT-04-roadmap-qa-decisions.md` | v0.74 | Roadmap/QA through canonical 1.3.10 merge and verified PR #151 Hero editing UX candidate; PR #151 merge is the next gate and tag/Release/deploy remain separate; RootProfile Team remains external-blocked |
-| `AZT-EXEC-MAP.md` | v0.66 | Derived execution map through canonical 1.3.10 merge and verified PR #151 Hero editing UX candidate; PR #151 merge is approval-gated and RootProfile Team remains blocked at #112 |
+| `AZT-03-baseline-provenance.md` | v0.61 | Canonical provenance through PR #150 merged 1.3.10 plus the verified PR #151 Hero authoring-bridge candidate; published/deployed release remains v1.3.0; RootProfile Team blocker #112 retained |
+| `AZT-04-roadmap-qa-decisions.md` | v0.75 | Roadmap/QA through canonical 1.3.10 merge and verified PR #151 Hero editing UX candidate; PR #151 merge is the next gate and tag/Release/deploy remain separate; RootProfile Team remains external-blocked |
+| `AZT-EXEC-MAP.md` | v0.67 | Derived execution map through canonical 1.3.10 merge and verified PR #151 Hero editing UX candidate; PR #151 merge is approval-gated and RootProfile Team remains blocked at #112 |
 
 v1.3 technical closure evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`. v1.3 publication evidence: `docs/evidence/V1_3_PUBLICATION_20260917.md`. v1.3 production deployment evidence: `docs/evidence/V1_3_PRODUCTION_DEPLOYMENT_20260917.md`. Canonical technical baseline is `1.3.0` at `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e` with exact-main V1 + X6 release-path PASS and deterministic package SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`. Published/GitHub-Release release and verified production deployment are now both `v1.3.0`; provider L5 remains unclaimed.
 
@@ -69,7 +69,7 @@ Derived DOCX source material remains archival/export evidence only. Canonical so
 
 19/09/2026 Homepage Hero editing UX evidence: `docs/evidence/HOMEPAGE_HERO_EDITOR_UX_20260919.md` records PR #150 canonical merge + exact-main V1/X6 PASS, PR #151 RED->GREEN authoring bridge, reconciliation to canonical 1.3.10 and 19/19 final workflow success. Hero copy remains WordPress-owned; Theme does not create a parallel Hero content store.
 
-**Exact next:** D-030 Homepage Hero Library is approved. Complete RED->GREEN on `feat/homepage-hero-library` with draft-first WordPress-owned synced Hero content, Theme-owned variants, legacy compatibility fallback and 1.3.11 candidate metadata. Production deployment remains a separate gate; RootProfile Team remains blocked at issue #112.
+**Exact next:** D-030 is PASS / MERGED and exact-main V1 is PASS. Merge the source/evidence closure PR after owner approval. After source sync, `v1.3.11` publication is a separate owner gate; production deployment remains independently gated. RootProfile Team remains blocked at issue #112.
 
 
 19/09/2026 PR #151 merge-closure evidence: `docs/evidence/HOMEPAGE_HERO_EDITOR_UX_MERGE_CLOSURE_20260919.md` records owner-approved merge to `main@39df23c3...`, zero file delta from the 22/22-verified final head and fresh exact-main V1 run `35412829723` SUCCESS.
@@ -81,3 +81,6 @@ Current release boundary: **GitHub publication v1.3.10 PASS / verified productio
 
 
 19/09/2026 architecture decision: AZT-02 v0.13 + AZT-04 D-030 replace the dedicated-Page-first Homepage Hero authoring model for new UX with **Hero Library + WordPress-native synced Hero content**. Theme owns visual variants/reference/composition only; WordPress owns the Core-block `wp_block` content. Initialization is draft-first so the current public Hero remains on its legacy/fallback source until the new synced Hero is explicitly published. Legacy Hero Page/Site fallback is retained for compatibility and no automatic migration/deletion is authorized.
+
+
+19/09/2026 D-030 canonical merge evidence: `docs/evidence/HOMEPAGE_HERO_LIBRARY_D030_MERGE_CLOSURE_20260919.md` records owner-approved PR #156 merge from 37/37-success final head `c8a14556...` to `main@01ddbff1...`, zero changed files across the merge boundary, fresh exact-main V1 run `35422599658` SUCCESS, and deterministic `aznet-theme-1.3.11.zip` candidate SHA-256 `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`. Published release remains `v1.3.10`; verified production remains `v1.3.0`.
