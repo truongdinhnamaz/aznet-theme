@@ -32,11 +32,8 @@
 <!-- /wp:column -->
 <!-- wp:column {"verticalAlignment":"center","className":"aznet-theme-homepage-hero-content__media","lock":{"move":true,"remove":true}} -->
 <div class="wp-block-column is-vertically-aligned-center aznet-theme-homepage-hero-content__media">
-<!-- wp:image {"sizeSlug":"large","className":"aznet-theme-homepage-hero-content__image","lock":{"move":true,"remove":true}} -->
-<figure class="wp-block-image size-large aznet-theme-homepage-hero-content__image"></figure>
-<!-- /wp:image -->
-<!-- wp:paragraph {"align":"center","className":"aznet-theme-homepage-hero-content__media-help","fontSize":"sm","lock":{"move":true,"remove":true}} -->
-<p class="has-text-align-center aznet-theme-homepage-hero-content__media-help has-sm-font-size"><?php esc_html_e( 'Chọn ảnh Hero trong trình biên tập.', 'aznet-theme' ); ?></p>
+<!-- wp:paragraph {"align":"center","className":"aznet-theme-homepage-hero-content__media-help","fontSize":"sm"} -->
+<p class="has-text-align-center aznet-theme-homepage-hero-content__media-help has-sm-font-size"><?php esc_html_e( 'Chèn block Ảnh vào cột này để chọn ảnh Hero.', 'aznet-theme' ); ?></p>
 <!-- /wp:paragraph -->
 </div>
 <!-- /wp:column -->
