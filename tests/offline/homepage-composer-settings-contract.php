@@ -4,15 +4,19 @@ if (! defined('ABSPATH')) { define('ABSPATH', __DIR__ . '/'); }
 $root = dirname(__DIR__, 2);
 require_once $root . '/inc/theme/settings.php';
 $defaults = AZnet\Theme\settings_defaults();
-assert($defaults['schema_version'] === 3);
+assert($defaults['schema_version'] === 4);
 assert($defaults['homepage_preset'] === 'off');
 assert($defaults['homepage_law01_variant'] === 'navy-gold');
+assert($defaults['homepage_hero_variant'] === 'split');
+assert($defaults['homepage_hero_block'] === 0);
 assert($defaults['homepage_hero_page'] === 0);
 assert($defaults['homepage_services_page'] === 0);
 assert($defaults['homepage_knowledge_terms'] === []);
 $normalized = AZnet\Theme\normalize_settings([
   'homepage_preset' => 'law-01',
   'homepage_law01_variant' => 'burgundy-gold',
+  'homepage_hero_variant' => 'inverse',
+  'homepage_hero_block' => '77',
   'homepage_hero_page' => '44',
   'homepage_services_page' => '12',
   'homepage_about_page' => -5,
@@ -21,6 +25,8 @@ $normalized = AZnet\Theme\normalize_settings([
 ]);
 assert($normalized['homepage_preset'] === 'law-01');
 assert($normalized['homepage_law01_variant'] === 'burgundy-gold');
+assert($normalized['homepage_hero_variant'] === 'inverse');
+assert($normalized['homepage_hero_block'] === 77);
 assert($normalized['homepage_hero_page'] === 44);
 assert($normalized['homepage_services_page'] === 12);
 assert($normalized['homepage_about_page'] === 0);
