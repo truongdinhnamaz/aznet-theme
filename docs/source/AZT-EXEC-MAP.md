@@ -1,13 +1,13 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.63
+**Version:** v0.64
 **Status:** Working Execution Map / derived  
 **Date:** 19/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** live `main` is Theme metadata `1.3.10` at owner-approved PR #151 merge `main@39df23c3385118888e262c27a2331de34dda430d`. Final PR head `b17532c0bc7348317c5044fa25262d28cb9fef54` completed 22/22 triggered workflows SUCCESS and has zero file delta to the merge commit. Fresh exact-main V1 run `35412829723` completed SUCCESS. Published GitHub Release and verified production deployment remain historical `v1.3.0`; RootProfile Team remains blocked under issue #112.
+> **Canonical-main checkpoint:** live `main` is `27e6a2bc3d68bfa4aa51b22c0e1fda2867cec174` after owner-approved source/evidence PR #152. PR #152 changed docs/evidence only, completed 7/7 triggered workflows SUCCESS and has zero file delta from its final head to the merge commit. Canonical implementation bytes remain anchored at owner-approved PR #151 merge `main@39df23c3385118888e262c27a2331de34dda430d`, Theme metadata `1.3.10`, with fresh exact-main V1 run `35412829723` SUCCESS. Published GitHub Release and verified production deployment remain historical `v1.3.0`; RootProfile Team remains blocked under issue #112.
 
 **Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS`. Current v1.3 state: `PUBLICATION + PRODUCTION DEPLOYMENT PASS`; published/GitHub-Release release and verified production deployment are both `v1.3.0` at their respective verified scopes.
 
@@ -454,7 +454,7 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 16. Exact next
 
-**NEXT — PR #151 merge + exact-main V1 closure are PASS. Merge the source-only closure PR after explicit owner approval. Do not tag, publish or deploy without a separate explicit gate.**
+**NEXT — No new AZnet Theme implementation slice is opened by this closure. Preserve canonical Theme metadata `1.3.10`. Any tag/GitHub Release, production deployment, takeover or new roadmap slice requires a separate explicit owner gate. RootProfile-backed authoritative Team remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
 
 
 ## 15.9 Homepage Hero editing UX follow-up — 19/09/2026
@@ -481,3 +481,14 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - Published release/deployment: historical `v1.3.0`.
 - RootProfile Team: BLOCKED at issue #112.
 - Release/tag/deploy: separate approval gates.
+
+
+## 15.11 Post-closure source sync — 19/09/2026
+
+- PR #152 source/evidence closure: owner-approved and merged to `main@27e6a2bc3d68bfa4aa51b22c0e1fda2867cec174`.
+- PR #152 final head: `489cf1ee64751690d793144c56b37c0b16699457`.
+- PR #152 verification: 7/7 triggered workflows SUCCESS.
+- Final head -> merge commit: zero file delta.
+- Production implementation anchor remains PR #151 merge `main@39df23c3385118888e262c27a2331de34dda430d` + exact-main V1 `35412829723` SUCCESS.
+- Theme metadata remains `1.3.10`.
+- No new implementation slice opened.

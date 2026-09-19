@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.71
+**Version:** v0.72
 **Status:** Working Source  
 **Date:** 19/09/2026
 
@@ -513,7 +513,7 @@ This remains Theme presentation only. RootProfile authoritative Team remains BLO
 
 ## 14. Exact next
 
-**NEXT — PR #151 canonical merge and fresh exact-main V1 are PASS. Merge the source-only closure PR after explicit owner approval. Do not tag, publish a GitHub Release or deploy production without separate explicit approval.**
+**NEXT — No new AZnet Theme implementation slice is opened by this closure. Preserve canonical Theme metadata `1.3.10`. Any tag/GitHub Release, production deployment, takeover or new roadmap slice requires a separate explicit owner gate. RootProfile-backed authoritative Team remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
 
 
 ### Canonical 1.3.10 merge and Homepage Hero editing UX candidate — 19/09/2026
@@ -534,3 +534,10 @@ The product owner approved PR #151 canonical merge. Final verified head `b17532c
 Final-head QA: 22/22 triggered workflows SUCCESS. Fresh exact-main V1 run `35412829723` completed SUCCESS on exact merge SHA `39df23c3385118888e262c27a2331de34dda430d`. Artifacts: static `10575125302` (`sha256:0fae4559000ac195e6f58a5fd50b1070b232c74bd472dd90c36d6abb0a15cb92`) and clean runtime/browser `10575290283` (`sha256:a2609a4ffee6f7c538402a4850103d5c14f6baa51fe6dceea4f61030ecba9e89`).
 
 No release/deployment authorization is created by this merge. RootProfile authoritative Team remains separately blocked at issue #112.
+
+
+### Post-closure state — 19/09/2026
+
+Owner-approved source/evidence PR #152 merged to `main@27e6a2bc3d68bfa4aa51b22c0e1fda2867cec174`. The PR was documentation/evidence only, completed 7/7 triggered workflows SUCCESS and has zero file delta between its final head and merge commit. The implementation verification anchor remains PR #151 merge `main@39df23c3385118888e262c27a2331de34dda430d` plus fresh exact-main V1 run `35412829723` SUCCESS.
+
+No new Theme implementation slice is opened by this closure. Release/deployment/takeover remain separately approval-gated; RootProfile Team remains externally blocked at issue #112.

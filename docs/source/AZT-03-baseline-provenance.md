@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.58
+**Version:** v0.59
 **Status:** Working Source  
 **Date:** 19/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -229,7 +229,7 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**NEXT — PR #151 is merged and fresh exact-main V1 run `35412829723` completed SUCCESS on `main@39df23c3385118888e262c27a2331de34dda430d`. Merge the source-only closure PR after explicit owner approval. Git tag/GitHub Release and production deployment remain separate gates; RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
+**NEXT — No new AZnet Theme implementation slice is opened by this closure. Preserve canonical Theme metadata `1.3.10`. Any tag/GitHub Release, production deployment, takeover or new roadmap slice requires a separate explicit owner gate. RootProfile-backed authoritative Team remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
 
 ### AZnet Theme 1.3.10 polished-Hero client-delivery candidate — 19/09/2026
 
@@ -341,3 +341,10 @@ Owner-approved PR #151 merged final verified head `b17532c0bc7348317c5044fa25262
 Final PR head completed 22/22 triggered workflows SUCCESS. Fresh exact-main V1 run `35412829723` completed SUCCESS on exact merge SHA `39df23c3385118888e262c27a2331de34dda430d`. Artifacts: static `10575125302` (`sha256:0fae4559000ac195e6f58a5fd50b1070b232c74bd472dd90c36d6abb0a15cb92`) and clean runtime/browser `10575290283` (`sha256:a2609a4ffee6f7c538402a4850103d5c14f6baa51fe6dceea4f61030ecba9e89`).
 
 Theme metadata remains `1.3.10`. Published GitHub Release and verified production deployment remain historical `v1.3.0`. Evidence: `docs/evidence/HOMEPAGE_HERO_EDITOR_UX_MERGE_CLOSURE_20260919.md`.
+
+
+### Post-closure source synchronization — 19/09/2026
+
+Owner-approved source/evidence PR #152 merged to canonical `main@27e6a2bc3d68bfa4aa51b22c0e1fda2867cec174`. PR #152 changed documentation/evidence only; its final head `489cf1ee64751690d793144c56b37c0b16699457` completed 7/7 triggered workflows SUCCESS and has zero file delta to the merge commit. No new production Theme bytes were introduced after the PR #151 canonical implementation merge at `main@39df23c3385118888e262c27a2331de34dda430d`, whose fresh exact-main V1 run `35412829723` remains the implementation verification anchor.
+
+Canonical repository Theme metadata remains `1.3.10`. Published GitHub Release and verified production deployment remain historical `v1.3.0`.
