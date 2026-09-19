@@ -79,16 +79,20 @@ assert(str_contains($hero, "get_bloginfo( 'name' )"), 'Pre-v1.3.4 Site/Front Pag
 
 assert(is_file($pattern), 'D-030 requires a portable Core-block Hero content scaffold pattern.');
 $pattern_source = is_file($pattern) ? (string) file_get_contents($pattern) : '';
-foreach (['wp:group', 'wp:heading', 'wp:paragraph', 'wp:buttons', 'wp:image'] as $needle) {
+foreach (['wp:group', 'wp:columns', 'wp:heading', 'wp:paragraph', 'wp:buttons'] as $needle) {
     assert(str_contains($pattern_source, $needle), "Hero content pattern must use Core blocks: {$needle}");
 }
 assert(! preg_match('/<!--\s+wp:aznet-theme\//', $pattern_source), 'Hero content pattern must not introduce a proprietary AZnet block type.');
+assert(! str_contains($pattern_source, '<!-- wp:image'), 'Hero scaffold must not serialize an empty Core Image block; users insert a valid Core Image through the editor.');
+assert(str_contains($pattern_source, 'Chèn block Ảnh vào cột này để chọn ảnh Hero.'), 'Hero scaffold must explain where to insert the WordPress Core Image block.');
+
 
 foreach ([
     'aznet-theme-law01-hero--split',
     'aznet-theme-law01-hero--centered',
     'aznet-theme-law01-hero--inverse',
     'aznet-theme-law01-hero--media-left',
+    'aznet-theme-homepage-hero-content__media .wp-block-image',
 ] as $needle) {
     assert(str_contains($css, $needle), "Hero Library presentation variant missing: {$needle}");
 }
