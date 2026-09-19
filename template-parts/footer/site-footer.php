@@ -24,8 +24,16 @@ $contact_menu = (string) ( $menus['footer-contact'] ?? '' );
 $social_menu  = (string) ( $menus['footer-social'] ?? '' );
 $policy_menu  = (string) ( $menus['footer-policy'] ?? '' );
 $year         = (string) ( $context['year'] ?? '' );
+
+$footer_classes = [
+    'aznet-theme-site-footer',
+    'aznet-theme-site-footer--' . $preset,
+];
+if ( function_exists( 'AZnet\\Theme\\homepage_composer_active' ) && \AZnet\Theme\homepage_composer_active() ) {
+    $footer_classes[] = 'aznet-theme-site-footer--law01-' . \AZnet\Theme\homepage_law01_variant();
+}
 ?>
-<footer class="aznet-theme-site-footer aznet-theme-site-footer--<?php echo esc_attr( $preset ); ?>" data-aznet-theme-site-footer role="contentinfo">
+<footer class="<?php echo esc_attr( implode( ' ', $footer_classes ) ); ?>" data-aznet-theme-site-footer role="contentinfo">
     <div class="aznet-theme-site-footer__inner">
         <div class="aznet-theme-site-footer__main">
             <div class="aznet-theme-site-footer__identity" data-aznet-theme-footer-identity-source="wordpress">
