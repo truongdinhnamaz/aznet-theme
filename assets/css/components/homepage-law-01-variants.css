@@ -416,6 +416,13 @@
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__member p { margin: 0; color: #6b5e55; font-size: var(--aznet-theme-text-small); line-height: var(--aznet-theme-line-height-body); }
 
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-articles { background: #fff; }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process { background: #fbf5e9; }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-faq { background: #fff; }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-final-cta {
+    background:
+        radial-gradient(circle at 85% 50%, rgba(185, 137, 47, .14), transparent 20rem),
+        var(--law01-client-burgundy);
+}
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--articles { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--articles .aznet-theme-law01-article-card:first-child { grid-column: auto; padding: 0; border-top: 1px solid rgba(122, 14, 24, .1); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--articles .aznet-theme-law01-article-card {
