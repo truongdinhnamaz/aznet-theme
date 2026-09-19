@@ -130,6 +130,8 @@ function render_homepage_hero_library( array $settings ): void {
     echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="aznet-theme-homepage-hero-library">';
     echo '<input type="hidden" name="action" value="aznet_theme_apply_homepage_hero">';
     wp_nonce_field( 'aznet_theme_apply_homepage_hero' );
+    echo '<fieldset class="aznet-theme-homepage-hero-library__fieldset">';
+    echo '<legend class="screen-reader-text">' . esc_html__( 'Chọn mẫu Hero', 'aznet-theme' ) . '</legend>';
     echo '<div class="aznet-theme-homepage-hero-library__grid">';
     foreach ( $variants as $slug => $label ) {
         $checked = checked( $current_variant, $slug, false );
@@ -139,7 +141,7 @@ function render_homepage_hero_library( array $settings ): void {
         echo '<strong>' . esc_html( $label ) . '</strong>';
         echo '</label>';
     }
-    echo '</div>';
+    echo '</div></fieldset>';
     echo '<div class="aznet-theme-homepage-hero-editor__actions">';
     submit_button( __( 'Dùng mẫu này', 'aznet-theme' ), 'primary', 'submit', false );
     if ( $hero_candidate instanceof \WP_Post ) {
