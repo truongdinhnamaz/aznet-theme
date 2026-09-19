@@ -132,6 +132,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-s
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-content-map-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-control-center-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-library-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-premium-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-client-ready-contract.php
