@@ -166,8 +166,12 @@ async function inspectViewport(browser, name, viewport) {
     const heroBodyStyles = await heroBodyParagraphs.evaluateAll((nodes) => nodes.map((node) => getComputedStyle(node).fontStyle));
     if (heroBodyStyles[0] === 'italic' || heroBodyStyles[1] !== 'italic') throw new Error(`Hero body must present description normally and final slogan in italic: ${JSON.stringify(heroBodyStyles)}`);
 
-    if (await page.locator('.aznet-theme-site-header__logo').count() !== 1 || await page.locator('.aznet-theme-site-header__brand-title').count() !== 1) {
-      throw new Error('reference Header must render logo + WordPress site-title lockup');
+    if (
+      await page.locator('.aznet-theme-site-header__logo').count() !== 1 ||
+      await page.locator('.aznet-theme-site-header__brand-title').count() !== 1 ||
+      await page.locator('.aznet-theme-site-header__brand-kicker').count() !== 1
+    ) {
+      throw new Error('reference Header must render logo + WordPress site-title + Law01 presentation kicker');
     }
     if (await page.locator('.aznet-theme-site-footer__logo').count() !== 1 || await page.locator('.aznet-theme-site-footer__brand-title').count() !== 1) {
       throw new Error('reference Footer must render logo + WordPress site-title lockup');
@@ -316,10 +320,13 @@ async function inspectViewport(browser, name, viewport) {
     }
     result.footerColumns = 4;
 
-    result.utilityLinks = await page.locator('.aznet-theme-site-header__utility-menu a').count();
-    if (result.utilityLinks < 2) throw new Error(`expected header phone/hotline utility links, got ${result.utilityLinks}`);
-    const utilityHrefs = await page.locator('.aznet-theme-site-header__utility-menu a').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
-    if (utilityHrefs.some((href) => !href?.startsWith('tel:'))) throw new Error(`header utility links must remain WordPress-owned tel: links: ${JSON.stringify(utilityHrefs)}`);
+    result.consultationLinks = await page.locator('.aznet-theme-site-header > .aznet-theme-site-header__inner > .aznet-theme-site-header__actions .aznet-theme-site-header__consultation').count();
+    if (result.consultationLinks !== 1) throw new Error(`expected one source-backed Header consultation action, got ${result.consultationLinks}`);
+    const consultationHref = await page.locator('.aznet-theme-site-header > .aznet-theme-site-header__inner > .aznet-theme-site-header__actions .aznet-theme-site-header__consultation').getAttribute('href');
+    if (!consultationHref || !consultationHref.includes('/lien-he/')) throw new Error(`Header consultation action is not mapped to Contact Page: ${consultationHref}`);
+    if (await page.locator('.aznet-theme-site-header > .aznet-theme-site-header__inner > .aznet-theme-site-header__actions .aznet-theme-site-header__utility-menu a').count() !== 0) {
+      throw new Error('Law01 desktop Header must not duplicate Hero phone/hotline utility links');
+    }
 
     const emptyCards = await page.locator('.aznet-theme-law01-card:empty, .aznet-theme-law01-article-card:empty').count();
     if (emptyCards > 0) throw new Error(`empty public cards rendered: ${emptyCards}`);
@@ -348,7 +355,8 @@ async function inspectViewport(browser, name, viewport) {
       await page.keyboard.press('Enter');
       await panel.waitFor({ state: 'visible' });
       if (await trigger.getAttribute('aria-expanded') !== 'true') throw new Error('mobile nav did not expand');
-      if (await panel.locator('.aznet-theme-site-header__utility-menu a').count() < 2) throw new Error('mobile utility links missing from expanded navigation');
+      if (await panel.locator('.aznet-theme-site-header__consultation').count() !== 1) throw new Error('mobile source-backed consultation action missing from expanded navigation');
+      if (await panel.locator('.aznet-theme-site-header__utility-menu a').count() !== 0) throw new Error('mobile Law01 Header must not duplicate Hero phone/hotline utility links');
       const openOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       if (openOverflow > 1) throw new Error(`mobile nav caused horizontal overflow: ${openOverflow}px`);
       await page.keyboard.press('Escape');
