@@ -44,6 +44,13 @@ jobs:
           curl -4 -vIL --connect-timeout 10 --max-time 30 https://lstamduchn.vn/wp-login.php 2>&1 || true
           echo '=== HTTPS root IPv6 ==='
           curl -6 -vIL --connect-timeout 10 --max-time 20 https://lstamduchn.vn/ 2>&1 || true
+          echo '=== Backend-specific TLS probes ==='
+          for ip in 103.166.183.10 103.56.163.10 103.216.118.10; do
+            echo "--- HTTPS via $ip ---"
+            curl -vIL --resolve "lstamduchn.vn:443:$ip" --connect-timeout 8 --max-time 15 https://lstamduchn.vn/ 2>&1 || true
+            echo "--- HTTP via $ip ---"
+            curl -vIL --resolve "lstamduchn.vn:80:$ip" --connect-timeout 8 --max-time 15 http://lstamduchn.vn/ 2>&1 || true
+          done
 
       - name: Run authenticated read-only preflight
         env:
