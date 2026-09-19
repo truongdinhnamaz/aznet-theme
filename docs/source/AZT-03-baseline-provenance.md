@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.56
+**Version:** v0.57
 **Status:** Working Source  
 **Date:** 19/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -229,7 +229,7 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**NEXT — PR #150 is now the owner-approved AZnet Theme 1.3.10 polished-Hero client-delivery candidate built from canonical `main@597639e26a2cb242c3c0a71e5459ab5d66a0701d`. Exact production head `a4c3621ec6d651b7e4c4d1085a2b900f8c94454b` completed 22/22 triggered workflows SUCCESS and produced the deterministic installable package. Canonical merge remains the next approval gate. Git tag/GitHub Release and production deployment remain separate gates; RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
+**NEXT — PR #151 canonical merge is the next explicit owner approval gate for the verified Homepage Hero editing UX follow-up on canonical Theme metadata `1.3.10`. Git tag/GitHub Release and production deployment remain separate gates; RootProfile-backed Team integration remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
 
 ### AZnet Theme 1.3.10 polished-Hero client-delivery candidate — 19/09/2026
 
@@ -321,3 +321,14 @@ The `exact-main` job completed SUCCESS on WordPress `6.9` / PHP `8.1` with zero 
 The `final-package` job independently built `aznet-theme-1.1.0.zip` twice with byte identity, verified one canonical top-level `aznet-theme/` directory, exact-matched 121 production files against canonical source, linted 93 packaged PHP files, installed the exact ZIP on clean WordPress `6.9` with zero active third-party plugins and passed the 18/18 browser/a11y matrix. WordPress-owned Page/Post/Category/Menu/meta continuity survived switching to bundled `twentytwentyfive`, switching back to `aznet-theme` restored active Theme `1.1.0`, and the 18/18 browser matrix passed again. Final ZIP SHA-256: `72ec808b0e35b27fae30b9faf0b470b7fa85748c40f9fbc15e0e82ffb35f2258`. Package artifact `10428893463`, digest `sha256:12e48cd836e4ab1a4e347749cc275ff555176930fad3987b702fc0d4192df61e`. Detailed evidence: `docs/evidence/P5_FINAL_CANDIDATE_VERIFICATION_20260916.md`.
 
 P5 technical state is therefore **TECHNICAL CANDIDATE PASS / PUBLICATION GATED** at its historical pre-publication checkpoint. Later owner-approved publication and production deployment closed v1.1; that later closure does not authorize later release lines by itself.
+
+
+### Canonical 1.3.10 merge + Homepage Hero authoring bridge candidate — 19/09/2026
+
+Owner-approved PR #150 merged the verified polished-Hero 1.3.10 candidate to canonical `main@55ca349c8808d0d6a3c96d5201983ae966b1d822`. Fresh exact-main V1 run `35412045895` and X6 run `35412045904` completed SUCCESS. Canonical repository Theme metadata is therefore `1.3.10`; published GitHub Release and verified production deployment remain historical `v1.3.0`.
+
+Follow-up PR #151 addresses Hero authoring UX without moving content ownership into Theme settings. WordPress remains owner of Hero Page title/excerpt/body/featured image; Theme keeps only `homepage_hero_page` plus a Control Center authoring bridge that exposes current source/fallback status, preview, native Page edit and native Page-create actions.
+
+After reconciliation with canonical 1.3.10, exact production/test head `82073e715be349f29fe84dbd0405c5af6e1b5c93` is ahead-only / behind-by-zero against main and completed 19/19 triggered workflows SUCCESS at final disposition. Homepage Composer run `35412090957`, R5 Control Center browser run `35412090873`, D-027 L3/L4/Exact Package and retained regression, V1 PR CI and R6 all PASS. R2 run `35412090864` had one first-attempt disposable-runtime `ERR_CONNECTION_RESET` and passed on the single retry without code changes. Evidence: `docs/evidence/HOMEPAGE_HERO_EDITOR_UX_20260919.md`.
+
+PR #151 remains unmerged. Tag/GitHub Release and production deployment are not authorized by this checkpoint.
