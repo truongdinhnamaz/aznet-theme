@@ -225,6 +225,20 @@ $must(
     str_contains($footer, 'if ( \'\' !== $social_menu || \'\' !== $policy_menu )'),
     'Law 01 Footer must keep empty WordPress menu projections fail-soft with no placeholder data.'
 );
+$must(
+    str_contains($footer, "$contact_heading = $law01_homepage") &&
+    str_contains($footer, 'Thông tin liên hệ') &&
+    str_contains($footer, "$navigation_heading = $law01_homepage") &&
+    str_contains($footer, 'Liên kết nhanh'),
+    'Law 01 Footer must use the approved reference headings without changing generic Footer copy.'
+);
+$must(
+    str_contains($css, '.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__identity { order: 1; }') &&
+    str_contains($css, '.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__contact { order: 2; }') &&
+    str_contains($css, '.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__navigation { order: 3; }') &&
+    str_contains($css, '.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__social-column { order: 4; }'),
+    'Law 01 Footer must visually order populated columns as Identity, Contact, Quick links, Social.'
+);
 
 
 $must(
