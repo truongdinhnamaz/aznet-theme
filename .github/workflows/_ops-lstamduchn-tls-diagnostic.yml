@@ -1,0 +1,27 @@
+name: OPS lstamduchn TLS Diagnostic
+
+on:
+  push:
+    branches:
+      - ops/deploy-v1.3.15-lstamduchn
+    paths:
+      - '.github/workflows/_ops-lstamduchn-tls-diagnostic.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  tls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Probe TLS 1.2 and 1.3 on every backend
+        shell: bash
+        run: |
+          set +e
+          for ip in 103.166.183.10 103.56.163.10 103.216.118.10; do
+            echo "=== $ip TLS1.2 ==="
+            curl -vI --tls-max 1.2 --resolve "lstamduchn.vn:443:$ip" --connect-timeout 6 --max-time 10 https://lstamduchn.vn/ 2>&1 || true
+            echo "=== $ip TLS1.3 ==="
+            curl -vI --tlsv1.3 --resolve "lstamduchn.vn:443:$ip" --connect-timeout 6 --max-time 10 https://lstamduchn.vn/ 2>&1 || true
+          done
