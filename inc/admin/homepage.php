@@ -23,8 +23,9 @@ function homepage_slot_statuses(): array {
 
     $hero_block_id = (int) ( $s['homepage_hero_block'] ?? 0 );
     $legacy_hero_page_id = (int) ( $s['homepage_hero_page'] ?? 0 );
-    if ( null !== homepage_block_reference( $hero_block_id ) ) {
-        $statuses['hero'] = 'READY';
+    $hero_block = homepage_block_reference( $hero_block_id );
+    if ( $hero_block instanceof \WP_Post ) {
+        $statuses['hero'] = '' !== trim( (string) $hero_block->post_content ) ? 'READY' : 'EMPTY';
     } elseif ( null !== homepage_hero_candidate_reference( $hero_block_id ) ) {
         $statuses['hero'] = 'DRAFT';
     } elseif ( null !== homepage_page_reference( $legacy_hero_page_id ) ) {
@@ -106,6 +107,7 @@ function render_homepage_hero_library( array $settings ): void {
     $hero_id = (int) ( $settings['homepage_hero_block'] ?? 0 );
     $hero_block = homepage_block_reference( $hero_id );
     $hero_candidate = homepage_hero_candidate_reference( $hero_id );
+    $hero_block_has_content = $hero_block instanceof \WP_Post && '' !== trim( (string) $hero_block->post_content );
     $legacy_page = homepage_page_reference( (int) ( $settings['homepage_hero_page'] ?? 0 ) );
     $current_variant = (string) ( $settings['homepage_hero_variant'] ?? 'split' );
     $variants = homepage_hero_library_variants();
@@ -114,9 +116,12 @@ function render_homepage_hero_library( array $settings ): void {
     echo '<div class="aznet-theme-homepage-hero-editor__heading"><div><h2>' . esc_html__( 'Thư viện Hero', 'aznet-theme' ) . '</h2>';
     echo '<p class="description">' . esc_html__( 'Chọn cách trình bày Hero. Nội dung được lưu trong WordPress dưới dạng Hero đồng bộ bằng block lõi; Theme không lưu bản sao tiêu đề, mô tả, ảnh hay CTA.', 'aznet-theme' ) . '</p></div></div>';
 
-    if ( $hero_block instanceof \WP_Post ) {
+    if ( $hero_block instanceof \WP_Post && $hero_block_has_content ) {
         echo '<div class="aznet-theme-homepage-hero-editor__status aznet-theme-homepage-hero-editor__status--ready"><strong>' . esc_html__( 'Nguồn Hero hiện tại:', 'aznet-theme' ) . '</strong> ' . esc_html__( 'Hero WordPress', 'aznet-theme' ) . '</div>';
         echo '<p class="description">' . esc_html__( 'Muốn tạm quay lại Hero cũ/dự phòng mà không xóa nội dung, hãy chuyển Hero WordPress này về trạng thái Bản nháp.', 'aznet-theme' ) . '</p>';
+    } elseif ( $hero_block instanceof \WP_Post ) {
+        echo '<div class="aznet-theme-homepage-hero-editor__status aznet-theme-homepage-hero-editor__status--warning"><strong>' . esc_html__( 'Nguồn Hero hiện tại:', 'aznet-theme' ) . '</strong> ' . esc_html__( 'Hero WordPress chưa có nội dung', 'aznet-theme' ) . '</div>';
+        echo '<p class="notice notice-warning inline aznet-theme-homepage-hero-editor__notice">' . esc_html__( 'Hero WordPress đã xuất bản nhưng đang trống, nên website tiếp tục dùng Hero cũ/dự phòng. Hãy thêm nội dung vào Hero để chuyển nguồn.', 'aznet-theme' ) . '</p>';
     } elseif ( $hero_candidate instanceof \WP_Post && 'draft' === $hero_candidate->post_status ) {
         echo '<div class="aznet-theme-homepage-hero-editor__status aznet-theme-homepage-hero-editor__status--warning"><strong>' . esc_html__( 'Nguồn Hero hiện tại:', 'aznet-theme' ) . '</strong> ' . esc_html__( 'Hero WordPress đang soạn', 'aznet-theme' ) . '</div>';
         echo '<p class="notice notice-info inline aznet-theme-homepage-hero-editor__notice">' . esc_html__( 'Hero mới vẫn là bản nháp nên website tiếp tục hiển thị Hero cũ/dự phòng. Hoàn thiện nội dung và xuất bản Hero để chuyển nguồn an toàn.', 'aznet-theme' ) . '</p>';
