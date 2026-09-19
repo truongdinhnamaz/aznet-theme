@@ -9,6 +9,7 @@ $mobilePanel = (string) file_get_contents($root . '/template-parts/header/mobile
 $law01ConsultationPath = $root . '/template-parts/header/law01-consultation.php';
 $law01Consultation = is_file($law01ConsultationPath) ? (string) file_get_contents($law01ConsultationPath) : '';
 $profile = (string) file_get_contents($root . '/template-parts/homepage/law-01/profile.php');
+$latest = (string) file_get_contents($root . '/template-parts/homepage/law-01/latest.php');
 $hero = (string) file_get_contents($root . '/template-parts/homepage/law-01/hero.php');
 $footer = (string) file_get_contents($root . '/template-parts/footer/site-footer.php');
 
@@ -246,6 +247,16 @@ $must(
         '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card__body'
     ) && str_contains($css, 'min-height: 100%;'),
     'Law 01 inherited Latest cards must retain an equal-height body rhythm while continuing to render WordPress-native posts.'
+);
+$must(
+    str_contains($latest, "get_option( 'page_for_posts', 0 )") &&
+    str_contains($latest, "get_post_status( $posts_page_id )") &&
+    str_contains($latest, 'Xem tất cả bài viết'),
+    'Law 01 Latest heading must expose a fail-soft WordPress Posts Page link instead of inventing an archive URL.'
+);
+$must(
+    str_contains($latest, 'aznet-theme-law01-article-card__media-link'),
+    'Law 01 Latest featured media must be part of the source-backed post link surface.'
 );
 
 echo "PASS: Law 01 Hero/Trust/Services visual parity contract\n";
