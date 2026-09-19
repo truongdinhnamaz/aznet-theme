@@ -174,6 +174,7 @@ Law 01 Hero no longer requires a dedicated WordPress Page as the primary authori
 - Theme owns the Hero visual library and presentation variant only.
 - WordPress owns the actual Hero content as one ordinary `wp_block` synced-pattern entity containing Core blocks only.
 - Theme stores only a typed `homepage_hero_block` reference plus allow-listed `homepage_hero_variant` presentation state.
+- These two keys are backward-compatible additions to the existing `aznet_theme_settings` family; `schema_version` remains `3` and no second Theme Mod or migration store is introduced.
 - The Theme MUST NOT copy Hero heading/body/image/CTA content into `aznet_theme_settings`.
 - Changing `homepage_hero_variant` MUST change presentation only and MUST NOT rewrite the synced Hero block content.
 - The Theme MAY create the initial synced Hero block only through an explicit, nonce/capability-protected user action from the Hero Library. Initialization is **draft-first**: the new `wp_block` is stored as a draft and the typed reference may point to it, but public Hero resolution still requires `publish`, so the existing legacy/fallback Hero remains live until the user explicitly publishes the new Hero in the native block editor. Generic Theme activation, preset switching and ordinary settings save remain content-mutation free.
