@@ -47,7 +47,7 @@ jobs:
 
       - name: Run authenticated read-only pilot QA
         env:
-          P4_AUTH_BASE_URL: https://tamduchanoi.aznet.vn
+          P4_AUTH_BASE_URL: https://lstamduchn.vn
           P4_AUTH_ADMIN_USER: ${{ secrets.PILOT_WP_USER }}
           P4_AUTH_ADMIN_PASS: ${{ secrets.PILOT_WP_PASSWORD }}
           P4_AUTH_STATE_DIR: /tmp/p4-authenticated-pilot

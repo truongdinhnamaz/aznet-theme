@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
 
-const baseUrl = (process.env.TAMDUC_BASE_URL || 'https://tamduchanoi.aznet.vn').replace(/\/$/, '');
+const baseUrl = (process.env.TAMDUC_BASE_URL || 'https://lstamduchn.vn').replace(/\/$/, '');
 const adminUser = process.env.PILOT_WP_USER || '';
 const adminPass = process.env.PILOT_WP_PASSWORD || '';
 const stateDir = process.env.TAMDUC_STATE_DIR || '/tmp/tamduc-homepage-inventory';

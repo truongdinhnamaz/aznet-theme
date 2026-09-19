@@ -1,15 +1,17 @@
 # AZnet Theme Source Manifest
 
 Canonical source is reconciled through owner-approved PR #153 at `main@e9133708713671584731c002f4d2947ea7adbbde`. Canonical implementation bytes remain the PR #151 merge at `main@39df23c3385118888e262c27a2331de34dda430d`, Theme metadata `1.3.10`, with fresh exact-main V1 run `35412829723` SUCCESS. Owner-approved publication run `35413516574` published annotated `v1.3.10` and GitHub Release `391877350`; public asset `aznet-theme-1.3.10.zip` has SHA-256 `5ff6c4862839dcdb6dfbbb77a71cb8bd87259b83cfbf308aa6b04279396bd572`. Verified production deployment remains historical `v1.3.0`. RootProfile-backed authoritative Team membership remains blocked at issue #112.
+
+**Operational pilot target (D-030):** `https://lstamduchn.vn/` replaces `tamduchanoi.aznet.vn` completely for future pilot QA/site-operations. Historical evidence for the retired host is preserved as provenance only and does not transfer PASS to the replacement pilot; current site-specific state on `lstamduchn.vn` is UNKNOWN until fresh verification.
 | Source | Semantic version | Role |
 | --- | --- | --- |
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.12 | Theme architecture, public integration contracts and D-027 Standalone Core runtime-independence boundary |
-| `AZT-03-baseline-provenance.md` | v0.60 | Canonical provenance through PR #150 merged 1.3.10 plus the verified PR #151 Hero authoring-bridge candidate; published/deployed release remains v1.3.0; RootProfile Team blocker #112 retained |
-| `AZT-04-roadmap-qa-decisions.md` | v0.73 | Roadmap/QA through canonical 1.3.10 merge and verified PR #151 Hero editing UX candidate; PR #151 merge is the next gate and tag/Release/deploy remain separate; RootProfile Team remains external-blocked |
-| `AZT-EXEC-MAP.md` | v0.65 | Derived execution map through canonical 1.3.10 merge and verified PR #151 Hero editing UX candidate; PR #151 merge is approval-gated and RootProfile Team remains blocked at #112 |
+| `AZT-03-baseline-provenance.md` | v0.61 | Canonical provenance through PR #150 merged 1.3.10 plus the verified PR #151 Hero authoring-bridge candidate; published/deployed release remains v1.3.0; RootProfile Team blocker #112 retained |
+| `AZT-04-roadmap-qa-decisions.md` | v0.74 | Roadmap/QA through canonical 1.3.10 merge and verified PR #151 Hero editing UX candidate; PR #151 merge is the next gate and tag/Release/deploy remain separate; RootProfile Team remains external-blocked |
+| `AZT-EXEC-MAP.md` | v0.66 | Derived execution map through canonical 1.3.10 merge and verified PR #151 Hero editing UX candidate; PR #151 merge is approval-gated and RootProfile Team remains blocked at #112 |
 
 v1.3 technical closure evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`. v1.3 publication evidence: `docs/evidence/V1_3_PUBLICATION_20260917.md`. v1.3 production deployment evidence: `docs/evidence/V1_3_PRODUCTION_DEPLOYMENT_20260917.md`. Canonical technical baseline is `1.3.0` at `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e` with exact-main V1 + X6 release-path PASS and deterministic package SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`. Published/GitHub-Release release and verified production deployment are now both `v1.3.0`; provider L5 remains unclaimed.
 

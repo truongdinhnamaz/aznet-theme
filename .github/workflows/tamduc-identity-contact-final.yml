@@ -45,7 +45,7 @@ jobs:
       - name: Run final public identity/contact L4
         if: success()
         env:
-          TAMDUC_BASE_URL: https://tamduchanoi.aznet.vn
+          TAMDUC_BASE_URL: https://lstamduchn.vn
           TAMDUC_STATE_DIR: /tmp/tamduc-identity-contact-final
         run: node tests/browser/tamduc-identity-contact-final-l4.mjs
       - name: Upload final L4 evidence

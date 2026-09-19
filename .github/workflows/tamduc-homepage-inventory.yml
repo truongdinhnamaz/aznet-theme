@@ -51,7 +51,7 @@ jobs:
 
       - name: Run authenticated read-only inventory
         env:
-          TAMDUC_BASE_URL: https://tamduchanoi.aznet.vn
+          TAMDUC_BASE_URL: https://lstamduchn.vn
           PILOT_WP_USER: ${{ secrets.PILOT_WP_USER }}
           PILOT_WP_PASSWORD: ${{ secrets.PILOT_WP_PASSWORD }}
           TAMDUC_STATE_DIR: /tmp/tamduc-homepage-inventory

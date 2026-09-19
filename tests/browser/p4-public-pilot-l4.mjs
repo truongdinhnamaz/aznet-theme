@@ -3,7 +3,7 @@ import path from 'node:path';
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 
-const P4_BASE_URL = ( process.env.P4_BASE_URL || 'https://tamduchanoi.aznet.vn' ).replace( /\/$/, '' );
+const P4_BASE_URL = ( process.env.P4_BASE_URL || 'https://lstamduchn.vn' ).replace( /\/$/, '' );
 const P4_STATE_DIR = process.env.P4_STATE_DIR || '/tmp/p4-public-pilot';
 const viewports = [
     { name: 'desktop-1440', width: 1440, height: 1000 },

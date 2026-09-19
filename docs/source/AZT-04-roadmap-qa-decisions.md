@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.73
+**Version:** v0.74
 **Status:** Working Source  
 **Date:** 19/09/2026
 
@@ -39,7 +39,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P4-C | Standalone Core independence | PASS / MERGED | D-027 source + implementation merged through PR #63/#64; zero-plugin L1-L4, exact-package and exact-main gates PASS; optional integrations remain additive |
 | P5 | Publication & production deployment | PASS | Tag `v1.1.0` + GitHub Release publication and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
 | X | v1.2 WordPress Experience Completion | PUBLICATION + PRODUCTION DEPLOYMENT PASS | X1-X5 retained; PR #87 technical integration and exact-main V1 + X6 L1-L4/L6 PASS; owner-approved `v1.2.0` publication PASS; owner-approved production deployment run `35135759389` plus fresh independent read-only run `35136876330` PASS; no provider L5 expansion |
-| Y | v1.3 Client Delivery System | v1.3.10 PUBLICATION PASS / v1.3.10 PRODUCTION DEPLOYMENT GATED | Current public release is owner-approved `v1.3.10` from exact verified implementation `39df23c...`, publication run `35413516574`, release `391877350`, asset SHA-256 `5ff6c486...`; currently verified production deployment remains historical `v1.3.0` on `tamduchanoi.aznet.vn` until a separate v1.3.10 deployment gate; provider L5 remains separate |
+| Y | v1.3 Client Delivery System | v1.3.10 PUBLICATION PASS / REPLACEMENT-PILOT DEPLOYMENT GATED | Current public release is owner-approved `v1.3.10` from exact verified implementation `39df23c...`, publication run `35413516574`, release `391877350`, asset SHA-256 `5ff6c486...`; the last verified production deployment is historical `v1.3.0` on retired pilot `tamduchanoi.aznet.vn`. Deployment/current-state on replacement pilot `lstamduchn.vn` is UNKNOWN and requires a separate explicit deployment gate plus fresh verification; provider L5 remains separate |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
 Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` points to `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`. Publication source closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72. P5 technical run `35051428372` verified final package bytes, publication run `35052694111` published the matching tag/Release, and production read-only run `35054176392` closed deployment at the tested Theme-owned/site-operations scope.
@@ -62,7 +62,12 @@ P3 merged through PR #52 from final verified head `d78091900451176c3815b23d14850
 
 A GitHub release check on 08/09/2026 historically established that publication had not yet occurred at that checkpoint. That historical `PUBLICATION_PENDING` state was superseded on 16/09/2026 by owner-approved publication run `35052694111`; final production deployment was then separately owner-approved and verified by read-only run `35054176392`.
 
-## 2.1 Current checkpoint — 18/09/2026
+## 2.1 Current checkpoint — 19/09/2026
+
+- **Operational pilot supersession:** `https://lstamduchn.vn/` is now the sole active AZnet Theme pilot target under D-030. `tamduchanoi.aznet.vn` is retired from active pilot use. All evidence produced against the retired pilot remains valid only as historical evidence for that exact site/time/version and is not inherited by the replacement pilot.
+- **Replacement-pilot evidence state:** runtime, authenticated System Health, responsive/browser/a11y, optional-provider integration and deployment state on `lstamduchn.vn` are currently **UNKNOWN** until fresh checks run against that host. Existing support-floor and canonical-package evidence remains unaffected because it is not site-specific.
+
+### Historical checkpoint — 18/09/2026
 
 - Canonical GitHub `main` is `a66ef1639c299a06e62e9797aa2f44fe4e26cd8d` after owner-approved corrective PR #133. Theme metadata is `1.3.3`; the tree explicitly inherits the approved v1.3.2 Law 01 unified-heading work plus PR #129-#131 closure. Final-head Y5/X6 and fresh exact-main V1/X6 all PASS; deterministic package SHA-256 is `172a98dc00a52228fbb44a6ad24b79d568b7b543faa484c1ded59511b33e35d7`. Published GitHub Release and previously verified production deployment remain `v1.3.0` until separately changed.
 - ConvertFlow F9/provider L5 is PASS only at the exact certified compatibility boundary in `docs/evidence/F9_PROVIDER_L5_SOURCE_SYNC_20260918.md`. This closes the Theme-side optional-provider certification question for that tested producer/consumer path; it does not release/deploy ConvertFlow or change the released ConvertFlow baseline.
@@ -342,6 +347,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-027** | **AZnet Theme Core has zero mandatory third-party runtime dependency. WordPress + Theme alone must complete install/activate/setup/provision/author/render on the support floor; optional providers are additive capability tracks, provider absence is not Core failure, and the exact final package must pass a zero-plugin standalone release path before Core Ready/publication. External development/QA tooling is allowed only outside deployed runtime.** | **Accepted** |
 | **D-028** | **v1.2 WordPress Experience Completion is a WordPress-Core-only Theme milestone using surface modules + shared primitives. No new provider integration is opened; Comments, Search/404/empty states and Media/gallery/embed receive deep polish; metadata remains 1.1.0 until X6 final-candidate promotion.** | **Accepted** |
 | **D-029** | **v1.3 Client Delivery System prioritizes fast, professional client handoff through WordPress-native inner Page presentation, five portable professional Page kits, bounded Footer presets, and a generic confirmed professional-services provisioning blueprint. It preserves Classic Editor policy for native Post/Page, the single `aznet_theme_settings` store, zero mandatory provider runtime dependency, and keeps metadata at 1.2.0 until a separately approved Y5 promotion gate.** | **Accepted** |
+| **D-030** | **The operational AZnet Theme pilot is replaced by `https://lstamduchn.vn/`. `tamduchanoi.aznet.vn` is retired as an active QA/deployment target; its prior runs remain historical evidence only and MUST NOT be transferred as PASS for the replacement pilot. Fresh runtime/browser/a11y/integration evidence is required on `lstamduchn.vn` before site-specific claims, and production deployment remains a separate explicit owner gate.** | **Accepted** |
 
 ## 10A. v1.3 Client Delivery System
 
