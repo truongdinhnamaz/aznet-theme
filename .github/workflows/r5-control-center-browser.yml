@@ -103,7 +103,9 @@ jobs:
           MENU_ID=$(wp menu create 'R5 Primary' --porcelain --path=/tmp/wp --allow-root)
           wp menu item add-custom "$MENU_ID" 'R5 Home' 'http://127.0.0.1:8080/' --path=/tmp/wp --allow-root >/dev/null
           wp menu location assign "$MENU_ID" primary --path=/tmp/wp --allow-root
-          wp post create --post_type=page --post_status=publish --post_title='R5 Continuity Page' --post_name='r5-continuity' --post_content='<p>R5 continuity sentinel</p>' --path=/tmp/wp --allow-root >/dev/null
+          FRONT_ID=$(wp post create --post_type=page --post_status=publish --post_title='R5 Continuity Page' --post_name='r5-continuity' --post_content='<p>R5 continuity sentinel</p>' --porcelain --path=/tmp/wp --allow-root)
+          wp option update show_on_front page --path=/tmp/wp --allow-root
+          wp option update page_on_front "$FRONT_ID" --path=/tmp/wp --allow-root
           wp option add r5_external_provider_sentinel keep --path=/tmp/wp --allow-root
           wp eval "set_theme_mod( 'aznet_theme_settings', [ 'schema_version' => 1, 'visual_preset' => 'editorial', 'header_preset' => 'compact', 'header_sticky' => 'sticky-compact', 'header_search' => false, 'header_utilities' => true, 'woo_catalog_preset' => 'editorial', 'woo_product_card_density' => 'comfortable', 'woo_product_preset' => 'story' ] );" --path=/tmp/wp --allow-root
           wp eval "if ( ! has_custom_logo() || ! has_nav_menu( 'primary' ) ) { exit(1); }" --path=/tmp/wp --allow-root
