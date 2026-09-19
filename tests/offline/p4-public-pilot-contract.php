@@ -61,13 +61,19 @@ $required_workflow_tokens = [
     'work/p4-public-pilot-qa',
     'tests/offline/p4-public-pilot-contract.php',
     'tests/browser/p4-public-pilot-l4.mjs',
-    'https://tamduchanoi.aznet.vn',
+    'https://lstamduchn.vn',
     'actions/upload-artifact@v4',
 ];
 
 foreach ( $required_workflow_tokens as $token ) {
     if ( false === strpos( $workflow, $token ) ) {
         $fail( "workflow must contain {$token}" );
+    }
+}
+
+foreach ( [ $browser, $workflow ] as $active_pilot_target ) {
+    if ( false !== strpos( $active_pilot_target, 'tamduchanoi.aznet.vn' ) ) {
+        $fail( 'retired pilot target must not remain in active P4 pilot QA configuration' );
     }
 }
 
