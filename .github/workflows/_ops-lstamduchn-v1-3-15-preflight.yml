@@ -1,0 +1,49 @@
+name: OPS lstamduchn v1.3.15 Preflight
+
+on:
+  push:
+    branches:
+      - ops/deploy-v1.3.15-lstamduchn
+    paths:
+      - 'tests/browser/lstamduchn-v1-3-15-preflight.mjs'
+      - '.github/workflows/_ops-lstamduchn-v1-3-15-preflight.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Check preflight harness syntax
+        run: node --check tests/browser/lstamduchn-v1-3-15-preflight.mjs
+
+      - name: Run authenticated read-only preflight
+        env:
+          LSTAMDUCHN_BASE_URL: https://lstamduchn.vn
+          PILOT_WP_USER: ${{ secrets.PILOT_WP_USER }}
+          PILOT_WP_PASSWORD: ${{ secrets.PILOT_WP_PASSWORD }}
+          LSTAMDUCHN_STATE_DIR: /tmp/lstamduchn-v1-3-15-preflight
+        run: node tests/browser/lstamduchn-v1-3-15-preflight.mjs
+
+      - name: Upload preflight evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lstamduchn-v1-3-15-preflight
+          path: /tmp/lstamduchn-v1-3-15-preflight
+          if-no-files-found: error
