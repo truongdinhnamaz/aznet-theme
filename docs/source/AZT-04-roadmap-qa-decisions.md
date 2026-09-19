@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.68
+**Version:** v0.69
 **Status:** Working Source  
 **Date:** 19/09/2026
 
@@ -499,6 +499,18 @@ Deterministic package `aznet-theme-1.3.9.zip`: 145 production files, 108 package
 
 This is Theme presentation only. RootProfile authoritative Team remains BLOCKED under issue #112. Tag/GitHub Release and production deployment remain separate explicit approval gates.
 
+### Law 01 Hero typography/transition polish + AZnet Theme 1.3.10 candidate — 19/09/2026
+
+The owner approved a bounded visual polish after the seamless-Hero correction: retain the full-width section and shared-shell geometry, but improve the title's editorial rhythm and soften the cream-to-image transition so the image no longer reads as a hard pasted rectangle.
+
+Visual RED `f95fba80020db53c126c41fe52f6fa8020c516eb` failed the intended title-polish assertion. Minimal production change tightened title measure/line-height/tracking, added a non-interactive cream-to-transparent transition overlay at the image edge and a subtle image crop. Browser geometry/no-overflow checks remain retained.
+
+Because 1.3.9 had already been packaged from the still-unmerged candidate before this extra polish, it is superseded and not reused. The current package is 1.3.10, with canonical promotion guarded as `1.3.8 -> 1.3.10`.
+
+Exact production head `a4c3621ec6d651b7e4c4d1085a2b900f8c94454b` completed **22/22 triggered workflows SUCCESS, 0 failure**. Deterministic package `aznet-theme-1.3.10.zip`: 145 production files, 108 packaged PHP lint PASS, SHA-256 `9eb8a3ad1c24b7e75a695199de3e45bf3e196bebd7fff8774f7390969283c92d`. Y5 run `35410299118`; artifact `10574586211`; digest `sha256:dadb066567c2b6c6d3c1f28f338a22441903fed03a55ad47433ac2d164f58132`.
+
+This remains Theme presentation only. RootProfile authoritative Team remains BLOCKED under issue #112. Tag/GitHub Release and production deployment remain separate explicit approval gates.
+
 ## 14. Exact next
 
-**NEXT — canonical merge of PR #150 is the next approval gate for the verified 1.3.9 seamless-Hero client-delivery candidate. Do not tag, publish a GitHub Release or deploy production without separate explicit approval.**
+**NEXT — canonical merge of PR #150 is the next approval gate for the verified 1.3.10 polished-Hero client-delivery candidate. Do not tag, publish a GitHub Release or deploy production without separate explicit approval.**
