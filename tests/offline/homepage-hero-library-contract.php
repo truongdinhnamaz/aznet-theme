@@ -52,6 +52,11 @@ assert(str_contains($bootstrap, "admin_post_aznet_theme_apply_homepage_hero"), '
 assert(str_contains($admin, 'Hero WordPress đang soạn'), 'Control Center must expose draft-first Hero state.');
 assert(str_contains($admin, 'website hiện tại chưa đổi cho đến khi Hero mới được xuất bản'), 'Draft-first Hero UX must preserve current public output.');
 
+assert(str_contains($settings, "'schema_version'                => 3"), 'D-030 additive Hero settings must retain Theme settings schema v3.');
+foreach (['wp_update_post(', 'wp_delete_post(', 'wp_trash_post('] as $forbidden_mutation) {
+    assert(! str_contains($hero_action, $forbidden_mutation), "Hero variant action must not rewrite/delete WordPress Hero content: {$forbidden_mutation}");
+}
+
 foreach ([
     "setting( 'homepage_hero_block', 0 )",
     "setting( 'homepage_hero_variant', 'split' )",
