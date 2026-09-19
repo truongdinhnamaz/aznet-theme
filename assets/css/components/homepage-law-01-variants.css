@@ -68,8 +68,63 @@
 .aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__search { border-color: rgba(143, 17, 27, .2); background: #fff; }
 .aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__search input[type="search"] { color: #2c241f; }
 .aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__search input[type="search"]::placeholder { color: #6f675f; }
-.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__search button { border-left-color: rgba(143, 17, 27, .2); color: var(--law01-brand-red, #8f111b); }
-.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__utility-menu a { border-color: rgba(143, 17, 27, .22); background: #fff; color: var(--law01-brand-red, #8f111b); }
+.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__search button {
+    position: relative;
+    width: 2.4rem;
+    min-width: 2.4rem;
+    padding: 0;
+    border-left-color: rgba(143, 17, 27, .2);
+    color: var(--law01-brand-red, #8f111b);
+    font-size: 0;
+}
+.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__search button::before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: .72rem;
+    height: .72rem;
+    border: 1.6px solid currentColor;
+    border-radius: 50%;
+    content: '';
+    transform: translate(-62%, -62%);
+}
+.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__search button::after {
+    position: absolute;
+    top: 55%;
+    left: 56%;
+    width: .45rem;
+    height: 1.6px;
+    background: currentColor;
+    content: '';
+    transform: rotate(45deg);
+    transform-origin: left center;
+}
+.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__utility-menu {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__utility-menu a {
+    display: inline-flex;
+    min-height: 2.5rem;
+    align-items: center;
+    justify-content: center;
+    padding: .6rem 1rem;
+    border: 1px solid var(--law01-client-burgundy);
+    border-radius: .3rem;
+    background: var(--law01-client-burgundy);
+    color: #fff;
+    font-size: var(--aznet-theme-text-small);
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__utility-menu a:hover,
+.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__utility-menu a:focus-visible {
+    background: var(--law01-client-burgundy-deep);
+    color: #fff;
+}
 
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero {
     min-height: clamp(31rem, 64vh, 44rem);
@@ -314,7 +369,7 @@
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card__media,
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card__image { display: block; width: 100%; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card__image { aspect-ratio: 3 / 2; height: auto; object-fit: cover; }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card__body { display: flex; flex: 1 1 auto; flex-direction: column; padding: 1.15rem 1.2rem 1.35rem; }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card__body { display: flex; min-height: 100%; flex: 1 1 auto; flex-direction: column; padding: 1.15rem 1.2rem 1.35rem; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card__meta { display: flex; align-items: center; justify-content: space-between; gap: .75rem; color: #76685f; font-size: var(--aznet-theme-text-meta); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card__meta span { padding: .22rem .5rem; border-radius: 999px; background: #f5ead2; color: #674812; font-weight: var(--aznet-theme-font-weight-bold); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card h3 { margin-top: 1rem; font-size: var(--law01-type-article-title); line-height: 1.35; }
