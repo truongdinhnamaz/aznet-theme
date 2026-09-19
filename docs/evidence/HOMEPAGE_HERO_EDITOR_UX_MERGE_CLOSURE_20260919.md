@@ -31,13 +31,15 @@ The production/test content had already been verified on reconciled head `82073e
 
 Fresh `V1 Exact Main Verification` run `35412829723` was emitted for exact merge SHA `39df23c3385118888e262c27a2331de34dda430d`.
 
-At this checkpoint:
-- static/core job: **SUCCESS**;
-- clean runtime/browser job: **IN PROGRESS**.
+The full workflow completed **SUCCESS** on exact merge SHA `39df23c3385118888e262c27a2331de34dda430d`.
 
-No exact-main PASS is claimed until the complete workflow reaches SUCCESS.
+Artifacts:
+- static/contracts: `10575125302`, digest `sha256:0fae4559000ac195e6f58a5fd50b1070b232c74bd472dd90c36d6abb0a15cb92`;
+- clean runtime/browser: `10575290283`, digest `sha256:a2609a4ffee6f7c538402a4850103d5c14f6baa51fe6dceea4f61030ecba9e89`.
 
-No separate X6 push run was observed for this merge at this checkpoint. Prior PR final-head regression evidence remains retained, but is not relabeled as a fresh exact-main X6 run.
+Fresh exact-main V1 is therefore **PASS** at its defined L1-L4 core verification scope.
+
+No separate X6 push run was observed for this merge. Prior PR final-head regression evidence remains retained, but is not relabeled as a fresh exact-main X6 run.
 
 ## Release boundary
 
@@ -47,4 +49,4 @@ Published GitHub Release and verified production deployment remain historical `v
 
 RootProfile authoritative Team projection remains separately blocked under issue #112.
 
-**NEXT:** wait for exact-main run `35412829723` to complete. If SUCCESS, update this closure and source documents to exact-main PASS. Publication/deployment remain separate explicit approval gates.
+**NEXT:** merge the source-only PR carrying this closure after explicit owner approval. No tag, GitHub Release or production deployment is authorized by this checkpoint.
