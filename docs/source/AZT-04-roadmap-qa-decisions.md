@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.74
+**Version:** v0.75
 **Status:** Working Source  
 **Date:** 19/09/2026
 
@@ -22,6 +22,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | W | WooCommerce presentation shell | PASS / retained | W1-W9 + R4; WooCommerce retains commerce truth |
 | E | RootProfile Profile / Contact | OPTIONAL COMPAT ACTIVE / TEAM PROJECTION BLOCKED | E0-E4/E5-B retained PASS; E5-C remains external-blocked and E5-D takeover locked. Pilot evidence confirms no public/versioned organization-team projection and no organization profile on the target site; issue #112 records the blocker. Non-blocking for core under D-016. |
 | F | Homepage | CORE PASS / F9 PROVIDER L5 PASS | Native Theme Homepage remains core PASS; F8 L3-L4 evidence is retained. ConvertFlow F9-A..E plus retained C1 are PASS at the exact Theme `v1.3.0` reference-producer / Core P5.244 + Pro P5.164 scope recorded in `F9_PROVIDER_L5_SOURCE_SYNC_20260918.md`. Law 01 live presentation/rerun QA is PASS at the tested site scope; RootProfile-backed Team projection remains separately external-blocked under issue #112 and does not reopen core Homepage PASS. |
+| D-030 | Homepage Hero Library | PASS / MERGED | PR #156 merged the WordPress-owned synced Hero + Theme-owned variant library to `main@01ddbff1843dfd8a0e1cc276be34144f35aeba35`; 37/37 final-head workflows and fresh exact-main V1 run `35422599658` PASS. Theme metadata is `1.3.11`; publication/deployment remain separate gates. |
 | G | Core v1.0 Cleanup / Release | TECHNICAL PASS | G0-G8 production/release-candidate closure merged; publication is a separate live GitHub state |
 | R0 | v1.0 -> v1.1 Source Reconciliation | PASS | Source-only reconciliation merged through PR #36; v1.1 product/architecture ratified |
 | R1 | Design System 2.0 | PASS | PR #37 merged; settings/tokens + Default/Editorial/Commerce outcomes + editor/frontend parity L1-L4 |
@@ -514,7 +515,7 @@ This remains Theme presentation only. RootProfile authoritative Team remains BLO
 
 ## 14. Exact next
 
-**NEXT — D-030 is owner-approved. Implement the Homepage Hero Library as a bounded Theme-owned presentation slice on a new 1.3.11 candidate: RED must prove the current Page-required UX, then GREEN must add a WordPress-native synced Hero source, variant library and legacy Page fallback without a Theme copy store. Production deployment remains separate; RootProfile Team remains externally blocked at issue #112.**
+**NEXT — D-030 is PASS / MERGED and fresh exact-main V1 verification is PASS. No further D-030 implementation work is open. A `v1.3.11` Git tag/GitHub Release is the next possible release action only after separate owner approval; production deployment remains another independent gate. RootProfile Team remains externally blocked at issue #112.**
 
 
 ### Canonical 1.3.10 merge and Homepage Hero editing UX candidate — 19/09/2026
@@ -577,3 +578,12 @@ Accepted boundary:
 - No proprietary block type, page-builder schema, provider storage read or domain ownership transfer is introduced.
 
 Implementation is a new post-release candidate and must not mutate the already-published v1.3.10 release identity. The implementation metadata target is 1.3.11 unless a later release gate explicitly changes it.
+
+
+### D-030 canonical merge closure — 19/09/2026
+
+Owner-approved PR #156 merged final head `c8a14556706a49bb380669b72bffd5b6f0cd98d5` to `main@01ddbff1843dfd8a0e1cc276be34144f35aeba35` with zero changed files between final head and merge commit. The final head completed 37/37 triggered workflows SUCCESS. Fresh `V1 Exact Main Verification` run `35422599658` completed SUCCESS on the exact merge SHA.
+
+The accepted D-030 ownership model is preserved: WordPress owns synced Hero content/media; Theme owns typed reference, visual variant and rendering composition only. Draft-first initialization, published-block precedence, variant reuse without content rewrite and legacy Page/Site fallback are retained. The known WordPress-core `WP_Query::rewind_posts()` warning remains separately classified rather than converted into a blanket clean-log claim.
+
+Y5 run `35422400222` produced deterministic candidate `aznet-theme-1.3.11.zip`, 147 production files, 110 packaged PHP lint PASS, SHA-256 `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`. This closes D-030 technical implementation/merge only. Tag/GitHub Release and production deployment remain separate owner gates. Evidence: `docs/evidence/HOMEPAGE_HERO_LIBRARY_D030_MERGE_CLOSURE_20260919.md`.
