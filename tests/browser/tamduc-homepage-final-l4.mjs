@@ -3,7 +3,7 @@ import path from 'node:path';
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 
-const baseUrl = (process.env.TAMDUC_BASE_URL || 'https://tamduchanoi.aznet.vn').replace(/\/$/, '');
+const baseUrl = (process.env.TAMDUC_BASE_URL || 'https://lstamduchn.vn').replace(/\/$/, '');
 const stateDir = process.env.TAMDUC_STATE_DIR || '/tmp/tamduc-homepage-final';
 const screenshots = path.join(stateDir, 'screenshots');
 
