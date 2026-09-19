@@ -24,7 +24,16 @@ function homepage_law01_variant(): string {
 
 /** Whether Theme-owned Homepage composition is active for this request. */
 function homepage_composer_active(): bool {
-    return function_exists( 'is_front_page' ) && is_front_page() && 'law-01' === homepage_preset();
+    if ( ! function_exists( 'is_front_page' ) || ! is_front_page() || 'law-01' !== homepage_preset() ) {
+        return false;
+    }
+
+    if ( 'page' !== get_option( 'show_on_front' ) ) {
+        return false;
+    }
+
+    $front_id = (int) get_option( 'page_on_front' );
+    return $front_id > 0 && null !== homepage_page_reference( $front_id );
 }
 
 /** Reset request-local displayed Post IDs. */
