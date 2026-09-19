@@ -87,6 +87,9 @@ assert(! str_contains($pattern_source, '<!-- wp:image'), 'Hero scaffold must not
 assert(str_contains($pattern_source, 'Chèn block Ảnh vào cột này để chọn ảnh Hero.'), 'Hero scaffold must explain where to insert the WordPress Core Image block.');
 
 
+assert(1 === preg_match('/homepage-hero-content__eyebrow\\s*\\{[^}]*color:\\s*var\\(--law01-gold-text,\\s*#8a632b\\);/s', $css), 'Hero Library eyebrow must use an accessible dark-gold text token on the light Hero surface.');
+assert(1 === preg_match('/law01-hero--inverse \\.aznet-theme-homepage-hero-content__eyebrow\\s*\\{[^}]*color:\\s*var\\(--law01-client-cream,\\s*#fffaf1\\);/s', $css), 'Inverse Hero Library eyebrow must use a light accessible color on the dark surface.');
+
 foreach ([
     'aznet-theme-law01-hero--split',
     'aznet-theme-law01-hero--centered',
