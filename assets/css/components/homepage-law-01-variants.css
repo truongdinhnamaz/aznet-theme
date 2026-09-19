@@ -27,6 +27,8 @@
 
 
 .aznet-theme-site-header--law01-burgundy-gold {
+    --law01-client-burgundy: #7a0e18;
+    --law01-client-burgundy-deep: #560912;
     --aznet-theme-header-muted: #6f675f;
     --aznet-theme-header-border: rgba(143, 17, 27, .14);
     background: rgba(255, 253, 248, .98);
