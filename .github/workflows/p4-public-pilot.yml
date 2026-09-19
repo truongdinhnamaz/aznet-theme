@@ -53,7 +53,7 @@ jobs:
 
       - name: Run P4 public pilot browser matrix
         env:
-          P4_BASE_URL: https://tamduchanoi.aznet.vn
+          P4_BASE_URL: https://lstamduchn.vn
           P4_STATE_DIR: /tmp/p4-public-pilot
         run: node tests/browser/p4-public-pilot-l4.mjs
 
