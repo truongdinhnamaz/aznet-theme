@@ -1,13 +1,13 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.67
+**Version:** v0.68
 **Status:** Working Execution Map / derived  
 **Date:** 19/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** live `main` is `01ddbff1843dfd8a0e1cc276be34144f35aeba35` after owner-approved PR #156 D-030 merge. Final head `c8a14556706a49bb380669b72bffd5b6f0cd98d5` completed 37/37 triggered workflows SUCCESS, has zero changed files to the merge commit, and fresh exact-main V1 run `35422599658` is SUCCESS. Canonical Theme metadata is `1.3.11`. Published GitHub Release remains `v1.3.10` (asset SHA-256 `5ff6c4862839dcdb6dfbbb77a71cb8bd87259b83cfbf308aa6b04279396bd572`); verified production remains historical `v1.3.0`; RootProfile Team remains blocked under issue #112.
+> **Canonical-main checkpoint:** publication-time live `main` is `f2f20e1e67407a0b259e90cbf7063f94d887bada`; exact D-030 implementation remains `01ddbff1843dfd8a0e1cc276be34144f35aeba35`, final head `c8a14556706a49bb380669b72bffd5b6f0cd98d5` completed 37/37 workflows SUCCESS and exact-main V1 run `35422599658` is SUCCESS. Canonical Theme metadata and current published GitHub Release are both `1.3.11`; published asset SHA-256 is `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`. Verified production remains historical `v1.3.0`; RootProfile Team remains blocked under issue #112.
 
 **Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS`. Current v1.3 state: `PUBLICATION + PRODUCTION DEPLOYMENT PASS`; published/GitHub-Release release and verified production deployment are both `v1.3.0` at their respective verified scopes.
 
@@ -454,7 +454,7 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 16. Exact next
 
-**NEXT — D-030 implementation is PASS / MERGED and exact-main V1 is PASS. Merge this source/evidence closure PR after owner approval. After source sync, `v1.3.11` publication is the next possible release gate only if separately approved; production deployment remains independently gated.**
+**NEXT — `v1.3.11` publication is PASS. Merge this publication source/evidence closure PR after owner approval. After source sync, production deployment of the exact `v1.3.11` release asset is the next possible release-path action only after separate owner approval and target-site/rollback revalidation.**
 
 
 ## 15.9 Homepage Hero editing UX follow-up — 19/09/2026
@@ -526,3 +526,15 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - Fresh exact-main V1 run `35422599658`: SUCCESS; static artifact `10577094776`, runtime/browser artifact `10578340381`.
 - Deterministic 1.3.11 package from Y5 run `35422400222`: 147 production files, 110 packaged PHP lint PASS, SHA-256 `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`.
 - D-030 state: **PASS / MERGED**. Tag/GitHub Release and production deployment remain separate approval gates.
+
+
+## 15.14 v1.3.11 publication closure — 19/09/2026
+
+- Owner-approved publication target: exact implementation `01ddbff1843dfd8a0e1cc276be34144f35aeba35`.
+- Publication run `35423516185`: SUCCESS; created annotated tag `v1.3.11`, GitHub Release `391924224`, asset `574135564`.
+- Package: `aznet-theme-1.3.11.zip`, 147 production files, 110/110 packaged PHP lint PASS, SHA-256 `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`.
+- Release-notes repair run `35424304502`: SUCCESS; corrected shell-rendered note fields idempotently, with tag/package identity unchanged.
+- Public readback: annotated tag object `87122bfc4ffa12d8e9781c57908328c434a3977c` -> implementation commit; Release non-draft/non-prerelease; asset digest matches package SHA-256.
+- Repair evidence artifact `10579042492`, digest `sha256:93e41bea89dee8be2f7be80f8338aac45016acb7457fc57565ecd7f38b220ac9`.
+- Temporary publication helper cleanup `b585dfbf03d559a6e19b09ca756774d49b5fd157`; ops branch zero net changed files against publication-time main.
+- State: **v1.3.11 PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED**.
