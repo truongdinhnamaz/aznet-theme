@@ -30,6 +30,8 @@ foreach ([
     'render_homepage_hero_library',
     'Thư viện Hero',
     'Dùng mẫu này',
+    'Chọn mẫu Hero',
+    '<fieldset class="aznet-theme-homepage-hero-library__fieldset">',
     'Sửa nội dung Hero',
     'aznet_theme_apply_homepage_hero',
 ] as $needle) {
