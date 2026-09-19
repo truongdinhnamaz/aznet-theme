@@ -1,15 +1,15 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.71
+**Version:** v0.72
 **Status:** Working Execution Map / derived  
 **Date:** 20/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** exact verified implementation remains `6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3` after owner-approved PR #167; source/evidence closure is merged through `main@79fcf11f043129a4ce82629a77fc1267802b2bba`. Theme metadata is `1.3.15`; exact-main V1 `35473959243` and X6 `35473959238` are SUCCESS. Owner-approved publication run `35474494290` published annotated `v1.3.15` and GitHub Release `392243619`; public package SHA-256 is `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`, 148 production files, 111 packaged PHP files. Production deployment remains separately gated. RootProfile Team remains blocked under open issue #112.
+> **Canonical-main checkpoint:** exact verified implementation remains `6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3`; publication source/evidence closure is merged through `main@2d2546b25021a90cb8b7bf4aa909673f1ff4cf7e`. Theme metadata is `1.3.15`; exact-main V1 `35473959243` and X6 `35473959238` are SUCCESS. Owner-approved publication run `35474494290` published annotated `v1.3.15` and GitHub Release `392243619`; public package SHA-256 is `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`. Owner-approved production deployment to `lstamduchn.vn` is currently BLOCKED_EXTERNAL_ACCESS before mutation: direct CI HTTPS stalls at TLS ClientHello on all observed IPv4 backends and WPVibe fallback is temporarily rate-limited. RootProfile Team remains separately blocked under issue #112.
 
-**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS -> corrective releases through v1.3.12 publication PASS -> Law 01 PR #166/#167 -> v1.3.15 exact-main technical closure PASS -> owner-approved v1.3.15 publication PASS`. Current release boundary: `v1.3.15 TECHNICAL + PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED`.
+**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS -> corrective releases through v1.3.12 publication PASS -> Law 01 PR #166/#167 -> v1.3.15 exact-main technical closure PASS -> owner-approved v1.3.15 publication PASS`. Current release boundary: `v1.3.15 TECHNICAL + PUBLICATION PASS / PRODUCTION DEPLOYMENT OWNER-APPROVED BUT BLOCKED_EXTERNAL_ACCESS`.
 
 ## 1. Current state
 
@@ -66,7 +66,7 @@ P3 final verified head `d78091900451176c3815b23d1485036e784bdde9` merged through
 - RootProfile Team/member discovery remains BLOCKED_EXTERNAL_CONTRACT under open issue #112. Theme must not self-unblock through private storage, WordPress-user enumeration or heuristic identity inference.
 - No production deployment/live-site mutation is claimed. Fresh post-publication read-only verification on `lstamduchn.vn` is UNKNOWN because the external WPVibe daily fair-use cap was reached; Theme `1.3.10` remains only the last verified live state.
 
-**Exact Next:** owner decision on production deployment of the exact published `v1.3.15` asset to `lstamduchn.vn`. Deployment is a hard gate and must preserve rollback/continuity. If deployment is not approved or current site access remains unavailable, preserve this publication checkpoint; do not infer live `1.3.15`.
+**Exact Next:** restore one secure authenticated path to `lstamduchn.vn`, then rerun the read-only preflight. Preferred safe paths are: (a) HTTPS termination accepts the deployment runner path, or (b) the existing WPVibe authenticated path becomes available again. Only after the current active Theme version and baseline are freshly verified may the already owner-approved `v1.3.15` mutation proceed with an exact rollback package and post-deploy verification. Do not infer live `1.3.15`.
 
 ## 2. Slice discipline
 
@@ -528,6 +528,19 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - Deterministic 1.3.11 package from Y5 run `35422400222`: 147 production files, 110 packaged PHP lint PASS, SHA-256 `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`.
 - D-030 state: **PASS / MERGED**. Tag/GitHub Release and production deployment remain separate approval gates.
 
+
+## 15.18 v1.3.15 lstamduchn.vn deployment preflight blocked — 20/09/2026
+
+- Owner approval for production deployment: received.
+- Production mutation: **none**.
+- Ops branch: `ops/deploy-v1.3.15-lstamduchn`.
+- Initial read-only preflight `35474904344`: failed before authentication at HTTPS navigation.
+- Full backend transport diagnosis `35475064743`: all three observed IPv4 backends accept TCP/443 but stall after TLS ClientHello; HTTP/80 redirects normally to HTTPS.
+- TLS protocol isolation `35475224372`: TLS 1.2 and TLS 1.3 both time out on all three backends.
+- WPVibe fallback: temporarily unavailable due rolling daily usage cap.
+- Fresh live Theme version: UNKNOWN; `1.3.10` is last verified only.
+- State: **v1.3.15 TECHNICAL PASS / PUBLICATION PASS / PRODUCTION DEPLOYMENT BLOCKED_EXTERNAL_ACCESS**.
+- Evidence: `docs/evidence/V1_3_15_LSTAMDUCHN_DEPLOYMENT_PREFLIGHT_BLOCKED_20260920.md`.
 
 ## 15.17 v1.3.15 publication closure — 20/09/2026
 
