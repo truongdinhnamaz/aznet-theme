@@ -11,9 +11,16 @@ $about_summary = $about instanceof \WP_Post ? trim( (string) get_the_excerpt( $a
 $about_image = $about instanceof \WP_Post && has_post_thumbnail( $about ) ? get_the_post_thumbnail( $about, 'large', [ 'class' => 'aznet-theme-law01-profile__about-image' ] ) : '';
 $team_summary = $team instanceof \WP_Post ? trim( (string) get_the_excerpt( $team ) ) : '';
 $members = $team instanceof \WP_Post ? homepage_direct_published_children( (int) $team->ID, 4 ) : [];
+$has_members = [] !== $members;
+if ( ! $about instanceof \WP_Post && ! $has_members ) { return; }
+
+$container_classes = 'aznet-theme-law01-container aznet-theme-law01-profile__container';
+if ( ! $has_members ) {
+    $container_classes .= ' aznet-theme-law01-profile__container--about-only';
+}
 ?>
 <section class="aznet-theme-law01-section aznet-theme-law01-profile" aria-label="<?php esc_attr_e( 'Giới thiệu và đội ngũ', 'aznet-theme' ); ?>">
-<div class="aznet-theme-law01-container">
+<div class="<?php echo esc_attr( $container_classes ); ?>">
     <?php if ( $about instanceof \WP_Post ) : ?>
     <div class="aznet-theme-law01-profile__about-grid">
         <div class="aznet-theme-law01-profile__about-copy aznet-theme-law01-editorial">
@@ -26,7 +33,7 @@ $members = $team instanceof \WP_Post ? homepage_direct_published_children( (int)
     </div>
     <?php endif; ?>
 
-    <?php if ( $team instanceof \WP_Post ) : ?>
+    <?php if ( $team instanceof \WP_Post && $has_members ) : ?>
     <div class="aznet-theme-law01-profile__team-band aznet-theme-law01-team">
         <div class="aznet-theme-law01-section-heading">
             <div>
