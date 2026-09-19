@@ -200,10 +200,11 @@ async function verifyHomepageHeroEditingBridge(page, viewportName) {
 
   await libraryForm.locator('input[name="homepage_hero_variant"][value="inverse"]').check();
   await Promise.all([
-    page.waitForURL(/post\.php\?post=\d+&action=edit/, { timeout: 20000 }),
+    page.waitForURL(/admin\.php\?page=aznet-theme&section=homepage&hero=draft/, { timeout: 20000 }),
     libraryForm.getByRole('button', { name: 'Dùng mẫu này' }).click(),
   ]);
-  const firstEditUrl = page.url();
+  const firstEditUrl = await page.getByRole('link', { name: 'Tiếp tục sửa Hero' }).getAttribute('href');
+  if (!firstEditUrl || !/post\.php\?post=\d+&action=edit/.test(firstEditUrl)) throw new Error('Draft Hero native edit link missing');
 
   await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded' });
   if (await page.locator('.aznet-theme-law01-hero--library').count()) throw new Error('Draft Hero must not replace the current public Hero before publication');
@@ -220,11 +221,11 @@ async function verifyHomepageHeroEditingBridge(page, viewportName) {
   const draftForm = page.locator('form.aznet-theme-homepage-hero-library');
   await draftForm.locator('input[name="homepage_hero_variant"][value="media-left"]').check();
   await Promise.all([
-    page.waitForURL(/post\.php\?post=\d+&action=edit/, { timeout: 20000 }),
+    page.waitForURL(/admin\.php\?page=aznet-theme&section=homepage&hero=draft/, { timeout: 20000 }),
     draftForm.getByRole('button', { name: 'Dùng mẫu này' }).click(),
   ]);
-  const secondEditUrl = page.url();
-  if (secondEditUrl !== firstEditUrl) throw new Error('Changing a draft Hero variant must reuse the same WordPress content source');
+  const secondEditUrl = await page.getByRole('link', { name: 'Tiếp tục sửa Hero' }).getAttribute('href');
+  if (!secondEditUrl || secondEditUrl !== firstEditUrl) throw new Error('Changing a draft Hero variant must reuse the same WordPress content source');
 
   await gotoCenter(page, 'homepage');
   if (!(await page.locator('input[name="homepage_hero_variant"][value="media-left"]').isChecked())) throw new Error('Hero presentation variant did not persist');
