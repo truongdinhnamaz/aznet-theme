@@ -358,7 +358,8 @@
 
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile { background: #fffaf1; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile > .aznet-theme-law01-container { display: grid; grid-template-columns: minmax(0, 48%) minmax(0, 52%); gap: clamp(1.75rem, 3vw, 3rem); align-items: start; }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__container--about-only { grid-template-columns: minmax(0, 1fr); }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__container--about-only,
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__container--team-only { grid-template-columns: minmax(0, 1fr); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__container--about-only .aznet-theme-law01-profile__about-copy { max-width: 56rem; padding-inline-end: 0; }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__about-grid {
     display: grid;
