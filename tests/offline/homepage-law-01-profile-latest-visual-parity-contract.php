@@ -27,6 +27,11 @@ $must(
     'A mapped Team Page must retain the 48/52 About+Team reference band even when no legitimate member cards are available.'
 );
 $must(
+    str_contains($profile, 'aznet-theme-law01-profile__container--team-only') &&
+    str_contains($css, '.aznet-theme-law01-profile__container--team-only'),
+    'Law 01 Team-only fail-soft state must collapse to one column instead of leaving an empty 48/52 grid column.'
+);
+$must(
     str_contains($profile, 'if ( $team instanceof \\WP_Post ) :') &&
     str_contains($profile, 'if ( [] !== $members ) :'),
     'Law 01 must keep the Team section visible when the mapped Team Page exists, while rendering member cards only when legitimate source members exist.'
