@@ -16,28 +16,29 @@ assert(is_string($browserText));
 
 foreach ([
     'ops/deploy-v1.3.11-tamduc',
+    'https://lstamduchn.vn',
     'PILOT_WP_USER',
     'PILOT_WP_PASSWORD',
     'aznet-theme-1.3.11.zip',
     '723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0',
+    'aznet-theme-1.3.10.zip',
+    '5ff6c4862839dcdb6dfbbb77a71cb8bd87259b83cfbf308aa6b04279396bd572',
     'tests/browser/tamduc-v1-3-11-preflight.mjs',
-    'tamduc-v1-3-11-preflight',
-    'aznet-theme-live-predeploy-1.3.1.zip',
+    'lstamduchn-v1-3-11-preflight',
 ] as $needle) {
     assert(str_contains($workflowText, $needle), "Workflow missing required marker: {$needle}");
 }
 
 foreach ([
-    "expectedLiveVersion = process.env.EXPECTED_LIVE_VERSION || '1.3.1'",
+    "CURRENT_VERSION = '1.3.10'",
+    "TARGET_VERSION = '1.3.11'",
     "scope: 'read-only-predeploy-preflight'",
     'mutation: false',
-    'backupLiveTheme',
-    '/wp-admin/admin-ajax.php?action=rest-nonce',
-    '/file/list?scope=wp-content',
-    "'/file/read'",
-    'rollback_snapshot_complete',
+    "const MENU_NAME = 'Tâm Đức - Liên hệ chính thức'",
+    "const PHONE_HREF = 'tel:+842437164123'",
+    "const UTILITY_LOCATION = 'header-utility'",
     'supportSnapshot',
-    'resolveApprovedPhoneMenuFromLocation',
+    'approvedPhoneMenu',
     'publicState',
 ] as $needle) {
     assert(str_contains($browserText, $needle), "Harness missing safety marker: {$needle}");
@@ -56,4 +57,4 @@ foreach ([
     assert(!str_contains($browserText, $forbidden), "Preflight must remain read-only: {$forbidden}");
 }
 
-echo "PASS: Tam Duc v1.3.11 deployment preflight static contract\n";
+echo "PASS: lstamduchn.vn v1.3.11 deployment preflight static contract\n";
