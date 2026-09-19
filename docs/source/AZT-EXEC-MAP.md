@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.65
+**Version:** v0.66
 **Status:** Working Execution Map / derived  
 **Date:** 19/09/2026
 
@@ -454,7 +454,7 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 16. Exact next
 
-**NEXT — v1.3.10 publication is PASS. Production deployment of the exact published `v1.3.10` asset requires a separate explicit owner gate; revalidate target-site local Theme changes and rollback first. No new Theme implementation slice is opened. RootProfile Team remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
+**NEXT — implement D-030 Homepage Hero Library on `feat/homepage-hero-library`: first add RED contracts for `homepage_hero_block` + `homepage_hero_variant`, synced-block resolution and the no-Page-required Control Center UX; then minimal GREEN while retaining legacy Page/Site fallback. Target candidate metadata: 1.3.11.**
 
 
 ## 15.9 Homepage Hero editing UX follow-up — 19/09/2026
@@ -508,3 +508,16 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - Temporary ops workflow cleanup: `9a51fa49c56bb8d27009cf17f942197df819aff5`, zero net file delta.
 - Older pre-PR #151 1.3.10 package digest `9eb8a3ad...` is superseded provenance and not the release identity.
 - Publication PASS does not imply deployment. Verified production remains v1.3.0.
+
+
+## 15.13 Homepage Hero Library — D-030 — 19/09/2026
+
+- Owner-approved architecture: Hero Library + WordPress-native synced Hero content.
+- Content source: ordinary Core-block `wp_block` entity.
+- Theme presentation state: typed `homepage_hero_block` reference + allow-listed `homepage_hero_variant`.
+- Initial source creation: explicit capability/nonce-protected action only.
+- Variant switch: presentation-only; no synced-block rewrite.
+- Backward compatibility: synced block -> legacy Hero Page -> legacy Site/Front Page projection.
+- Forbidden: Theme-owned Hero copy fields/store, proprietary block type, silent Page deletion/migration, provider/private storage reads.
+- Candidate metadata target: 1.3.11 because v1.3.10 is already published and immutable.
+- QA path: L0 source -> L2 RED/GREEN -> L3 WordPress 6.9 runtime -> L4 Control Center + Homepage browser/a11y -> package/release gates only if separately approved.
