@@ -413,12 +413,12 @@
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__media {
     min-width: 0;
 }
-.aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__image {
+.aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__media .wp-block-image {
     overflow: hidden;
     margin: 0;
     border-radius: var(--aznet-theme-radius-lg);
 }
-.aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__image img {
+.aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__media .wp-block-image img {
     display: block;
     width: 100%;
     min-height: clamp(20rem, 32vw, 34rem);
