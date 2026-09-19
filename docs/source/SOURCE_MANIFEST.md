@@ -1,17 +1,17 @@
 # AZnet Theme Source Manifest
 
-Canonical implementation baseline is owner-approved D-030 PR #156 at `main@01ddbff1843dfd8a0e1cc276be34144f35aeba35`, Theme metadata `1.3.11`. Final head `c8a14556706a49bb380669b72bffd5b6f0cd98d5` completed 37/37 triggered workflows SUCCESS and fresh exact-main V1 run `35422599658` completed SUCCESS. Published GitHub Release remains `v1.3.10`; public asset `aznet-theme-1.3.10.zip` has SHA-256 `5ff6c4862839dcdb6dfbbb77a71cb8bd87259b83cfbf308aa6b04279396bd572`. Verified production deployment remains historical `v1.3.0`. RootProfile-backed authoritative Team membership remains blocked at issue #112.
+Canonical implementation baseline is owner-approved D-030 PR #156 at `main@01ddbff1843dfd8a0e1cc276be34144f35aeba35`, Theme metadata `1.3.11`. Final head `c8a14556706a49bb380669b72bffd5b6f0cd98d5` completed 37/37 triggered workflows SUCCESS and fresh exact-main V1 run `35422599658` completed SUCCESS. Published GitHub Release is now `v1.3.11`; public asset `aznet-theme-1.3.11.zip` has SHA-256 `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`. Verified production deployment remains historical `v1.3.0`. RootProfile-backed authoritative Team membership remains blocked at issue #112.
 | Source | Semantic version | Role |
 | --- | --- | --- |
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.13 | Theme architecture, public integration contracts and D-027 Standalone Core runtime-independence boundary |
-| `AZT-03-baseline-provenance.md` | v0.61 | Canonical provenance through owner-approved D-030 PR #156 merge at Theme metadata 1.3.11 plus fresh exact-main V1 verification; published release remains v1.3.10, verified production remains v1.3.0; RootProfile Team blocker #112 retained |
-| `AZT-04-roadmap-qa-decisions.md` | v0.75 | Roadmap/QA through D-030 PASS / MERGED with exact-main V1 PASS; 1.3.11 publication and production deployment remain separate approval gates; RootProfile Team remains external-blocked |
-| `AZT-EXEC-MAP.md` | v0.67 | Derived execution map through owner-approved D-030 PR #156 canonical merge and exact-main V1 PASS; source sync is the current bounded slice and release/deploy remain separate gates |
+| `AZT-03-baseline-provenance.md` | v0.62 | Canonical provenance through D-030 merge and owner-approved v1.3.11 publication; verified production remains v1.3.0; RootProfile Team blocker #112 retained |
+| `AZT-04-roadmap-qa-decisions.md` | v0.76 | Roadmap/QA through D-030 PASS / MERGED / PUBLISHED at v1.3.11; production deployment remains separately gated; RootProfile Team remains external-blocked |
+| `AZT-EXEC-MAP.md` | v0.68 | Derived execution map through owner-approved v1.3.11 publication closure; source sync is current bounded slice and production deployment remains separately gated |
 
-v1.3 technical closure evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`. v1.3 publication evidence: `docs/evidence/V1_3_PUBLICATION_20260917.md`. v1.3 production deployment evidence: `docs/evidence/V1_3_PRODUCTION_DEPLOYMENT_20260917.md`. Historical v1.3.0 technical baseline is `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e` with exact-main V1 + X6 release-path PASS and deterministic package SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`. Current published release is `v1.3.10`; verified production deployment remains `v1.3.0`. Provider L5 remains unclaimed.
+v1.3 technical closure evidence: `docs/evidence/V1_3_TECHNICAL_CLOSURE_20260917.md`. v1.3 publication evidence: `docs/evidence/V1_3_PUBLICATION_20260917.md`. v1.3 production deployment evidence: `docs/evidence/V1_3_PRODUCTION_DEPLOYMENT_20260917.md`. Historical v1.3.0 technical baseline is `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e` with exact-main V1 + X6 release-path PASS and deterministic package SHA-256 `4a30001f04dbbb881b8bfb01099e2caa4c8d01eafbca686ab934c0b2c12f105e`. Current published release is `v1.3.11`; verified production deployment remains `v1.3.0`. Provider L5 remains unclaimed.
 
 18/09/2026 architecture correction: AZT-02 v0.12 adds the Law 01 Hero backward-compatibility rule so an unmapped/invalid dedicated Hero Page no longer removes the pre-v1.3.4 WordPress-native Hero presentation on upgraded sites. Dedicated `homepage_hero_page` remains preferred and no duplicate/domain store is introduced.
 
@@ -69,7 +69,7 @@ Derived DOCX source material remains archival/export evidence only. Canonical so
 
 19/09/2026 Homepage Hero editing UX evidence: `docs/evidence/HOMEPAGE_HERO_EDITOR_UX_20260919.md` records PR #150 canonical merge + exact-main V1/X6 PASS, PR #151 RED->GREEN authoring bridge, reconciliation to canonical 1.3.10 and 19/19 final workflow success. Hero copy remains WordPress-owned; Theme does not create a parallel Hero content store.
 
-**Exact next:** D-030 is PASS / MERGED and exact-main V1 is PASS. Merge the source/evidence closure PR after owner approval. After source sync, `v1.3.11` publication is a separate owner gate; production deployment remains independently gated. RootProfile Team remains blocked at issue #112.
+**Exact next:** `v1.3.11` publication is PASS. Merge the publication source/evidence closure PR after owner approval. After source sync, production deployment of the exact published `v1.3.11` asset is a separate owner gate requiring target-site/rollback revalidation. RootProfile Team remains blocked at issue #112.
 
 
 19/09/2026 PR #151 merge-closure evidence: `docs/evidence/HOMEPAGE_HERO_EDITOR_UX_MERGE_CLOSURE_20260919.md` records owner-approved merge to `main@39df23c3...`, zero file delta from the 22/22-verified final head and fresh exact-main V1 run `35412829723` SUCCESS.
@@ -77,10 +77,13 @@ Derived DOCX source material remains archival/export evidence only. Canonical so
 
 19/09/2026 v1.3.10 publication evidence: `docs/evidence/V1_3_10_PUBLICATION_20260919.md` records owner-approved publication run `35413516574` SUCCESS, annotated tag `v1.3.10` -> exact implementation `39df23c...`, GitHub Release `391877350`, asset `573847909`, published SHA-256 `5ff6c4862839dcdb6dfbbb77a71cb8bd87259b83cfbf308aa6b04279396bd572`, and cleaned temporary publication helper with zero net file delta. The earlier pre-PR #151 1.3.10 package digest is superseded provenance.
 
-Current release boundary: **GitHub publication v1.3.10 PASS / verified production deployment v1.3.0**.
+Current release boundary: **GitHub publication v1.3.11 PASS / verified production deployment v1.3.0**.
 
 
 19/09/2026 architecture decision: AZT-02 v0.13 + AZT-04 D-030 replace the dedicated-Page-first Homepage Hero authoring model for new UX with **Hero Library + WordPress-native synced Hero content**. Theme owns visual variants/reference/composition only; WordPress owns the Core-block `wp_block` content. Initialization is draft-first so the current public Hero remains on its legacy/fallback source until the new synced Hero is explicitly published. Legacy Hero Page/Site fallback is retained for compatibility and no automatic migration/deletion is authorized.
 
 
 19/09/2026 D-030 canonical merge evidence: `docs/evidence/HOMEPAGE_HERO_LIBRARY_D030_MERGE_CLOSURE_20260919.md` records owner-approved PR #156 merge from 37/37-success final head `c8a14556...` to `main@01ddbff1...`, zero changed files across the merge boundary, fresh exact-main V1 run `35422599658` SUCCESS, and deterministic `aznet-theme-1.3.11.zip` candidate SHA-256 `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`. Published release remains `v1.3.10`; verified production remains `v1.3.0`.
+
+
+19/09/2026 v1.3.11 publication evidence: `docs/evidence/V1_3_11_PUBLICATION_20260919.md` records owner-approved publication of annotated `v1.3.11` -> exact D-030 implementation `01ddbff1...`, GitHub Release `391924224`, asset `574135564`, SHA-256 `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`, 147 production files and 110/110 packaged PHP lint PASS. Repair run `35424304502` corrected the release-note rendering defect without changing tag/package identity; temporary publication helper cleanup leaves zero net file delta. Verified production remains `v1.3.0`.
