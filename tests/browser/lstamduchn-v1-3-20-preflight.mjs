@@ -6,6 +6,7 @@ const baseUrl = (process.env.LSTAMDUCHN_BASE_URL || 'https://lstamduchn.vn').rep
 const adminUser = process.env.PILOT_WP_USER || '';
 const adminPass = process.env.PILOT_WP_PASSWORD || '';
 const stateDir = process.env.LSTAMDUCHN_STATE_DIR || '/tmp/lstamduchn-v1-3-20-preflight';
+const proxyServer = process.env.LSTAMDUCHN_PROXY_SERVER || '';
 
 fs.mkdirSync(stateDir, { recursive: true });
 
@@ -18,6 +19,7 @@ const state = {
   installed_themes: [],
   menu_locations: {},
   public: {},
+  proxy: proxyServer || null,
   error: null,
 };
 
@@ -89,7 +91,10 @@ async function publicState(page, width, height) {
   }, response?.status() || 0);
 }
 
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({
+  headless: true,
+  ...(proxyServer ? { proxy: { server: proxyServer } } : {}),
+});
 try {
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
   const page = await context.newPage();
