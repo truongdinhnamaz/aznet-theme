@@ -91,6 +91,28 @@ function enqueue_sticky_header_asset( ?string $version = null ): void {
 }
 
 /**
+ * Enqueue the site-wide Law 01 Header presentation independently of Front Page assets.
+ *
+ * @param string|null $version Asset version.
+ */
+function enqueue_header_law01_asset( ?string $version = null ): void {
+    if ( ! function_exists( __NAMESPACE__ . '\\header_law01_active' ) || ! header_law01_active() ) {
+        return;
+    }
+
+    if ( 'burgundy-gold' !== homepage_law01_variant() ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'aznet-theme-header-law-01',
+        get_theme_file_uri( '/assets/css/components/header-law-01.css' ),
+        [ 'aznet-theme-site-header' ],
+        asset_content_version( '/assets/css/components/header-law-01.css', $version )
+    );
+}
+
+/**
  * Enqueue the dedicated Homepage blueprint presentation only on the Front Page.
  *
  * @param string|null $version Asset version.
@@ -418,6 +440,7 @@ function enqueue_assets(): void {
         $version
     );
 
+    enqueue_header_law01_asset( $version );
     enqueue_header_utility_asset( $version );
     enqueue_header_navigation_asset( $version );
     enqueue_sticky_header_asset( $version );
