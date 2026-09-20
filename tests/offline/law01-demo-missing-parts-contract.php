@@ -27,8 +27,6 @@ $profileRequired = [
     'homepage_services_page',
     'homepage_process_page',
     'homepage_faq_page',
-    "preg_match_all( '/<li\\b/i'",
-    "preg_match_all( '/<details\\b/i'",
     'aznet-theme-law01-profile__team-empty',
 ];
 
