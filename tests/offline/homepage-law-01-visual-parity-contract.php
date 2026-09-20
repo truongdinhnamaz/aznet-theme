@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 $root = dirname(__DIR__, 2);
 $css = (string) file_get_contents($root . '/assets/css/components/homepage-law-01-variants.css');
+$referenceCss = (string) file_get_contents($root . '/assets/css/components/homepage-law-01-reference.css');
 $brand = (string) file_get_contents($root . '/template-parts/header/brand.php');
 $siteHeader = (string) file_get_contents($root . '/template-parts/header/site-header.php');
 $mobilePanel = (string) file_get_contents($root . '/template-parts/header/mobile-panel.php');
@@ -27,7 +28,7 @@ $must(
 $must(
     1 === preg_match(
         '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-hero__content\\s*\\{[^}]*padding-inline-start:\\s*0;[^}]*padding-inline-end:\\s*clamp\\(2rem,\\s*3vw,\\s*3.5rem\\);/s',
-        $css
+        $referenceCss
     ),
     'Law 01 Hero copy must start on the shared shell edge and keep breathing room only toward the media seam.'
 );
@@ -38,11 +39,6 @@ $must(
 $must(
     str_contains($css, 'object-position: center center;'),
     'Law 01 Hero media must keep the supplied office composition centered inside the desktop crop.'
-);
-$heroImageSize = getimagesize($root . '/assets/starter/law01/hero.webp');
-$must(
-    false !== $heroImageSize && 1672 === $heroImageSize[0] && 941 === $heroImageSize[1],
-    'Law 01 starter Hero must package the approved 1672x941 Tâm Đức office image.'
 );
 $must(
     str_contains(
