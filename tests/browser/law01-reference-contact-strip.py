@@ -58,6 +58,7 @@ with sync_playwright() as p:
             cols,
             minHeights: links.map(a=>a.getBoundingClientRect().height),
             iconContents: icons.map(x=>x.content),
+            iconMasks: icons.map(x=>x.maskImage || x.webkitMaskImage),
             iconWidths: icons.map(x=>parseFloat(x.width)),
           };
         }""")
@@ -72,8 +73,10 @@ with sync_playwright() as p:
                 failures.append(f"{width}: expected three stacked contact rows, got cols={metric['cols']} rows={metric['rows']}")
         if any(h < 55 for h in metric["minHeights"]):
             failures.append(f"{width}: contact target height below intended 3.5rem rail")
-        if any(content in ("none", "normal", '""') for content in metric["iconContents"]):
-            failures.append(f"{width}: missing decorative contact icon")
+        if any(mask in ("none", "") for mask in metric["iconMasks"]):
+            failures.append(f"{width}: missing decorative contact icon mask")
+        if any(content != '""' for content in metric["iconContents"]):
+            failures.append(f"{width}: contact icon pseudo-elements must remain decorative, not unicode/text glyphs")
         if any(w < 16 for w in metric["iconWidths"]):
             failures.append(f"{width}: contact icon rail too small")
         page.close()
