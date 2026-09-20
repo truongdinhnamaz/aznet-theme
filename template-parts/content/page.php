@@ -12,6 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 $variant = \AZnet\Theme\page_variant( (int) get_the_ID() );
 $crumbs  = \AZnet\Theme\page_breadcrumb_items( (int) get_the_ID() );
 $excerpt = \AZnet\Theme\page_excerpt( (int) get_the_ID() );
+$is_service_detail = \AZnet\Theme\service_page_is_detail( (int) get_the_ID() );
+$service_contact_url = $is_service_detail ? \AZnet\Theme\service_page_contact_url() : '';
+$service_siblings = $is_service_detail ? \AZnet\Theme\service_page_siblings( (int) get_the_ID() ) : [];
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'aznet-theme-page aznet-theme-page--' . $variant . ( $is_service_detail ? ' aznet-theme-page--service-detail' : '' ) ); ?>>
     <header class="aznet-theme-page__header">
