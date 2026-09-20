@@ -42,6 +42,12 @@ $must(
 );
 
 $must(
+    1 === preg_match('/a\[href\^="tel:"\]::before\s*\{[^}]*content:\s*"";/s', $css) &&
+    1 === preg_match('/a\[href\^="mailto:"\]::before\s*\{[^}]*content:\s*"";/s', $css),
+    'Law 01 semantic contact icons must stay decorative and suppress inherited unicode glyph content.'
+);
+
+$must(
     1 === preg_match(
         '/@media \(max-width:\s*640px\)[\s\S]*\.aznet-theme-homepage--law-01-burgundy-gold \.aznet-theme-law01-hero__contact-list\s*\{[^}]*grid-template-columns:\s*1fr;/s',
         $css
