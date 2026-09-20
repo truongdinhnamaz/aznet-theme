@@ -61,13 +61,7 @@ $landing_id = y1_create_page(
 );
 update_post_meta( $landing_id, '_wp_page_template', 'page-templates/landing.php' );
 
-$services_id = y1_create_page(
-    [
-        'post_title'   => 'Y1 Services',
-        'post_excerpt' => 'Mapped Services parent.',
-        'post_name'    => 'y1-services',
-    ]
-);
+$services_id = $parent_id;
 
 $service_detail_id = y1_create_page(
     [
@@ -83,7 +77,7 @@ $service_sibling_id = y1_create_page(
     [
         'post_title'   => 'Y1 Civil Service',
         'post_excerpt' => 'Sibling mapped service Page.',
-        'post_parent'  => $services_id,
+        'post_parent'  => $parent_id,
         'post_name'    => 'y1-civil-service',
     ]
 );
