@@ -1,48 +1,39 @@
 .aznet-theme-page--service-hub {
     --aznet-theme-service-hub-copy: 52rem;
-    --aznet-theme-service-hub-card-min: 15rem;
+    --aznet-theme-service-hub-icon-scales: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3v18M7 21h10M4 7h16M6 7l-4 7h8L6 7Zm12 0-4 7h8l-4-7ZM2 14a4 4 0 0 0 8 0m4 0a4 4 0 0 0 8 0'/%3E%3C/svg%3E");
 }
 
 .aznet-theme-page--service-hub .aznet-theme-service-hub__hero {
     position: relative;
-    display: grid;
-    min-height: clamp(20rem, 34vw, 27rem);
-    align-content: center;
+    display: block;
+    min-height: 0;
     max-width: var(--aznet-theme-container-shell);
-    margin-block-end: clamp(var(--aznet-theme-space-6), 7vw, var(--aznet-theme-space-section));
+    margin-block-end: clamp(var(--aznet-theme-space-5), 4vw, var(--aznet-theme-space-8));
     padding: clamp(var(--aznet-theme-space-5), 5vw, var(--aznet-theme-space-8));
     overflow: hidden;
-    border: 1px solid var(--aznet-theme-surface-inverse);
-    border-radius: calc(var(--aznet-theme-radius-card) + var(--aznet-theme-space-1));
-    color: var(--aznet-theme-on-inverse);
-    background: var(--aznet-theme-surface-inverse);
-    box-shadow: var(--aznet-theme-shadow-float);
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    color: var(--aznet-theme-text);
+    background: linear-gradient(
+        135deg,
+        var(--aznet-theme-color-surface-subtle),
+        var(--aznet-theme-surface)
+    );
+    box-shadow: none;
 }
 
-.aznet-theme-page--service-hub .aznet-theme-service-hub__hero::before,
 .aznet-theme-page--service-hub .aznet-theme-service-hub__hero::after {
     position: absolute;
-    border-radius: 999px;
-    content: "";
-    pointer-events: none;
-}
-
-.aznet-theme-page--service-hub .aznet-theme-service-hub__hero::before {
-    inset-block-start: -7rem;
-    inset-inline-end: -3rem;
-    width: clamp(13rem, 24vw, 22rem);
-    aspect-ratio: 1;
-    border: 1px solid var(--aznet-theme-color-border);
-    opacity: .22;
-}
-
-.aznet-theme-page--service-hub .aznet-theme-service-hub__hero::after {
-    inset-block-end: -8rem;
-    inset-inline-end: 9%;
-    width: clamp(10rem, 19vw, 18rem);
+    inset-block-start: var(--aznet-theme-space-4);
+    inset-inline-end: var(--aznet-theme-space-4);
+    width: clamp(3.25rem, 7vw, 5rem);
     aspect-ratio: 1;
     background: var(--aznet-theme-accent);
+    content: "";
     opacity: .12;
+    pointer-events: none;
+    -webkit-mask: var(--aznet-theme-service-hub-icon-scales) center / contain no-repeat;
+    mask: var(--aznet-theme-service-hub-icon-scales) center / contain no-repeat;
 }
 
 .aznet-theme-page--service-hub .aznet-theme-service-hub__hero > * {
@@ -56,35 +47,29 @@
 }
 
 .aznet-theme-page--service-hub .aznet-theme-page__title {
-    margin-block: 0;
-    color: var(--aznet-theme-on-inverse);
-    font-size: clamp(var(--aznet-theme-text-h1), 6vw, var(--aznet-theme-text-display));
+    margin: 0;
+    color: var(--aznet-theme-text);
+    font-size: clamp(var(--aznet-theme-text-h1), 5vw, var(--aznet-theme-text-display));
     line-height: var(--aznet-theme-line-height-display);
-    letter-spacing: -.025em;
+    letter-spacing: -.02em;
     text-wrap: balance;
 }
 
 .aznet-theme-page--service-hub .aznet-theme-page__lead {
     margin-block: var(--aznet-theme-space-3) 0;
-    color: var(--aznet-theme-on-inverse);
+    color: var(--aznet-theme-muted);
     font-size: var(--aznet-theme-text-lead);
     line-height: var(--aznet-theme-line-height-lead);
-    opacity: .82;
 }
 
 .aznet-theme-service-hub__eyebrow {
     width: fit-content;
-    margin: 0 0 var(--aznet-theme-space-3);
+    margin: 0 0 var(--aznet-theme-space-2);
     color: var(--aznet-theme-accent);
     font-size: var(--aznet-theme-text-label);
     font-weight: var(--aznet-theme-font-weight-bold);
-    letter-spacing: .1em;
+    letter-spacing: .09em;
     text-transform: uppercase;
-}
-
-.aznet-theme-service-hub__hero .aznet-theme-service-hub__eyebrow {
-    color: var(--aznet-theme-color-on-primary);
-    opacity: .8;
 }
 
 .aznet-theme-service-hub__hero-meta {
@@ -94,15 +79,15 @@
     gap: var(--aznet-theme-space-2);
     margin: var(--aznet-theme-space-3) 0 0;
     padding: var(--aznet-theme-space-2) var(--aznet-theme-space-3);
-    border: 1px solid var(--aznet-theme-color-border);
+    border: 1px solid var(--aznet-theme-border);
     border-radius: var(--aznet-theme-radius-pill);
-    color: var(--aznet-theme-on-inverse);
+    color: var(--aznet-theme-muted);
+    background: var(--aznet-theme-surface);
     font-size: var(--aznet-theme-text-small);
-    opacity: .86;
 }
 
 .aznet-theme-service-hub__hero-meta strong {
-    color: var(--aznet-theme-color-on-primary);
+    color: var(--aznet-theme-accent);
     font-size: var(--aznet-theme-text-h4);
     line-height: 1;
 }
@@ -127,13 +112,12 @@
     font-weight: var(--aznet-theme-font-weight-bold);
     line-height: var(--aznet-theme-line-height-button);
     text-decoration: none;
-    transition: transform var(--aznet-theme-motion-fast), background-color var(--aznet-theme-motion-fast), color var(--aznet-theme-motion-fast), box-shadow var(--aznet-theme-motion-fast);
+    transition: background-color var(--aznet-theme-motion-fast), color var(--aznet-theme-motion-fast), border-color var(--aznet-theme-motion-fast);
 }
 
 .aznet-theme-service-hub__primary {
     color: var(--aznet-theme-color-on-primary);
     background: var(--aznet-theme-accent);
-    box-shadow: var(--aznet-theme-shadow-card);
 }
 
 .aznet-theme-service-hub__secondary {
@@ -141,15 +125,12 @@
     background: var(--aznet-theme-surface);
 }
 
-.aznet-theme-service-hub__hero .aznet-theme-service-hub__secondary {
-    border-color: var(--aznet-theme-color-border);
-    color: var(--aznet-theme-on-inverse);
-    background: transparent;
+.aznet-theme-service-hub__primary:hover {
+    color: var(--aznet-theme-color-on-primary);
 }
 
-.aznet-theme-service-hub__primary:hover,
 .aznet-theme-service-hub__secondary:hover {
-    transform: translateY(-2px);
+    background: var(--aznet-theme-color-surface-subtle);
 }
 
 .aznet-theme-service-hub__primary:focus-visible,
@@ -163,21 +144,22 @@
 
 .aznet-theme-service-hub {
     display: grid;
-    gap: clamp(var(--aznet-theme-space-6), 7vw, calc(var(--aznet-theme-space-section) * 1.15));
+    gap: clamp(var(--aznet-theme-space-5), 4vw, var(--aznet-theme-space-8));
     width: 100%;
     max-width: var(--aznet-theme-container-shell);
     margin-inline: auto;
 }
 
-.aznet-theme-service-hub__section {
+.aznet-theme-service-hub__section,
+.aznet-theme-service-hub__selection {
     min-width: 0;
 }
 
 .aznet-theme-service-hub__selection {
-    padding: clamp(var(--aznet-theme-space-4), 4vw, var(--aznet-theme-space-6));
-    border: 1px solid var(--aznet-theme-border);
-    border-radius: calc(var(--aznet-theme-radius-card) + var(--aznet-theme-space-1));
-    background: var(--aznet-theme-color-surface-subtle);
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
 }
 
 .aznet-theme-service-hub__section-heading {
@@ -191,7 +173,7 @@
     margin: 0;
     font-size: var(--aznet-theme-text-h2);
     line-height: var(--aznet-theme-line-height-h2);
-    letter-spacing: -.015em;
+    letter-spacing: -.01em;
     text-wrap: balance;
 }
 
@@ -205,43 +187,19 @@
     position: relative;
     display: flex;
     min-width: 0;
-    min-height: 16rem;
+    min-height: 15rem;
     flex-direction: column;
-    padding: var(--aznet-theme-space-5);
+    padding: var(--aznet-theme-space-4);
     overflow: hidden;
     border: 1px solid var(--aznet-theme-border);
     border-radius: var(--aznet-theme-radius-card);
     background: var(--aznet-theme-surface);
     box-shadow: var(--aznet-theme-shadow-card);
-    transition: transform var(--aznet-theme-motion-base), box-shadow var(--aznet-theme-motion-base), border-color var(--aznet-theme-motion-base);
-}
-
-.aznet-theme-service-hub__card::before {
-    position: absolute;
-    inset-block-start: 0;
-    inset-inline: 0;
-    height: .2rem;
-    background: var(--aznet-theme-accent);
-    content: "";
-}
-
-.aznet-theme-service-hub__card::after {
-    position: absolute;
-    inset-block-end: -3rem;
-    inset-inline-end: -3rem;
-    width: 8rem;
-    aspect-ratio: 1;
-    border: 1px solid var(--aznet-theme-border);
-    border-radius: 999px;
-    content: "";
-    opacity: .6;
-    pointer-events: none;
+    transition: border-color var(--aznet-theme-motion-fast), background-color var(--aznet-theme-motion-fast);
 }
 
 .aznet-theme-service-hub__card:hover {
     border-color: var(--aznet-theme-accent);
-    box-shadow: var(--aznet-theme-shadow-float);
-    transform: translateY(-4px);
 }
 
 .aznet-theme-service-hub__card-number {
@@ -249,20 +207,17 @@
     width: 2.5rem;
     height: 2.5rem;
     place-items: center;
-    margin-block-end: var(--aznet-theme-space-4);
+    margin-block-end: var(--aznet-theme-space-3);
     border-radius: var(--aznet-theme-radius-pill);
-    color: var(--aznet-theme-color-on-primary);
+    color: var(--aznet-theme-surface);
     background: var(--aznet-theme-accent);
     font-size: var(--aznet-theme-text-label);
     font-weight: var(--aznet-theme-font-weight-bold);
-    letter-spacing: .04em;
 }
 
 .aznet-theme-service-hub__card h3,
 .aznet-theme-service-hub__support-card h3,
 .aznet-theme-service-hub__knowledge-card h3 {
-    position: relative;
-    z-index: 1;
     margin: 0;
     font-size: var(--aznet-theme-text-h4);
     line-height: var(--aznet-theme-line-height-h4);
@@ -284,19 +239,15 @@
 .aznet-theme-service-hub__card p,
 .aznet-theme-service-hub__support-card p,
 .aznet-theme-service-hub__knowledge-card p {
-    position: relative;
-    z-index: 1;
     margin: var(--aznet-theme-space-3) 0 0;
     color: var(--aznet-theme-muted);
     overflow-wrap: anywhere;
 }
 
 .aznet-theme-service-hub__card-link {
-    position: relative;
-    z-index: 1;
     width: fit-content;
     margin-block-start: auto;
-    padding-block-start: var(--aznet-theme-space-5);
+    padding-block-start: var(--aznet-theme-space-4);
     color: var(--aznet-theme-accent);
     font-weight: var(--aznet-theme-font-weight-bold);
     text-decoration: none;
@@ -308,15 +259,13 @@
     grid-template-columns: minmax(0, 1fr) auto;
     gap: var(--aznet-theme-space-5);
     align-items: center;
-    padding: clamp(var(--aznet-theme-space-5), 5vw, var(--aznet-theme-space-7));
-    border-radius: calc(var(--aznet-theme-radius-card) + var(--aznet-theme-space-1));
-}
-
-.aznet-theme-service-hub__orientation {
-    border: 1px solid var(--aznet-theme-border);
-    border-inline-start: .25rem solid var(--aznet-theme-accent);
+    padding: clamp(var(--aznet-theme-space-4), 4vw, var(--aznet-theme-space-6));
+    border: 0;
+    border-inline-start: 3px solid var(--aznet-theme-accent);
+    border-radius: 0;
+    color: var(--aznet-theme-text);
     background: var(--aznet-theme-color-surface-subtle);
-    box-shadow: var(--aznet-theme-shadow-card);
+    box-shadow: none;
 }
 
 .aznet-theme-service-hub__orientation > div,
@@ -330,10 +279,8 @@
 }
 
 .aznet-theme-service-hub__editorial {
-    padding: var(--aznet-theme-space-6);
-    border: 1px solid var(--aznet-theme-border);
-    border-radius: var(--aznet-theme-radius-card);
-    background: var(--aznet-theme-surface);
+    padding-block: var(--aznet-theme-space-6);
+    border-block: 1px solid var(--aznet-theme-border);
 }
 
 .aznet-theme-page--service-hub .aznet-theme-service-hub__editorial .aznet-theme-page__content {
@@ -349,12 +296,12 @@
 
 .aznet-theme-service-hub__support-card {
     min-width: 0;
-    padding: var(--aznet-theme-space-5);
-    border: 1px solid var(--aznet-theme-border);
-    border-block-start: .2rem solid var(--aznet-theme-accent);
-    border-radius: var(--aznet-theme-radius-card);
-    background: var(--aznet-theme-surface);
-    box-shadow: var(--aznet-theme-shadow-card);
+    padding: clamp(var(--aznet-theme-space-4), 3vw, var(--aznet-theme-space-6));
+    border: 0;
+    border-block-start: 2px solid var(--aznet-theme-accent);
+    border-radius: 0;
+    background: var(--aznet-theme-color-surface-subtle);
+    box-shadow: none;
 }
 
 .aznet-theme-service-hub__support-card > a:last-child {
@@ -382,6 +329,7 @@
     border: 1px solid var(--aznet-theme-border);
     border-radius: var(--aznet-theme-radius-card);
     background: var(--aznet-theme-surface);
+    box-shadow: var(--aznet-theme-shadow-card);
 }
 
 .aznet-theme-service-hub__meta {
@@ -390,20 +338,8 @@
     font-size: var(--aznet-theme-text-meta);
 }
 
-.aznet-theme-service-hub__final-cta {
-    border: 1px solid var(--aznet-theme-surface-inverse);
-    color: var(--aznet-theme-on-inverse);
-    background: var(--aznet-theme-surface-inverse);
-    box-shadow: var(--aznet-theme-shadow-float);
-}
-
 .aznet-theme-service-hub__final-cta :where(h2, p) {
     color: inherit;
-}
-
-.aznet-theme-service-hub__final-cta .aznet-theme-service-hub__eyebrow {
-    color: var(--aznet-theme-color-on-primary);
-    opacity: .8;
 }
 
 @media (max-width: 64rem) {
@@ -421,20 +357,12 @@
 
 @media (max-width: 47.999rem) {
     .aznet-theme-page--service-hub .aznet-theme-service-hub__hero {
-        min-height: 0;
-        padding: var(--aznet-theme-space-6) var(--aznet-theme-space-4);
-        border-radius: var(--aznet-theme-radius-card);
-        box-shadow: var(--aznet-theme-shadow-card);
-    }
-
-    .aznet-theme-page--service-hub .aznet-theme-service-hub__hero::before {
-        inset-block-start: -4rem;
-        inset-inline-end: -4rem;
-        width: 10rem;
+        padding: var(--aznet-theme-space-5) var(--aznet-theme-space-4);
     }
 
     .aznet-theme-page--service-hub .aznet-theme-service-hub__hero::after {
-        display: none;
+        width: 3rem;
+        opacity: .08;
     }
 
     .aznet-theme-service-hub__hero-actions {
@@ -448,11 +376,7 @@
     }
 
     .aznet-theme-service-hub {
-        gap: var(--aznet-theme-space-6);
-    }
-
-    .aznet-theme-service-hub__selection {
-        padding: var(--aznet-theme-space-4);
+        gap: var(--aznet-theme-space-5);
     }
 
     .aznet-theme-service-hub__grid,
@@ -464,8 +388,7 @@
     .aznet-theme-service-hub__card,
     .aznet-theme-service-hub__support-card,
     .aznet-theme-service-hub__orientation,
-    .aznet-theme-service-hub__final-cta,
-    .aznet-theme-service-hub__editorial {
+    .aznet-theme-service-hub__final-cta {
         padding: var(--aznet-theme-space-4);
     }
 
@@ -479,11 +402,5 @@
     .aznet-theme-service-hub__secondary,
     .aznet-theme-service-hub__card {
         transition: none;
-    }
-
-    .aznet-theme-service-hub__primary:hover,
-    .aznet-theme-service-hub__secondary:hover,
-    .aznet-theme-service-hub__card:hover {
-        transform: none;
     }
 }
