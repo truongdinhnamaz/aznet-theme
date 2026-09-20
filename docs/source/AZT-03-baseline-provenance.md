@@ -148,7 +148,7 @@ D-027 does not authorize a Git tag, GitHub Release, final production deployment,
 Under AZT-05 v1.0 and D-016:
 
 - WordPress-clean core Theme readiness is release-critical.
-- v1.1.0 and v1.2.0 publication/deployment remain retained historical PASS; current published GitHub Release is `v1.3.11`, canonical repository Theme metadata is `1.3.11`, and the verified production Theme on `tamduchanoi.aznet.vn` remains `1.3.0`.
+- v1.1.0 and v1.2.0 publication/deployment remain retained historical PASS; current published GitHub Release is `v1.3.20`, canonical repository Theme metadata is `1.3.21`, and current production target `lstamduchn.vn` has fresh live Theme version UNKNOWN; `1.3.10` remains the last verified live state.
 - v1.2 X1-X5 functional closure and X6 technical/publication/deployment evidence are retained.
 - v1.3 Y1-Y5 technical closure, exact-main/package verification, publication and owner-approved production deployment are PASS at their separately verified scopes.
 - Provider L5 is outside v1.3 Core and is not inferred from technical/publication/deployment PASS.
@@ -233,7 +233,7 @@ Every release candidate must have a concrete previous package/commit or restorat
 
 ## 11. Exact next
 
-**NEXT — `v1.3.11` PUBLICATION is PASS. Published tag `v1.3.11` targets exact verified implementation `01ddbff1843dfd8a0e1cc276be34144f35aeba35`; public asset SHA-256 is `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`. Verified production remains `v1.3.0`. Merge the publication source/evidence closure PR after owner approval; any production deployment of `v1.3.11` remains a separate explicit owner gate with target-site revalidation and rollback. RootProfile-backed authoritative Team remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
+**NEXT — preserve canonical `v1.3.21` technical PASS. Current public GitHub Release remains `v1.3.20`; a `v1.3.21` tag/Release is a separate publication action. Production deployment remains a separate gate requiring a safe authenticated target-site path, fresh preflight and rollback evidence. RootProfile-backed authoritative Team remains `BLOCKED_EXTERNAL_CONTRACT` at issue #112.**
 
 ### AZnet Theme 1.3.10 polished-Hero client-delivery candidate — 19/09/2026
 
