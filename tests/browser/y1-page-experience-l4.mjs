@@ -108,7 +108,7 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
       if (await page.locator('.aznet-theme-service-hub__selection').count() !== 1) throw new Error('Expected Services Hub selection');
       if (await page.locator('.aznet-theme-service-hub__hero-intro').count() !== 1) throw new Error('Expected Services Hub fallback hero introduction');
       if (await page.locator('.aznet-theme-service-hub__hero-meta').count() !== 1) throw new Error('Expected Services Hub service-count metadata');
-      const hubMetaText = (await page.locator('.aznet-theme-service-hub__hero-meta').innerText()).replace(/\\s+/g, ' ').trim();
+      const hubMetaText = (await page.locator('.aznet-theme-service-hub__hero-meta').innerText()).replace(/\s+/g, ' ').trim();
       if (!hubMetaText.includes('3 lĩnh vực hỗ trợ')) throw new Error(`Unexpected Services Hub count metadata: ${hubMetaText}`);
       if (await page.locator('.aznet-theme-service-hub__card').count() !== 3) throw new Error('Expected three mapped service cards');
       if (await page.locator('.aznet-theme-service-hub__orientation').count() !== 1) throw new Error('Expected Services Hub orientation band');
