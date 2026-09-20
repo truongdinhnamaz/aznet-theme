@@ -105,6 +105,7 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
 
     if (config.hub) {
       if (await page.locator('.aznet-theme-page--service-hub').count() !== 1) throw new Error('Expected mapped Services Hub presentation');
+      if (await page.locator('.aznet-theme-page--law01-burgundy-gold').count() !== 1) throw new Error('Expected Law01 Burgundy inner-page presentation class');
       if (await page.locator('.aznet-theme-service-hub__selection').count() !== 1) throw new Error('Expected Services Hub selection');
       if (await page.locator('.aznet-theme-service-hub__hero-intro').count() !== 1) throw new Error('Expected Services Hub fallback hero introduction');
       if (await page.locator('.aznet-theme-service-hub__hero-meta').count() !== 1) throw new Error('Expected Services Hub service-count metadata');
@@ -118,39 +119,65 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
       if (await page.locator('.aznet-theme-service-hub__knowledge-card').count() !== 3) throw new Error('Expected three native knowledge cards');
       if (await page.locator('.aznet-theme-service-hub__final-cta').count() !== 1) throw new Error('Expected Services Hub final CTA');
       const hubVisual = await page.evaluate(() => {
-        const selection = document.querySelector('.aznet-theme-service-hub__selection');
-        const card = document.querySelector('.aznet-theme-service-hub__card');
+        const root = document.querySelector('.aznet-theme-page--service-hub');
         const hero = document.querySelector('.aznet-theme-service-hub__hero');
+        const eyebrow = document.querySelector('.aznet-theme-service-hub__selection .aznet-theme-service-hub__eyebrow');
+        const sectionTitle = document.querySelector('.aznet-theme-service-hub__selection h2');
+        const card = document.querySelector('.aznet-theme-service-hub__card');
+        const number = document.querySelector('.aznet-theme-service-hub__card-number');
         const orientation = document.querySelector('.aznet-theme-service-hub__orientation');
         const finalCta = document.querySelector('.aznet-theme-service-hub__final-cta');
-        if (!(selection instanceof HTMLElement) || !(card instanceof HTMLElement) || !(hero instanceof HTMLElement) || !(orientation instanceof HTMLElement) || !(finalCta instanceof HTMLElement)) return null;
-        const selectionStyle = getComputedStyle(selection);
-        const cardStyle = getComputedStyle(card);
+        const primary = document.querySelector('.aznet-theme-service-hub__primary');
+        if (!(root instanceof HTMLElement) || !(hero instanceof HTMLElement) || !(eyebrow instanceof HTMLElement) || !(sectionTitle instanceof HTMLElement) || !(card instanceof HTMLElement) || !(number instanceof HTMLElement) || !(orientation instanceof HTMLElement) || !(finalCta instanceof HTMLElement) || !(primary instanceof HTMLElement)) return null;
+        const rootStyle = getComputedStyle(root);
         const heroStyle = getComputedStyle(hero);
+        const eyebrowStyle = getComputedStyle(eyebrow);
+        const sectionTitleStyle = getComputedStyle(sectionTitle);
+        const cardStyle = getComputedStyle(card);
+        const numberStyle = getComputedStyle(number);
         const orientationStyle = getComputedStyle(orientation);
         const finalCtaStyle = getComputedStyle(finalCta);
+        const primaryStyle = getComputedStyle(primary);
         return {
-          selectionBackground: selectionStyle.backgroundColor,
-          cardTransition: cardStyle.transitionProperty,
+          paletteBrand: rootStyle.getPropertyValue('--aznet-theme-law01-brand-red').trim(),
+          paletteDeep: rootStyle.getPropertyValue('--aznet-theme-law01-brand-red-deep').trim(),
+          palettePaper: rootStyle.getPropertyValue('--aznet-theme-law01-warm-paper').trim(),
+          heroBackgroundColor: heroStyle.backgroundColor,
           heroBackgroundImage: heroStyle.backgroundImage,
           heroBoxShadow: heroStyle.boxShadow,
           heroMinHeight: Number.parseFloat(heroStyle.minHeight || '0'),
+          eyebrowColor: eyebrowStyle.color,
+          sectionTitleColor: sectionTitleStyle.color,
+          cardTransition: cardStyle.transitionProperty,
+          numberBackground: numberStyle.backgroundColor,
           orientationBackground: orientationStyle.backgroundColor,
+          orientationBorderLeftColor: orientationStyle.borderLeftColor,
           orientationBorderLeftWidth: Number.parseFloat(orientationStyle.borderLeftWidth || '0'),
           finalCtaBackground: finalCtaStyle.backgroundColor,
+          finalCtaBorderLeftColor: finalCtaStyle.borderLeftColor,
           finalCtaBorderLeftWidth: Number.parseFloat(finalCtaStyle.borderLeftWidth || '0'),
+          primaryBackground: primaryStyle.backgroundColor,
         };
       });
       if (!hubVisual) throw new Error('Unable to inspect Services Hub visual hierarchy');
-      if (hubVisual.heroBackgroundImage === 'none' || hubVisual.heroBoxShadow !== 'none' || (viewport.width >= 1024 && hubVisual.heroMinHeight >= 300)) {
-        throw new Error(`Services Hub hero must follow About's light editorial intro treatment: ${JSON.stringify(hubVisual)}`);
+      if (hubVisual.paletteBrand !== '#8f111b' || hubVisual.paletteDeep !== '#6d0b13' || hubVisual.palettePaper !== '#fffaf2') {
+        throw new Error(`Law01 shared palette does not match approved About colors: ${JSON.stringify(hubVisual)}`);
       }
-      if (hubVisual.cardTransition.includes('transform')) throw new Error(`Services Hub cards must avoid landing-page lift effects: ${JSON.stringify(hubVisual)}`);
-      if (hubVisual.orientationBackground === 'rgba(0, 0, 0, 0)' || hubVisual.orientationBorderLeftWidth < 3) {
-        throw new Error(`Services Hub orientation must follow About's light accent-panel language: ${JSON.stringify(hubVisual)}`);
+      if (hubVisual.heroBoxShadow !== 'none' || (viewport.width >= 1024 && hubVisual.heroMinHeight >= 300)) {
+        throw new Error(`Services page header must retain About's restrained page-header depth: ${JSON.stringify(hubVisual)}`);
       }
-      if (hubVisual.finalCtaBackground !== hubVisual.orientationBackground || hubVisual.finalCtaBorderLeftWidth < 3) {
-        throw new Error(`Services Hub CTA must follow About's light accent-panel language: ${JSON.stringify(hubVisual)}`);
+      if (hubVisual.eyebrowColor !== 'rgb(143, 17, 27)' || hubVisual.sectionTitleColor !== 'rgb(109, 11, 19)') {
+        throw new Error(`Services headings do not match About Burgundy hierarchy: ${JSON.stringify(hubVisual)}`);
+      }
+      if (hubVisual.cardTransition.includes('transform')) throw new Error(`Services cards must avoid landing-page lift effects: ${JSON.stringify(hubVisual)}`);
+      if (hubVisual.numberBackground !== 'rgb(143, 17, 27)' || hubVisual.primaryBackground !== 'rgb(143, 17, 27)') {
+        throw new Error(`Services controls do not use the approved Burgundy brand color: ${JSON.stringify(hubVisual)}`);
+      }
+      if (hubVisual.orientationBackground !== 'rgb(255, 250, 242)' || hubVisual.orientationBorderLeftColor !== 'rgb(143, 17, 27)' || hubVisual.orientationBorderLeftWidth < 3) {
+        throw new Error(`Services orientation does not match About warm-paper accent panel: ${JSON.stringify(hubVisual)}`);
+      }
+      if (hubVisual.finalCtaBackground !== 'rgb(255, 250, 242)' || hubVisual.finalCtaBorderLeftColor !== 'rgb(143, 17, 27)' || hubVisual.finalCtaBorderLeftWidth < 3) {
+        throw new Error(`Services CTA does not match About warm-paper accent panel: ${JSON.stringify(hubVisual)}`);
       }
       const hubStylesheets = await page.evaluate(() => Array.from(document.styleSheets).map((sheet) => sheet.href).filter(Boolean));
       if (!hubStylesheets.some((href) => href.includes('/assets/css/components/service-hub.css'))) {
