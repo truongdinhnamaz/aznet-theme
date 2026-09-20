@@ -39,8 +39,9 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq tor
           sudo systemctl restart tor
+          mkdir -p /tmp/lstamduchn-v1-3-20-preflight
           for i in $(seq 1 30); do
-            if (timeout 1 bash -c '</dev/tcp/127.0.0.1/9050' 2>/dev/null; then
+            if timeout 1 bash -c '</dev/tcp/127.0.0.1/9050' 2>/dev/null; then
               echo 'Tor SOCKS listener ready'
               exit 0
             fi
