@@ -19,6 +19,18 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      - name: Capture exact source recovery checkpoint
+        run: |
+          mkdir -p /tmp/law01-recovery
+          git rev-parse HEAD > /tmp/law01-recovery/CHECKOUT.txt
+          git archive --format=zip --output=/tmp/law01-recovery/source.zip HEAD
+          cd /tmp/law01-recovery
+          sha256sum source.zip > SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: law01-source-recovery
+          path: /tmp/law01-recovery/
+          retention-days: 14
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
