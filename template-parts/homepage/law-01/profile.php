@@ -14,15 +14,13 @@ $about_image = $about instanceof \WP_Post && has_post_thumbnail( $about ) ? get_
 $team_summary = $team instanceof \WP_Post ? trim( (string) get_the_excerpt( $team ) ) : '';
 $members = $has_team ? homepage_direct_published_children( (int) $team->ID, 4 ) : [];
 $has_members = [] !== $members;
-$render_team = $has_team && $has_members;
-if ( ! $has_about && ! $render_team ) { return; }
 
-$section_label = $render_team
+$section_label = $has_team
     ? ( $has_about ? __( 'Giới thiệu và đội ngũ', 'aznet-theme' ) : __( 'Đội ngũ luật sư', 'aznet-theme' ) )
     : __( 'Giới thiệu', 'aznet-theme' );
 
 $container_classes = 'aznet-theme-law01-container aznet-theme-law01-profile__container';
-if ( ! $render_team ) {
+if ( ! $has_team ) {
     $container_classes .= ' aznet-theme-law01-profile__container--about-only';
 } elseif ( ! $has_about ) {
     $container_classes .= ' aznet-theme-law01-profile__container--team-only';
@@ -42,7 +40,7 @@ if ( ! $render_team ) {
     </div>
     <?php endif; ?>
 
-    <?php if ( $render_team ) : ?>
+    <?php if ( $team instanceof \WP_Post ) : ?>
     <div class="aznet-theme-law01-profile__team-band aznet-theme-law01-team">
         <div class="aznet-theme-law01-section-heading">
             <div>
