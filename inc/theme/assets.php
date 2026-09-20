@@ -305,6 +305,29 @@ function enqueue_page_assets( ?string $version = null ): void {
 
 
 
+/** Determine whether the explicitly mapped Services Hub presentation can render. */
+function should_enqueue_service_hub_assets(): bool {
+    if ( ! function_exists( __NAMESPACE__ . '\\service_hub_is_current_page' ) ) {
+        return false;
+    }
+
+    return service_hub_is_current_page();
+}
+
+/** Enqueue scoped Services Hub presentation only for the explicitly mapped Services Page. */
+function enqueue_service_hub_assets( ?string $version = null ): void {
+    if ( ! should_enqueue_service_hub_assets() ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'aznet-theme-service-hub',
+        get_theme_file_uri( '/assets/css/components/service-hub.css' ),
+        [ 'aznet-theme-tokens', 'aznet-theme-page' ],
+        asset_content_version( '/assets/css/components/service-hub.css', $version )
+    );
+}
+
 /** Determine whether the mapped Services child landing presentation can render. */
 function should_enqueue_service_page_assets(): bool {
     if ( ! function_exists( __NAMESPACE__ . '\\service_page_is_detail' ) ) {
@@ -442,6 +465,7 @@ function enqueue_assets(): void {
     }
 
     enqueue_page_assets( $version );
+    enqueue_service_hub_assets( $version );
     enqueue_service_page_assets( $version );
     enqueue_form_assets( $version );
     enqueue_navigation_assets( $version );
