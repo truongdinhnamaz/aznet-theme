@@ -31,6 +31,10 @@ $analysis = file_get_contents($files['analysis']);
 $news = file_get_contents($files['news']);
 $process = file_get_contents($files['process']);
 $faq = file_get_contents($files['faq']);
+
+$premiumMust = static function (bool $condition, string $message): void {
+    if (! $condition) { throw new RuntimeException($message); }
+};
 $footerCss = file_get_contents($files['footer_css']);
 
 foreach ([
@@ -201,7 +205,7 @@ foreach ([
     'get_the_excerpt',
     'Đọc phân tích',
 ] as $needle) {
-    assert(str_contains($analysis, $needle), "Premium Analysis presentation missing: {$needle}");
+    $premiumMust(str_contains($analysis, $needle), "Premium Analysis presentation missing: {$needle}");
 }
 foreach ([
     'aznet-theme-law01-news-featured',
@@ -209,7 +213,7 @@ foreach ([
     'get_the_post_thumbnail',
     'get_the_excerpt',
 ] as $needle) {
-    assert(str_contains($news, $needle), "Premium Legal News presentation missing: {$needle}");
+    $premiumMust(str_contains($news, $needle), "Premium Legal News presentation missing: {$needle}");
 }
 foreach ([
     'parse_blocks',
@@ -217,7 +221,7 @@ foreach ([
     'render_block',
     'aznet-theme-law01-process__source',
 ] as $needle) {
-    assert(str_contains($process, $needle), "Source-authored Process preview missing: {$needle}");
+    $premiumMust(str_contains($process, $needle), "Source-authored Process preview missing: {$needle}");
 }
 foreach ([
     'parse_blocks',
@@ -225,7 +229,7 @@ foreach ([
     'render_block',
     'aznet-theme-law01-faq__items',
 ] as $needle) {
-    assert(str_contains($faq, $needle), "Source-authored FAQ preview missing: {$needle}");
+    $premiumMust(str_contains($faq, $needle), "Source-authored FAQ preview missing: {$needle}");
 }
 foreach ([
     '.aznet-theme-law01-analysis-card__media',
@@ -233,7 +237,7 @@ foreach ([
     '.aznet-theme-law01-process__source',
     '.aznet-theme-law01-faq__items',
 ] as $needle) {
-    assert(str_contains($css, $needle), "Premium Homepage presentation hook missing: {$needle}");
+    $premiumMust(str_contains($css, $needle), "Premium Homepage presentation hook missing: {$needle}");
 }
 
 foreach (['500+', '95%', '98%', '1.000+', '1000+', 'Nguyễn Văn A', 'Nguyễn Văn Minh', 'Trần Thị Lan', 'Phạm Anh Tuấn', 'Lê Thị Hoa'] as $forbidden) {
