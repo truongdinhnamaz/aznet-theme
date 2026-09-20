@@ -1,0 +1,124 @@
+name: OPS Publish v1.3.18
+
+on:
+  push:
+    branches:
+      - ops/publish-v1.3.18
+    paths:
+      - .github/workflows/ops-publish-v1.3.18.yml
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout publication workflow branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout exact release source
+        run: |
+          set -euo pipefail
+          git checkout --detach cd45737ea2b8f6e1ccd5b5ba68e83e50841ec38b
+          test "$(git rev-parse HEAD)" = "cd45737ea2b8f6e1ccd5b5ba68e83e50841ec38b"
+
+      - name: Verify release identity
+        run: |
+          set -euo pipefail
+          grep -Fx 'Version: 1.3.18' style.css
+          grep -F "define( 'AZNET_THEME_VERSION', '1.3.18' );" functions.php
+          if git rev-parse -q --verify refs/tags/v1.3.18 >/dev/null; then
+            test "$(git rev-parse v1.3.18^{commit})" = "cd45737ea2b8f6e1ccd5b5ba68e83e50841ec38b"
+          fi
+
+      - name: Build deterministic release package twice
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/package-lint
+          python3 scripts/build-release-package.py --source . --output /tmp/aznet-theme-1.3.18-a.zip --version 1.3.18 | tee /tmp/build-a.txt
+          python3 scripts/build-release-package.py --source . --output /tmp/aznet-theme-1.3.18-b.zip --version 1.3.18 | tee /tmp/build-b.txt
+          sha_a="$(sha256sum /tmp/aznet-theme-1.3.18-a.zip | awk '{print $1}')"
+          sha_b="$(sha256sum /tmp/aznet-theme-1.3.18-b.zip | awk '{print $1}')"
+          test "$sha_a" = "$sha_b"
+          test "$sha_a" = "52677ef7f204a6813bda0a63d5ce05a50bca4612167f2e9a8c1db4aeab4ef80f"
+          mv /tmp/aznet-theme-1.3.18-a.zip /tmp/aznet-theme-1.3.18.zip
+          unzip -l /tmp/aznet-theme-1.3.18.zip > /tmp/package-files.txt
+          unzip -q /tmp/aznet-theme-1.3.18.zip -d /tmp/package-lint
+          find /tmp/package-lint/aznet-theme -type f -name '*.php' -print0 | sort -z | xargs -0 -n1 php -l > /tmp/php-lint.txt
+          production_files="$(find /tmp/package-lint/aznet-theme -type f | wc -l | tr -d ' ')"
+          php_files="$(find /tmp/package-lint/aznet-theme -type f -name '*.php' | wc -l | tr -d ' ')"
+          test "$production_files" = "155"
+          test "$php_files" = "113"
+          {
+            echo "source_sha=cd45737ea2b8f6e1ccd5b5ba68e83e50841ec38b"
+            echo "version=1.3.18"
+            echo "package_sha256=$sha_a"
+            echo "production_files=$production_files"
+            echo "php_files=$php_files"
+          } | tee /tmp/publication-evidence.txt
+
+      - name: Create or verify annotated tag
+        run: |
+          set -euo pipefail
+          if git rev-parse -q --verify refs/tags/v1.3.18 >/dev/null; then
+            test "$(git rev-parse v1.3.18^{commit})" = "cd45737ea2b8f6e1ccd5b5ba68e83e50841ec38b"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag -a v1.3.18 cd45737ea2b8f6e1ccd5b5ba68e83e50841ec38b -m "AZnet Theme v1.3.18"
+            git push origin refs/tags/v1.3.18
+          fi
+
+      - name: Publish or verify GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if gh release view v1.3.18 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo 'Release v1.3.18 already exists; verifying readback.'
+          else
+            gh release create v1.3.18 /tmp/aznet-theme-1.3.18.zip \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "AZnet Theme 1.3.18" \
+              --notes "Law 01 Hero presentation release. The approved homepage Hero now uses a 46/54 desktop copy/media split, a taller right-side media stage, centered office-image crop, shared-shell copy alignment, refined legal-brand typography, telephone presentation markers, and the retained four-item responsive trust strip. Hero content and media remain WordPress-owned; the Theme continues to own presentation only. No provider/domain ownership boundary changes are introduced. Publication only; no production deployment is performed by this release."
+          fi
+
+      - name: Verify published release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag_sha="$(git rev-parse v1.3.18^{commit})"
+          test "$tag_sha" = "cd45737ea2b8f6e1ccd5b5ba68e83e50841ec38b"
+          gh release view v1.3.18 --repo "$GITHUB_REPOSITORY" --json isDraft,isPrerelease,tagName,name > /tmp/release.json
+          python3 - <<'PY'
+          import json
+          data=json.load(open('/tmp/release.json', encoding='utf-8'))
+          assert data['tagName']=='v1.3.18'
+          assert data['name']=='AZnet Theme 1.3.18'
+          assert data['isDraft'] is False
+          assert data['isPrerelease'] is False
+          PY
+          mkdir -p /tmp/release-readback
+          gh release download v1.3.18 --repo "$GITHUB_REPOSITORY" --pattern 'aznet-theme-1.3.18.zip' --dir /tmp/release-readback
+          sha_local="$(sha256sum /tmp/aznet-theme-1.3.18.zip | awk '{print $1}')"
+          sha_release="$(sha256sum /tmp/release-readback/aznet-theme-1.3.18.zip | awk '{print $1}')"
+          test "$sha_local" = "$sha_release"
+          test "$sha_release" = "52677ef7f204a6813bda0a63d5ce05a50bca4612167f2e9a8c1db4aeab4ef80f"
+          echo "release_readback_sha256=$sha_release" >> /tmp/publication-evidence.txt
+
+      - name: Upload publication evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: v1.3.18-publication-evidence
+          path: |
+            /tmp/publication-evidence.txt
+            /tmp/build-a.txt
+            /tmp/build-b.txt
+            /tmp/package-files.txt
+            /tmp/php-lint.txt
+            /tmp/release.json
+          if-no-files-found: error
