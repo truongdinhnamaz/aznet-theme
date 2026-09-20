@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.87
+**Version:** v0.88
 **Status:** Working Source  
 **Date:** 20/09/2026
 
@@ -42,7 +42,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P4-C | Standalone Core independence | PASS / MERGED | D-027 source + implementation merged through PR #63/#64; zero-plugin L1-L4, exact-package and exact-main gates PASS; optional integrations remain additive |
 | P5 | Publication & production deployment | PASS | Tag `v1.1.0` + GitHub Release publication and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
 | X | v1.2 WordPress Experience Completion | PUBLICATION + PRODUCTION DEPLOYMENT PASS | X1-X5 retained; PR #87 technical integration and exact-main V1 + X6 L1-L4/L6 PASS; owner-approved `v1.2.0` publication PASS; owner-approved production deployment run `35135759389` plus fresh independent read-only run `35136876330` PASS; no provider L5 expansion |
-| Y | v1.3 Client Delivery System | v1.3.22 TECHNICAL PASS / PUBLICATION PASS / PRODUCTION DEPLOYMENT BLOCKED_EXTERNAL_ACCESS | Current canonical implementation is `main@7ea9a189b124482b495f6e2adff668c070ff94de`, Theme metadata `1.3.22`. Service Page landing presentation PR #199 and release PR #200 are merged. Exact-main V1 `35521042638` and X6 `35521042601` PASS; deterministic `aznet-theme-1.3.22.zip` has 159 production files, 113 packaged PHP files verified and SHA-256 `d5197073641ebc6b7764ffca31409b56cf9e447d533899999db94b28d5e02790`. Publication run `35521247319` PASS; annotated `v1.3.22` and Release `392486195` carry the exact verified package. Production target `lstamduchn.vn` remains unmodified because the authenticated WPVibe path is temporarily blocked by the rolling fair-use cap. Provider L5 remains separate. |
+| Y | v1.3 Client Delivery System | v1.3.23 TECHNICAL PASS / PUBLICATION PASS | Current canonical implementation is `main@c3d991199bb5c95dec3bac6e0ae06072c8a249f2`, Theme metadata `1.3.23`. PR #202 completed RED -> GREEN promotion with all 14 final-head workflows SUCCESS. Exact-main V1 `35521890888` and X6 `35521890901` PASS; deterministic `aznet-theme-1.3.23.zip` has 159 production files, 113 packaged PHP files verified and SHA-256 `7129b1506131c6b9e413bcba3087475fce75f52df7b71593c5f2804e90c4f005`. Publication run `35522052972` PASS; annotated `v1.3.23` and Release `392490797` carry the exact verified package. Under D-033, repository release verification/publication does not depend on WPVibe or another production-site connector. |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
 Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` points to `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`. Publication source closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72. P5 technical run `35051428372` verified final package bytes, publication run `35052694111` published the matching tag/Release, and production read-only run `35054176392` closed deployment at the tested Theme-owned/site-operations scope.
@@ -74,7 +74,7 @@ A GitHub release check on 08/09/2026 historically established that publication h
 - Live Homepage/content readiness at the tested scope: five published Posts render in `Mới cập nhật`; About excerpt renders; indexing is enabled; homepage meta description is present; fresh mobile Lighthouse is 98 Performance / 100 Accessibility / 100 Best Practices / 100 SEO.
 - RootProfile Team remains `BLOCKED_EXTERNAL_CONTRACT`: no public/versioned organization-team projection exists on the pilot and the organization endpoint currently returns not-found. Issue #112 is the durable Theme-side blocker record. No user/author/post heuristic or private-storage fallback is allowed.
 
-**Exact next:** preserve the canonical `v1.3.22` technical/publication PASS. When authenticated production access is available, perform fresh `lstamduchn.vn` active-version/rollback preflight, deploy only the exact published `aznet-theme-1.3.22.zip`, then verify Homepage and mapped Service Page surfaces before claiming production PASS. RootProfile Team remains independently blocked at issue #112.
+**Exact next:** preserve the canonical `v1.3.23` technical/publication PASS. The exact published package may be installed by any approved deployment path; repository package creation, technical verification and publication must not be blocked on WPVibe. RootProfile Team remains independently blocked at issue #112.
 
 ## 3. v1.0 closure state
 
