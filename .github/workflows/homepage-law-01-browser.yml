@@ -217,8 +217,18 @@ jobs:
           law01_featured_fixture( $member_d, 'team-d', 800, 1000 );
           $brand_logo = law01_featured_fixture( $team, 'brand-logo', 300, 300 );
           set_theme_mod( 'custom_logo', $brand_logo );
-          $process = law01_page( 'Quy trình tư vấn', 'quy-trinh-tu-van', 'Tiếp nhận thông tin, đánh giá phạm vi và thống nhất phương án phù hợp.' );
-          $faq = law01_page( 'Câu hỏi thường gặp', 'cau-hoi-thuong-gap', 'Các câu hỏi phổ biến trước khi bắt đầu trao đổi pháp lý.' );
+          $process = law01_page(
+              'Quy trình tư vấn',
+              'quy-trinh-tu-van',
+              'Tiếp nhận thông tin, đánh giá phạm vi và thống nhất phương án phù hợp.',
+              '<!-- wp:list --><ul class="wp-block-list"><!-- wp:list-item --><li>Tiếp nhận thông tin</li><!-- /wp:list-item --><!-- wp:list-item --><li>Đánh giá phạm vi</li><!-- /wp:list-item --><!-- wp:list-item --><li>Thống nhất phương án</li><!-- /wp:list-item --></ul><!-- /wp:list -->'
+          );
+          $faq = law01_page(
+              'Câu hỏi thường gặp',
+              'cau-hoi-thuong-gap',
+              'Các câu hỏi phổ biến trước khi bắt đầu trao đổi pháp lý.',
+              '<!-- wp:details --><details class="wp-block-details"><summary>Tôi cần chuẩn bị gì?</summary><!-- wp:paragraph --><p>Chuẩn bị tài liệu liên quan đến vụ việc.</p><!-- /wp:paragraph --></details><!-- /wp:details --><!-- wp:details --><details class="wp-block-details"><summary>Thời gian tư vấn bao lâu?</summary><!-- wp:paragraph --><p>Thời gian phụ thuộc phạm vi hồ sơ.</p><!-- /wp:paragraph --></details><!-- /wp:details --><!-- wp:details --><details class="wp-block-details"><summary>Thông tin có được bảo mật?</summary><!-- wp:paragraph --><p>Thông tin được xử lý theo phạm vi tư vấn.</p><!-- /wp:paragraph --></details><!-- /wp:details -->'
+          );
           $contact = law01_page( 'Liên hệ', 'lien-he', 'Gửi thông tin để bắt đầu trao đổi.' );
 
           $knowledge_a = law01_cat( 'Kiến thức Doanh nghiệp', 'kien-thuc-doanh-nghiep' );
