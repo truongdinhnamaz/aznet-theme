@@ -8,6 +8,7 @@ on:
       - 'template-parts/header/**'
       - 'template-parts/homepage/law-01/**'
       - 'assets/css/components/homepage-law-01*.css'
+      - 'assets/images/law01-reference/**'
       - 'tests/offline/law01-reference-*.php'
       - 'tests/browser/law01-reference-components.py'
       - 'tests/browser/law01-heading-geometry.py'
@@ -45,6 +46,7 @@ jobs:
           php tests/offline/law01-reference-assets-contract.php
           php tests/offline/law01-reference-topbar-contract.php
           php tests/offline/law01-reference-team-illustration-contract.php
+          php tests/offline/law01-reference-generated-art-contract.php
       - name: Retained full core verification
         run: bash scripts/verify-v1-core.sh
       - uses: actions/setup-python@v5
