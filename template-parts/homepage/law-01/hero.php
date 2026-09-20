@@ -33,7 +33,11 @@ if ( '' === $hero_block_html ) {
         $title = trim( (string) get_the_title( $hero ) );
         $brand_title = trim( (string) get_bloginfo( 'name' ) );
         $hero_heading = trim( (string) get_the_title( $front_id ) );
-        $value_proposition = trim( (string) get_the_excerpt( $hero ) );
+        $lede = trim( (string) get_the_excerpt( $front_id ) );
+        if ( '' === $lede ) {
+            $lede = trim( (string) get_the_excerpt( $hero ) );
+        }
+        $value_proposition = '';
         $body = trim( (string) $hero->post_content );
         $body_html = '' !== $body ? wpautop( do_blocks( $body ) ) : '';
         $image = has_post_thumbnail( $hero ) ? get_the_post_thumbnail( $hero, 'large', [ 'class' => 'aznet-theme-law01-hero__image' ] ) : '';
