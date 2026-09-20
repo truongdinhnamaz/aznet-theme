@@ -85,8 +85,12 @@
     text-underline-offset: .2em;
 }
 #aznet-theme-about-content .aznet-theme-page-kit--about a:focus-visible {
-    outline: 3px solid currentColor;
+    outline: 3px solid var(--aznet-theme-about-accent);
     outline-offset: 4px;
+}
+#aznet-theme-about-content .aznet-theme-page-kit__intro a:focus-visible,
+#aznet-theme-about-content .aznet-theme-page-kit__cta a:focus-visible {
+    outline-color: #fff;
 }
 /* A compact statement; the three authored children have explicit positions. */
 #aznet-theme-about-content .aznet-theme-page-kit--about > .aznet-theme-page-kit__intro {
