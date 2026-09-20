@@ -51,3 +51,45 @@ This is intentional fail-safe behavior: without a fresh authenticated read path,
 ## Next
 
 Restore one secure authenticated read path (GitHub-hosted HTTPS or WPVibe capacity), rerun the read-only preflight, and only if active Theme state + rollback baseline are freshly verified proceed with the owner-approved exact `v1.3.20` deployment.
+
+
+## WPVibe-independent access attempts
+
+The deployment path was explicitly continued without relying on WPVibe.
+
+### Tor egress fallback
+
+A Tor SOCKS egress path was added on the GitHub-hosted runner with certificate validation retained end-to-end.
+
+- Tor circuit bootstrap: PASS via `https://check.torproject.org/api/ip`.
+- Fresh preflight run: `35515941559`.
+- Direct GitHub-runner HTTPS to `lstamduchn.vn`: TLS ClientHello -> SSL connection timeout.
+- Tor-routed HTTPS to `lstamduchn.vn`: SOCKS connection established, then TLS -> SSL connection timeout.
+- Tor-routed authenticated Playwright preflight: timed out at `/wp-login.php` before authentication.
+- Evidence artifact: `10606827830`.
+- Artifact digest: `sha256:4dffd8538f2ef3cc042a0e57ed526c70a71c66c37aa69547b4766e26e0431ce4`.
+
+This proves the blocker is not simply the original GitHub-hosted runner egress IP and does not depend on WPVibe availability.
+
+### Alternate GitHub-hosted runner matrix
+
+Fresh no-secret TLS probes were then executed across multiple GitHub-hosted runner families in run `35516159536`:
+
+- `ubuntu-22.04`: FAIL.
+- `ubuntu-24.04`: FAIL.
+- `macos-14`: FAIL.
+- `macos-15`: FAIL.
+
+All four failed to establish the target HTTPS login surface. No WordPress credentials were used in this matrix and no production mutation occurred.
+
+## Revised blocker classification
+
+**BLOCKED_EXTERNAL_TLS_TERMINATION / ACCESS PATH**, independent of WPVibe.
+
+The remaining requirement is one secure authenticated path that can complete TLS to the production site. Acceptable examples are:
+
+1. repair/allow the target HTTPS/WAF path for an external deployment runner;
+2. use an authenticated hosting/SSH/SFTP/control-panel path that bypasses the broken public TLS edge;
+3. run the deployment from a trusted local/self-hosted runner on a network from which `lstamduchn.vn` HTTPS works.
+
+Do not send WordPress administrator credentials over plain HTTP and do not bypass TLS certificate verification for deployment.
