@@ -211,6 +211,16 @@ foreach (['get_bloginfo(', 'home_url(', 'get_theme_mod(', 'wp_nav_menu(', 'wp_da
 if (1 !== substr_count($template, 'role="contentinfo"')) {
     y3_fail('Footer template must keep exactly one semantic contentinfo region');
 }
+foreach (['homepage_composer_active', 'homepage_law01_variant', '$law01_homepage', 'aznet-theme-site-footer--law01-'] as $forbidden) {
+    if (str_contains($template, $forbidden)) {
+        y3_fail('Footer presentation must remain page-independent and must not inspect Homepage state: ' . $forbidden);
+    }
+}
+foreach (['Thông tin liên hệ', 'Liên kết nhanh'] as $heading) {
+    if (! str_contains($template, $heading)) {
+        y3_fail('Footer must keep the approved page-independent professional heading: ' . $heading);
+    }
+}
 foreach (['aznet-theme-site-footer__social-column', "'professional' === \$preset", 'Kết nối với chúng tôi'] as $needle) {
     if (! str_contains($template, $needle)) {
         y3_fail('Professional Footer demo composition missing: ' . $needle);
@@ -250,6 +260,23 @@ if (! str_contains($css, '@media (max-width: 48rem)')) {
 }
 if (! str_contains($css, ':focus-visible')) {
     y3_fail('Footer stylesheet must retain visible keyboard focus');
+}
+foreach ([
+    '--aznet-theme-footer-accent',
+    'linear-gradient(',
+    '.aznet-theme-site-footer--professional .aznet-theme-site-footer__brand-title',
+    'letter-spacing:',
+] as $needle) {
+    if (! str_contains($css, $needle)) {
+        y3_fail('Footer professional visual system missing approved detail: ' . $needle);
+    }
+}
+$law01Css = file_get_contents($root . '/assets/css/components/homepage-law-01-variants.css');
+if (false === $law01Css) {
+    y3_fail('unable to read Law 01 variant stylesheet');
+}
+if (str_contains($law01Css, '.aznet-theme-site-footer--law01-')) {
+    y3_fail('Homepage variant stylesheet must not restyle the independent Theme Footer');
 }
 if (preg_match('/#[0-9a-f]{3,8}\b|rgba?\s*\(/i', $css)) {
     y3_fail('Footer presentation must use existing Theme tokens instead of hard-coded brand colors');
