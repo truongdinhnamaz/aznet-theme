@@ -1,0 +1,92 @@
+/* Final balance correction for About preview. Keeps Hero and authored content intact. */
+.aznet-theme-main--about-preview,
+.aznet-theme-main--about-preview .aznet-theme-about,
+#aznet-theme-about-content,
+#aznet-theme-about-content > .aznet-theme-page-kit--about {
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    box-sizing: border-box;
+}
+
+.aznet-theme-main--about-preview .aznet-theme-about {
+    padding: 0 !important;
+    overflow-x: clip;
+}
+
+#aznet-theme-about-content .aznet-theme-page-kit--about > .aznet-theme-page-kit__section {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    box-sizing: border-box;
+    padding-left: max(var(--aznet-theme-about-gutter), calc((100vw - var(--aznet-theme-container-shell)) / 2)) !important;
+    padding-right: max(var(--aznet-theme-about-gutter), calc((100vw - var(--aznet-theme-container-shell)) / 2)) !important;
+}
+
+#aznet-theme-about-content .aznet-theme-page-kit--about .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)),
+#aznet-theme-about-content .aznet-theme-page-kit--about > .aznet-theme-page-kit__section > * {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+#aznet-theme-about-content .aznet-theme-page-kit--about > .aznet-theme-page-kit__intro {
+    display: grid !important;
+    grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr) !important;
+    grid-template-areas: "label copy" "title copy" !important;
+    column-gap: clamp(2.5rem, 5vw, 5rem) !important;
+    align-items: center !important;
+}
+
+#aznet-theme-about-content .aznet-theme-page-kit--about > .aznet-theme-page-kit__story {
+    display: grid !important;
+    grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr) !important;
+    gap: clamp(2rem, 4vw, 4rem) !important;
+    align-items: center !important;
+}
+
+#aznet-theme-about-content .aznet-theme-page-kit__story > .wp-block-column {
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    flex-basis: auto !important;
+}
+
+#aznet-theme-about-content .aznet-theme-page-kit__story-media,
+#aznet-theme-about-content .aznet-theme-page-kit__story-media img {
+    display: block;
+    width: 100% !important;
+    max-width: none !important;
+}
+
+#aznet-theme-about-content .aznet-theme-page-kit__story-media img {
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+}
+
+#aznet-theme-about-content .aznet-theme-page-kit__section > .wp-block-columns {
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+@media (max-width: 48rem) {
+    #aznet-theme-about-content .aznet-theme-page-kit--about > .aznet-theme-page-kit__section {
+        padding-left: var(--aznet-theme-gutter-mobile) !important;
+        padding-right: var(--aznet-theme-gutter-mobile) !important;
+    }
+
+    #aznet-theme-about-content .aznet-theme-page-kit--about > .aznet-theme-page-kit__intro {
+        grid-template-columns: 1fr !important;
+        grid-template-areas: "label" "title" "copy" !important;
+        row-gap: .85rem !important;
+    }
+
+    #aznet-theme-about-content .aznet-theme-page-kit--about > .aznet-theme-page-kit__story {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+}
