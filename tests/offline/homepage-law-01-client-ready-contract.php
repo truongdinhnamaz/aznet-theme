@@ -205,7 +205,7 @@ foreach ([
 
 foreach ([
     '.aznet-theme-homepage--law-01-burgundy-gold > .aznet-theme-entry--front-page',
-    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process__layout',
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process .aznet-theme-law01-process__layout',
     '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-faq__layout',
     '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-final-cta__inner',
     'grid-template-columns: minmax(0, 42%) minmax(0, 58%);',
