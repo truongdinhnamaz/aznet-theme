@@ -11,7 +11,7 @@
     --aznet-theme-color-warning: #9a6700;
     --aznet-theme-color-danger: #b42318;
 
-    --aznet-theme-font-family-base: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --aznet-theme-font-family-base: Roboto, Arial, sans-serif;
     --aznet-theme-font-family-heading: var(--aznet-theme-font-family-base);
 
     --aznet-theme-text-display: clamp(2.75rem, 5vw, 4.5rem);
