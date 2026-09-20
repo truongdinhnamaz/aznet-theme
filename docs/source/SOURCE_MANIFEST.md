@@ -6,9 +6,9 @@ Canonical implementation baseline is exact implementation `ac5f6a41122f11bfdf334
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
-| `AZT-02-architecture.md` | v0.14 | Theme architecture, public integration contracts, D-027 Standalone Core boundary and complete WordPress-owned D-030 Hero authoring rule |
+| `AZT-02-architecture.md` | v0.15 | Theme architecture, public integration contracts, D-027 Standalone Core boundary, complete WordPress-owned D-030 Hero authoring rule, and D-032 constrained content-shell presentation invariant |
 | `AZT-03-baseline-provenance.md` | v0.68 | Canonical provenance through v1.3.16 publication plus fresh production-access BLOCKED_EXTERNAL_ACCESS evidence |
-| `AZT-04-roadmap-qa-decisions.md` | v0.83 | Roadmap/QA through v1.3.16 publication and fresh production-access BLOCKED_EXTERNAL_ACCESS checkpoint |
+| `AZT-04-roadmap-qa-decisions.md` | v0.84 | Roadmap/QA through v1.3.16 publication, fresh production-access BLOCKED_EXTERNAL_ACCESS checkpoint, and accepted D-032 layout container standard |
 | `AZT-EXEC-MAP.md` | v0.74 | Derived execution map through v1.3.16 publication plus fresh production-access blocker; exact Next is restore secure authenticated read access |
 
 v1.3.16 production-access evidence: `docs/evidence/V1_3_16_LSTAMDUCHN_PRODUCTION_ACCESS_BLOCKED_20260920.md`. Fresh run `35475064743` attempt 2 reproduced TLS stall after ClientHello before WordPress authentication; WPVibe fallback was rate-limited. Production remained unmodified and `1.3.10` remains the last verified live Theme only.

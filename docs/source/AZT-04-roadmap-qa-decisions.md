@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.83
+**Version:** v0.84
 **Status:** Working Source  
 **Date:** 20/09/2026
 
@@ -346,6 +346,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-029** | **v1.3 Client Delivery System prioritizes fast, professional client handoff through WordPress-native inner Page presentation, five portable professional Page kits, bounded Footer presets, and a generic confirmed professional-services provisioning blueprint. It preserves Classic Editor policy for native Post/Page, the single `aznet_theme_settings` store, zero mandatory provider runtime dependency, and keeps metadata at 1.2.0 until a separately approved Y5 promotion gate.** | **Accepted** |
 | **D-030** | **Homepage Hero authoring uses a Theme-owned visual library over one WordPress-owned Core-block synced Hero (`wp_block`). Theme stores only the typed block reference and presentation variant; Page Hero is legacy compatibility only. Explicit Hero initialization is draft-first so current public Hero output remains unchanged until the user publishes the new synced Hero; ordinary settings/preset saves remain content-mutation free.** | **Accepted** |
 | **D-031** | **Burgundy Law 01 Homepage composition is Theme-owned presentation around the existing single native Front Page `the_content()` boundary: Hero/Trust/Services/About-Team render before native content; Process/FAQ/Latest legal knowledge/Contact CTA render after it; Topics/Analysis/News stay excluded from the Burgundy reference composition. Every mapped section fails soft when its WordPress/public-safe source is absent or invalid, and no provider/domain data ownership or authoritative inference moves into Theme.** | **Accepted** |
+| **D-032** | **Theme-owned surfaces use full-bleed background/decorative layers over a centered constrained content shell by default. Meaningful content (text, media, cards, CTA, forms, navigation/control and content grids) stays inside `--aznet-theme-container-shell` with responsive gutters and aligned Header/Footer/main-content axes. `100vw`, negative-margin or viewport-bleed content is not a default pattern; meaningful full-bleed is an explicit surface exception that requires design intent plus responsive/browser/a11y evidence. Site/preset refinements reuse semantic shell/gutter tokens instead of introducing competing hard-coded container widths.** | **Accepted** |
 
 ## 10A. v1.3 Client Delivery System
 

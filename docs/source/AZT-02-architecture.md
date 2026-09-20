@@ -4,9 +4,9 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.14 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.15 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 19/09/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 20/09/2026 |
 
 | **Kiến trúc lõi: **Theme chỉ sở hữu presentation/configuration/reference cần thiết. Dữ liệu authoritative và business state ở lại owner. Boundary giữa hai bên là public/versioned provider contract hoặc adapter tối thiểu. |
 | --- |
@@ -77,6 +77,18 @@ AZnet Theme sở hữu font presentation và semantic typography tokens. Font m�
 - Chỉ ship các weight thực sự dùng; implementation hiện dùng 400 Regular, 500 Medium và 700 Bold. Selector cần emphasis trung gian phải chọn weight gần nhất có chủ đích, không relabel/synthesize font file.
 - `theme.json` và frontend phải dùng cùng family để giữ editor/frontend parity.
 - Provider/plugin có thể consume semantic typography token khi cần presentation alignment nhưng không sở hữu, lưu hoặc mutation Theme typography.
+
+## 5.2. Full-bleed background + constrained content shell
+
+Geometry mặc định của mọi Theme-owned Page/section là mô hình hai lớp: **background/decorative layer có thể full-width; meaningful content mặc định nằm trong centered shell container**. Đây là presentation invariant dùng lại khi thiết kế từng surface, không phải site-specific workaround.
+
+- Background, màu section, border band và decorative media có thể chạy full viewport khi presentation intent cần.
+- Text, ảnh nội dung, card, CTA, form, navigation/control và content grid mặc định phải nằm trong `--aznet-theme-container-shell`, căn giữa, với responsive gutter dùng `--aznet-theme-gutter` và mobile gutter tương ứng.
+- Header, Footer và main content surfaces nên cùng trục shell để tạo continuity thị giác xuyên website; surface chuyên biệt chỉ được lệch trục khi có lý do presentation rõ ràng.
+- Không dùng `100vw`, negative margin hoặc viewport bleed cho meaningful content như một mặc định để “làm đầy” màn hình.
+- Full-bleed meaningful content là exception: phải được ghi rõ trong Design Packet/surface contract, không tạo horizontal overflow, và phải PASS responsive/browser/a11y evidence ở layer phù hợp.
+- Site/preset refinement phải reuse semantic shell/gutter tokens; không tạo competing hard-coded container width chỉ để nới một surface nếu chưa có source decision riêng.
+- Quy tắc geometry này không thay đổi ownership: WordPress/provider vẫn sở hữu content/data của họ; Theme chỉ sở hữu cách bố cục và presentation.
 
 # 6. Cấu trúc source tree - baseline
 
