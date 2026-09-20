@@ -32,6 +32,23 @@ jobs:
       - name: Check preflight harness syntax
         run: node --check tests/browser/lstamduchn-v1-3-20-preflight.mjs
 
+      - name: Start Tor egress fallback
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq tor
+          sudo systemctl restart tor
+          for i in $(seq 1 30); do
+            if (timeout 1 bash -c '</dev/tcp/127.0.0.1/9050' 2>/dev/null; then
+              echo 'Tor SOCKS listener ready'
+              exit 0
+            fi
+            sleep 1
+          done
+          echo 'Tor SOCKS listener did not become ready' >&2
+          exit 1
+
       - name: Diagnose target network and HTTP reachability
         shell: bash
         run: |
@@ -44,13 +61,19 @@ jobs:
           curl -4 -vIL --connect-timeout 10 --max-time 30 https://lstamduchn.vn/wp-login.php 2>&1 || true
           echo '=== HTTP root IPv4 ==='
           curl -4 -vIL --connect-timeout 10 --max-time 20 http://lstamduchn.vn/ 2>&1 || true
+          echo '=== HTTPS root through Tor SOCKS ==='
+          curl --socks5-hostname 127.0.0.1:9050 -vIL --connect-timeout 20 --max-time 45 https://lstamduchn.vn/ 2>&1 || true
+          echo '=== HTTPS wp-login through Tor SOCKS ==='
+          curl --socks5-hostname 127.0.0.1:9050 -vIL --connect-timeout 20 --max-time 45 https://lstamduchn.vn/wp-login.php 2>&1 || true
 
-      - name: Run authenticated read-only preflight
+      - name: Run authenticated read-only preflight through Tor
+
         env:
           LSTAMDUCHN_BASE_URL: https://lstamduchn.vn
           PILOT_WP_USER: ${{ secrets.PILOT_WP_USER }}
           PILOT_WP_PASSWORD: ${{ secrets.PILOT_WP_PASSWORD }}
           LSTAMDUCHN_STATE_DIR: /tmp/lstamduchn-v1-3-20-preflight
+          LSTAMDUCHN_PROXY_SERVER: socks5://127.0.0.1:9050
         run: node tests/browser/lstamduchn-v1-3-20-preflight.mjs
 
       - name: Upload preflight evidence
