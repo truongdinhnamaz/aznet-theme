@@ -125,6 +125,8 @@ for ( $i = 1; $i <= 3; $i++ ) {
 
 $settings = get_theme_mod( 'aznet_theme_settings', [] );
 $settings = is_array( $settings ) ? $settings : [];
+$settings['homepage_preset']        = 'law-01';
+$settings['homepage_law01_variant'] = 'burgundy-gold';
 $settings['homepage_services_page'] = $services_id;
 $settings['homepage_contact_page']  = $contact_id;
 $settings['homepage_process_page']  = $process_id;
