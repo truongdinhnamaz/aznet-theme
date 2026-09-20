@@ -1,13 +1,6 @@
 /* Law 01 reference refinement. Content and identity remain owned by their sources.
  * This asset is loaded only on the existing Burgundy/Gold front-page surface.
  */
-.aznet-theme-homepage--law-01-burgundy-gold,
-.aznet-theme-site-header--law01-burgundy-gold,
-.aznet-theme-site-footer--law01-burgundy-gold {
-    --aznet-theme-font-family-base: "Times New Roman", "Liberation Serif", Times, serif;
-    --aznet-theme-font-family-heading: var(--aznet-theme-font-family-base);
-    font-family: var(--aznet-theme-font-family-base);
-}
 .aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__inner {
     min-height: 88px;
     gap: clamp(.8rem, 1.3vw, 1.5rem);
