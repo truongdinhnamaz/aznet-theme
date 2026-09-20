@@ -49,6 +49,7 @@ jobs:
           php tests/offline/law01-reference-team-illustration-contract.php
           php tests/offline/law01-reference-generated-art-contract.php
           php tests/offline/law01-reference-contact-strip-contract.php
+          php tests/offline/law01-reference-latest-card-contract.php
       - name: Retained full core verification
         run: bash scripts/verify-v1-core.sh
       - uses: actions/setup-python@v5
