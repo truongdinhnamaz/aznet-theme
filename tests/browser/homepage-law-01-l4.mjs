@@ -289,7 +289,7 @@ async function inspectViewport(browser, name, viewport) {
         throw new Error('desktop Footer and Law 01 content must align to the same reference shell');
       }
       const contentRatio = parityMetrics.content.width / parityMetrics.heroGrid.width;
-      if (contentRatio < 0.52 || contentRatio > 0.56) throw new Error(`desktop Hero content column must stay near approved 54% shell target, got ${contentRatio.toFixed(3)}`);
+      if (contentRatio < 0.44 || contentRatio > 0.48) throw new Error(`desktop Hero content column must stay near approved 46% shell target, got ${contentRatio.toFixed(3)}`);
       if (Math.abs(parityMetrics.content.y - parityMetrics.visual.y) > 2) throw new Error('desktop Hero columns must align on one row');
       const visualRight = parityMetrics.visual.x + parityMetrics.visual.width;
       if (Math.abs(visualRight - viewport.width) > 2) {
