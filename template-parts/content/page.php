@@ -21,6 +21,8 @@ $service_hub_items = $is_service_hub ? \AZnet\Theme\service_hub_items( 6 ) : [];
 $service_hub_posts = $is_service_hub ? \AZnet\Theme\service_hub_latest_posts( 3 ) : [];
 $service_hub_process = $is_service_hub ? \AZnet\Theme\service_hub_support_page( 'process' ) : null;
 $service_hub_faq = $is_service_hub ? \AZnet\Theme\service_hub_support_page( 'faq' ) : null;
+$service_hub_post = $is_service_hub ? get_post( $post_id ) : null;
+$service_hub_has_editorial = $service_hub_post instanceof \WP_Post && '' !== trim( (string) $service_hub_post->post_content );
 
 $article_classes = 'aznet-theme-page aznet-theme-page--' . $variant;
 if ( $is_service_detail ) {
@@ -140,12 +142,14 @@ $card_summary = static function ( \WP_Post $post, int $words = 24 ): string {
                 </section>
             <?php endif; ?>
 
-            <section class="aznet-theme-service-hub__section aznet-theme-service-hub__editorial" aria-label="<?php echo esc_attr__( 'Thông tin dịch vụ', 'aznet-theme' ); ?>">
-                <div class="aznet-theme-page__content aznet-theme-entry__content">
-                    <?php the_content(); ?>
-                    <?php wp_link_pages(); ?>
-                </div>
-            </section>
+            <?php if ( $service_hub_has_editorial ) : ?>
+                <section class="aznet-theme-service-hub__section aznet-theme-service-hub__editorial" aria-label="<?php echo esc_attr__( 'Thông tin dịch vụ', 'aznet-theme' ); ?>">
+                    <div class="aznet-theme-page__content aznet-theme-entry__content">
+                        <?php the_content(); ?>
+                        <?php wp_link_pages(); ?>
+                    </div>
+                </section>
+            <?php endif; ?>
 
             <?php if ( $service_hub_process instanceof \WP_Post || $service_hub_faq instanceof \WP_Post ) : ?>
                 <section class="aznet-theme-service-hub__section aznet-theme-service-hub__support" aria-labelledby="aznet-theme-service-support-title">
