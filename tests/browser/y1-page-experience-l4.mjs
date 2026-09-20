@@ -4,6 +4,7 @@ import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 
 const routes = {
+  servicesHub: { url: process.env.Y1_SERVICE_HUB_URL, variant: 'standard', breadcrumbs: false, hub: true },
   child: { url: process.env.Y1_CHILD_URL, variant: 'standard', breadcrumbs: true, service: true },
   wide: { url: process.env.Y1_WIDE_URL, variant: 'wide', breadcrumbs: false },
   landing: { url: process.env.Y1_LANDING_URL, variant: 'landing', breadcrumbs: false },
@@ -74,6 +75,7 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
     blockingAxeViolations: null,
     breadcrumbFocus: null,
     servicePrimaryFocus: null,
+    hubPrimaryFocus: null,
     status: 'failed',
     error: null,
   };
@@ -100,6 +102,25 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
     const breadcrumbCount = await page.locator('.aznet-theme-page__breadcrumbs').count();
     if (config.breadcrumbs && breadcrumbCount !== 1) throw new Error('Expected one breadcrumb navigation');
     if (!config.breadcrumbs && breadcrumbCount !== 0) throw new Error('Unexpected breadcrumb navigation');
+
+    if (config.hub) {
+      if (await page.locator('.aznet-theme-page--service-hub').count() !== 1) throw new Error('Expected mapped Services Hub presentation');
+      if (await page.locator('.aznet-theme-service-hub__selection').count() !== 1) throw new Error('Expected Services Hub selection');
+      if (await page.locator('.aznet-theme-service-hub__card').count() !== 3) throw new Error('Expected three mapped service cards');
+      if (await page.locator('.aznet-theme-service-hub__orientation').count() !== 1) throw new Error('Expected Services Hub orientation band');
+      if (await page.locator('.aznet-theme-service-hub__support-card').count() !== 2) throw new Error('Expected mapped process and FAQ support cards');
+      if (await page.locator('.aznet-theme-service-hub__knowledge').count() !== 1) throw new Error('Expected Services Hub knowledge section');
+      if (await page.locator('.aznet-theme-service-hub__knowledge-card').count() !== 3) throw new Error('Expected three native knowledge cards');
+      if (await page.locator('.aznet-theme-service-hub__final-cta').count() !== 1) throw new Error('Expected Services Hub final CTA');
+      const hubStylesheets = await page.evaluate(() => Array.from(document.styleSheets).map((sheet) => sheet.href).filter(Boolean));
+      if (!hubStylesheets.some((href) => href.includes('/assets/css/components/service-hub.css'))) {
+        throw new Error('Services Hub stylesheet not observed');
+      }
+      result.hubPrimaryFocus = await focusEvidence(page, '.aznet-theme-service-hub__primary');
+      if (!result.hubPrimaryFocus?.visible || !result.hubPrimaryFocus.focusVisible || result.hubPrimaryFocus.outlineStyle === 'none' || result.hubPrimaryFocus.outlineWidth < 1) {
+        throw new Error(`Services Hub primary action lacks visible focus evidence: ${JSON.stringify(result.hubPrimaryFocus)}`);
+      }
+    }
 
     if (config.service) {
       if (await page.locator('.aznet-theme-page--service-detail').count() !== 1) throw new Error('Expected mapped service detail presentation');
