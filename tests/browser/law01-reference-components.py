@@ -25,7 +25,7 @@ with sync_playwright() as p:
         if metric['scroll'] > width + 1: errors.append(f'{width}: horizontal overflow')
         if metric['profileRight'] > metric['containerRight'] + 1: errors.append(f'{width}: profile columns exceed container')
         if width == 1440:
-            if 'serif' not in metric['font'].lower() or 'sans-serif' in metric['font'].lower(): errors.append('1440: serif typography missing')
+            if not metric['font'].lower().startswith('roboto'): errors.append(f"1440: agreed Roboto typography missing: {metric['font']}")
             if metric['brand'] <= metric['headline']: errors.append('1440: brand is not larger than headline')
             if metric['support'] >= metric['headline'] * .7: errors.append('1440: supporting copy too large')
             if not 2.2 <= metric['mediaRatio'] <= 2.5: errors.append('1440: article image lacks reference landscape crop')
