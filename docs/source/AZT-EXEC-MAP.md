@@ -1,15 +1,15 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.75
+**Version:** v0.76
 **Status:** Working Execution Map / derived  
 **Date:** 20/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** exact verified implementation is `a81067b1f1804783a35e8113ebf6859c7fcc38fa`, Theme metadata `1.3.20`; exact-main V1 `35509805662` and X6 `35509805668` are SUCCESS. Publication run `35509995234` published annotated `v1.3.20` tag object `f7d50863b3b7b8f4e500172ba624d24b73ff312f` -> exact canonical commit and GitHub Release `392420684`; public package SHA-256 is `96ff01960e17d1da7167c5c3e296abbdabad0e5d51603f0f73ca4513ac880c00`. Owner final approval on 20/09/2026 marks the reviewed Law 01 Homepage PASS. Production deployment to `lstamduchn.vn` remains separately gated and BLOCKED_EXTERNAL_ACCESS on the last secure-access evidence; no live `1.3.20` mutation is claimed and `1.3.10` remains the last verified live Theme. RootProfile Team remains separately blocked under issue #112.
+> **Canonical-main checkpoint:** exact verified implementation is `998a8dcf342b09824b197059524c50c013dba828`, Theme metadata `1.3.21`; exact-main V1 `35518082825` and X6 `35518082833` are SUCCESS. X6 browser/axe is 32/32 PASS and deterministic `aznet-theme-1.3.21.zip` SHA-256 is `da695f2b33aafc38172a9a412a3b1afd16263db3f03d305be4304eba877e09e2` (158 files, 113 packaged PHP lint PASS). Current published GitHub Release remains `v1.3.20` from release run `35509995234`; `v1.3.21` publication is not claimed. Production deployment to `lstamduchn.vn` remains separate and no live `1.3.21` mutation is claimed; `1.3.10` remains the last verified live Theme under current access evidence. RootProfile Team remains separately blocked under issue #112.
 
-**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication/deployment PASS -> Y1-Y5 -> PR #98 -> v1.3.0 publication/deployment PASS -> corrective releases through v1.3.16 publication PASS -> D-032 expansion -> PR #193 premium Homepage refinement -> PR #194 v1.3.20 promotion -> exact-main V1/X6 PASS -> v1.3.20 publication PASS -> owner final Homepage approval PASS`. Current release boundary: `v1.3.20 TECHNICAL + PUBLICATION PASS / HOMEPAGE FINAL PASS / PRODUCTION DEPLOYMENT BLOCKED_EXTERNAL_ACCESS`.
+**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication/deployment PASS -> Y1-Y5 -> PR #98 -> v1.3.0 publication/deployment PASS -> corrective releases through v1.3.16 publication PASS -> D-032 expansion -> PR #193 premium Homepage refinement -> PR #194 v1.3.20 promotion/publication -> final Homepage approval -> PR #196 About presentation -> PR #197 v1.3.21 promotion -> exact-main V1/X6 PASS`. Current release boundary: `v1.3.21 TECHNICAL PASS / v1.3.20 PUBLICATION PASS / PRODUCTION DEPLOYMENT NOT CLAIMED`.
 
 ## 1. Current state
 
@@ -69,7 +69,7 @@ P3 final verified head `d78091900451176c3815b23d1485036e784bdde9` merged through
 - RootProfile Team/member discovery remains BLOCKED_EXTERNAL_CONTRACT under issue #112. Theme must not self-unblock through private storage, WordPress-user enumeration or heuristic identity inference.
 - Production deployment is **not** implied by Homepage final PASS or publication. Fresh live `1.3.20` state is UNKNOWN; `1.3.10` remains the last verified live Theme under existing access evidence.
 
-**Exact Next:** source/evidence reconciliation for this final Homepage + `v1.3.20` checkpoint is safe and may merge only with owner approval. Production deployment remains a separate hard gate and additionally requires restored secure authenticated access + fresh rollback/preflight verification.
+**Exact Next:** preserve the canonical `v1.3.21` technical checkpoint and complete source reconciliation. `v1.3.21` publication remains separate; production deployment remains a separate hard gate requiring a safe authenticated target-site path plus fresh rollback/preflight verification. WPVibe is not a mandatory repository release-verification dependency.
 
 ## 2. Slice discipline
 
@@ -458,7 +458,7 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 16. Exact next
 
-**NEXT — `v1.3.11` publication is PASS. Merge this publication source/evidence closure PR after owner approval. After source sync, production deployment of the exact `v1.3.11` release asset is the next possible release-path action only after separate owner approval and target-site/rollback revalidation.**
+**NEXT — preserve canonical `v1.3.21` technical PASS. Current public GitHub Release remains `v1.3.20`; `v1.3.21` publication is a separate release action. Production deployment remains separately gated by safe authenticated target-site preflight and rollback evidence.**
 
 
 ## 15.9 Homepage Hero editing UX follow-up — 19/09/2026
@@ -591,3 +591,19 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - Repair evidence artifact `10579042492`, digest `sha256:93e41bea89dee8be2f7be80f8338aac45016acb7457fc57565ecd7f38b220ac9`.
 - Temporary publication helper cleanup `b585dfbf03d559a6e19b09ca756774d49b5fd157`; ops branch zero net changed files against publication-time main.
 - State: **v1.3.11 PUBLICATION PASS / PRODUCTION DEPLOYMENT GATED**.
+
+
+## 15.19 v1.3.21 About Page technical closure — 20/09/2026
+
+- Owner-approved About presentation PR #196: RED `4b7435b6daaed58fc4d1b68f877000aadf92e637` -> GREEN `9e2b8989bc9d6e382495791bba4379b685494c4f`; final head 15/15 workflows SUCCESS; merged to `main@aab636d3fe1c21be924ba62ea30b7a910cf2e019`.
+- Release PR #197: RED head `d7d91627d325dc76433c9e693140fcd37192ee17` failed the intended Y5 1.3.21 metadata assertion; exact GREEN head `f7107f301485839d361fd00e9cb11c0837074434` completed 14/14 triggered workflows SUCCESS.
+- Canonical merge: `main@998a8dcf342b09824b197059524c50c013dba828`, Theme metadata `1.3.21`.
+- Exact-main V1 `35518082825`: SUCCESS.
+- Exact-main X6 `35518082833`: SUCCESS; browser/axe 32/32 PASS; `PASS: X6 promoted 1.3.21 ownership boundary`.
+- Deterministic package: `aznet-theme-1.3.21.zip`, 158 files, 113 packaged PHP lint PASS, SHA-256 `da695f2b33aafc38172a9a412a3b1afd16263db3f03d305be4304eba877e09e2`.
+- Exact-main X6 artifact `10607616743`, digest `sha256:beacf4a2d8bc6abf0c0b1f8453822c3aa3a3fcee99e7ca4aad4611b25917e655`.
+- Theme owns presentation only; WordPress retains About Page content/link/storage ownership. No RootProfile/private provider data or authoritative Team/Profile semantics were introduced.
+- Owner decision: WPVibe is not required for repository-native technical/release verification. Production deployment still requires independent authenticated target-site preflight and rollback evidence.
+- State: **v1.3.21 TECHNICAL PASS / PUBLICATION GATED / PRODUCTION DEPLOYMENT NOT CLAIMED**.
+- Current public GitHub Release remains `v1.3.20`.
+- Evidence: `docs/evidence/V1_3_21_ABOUT_PAGE_TECHNICAL_CLOSURE_20260920.md`.

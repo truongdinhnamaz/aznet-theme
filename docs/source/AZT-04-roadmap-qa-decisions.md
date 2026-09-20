@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.85
+**Version:** v0.86
 **Status:** Working Source  
 **Date:** 20/09/2026
 
@@ -42,7 +42,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P4-C | Standalone Core independence | PASS / MERGED | D-027 source + implementation merged through PR #63/#64; zero-plugin L1-L4, exact-package and exact-main gates PASS; optional integrations remain additive |
 | P5 | Publication & production deployment | PASS | Tag `v1.1.0` + GitHub Release publication and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
 | X | v1.2 WordPress Experience Completion | PUBLICATION + PRODUCTION DEPLOYMENT PASS | X1-X5 retained; PR #87 technical integration and exact-main V1 + X6 L1-L4/L6 PASS; owner-approved `v1.2.0` publication PASS; owner-approved production deployment run `35135759389` plus fresh independent read-only run `35136876330` PASS; no provider L5 expansion |
-| Y | v1.3 Client Delivery System | v1.3.20 PUBLICATION PASS / PRODUCTION DEPLOYMENT BLOCKED_EXTERNAL_ACCESS | Current public release is `v1.3.20` from exact verified canonical implementation `a81067b1f1804783a35e8113ebf6859c7fcc38fa`. Exact-main V1 `35509805662` and X6 `35509805668` PASS; publication run `35509995234` published Release `392420684`, asset `576757385`, SHA-256 `96ff01960e17d1da7167c5c3e296abbdabad0e5d51603f0f73ca4513ac880c00`. No live v1.3.20 deployment is claimed; last verified live Theme remains `1.3.10`. Provider L5 remains separate. |
+| Y | v1.3 Client Delivery System | v1.3.21 TECHNICAL PASS / v1.3.20 PUBLICATION PASS / PRODUCTION DEPLOYMENT NOT CLAIMED | Current canonical technical implementation is `main@998a8dcf342b09824b197059524c50c013dba828`, Theme metadata `1.3.21`. Exact-main V1 `35518082825` and X6 `35518082833` PASS; X6 browser/axe is 32/32 PASS and deterministic `aznet-theme-1.3.21.zip` SHA-256 is `da695f2b33aafc38172a9a412a3b1afd16263db3f03d305be4304eba877e09e2`. Current public GitHub Release remains `v1.3.20`; no live `1.3.21` deployment is claimed. Provider L5 remains separate. |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
 Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` points to `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`. Publication source closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72. P5 technical run `35051428372` verified final package bytes, publication run `35052694111` published the matching tag/Release, and production read-only run `35054176392` closed deployment at the tested Theme-owned/site-operations scope.
@@ -74,7 +74,7 @@ A GitHub release check on 08/09/2026 historically established that publication h
 - Live Homepage/content readiness at the tested scope: five published Posts render in `Mới cập nhật`; About excerpt renders; indexing is enabled; homepage meta description is present; fresh mobile Lighthouse is 98 Performance / 100 Accessibility / 100 Best Practices / 100 SEO.
 - RootProfile Team remains `BLOCKED_EXTERNAL_CONTRACT`: no public/versioned organization-team projection exists on the pilot and the organization endpoint currently returns not-found. Issue #112 is the durable Theme-side blocker record. No user/author/post heuristic or private-storage fallback is allowed.
 
-**Exact next:** no new Theme implementation slice is opened by this checkpoint. Preserve the completed core/release state. Team rendering may resume only after the RootProfile owner publishes a suitable public/versioned projection; any further release/deploy/takeover or new roadmap slice requires its own gate.
+**Exact next:** preserve the `v1.3.21` technical PASS and current published `v1.3.20` release boundary. A `v1.3.21` tag/GitHub Release remains a separate publication action; production deployment remains separate and requires fresh authenticated target-site preflight/rollback evidence. RootProfile Team remains independently blocked at issue #112.
 
 ## 3. v1.0 closure state
 
@@ -348,6 +348,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-030** | **Homepage Hero authoring uses a Theme-owned visual library over one WordPress-owned Core-block synced Hero (`wp_block`). Theme stores only the typed block reference and presentation variant; Page Hero is legacy compatibility only. Explicit Hero initialization is draft-first so current public Hero output remains unchanged until the user publishes the new synced Hero; ordinary settings/preset saves remain content-mutation free.** | **Accepted** |
 | **D-031** | **Burgundy Law 01 Homepage composition is Theme-owned presentation around the existing single native Front Page `the_content()` boundary: Hero/Trust/Services/About-Team render before native content; Process/FAQ/Latest legal knowledge/Contact CTA render after it; Topics/Analysis/News stay excluded from the Burgundy reference composition. Every mapped section fails soft when its WordPress/public-safe source is absent or invalid, and no provider/domain data ownership or authoritative inference moves into Theme.** | **Accepted** |
 | **D-032** | **Burgundy Law 01 Homepage expansion preserves the owner-accepted v1.3.18 visual baseline for Hero/Trust/Services/About-Team/Latest and extends only below Latest with exact mapped WordPress-native Topics, Analysis, Legal News, Process, FAQ and Contact CTA. The Theme owns composition/presentation only; WordPress/public-safe sources own content/data; every added section fails soft when its mapped source is absent/invalid; Footer remains page-independent; no heuristic source discovery, private storage read, provider takeover or domain semantics are introduced. D-032 supersedes D-031 only where D-031 excluded Topics/Analysis/News or ordered post-content sections differently.** | **Accepted** |
+| **D-033** | **Repository-native static/contract/WordPress runtime/browser/a11y/exact-package/lifecycle evidence is sufficient for AZnet Theme technical release closure; WPVibe is not a mandatory release-verification dependency. Production deployment remains a separate gate and still requires a safe authenticated target-site path, fresh preflight and rollback evidence by an available approved mechanism.** | **Accepted** |
 
 ## 10A. v1.3 Client Delivery System
 
@@ -519,7 +520,7 @@ This remains Theme presentation only. RootProfile authoritative Team remains BLO
 
 ## 14. Exact next
 
-**NEXT — `v1.3.11` PUBLICATION is PASS. Merge the publication source/evidence closure PR after owner approval. Production deployment of the exact published `v1.3.11` asset remains a separate explicit owner gate and must revalidate target-site local modifications plus rollback before any mutation. RootProfile Team remains externally blocked at issue #112.**
+**NEXT — preserve canonical `v1.3.21` technical PASS and current public `v1.3.20` publication boundary. `v1.3.21` publication remains separate. Any production deployment remains a separate explicit gate and must revalidate authenticated target-site state plus rollback before mutation. RootProfile Team remains externally blocked at issue #112.**
 
 
 ### Canonical 1.3.10 merge and Homepage Hero editing UX candidate — 19/09/2026
@@ -679,3 +680,12 @@ Owner-approved production deployment was stopped safely at preflight.
 - RootProfile issue #112 is unrelated and remains separately external-blocked.
 
 Evidence: `docs/evidence/V1_3_15_LSTAMDUCHN_DEPLOYMENT_PREFLIGHT_BLOCKED_20260920.md`.
+
+
+### v1.3.21 About Page technical closure — 20/09/2026
+
+The product owner approved the refined About / Giới thiệu presentation and explicitly removed WPVibe as a required repository release-verification dependency. PR #196 merged the scoped icon-led presentation to `main@aab636d3fe1c21be924ba62ea30b7a910cf2e019`; WordPress remains owner of Page content and the Theme adds presentation only.
+
+Release PR #197 followed RED -> GREEN. RED head `d7d91627d325dc76433c9e693140fcd37192ee17` failed the intended Y5 `1.3.21` metadata assertion. Exact GREEN head `f7107f301485839d361fd00e9cb11c0837074434` completed 14/14 triggered workflows SUCCESS and merged to canonical `main@998a8dcf342b09824b197059524c50c013dba828`.
+
+Fresh exact-main V1 `35518082825` and X6 `35518082833` completed SUCCESS. X6 browser/axe passed 32/32; deterministic `aznet-theme-1.3.21.zip` has 158 files, 113 packaged PHP lint PASS and SHA-256 `da695f2b33aafc38172a9a412a3b1afd16263db3f03d305be4304eba877e09e2`. This closes `v1.3.21` technically only. Current GitHub Release remains `v1.3.20`; no `v1.3.21` publication or production deployment is claimed. Evidence: `docs/evidence/V1_3_21_ABOUT_PAGE_TECHNICAL_CLOSURE_20260920.md`.
