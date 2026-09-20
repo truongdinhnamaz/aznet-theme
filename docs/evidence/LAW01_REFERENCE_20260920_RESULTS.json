@@ -1,0 +1,43 @@
+{
+  "date": "2026-09-20",
+  "baseline_commit": "aba549a54877d21c38e3d83bf77094ad8b40d9df",
+  "artifact_tested_merge_commit": "55dae49ea5c57090b091372c48668346b551294f",
+  "artifact_id": 10598572656,
+  "outer_artifact_sha256": "459edf3ab8b4e70d7eac4a186033d64128b508071a1354c17f62c29a0bb71be2",
+  "php_lint": {"production_files": 113, "failures": 0},
+  "contracts": {
+    "law01-reference-interaction-contract.php": "PASS after RED: decorative span was not a permalink",
+    "law01-reference-assets-contract.php": "PASS after RED: scoped module was missing",
+    "law01-reference-topbar-contract.php": "PASS after RED: source-backed topbar was missing"
+  },
+  "component_browser": {
+    "scope": "isolated component fixture, NOT live WordPress",
+    "viewport_widths": [1440, 1024, 390, 320],
+    "failures": [],
+    "baseline_without_reference_css": "FAIL: serif hierarchy, supporting copy, landscape crop and 1024px overflow"
+  },
+  "pilot_automated_audits_after_topbar": {
+    "desktop": {"accessibility": 100, "best_practices": 100},
+    "mobile": {"accessibility": 100, "best_practices": 100},
+    "limit": "Automated category scores only, not visual parity or full accessibility certification"
+  },
+  "native_page_order": {
+    "before": {"174": 0, "175": 0, "176": 0, "177": 0, "178": 0, "179": 0},
+    "after": {"174": 1, "175": 2, "176": 3, "177": 4, "178": 5, "179": 6},
+    "scope": "Shared WordPress native content, not draft-isolated"
+  },
+  "runtime_observed": [
+    "Reference stylesheet enqueued by WordPress after original variant styles",
+    "Three article read-more actions render real permalink anchors",
+    "Six services render in explicitly configured order",
+    "Topbar renders native description and existing contact menu"
+  ],
+  "not_proven": [
+    "100 percent screenshot parity",
+    "Fresh full candidate regression until remote CI finishes",
+    "Actual pilot browser screenshots",
+    "Artwork replacement",
+    "Integration closure",
+    "Release or publish approval"
+  ]
+}

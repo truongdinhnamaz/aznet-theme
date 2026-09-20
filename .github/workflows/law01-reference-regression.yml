@@ -1,0 +1,41 @@
+name: Law 01 Reference Regression
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'inc/theme/bootstrap.php'
+      - 'inc/theme/law01-reference.php'
+      - 'template-parts/header/**'
+      - 'template-parts/homepage/law-01/**'
+      - 'assets/css/components/homepage-law-01*.css'
+      - 'tests/offline/law01-reference-*.php'
+      - 'tests/browser/law01-reference-components.py'
+      - '.github/workflows/law01-reference-regression.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Reference behavior contracts
+        run: |
+          set -euo pipefail
+          php tests/offline/law01-reference-interaction-contract.php
+          php tests/offline/law01-reference-assets-contract.php
+          php tests/offline/law01-reference-topbar-contract.php
+      - name: Retained full core verification
+        run: bash scripts/verify-v1-core.sh
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Isolated component browser checks - not pilot screenshots
+        run: |
+          python -m pip install playwright==1.57.0
+          python -m playwright install --with-deps chromium
+          python tests/browser/law01-reference-components.py
