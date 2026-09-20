@@ -1,15 +1,17 @@
 # AZnet Theme Source Manifest
 
-Canonical implementation baseline is exact implementation `6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3`, Theme metadata `1.3.15`; publication source/evidence closure is merged through `main@2d2546b25021a90cb8b7bf4aa909673f1ff4cf7e`. Exact-main V1 `35473959243` and X6 `35473959238` PASS. Owner-approved publication run `35474494290` published annotated `v1.3.15` and GitHub Release `392243619`; asset `575623879` has SHA-256 `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`. Owner-approved production deployment to `lstamduchn.vn` is BLOCKED_EXTERNAL_ACCESS before mutation because CI HTTPS stalls after TLS ClientHello on all observed IPv4 backends and WPVibe fallback is temporarily rate-limited. RootProfile-backed authoritative Team membership remains separately blocked at issue #112.
+Canonical implementation baseline is exact implementation `ac5f6a41122f11bfdf334a8e080532f6165aa120`, Theme metadata `1.3.16`. Exact-main V1 `35477748238` and X6 `35477748216` PASS. Owner-approved publication run `35478013102` published annotated `v1.3.16` and GitHub Release `392259635`; asset `575729964` has SHA-256 `7d6798077bfa0dfcda5e770c31df5e89ff00cc82c4686d3256e9897a3959e431`. Production deployment to `lstamduchn.vn` remains a separate gate; the last verified live Theme is `1.3.10` and no live `1.3.16` mutation is claimed. RootProfile-backed authoritative Team membership remains separately blocked at issue #112.
 | Source | Semantic version | Role |
 | --- | --- | --- |
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.14 | Theme architecture, public integration contracts, D-027 Standalone Core boundary and complete WordPress-owned D-030 Hero authoring rule |
-| `AZT-03-baseline-provenance.md` | v0.66 | Canonical provenance through v1.3.15 publication plus owner-approved production preflight blocked before mutation by external HTTPS access |
-| `AZT-04-roadmap-qa-decisions.md` | v0.81 | Roadmap/QA through v1.3.15 deployment preflight BLOCKED_EXTERNAL_ACCESS; no production mutation; RootProfile Team #112 remains separate |
-| `AZT-EXEC-MAP.md` | v0.72 | Derived execution map through owner-approved deployment preflight blocker; exact Next is restore secure authenticated access then rerun preflight |
+| `AZT-03-baseline-provenance.md` | v0.67 | Canonical provenance through v1.3.16 technical closure/publication; production deployment remains separate |
+| `AZT-04-roadmap-qa-decisions.md` | v0.82 | Roadmap/QA through accepted D-031 Burgundy composition and v1.3.16 publication; production deployment remains separate |
+| `AZT-EXEC-MAP.md` | v0.73 | Derived execution map through v1.3.16 technical/publication PASS; production deployment remains separately gated |
+
+v1.3.16 technical closure evidence: `docs/evidence/V1_3_16_TECHNICAL_CLOSURE_20260920.md`. v1.3.16 publication evidence: `docs/evidence/V1_3_16_PUBLICATION_20260920.md`.
 
 v1.3.15 deployment preflight evidence: `docs/evidence/V1_3_15_LSTAMDUCHN_DEPLOYMENT_PREFLIGHT_BLOCKED_20260920.md`. Owner-approved deployment did not mutate production: initial run `35474904344` failed before authentication; backend diagnosis `35475064743` proved TLS handshake timeout on all observed IPv4 backends; TLS isolation `35475224372` reproduced under TLS 1.2 and 1.3. WPVibe fallback was temporarily rate-limited. Fresh live Theme state remains UNKNOWN and `1.3.10` is last verified only. Publication evidence remains `docs/evidence/V1_3_15_PUBLICATION_20260920.md`; technical closure evidence remains `docs/evidence/V1_3_15_TECHNICAL_CLOSURE_20260920.md`.
 
