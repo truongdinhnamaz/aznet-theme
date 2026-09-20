@@ -13,7 +13,7 @@ $must = static function (bool $condition, string $message): void {
 };
 
 $must(
-    str_contains($latest, 'WP_Query') &&
+    str_contains($latest, 'homepage_latest_posts') &&
     str_contains($latest, 'aznet-theme-law01-grid--articles') &&
     str_contains($latest, 'aznet-theme-law01-article-card'),
     'Law 01 Latest must continue rendering WordPress-native posts through the existing Theme presentation.'
