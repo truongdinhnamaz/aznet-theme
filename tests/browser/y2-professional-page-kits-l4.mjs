@@ -63,6 +63,48 @@ async function inspectFrontend(browser, item, viewportName, viewport) {
       throw new Error('Y2 Page stylesheet not observed');
     }
 
+    if (item.role === 'about') {
+      const iconGeometry = await page.evaluate(() => {
+        const root = document.querySelector('.aznet-theme-page-kit--about');
+        if (!root) throw new Error('About Page Kit root missing for icon geometry audit');
+
+        const probe = document.createElement('div');
+        probe.setAttribute('data-aznet-theme-about-icon-probe', '');
+        probe.innerHTML = `
+          <div class="aznet-theme-page-kit__principles"><div class="wp-block-columns"><div class="aznet-theme-page-kit__card"><h3>Principle probe</h3><p>Probe copy</p></div></div></div>
+          <div class="aznet-theme-page-kit__capabilities"><div class="aznet-theme-page-kit__card"><h3>Capability probe heading that reserves icon space</h3><p>Probe copy</p></div></div>
+          <div class="aznet-theme-page-kit__trust"><div class="wp-block-columns"><div class="wp-block-column"><h3>Trust probe</h3><p>Probe copy</p></div></div></div>
+        `;
+        root.appendChild(probe);
+
+        const px = (value) => Number.parseFloat(value) || 0;
+        const audit = (selector, pseudo, axis) => {
+          const node = probe.querySelector(selector);
+          if (!node) throw new Error(`Icon geometry probe missing: ${selector}`);
+          const box = getComputedStyle(node);
+          const decoration = getComputedStyle(node, pseudo);
+          const size = px(decoration.width);
+          const inset = axis === 'block' ? px(decoration.top) : px(decoration.right);
+          const padding = axis === 'block' ? px(box.paddingTop) : px(box.paddingRight);
+          return { size, inset, padding, clearance: padding - inset - size };
+        };
+
+        const result = {
+          principle: audit('.aznet-theme-page-kit__principles .aznet-theme-page-kit__card', '::before', 'block'),
+          capability: audit('.aznet-theme-page-kit__capabilities .aznet-theme-page-kit__card', '::after', 'inline'),
+          trust: audit('.aznet-theme-page-kit__trust .wp-block-column', '::before', 'block'),
+        };
+        probe.remove();
+        return result;
+      });
+      result.aboutIconGeometry = iconGeometry;
+      for (const [name, geometry] of Object.entries(iconGeometry)) {
+        if (geometry.size <= 0 || geometry.clearance < 8) {
+          throw new Error(`About ${name} icon does not retain a safe text clearance: ${JSON.stringify(geometry)}`);
+        }
+      }
+    }
+
     result.overflowPx = await page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - document.documentElement.clientWidth));
     if (result.overflowPx !== 0) throw new Error(`Horizontal overflow: ${result.overflowPx}px`);
 
