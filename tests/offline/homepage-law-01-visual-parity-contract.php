@@ -117,7 +117,7 @@ $must(
     'Law 01 reference Team band must sit beside About rather than below it.'
 );
 $must(
-    str_contains($css, 'min-height: clamp(29rem, 32vw, 34rem);'),
+    str_contains($css, 'min-height: clamp(36rem, 38vw, 40rem);'),
     'Law 01 target Hero visual must keep the approved desktop image band proportion.'
 );
 $must(
