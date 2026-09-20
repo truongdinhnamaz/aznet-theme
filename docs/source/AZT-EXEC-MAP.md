@@ -458,7 +458,7 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 
 ## 16. Exact next
 
-**NEXT — `v1.3.11` publication is PASS. Merge this publication source/evidence closure PR after owner approval. After source sync, production deployment of the exact `v1.3.11` release asset is the next possible release-path action only after separate owner approval and target-site/rollback revalidation.**
+**NEXT — preserve canonical `v1.3.21` technical PASS. Current public GitHub Release remains `v1.3.20`; `v1.3.21` publication is a separate release action. Production deployment remains separately gated by safe authenticated target-site preflight and rollback evidence.**
 
 
 ## 15.9 Homepage Hero editing UX follow-up — 19/09/2026
