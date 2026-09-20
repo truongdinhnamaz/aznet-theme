@@ -1,0 +1,364 @@
+.aznet-theme-page--service-hub {
+    --aznet-theme-service-hub-copy: 52rem;
+    --aznet-theme-service-hub-card-min: 15rem;
+}
+
+.aznet-theme-page--service-hub .aznet-theme-service-hub__hero {
+    position: relative;
+    max-width: var(--aznet-theme-container-shell);
+    margin-block-end: clamp(var(--aznet-theme-space-6), 7vw, var(--aznet-theme-space-section));
+    padding: clamp(var(--aznet-theme-space-5), 5vw, var(--aznet-theme-space-8));
+    overflow: hidden;
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    background: linear-gradient(135deg, var(--aznet-theme-color-surface-subtle), var(--aznet-theme-surface));
+}
+
+.aznet-theme-page--service-hub .aznet-theme-service-hub__hero::after {
+    position: absolute;
+    inset-block-start: -18%;
+    inset-inline-end: -5%;
+    width: clamp(8rem, 18vw, 16rem);
+    aspect-ratio: 1;
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: 999px;
+    content: "";
+    opacity: .5;
+    pointer-events: none;
+}
+
+.aznet-theme-page--service-hub .aznet-theme-service-hub__hero > * {
+    position: relative;
+    z-index: 1;
+}
+
+.aznet-theme-page--service-hub .aznet-theme-page__title,
+.aznet-theme-page--service-hub .aznet-theme-page__lead {
+    max-width: var(--aznet-theme-service-hub-copy);
+}
+
+.aznet-theme-page--service-hub .aznet-theme-page__title {
+    font-size: clamp(var(--aznet-theme-text-h1), 5vw, var(--aznet-theme-text-display));
+    line-height: var(--aznet-theme-line-height-display);
+}
+
+.aznet-theme-service-hub__eyebrow {
+    margin: 0 0 var(--aznet-theme-space-2);
+    color: var(--aznet-theme-accent);
+    font-size: var(--aznet-theme-text-label);
+    font-weight: var(--aznet-theme-font-weight-bold);
+    letter-spacing: .09em;
+    text-transform: uppercase;
+}
+
+.aznet-theme-service-hub__hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--aznet-theme-space-3);
+    margin-block-start: var(--aznet-theme-space-5);
+}
+
+.aznet-theme-service-hub__primary,
+.aznet-theme-service-hub__secondary {
+    display: inline-flex;
+    min-height: 2.875rem;
+    align-items: center;
+    justify-content: center;
+    padding: var(--aznet-theme-space-2) var(--aznet-theme-space-4);
+    border: 1px solid var(--aznet-theme-accent);
+    border-radius: var(--aznet-theme-radius-pill);
+    font-size: var(--aznet-theme-text-button);
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    line-height: var(--aznet-theme-line-height-button);
+    text-decoration: none;
+    transition: transform var(--aznet-theme-motion-fast), background-color var(--aznet-theme-motion-fast), color var(--aznet-theme-motion-fast);
+}
+
+.aznet-theme-service-hub__primary {
+    color: var(--aznet-theme-color-on-primary);
+    background: var(--aznet-theme-accent);
+}
+
+.aznet-theme-service-hub__secondary {
+    color: var(--aznet-theme-accent);
+    background: var(--aznet-theme-surface);
+}
+
+.aznet-theme-service-hub__primary:hover,
+.aznet-theme-service-hub__secondary:hover {
+    transform: translateY(-1px);
+}
+
+.aznet-theme-service-hub__primary:focus-visible,
+.aznet-theme-service-hub__secondary:focus-visible,
+.aznet-theme-service-hub__card a:focus-visible,
+.aznet-theme-service-hub__support-card a:focus-visible,
+.aznet-theme-service-hub__knowledge-card a:focus-visible {
+    outline: 2px solid var(--aznet-theme-focus);
+    outline-offset: 3px;
+}
+
+.aznet-theme-service-hub {
+    display: grid;
+    gap: clamp(var(--aznet-theme-space-6), 7vw, calc(var(--aznet-theme-space-section) * 1.15));
+    width: 100%;
+    max-width: var(--aznet-theme-container-shell);
+    margin-inline: auto;
+}
+
+.aznet-theme-service-hub__section,
+.aznet-theme-service-hub__selection {
+    min-width: 0;
+}
+
+.aznet-theme-service-hub__section-heading {
+    max-width: var(--aznet-theme-service-hub-copy);
+    margin-block-end: var(--aznet-theme-space-5);
+}
+
+.aznet-theme-service-hub__section-heading h2,
+.aznet-theme-service-hub__orientation h2,
+.aznet-theme-service-hub__final-cta h2 {
+    margin: 0;
+    font-size: var(--aznet-theme-text-h2);
+    line-height: var(--aznet-theme-line-height-h2);
+    text-wrap: balance;
+}
+
+.aznet-theme-service-hub__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--aznet-theme-space-4);
+}
+
+.aznet-theme-service-hub__card {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    min-height: 15rem;
+    flex-direction: column;
+    padding: var(--aznet-theme-space-5);
+    overflow: hidden;
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-surface);
+    box-shadow: var(--aznet-theme-shadow-card);
+}
+
+.aznet-theme-service-hub__card::after {
+    position: absolute;
+    inset-block-end: -3rem;
+    inset-inline-end: -3rem;
+    width: 8rem;
+    aspect-ratio: 1;
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: 999px;
+    content: "";
+    opacity: .55;
+    pointer-events: none;
+}
+
+.aznet-theme-service-hub__card-number {
+    margin-block-end: var(--aznet-theme-space-4);
+    color: var(--aznet-theme-accent);
+    font-size: var(--aznet-theme-text-label);
+    font-weight: var(--aznet-theme-font-weight-bold);
+    letter-spacing: .08em;
+}
+
+.aznet-theme-service-hub__card h3,
+.aznet-theme-service-hub__support-card h3,
+.aznet-theme-service-hub__knowledge-card h3 {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    font-size: var(--aznet-theme-text-h4);
+    line-height: var(--aznet-theme-line-height-h4);
+}
+
+.aznet-theme-service-hub__card h3 a,
+.aznet-theme-service-hub__support-card h3 a,
+.aznet-theme-service-hub__knowledge-card h3 a {
+    color: var(--aznet-theme-text);
+    text-decoration: none;
+}
+
+.aznet-theme-service-hub__card h3 a:hover,
+.aznet-theme-service-hub__support-card h3 a:hover,
+.aznet-theme-service-hub__knowledge-card h3 a:hover {
+    color: var(--aznet-theme-accent);
+}
+
+.aznet-theme-service-hub__card p,
+.aznet-theme-service-hub__support-card p,
+.aznet-theme-service-hub__knowledge-card p {
+    position: relative;
+    z-index: 1;
+    margin: var(--aznet-theme-space-3) 0 0;
+    color: var(--aznet-theme-muted);
+    overflow-wrap: anywhere;
+}
+
+.aznet-theme-service-hub__card-link {
+    position: relative;
+    z-index: 1;
+    margin-block-start: auto;
+    padding-block-start: var(--aznet-theme-space-5);
+    color: var(--aznet-theme-accent);
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    text-decoration: none;
+}
+
+.aznet-theme-service-hub__orientation,
+.aznet-theme-service-hub__final-cta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--aznet-theme-space-5);
+    align-items: center;
+    padding: clamp(var(--aznet-theme-space-5), 5vw, var(--aznet-theme-space-7));
+    border-radius: var(--aznet-theme-radius-card);
+}
+
+.aznet-theme-service-hub__orientation {
+    border: 1px solid var(--aznet-theme-border);
+    background: var(--aznet-theme-color-surface-subtle);
+}
+
+.aznet-theme-service-hub__orientation > div,
+.aznet-theme-service-hub__final-cta > div {
+    max-width: var(--aznet-theme-service-hub-copy);
+}
+
+.aznet-theme-service-hub__orientation p:last-child,
+.aznet-theme-service-hub__final-cta p:last-child {
+    margin-block-end: 0;
+}
+
+.aznet-theme-service-hub__editorial {
+    padding-block: var(--aznet-theme-space-6);
+    border-block: 1px solid var(--aznet-theme-border);
+}
+
+.aznet-theme-page--service-hub .aznet-theme-service-hub__editorial .aznet-theme-page__content {
+    width: 100%;
+    max-width: var(--aznet-theme-service-hub-copy);
+}
+
+.aznet-theme-service-hub__support-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--aznet-theme-space-4);
+}
+
+.aznet-theme-service-hub__support-card {
+    min-width: 0;
+    padding: var(--aznet-theme-space-5);
+    border-block-start: 2px solid var(--aznet-theme-accent);
+    background: var(--aznet-theme-color-surface-subtle);
+}
+
+.aznet-theme-service-hub__support-card > a:last-child {
+    display: inline-block;
+    margin-block-start: var(--aznet-theme-space-4);
+    color: var(--aznet-theme-accent);
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    text-decoration: none;
+}
+
+.aznet-theme-service-hub__knowledge-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--aznet-theme-space-4);
+}
+
+.aznet-theme-service-hub__knowledge-card {
+    min-width: 0;
+    padding-block-start: var(--aznet-theme-space-4);
+    border-block-start: 1px solid var(--aznet-theme-border);
+}
+
+.aznet-theme-service-hub__meta {
+    margin: 0 0 var(--aznet-theme-space-2) !important;
+    color: var(--aznet-theme-muted);
+    font-size: var(--aznet-theme-text-meta);
+}
+
+.aznet-theme-service-hub__final-cta {
+    background: var(--aznet-theme-surface-inverse);
+    color: var(--aznet-theme-on-inverse);
+}
+
+.aznet-theme-service-hub__final-cta :where(h2, p) {
+    color: inherit;
+}
+
+.aznet-theme-service-hub__final-cta .aznet-theme-service-hub__eyebrow {
+    color: var(--aznet-theme-on-inverse);
+}
+
+@media (max-width: 64rem) {
+    .aznet-theme-service-hub__grid,
+    .aznet-theme-service-hub__knowledge-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .aznet-theme-service-hub__orientation,
+    .aznet-theme-service-hub__final-cta {
+        grid-template-columns: minmax(0, 1fr);
+        align-items: start;
+    }
+}
+
+@media (max-width: 47.999rem) {
+    .aznet-theme-page--service-hub .aznet-theme-service-hub__hero {
+        padding: var(--aznet-theme-space-5) var(--aznet-theme-space-4);
+    }
+
+    .aznet-theme-page--service-hub .aznet-theme-service-hub__hero::after {
+        width: 8rem;
+        opacity: .32;
+    }
+
+    .aznet-theme-service-hub__hero-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .aznet-theme-service-hub__primary,
+    .aznet-theme-service-hub__secondary {
+        width: 100%;
+    }
+
+    .aznet-theme-service-hub {
+        gap: var(--aznet-theme-space-6);
+    }
+
+    .aznet-theme-service-hub__grid,
+    .aznet-theme-service-hub__support-grid,
+    .aznet-theme-service-hub__knowledge-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .aznet-theme-service-hub__card,
+    .aznet-theme-service-hub__support-card,
+    .aznet-theme-service-hub__orientation,
+    .aznet-theme-service-hub__final-cta {
+        padding: var(--aznet-theme-space-4);
+    }
+
+    .aznet-theme-service-hub__card {
+        min-height: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .aznet-theme-service-hub__primary,
+    .aznet-theme-service-hub__secondary {
+        transition: none;
+    }
+
+    .aznet-theme-service-hub__primary:hover,
+    .aznet-theme-service-hub__secondary:hover {
+        transform: none;
+    }
+}
