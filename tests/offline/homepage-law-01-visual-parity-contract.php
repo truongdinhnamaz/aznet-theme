@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 $root = dirname(__DIR__, 2);
 $css = (string) file_get_contents($root . '/assets/css/components/homepage-law-01-variants.css');
+$referenceCss = (string) file_get_contents($root . '/assets/css/components/homepage-law-01-reference.css');
 $brand = (string) file_get_contents($root . '/template-parts/header/brand.php');
 $siteHeader = (string) file_get_contents($root . '/template-parts/header/site-header.php');
 $mobilePanel = (string) file_get_contents($root . '/template-parts/header/mobile-panel.php');
@@ -21,8 +22,23 @@ $must = static function (bool $condition, string $message): void {
 // Visual target approved from the supplied law-firm homepage reference:
 // balanced light split Hero, compact four-item trust strip, and six-card services row.
 $must(
-    str_contains($css, 'grid-template-columns: minmax(0, 54%) minmax(0, 46%);'),
-    'Law 01 target Hero must use the approved responsive 54/46 desktop split with the copy column wider than media.'
+    str_contains($css, 'grid-template-columns: minmax(0, 46%) minmax(0, 54%);'),
+    'Law 01 target Hero must use the approved responsive 46/54 desktop split with the media column wider than copy.'
+);
+$must(
+    1 === preg_match(
+        '/\\.aznet-theme-homepage--law-01-burgundy-gold \\.aznet-theme-law01-hero__content\\s*\\{[^}]*padding-inline-start:\\s*0;[^}]*padding-inline-end:\\s*clamp\\(2rem,\\s*3vw,\\s*3.5rem\\);/s',
+        $referenceCss
+    ),
+    'Law 01 Hero copy must start on the shared shell edge and keep breathing room only toward the media seam.'
+);
+$must(
+    str_contains($css, 'min-height: clamp(36rem, 38vw, 40rem);'),
+    'Law 01 Hero media must use the approved tall desktop stage from the supplied reference.'
+);
+$must(
+    str_contains($css, 'object-position: center center;'),
+    'Law 01 Hero media must keep the supplied office composition centered inside the desktop crop.'
 );
 $must(
     str_contains(
@@ -101,7 +117,7 @@ $must(
     'Law 01 reference Team band must sit beside About rather than below it.'
 );
 $must(
-    str_contains($css, 'min-height: clamp(29rem, 32vw, 34rem);'),
+    str_contains($css, 'min-height: clamp(36rem, 38vw, 40rem);'),
     'Law 01 target Hero visual must keep the approved desktop image band proportion.'
 );
 $must(

@@ -57,12 +57,14 @@
     min-height: 0;
 }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__content {
-    padding: clamp(2rem, 3.7vw, 4rem) clamp(1.25rem, 2.7vw, 3rem);
+    padding-block: clamp(3.4rem, 4.6vw, 5rem);
+    padding-inline-start: 0;
+    padding-inline-end: clamp(2rem, 3vw, 3.5rem);
 }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__brand {
     max-width: none;
     margin: .2rem 0 .5rem;
-    font-size: clamp(2rem, 3.3vw, 3.35rem);
+    font-size: clamp(3rem, 4vw, 4.15rem);
     line-height: 1.1;
     letter-spacing: 0;
     text-wrap: balance;
@@ -70,7 +72,7 @@
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__content h1 {
     margin: 0 0 .9rem;
     color: var(--law01-client-ink);
-    font-size: clamp(1.7rem, 2.65vw, 2.65rem);
+    font-size: clamp(2rem, 3vw, 3rem);
     line-height: 1.02;
     letter-spacing: -.015em;
     text-wrap: balance;
@@ -135,8 +137,8 @@
     line-height: 1.4;
 }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__trust-item {
-    min-height: 6rem;
-    padding: 1.2rem 1.4rem;
+    min-height: 6.25rem;
+    padding: 1.15rem 1.5rem;
     font-size: 1.05rem;
 }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-card__badge {
