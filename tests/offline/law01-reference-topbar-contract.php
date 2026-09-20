@@ -16,7 +16,7 @@ function wp_nav_menu($options): void { $GLOBALS['menu_calls'][] = $options; echo
 $path = dirname(__DIR__, 2) . '/template-parts/header/law01-topbar.php';
 if (!is_file($path)) { fwrite(STDERR, "FAIL: source-backed Law 01 topbar is missing.\n"); exit(1); }
 $render = static function (bool $active) use ($path): string {
-    $args = ['law01_homepage' => $active];
+    $args = ['law01_header' => $active];
     ob_start(); require $path; return (string) ob_get_clean();
 };
 $html = $render(true);
@@ -27,7 +27,7 @@ $ids = array_column($GLOBALS['menu_calls'], 'menu_id');
 if (count(array_unique($ids)) !== 2 || in_array('aznet-theme-law01-hero-contact-menu', $ids, true)) {
     fwrite(STDERR, "FAIL: topbar menu IDs must be distinct from each other and Hero.\n"); exit(1);
 }
-if ($render(false) !== '') { fwrite(STDERR, "FAIL: non-homepage topbar escaped scope.\n"); exit(1); }
+if ($render(false) !== '') { fwrite(STDERR, "FAIL: inactive Law 01 Header escaped scope.\n"); exit(1); }
 $GLOBALS['variant'] = 'navy-gold';
 if ($render(true) !== '') { fwrite(STDERR, "FAIL: other variant must remain unchanged.\n"); exit(1); }
 $GLOBALS['variant'] = 'burgundy-gold';
