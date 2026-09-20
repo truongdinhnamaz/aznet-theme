@@ -89,10 +89,45 @@ $contact_id = y1_create_page(
     ]
 );
 
+$process_id = y1_create_page(
+    [
+        'post_title'   => 'Y1 Working Process',
+        'post_excerpt' => 'How the engagement process works.',
+        'post_name'    => 'y1-working-process',
+    ]
+);
+
+$faq_id = y1_create_page(
+    [
+        'post_title'   => 'Y1 Service FAQ',
+        'post_excerpt' => 'Common questions before contacting the practice.',
+        'post_name'    => 'y1-service-faq',
+    ]
+);
+
+for ( $i = 1; $i <= 3; $i++ ) {
+    $knowledge_id = wp_insert_post(
+        [
+            'post_type'    => 'post',
+            'post_status'  => 'publish',
+            'post_title'   => 'Y1 Knowledge ' . $i,
+            'post_excerpt' => 'Native legal knowledge excerpt ' . $i . '.',
+            'post_name'    => 'y1-knowledge-' . $i,
+            'post_content' => '<p>Native WordPress knowledge content.</p>',
+        ],
+        true
+    );
+    if ( is_wp_error( $knowledge_id ) || 0 >= (int) $knowledge_id ) {
+        WP_CLI::error( 'Unable to create Y1 knowledge fixture.' );
+    }
+}
+
 $settings = get_theme_mod( 'aznet_theme_settings', [] );
 $settings = is_array( $settings ) ? $settings : [];
 $settings['homepage_services_page'] = $services_id;
 $settings['homepage_contact_page']  = $contact_id;
+$settings['homepage_process_page']  = $process_id;
+$settings['homepage_faq_page']      = $faq_id;
 set_theme_mod( 'aznet_theme_settings', $settings );
 
 $commerce_looking_id = y1_create_page(
@@ -163,6 +198,8 @@ $result = array_merge(
         'service_detail_id'    => $service_detail_id,
         'service_sibling_id'   => $service_sibling_id,
         'contact_id'           => $contact_id,
+        'process_id'           => $process_id,
+        'faq_id'               => $faq_id,
         'attachment_id'        => (int) $attachment_id,
     ]
 );
