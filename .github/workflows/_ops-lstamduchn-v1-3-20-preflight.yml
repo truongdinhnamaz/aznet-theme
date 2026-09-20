@@ -43,11 +43,20 @@ jobs:
           for i in $(seq 1 30); do
             if timeout 1 bash -c '</dev/tcp/127.0.0.1/9050' 2>/dev/null; then
               echo 'Tor SOCKS listener ready'
-              exit 0
+              break
             fi
             sleep 1
           done
-          echo 'Tor SOCKS listener did not become ready' >&2
+          for i in $(seq 1 45); do
+            if curl --silent --show-error --fail --socks5-hostname 127.0.0.1:9050 --connect-timeout 5 --max-time 12 https://check.torproject.org/api/ip -o /tmp/tor-ip.json; then
+              echo 'Tor circuit ready'
+              cat /tmp/tor-ip.json
+              exit 0
+            fi
+            sleep 2
+          done
+          echo 'Tor circuit did not bootstrap in time' >&2
+          sudo journalctl -u tor --no-pager -n 100 || true
           exit 1
 
       - name: Diagnose target network and HTTP reachability
