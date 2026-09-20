@@ -46,8 +46,19 @@ assert(! str_contains($css, '.aznet-theme-site-footer--law01-'), 'Law 01 variant
 assert(str_contains($footerCss, '.aznet-theme-site-footer'), 'Independent Footer component stylesheet must own Footer presentation.');
 
 assert(str_contains($composer, "[ 'hero', 'services', 'profile' ]"), 'Composer must render the combined client-ready profile band.');
-assert(str_contains($composer, "'burgundy-gold' === \$variant ? [ 'latest' ] : [ 'topics', 'latest', 'analysis', 'news', 'process', 'faq', 'final-cta' ]"), 'Burgundy Law 01 Homepage must match the approved compact reference composition: Hero, Services, Profile/Team, Latest and Footer only.');
+assert(str_contains($composer, "[ 'latest', 'topics', 'analysis', 'news', 'process', 'faq', 'final-cta' ]"), 'Burgundy Law 01 Homepage must extend the locked v1.3.18 baseline after Latest with mapped knowledge, analysis, news, process, FAQ and final CTA sections.');
 assert(! str_contains($composer, "[ 'hero', 'services', 'about', 'team' ]"), 'Composer must not render duplicate legacy About/Team sections.');
+foreach ([
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topics',
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-analysis',
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news',
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process',
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-faq',
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-final-cta',
+] as $needle) {
+    assert(str_contains($css, $needle), "Expanded Burgundy Homepage presentation missing: {$needle}");
+}
+
 
 foreach ([
     "setting( 'homepage_hero_block', 0 )",
