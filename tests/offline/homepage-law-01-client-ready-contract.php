@@ -10,6 +10,7 @@ $files = [
     'services' => $root . '/template-parts/homepage/law-01/services.php',
     'profile' => $root . '/template-parts/homepage/law-01/profile.php',
     'latest' => $root . '/template-parts/homepage/law-01/latest.php',
+    'footer_css' => $root . '/assets/css/components/site-footer.css',
 ];
 
 foreach ($files as $label => $path) {
@@ -22,6 +23,7 @@ $hero = file_get_contents($files['hero']);
 $services = file_get_contents($files['services']);
 $profile = file_get_contents($files['profile']);
 $latest = file_get_contents($files['latest']);
+$footerCss = file_get_contents($files['footer_css']);
 
 foreach ([
     '--law01-client-burgundy:',
@@ -33,13 +35,15 @@ foreach ([
     '.aznet-theme-law01-grid--articles',
     'grid-column: auto;',
     '.aznet-theme-site-header',
-    '.aznet-theme-site-footer',
     '@media (max-width: 960px)',
     '@media (max-width: 640px)',
     '@media (prefers-reduced-motion: reduce)',
 ] as $needle) {
     assert(str_contains($css, $needle), "Client-ready Law 01 CSS contract missing: {$needle}");
 }
+
+assert(! str_contains($css, '.aznet-theme-site-footer--law01-'), 'Law 01 variant CSS must not own Footer presentation.');
+assert(str_contains($footerCss, '.aznet-theme-site-footer'), 'Independent Footer component stylesheet must own Footer presentation.');
 
 assert(str_contains($composer, "[ 'hero', 'services', 'profile' ]"), 'Composer must render the combined client-ready profile band.');
 assert(str_contains($composer, "'burgundy-gold' === \$variant ? [ 'latest' ] : [ 'topics', 'latest', 'analysis', 'news', 'process', 'faq', 'final-cta' ]"), 'Burgundy Law 01 Homepage must match the approved compact reference composition: Hero, Services, Profile/Team, Latest and Footer only.');

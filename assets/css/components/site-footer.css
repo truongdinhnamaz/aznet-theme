@@ -1,10 +1,14 @@
 .aznet-theme-site-footer {
     --aznet-theme-footer-muted: color-mix(in srgb, var(--aznet-theme-on-inverse) 70%, transparent);
     --aznet-theme-footer-border: color-mix(in srgb, var(--aznet-theme-on-inverse) 12%, transparent);
+    --aznet-theme-footer-accent: color-mix(in srgb, var(--aznet-theme-on-inverse) 22%, transparent);
+    --aznet-theme-footer-glow: color-mix(in srgb, var(--aznet-theme-on-inverse) 7%, transparent);
     width: 100%;
     box-sizing: border-box;
     border-top: 1px solid var(--aznet-theme-footer-border);
-    background: var(--aznet-theme-surface-inverse);
+    background:
+        linear-gradient(135deg, var(--aznet-theme-footer-glow) 0%, transparent 42%),
+        var(--aznet-theme-surface-inverse);
     color: var(--aznet-theme-on-inverse);
 }
 
@@ -21,16 +25,59 @@
     align-items: start;
 }
 
+.aznet-theme-site-footer--professional {
+    --aznet-theme-footer-shell: 96rem;
+}
+
+.aznet-theme-site-footer--professional .aznet-theme-site-footer__inner {
+    width: min(calc(100% - (2 * var(--aznet-theme-gutter))), var(--aznet-theme-footer-shell));
+}
+
 .aznet-theme-site-footer--professional .aznet-theme-site-footer__main {
-    grid-template-columns: minmax(260px, 1.35fr) repeat(3, minmax(140px, .75fr));
-    gap: var(--aznet-theme-space-6);
+    grid-template-columns: minmax(280px, 1.4fr) repeat(3, minmax(140px, .75fr));
+    gap: clamp(var(--aznet-theme-space-5), 3vw, var(--aznet-theme-space-7));
 }
 
 .aznet-theme-site-footer--professional .aznet-theme-site-footer__navigation,
 .aznet-theme-site-footer--professional .aznet-theme-site-footer__contact,
 .aznet-theme-site-footer--professional .aznet-theme-site-footer__social-column {
-    padding-inline-start: var(--aznet-theme-space-4);
+    padding-inline-start: var(--aznet-theme-space-5);
     border-inline-start: 1px solid var(--aznet-theme-footer-border);
+}
+
+.aznet-theme-site-footer--professional .aznet-theme-site-footer__brand {
+    max-width: 280px;
+    gap: var(--aznet-theme-space-3);
+}
+
+.aznet-theme-site-footer--professional .aznet-theme-site-footer__brand-title {
+    display: block;
+    max-width: 16rem;
+    font-family: var(--aznet-theme-font-family-heading);
+    font-size: clamp(1rem, 1.35vw, 1.2rem);
+    line-height: 1.2;
+}
+
+.aznet-theme-site-footer--professional .aznet-theme-site-footer__identity p {
+    max-width: 34rem;
+    margin-top: var(--aznet-theme-space-4);
+    color: var(--aznet-theme-footer-muted);
+}
+
+.aznet-theme-site-footer--professional .aznet-theme-site-footer__heading {
+    position: relative;
+    padding-bottom: var(--aznet-theme-space-2);
+    letter-spacing: .03em;
+}
+
+.aznet-theme-site-footer--professional .aznet-theme-site-footer__heading::after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 2.5rem;
+    height: 1px;
+    background: var(--aznet-theme-footer-accent);
+    content: '';
 }
 
 .aznet-theme-site-footer__social-column .aznet-theme-site-footer__social-menu {
@@ -205,6 +252,10 @@
     .aznet-theme-site-footer__inner {
         width: calc(100% - var(--aznet-theme-gutter-mobile));
         padding-top: var(--aznet-theme-space-6);
+    }
+
+    .aznet-theme-site-footer--professional .aznet-theme-site-footer__inner {
+        width: calc(100% - (2 * var(--aznet-theme-gutter-mobile)));
     }
 
     .aznet-theme-site-footer__main,

@@ -25,22 +25,13 @@ $social_menu  = (string) ( $menus['footer-social'] ?? '' );
 $policy_menu  = (string) ( $menus['footer-policy'] ?? '' );
 $year         = (string) ( $context['year'] ?? '' );
 
-$law01_homepage = function_exists( 'AZnet\\Theme\\homepage_composer_active' ) && \AZnet\Theme\homepage_composer_active();
-
 $footer_classes = [
     'aznet-theme-site-footer',
     'aznet-theme-site-footer--' . $preset,
 ];
-if ( $law01_homepage ) {
-    $footer_classes[] = 'aznet-theme-site-footer--law01-' . \AZnet\Theme\homepage_law01_variant();
-}
 
-$contact_heading = $law01_homepage
-    ? __( 'Thông tin liên hệ', 'aznet-theme' )
-    : __( 'Liên hệ', 'aznet-theme' );
-$navigation_heading = $law01_homepage
-    ? __( 'Liên kết nhanh', 'aznet-theme' )
-    : __( 'Khám phá', 'aznet-theme' );
+$contact_heading    = __( 'Thông tin liên hệ', 'aznet-theme' );
+$navigation_heading = __( 'Liên kết nhanh', 'aznet-theme' );
 ?>
 <footer class="<?php echo esc_attr( implode( ' ', $footer_classes ) ); ?>" data-aznet-theme-site-footer role="contentinfo">
     <div class="aznet-theme-site-footer__inner">
@@ -80,7 +71,7 @@ $navigation_heading = $law01_homepage
                 </nav>
             <?php endif; ?>
 
-            <?php if ( ( 'professional' === $preset || $law01_homepage ) && '' !== $social_menu ) : ?>
+            <?php if ( 'professional' === $preset && '' !== $social_menu ) : ?>
                 <nav class="aznet-theme-site-footer__social-column aznet-theme-site-footer__social" aria-label="<?php echo esc_attr__( 'Kết nối với chúng tôi', 'aznet-theme' ); ?>">
                     <h2 class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Kết nối với chúng tôi', 'aznet-theme' ); ?></h2>
                     <?php echo $social_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
@@ -94,7 +85,7 @@ $navigation_heading = $law01_homepage
             </p>
             <?php if ( '' !== $social_menu || '' !== $policy_menu ) : ?>
                 <div class="aznet-theme-site-footer__bottom-nav">
-                    <?php if ( '' !== $social_menu && 'professional' !== $preset && ! $law01_homepage ) : ?>
+                    <?php if ( '' !== $social_menu && 'professional' !== $preset ) : ?>
                         <nav class="aznet-theme-site-footer__social" aria-label="<?php echo esc_attr__( 'Mạng xã hội', 'aznet-theme' ); ?>">
                             <?php echo $social_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
                         </nav>
