@@ -1,15 +1,17 @@
 # AZnet Theme Source Manifest
 
-Canonical technical implementation baseline is exact `main@998a8dcf342b09824b197059524c50c013dba828`, Theme metadata `1.3.21`. Exact-main V1 `35518082825` and X6 `35518082833` PASS; X6 browser/axe is 32/32 PASS and deterministic `aznet-theme-1.3.21.zip` has 158 files, 113 packaged PHP lint PASS, SHA-256 `da695f2b33aafc38172a9a412a3b1afd16263db3f03d305be4304eba877e09e2`. Current published GitHub Release remains `v1.3.20`: publication run `35509995234`, tag object `f7d50863b3b7b8f4e500172ba624d24b73ff312f`, Release `392420684`, asset `576757385`. Production deployment to `lstamduchn.vn` remains separate and no live `1.3.21` mutation is claimed; `1.3.10` remains the last verified live Theme under current access evidence. RootProfile-backed authoritative Team membership remains separately blocked at issue #112.
+Canonical technical implementation baseline is exact `main@7ea9a189b124482b495f6e2adff668c070ff94de`, Theme metadata `1.3.22`. Exact-main V1 `35521042638` and X6 `35521042601` PASS; deterministic `aznet-theme-1.3.22.zip` has 159 production files, 113 packaged PHP files verified and SHA-256 `d5197073641ebc6b7764ffca31409b56cf9e447d533899999db94b28d5e02790`. Current published GitHub Release is `v1.3.22`: publication run `35521247319`, tag object `a552ee75f05ff1b8f9733137d2015692a20e565d`, Release `392486195`, asset `577094851`. Production deployment to `lstamduchn.vn` is not claimed and is currently `BLOCKED_EXTERNAL_ACCESS` because the authenticated WPVibe allowance is exhausted; `1.3.10` remains the last verified live Theme. RootProfile-backed authoritative Team membership remains separately blocked at issue #112.
 | Source | Semantic version | Role |
 | --- | --- | --- |
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.14 | Theme architecture, public integration contracts, D-027 Standalone Core boundary and complete WordPress-owned D-030 Hero authoring rule |
-| `AZT-03-baseline-provenance.md` | v0.70 | Canonical provenance through v1.3.21 About technical closure; current publication remains v1.3.20 and deployment stays separate |
-| `AZT-04-roadmap-qa-decisions.md` | v0.86 | Roadmap/QA through v1.3.21 technical closure and repository-native verification decision |
-| `AZT-EXEC-MAP.md` | v0.76 | Derived execution map through v1.3.21 About technical closure; publication/deployment remain separate gates |
+| `AZT-03-baseline-provenance.md` | v0.71 | Canonical provenance through v1.3.22 service-page technical/publication closure; production deployment remains externally blocked |
+| `AZT-04-roadmap-qa-decisions.md` | v0.87 | Roadmap/QA through v1.3.22 technical/publication PASS and production access blocker |
+| `AZT-EXEC-MAP.md` | v0.77 | Derived execution map through v1.3.22 publication; production deployment awaits authenticated preflight |
+
+20/09/2026 v1.3.22 service-page release evidence: `docs/evidence/V1_3_22_SERVICE_PAGE_RELEASE_20260920.md` records PR #199 mapped Service Page presentation, PR #200 metadata promotion, exact-main V1 `35521042638`, exact-main X6 `35521042601`, deterministic package SHA-256 `d5197073641ebc6b7764ffca31409b56cf9e447d533899999db94b28d5e02790`, publication run `35521247319`, annotated `v1.3.22`, Release `392486195` and the current `BLOCKED_EXTERNAL_ACCESS` production state caused by the exhausted authenticated WPVibe allowance. No live `1.3.22` mutation is claimed.
 
 20/09/2026 v1.3.21 About technical-closure evidence: `docs/evidence/V1_3_21_ABOUT_PAGE_TECHNICAL_CLOSURE_20260920.md` records PR #196 About presentation RED->GREEN/merge, PR #197 1.3.21 promotion RED->GREEN/merge, exact-main V1 `35518082825`, exact-main X6 `35518082833`, 32/32 browser/axe PASS, deterministic package SHA-256 `da695f2b33aafc38172a9a412a3b1afd16263db3f03d305be4304eba877e09e2`, and the owner decision that WPVibe is not a mandatory repository technical/release verification dependency. `v1.3.21` publication and production deployment are not claimed; current public Release remains `v1.3.20`.
 

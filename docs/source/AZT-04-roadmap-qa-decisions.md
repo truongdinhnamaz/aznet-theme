@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.86
+**Version:** v0.87
 **Status:** Working Source  
 **Date:** 20/09/2026
 
@@ -42,7 +42,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P4-C | Standalone Core independence | PASS / MERGED | D-027 source + implementation merged through PR #63/#64; zero-plugin L1-L4, exact-package and exact-main gates PASS; optional integrations remain additive |
 | P5 | Publication & production deployment | PASS | Tag `v1.1.0` + GitHub Release publication and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
 | X | v1.2 WordPress Experience Completion | PUBLICATION + PRODUCTION DEPLOYMENT PASS | X1-X5 retained; PR #87 technical integration and exact-main V1 + X6 L1-L4/L6 PASS; owner-approved `v1.2.0` publication PASS; owner-approved production deployment run `35135759389` plus fresh independent read-only run `35136876330` PASS; no provider L5 expansion |
-| Y | v1.3 Client Delivery System | v1.3.21 TECHNICAL PASS / v1.3.20 PUBLICATION PASS / PRODUCTION DEPLOYMENT NOT CLAIMED | Current canonical technical implementation is `main@998a8dcf342b09824b197059524c50c013dba828`, Theme metadata `1.3.21`. Exact-main V1 `35518082825` and X6 `35518082833` PASS; X6 browser/axe is 32/32 PASS and deterministic `aznet-theme-1.3.21.zip` SHA-256 is `da695f2b33aafc38172a9a412a3b1afd16263db3f03d305be4304eba877e09e2`. Current public GitHub Release remains `v1.3.20`; no live `1.3.21` deployment is claimed. Provider L5 remains separate. |
+| Y | v1.3 Client Delivery System | v1.3.22 TECHNICAL PASS / PUBLICATION PASS / PRODUCTION DEPLOYMENT BLOCKED_EXTERNAL_ACCESS | Current canonical implementation is `main@7ea9a189b124482b495f6e2adff668c070ff94de`, Theme metadata `1.3.22`. Service Page landing presentation PR #199 and release PR #200 are merged. Exact-main V1 `35521042638` and X6 `35521042601` PASS; deterministic `aznet-theme-1.3.22.zip` has 159 production files, 113 packaged PHP files verified and SHA-256 `d5197073641ebc6b7764ffca31409b56cf9e447d533899999db94b28d5e02790`. Publication run `35521247319` PASS; annotated `v1.3.22` and Release `392486195` carry the exact verified package. Production target `lstamduchn.vn` remains unmodified because the authenticated WPVibe path is temporarily blocked by the rolling fair-use cap. Provider L5 remains separate. |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
 Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` points to `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`. Publication source closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72. P5 technical run `35051428372` verified final package bytes, publication run `35052694111` published the matching tag/Release, and production read-only run `35054176392` closed deployment at the tested Theme-owned/site-operations scope.
@@ -74,7 +74,7 @@ A GitHub release check on 08/09/2026 historically established that publication h
 - Live Homepage/content readiness at the tested scope: five published Posts render in `Mới cập nhật`; About excerpt renders; indexing is enabled; homepage meta description is present; fresh mobile Lighthouse is 98 Performance / 100 Accessibility / 100 Best Practices / 100 SEO.
 - RootProfile Team remains `BLOCKED_EXTERNAL_CONTRACT`: no public/versioned organization-team projection exists on the pilot and the organization endpoint currently returns not-found. Issue #112 is the durable Theme-side blocker record. No user/author/post heuristic or private-storage fallback is allowed.
 
-**Exact next:** preserve the `v1.3.21` technical PASS and current published `v1.3.20` release boundary. A `v1.3.21` tag/GitHub Release remains a separate publication action; production deployment remains separate and requires fresh authenticated target-site preflight/rollback evidence. RootProfile Team remains independently blocked at issue #112.
+**Exact next:** preserve the canonical `v1.3.22` technical/publication PASS. When authenticated production access is available, perform fresh `lstamduchn.vn` active-version/rollback preflight, deploy only the exact published `aznet-theme-1.3.22.zip`, then verify Homepage and mapped Service Page surfaces before claiming production PASS. RootProfile Team remains independently blocked at issue #112.
 
 ## 3. v1.0 closure state
 
