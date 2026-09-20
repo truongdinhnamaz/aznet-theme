@@ -157,7 +157,7 @@ async function inspectViewport(browser, name, viewport) {
     }
 
     if (viewport.width > 960) {
-      const headingMetrics = await page.locator('.aznet-theme-law01-section h2').evaluateAll((nodes) => nodes.map((node) => {
+      const headingMetrics = await page.locator('.aznet-theme-law01-section:not(.aznet-theme-law01-final-cta) h2').evaluateAll((nodes) => nodes.map((node) => {
         const rect = node.getBoundingClientRect();
         const style = window.getComputedStyle(node);
         return {
@@ -173,6 +173,19 @@ async function inspectViewport(browser, name, viewport) {
       const invalidHeading = headingMetrics.find((item) => item.whiteSpace !== 'nowrap' || item.height > item.lineHeight * 1.25);
       if (invalidHeading) throw new Error(`Law 01 section heading must stay on one desktop line: ${JSON.stringify(invalidHeading)}`);
       if (headingSizes.size !== 1) throw new Error(`Law 01 section headings must use one consistent size: ${JSON.stringify(headingMetrics)}`);
+
+      const finalHeading = await page.locator('.aznet-theme-law01-final-cta h2').evaluate((node) => {
+        const rect = node.getBoundingClientRect();
+        const style = window.getComputedStyle(node);
+        return {
+          height: rect.height,
+          lineHeight: Number.parseFloat(style.lineHeight || '0'),
+          whiteSpace: style.whiteSpace,
+        };
+      });
+      if (finalHeading.whiteSpace !== 'normal' || finalHeading.height > finalHeading.lineHeight * 2.25) {
+        throw new Error(`Law 01 final CTA heading must wrap intentionally within two desktop lines: ${JSON.stringify(finalHeading)}`);
+      }
     }
 
     const servicesIntro = (await page.locator('.aznet-theme-law01-services__intro').textContent())?.trim() || '';
@@ -210,6 +223,16 @@ async function inspectViewport(browser, name, viewport) {
       const servicesContainer = document.querySelector('.aznet-theme-law01-services > .aznet-theme-law01-container')?.getBoundingClientRect();
       const profileContainer = document.querySelector('.aznet-theme-law01-profile > .aznet-theme-law01-container')?.getBoundingClientRect();
       const articlesContainer = document.querySelector('.aznet-theme-law01-articles > .aznet-theme-law01-container')?.getBoundingClientRect();
+      const nativeEntry = document.querySelector('.aznet-theme-homepage--law-01-burgundy-gold > .aznet-theme-entry--front-page')?.getBoundingClientRect();
+      const processContainer = document.querySelector('.aznet-theme-law01-process > .aznet-theme-law01-container')?.getBoundingClientRect();
+      const faqContainer = document.querySelector('.aznet-theme-law01-faq > .aznet-theme-law01-container')?.getBoundingClientRect();
+      const finalCtaContainer = document.querySelector('.aznet-theme-law01-final-cta > .aznet-theme-law01-container')?.getBoundingClientRect();
+      const processCopy = document.querySelector('.aznet-theme-law01-process__copy')?.getBoundingClientRect();
+      const processBody = document.querySelector('.aznet-theme-law01-process__body')?.getBoundingClientRect();
+      const faqCopy = document.querySelector('.aznet-theme-law01-faq__copy')?.getBoundingClientRect();
+      const faqAction = document.querySelector('.aznet-theme-law01-faq__action')?.getBoundingClientRect();
+      const finalCtaCopy = document.querySelector('.aznet-theme-law01-final-cta__copy')?.getBoundingClientRect();
+      const finalCtaActions = document.querySelector('.aznet-theme-law01-final-cta__actions')?.getBoundingClientRect();
       const headerInner = document.querySelector('.aznet-theme-site-header__inner')?.getBoundingClientRect();
       const footerInner = document.querySelector('.aznet-theme-site-footer__inner')?.getBoundingClientRect();
       const content = document.querySelector('.aznet-theme-law01-hero__content')?.getBoundingClientRect();
@@ -231,6 +254,16 @@ async function inspectViewport(browser, name, viewport) {
         servicesContainer: servicesContainer ? { x: servicesContainer.x, y: servicesContainer.y, width: servicesContainer.width, height: servicesContainer.height } : null,
         profileContainer: profileContainer ? { x: profileContainer.x, y: profileContainer.y, width: profileContainer.width, height: profileContainer.height } : null,
         articlesContainer: articlesContainer ? { x: articlesContainer.x, y: articlesContainer.y, width: articlesContainer.width, height: articlesContainer.height } : null,
+        nativeEntry: nativeEntry ? { x: nativeEntry.x, y: nativeEntry.y, width: nativeEntry.width, height: nativeEntry.height } : null,
+        processContainer: processContainer ? { x: processContainer.x, y: processContainer.y, width: processContainer.width, height: processContainer.height } : null,
+        faqContainer: faqContainer ? { x: faqContainer.x, y: faqContainer.y, width: faqContainer.width, height: faqContainer.height } : null,
+        finalCtaContainer: finalCtaContainer ? { x: finalCtaContainer.x, y: finalCtaContainer.y, width: finalCtaContainer.width, height: finalCtaContainer.height } : null,
+        processCopy: processCopy ? { x: processCopy.x, y: processCopy.y, width: processCopy.width, height: processCopy.height } : null,
+        processBody: processBody ? { x: processBody.x, y: processBody.y, width: processBody.width, height: processBody.height } : null,
+        faqCopy: faqCopy ? { x: faqCopy.x, y: faqCopy.y, width: faqCopy.width, height: faqCopy.height } : null,
+        faqAction: faqAction ? { x: faqAction.x, y: faqAction.y, width: faqAction.width, height: faqAction.height } : null,
+        finalCtaCopy: finalCtaCopy ? { x: finalCtaCopy.x, y: finalCtaCopy.y, width: finalCtaCopy.width, height: finalCtaCopy.height } : null,
+        finalCtaActions: finalCtaActions ? { x: finalCtaActions.x, y: finalCtaActions.y, width: finalCtaActions.width, height: finalCtaActions.height } : null,
         headerInner: headerInner ? { x: headerInner.x, y: headerInner.y, width: headerInner.width, height: headerInner.height } : null,
         footerInner: footerInner ? { x: footerInner.x, y: footerInner.y, width: footerInner.width, height: footerInner.height } : null,
         content: content ? { x: content.x, y: content.y, width: content.width, height: content.height } : null,
@@ -257,7 +290,7 @@ async function inspectViewport(browser, name, viewport) {
 
     if (!parityMetrics.content || !parityMetrics.visual) throw new Error('Hero visual-parity metrics unavailable');
     if (viewport.width >= 1024) {
-      if (!parityMetrics.heroSection || !parityMetrics.heroGrid || !parityMetrics.trustGrid || !parityMetrics.servicesContainer || !parityMetrics.profileContainer || !parityMetrics.articlesContainer) {
+      if (!parityMetrics.heroSection || !parityMetrics.heroGrid || !parityMetrics.trustGrid || !parityMetrics.servicesContainer || !parityMetrics.profileContainer || !parityMetrics.articlesContainer || !parityMetrics.nativeEntry || !parityMetrics.processContainer || !parityMetrics.faqContainer || !parityMetrics.finalCtaContainer) {
         throw new Error('Law 01 reference shell geometry unavailable');
       }
       if (Math.abs(parityMetrics.heroSection.x) > 1 || Math.abs(parityMetrics.heroSection.width - viewport.width) > 2) {
@@ -267,7 +300,11 @@ async function inspectViewport(browser, name, viewport) {
         ['Trust', parityMetrics.trustGrid],
         ['Services', parityMetrics.servicesContainer],
         ['Profile', parityMetrics.profileContainer],
+        ['Native content', parityMetrics.nativeEntry],
+        ['Process', parityMetrics.processContainer],
+        ['FAQ', parityMetrics.faqContainer],
         ['Articles', parityMetrics.articlesContainer],
+        ['Final CTA', parityMetrics.finalCtaContainer],
       ]) {
         if (Math.abs(parityMetrics.heroGrid.x - rect.x) > 2 || Math.abs(parityMetrics.heroGrid.width - rect.width) > 2) {
           throw new Error(`desktop Law 01 sections must share one vertical shell: Hero x=${parityMetrics.heroGrid.x.toFixed(1)} width=${parityMetrics.heroGrid.width.toFixed(1)}; ${label} x=${rect.x.toFixed(1)} width=${rect.width.toFixed(1)}`);
@@ -314,6 +351,15 @@ async function inspectViewport(browser, name, viewport) {
       if (parityMetrics.articles.length !== 3 || new Set(parityMetrics.articles.map((item) => Math.round(item.y))).size !== 1) {
         throw new Error('desktop Latest Posts must remain one three-card row');
       }
+      if (!parityMetrics.processCopy || !parityMetrics.processBody || parityMetrics.processBody.x <= parityMetrics.processCopy.x) {
+        throw new Error('desktop Process must present source copy and handoff in one horizontal reference band');
+      }
+      if (!parityMetrics.faqCopy || !parityMetrics.faqAction || parityMetrics.faqAction.x <= parityMetrics.faqCopy.x) {
+        throw new Error('desktop FAQ must keep the source-backed CTA beside the FAQ copy');
+      }
+      if (!parityMetrics.finalCtaCopy || !parityMetrics.finalCtaActions || parityMetrics.finalCtaActions.x <= parityMetrics.finalCtaCopy.x) {
+        throw new Error('desktop final CTA must keep contact actions beside the contact copy');
+      }
     }
     if (viewport.width <= 390) {
       if (parityMetrics.visual.y <= parityMetrics.content.y) throw new Error('mobile Hero visual must stack after Hero content');
@@ -325,6 +371,9 @@ async function inspectViewport(browser, name, viewport) {
       if (new Set(parityMetrics.services.map((item) => Math.round(item.y))).size !== 6) throw new Error('mobile Services cards must stack to one card per row');
       if (!parityMetrics.aboutCopy || !parityMetrics.teamBand || parityMetrics.teamBand.y <= parityMetrics.aboutCopy.y) throw new Error('mobile Profile must stack Team after About');
       if (new Set(parityMetrics.articles.map((item) => Math.round(item.y))).size !== 3) throw new Error('mobile Latest Posts cards must stack to one card per row');
+      if (!parityMetrics.processCopy || !parityMetrics.processBody || parityMetrics.processBody.y <= parityMetrics.processCopy.y) throw new Error('mobile Process handoff must stack after the Process heading');
+      if (!parityMetrics.faqCopy || !parityMetrics.faqAction || parityMetrics.faqAction.y <= parityMetrics.faqCopy.y) throw new Error('mobile FAQ CTA must stack after FAQ copy');
+      if (!parityMetrics.finalCtaCopy || !parityMetrics.finalCtaActions || parityMetrics.finalCtaActions.y <= parityMetrics.finalCtaCopy.y) throw new Error('mobile final CTA actions must stack after CTA copy');
     }
 
     result.teamCards = await page.locator('.aznet-theme-law01-team-card').count();

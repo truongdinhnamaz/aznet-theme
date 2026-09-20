@@ -10,6 +10,9 @@ $files = [
     'services' => $root . '/template-parts/homepage/law-01/services.php',
     'profile' => $root . '/template-parts/homepage/law-01/profile.php',
     'latest' => $root . '/template-parts/homepage/law-01/latest.php',
+    'process' => $root . '/template-parts/homepage/law-01/process.php',
+    'faq' => $root . '/template-parts/homepage/law-01/faq.php',
+    'final_cta' => $root . '/template-parts/homepage/law-01/final-cta.php',
 ];
 
 foreach ($files as $label => $path) {
@@ -22,6 +25,9 @@ $hero = file_get_contents($files['hero']);
 $services = file_get_contents($files['services']);
 $profile = file_get_contents($files['profile']);
 $latest = file_get_contents($files['latest']);
+$process = file_get_contents($files['process']);
+$faq = file_get_contents($files['faq']);
+$final_cta = file_get_contents($files['final_cta']);
 
 foreach ([
     '--law01-client-burgundy:',
@@ -171,6 +177,42 @@ assert(str_contains($latest, 'aznet-theme-law01-article-card__media'), 'Latest c
 assert(str_contains($latest, 'get_the_category'), 'Latest cards must expose WordPress-owned taxonomy labels.');
 assert(str_contains($latest, "'style' => 'display:block;width:100%;height:auto;'"), 'Latest featured media must constrain intrinsic image width for every Law 01 visual variant.');
 assert(! str_contains($latest, '<a class="aznet-theme-law01-article-card__media"'), 'Latest media must not duplicate the canonical article URL.');
+
+foreach ([
+    'aznet-theme-law01-process__layout',
+    'aznet-theme-law01-process__copy',
+    'aznet-theme-law01-process__body',
+    'aznet-theme-law01-process__action',
+] as $needle) {
+    assert(str_contains($process, $needle), "Law 01 Process reference-parity structure missing: {$needle}");
+}
+
+foreach ([
+    'aznet-theme-law01-faq__layout',
+    'aznet-theme-law01-faq__copy',
+    'aznet-theme-law01-faq__action',
+] as $needle) {
+    assert(str_contains($faq, $needle), "Law 01 FAQ reference-parity structure missing: {$needle}");
+}
+
+foreach ([
+    'aznet-theme-law01-final-cta__inner',
+    'aznet-theme-law01-final-cta__copy',
+    'aznet-theme-law01-final-cta__actions',
+] as $needle) {
+    assert(str_contains($final_cta, $needle), "Law 01 final CTA reference-parity structure missing: {$needle}");
+}
+
+foreach ([
+    '.aznet-theme-homepage--law-01-burgundy-gold > .aznet-theme-entry--front-page',
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process .aznet-theme-law01-process__layout',
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-faq__layout',
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-final-cta__inner',
+    'grid-template-columns: minmax(0, 42%) minmax(0, 58%);',
+    'grid-template-columns: minmax(0, 1fr) auto;',
+] as $needle) {
+    assert(str_contains($css, $needle), "Law 01 extended Burgundy reference-parity CSS missing: {$needle}");
+}
 
 foreach (['500+', '95%', '98%', '1.000+', '1000+', 'Nguyễn Văn A', 'Nguyễn Văn Minh', 'Trần Thị Lan', 'Phạm Anh Tuấn', 'Lê Thị Hoa'] as $forbidden) {
     foreach ([$hero, $services, $profile, $latest, $css] as $surface) {

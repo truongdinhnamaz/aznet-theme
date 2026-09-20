@@ -22,7 +22,7 @@ permissions:
   contents: read
 
 # Promoted target: WordPress 6.9 / PHP 8.1 / zero active third-party plugins.
-# The exact package is aznet-theme-1.3.16.zip after the approved metadata gate.
+# The exact package is aznet-theme-1.3.17.zip after the approved metadata gate.
 # Final lifecycle switches to twentytwentyfive and back and uses build-release-package.py.
 
 jobs:
@@ -92,7 +92,7 @@ jobs:
           rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='node_modules' --exclude='README.md' --exclude='aznet-preview.png' ./ /tmp/wp-y5/wp-content/themes/aznet-theme/
           wp theme activate aznet-theme --path=/tmp/wp-y5 --allow-root
           wp core version --path=/tmp/wp-y5 --allow-root | grep -Fx '6.9'
-          wp theme get aznet-theme --field=version --path=/tmp/wp-y5 --allow-root | grep -Fx '1.3.16'
+          wp theme get aznet-theme --field=version --path=/tmp/wp-y5 --allow-root | grep -Fx '1.3.17'
           test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-y5 --allow-root)"
       - name: Build integrated clean-site runtime fixture
         env:
@@ -183,17 +183,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Build deterministic aznet-theme-1.3.16.zip twice and prove source/package identity
+      - name: Build deterministic aznet-theme-1.3.17.zip twice and prove source/package identity
         run: |
           set -euo pipefail
           rm -rf /tmp/y5-package /tmp/y5-unpack /tmp/y5-source-snapshot
           mkdir -p /tmp/y5-package/evidence /tmp/y5-unpack /tmp/y5-source-snapshot/aznet-theme
-          python3 scripts/build-release-package.py --source . --output /tmp/y5-package/aznet-theme-1.3.16-a.zip --version 1.3.16 | tee /tmp/y5-package/evidence/package-a.txt
-          python3 scripts/build-release-package.py --source . --output /tmp/y5-package/aznet-theme-1.3.16-b.zip --version 1.3.16 | tee /tmp/y5-package/evidence/package-b.txt
-          cmp /tmp/y5-package/aznet-theme-1.3.16-a.zip /tmp/y5-package/aznet-theme-1.3.16-b.zip
-          cp /tmp/y5-package/aznet-theme-1.3.16-a.zip /tmp/y5-package/aznet-theme-1.3.16.zip
-          sha256sum /tmp/y5-package/aznet-theme-1.3.16.zip | tee /tmp/y5-package/evidence/package-sha256.txt
-          unzip -q /tmp/y5-package/aznet-theme-1.3.16.zip -d /tmp/y5-unpack
+          python3 scripts/build-release-package.py --source . --output /tmp/y5-package/aznet-theme-1.3.17-a.zip --version 1.3.17 | tee /tmp/y5-package/evidence/package-a.txt
+          python3 scripts/build-release-package.py --source . --output /tmp/y5-package/aznet-theme-1.3.17-b.zip --version 1.3.17 | tee /tmp/y5-package/evidence/package-b.txt
+          cmp /tmp/y5-package/aznet-theme-1.3.17-a.zip /tmp/y5-package/aznet-theme-1.3.17-b.zip
+          cp /tmp/y5-package/aznet-theme-1.3.17-a.zip /tmp/y5-package/aznet-theme-1.3.17.zip
+          sha256sum /tmp/y5-package/aznet-theme-1.3.17.zip | tee /tmp/y5-package/evidence/package-sha256.txt
+          unzip -q /tmp/y5-package/aznet-theme-1.3.17.zip -d /tmp/y5-unpack
           rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='node_modules' --exclude='README.md' --exclude='aznet-preview.png' ./ /tmp/y5-source-snapshot/aznet-theme/
           if ! diff -qr /tmp/y5-source-snapshot/aznet-theme /tmp/y5-unpack/aznet-theme > /tmp/y5-package/evidence/source-package-diff.txt; then
             cat /tmp/y5-package/evidence/source-package-diff.txt
@@ -218,7 +218,7 @@ jobs:
           cp -a /tmp/y5-unpack/aznet-theme /tmp/wp-y5-package/wp-content/themes/aznet-theme
           wp theme activate aznet-theme --path=/tmp/wp-y5-package --allow-root
           wp core version --path=/tmp/wp-y5-package --allow-root | grep -Fx '6.9'
-          wp theme get aznet-theme --field=version --path=/tmp/wp-y5-package --allow-root | grep -Fx '1.3.16'
+          wp theme get aznet-theme --field=version --path=/tmp/wp-y5-package --allow-root | grep -Fx '1.3.17'
           test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-y5-package --allow-root)"
       - name: Execute exact-package client-delivery runtime smoke
         run: |
@@ -278,7 +278,7 @@ jobs:
         with:
           name: y5-client-delivery-promoted-package
           path: |
-            /tmp/y5-package/aznet-theme-1.3.16.zip
+            /tmp/y5-package/aznet-theme-1.3.17.zip
             /tmp/y5-package/evidence
             /tmp/y5-package/state
           if-no-files-found: error
