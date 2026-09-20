@@ -83,6 +83,13 @@ foreach ([
 }
 assert(!preg_match('/#(?:[0-9a-fA-F]{3}){1,2}\\b/', $hubCss), 'Services Hub CSS must use semantic Theme tokens rather than hard-coded colors');
 
+$tokensCss = file_get_contents($root . '/assets/css/tokens.css');
+assert(is_string($tokensCss), 'tokens.css missing');
+preg_match_all('/var\\((--aznet-theme-[a-z0-9-]+)/i', $hubCss, $hubTokenUses);
+preg_match_all('/(--aznet-theme-[a-z0-9-]+)\\s*:/i', $tokensCss . "\n" . $hubCss, $hubTokenDefinitions);
+$undefinedHubTokens = array_values(array_diff(array_unique($hubTokenUses[1]), array_unique($hubTokenDefinitions[1])));
+assert([] === $undefinedHubTokens, 'Services Hub CSS uses undefined Theme tokens: ' . implode(', ', $undefinedHubTokens));
+
 $serviceCssPath = $root . '/assets/css/components/service-page.css';
 assert(is_file($serviceCssPath), 'service-page.css missing');
 $serviceCss = file_get_contents($serviceCssPath);
