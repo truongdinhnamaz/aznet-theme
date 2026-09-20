@@ -329,14 +329,12 @@ jobs:
           grep -F 'aznet-theme-law01-article-card__media' /tmp/homepage-law01/homepage.html
           grep -F 'aznet-theme-site-footer--professional' /tmp/homepage-law01/homepage.html
           grep -F 'aznet-theme-site-footer__social-column' /tmp/homepage-law01/homepage.html
-          if grep -F 'aznet-theme-law01-analysis' /tmp/homepage-law01/homepage.html; then
-            echo 'Burgundy visual closure must not render Analysis section' >&2
-            exit 1
-          fi
-          if grep -F 'aznet-theme-law01-news' /tmp/homepage-law01/homepage.html; then
-            echo 'Burgundy visual closure must not render News section' >&2
-            exit 1
-          fi
+          grep -F 'aznet-theme-law01-topics' /tmp/homepage-law01/homepage.html
+          grep -F 'aznet-theme-law01-analysis' /tmp/homepage-law01/homepage.html
+          grep -F 'aznet-theme-law01-news' /tmp/homepage-law01/homepage.html
+          grep -F 'aznet-theme-law01-process' /tmp/homepage-law01/homepage.html
+          grep -F 'aznet-theme-law01-faq' /tmp/homepage-law01/homepage.html
+          grep -F 'aznet-theme-law01-final-cta' /tmp/homepage-law01/homepage.html
           grep -F 'Tận tâm với khách hàng' /tmp/homepage-law01/homepage.html
           grep -F 'cá nhân và doanh nghiệp' /tmp/homepage-law01/homepage.html
           grep -F 'tel:+842400000000' /tmp/homepage-law01/homepage.html
