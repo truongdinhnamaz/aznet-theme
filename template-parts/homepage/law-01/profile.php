@@ -88,14 +88,6 @@ if ( ! $has_team ) {
                 <?php if ( '' !== $team_summary ) : ?><p class="aznet-theme-law01-lede"><?php echo esc_html( $team_summary ); ?></p><?php endif; ?>
             </div>
         </div>
-        <?php if ( ! $has_members ) : ?>
-            <div class="aznet-theme-law01-profile__team-empty">
-                <span class="aznet-theme-law01-profile__team-empty-icon" aria-hidden="true">
-                    <svg viewBox="0 0 64 64" focusable="false"><path d="M22 30a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm20-2a7 7 0 1 0 0-14 7 7 0 0 0 0 14ZM7 52v-6c0-8 6-14 14-14h2c8 0 14 6 14 14v6m-5-17c3-4 7-6 12-6h1c7 0 12 5 12 12v11"/></svg>
-                </span>
-                <p><?php esc_html_e( 'Hồ sơ thành viên sẽ hiển thị tại đây khi được công khai trên trang Đội ngũ.', 'aznet-theme' ); ?></p>
-            </div>
-        <?php endif; ?>
         <?php if ( [] !== $members ) : ?><div class="aznet-theme-law01-profile__members">
             <?php foreach ( $members as $member ) : if ( ! $member instanceof \WP_Post ) { continue; } $member_image = has_post_thumbnail( $member ) ? get_the_post_thumbnail( $member, 'medium_large', [ 'class' => 'aznet-theme-law01-profile__member-image aznet-theme-law01-team-card__image' ] ) : ''; $member_summary = trim( (string) get_the_excerpt( $member ) ); ?>
             <article class="aznet-theme-law01-profile__member aznet-theme-law01-team-card">
