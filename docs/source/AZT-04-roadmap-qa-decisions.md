@@ -520,7 +520,7 @@ This remains Theme presentation only. RootProfile authoritative Team remains BLO
 
 ## 14. Exact next
 
-**NEXT — `v1.3.11` PUBLICATION is PASS. Merge the publication source/evidence closure PR after owner approval. Production deployment of the exact published `v1.3.11` asset remains a separate explicit owner gate and must revalidate target-site local modifications plus rollback before any mutation. RootProfile Team remains externally blocked at issue #112.**
+**NEXT — preserve canonical `v1.3.21` technical PASS and current public `v1.3.20` publication boundary. `v1.3.21` publication remains separate. Any production deployment remains a separate explicit gate and must revalidate authenticated target-site state plus rollback before mutation. RootProfile Team remains externally blocked at issue #112.**
 
 
 ### Canonical 1.3.10 merge and Homepage Hero editing UX candidate — 19/09/2026
