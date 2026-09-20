@@ -1,15 +1,15 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.73
+**Version:** v0.74
 **Status:** Working Execution Map / derived  
 **Date:** 20/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** exact verified implementation is `ac5f6a41122f11bfdf334a8e080532f6165aa120`, Theme metadata `1.3.16`; exact-main V1 `35477748238` and X6 `35477748216` are SUCCESS. Owner-approved publication run `35478013102` published annotated `v1.3.16` and GitHub Release `392259635`; public package SHA-256 is `7d6798077bfa0dfcda5e770c31df5e89ff00cc82c4686d3256e9897a3959e431`. Production deployment to `lstamduchn.vn` remains a separate gate; no live `1.3.16` mutation is claimed and `1.3.10` remains the last verified live Theme. RootProfile Team remains separately blocked under issue #112.
+> **Canonical-main checkpoint:** exact verified implementation is `ac5f6a41122f11bfdf334a8e080532f6165aa120`, Theme metadata `1.3.16`; exact-main V1 `35477748238` and X6 `35477748216` are SUCCESS. Owner-approved publication run `35478013102` published annotated `v1.3.16` and GitHub Release `392259635`; public package SHA-256 is `7d6798077bfa0dfcda5e770c31df5e89ff00cc82c4686d3256e9897a3959e431`. Production deployment to `lstamduchn.vn` is BLOCKED_EXTERNAL_ACCESS before mutation: fresh run `35475064743` attempt 2 again reached TCP/443 but stalled after TLS ClientHello, while WPVibe fallback was rate-limited. No live `1.3.16` mutation is claimed and `1.3.10` remains the last verified live Theme. RootProfile Team remains separately blocked under issue #112.
 
-**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS -> corrective releases through v1.3.12 publication PASS -> Law 01 PR #166/#167 -> v1.3.15 publication PASS -> PR #171 Burgundy composition -> v1.3.16 exact-main technical closure PASS -> owner-approved v1.3.16 publication PASS`. Current release boundary: `v1.3.16 TECHNICAL + PUBLICATION PASS / PRODUCTION DEPLOYMENT SEPARATE`.
+**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS -> corrective releases through v1.3.12 publication PASS -> Law 01 PR #166/#167 -> v1.3.15 publication PASS -> PR #171 Burgundy composition -> v1.3.16 exact-main technical closure PASS -> owner-approved v1.3.16 publication PASS`. Current release boundary: `v1.3.16 TECHNICAL + PUBLICATION PASS / PRODUCTION DEPLOYMENT BLOCKED_EXTERNAL_ACCESS`.
 
 ## 1. Current state
 
@@ -65,9 +65,9 @@ P3 final verified head `d78091900451176c3815b23d1485036e784bdde9` merged through
 - Publication run `35478013102`: SUCCESS; evidence artifact `10594348675`, digest `sha256:a6443d2d70d3d5e05e6dc6a423247a7e84cccc1f79355d87e7ba61ec008e319a`.
 - D-031 accepted Burgundy composition: Hero/Trust/Services/About-Team before the native Front Page content boundary; Process/FAQ/Latest legal knowledge/Contact CTA after it; Topics/Analysis/News excluded; mapped sources fail soft.
 - RootProfile Team/member discovery remains BLOCKED_EXTERNAL_CONTRACT under open issue #112. Theme must not self-unblock through private storage, WordPress-user enumeration or heuristic identity inference.
-- No production deployment/live-site mutation is claimed. Theme `1.3.10` remains only the last verified live state until a fresh secure authenticated preflight proves the current production baseline.
+- Fresh read-only production-access recheck run `35475064743` attempt 2 reproduced the HTTPS/TLS stall after ClientHello before WordPress authentication; WPVibe authenticated fallback was rate-limited. No production deployment/live-site mutation occurred. Theme `1.3.10` remains only the last verified live state.
 
-**Exact Next:** production deployment of `v1.3.16` requires a separate owner gate and a fresh read-only preflight on `lstamduchn.vn`. Do not infer live `1.3.16` from publication.
+**Exact Next:** restore one secure authenticated read path to `lstamduchn.vn` (HTTPS runner path or WPVibe availability), then rerun read-only preflight. Only after active Theme version + rollback baseline are freshly verified may a separately owner-approved `v1.3.16` production deployment proceed. Do not infer live `1.3.16`.
 
 ## 2. Slice discipline
 
