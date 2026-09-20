@@ -816,6 +816,240 @@
     }
 }
 
+/* Premium Homepage v1.3.20 candidate: source-backed depth below the locked v1.3.19 baseline. */
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-analysis-card {
+    overflow: hidden;
+    padding: 0;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-analysis-card__media {
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255,255,255,.13);
+    background: rgba(255,255,255,.04);
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-analysis-card__image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    object-fit: cover;
+    transition: transform 220ms ease;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-analysis-card:hover .aznet-theme-law01-analysis-card__image {
+    transform: scale(1.025);
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-analysis-card__body {
+    padding: 1.25rem 1.3rem 1.4rem;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-analysis-card__excerpt {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 0 0 1rem;
+    color: rgba(255,255,255,.8);
+    line-height: 1.65;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-analysis-card .aznet-theme-law01-text-link {
+    color: #f1d593;
+}
+
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-featured {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    overflow: hidden;
+    margin-top: 1.25rem;
+    border: 1px solid rgba(122, 14, 24, .11);
+    border-radius: .3rem;
+    background: #fff;
+    box-shadow: 0 .75rem 2rem rgba(74, 46, 31, .055);
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-featured__media {
+    min-height: 100%;
+    overflow: hidden;
+    background: #f4eadb;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-featured__image {
+    width: 100%;
+    height: 100% !important;
+    min-height: 18rem;
+    object-fit: cover;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-featured__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-featured__body h3 {
+    margin-bottom: .75rem;
+    font-size: clamp(1.35rem, 2vw, 1.8rem);
+    line-height: 1.2;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-featured__body h3 a {
+    color: var(--law01-client-ink);
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-featured__body > p:not(.aznet-theme-law01-meta) {
+    color: #655a51;
+    line-height: 1.7;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-list--secondary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 2rem;
+    margin-top: 1.35rem;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-list--secondary article {
+    grid-template-columns: 6.25rem minmax(0, 1fr);
+    min-width: 0;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-list--secondary h3 {
+    font-size: var(--law01-type-card-title);
+    line-height: 1.35;
+}
+
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process .aznet-theme-law01-panel {
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    align-items: start;
+    gap: clamp(2rem, 4vw, 4.5rem);
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process__intro,
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process__source {
+    min-width: 0;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process__intro > p:not(.aznet-theme-law01-eyebrow) {
+    color: #655a51;
+    line-height: 1.7;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process__source .wp-block-list {
+    display: grid;
+    counter-reset: law01-process-step;
+    gap: .75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process__source .wp-block-list > li {
+    position: relative;
+    min-height: 3.75rem;
+    display: flex;
+    align-items: center;
+    padding: .85rem 1rem .85rem 4rem;
+    border: 1px solid rgba(122, 14, 24, .1);
+    border-radius: .25rem;
+    background: var(--law01-client-cream);
+    color: var(--law01-client-ink);
+    counter-increment: law01-process-step;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process__source .wp-block-list > li::before {
+    position: absolute;
+    left: 1rem;
+    width: 2rem;
+    height: 2rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--law01-client-gold);
+    border-radius: 50%;
+    color: var(--law01-client-burgundy);
+    content: counter(law01-process-step, decimal-leading-zero);
+    font-size: .72rem;
+    font-weight: var(--aznet-theme-font-weight-bold);
+}
+
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-faq .aznet-theme-law01-container {
+    max-width: 76rem;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-faq__intro {
+    max-width: 58rem;
+    margin-bottom: 1.25rem;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-faq__items {
+    display: grid;
+    gap: .65rem;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-faq__items details.wp-block-details {
+    overflow: hidden;
+    margin: 0;
+    border: 1px solid rgba(122, 14, 24, .11);
+    border-radius: .25rem;
+    background: #fffaf2;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-faq__items details.wp-block-details > summary {
+    position: relative;
+    padding: 1rem 3.25rem 1rem 1.15rem;
+    color: var(--law01-client-ink);
+    cursor: pointer;
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    list-style: none;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-faq__items details.wp-block-details > summary::-webkit-details-marker {
+    display: none;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-faq__items details.wp-block-details > summary::after {
+    position: absolute;
+    top: 50%;
+    right: 1.15rem;
+    color: var(--law01-client-burgundy);
+    content: '+';
+    font-size: 1.35rem;
+    transform: translateY(-50%);
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-faq__items details.wp-block-details[open] > summary::after {
+    content: '−';
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-faq__items details.wp-block-details > :not(summary) {
+    margin: 0;
+    padding: 0 1.15rem 1rem;
+    color: #655a51;
+    line-height: 1.7;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-faq__action {
+    margin: 1.25rem 0 0;
+}
+
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-final-cta .aznet-theme-law01-container {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: clamp(2rem, 5vw, 5rem);
+    align-items: center;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-final-cta h2,
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-final-cta > .aznet-theme-law01-container > p {
+    grid-column: 1;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-final-cta .aznet-theme-law01-actions {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    justify-content: flex-end;
+    margin-top: 0;
+}
+
+@media (max-width: 960px) {
+    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-featured,
+    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process .aznet-theme-law01-panel,
+    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-final-cta .aznet-theme-law01-container {
+        grid-template-columns: 1fr;
+    }
+    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-list--secondary {
+        grid-template-columns: 1fr;
+    }
+    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-final-cta h2,
+    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-final-cta > .aznet-theme-law01-container > p,
+    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-final-cta .aznet-theme-law01-actions {
+        grid-column: 1;
+        grid-row: auto;
+    }
+    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-final-cta .aznet-theme-law01-actions {
+        justify-content: flex-start;
+        margin-top: 1.25rem;
+    }
+}
+@media (max-width: 640px) {
+    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-featured__image {
+        min-height: 13rem;
+    }
+    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process__source .wp-block-list > li {
+        padding-left: 3.6rem;
+    }
+}
+
 /* Tâm Đức Law 01 demo refinement: presentation only. */
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__brand {
     max-width: 22ch;
