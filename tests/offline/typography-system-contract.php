@@ -11,11 +11,11 @@ assert(is_file($tokensPath));
 $themeJson = json_decode((string) file_get_contents($themeJsonPath), true, 512, JSON_THROW_ON_ERROR);
 $tokens = (string) file_get_contents($tokensPath);
 
-$systemStack = 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
+$robotoStack = 'Roboto, Arial, sans-serif';
 
 assert(str_contains(
     $tokens,
-    '--aznet-theme-font-family-base: ' . $systemStack . ';'
+    '--aznet-theme-font-family-base: ' . $robotoStack . ';'
 ));
 
 assert(str_contains($tokens, '--aznet-theme-line-height-small: 1.6;'));
@@ -41,14 +41,14 @@ foreach ([
 }
 
 $families = $themeJson['settings']['typography']['fontFamilies'] ?? [];
-assert(1 === count($families), 'theme.json must expose one canonical system family.');
-assert('system' === ($families[0]['slug'] ?? null));
-assert($systemStack === ($families[0]['fontFamily'] ?? null));
-assert(empty($families[0]['fontFace'] ?? []), 'System family must not declare fontFace.');
+assert(1 === count($families), 'theme.json must expose one canonical Roboto family.');
+assert('roboto' === ($families[0]['slug'] ?? null));
+assert($robotoStack === ($families[0]['fontFamily'] ?? null));
+assert(3 === count($families[0]['fontFace'] ?? []), 'Roboto family must declare the approved 400/500/700 self-hosted faces.');
 
 assert(
-    'var:preset|font-family|system' === ($themeJson['styles']['typography']['fontFamily'] ?? null),
-    'Global theme.json typography must use the system preset.'
+    'var:preset|font-family|roboto' === ($themeJson['styles']['typography']['fontFamily'] ?? null),
+    'Global theme.json typography must use the Roboto preset.'
 );
 
 
@@ -74,7 +74,7 @@ foreach ([
     $root . '/assets/fonts/roboto/Roboto-Medium.woff2',
     $root . '/assets/fonts/roboto/Roboto-Bold.woff2',
 ] as $fontPath) {
-    assert(! is_file($fontPath), "Obsolete default font asset remains: {$fontPath}");
+    assert(is_file($fontPath), "Approved Roboto font asset missing: {$fontPath}");
 }
 
-echo "PASS: system typography architecture contract\n";
+echo "PASS: Roboto default typography architecture contract\n";
