@@ -15,6 +15,7 @@ $crumbs  = \AZnet\Theme\page_breadcrumb_items( $post_id );
 $excerpt = \AZnet\Theme\page_excerpt( $post_id );
 $is_service_detail = \AZnet\Theme\service_page_is_detail( $post_id );
 $is_service_hub = \AZnet\Theme\service_hub_is_current_page( $post_id );
+$is_law01_burgundy = \AZnet\Theme\page_law01_burgundy_active();
 $service_contact_url = ( $is_service_detail || $is_service_hub ) ? \AZnet\Theme\service_page_contact_url() : '';
 $service_siblings = $is_service_detail ? \AZnet\Theme\service_page_siblings( $post_id ) : [];
 $service_hub_items = $is_service_hub ? \AZnet\Theme\service_hub_items( 6 ) : [];
@@ -30,6 +31,9 @@ if ( $is_service_detail ) {
 }
 if ( $is_service_hub ) {
     $article_classes .= ' aznet-theme-page--service-hub';
+}
+if ( $is_law01_burgundy ) {
+    $article_classes .= ' aznet-theme-page--law01-burgundy-gold';
 }
 
 $card_summary = static function ( \WP_Post $post, int $words = 24 ): string {
