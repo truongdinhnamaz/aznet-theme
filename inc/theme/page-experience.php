@@ -28,6 +28,11 @@ function page_variant( ?int $post_id = null ): string {
     };
 }
 
+/** Whether mapped inner Pages should inherit the configured Law 01 Burgundy presentation. */
+function page_law01_burgundy_active(): bool {
+    return 'law-01' === homepage_preset() && 'burgundy-gold' === homepage_law01_variant();
+}
+
 /**
  * Return the native Page excerpt without pre-consuming plugin-owned dynamic content.
  *
