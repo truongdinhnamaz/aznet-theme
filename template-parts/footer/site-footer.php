@@ -41,13 +41,6 @@ $contact_heading = $law01_homepage
 $navigation_heading = $law01_homepage
     ? __( 'Liên kết nhanh', 'aznet-theme' )
     : __( 'Khám phá', 'aznet-theme' );
-
-$law01_contact_page = null;
-$law01_services_page = null;
-if ( $law01_homepage && function_exists( 'AZnet\\Theme\\homepage_page_reference' ) && function_exists( 'AZnet\\Theme\\setting' ) ) {
-    $law01_contact_page = \AZnet\Theme\homepage_page_reference( (int) \AZnet\Theme\setting( 'homepage_contact_page', 0 ) );
-    $law01_services_page = \AZnet\Theme\homepage_page_reference( (int) \AZnet\Theme\setting( 'homepage_services_page', 0 ) );
-}
 ?>
 <footer class="<?php echo esc_attr( implode( ' ', $footer_classes ) ); ?>" data-aznet-theme-site-footer role="contentinfo">
     <div class="aznet-theme-site-footer__inner">
@@ -91,14 +84,6 @@ if ( $law01_homepage && function_exists( 'AZnet\\Theme\\homepage_page_reference'
                 <nav class="aznet-theme-site-footer__social-column aznet-theme-site-footer__social" aria-label="<?php echo esc_attr__( 'Kết nối với chúng tôi', 'aznet-theme' ); ?>">
                     <h2 class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Kết nối với chúng tôi', 'aznet-theme' ); ?></h2>
                     <?php echo $social_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
-                </nav>
-            <?php elseif ( $law01_homepage && ( $law01_contact_page instanceof \WP_Post || $law01_services_page instanceof \WP_Post ) ) : ?>
-                <nav class="aznet-theme-site-footer__social-column aznet-theme-site-footer__connect-fallback" aria-label="<?php echo esc_attr__( 'Kết nối', 'aznet-theme' ); ?>">
-                    <h2 class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Kết nối', 'aznet-theme' ); ?></h2>
-                    <ul class="aznet-theme-site-footer__menu">
-                        <?php if ( $law01_contact_page instanceof \WP_Post ) : ?><li><a href="<?php echo esc_url( get_permalink( $law01_contact_page ) ); ?>"><?php esc_html_e( 'Yêu cầu tư vấn', 'aznet-theme' ); ?></a></li><?php endif; ?>
-                        <?php if ( $law01_services_page instanceof \WP_Post ) : ?><li><a href="<?php echo esc_url( get_permalink( $law01_services_page ) ); ?>"><?php esc_html_e( 'Xem dịch vụ', 'aznet-theme' ); ?></a></li><?php endif; ?>
-                    </ul>
                 </nav>
             <?php endif; ?>
         </div>
