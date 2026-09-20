@@ -14,9 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  */
 function law01_reference_art_urls( string $group ): array {
     $groups = [
-        'hero' => [
-            '/assets/images/law01-reference/hero-office.svg',
-        ],
         'team' => [
             '/assets/images/law01-reference/team-portrait-01.svg',
             '/assets/images/law01-reference/team-portrait-02.svg',
