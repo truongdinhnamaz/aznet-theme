@@ -272,20 +272,20 @@
 .aznet-theme-page-kit--about .aznet-theme-page-kit__capabilities .aznet-theme-page-kit__card {
     position: relative;
     overflow: hidden;
-    padding-inline-end: clamp(var(--aznet-theme-space-5), 7vw, var(--aznet-theme-space-8));
+    padding-inline-end: calc(var(--aznet-theme-space-8) + var(--aznet-theme-space-2));
 }
 
 .aznet-theme-page-kit--about .aznet-theme-page-kit__capabilities .aznet-theme-page-kit__card::after {
     position: absolute;
-    inset-block-start: 50%;
+    inset-block-start: var(--aznet-theme-space-4);
     inset-inline-end: var(--aznet-theme-space-4);
-    width: clamp(2rem, 4vw, 3rem);
+    width: 2.5rem;
     aspect-ratio: 1;
     background: var(--aznet-theme-accent);
     content: "";
-    opacity: .16;
+    opacity: .14;
     pointer-events: none;
-    transform: translateY(-50%);
+    transform: none;
     -webkit-mask: var(--aznet-theme-about-icon-scales) center / contain no-repeat;
     mask: var(--aznet-theme-about-icon-scales) center / contain no-repeat;
 }

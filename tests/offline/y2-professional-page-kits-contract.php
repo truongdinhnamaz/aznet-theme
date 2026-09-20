@@ -198,6 +198,13 @@ if (preg_match('/#[0-9a-f]{3,8}\b|rgba?\s*\(/i', $pageCss)) {
     y2_fail('Page Kit presentation must use existing Theme tokens instead of hard-coded brand colors');
 }
 
+if (! preg_match(
+    '/\\.aznet-theme-page-kit--about \\.aznet-theme-page-kit__capabilities \\.aznet-theme-page-kit__card::after\\s*\\{[^}]*inset-block-start:\\s*var\\(--aznet-theme-space-4\\);[^}]*inset-inline-end:\\s*var\\(--aznet-theme-space-4\\);[^}]*transform:\\s*none;/s',
+    $pageCss
+)) {
+    y2_fail('About capabilities decorative icon must be anchored to the card top-right instead of floating through body copy');
+}
+
 $style = file_get_contents($root . '/style.css');
 $functions = file_get_contents($root . '/functions.php');
 if (false === $style || false === $functions) {
