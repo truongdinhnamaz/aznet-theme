@@ -4,10 +4,9 @@ import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 
 const routes = {
-  child: { url: process.env.Y1_CHILD_URL, variant: 'standard', breadcrumbs: true },
+  child: { url: process.env.Y1_CHILD_URL, variant: 'standard', breadcrumbs: true, service: true },
   wide: { url: process.env.Y1_WIDE_URL, variant: 'wide', breadcrumbs: false },
   landing: { url: process.env.Y1_LANDING_URL, variant: 'landing', breadcrumbs: false },
-  service: { url: process.env.Y1_SERVICE_URL, variant: 'standard', breadcrumbs: true, service: true },
 };
 
 const outputDir = process.env.Y1_PAGE_STATE_DIR || '/tmp/y1-page-l4';
