@@ -1,15 +1,17 @@
 # AZnet Theme Source Manifest
 
-Canonical technical implementation baseline is exact `main@7ea9a189b124482b495f6e2adff668c070ff94de`, Theme metadata `1.3.22`. Exact-main V1 `35521042638` and X6 `35521042601` PASS; deterministic `aznet-theme-1.3.22.zip` has 159 production files, 113 packaged PHP files verified and SHA-256 `d5197073641ebc6b7764ffca31409b56cf9e447d533899999db94b28d5e02790`. Current published GitHub Release is `v1.3.22`: publication run `35521247319`, tag object `a552ee75f05ff1b8f9733137d2015692a20e565d`, Release `392486195`, asset `577094851`. Production deployment to `lstamduchn.vn` is not claimed and is currently `BLOCKED_EXTERNAL_ACCESS` because the authenticated WPVibe allowance is exhausted; `1.3.10` remains the last verified live Theme. RootProfile-backed authoritative Team membership remains separately blocked at issue #112.
+Canonical technical implementation baseline is exact `main@c3d991199bb5c95dec3bac6e0ae06072c8a249f2`, Theme metadata `1.3.23`. Exact-main V1 `35521890888` and X6 `35521890901` PASS; deterministic `aznet-theme-1.3.23.zip` has 159 production files, 113 packaged PHP files verified and SHA-256 `7129b1506131c6b9e413bcba3087475fce75f52df7b71593c5f2804e90c4f005`. Current published GitHub Release is `v1.3.23`: publication run `35522052972`, tag object `2bc3077cfc915ead5bb96770d7b2907503e43a44`, Release `392490797`, asset `577120116`. Repository release verification/publication is connector-independent under D-033; production deployment is separate.
 | Source | Semantic version | Role |
 | --- | --- | --- |
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.14 | Theme architecture, public integration contracts, D-027 Standalone Core boundary and complete WordPress-owned D-030 Hero authoring rule |
-| `AZT-03-baseline-provenance.md` | v0.71 | Canonical provenance through v1.3.22 service-page technical/publication closure; production deployment remains externally blocked |
-| `AZT-04-roadmap-qa-decisions.md` | v0.87 | Roadmap/QA through v1.3.22 technical/publication PASS and production access blocker |
-| `AZT-EXEC-MAP.md` | v0.77 | Derived execution map through v1.3.22 publication; production deployment awaits authenticated preflight |
+| `AZT-03-baseline-provenance.md` | v0.72 | Canonical provenance through v1.3.23 repository-native technical/publication closure |
+| `AZT-04-roadmap-qa-decisions.md` | v0.88 | Roadmap/QA through v1.3.23 connector-independent technical/publication PASS |
+| `AZT-EXEC-MAP.md` | v0.78 | Derived execution map through v1.3.23 publication |
+
+20/09/2026 v1.3.23 repository-native release evidence: `docs/evidence/V1_3_23_REPOSITORY_NATIVE_RELEASE_20260920.md` records PR #202 RED->GREEN promotion, exact-main V1 `35521890888`, exact-main X6 `35521890901`, deterministic package SHA-256 `7129b1506131c6b9e413bcba3087475fce75f52df7b71593c5f2804e90c4f005`, publication run `35522052972`, annotated `v1.3.23`, Release `392490797`, asset `577120116`, and the retained D-033 rule that repository release verification/publication does not depend on WPVibe or another production-site connector.
 
 20/09/2026 v1.3.22 service-page release evidence: `docs/evidence/V1_3_22_SERVICE_PAGE_RELEASE_20260920.md` records PR #199 mapped Service Page presentation, PR #200 metadata promotion, exact-main V1 `35521042638`, exact-main X6 `35521042601`, deterministic package SHA-256 `d5197073641ebc6b7764ffca31409b56cf9e447d533899999db94b28d5e02790`, publication run `35521247319`, annotated `v1.3.22`, Release `392486195` and the current `BLOCKED_EXTERNAL_ACCESS` production state caused by the exhausted authenticated WPVibe allowance. No live `1.3.22` mutation is claimed.
 
