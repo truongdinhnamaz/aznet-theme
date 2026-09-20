@@ -164,6 +164,10 @@
  * WordPress keeps the authored content; these icons are decorative Theme presentation only.
  */
 .aznet-theme-page-kit--about {
+    --aznet-theme-about-principle-icon-size: 2rem;
+    --aznet-theme-about-trust-icon-size: 1.75rem;
+    --aznet-theme-about-capability-icon-size: 2.5rem;
+    --aznet-theme-about-icon-gap: var(--aznet-theme-space-3);
     --aznet-theme-about-icon-scales: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3v18M7 21h10M4 7h16M6 7l-4 7h8L6 7Zm12 0-4 7h8l-4-7ZM2 14a4 4 0 0 0 8 0m4 0a4 4 0 0 0 8 0'/%3E%3C/svg%3E");
     --aznet-theme-about-icon-compass: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='m16 8-2.5 5.5L8 16l2.5-5.5L16 8Z'/%3E%3C/svg%3E");
     --aznet-theme-about-icon-shield: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m12 2 8 3v6c0 5-4 8-8 11-4-3-8-6-8-11V5l8-3Z'/%3E%3Cpath d='m8 11 3 3 5-6'/%3E%3C/svg%3E");
@@ -219,14 +223,14 @@
 
 .aznet-theme-page-kit--about .aznet-theme-page-kit__principles .aznet-theme-page-kit__card {
     position: relative;
-    padding-block-start: calc(var(--aznet-theme-space-6) + var(--aznet-theme-space-4));
+    padding-block-start: calc(var(--aznet-theme-space-4) + var(--aznet-theme-about-principle-icon-size) + var(--aznet-theme-about-icon-gap));
 }
 
 .aznet-theme-page-kit--about .aznet-theme-page-kit__principles .aznet-theme-page-kit__card::before {
     position: absolute;
     inset-block-start: var(--aznet-theme-space-4);
     inset-inline-start: var(--aznet-theme-space-4);
-    width: 2rem;
+    width: var(--aznet-theme-about-principle-icon-size);
     aspect-ratio: 1;
     background: var(--aznet-theme-accent);
     content: "";
@@ -272,14 +276,14 @@
 .aznet-theme-page-kit--about .aznet-theme-page-kit__capabilities .aznet-theme-page-kit__card {
     position: relative;
     overflow: hidden;
-    padding-inline-end: calc(var(--aznet-theme-space-8) + var(--aznet-theme-space-2));
+    padding-inline-end: calc(var(--aznet-theme-space-4) + var(--aznet-theme-about-capability-icon-size) + var(--aznet-theme-about-icon-gap));
 }
 
 .aznet-theme-page-kit--about .aznet-theme-page-kit__capabilities .aznet-theme-page-kit__card::after {
     position: absolute;
     inset-block-start: var(--aznet-theme-space-4);
     inset-inline-end: var(--aznet-theme-space-4);
-    width: 2.5rem;
+    width: var(--aznet-theme-about-capability-icon-size);
     aspect-ratio: 1;
     background: var(--aznet-theme-accent);
     content: "";
@@ -299,7 +303,7 @@
 .aznet-theme-page-kit--about .aznet-theme-page-kit__trust > .wp-block-columns > .wp-block-column,
 .aznet-theme-page-kit--about > .aznet-theme-page-kit__trust.wp-block-columns > .wp-block-column {
     position: relative;
-    padding-block-start: calc(var(--aznet-theme-space-5) + 1.75rem);
+    padding-block-start: calc(var(--aznet-theme-space-3) + var(--aznet-theme-about-trust-icon-size) + var(--aznet-theme-about-icon-gap));
 }
 
 .aznet-theme-page-kit--about .aznet-theme-page-kit__trust > .wp-block-columns > .wp-block-column::before,
@@ -307,7 +311,7 @@
     position: absolute;
     inset-block-start: var(--aznet-theme-space-3);
     inset-inline-start: 0;
-    width: 1.75rem;
+    width: var(--aznet-theme-about-trust-icon-size);
     aspect-ratio: 1;
     background: var(--aznet-theme-accent);
     content: "";
