@@ -64,6 +64,7 @@ P3 final verified head `d78091900451176c3815b23d1485036e784bdde9` merged through
 - Published release: annotated `v1.3.16` object `2196d9248c15000eecd2bc5334499a3445ab427a` -> exact implementation; GitHub Release `392259635`; asset `575729964`; SHA-256 `7d6798077bfa0dfcda5e770c31df5e89ff00cc82c4686d3256e9897a3959e431`.
 - Publication run `35478013102`: SUCCESS; evidence artifact `10594348675`, digest `sha256:a6443d2d70d3d5e05e6dc6a423247a7e84cccc1f79355d87e7ba61ec008e319a`.
 - D-031 accepted Burgundy composition: Hero/Trust/Services/About-Team before the native Front Page content boundary; Process/FAQ/Latest legal knowledge/Contact CTA after it; Topics/Analysis/News excluded; mapped sources fail soft.
+- D-032 owner-approved Burgundy expansion (PR #190 in progress): retain the accepted v1.3.18 Hero/Trust/Services/About-Team/Latest visual baseline, then extend below Latest with mapped Topics/Analysis/Legal News/Process/FAQ/Contact CTA; all additions remain source-backed and fail soft; Footer remains independent.
 - RootProfile Team/member discovery remains BLOCKED_EXTERNAL_CONTRACT under open issue #112. Theme must not self-unblock through private storage, WordPress-user enumeration or heuristic identity inference.
 - Fresh read-only production-access recheck run `35475064743` attempt 2 reproduced the HTTPS/TLS stall after ClientHello before WordPress authentication; WPVibe authenticated fallback was rate-limited. No production deployment/live-site mutation occurred. Theme `1.3.10` remains only the last verified live state.
 
