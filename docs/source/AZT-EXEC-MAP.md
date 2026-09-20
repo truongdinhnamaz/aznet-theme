@@ -1,15 +1,15 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.72
+**Version:** v0.73
 **Status:** Working Execution Map / derived  
 **Date:** 20/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** exact verified implementation remains `6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3`; publication source/evidence closure is merged through `main@2d2546b25021a90cb8b7bf4aa909673f1ff4cf7e`. Theme metadata is `1.3.15`; exact-main V1 `35473959243` and X6 `35473959238` are SUCCESS. Owner-approved publication run `35474494290` published annotated `v1.3.15` and GitHub Release `392243619`; public package SHA-256 is `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`. Owner-approved production deployment to `lstamduchn.vn` is currently BLOCKED_EXTERNAL_ACCESS before mutation: direct CI HTTPS stalls at TLS ClientHello on all observed IPv4 backends and WPVibe fallback is temporarily rate-limited. RootProfile Team remains separately blocked under issue #112.
+> **Canonical-main checkpoint:** exact verified implementation is `ac5f6a41122f11bfdf334a8e080532f6165aa120`, Theme metadata `1.3.16`; exact-main V1 `35477748238` and X6 `35477748216` are SUCCESS. Owner-approved publication run `35478013102` published annotated `v1.3.16` and GitHub Release `392259635`; public package SHA-256 is `7d6798077bfa0dfcda5e770c31df5e89ff00cc82c4686d3256e9897a3959e431`. Production deployment to `lstamduchn.vn` remains a separate gate; no live `1.3.16` mutation is claimed and `1.3.10` remains the last verified live Theme. RootProfile Team remains separately blocked under issue #112.
 
-**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS -> corrective releases through v1.3.12 publication PASS -> Law 01 PR #166/#167 -> v1.3.15 exact-main technical closure PASS -> owner-approved v1.3.15 publication PASS`. Current release boundary: `v1.3.15 TECHNICAL + PUBLICATION PASS / PRODUCTION DEPLOYMENT OWNER-APPROVED BUT BLOCKED_EXTERNAL_ACCESS`.
+**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication PASS -> owner-approved v1.2.0 production deployment PASS -> Y1 -> Y2 -> Y3 -> Y4 -> Y5 -> PR #98 merge -> exact-main V1/X6 release-path PASS -> owner-approved v1.3.0 publication PASS -> owner-approved v1.3.0 production deployment PASS -> independent post-deploy read-only verification PASS -> corrective releases through v1.3.12 publication PASS -> Law 01 PR #166/#167 -> v1.3.15 publication PASS -> PR #171 Burgundy composition -> v1.3.16 exact-main technical closure PASS -> owner-approved v1.3.16 publication PASS`. Current release boundary: `v1.3.16 TECHNICAL + PUBLICATION PASS / PRODUCTION DEPLOYMENT SEPARATE`.
 
 ## 1. Current state
 
@@ -59,14 +59,15 @@ P3 final verified head `d78091900451176c3815b23d1485036e784bdde9` merged through
 
 ## 1.1 Exact current checkpoint — 20/09/2026
 
-- Exact verified implementation: `6cf48d1653d6468ec5aa25761c1a5b1dc82d4aa3`, Theme `1.3.15`; source/evidence technical closure is merged through `main@79fcf11f043129a4ce82629a77fc1267802b2bba`.
-- Exact-main V1 `35473959243`: SUCCESS. Exact-main X6 `35473959238`: SUCCESS, including 32/32 browser/axe, deterministic double-build, source/package identity, packaged PHP verification and lifecycle/rollback.
-- Published release: annotated `v1.3.15` object `a0895fc339b1020d7147b00eac243340691fde23` -> exact implementation; GitHub Release `392243619`; asset `575623879`; SHA-256 `8f91e9bd3a40a7eae4e6984a77f2735f339d188e52cfc6f97fac57a96bfcecd8`.
-- Publication run `35474494290`: SUCCESS; evidence artifact `10593402386`, digest `sha256:cf35664008ef75b2a93dca455e14987c571949e826d0bda97b000ad86f6dff67`.
+- Exact verified implementation: `ac5f6a41122f11bfdf334a8e080532f6165aa120`, Theme `1.3.16`; PR #171 merged the owner-approved Burgundy composition to canonical `main`.
+- Exact-main V1 `35477748238`: SUCCESS. Exact-main X6 `35477748216`: SUCCESS, including deterministic double-build, source/package identity, packaged PHP verification and lifecycle/rollback.
+- Published release: annotated `v1.3.16` object `2196d9248c15000eecd2bc5334499a3445ab427a` -> exact implementation; GitHub Release `392259635`; asset `575729964`; SHA-256 `7d6798077bfa0dfcda5e770c31df5e89ff00cc82c4686d3256e9897a3959e431`.
+- Publication run `35478013102`: SUCCESS; evidence artifact `10594348675`, digest `sha256:a6443d2d70d3d5e05e6dc6a423247a7e84cccc1f79355d87e7ba61ec008e319a`.
+- D-031 accepted Burgundy composition: Hero/Trust/Services/About-Team before the native Front Page content boundary; Process/FAQ/Latest legal knowledge/Contact CTA after it; Topics/Analysis/News excluded; mapped sources fail soft.
 - RootProfile Team/member discovery remains BLOCKED_EXTERNAL_CONTRACT under open issue #112. Theme must not self-unblock through private storage, WordPress-user enumeration or heuristic identity inference.
-- No production deployment/live-site mutation is claimed. Fresh post-publication read-only verification on `lstamduchn.vn` is UNKNOWN because the external WPVibe daily fair-use cap was reached; Theme `1.3.10` remains only the last verified live state.
+- No production deployment/live-site mutation is claimed. Theme `1.3.10` remains only the last verified live state until a fresh secure authenticated preflight proves the current production baseline.
 
-**Exact Next:** restore one secure authenticated path to `lstamduchn.vn`, then rerun the read-only preflight. Preferred safe paths are: (a) HTTPS termination accepts the deployment runner path, or (b) the existing WPVibe authenticated path becomes available again. Only after the current active Theme version and baseline are freshly verified may the already owner-approved `v1.3.15` mutation proceed with an exact rollback package and post-deploy verification. Do not infer live `1.3.15`.
+**Exact Next:** production deployment of `v1.3.16` requires a separate owner gate and a fresh read-only preflight on `lstamduchn.vn`. Do not infer live `1.3.16` from publication.
 
 ## 2. Slice discipline
 
