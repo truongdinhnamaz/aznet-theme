@@ -163,3 +163,101 @@ function service_page_siblings( ?int $post_id = null, int $limit = 6 ): array {
 
     return is_array( $posts ) ? $posts : [];
 }
+
+/**
+ * Whether the current native Page is the explicitly mapped Services Hub.
+ *
+ * The authoritative Page reference comes from the Theme Content Map. No slug,
+ * title, URL or request-path heuristics are used.
+ */
+function service_hub_is_current_page( ?int $post_id = null ): bool {
+    $post_id = $post_id ?: (int) get_queried_object_id();
+    if ( $post_id <= 0 ) {
+        return false;
+    }
+
+    $services_id = (int) setting( 'homepage_services_page', 0 );
+    if ( $services_id <= 0 || $post_id !== $services_id ) {
+        return false;
+    }
+
+    $post = get_post( $post_id );
+
+    return $post instanceof \\WP_Post && 'page' === $post->post_type && 'publish' === $post->post_status;
+}
+
+/**
+ * Return published direct child Pages of the explicitly mapped Services Hub.
+ *
+ * @return array<int, \\WP_Post>
+ */
+function service_hub_items( int $limit = 6 ): array {
+    $services_id = (int) setting( 'homepage_services_page', 0 );
+    if ( $services_id <= 0 ) {
+        return [];
+    }
+
+    $services_page = get_post( $services_id );
+    if ( ! $services_page instanceof \\WP_Post || 'page' !== $services_page->post_type || 'publish' !== $services_page->post_status ) {
+        return [];
+    }
+
+    $limit = max( 1, min( 12, $limit ) );
+    $posts = get_posts(
+        [
+            'post_type'      => 'page',
+            'post_status'    => 'publish',
+            'post_parent'    => $services_id,
+            'orderby'        => 'menu_order title',
+            'order'          => 'ASC',
+            'posts_per_page' => $limit,
+            'no_found_rows'  => true,
+        ]
+    );
+
+    return is_array( $posts ) ? $posts : [];
+}
+
+/**
+ * Return recent native WordPress Posts for the Services Hub knowledge band.
+ *
+ * @return array<int, \\WP_Post>
+ */
+function service_hub_latest_posts( int $limit = 3 ): array {
+    $limit = max( 1, min( 6, $limit ) );
+    $posts = get_posts(
+        [
+            'post_type'      => 'post',
+            'post_status'    => 'publish',
+            'orderby'        => 'date',
+            'order'          => 'DESC',
+            'posts_per_page' => $limit,
+            'no_found_rows'  => true,
+        ]
+    );
+
+    return is_array( $posts ) ? $posts : [];
+}
+
+/**
+ * Resolve one optional explicitly mapped support Page for Services Hub presentation.
+ */
+function service_hub_support_page( string $role ): ?\\WP_Post {
+    $keys = [
+        'process' => 'homepage_process_page',
+        'faq'     => 'homepage_faq_page',
+        'contact' => 'homepage_contact_page',
+    ];
+    if ( ! isset( $keys[ $role ] ) ) {
+        return null;
+    }
+
+    $post_id = (int) setting( $keys[ $role ], 0 );
+    if ( $post_id <= 0 ) {
+        return null;
+    }
+
+    $post = get_post( $post_id );
+
+    return $post instanceof \\WP_Post && 'page' === $post->post_type && 'publish' === $post->post_status ? $post : null;
+}
