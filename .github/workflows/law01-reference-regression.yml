@@ -8,6 +8,7 @@ on:
       - 'template-parts/header/**'
       - 'template-parts/homepage/law-01/**'
       - 'assets/css/components/homepage-law-01*.css'
+      - 'assets/css/components/header-law-01.css'
       - 'assets/images/law01-reference/**'
       - 'tests/offline/law01-reference-*.php'
       - 'tests/browser/law01-reference-components.py'
