@@ -20,6 +20,7 @@ $front_id = (int) get_the_ID();
 $lede = '';
 $slogan = '';
 $title = '';
+$brand_title = '';
 $value_proposition = '';
 $body_html = '';
 $image = '';
@@ -29,6 +30,7 @@ if ( '' === $hero_block_html ) {
 
     if ( $hero instanceof \WP_Post ) {
         $title = trim( (string) get_the_title( $hero ) );
+        $brand_title = trim( (string) get_bloginfo( 'name' ) );
         $value_proposition = trim( (string) get_the_excerpt( $hero ) );
         $body = trim( (string) $hero->post_content );
         $body_html = '' !== $body ? wpautop( do_blocks( $body ) ) : '';
@@ -76,6 +78,7 @@ if ( '' !== $hero_block_html ) {
         <div class="aznet-theme-law01-container aznet-theme-law01-hero__grid<?php echo '' === $image ? ' aznet-theme-law01-hero__grid--text' : ''; ?>">
             <div class="aznet-theme-law01-hero__content">
                 <p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Văn phòng luật sư', 'aznet-theme' ); ?></p>
+                <?php if ( '' !== $brand_title ) : ?><p class="aznet-theme-law01-hero__brand"><?php echo esc_html( $brand_title ); ?></p><?php endif; ?>
                 <h1 id="aznet-law01-title"><?php echo esc_html( $title ); ?></h1>
                 <?php if ( '' !== $value_proposition ) : ?><p class="aznet-theme-law01-hero__value"><?php echo esc_html( $value_proposition ); ?></p><?php endif; ?>
                 <?php if ( '' !== $lede ) : ?><p class="aznet-theme-law01-lede"><?php echo esc_html( $lede ); ?></p><?php endif; ?>

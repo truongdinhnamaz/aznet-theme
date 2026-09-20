@@ -42,7 +42,7 @@ foreach ([
 }
 
 assert(str_contains($composer, "[ 'hero', 'services', 'profile' ]"), 'Composer must render the combined client-ready profile band.');
-assert(str_contains($composer, "'burgundy-gold' === \$variant ? [ 'process', 'faq', 'latest', 'final-cta' ] : [ 'topics', 'latest', 'analysis', 'news', 'process', 'faq', 'final-cta' ]"), 'Burgundy Law 01 Homepage must render the mapped Process, FAQ, Knowledge and Contact handoff instead of hiding configured sources.');
+assert(str_contains($composer, "'burgundy-gold' === \$variant ? [ 'latest' ] : [ 'topics', 'latest', 'analysis', 'news', 'process', 'faq', 'final-cta' ]"), 'Burgundy Law 01 Homepage must match the approved compact reference composition: Hero, Services, Profile/Team, Latest and Footer only.');
 assert(! str_contains($composer, "[ 'hero', 'services', 'about', 'team' ]"), 'Composer must not render duplicate legacy About/Team sections.');
 
 foreach ([
