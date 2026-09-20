@@ -63,6 +63,43 @@ async function inspectFrontend(browser, item, viewportName, viewport) {
       throw new Error('Y2 Page stylesheet not observed');
     }
 
+    if (item.role === 'services') {
+      const servicesVisual = await page.evaluate(() => {
+        const intro = document.querySelector('.aznet-theme-page-kit--services .aznet-theme-page-kit__intro');
+        const orientation = document.querySelector('.aznet-theme-page-kit--services .aznet-theme-page-kit__orientation');
+        const cta = document.querySelector('.aznet-theme-page-kit--services .aznet-theme-page-kit__cta');
+        const serviceCard = document.querySelector('.aznet-theme-page-kit--services .aznet-theme-page-kit__service-card');
+        if (!(intro instanceof HTMLElement) || !(orientation instanceof HTMLElement) || !(cta instanceof HTMLElement) || !(serviceCard instanceof HTMLElement)) return null;
+        const introStyle = getComputedStyle(intro);
+        const orientationStyle = getComputedStyle(orientation);
+        const ctaStyle = getComputedStyle(cta);
+        const cardStyle = getComputedStyle(serviceCard);
+        return {
+          introBackgroundImage: introStyle.backgroundImage,
+          introBorderRadius: Number.parseFloat(introStyle.borderRadius || '0'),
+          introPaddingTop: Number.parseFloat(introStyle.paddingTop || '0'),
+          orientationBackground: orientationStyle.backgroundColor,
+          orientationBorderLeftWidth: Number.parseFloat(orientationStyle.borderLeftWidth || '0'),
+          ctaBackground: ctaStyle.backgroundColor,
+          ctaBorderLeftWidth: Number.parseFloat(ctaStyle.borderLeftWidth || '0'),
+          cardTransition: cardStyle.transitionProperty,
+        };
+      });
+      if (!servicesVisual) throw new Error('Unable to inspect Services Page Kit visual language');
+      if (servicesVisual.introBackgroundImage === 'none' || servicesVisual.introBorderRadius < 8 || servicesVisual.introPaddingTop < 24) {
+        throw new Error(`Services intro does not match About intro treatment: ${JSON.stringify(servicesVisual)}`);
+      }
+      if (servicesVisual.orientationBackground === 'rgba(0, 0, 0, 0)' || servicesVisual.orientationBorderLeftWidth < 3) {
+        throw new Error(`Services orientation does not match About accent-panel treatment: ${JSON.stringify(servicesVisual)}`);
+      }
+      if (servicesVisual.ctaBackground !== servicesVisual.orientationBackground || servicesVisual.ctaBorderLeftWidth < 3) {
+        throw new Error(`Services CTA does not match About CTA treatment: ${JSON.stringify(servicesVisual)}`);
+      }
+      if (servicesVisual.cardTransition.includes('transform')) {
+        throw new Error(`Services cards should share About's stable editorial-card behavior: ${JSON.stringify(servicesVisual)}`);
+      }
+    }
+
     if (item.role === 'about') {
       const iconGeometry = await page.evaluate(() => {
         const root = document.querySelector('.aznet-theme-page-kit--about');
