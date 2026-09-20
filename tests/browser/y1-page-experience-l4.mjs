@@ -106,12 +106,38 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
     if (config.hub) {
       if (await page.locator('.aznet-theme-page--service-hub').count() !== 1) throw new Error('Expected mapped Services Hub presentation');
       if (await page.locator('.aznet-theme-service-hub__selection').count() !== 1) throw new Error('Expected Services Hub selection');
+      if (await page.locator('.aznet-theme-service-hub__hero-intro').count() !== 1) throw new Error('Expected Services Hub fallback hero introduction');
+      if (await page.locator('.aznet-theme-service-hub__hero-meta').count() !== 1) throw new Error('Expected Services Hub service-count metadata');
+      const hubMetaText = await page.locator('.aznet-theme-service-hub__hero-meta').innerText();
+      if (!hubMetaText.includes('3 lĩnh vực hỗ trợ')) throw new Error(`Unexpected Services Hub count metadata: ${hubMetaText}`);
       if (await page.locator('.aznet-theme-service-hub__card').count() !== 3) throw new Error('Expected three mapped service cards');
       if (await page.locator('.aznet-theme-service-hub__orientation').count() !== 1) throw new Error('Expected Services Hub orientation band');
       if (await page.locator('.aznet-theme-service-hub__support-card').count() !== 2) throw new Error('Expected mapped process and FAQ support cards');
       if (await page.locator('.aznet-theme-service-hub__knowledge').count() !== 1) throw new Error('Expected Services Hub knowledge section');
       if (await page.locator('.aznet-theme-service-hub__knowledge-card').count() !== 3) throw new Error('Expected three native knowledge cards');
       if (await page.locator('.aznet-theme-service-hub__final-cta').count() !== 1) throw new Error('Expected Services Hub final CTA');
+      const hubVisual = await page.evaluate(() => {
+        const selection = document.querySelector('.aznet-theme-service-hub__selection');
+        const card = document.querySelector('.aznet-theme-service-hub__card');
+        const hero = document.querySelector('.aznet-theme-service-hub__hero');
+        if (!(selection instanceof HTMLElement) || !(card instanceof HTMLElement) || !(hero instanceof HTMLElement)) return null;
+        const selectionStyle = getComputedStyle(selection);
+        const cardStyle = getComputedStyle(card);
+        const heroStyle = getComputedStyle(hero);
+        return {
+          selectionBackground: selectionStyle.backgroundColor,
+          selectionRadius: Number.parseFloat(selectionStyle.borderRadius || '0'),
+          selectionPaddingTop: Number.parseFloat(selectionStyle.paddingTop || '0'),
+          cardTransition: cardStyle.transitionProperty,
+          heroMinHeight: Number.parseFloat(heroStyle.minHeight || '0'),
+        };
+      });
+      if (!hubVisual) throw new Error('Unable to inspect Services Hub visual hierarchy');
+      if (hubVisual.selectionBackground === 'rgba(0, 0, 0, 0)' || hubVisual.selectionRadius < 8 || hubVisual.selectionPaddingTop < 24) {
+        throw new Error(`Services Hub selection still lacks a designed surface: ${JSON.stringify(hubVisual)}`);
+      }
+      if (!hubVisual.cardTransition.includes('transform')) throw new Error(`Services Hub cards lack interaction polish: ${JSON.stringify(hubVisual)}`);
+      if (viewport.width >= 1024 && hubVisual.heroMinHeight < 300) throw new Error(`Services Hub hero lacks desktop visual depth: ${JSON.stringify(hubVisual)}`);
       const hubStylesheets = await page.evaluate(() => Array.from(document.styleSheets).map((sheet) => sheet.href).filter(Boolean));
       if (!hubStylesheets.some((href) => href.includes('/assets/css/components/service-hub.css'))) {
         throw new Error('Services Hub stylesheet not observed');
