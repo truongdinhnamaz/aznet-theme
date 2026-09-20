@@ -35,10 +35,12 @@ The authenticated read-only gate therefore could not determine the active Theme 
 ## Evidence
 
 - Workflow run: `35513866003`.
-- Evidence artifact: `10606485629`.
+- Attempt 1: FAILURE / BLOCKED_EXTERNAL_ACCESS before WordPress authentication.
+- Attempt 2: FAILURE / BLOCKED_EXTERNAL_ACCESS with the same transport symptom: TLS ClientHello followed by SSL connection timeout for both `/` and `/wp-login.php`; Playwright again timed out at `/wp-login.php` after 30 seconds.
+- Attempt-1 evidence artifact: `10606485629`.
 - Artifact digest: `sha256:afe6b8b35c8744a13602577082ca11784a18a3d55ed8a86ad7a7e2470b145617`.
 
-WPVibe fallback was also unavailable during this execution window because the account reported `550 / 500` rolling-24-hour calls used and `0 remaining`; the account indicated capacity should begin returning around 21/09/2026 03:40 UTC.
+WPVibe fallback was also rechecked after attempt 2 and remained unavailable because the account daily cap was still exhausted. WPVibe reported capacity should begin returning around 21/09/2026 03:30 UTC.
 
 ## Safety disposition
 
