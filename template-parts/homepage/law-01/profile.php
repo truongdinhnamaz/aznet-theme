@@ -15,6 +15,35 @@ $team_summary = $team instanceof \WP_Post ? trim( (string) get_the_excerpt( $tea
 $members = $has_team ? homepage_direct_published_children( (int) $team->ID, 4 ) : [];
 $has_members = [] !== $members;
 
+$services_page = homepage_page_reference( (int) setting( 'homepage_services_page', 0 ) );
+$process_page = homepage_page_reference( (int) setting( 'homepage_process_page', 0 ) );
+$faq_page = homepage_page_reference( (int) setting( 'homepage_faq_page', 0 ) );
+$service_count = $services_page instanceof \WP_Post
+    ? count( homepage_direct_published_children( (int) $services_page->ID, 24 ) )
+    : 0;
+$profile_facts = [];
+if ( $service_count > 0 && $services_page instanceof \WP_Post ) {
+    $profile_facts[] = [
+        'value' => (string) $service_count,
+        'label' => __( 'Lĩnh vực dịch vụ', 'aznet-theme' ),
+        'url'   => get_permalink( $services_page ),
+    ];
+}
+if ( $process_page instanceof \WP_Post ) {
+    $profile_facts[] = [
+        'value' => __( 'Quy trình', 'aznet-theme' ),
+        'label' => get_the_title( $process_page ),
+        'url'   => get_permalink( $process_page ),
+    ];
+}
+if ( $faq_page instanceof \WP_Post ) {
+    $profile_facts[] = [
+        'value' => __( 'Hỏi đáp', 'aznet-theme' ),
+        'label' => get_the_title( $faq_page ),
+        'url'   => get_permalink( $faq_page ),
+    ];
+}
+
 $section_label = $has_team
     ? ( $has_about ? __( 'Giới thiệu và đội ngũ', 'aznet-theme' ) : __( 'Đội ngũ luật sư', 'aznet-theme' ) )
     : __( 'Giới thiệu', 'aznet-theme' );
@@ -34,6 +63,16 @@ if ( ! $has_team ) {
             <p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Giới thiệu về văn phòng', 'aznet-theme' ); ?></p>
             <h2><?php echo esc_html( get_the_title( $about ) ); ?></h2>
             <?php if ( '' !== $about_summary ) : ?><p class="aznet-theme-law01-lede"><?php echo esc_html( $about_summary ); ?></p><?php endif; ?>
+            <?php if ( [] !== $profile_facts ) : ?>
+                <div class="aznet-theme-law01-profile__facts" aria-label="<?php esc_attr_e( 'Thông tin nổi bật', 'aznet-theme' ); ?>">
+                    <?php foreach ( $profile_facts as $fact ) : ?>
+                        <a class="aznet-theme-law01-profile__fact" href="<?php echo esc_url( (string) $fact['url'] ); ?>">
+                            <strong class="aznet-theme-law01-profile__fact-value"><?php echo esc_html( (string) $fact['value'] ); ?></strong>
+                            <span class="aznet-theme-law01-profile__fact-label"><?php echo esc_html( (string) $fact['label'] ); ?></span>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
             <p><a class="aznet-theme-law01-button" href="<?php echo esc_url( get_permalink( $about ) ); ?>"><?php esc_html_e( 'Tìm hiểu thêm', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a></p>
         </div>
         <?php if ( '' !== $about_image ) : ?><div class="aznet-theme-law01-profile__about-media"><?php echo wp_kses_post( $about_image ); ?></div><?php endif; ?>
@@ -49,6 +88,14 @@ if ( ! $has_team ) {
                 <?php if ( '' !== $team_summary ) : ?><p class="aznet-theme-law01-lede"><?php echo esc_html( $team_summary ); ?></p><?php endif; ?>
             </div>
         </div>
+        <?php if ( ! $has_members ) : ?>
+            <div class="aznet-theme-law01-profile__team-empty">
+                <span class="aznet-theme-law01-profile__team-empty-icon" aria-hidden="true">
+                    <svg viewBox="0 0 64 64" focusable="false"><path d="M22 30a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm20-2a7 7 0 1 0 0-14 7 7 0 0 0 0 14ZM7 52v-6c0-8 6-14 14-14h2c8 0 14 6 14 14v6m-5-17c3-4 7-6 12-6h1c7 0 12 5 12 12v11"/></svg>
+                </span>
+                <p><?php esc_html_e( 'Hồ sơ thành viên sẽ hiển thị tại đây khi được công khai trên trang Đội ngũ.', 'aznet-theme' ); ?></p>
+            </div>
+        <?php endif; ?>
         <?php if ( [] !== $members ) : ?><div class="aznet-theme-law01-profile__members">
             <?php foreach ( $members as $member ) : if ( ! $member instanceof \WP_Post ) { continue; } $member_image = has_post_thumbnail( $member ) ? get_the_post_thumbnail( $member, 'medium_large', [ 'class' => 'aznet-theme-law01-profile__member-image aznet-theme-law01-team-card__image' ] ) : ''; $member_summary = trim( (string) get_the_excerpt( $member ) ); ?>
             <article class="aznet-theme-law01-profile__member aznet-theme-law01-team-card">
