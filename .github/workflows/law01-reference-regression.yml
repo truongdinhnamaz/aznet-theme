@@ -10,6 +10,9 @@ on:
       - 'assets/css/components/homepage-law-01*.css'
       - 'tests/offline/law01-reference-*.php'
       - 'tests/browser/law01-reference-components.py'
+      - 'tests/browser/law01-heading-geometry.py'
+      - 'tests/browser/law01-reference-media-geometry.py'
+      - 'tests/browser/homepage-law-01-l4.mjs'
       - '.github/workflows/law01-reference-regression.yml'
   workflow_dispatch:
 permissions:
@@ -41,6 +44,7 @@ jobs:
           php tests/offline/law01-reference-interaction-contract.php
           php tests/offline/law01-reference-assets-contract.php
           php tests/offline/law01-reference-topbar-contract.php
+          php tests/offline/law01-reference-team-illustration-contract.php
       - name: Retained full core verification
         run: bash scripts/verify-v1-core.sh
       - uses: actions/setup-python@v5
@@ -51,3 +55,5 @@ jobs:
           python -m pip install playwright==1.57.0
           python -m playwright install --with-deps chromium
           python tests/browser/law01-reference-components.py
+          python tests/browser/law01-heading-geometry.py
+          python tests/browser/law01-reference-media-geometry.py

@@ -166,11 +166,23 @@ async function inspectViewport(browser, name, viewport) {
           lineHeight: Number.parseFloat(style.lineHeight || '0'),
           fontSize: Number.parseFloat(style.fontSize || '0'),
           whiteSpace: style.whiteSpace,
+          width: rect.width,
+          clientWidth: node.clientWidth,
+          scrollWidth: node.scrollWidth,
+          clientHeight: node.clientHeight,
+          scrollHeight: node.scrollHeight,
         };
       }));
       if (headingMetrics.length < 4) throw new Error(`expected current Burgundy Law 01 heading coverage, got ${headingMetrics.length}`);
       const headingSizes = new Set(headingMetrics.map((item) => item.fontSize.toFixed(2)));
-      const invalidHeading = headingMetrics.find((item) => item.whiteSpace !== 'nowrap' || item.height > item.lineHeight * 1.25);
+      // Check rendered geometry rather than requiring a particular CSS keyword.
+      const invalidHeading = headingMetrics.find((item) =>
+        !item.text ||
+        ![item.height, item.width, item.lineHeight, item.fontSize].every(Number.isFinite) ||
+        item.width <= 0 || item.height <= 0 || item.lineHeight <= 0 || item.fontSize <= 0 ||
+        item.height > item.lineHeight * 1.25 ||
+        item.scrollWidth > item.clientWidth + 1 || item.scrollHeight > item.clientHeight + 1
+      );
       if (invalidHeading) throw new Error(`Law 01 section heading must stay on one desktop line: ${JSON.stringify(invalidHeading)}`);
       if (headingSizes.size !== 1) throw new Error(`Law 01 section headings must use one consistent size: ${JSON.stringify(headingMetrics)}`);
     }
