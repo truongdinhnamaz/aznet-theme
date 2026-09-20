@@ -4,7 +4,7 @@ import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 
 const routes = {
-  child: { url: process.env.Y1_CHILD_URL, variant: 'standard', breadcrumbs: true },
+  child: { url: process.env.Y1_CHILD_URL, variant: 'standard', breadcrumbs: true, service: true },
   wide: { url: process.env.Y1_WIDE_URL, variant: 'wide', breadcrumbs: false },
   landing: { url: process.env.Y1_LANDING_URL, variant: 'landing', breadcrumbs: false },
 };
@@ -73,6 +73,7 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
     overflowPx: null,
     blockingAxeViolations: null,
     breadcrumbFocus: null,
+    servicePrimaryFocus: null,
     status: 'failed',
     error: null,
   };
@@ -99,6 +100,22 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
     const breadcrumbCount = await page.locator('.aznet-theme-page__breadcrumbs').count();
     if (config.breadcrumbs && breadcrumbCount !== 1) throw new Error('Expected one breadcrumb navigation');
     if (!config.breadcrumbs && breadcrumbCount !== 0) throw new Error('Unexpected breadcrumb navigation');
+
+    if (config.service) {
+      if (await page.locator('.aznet-theme-page--service-detail').count() !== 1) throw new Error('Expected mapped service detail presentation');
+      if (await page.locator('.aznet-theme-page__service-actions').count() !== 1) throw new Error('Expected service CTA group');
+      if (await page.locator('.aznet-theme-page__service-primary').count() !== 1) throw new Error('Expected mapped Contact CTA');
+      if (await page.locator('.aznet-theme-page__service-siblings').count() !== 1) throw new Error('Expected sibling services section');
+      if (await page.getByText('Y1 Civil Service', { exact: true }).count() !== 1) throw new Error('Expected sibling service card');
+      const stylesheets = await page.evaluate(() => Array.from(document.styleSheets).map((sheet) => sheet.href).filter(Boolean));
+      if (!stylesheets.some((href) => href.includes('/assets/css/components/service-page.css'))) {
+        throw new Error('Service page stylesheet not observed');
+      }
+      result.servicePrimaryFocus = await focusEvidence(page, '.aznet-theme-page__service-primary');
+      if (!result.servicePrimaryFocus?.visible || !result.servicePrimaryFocus.focusVisible || result.servicePrimaryFocus.outlineStyle === 'none' || result.servicePrimaryFocus.outlineWidth < 1) {
+        throw new Error(`Service primary CTA lacks visible focus evidence: ${JSON.stringify(result.servicePrimaryFocus)}`);
+      }
+    }
 
     if (config.breadcrumbs) {
       const selector = '.aznet-theme-page__breadcrumbs a:first-of-type';

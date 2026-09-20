@@ -89,3 +89,77 @@ function page_breadcrumb_items( ?int $post_id = null ): array {
 
     return $items;
 }
+
+
+/**
+ * Whether one native Page is an explicitly mapped direct child of the Services Page.
+ *
+ * The Services Page ID comes from the Theme Content Map. This deliberately avoids
+ * title, slug, URL or Page-ID heuristics beyond the explicit mapped parent reference.
+ */
+function service_page_is_detail( ?int $post_id = null ): bool {
+    $post_id = $post_id ?: (int) get_queried_object_id();
+    if ( $post_id <= 0 ) {
+        return false;
+    }
+
+    $services_id = (int) setting( 'homepage_services_page', 0 );
+    if ( $services_id <= 0 || $post_id === $services_id ) {
+        return false;
+    }
+
+    $post = get_post( $post_id );
+    if ( ! $post instanceof \WP_Post || 'page' !== $post->post_type || 'publish' !== $post->post_status ) {
+        return false;
+    }
+
+    return $services_id === (int) $post->post_parent;
+}
+
+/**
+ * Return the explicitly mapped Contact Page URL for service CTA presentation.
+ */
+function service_page_contact_url(): string {
+    $contact_id = (int) setting( 'homepage_contact_page', 0 );
+    if ( $contact_id <= 0 ) {
+        return '';
+    }
+
+    $post = get_post( $contact_id );
+    if ( ! $post instanceof \WP_Post || 'page' !== $post->post_type || 'publish' !== $post->post_status ) {
+        return '';
+    }
+
+    $url = get_permalink( $contact_id );
+
+    return is_string( $url ) ? $url : '';
+}
+
+/**
+ * Return other published service Pages under the same explicitly mapped Services parent.
+ *
+ * @return array<int, \WP_Post>
+ */
+function service_page_siblings( ?int $post_id = null, int $limit = 6 ): array {
+    $post_id = $post_id ?: (int) get_queried_object_id();
+    if ( ! service_page_is_detail( $post_id ) ) {
+        return [];
+    }
+
+    $services_id = (int) setting( 'homepage_services_page', 0 );
+    $limit = max( 1, min( 12, $limit ) );
+    $posts = get_posts(
+        [
+            'post_type'      => 'page',
+            'post_status'    => 'publish',
+            'post_parent'    => $services_id,
+            'post__not_in'   => [ $post_id ],
+            'orderby'        => 'menu_order title',
+            'order'          => 'ASC',
+            'posts_per_page' => $limit,
+            'no_found_rows'  => true,
+        ]
+    );
+
+    return is_array( $posts ) ? $posts : [];
+}
