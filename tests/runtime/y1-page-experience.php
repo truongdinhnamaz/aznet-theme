@@ -27,6 +27,7 @@ $parent_id = y1_create_page(
     [
         'post_title'   => 'Y1 Parent Page',
         'post_excerpt' => '',
+        'post_content' => '',
         'post_name'    => 'y1-parent-page',
     ]
 );
