@@ -102,13 +102,20 @@ if ( ! $has_team ) {
         $team_illustration_caption = ! $has_members && has_post_thumbnail( $team )
             ? trim( wp_strip_all_tags( (string) get_the_post_thumbnail_caption( $team ) ) )
             : '';
-        $team_illustration = '' !== $team_illustration_caption
-            ? get_the_post_thumbnail( $team, 'large', [ 'class' => 'aznet-theme-law01-profile__team-illustration-image' ] )
+        $team_illustration_url = '' !== $team_illustration_caption
+            ? get_the_post_thumbnail_url( $team, 'large' )
             : '';
+        $team_illustration_url = is_string( $team_illustration_url ) ? $team_illustration_url : '';
         ?>
-        <?php if ( '' !== $team_illustration ) : ?>
+        <?php if ( '' !== $team_illustration_url ) : ?>
             <figure class="aznet-theme-law01-profile__team-illustration">
-                <?php echo wp_kses_post( $team_illustration ); ?>
+                <div class="aznet-theme-law01-profile__team-illustration-grid" aria-hidden="true">
+                    <?php for ( $slot = 0; $slot < 4; $slot++ ) : ?>
+                        <span class="aznet-theme-law01-profile__team-illustration-slot">
+                            <img class="aznet-theme-law01-profile__team-illustration-image aznet-theme-law01-profile__team-illustration-image--<?php echo esc_attr( (string) ( $slot + 1 ) ); ?>" src="<?php echo esc_url( $team_illustration_url ); ?>" alt="" loading="lazy">
+                        </span>
+                    <?php endfor; ?>
+                </div>
                 <figcaption><?php echo esc_html( $team_illustration_caption ); ?></figcaption>
             </figure>
         <?php endif; ?>

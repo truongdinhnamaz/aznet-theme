@@ -12,6 +12,7 @@ namespace AZnet\Theme {
     function get_the_excerpt($post):string{return 'Native page summary';}
     function has_post_thumbnail($post):bool{return $post->ID===2&&$GLOBALS['team_test']['image'];}
     function get_the_post_thumbnail($post,$size,$attr):string{return '<img src="https://example.test/native.webp" class="'.$attr['class'].'" alt="Editorial illustration">';}
+    function get_the_post_thumbnail_url($post,$size):string{return $GLOBALS['team_test']['image']?'https://example.test/native.webp':'';}
     function get_the_post_thumbnail_caption($post):string{return $GLOBALS['team_test']['caption'];}
     function wp_strip_all_tags($text):string{return strip_tags($text);}
     function get_the_title($post):string{return $post->post_title;}
@@ -26,7 +27,8 @@ namespace AZnet\Theme {
     function render_profile_test():string{ob_start();require dirname(__DIR__,2).'/template-parts/homepage/law-01/profile.php';return (string)ob_get_clean();}
     $must=static function(bool $ok,string $message):void{if(!$ok){fwrite(STDERR,"FAIL: $message\n");exit(1);}};
     $html=render_profile_test();
-    $must(str_contains($html,'aznet-theme-law01-profile__team-illustration-image'),'captioned native Team media must render without invented member records');
+    $must(substr_count($html,'aznet-theme-law01-profile__team-illustration-slot')===4,'captioned native Team media must render four visual portrait slots without invented member records');
+    $must(substr_count($html,'class="aznet-theme-law01-profile__team-illustration-image ')===4,'each portrait slot must reuse only the mapped native Team featured media');
     $must(str_contains($html,'<figcaption>AI illustration not staff</figcaption>'),'visible caption must be source-backed plain text');
     $must(!str_contains($html,'<article class="aznet-theme-law01-profile__member'),'editorial image must not become a member');
     $cta=strpos($html,'class="aznet-theme-law01-button"');$facts=strpos($html,'class="aznet-theme-law01-profile__facts"');
