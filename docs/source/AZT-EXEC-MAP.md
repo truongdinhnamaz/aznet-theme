@@ -1,15 +1,15 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.77
+**Version:** v0.78
 **Status:** Working Execution Map / derived  
 **Date:** 20/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** exact verified implementation is `7ea9a189b124482b495f6e2adff668c070ff94de`, Theme metadata `1.3.22`; exact-main V1 `35521042638` and X6 `35521042601` are SUCCESS. X6 browser/axe, runtime, package/source identity and rollback lifecycle PASS; deterministic `aznet-theme-1.3.22.zip` SHA-256 is `d5197073641ebc6b7764ffca31409b56cf9e447d533899999db94b28d5e02790` (159 production files, 113 packaged PHP files verified). Current published GitHub Release is `v1.3.22` from publication run `35521247319`. Production deployment to `lstamduchn.vn` remains separate and is currently `BLOCKED_EXTERNAL_ACCESS` because the connected WPVibe account has 0 calls remaining in its rolling 24-hour allowance; no live `1.3.22` mutation is claimed and `1.3.10` remains the last verified live Theme. RootProfile Team remains separately blocked under issue #112.
+> **Canonical-main checkpoint:** exact verified implementation is `c3d991199bb5c95dec3bac6e0ae06072c8a249f2`, Theme metadata `1.3.23`; exact-main V1 `35521890888` and X6 `35521890901` are SUCCESS. Deterministic `aznet-theme-1.3.23.zip` SHA-256 is `7129b1506131c6b9e413bcba3087475fce75f52df7b71593c5f2804e90c4f005` (159 production files, 113 packaged PHP files verified). Current published GitHub Release is `v1.3.23` from publication run `35522052972`. Repository technical verification and publication are connector-independent under D-033; production deployment is a separate operation.
 
-**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication/deployment PASS -> Y1-Y5 -> PR #98 -> v1.3.0 publication/deployment PASS -> corrective releases through v1.3.16 publication PASS -> D-032 expansion -> PR #193 premium Homepage refinement -> PR #194 v1.3.20 publication -> final Homepage approval -> PR #196 About presentation -> PR #197 v1.3.21 technical promotion -> PR #199 mapped Service Page landing presentation -> PR #200 v1.3.22 promotion -> exact-main V1/X6 PASS -> v1.3.22 publication PASS`. Current release boundary: `v1.3.22 TECHNICAL PASS / PUBLICATION PASS / PRODUCTION DEPLOYMENT BLOCKED_EXTERNAL_ACCESS`.
+**Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication/deployment PASS -> Y1-Y5 -> PR #98 -> v1.3.0 publication/deployment PASS -> corrective releases through v1.3.16 publication PASS -> D-032 expansion -> PR #193 premium Homepage refinement -> PR #194 v1.3.20 publication -> final Homepage approval -> PR #196 About presentation -> PR #197 v1.3.21 technical promotion -> PR #199 mapped Service Page landing presentation -> PR #200 v1.3.22 promotion -> exact-main V1/X6 PASS -> v1.3.22 publication PASS`. Current release boundary: `v1.3.22 TECHNICAL PASS / PUBLICATION PASS / PRODUCTION DEPLOYMENT BLOCKED_EXTERNAL_ACCESS`. -> PR #202 v1.3.23 repository-native promotion -> exact-main V1/X6 PASS -> v1.3.23 publication PASS
 
 ## 1. Current state
 
@@ -40,7 +40,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | P4-C Standalone Core independence | PASS / MERGED | PR #63/#64 merged; zero-plugin L1-L4, exact-package and exact-main PASS; optional integrations remain additive |
 | P5 Publication/Deployment | PASS | Tag `v1.1.0` + GitHub Release and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
 | X v1.2 WordPress Experience Completion | PUBLICATION + PRODUCTION DEPLOYMENT PASS | X1-X5 retained; PR #87 exact-main V1 + X6 L1-L4/L6 PASS; annotated `v1.2.0` + GitHub Release publication PASS; owner-approved production deployment run `35135759389` + fresh read-only run `35136876330` PASS; provider L5 stays separate |
-| Y v1.3 Client Delivery System | v1.3.22 TECHNICAL + PUBLICATION PASS / PROD BLOCKED_EXTERNAL_ACCESS | Y1-Y5 retained; PR #199 adds mapped Service Page presentation without content ownership transfer; PR #200 promotes `1.3.22`; exact-main V1/X6 PASS at `7ea9a189b124482b495f6e2adff668c070ff94de`; publication run `35521247319` publishes exact package SHA-256 `d5197073641ebc6b7764ffca31409b56cf9e447d533899999db94b28d5e02790`; `lstamduchn.vn` deployment awaits authenticated quota recovery and fresh rollback/preflight verification |
+| Y v1.3 Client Delivery System | v1.3.23 TECHNICAL + PUBLICATION PASS | PR #202 promoted `1.3.23`; exact-main V1/X6 PASS at `c3d991199bb5c95dec3bac6e0ae06072c8a249f2`; publication run `35522052972` publishes exact package SHA-256 `7129b1506131c6b9e413bcba3087475fce75f52df7b71593c5f2804e90c4f005`; no production-site connector is required for package creation/verification/publication under D-033 |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
 Canonical repository technical baseline is exact Theme `1.3.0` at owner-approved PR #98 merge `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`. Fresh exact-main V1 + X6 release-path verification is PASS. GitHub publication is verified `v1.3.0` through run `35211254633`; production deployment is verified `v1.3.0` through deployment run `35222200660` plus fresh independent read-only run `35223053733`.
@@ -69,7 +69,7 @@ P3 final verified head `d78091900451176c3815b23d1485036e784bdde9` merged through
 - RootProfile Team/member discovery remains BLOCKED_EXTERNAL_CONTRACT under issue #112. Theme must not self-unblock through private storage, WordPress-user enumeration or heuristic identity inference.
 - Production deployment is **not** implied by Homepage final PASS or publication. Fresh live `1.3.20` state is UNKNOWN; `1.3.10` remains the last verified live Theme under existing access evidence.
 
-**Exact Next:** preserve the canonical `v1.3.22` technical/publication checkpoint. Once authenticated production access becomes available, preflight `lstamduchn.vn`, verify active Theme/version and rollback path, deploy the exact published `aznet-theme-1.3.22.zip`, then run fresh Homepage + mapped Service Page browser/runtime checks before claiming production PASS. WPVibe remains an access mechanism, not a repository release-verification dependency.
+**Exact Next:** preserve canonical `v1.3.23` technical/publication PASS. Use the exact published `aznet-theme-1.3.23.zip` for installation/update by any approved deployment path; do not make release creation, verification or GitHub publication contingent on WPVibe.
 
 ## 2. Slice discipline
 
