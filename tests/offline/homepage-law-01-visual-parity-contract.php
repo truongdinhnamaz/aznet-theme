@@ -12,6 +12,7 @@ $profile = (string) file_get_contents($root . '/template-parts/homepage/law-01/p
 $latest = (string) file_get_contents($root . '/template-parts/homepage/law-01/latest.php');
 $hero = (string) file_get_contents($root . '/template-parts/homepage/law-01/hero.php');
 $footer = (string) file_get_contents($root . '/template-parts/footer/site-footer.php');
+$footerCss = (string) file_get_contents($root . '/assets/css/components/site-footer.css');
 
 $must = static function (bool $condition, string $message): void {
     assert($condition, $message);
@@ -211,7 +212,7 @@ $must(
 );
 $must(
     str_contains($footer, 'aznet-theme-site-footer__brand-title') &&
-    str_contains($css, '.aznet-theme-site-footer__brand-title'),
+    str_contains($footerCss, '.aznet-theme-site-footer__brand-title'),
     'Law 01 reference Footer must support a WordPress logo + site-title lockup.'
 );
 
