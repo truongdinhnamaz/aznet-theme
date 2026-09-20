@@ -82,6 +82,8 @@ foreach ([
     assert(str_contains($hubCss, $hubSelector), 'Services Hub CSS missing selector ' . $hubSelector);
 }
 assert(!preg_match('/#(?:[0-9a-fA-F]{3}){1,2}\\b/', $hubCss), 'Services Hub CSS must use semantic Theme tokens rather than hard-coded colors');
+assert(!str_contains($hubCss, 'var(--aznet-theme-surface-inverse)'), 'Services Hub must reuse the About light editorial language instead of a dark inverse surface');
+assert(!str_contains($hubCss, 'var(--aznet-theme-on-inverse)'), 'Services Hub must not introduce an inverse text system separate from About');
 
 $tokensCss = file_get_contents($root . '/assets/css/tokens.css');
 assert(is_string($tokensCss), 'tokens.css missing');
