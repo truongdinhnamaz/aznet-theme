@@ -140,6 +140,115 @@
     border-inline-start: 3px solid var(--aznet-theme-accent);
 }
 
+
+/* Editorial About Page Kit: presentation only; content remains WordPress-owned. */
+.aznet-theme-page-kit--about {
+    gap: 0;
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__section {
+    padding-block: var(--aznet-theme-space-6);
+    border-top: 1px solid var(--aznet-theme-border);
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__intro {
+    max-width: var(--aznet-theme-container-content);
+    padding-block-start: 0;
+    border-top: 0;
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__intro h2,
+.aznet-theme-page-kit--about .aznet-theme-page-kit__story h2,
+.aznet-theme-page-kit--about .aznet-theme-page-kit__principles h2,
+.aznet-theme-page-kit--about .aznet-theme-page-kit__process h2,
+.aznet-theme-page-kit--about .aznet-theme-page-kit__capabilities h2,
+.aznet-theme-page-kit--about .aznet-theme-page-kit__team-teaser h2,
+.aznet-theme-page-kit--about .aznet-theme-page-kit__trust h2,
+.aznet-theme-page-kit--about .aznet-theme-page-kit__cta h2 {
+    max-width: 24ch;
+    margin-block-end: var(--aznet-theme-space-3);
+    text-wrap: balance;
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__story {
+    align-items: center;
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__story-media {
+    display: grid;
+    min-height: 16rem;
+    align-items: end;
+    padding: var(--aznet-theme-space-4);
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-color-surface-subtle);
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__story-media p {
+    max-width: 32ch;
+    margin: 0;
+    color: var(--aznet-theme-muted);
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__principles > .wp-block-columns > .wp-block-column,
+.aznet-theme-page-kit--about .aznet-theme-page-kit__process > .wp-block-columns > .wp-block-column,
+.aznet-theme-page-kit--about .aznet-theme-page-kit__capabilities > .wp-block-columns > .wp-block-column {
+    padding-block-start: var(--aznet-theme-space-3);
+    border-top: 2px solid var(--aznet-theme-accent);
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__principles h3,
+.aznet-theme-page-kit--about .aznet-theme-page-kit__process h3,
+.aznet-theme-page-kit--about .aznet-theme-page-kit__capabilities h3,
+.aznet-theme-page-kit--about .aznet-theme-page-kit__trust h3 {
+    margin-block: 0 var(--aznet-theme-space-2);
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__step-label {
+    margin: 0 0 var(--aznet-theme-space-2);
+    color: var(--aznet-theme-accent);
+    font-size: var(--aznet-theme-text-label);
+    font-weight: var(--aznet-theme-font-weight-bold);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__capabilities {
+    padding-inline: var(--aznet-theme-space-4);
+    background: var(--aznet-theme-color-surface-subtle);
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__team-teaser {
+    align-items: center;
+    padding-inline-start: var(--aznet-theme-space-4);
+    border-inline-start: 3px solid var(--aznet-theme-accent);
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__team-teaser .wp-block-buttons {
+    justify-content: flex-end;
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__trust > .wp-block-columns > .wp-block-column {
+    padding-inline-start: var(--aznet-theme-space-3);
+    border-inline-start: 1px solid var(--aznet-theme-border);
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__cta {
+    margin-block-start: var(--aznet-theme-space-6);
+    border: 0;
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-surface-inverse);
+    color: var(--aznet-theme-on-inverse);
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__cta :where(h2, p) {
+    color: inherit;
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__cta .aznet-theme-pattern__eyebrow {
+    color: var(--aznet-theme-on-inverse);
+}
+
 .aznet-theme-page-kit :where(a, button, summary):focus-visible {
     outline: 2px solid var(--aznet-theme-focus);
     outline-offset: 2px;
@@ -157,5 +266,25 @@
     .aznet-theme-page-kit__card,
     .aznet-theme-page-kit__cta {
         padding: var(--aznet-theme-space-3);
+    }
+
+    .aznet-theme-page-kit--about .aznet-theme-page-kit__section {
+        padding-block: var(--aznet-theme-space-4);
+    }
+
+    .aznet-theme-page-kit--about .aznet-theme-page-kit__capabilities,
+    .aznet-theme-page-kit--about .aznet-theme-page-kit__team-teaser {
+        padding-inline: var(--aznet-theme-space-3);
+    }
+
+    .aznet-theme-page-kit--about .aznet-theme-page-kit__team-teaser .wp-block-buttons {
+        justify-content: flex-start;
+    }
+
+    .aznet-theme-page-kit--about .aznet-theme-page-kit__trust > .wp-block-columns > .wp-block-column {
+        padding-block-start: var(--aznet-theme-space-3);
+        padding-inline-start: 0;
+        border-top: 1px solid var(--aznet-theme-border);
+        border-inline-start: 0;
     }
 }
