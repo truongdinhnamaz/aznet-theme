@@ -61,6 +61,12 @@ $card_summary = static function ( \WP_Post $post, int $words = 24 ): string {
 
         <?php if ( '' !== $excerpt ) : ?>
             <p class="aznet-theme-page__lead"><?php echo esc_html( $excerpt ); ?></p>
+        <?php elseif ( $is_service_hub ) : ?>
+            <p class="aznet-theme-page__lead aznet-theme-service-hub__hero-intro"><?php esc_html_e( 'Chọn lĩnh vực gần với nhu cầu của bạn hoặc gửi thông tin ban đầu để bắt đầu trao đổi.', 'aznet-theme' ); ?></p>
+        <?php endif; ?>
+
+        <?php if ( $is_service_hub && [] !== $service_hub_items ) : ?>
+            <p class="aznet-theme-service-hub__hero-meta"><strong><?php echo esc_html( (string) count( $service_hub_items ) ); ?></strong> <?php esc_html_e( 'lĩnh vực hỗ trợ', 'aznet-theme' ); ?></p>
         <?php endif; ?>
 
         <?php if ( $is_service_hub ) : ?>
