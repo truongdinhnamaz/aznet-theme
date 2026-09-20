@@ -157,7 +157,7 @@ async function inspectViewport(browser, name, viewport) {
     }
 
     if (viewport.width > 960) {
-      const headingMetrics = await page.locator('.aznet-theme-law01-section h2').evaluateAll((nodes) => nodes.map((node) => {
+      const headingMetrics = await page.locator('.aznet-theme-law01-section:not(.aznet-theme-law01-final-cta) h2').evaluateAll((nodes) => nodes.map((node) => {
         const rect = node.getBoundingClientRect();
         const style = window.getComputedStyle(node);
         return {
@@ -173,6 +173,19 @@ async function inspectViewport(browser, name, viewport) {
       const invalidHeading = headingMetrics.find((item) => item.whiteSpace !== 'nowrap' || item.height > item.lineHeight * 1.25);
       if (invalidHeading) throw new Error(`Law 01 section heading must stay on one desktop line: ${JSON.stringify(invalidHeading)}`);
       if (headingSizes.size !== 1) throw new Error(`Law 01 section headings must use one consistent size: ${JSON.stringify(headingMetrics)}`);
+
+      const finalHeading = await page.locator('.aznet-theme-law01-final-cta h2').evaluate((node) => {
+        const rect = node.getBoundingClientRect();
+        const style = window.getComputedStyle(node);
+        return {
+          height: rect.height,
+          lineHeight: Number.parseFloat(style.lineHeight || '0'),
+          whiteSpace: style.whiteSpace,
+        };
+      });
+      if (finalHeading.whiteSpace !== 'normal' || finalHeading.height > finalHeading.lineHeight * 2.25) {
+        throw new Error(`Law 01 final CTA heading must wrap intentionally within two desktop lines: ${JSON.stringify(finalHeading)}`);
+      }
     }
 
     const servicesIntro = (await page.locator('.aznet-theme-law01-services__intro').textContent())?.trim() || '';
