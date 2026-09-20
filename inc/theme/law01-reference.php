@@ -3,6 +3,38 @@
 namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+/**
+ * Theme-owned generated artwork for the Law 01 reference presentation.
+ *
+ * These files are decorative/reference presentation only. They never create
+ * WordPress content, Team member records, identity, credentials, roles or
+ * authoritative facts.
+ *
+ * @return string[]
+ */
+function law01_reference_art_urls( string $group ): array {
+    $groups = [
+        'hero' => [
+            '/assets/images/law01-reference/hero-office.svg',
+        ],
+        'team' => [
+            '/assets/images/law01-reference/team-portrait-01.svg',
+            '/assets/images/law01-reference/team-portrait-02.svg',
+            '/assets/images/law01-reference/team-portrait-03.svg',
+            '/assets/images/law01-reference/team-portrait-04.svg',
+        ],
+    ];
+
+    if ( ! isset( $groups[ $group ] ) ) {
+        return [];
+    }
+
+    return array_map(
+        static fn( string $path ): string => get_theme_file_uri( $path ),
+        $groups[ $group ]
+    );
+}
+
 /** Enqueue only for the existing Burgundy/Gold Homepage; never for provider surfaces. */
 function enqueue_law01_reference_asset( ?string $version = null ): void {
     if ( ! function_exists( __NAMESPACE__ . '\\homepage_composer_active' )
