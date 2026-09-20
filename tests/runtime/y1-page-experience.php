@@ -61,6 +61,46 @@ $landing_id = y1_create_page(
 );
 update_post_meta( $landing_id, '_wp_page_template', 'page-templates/landing.php' );
 
+$services_id = y1_create_page(
+    [
+        'post_title'   => 'Y1 Services',
+        'post_excerpt' => 'Mapped Services parent.',
+        'post_name'    => 'y1-services',
+    ]
+);
+
+$service_detail_id = y1_create_page(
+    [
+        'post_title'   => 'Y1 Business Service',
+        'post_excerpt' => 'Mapped child service presentation.',
+        'post_parent'  => $services_id,
+        'post_name'    => 'y1-business-service',
+        'post_content' => '<h2>Phạm vi hỗ trợ</h2><p id="y1-service-content">Service Page content owned by WordPress.</p><h2>Thông tin nên chuẩn bị</h2><p>Prepare relevant documents.</p>',
+    ]
+);
+
+$service_sibling_id = y1_create_page(
+    [
+        'post_title'   => 'Y1 Civil Service',
+        'post_excerpt' => 'Sibling mapped service Page.',
+        'post_parent'  => $services_id,
+        'post_name'    => 'y1-civil-service',
+    ]
+);
+
+$contact_id = y1_create_page(
+    [
+        'post_title'   => 'Y1 Contact',
+        'post_name'    => 'y1-contact',
+    ]
+);
+
+$settings = get_theme_mod( 'aznet_theme_settings', [] );
+$settings = is_array( $settings ) ? $settings : [];
+$settings['homepage_services_page'] = $services_id;
+$settings['homepage_contact_page']  = $contact_id;
+set_theme_mod( 'aznet_theme_settings', $settings );
+
 $commerce_looking_id = y1_create_page(
     [
         'post_title'   => 'Y1 Commerce Looking Page',
@@ -106,6 +146,8 @@ foreach (
         'wide_url'             => $wide_id,
         'landing_url'          => $landing_id,
         'commerce_looking_url' => $commerce_looking_id,
+        'service_detail_url'    => $service_detail_id,
+        'contact_url'           => $contact_id,
     ] as $key => $post_id
 ) {
     $url = get_permalink( $post_id );
@@ -123,7 +165,11 @@ $result = array_merge(
         'wide_id'             => $wide_id,
         'landing_id'          => $landing_id,
         'commerce_looking_id' => $commerce_looking_id,
-        'attachment_id'       => (int) $attachment_id,
+        'services_id'          => $services_id,
+        'service_detail_id'    => $service_detail_id,
+        'service_sibling_id'   => $service_sibling_id,
+        'contact_id'           => $contact_id,
+        'attachment_id'        => (int) $attachment_id,
     ]
 );
 
