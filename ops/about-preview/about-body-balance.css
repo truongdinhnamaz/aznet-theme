@@ -1,52 +1,109 @@
-/* Final balance correction for About preview. Keeps Hero and authored content intact. */
-.aznet-theme-main--about-preview,
-.aznet-theme-main--about-preview .aznet-theme-about,
+/* Structural full-width / centered-shell correction for About preview.
+ * Requires the draft template to wrap each authored top-level section in
+ * .aznet-theme-about-band > .aznet-theme-about-shell.aznet-theme-about-band__inner.
+ */
 #aznet-theme-about-content,
-#aznet-theme-about-content > .aznet-theme-page-kit--about {
-    width: 100% !important;
-    max-width: none !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+#aznet-theme-about-content > .aznet-theme-about-bands {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
+
+#aznet-theme-about-content > .aznet-theme-about-bands {
+    display: block;
+}
+
+#aznet-theme-about-content .aznet-theme-about-band {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+
+#aznet-theme-about-content .aznet-theme-about-band__inner {
+    width: min(calc(100% - (2 * var(--aznet-theme-gutter))), var(--aznet-theme-container-shell));
+    max-width: var(--aznet-theme-container-shell);
+    margin-inline: auto;
+    padding-block: clamp(3.25rem, 5vw, 5.5rem);
     box-sizing: border-box;
 }
 
-.aznet-theme-main--about-preview .aznet-theme-about {
-    padding: 0 !important;
-    overflow-x: clip;
-}
-
-#aznet-theme-about-content .aznet-theme-page-kit--about > .aznet-theme-page-kit__section {
+/* The original WordPress block remains the content owner inside the shell. */
+#aznet-theme-about-content .aznet-theme-about-band__inner > .aznet-theme-page-kit__section {
     width: 100% !important;
     max-width: none !important;
+    min-width: 0;
     margin: 0 !important;
-    box-sizing: border-box;
-    padding-left: max(var(--aznet-theme-about-gutter), calc((100vw - var(--aznet-theme-container-shell)) / 2)) !important;
-    padding-right: max(var(--aznet-theme-about-gutter), calc((100vw - var(--aznet-theme-container-shell)) / 2)) !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
 }
 
-#aznet-theme-about-content .aznet-theme-page-kit--about .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)),
-#aznet-theme-about-content .aznet-theme-page-kit--about > .aznet-theme-page-kit__section > * {
+#aznet-theme-about-content .aznet-theme-about-band__inner .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
     max-width: none !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
 }
 
-#aznet-theme-about-content .aznet-theme-page-kit--about > .aznet-theme-page-kit__intro {
+/* Full-width bands; only the inner shell is constrained. */
+#aznet-theme-about-content .aznet-theme-about-band--intro,
+#aznet-theme-about-content .aznet-theme-about-band--cta {
+    background: var(--aznet-theme-about-inverse);
+}
+
+#aznet-theme-about-content .aznet-theme-about-band--principles,
+#aznet-theme-about-content .aznet-theme-about-band--capabilities {
+    background: var(--aznet-theme-about-surface);
+}
+
+#aznet-theme-about-content .aznet-theme-about-band--story,
+#aznet-theme-about-content .aznet-theme-about-band--process,
+#aznet-theme-about-content .aznet-theme-about-band--team,
+#aznet-theme-about-content .aznet-theme-about-band--trust {
+    background: #fff;
+}
+
+/* Intro: balanced editorial statement. */
+#aznet-theme-about-content .aznet-theme-about-band--intro .aznet-theme-page-kit__intro {
     display: grid !important;
     grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr) !important;
-    grid-template-areas: "label copy" "title copy" !important;
+    grid-template-areas:
+        "label copy"
+        "title copy" !important;
     column-gap: clamp(2.5rem, 5vw, 5rem) !important;
+    row-gap: .65rem !important;
     align-items: center !important;
 }
 
-#aznet-theme-about-content .aznet-theme-page-kit--about > .aznet-theme-page-kit__story {
+#aznet-theme-about-content .aznet-theme-about-band--intro .aznet-theme-about-eyebrow {
+    grid-area: label;
+    color: #f0d39a !important;
+}
+
+#aznet-theme-about-content .aznet-theme-about-band--intro h2 {
+    grid-area: title;
+    margin: 0 !important;
+    color: #fff !important;
+}
+
+#aznet-theme-about-content .aznet-theme-about-band--intro .aznet-theme-page-kit__intro > p:last-child {
+    grid-area: copy;
+    max-width: 44rem;
+    margin: 0 !important;
+    color: #fff !important;
+}
+
+/* Approach: the text and picture now share one centered shell. */
+#aznet-theme-about-content .aznet-theme-about-band--story .aznet-theme-page-kit__story {
     display: grid !important;
     grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr) !important;
     gap: clamp(2rem, 4vw, 4rem) !important;
     align-items: center !important;
 }
 
-#aznet-theme-about-content .aznet-theme-page-kit__story > .wp-block-column {
+#aznet-theme-about-content .aznet-theme-about-band--story .aznet-theme-page-kit__story > .wp-block-column {
     width: auto !important;
     max-width: none !important;
     min-width: 0 !important;
@@ -54,38 +111,57 @@
     flex-basis: auto !important;
 }
 
-#aznet-theme-about-content .aznet-theme-page-kit__story-media,
-#aznet-theme-about-content .aznet-theme-page-kit__story-media img {
+#aznet-theme-about-content .aznet-theme-about-band--story .aznet-theme-page-kit__story-media,
+#aznet-theme-about-content .aznet-theme-about-band--story .aznet-theme-page-kit__story-media img {
     display: block;
     width: 100% !important;
     max-width: none !important;
 }
 
-#aznet-theme-about-content .aznet-theme-page-kit__story-media img {
+#aznet-theme-about-content .aznet-theme-about-band--story .aznet-theme-page-kit__story-media img {
     aspect-ratio: 16 / 10;
     object-fit: cover;
 }
 
-#aznet-theme-about-content .aznet-theme-page-kit__section > .wp-block-columns {
+/* Repeated rows always use the full inner shell, never Core's content-size cap. */
+#aznet-theme-about-content .aznet-theme-about-band__inner .wp-block-columns {
     width: 100% !important;
     max-width: none !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
 }
 
+/* Team stays light; do not present a stock office image as personnel evidence. */
+#aznet-theme-about-content .aznet-theme-about-band--team .aznet-theme-page-kit__team-teaser {
+    min-height: 0 !important;
+    background: transparent !important;
+}
+
+#aznet-theme-about-content .aznet-theme-about-band--team .aznet-theme-page-kit__team-teaser::after {
+    content: none !important;
+}
+
+#aznet-theme-about-content .aznet-theme-about-band--team .aznet-theme-page-kit__team-teaser :where(h2, h3, p) {
+    color: var(--aznet-theme-about-text) !important;
+}
+
+#aznet-theme-about-content .aznet-theme-about-band--team .aznet-theme-about-eyebrow {
+    color: var(--aznet-theme-about-accent) !important;
+}
+
 @media (max-width: 48rem) {
-    #aznet-theme-about-content .aznet-theme-page-kit--about > .aznet-theme-page-kit__section {
-        padding-left: var(--aznet-theme-gutter-mobile) !important;
-        padding-right: var(--aznet-theme-gutter-mobile) !important;
+    #aznet-theme-about-content .aznet-theme-about-band__inner {
+        width: min(calc(100% - (2 * var(--aznet-theme-gutter-mobile))), var(--aznet-theme-container-shell));
+        padding-block: 2.75rem;
     }
 
-    #aznet-theme-about-content .aznet-theme-page-kit--about > .aznet-theme-page-kit__intro {
+    #aznet-theme-about-content .aznet-theme-about-band--intro .aznet-theme-page-kit__intro {
         grid-template-columns: 1fr !important;
         grid-template-areas: "label" "title" "copy" !important;
         row-gap: .85rem !important;
     }
 
-    #aznet-theme-about-content .aznet-theme-page-kit--about > .aznet-theme-page-kit__story {
+    #aznet-theme-about-content .aznet-theme-about-band--story .aznet-theme-page-kit__story {
         grid-template-columns: 1fr !important;
         gap: 1.5rem !important;
     }
