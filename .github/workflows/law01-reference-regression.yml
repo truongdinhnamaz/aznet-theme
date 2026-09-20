@@ -14,6 +14,7 @@ on:
       - 'tests/browser/law01-heading-geometry.py'
       - 'tests/browser/law01-reference-media-geometry.py'
       - 'tests/browser/law01-reference-contact-strip.py'
+      - 'tests/browser/law01-reference-latest-cards.py'
       - 'tests/browser/homepage-law-01-l4.mjs'
       - '.github/workflows/law01-reference-regression.yml'
   workflow_dispatch:
@@ -63,3 +64,4 @@ jobs:
           python tests/browser/law01-heading-geometry.py
           python tests/browser/law01-reference-media-geometry.py
           python tests/browser/law01-reference-contact-strip.py
+          python tests/browser/law01-reference-latest-cards.py
