@@ -15,6 +15,35 @@ $team_summary = $team instanceof \WP_Post ? trim( (string) get_the_excerpt( $tea
 $members = $has_team ? homepage_direct_published_children( (int) $team->ID, 4 ) : [];
 $has_members = [] !== $members;
 
+$services_page = homepage_page_reference( (int) setting( 'homepage_services_page', 0 ) );
+$process_page = homepage_page_reference( (int) setting( 'homepage_process_page', 0 ) );
+$faq_page = homepage_page_reference( (int) setting( 'homepage_faq_page', 0 ) );
+$service_count = $services_page instanceof \WP_Post
+    ? count( homepage_direct_published_children( (int) $services_page->ID, 24 ) )
+    : 0;
+$profile_facts = [];
+if ( $service_count > 0 && $services_page instanceof \WP_Post ) {
+    $profile_facts[] = [
+        'value' => (string) $service_count,
+        'label' => __( 'Lĩnh vực dịch vụ', 'aznet-theme' ),
+        'url'   => get_permalink( $services_page ),
+    ];
+}
+if ( $process_page instanceof \WP_Post ) {
+    $profile_facts[] = [
+        'value' => __( 'Quy trình', 'aznet-theme' ),
+        'label' => get_the_title( $process_page ),
+        'url'   => get_permalink( $process_page ),
+    ];
+}
+if ( $faq_page instanceof \WP_Post ) {
+    $profile_facts[] = [
+        'value' => __( 'Hỏi đáp', 'aznet-theme' ),
+        'label' => get_the_title( $faq_page ),
+        'url'   => get_permalink( $faq_page ),
+    ];
+}
+
 $section_label = $has_team
     ? ( $has_about ? __( 'Giới thiệu và đội ngũ', 'aznet-theme' ) : __( 'Đội ngũ luật sư', 'aznet-theme' ) )
     : __( 'Giới thiệu', 'aznet-theme' );
@@ -35,6 +64,16 @@ if ( ! $has_team ) {
             <h2><?php echo esc_html( get_the_title( $about ) ); ?></h2>
             <?php if ( '' !== $about_summary ) : ?><p class="aznet-theme-law01-lede"><?php echo esc_html( $about_summary ); ?></p><?php endif; ?>
             <p><a class="aznet-theme-law01-button" href="<?php echo esc_url( get_permalink( $about ) ); ?>"><?php esc_html_e( 'Tìm hiểu thêm', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a></p>
+            <?php if ( [] !== $profile_facts ) : ?>
+                <div class="aznet-theme-law01-profile__facts" aria-label="<?php esc_attr_e( 'Thông tin nổi bật', 'aznet-theme' ); ?>">
+                    <?php foreach ( $profile_facts as $fact ) : ?>
+                        <a class="aznet-theme-law01-profile__fact" href="<?php echo esc_url( (string) $fact['url'] ); ?>">
+                            <strong class="aznet-theme-law01-profile__fact-value"><?php echo esc_html( (string) $fact['value'] ); ?></strong>
+                            <span class="aznet-theme-law01-profile__fact-label"><?php echo esc_html( (string) $fact['label'] ); ?></span>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
         </div>
         <?php if ( '' !== $about_image ) : ?><div class="aznet-theme-law01-profile__about-media"><?php echo wp_kses_post( $about_image ); ?></div><?php endif; ?>
     </div>
@@ -58,6 +97,21 @@ if ( ! $has_team ) {
             </article>
             <?php endforeach; ?>
         </div><?php endif; ?>
+        <?php
+        // A captioned native Page illustration is editorial media, never a member record.
+        $team_illustration_caption = ! $has_members && has_post_thumbnail( $team )
+            ? trim( wp_strip_all_tags( (string) get_the_post_thumbnail_caption( $team ) ) )
+            : '';
+        $team_illustration = '' !== $team_illustration_caption
+            ? get_the_post_thumbnail( $team, 'large', [ 'class' => 'aznet-theme-law01-profile__team-illustration-image' ] )
+            : '';
+        ?>
+        <?php if ( '' !== $team_illustration ) : ?>
+            <figure class="aznet-theme-law01-profile__team-illustration">
+                <?php echo wp_kses_post( $team_illustration ); ?>
+                <figcaption><?php echo esc_html( $team_illustration_caption ); ?></figcaption>
+            </figure>
+        <?php endif; ?>
         <p class="aznet-theme-law01-team-more"><a class="aznet-theme-law01-button aznet-theme-law01-button--secondary" href="<?php echo esc_url( get_permalink( $team ) ); ?>"><?php esc_html_e( 'Xem thêm về đội ngũ', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a></p>
     </div>
     <?php endif; ?>
