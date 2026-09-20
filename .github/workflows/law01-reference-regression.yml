@@ -9,6 +9,8 @@ on:
       - 'template-parts/homepage/law-01/**'
       - 'assets/css/components/homepage-law-01*.css'
       - 'tests/offline/law01-reference-*.php'
+      - 'tests/offline/law01-reference-*.cjs'
+      - 'tests/browser/homepage-law-01-l4.mjs'
       - 'tests/browser/law01-reference-components.py'
       - '.github/workflows/law01-reference-regression.yml'
   workflow_dispatch:
@@ -41,6 +43,8 @@ jobs:
           php tests/offline/law01-reference-interaction-contract.php
           php tests/offline/law01-reference-assets-contract.php
           php tests/offline/law01-reference-topbar-contract.php
+          php tests/offline/law01-reference-team-artwork-contract.php
+          node tests/offline/law01-reference-heading-predicate.cjs
       - name: Retained full core verification
         run: bash scripts/verify-v1-core.sh
       - uses: actions/setup-python@v5

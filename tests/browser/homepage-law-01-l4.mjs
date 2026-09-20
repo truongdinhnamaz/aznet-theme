@@ -166,11 +166,14 @@ async function inspectViewport(browser, name, viewport) {
           lineHeight: Number.parseFloat(style.lineHeight || '0'),
           fontSize: Number.parseFloat(style.fontSize || '0'),
           whiteSpace: style.whiteSpace,
+          clientWidth: node.clientWidth,
+          scrollWidth: node.scrollWidth,
         };
       }));
       if (headingMetrics.length < 4) throw new Error(`expected current Burgundy Law 01 heading coverage, got ${headingMetrics.length}`);
       const headingSizes = new Set(headingMetrics.map((item) => item.fontSize.toFixed(2)));
-      const invalidHeading = headingMetrics.find((item) => item.whiteSpace !== 'nowrap' || item.height > item.lineHeight * 1.25);
+      // Measure the approved single-line result, not the CSS strategy used to obtain it.
+      const invalidHeading = headingMetrics.find((item) => ![item.height, item.lineHeight, item.clientWidth, item.scrollWidth].every(Number.isFinite) || item.height <= 0 || item.lineHeight <= 0 || item.clientWidth <= 0 || item.height > item.lineHeight * 1.25 || item.scrollWidth > item.clientWidth + 1);
       if (invalidHeading) throw new Error(`Law 01 section heading must stay on one desktop line: ${JSON.stringify(invalidHeading)}`);
       if (headingSizes.size !== 1) throw new Error(`Law 01 section headings must use one consistent size: ${JSON.stringify(headingMetrics)}`);
     }
@@ -293,7 +296,10 @@ async function inspectViewport(browser, name, viewport) {
       if (!parityMetrics.heroTitleStyle) throw new Error('Hero title computed style unavailable');
       const heroTitleFont = Number.parseFloat(parityMetrics.heroTitleStyle.fontSize);
       const heroTitleLine = Number.parseFloat(parityMetrics.heroTitleStyle.lineHeight);
-      if (!(heroTitleLine / heroTitleFont < 1.05)) throw new Error(`Hero title line-height must stay editorially compact, got ${parityMetrics.heroTitleStyle.lineHeight} / ${parityMetrics.heroTitleStyle.fontSize}`);
+      const heroTitleRatio = heroTitleLine / heroTitleFont;
+      // Reference refinement uses 1.16 leading; reject overlap, excessive leading and unknown metrics.
+      const validHeroLeading = Number.isFinite(heroTitleRatio) && heroTitleRatio >= 1 && heroTitleRatio <= 1.2;
+      if (!validHeroLeading) throw new Error(`Hero title line-height must stay editorially compact, got ${parityMetrics.heroTitleStyle.lineHeight} / ${parityMetrics.heroTitleStyle.fontSize}`);
       if (parityMetrics.trust.length !== 4 || new Set(parityMetrics.trust.map((item) => Math.round(item.y))).size !== 1) {
         throw new Error('desktop trust strip must remain one four-item row');
       }
