@@ -1,0 +1,29 @@
+name: About Preview Parity
+on:
+  push:
+    branches: ['fix/about-below-hero-parity-20260920']
+    paths: ['ops/about-preview/**', 'tests/browser/about-preview-parity.mjs', '.github/workflows/about-preview-parity.yml']
+permissions:
+  contents: read
+jobs:
+  read-only-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install existing QA dependencies
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+      - name: Verify authored content geometry against Homepage
+        run: node tests/browser/about-preview-parity.mjs
+      - name: Retain measured evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: about-preview-parity
+          path: /tmp/about-parity
+          if-no-files-found: error
