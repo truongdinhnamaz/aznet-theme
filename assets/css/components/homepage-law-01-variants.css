@@ -769,6 +769,13 @@
     font-weight: var(--aznet-theme-font-weight-regular);
     line-height: 1.6;
 }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero .aznet-theme-law01-lede {
+    max-width: 38rem;
+    margin: 0 0 .45rem;
+    color: #574b43;
+    font-size: clamp(.96rem, 1.18vw, 1.06rem);
+    line-height: 1.62;
+}
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__body {
     max-width: 38rem;
     margin-top: .75rem;
