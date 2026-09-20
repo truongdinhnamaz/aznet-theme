@@ -86,7 +86,7 @@ async function inspectFrontend(browser, item, viewportName, viewport) {
           const size = px(decoration.width);
           const inset = axis === 'block' ? px(decoration.top) : px(decoration.right);
           const padding = axis === 'block' ? px(box.paddingTop) : px(box.paddingRight);
-          return { size, inset, padding, clearance: padding - inset - size };
+          return { display: decoration.display, size, inset, padding, clearance: padding - inset - size };
         };
 
         const result = {
@@ -99,6 +99,7 @@ async function inspectFrontend(browser, item, viewportName, viewport) {
       });
       result.aboutIconGeometry = iconGeometry;
       for (const [name, geometry] of Object.entries(iconGeometry)) {
+        if (geometry.display === 'none') continue;
         if (geometry.size <= 0 || geometry.clearance < 8) {
           throw new Error(`About ${name} icon does not retain a safe text clearance: ${JSON.stringify(geometry)}`);
         }
