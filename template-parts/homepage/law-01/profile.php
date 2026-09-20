@@ -118,6 +118,20 @@ if ( ! $has_team ) {
                 </div>
                 <figcaption><?php echo esc_html( $team_illustration_caption ); ?></figcaption>
             </figure>
+        <?php elseif ( ! $has_members && function_exists( __NAMESPACE__ . '\\law01_reference_art_urls' ) ) : ?>
+            <?php $reference_portraits = law01_reference_art_urls( 'team' ); ?>
+            <?php if ( [] !== $reference_portraits ) : ?>
+                <figure class="aznet-theme-law01-profile__team-illustration aznet-theme-law01-profile__team-illustration--generated">
+                    <div class="aznet-theme-law01-profile__team-illustration-grid" aria-hidden="true">
+                        <?php foreach ( array_slice( $reference_portraits, 0, 4 ) as $portrait_url ) : ?>
+                            <span class="aznet-theme-law01-profile__team-illustration-slot">
+                                <img class="aznet-theme-law01-profile__team-illustration-image aznet-theme-law01-profile__team-illustration-image--generated" src="<?php echo esc_url( $portrait_url ); ?>" alt="" loading="lazy">
+                            </span>
+                        <?php endforeach; ?>
+                    </div>
+                    <figcaption><?php esc_html_e( 'Hình ảnh minh họa — không phải hồ sơ nhân sự.', 'aznet-theme' ); ?></figcaption>
+                </figure>
+            <?php endif; ?>
         <?php endif; ?>
         <p class="aznet-theme-law01-team-more"><a class="aznet-theme-law01-button aznet-theme-law01-button--secondary" href="<?php echo esc_url( get_permalink( $team ) ); ?>"><?php esc_html_e( 'Xem thêm về đội ngũ', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a></p>
     </div>
