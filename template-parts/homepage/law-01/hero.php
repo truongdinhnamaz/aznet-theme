@@ -49,16 +49,6 @@ if ( '' === $hero_block_html ) {
     }
 }
 
-if ( '' === $hero_block_html && function_exists( __NAMESPACE__ . '\\law01_reference_art_urls' ) ) {
-    $reference_hero_art = law01_reference_art_urls( 'hero' );
-    if ( isset( $reference_hero_art[0] ) && is_string( $reference_hero_art[0] ) && '' !== $reference_hero_art[0] ) {
-        $image = sprintf(
-            '<img class="aznet-theme-law01-hero__image aznet-theme-law01-hero__image--reference" src="%s" alt="" aria-hidden="true" decoding="async" fetchpriority="high">',
-            esc_url( $reference_hero_art[0] )
-        );
-    }
-}
-
 $contact = homepage_page_reference( (int) setting( 'homepage_contact_page', 0 ) );
 $services = homepage_page_reference( (int) setting( 'homepage_services_page', 0 ) );
 if ( '' === $hero_block_html && '' === $title ) { return; }
