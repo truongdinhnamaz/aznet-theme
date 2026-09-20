@@ -1,15 +1,17 @@
 # AZnet Theme Source Manifest
 
-Canonical implementation baseline is exact implementation `a81067b1f1804783a35e8113ebf6859c7fcc38fa`, Theme metadata `1.3.20`. Exact-main V1 `35509805662` and X6 `35509805668` PASS. Publication run `35509995234` published annotated `v1.3.20` tag object `f7d50863b3b7b8f4e500172ba624d24b73ff312f` and GitHub Release `392420684`; asset `576757385` has SHA-256 `96ff01960e17d1da7167c5c3e296abbdabad0e5d51603f0f73ca4513ac880c00`. Owner final approval on 20/09/2026 marks the reviewed Law 01 Homepage PASS. Production deployment to `lstamduchn.vn` remains separate and no live `1.3.20` mutation is claimed; `1.3.10` remains the last verified live Theme under current access evidence. RootProfile-backed authoritative Team membership remains separately blocked at issue #112.
+Canonical technical implementation baseline is exact `main@998a8dcf342b09824b197059524c50c013dba828`, Theme metadata `1.3.21`. Exact-main V1 `35518082825` and X6 `35518082833` PASS; X6 browser/axe is 32/32 PASS and deterministic `aznet-theme-1.3.21.zip` has 158 files, 113 packaged PHP lint PASS, SHA-256 `da695f2b33aafc38172a9a412a3b1afd16263db3f03d305be4304eba877e09e2`. Current published GitHub Release remains `v1.3.20`: publication run `35509995234`, tag object `f7d50863b3b7b8f4e500172ba624d24b73ff312f`, Release `392420684`, asset `576757385`. Production deployment to `lstamduchn.vn` remains separate and no live `1.3.21` mutation is claimed; `1.3.10` remains the last verified live Theme under current access evidence. RootProfile-backed authoritative Team membership remains separately blocked at issue #112.
 | Source | Semantic version | Role |
 | --- | --- | --- |
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.14 | Theme architecture, public integration contracts, D-027 Standalone Core boundary and complete WordPress-owned D-030 Hero authoring rule |
-| `AZT-03-baseline-provenance.md` | v0.69 | Canonical provenance through final Homepage PASS and v1.3.20 publication; production deployment remains separately gated |
-| `AZT-04-roadmap-qa-decisions.md` | v0.85 | Roadmap/QA through final Law 01 Homepage owner approval and v1.3.20 publication |
-| `AZT-EXEC-MAP.md` | v0.75 | Derived execution map through final Homepage PASS and v1.3.20 publication; deployment remains a separate hard gate |
+| `AZT-03-baseline-provenance.md` | v0.70 | Canonical provenance through v1.3.21 About technical closure; current publication remains v1.3.20 and deployment stays separate |
+| `AZT-04-roadmap-qa-decisions.md` | v0.86 | Roadmap/QA through v1.3.21 technical closure and repository-native verification decision |
+| `AZT-EXEC-MAP.md` | v0.76 | Derived execution map through v1.3.21 About technical closure; publication/deployment remain separate gates |
+
+20/09/2026 v1.3.21 About technical-closure evidence: `docs/evidence/V1_3_21_ABOUT_PAGE_TECHNICAL_CLOSURE_20260920.md` records PR #196 About presentation RED->GREEN/merge, PR #197 1.3.21 promotion RED->GREEN/merge, exact-main V1 `35518082825`, exact-main X6 `35518082833`, 32/32 browser/axe PASS, deterministic package SHA-256 `da695f2b33aafc38172a9a412a3b1afd16263db3f03d305be4304eba877e09e2`, and the owner decision that WPVibe is not a mandatory repository technical/release verification dependency. `v1.3.21` publication and production deployment are not claimed; current public Release remains `v1.3.20`.
 
 20/09/2026 final Homepage + v1.3.20 evidence: `docs/evidence/LAW01_HOMEPAGE_FINAL_PASS_20260920.md` records owner final Homepage approval, PR #193 premium refinement, PR #194 release promotion, exact-main V1/X6 PASS, deterministic 1.3.20 package identity and published Release `392420684`. This closes the reviewed Homepage presentation/release checkpoint only; it does not authorize or imply production deployment.
 
