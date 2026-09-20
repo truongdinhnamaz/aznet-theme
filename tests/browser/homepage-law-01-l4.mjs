@@ -133,6 +133,17 @@ async function inspectViewport(browser, name, viewport) {
       if (await page.locator(selector).count() < 1) throw new Error(`Expanded Burgundy Homepage missing mapped section ${selector}`);
     }
 
+    const homepageFont = await page.locator('.aznet-theme-homepage--law-01-burgundy-gold').evaluate((node) => getComputedStyle(node).fontFamily);
+    if (!homepageFont.toLowerCase().includes('roboto')) throw new Error(`Agreed Roboto Homepage typography missing: ${homepageFont}`);
+
+    if (await page.locator('.aznet-theme-law01-analysis-card__media img').count() < 3) throw new Error('Premium Analysis cards must expose mapped featured media.');
+    if (await page.locator('.aznet-theme-law01-analysis-card__excerpt').count() < 3) throw new Error('Premium Analysis cards must expose WordPress-owned excerpts.');
+    if (await page.locator('.aznet-theme-law01-news-featured').count() !== 1) throw new Error('Premium Legal News must expose exactly one featured story.');
+    if (await page.locator('.aznet-theme-law01-news-list--secondary article').count() !== 4) throw new Error('Premium Legal News must expose four secondary stories.');
+    if (await page.locator('.aznet-theme-law01-process__source .wp-block-list').count() !== 1) throw new Error('Process must render the authored Core List when present.');
+    const faqItems = await page.locator('.aznet-theme-law01-faq__items details').count();
+    if (faqItems !== 3) throw new Error(`FAQ must render the three authored Core Details in the fixture, got ${faqItems}`);
+
     const compositionOrder = [
       '.aznet-theme-law01-hero',
       '.aznet-theme-law01-hero__trust-grid',
