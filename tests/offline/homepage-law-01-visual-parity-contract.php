@@ -173,10 +173,10 @@ $must(
 );
 
 $must(
-    str_contains($footer, '$law01_homepage =') &&
-    str_contains($footer, '( \'professional\' === $preset || $law01_homepage ) && \'\' !== $social_menu') &&
-    str_contains($footer, '\'\' !== $social_menu && \'professional\' !== $preset && ! $law01_homepage'),
-    'Law 01 Footer must place a real social menu in the main reference grid for any Footer preset and avoid duplicating it in the bottom row.'
+    ! str_contains($footer, 'homepage_composer_active') &&
+    ! str_contains($footer, 'homepage_law01_variant') &&
+    ! str_contains($footer, '$law01_homepage'),
+    'Law 01 Homepage must not control or restyle the independent Theme Footer.'
 );
 
 $must(
@@ -216,35 +216,20 @@ $must(
 );
 
 $must(
-    str_contains($footer, 'aznet-theme-site-footer--law01-') &&
-    str_contains($footer, "homepage_composer_active()") &&
-    str_contains($footer, "homepage_law01_variant()"),
-    'Law 01 Footer must expose a homepage-only variant modifier while preserving the generic Footer elsewhere.'
-);
-$must(
-    str_contains($css, '.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__main') &&
-    str_contains($css, 'repeat(auto-fit, minmax(10rem, .75fr))'),
-    'Law 01 Footer must use a source-backed adaptive reference grid instead of requiring fabricated empty columns.'
-);
-$must(
-    str_contains($footer, 'if ( \'\' !== $primary_menu )') &&
-    str_contains($footer, 'if ( \'professional\' !== $preset && \'\' !== $contact_menu )') &&
-    str_contains($footer, 'if ( \'\' !== $social_menu || \'\' !== $policy_menu )'),
-    'Law 01 Footer must keep empty WordPress menu projections fail-soft with no placeholder data.'
-);
-$must(
-    str_contains($footer, '$contact_heading = $law01_homepage') &&
+    str_contains($footer, 'aznet-theme-site-footer__brand-title') &&
     str_contains($footer, 'Thông tin liên hệ') &&
-    str_contains($footer, '$navigation_heading = $law01_homepage') &&
     str_contains($footer, 'Liên kết nhanh'),
-    'Law 01 Footer must use the approved reference headings without changing generic Footer copy.'
+    'Law 01 Homepage must inherit the same independent professional Footer structure used by other surfaces.'
 );
 $must(
-    str_contains($css, '.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__identity { order: 1; }') &&
-    str_contains($css, '.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__contact { order: 2; }') &&
-    str_contains($css, '.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__navigation { order: 3; }') &&
-    str_contains($css, '.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__social-column { order: 4; }'),
-    'Law 01 Footer must visually order populated columns as Identity, Contact, Quick links, Social.'
+    ! str_contains($css, '.aznet-theme-site-footer--law01-'),
+    'Law 01 Homepage stylesheet must not contain Footer-specific presentation overrides.'
+);
+$must(
+    str_contains($footer, "if ( '' !== $primary_menu )") &&
+    str_contains($footer, "if ( 'professional' !== $preset && '' !== $contact_menu )") &&
+    str_contains($footer, "if ( '' !== $social_menu || '' !== $policy_menu )"),
+    'Independent Footer must keep empty WordPress menu projections fail-soft with no placeholder data.'
 );
 
 
