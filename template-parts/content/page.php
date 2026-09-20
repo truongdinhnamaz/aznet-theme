@@ -73,7 +73,7 @@ $service_siblings = $is_service_detail ? \AZnet\Theme\service_page_siblings( (in
                     <?php if ( ! is_string( $service_url ) || '' === $service_url ) { continue; } ?>
                     <article class="aznet-theme-page__service-card">
                         <h3><a href="<?php echo esc_url( $service_url ); ?>"><?php echo esc_html( get_the_title( $service_page ) ); ?></a></h3>
-                        <?php $service_excerpt = trim( (string) get_the_excerpt( $service_page ) ); ?>
+                        <?php $service_excerpt = trim( (string) $service_page->post_excerpt ); ?>
                         <?php if ( '' !== $service_excerpt ) : ?>
                             <p><?php echo esc_html( $service_excerpt ); ?></p>
                         <?php endif; ?>
