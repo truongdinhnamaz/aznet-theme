@@ -243,6 +243,11 @@
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__fact-value {
     font-size: clamp(1.6rem, 2vw, 2rem);
 }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--articles .aznet-theme-law01-article-card:first-child h3 {
+    max-width: none;
+    font-size: var(--law01-type-article-title);
+    line-height: 1.35;
+}
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-article-card__media-link {
     overflow: hidden;
     aspect-ratio: 2.35 / 1;
