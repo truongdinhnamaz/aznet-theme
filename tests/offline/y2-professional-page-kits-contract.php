@@ -167,6 +167,32 @@ foreach ($patternFiles as $filename => $slug) {
     }
 }
 
+
+$servicesPath = $root . '/patterns/page-services.php';
+$services = file_get_contents($servicesPath);
+if (false === $services) {
+    y2_fail('unable to read Services Page Kit pattern');
+}
+foreach ([
+    'aznet-theme-page-kit__intro',
+    'aznet-theme-page-kit__service-selection',
+    'aznet-theme-page-kit__orientation',
+    'aznet-theme-page-kit__process',
+    'aznet-theme-page-kit__trust',
+    'aznet-theme-page-kit__knowledge',
+    'aznet-theme-page-kit__cta',
+] as $servicesSectionClass) {
+    if (! str_contains($services, $servicesSectionClass)) {
+        y2_fail('Services Page Kit missing approved hub section class ' . $servicesSectionClass);
+    }
+}
+if (6 !== substr_count($services, '<div class="wp-block-group aznet-theme-page-kit__service-card">')) {
+    y2_fail('Services Page Kit must expose exactly six replaceable service cards');
+}
+if (! str_contains($services, '<!-- wp:query ')) {
+    y2_fail('Services Page Kit knowledge section must use a WordPress-native Query block');
+}
+
 $pageCss = file_get_contents($root . '/assets/css/components/page.css');
 if (false === $pageCss) {
     y2_fail('unable to read Page stylesheet');
@@ -176,6 +202,12 @@ foreach ([
     '.aznet-theme-page-kit__section',
     '.aznet-theme-page-kit__card',
     '.aznet-theme-page-kit__cta',
+    '.aznet-theme-page-kit--services .aznet-theme-page-kit__service-selection',
+    '.aznet-theme-page-kit--services .aznet-theme-page-kit__service-card',
+    '.aznet-theme-page-kit--services .aznet-theme-page-kit__orientation',
+    '.aznet-theme-page-kit--services .aznet-theme-page-kit__process',
+    '.aznet-theme-page-kit--services .aznet-theme-page-kit__trust',
+    '.aznet-theme-page-kit--services .aznet-theme-page-kit__knowledge',
 ] as $selector) {
     if (! str_contains($pageCss, $selector)) {
         y2_fail('Page Kit stylesheet missing shared selector ' . $selector);

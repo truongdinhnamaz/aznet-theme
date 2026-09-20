@@ -11,6 +11,14 @@
     --aznet-theme-color-warning: #9a6700;
     --aznet-theme-color-danger: #b42318;
 
+    /* Law 01 Burgundy presentation palette shared by Homepage and mapped inner Pages. */
+    --aznet-theme-law01-brand-red: #8f111b;
+    --aznet-theme-law01-brand-red-deep: #6d0b13;
+    --aznet-theme-law01-warm-paper: #fffaf2;
+    --aznet-theme-law01-body: #6f625b;
+    --aznet-theme-law01-line: rgba(111, 16, 32, 0.14);
+    --aznet-theme-law01-icon-muted: #e3e7ee;
+
     --aznet-theme-font-family-base: Roboto, Arial, sans-serif;
     --aznet-theme-font-family-heading: var(--aznet-theme-font-family-base);
 
@@ -68,7 +76,10 @@
     --aznet-theme-space-2: 0.5rem;
     --aznet-theme-space-3: 1rem;
     --aznet-theme-space-4: 1.5rem;
+    --aznet-theme-space-5: 2rem;
     --aznet-theme-space-6: 2.625rem;
+    --aznet-theme-space-7: 3.25rem;
+    --aznet-theme-space-8: 4rem;
     --aznet-theme-space-section: 3.25rem;
 
     --aznet-theme-radius-control: 0.5rem;

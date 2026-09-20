@@ -1,0 +1,580 @@
+.aznet-theme-page--service-hub {
+    --aznet-theme-service-hub-copy: 52rem;
+    --aznet-theme-service-hub-icon-scales: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3v18M7 21h10M4 7h16M6 7l-4 7h8L6 7Zm12 0-4 7h8l-4-7ZM2 14a4 4 0 0 0 8 0m4 0a4 4 0 0 0 8 0'/%3E%3C/svg%3E");
+}
+
+.aznet-theme-page--service-hub .aznet-theme-service-hub__hero {
+    position: relative;
+    display: block;
+    min-height: 0;
+    max-width: var(--aznet-theme-container-shell);
+    margin-block-end: clamp(var(--aznet-theme-space-5), 4vw, var(--aznet-theme-space-8));
+    padding: clamp(var(--aznet-theme-space-5), 5vw, var(--aznet-theme-space-8));
+    overflow: hidden;
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    color: var(--aznet-theme-text);
+    background: linear-gradient(
+        135deg,
+        var(--aznet-theme-color-surface-subtle),
+        var(--aznet-theme-surface)
+    );
+    box-shadow: none;
+}
+
+.aznet-theme-page--service-hub .aznet-theme-service-hub__hero::after {
+    position: absolute;
+    inset-block-start: var(--aznet-theme-space-4);
+    inset-inline-end: var(--aznet-theme-space-4);
+    width: clamp(3.25rem, 7vw, 5rem);
+    aspect-ratio: 1;
+    background: var(--aznet-theme-accent);
+    content: "";
+    opacity: .12;
+    pointer-events: none;
+    -webkit-mask: var(--aznet-theme-service-hub-icon-scales) center / contain no-repeat;
+    mask: var(--aznet-theme-service-hub-icon-scales) center / contain no-repeat;
+}
+
+.aznet-theme-page--service-hub .aznet-theme-service-hub__hero > * {
+    position: relative;
+    z-index: 1;
+}
+
+.aznet-theme-page--service-hub .aznet-theme-page__title,
+.aznet-theme-page--service-hub .aznet-theme-page__lead {
+    max-width: var(--aznet-theme-service-hub-copy);
+}
+
+.aznet-theme-page--service-hub .aznet-theme-page__title {
+    margin: 0;
+    color: var(--aznet-theme-text);
+    font-size: clamp(var(--aznet-theme-text-h1), 5vw, var(--aznet-theme-text-display));
+    line-height: var(--aznet-theme-line-height-display);
+    letter-spacing: -.02em;
+    text-wrap: balance;
+}
+
+.aznet-theme-page--service-hub .aznet-theme-page__lead {
+    margin-block: var(--aznet-theme-space-3) 0;
+    color: var(--aznet-theme-muted);
+    font-size: var(--aznet-theme-text-lead);
+    line-height: var(--aznet-theme-line-height-lead);
+}
+
+.aznet-theme-service-hub__eyebrow {
+    width: fit-content;
+    margin: 0 0 var(--aznet-theme-space-2);
+    color: var(--aznet-theme-accent);
+    font-size: var(--aznet-theme-text-label);
+    font-weight: var(--aznet-theme-font-weight-bold);
+    letter-spacing: .09em;
+    text-transform: uppercase;
+}
+
+.aznet-theme-service-hub__hero-meta {
+    display: inline-flex;
+    width: fit-content;
+    align-items: baseline;
+    gap: var(--aznet-theme-space-2);
+    margin: var(--aznet-theme-space-3) 0 0;
+    padding: var(--aznet-theme-space-2) var(--aznet-theme-space-3);
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-pill);
+    color: var(--aznet-theme-muted);
+    background: var(--aznet-theme-surface);
+    font-size: var(--aznet-theme-text-small);
+}
+
+.aznet-theme-service-hub__hero-meta strong {
+    color: var(--aznet-theme-accent);
+    font-size: var(--aznet-theme-text-h4);
+    line-height: 1;
+}
+
+.aznet-theme-service-hub__hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--aznet-theme-space-3);
+    margin-block-start: var(--aznet-theme-space-5);
+}
+
+.aznet-theme-service-hub__primary,
+.aznet-theme-service-hub__secondary {
+    display: inline-flex;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: center;
+    padding: var(--aznet-theme-space-2) var(--aznet-theme-space-4);
+    border: 1px solid var(--aznet-theme-accent);
+    border-radius: var(--aznet-theme-radius-pill);
+    font-size: var(--aznet-theme-text-button);
+    font-weight: var(--aznet-theme-font-weight-bold);
+    line-height: var(--aznet-theme-line-height-button);
+    text-decoration: none;
+    transition: background-color var(--aznet-theme-motion-fast), color var(--aznet-theme-motion-fast), border-color var(--aznet-theme-motion-fast);
+}
+
+.aznet-theme-service-hub__primary {
+    color: var(--aznet-theme-color-on-primary);
+    background: var(--aznet-theme-accent);
+}
+
+.aznet-theme-service-hub__secondary {
+    color: var(--aznet-theme-accent);
+    background: var(--aznet-theme-surface);
+}
+
+.aznet-theme-service-hub__primary:hover {
+    color: var(--aznet-theme-color-on-primary);
+}
+
+.aznet-theme-service-hub__secondary:hover {
+    background: var(--aznet-theme-color-surface-subtle);
+}
+
+.aznet-theme-service-hub__primary:focus-visible,
+.aznet-theme-service-hub__secondary:focus-visible,
+.aznet-theme-service-hub__card a:focus-visible,
+.aznet-theme-service-hub__support-card a:focus-visible,
+.aznet-theme-service-hub__knowledge-card a:focus-visible {
+    outline: 2px solid var(--aznet-theme-focus);
+    outline-offset: 3px;
+}
+
+.aznet-theme-service-hub {
+    display: grid;
+    gap: clamp(var(--aznet-theme-space-5), 4vw, var(--aznet-theme-space-8));
+    width: 100%;
+    max-width: var(--aznet-theme-container-shell);
+    margin-inline: auto;
+}
+
+.aznet-theme-service-hub__section,
+.aznet-theme-service-hub__selection {
+    min-width: 0;
+}
+
+.aznet-theme-service-hub__selection {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+.aznet-theme-service-hub__section-heading {
+    max-width: var(--aznet-theme-service-hub-copy);
+    margin-block-end: var(--aznet-theme-space-5);
+}
+
+.aznet-theme-service-hub__section-heading h2,
+.aznet-theme-service-hub__orientation h2,
+.aznet-theme-service-hub__final-cta h2 {
+    margin: 0;
+    font-size: var(--aznet-theme-text-h2);
+    line-height: var(--aznet-theme-line-height-h2);
+    letter-spacing: -.01em;
+    text-wrap: balance;
+}
+
+.aznet-theme-service-hub__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--aznet-theme-space-4);
+}
+
+.aznet-theme-service-hub__card {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    min-height: 15rem;
+    flex-direction: column;
+    padding: var(--aznet-theme-space-4);
+    overflow: hidden;
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-surface);
+    box-shadow: var(--aznet-theme-shadow-card);
+    transition: border-color var(--aznet-theme-motion-fast), background-color var(--aznet-theme-motion-fast);
+}
+
+.aznet-theme-service-hub__card:hover {
+    border-color: var(--aznet-theme-accent);
+}
+
+.aznet-theme-service-hub__card-number {
+    display: inline-grid;
+    width: 2.5rem;
+    height: 2.5rem;
+    place-items: center;
+    margin-block-end: var(--aznet-theme-space-3);
+    border-radius: var(--aznet-theme-radius-pill);
+    color: var(--aznet-theme-surface);
+    background: var(--aznet-theme-accent);
+    font-size: var(--aznet-theme-text-label);
+    font-weight: var(--aznet-theme-font-weight-bold);
+}
+
+.aznet-theme-service-hub__card h3,
+.aznet-theme-service-hub__support-card h3,
+.aznet-theme-service-hub__knowledge-card h3 {
+    margin: 0;
+    font-size: var(--aznet-theme-text-h4);
+    line-height: var(--aznet-theme-line-height-h4);
+}
+
+.aznet-theme-service-hub__card h3 a,
+.aznet-theme-service-hub__support-card h3 a,
+.aznet-theme-service-hub__knowledge-card h3 a {
+    color: var(--aznet-theme-text);
+    text-decoration: none;
+}
+
+.aznet-theme-service-hub__card h3 a:hover,
+.aznet-theme-service-hub__support-card h3 a:hover,
+.aznet-theme-service-hub__knowledge-card h3 a:hover {
+    color: var(--aznet-theme-accent);
+}
+
+.aznet-theme-service-hub__card p,
+.aznet-theme-service-hub__support-card p,
+.aznet-theme-service-hub__knowledge-card p {
+    margin: var(--aznet-theme-space-3) 0 0;
+    color: var(--aznet-theme-muted);
+    overflow-wrap: anywhere;
+}
+
+.aznet-theme-service-hub__card-link {
+    width: fit-content;
+    margin-block-start: auto;
+    padding-block-start: var(--aznet-theme-space-4);
+    color: var(--aznet-theme-accent);
+    font-weight: var(--aznet-theme-font-weight-bold);
+    text-decoration: none;
+}
+
+.aznet-theme-service-hub__orientation,
+.aznet-theme-service-hub__final-cta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--aznet-theme-space-5);
+    align-items: center;
+    padding: clamp(var(--aznet-theme-space-4), 4vw, var(--aznet-theme-space-6));
+    border: 0;
+    border-inline-start: 3px solid var(--aznet-theme-accent);
+    border-radius: 0;
+    color: var(--aznet-theme-text);
+    background: var(--aznet-theme-color-surface-subtle);
+    box-shadow: none;
+}
+
+.aznet-theme-service-hub__orientation > div,
+.aznet-theme-service-hub__final-cta > div {
+    max-width: var(--aznet-theme-service-hub-copy);
+}
+
+.aznet-theme-service-hub__orientation p:last-child,
+.aznet-theme-service-hub__final-cta p:last-child {
+    margin-block-end: 0;
+}
+
+.aznet-theme-service-hub__editorial {
+    padding-block: var(--aznet-theme-space-6);
+    border-block: 1px solid var(--aznet-theme-border);
+}
+
+.aznet-theme-page--service-hub .aznet-theme-service-hub__editorial .aznet-theme-page__content {
+    width: 100%;
+    max-width: var(--aznet-theme-service-hub-copy);
+}
+
+.aznet-theme-service-hub__support-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--aznet-theme-space-4);
+}
+
+.aznet-theme-service-hub__support-card {
+    min-width: 0;
+    padding: clamp(var(--aznet-theme-space-4), 3vw, var(--aznet-theme-space-6));
+    border: 0;
+    border-block-start: 2px solid var(--aznet-theme-accent);
+    border-radius: 0;
+    background: var(--aznet-theme-color-surface-subtle);
+    box-shadow: none;
+}
+
+.aznet-theme-service-hub__support-card > a:last-child {
+    display: inline-block;
+    margin-block-start: var(--aznet-theme-space-4);
+    color: var(--aznet-theme-accent);
+    font-weight: var(--aznet-theme-font-weight-bold);
+    text-decoration: none;
+}
+
+.aznet-theme-service-hub__knowledge {
+    padding-block-start: var(--aznet-theme-space-6);
+    border-block-start: 1px solid var(--aznet-theme-border);
+}
+
+.aznet-theme-service-hub__knowledge-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--aznet-theme-space-4);
+}
+
+.aznet-theme-service-hub__knowledge-card {
+    min-width: 0;
+    padding: var(--aznet-theme-space-4);
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-surface);
+    box-shadow: var(--aznet-theme-shadow-card);
+}
+
+.aznet-theme-service-hub__meta {
+    margin: 0 0 var(--aznet-theme-space-2) !important;
+    color: var(--aznet-theme-muted);
+    font-size: var(--aznet-theme-text-meta);
+}
+
+.aznet-theme-service-hub__final-cta :where(h2, p) {
+    color: inherit;
+}
+
+@media (max-width: 64rem) {
+    .aznet-theme-service-hub__grid,
+    .aznet-theme-service-hub__knowledge-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .aznet-theme-service-hub__orientation,
+    .aznet-theme-service-hub__final-cta {
+        grid-template-columns: minmax(0, 1fr);
+        align-items: start;
+    }
+}
+
+@media (max-width: 47.999rem) {
+    .aznet-theme-page--service-hub .aznet-theme-service-hub__hero {
+        padding: var(--aznet-theme-space-5) var(--aznet-theme-space-4);
+    }
+
+    .aznet-theme-page--service-hub .aznet-theme-service-hub__hero::after {
+        width: 3rem;
+        opacity: .08;
+    }
+
+    .aznet-theme-service-hub__hero-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .aznet-theme-service-hub__primary,
+    .aznet-theme-service-hub__secondary {
+        width: 100%;
+    }
+
+    .aznet-theme-service-hub {
+        gap: var(--aznet-theme-space-5);
+    }
+
+    .aznet-theme-service-hub__grid,
+    .aznet-theme-service-hub__support-grid,
+    .aznet-theme-service-hub__knowledge-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .aznet-theme-service-hub__card,
+    .aznet-theme-service-hub__support-card,
+    .aznet-theme-service-hub__orientation,
+    .aznet-theme-service-hub__final-cta {
+        padding: var(--aznet-theme-space-4);
+    }
+
+    .aznet-theme-service-hub__card {
+        min-height: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .aznet-theme-service-hub__primary,
+    .aznet-theme-service-hub__secondary,
+    .aznet-theme-service-hub__card {
+        transition: none;
+    }
+}
+
+/* Law 01 Burgundy inner-page parity.
+ * Uses the same approved Tâm Đức palette as the Law 01 visual direction while
+ * keeping WordPress content and service hierarchy source-owned.
+ */
+.aznet-theme-page--law01-burgundy-gold.aznet-theme-page--service-hub {
+    --aznet-theme-service-hub-brand: var(--aznet-theme-law01-brand-red);
+    --aznet-theme-service-hub-brand-deep: var(--aznet-theme-law01-brand-red-deep);
+    --aznet-theme-service-hub-paper: var(--aznet-theme-law01-warm-paper);
+    --aznet-theme-service-hub-body: var(--aznet-theme-law01-body);
+    --aznet-theme-service-hub-line: var(--aznet-theme-law01-line);
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__hero {
+    max-width: var(--aznet-theme-container-wide);
+    margin-block-end: clamp(var(--aznet-theme-space-7), 6vw, calc(var(--aznet-theme-space-8) + var(--aznet-theme-space-3)));
+    padding: 0;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__hero::after {
+    display: none;
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__hero > .aznet-theme-service-hub__eyebrow,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__hero-meta {
+    display: none;
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-page__title {
+    color: var(--aznet-theme-text);
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-page__lead {
+    color: var(--aznet-theme-service-hub-body);
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__eyebrow {
+    color: var(--aznet-theme-service-hub-brand);
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__selection {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(var(--aznet-theme-space-5), 4vw, var(--aznet-theme-space-7));
+    border: 1px solid var(--aznet-theme-service-hub-line);
+    border-inline-start: 4px solid var(--aznet-theme-service-hub-brand);
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-service-hub-paper);
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__selection::after {
+    position: absolute;
+    inset-block-start: var(--aznet-theme-space-4);
+    inset-inline-end: var(--aznet-theme-space-4);
+    width: clamp(3.25rem, 7vw, 5rem);
+    aspect-ratio: 1;
+    background: var(--aznet-theme-law01-icon-muted);
+    content: "";
+    pointer-events: none;
+    -webkit-mask: var(--aznet-theme-service-hub-icon-scales) center / contain no-repeat;
+    mask: var(--aznet-theme-service-hub-icon-scales) center / contain no-repeat;
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__selection > * {
+    position: relative;
+    z-index: 1;
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__selection h2,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__orientation h2,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__final-cta h2,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__support-card h3,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__knowledge-card h3 {
+    color: var(--aznet-theme-service-hub-brand-deep);
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__card {
+    border-color: var(--aznet-theme-service-hub-line);
+    box-shadow: none;
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__card:hover {
+    border-color: var(--aznet-theme-service-hub-brand);
+    background: var(--aznet-theme-surface);
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__card-number,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__primary {
+    background: var(--aznet-theme-service-hub-brand);
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__card h3 a,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__card-link,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__support-card > a:last-child,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__knowledge-card h3 a {
+    color: var(--aznet-theme-service-hub-brand-deep);
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__card h3 a:hover,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__card-link:hover,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__support-card > a:last-child:hover,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__knowledge-card h3 a:hover {
+    color: var(--aznet-theme-service-hub-brand);
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__card p,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__support-card p,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__knowledge-card p,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__meta {
+    color: var(--aznet-theme-service-hub-body);
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__primary,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__secondary {
+    border-color: var(--aznet-theme-service-hub-brand);
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__secondary {
+    color: var(--aznet-theme-service-hub-brand);
+    background: var(--aznet-theme-surface);
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__secondary:hover {
+    color: var(--aznet-theme-service-hub-brand-deep);
+    background: var(--aznet-theme-service-hub-paper);
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__primary:focus-visible,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__secondary:focus-visible,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__card a:focus-visible,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__support-card a:focus-visible,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__knowledge-card a:focus-visible {
+    outline-color: var(--aznet-theme-service-hub-brand);
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__orientation,
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__final-cta {
+    border-inline-start-color: var(--aznet-theme-service-hub-brand);
+    color: var(--aznet-theme-service-hub-body);
+    background: var(--aznet-theme-service-hub-paper);
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__support-card {
+    border-block-start-color: var(--aznet-theme-service-hub-brand);
+    background: var(--aznet-theme-service-hub-paper);
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__knowledge {
+    border-block-start-color: var(--aznet-theme-service-hub-line);
+}
+
+.aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__knowledge-card {
+    border-color: var(--aznet-theme-service-hub-line);
+    box-shadow: none;
+}
+
+@media (max-width: 47.999rem) {
+    .aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__hero {
+        padding: 0;
+    }
+
+    .aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__selection {
+        padding: var(--aznet-theme-space-4);
+    }
+
+    .aznet-theme-page--law01-burgundy-gold .aznet-theme-service-hub__selection::after {
+        width: 3rem;
+        opacity: .8;
+    }
+}

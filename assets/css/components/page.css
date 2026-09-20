@@ -350,3 +350,219 @@
         display: none;
     }
 }
+
+/* Services Hub Page Kit: presentation only; content and service semantics remain source-owned.
+ * It intentionally reuses the same light editorial language as the About Page Kit.
+ */
+.aznet-theme-page-kit--services {
+    --aznet-theme-services-icon-scales: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3v18M7 21h10M4 7h16M6 7l-4 7h8L6 7Zm12 0-4 7h8l-4-7ZM2 14a4 4 0 0 0 8 0m4 0a4 4 0 0 0 8 0'/%3E%3C/svg%3E");
+    gap: clamp(var(--aznet-theme-space-5), 4vw, var(--aznet-theme-space-8));
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__section {
+    min-width: 0;
+    margin-block: 0;
+}
+
+.aznet-theme-page-kit--services > .aznet-theme-page-kit__intro {
+    position: relative;
+    max-width: none;
+    overflow: hidden;
+    padding: clamp(var(--aznet-theme-space-5), 5vw, var(--aznet-theme-space-8));
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    background: linear-gradient(
+        135deg,
+        var(--aznet-theme-color-surface-subtle),
+        var(--aznet-theme-surface)
+    );
+}
+
+.aznet-theme-page-kit--services > .aznet-theme-page-kit__intro::after {
+    position: absolute;
+    inset-block-start: var(--aznet-theme-space-4);
+    inset-inline-end: var(--aznet-theme-space-4);
+    width: clamp(3.25rem, 7vw, 5rem);
+    aspect-ratio: 1;
+    background: var(--aznet-theme-accent);
+    content: "";
+    opacity: .12;
+    pointer-events: none;
+    -webkit-mask: var(--aznet-theme-services-icon-scales) center / contain no-repeat;
+    mask: var(--aznet-theme-services-icon-scales) center / contain no-repeat;
+}
+
+.aznet-theme-page-kit--services > .aznet-theme-page-kit__intro > * {
+    position: relative;
+    z-index: 1;
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__intro h2,
+.aznet-theme-page-kit--services .aznet-theme-page-kit__service-selection h2,
+.aznet-theme-page-kit--services .aznet-theme-page-kit__orientation h2,
+.aznet-theme-page-kit--services .aznet-theme-page-kit__process h2,
+.aznet-theme-page-kit--services .aznet-theme-page-kit__trust h2,
+.aznet-theme-page-kit--services .aznet-theme-page-kit__knowledge h2,
+.aznet-theme-page-kit--services .aznet-theme-page-kit__cta h2 {
+    max-width: 24ch;
+    margin-block-end: var(--aznet-theme-space-3);
+    text-wrap: balance;
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__service-row {
+    align-items: stretch;
+    margin-block: var(--aznet-theme-space-4) 0;
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__service-row + .aznet-theme-page-kit__service-row {
+    margin-block-start: var(--aznet-theme-space-3);
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__service-row > .wp-block-column {
+    display: flex;
+    min-width: 0;
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__service-card {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+    padding: var(--aznet-theme-space-4);
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-surface);
+    box-shadow: var(--aznet-theme-shadow-card);
+    transition: border-color var(--aznet-theme-motion-fast), background-color var(--aznet-theme-motion-fast);
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__service-card:hover {
+    border-color: var(--aznet-theme-accent);
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__service-card h3 {
+    margin-block: 0 var(--aznet-theme-space-2);
+    overflow-wrap: anywhere;
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__service-card p {
+    overflow-wrap: anywhere;
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__service-card p:last-child {
+    margin-block-start: auto;
+    padding-block-start: var(--aznet-theme-space-3);
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__service-card a {
+    font-weight: var(--aznet-theme-font-weight-bold);
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__orientation {
+    padding: clamp(var(--aznet-theme-space-4), 4vw, var(--aznet-theme-space-6));
+    border: 0;
+    border-inline-start: 3px solid var(--aznet-theme-accent);
+    background: var(--aznet-theme-color-surface-subtle);
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__orientation > :where(p, h2, .wp-block-buttons) {
+    max-width: var(--aznet-theme-container-content);
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__process > .wp-block-columns {
+    align-items: stretch;
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__process > .wp-block-columns > .wp-block-column {
+    min-width: 0;
+    padding-block-start: var(--aznet-theme-space-4);
+    border-block-start: 1px solid var(--aznet-theme-border);
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__step-label {
+    display: inline-grid;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    place-items: center;
+    margin: 0 0 var(--aznet-theme-space-3);
+    border-radius: var(--aznet-theme-radius-pill);
+    color: var(--aznet-theme-surface);
+    background: var(--aznet-theme-accent);
+    font-size: var(--aznet-theme-text-label);
+    font-weight: var(--aznet-theme-font-weight-bold);
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__process h3,
+.aznet-theme-page-kit--services .aznet-theme-page-kit__trust h3 {
+    margin-block: 0 var(--aznet-theme-space-2);
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__trust > .wp-block-columns {
+    align-items: stretch;
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__trust > .wp-block-columns > .wp-block-column {
+    min-width: 0;
+    padding: clamp(var(--aznet-theme-space-4), 3vw, var(--aznet-theme-space-6));
+    border-block-start: 2px solid var(--aznet-theme-accent);
+    background: var(--aznet-theme-color-surface-subtle);
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__knowledge .wp-block-post-template {
+    gap: var(--aznet-theme-space-4);
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__knowledge .aznet-theme-page-kit__card {
+    height: 100%;
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__cta {
+    position: relative;
+    overflow: hidden;
+    margin-block-start: 0;
+    border: 1px solid var(--aznet-theme-border);
+    border-inline-start: 3px solid var(--aznet-theme-accent);
+    background: var(--aznet-theme-color-surface-subtle);
+    color: var(--aznet-theme-text);
+}
+
+.aznet-theme-page-kit--services .aznet-theme-page-kit__cta :where(h2, p) {
+    color: inherit;
+}
+
+@media (max-width: 63.999rem) and (min-width: 48rem) {
+    .aznet-theme-page-kit--services .aznet-theme-page-kit__service-row {
+        flex-wrap: wrap;
+    }
+
+    .aznet-theme-page-kit--services .aznet-theme-page-kit__service-row > .wp-block-column {
+        flex-basis: calc(50% - var(--aznet-theme-space-2));
+    }
+
+    .aznet-theme-page-kit--services .aznet-theme-page-kit__process > .wp-block-column,
+    .aznet-theme-page-kit--services .aznet-theme-page-kit__trust > .wp-block-column {
+        flex-basis: calc(50% - var(--aznet-theme-space-2));
+    }
+}
+
+@media (max-width: 47.999rem) {
+    .aznet-theme-page-kit--services > .aznet-theme-page-kit__intro {
+        padding: var(--aznet-theme-space-5) var(--aznet-theme-space-4);
+    }
+
+    .aznet-theme-page-kit--services > .aznet-theme-page-kit__intro::after {
+        width: 3rem;
+        opacity: .08;
+    }
+
+    .aznet-theme-page-kit--services .aznet-theme-page-kit__service-row {
+        gap: var(--aznet-theme-space-3);
+        margin-block-start: var(--aznet-theme-space-3);
+    }
+
+    .aznet-theme-page-kit--services .aznet-theme-page-kit__service-card,
+    .aznet-theme-page-kit--services .aznet-theme-page-kit__orientation,
+    .aznet-theme-page-kit--services .aznet-theme-page-kit__trust > .wp-block-columns > .wp-block-column {
+        padding: var(--aznet-theme-space-4);
+    }
+}
