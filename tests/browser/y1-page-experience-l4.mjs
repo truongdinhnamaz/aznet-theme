@@ -112,6 +112,7 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
       if (!hubMetaText.includes('3 lĩnh vực hỗ trợ')) throw new Error(`Unexpected Services Hub count metadata: ${hubMetaText}`);
       if (await page.locator('.aznet-theme-service-hub__card').count() !== 3) throw new Error('Expected three mapped service cards');
       if (await page.locator('.aznet-theme-service-hub__orientation').count() !== 1) throw new Error('Expected Services Hub orientation band');
+      if (await page.locator('.aznet-theme-service-hub__editorial').count() !== 0) throw new Error('Empty mapped Services Page must not render a blank editorial panel');
       if (await page.locator('.aznet-theme-service-hub__support-card').count() !== 2) throw new Error('Expected mapped process and FAQ support cards');
       if (await page.locator('.aznet-theme-service-hub__knowledge').count() !== 1) throw new Error('Expected Services Hub knowledge section');
       if (await page.locator('.aznet-theme-service-hub__knowledge-card').count() !== 3) throw new Error('Expected three native knowledge cards');
