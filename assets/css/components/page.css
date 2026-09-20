@@ -159,3 +159,190 @@
         padding: var(--aznet-theme-space-3);
     }
 }
+
+/* About / Giới thiệu — scoped editorial presentation.
+ * WordPress keeps the authored content; these icons are decorative Theme presentation only.
+ */
+.aznet-theme-page-kit--about {
+    --aznet-theme-about-icon-scales: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3v18M7 21h10M4 7h16M6 7l-4 7h8L6 7Zm12 0-4 7h8l-4-7ZM2 14a4 4 0 0 0 8 0m4 0a4 4 0 0 0 8 0'/%3E%3C/svg%3E");
+    --aznet-theme-about-icon-compass: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='m16 8-2.5 5.5L8 16l2.5-5.5L16 8Z'/%3E%3C/svg%3E");
+    --aznet-theme-about-icon-shield: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m12 2 8 3v6c0 5-4 8-8 11-4-3-8-6-8-11V5l8-3Z'/%3E%3Cpath d='m8 11 3 3 5-6'/%3E%3C/svg%3E");
+    --aznet-theme-about-icon-document: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 2h10l5 5v15H5V2Zm10 0v6h5M8 12h9M8 16h9M8 19h5'/%3E%3C/svg%3E");
+    gap: clamp(var(--aznet-theme-space-5), 4vw, var(--aznet-theme-space-8));
+}
+
+.aznet-theme-page-kit--about > .aznet-theme-page-kit__intro {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(var(--aznet-theme-space-5), 5vw, var(--aznet-theme-space-8));
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    background: linear-gradient(
+        135deg,
+        var(--aznet-theme-color-surface-subtle),
+        var(--aznet-theme-surface)
+    );
+}
+
+.aznet-theme-page-kit--about > .aznet-theme-page-kit__intro::after {
+    position: absolute;
+    inset-block-start: var(--aznet-theme-space-4);
+    inset-inline-end: var(--aznet-theme-space-4);
+    width: clamp(3.25rem, 7vw, 5rem);
+    aspect-ratio: 1;
+    background: var(--aznet-theme-accent);
+    content: "";
+    opacity: .12;
+    pointer-events: none;
+    -webkit-mask: var(--aznet-theme-about-icon-scales) center / contain no-repeat;
+    mask: var(--aznet-theme-about-icon-scales) center / contain no-repeat;
+}
+
+.aznet-theme-page-kit--about > .aznet-theme-page-kit__intro > * {
+    position: relative;
+    z-index: 1;
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__alternating {
+    align-items: stretch;
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__alternating > .wp-block-column {
+    padding: clamp(var(--aznet-theme-space-4), 3vw, var(--aznet-theme-space-6));
+    border-block-start: 2px solid var(--aznet-theme-accent);
+    background: var(--aznet-theme-color-surface-subtle);
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__principles > .wp-block-columns {
+    align-items: stretch;
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__principles .aznet-theme-page-kit__card {
+    position: relative;
+    padding-block-start: calc(var(--aznet-theme-space-6) + var(--aznet-theme-space-4));
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__principles .aznet-theme-page-kit__card::before {
+    position: absolute;
+    inset-block-start: var(--aznet-theme-space-4);
+    inset-inline-start: var(--aznet-theme-space-4);
+    width: 2rem;
+    aspect-ratio: 1;
+    background: var(--aznet-theme-accent);
+    content: "";
+    -webkit-mask: var(--aznet-theme-about-icon-compass) center / contain no-repeat;
+    mask-image: var(--aznet-theme-about-icon-compass);
+    mask-position: center;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__principles .aznet-theme-page-kit__card:nth-child(2)::before {
+    -webkit-mask-image: var(--aznet-theme-about-icon-scales);
+    mask-image: var(--aznet-theme-about-icon-scales);
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__principles .aznet-theme-page-kit__card:nth-child(3)::before {
+    -webkit-mask-image: var(--aznet-theme-about-icon-shield);
+    mask-image: var(--aznet-theme-about-icon-shield);
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__process > .wp-block-columns {
+    align-items: stretch;
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__process > .wp-block-columns > .wp-block-column {
+    position: relative;
+    padding-block-start: var(--aznet-theme-space-4);
+    border-block-start: 1px solid var(--aznet-theme-border);
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__process .aznet-theme-page-kit__step-label {
+    display: inline-grid;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    place-items: center;
+    margin-block-end: var(--aznet-theme-space-3);
+    border-radius: 999px;
+    color: var(--aznet-theme-surface);
+    background: var(--aznet-theme-accent);
+    font-weight: var(--aznet-theme-font-weight-bold);
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__capabilities .aznet-theme-page-kit__card {
+    position: relative;
+    overflow: hidden;
+    padding-inline-end: clamp(var(--aznet-theme-space-5), 7vw, var(--aznet-theme-space-8));
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__capabilities .aznet-theme-page-kit__card::after {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: var(--aznet-theme-space-4);
+    width: clamp(2rem, 4vw, 3rem);
+    aspect-ratio: 1;
+    background: var(--aznet-theme-accent);
+    content: "";
+    opacity: .16;
+    pointer-events: none;
+    transform: translateY(-50%);
+    -webkit-mask: var(--aznet-theme-about-icon-scales) center / contain no-repeat;
+    mask: var(--aznet-theme-about-icon-scales) center / contain no-repeat;
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__team-teaser {
+    padding: clamp(var(--aznet-theme-space-4), 4vw, var(--aznet-theme-space-6));
+    border-inline-start: 3px solid var(--aznet-theme-accent);
+    background: var(--aznet-theme-color-surface-subtle);
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__trust > .wp-block-columns > .wp-block-column,
+.aznet-theme-page-kit--about > .aznet-theme-page-kit__trust.wp-block-columns > .wp-block-column {
+    position: relative;
+    padding-block-start: calc(var(--aznet-theme-space-5) + 1.75rem);
+}
+
+.aznet-theme-page-kit--about .aznet-theme-page-kit__trust > .wp-block-columns > .wp-block-column::before,
+.aznet-theme-page-kit--about > .aznet-theme-page-kit__trust.wp-block-columns > .wp-block-column::before {
+    position: absolute;
+    inset-block-start: var(--aznet-theme-space-3);
+    inset-inline-start: 0;
+    width: 1.75rem;
+    aspect-ratio: 1;
+    background: var(--aznet-theme-accent);
+    content: "";
+    -webkit-mask: var(--aznet-theme-about-icon-document) center / contain no-repeat;
+    mask-image: var(--aznet-theme-about-icon-document);
+    mask-position: center;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+}
+
+.aznet-theme-page-kit--about > .aznet-theme-page-kit__cta {
+    position: relative;
+    overflow: hidden;
+    border-inline-start: 3px solid var(--aznet-theme-accent);
+}
+
+@media (max-width: 47.999rem) {
+    .aznet-theme-page-kit--about > .aznet-theme-page-kit__intro {
+        padding: var(--aznet-theme-space-5) var(--aznet-theme-space-4);
+    }
+
+    .aznet-theme-page-kit--about > .aznet-theme-page-kit__intro::after {
+        width: 3rem;
+        opacity: .08;
+    }
+
+    .aznet-theme-page-kit--about .aznet-theme-page-kit__alternating > .wp-block-column {
+        padding: var(--aznet-theme-space-4);
+    }
+
+    .aznet-theme-page-kit--about .aznet-theme-page-kit__capabilities .aznet-theme-page-kit__card {
+        padding-inline-end: var(--aznet-theme-space-4);
+    }
+
+    .aznet-theme-page-kit--about .aznet-theme-page-kit__capabilities .aznet-theme-page-kit__card::after {
+        display: none;
+    }
+}
