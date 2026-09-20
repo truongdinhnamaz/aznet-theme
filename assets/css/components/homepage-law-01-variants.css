@@ -542,7 +542,7 @@
     border-block: 1px solid rgba(122, 14, 24, .08);
     background: var(--law01-client-cream);
 }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process__layout {
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process .aznet-theme-law01-process__layout {
     display: grid;
     grid-template-columns: minmax(0, 42%) minmax(0, 58%);
     gap: clamp(2rem, 4vw, 4.5rem);
@@ -639,7 +639,7 @@
 }
 
 @media (max-width: 960px) {
-    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process__layout,
+    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process .aznet-theme-law01-process__layout,
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-faq__layout,
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-final-cta__inner {
         grid-template-columns: minmax(0, 1fr);
