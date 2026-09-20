@@ -10,6 +10,10 @@ $files = [
     'services' => $root . '/template-parts/homepage/law-01/services.php',
     'profile' => $root . '/template-parts/homepage/law-01/profile.php',
     'latest' => $root . '/template-parts/homepage/law-01/latest.php',
+    'analysis' => $root . '/template-parts/homepage/law-01/analysis.php',
+    'news' => $root . '/template-parts/homepage/law-01/news.php',
+    'process' => $root . '/template-parts/homepage/law-01/process.php',
+    'faq' => $root . '/template-parts/homepage/law-01/faq.php',
     'footer_css' => $root . '/assets/css/components/site-footer.css',
 ];
 
@@ -23,6 +27,14 @@ $hero = file_get_contents($files['hero']);
 $services = file_get_contents($files['services']);
 $profile = file_get_contents($files['profile']);
 $latest = file_get_contents($files['latest']);
+$analysis = file_get_contents($files['analysis']);
+$news = file_get_contents($files['news']);
+$process = file_get_contents($files['process']);
+$faq = file_get_contents($files['faq']);
+
+$premiumMust = static function (bool $condition, string $message): void {
+    if (! $condition) { throw new RuntimeException($message); }
+};
 $footerCss = file_get_contents($files['footer_css']);
 
 foreach ([
@@ -186,6 +198,47 @@ assert(str_contains($latest, 'aznet-theme-law01-article-card__media'), 'Latest c
 assert(str_contains($latest, 'get_the_category'), 'Latest cards must expose WordPress-owned taxonomy labels.');
 assert(str_contains($latest, "'style' => 'display:block;width:100%;height:auto;'"), 'Latest featured media must constrain intrinsic image width for every Law 01 visual variant.');
 assert(! str_contains($latest, '<a class="aznet-theme-law01-article-card__media"'), 'Latest media must not duplicate the canonical article URL.');
+
+foreach ([
+    'aznet-theme-law01-analysis-card__media',
+    'get_the_post_thumbnail',
+    'get_the_excerpt',
+    'Đọc phân tích',
+] as $needle) {
+    $premiumMust(str_contains($analysis, $needle), "Premium Analysis presentation missing: {$needle}");
+}
+foreach ([
+    'aznet-theme-law01-news-featured',
+    'aznet-theme-law01-news-list--secondary',
+    'get_the_post_thumbnail',
+    'get_the_excerpt',
+] as $needle) {
+    $premiumMust(str_contains($news, $needle), "Premium Legal News presentation missing: {$needle}");
+}
+foreach ([
+    'parse_blocks',
+    "'core/list'",
+    'render_block',
+    'aznet-theme-law01-process__source',
+] as $needle) {
+    $premiumMust(str_contains($process, $needle), "Source-authored Process preview missing: {$needle}");
+}
+foreach ([
+    'parse_blocks',
+    "'core/details'",
+    'render_block',
+    'aznet-theme-law01-faq__items',
+] as $needle) {
+    $premiumMust(str_contains($faq, $needle), "Source-authored FAQ preview missing: {$needle}");
+}
+foreach ([
+    '.aznet-theme-law01-analysis-card__media',
+    '.aznet-theme-law01-news-featured',
+    '.aznet-theme-law01-process__source',
+    '.aznet-theme-law01-faq__items',
+] as $needle) {
+    $premiumMust(str_contains($css, $needle), "Premium Homepage presentation hook missing: {$needle}");
+}
 
 foreach (['500+', '95%', '98%', '1.000+', '1000+', 'Nguyễn Văn A', 'Nguyễn Văn Minh', 'Trần Thị Lan', 'Phạm Anh Tuấn', 'Lê Thị Hoa'] as $forbidden) {
     foreach ([$hero, $services, $profile, $latest, $css] as $surface) {
