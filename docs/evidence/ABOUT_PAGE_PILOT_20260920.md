@@ -57,3 +57,21 @@ Non-destructive rollback path:
 2. restore the prior WordPress revision for Page 34 if the authored body needs to be reverted.
 
 The existing WPVibe draft remains untouched and available to its owning workstream.
+
+
+## Horizontal alignment refinement
+
+After visual review of the live pilot, the About Page was still visibly narrower than the Law 01 Homepage because the generic Standard Page contract constrains `.aznet-theme-page__content` to the content measure, while the Burgundy Law 01 Homepage uses a 96rem constrained inner container.
+
+Pilot-only refinement:
+- Page 34 outer article now uses the same desktop width formula as the Burgundy Law 01 Homepage: `min(calc(100% - (2 * gutter)), 96rem)`;
+- the About Page header is allowed to the same 96rem shell;
+- Page 34 content max-width is removed so the About Page Kit can use the full aligned shell;
+- mobile retains the Theme mobile gutter;
+- selectors are scoped to `article.post-34.aznet-theme-page`, so the Homepage workstream remains untouched.
+
+Fresh verification after refinement:
+- live Homepage still renders `aznet-theme-homepage--law-01-burgundy-gold`;
+- About CSS override is present in rendered HTML;
+- mobile Accessibility 100/100 and Best Practices 100/100;
+- desktop Accessibility 100/100 and Best Practices 100/100.
