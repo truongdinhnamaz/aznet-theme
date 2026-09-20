@@ -102,6 +102,20 @@
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__team-illustration-image--2 { transform: translateX(-25%); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__team-illustration-image--3 { transform: translateX(-50%); }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__team-illustration-image--4 { transform: translateX(-75%); }
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__team-illustration--generated .aznet-theme-law01-profile__team-illustration-image--generated {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    transform: none;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__image--reference {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__team-illustration figcaption {
     margin-top: .6rem;
     color: #62574d;
