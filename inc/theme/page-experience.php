@@ -183,13 +183,13 @@ function service_hub_is_current_page( ?int $post_id = null ): bool {
 
     $post = get_post( $post_id );
 
-    return $post instanceof \\WP_Post && 'page' === $post->post_type && 'publish' === $post->post_status;
+    return $post instanceof \WP_Post && 'page' === $post->post_type && 'publish' === $post->post_status;
 }
 
 /**
  * Return published direct child Pages of the explicitly mapped Services Hub.
  *
- * @return array<int, \\WP_Post>
+ * @return array<int, \WP_Post>
  */
 function service_hub_items( int $limit = 6 ): array {
     $services_id = (int) setting( 'homepage_services_page', 0 );
@@ -198,7 +198,7 @@ function service_hub_items( int $limit = 6 ): array {
     }
 
     $services_page = get_post( $services_id );
-    if ( ! $services_page instanceof \\WP_Post || 'page' !== $services_page->post_type || 'publish' !== $services_page->post_status ) {
+    if ( ! $services_page instanceof \WP_Post || 'page' !== $services_page->post_type || 'publish' !== $services_page->post_status ) {
         return [];
     }
 
@@ -221,7 +221,7 @@ function service_hub_items( int $limit = 6 ): array {
 /**
  * Return recent native WordPress Posts for the Services Hub knowledge band.
  *
- * @return array<int, \\WP_Post>
+ * @return array<int, \WP_Post>
  */
 function service_hub_latest_posts( int $limit = 3 ): array {
     $limit = max( 1, min( 6, $limit ) );
@@ -242,7 +242,7 @@ function service_hub_latest_posts( int $limit = 3 ): array {
 /**
  * Resolve one optional explicitly mapped support Page for Services Hub presentation.
  */
-function service_hub_support_page( string $role ): ?\\WP_Post {
+function service_hub_support_page( string $role ): ?\WP_Post {
     $keys = [
         'process' => 'homepage_process_page',
         'faq'     => 'homepage_faq_page',
@@ -259,5 +259,5 @@ function service_hub_support_page( string $role ): ?\\WP_Post {
 
     $post = get_post( $post_id );
 
-    return $post instanceof \\WP_Post && 'page' === $post->post_type && 'publish' === $post->post_status ? $post : null;
+    return $post instanceof \WP_Post && 'page' === $post->post_type && 'publish' === $post->post_status ? $post : null;
 }
