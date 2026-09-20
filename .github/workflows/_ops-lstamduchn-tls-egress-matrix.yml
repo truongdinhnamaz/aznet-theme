@@ -1,0 +1,43 @@
+name: OPS lstamduchn TLS Egress Matrix
+
+on:
+  push:
+    branches:
+      - ops/deploy-v1.3.20-lstamduchn
+    paths:
+      - '.github/workflows/_ops-lstamduchn-tls-egress-matrix.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-22.04
+          - ubuntu-24.04
+          - macos-14
+          - macos-15
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - name: Probe HTTPS login surface
+        shell: bash
+        run: |
+          set +e
+          echo "runner=${{ matrix.os }}"
+          uname -a || true
+          echo '=== DNS ==='
+          (command -v dig >/dev/null && dig +short lstamduchn.vn) || (command -v host >/dev/null && host lstamduchn.vn) || true
+          echo '=== TLS / wp-login ==='
+          curl -4 -sSvkI --connect-timeout 10 --max-time 20 https://lstamduchn.vn/wp-login.php -o /dev/null
+          rc=$?
+          echo "curl_rc=$rc"
+          if [ "$rc" -eq 0 ]; then
+            echo 'TLS_PROBE_PASS'
+          else
+            echo 'TLS_PROBE_FAIL'
+          fi
+          exit "$rc"
