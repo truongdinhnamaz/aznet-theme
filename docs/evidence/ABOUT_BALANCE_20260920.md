@@ -1,33 +1,66 @@
 # About balance correction — 2026-09-20
 
 ## Trigger
-User screenshot showed the post-Hero body visually occupying the left half of the viewport: the burgundy statement stopped near the midline and the approach image sat in an undersized left column.
+User screenshots showed the post-Hero body visually occupying the left half of the viewport: the burgundy statement stopped near the midline and the approach image sat in an undersized left column.
 
 ## Root cause
-The About body is nested in WordPress Core constrained-layout wrappers while three preview stylesheets progressively restyle the same authored blocks. The existing full-width rule was not strong enough at every wrapper/child boundary, and the story columns retained inherited flex/layout constraints. The visible symptom was a full-width band being laid out within a constrained ancestor.
+The About body is authored as WordPress Core constrained-layout blocks. Styling the authored section itself as both the full-width background band and the constrained content container left Core layout constraints in the same box that owned the background. That mixed responsibilities: the band could not reliably reach the viewport while the content remained on the Homepage shell axis.
 
-## TDD
-A one-off balance contract was written before the fix.
-RED: missing `about-body-balance.css` caused `AssertionError: RED: balance stylesheet is missing`.
-GREEN: the contract passed after adding the bounded balance layer.
+## Structural correction
+The correction is now explicit rather than a padding workaround:
 
-## Minimal correction
-- Force only the About preview main/article/content/Page Kit/sections to a 100% non-constrained width.
-- Neutralize WordPress Core constrained child max-width/margins inside those bands.
-- Keep section backgrounds full width while content padding follows the existing shell axis.
-- Stabilize the statement at 41/59 and the approach at 46/54 on desktop.
-- Force the story columns and image to fill their assigned tracks.
-- Stack statement and approach to one column at <=48rem.
-- Hero and WordPress-authored content remain unchanged.
+`viewport/full-width band -> .aznet-theme-about-shell -> original WordPress-authored section`.
 
-## Fresh verification
-- Preview HTML loads `aznet-theme-about-body-balance-css` after the retained visual layer.
-- WPVibe mobile audit: Accessibility 100 / Best Practices 100.
-- WPVibe desktop audit: Accessibility 100 / Best Practices 100.
-- The final visual acceptance still belongs to the exact preview in the user's browser; Lighthouse does not replace visual review.
+- `ops/about-preview/about-body-bands.php` retains the draft renderer that parses the existing top-level About Page Kit blocks and wraps the eight known sections in presentation-only full-width bands.
+- `ops/about-preview/about-body-balance.css` styles only those bands and inner shells.
+- The original authored section remains inside the shell and continues to own its WordPress content.
+- Hero rendering and Page 34 authored text/links remain unchanged.
+- No provider data, identity, metrics, staff claims, routing or domain storage is introduced.
+
+Desktop composition:
+- intro statement: 41/59 editorial grid;
+- approach: 46/54 text/image grid;
+- all bands: 100% viewport width;
+- all inner content: existing Theme container-shell axis;
+- mobile <=48rem: one-column stacking.
+
+## TDD / evidence history
+Earlier RED: missing `about-body-balance.css` caused `AssertionError: RED: balance stylesheet is missing`.
+Earlier GREEN: the bounded balance stylesheet contract passed and WPVibe loaded it.
+
+A later user screenshot proved the CSS-only correction was insufficient visually. That invalidated the earlier visual completion assumption and led to the structural band/shell correction above.
+
+Before the structural draft edit, a rendered-HTML probe recorded:
+- `red_missing_band_wrapper: true`
+- `has_intro: true`
+- `has_story: true`
+
+The draft template was then changed to emit `.aznet-theme-about-band` wrappers around the existing authored sections.
+
+## Current verification boundary
+Previous WPVibe audits before the structural refactor were:
+- mobile Accessibility 100 / Best Practices 100;
+- desktop Accessibility 100 / Best Practices 100.
+
+Those scores do **not** verify the new structural refactor.
+
+WPVibe reached its rolling 24-hour Pro call limit immediately after the draft PHP structural edit. The connector explicitly blocked further calls until about 2026-09-21 03:30 UTC. Therefore the final balance stylesheet could not yet be written into the draft and the new exact preview could not yet be re-rendered/audited.
+
+Do not claim the current website/draft is complete or visually PASS until that write and fresh preview verification occur.
+
+## Git provenance
+- Full-width band stylesheet retained in `ops/about-preview/about-body-balance.css`.
+- Full-width band renderer retained in `ops/about-preview/about-body-bands.php`.
+- Draft PR remains #179 on `fix/about-below-hero-parity-20260920`.
+- No merge or live publication.
 
 ## Rollback
-Remove the `aznet-theme-about-body-balance` enqueue from the draft About template and leave the prior Hero/parity/visual files intact.
+In the draft, restore the previous `the_content()` body render and remove the `aznet-theme-about-body-balance` enqueue. Hero/parity/visual files remain intact.
 
-## Next
-User reviews the same draft preview. No merge or live publication before explicit publish approval and backup gate.
+## Exact next
+When WPVibe write access is available again:
+1. write the retained `about-body-balance.css` to the draft;
+2. confirm the draft template still contains the band/shell renderer;
+3. render the exact `/gioi-thieu/` preview and visually verify full-width backgrounds plus centered shell;
+4. run fresh mobile/desktop Accessibility + Best Practices;
+5. only then create a new PASS checkpoint. No publish/merge without the separate release gate.
