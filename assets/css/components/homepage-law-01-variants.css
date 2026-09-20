@@ -760,7 +760,7 @@
     box-shadow: 0 .75rem 2rem rgba(74, 46, 31, .055);
 }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process .aznet-theme-law01-eyebrow {
-    color: var(--law01-client-gold);
+    color: var(--law01-gold-text);
 }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-faq {
     border-top: 1px solid rgba(122, 14, 24, .08);
