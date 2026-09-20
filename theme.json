@@ -114,9 +114,38 @@
       ],
       "fontFamilies": [
         {
-          "slug": "system",
-          "name": "System UI",
-          "fontFamily": "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif"
+          "slug": "roboto",
+          "name": "Roboto",
+          "fontFamily": "Roboto, Arial, sans-serif",
+          "fontFace": [
+            {
+              "fontFamily": "Roboto",
+              "fontStyle": "normal",
+              "fontWeight": "400",
+              "fontDisplay": "swap",
+              "src": [
+                "file:./assets/fonts/roboto/Roboto-Regular.woff2"
+              ]
+            },
+            {
+              "fontFamily": "Roboto",
+              "fontStyle": "normal",
+              "fontWeight": "500",
+              "fontDisplay": "swap",
+              "src": [
+                "file:./assets/fonts/roboto/Roboto-Medium.woff2"
+              ]
+            },
+            {
+              "fontFamily": "Roboto",
+              "fontStyle": "normal",
+              "fontWeight": "700",
+              "fontDisplay": "swap",
+              "src": [
+                "file:./assets/fonts/roboto/Roboto-Bold.woff2"
+              ]
+            }
+          ]
         }
       ]
     }
@@ -132,7 +161,7 @@
     "typography": {
       "fontSize": "var(--aznet-theme-font-size-base)",
       "lineHeight": "var(--aznet-theme-line-height-body)",
-      "fontFamily": "var:preset|font-family|system"
+      "fontFamily": "var:preset|font-family|roboto"
     },
     "elements": {
       "h1": {
