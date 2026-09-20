@@ -31,8 +31,7 @@ if ( '' === $hero_block_html ) {
     if ( $hero instanceof \WP_Post ) {
         $title = trim( (string) get_the_title( $hero ) );
         $brand_title = trim( (string) get_bloginfo( 'name' ) );
-        $lede = trim( (string) get_the_excerpt( $hero ) );
-        $value_proposition = '';
+        $value_proposition = trim( (string) get_the_excerpt( $hero ) );
         $body = trim( (string) $hero->post_content );
         $body_html = '' !== $body ? wpautop( do_blocks( $body ) ) : '';
         $image = has_post_thumbnail( $hero ) ? get_the_post_thumbnail( $hero, 'large', [ 'class' => 'aznet-theme-law01-hero__image' ] ) : '';
