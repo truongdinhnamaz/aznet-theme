@@ -65,7 +65,6 @@ $topbar = (string) file_get_contents($root . '/template-parts/header/law01-topba
 $mobile = (string) file_get_contents($root . '/template-parts/header/mobile-panel.php');
 
 if (
-    !str_contains($siteHeader, 'header_law01_active()') ||
     str_contains($siteHeader, 'homepage_composer_active()') ||
     !str_contains($siteHeader, "['law01_header']")
 ) {
