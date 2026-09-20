@@ -104,10 +104,10 @@ foreach ([
 
 foreach ([
     'grid-template-columns: minmax(0, 46%) minmax(0, 54%);',
-    'min-height: clamp(29rem, 32vw, 34rem);',
+    'min-height: clamp(36rem, 38vw, 40rem);',
     '--law01-type-hero-title: clamp(2.7rem, 4.2vw, 3.4rem);',
     'font-size: clamp(2.55rem, 3.6vw, 3.4rem);',
-    'object-position: center 48%;',
+    'object-position: center center;',
 ] as $needle) {
     assert(str_contains($css, $needle), "Law 01 approved hero hierarchy missing: {$needle}");
 }
