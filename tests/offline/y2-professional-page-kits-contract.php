@@ -181,6 +181,19 @@ foreach ([
         y2_fail('Page Kit stylesheet missing shared selector ' . $selector);
     }
 }
+foreach ([
+    '.aznet-theme-page-kit--about',
+    '--aznet-theme-about-icon-scales',
+    '--aznet-theme-about-icon-compass',
+    '--aznet-theme-about-icon-shield',
+    '--aznet-theme-about-icon-document',
+    '.aznet-theme-page-kit--about .aznet-theme-page-kit__trust',
+    'mask-image: var(--aznet-theme-about-icon',
+] as $aboutPresentationMarker) {
+    if (! str_contains($pageCss, $aboutPresentationMarker)) {
+        y2_fail('About Page Kit visual refresh missing marker: ' . $aboutPresentationMarker);
+    }
+}
 if (preg_match('/#[0-9a-f]{3,8}\b|rgba?\s*\(/i', $pageCss)) {
     y2_fail('Page Kit presentation must use existing Theme tokens instead of hard-coded brand colors');
 }
