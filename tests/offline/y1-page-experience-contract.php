@@ -87,6 +87,15 @@ assert(!str_contains($hubCss, 'var(--aznet-theme-on-inverse)'), 'Services Hub mu
 
 $tokensCss = file_get_contents($root . '/assets/css/tokens.css');
 assert(is_string($tokensCss), 'tokens.css missing');
+foreach ([
+    '--aznet-theme-law01-brand-red: #8f111b;',
+    '--aznet-theme-law01-brand-red-deep: #6d0b13;',
+    '--aznet-theme-law01-warm-paper: #fffaf2;',
+    '--aznet-theme-law01-body: #6f625b;',
+] as $law01SharedPaletteToken) {
+    assert(str_contains($tokensCss, $law01SharedPaletteToken), 'missing shared Law01 inner-page palette token: ' . $law01SharedPaletteToken);
+}
+assert(str_contains($shared, 'aznet-theme-page--law01-burgundy-gold'), 'mapped inner Page must expose the configured Law01 Burgundy presentation class');
 preg_match_all('/var\\((--aznet-theme-[a-z0-9-]+)/i', $hubCss, $hubTokenUses);
 preg_match_all('/(--aznet-theme-[a-z0-9-]+)\\s*:/i', $tokensCss . "\n" . $hubCss, $hubTokenDefinitions);
 $undefinedHubTokens = array_values(array_diff(array_unique($hubTokenUses[1]), array_unique($hubTokenDefinitions[1])));
