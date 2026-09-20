@@ -205,6 +205,23 @@ if (! preg_match(
     y2_fail('About capabilities decorative icon must be anchored to the card top-right instead of floating through body copy');
 }
 
+foreach ([
+    '--aznet-theme-about-principle-icon-size: 2rem;',
+    '--aznet-theme-about-trust-icon-size: 1.75rem;',
+    '--aznet-theme-about-capability-icon-size: 2.5rem;',
+    '--aznet-theme-about-icon-gap: var(--aznet-theme-space-3);',
+    'padding-block-start: calc(var(--aznet-theme-space-4) + var(--aznet-theme-about-principle-icon-size) + var(--aznet-theme-about-icon-gap));',
+    'width: var(--aznet-theme-about-principle-icon-size);',
+    'padding-inline-end: calc(var(--aznet-theme-space-4) + var(--aznet-theme-about-capability-icon-size) + var(--aznet-theme-about-icon-gap));',
+    'width: var(--aznet-theme-about-capability-icon-size);',
+    'padding-block-start: calc(var(--aznet-theme-space-3) + var(--aznet-theme-about-trust-icon-size) + var(--aznet-theme-about-icon-gap));',
+    'width: var(--aznet-theme-about-trust-icon-size);',
+] as $iconGeometryMarker) {
+    if (! str_contains($pageCss, $iconGeometryMarker)) {
+        y2_fail('About Page Kit icon geometry audit missing marker: ' . $iconGeometryMarker);
+    }
+}
+
 $style = file_get_contents($root . '/style.css');
 $functions = file_get_contents($root . '/functions.php');
 if (false === $style || false === $functions) {
