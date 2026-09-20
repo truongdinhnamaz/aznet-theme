@@ -186,7 +186,7 @@ foreach ([
         y2_fail('Services Page Kit missing approved hub section class ' . $servicesSectionClass);
     }
 }
-if (6 !== substr_count($services, 'aznet-theme-page-kit__service-card')) {
+if (6 !== substr_count($services, '<div class="wp-block-group aznet-theme-page-kit__service-card">')) {
     y2_fail('Services Page Kit must expose exactly six replaceable service cards');
 }
 if (! str_contains($services, '<!-- wp:query ')) {
