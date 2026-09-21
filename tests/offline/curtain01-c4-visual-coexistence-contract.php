@@ -59,7 +59,7 @@ foreach (['rqa-', 'flatsome', 'ux_', 'choiceguide_', '_choiceguide_', 'get_post_
 }
 
 $assets = file_get_contents($root . '/inc/theme/assets.php');
-if (! str_contains((string) $assets, "'/assets/css/presets/' . $preset . '.css'")) {
+if (! str_contains((string) $assets, "get_theme_file_uri( '/assets/css/presets/' . \$preset . '.css' )")) {
     fwrite(STDERR, "FAIL: Visual preset must continue through the existing surface-aware asset loader.\n");
     exit(1);
 }
