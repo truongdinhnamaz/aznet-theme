@@ -461,7 +461,7 @@
     font-size: clamp(1.65rem, 2.7vw, 2.25rem);
     line-height: 1.24;
     letter-spacing: -.018em;
-    text-wrap: balance;
+    text-wrap: pretty;
 }
 
 .aznet-theme-article--law01 .aznet-theme-article__content h2::before {
