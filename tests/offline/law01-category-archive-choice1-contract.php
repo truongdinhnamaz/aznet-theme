@@ -72,7 +72,7 @@ foreach ([
 foreach ([
     'have_posts()',
     'the_post()',
-    "get_template_part( 'template-parts/archive/law01-item'",
+    'template-parts/archive/law01-item',
     'the_posts_pagination(',
     "prev_text",
     "next_text",
