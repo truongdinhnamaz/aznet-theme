@@ -66,6 +66,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/r6-release-workflow
 
 printf '%s\n' '==> P2 Editorial Single-Post contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/editorial-single-post-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-article-reading-experience-contract.php
 
 printf '%s\n' '==> P3 Editorial Listing/Search contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/editorial-listing-search-contract.php
