@@ -51,9 +51,11 @@ foreach ([
 }
 
 foreach ([
-    "get_template_part(\n                            'template-parts/services/card'",
+    "get_template_part(",
+    "'template-parts/services/card'",
     "'service_page' => \$service_page",
     "'index'        => \$index + 1",
+    'aznet-theme-service-card-grid',
 ] as $needle) {
     if (! str_contains($services, $needle)) {
         $fail('Services root must render the shared service-card partial: ' . $needle);
@@ -61,10 +63,12 @@ foreach ([
 }
 
 foreach ([
-    "get_template_part(\n                            'template-parts/services/card'",
+    "get_template_part(",
+    "'template-parts/services/card'",
     "'service_page' => \$service_page",
     "'index'        => \$service_positions[ (int) \$service_page->ID ]",
     'services_page_children()',
+    'aznet-theme-service-card-grid',
 ] as $needle) {
     if (! str_contains($page, $needle)) {
         $fail('service detail siblings must render the shared service-card partial with canonical index: ' . $needle);
