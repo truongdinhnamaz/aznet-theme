@@ -1,7 +1,7 @@
 # Curtain 01 Pilot — design packet
 
 **Date:** 21/09/2026  
-**Status:** Proposed / source-gated  
+**Status:** Approved / source-gated until canonical merge  
 **Target product:** AZnet Theme  
 **Pilot site:** `https://remquocanh.vn/`  
 **UI label:** Rèm 01  
@@ -292,4 +292,4 @@ After a later approved cutover, rollback must restore the previously verified Fl
 
 ## 14. Exact next
 
-Obtain owner approval for the D-034 source decision. After source merge, perform the read-only pilot inventory before production implementation is allowed to claim Rèm Quốc Anh parity or migration readiness.
+Merge the owner-approved D-034 source decision to canonical `main`, then perform the C1/M0 read-only pilot inventory before production implementation is allowed to claim Rèm Quốc Anh parity or migration readiness.
