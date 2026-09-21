@@ -85,7 +85,9 @@ $service_sibling_id = y1_create_page(
 $contact_id = y1_create_page(
     [
         'post_title'   => 'Y1 Contact',
+        'post_excerpt' => 'Trao đổi trực tiếp với văn phòng qua trang Liên hệ.',
         'post_name'    => 'y1-contact',
+        'post_content' => '<p id="y1-contact-content">Contact Page content owned by WordPress.</p><p><label>Họ tên <input type="text" name="y1_name"></label></p><p><label>Nội dung <textarea name="y1_message"></textarea></label></p>',
     ]
 );
 
@@ -93,6 +95,8 @@ $settings = get_theme_mod( 'aznet_theme_settings', [] );
 $settings = is_array( $settings ) ? $settings : [];
 $settings['homepage_services_page'] = $services_id;
 $settings['homepage_contact_page']  = $contact_id;
+$settings['homepage_preset']        = 'law-01';
+$settings['homepage_law01_variant'] = 'burgundy-gold';
 set_theme_mod( 'aznet_theme_settings', $settings );
 
 $commerce_looking_id = y1_create_page(
