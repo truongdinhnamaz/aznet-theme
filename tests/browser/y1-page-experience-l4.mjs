@@ -108,7 +108,7 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
     if (config.servicesRoot) {
       if (await page.locator('.aznet-theme-page--services-root').count() !== 1) throw new Error('Expected mapped premium Services Page presentation');
       if (await page.locator('.aznet-theme-services-page__hero').count() !== 1) throw new Error('Expected Services Page hero');
-      if (await page.locator('#y1-services-content').count() !== 1) throw new Error('Expected WordPress-owned Services Page content');
+      if (await page.locator('.aznet-theme-services-page__intro').count() !== 0) throw new Error('Empty mapped Services Page must not render an orphan intro card');
       if (await page.locator('.aznet-theme-services-page__card').count() !== 3) throw new Error('Expected three direct published service child cards');
       if (await page.getByText('Y1 Business Service', { exact: true }).count() !== 1) throw new Error('Expected Business service child card');
       if (await page.getByText('Y1 Civil Service', { exact: true }).count() !== 1) throw new Error('Expected Civil service child card');
