@@ -1,5 +1,5 @@
 /**
- * Curtain 01 Homepage presentation foundation.
+ * Curtain 01 Homepage presentation.
  *
  * Theme-owned presentation only. Authored content, product truth and provider
  * semantics remain with WordPress/WooCommerce/public integration owners.
@@ -8,10 +8,15 @@
 .aznet-theme-homepage--curtain-01 {
     --aznet-theme-curtain-surface: #f6f2ea;
     --aznet-theme-curtain-surface-strong: #ebe3d7;
+    --aznet-theme-curtain-surface-dark: #25221e;
     --aznet-theme-curtain-text: #282521;
     --aznet-theme-curtain-muted: #70695f;
     --aznet-theme-curtain-accent: #8a6a43;
+    --aznet-theme-curtain-accent-soft: #b59a76;
     --aznet-theme-curtain-border: rgba(40, 37, 33, 0.14);
+    --aznet-theme-curtain-shadow: 0 24px 70px rgba(35, 30, 24, 0.10);
+    --aznet-theme-curtain-radius: 1.25rem;
+    --aznet-theme-curtain-shell: min(1180px, calc(100vw - 2rem));
 
     color: var(--aznet-theme-curtain-text);
     background: var(--aznet-theme-curtain-surface);
@@ -25,10 +30,487 @@
     color: inherit;
 }
 
+.aznet-theme-curtain01-shell {
+    width: var(--aznet-theme-curtain-shell);
+    margin-inline: auto;
+}
+
+.aznet-theme-curtain01-section {
+    padding: clamp(4rem, 7vw, 7.5rem) 0;
+}
+
+.aznet-theme-curtain01-kicker {
+    margin: 0 0 0.85rem;
+    color: var(--aznet-theme-curtain-accent);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.aznet-theme-curtain01-kicker--inverse {
+    color: #d9c7af;
+}
+
+.aznet-theme-curtain01-lede {
+    max-width: 42rem;
+    margin: 1.25rem 0 0;
+    color: var(--aznet-theme-curtain-muted);
+    font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+    line-height: 1.75;
+}
+
+.aznet-theme-curtain01-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.4rem;
+    margin-top: 2rem;
+}
+
+.aznet-theme-curtain01-button {
+    display: inline-flex;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem 1.35rem;
+    border: 1px solid var(--aznet-theme-curtain-text);
+    border-radius: 999px;
+    background: var(--aznet-theme-curtain-text);
+    color: #fff;
+    font-weight: 700;
+    line-height: 1.1;
+    text-decoration: none;
+}
+
+.aznet-theme-curtain01-button:hover,
+.aznet-theme-curtain01-button:focus-visible {
+    background: transparent;
+    color: var(--aznet-theme-curtain-text);
+}
+
+.aznet-theme-curtain01-button--light {
+    border-color: #fff;
+    background: #fff;
+    color: var(--aznet-theme-curtain-surface-dark);
+}
+
+.aznet-theme-curtain01-button--light:hover,
+.aznet-theme-curtain01-button--light:focus-visible {
+    background: transparent;
+    color: #fff;
+}
+
+.aznet-theme-curtain01-text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: inherit;
+    font-weight: 700;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+}
+
+.aznet-theme-curtain01-text-link span {
+    transition: transform 180ms ease;
+}
+
+.aznet-theme-curtain01-text-link:hover span,
+.aznet-theme-curtain01-text-link:focus-visible span {
+    transform: translateX(0.2rem);
+}
+
+.aznet-theme-curtain01-section-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: clamp(2rem, 4vw, 3.25rem);
+}
+
+.aznet-theme-curtain01-section-heading h2,
+.aznet-theme-curtain01-about h2,
+.aznet-theme-curtain01-final-cta h2 {
+    max-width: 14ch;
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 3.8rem);
+    font-weight: 550;
+    letter-spacing: -0.035em;
+    line-height: 1.04;
+}
+
+/* Hero */
+.aznet-theme-curtain01-hero {
+    padding-top: clamp(1.5rem, 3vw, 3rem);
+    background:
+        radial-gradient(circle at 10% 10%, rgba(181, 154, 118, 0.18), transparent 34rem),
+        var(--aznet-theme-curtain-surface);
+}
+
+.aznet-theme-curtain01-hero__grid {
+    display: grid;
+    min-height: min(72vh, 760px);
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.35fr);
+    align-items: stretch;
+    overflow: hidden;
+    border-radius: calc(var(--aznet-theme-curtain-radius) * 1.25);
+    background: #fff;
+    box-shadow: var(--aznet-theme-curtain-shadow);
+}
+
+.aznet-theme-curtain01-hero__grid--text {
+    min-height: auto;
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.aznet-theme-curtain01-hero__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(2rem, 5vw, 5.5rem);
+}
+
+.aznet-theme-curtain01-hero__content h1 {
+    max-width: 12ch;
+    margin: 0;
+    font-size: clamp(2.8rem, 6.2vw, 6.2rem);
+    font-weight: 520;
+    letter-spacing: -0.055em;
+    line-height: 0.96;
+}
+
+.aznet-theme-curtain01-hero__media {
+    min-height: 32rem;
+    overflow: hidden;
+    background: var(--aznet-theme-curtain-surface-strong);
+}
+
+.aznet-theme-curtain01-hero__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.aznet-theme-curtain01-hero--library {
+    min-height: 0;
+}
+
+.aznet-theme-curtain01-hero__library {
+    overflow: hidden;
+    border-radius: calc(var(--aznet-theme-curtain-radius) * 1.25);
+    background: #fff;
+    box-shadow: var(--aznet-theme-curtain-shadow);
+}
+
+.aznet-theme-curtain01-hero__library > :first-child {
+    margin-top: 0;
+}
+
+.aznet-theme-curtain01-hero__library > :last-child {
+    margin-bottom: 0;
+}
+
+/* About */
+.aznet-theme-curtain01-about {
+    background: #fff;
+}
+
+.aznet-theme-curtain01-about__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: clamp(2.5rem, 7vw, 7rem);
+}
+
+.aznet-theme-curtain01-about__grid--text {
+    grid-template-columns: minmax(0, 52rem);
+}
+
+.aznet-theme-curtain01-about__media {
+    overflow: hidden;
+    border-radius: var(--aznet-theme-curtain-radius);
+    box-shadow: var(--aznet-theme-curtain-shadow);
+}
+
+.aznet-theme-curtain01-about__image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+}
+
+.aznet-theme-curtain01-about__content .aznet-theme-curtain01-text-link {
+    margin-top: 1.75rem;
+}
+
+/* Catalogue */
+.aznet-theme-curtain01-catalogue {
+    background: var(--aznet-theme-curtain-surface);
+}
+
+.aznet-theme-curtain01-catalogue__categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin: -0.75rem 0 2rem;
+}
+
+.aznet-theme-curtain01-category-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 0.95rem;
+    border: 1px solid var(--aznet-theme-curtain-border);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    color: var(--aznet-theme-curtain-text);
+    text-decoration: none;
+}
+
+.aznet-theme-curtain01-category-chip:hover,
+.aznet-theme-curtain01-category-chip:focus-visible {
+    border-color: var(--aznet-theme-curtain-accent);
+    background: #fff;
+}
+
+.aznet-theme-curtain01-category-chip small {
+    color: var(--aznet-theme-curtain-muted);
+}
+
+.aznet-theme-curtain01-product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.aznet-theme-curtain01-product-card {
+    overflow: hidden;
+    border: 1px solid var(--aznet-theme-curtain-border);
+    border-radius: var(--aznet-theme-curtain-radius);
+    background: #fff;
+}
+
+.aznet-theme-curtain01-product-card__media {
+    display: block;
+    overflow: hidden;
+    background: var(--aznet-theme-curtain-surface-strong);
+}
+
+.aznet-theme-curtain01-product-card__image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    height: auto;
+    object-fit: cover;
+    transition: transform 260ms ease;
+}
+
+.aznet-theme-curtain01-product-card:hover .aznet-theme-curtain01-product-card__image {
+    transform: scale(1.025);
+}
+
+.aznet-theme-curtain01-product-card__body {
+    padding: 1.25rem 1.25rem 1.4rem;
+}
+
+.aznet-theme-curtain01-product-card h3 {
+    margin: 0 0 1rem;
+    font-size: clamp(1.15rem, 2vw, 1.45rem);
+    line-height: 1.25;
+}
+
+.aznet-theme-curtain01-product-card h3 a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Knowledge */
+.aznet-theme-curtain01-knowledge {
+    background: #fff;
+}
+
+.aznet-theme-curtain01-knowledge__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+.aznet-theme-curtain01-knowledge-card {
+    min-width: 0;
+}
+
+.aznet-theme-curtain01-knowledge-card__media {
+    display: block;
+    overflow: hidden;
+    border-radius: var(--aznet-theme-curtain-radius);
+    background: var(--aznet-theme-curtain-surface-strong);
+}
+
+.aznet-theme-curtain01-knowledge-card__image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+}
+
+.aznet-theme-curtain01-knowledge-card__body {
+    padding: 1.25rem 0 0;
+}
+
+.aznet-theme-curtain01-knowledge-card time {
+    color: var(--aznet-theme-curtain-muted);
+    font-size: 0.82rem;
+}
+
+.aznet-theme-curtain01-knowledge-card h3 {
+    margin: 0.55rem 0 0.8rem;
+    font-size: clamp(1.2rem, 2vw, 1.55rem);
+    line-height: 1.28;
+}
+
+.aznet-theme-curtain01-knowledge-card h3 a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.aznet-theme-curtain01-knowledge-card p {
+    margin: 0 0 1rem;
+    color: var(--aznet-theme-curtain-muted);
+    line-height: 1.7;
+}
+
+/* Final CTA */
+.aznet-theme-curtain01-final-cta {
+    background: var(--aznet-theme-curtain-surface-dark);
+    color: #fff;
+}
+
+.aznet-theme-curtain01-final-cta__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(14rem, 0.6fr);
+    align-items: end;
+    gap: clamp(2rem, 6vw, 6rem);
+}
+
+.aznet-theme-curtain01-final-cta h2 {
+    color: #fff;
+}
+
+.aznet-theme-curtain01-final-cta p {
+    max-width: 48rem;
+    color: rgba(255, 255, 255, 0.72);
+    line-height: 1.75;
+}
+
+.aznet-theme-curtain01-final-cta .aznet-theme-curtain01-actions {
+    justify-content: flex-end;
+}
+
+.aznet-theme-curtain01-phone {
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.aznet-theme-curtain01-phone:hover,
+.aznet-theme-curtain01-phone:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
+.aznet-theme-homepage--curtain-01 a:focus-visible {
+    outline: 3px solid var(--aznet-theme-curtain-accent-soft);
+    outline-offset: 4px;
+}
+
+@media (max-width: 960px) {
+    .aznet-theme-curtain01-hero__grid,
+    .aznet-theme-curtain01-about__grid,
+    .aznet-theme-curtain01-final-cta__inner {
+        grid-template-columns: 1fr;
+    }
+
+    .aznet-theme-curtain01-hero__media {
+        min-height: 28rem;
+        order: -1;
+    }
+
+    .aznet-theme-curtain01-product-grid,
+    .aznet-theme-curtain01-knowledge__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .aznet-theme-curtain01-final-cta .aznet-theme-curtain01-actions {
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 640px) {
+    .aznet-theme-homepage--curtain-01 {
+        --aznet-theme-curtain-shell: min(100% - 1.25rem, 1180px);
+    }
+
+    .aznet-theme-curtain01-section {
+        padding: 3.5rem 0;
+    }
+
+    .aznet-theme-curtain01-hero {
+        padding-top: 0.75rem;
+    }
+
+    .aznet-theme-curtain01-hero__grid,
+    .aznet-theme-curtain01-hero__library,
+    .aznet-theme-curtain01-about__media,
+    .aznet-theme-curtain01-product-card,
+    .aznet-theme-curtain01-knowledge-card__media {
+        border-radius: 0.9rem;
+    }
+
+    .aznet-theme-curtain01-hero__media {
+        min-height: 20rem;
+    }
+
+    .aznet-theme-curtain01-hero__content {
+        padding: 2rem 1.25rem 2.35rem;
+    }
+
+    .aznet-theme-curtain01-hero__content h1 {
+        font-size: clamp(2.4rem, 13vw, 4.2rem);
+    }
+
+    .aznet-theme-curtain01-section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .aznet-theme-curtain01-product-grid,
+    .aznet-theme-curtain01-knowledge__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .aznet-theme-curtain01-category-chip {
+        flex: 1 1 auto;
+        justify-content: space-between;
+    }
+
+    .aznet-theme-curtain01-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .aznet-theme-curtain01-button {
+        width: 100%;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .aznet-theme-homepage--curtain-01 *,
     .aznet-theme-homepage--curtain-01 *::before,
     .aznet-theme-homepage--curtain-01 *::after {
         scroll-behavior: auto;
+        transition-duration: 0.01ms !important;
     }
 }
