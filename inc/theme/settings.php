@@ -53,7 +53,7 @@ function settings_defaults(): array {
  * @return array<string, mixed>
  */
 function normalize_settings( array $raw ): array {
-    $preset = isset( $raw['visual_preset'] ) && in_array( $raw['visual_preset'], [ 'default', 'editorial', 'commerce' ], true )
+    $preset = isset( $raw['visual_preset'] ) && in_array( $raw['visual_preset'], [ 'default', 'editorial', 'commerce', 'curtain-01' ], true )
         ? (string) $raw['visual_preset']
         : 'default';
 
