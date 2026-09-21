@@ -143,12 +143,18 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
         throw new Error(`Services first section exposes rounded top edges: ${servicesHeroRadius.join(', ')}`);
       }
       if (await page.locator('.aznet-theme-services-page__intro').count() !== 0) throw new Error('Empty mapped Services Page must not render an orphan intro card');
-      if (await page.locator('.aznet-theme-services-page__card').count() !== 3) throw new Error('Expected three direct published service child cards');
+      if (await page.locator('.aznet-theme-service-card').count() !== 3) throw new Error('Expected three shared direct published service child cards');
+      if (await page.locator('.aznet-theme-service-card__index').allTextContents().then((values) => values.join(',')) !== '01,02,03') throw new Error('Expected canonical Services root card indices');
+      if (await page.locator('.aznet-theme-service-card__icon').count() !== 3) throw new Error('Expected shared service card icons');
+      if (await page.locator('.aznet-theme-service-card__link').count() !== 3) throw new Error('Expected shared service card CTAs');
       if (await page.getByText('Y1 Business Service', { exact: true }).count() !== 1) throw new Error('Expected Business service child card');
       if (await page.getByText('Y1 Civil Service', { exact: true }).count() !== 1) throw new Error('Expected Civil service child card');
       const servicesStyles = await page.evaluate(() => Array.from(document.styleSheets).map((sheet) => sheet.href).filter(Boolean));
       if (!servicesStyles.some((href) => href.includes('/assets/css/components/services-page.css'))) {
         throw new Error('Services Page stylesheet not observed');
+      }
+      if (!servicesStyles.some((href) => href.includes('/assets/css/components/service-card.css'))) {
+        throw new Error('Shared service-card stylesheet not observed on Services root');
       }
       result.servicesPrimaryFocus = await focusEvidence(page, '.aznet-theme-services-page__primary');
       if (!result.servicesPrimaryFocus?.visible || !result.servicesPrimaryFocus.focusVisible || result.servicesPrimaryFocus.outlineStyle === 'none' || result.servicesPrimaryFocus.outlineWidth < 1) {
@@ -168,10 +174,17 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
       if (await page.locator('.aznet-theme-page__service-actions').count() !== 1) throw new Error('Expected service CTA group');
       if (await page.locator('.aznet-theme-page__service-primary').count() !== 1) throw new Error('Expected mapped Contact CTA');
       if (await page.locator('.aznet-theme-page__service-siblings').count() !== 1) throw new Error('Expected sibling services section');
+      if (await page.locator('.aznet-theme-service-card').count() !== 2) throw new Error('Expected two shared sibling service cards');
+      if (await page.locator('.aznet-theme-service-card__index').allTextContents().then((values) => values.join(',')) !== '02,03') throw new Error('Expected sibling cards to preserve canonical Services indices');
+      if (await page.locator('.aznet-theme-service-card__icon').count() !== 2) throw new Error('Expected sibling service card icons');
+      if (await page.locator('.aznet-theme-service-card__link').count() !== 2) throw new Error('Expected sibling service card CTAs');
       if (await page.getByText('Y1 Civil Service', { exact: true }).count() !== 1) throw new Error('Expected sibling service card');
       const stylesheets = await page.evaluate(() => Array.from(document.styleSheets).map((sheet) => sheet.href).filter(Boolean));
       if (!stylesheets.some((href) => href.includes('/assets/css/components/service-page.css'))) {
         throw new Error('Service page stylesheet not observed');
+      }
+      if (!stylesheets.some((href) => href.includes('/assets/css/components/service-card.css'))) {
+        throw new Error('Shared service-card stylesheet not observed on service detail');
       }
       result.servicePrimaryFocus = await focusEvidence(page, '.aznet-theme-page__service-primary');
       if (!result.servicePrimaryFocus?.visible || !result.servicePrimaryFocus.focusVisible || result.servicePrimaryFocus.outlineStyle === 'none' || result.servicePrimaryFocus.outlineWidth < 1) {
