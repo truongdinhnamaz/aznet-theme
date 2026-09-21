@@ -175,7 +175,7 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
       if (await page.locator('.aznet-theme-page__service-primary').count() !== 1) throw new Error('Expected mapped Contact CTA');
       if (await page.locator('.aznet-theme-page__service-siblings').count() !== 1) throw new Error('Expected sibling services section');
       if (await page.locator('.aznet-theme-service-card').count() !== 2) throw new Error('Expected two shared sibling service cards');
-      if (await page.locator('.aznet-theme-service-card__index').allTextContents().then((values) => values.join(',')) !== '02,03') throw new Error('Expected sibling cards to preserve canonical Services indices');
+      if (await page.locator('.aznet-theme-service-card__index').allTextContents().then((values) => values.join(',')) !== '01,03') throw new Error('Expected sibling cards to preserve canonical Services indices');
       if (await page.locator('.aznet-theme-service-card__icon').count() !== 2) throw new Error('Expected sibling service card icons');
       if (await page.locator('.aznet-theme-service-card__link').count() !== 2) throw new Error('Expected sibling service card CTAs');
       if (await page.getByText('Y1 Civil Service', { exact: true }).count() !== 1) throw new Error('Expected sibling service card');
