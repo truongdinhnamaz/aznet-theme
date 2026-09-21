@@ -24,8 +24,8 @@ if ( $law01_header ) {
 }
 ?>
 <a class="aznet-theme-skip-link screen-reader-text" href="#main"><?php esc_html_e( 'Chuyển đến nội dung', 'aznet-theme' ); ?></a>
+<?php get_template_part( 'template-parts/header/law01-topbar', null, $context ); ?>
 <header class="<?php echo esc_attr( implode( ' ', $header_classes ) ); ?>" data-aznet-theme-site-header role="banner">
-    <?php get_template_part( 'template-parts/header/law01-topbar', null, $context ); ?>
     <div class="aznet-theme-site-header__inner">
         <?php get_template_part( 'template-parts/header/brand', null, $context ); ?>
 
