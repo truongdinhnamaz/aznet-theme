@@ -436,21 +436,21 @@
     background: var(--aznet-theme-service-burgundy-deep);
 }
 
-.aznet-theme-page--service-detail-law01 .aznet-theme-page--service-detail-law01 .aznet-theme-page__service-siblings {
+.aznet-theme-page--service-detail-law01 .aznet-theme-page__service-siblings {
     border-block-start: 1px solid var(--aznet-theme-service-line);
     background: var(--aznet-theme-law01-ivory);
 }
 
-.aznet-theme-page--service-detail-law01 .aznet-theme-page--service-detail-law01 .aznet-theme-page__service-eyebrow {
+.aznet-theme-page--service-detail-law01 .aznet-theme-page__service-eyebrow {
     color: var(--aznet-theme-service-gold);
 }
 
-.aznet-theme-page--service-detail-law01 .aznet-theme-page--service-detail-law01 .aznet-theme-page__service-siblings-header h2 {
+.aznet-theme-page--service-detail-law01 .aznet-theme-page__service-siblings-header h2 {
     color: var(--aznet-theme-service-burgundy);
     font-family: var(--aznet-theme-font-family-heading);
 }
 
-.aznet-theme-page--service-detail-law01 .aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card {
+.aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card {
     position: relative;
     overflow: hidden;
     border-color: var(--aznet-theme-service-line);
@@ -462,7 +462,7 @@
         border-color var(--aznet-theme-motion-base);
 }
 
-.aznet-theme-page--service-detail-law01 .aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card::before {
+.aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card::before {
     position: absolute;
     inset-block: 0;
     inset-inline-start: 0;
@@ -471,21 +471,21 @@
     content: "";
 }
 
-.aznet-theme-page--service-detail-law01 .aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card:hover {
+.aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card:hover {
     transform: translateY(-3px);
     border-color: rgba(122, 14, 24, .26);
     box-shadow: 0 1rem 2.25rem rgba(74, 46, 31, .1);
 }
 
-.aznet-theme-page--service-detail-law01 .aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card h3 a {
+.aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card h3 a {
     color: var(--aznet-theme-service-burgundy);
 }
 
-.aznet-theme-page--service-detail-law01 .aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card h3 a:hover {
+.aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card h3 a:hover {
     color: var(--aznet-theme-service-burgundy-deep);
 }
 
-.aznet-theme-page--service-detail-law01 .aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card p {
+.aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card p {
     color: var(--aznet-theme-service-muted);
     line-height: 1.7;
 }
@@ -520,11 +520,11 @@
 
 @media (prefers-reduced-motion: reduce) {
     .aznet-theme-page--service-detail-law01 .aznet-theme-page__service-actions a,
-    .aznet-theme-page--service-detail-law01 .aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card {
+    .aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card {
         transition: none;
     }
 
-    .aznet-theme-page--service-detail-law01 .aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card:hover {
+    .aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card:hover {
         transform: none;
     }
 }
