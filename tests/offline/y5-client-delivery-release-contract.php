@@ -53,6 +53,9 @@ $functions = (string) file_get_contents( $root . '/functions.php' );
 $must( 1 === preg_match( '/^Version:\s*1\.3\.26\s*$/m', $style ), 'Y5 promoted style.css must be exactly 1.3.26' );
 $must( str_contains( $functions, "define( 'AZNET_THEME_VERSION', '1.3.26' );" ), 'Y5 promoted AZNET_THEME_VERSION must be exactly 1.3.26' );
 
+$runtime = (string) file_get_contents( $root . '/tests/runtime/y5-client-delivery.php' );
+$must( str_contains( $runtime, "'1.3.26' === AZNET_THEME_VERSION" ), 'Y5 runtime fixture must validate promoted Theme version 1.3.26' );
+
 $workflow = (string) file_get_contents( $root . '/.github/workflows/y5-client-delivery-release.yml' );
 foreach ( [
     'WordPress 6.9',
