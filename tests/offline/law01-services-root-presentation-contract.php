@@ -29,7 +29,7 @@ foreach ([
     "setting( 'homepage_services_page', 0 )",
     'function services_page_presentation_active',
     'function services_page_children',
-    "'post_parent'    => \\$services_id",
+    "'post_parent'    => \$services_id",
     "'orderby'        => 'menu_order title'",
 ] as $needle) {
     if (! str_contains($pageExperience, $needle)) {
@@ -51,7 +51,7 @@ foreach ([
     'services_page_children()',
     'service_page_contact_url()',
     'the_title()',
-    "\\$authored_content = trim( (string) get_the_content() );",
+    "\$authored_content = trim( (string) get_the_content() );",
     "if ( '' !== \\$authored_content )",
     'the_content()',
     'get_permalink( $service_page )',
