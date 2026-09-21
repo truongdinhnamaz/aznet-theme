@@ -17,7 +17,7 @@ $is_contact_page = \AZnet\Theme\contact_page_presentation_active( (int) get_the_
 $is_services_page = \AZnet\Theme\services_page_presentation_active( (int) get_the_ID() );
 $service_contact_url = $is_service_detail ? \AZnet\Theme\service_page_contact_url() : '';
 $service_siblings = $is_service_detail ? \AZnet\Theme\service_page_siblings( (int) get_the_ID() ) : [];
-$page_classes = 'aznet-theme-page aznet-theme-page--' . $variant;
+$page_classes = 'aznet-theme-page aznet-theme-page--full-bleed aznet-theme-page--' . $variant;
 if ( $is_service_detail ) {
     $page_classes .= ' aznet-theme-page--service-detail';
 }
