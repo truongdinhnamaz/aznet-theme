@@ -73,6 +73,7 @@ foreach ([
     '.aznet-theme-services-page__hero {',
     'border-top-left-radius: 0;',
     'border-top-right-radius: 0;',
+    'border-top: 0;',
     '.aznet-theme-services-page__consultation {',
     'border-bottom-left-radius: 0;',
     'border-bottom-right-radius: 0;',
@@ -94,6 +95,7 @@ foreach ([
     '.aznet-theme-contact-page > :last-child',
     'border-bottom-left-radius: 0;',
     'border-bottom-right-radius: 0;',
+    'border-bottom: 0;',
 ] as $needle) {
     if (!str_contains($contactCss, $needle)) {
         $fail('Contact Page CSS missing full-section edge marker: ' . $needle);
