@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.88
+**Version:** v0.89
 **Status:** Working Source  
-**Date:** 20/09/2026
+**Date:** 21/09/2026
 
 ## 1. Purpose
 
@@ -349,6 +349,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-031** | **Burgundy Law 01 Homepage composition is Theme-owned presentation around the existing single native Front Page `the_content()` boundary: Hero/Trust/Services/About-Team render before native content; Process/FAQ/Latest legal knowledge/Contact CTA render after it; Topics/Analysis/News stay excluded from the Burgundy reference composition. Every mapped section fails soft when its WordPress/public-safe source is absent or invalid, and no provider/domain data ownership or authoritative inference moves into Theme.** | **Accepted** |
 | **D-032** | **Burgundy Law 01 Homepage expansion preserves the owner-accepted v1.3.18 visual baseline for Hero/Trust/Services/About-Team/Latest and extends only below Latest with exact mapped WordPress-native Topics, Analysis, Legal News, Process, FAQ and Contact CTA. The Theme owns composition/presentation only; WordPress/public-safe sources own content/data; every added section fails soft when its mapped source is absent/invalid; Footer remains page-independent; no heuristic source discovery, private storage read, provider takeover or domain semantics are introduced. D-032 supersedes D-031 only where D-031 excluded Topics/Analysis/News or ordered post-content sections differently.** | **Accepted** |
 | **D-033** | **Repository-native static/contract/WordPress runtime/browser/a11y/exact-package/lifecycle evidence is sufficient for AZnet Theme technical release closure; WPVibe is not a mandatory release-verification dependency. Production deployment remains a separate gate and still requires a safe authenticated target-site path, fresh preflight and rollback evidence by an available approved mechanism.** | **Accepted** |
+| **D-034** | **Rèm 01 is a reusable curtain/interior presentation preset and migration pilot over WordPress/WooCommerce/provider-owned data. It may extend existing Homepage/Header/Footer/Page/Woo/provisioning presentation systems but must not interpret Flatsome/UX Builder at runtime, create a parallel product/contact/identity store, or absorb ConvertFlow decision/conversion semantics. Existing-site Flatsome cutover requires read-only inventory, native-content portability for trapped builder content, real runtime/browser evidence, rollback, and a separate production approval gate.** | **Accepted — owner approved 21/09/2026** |
 
 ## 10A. v1.3 Client Delivery System
 
@@ -371,6 +372,18 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 **Y5 — Client Delivery QA & Release Closure:** prove the full clean-site journey on WordPress 6.9+/PHP 8.1+, zero mandatory third-party plugins, responsive/a11y browser matrix, deterministic exact-package identity, packaged-PHP lint, theme-switch/update/rollback continuity and exact-main verification. Metadata remained `1.2.0` through Y1-Y4; promotion to `1.3.0`, publication and production deployment were separately owner-approved and completed.
 
 **Provider boundary:** v1.3 Core opens no RootProfile/ConvertFlow/Woo provider L5 expansion. Existing optional compatibility tracks remain separate and fail-soft.
+
+## 10B. Rèm 01 curtain/interior pilot — ACCEPTED
+
+**State:** SOURCE/DESIGN APPROVED. Production implementation remains gated on canonical source merge; after merge, C1 read-only pilot inventory is the exact next evidence slice.
+
+**Pilot:** `https://remquocanh.vn/` is the migration/reference pilot. The reusable output is a generic Rèm 01 presentation, not a hardcoded Rèm Quốc Anh site.
+
+**Design record:** `docs/superpowers/specs/2026-09-21-curtain01-pilot-design.md`.
+
+**Intent:** replace a Flatsome presentation layer with AZnet Theme while preserving WordPress/WooCommerce/provider ownership, keeping Flatsome rollback until destination QA passes, and avoiding a proprietary builder or Flatsome runtime compatibility engine.
+
+**First execution gate after approval:** read-only pilot inventory and classification of existing surfaces/content as KEEP, MAP, REBUILD PRESENTATION, OWNER CONTRACT or RETIRE LATER. Live pilot parity, exact UX Builder dependency and cutover readiness remain UNKNOWN until that inventory exists.
 
 ## 11. Open questions
 
