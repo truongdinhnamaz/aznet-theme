@@ -81,7 +81,7 @@ function normalize_settings( array $raw ): array {
         ? (string) $raw['woo_product_preset']
         : 'classic';
 
-    $homepage_preset = isset( $raw['homepage_preset'] ) && in_array( $raw['homepage_preset'], [ 'off', 'law-01' ], true )
+    $homepage_preset = isset( $raw['homepage_preset'] ) && in_array( $raw['homepage_preset'], [ 'off', 'law-01', 'curtain-01' ], true )
         ? (string) $raw['homepage_preset']
         : 'off';
 
