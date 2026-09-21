@@ -523,6 +523,10 @@
     .aznet-theme-site-footer__identity {
         grid-column: 1 / -1;
     }
+
+    .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__identity {
+        grid-column: auto;
+    }
 }
 
 @media (max-width: 48rem) {
@@ -552,7 +556,8 @@
     .aznet-theme-site-footer--professional .aznet-theme-site-footer__contact,
     .aznet-theme-site-footer--professional .aznet-theme-site-footer__social-column,
     .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__navigation,
-    .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact {
+    .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact,
+    .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__connect {
         padding-inline-start: 0;
         border-inline-start: 0;
     }
