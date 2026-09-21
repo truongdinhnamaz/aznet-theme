@@ -7,6 +7,7 @@ const routes = {
   child: { url: process.env.Y1_CHILD_URL, variant: 'standard', breadcrumbs: true, service: true },
   wide: { url: process.env.Y1_WIDE_URL, variant: 'wide', breadcrumbs: false },
   landing: { url: process.env.Y1_LANDING_URL, variant: 'landing', breadcrumbs: false },
+  contact: { url: process.env.Y1_CONTACT_URL, variant: 'standard', breadcrumbs: false, contact: true },
 };
 
 const outputDir = process.env.Y1_PAGE_STATE_DIR || '/tmp/y1-page-l4';
@@ -74,6 +75,7 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
     blockingAxeViolations: null,
     breadcrumbFocus: null,
     servicePrimaryFocus: null,
+    contactPrimaryFocus: null,
     status: 'failed',
     error: null,
   };
@@ -114,6 +116,21 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
       result.servicePrimaryFocus = await focusEvidence(page, '.aznet-theme-page__service-primary');
       if (!result.servicePrimaryFocus?.visible || !result.servicePrimaryFocus.focusVisible || result.servicePrimaryFocus.outlineStyle === 'none' || result.servicePrimaryFocus.outlineWidth < 1) {
         throw new Error(`Service primary CTA lacks visible focus evidence: ${JSON.stringify(result.servicePrimaryFocus)}`);
+      }
+    }
+
+    if (config.contact) {
+      if (await page.locator('.aznet-theme-page--contact').count() !== 1) throw new Error('Expected mapped premium Contact Page presentation');
+      if (await page.locator('.aznet-theme-contact-page__hero').count() !== 1) throw new Error('Expected Contact Page hero');
+      if (await page.locator('.aznet-theme-contact-page__content-card').count() !== 1) throw new Error('Expected Contact Page authored-content card');
+      if (await page.locator('#y1-contact-content').count() !== 1) throw new Error('Expected WordPress-owned Contact Page content');
+      const contactStyles = await page.evaluate(() => Array.from(document.styleSheets).map((sheet) => sheet.href).filter(Boolean));
+      if (!contactStyles.some((href) => href.includes('/assets/css/components/contact-page.css'))) {
+        throw new Error('Contact Page stylesheet not observed');
+      }
+      result.contactPrimaryFocus = await focusEvidence(page, '.aznet-theme-contact-page__primary');
+      if (!result.contactPrimaryFocus?.visible || !result.contactPrimaryFocus.focusVisible || result.contactPrimaryFocus.outlineStyle === 'none' || result.contactPrimaryFocus.outlineWidth < 1) {
+        throw new Error(`Contact primary CTA lacks visible focus evidence: ${JSON.stringify(result.contactPrimaryFocus)}`);
       }
     }
 
