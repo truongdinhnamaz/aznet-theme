@@ -1,0 +1,134 @@
+/* Shared service-card presentation for mapped Services surfaces. */
+
+.aznet-theme-service-card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.35rem);
+}
+
+.aznet-theme-service-card {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    min-height: 19rem;
+    flex-direction: column;
+    padding: clamp(1.35rem, 2.5vw, 2rem);
+    overflow: hidden;
+    border: 1px solid var(--aznet-theme-service-card-line, var(--aznet-theme-border));
+    border-radius: .85rem;
+    background: var(--aznet-theme-service-card-surface, var(--aznet-theme-color-surface));
+    box-shadow: var(--aznet-theme-service-card-shadow, var(--aznet-theme-shadow-card));
+    transition:
+        transform var(--aznet-theme-motion-base),
+        border-color var(--aznet-theme-motion-base),
+        box-shadow var(--aznet-theme-motion-base);
+}
+
+.aznet-theme-service-card::before {
+    position: absolute;
+    inset-block: 0 auto;
+    inset-inline: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--aznet-theme-service-card-burgundy), var(--aznet-theme-service-card-gold));
+    content: "";
+}
+
+.aznet-theme-service-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--aznet-theme-service-card-hover-line, var(--aznet-theme-service-card-burgundy));
+    box-shadow: var(--aznet-theme-service-card-shadow-hover, var(--aznet-theme-shadow-card));
+}
+
+.aznet-theme-service-card__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+}
+
+.aznet-theme-service-card__index {
+    color: var(--aznet-theme-service-card-gold);
+    font-size: .82rem;
+    font-weight: var(--aznet-theme-font-weight-bold);
+    letter-spacing: .12em;
+}
+
+.aznet-theme-service-card__icon {
+    width: 2.65rem;
+    aspect-ratio: 1;
+    background: var(--aznet-theme-service-card-burgundy);
+    opacity: .88;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 3h10l3 3v15H4V6l3-3Z'/%3E%3Cpath d='M8 10h8M8 14h8M8 18h5M9 3v4h6V3'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 3h10l3 3v15H4V6l3-3Z'/%3E%3Cpath d='M8 10h8M8 14h8M8 18h5M9 3v4h6V3'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.aznet-theme-service-card__title {
+    margin: 0;
+    color: var(--aznet-theme-service-card-ink, var(--aznet-theme-text));
+    font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+    line-height: 1.22;
+    overflow-wrap: anywhere;
+}
+
+.aznet-theme-service-card__title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.aznet-theme-service-card__title a:hover {
+    color: var(--aznet-theme-service-card-burgundy);
+}
+
+.aznet-theme-service-card__excerpt {
+    margin: .85rem 0 0;
+    color: var(--aznet-theme-service-card-muted, var(--aznet-theme-muted));
+    line-height: 1.65;
+}
+
+.aznet-theme-service-card__link {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    gap: .4rem;
+    margin-top: auto;
+    padding-top: 1.35rem;
+    color: var(--aznet-theme-service-card-burgundy);
+    font-weight: var(--aznet-theme-font-weight-bold);
+    text-decoration: none;
+}
+
+.aznet-theme-service-card__link:hover {
+    color: var(--aznet-theme-service-card-burgundy-deep, var(--aznet-theme-service-card-burgundy));
+}
+
+.aznet-theme-service-card :where(a):focus-visible {
+    outline: 2px solid var(--aznet-theme-focus);
+    outline-offset: 3px;
+}
+
+@media (max-width: 64rem) {
+    .aznet-theme-service-card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 47.999rem) {
+    .aznet-theme-service-card-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .aznet-theme-service-card {
+        min-height: auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .aznet-theme-service-card {
+        transition: none;
+    }
+
+    .aznet-theme-service-card:hover {
+        transform: none;
+    }
+}

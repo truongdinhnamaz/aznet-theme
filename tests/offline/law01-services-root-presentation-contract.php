@@ -10,7 +10,9 @@ $fail = static function (string $message): void {
 
 $required = [
     'template-parts/services/page.php',
+    'template-parts/services/card.php',
     'assets/css/components/services-page.css',
+    'assets/css/components/service-card.css',
 ];
 foreach ($required as $relative) {
     if (! is_file($root . '/' . $relative)) {
@@ -21,8 +23,10 @@ foreach ($required as $relative) {
 $pageExperience = (string) file_get_contents($root . '/inc/theme/page-experience.php');
 $pageTemplate = (string) file_get_contents($root . '/template-parts/content/page.php');
 $servicesTemplate = (string) file_get_contents($root . '/template-parts/services/page.php');
+$cardTemplate = (string) file_get_contents($root . '/template-parts/services/card.php');
 $assets = (string) file_get_contents($root . '/inc/theme/assets.php');
 $css = (string) file_get_contents($root . '/assets/css/components/services-page.css');
+$cardCss = (string) file_get_contents($root . '/assets/css/components/service-card.css');
 
 foreach ([
     'function services_page_is_mapped',
@@ -54,16 +58,26 @@ foreach ([
     "\$authored_content = trim( (string) get_the_content() );",
     "if ( '' !== \$authored_content )",
     'the_content()',
-    'get_permalink( $service_page )',
-    'get_the_title( $service_page )',
-    'post_excerpt',
     'aznet-theme-services-page__hero',
     'aznet-theme-services-page__grid',
-    'aznet-theme-services-page__card',
+    'template-parts/services/card',
+    'aznet-theme-service-card-grid',
     'aznet-theme-services-page__consultation',
 ] as $needle) {
     if (! str_contains($servicesTemplate, $needle)) {
         $fail('Services Page template missing marker: ' . $needle);
+    }
+}
+
+foreach ([
+    'get_permalink( $service_page )',
+    'get_the_title( $service_page )',
+    'post_excerpt',
+    'aznet-theme-service-card',
+    'aznet-theme-service-card__link',
+] as $needle) {
+    if (! str_contains($cardTemplate, $needle)) {
+        $fail('shared service-card template missing Services root marker: ' . $needle);
     }
 }
 
@@ -82,10 +96,9 @@ foreach ([
     '.aznet-theme-page--services-root',
     '.aznet-theme-services-page__hero',
     'width: 100%;',
-    '.aznet-theme-services-page__grid',
-    '.aznet-theme-services-page__card',
     '.aznet-theme-services-page__consultation',
     '--law01-services-burgundy',
+    '--aznet-theme-service-card-burgundy',
     '@media (max-width:',
 ] as $needle) {
     if (! str_contains($css, $needle)) {
@@ -93,7 +106,18 @@ foreach ([
     }
 }
 
-$production = $pageExperience . "\n" . $pageTemplate . "\n" . $servicesTemplate;
+foreach ([
+    '.aznet-theme-service-card-grid',
+    '.aznet-theme-service-card {',
+    '.aznet-theme-service-card__icon',
+    '.aznet-theme-service-card__link',
+] as $needle) {
+    if (! str_contains($cardCss, $needle)) {
+        $fail('shared service-card CSS missing Services root marker: ' . $needle);
+    }
+}
+
+$production = $pageExperience . "\n" . $pageTemplate . "\n" . $servicesTemplate . "\n" . $cardTemplate;
 foreach ([
     "is_page( 'dich-vu' )",
     'REQUEST_URI',
