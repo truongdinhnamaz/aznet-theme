@@ -69,6 +69,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/editorial-single-po
 
 printf '%s\n' '==> P3 Editorial Listing/Search contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/editorial-listing-search-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-category-archive-choice1-contract.php
 
 printf '%s\n' '==> X1 Comments Surface contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x1-comments-surface-contract.php
