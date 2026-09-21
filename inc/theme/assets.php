@@ -327,6 +327,36 @@ function enqueue_page_assets( ?string $version = null ): void {
 
 
 
+/** Determine whether the mapped premium Law 01 Contact Page presentation can render. */
+function should_enqueue_contact_page_assets(): bool {
+    if ( ! function_exists( __NAMESPACE__ . '\\contact_page_presentation_active' ) ) {
+        return false;
+    }
+
+    return contact_page_presentation_active();
+}
+
+/** Enqueue scoped premium Contact Page presentation only for the explicit mapped Page. */
+function enqueue_contact_page_assets( ?string $version = null ): void {
+    if ( ! should_enqueue_contact_page_assets() ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'aznet-theme-contact-surface',
+        get_theme_file_uri( '/assets/css/components/contact-surface.css' ),
+        [ 'aznet-theme-tokens' ],
+        asset_content_version( '/assets/css/components/contact-surface.css', $version )
+    );
+
+    wp_enqueue_style(
+        'aznet-theme-contact-page',
+        get_theme_file_uri( '/assets/css/components/contact-page.css' ),
+        [ 'aznet-theme-page', 'aznet-theme-forms', 'aznet-theme-contact-surface' ],
+        asset_content_version( '/assets/css/components/contact-page.css', $version )
+    );
+}
+
 /** Determine whether the mapped Services child landing presentation can render. */
 function should_enqueue_service_page_assets(): bool {
     if ( ! function_exists( __NAMESPACE__ . '\\service_page_is_detail' ) ) {
@@ -465,6 +495,7 @@ function enqueue_assets(): void {
     }
 
     enqueue_page_assets( $version );
+    enqueue_contact_page_assets( $version );
     enqueue_service_page_assets( $version );
     enqueue_form_assets( $version );
     enqueue_navigation_assets( $version );
