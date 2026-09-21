@@ -10,6 +10,8 @@ $fail = static function (string $message): void {
 
 $files = [
     'page.php',
+    'page-templates/wide.php',
+    'page-templates/landing.php',
     'template-parts/content/page.php',
     'assets/css/components/page.css',
     'assets/css/components/services-page.css',
@@ -23,18 +25,21 @@ foreach ($files as $relative) {
     }
 }
 
-$page = (string) file_get_contents($root . '/page.php');
+$pageTemplates = [
+    'page.php',
+    'page-templates/wide.php',
+    'page-templates/landing.php',
+];
 $template = (string) file_get_contents($root . '/template-parts/content/page.php');
 $pageCss = (string) file_get_contents($root . '/assets/css/components/page.css');
 $servicesCss = (string) file_get_contents($root . '/assets/css/components/services-page.css');
 $contactCss = (string) file_get_contents($root . '/assets/css/components/contact-page.css');
 $serviceDetailCss = (string) file_get_contents($root . '/assets/css/components/service-page.css');
 
-foreach ([
-    'aznet-theme-main--page',
-] as $needle) {
-    if (!str_contains($page, $needle)) {
-        $fail('native Page main shell missing full-bleed marker: ' . $needle);
+foreach ($pageTemplates as $relative) {
+    $pageTemplate = (string) file_get_contents($root . '/' . $relative);
+    if (!str_contains($pageTemplate, 'class="aznet-theme-main aznet-theme-main--page"')) {
+        $fail('Page template main shell missing full-bleed modifier: ' . $relative);
     }
 }
 
