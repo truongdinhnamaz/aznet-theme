@@ -380,6 +380,29 @@ function enqueue_contact_page_assets( ?string $version = null ): void {
     );
 }
 
+/** Determine whether the mapped premium Law 01 Services Page presentation can render. */
+function should_enqueue_services_page_assets(): bool {
+    if ( ! function_exists( __NAMESPACE__ . '\\services_page_presentation_active' ) ) {
+        return false;
+    }
+
+    return services_page_presentation_active();
+}
+
+/** Enqueue scoped premium Services Page presentation only for the explicit mapped Page. */
+function enqueue_services_page_assets( ?string $version = null ): void {
+    if ( ! should_enqueue_services_page_assets() ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'aznet-theme-services-page',
+        get_theme_file_uri( '/assets/css/components/services-page.css' ),
+        [ 'aznet-theme-page' ],
+        asset_content_version( '/assets/css/components/services-page.css', $version )
+    );
+}
+
 /** Determine whether the mapped Services child landing presentation can render. */
 function should_enqueue_service_page_assets(): bool {
     if ( ! function_exists( __NAMESPACE__ . '\\service_page_is_detail' ) ) {
@@ -520,6 +543,7 @@ function enqueue_assets(): void {
     enqueue_law01_archive_asset( $version );
     enqueue_page_assets( $version );
     enqueue_contact_page_assets( $version );
+    enqueue_services_page_assets( $version );
     enqueue_service_page_assets( $version );
     enqueue_form_assets( $version );
     enqueue_navigation_assets( $version );
