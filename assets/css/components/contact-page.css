@@ -25,6 +25,7 @@
     margin-block-end: 0;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    border-bottom: 0;
 }
 
 .aznet-theme-contact-page__hero {
@@ -37,6 +38,7 @@
     border-radius: clamp(1.2rem, 2vw, 2rem);
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+    border-top: 0;
     background:
         radial-gradient(circle at 82% 20%, rgba(185, 137, 47, .2), transparent 16rem),
         linear-gradient(120deg, var(--law01-contact-cream) 0%, #fff8ed 56%, #f4e7d1 100%);
