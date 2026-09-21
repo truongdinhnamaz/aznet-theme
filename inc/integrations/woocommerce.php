@@ -123,4 +123,3 @@ function shop_url(): string {
     $url = wc_get_page_permalink( 'shop' );
     return is_string( $url ) ? $url : '';
 }
-
