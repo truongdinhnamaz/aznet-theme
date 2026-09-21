@@ -58,7 +58,7 @@
     margin: 0 0 .9rem;
     color: var(--law01-contact-gold);
     font-size: .78rem;
-    font-weight: 800;
+    font-weight: var(--aznet-theme-font-weight-bold);
     letter-spacing: .14em;
     text-transform: uppercase;
 }
@@ -278,7 +278,7 @@
     color: var(--law01-contact-burgundy);
     content: "✓";
     font-size: .76rem;
-    font-weight: 800;
+    font-weight: var(--aznet-theme-font-weight-bold);
 }
 
 .aznet-theme-contact-page__note {
