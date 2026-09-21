@@ -71,7 +71,7 @@ function render_settings_form( string $section ): void {
         field_checkbox( 'header_search', __( 'Hiển thị tìm kiếm', 'aznet-theme' ), (bool) $s['header_search'] );
         field_checkbox( 'header_utilities', __( 'Hiển thị tiện ích Header', 'aznet-theme' ), (bool) $s['header_utilities'] );
     } elseif ( 'footer' === $section ) {
-        field_select( 'footer_preset', __( 'Kiểu Footer', 'aznet-theme' ), [ 'standard' => 'Standard', 'professional' => 'Professional', 'compact' => 'Compact' ], (string) $s['footer_preset'] );
+        field_select( 'footer_preset', __( 'Kiểu Footer', 'aznet-theme' ), [ 'standard' => 'Standard', 'professional' => 'Professional', 'compact' => 'Compact', 'law-01' => 'Law 01' ], (string) $s['footer_preset'] );
     } elseif ( 'commerce' === $section ) {
         field_select( 'woo_catalog_preset', __( 'Catalog', 'aznet-theme' ), [ 'grid' => 'Grid', 'compact-grid' => 'Compact Grid', 'editorial' => 'Editorial' ], (string) $s['woo_catalog_preset'] );
         field_select( 'woo_product_card_density', __( 'Mật độ thẻ sản phẩm', 'aznet-theme' ), [ 'comfortable' => 'Comfortable', 'balanced' => 'Balanced', 'compact' => 'Compact' ], (string) $s['woo_product_card_density'] );

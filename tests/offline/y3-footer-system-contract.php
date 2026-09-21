@@ -79,7 +79,7 @@ if (($defaults['footer_preset'] ?? null) !== 'standard') {
     y3_fail('footer_preset default must be standard');
 }
 
-foreach (['standard', 'professional', 'compact'] as $preset) {
+foreach (['standard', 'professional', 'compact', 'law-01'] as $preset) {
     $normalized = \AZnet\Theme\normalize_settings(['footer_preset' => $preset]);
     if (($normalized['footer_preset'] ?? null) !== $preset) {
         y3_fail('valid footer_preset was not preserved: ' . $preset);
@@ -187,7 +187,7 @@ if (! str_contains($controlCenter, "[ 'footer_preset' ]")) {
 if (! str_contains($controlCenter, "field_select( 'footer_preset'")) {
     y3_fail('Footer Control Center must render footer_preset with field_select()');
 }
-foreach (['standard', 'professional', 'compact'] as $preset) {
+foreach (['standard', 'professional', 'compact', 'law-01'] as $preset) {
     if (! str_contains($controlCenter, "'{$preset}'")) {
         y3_fail('Footer preset choice missing from Control Center: ' . $preset);
     }
@@ -245,7 +245,7 @@ if (false === $professionalContactPos || false === $professionalNavigationPos ||
     y3_fail('Professional Footer must render Contact before primary navigation to match approved demo composition');
 }
 
-foreach (['.aznet-theme-site-footer--professional', '.aznet-theme-site-footer--compact'] as $selector) {
+foreach (['.aznet-theme-site-footer--professional', '.aznet-theme-site-footer--compact', '.aznet-theme-site-footer--law-01'] as $selector) {
     if (! str_contains($css, $selector)) {
         y3_fail('Footer stylesheet missing preset selector ' . $selector);
     }
@@ -253,6 +253,17 @@ foreach (['.aznet-theme-site-footer--professional', '.aznet-theme-site-footer--c
 foreach (['repeat(3, minmax(140px, .75fr))', '.aznet-theme-site-footer__social-column'] as $needle) {
     if (! str_contains($css, $needle)) {
         y3_fail('Professional Footer demo grid missing: ' . $needle);
+    }
+}
+foreach ([
+    '--aznet-theme-law01-burgundy-deep',
+    '--aznet-theme-law01-gold',
+    '--aznet-theme-law01-ivory',
+    '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__brand-title',
+    '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__heading::after',
+] as $needle) {
+    if (! str_contains($css, $needle)) {
+        y3_fail('Law 01 Footer visual system missing approved detail: ' . $needle);
     }
 }
 if (! str_contains($css, '@media (max-width: 48rem)')) {

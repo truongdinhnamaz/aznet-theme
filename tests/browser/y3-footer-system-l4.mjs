@@ -13,7 +13,7 @@ if (!fs.existsSync(fixturePath)) throw new Error(`Missing Y3 fixture: ${fixtureP
 const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
 if (!fixture.front_url || !fixture.menu_ids) throw new Error('Incomplete Y3 runtime fixture');
 
-const presets = ['standard', 'professional', 'compact'];
+const presets = ['standard', 'professional', 'compact', 'law-01'];
 const viewports = {
   desktop: { width: 1440, height: 1000 },
   tablet: { width: 1024, height: 900 },
