@@ -21,10 +21,10 @@ if ( $law01_article ) {
 }
 
 $dek = has_excerpt() ? trim( (string) get_the_excerpt() ) : '';
-$has_article_navigation = is_active_sidebar( 'article-navigation' );
+$has_article_sidebar = is_active_sidebar( 'article-navigation' );
 $reading_layout_class = 'aznet-theme-article__reading-layout';
-if ( $has_article_navigation ) {
-    $reading_layout_class .= ' aznet-theme-article__reading-layout--with-navigation';
+if ( $has_article_sidebar ) {
+    $reading_layout_class .= ' aznet-theme-article__reading-layout--with-sidebar';
 }
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( $article_classes ); ?>>
@@ -65,8 +65,8 @@ if ( $has_article_navigation ) {
             </div>
         </div>
 
-        <?php if ( $has_article_navigation ) : ?>
-            <aside class="aznet-theme-article__navigation-sidebar" aria-label="<?php esc_attr_e( 'Điều hướng nội dung bài viết', 'aznet-theme' ); ?>">
+        <?php if ( $has_article_sidebar ) : ?>
+            <aside class="aznet-theme-article__sidebar" aria-label="<?php esc_attr_e( 'Điều hướng nội dung bài viết', 'aznet-theme' ); ?>">
                 <?php dynamic_sidebar( 'article-navigation' ); ?>
             </aside>
         <?php endif; ?>
