@@ -91,6 +91,40 @@ function page_breadcrumb_items( ?int $post_id = null ): array {
 }
 
 
+
+/**
+ * Whether the current native Page is the explicitly mapped Contact Page.
+ *
+ * The Contact Page ID is sourced from the Theme Content Map. This deliberately
+ * avoids title, slug and URL heuristics.
+ */
+function contact_page_is_mapped( ?int $post_id = null ): bool {
+    $post_id = $post_id ?: (int) get_queried_object_id();
+    $contact_id = (int) setting( 'homepage_contact_page', 0 );
+
+    if ( $post_id <= 0 || $contact_id <= 0 || $post_id !== $contact_id ) {
+        return false;
+    }
+
+    $post = get_post( $post_id );
+
+    return $post instanceof \WP_Post
+        && 'page' === $post->post_type
+        && 'publish' === $post->post_status;
+}
+
+/**
+ * Whether the premium Law 01 Contact Page presentation is active.
+ */
+function contact_page_presentation_active( ?int $post_id = null ): bool {
+    if ( ! contact_page_is_mapped( $post_id ) ) {
+        return false;
+    }
+
+    return function_exists( __NAMESPACE__ . '\\header_law01_active' )
+        && header_law01_active();
+}
+
 /**
  * Whether one native Page is an explicitly mapped direct child of the Services Page.
  *
