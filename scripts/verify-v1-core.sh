@@ -67,6 +67,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/r6-release-workflow
 printf '%s\n' '==> P2 Editorial Single-Post contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/editorial-single-post-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-article-reading-experience-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-article-h2-wrap-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/article-navigation-widget-area-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/article-sidebar-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/article-sidebar-scrollbar-contract.php
