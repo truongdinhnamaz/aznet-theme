@@ -7,7 +7,7 @@ const routes = {
   child: { url: process.env.Y1_CHILD_URL, variant: 'standard', breadcrumbs: true, service: true },
   wide: { url: process.env.Y1_WIDE_URL, variant: 'wide', breadcrumbs: false },
   landing: { url: process.env.Y1_LANDING_URL, variant: 'landing', breadcrumbs: false },
-  contact: { url: process.env.Y1_CONTACT_URL, variant: 'standard', breadcrumbs: false, contact: true },
+  contact: { url: process.env.Y1_CONTACT_URL || 'http://127.0.0.1:8080/y1-contact/', variant: 'standard', breadcrumbs: false, contact: true },
 };
 
 const outputDir = process.env.Y1_PAGE_STATE_DIR || '/tmp/y1-page-l4';
