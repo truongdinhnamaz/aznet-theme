@@ -10,7 +10,9 @@ $fail = static function (string $message): void {
 
 $required = [
     'template-parts/services/page.php',
+    'template-parts/services/card.php',
     'assets/css/components/services-page.css',
+    'assets/css/components/service-card.css',
 ];
 foreach ($required as $relative) {
     if (! is_file($root . '/' . $relative)) {
@@ -23,6 +25,7 @@ $pageTemplate = (string) file_get_contents($root . '/template-parts/content/page
 $servicesTemplate = (string) file_get_contents($root . '/template-parts/services/page.php');
 $assets = (string) file_get_contents($root . '/inc/theme/assets.php');
 $css = (string) file_get_contents($root . '/assets/css/components/services-page.css');
+$cardCss = (string) file_get_contents($root . '/assets/css/components/service-card.css');
 
 foreach ([
     'function services_page_is_mapped',
@@ -59,7 +62,8 @@ foreach ([
     'post_excerpt',
     'aznet-theme-services-page__hero',
     'aznet-theme-services-page__grid',
-    'aznet-theme-services-page__card',
+    'template-parts/services/card',
+    'aznet-theme-service-card-grid',
     'aznet-theme-services-page__consultation',
 ] as $needle) {
     if (! str_contains($servicesTemplate, $needle)) {
@@ -82,14 +86,24 @@ foreach ([
     '.aznet-theme-page--services-root',
     '.aznet-theme-services-page__hero',
     'width: 100%;',
-    '.aznet-theme-services-page__grid',
-    '.aznet-theme-services-page__card',
     '.aznet-theme-services-page__consultation',
     '--law01-services-burgundy',
+    '--aznet-theme-service-card-burgundy',
     '@media (max-width:',
 ] as $needle) {
     if (! str_contains($css, $needle)) {
         $fail('Services Page CSS missing marker: ' . $needle);
+    }
+}
+
+foreach ([
+    '.aznet-theme-service-card-grid',
+    '.aznet-theme-service-card {',
+    '.aznet-theme-service-card__icon',
+    '.aznet-theme-service-card__link',
+] as $needle) {
+    if (! str_contains($cardCss, $needle)) {
+        $fail('shared service-card CSS missing Services root marker: ' . $needle);
     }
 }
 
