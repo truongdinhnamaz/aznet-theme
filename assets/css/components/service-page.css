@@ -219,6 +219,7 @@
     --aznet-theme-service-burgundy-deep: var(--aznet-theme-law01-burgundy-deep);
     --aznet-theme-service-gold: var(--aznet-theme-law01-gold);
     --aznet-theme-service-gold-soft: var(--aznet-theme-law01-gold-soft);
+    --aznet-theme-service-gold-text: var(--aznet-theme-law01-gold-text);
     --aznet-theme-service-paper: var(--aznet-theme-law01-paper);
     --aznet-theme-service-ink: var(--aznet-theme-law01-ink);
     --aznet-theme-service-muted: var(--aznet-theme-law01-muted);
@@ -442,7 +443,7 @@
 }
 
 .aznet-theme-page--service-detail-law01 .aznet-theme-page__service-eyebrow {
-    color: var(--aznet-theme-service-gold);
+    color: var(--aznet-theme-service-gold-text);
 }
 
 .aznet-theme-page--service-detail-law01 .aznet-theme-page__service-siblings-header h2 {
