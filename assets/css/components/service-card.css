@@ -36,7 +36,7 @@
 .aznet-theme-service-card:hover {
     transform: translateY(-3px);
     border-color: var(--aznet-theme-service-card-hover-line, var(--aznet-theme-service-card-burgundy));
-    box-shadow: var(--aznet-theme-service-card-shadow-hover, var(--aznet-theme-shadow-elevated));
+    box-shadow: var(--aznet-theme-service-card-shadow-hover, var(--aznet-theme-shadow-card));
 }
 
 .aznet-theme-service-card__top {
