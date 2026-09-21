@@ -13,10 +13,29 @@ $variant = \AZnet\Theme\page_variant( (int) get_the_ID() );
 $crumbs  = \AZnet\Theme\page_breadcrumb_items( (int) get_the_ID() );
 $excerpt = \AZnet\Theme\page_excerpt( (int) get_the_ID() );
 $is_service_detail = \AZnet\Theme\service_page_is_detail( (int) get_the_ID() );
+$is_contact_page = \AZnet\Theme\contact_page_presentation_active( (int) get_the_ID() );
 $service_contact_url = $is_service_detail ? \AZnet\Theme\service_page_contact_url() : '';
 $service_siblings = $is_service_detail ? \AZnet\Theme\service_page_siblings( (int) get_the_ID() ) : [];
+$page_classes = 'aznet-theme-page aznet-theme-page--' . $variant;
+if ( $is_service_detail ) {
+    $page_classes .= ' aznet-theme-page--service-detail';
+}
+if ( $is_contact_page ) {
+    $page_classes .= ' aznet-theme-page--contact';
+}
 ?>
-<article id="post-<?php the_ID(); ?>" <?php post_class( 'aznet-theme-page aznet-theme-page--' . $variant . ( $is_service_detail ? ' aznet-theme-page--service-detail' : '' ) ); ?>>
+<article id="post-<?php the_ID(); ?>" <?php post_class( $page_classes ); ?>>
+    <?php if ( $is_contact_page ) : ?>
+        <?php
+        get_template_part(
+            'template-parts/contact/page',
+            null,
+            [
+                'excerpt' => $excerpt,
+            ]
+        );
+        ?>
+    <?php else : ?>
     <header class="aznet-theme-page__header">
         <?php if ( [] !== $crumbs ) : ?>
             <nav class="aznet-theme-page__breadcrumbs" aria-label="<?php echo esc_attr__( 'Breadcrumb', 'aznet-theme' ); ?>">
@@ -81,5 +100,6 @@ $service_siblings = $is_service_detail ? \AZnet\Theme\service_page_siblings( (in
                 <?php endforeach; ?>
             </div>
         </aside>
+    <?php endif; ?>
     <?php endif; ?>
 </article>
