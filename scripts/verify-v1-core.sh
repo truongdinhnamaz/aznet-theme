@@ -66,9 +66,15 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/r6-release-workflow
 
 printf '%s\n' '==> P2 Editorial Single-Post contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/editorial-single-post-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-article-reading-experience-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-article-h2-wrap-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/article-navigation-widget-area-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/article-sidebar-presentation-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/article-sidebar-scrollbar-contract.php
 
 printf '%s\n' '==> P3 Editorial Listing/Search contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/editorial-listing-search-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-category-archive-choice1-contract.php
 
 printf '%s\n' '==> X1 Comments Surface contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x1-comments-surface-contract.php
@@ -102,7 +108,10 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-promotion-workfl
 
 printf '%s\n' '==> Y1 Page Experience contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-page-experience-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/page-full-bleed-sections-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-services-root-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-woocommerce-page-excerpt-regression-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/contact-page-presentation-contract.php
 
 printf '%s\n' '==> Y2 Professional Page Kits contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y2-professional-page-kits-contract.php

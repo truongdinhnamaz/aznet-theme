@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/settings.php';
 require_once __DIR__ . '/page-experience.php';
+require_once __DIR__ . '/archive-presentation.php';
 require_once __DIR__ . '/professional-page-kits.php';
 require_once __DIR__ . '/homepage-content-map.php';
 require_once __DIR__ . '/homepage-composer.php';
@@ -29,6 +30,7 @@ require_once __DIR__ . '/provisioning-runner.php';
 require_once __DIR__ . '/provisioning-readiness.php';
 require_once __DIR__ . '/design-system.php';
 require_once __DIR__ . '/setup.php';
+require_once __DIR__ . '/widgets.php';
 require_once __DIR__ . '/patterns.php';
 require_once __DIR__ . '/header.php';
 require_once __DIR__ . '/footer.php';
@@ -50,6 +52,7 @@ require_once __DIR__ . '/rootprofile-current-surface.php';
 require_once __DIR__ . '/../admin/bootstrap.php';
 
 add_action( 'after_setup_theme', __NAMESPACE__ . '\\setup' );
+add_action( 'widgets_init', __NAMESPACE__ . '\\register_widget_areas' );
 add_action( 'init', __NAMESPACE__ . '\\register_pattern_categories' );
 add_action( 'init', __NAMESPACE__ . '\\register_woocommerce_patterns', 20 );
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_assets' );

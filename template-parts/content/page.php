@@ -13,11 +13,45 @@ $variant = \AZnet\Theme\page_variant( (int) get_the_ID() );
 $crumbs  = \AZnet\Theme\page_breadcrumb_items( (int) get_the_ID() );
 $excerpt = \AZnet\Theme\page_excerpt( (int) get_the_ID() );
 $is_service_detail = \AZnet\Theme\service_page_is_detail( (int) get_the_ID() );
+$is_contact_page = \AZnet\Theme\contact_page_presentation_active( (int) get_the_ID() );
+$is_services_page = \AZnet\Theme\services_page_presentation_active( (int) get_the_ID() );
 $service_contact_url = $is_service_detail ? \AZnet\Theme\service_page_contact_url() : '';
 $service_siblings = $is_service_detail ? \AZnet\Theme\service_page_siblings( (int) get_the_ID() ) : [];
+$page_classes = 'aznet-theme-page aznet-theme-page--full-bleed aznet-theme-page--' . $variant;
+if ( $is_service_detail ) {
+    $page_classes .= ' aznet-theme-page--service-detail';
+}
+if ( $is_contact_page ) {
+    $page_classes .= ' aznet-theme-page--contact';
+}
+if ( $is_services_page ) {
+    $page_classes .= ' aznet-theme-page--services-root';
+}
 ?>
-<article id="post-<?php the_ID(); ?>" <?php post_class( 'aznet-theme-page aznet-theme-page--' . $variant . ( $is_service_detail ? ' aznet-theme-page--service-detail' : '' ) ); ?>>
+<article id="post-<?php the_ID(); ?>" <?php post_class( $page_classes ); ?>>
+    <?php if ( $is_contact_page ) : ?>
+        <?php
+        get_template_part(
+            'template-parts/contact/page',
+            null,
+            [
+                'excerpt' => $excerpt,
+            ]
+        );
+        ?>
+    <?php elseif ( $is_services_page ) : ?>
+        <?php
+        get_template_part(
+            'template-parts/services/page',
+            null,
+            [
+                'excerpt' => $excerpt,
+            ]
+        );
+        ?>
+    <?php else : ?>
     <header class="aznet-theme-page__header">
+        <div class="aznet-theme-page__section-inner aznet-theme-page__section-inner--header">
         <?php if ( [] !== $crumbs ) : ?>
             <nav class="aznet-theme-page__breadcrumbs" aria-label="<?php echo esc_attr__( 'Breadcrumb', 'aznet-theme' ); ?>">
                 <ol>
@@ -54,15 +88,19 @@ $service_siblings = $is_service_detail ? \AZnet\Theme\service_page_siblings( (in
                 <?php the_post_thumbnail( 'large' ); ?>
             </figure>
         <?php endif; ?>
+        </div>
     </header>
 
-    <div class="aznet-theme-page__content aznet-theme-entry__content">
-        <?php the_content(); ?>
-        <?php wp_link_pages(); ?>
-    </div>
+    <section class="aznet-theme-page__content-section">
+        <div class="aznet-theme-page__section-inner aznet-theme-page__content aznet-theme-page__content-inner aznet-theme-entry__content">
+            <?php the_content(); ?>
+            <?php wp_link_pages(); ?>
+        </div>
+    </section>
 
     <?php if ( $is_service_detail && [] !== $service_siblings ) : ?>
         <aside class="aznet-theme-page__service-siblings" aria-labelledby="aznet-theme-service-siblings-title">
+            <div class="aznet-theme-page__section-inner aznet-theme-page__section-inner--siblings">
             <div class="aznet-theme-page__service-siblings-header">
                 <p class="aznet-theme-page__service-eyebrow"><?php esc_html_e( 'Dịch vụ pháp lý', 'aznet-theme' ); ?></p>
                 <h2 id="aznet-theme-service-siblings-title"><?php esc_html_e( 'Các dịch vụ khác', 'aznet-theme' ); ?></h2>
@@ -80,6 +118,8 @@ $service_siblings = $is_service_detail ? \AZnet\Theme\service_page_siblings( (in
                     </article>
                 <?php endforeach; ?>
             </div>
+            </div>
         </aside>
+    <?php endif; ?>
     <?php endif; ?>
 </article>

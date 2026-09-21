@@ -4,9 +4,11 @@ import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 
 const routes = {
+  services: { url: process.env.Y1_SERVICES_URL, variant: 'standard', breadcrumbs: false, servicesRoot: true },
   child: { url: process.env.Y1_CHILD_URL, variant: 'standard', breadcrumbs: true, service: true },
   wide: { url: process.env.Y1_WIDE_URL, variant: 'wide', breadcrumbs: false },
   landing: { url: process.env.Y1_LANDING_URL, variant: 'landing', breadcrumbs: false },
+  contact: { url: process.env.Y1_CONTACT_URL || 'http://127.0.0.1:8080/y1-contact/', variant: 'standard', breadcrumbs: false, contact: true },
 };
 
 const outputDir = process.env.Y1_PAGE_STATE_DIR || '/tmp/y1-page-l4';
@@ -73,7 +75,9 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
     overflowPx: null,
     blockingAxeViolations: null,
     breadcrumbFocus: null,
+    servicesPrimaryFocus: null,
     servicePrimaryFocus: null,
+    contactPrimaryFocus: null,
     status: 'failed',
     error: null,
   };
@@ -88,6 +92,33 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
     if (await page.locator(`article.aznet-theme-page--${config.variant}`).count() !== 1) {
       throw new Error(`Expected ${config.variant} Page variant`);
     }
+    if (await page.locator('article.aznet-theme-page--full-bleed').count() !== 1) {
+      throw new Error('Expected native Page full-bleed presentation');
+    }
+
+    const fullBleed = await page.locator('article.aznet-theme-page--full-bleed').evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      const first = element.firstElementChild?.getBoundingClientRect() ?? null;
+      const last = element.lastElementChild?.getBoundingClientRect() ?? null;
+      return {
+        left: rect.left,
+        right: rect.right,
+        viewportWidth: document.documentElement.clientWidth,
+        top: rect.top,
+        bottom: rect.bottom,
+        firstTop: first?.top ?? null,
+        lastBottom: last?.bottom ?? null,
+      };
+    });
+    if (Math.abs(fullBleed.left) > 1 || Math.abs(fullBleed.right - fullBleed.viewportWidth) > 1) {
+      throw new Error(`Page does not span viewport width: ${JSON.stringify(fullBleed)}`);
+    }
+    if (fullBleed.firstTop !== null && Math.abs(fullBleed.firstTop - fullBleed.top) > 1) {
+      throw new Error(`First Page section exposes an outer top gutter: ${JSON.stringify(fullBleed)}`);
+    }
+    if (fullBleed.lastBottom !== null && Math.abs(fullBleed.lastBottom - fullBleed.bottom) > 1) {
+      throw new Error(`Last Page section exposes an outer bottom gutter: ${JSON.stringify(fullBleed)}`);
+    }
 
     const stylesheets = await page.evaluate(() => Array.from(document.styleSheets).map((sheet) => sheet.href).filter(Boolean));
     if (!stylesheets.some((href) => href.includes('/assets/css/components/page.css'))) {
@@ -101,8 +132,39 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
     if (config.breadcrumbs && breadcrumbCount !== 1) throw new Error('Expected one breadcrumb navigation');
     if (!config.breadcrumbs && breadcrumbCount !== 0) throw new Error('Unexpected breadcrumb navigation');
 
+    if (config.servicesRoot) {
+      if (await page.locator('.aznet-theme-page--services-root').count() !== 1) throw new Error('Expected mapped premium Services Page presentation');
+      if (await page.locator('.aznet-theme-services-page__hero').count() !== 1) throw new Error('Expected Services Page hero');
+      const servicesHeroRadius = await page.locator('.aznet-theme-services-page__hero').evaluate((element) => {
+        const style = getComputedStyle(element);
+        return [style.borderTopLeftRadius, style.borderTopRightRadius];
+      });
+      if (servicesHeroRadius.some((value) => Number.parseFloat(value) > 0)) {
+        throw new Error(`Services first section exposes rounded top edges: ${servicesHeroRadius.join(', ')}`);
+      }
+      if (await page.locator('.aznet-theme-services-page__intro').count() !== 0) throw new Error('Empty mapped Services Page must not render an orphan intro card');
+      if (await page.locator('.aznet-theme-services-page__card').count() !== 3) throw new Error('Expected three direct published service child cards');
+      if (await page.getByText('Y1 Business Service', { exact: true }).count() !== 1) throw new Error('Expected Business service child card');
+      if (await page.getByText('Y1 Civil Service', { exact: true }).count() !== 1) throw new Error('Expected Civil service child card');
+      const servicesStyles = await page.evaluate(() => Array.from(document.styleSheets).map((sheet) => sheet.href).filter(Boolean));
+      if (!servicesStyles.some((href) => href.includes('/assets/css/components/services-page.css'))) {
+        throw new Error('Services Page stylesheet not observed');
+      }
+      result.servicesPrimaryFocus = await focusEvidence(page, '.aznet-theme-services-page__primary');
+      if (!result.servicesPrimaryFocus?.visible || !result.servicesPrimaryFocus.focusVisible || result.servicesPrimaryFocus.outlineStyle === 'none' || result.servicesPrimaryFocus.outlineWidth < 1) {
+        throw new Error(`Services primary CTA lacks visible focus evidence: ${JSON.stringify(result.servicesPrimaryFocus)}`);
+      }
+    }
+
     if (config.service) {
       if (await page.locator('.aznet-theme-page--service-detail').count() !== 1) throw new Error('Expected mapped service detail presentation');
+      const serviceHeaderRadius = await page.locator('.aznet-theme-page--service-detail .aznet-theme-page__header').evaluate((element) => {
+        const style = getComputedStyle(element);
+        return [style.borderTopLeftRadius, style.borderTopRightRadius];
+      });
+      if (serviceHeaderRadius.some((value) => Number.parseFloat(value) > 0)) {
+        throw new Error(`Service detail first section exposes rounded top edges: ${serviceHeaderRadius.join(', ')}`);
+      }
       if (await page.locator('.aznet-theme-page__service-actions').count() !== 1) throw new Error('Expected service CTA group');
       if (await page.locator('.aznet-theme-page__service-primary').count() !== 1) throw new Error('Expected mapped Contact CTA');
       if (await page.locator('.aznet-theme-page__service-siblings').count() !== 1) throw new Error('Expected sibling services section');
@@ -114,6 +176,28 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
       result.servicePrimaryFocus = await focusEvidence(page, '.aznet-theme-page__service-primary');
       if (!result.servicePrimaryFocus?.visible || !result.servicePrimaryFocus.focusVisible || result.servicePrimaryFocus.outlineStyle === 'none' || result.servicePrimaryFocus.outlineWidth < 1) {
         throw new Error(`Service primary CTA lacks visible focus evidence: ${JSON.stringify(result.servicePrimaryFocus)}`);
+      }
+    }
+
+    if (config.contact) {
+      if (await page.locator('.aznet-theme-page--contact').count() !== 1) throw new Error('Expected mapped premium Contact Page presentation');
+      if (await page.locator('.aznet-theme-contact-page__hero').count() !== 1) throw new Error('Expected Contact Page hero');
+      const contactHeroRadius = await page.locator('.aznet-theme-contact-page__hero').evaluate((element) => {
+        const style = getComputedStyle(element);
+        return [style.borderTopLeftRadius, style.borderTopRightRadius];
+      });
+      if (contactHeroRadius.some((value) => Number.parseFloat(value) > 0)) {
+        throw new Error(`Contact first section exposes rounded top edges: ${contactHeroRadius.join(', ')}`);
+      }
+      if (await page.locator('.aznet-theme-contact-page__content-card').count() !== 1) throw new Error('Expected Contact Page authored-content card');
+      if (await page.locator('#y1-contact-content').count() !== 1) throw new Error('Expected WordPress-owned Contact Page content');
+      const contactStyles = await page.evaluate(() => Array.from(document.styleSheets).map((sheet) => sheet.href).filter(Boolean));
+      if (!contactStyles.some((href) => href.includes('/assets/css/components/contact-page.css'))) {
+        throw new Error('Contact Page stylesheet not observed');
+      }
+      result.contactPrimaryFocus = await focusEvidence(page, '.aznet-theme-contact-page__primary');
+      if (!result.contactPrimaryFocus?.visible || !result.contactPrimaryFocus.focusVisible || result.contactPrimaryFocus.outlineStyle === 'none' || result.contactPrimaryFocus.outlineWidth < 1) {
+        throw new Error(`Contact primary CTA lacks visible focus evidence: ${JSON.stringify(result.contactPrimaryFocus)}`);
       }
     }
 

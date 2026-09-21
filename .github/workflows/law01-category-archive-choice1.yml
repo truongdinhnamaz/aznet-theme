@@ -1,0 +1,179 @@
+name: Law 01 Category Archive Choice 1
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'archive.php'
+      - 'inc/theme/archive-presentation.php'
+      - 'inc/theme/bootstrap.php'
+      - 'inc/theme/assets.php'
+      - 'template-parts/archive/**'
+      - 'assets/css/components/archive-law-01.css'
+      - 'scripts/verify-v1-core.sh'
+      - 'tests/offline/law01-category-archive-choice1-contract.php'
+      - 'tests/runtime/law01-category-archive-choice1.php'
+      - 'tests/browser/law01-category-archive-choice1-l4.mjs'
+      - '.github/workflows/law01-category-archive-choice1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Verify Choice 1 contract and retained Core
+        run: |
+          set -euo pipefail
+          git diff --check
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-category-archive-choice1-contract.php
+          bash scripts/verify-v1-core.sh
+
+  runtime-browser-package:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Record exact candidate
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/law01-archive /tmp/law01-archive-l4 /tmp/law01-package
+          git rev-parse HEAD | tee /tmp/law01-archive/checkout-sha.txt
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+      - name: Install WordPress 6.9 and Theme candidate
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/wp
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='AZnet Law 01 Archive' --admin_user=admin --admin_password='archive-choice1-password' --admin_email=ci@example.test --skip-email --allow-root
+          rsync -a --delete             --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests'             --exclude='README.md' --exclude='aznet-preview.png'             ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          wp core version --path=/tmp/wp --allow-root | grep -Fx '6.9'
+          wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp --allow-root)"
+      - name: Seed category archive fixture
+        run: |
+          set -euo pipefail
+          wp eval-file "$GITHUB_WORKSPACE/tests/runtime/law01-category-archive-choice1.php" --path=/tmp/wp --allow-root > /tmp/law01-archive/fixture.json
+          jq -e '.category_id > 0 and (.post_ids | length) == 11 and .attachment_id > 0' /tmp/law01-archive/fixture.json
+      - name: Start WordPress runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/law01-archive/server.log 2>&1 &
+          echo $! > /tmp/law01-archive/server.pid
+          for attempt in $(seq 1 30); do
+            curl -sS http://127.0.0.1:8080/ >/dev/null && break
+            sleep 1
+          done
+          curl -sS http://127.0.0.1:8080/ >/dev/null
+      - name: Verify WordPress runtime surface
+        run: |
+          set -euo pipefail
+          archive_url="$(jq -r '.archive_url' /tmp/law01-archive/fixture.json)"
+          code="$(curl -sS -o /tmp/law01-archive/archive.html -w '%{http_code}' "$archive_url")"
+          test "$code" = 200
+          test "$(grep -o 'id="main"' /tmp/law01-archive/archive.html | wc -l)" -eq 1
+          test "$(grep -o '<h1' /tmp/law01-archive/archive.html | wc -l)" -eq 1
+          grep -F 'aznet-theme-law01-archive' /tmp/law01-archive/archive.html
+          grep -F 'aznet-theme-law01-archive-item--featured' /tmp/law01-archive/archive.html
+          test "$(grep -o 'aznet-theme-law01-archive-item--latest' /tmp/law01-archive/archive.html | wc -l)" -eq 3
+          test "$(grep -o 'aznet-theme-law01-archive-item--standard' /tmp/law01-archive/archive.html | wc -l)" -eq 2
+          grep -F 'aznet-theme-archive-law-01-css' /tmp/law01-archive/archive.html
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/law01-archive/server.log; then
+            echo 'FAIL: Theme-caused PHP error marker found' >&2
+            exit 1
+          fi
+          echo 'PASS: Law 01 Choice 1 L3 runtime'
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+      - name: Run desktop tablet mobile browser verification
+        env:
+          LAW01_ARCHIVE_STATE_DIR: /tmp/law01-archive
+          LAW01_ARCHIVE_L4_DIR: /tmp/law01-archive-l4
+        run: node tests/browser/law01-category-archive-choice1-l4.mjs
+      - name: Verify ownership boundary
+        run: |
+          set -euo pipefail
+          if git diff -U0 "${{ github.event.pull_request.base.sha || 'main' }}"...HEAD -- archive.php inc/theme/archive-presentation.php template-parts/archive assets/css/components/archive-law-01.css | grep -E '^\+.*(new WP_Query|WP_Query\(|query_posts\(|get_posts\(|pre_get_posts|get_option\(|get_post_meta\(|\$wpdb|REQUEST_URI|parse_url\(|is_category\( .tin-tuc.)'; then
+            echo 'FAIL: archive Choice 1 crossed native query/storage/route boundary' >&2
+            exit 1
+          fi
+          echo 'PASS: native WordPress category/query ownership retained'
+      - name: Build exact installable Theme package
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/law01-package/aznet-theme
+          mkdir -p /tmp/law01-package/aznet-theme
+          rsync -a --delete             --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests'             --exclude='README.md' --exclude='aznet-preview.png'             ./ /tmp/law01-package/aznet-theme/
+          cd /tmp/law01-package
+          zip -qr aznet-theme-1.3.25-law01-archive-choice1.zip aznet-theme
+          sha256sum aznet-theme-1.3.25-law01-archive-choice1.zip | tee aznet-theme-1.3.25-law01-archive-choice1.SHA256SUMS.txt
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: law01-category-archive-choice1-evidence
+          path: |
+            /tmp/law01-archive
+            /tmp/law01-archive-l4
+          if-no-files-found: error
+      - name: Upload installable Theme package
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aznet-theme-law01-archive-choice1-package
+          path: |
+            /tmp/law01-package/aznet-theme-1.3.25-law01-archive-choice1.zip
+            /tmp/law01-package/aznet-theme-1.3.25-law01-archive-choice1.SHA256SUMS.txt
+          if-no-files-found: error
+      - name: Stop runtime
+        if: always()
+        run: |
+          if [[ -f /tmp/law01-archive/server.pid ]]; then
+            kill "$(cat /tmp/law01-archive/server.pid)" || true
+          fi

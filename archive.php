@@ -11,6 +11,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
+if ( \AZnet\Theme\law01_category_archive_active() ) {
+    ?>
+    <main id="main" class="aznet-theme-main aznet-theme-main--listing aznet-theme-main--law01-category">
+        <div class="aznet-theme-content-shell">
+            <?php get_template_part( 'template-parts/archive/law01-category' ); ?>
+        </div>
+    </main>
+    <?php
+    get_footer();
+    return;
+}
+
 $shell_classes = \AZnet\Theme\content_shell_classes( false );
 ?>
 <main id="main" class="aznet-theme-main aznet-theme-main--listing">

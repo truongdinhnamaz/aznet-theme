@@ -1,15 +1,42 @@
+.aznet-theme-main--page {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    padding-block: 0;
+    overflow-x: clip;
+}
+
 .aznet-theme-page {
-    width: min(calc(100% - (var(--aznet-theme-gutter) * 2)), var(--aznet-theme-container-shell));
-    margin-inline: auto;
-    padding-block: var(--aznet-theme-space-section);
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    padding-block: 0;
     color: var(--aznet-theme-text);
+}
+
+.aznet-theme-page > :first-child {
+    margin-block-start: 0;
+}
+
+.aznet-theme-page > :last-child {
+    margin-block-end: 0;
 }
 
 .aznet-theme-page__header {
     width: 100%;
-    max-width: var(--aznet-theme-container-wide);
+    max-width: none;
+    margin-inline: 0;
+    margin-block-end: 0;
+    padding-block: var(--aznet-theme-space-section) var(--aznet-theme-space-6);
+}
+
+.aznet-theme-page__section-inner {
+    width: min(calc(100% - (var(--aznet-theme-gutter) * 2)), var(--aznet-theme-container-wide));
     margin-inline: auto;
-    margin-block-end: var(--aznet-theme-space-6);
+}
+
+.aznet-theme-page__content-section {
+    width: 100%;
 }
 
 .aznet-theme-page__title {
@@ -77,6 +104,7 @@
 .aznet-theme-page__content {
     min-width: 0;
     margin-inline: auto;
+    padding-block-end: var(--aznet-theme-space-section);
     overflow-wrap: anywhere;
 }
 
@@ -88,12 +116,14 @@
     max-width: var(--aznet-theme-container-wide);
 }
 
-.aznet-theme-page--landing .aznet-theme-page__header {
-    max-width: var(--aznet-theme-container-shell);
+.aznet-theme-page--landing .aznet-theme-page__section-inner--header {
+    width: min(calc(100% - (var(--aznet-theme-gutter) * 2)), var(--aznet-theme-container-shell));
 }
 
-.aznet-theme-page--landing .aznet-theme-page__content {
+.aznet-theme-page--landing .aznet-theme-page__content-inner {
+    width: 100%;
     max-width: none;
+    padding-block-end: 0;
 }
 
 .aznet-theme-page__content :where(img, video, svg, iframe) {
@@ -147,7 +177,20 @@
 
 @media (max-width: 47.999rem) {
     .aznet-theme-page {
+        width: 100%;
+        max-width: none;
+    }
+
+    .aznet-theme-page__section-inner {
+        width: min(calc(100% - (var(--aznet-theme-gutter-mobile) * 2)), var(--aznet-theme-container-wide));
+    }
+
+    .aznet-theme-page--landing .aznet-theme-page__section-inner--header {
         width: min(calc(100% - (var(--aznet-theme-gutter-mobile) * 2)), var(--aznet-theme-container-shell));
+    }
+
+    .aznet-theme-page--landing .aznet-theme-page__content-inner {
+        width: 100%;
     }
 
     .aznet-theme-page-kit {
