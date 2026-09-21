@@ -14,6 +14,7 @@ $files = [
     'assets/css/components/page.css',
     'assets/css/components/services-page.css',
     'assets/css/components/contact-page.css',
+    'assets/css/components/service-page.css',
 ];
 
 foreach ($files as $relative) {
@@ -27,6 +28,7 @@ $template = (string) file_get_contents($root . '/template-parts/content/page.php
 $pageCss = (string) file_get_contents($root . '/assets/css/components/page.css');
 $servicesCss = (string) file_get_contents($root . '/assets/css/components/services-page.css');
 $contactCss = (string) file_get_contents($root . '/assets/css/components/contact-page.css');
+$serviceDetailCss = (string) file_get_contents($root . '/assets/css/components/service-page.css');
 
 foreach ([
     'aznet-theme-main--page',
@@ -95,6 +97,25 @@ foreach ([
 ] as $needle) {
     if (!str_contains($contactCss, $needle)) {
         $fail('Contact Page CSS missing full-section edge marker: ' . $needle);
+    }
+}
+
+foreach ([
+    '.aznet-theme-page--service-detail .aznet-theme-page__header {',
+    'width: 100%;',
+    'max-width: none;',
+    'margin-block-end: 0;',
+    'border-top: 0;',
+    'border-inline: 0;',
+    'border-top-left-radius: 0;',
+    'border-top-right-radius: 0;',
+    '.aznet-theme-page__service-siblings {',
+    'max-width: none;',
+    'margin: 0;',
+    'padding-block:',
+] as $needle) {
+    if (!str_contains($serviceDetailCss, $needle)) {
+        $fail('Service detail Page CSS missing full-section edge marker: ' . $needle);
     }
 }
 
