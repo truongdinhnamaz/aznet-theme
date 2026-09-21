@@ -30,10 +30,10 @@ foreach ([
     'function register_widget_areas',
     'register_sidebar(',
     "'id'            => 'article-navigation'",
-    "'name'          => __( 'Điều hướng bài viết'",
+    "'name'          => __( 'Sidebar bài viết'",
 ] as $needle) {
     if (!str_contains($widgets, $needle)) {
-        $fail('Theme does not register the native article navigation widget area: ' . $needle);
+        $fail('Theme does not register the native article sidebar widget area: ' . $needle);
     }
 }
 
@@ -49,8 +49,8 @@ foreach ([
 foreach ([
     "is_active_sidebar( 'article-navigation' )",
     "dynamic_sidebar( 'article-navigation' )",
-    'aznet-theme-article__navigation-sidebar',
-    'aznet-theme-article__reading-layout--with-navigation',
+    'aznet-theme-article__sidebar',
+    'aznet-theme-article__reading-layout--with-sidebar',
 ] as $needle) {
     if (!str_contains($single, $needle)) {
         $fail('single Post template does not render the native article navigation widget area: ' . $needle);
@@ -58,13 +58,13 @@ foreach ([
 }
 
 foreach ([
-    '.aznet-theme-article__reading-layout--with-navigation',
-    '.aznet-theme-article__navigation-sidebar',
+    '.aznet-theme-article__reading-layout--with-sidebar',
+    '.aznet-theme-article__sidebar',
     'position: sticky',
     '@media (max-width: 64rem)',
 ] as $needle) {
     if (!str_contains($css, $needle)) {
-        $fail('article CSS does not support the responsive navigation sidebar: ' . $needle);
+        $fail('article CSS does not support the responsive article sidebar: ' . $needle);
     }
 }
 
@@ -83,4 +83,4 @@ foreach ([
     }
 }
 
-echo "PASS: native Article Navigation widget area contract\n";
+echo "PASS: native Article Sidebar widget area contract\n";
