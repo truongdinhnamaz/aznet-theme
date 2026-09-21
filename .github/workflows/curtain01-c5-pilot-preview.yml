@@ -1,0 +1,439 @@
+name: C5 Curtain 01 Pilot-shaped Preview
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'front-page.php'
+      - 'inc/theme/settings.php'
+      - 'inc/theme/design-system.php'
+      - 'inc/theme/homepage-*.php'
+      - 'inc/theme/assets.php'
+      - 'inc/integrations/woocommerce.php'
+      - 'template-parts/homepage/curtain-01/**'
+      - 'assets/css/presets/curtain-01.css'
+      - 'assets/css/components/homepage-curtain-01.css'
+      - 'tests/browser/curtain01-c5-pilot-preview.mjs'
+      - '.github/workflows/curtain01-c5-pilot-preview.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  curtain01-c5:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+
+      - name: Record exact candidate
+        run: git rev-parse HEAD
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli, gd
+          coverage: none
+
+      - name: Install WordPress 7.1.1, Theme and WooCommerce 11.1.1
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+
+          rm -rf /tmp/wp /tmp/curtain01-c5
+          mkdir -p /tmp/wp /tmp/curtain01-c5
+          wp core download --version=7.1.1 --path=/tmp/wp --force --allow-root
+          wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='Rèm Quốc Anh C5 Preview' --admin_user=admin --admin_password='curtain01-preview-password' --admin_email=curtain01@example.test --skip-email --allow-root
+
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
+            ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+
+          wp plugin install woocommerce --version=11.1.1 --activate --path=/tmp/wp --allow-root
+
+          wp core version --path=/tmp/wp --allow-root | grep -Fx '7.1.1'
+          wp plugin get woocommerce --field=version --path=/tmp/wp --allow-root | grep -Fx '11.1.1'
+          wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
+
+      - name: Seed pilot-shaped migrated WordPress and WooCommerce data
+        run: |
+          set -euo pipefail
+          cat > /tmp/curtain01-c5-fixture.php <<'PHP'
+          <?php
+          function curtain01_image( int $post_id, string $key, int $width = 1400, int $height = 900 ): int {
+              $upload = wp_upload_dir();
+              if ( ! empty( $upload['error'] ) ) { throw new RuntimeException( (string) $upload['error'] ); }
+              $path = trailingslashit( $upload['path'] ) . sanitize_file_name( 'curtain01-' . $key . '.png' );
+              $image = imagecreatetruecolor( $width, $height );
+              if ( false === $image ) { throw new RuntimeException( 'Unable to create image fixture.' ); }
+              $seed = (int) sprintf( '%u', crc32( $key ) );
+              $wall = imagecolorallocate( $image, 235 + ( $seed % 12 ), 229 + ( ( $seed >> 2 ) % 10 ), 216 + ( ( $seed >> 5 ) % 12 ) );
+              $charcoal = imagecolorallocate( $image, 45, 41, 36 );
+              $bronze = imagecolorallocate( $image, 150, 112, 72 );
+              $linen = imagecolorallocate( $image, 250, 247, 240 );
+              imagefilledrectangle( $image, 0, 0, $width, $height, $wall );
+              imagefilledrectangle( $image, 0, (int) ( $height * .78 ), $width, $height, $charcoal );
+              imagefilledrectangle( $image, (int) ( $width * .10 ), (int) ( $height * .08 ), (int) ( $width * .54 ), (int) ( $height * .76 ), $linen );
+              imagefilledrectangle( $image, (int) ( $width * .15 ), (int) ( $height * .08 ), (int) ( $width * .20 ), (int) ( $height * .76 ), $bronze );
+              imagefilledrectangle( $image, (int) ( $width * .34 ), (int) ( $height * .08 ), (int) ( $width * .39 ), (int) ( $height * .76 ), $bronze );
+              imagefilledellipse( $image, (int) ( $width * .76 ), (int) ( $height * .60 ), (int) ( $width * .25 ), (int) ( $height * .22 ), $bronze );
+              imagepng( $image, $path, 6 );
+              imagedestroy( $image );
+
+              $attachment_id = wp_insert_attachment(
+                  [
+                      'post_mime_type' => 'image/png',
+                      'post_title' => 'Curtain 01 fixture ' . $key,
+                      'post_status' => 'inherit',
+                  ],
+                  $path,
+                  $post_id,
+                  true
+              );
+              if ( is_wp_error( $attachment_id ) ) { throw new RuntimeException( $attachment_id->get_error_message() ); }
+              require_once ABSPATH . 'wp-admin/includes/image.php';
+              $metadata = wp_generate_attachment_metadata( (int) $attachment_id, $path );
+              if ( is_array( $metadata ) ) { wp_update_attachment_metadata( (int) $attachment_id, $metadata ); }
+              return (int) $attachment_id;
+          }
+
+          function curtain01_page( string $title, string $slug, string $excerpt = '', string $content = '' ): int {
+              $id = wp_insert_post(
+                  [
+                      'post_type' => 'page',
+                      'post_status' => 'publish',
+                      'post_title' => $title,
+                      'post_name' => $slug,
+                      'post_excerpt' => $excerpt,
+                      'post_content' => $content,
+                  ],
+                  true
+              );
+              if ( is_wp_error( $id ) ) { throw new RuntimeException( $id->get_error_message() ); }
+              return (int) $id;
+          }
+
+          function curtain01_post( string $title, string $slug, int $category, string $date ): int {
+              $id = wp_insert_post(
+                  [
+                      'post_type' => 'post',
+                      'post_status' => 'publish',
+                      'post_title' => $title,
+                      'post_name' => $slug,
+                      'post_excerpt' => 'Gợi ý thực tế giúp lựa chọn giải pháp rèm theo hình dạng cửa, ánh sáng và nhu cầu sử dụng.',
+                      'post_content' => '<p>Nội dung kiểm thử WordPress-owned cho bản xem trước Rèm 01.</p>',
+                      'post_date' => $date,
+                      'post_date_gmt' => get_gmt_from_date( $date ),
+                  ],
+                  true
+              );
+              if ( is_wp_error( $id ) ) { throw new RuntimeException( $id->get_error_message() ); }
+              wp_set_post_categories( (int) $id, [ $category ] );
+              $image = curtain01_image( (int) $id, $slug, 1200, 750 );
+              set_post_thumbnail( (int) $id, $image );
+              return (int) $id;
+          }
+
+          function curtain01_product_category( string $name, string $slug ): int {
+              $existing = term_exists( $slug, 'product_cat' );
+              if ( is_array( $existing ) ) { return (int) $existing['term_id']; }
+              $term = wp_insert_term( $name, 'product_cat', [ 'slug' => $slug ] );
+              if ( is_wp_error( $term ) ) { throw new RuntimeException( $term->get_error_message() ); }
+              return (int) $term['term_id'];
+          }
+
+          function curtain01_product( string $name, string $slug, int $category, int $order ): int {
+              $product = new WC_Product_Simple();
+              $product->set_name( $name );
+              $product->set_slug( $slug );
+              $product->set_status( 'publish' );
+              $product->set_catalog_visibility( 'visible' );
+              $product->set_menu_order( $order );
+              $product->set_short_description( 'Mẫu sản phẩm pilot-shaped; commerce truth remains WooCommerce-owned.' );
+              $id = $product->save();
+              if ( $id <= 0 ) { throw new RuntimeException( 'Unable to create product ' . $name ); }
+              wp_set_object_terms( $id, [ $category ], 'product_cat' );
+              $image = curtain01_image( $id, 'product-' . $slug, 1000, 760 );
+              $product = wc_get_product( $id );
+              $product->set_image_id( $image );
+              $product->save();
+              return $id;
+          }
+
+          update_option( 'blogname', 'Rèm Quốc Anh' );
+          update_option( 'blogdescription', 'Từ nghề truyền thống đến giải pháp không gian.' );
+
+          $front = curtain01_page(
+              'Rèm Quốc Anh',
+              'trang-chu',
+              'Giải pháp rèm theo không gian, ánh sáng và nhu cầu sử dụng.',
+              '<!-- wp:paragraph --><p id="curtain01-native-body">Nội dung WordPress native sau migration; không phụ thuộc UX Builder.</p><!-- /wp:paragraph -->'
+          );
+          $front_image = curtain01_image( $front, 'front', 1600, 1000 );
+          set_post_thumbnail( $front, $front_image );
+
+          $about = curtain01_page(
+              'Giới thiệu về Rèm Quốc Anh',
+              'gioi-thieu',
+              'Hơn hai thập kỷ gìn giữ nghề rèm và hoàn thiện giải pháp phù hợp cho từng không gian.'
+          );
+          set_post_thumbnail( $about, curtain01_image( $about, 'about', 1200, 1500 ) );
+
+          $collection = curtain01_page( 'Bộ sưu tập', 'bo-suu-tap', 'Khám phá các nhóm rèm theo chất liệu và cách sử dụng.' );
+          $projects = curtain01_page( 'Công trình', 'cong-trinh', 'Các không gian đã hoàn thiện.' );
+          $knowledge_page = curtain01_page( 'Kiến thức', 'kien-thuc', 'Kinh nghiệm chọn và sử dụng rèm.' );
+          $contact = curtain01_page( 'Liên hệ', 'lien-he', 'Trao đổi nhu cầu để nhận tư vấn phù hợp.' );
+          $quote = curtain01_page( 'Báo giá rèm tại Rèm Quốc Anh', 'bao-gia-rem', 'Gửi thông tin để nhận báo giá theo nhu cầu.' );
+
+          $knowledge_term = wp_insert_term( 'Tư vấn chọn rèm', 'category', [ 'slug' => 'tu-van-chon-rem' ] );
+          if ( is_wp_error( $knowledge_term ) ) { throw new RuntimeException( $knowledge_term->get_error_message() ); }
+          $knowledge_id = (int) $knowledge_term['term_id'];
+
+          $post_titles = [
+              'Làm rèm cho cửa không vuông: Những gì cần kiểm tra trước khi lắp',
+              'Cách chọn rèm cho cửa vòm: 5 tiêu chí giúp chọn đúng giải pháp',
+              'Cửa vòm có lắp rèm được không? Giải đáp trước khi chọn giải pháp',
+              'Cửa hình dạng đặc biệt nên dùng rèm gì? 5 cách xử lý cần biết',
+              'Cửa vòm nên lắp rèm gì? Cách chọn rèm phù hợp với từng nhu cầu',
+          ];
+          foreach ( $post_titles as $index => $title ) {
+              curtain01_post( $title, 'tu-van-rem-' . ( $index + 1 ), $knowledge_id, sprintf( '2026-08-31 1%d:00:00', 7 - $index ) );
+          }
+
+          $product_categories = [
+              'rem-vai' => curtain01_product_category( 'Rèm vải', 'rem-vai' ),
+              'rem-cuon' => curtain01_product_category( 'Rèm Cuốn', 'rem-cuon' ),
+              'rem-cau-vong' => curtain01_product_category( 'Rèm Cầu Vồng', 'rem-cau-vong' ),
+              'rem-roman' => curtain01_product_category( 'Rèm Roman', 'rem-roman' ),
+          ];
+
+          $products = [
+              [ 'Rèm vải đơn sắc', 'rem-vai-don-sac', 'rem-vai' ],
+              [ 'Rèm Vải 2 Lớp', 'rem-vai-2-lop', 'rem-vai' ],
+              [ 'Rèm voan', 'rem-voan', 'rem-vai' ],
+              [ 'Rèm cuốn chống cháy', 'rem-cuon-chong-chay', 'rem-cuon' ],
+              [ 'Rèm cuốn xuyên sáng', 'rem-cuon-xuyen-sang', 'rem-cuon' ],
+              [ 'Rèm cuốn cản sáng', 'rem-cuon-can-sang', 'rem-cuon' ],
+              [ 'Rèm cầu vồng chống cháy', 'rem-cau-vong-chong-chay', 'rem-cau-vong' ],
+              [ 'Rèm cầu vồng xuyên sáng', 'rem-cau-vong-xuyen-sang', 'rem-cau-vong' ],
+              [ 'Rèm cầu vồng cản sáng', 'rem-cau-vong-can-sang', 'rem-cau-vong' ],
+              [ 'Rèm vải hoa văn', 'rem-vai-hoa-van', 'rem-roman' ],
+          ];
+          $product_ids = [];
+          foreach ( $products as $index => $row ) {
+              $product_ids[] = curtain01_product( $row[0], $row[1], $product_categories[ $row[2] ], $index + 1 );
+          }
+
+          $shop = curtain01_page( 'Sản phẩm', 'san-pham', 'Danh mục sản phẩm WooCommerce.' );
+          update_option( 'woocommerce_shop_page_id', $shop );
+
+          $hero_url = wp_get_attachment_url( $front_image );
+          $hero_content = sprintf(
+              '<!-- wp:cover {"url":"%1$s","id":%2$d,"dimRatio":35,"minHeight":620,"minHeightUnit":"px","contentPosition":"center center"} --><div class="wp-block-cover" style="min-height:620px"><span aria-hidden="true" class="wp-block-cover__background has-background-dim-35 has-background-dim"></span><img class="wp-block-cover__image-background wp-image-%2$d" alt="" src="%1$s" data-object-fit="cover"/><div class="wp-block-cover__inner-container"><!-- wp:paragraph {"align":"center"} --><p class="has-text-align-center">HƠN HAI THẬP KỶ GÌN GIỮ NGHỀ RÈM</p><!-- /wp:paragraph --><!-- wp:heading {"textAlign":"center","level":1} --><h1 class="wp-block-heading has-text-align-center">Từ nghề truyền thống đến giải pháp không gian</h1><!-- /wp:heading --><!-- wp:paragraph {"align":"center"} --><p class="has-text-align-center">Rèm được lựa chọn theo ánh sáng, công năng và thẩm mỹ của từng không gian.</p><!-- /wp:paragraph --></div></div><!-- /wp:cover -->',
+              esc_url_raw( (string) $hero_url ),
+              $front_image
+          );
+          $hero = wp_insert_post(
+              [
+                  'post_type' => 'wp_block',
+                  'post_status' => 'publish',
+                  'post_title' => 'Hero Rèm 01',
+                  'post_content' => $hero_content,
+              ],
+              true
+          );
+          if ( is_wp_error( $hero ) ) { throw new RuntimeException( $hero->get_error_message() ); }
+
+          update_option( 'show_on_front', 'page' );
+          update_option( 'page_on_front', $front );
+          set_theme_mod(
+              'aznet_theme_settings',
+              [
+                  'schema_version' => 3,
+                  'visual_preset' => 'curtain-01',
+                  'page_breadcrumbs' => true,
+                  'header_preset' => 'standard',
+                  'header_sticky' => 'sticky',
+                  'header_search' => false,
+                  'header_utilities' => false,
+                  'footer_preset' => 'professional',
+                  'woo_catalog_preset' => 'grid',
+                  'woo_product_card_density' => 'balanced',
+                  'woo_product_preset' => 'focus',
+                  'homepage_preset' => 'curtain-01',
+                  'homepage_hero_variant' => 'split',
+                  'homepage_hero_block' => (int) $hero,
+                  'homepage_about_page' => $about,
+                  'homepage_knowledge_terms' => [ $knowledge_id ],
+                  'homepage_contact_page' => $contact,
+              ]
+          );
+
+          $logo = curtain01_image( 0, 'logo', 520, 180 );
+          set_theme_mod( 'custom_logo', $logo );
+
+          echo wp_json_encode(
+              compact(
+                  'front',
+                  'about',
+                  'collection',
+                  'projects',
+                  'knowledge_page',
+                  'contact',
+                  'quote',
+                  'shop',
+                  'hero',
+                  'knowledge_id',
+                  'product_ids'
+              )
+          );
+          PHP
+
+          wp eval-file /tmp/curtain01-c5-fixture.php --path=/tmp/wp --allow-root | tee /tmp/curtain01-c5/fixture.json
+
+          FRONT_ID=$(php -r '$j=json_decode(file_get_contents("/tmp/curtain01-c5/fixture.json"), true); echo $j["front"];')
+          ABOUT_ID=$(php -r '$j=json_decode(file_get_contents("/tmp/curtain01-c5/fixture.json"), true); echo $j["about"];')
+          COLLECTION_ID=$(php -r '$j=json_decode(file_get_contents("/tmp/curtain01-c5/fixture.json"), true); echo $j["collection"];')
+          PROJECTS_ID=$(php -r '$j=json_decode(file_get_contents("/tmp/curtain01-c5/fixture.json"), true); echo $j["projects"];')
+          KNOWLEDGE_PAGE_ID=$(php -r '$j=json_decode(file_get_contents("/tmp/curtain01-c5/fixture.json"), true); echo $j["knowledge_page"];')
+          CONTACT_ID=$(php -r '$j=json_decode(file_get_contents("/tmp/curtain01-c5/fixture.json"), true); echo $j["contact"];')
+          QUOTE_ID=$(php -r '$j=json_decode(file_get_contents("/tmp/curtain01-c5/fixture.json"), true); echo $j["quote"];')
+          SHOP_ID=$(php -r '$j=json_decode(file_get_contents("/tmp/curtain01-c5/fixture.json"), true); echo $j["shop"];')
+
+          MENU_ID=$(wp menu create 'Main menu' --porcelain --path=/tmp/wp --allow-root)
+          wp menu item add-post "$MENU_ID" "$FRONT_ID" --title='Trang chủ' --path=/tmp/wp --allow-root >/dev/null
+          wp menu item add-post "$MENU_ID" "$ABOUT_ID" --title='Giới thiệu' --path=/tmp/wp --allow-root >/dev/null
+          wp menu item add-post "$MENU_ID" "$SHOP_ID" --title='Sản phẩm' --path=/tmp/wp --allow-root >/dev/null
+          wp menu item add-post "$MENU_ID" "$QUOTE_ID" --title='Báo giá' --path=/tmp/wp --allow-root >/dev/null
+          wp menu item add-post "$MENU_ID" "$PROJECTS_ID" --title='Công trình' --path=/tmp/wp --allow-root >/dev/null
+          wp menu item add-post "$MENU_ID" "$KNOWLEDGE_PAGE_ID" --title='Kiến thức' --path=/tmp/wp --allow-root >/dev/null
+          wp menu item add-post "$MENU_ID" "$CONTACT_ID" --title='Liên hệ' --path=/tmp/wp --allow-root >/dev/null
+          wp menu location assign "$MENU_ID" primary --path=/tmp/wp --allow-root
+
+          FOOTER_ID=$(wp menu create 'Footer Curtain01' --porcelain --path=/tmp/wp --allow-root)
+          wp menu item add-post "$FOOTER_ID" "$ABOUT_ID" --title='Giới thiệu' --path=/tmp/wp --allow-root >/dev/null
+          wp menu item add-post "$FOOTER_ID" "$COLLECTION_ID" --title='Bộ sưu tập' --path=/tmp/wp --allow-root >/dev/null
+          wp menu item add-post "$FOOTER_ID" "$PROJECTS_ID" --title='Công trình' --path=/tmp/wp --allow-root >/dev/null
+          wp menu item add-post "$FOOTER_ID" "$CONTACT_ID" --title='Liên hệ' --path=/tmp/wp --allow-root >/dev/null
+          wp menu location assign "$FOOTER_ID" footer --path=/tmp/wp --allow-root
+
+          wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+
+          wp option get show_on_front --path=/tmp/wp --allow-root | grep -Fx 'page'
+          wp post get "$FRONT_ID" --field=post_content --path=/tmp/wp --allow-root | grep -F 'curtain01-native-body'
+          if wp post get "$FRONT_ID" --field=post_content --path=/tmp/wp --allow-root | grep -E '\[(section|ux_|row|col|blog_posts|ux_products)'; then
+            echo 'Legacy Flatsome shortcode unexpectedly present in migrated Front Page fixture.' >&2
+            exit 1
+          fi
+
+      - name: Start candidate runtime
+        run: |
+          set -euo pipefail
+          cat > /tmp/wp-router.php <<'PHP'
+          <?php
+          $path = parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH );
+          $file = '/tmp/wp' . $path;
+          if ( '/' !== $path && is_file( $file ) ) {
+              return false;
+          }
+          require '/tmp/wp/index.php';
+          PHP
+
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp /tmp/wp-router.php > /tmp/curtain01-c5/server.log 2>&1 &
+          echo $! > /tmp/curtain01-c5/server.pid
+
+          for attempt in $(seq 1 40); do
+            if curl -fsS http://127.0.0.1:8080/ > /tmp/curtain01-c5/home.html; then break; fi
+            sleep 1
+          done
+
+          curl -fsS http://127.0.0.1:8080/ > /tmp/curtain01-c5/home.html
+          grep -F 'aznet-theme-homepage--curtain-01' /tmp/curtain01-c5/home.html
+          grep -F 'aznet-theme-curtain01-catalogue' /tmp/curtain01-c5/home.html
+          grep -F 'aznet-theme-curtain01-knowledge' /tmp/curtain01-c5/home.html
+          grep -F 'curtain01-native-body' /tmp/curtain01-c5/home.html
+          grep -F '/assets/css/presets/curtain-01.css' /tmp/curtain01-c5/home.html
+          grep -F '/assets/css/components/homepage-curtain-01.css' /tmp/curtain01-c5/home.html
+          if grep -E '\[(section|ux_|row|col|blog_posts|ux_products)' /tmp/curtain01-c5/home.html; then
+            echo 'Legacy Flatsome shortcode leaked into candidate Homepage.' >&2
+            exit 1
+          fi
+          if grep -i 'flatsome' /tmp/curtain01-c5/home.html; then
+            echo 'Flatsome runtime dependency marker found in candidate Homepage.' >&2
+            exit 1
+          fi
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/curtain01-c5/server.log; then
+            echo 'Runtime PHP error marker found.' >&2
+            exit 1
+          fi
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright and axe
+        run: |
+          set -euo pipefail
+          npm init -y >/dev/null
+          npm install --no-audit --no-fund playwright @axe-core/playwright
+          npx playwright install --with-deps chromium
+
+      - name: Run responsive browser and accessibility preview
+        env:
+          CURTAIN01_BASE_URL: http://127.0.0.1:8080
+          CURTAIN01_OUT_DIR: /tmp/curtain01-c5
+        run: node tests/browser/curtain01-c5-pilot-preview.mjs
+
+      - name: Verify runtime log boundary
+        run: |
+          set -euo pipefail
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/curtain01-c5/server.log; then
+            echo 'Runtime PHP error marker found after browser gate.' >&2
+            exit 1
+          fi
+          test -f /tmp/curtain01-c5/summary.json
+          cat /tmp/curtain01-c5/summary.json
+
+      - name: Upload C5 preview evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: curtain01-c5-pilot-preview-${{ github.sha }}
+          path: |
+            /tmp/curtain01-c5/*.png
+            /tmp/curtain01-c5/*-axe.json
+            /tmp/curtain01-c5/summary.json
+            /tmp/curtain01-c5/fixture.json
+            /tmp/curtain01-c5/server.log
+          if-no-files-found: error
+
+      - name: Stop runtime
+        if: always()
+        run: |
+          if [ -f /tmp/curtain01-c5/server.pid ]; then
+            kill "$(cat /tmp/curtain01-c5/server.pid)" || true
+          fi
