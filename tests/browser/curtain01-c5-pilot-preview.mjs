@@ -22,7 +22,16 @@ async function assertA11y(page, label) {
   const serious = axe.violations.filter((item) => ['critical', 'serious'].includes(item.impact || ''));
   fs.writeFileSync(path.join(outDir, `${label}-axe.json`), JSON.stringify(axe, null, 2));
   if (serious.length) {
-    throw new Error(`${label}: axe serious/critical violations: ${serious.map((item) => item.id).join(', ')}`);
+    const detail = serious.map((item) => ({
+      id: item.id,
+      impact: item.impact,
+      nodes: item.nodes.slice(0, 6).map((node) => ({
+        target: node.target,
+        html: node.html,
+        failureSummary: node.failureSummary,
+      })),
+    }));
+    throw new Error(`${label}: axe serious/critical violations: ${JSON.stringify(detail)}`);
   }
   return { violations: axe.violations.length, serious: serious.length };
 }
