@@ -29,7 +29,9 @@ jobs:
           coverage: none
 
       - name: Verify diff hygiene
-        run: git diff --check origin/main...HEAD
+        run: |
+          git fetch origin main:refs/remotes/origin/main
+          git diff --check origin/main...HEAD
 
       - name: Run Curtain 01 C2 contract
         run: php tests/offline/curtain01-c2-preset-foundation-contract.php
