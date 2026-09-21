@@ -63,6 +63,10 @@
     text-transform: uppercase;
 }
 
+.aznet-theme-contact-page__section-kicker {
+    color: var(--law01-contact-burgundy);
+}
+
 .aznet-theme-contact-page__title {
     max-width: 14ch;
     margin: 0;
