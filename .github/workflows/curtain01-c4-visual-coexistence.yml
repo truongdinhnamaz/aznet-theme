@@ -1,0 +1,54 @@
+name: C4 Curtain 01 Visual Coexistence
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'inc/theme/settings.php'
+      - 'inc/theme/design-system.php'
+      - 'inc/admin/control-center.php'
+      - 'assets/css/presets/curtain-01.css'
+      - 'tests/offline/curtain01-c4-visual-coexistence-contract.php'
+      - '.github/workflows/curtain01-c4-visual-coexistence.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  curtain01-c4:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Verify diff hygiene
+        run: |
+          git fetch origin main:refs/remotes/origin/main
+          git diff --check origin/main...HEAD
+
+      - name: Run Curtain 01 C4 contract
+        run: php tests/offline/curtain01-c4-visual-coexistence-contract.php
+
+      - name: Retain design and commerce contracts
+        run: |
+          php tests/offline/r1-settings-contract.php
+          php tests/offline/r1-visual-preset-contract.php
+          php tests/offline/r1-visual-preset-mechanism-contract.php
+          php tests/offline/r4-woocommerce-settings-contract.php
+          php tests/offline/curtain01-c2-preset-foundation-contract.php
+          php tests/offline/curtain01-c3-homepage-composition-contract.php
+
+      - name: Lint touched PHP
+        run: |
+          php -l inc/theme/settings.php
+          php -l inc/theme/design-system.php
+          php -l inc/admin/control-center.php

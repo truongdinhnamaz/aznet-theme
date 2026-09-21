@@ -1,0 +1,95 @@
+/**
+ * Curtain 01 site-wide visual preset.
+ *
+ * Presentation-only token mapping for generic Theme, WordPress and WooCommerce
+ * surfaces. No Rèm Quốc Anh identity or provider/domain state is stored here.
+ */
+
+body.aznet-theme-preset--curtain-01,
+.editor-styles-wrapper {
+    --aznet-theme-color-primary: #8a6a43;
+    --aznet-theme-color-on-primary: #ffffff;
+    --aznet-theme-color-surface: #fffdf8;
+    --aznet-theme-color-surface-subtle: #f5f0e7;
+    --aznet-theme-color-text: #282521;
+    --aznet-theme-color-text-muted: #70695f;
+    --aznet-theme-color-border: #ded4c6;
+    --aznet-theme-color-focus: #9b6d3d;
+
+    --aznet-theme-surface: var(--aznet-theme-color-surface);
+    --aznet-theme-text: var(--aznet-theme-color-text);
+    --aznet-theme-muted: var(--aznet-theme-color-text-muted);
+    --aznet-theme-border: var(--aznet-theme-color-border);
+    --aznet-theme-accent: var(--aznet-theme-color-primary);
+    --aznet-theme-focus: var(--aznet-theme-color-focus);
+    --aznet-theme-surface-inverse: #27231f;
+    --aznet-theme-on-inverse: #fbf7ef;
+
+    --aznet-theme-font-family-heading: Georgia, "Times New Roman", serif;
+    --aznet-theme-container-content: 46rem;
+    --aznet-theme-container-wide: 74rem;
+    --aznet-theme-container-shell: 80rem;
+    --aznet-theme-space-section: 4.25rem;
+    --aznet-theme-radius-control: 0.45rem;
+    --aznet-theme-radius-card: 0.8rem;
+    --aznet-theme-shadow-card: 0 0.65rem 2rem rgba(45, 38, 30, 0.08);
+    --aznet-theme-shadow-float: 0 1.5rem 3.5rem rgba(35, 29, 23, 0.18);
+}
+
+body.aznet-theme-preset--curtain-01 {
+    background: var(--aznet-theme-surface);
+    color: var(--aznet-theme-text);
+}
+
+body.aznet-theme-preset--curtain-01 :where(h1, h2, h3) {
+    font-family: var(--aznet-theme-font-family-heading);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+}
+
+body.aznet-theme-preset--curtain-01 .aznet-theme-site-header,
+body.aznet-theme-preset--curtain-01 .aznet-theme-site-footer {
+    --aznet-theme-header-border: color-mix(in srgb, var(--aznet-theme-on-inverse) 10%, transparent);
+    --aznet-theme-footer-border: color-mix(in srgb, var(--aznet-theme-on-inverse) 12%, transparent);
+}
+
+body.aznet-theme-preset--curtain-01 .aznet-theme-page__header {
+    background:
+        linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--aznet-theme-color-surface-subtle) 92%, #ffffff) 0%,
+            var(--aznet-theme-color-surface) 100%
+        );
+}
+
+body.aznet-theme-preset--curtain-01 .aznet-theme-page__title {
+    max-width: 18ch;
+}
+
+body.aznet-theme-preset--curtain-01 .aznet-theme-page-kit__card,
+body.aznet-theme-preset--curtain-01 .woocommerce ul.products li.product {
+    border-color: var(--aznet-theme-border);
+    box-shadow: none;
+}
+
+body.aznet-theme-preset--curtain-01 .woocommerce ul.products li.product a img,
+body.aznet-theme-preset--curtain-01 .single-product .aznet-theme-main .woocommerce-product-gallery__image {
+    background: var(--aznet-theme-color-surface-subtle);
+}
+
+body.aznet-theme-preset--curtain-01 .woocommerce ul.products li.product .button,
+body.aznet-theme-preset--curtain-01 .single-product .aznet-theme-main .single_add_to_cart_button {
+    border-radius: var(--aznet-theme-radius-pill);
+}
+
+body.aznet-theme-preset--curtain-01 :where(a, button, input, select, textarea, summary):focus-visible {
+    outline-color: var(--aznet-theme-focus);
+}
+
+@media (max-width: 48rem) {
+    body.aznet-theme-preset--curtain-01,
+    .editor-styles-wrapper {
+        --aznet-theme-space-section: 3.25rem;
+        --aznet-theme-radius-card: 0.7rem;
+    }
+}
