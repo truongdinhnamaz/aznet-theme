@@ -244,14 +244,38 @@ A later approved live migration must be able to restore:
 
 Do not delete WordPress/WooCommerce/RootProfile/ConvertFlow data during presentation rollback.
 
+## Hero reusable block creation checkpoint
+
+Owner approved creation of the WordPress-owned Hero source on 21/09/2026.
+
+Created live WordPress object:
+
+- post type: `wp_block`;
+- ID: **985**;
+- title: **Hero Rèm 01 — Rèm Quốc Anh**;
+- status: **draft**;
+- source Media attachment: **#669** (`rem-quoc-anh-03.png`);
+- content: one native Core Cover block with native Paragraph/Heading blocks;
+- no Theme/private-provider data store introduced.
+
+Safety verification immediately after creation:
+
+- Page #2 `post_content` still matches the captured 4006-character snapshot;
+- Page #2 modified timestamp remains `2026-09-01T15:52:04`;
+- Page #2 template remains `page-transparent-header-light.php`;
+- Theme mods do **not** map `homepage_hero_block` to #985;
+- therefore the new draft Hero is not active and does not alter the public Front Page.
+
+This write intentionally created only the WordPress-owned source object. It did **not** publish/map the Hero, enable Rèm 01 presets, or migrate Page #2.
+
 ## C6 disposition
 
 - **C6 PLAN:** PASS
 - **PRE-WRITE ROLLBACK SNAPSHOT:** PASS
-- **EXACT HERO OWNER SOURCE:** BLOCKED
+- **EXACT HERO OWNER SOURCE:** PASS — draft `wp_block` #985 created; not mapped
 - **LIVE PAGE #2 MIGRATION:** NOT EXECUTED
 - **REAL-PILOT L4/L5:** UNKNOWN / OneShield browser path still blocks direct parity evidence
 
 ## Exact next
 
-**Hard gate:** owner approval to create one WordPress-owned Hero reusable block from the already inventoried WordPress Media assets. This must not change Page #2 yet. After the Hero block receives an exact ID and the rollback snapshot is revalidated, Page #2 migration remains a separate subsequent approval gate.
+**Hard gate:** explicit owner approval to publish/map Hero block #985 and execute the bounded Page #2 migration transaction. Before that write, revalidate the drift guard again. Production release/deploy/cutover beyond this transaction remains a separate gate.
