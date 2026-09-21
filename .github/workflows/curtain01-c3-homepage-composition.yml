@@ -1,0 +1,53 @@
+name: C3 Curtain 01 Homepage Composition
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'inc/theme/homepage-composer.php'
+      - 'inc/integrations/woocommerce.php'
+      - 'template-parts/homepage/curtain-01/**'
+      - 'assets/css/components/homepage-curtain-01.css'
+      - 'tests/offline/curtain01-c3-homepage-composition-contract.php'
+      - '.github/workflows/curtain01-c3-homepage-composition.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  curtain01-c3:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Verify diff hygiene
+        run: |
+          git fetch origin main:refs/remotes/origin/main
+          git diff --check origin/main...HEAD
+
+      - name: Run Curtain 01 C3 contract
+        run: php tests/offline/curtain01-c3-homepage-composition-contract.php
+
+      - name: Retain C2 and Homepage boundary regressions
+        run: |
+          php tests/offline/curtain01-c2-preset-foundation-contract.php
+          php tests/offline/homepage-composer-settings-contract.php
+          php tests/offline/homepage-composer-contract.php
+          php tests/offline/f3-homepage-ownership-static-contract.php
+          php tests/offline/f5-homepage-absent-failsoft-contract.php
+
+      - name: Lint touched PHP
+        run: |
+          php -l inc/theme/homepage-composer.php
+          php -l inc/integrations/woocommerce.php
+          for file in template-parts/homepage/curtain-01/*.php; do php -l "$file"; done
