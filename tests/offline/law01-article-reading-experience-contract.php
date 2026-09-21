@@ -54,6 +54,10 @@ foreach ([
     '.aznet-theme-article--law01 .aznet-theme-article__content table',
     '--law01-article-burgundy',
     'max-width: 50rem',
+    'max-width: 26ch;',
+    'font-size: clamp(3rem, 4vw, 4rem);',
+    'line-height: 1.08;',
+    'text-align: center;',
     'line-height: 1.82',
     '@media (max-width: 47.999rem)',
 ] as $marker) {
