@@ -27,7 +27,7 @@ foreach (['page.php', 'page-templates/wide.php', 'page-templates/landing.php'] a
     $template = file_get_contents($root . '/' . $templatePath);
     assert(is_string($template));
     assert(str_contains($template, "get_template_part( 'template-parts/content/page' )"));
-    assert(1 === substr_count($template, '<main id="main" class="aznet-theme-main">'));
+    assert(1 === substr_count($template, '<main id="main" class="aznet-theme-main aznet-theme-main--page">'));
 }
 
 $shared = file_get_contents($root . '/template-parts/content/page.php');
