@@ -11,6 +11,16 @@
     --aznet-theme-color-warning: #9a6700;
     --aznet-theme-color-danger: #b42318;
 
+    /* Law 01 reference palette: Theme-owned presentation tokens for law surfaces. */
+    --aznet-theme-law01-burgundy: #7a0e18;
+    --aznet-theme-law01-burgundy-deep: #560912;
+    --aznet-theme-law01-gold: #b9892f;
+    --aznet-theme-law01-gold-soft: #d8b66f;
+    --aznet-theme-law01-paper: #fffaf2;
+    --aznet-theme-law01-ivory: #fffdf8;
+    --aznet-theme-law01-ink: #211a17;
+    --aznet-theme-law01-muted: #6a5b52;
+
     --aznet-theme-font-family-base: Roboto, Arial, sans-serif;
     --aznet-theme-font-family-heading: var(--aznet-theme-font-family-base);
 
