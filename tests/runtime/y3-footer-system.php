@@ -119,7 +119,7 @@ foreach ( array_keys( $menu_definitions ) as $location ) {
     }
 }
 
-foreach ( [ 'standard', 'professional', 'compact' ] as $preset ) {
+foreach ( [ 'standard', 'professional', 'compact', 'law-01' ] as $preset ) {
     y3_runtime_set_preset( $preset );
     $html = y3_runtime_home_html();
     $footer = y3_runtime_footer_html( $html );
