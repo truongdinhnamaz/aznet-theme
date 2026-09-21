@@ -11,13 +11,20 @@
     --law01-contact-ink: #211a17;
     --law01-contact-muted: #75685f;
     --law01-contact-line: rgba(122, 14, 24, .14);
-    width: min(calc(100% - (var(--aznet-theme-gutter) * 2)), 96rem);
-    padding-block: clamp(2rem, 4vw, 4.5rem);
+    width: 100%;
+    max-width: none;
+    padding-block: 0;
 }
 
 .aznet-theme-contact-page {
     display: grid;
-    gap: clamp(1.5rem, 3vw, 3rem);
+    gap: 0;
+}
+
+.aznet-theme-contact-page > :last-child {
+    margin-block-end: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 .aznet-theme-contact-page__hero {
@@ -28,6 +35,8 @@
     overflow: hidden;
     border: 1px solid var(--law01-contact-line);
     border-radius: clamp(1.2rem, 2vw, 2rem);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
     background:
         radial-gradient(circle at 82% 20%, rgba(185, 137, 47, .2), transparent 16rem),
         linear-gradient(120deg, var(--law01-contact-cream) 0%, #fff8ed 56%, #f4e7d1 100%);
@@ -177,7 +186,9 @@
     display: grid;
     grid-template-columns: minmax(0, 1.35fr) minmax(18rem, .65fr);
     gap: clamp(1rem, 2vw, 1.5rem);
+    width: 100%;
     align-items: start;
+    padding: clamp(2rem, 4vw, 4rem) max(var(--aznet-theme-gutter), calc((100vw - 96rem) / 2));
 }
 
 .aznet-theme-contact-page__content-card,
@@ -295,8 +306,9 @@
 }
 
 .aznet-theme-contact-page__provider {
+    width: 100%;
     overflow: hidden;
-    padding: clamp(1.4rem, 3vw, 2.5rem);
+    padding: clamp(2rem, 4vw, 4rem) max(var(--aznet-theme-gutter), calc((100vw - 96rem) / 2));
 }
 
 .aznet-theme-contact-page__provider-heading {
@@ -345,12 +357,18 @@
 
 @media (max-width: 47.999rem) {
     .aznet-theme-page--contact {
-        width: min(calc(100% - (var(--aznet-theme-gutter-mobile) * 2)), 96rem);
-        padding-block: 1.5rem 2.5rem;
+        width: 100%;
+        max-width: none;
+        padding-block: 0;
     }
 
     .aznet-theme-contact-page {
-        gap: 1rem;
+        gap: 0;
+    }
+
+    .aznet-theme-contact-page__body,
+    .aznet-theme-contact-page__provider {
+        padding: 2rem var(--aznet-theme-gutter-mobile);
     }
 
     .aznet-theme-contact-page__hero {
