@@ -28,7 +28,7 @@ $parent_id = y1_create_page(
         'post_title'   => 'Y1 Parent Page',
         'post_excerpt' => 'Authored parent introduction for Y1.',
         'post_name'    => 'y1-parent-page',
-        'post_content' => '<p id="y1-services-content">Mapped Services Page content owned by WordPress.</p>',
+        'post_content' => '',
     ]
 );
 
