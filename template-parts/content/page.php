@@ -13,6 +13,9 @@ $variant = \AZnet\Theme\page_variant( (int) get_the_ID() );
 $crumbs  = \AZnet\Theme\page_breadcrumb_items( (int) get_the_ID() );
 $excerpt = \AZnet\Theme\page_excerpt( (int) get_the_ID() );
 $is_service_detail = \AZnet\Theme\service_page_is_detail( (int) get_the_ID() );
+$is_law01_service_detail = $is_service_detail
+    && function_exists( 'AZnet\\Theme\\header_law01_active' )
+    && \AZnet\Theme\header_law01_active();
 $is_contact_page = \AZnet\Theme\contact_page_presentation_active( (int) get_the_ID() );
 $is_services_page = \AZnet\Theme\services_page_presentation_active( (int) get_the_ID() );
 $service_contact_url = $is_service_detail ? \AZnet\Theme\service_page_contact_url() : '';
@@ -20,6 +23,9 @@ $service_siblings = $is_service_detail ? \AZnet\Theme\service_page_siblings( (in
 $page_classes = 'aznet-theme-page aznet-theme-page--full-bleed aznet-theme-page--' . $variant;
 if ( $is_service_detail ) {
     $page_classes .= ' aznet-theme-page--service-detail';
+}
+if ( $is_law01_service_detail ) {
+    $page_classes .= ' aznet-theme-page--service-detail-law01';
 }
 if ( $is_contact_page ) {
     $page_classes .= ' aznet-theme-page--contact';
