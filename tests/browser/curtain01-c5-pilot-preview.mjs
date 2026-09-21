@@ -34,6 +34,9 @@ async function assertNoOverflow(page, label) {
     const offenders = [...document.querySelectorAll('body *')]
       .map((node) => {
         const rect = node.getBoundingClientRect();
+        const style = getComputedStyle(node);
+        const parent = node.parentElement;
+        const parentRect = parent ? parent.getBoundingClientRect() : null;
         return {
           tag: node.tagName.toLowerCase(),
           id: node.id || '',
@@ -41,6 +44,12 @@ async function assertNoOverflow(page, label) {
           left: Math.round(rect.left),
           right: Math.round(rect.right),
           width: Math.round(rect.width),
+          cssWidth: style.width,
+          cssMaxWidth: style.maxWidth,
+          display: style.display,
+          minWidth: style.minWidth,
+          parentClass: parent && typeof parent.className === 'string' ? parent.className : '',
+          parentWidth: parentRect ? Math.round(parentRect.width) : null,
         };
       })
       .filter((item) => item.right > viewport + 1 || item.left < -1 || item.width > viewport + 1)
