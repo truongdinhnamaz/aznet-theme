@@ -12,6 +12,7 @@ on:
       - 'page-templates/**'
       - 'template-parts/content/page.php'
       - 'template-parts/contact/page.php'
+      - 'template-parts/services/page.php'
       - 'inc/theme/page-experience.php'
       - 'inc/theme/settings.php'
       - 'inc/theme/bootstrap.php'
@@ -20,12 +21,14 @@ on:
       - 'inc/theme/design-system.php'
       - 'assets/css/components/page.css'
       - 'assets/css/components/contact-page.css'
+      - 'assets/css/components/services-page.css'
       - 'assets/css/components/contact-surface.css'
       - 'scripts/verify-v1-core.sh'
       - 'tests/offline/r1-visual-preset-contract.php'
       - 'tests/offline/r3-header-settings-contract.php'
       - 'tests/offline/y1-page-experience-contract.php'
       - 'tests/offline/contact-page-presentation-contract.php'
+      - 'tests/offline/law01-services-root-presentation-contract.php'
       - 'tests/runtime/y1-page-experience.php'
       - 'tests/browser/y1-page-experience-l4.mjs'
       - '.github/workflows/y1-page-experience.yml'
@@ -114,6 +117,7 @@ jobs:
           wp eval-file "$GITHUB_WORKSPACE/tests/runtime/y1-page-experience.php" --path=/tmp/wp --allow-root > /tmp/y1/fixture.json
           jq -e '.parent_id > 0 and .child_id > 0 and .wide_id > 0 and .landing_id > 0 and .commerce_looking_id > 0 and .attachment_id > 0' /tmp/y1/fixture.json
           {
+            echo "Y1_SERVICES_URL=$(jq -r '.parent_url' /tmp/y1/fixture.json)"
             echo "Y1_CHILD_URL=$(jq -r '.child_url' /tmp/y1/fixture.json)"
             echo "Y1_WIDE_URL=$(jq -r '.wide_url' /tmp/y1/fixture.json)"
             echo "Y1_LANDING_URL=$(jq -r '.landing_url' /tmp/y1/fixture.json)"
@@ -154,6 +158,9 @@ jobs:
             fi
           }
           request parent "$(jq -r '.parent_url' /tmp/y1/fixture.json)" standard no
+          grep -F 'aznet-theme-page--services-root' /tmp/y1/parent.html
+          grep -F 'aznet-theme-services-page-css' /tmp/y1/parent.html
+          grep -F 'y1-services-content' /tmp/y1/parent.html
           request child "$(jq -r '.child_url' /tmp/y1/fixture.json)" standard yes
           grep -F 'aznet-theme-page__featured' /tmp/y1/child.html
           request wide "$(jq -r '.wide_url' /tmp/y1/fixture.json)" wide no
@@ -179,6 +186,7 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Run Y1 browser verification
         env:
+          Y1_SERVICES_URL: ${{ env.Y1_SERVICES_URL }}
           Y1_CHILD_URL: ${{ env.Y1_CHILD_URL }}
           Y1_WIDE_URL: ${{ env.Y1_WIDE_URL }}
           Y1_LANDING_URL: ${{ env.Y1_LANDING_URL }}
@@ -189,7 +197,7 @@ jobs:
         run: |
           set -euo pipefail
           git diff --check "${{ github.event.pull_request.base.sha || 'main' }}"...HEAD || git diff --check
-          if git diff -U0 "${{ github.event.pull_request.base.sha || 'main' }}"...HEAD -- page.php page-templates template-parts/content/page.php template-parts/contact/page.php inc/theme/page-experience.php inc/theme/assets.php assets/css/components/page.css assets/css/components/contact-page.css | grep -E '^\+.*(get_post_meta\(|get_option\(|parse_url\(|REQUEST_URI|\$wpdb|choiceguide_|rootprofile_|application/ld\+json|schema\.org)'; then
+          if git diff -U0 "${{ github.event.pull_request.base.sha || 'main' }}"...HEAD -- page.php page-templates template-parts/content/page.php template-parts/contact/page.php template-parts/services/page.php inc/theme/page-experience.php inc/theme/assets.php assets/css/components/page.css assets/css/components/contact-page.css assets/css/components/services-page.css | grep -E '^\+.*(get_post_meta\(|get_option\(|parse_url\(|REQUEST_URI|\$wpdb|choiceguide_|rootprofile_|application/ld\+json|schema\.org)'; then
             echo 'FAIL: Y1 introduced forbidden ownership/heuristic/schema behavior' >&2
             exit 1
           fi
