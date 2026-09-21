@@ -1,4 +1,8 @@
 .aznet-theme-main--page {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    padding-block: 0;
     overflow-x: clip;
 }
 
