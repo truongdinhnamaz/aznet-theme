@@ -389,16 +389,28 @@ function should_enqueue_services_page_assets(): bool {
     return services_page_presentation_active();
 }
 
+/** Enqueue the shared service-card component only when a Services surface consumes it. */
+function enqueue_service_card_asset( ?string $version = null ): void {
+    wp_enqueue_style(
+        'aznet-theme-service-card',
+        get_theme_file_uri( '/assets/css/components/service-card.css' ),
+        [ 'aznet-theme-tokens', 'aznet-theme-page' ],
+        asset_content_version( '/assets/css/components/service-card.css', $version )
+    );
+}
+
 /** Enqueue scoped premium Services Page presentation only for the explicit mapped Page. */
 function enqueue_services_page_assets( ?string $version = null ): void {
     if ( ! should_enqueue_services_page_assets() ) {
         return;
     }
 
+    enqueue_service_card_asset( $version );
+
     wp_enqueue_style(
         'aznet-theme-services-page',
         get_theme_file_uri( '/assets/css/components/services-page.css' ),
-        [ 'aznet-theme-page' ],
+        [ 'aznet-theme-service-card' ],
         asset_content_version( '/assets/css/components/services-page.css', $version )
     );
 }
@@ -418,10 +430,12 @@ function enqueue_service_page_assets( ?string $version = null ): void {
         return;
     }
 
+    enqueue_service_card_asset( $version );
+
     wp_enqueue_style(
         'aznet-theme-service-page',
         get_theme_file_uri( '/assets/css/components/service-page.css' ),
-        [ 'aznet-theme-tokens', 'aznet-theme-page' ],
+        [ 'aznet-theme-service-card' ],
         asset_content_version( '/assets/css/components/service-page.css', $version )
     );
 }
