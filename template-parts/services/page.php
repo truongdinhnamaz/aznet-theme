@@ -66,32 +66,18 @@ $authored_content = trim( (string) get_the_content() );
                 <p><?php esc_html_e( 'Mỗi trang dịch vụ trình bày phạm vi hỗ trợ và những thông tin nên chuẩn bị trước khi trao đổi.', 'aznet-theme' ); ?></p>
             </header>
 
-            <div class="aznet-theme-services-page__grid">
+            <div class="aznet-theme-services-page__grid aznet-theme-service-card-grid">
                 <?php foreach ( $services as $index => $service_page ) : ?>
                     <?php
-                    $service_url = get_permalink( $service_page );
-                    if ( ! is_string( $service_url ) || '' === $service_url ) {
-                        continue;
-                    }
-                    $service_excerpt = trim( (string) $service_page->post_excerpt );
+                    get_template_part(
+                        'template-parts/services/card',
+                        null,
+                        [
+                            'service_page' => $service_page,
+                            'index'        => $index + 1,
+                        ]
+                    );
                     ?>
-                    <article class="aznet-theme-services-page__card">
-                        <div class="aznet-theme-services-page__card-top">
-                            <span class="aznet-theme-services-page__card-index" aria-hidden="true">
-                                <?php echo esc_html( str_pad( (string) ( $index + 1 ), 2, '0', STR_PAD_LEFT ) ); ?>
-                            </span>
-                            <span class="aznet-theme-services-page__card-icon" aria-hidden="true"></span>
-                        </div>
-                        <h3 class="aznet-theme-services-page__card-title">
-                            <a href="<?php echo esc_url( $service_url ); ?>"><?php echo esc_html( get_the_title( $service_page ) ); ?></a>
-                        </h3>
-                        <?php if ( '' !== $service_excerpt ) : ?>
-                            <p class="aznet-theme-services-page__card-excerpt"><?php echo esc_html( $service_excerpt ); ?></p>
-                        <?php endif; ?>
-                        <a class="aznet-theme-services-page__card-link" href="<?php echo esc_url( $service_url ); ?>">
-                            <?php esc_html_e( 'Xem dịch vụ', 'aznet-theme' ); ?> <span aria-hidden="true">→</span>
-                        </a>
-                    </article>
                 <?php endforeach; ?>
             </div>
         </section>
