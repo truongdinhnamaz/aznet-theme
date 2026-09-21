@@ -65,7 +65,7 @@ function normalize_settings( array $raw ): array {
         ? (string) $raw['header_sticky']
         : 'sticky';
 
-    $footer_preset = isset( $raw['footer_preset'] ) && in_array( $raw['footer_preset'], [ 'standard', 'professional', 'compact' ], true )
+    $footer_preset = isset( $raw['footer_preset'] ) && in_array( $raw['footer_preset'], [ 'standard', 'professional', 'compact', 'law-01' ], true )
         ? (string) $raw['footer_preset']
         : 'standard';
 
