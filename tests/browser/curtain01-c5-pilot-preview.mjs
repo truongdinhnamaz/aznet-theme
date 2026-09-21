@@ -144,8 +144,18 @@ await assertNoOverflow(page, 'shop');
 results.shop = { products: shopProducts, a11y: await assertA11y(page, 'shop') };
 await page.screenshot({ path: path.join(outDir, 'shop.png'), fullPage: true });
 
-await page.goto(baseUrl + '/product/rem-vai-don-sac/', { waitUntil: 'networkidle' });
-if (await page.locator('.single-product .product_title').count() !== 1) throw new Error('product: native Woo product title missing');
+const productResponse = await page.goto(baseUrl + '/product/rem-vai-don-sac/', { waitUntil: 'networkidle' });
+if (await page.locator('.single-product .product_title').count() !== 1) {
+  const diagnostic = {
+    status: productResponse ? productResponse.status() : null,
+    url: page.url(),
+    title: await page.title(),
+    bodyClass: await page.locator('body').getAttribute('class') || '',
+    h1: await page.locator('h1').allTextContents(),
+    mainText: (await page.locator('main').count()) ? (await page.locator('main').innerText()).slice(0, 1200) : '',
+  };
+  throw new Error(`product: native Woo product title missing; ${JSON.stringify(diagnostic)}`);
+}
 if (!(await page.locator('body').getAttribute('class') || '').includes('aznet-theme-preset--curtain-01')) {
   throw new Error('product: Curtain 01 visual preset missing');
 }
