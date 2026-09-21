@@ -145,7 +145,8 @@ results.shop = { products: shopProducts, a11y: await assertA11y(page, 'shop') };
 await page.screenshot({ path: path.join(outDir, 'shop.png'), fullPage: true });
 
 const productResponse = await page.goto(baseUrl + '/product/rem-vai-don-sac/', { waitUntil: 'networkidle' });
-if (await page.locator('.single-product .product_title').count() !== 1) {
+const productHeadings = page.locator('body.single-product main h1');
+if (await productHeadings.count() !== 1 || (await productHeadings.first().innerText()).trim() !== 'Rèm vải đơn sắc') {
   const diagnostic = {
     status: productResponse ? productResponse.status() : null,
     url: page.url(),
@@ -154,7 +155,7 @@ if (await page.locator('.single-product .product_title').count() !== 1) {
     h1: await page.locator('h1').allTextContents(),
     mainText: (await page.locator('main').count()) ? (await page.locator('main').innerText()).slice(0, 1200) : '',
   };
-  throw new Error(`product: native Woo product title missing; ${JSON.stringify(diagnostic)}`);
+  throw new Error(`product: native Woo product heading missing or unexpected; ${JSON.stringify(diagnostic)}`);
 }
 if (!(await page.locator('body').getAttribute('class') || '').includes('aznet-theme-preset--curtain-01')) {
   throw new Error('product: Curtain 01 visual preset missing');
