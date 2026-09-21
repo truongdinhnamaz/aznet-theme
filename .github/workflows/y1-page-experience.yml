@@ -160,7 +160,10 @@ jobs:
           request parent "$(jq -r '.parent_url' /tmp/y1/fixture.json)" standard no
           grep -F 'aznet-theme-page--services-root' /tmp/y1/parent.html
           grep -F 'aznet-theme-services-page-css' /tmp/y1/parent.html
-          grep -F 'y1-services-content' /tmp/y1/parent.html
+          if grep -F 'aznet-theme-services-page__intro' /tmp/y1/parent.html; then
+            echo 'FAIL: empty mapped Services Page rendered an orphan intro card' >&2
+            exit 1
+          fi
           request child "$(jq -r '.child_url' /tmp/y1/fixture.json)" standard yes
           grep -F 'aznet-theme-page__featured' /tmp/y1/child.html
           request wide "$(jq -r '.wide_url' /tmp/y1/fixture.json)" wide no
