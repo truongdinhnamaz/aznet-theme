@@ -53,3 +53,74 @@ function current_surface(): ?string {
 
     return null;
 }
+
+/**
+ * Return public WooCommerce product categories for Homepage presentation.
+ *
+ * @return array<int, \WP_Term>
+ */
+function homepage_product_categories( int $limit = 4 ): array {
+    if ( ! available() || ! function_exists( 'taxonomy_exists' ) || ! taxonomy_exists( 'product_cat' ) ) {
+        return [];
+    }
+
+    $limit = max( 1, min( 12, $limit ) );
+    $terms = get_terms(
+        [
+            'taxonomy'   => 'product_cat',
+            'hide_empty' => true,
+            'number'     => $limit,
+            'orderby'    => 'name',
+            'order'      => 'ASC',
+        ]
+    );
+
+    if ( is_wp_error( $terms ) || ! is_array( $terms ) ) {
+        return [];
+    }
+
+    return array_values(
+        array_filter(
+            $terms,
+            static fn ( $term ): bool => $term instanceof \WP_Term
+        )
+    );
+}
+
+/**
+ * Return public WooCommerce products for Homepage presentation.
+ *
+ * @return array<int, object>
+ */
+function homepage_products( int $limit = 6 ): array {
+    if ( ! available() || ! function_exists( 'wc_get_products' ) ) {
+        return [];
+    }
+
+    $limit = max( 1, min( 12, $limit ) );
+    $products = wc_get_products(
+        [
+            'status'     => 'publish',
+            'limit'      => $limit,
+            'orderby'    => 'date',
+            'order'      => 'DESC',
+            'visibility' => 'catalog',
+            'return'     => 'objects',
+        ]
+    );
+
+    return is_array( $products ) ? array_values( $products ) : [];
+}
+
+/**
+ * Return the public WooCommerce shop URL when available.
+ */
+function shop_url(): string {
+    if ( ! available() || ! function_exists( 'wc_get_page_permalink' ) ) {
+        return '';
+    }
+
+    $url = wc_get_page_permalink( 'shop' );
+    return is_string( $url ) ? $url : '';
+}
+
