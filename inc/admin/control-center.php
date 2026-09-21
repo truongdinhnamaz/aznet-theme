@@ -63,7 +63,7 @@ function render_settings_form( string $section ): void {
     render_hidden_settings( $visible_keys );
 
     if ( 'design' === $section ) {
-        field_select( 'visual_preset', __( 'Phong cách', 'aznet-theme' ), [ 'default' => 'Default', 'editorial' => 'Editorial', 'commerce' => 'Commerce' ], (string) $s['visual_preset'] );
+        field_select( 'visual_preset', __( 'Phong cách', 'aznet-theme' ), [ 'default' => 'Default', 'editorial' => 'Editorial', 'commerce' => 'Commerce', 'curtain-01' => 'Rèm 01' ], (string) $s['visual_preset'] );
         field_checkbox( 'page_breadcrumbs', __( 'Hiển thị breadcrumb cho Page con', 'aznet-theme' ), (bool) $s['page_breadcrumbs'] );
     } elseif ( 'header' === $section ) {
         field_select( 'header_preset', __( 'Kiểu Header', 'aznet-theme' ), [ 'standard' => 'Standard', 'compact' => 'Compact', 'commerce' => 'Commerce', 'overlay' => 'Overlay' ], (string) $s['header_preset'] );
@@ -88,7 +88,7 @@ function render_quick_setup_form(): void {
     wp_nonce_field( 'aznet_theme_save_settings' );
     render_hidden_settings( [ 'visual_preset', 'header_preset' ] );
     echo '<h2>' . esc_html__( 'Quick Setup', 'aznet-theme' ) . '</h2>';
-    field_select( 'visual_preset', __( 'Phong cách', 'aznet-theme' ), [ 'default' => 'Default', 'editorial' => 'Editorial', 'commerce' => 'Commerce' ], (string) $s['visual_preset'] );
+    field_select( 'visual_preset', __( 'Phong cách', 'aznet-theme' ), [ 'default' => 'Default', 'editorial' => 'Editorial', 'commerce' => 'Commerce', 'curtain-01' => 'Rèm 01' ], (string) $s['visual_preset'] );
     field_select( 'header_preset', __( 'Kiểu Header', 'aznet-theme' ), [ 'standard' => 'Standard', 'compact' => 'Compact', 'commerce' => 'Commerce', 'overlay' => 'Overlay' ], (string) $s['header_preset'] );
     submit_button( __( 'Lưu Quick Setup', 'aznet-theme' ), 'primary', 'submit', false );
     echo '</form>';
