@@ -30,7 +30,7 @@ foreach ([
     'function register_widget_areas',
     'register_sidebar(',
     "'id'            => 'article-navigation'",
-    "'name'          => __( 'Article Navigation'",
+    "'name'          => __( 'Điều hướng bài viết'",
 ] as $needle) {
     if (!str_contains($widgets, $needle)) {
         $fail('Theme does not register the native article navigation widget area: ' . $needle);
