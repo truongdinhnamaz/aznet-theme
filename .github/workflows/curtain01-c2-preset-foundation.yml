@@ -8,6 +8,7 @@ on:
       - 'inc/theme/settings.php'
       - 'inc/theme/homepage-composer.php'
       - 'inc/theme/assets.php'
+      - 'inc/admin/homepage.php'
       - 'assets/css/components/homepage-curtain-01.css'
       - 'tests/offline/curtain01-c2-preset-foundation-contract.php'
       - '.github/workflows/curtain01-c2-preset-foundation.yml'
@@ -50,3 +51,4 @@ jobs:
           php -l inc/theme/settings.php
           php -l inc/theme/homepage-composer.php
           php -l inc/theme/assets.php
+          php -l inc/admin/homepage.php
