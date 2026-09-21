@@ -171,6 +171,7 @@
 
 .aznet-theme-services-page__intro {
     display: grid;
+    width: 100%;
     grid-template-columns: auto minmax(0, 1fr);
     gap: clamp(1rem, 2.5vw, 1.7rem);
     align-items: start;
