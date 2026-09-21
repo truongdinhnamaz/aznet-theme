@@ -81,6 +81,7 @@ foreach ([
 foreach ([
     '.aznet-theme-page--services-root',
     '.aznet-theme-services-page__hero',
+    'width: 100%;',
     '.aznet-theme-services-page__grid',
     '.aznet-theme-services-page__card',
     '.aznet-theme-services-page__consultation',
