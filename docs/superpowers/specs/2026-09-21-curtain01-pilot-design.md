@@ -1,10 +1,10 @@
 # Curtain 01 Pilot — design packet
 
-**Date:** 21/09/2026  
-**Status:** Approved / source-gated until canonical merge  
-**Target product:** AZnet Theme  
-**Pilot site:** `https://remquocanh.vn/`  
-**UI label:** Rèm 01  
+**Date:** 21/09/2026
+**Status:** Approved / source-gated until canonical merge
+**Target product:** AZnet Theme
+**Pilot site:** `https://remquocanh.vn/`
+**UI label:** Rèm 01
 **Proposed machine keys:** `curtain-01` (presentation preset), `curtain-v1` (provisioning blueprint)
 
 ## 1. Goal
