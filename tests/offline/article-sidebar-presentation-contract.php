@@ -39,7 +39,13 @@ foreach ([
     '.aznet-theme-article__sidebar',
     '.aznet-theme-article-sidebar-widget__title',
     'position: sticky',
+    'max-height: calc(100dvh - var(--aznet-theme-header-height, 5rem) - 2.5rem);',
+    'overflow-y: auto;',
+    'overscroll-behavior: contain;',
+    'scrollbar-gutter: stable;',
     'order: -1',
+    'max-height: none;',
+    'overflow-y: visible;',
 ] as $needle) {
     if (!str_contains($css, $needle)) {
         $fail('Article CSS does not provide the generic responsive sidebar presentation: ' . $needle);
