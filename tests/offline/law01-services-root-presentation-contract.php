@@ -23,6 +23,7 @@ foreach ($required as $relative) {
 $pageExperience = (string) file_get_contents($root . '/inc/theme/page-experience.php');
 $pageTemplate = (string) file_get_contents($root . '/template-parts/content/page.php');
 $servicesTemplate = (string) file_get_contents($root . '/template-parts/services/page.php');
+$cardTemplate = (string) file_get_contents($root . '/template-parts/services/card.php');
 $assets = (string) file_get_contents($root . '/inc/theme/assets.php');
 $css = (string) file_get_contents($root . '/assets/css/components/services-page.css');
 $cardCss = (string) file_get_contents($root . '/assets/css/components/service-card.css');
@@ -57,9 +58,6 @@ foreach ([
     "\$authored_content = trim( (string) get_the_content() );",
     "if ( '' !== \$authored_content )",
     'the_content()',
-    'get_permalink( $service_page )',
-    'get_the_title( $service_page )',
-    'post_excerpt',
     'aznet-theme-services-page__hero',
     'aznet-theme-services-page__grid',
     'template-parts/services/card',
@@ -68,6 +66,18 @@ foreach ([
 ] as $needle) {
     if (! str_contains($servicesTemplate, $needle)) {
         $fail('Services Page template missing marker: ' . $needle);
+    }
+}
+
+foreach ([
+    'get_permalink( $service_page )',
+    'get_the_title( $service_page )',
+    'post_excerpt',
+    'aznet-theme-service-card',
+    'aznet-theme-service-card__link',
+] as $needle) {
+    if (! str_contains($cardTemplate, $needle)) {
+        $fail('shared service-card template missing Services root marker: ' . $needle);
     }
 }
 
@@ -107,7 +117,7 @@ foreach ([
     }
 }
 
-$production = $pageExperience . "\n" . $pageTemplate . "\n" . $servicesTemplate;
+$production = $pageExperience . "\n" . $pageTemplate . "\n" . $servicesTemplate . "\n" . $cardTemplate;
 foreach ([
     "is_page( 'dich-vu' )",
     'REQUEST_URI',
