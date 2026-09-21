@@ -145,8 +145,6 @@
 }
 
 
-@media (max-width: 64rem) {}
-
 @media (max-width: 47.999rem) {
     .aznet-theme-page--service-detail .aznet-theme-page__header {
         padding-block: var(--aznet-theme-space-4);
