@@ -11,13 +11,14 @@
     --law01-services-ink: #211a17;
     --law01-services-muted: #6f625a;
     --law01-services-line: rgba(122, 14, 24, .14);
-    width: min(calc(100% - (var(--aznet-theme-gutter) * 2)), 96rem);
-    padding-block: clamp(2rem, 4vw, 4.5rem);
+    width: 100%;
+    max-width: none;
+    padding-block: 0;
 }
 
 .aznet-theme-services-page {
     display: grid;
-    gap: clamp(2rem, 4vw, 4.5rem);
+    gap: 0;
 }
 
 .aznet-theme-services-page__hero {
@@ -28,6 +29,8 @@
     overflow: hidden;
     border: 1px solid var(--law01-services-line);
     border-radius: clamp(1rem, 2vw, 1.75rem);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
     background:
         radial-gradient(circle at 84% 18%, rgba(168, 115, 31, .18), transparent 16rem),
         linear-gradient(120deg, var(--law01-services-cream) 0%, #fffdf9 58%, #f2e4cd 100%);
@@ -176,7 +179,7 @@
     gap: clamp(1rem, 2.5vw, 1.7rem);
     align-items: start;
     max-width: 68rem;
-    margin-inline: auto;
+    margin: clamp(2rem, 4vw, 4rem) auto;
     padding: clamp(1.35rem, 3vw, 2.2rem);
     border: 1px solid var(--law01-services-line);
     border-radius: .9rem;
@@ -214,6 +217,8 @@
 .aznet-theme-services-page__services {
     display: grid;
     gap: 1.5rem;
+    width: 100%;
+    padding: clamp(2rem, 4vw, 4rem) max(var(--aznet-theme-gutter), calc((100vw - 96rem) / 2));
 }
 
 .aznet-theme-services-page__section-heading {
@@ -343,6 +348,8 @@
     align-items: center;
     padding: clamp(1.5rem, 4vw, 3rem);
     border-radius: 1rem;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
     background:
         radial-gradient(circle at 90% 20%, rgba(255, 255, 255, .08), transparent 13rem),
         linear-gradient(130deg, var(--law01-services-burgundy), var(--law01-services-burgundy-deep));
@@ -397,12 +404,17 @@
 
 @media (max-width: 47.999rem) {
     .aznet-theme-page--services-root {
-        width: min(calc(100% - (var(--aznet-theme-gutter-mobile) * 2)), 96rem);
-        padding-block: 1.5rem 2.75rem;
+        width: 100%;
+        max-width: none;
+        padding-block: 0;
     }
 
     .aznet-theme-services-page {
-        gap: 2.25rem;
+        gap: 0;
+    }
+
+    .aznet-theme-services-page__services {
+        padding: 2rem var(--aznet-theme-gutter-mobile);
     }
 
     .aznet-theme-services-page__hero {
