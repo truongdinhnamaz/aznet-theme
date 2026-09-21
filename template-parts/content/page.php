@@ -51,6 +51,7 @@ if ( $is_services_page ) {
         ?>
     <?php else : ?>
     <header class="aznet-theme-page__header">
+        <div class="aznet-theme-page__section-inner aznet-theme-page__section-inner--header">
         <?php if ( [] !== $crumbs ) : ?>
             <nav class="aznet-theme-page__breadcrumbs" aria-label="<?php echo esc_attr__( 'Breadcrumb', 'aznet-theme' ); ?>">
                 <ol>
@@ -87,15 +88,19 @@ if ( $is_services_page ) {
                 <?php the_post_thumbnail( 'large' ); ?>
             </figure>
         <?php endif; ?>
+        </div>
     </header>
 
-    <div class="aznet-theme-page__content aznet-theme-entry__content">
-        <?php the_content(); ?>
-        <?php wp_link_pages(); ?>
-    </div>
+    <section class="aznet-theme-page__content-section">
+        <div class="aznet-theme-page__section-inner aznet-theme-page__content aznet-theme-page__content-inner aznet-theme-entry__content">
+            <?php the_content(); ?>
+            <?php wp_link_pages(); ?>
+        </div>
+    </section>
 
     <?php if ( $is_service_detail && [] !== $service_siblings ) : ?>
         <aside class="aznet-theme-page__service-siblings" aria-labelledby="aznet-theme-service-siblings-title">
+            <div class="aznet-theme-page__section-inner aznet-theme-page__section-inner--siblings">
             <div class="aznet-theme-page__service-siblings-header">
                 <p class="aznet-theme-page__service-eyebrow"><?php esc_html_e( 'Dịch vụ pháp lý', 'aznet-theme' ); ?></p>
                 <h2 id="aznet-theme-service-siblings-title"><?php esc_html_e( 'Các dịch vụ khác', 'aznet-theme' ); ?></h2>
@@ -112,6 +117,7 @@ if ( $is_services_page ) {
                         <?php endif; ?>
                     </article>
                 <?php endforeach; ?>
+            </div>
             </div>
         </aside>
     <?php endif; ?>
