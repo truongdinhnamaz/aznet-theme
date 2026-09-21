@@ -84,7 +84,7 @@ $navigation_heading = __( 'Liên kết nhanh', 'aznet-theme' );
             <?php endif; ?>
 
             <?php if ( $is_law01 ) : ?>
-                <section class="aznet-theme-site-footer__social-column aznet-theme-site-footer__connect" aria-labelledby="aznet-theme-footer-connect-heading">
+                <section class="aznet-theme-site-footer__connect" aria-labelledby="aznet-theme-footer-connect-heading">
                     <h2 id="aznet-theme-footer-connect-heading" class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Kết nối với chúng tôi', 'aznet-theme' ); ?></h2>
                     <?php if ( '' !== $social_menu ) : ?>
                         <nav class="aznet-theme-site-footer__social" aria-label="<?php echo esc_attr__( 'Mạng xã hội', 'aznet-theme' ); ?>">
