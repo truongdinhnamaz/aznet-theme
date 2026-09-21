@@ -389,6 +389,25 @@
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(122, 14, 24, .32) transparent;
+}
+
+.aznet-theme-article--law01 .aznet-theme-article__sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.aznet-theme-article--law01 .aznet-theme-article__sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.aznet-theme-article--law01 .aznet-theme-article__sidebar::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: rgba(122, 14, 24, .28);
+}
+
+.aznet-theme-article--law01 .aznet-theme-article__sidebar:hover::-webkit-scrollbar-thumb {
+    background: rgba(122, 14, 24, .55);
 }
 
 .aznet-theme-article--law01 .aznet-theme-article__sidebar .widget {
