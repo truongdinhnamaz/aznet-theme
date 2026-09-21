@@ -21,6 +21,11 @@ if ( $law01_article ) {
 }
 
 $dek = has_excerpt() ? trim( (string) get_the_excerpt() ) : '';
+$has_article_navigation = is_active_sidebar( 'article-navigation' );
+$reading_layout_class = 'aznet-theme-article__reading-layout';
+if ( $has_article_navigation ) {
+    $reading_layout_class .= ' aznet-theme-article__reading-layout--with-navigation';
+}
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( $article_classes ); ?>>
     <header class="aznet-theme-entry__header aznet-theme-article__header">
@@ -45,7 +50,7 @@ $dek = has_excerpt() ? trim( (string) get_the_excerpt() ) : '';
         </figure>
     <?php endif; ?>
 
-    <div class="aznet-theme-article__reading-layout">
+    <div class="<?php echo esc_attr( $reading_layout_class ); ?>">
         <div class="aznet-theme-article__reading-main">
             <div class="aznet-theme-entry__content aznet-theme-article__content">
                 <?php the_content(); ?>
@@ -59,6 +64,12 @@ $dek = has_excerpt() ? trim( (string) get_the_excerpt() ) : '';
                 ?>
             </div>
         </div>
+
+        <?php if ( $has_article_navigation ) : ?>
+            <aside class="aznet-theme-article__navigation-sidebar" aria-label="<?php esc_attr_e( 'Điều hướng nội dung bài viết', 'aznet-theme' ); ?>">
+                <?php dynamic_sidebar( 'article-navigation' ); ?>
+            </aside>
+        <?php endif; ?>
     </div>
 
     <?php if ( has_tag() ) : ?>
