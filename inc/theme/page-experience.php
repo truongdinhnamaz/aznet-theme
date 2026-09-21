@@ -126,6 +126,64 @@ function contact_page_presentation_active( ?int $post_id = null ): bool {
 }
 
 /**
+ * Whether the current native Page is the explicitly mapped Services Page.
+ *
+ * The Services Page ID comes from the Theme Content Map. This avoids slug, title
+ * and URL heuristics while keeping WordPress authoritative for Page content.
+ */
+function services_page_is_mapped( ?int $post_id = null ): bool {
+    $post_id = $post_id ?: (int) get_queried_object_id();
+    $services_id = (int) setting( 'homepage_services_page', 0 );
+
+    if ( $post_id <= 0 || $services_id <= 0 || $post_id !== $services_id ) {
+        return false;
+    }
+
+    $post = get_post( $post_id );
+
+    return $post instanceof \WP_Post
+        && 'page' === $post->post_type
+        && 'publish' === $post->post_status;
+}
+
+/** Whether the premium Law 01 Services Page presentation is active. */
+function services_page_presentation_active( ?int $post_id = null ): bool {
+    if ( ! services_page_is_mapped( $post_id ) ) {
+        return false;
+    }
+
+    return function_exists( __NAMESPACE__ . '\\header_law01_active' )
+        && header_law01_active();
+}
+
+/**
+ * Return published direct service children of the explicitly mapped Services Page.
+ *
+ * @return array<int, \WP_Post>
+ */
+function services_page_children( int $limit = 12 ): array {
+    $services_id = (int) setting( 'homepage_services_page', 0 );
+    if ( $services_id <= 0 ) {
+        return [];
+    }
+
+    $limit = max( 1, min( 24, $limit ) );
+    $posts = get_posts(
+        [
+            'post_type'      => 'page',
+            'post_status'    => 'publish',
+            'post_parent'    => $services_id,
+            'orderby'        => 'menu_order title',
+            'order'          => 'ASC',
+            'posts_per_page' => $limit,
+            'no_found_rows'  => true,
+        ]
+    );
+
+    return is_array( $posts ) ? $posts : [];
+}
+
+/**
  * Whether one native Page is an explicitly mapped direct child of the Services Page.
  *
  * The Services Page ID comes from the Theme Content Map. This deliberately avoids
