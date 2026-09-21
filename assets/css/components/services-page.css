@@ -5,7 +5,7 @@
 .aznet-theme-page--services-root {
     --law01-services-burgundy: #7a0e18;
     --law01-services-burgundy-deep: #560912;
-    --law01-services-gold: #a8731f;
+    --law01-services-gold: var(--aznet-theme-law01-gold-strong);
     --law01-services-cream: #fff9ef;
     --law01-services-paper: #fffdf9;
     --law01-services-ink: #211a17;
