@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Checkout exact candidate
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup PHP 8.1
         uses: shivammathur/setup-php@v2
