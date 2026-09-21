@@ -75,9 +75,10 @@ foreach ([
     '.aznet-theme-page--service-detail-law01 .aznet-theme-page__service-siblings {',
     '.aznet-theme-page--service-detail-law01 .aznet-theme-page__service-eyebrow {',
     'color: var(--aznet-theme-service-gold-text);',
-    '.aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card::before {',
-    '.aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card:hover {',
-    'transform: translateY(-3px);',
+    '--aznet-theme-service-card-burgundy: var(--aznet-theme-service-burgundy);',
+    '--aznet-theme-service-card-gold: var(--aznet-theme-law01-gold-strong);',
+    '.aznet-theme-page--service-detail-law01 .aznet-theme-page__section-inner--siblings {',
+    'padding-inline: max(var(--aznet-theme-gutter), calc((100vw - 96rem) / 2));',
     '@media (max-width: 47.999rem)',
     '@media (prefers-reduced-motion: reduce)',
 ] as $needle) {
