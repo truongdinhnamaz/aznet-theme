@@ -23,6 +23,18 @@ function header_preset(): string {
 }
 
 /**
+ * Whether the site-level Law 01 Header presentation is active.
+ *
+ * This intentionally depends on the Theme presentation preset, not on the
+ * current WordPress request, so inner pages keep the same site Header as the
+ * Front Page.
+ */
+function header_law01_active(): bool {
+    return function_exists( __NAMESPACE__ . '\\homepage_preset' )
+        && 'law-01' === homepage_preset();
+}
+
+/**
  * Return the Header preset that is safe for the current WordPress surface.
  */
 function effective_header_preset(): string {
@@ -152,5 +164,6 @@ function header_context(): array {
         'requested_preset'  => header_preset(),
         'effective_preset'  => effective_header_preset(),
         'sticky_mode'       => header_sticky_mode(),
+        'law01_header'      => header_law01_active(),
     ];
 }

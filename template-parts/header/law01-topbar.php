@@ -2,7 +2,7 @@
 /** Law 01 reference topbar: native WordPress tagline and existing public menus only. */
 namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-if ( empty( $args['law01_homepage'] ) || 'burgundy-gold' !== homepage_law01_variant() ) { return; }
+if ( empty( $args['law01_header'] ) || 'burgundy-gold' !== homepage_law01_variant() ) { return; }
 $tagline = trim( (string) get_bloginfo( 'description' ) );
 $has_contact = true === setting( 'header_utilities', true ) && has_nav_menu( 'header-utility' );
 $has_social = has_nav_menu( 'footer-social' );

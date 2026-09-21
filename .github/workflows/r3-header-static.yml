@@ -12,6 +12,7 @@ on:
       - 'inc/theme/assets.php'
       - 'template-parts/header/**'
       - 'assets/css/components/site-header.css'
+      - 'assets/css/components/header-law-01.css'
       - 'assets/js/header-navigation.js'
       - 'assets/js/sticky-header.js'
       - 'tests/offline/r3-*.php'
