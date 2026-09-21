@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function footer_preset(): string {
     $preset = setting( 'footer_preset', 'standard' );
 
-    return in_array( $preset, [ 'standard', 'professional', 'compact' ], true )
+    return in_array( $preset, [ 'standard', 'professional', 'compact', 'law-01' ], true )
         ? (string) $preset
         : 'standard';
 }
