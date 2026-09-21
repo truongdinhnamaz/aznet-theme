@@ -103,6 +103,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-promotion-workfl
 printf '%s\n' '==> Y1 Page Experience contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-page-experience-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-woocommerce-page-excerpt-regression-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/contact-page-presentation-contract.php
 
 printf '%s\n' '==> Y2 Professional Page Kits contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y2-professional-page-kits-contract.php
