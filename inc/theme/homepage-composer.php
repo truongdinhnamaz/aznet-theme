@@ -24,7 +24,7 @@ function homepage_law01_variant(): string {
 
 /** Whether Theme-owned Homepage composition is active for this request. */
 function homepage_composer_active(): bool {
-    if ( ! function_exists( 'is_front_page' ) || ! is_front_page() || 'law-01' !== homepage_preset() ) {
+    if ( ! function_exists( 'is_front_page' ) || ! is_front_page() || ! in_array( homepage_preset(), [ 'law-01', 'curtain-01' ], true ) ) {
         return false;
     }
 
@@ -65,6 +65,12 @@ function render_law01_part( string $slug, array $args = [] ): void {
 /** Render Law 01 sections that precede the native Front Page body boundary. */
 function render_homepage_before_content(): void {
     if ( ! homepage_composer_active() ) { return; }
+
+    if ( 'curtain-01' === homepage_preset() ) {
+        echo '<div class="aznet-theme-homepage aznet-theme-homepage--curtain-01">';
+        return;
+    }
+
     $variant = homepage_law01_variant();
     echo '<div class="aznet-theme-homepage aznet-theme-homepage--law-01 aznet-theme-homepage--law-01-' . esc_attr( $variant ) . '">';
     foreach ( [ 'hero', 'services', 'profile' ] as $section ) { render_law01_part( $section ); }
@@ -73,6 +79,12 @@ function render_homepage_before_content(): void {
 /** Render Law 01 sections after the native Front Page body boundary. */
 function render_homepage_after_content(): void {
     if ( ! homepage_composer_active() ) { return; }
+
+    if ( 'curtain-01' === homepage_preset() ) {
+        echo '</div>';
+        return;
+    }
+
     $variant = homepage_law01_variant();
     $sections = 'burgundy-gold' === $variant ? [ 'latest', 'topics', 'analysis', 'news', 'process', 'faq', 'final-cta' ] : [ 'topics', 'latest', 'analysis', 'news', 'process', 'faq', 'final-cta' ];
     foreach ( $sections as $section ) { render_law01_part( $section ); }
