@@ -1,0 +1,101 @@
+<?php
+declare(strict_types=1);
+
+$root = dirname(__DIR__, 2);
+
+$fail = static function (string $message): void {
+    fwrite(STDERR, "FAIL: {$message}\n");
+    exit(1);
+};
+
+$files = [
+    'page.php',
+    'template-parts/content/page.php',
+    'assets/css/components/page.css',
+    'assets/css/components/services-page.css',
+    'assets/css/components/contact-page.css',
+];
+
+foreach ($files as $relative) {
+    if (!is_file($root . '/' . $relative)) {
+        $fail('missing Page full-bleed artifact: ' . $relative);
+    }
+}
+
+$page = (string) file_get_contents($root . '/page.php');
+$template = (string) file_get_contents($root . '/template-parts/content/page.php');
+$pageCss = (string) file_get_contents($root . '/assets/css/components/page.css');
+$servicesCss = (string) file_get_contents($root . '/assets/css/components/services-page.css');
+$contactCss = (string) file_get_contents($root . '/assets/css/components/contact-page.css');
+
+foreach ([
+    'aznet-theme-main--page',
+] as $needle) {
+    if (!str_contains($page, $needle)) {
+        $fail('native Page main shell missing full-bleed marker: ' . $needle);
+    }
+}
+
+foreach ([
+    'aznet-theme-page--full-bleed',
+] as $needle) {
+    if (!str_contains($template, $needle)) {
+        $fail('shared Page presentation missing full-bleed class marker: ' . $needle);
+    }
+}
+
+foreach ([
+    '.aznet-theme-main--page',
+    'overflow-x: clip;',
+    '.aznet-theme-page {',
+    'width: 100%;',
+    'max-width: none;',
+    'margin-inline: 0;',
+    'padding-block: 0;',
+    '.aznet-theme-page > :first-child',
+    'margin-block-start: 0;',
+    '.aznet-theme-page > :last-child',
+    'margin-block-end: 0;',
+] as $needle) {
+    if (!str_contains($pageCss, $needle)) {
+        $fail('generic Page CSS missing full-bleed marker: ' . $needle);
+    }
+}
+
+foreach ([
+    '.aznet-theme-page--services-root {',
+    'width: 100%;',
+    'padding-block: 0;',
+    '.aznet-theme-services-page {',
+    'gap: 0;',
+    '.aznet-theme-services-page__hero {',
+    'border-top-left-radius: 0;',
+    'border-top-right-radius: 0;',
+    '.aznet-theme-services-page__consultation {',
+    'border-bottom-left-radius: 0;',
+    'border-bottom-right-radius: 0;',
+] as $needle) {
+    if (!str_contains($servicesCss, $needle)) {
+        $fail('Services Page CSS missing full-section edge marker: ' . $needle);
+    }
+}
+
+foreach ([
+    '.aznet-theme-page--contact {',
+    'width: 100%;',
+    'padding-block: 0;',
+    '.aznet-theme-contact-page {',
+    'gap: 0;',
+    '.aznet-theme-contact-page__hero {',
+    'border-top-left-radius: 0;',
+    'border-top-right-radius: 0;',
+    '.aznet-theme-contact-page > :last-child',
+    'border-bottom-left-radius: 0;',
+    'border-bottom-right-radius: 0;',
+] as $needle) {
+    if (!str_contains($contactCss, $needle)) {
+        $fail('Contact Page CSS missing full-section edge marker: ' . $needle);
+    }
+}
+
+echo "PASS: native Pages use full-bleed outer sections with flush first/last edges\n";
