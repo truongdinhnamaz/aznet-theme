@@ -20,6 +20,12 @@ $is_contact_page = \AZnet\Theme\contact_page_presentation_active( (int) get_the_
 $is_services_page = \AZnet\Theme\services_page_presentation_active( (int) get_the_ID() );
 $service_contact_url = $is_service_detail ? \AZnet\Theme\service_page_contact_url() : '';
 $service_siblings = $is_service_detail ? \AZnet\Theme\service_page_siblings( (int) get_the_ID() ) : [];
+$service_positions = [];
+if ( $is_service_detail ) {
+    foreach ( \AZnet\Theme\services_page_children() as $service_index => $service_page ) {
+        $service_positions[ (int) $service_page->ID ] = $service_index + 1;
+    }
+}
 $page_classes = 'aznet-theme-page aznet-theme-page--full-bleed aznet-theme-page--' . $variant;
 if ( $is_service_detail ) {
     $page_classes .= ' aznet-theme-page--service-detail';
@@ -111,17 +117,21 @@ if ( $is_services_page ) {
                 <p class="aznet-theme-page__service-eyebrow"><?php esc_html_e( 'Dịch vụ pháp lý', 'aznet-theme' ); ?></p>
                 <h2 id="aznet-theme-service-siblings-title"><?php esc_html_e( 'Các dịch vụ khác', 'aznet-theme' ); ?></h2>
             </div>
-            <div class="aznet-theme-page__service-siblings-grid">
+            <div class="aznet-theme-page__service-siblings-grid aznet-theme-service-card-grid">
                 <?php foreach ( $service_siblings as $service_page ) : ?>
-                    <?php $service_url = get_permalink( $service_page ); ?>
-                    <?php if ( ! is_string( $service_url ) || '' === $service_url ) { continue; } ?>
-                    <article class="aznet-theme-page__service-card">
-                        <h3><a href="<?php echo esc_url( $service_url ); ?>"><?php echo esc_html( get_the_title( $service_page ) ); ?></a></h3>
-                        <?php $service_excerpt = trim( (string) $service_page->post_excerpt ); ?>
-                        <?php if ( '' !== $service_excerpt ) : ?>
-                            <p><?php echo esc_html( $service_excerpt ); ?></p>
-                        <?php endif; ?>
-                    </article>
+                    <?php
+                    if ( ! isset( $service_positions[ (int) $service_page->ID ] ) ) {
+                        continue;
+                    }
+                    get_template_part(
+                        'template-parts/services/card',
+                        null,
+                        [
+                            'service_page' => $service_page,
+                            'index'        => $service_positions[ (int) $service_page->ID ],
+                        ]
+                    );
+                    ?>
                 <?php endforeach; ?>
             </div>
             </div>
