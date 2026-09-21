@@ -46,9 +46,24 @@ foreach ([
     }
 }
 
+if (!preg_match('/\.aznet-theme-main--page\s*\{([^}]*)\}/s', $pageCss, $mainMatch)) {
+    $fail('generic Page CSS missing .aznet-theme-main--page rule');
+}
+
+$mainRule = $mainMatch[1];
 foreach ([
-    '.aznet-theme-main--page',
+    'width: 100%;',
+    'max-width: none;',
+    'margin-inline: 0;',
+    'padding-block: 0;',
     'overflow-x: clip;',
+] as $needle) {
+    if (!str_contains($mainRule, $needle)) {
+        $fail('native Page main shell still inherits constrained global layout: ' . $needle);
+    }
+}
+
+foreach ([
     '.aznet-theme-page {',
     'width: 100%;',
     'max-width: none;',
@@ -121,4 +136,4 @@ foreach ([
     }
 }
 
-echo "PASS: native Pages use full-bleed outer sections with flush first/last edges\n";
+echo "PASS: native Pages use a viewport-width main shell with full-bleed outer sections and flush first/last edges\n";
