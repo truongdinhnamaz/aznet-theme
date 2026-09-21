@@ -31,6 +31,7 @@
     border-radius: clamp(1rem, 2vw, 1.75rem);
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+    border-top: 0;
     background:
         radial-gradient(circle at 84% 18%, rgba(168, 115, 31, .18), transparent 16rem),
         linear-gradient(120deg, var(--law01-services-cream) 0%, #fffdf9 58%, #f2e4cd 100%);
