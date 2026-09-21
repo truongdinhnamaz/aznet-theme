@@ -363,7 +363,7 @@ jobs:
           require '/tmp/wp/index.php';
           PHP
 
-          nohup php -S 127.0.0.1:8080 /tmp/wp-router.php > /tmp/curtain01-c5/server.log 2>&1 &
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp /tmp/wp-router.php > /tmp/curtain01-c5/server.log 2>&1 &
           echo $! > /tmp/curtain01-c5/server.pid
 
           for attempt in $(seq 1 40); do
