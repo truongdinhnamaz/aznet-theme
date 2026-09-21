@@ -17,6 +17,22 @@ if (!is_file($cssPath) || !is_file($tokensPath)) {
 $css = (string) file_get_contents($cssPath);
 $tokens = (string) file_get_contents($tokensPath);
 
+$templatePath = $root . '/template-parts/content/page.php';
+if (!is_file($templatePath)) {
+    $fail('missing shared Page presentation template');
+}
+$template = (string) file_get_contents($templatePath);
+
+foreach ([
+    '$is_law01_service_detail',
+    'header_law01_active()',
+    'aznet-theme-page--service-detail-law01',
+] as $needle) {
+    if (!str_contains($template, $needle)) {
+        $fail('Law 01 service-detail presentation scope missing from Page template: ' . $needle);
+    }
+}
+
 foreach ([
     '--aznet-theme-law01-burgundy: #7a0e18;',
     '--aznet-theme-law01-burgundy-deep: #560912;',
@@ -39,21 +55,21 @@ foreach ([
     '--aznet-theme-service-paper: var(--aznet-theme-law01-paper);',
     '--aznet-theme-service-ink: var(--aznet-theme-law01-ink);',
     '--aznet-theme-service-muted: var(--aznet-theme-law01-muted);',
-    '.aznet-theme-page--service-detail .aznet-theme-page__header::before',
+    '.aznet-theme-page--service-detail-law01 .aznet-theme-page__header::before',
     'radial-gradient(',
     'linear-gradient(125deg, var(--aznet-theme-service-burgundy-deep), var(--aznet-theme-service-burgundy))',
-    '.aznet-theme-page--service-detail .aznet-theme-page__breadcrumbs',
-    '.aznet-theme-page--service-detail .aznet-theme-page__title',
-    '.aznet-theme-page--service-detail .aznet-theme-page__lead',
-    '.aznet-theme-page--service-detail .aznet-theme-page__service-primary',
+    '.aznet-theme-page--service-detail-law01 .aznet-theme-page__breadcrumbs',
+    '.aznet-theme-page--service-detail-law01 .aznet-theme-page__title',
+    '.aznet-theme-page--service-detail-law01 .aznet-theme-page__lead',
+    '.aznet-theme-page--service-detail-law01 .aznet-theme-page__service-primary',
     'border-color: var(--aznet-theme-service-gold);',
     'background: var(--aznet-theme-service-gold);',
-    '.aznet-theme-page--service-detail .aznet-theme-page__content-section',
-    '.aznet-theme-page--service-detail .aznet-theme-page__content > h2::before',
-    '.aznet-theme-page--service-detail .aznet-theme-page__content :where(ul, ol)',
-    '.aznet-theme-page--service-detail .aznet-theme-page__content ul > li::marker',
+    '.aznet-theme-page--service-detail-law01 .aznet-theme-page__content-section',
+    '.aznet-theme-page--service-detail-law01 .aznet-theme-page__content > h2::before',
+    '.aznet-theme-page--service-detail-law01 .aznet-theme-page__content :where(ul, ol)',
+    '.aznet-theme-page--service-detail-law01 .aznet-theme-page__content ul > li::marker',
     'color: var(--aznet-theme-service-burgundy);',
-    '.aznet-theme-page--service-detail .aznet-theme-page__content blockquote',
+    '.aznet-theme-page--service-detail-law01 .aznet-theme-page__content blockquote',
     '.aznet-theme-page__service-card::before',
     '.aznet-theme-page__service-card:hover',
     'transform: translateY(-3px);',
