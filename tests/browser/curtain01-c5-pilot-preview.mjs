@@ -28,9 +28,28 @@ async function assertA11y(page, label) {
 }
 
 async function assertNoOverflow(page, label) {
-  const delta = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-  if (delta > 1) throw new Error(`${label}: horizontal overflow ${delta}px`);
-  return delta;
+  const probe = await page.evaluate(() => {
+    const viewport = document.documentElement.clientWidth;
+    const delta = document.documentElement.scrollWidth - viewport;
+    const offenders = [...document.querySelectorAll('body *')]
+      .map((node) => {
+        const rect = node.getBoundingClientRect();
+        return {
+          tag: node.tagName.toLowerCase(),
+          id: node.id || '',
+          className: typeof node.className === 'string' ? node.className : '',
+          left: Math.round(rect.left),
+          right: Math.round(rect.right),
+          width: Math.round(rect.width),
+        };
+      })
+      .filter((item) => item.right > viewport + 1 || item.left < -1 || item.width > viewport + 1)
+      .sort((a, b) => Math.max(b.right - viewport, b.width - viewport) - Math.max(a.right - viewport, a.width - viewport))
+      .slice(0, 12);
+    return { delta, viewport, scrollWidth: document.documentElement.scrollWidth, offenders };
+  });
+  if (probe.delta > 1) throw new Error(`${label}: horizontal overflow ${probe.delta}px; ${JSON.stringify(probe)}`);
+  return probe.delta;
 }
 
 async function verifyHomepage(viewportName, viewport) {
