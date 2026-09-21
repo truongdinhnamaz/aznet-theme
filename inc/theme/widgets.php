@@ -19,12 +19,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 function register_widget_areas(): void {
     register_sidebar(
         [
-            'name'          => __( 'Điều hướng bài viết', 'aznet-theme' ),
+            'name'          => __( 'Sidebar bài viết', 'aznet-theme' ),
             'id'            => 'article-navigation',
-            'description'   => __( 'Vùng tiện ích bên cạnh nội dung Bài viết, phù hợp cho mục lục hoặc điều hướng nội dung.', 'aznet-theme' ),
-            'before_widget' => '<section id="%1$s" class="widget aznet-theme-article-navigation-widget %2$s">',
+            'description'   => __( 'Vùng tiện ích bên cạnh nội dung Bài viết. Có thể chứa điều hướng, tìm kiếm, CTA hoặc widget từ plugin.', 'aznet-theme' ),
+            'before_widget' => '<section id="%1$s" class="widget aznet-theme-article-sidebar-widget %2$s">',
             'after_widget'  => '</section>',
-            'before_title'  => '<h2 class="aznet-theme-article-navigation-widget__title">',
+            'before_title'  => '<h2 class="aznet-theme-article-sidebar-widget__title">',
             'after_title'   => '</h2>',
         ]
     );
