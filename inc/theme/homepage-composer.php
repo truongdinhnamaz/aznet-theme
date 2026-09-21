@@ -62,12 +62,20 @@ function render_law01_part( string $slug, array $args = [] ): void {
     get_template_part( 'template-parts/homepage/law-01/' . $slug, null, $args );
 }
 
+/** @param string $slug Curtain 01 section slug. @param array<string, mixed> $args Section arguments. */
+function render_curtain01_part( string $slug, array $args = [] ): void {
+    $path = get_theme_file_path( 'template-parts/homepage/curtain-01/' . $slug . '.php' );
+    if ( ! is_file( $path ) ) { return; }
+    get_template_part( 'template-parts/homepage/curtain-01/' . $slug, null, $args );
+}
+
 /** Render Law 01 sections that precede the native Front Page body boundary. */
 function render_homepage_before_content(): void {
     if ( ! homepage_composer_active() ) { return; }
 
     if ( 'curtain-01' === homepage_preset() ) {
         echo '<div class="aznet-theme-homepage aznet-theme-homepage--curtain-01">';
+        render_curtain01_part( 'hero' );
         return;
     }
 
@@ -81,6 +89,9 @@ function render_homepage_after_content(): void {
     if ( ! homepage_composer_active() ) { return; }
 
     if ( 'curtain-01' === homepage_preset() ) {
+        foreach ( [ 'about', 'catalogue', 'knowledge', 'final-cta' ] as $section ) {
+            render_curtain01_part( $section );
+        }
         echo '</div>';
         return;
     }
