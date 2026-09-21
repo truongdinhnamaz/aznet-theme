@@ -76,9 +76,11 @@ These are migration targets, not live writes:
 - Knowledge => WordPress category term **#57** (`Tư vấn chọn rèm`)
 - Contact => WordPress Page **#45**
 - Shop/catalogue => WooCommerce-owned catalogue; Shop Page **#130**
-- Hero => **BLOCKED / NOT YET SELECTED AS AN EXACT WORDPRESS-OWNED HERO SOURCE**
+- Hero => **BLOCKED / NO EXISTING WORDPRESS `wp_block` SOURCE**
 
-The Hero mapping is the remaining pre-write source gate. Existing Page #2 references three WordPress Media URLs, but D-034 forbids turning those URLs into a Theme hardcoded/heuristic authoritative mapping.
+Fresh authenticated read-only discovery of `/wp/v2/blocks?context=edit&per_page=100` returned an empty collection. The `wp_block` post type is registered and available, but the pilot currently has no reusable block that can be selected as the exact Hero source.
+
+Therefore the Hero source cannot be frozen by read-only selection. Existing Page #2 references three WordPress Media URLs, but D-034 forbids turning those URLs into a Theme hardcoded/heuristic authoritative mapping. Creating the WordPress-owned Hero block is the next live database mutation and requires an explicit owner gate.
 
 ## Exact Page #2 raw rollback body
 
@@ -252,4 +254,4 @@ Do not delete WordPress/WooCommerce/RootProfile/ConvertFlow data during presenta
 
 ## Exact next
 
-Resolve and freeze the exact WordPress-owned Hero source without changing Page #2. Once the Hero source is explicit and rollback evidence remains current, live Page #2 migration is a separate owner approval gate.
+**Hard gate:** owner approval to create one WordPress-owned Hero reusable block from the already inventoried WordPress Media assets. This must not change Page #2 yet. After the Hero block receives an exact ID and the rollback snapshot is revalidated, Page #2 migration remains a separate subsequent approval gate.
