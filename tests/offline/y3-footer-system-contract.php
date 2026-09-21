@@ -226,6 +226,17 @@ foreach (['aznet-theme-site-footer__social-column', "'professional' === \$preset
         y3_fail('Professional Footer demo composition missing: ' . $needle);
     }
 }
+
+foreach ([
+    "'law-01' === \$preset",
+    'aznet-theme-site-footer__connect',
+    'aznet-theme-site-footer__watermark',
+    'aznet-theme-site-footer__law01-copyright',
+] as $needle) {
+    if (! str_contains($template, $needle)) {
+        y3_fail('Law 01 Footer demo-parity composition missing: ' . $needle);
+    }
+}
 if (str_contains($template, 'aznet-theme-site-footer--standard"')) {
     y3_fail('Footer template must derive preset class from normalized context instead of hard-coding standard');
 }
@@ -264,6 +275,20 @@ foreach ([
 ] as $needle) {
     if (! str_contains($css, $needle)) {
         y3_fail('Law 01 Footer visual system missing approved detail: ' . $needle);
+    }
+}
+
+foreach ([
+    'grid-template-columns: minmax(280px, 1.3fr) minmax(200px, 1fr) minmax(170px, .72fr) minmax(190px, .82fr);',
+    '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__connect',
+    '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__watermark',
+    '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-menu a::before',
+    '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__menu a::before',
+    '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__social-menu a',
+    'border-radius: 999px',
+] as $needle) {
+    if (! str_contains($css, $needle)) {
+        y3_fail('Law 01 Footer demo-parity styling missing: ' . $needle);
     }
 }
 if (! str_contains($css, '@media (max-width: 48rem)')) {
