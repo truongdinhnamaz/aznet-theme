@@ -70,8 +70,10 @@ foreach ([
     '.aznet-theme-page--service-detail-law01 .aznet-theme-page__content ul > li::marker',
     'color: var(--aznet-theme-service-burgundy);',
     '.aznet-theme-page--service-detail-law01 .aznet-theme-page__content blockquote',
-    '.aznet-theme-page__service-card::before',
-    '.aznet-theme-page__service-card:hover',
+    '.aznet-theme-page--service-detail-law01 .aznet-theme-page__service-siblings {',
+    '.aznet-theme-page--service-detail-law01 .aznet-theme-page__service-eyebrow {',
+    '.aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card::before {',
+    '.aznet-theme-page--service-detail-law01 .aznet-theme-page__service-card:hover {',
     'transform: translateY(-3px);',
     '@media (max-width: 47.999rem)',
     '@media (prefers-reduced-motion: reduce)',
@@ -83,6 +85,10 @@ foreach ([
 
 if (preg_match('/#(?:[0-9a-fA-F]{3}){1,2}\b/', $css)) {
     $fail('service detail stylesheet must consume semantic Theme tokens instead of hard-coded colors');
+}
+
+if (str_contains($css, '.aznet-theme-page--service-detail-law01 .aznet-theme-page--service-detail-law01')) {
+    $fail('Law 01 service-detail selectors must not contain a duplicated scope modifier');
 }
 
 if (str_contains($css, 'url(/dich-vu/') || str_contains($css, 'luat-doanh-nghiep')) {
