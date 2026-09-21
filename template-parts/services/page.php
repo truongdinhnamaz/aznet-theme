@@ -18,6 +18,7 @@ $contact_url = \AZnet\Theme\service_page_contact_url();
 $lead = '' !== $excerpt
     ? $excerpt
     : __( 'Khám phá các nhóm dịch vụ pháp lý và chọn nội dung phù hợp với nhu cầu cần trao đổi.', 'aznet-theme' );
+$authored_content = trim( (string) get_the_content() );
 ?>
 <div class="aznet-theme-services-page">
     <header class="aznet-theme-services-page__hero">
@@ -47,13 +48,15 @@ $lead = '' !== $excerpt
         </div>
     </header>
 
-    <section class="aznet-theme-services-page__intro" aria-label="<?php esc_attr_e( 'Giới thiệu dịch vụ', 'aznet-theme' ); ?>">
-        <div class="aznet-theme-services-page__intro-mark" aria-hidden="true">§</div>
-        <div class="aznet-theme-services-page__content aznet-theme-entry__content">
-            <?php the_content(); ?>
-            <?php wp_link_pages(); ?>
-        </div>
-    </section>
+    <?php if ( '' !== $authored_content ) : ?>
+        <section class="aznet-theme-services-page__intro" aria-label="<?php esc_attr_e( 'Giới thiệu dịch vụ', 'aznet-theme' ); ?>">
+            <div class="aznet-theme-services-page__intro-mark" aria-hidden="true">§</div>
+            <div class="aznet-theme-services-page__content aznet-theme-entry__content">
+                <?php the_content(); ?>
+                <?php wp_link_pages(); ?>
+            </div>
+        </section>
+    <?php endif; ?>
 
     <?php if ( [] !== $services ) : ?>
         <section id="aznet-theme-services-list" class="aznet-theme-services-page__services" aria-labelledby="aznet-theme-services-heading">
