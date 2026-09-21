@@ -215,13 +215,13 @@
  * WordPress remains authoritative for Page content and hierarchy; this layer is visual only.
  */
 .aznet-theme-page--service-detail {
-    --aznet-theme-service-burgundy: #7a0e18;
-    --aznet-theme-service-burgundy-deep: #560912;
-    --aznet-theme-service-gold: #b9892f;
-    --aznet-theme-service-gold-soft: #d8b66f;
-    --aznet-theme-service-paper: #fffaf2;
-    --aznet-theme-service-ink: #211a17;
-    --aznet-theme-service-muted: #6a5b52;
+    --aznet-theme-service-burgundy: var(--aznet-theme-law01-burgundy);
+    --aznet-theme-service-burgundy-deep: var(--aznet-theme-law01-burgundy-deep);
+    --aznet-theme-service-gold: var(--aznet-theme-law01-gold);
+    --aznet-theme-service-gold-soft: var(--aznet-theme-law01-gold-soft);
+    --aznet-theme-service-paper: var(--aznet-theme-law01-paper);
+    --aznet-theme-service-ink: var(--aznet-theme-law01-ink);
+    --aznet-theme-service-muted: var(--aznet-theme-law01-muted);
     --aznet-theme-service-line: rgba(122, 14, 24, .13);
     color: var(--aznet-theme-service-ink);
     background: var(--aznet-theme-service-paper);
@@ -232,7 +232,7 @@
     padding-block: clamp(3.75rem, 7vw, 6.75rem);
     border: 0;
     border-radius: 0;
-    color: #fff;
+    color: var(--aznet-theme-color-on-primary);
     background:
         radial-gradient(circle at 76% 24%, rgba(185, 137, 47, .18), transparent 22rem),
         linear-gradient(125deg, var(--aznet-theme-service-burgundy-deep), var(--aznet-theme-service-burgundy));
@@ -279,12 +279,12 @@
 }
 
 .aznet-theme-page--service-detail .aznet-theme-page__breadcrumbs a:hover {
-    color: #fff;
+    color: var(--aznet-theme-color-on-primary);
 }
 
 .aznet-theme-page--service-detail .aznet-theme-page__title {
     max-width: 15ch;
-    color: #fff;
+    color: var(--aznet-theme-color-on-primary);
     font-family: var(--aznet-theme-font-family-heading);
     font-size: clamp(2.65rem, 5.6vw, 5.2rem);
     line-height: 1.02;
@@ -329,17 +329,17 @@
 .aznet-theme-page--service-detail .aznet-theme-page__service-secondary {
     border-color: rgba(255, 255, 255, .5);
     background: rgba(255, 255, 255, .04);
-    color: #fff;
+    color: var(--aznet-theme-color-on-primary);
 }
 
 .aznet-theme-page--service-detail .aznet-theme-page__service-secondary:hover {
-    border-color: #fff;
+    border-color: var(--aznet-theme-color-on-primary);
     background: rgba(255, 255, 255, .1);
 }
 
 .aznet-theme-page--service-detail .aznet-theme-page__content-section {
     width: 100%;
-    background: linear-gradient(180deg, #fffdf8 0%, var(--aznet-theme-service-paper) 100%);
+    background: linear-gradient(180deg, var(--aznet-theme-law01-ivory) 0%, var(--aznet-theme-service-paper) 100%);
 }
 
 .aznet-theme-page--service-detail .aznet-theme-page__content {
@@ -412,7 +412,7 @@
     margin-block: 2.25rem;
     padding: 1.5rem 1.75rem;
     border-inline-start: 3px solid var(--aznet-theme-service-gold);
-    background: #fff;
+    background: var(--aznet-theme-color-surface);
     color: var(--aznet-theme-service-muted);
     box-shadow: 0 .8rem 2rem rgba(74, 46, 31, .06);
 }
@@ -429,7 +429,7 @@
 .aznet-theme-page--service-detail .aznet-theme-page__content :where(.wp-block-button__link, .wp-element-button) {
     border-radius: .35rem;
     background: var(--aznet-theme-service-burgundy);
-    color: #fff;
+    color: var(--aznet-theme-color-on-primary);
 }
 
 .aznet-theme-page--service-detail .aznet-theme-page__content :where(.wp-block-button__link, .wp-element-button):hover {
@@ -438,7 +438,7 @@
 
 .aznet-theme-page--service-detail .aznet-theme-page__service-siblings {
     border-block-start: 1px solid var(--aznet-theme-service-line);
-    background: #fffdf8;
+    background: var(--aznet-theme-law01-ivory);
 }
 
 .aznet-theme-page--service-detail .aznet-theme-page__service-eyebrow {
