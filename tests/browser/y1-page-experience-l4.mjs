@@ -4,6 +4,7 @@ import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 
 const routes = {
+  services: { url: process.env.Y1_SERVICES_URL, variant: 'standard', breadcrumbs: false, servicesRoot: true },
   child: { url: process.env.Y1_CHILD_URL, variant: 'standard', breadcrumbs: true, service: true },
   wide: { url: process.env.Y1_WIDE_URL, variant: 'wide', breadcrumbs: false },
   landing: { url: process.env.Y1_LANDING_URL, variant: 'landing', breadcrumbs: false },
@@ -74,6 +75,7 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
     overflowPx: null,
     blockingAxeViolations: null,
     breadcrumbFocus: null,
+    servicesPrimaryFocus: null,
     servicePrimaryFocus: null,
     contactPrimaryFocus: null,
     status: 'failed',
@@ -102,6 +104,23 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
     const breadcrumbCount = await page.locator('.aznet-theme-page__breadcrumbs').count();
     if (config.breadcrumbs && breadcrumbCount !== 1) throw new Error('Expected one breadcrumb navigation');
     if (!config.breadcrumbs && breadcrumbCount !== 0) throw new Error('Unexpected breadcrumb navigation');
+
+    if (config.servicesRoot) {
+      if (await page.locator('.aznet-theme-page--services-root').count() !== 1) throw new Error('Expected mapped premium Services Page presentation');
+      if (await page.locator('.aznet-theme-services-page__hero').count() !== 1) throw new Error('Expected Services Page hero');
+      if (await page.locator('#y1-services-content').count() !== 1) throw new Error('Expected WordPress-owned Services Page content');
+      if (await page.locator('.aznet-theme-services-page__card').count() !== 3) throw new Error('Expected three direct published service child cards');
+      if (await page.getByText('Y1 Business Service', { exact: true }).count() !== 1) throw new Error('Expected Business service child card');
+      if (await page.getByText('Y1 Civil Service', { exact: true }).count() !== 1) throw new Error('Expected Civil service child card');
+      const servicesStyles = await page.evaluate(() => Array.from(document.styleSheets).map((sheet) => sheet.href).filter(Boolean));
+      if (!servicesStyles.some((href) => href.includes('/assets/css/components/services-page.css'))) {
+        throw new Error('Services Page stylesheet not observed');
+      }
+      result.servicesPrimaryFocus = await focusEvidence(page, '.aznet-theme-services-page__primary');
+      if (!result.servicesPrimaryFocus?.visible || !result.servicesPrimaryFocus.focusVisible || result.servicesPrimaryFocus.outlineStyle === 'none' || result.servicesPrimaryFocus.outlineWidth < 1) {
+        throw new Error(`Services primary CTA lacks visible focus evidence: ${JSON.stringify(result.servicesPrimaryFocus)}`);
+      }
+    }
 
     if (config.service) {
       if (await page.locator('.aznet-theme-page--service-detail').count() !== 1) throw new Error('Expected mapped service detail presentation');
