@@ -51,6 +51,8 @@ foreach ([
     'services_page_children()',
     'service_page_contact_url()',
     'the_title()',
+    "$authored_content = trim( (string) get_the_content() );",
+    "if ( '' !== $authored_content )",
     'the_content()',
     'get_permalink( $service_page )',
     'get_the_title( $service_page )',
