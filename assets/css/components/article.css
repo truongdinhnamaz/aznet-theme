@@ -285,12 +285,13 @@
 }
 
 .aznet-theme-article--law01 .aznet-theme-article__title {
-    max-width: 17ch;
+    max-width: 26ch;
     margin: 0 auto;
     color: var(--law01-article-ink);
-    font-size: clamp(2.4rem, 5vw, 4.5rem);
-    line-height: 1.04;
+    font-size: clamp(3rem, 4vw, 4rem);
+    line-height: 1.08;
     letter-spacing: -.035em;
+    text-align: center;
     text-wrap: balance;
 }
 
