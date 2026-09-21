@@ -18,10 +18,12 @@ if (($normalized['homepage_preset'] ?? null) !== 'curtain-01') {
 
 $composerPath = $root . '/inc/theme/homepage-composer.php';
 $assetsPath   = $root . '/inc/theme/assets.php';
+$adminPath    = $root . '/inc/admin/homepage.php';
 $cssPath      = $root . '/assets/css/components/homepage-curtain-01.css';
 
 $composer = file_get_contents($composerPath);
 $assets   = file_get_contents($assetsPath);
+$admin    = file_get_contents($adminPath);
 
 if (! is_string($composer) || ! str_contains($composer, "'curtain-01'")) {
     fwrite(STDERR, "FAIL: Homepage Composer does not recognize Curtain 01 as a Theme-owned preset.\n");
@@ -35,6 +37,11 @@ if (! is_string($assets) || ! str_contains($assets, 'enqueue_homepage_curtain01_
 
 if (! str_contains($assets, '/assets/css/components/homepage-curtain-01.css')) {
     fwrite(STDERR, "FAIL: Curtain 01 Homepage asset path is not registered.\n");
+    exit(1);
+}
+
+if (! is_string($admin) || ! str_contains($admin, "'curtain-01' => 'Rèm 01'")) {
+    fwrite(STDERR, "FAIL: Curtain 01 is not exposed as a selectable Homepage preset.\n");
     exit(1);
 }
 
