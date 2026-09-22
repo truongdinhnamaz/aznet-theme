@@ -32,6 +32,19 @@
     gap: var(--aznet-theme-space-section, 3.25rem);
 }
 
+.single-product .aznet-theme-main .product > * {
+    grid-column: 1 / -1;
+    min-width: 0;
+}
+
+.single-product .aznet-theme-main .product > .woocommerce-product-gallery {
+    grid-column: 1;
+}
+
+.single-product .aznet-theme-main .product > .summary {
+    grid-column: 2;
+}
+
 .single-product .aznet-theme-main .woocommerce-product-gallery,
 .single-product .aznet-theme-main .summary {
     float: none;
@@ -268,6 +281,8 @@
         grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
+    .single-product .aznet-theme-main .product > .woocommerce-product-gallery,
+    .single-product .aznet-theme-main .product > .summary,
     .single-product .aznet-theme-main .woocommerce-product-gallery,
     .single-product .aznet-theme-main .summary,
     .single-product .aznet-theme-main .woocommerce-tabs,
