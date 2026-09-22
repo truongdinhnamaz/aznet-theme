@@ -2,7 +2,7 @@
     'use strict';
 
     var selector = '[data-aznet-curtain-cinematic]';
-    var slideDelay = 7000;
+    var slideDelay = 5000;
 
     function clamp(value, min, max) {
         return Math.min(Math.max(value, min), max);
@@ -109,8 +109,6 @@
                 library.appendChild(controls);
             }
 
-            hero.addEventListener('pointerenter', clearSlideTimer, { passive: true });
-            hero.addEventListener('pointerleave', scheduleNextSlide, { passive: true });
             hero.addEventListener('focusin', clearSlideTimer);
             hero.addEventListener('focusout', scheduleNextSlide);
             document.addEventListener('visibilitychange', function () {
