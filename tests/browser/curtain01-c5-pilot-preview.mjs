@@ -136,6 +136,51 @@ async function verifyHomepage(viewportName, viewport) {
     throw new Error(`${viewportName}: cinematic transition must not remove the semantic Hero heading from the accessibility tree`);
   }
 
+  if (viewportName === 'desktop') {
+    const headingSelectors = [
+      '.aznet-theme-curtain01-about__content h2',
+      '.aznet-theme-curtain01-catalogue .aznet-theme-curtain01-section-heading h2',
+      '.aznet-theme-curtain01-knowledge .aznet-theme-curtain01-section-heading h2',
+      '.aznet-theme-curtain01-final-cta h2',
+    ];
+
+    for (const selector of headingSelectors) {
+      const probe = await page.locator(selector).evaluate((heading) => {
+        const style = getComputedStyle(heading);
+        const parent = heading.parentElement;
+        const parentWidth = parent ? parent.getBoundingClientRect().width : heading.getBoundingClientRect().width;
+        const renderedHeight = heading.getBoundingClientRect().height;
+        const lineHeight = Number.parseFloat(style.lineHeight);
+        const meter = document.createElement('span');
+        meter.textContent = heading.textContent || '';
+        meter.style.position = 'absolute';
+        meter.style.visibility = 'hidden';
+        meter.style.whiteSpace = 'nowrap';
+        meter.style.font = style.font;
+        meter.style.letterSpacing = style.letterSpacing;
+        meter.style.wordSpacing = style.wordSpacing;
+        meter.style.maxWidth = 'none';
+        document.body.appendChild(meter);
+        const singleLineWidth = meter.getBoundingClientRect().width;
+        meter.remove();
+
+        return {
+          text: (heading.textContent || '').trim(),
+          parentWidth,
+          renderedHeight,
+          lineHeight,
+          singleLineWidth,
+        };
+      });
+
+      const fitsSingleLine = probe.singleLineWidth <= probe.parentWidth - 2;
+      const renderedOnMultipleLines = Number.isFinite(probe.lineHeight) && probe.renderedHeight > probe.lineHeight * 1.35;
+      if (fitsSingleLine && renderedOnMultipleLines) {
+        throw new Error(`${viewportName}: heading wrapped despite available row width: ${selector}; ${JSON.stringify(probe)}`);
+      }
+    }
+  }
+
   const visibleText = (await page.locator('body').innerText()).toLowerCase();
   for (const forbidden of ['[section', '[ux_', '[row', '[col', '[blog_posts', '[ux_products']) {
     if (visibleText.includes(forbidden)) throw new Error(`${viewportName}: legacy Flatsome shortcode leaked visibly: ${forbidden}`);
