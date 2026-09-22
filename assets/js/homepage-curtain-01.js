@@ -2,24 +2,135 @@
     'use strict';
 
     var selector = '[data-aznet-curtain-cinematic]';
+    var slideDelay = 7000;
 
     function clamp(value, min, max) {
         return Math.min(Math.max(value, min), max);
     }
 
     function init(hero) {
+        var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        var finePointer = window.matchMedia('(pointer: fine)').matches;
+        var slides = Array.prototype.slice.call(
+            hero.querySelectorAll('.aznet-theme-curtain01-hero__library .wp-block-cover')
+        );
         var image = hero.querySelector('.wp-block-cover__image-background, .aznet-theme-curtain01-hero__image');
+        var slideTimer = 0;
+        var activeSlide = 0;
+        var dots = [];
+
         if (!image) {
             return;
         }
 
-        var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (slides.length) {
+            var slideHost = slides[0].parentElement;
+            var sharedHost = slideHost && slides.every(function (slide) {
+                return slide.parentElement === slideHost;
+            });
+
+            if (sharedHost) {
+                slideHost.classList.add('aznet-theme-curtain01-hero__slide-stage');
+            }
+
+            slides.forEach(function (slide, index) {
+                slide.classList.add('aznet-theme-curtain01-hero__slide');
+                slide.setAttribute('data-aznet-curtain-slide', String(index + 1));
+                slide.classList.toggle('is-active', 0 === index);
+                slide.setAttribute('aria-hidden', 0 === index ? 'false' : 'true');
+            });
+        }
+
+        function clearSlideTimer() {
+            if (slideTimer) {
+                window.clearTimeout(slideTimer);
+                slideTimer = 0;
+            }
+        }
+
+        function setActiveSlide(index, userInitiated) {
+            if (slides.length < 2) {
+                return;
+            }
+
+            activeSlide = (index + slides.length) % slides.length;
+
+            slides.forEach(function (slide, slideIndex) {
+                var active = slideIndex === activeSlide;
+                slide.classList.toggle('is-active', active);
+                slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+            });
+
+            dots.forEach(function (dot, dotIndex) {
+                var active = dotIndex === activeSlide;
+                dot.classList.toggle('is-active', active);
+                dot.setAttribute('aria-pressed', active ? 'true' : 'false');
+            });
+
+            if (userInitiated) {
+                scheduleNextSlide();
+            }
+        }
+
+        function scheduleNextSlide() {
+            clearSlideTimer();
+
+            if (slides.length < 2 || reducedMotion.matches || document.hidden) {
+                return;
+            }
+
+            slideTimer = window.setTimeout(function () {
+                setActiveSlide(activeSlide + 1, false);
+                scheduleNextSlide();
+            }, slideDelay);
+        }
+
+        if (slides.length > 1) {
+            hero.classList.add('has-cinematic-slides');
+
+            var controls = document.createElement('div');
+            controls.className = 'aznet-theme-curtain01-hero__dots';
+            controls.setAttribute('role', 'group');
+            controls.setAttribute('aria-label', 'Chọn ảnh Hero');
+
+            slides.forEach(function (slide, index) {
+                var dot = document.createElement('button');
+                dot.type = 'button';
+                dot.className = 'aznet-theme-curtain01-hero__dot' + (0 === index ? ' is-active' : '');
+                dot.setAttribute('aria-label', 'Ảnh Hero ' + (index + 1));
+                dot.setAttribute('aria-pressed', 0 === index ? 'true' : 'false');
+                dot.addEventListener('click', function () {
+                    setActiveSlide(index, true);
+                });
+                dots.push(dot);
+                controls.appendChild(dot);
+            });
+
+            var library = hero.querySelector('.aznet-theme-curtain01-hero__library');
+            if (library) {
+                library.appendChild(controls);
+            }
+
+            hero.addEventListener('pointerenter', clearSlideTimer, { passive: true });
+            hero.addEventListener('pointerleave', scheduleNextSlide, { passive: true });
+            hero.addEventListener('focusin', clearSlideTimer);
+            hero.addEventListener('focusout', scheduleNextSlide);
+            document.addEventListener('visibilitychange', function () {
+                if (document.hidden) {
+                    clearSlideTimer();
+                } else {
+                    scheduleNextSlide();
+                }
+            });
+
+            scheduleNextSlide();
+        }
+
         if (reducedMotion.matches) {
             hero.classList.add('is-cinematic-ready');
             return;
         }
 
-        var finePointer = window.matchMedia('(pointer: fine)').matches;
         var currentX = 0;
         var currentY = 0;
         var currentScroll = 0;
