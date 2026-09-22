@@ -545,6 +545,21 @@
     font-size: clamp(1.02rem, 1.45vw, 1.18rem);
 }
 
+.aznet-theme-curtain01-about__quote {
+    margin: 1.6rem 0 0;
+    padding: 0 0 0 1.1rem;
+    border-left: 2px solid var(--aznet-theme-curtain-accent-soft);
+    color: var(--aznet-theme-curtain-text);
+    font-family: Cambria, Georgia, "Times New Roman", serif;
+    font-size: clamp(1.05rem, 1.6vw, 1.28rem);
+    font-style: italic;
+    line-height: 1.55;
+}
+
+.aznet-theme-curtain01-about__quote p {
+    margin: 0;
+}
+
 .aznet-theme-curtain01-about__story-link {
     margin-top: 1.8rem;
 }
