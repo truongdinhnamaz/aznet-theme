@@ -528,7 +528,7 @@
 }
 
 .aznet-theme-curtain01-about__content h2 {
-    max-width: 18ch;
+    max-width: 20ch;
     font-family: Cambria, Georgia, "Times New Roman", serif;
     font-size: clamp(2.35rem, 4.8vw, 4.7rem);
     font-weight: 500;
