@@ -7,6 +7,9 @@ $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($cssRoo
 
 $forbiddenFamilies = [
     "Georgia, 'Times New Roman', serif",
+    'font-family: Cambria',
+    'Georgia',
+    'Times New Roman',
     'font-family: Roboto',
     'font-family: Arial',
     'font-family: Helvetica',

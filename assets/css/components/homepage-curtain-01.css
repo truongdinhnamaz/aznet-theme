@@ -529,7 +529,7 @@
 
 .aznet-theme-curtain01-about__content h2 {
     max-width: 20ch;
-    font-family: Cambria, Georgia, "Times New Roman", serif;
+    font-family: var(--aznet-theme-font-family-heading);
     font-size: clamp(2.35rem, 4.8vw, 4.7rem);
     font-weight: 500;
     letter-spacing: -0.025em;
@@ -550,7 +550,7 @@
     padding: 0 0 0 1.1rem;
     border-left: 2px solid var(--aznet-theme-curtain-accent-soft);
     color: var(--aznet-theme-curtain-text);
-    font-family: Cambria, Georgia, "Times New Roman", serif;
+    font-family: var(--aznet-theme-font-family-heading);
     font-size: clamp(1.05rem, 1.6vw, 1.28rem);
     font-style: italic;
     line-height: 1.55;
