@@ -14,6 +14,8 @@ on:
       - 'template-parts/homepage/curtain-01/**'
       - 'assets/css/presets/curtain-01.css'
       - 'assets/css/components/homepage-curtain-01.css'
+      - 'assets/js/homepage-curtain-01.js'
+      - 'tests/offline/curtain01-cinematic-hero-contract.php'
       - 'tests/browser/curtain01-c5-pilot-preview.mjs'
       - '.github/workflows/curtain01-c5-pilot-preview.yml'
   workflow_dispatch:
