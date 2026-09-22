@@ -108,6 +108,24 @@ async function verifyHomepage(viewportName, viewport) {
   if (!(await cinematicSlides.nth(0).getAttribute('class') || '').includes('is-active')) {
     throw new Error(`${viewportName}: first cinematic Hero slide must start active`);
   }
+
+  const cinematicGeometry = await cinematicHero.evaluate((hero) => {
+    const stage = hero.querySelector('.aznet-theme-curtain01-hero__slide-stage');
+    const slides = [...hero.querySelectorAll('[data-aznet-curtain-slide]')];
+    const heroRect = hero.getBoundingClientRect();
+    const stageRect = stage ? stage.getBoundingClientRect() : null;
+    return {
+      heroWidth: heroRect.width,
+      stageWidth: stageRect ? stageRect.width : 0,
+      slideWidths: slides.map((slide) => slide.getBoundingClientRect().width),
+    };
+  });
+  if (cinematicGeometry.stageWidth < cinematicGeometry.heroWidth * 0.95) {
+    throw new Error(`${viewportName}: cinematic Hero stage collapsed; ${JSON.stringify(cinematicGeometry)}`);
+  }
+  if (cinematicGeometry.slideWidths.some((width) => width < cinematicGeometry.heroWidth * 0.95)) {
+    throw new Error(`${viewportName}: cinematic Hero slide collapsed; ${JSON.stringify(cinematicGeometry)}`);
+  }
   await cinematicDots.nth(1).click();
   await page.waitForTimeout(80);
   if (!(await cinematicSlides.nth(1).getAttribute('class') || '').includes('is-active')) {
