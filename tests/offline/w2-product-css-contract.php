@@ -4,7 +4,7 @@ if ( ! is_file( $path ) ) { fwrite( STDERR, "missing product CSS\n" ); exit( 1 )
 $css = file_get_contents( $path );
 $required = [
     '.single-product',
-    '.aznet-theme-main',
+    '#main',
     '.woocommerce-product-gallery',
     '.summary',
     '.woocommerce-tabs',
