@@ -200,6 +200,9 @@ async function verifyHomepage(viewportName, viewport) {
   const categoryShowcaseImages = await page.locator('.aznet-theme-curtain01-category-showcase__card img').count();
   if (categoryShowcaseImages !== 4) throw new Error(`${viewportName}: expected 4 category showcase images, got ${categoryShowcaseImages}`);
 
+  const categoryShowcasePlaceholders = await page.locator('.aznet-theme-curtain01-category-showcase__card img[src*="woocommerce-placeholder"]').count();
+  if (categoryShowcasePlaceholders !== 0) throw new Error(`${viewportName}: category showcase must skip missing category images instead of rendering Woo placeholders`);
+
     const productCards = await page.locator('.aznet-theme-curtain01-product-card').count();
   if (productCards !== 6) throw new Error(`${viewportName}: expected 6 Homepage product cards, got ${productCards}`);
 
