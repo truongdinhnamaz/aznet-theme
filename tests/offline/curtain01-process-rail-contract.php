@@ -2,16 +2,30 @@
 declare(strict_types=1);
 
 $root = dirname(__DIR__, 2);
+$settings_path = $root . '/inc/theme/settings.php';
 $composer_path = $root . '/inc/theme/homepage-composer.php';
+$admin_path = $root . '/inc/admin/homepage.php';
 $template_path = $root . '/template-parts/homepage/curtain-01/process.php';
 $css_path = $root . '/assets/css/components/homepage-curtain-01.css';
 
+$settings = is_file($settings_path) ? file_get_contents($settings_path) : false;
 $composer = is_file($composer_path) ? file_get_contents($composer_path) : false;
+$admin = is_file($admin_path) ? file_get_contents($admin_path) : false;
 $css = is_file($css_path) ? file_get_contents($css_path) : false;
 
-if (! is_string($composer) || ! is_string($css)) {
+if (! is_string($settings) || ! is_string($composer) || ! is_string($admin) || ! is_string($css)) {
     fwrite(STDERR, "FAIL: Curtain 01 process source files missing.\n");
     exit(1);
+}
+
+foreach ([
+    "'homepage_curtain01_process_page' => 0",
+    "'homepage_curtain01_process_page' => \\$normalize_id",
+] as $needle) {
+    if (! str_contains($settings, $needle)) {
+        fwrite(STDERR, "FAIL: Rèm 01 process source must use its own normalized setting, isolated from Law 01: {$needle}\n");
+        exit(1);
+    }
 }
 
 $curtain_sections = "[ 'about', 'category-showcase', 'catalogue', 'process', 'knowledge', 'final-cta' ]";
@@ -27,7 +41,7 @@ if (! is_file($template_path)) {
 
 $template = file_get_contents($template_path);
 foreach ([
-    "setting( 'homepage_process_page', 0 )",
+    "setting( 'homepage_curtain01_process_page', 0 )",
     'homepage_page_reference',
     "apply_filters( 'the_content'",
     'aznet-theme-curtain01-process__rail',
@@ -51,6 +65,11 @@ foreach ([
         fwrite(STDERR, "FAIL: process business copy must remain WordPress-owned, not hard-coded in Theme PHP.\n");
         exit(1);
     }
+}
+
+if (! str_contains($admin, 'homepage_curtain01_process_page') || ! str_contains($admin, 'Quy trình Rèm 01')) {
+    fwrite(STDERR, "FAIL: Homepage admin must expose the independent Rèm 01 process Page mapping.\n");
+    exit(1);
 }
 
 foreach ([
