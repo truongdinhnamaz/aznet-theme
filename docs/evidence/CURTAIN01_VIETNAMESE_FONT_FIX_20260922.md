@@ -1,8 +1,8 @@
 # Curtain 01 — Vietnamese Roboto font corrective checkpoint
 
-**Date:** 22/09/2026  
-**Pilot:** `https://remquocanh.vn/`  
-**Scope:** Theme presentation / typography only  
+**Date:** 22/09/2026
+**Pilot:** `https://remquocanh.vn/`
+**Scope:** Theme presentation / typography only
 **Decision:** D-037 Accepted
 
 ## Problem
