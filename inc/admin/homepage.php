@@ -194,8 +194,12 @@ function render_homepage_settings(): void {
     render_hidden_settings( $preset_visible );
     echo '<h2>' . esc_html__( 'Mẫu trang chủ', 'aznet-theme' ) . '</h2>';
     field_select( 'homepage_preset', __( 'Mẫu', 'aznet-theme' ), [ 'off' => 'Tắt Composer', 'law-01' => 'Luật 01', 'curtain-01' => 'Rèm 01' ], (string) $s['homepage_preset'] );
-    field_select( 'homepage_law01_variant', __( 'Biến thể Luật 01', 'aznet-theme' ), [ 'navy-gold' => 'Navy + Gold', 'burgundy-gold' => 'Burgundy + Gold' ], (string) $s['homepage_law01_variant'] );
-    echo '<p class="description">' . esc_html__( 'Luật 01: website dịch vụ pháp lý kết hợp nội dung chuyên môn. Áp dụng mẫu chỉ đổi presentation, không sửa nội dung WordPress.', 'aznet-theme' ) . '</p>';
+    if ( 'law-01' === (string) $s['homepage_preset'] ) {
+        field_select( 'homepage_law01_variant', __( 'Biến thể Luật 01', 'aznet-theme' ), [ 'navy-gold' => 'Navy + Gold', 'burgundy-gold' => 'Burgundy + Gold' ], (string) $s['homepage_law01_variant'] );
+        echo '<p class="description">' . esc_html__( 'Luật 01: website dịch vụ pháp lý kết hợp nội dung chuyên môn. Áp dụng mẫu chỉ đổi presentation, không sửa nội dung WordPress.', 'aznet-theme' ) . '</p>';
+    } elseif ( 'curtain-01' === (string) $s['homepage_preset'] ) {
+        echo '<p class="description">' . esc_html__( 'Rèm 01: website rèm và giải pháp kiểm soát ánh sáng. Đây là mẫu độc lập; áp dụng mẫu không sửa nội dung WordPress và không thay đổi cấu hình Luật 01.', 'aznet-theme' ) . '</p>';
+    }
     submit_button( __( 'Lưu mẫu trang chủ', 'aznet-theme' ) );
     echo '</form>';
 
