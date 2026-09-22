@@ -29,6 +29,7 @@ foreach ([
     "aznet-theme-curtain01-about__history",
     "aznet-theme-curtain01-about__media-frame",
     "aznet-theme-curtain01-about__story-link",
+    "aznet-theme-curtain01-about__quote",
 ] as $needle) {
     if (! str_contains($about, $needle)) {
         fwrite(STDERR, "FAIL: approved history-first About structure missing: {$needle}\n");
