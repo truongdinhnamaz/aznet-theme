@@ -231,6 +231,8 @@ jobs:
               'rem-cuon' => curtain01_product_category( 'Rèm Cuốn', 'rem-cuon' ),
               'rem-cau-vong' => curtain01_product_category( 'Rèm Cầu Vồng', 'rem-cau-vong' ),
               'rem-roman' => curtain01_product_category( 'Rèm Roman', 'rem-roman' ),
+              'rem-sao' => curtain01_product_category( 'Rèm sáo', 'rem-sao' ),
+              'rem-go' => curtain01_product_category( 'Rèm gỗ', 'rem-go' ),
           ];
 
           foreach ( $product_categories as $slug => $category_id ) {
@@ -249,6 +251,8 @@ jobs:
               [ 'Rèm cầu vồng xuyên sáng', 'rem-cau-vong-xuyen-sang', 'rem-cau-vong' ],
               [ 'Rèm cầu vồng cản sáng', 'rem-cau-vong-can-sang', 'rem-cau-vong' ],
               [ 'Rèm vải hoa văn', 'rem-vai-hoa-van', 'rem-roman' ],
+              [ 'Rèm sáo nhôm', 'rem-sao-nhom', 'rem-sao' ],
+              [ 'Rèm gỗ tự nhiên', 'rem-go-tu-nhien', 'rem-go' ],
           ];
           $product_ids = [];
           foreach ( $products as $index => $row ) {

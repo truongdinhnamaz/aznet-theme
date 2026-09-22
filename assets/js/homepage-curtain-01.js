@@ -207,8 +207,58 @@
         });
     }
 
+
+    function initCategoryCarousel(section) {
+        var track = section.querySelector('.aznet-theme-curtain01-category-showcase__grid');
+        var previous = section.querySelector('.aznet-theme-curtain01-category-showcase__control--prev');
+        var next = section.querySelector('.aznet-theme-curtain01-category-showcase__control--next');
+        var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+        if (!track || !previous || !next) {
+            return;
+        }
+
+        function maxScrollLeft() {
+            return Math.max(track.scrollWidth - track.clientWidth, 0);
+        }
+
+        function updateControls() {
+            var max = maxScrollLeft();
+            var atStart = track.scrollLeft <= 2;
+            var atEnd = track.scrollLeft >= max - 2;
+
+            previous.disabled = atStart;
+            previous.setAttribute('aria-disabled', atStart ? 'true' : 'false');
+            next.disabled = atEnd;
+            next.setAttribute('aria-disabled', atEnd ? 'true' : 'false');
+        }
+
+        function scrollPage(direction) {
+            var distance = Math.max(track.clientWidth, 1);
+
+            track.scrollBy({
+                left: distance * direction,
+                behavior: reducedMotion.matches ? 'auto' : 'smooth'
+            });
+        }
+
+        previous.addEventListener('click', function () {
+            scrollPage(-1);
+        });
+
+        next.addEventListener('click', function () {
+            scrollPage(1);
+        });
+
+        track.addEventListener('scroll', updateControls, { passive: true });
+        window.addEventListener('resize', updateControls, { passive: true });
+
+        updateControls();
+    }
+
     function boot() {
         document.querySelectorAll(selector).forEach(init);
+        document.querySelectorAll('[data-aznet-curtain-category-carousel]').forEach(initCategoryCarousel);
     }
 
     if ('loading' === document.readyState) {
