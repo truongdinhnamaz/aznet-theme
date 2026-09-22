@@ -37,6 +37,9 @@ function settings_defaults(): array {
         'homepage_services_page'        => 0,
         'homepage_about_page'           => 0,
         'homepage_about_image'          => 0,
+        'homepage_about_kicker'         => '',
+        'homepage_about_heading'        => '',
+        'homepage_about_quote'          => '',
         'homepage_team_page'            => 0,
         'homepage_knowledge_terms'      => [],
         'homepage_case_analysis_term'   => 0,
@@ -119,6 +122,10 @@ function normalize_settings( array $raw ): array {
         return $id > 0 ? $id : 0;
     };
 
+    $normalize_text = static function ( mixed $value ): string {
+        return is_string( $value ) ? trim( $value ) : '';
+    };
+
     $normalize_ids = static function ( mixed $value ) use ( $normalize_id ): array {
         if ( ! is_array( $value ) ) {
             return [];
@@ -153,6 +160,9 @@ function normalize_settings( array $raw ): array {
         'homepage_services_page'        => $normalize_id( $raw['homepage_services_page'] ?? 0 ),
         'homepage_about_page'           => $normalize_id( $raw['homepage_about_page'] ?? 0 ),
         'homepage_about_image'          => $normalize_id( $raw['homepage_about_image'] ?? 0 ),
+        'homepage_about_kicker'         => $normalize_text( $raw['homepage_about_kicker'] ?? '' ),
+        'homepage_about_heading'        => $normalize_text( $raw['homepage_about_heading'] ?? '' ),
+        'homepage_about_quote'          => $normalize_text( $raw['homepage_about_quote'] ?? '' ),
         'homepage_team_page'            => $normalize_id( $raw['homepage_team_page'] ?? 0 ),
         'homepage_knowledge_terms'      => $normalize_ids( $raw['homepage_knowledge_terms'] ?? [] ),
         'homepage_case_analysis_term'   => $normalize_id( $raw['homepage_case_analysis_term'] ?? 0 ),
