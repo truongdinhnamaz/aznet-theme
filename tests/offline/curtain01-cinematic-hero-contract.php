@@ -94,6 +94,19 @@ if (!str_contains($js, '7000') || !str_contains($css, 'opacity 1400ms')) {
     $fail('Curtain 01 crossfade timing must remain slow and restrained.');
 }
 
+foreach ([
+    '.aznet-theme-curtain01-hero__slide-stage {',
+    'width: 100%;',
+    'max-width: none !important;',
+    '.aznet-theme-curtain01-hero__slide-stage > .aznet-theme-curtain01-hero__slide {',
+    'width: 100%;',
+    'margin: 0 !important;',
+] as $needle) {
+    if (!str_contains($css, $needle)) {
+        $fail('Crossfade stage must override WordPress constrained-layout width/margins: ' . $needle);
+    }
+}
+
 if (str_contains($js, "setAttribute('aria-hidden'") || str_contains($css, 'visibility: hidden')) {
     $fail('Crossfade must not hide the stable Hero heading from the accessibility tree.');
 }
