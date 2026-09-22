@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.89
+**Version:** v0.90
 **Status:** Working Source  
-**Date:** 21/09/2026
+**Date:** 22/09/2026
 
 ## 1. Purpose
 
@@ -352,6 +352,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-034** | **Rèm 01 is a reusable curtain/interior presentation preset and migration pilot over WordPress/WooCommerce/provider-owned data. It may extend existing Homepage/Header/Footer/Page/Woo/provisioning presentation systems but must not interpret Flatsome/UX Builder at runtime, create a parallel product/contact/identity store, or absorb ConvertFlow decision/conversion semantics. Existing-site Flatsome cutover requires read-only inventory, native-content portability for trapped builder content, real runtime/browser evidence, rollback, and a separate production approval gate.** | **Accepted — owner approved 21/09/2026** |
 | **D-035** | **AZnet Theme uses a full-bleed outer presentation shell by default: page/front-page/section backgrounds may span the viewport while readable content is constrained only by explicit inner containers. A first Hero must sit flush directly below the Header with no Theme-owned top gap, outer gutter, boxed shell, rounded outer edge or shadow unless a preset specification explicitly opts into one.** | **Accepted — owner approved 22/09/2026** |
 | **D-036** | **On desktop, AZnet Theme must not artificially wrap a heading onto an additional line when the heading can fit within its actual available container width. Presentation may not use narrow decorative width caps to force wrapping, and must not use `white-space: nowrap` to create overflow. Natural wrapping remains correct when the real container is insufficient; tablet/mobile may wrap responsively for readability.** | **Accepted — owner approved 22/09/2026** |
+| **D-037** | **Self-hosted Theme fonts used for Vietnamese content must explicitly prove Vietnamese glyph coverage for every shipped production weight. The canonical typography family must be consumed through Theme tokens/presets; presentation presets may not silently replace it with unrelated serif/system stacks. A font fix is not production PASS until the Vietnamese face is verified at runtime/browser level; repository PASS and live-site publish remain separate gates.** | **Accepted — owner approved 22/09/2026** |
 
 ## 10A. v1.3 Client Delivery System
 
@@ -377,7 +378,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 
 ## 10B. Rèm 01 curtain/interior pilot — ACCEPTED
 
-**State:** LIVE PILOT CUTOVER + FOLLOW-UP PRESENTATION FIXES EXECUTED — production migration, cinematic 3-image Hero, About typography/excerpt correction and D-036 desktop heading-flow rule are live. Fresh authenticated live L3 smoke is PASS; exact-main repository-native L1-L4/L6 regression is PASS on `main@66c734dc285b6e1e4a1b39e3074466fd4b866818`. Independent pixel-level L4 verification on the protected production hostname and provider-specific L5 certification remain UNKNOWN and are not inferred.
+**State:** LIVE PILOT CUTOVER + FOLLOW-UP PRESENTATION FIXES EXECUTED; VIETNAMESE FONT CORRECTIVE SOURCE PASS / LIVE PUBLISH PENDING. Production migration, cinematic 3-image Hero, About typography/excerpt correction and D-036 desktop heading-flow rule are live. The D-037 Vietnamese Roboto corrective fix is canonical and exact-main verified, but its live publish is still pending because the approved WPVibe publish path is temporarily rate-limited. Independent pixel-level L4 verification on the protected production hostname and provider-specific L5 certification remain UNKNOWN and are not inferred.
 
 **Pilot:** `https://remquocanh.vn/` is the migration/reference pilot. The reusable output is a generic Rèm 01 presentation, not a hardcoded Rèm Quốc Anh site.
 
@@ -391,7 +392,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 
 **Evidence:** `docs/evidence/C6_CURTAIN01_PAGE2_PREWRITE_SNAPSHOT_20260921.md`, `docs/evidence/C6_CURTAIN01_LIVE_CUTOVER_20260922.md`, and `docs/evidence/CURTAIN01_EXACT_MAIN_FOLLOWUP_20260922.md`.
 
-**Exact Next:** obtain one fresh independent production-browser L4 pass when a safe browser path is available; do not reopen the now-PASS Theme-owned Hero/About/heading-flow implementation or mutate provider/domain data merely to satisfy that remaining evidence gap.
+**Exact Next:** when the approved WPVibe path is available, publish the already-previewed D-037 font-only draft on the live `1.3.30` baseline, then verify Vietnamese Roboto 400/500/700 and the affected Curtain 01 text on production. Do not replace live `1.3.30` with the lower repository metadata package merely to deliver this fix. After live font verification, retain the separate independent production-browser L4 gap for later closure.
 
 ## 11. Open questions
 
