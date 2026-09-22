@@ -94,4 +94,8 @@ if (!str_contains($js, '7000') || !str_contains($css, 'opacity 1400ms')) {
     $fail('Curtain 01 crossfade timing must remain slow and restrained.');
 }
 
+if (str_contains($js, "setAttribute('aria-hidden'") || str_contains($css, 'visibility: hidden')) {
+    $fail('Crossfade must not hide the stable Hero heading from the accessibility tree.');
+}
+
 echo "PASS: Curtain 01 cinematic Hero supports three-slide crossfade, scoped motion and reduced-motion safety\n";
