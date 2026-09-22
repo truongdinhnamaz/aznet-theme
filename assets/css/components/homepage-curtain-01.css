@@ -671,6 +671,19 @@
     outline-offset: 4px;
 }
 
+@media (min-width: 64rem) {
+    .aznet-theme-curtain01-hero__content h1,
+    .aznet-theme-curtain01-section-heading h2,
+    .aznet-theme-curtain01-about__content h2,
+    .aznet-theme-curtain01-final-cta h2 {
+        max-width: none;
+        overflow-wrap: normal;
+        word-break: normal;
+        hyphens: none;
+        text-wrap: balance;
+    }
+}
+
 @media (max-width: 960px) {
     .aznet-theme-curtain01-hero__grid,
     .aznet-theme-curtain01-about__grid,
