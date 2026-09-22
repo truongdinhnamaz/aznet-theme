@@ -182,9 +182,9 @@ async function verifyKind(page, kind, viewport) {
     if (!bodyClass.split(/\s+/).includes(expected)) throw new Error(`product: missing body class ${expected}`);
     if (!((await themeWooStyleIds(page)).includes('aznet-theme-woocommerce-product-css'))) throw new Error('product: product stylesheet not scoped onto product page');
 
-    const themeTitle = page.locator('main#main .aznet-theme-entry__title').first();
-    await themeTitle.waitFor({ state: 'visible', timeout: 20000 });
-    if ((await themeTitle.textContent())?.trim() !== 'R4 Variable Product') throw new Error('product: Theme-owned product H1 does not match fixture title');
+    const productTitle = page.locator('main#main h1.product_title.entry-title').first();
+    await productTitle.waitFor({ state: 'visible', timeout: 20000 });
+    if ((await productTitle.textContent())?.trim() !== 'R4 Variable Product') throw new Error('product: native Woo product H1 does not match fixture title');
     if (await page.locator('main#main h1').count() !== 1) throw new Error('product: expected exactly one H1 in main');
 
     for (const selector of ['.summary .price', 'form.variations_form', '.variations select', '.single_add_to_cart_button']) {
