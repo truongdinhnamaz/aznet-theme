@@ -223,6 +223,150 @@
     margin-bottom: 0;
 }
 
+/* Cinematic Hero enhancement: progressive, scoped and motion-preference safe. */
+.aznet-theme-curtain01-hero[data-aznet-curtain-cinematic] {
+    --aznet-curtain-shift-x: 0px;
+    --aznet-curtain-shift-y: 0px;
+    --aznet-curtain-scroll-shift: 0px;
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+}
+
+.aznet-theme-curtain01-hero[data-aznet-curtain-cinematic]::before {
+    position: absolute;
+    z-index: 3;
+    inset: auto 0 0;
+    height: clamp(3rem, 8vw, 7rem);
+    background: linear-gradient(to bottom, transparent, rgba(37, 34, 30, 0.09));
+    content: "";
+    pointer-events: none;
+}
+
+.aznet-theme-curtain01-hero[data-aznet-curtain-cinematic] .aznet-theme-curtain01-hero__library,
+.aznet-theme-curtain01-hero[data-aznet-curtain-cinematic] .aznet-theme-curtain01-hero__grid {
+    position: relative;
+    isolation: isolate;
+}
+
+.aznet-theme-curtain01-hero[data-aznet-curtain-cinematic] .aznet-theme-curtain01-hero__library::after,
+.aznet-theme-curtain01-hero[data-aznet-curtain-cinematic] .aznet-theme-curtain01-hero__grid::after {
+    position: absolute;
+    z-index: 2;
+    inset: -22% -12%;
+    background:
+        radial-gradient(circle at 38% 48%, rgba(255, 247, 224, 0.22), transparent 22%),
+        linear-gradient(108deg, transparent 24%, rgba(255, 245, 218, 0.18) 48%, transparent 67%);
+    content: "";
+    opacity: 0;
+    pointer-events: none;
+    transform: translate3d(-13%, 0, 0) rotate(-4deg);
+    mix-blend-mode: soft-light;
+}
+
+.aznet-theme-curtain01-hero[data-aznet-curtain-cinematic] :where(
+    .wp-block-cover__image-background,
+    .aznet-theme-curtain01-hero__image
+) {
+    transform: translate3d(
+        var(--aznet-curtain-shift-x),
+        calc(var(--aznet-curtain-shift-y) + var(--aznet-curtain-scroll-shift)),
+        0
+    );
+    scale: 1.025;
+    transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, scale;
+}
+
+.aznet-theme-curtain01-hero[data-aznet-curtain-cinematic].is-cinematic-ready .aznet-theme-curtain01-hero__library,
+.aznet-theme-curtain01-hero[data-aznet-curtain-cinematic].is-cinematic-ready .aznet-theme-curtain01-hero__grid {
+    animation: aznet-curtain01-hero-reveal 850ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.aznet-theme-curtain01-hero[data-aznet-curtain-cinematic].is-cinematic-ready :where(
+    .wp-block-cover__image-background,
+    .aznet-theme-curtain01-hero__image
+) {
+    animation: aznet-curtain01-hero-breathe 14s ease-in-out 900ms infinite alternate;
+}
+
+.aznet-theme-curtain01-hero[data-aznet-curtain-cinematic].is-cinematic-ready .aznet-theme-curtain01-hero__library::after,
+.aznet-theme-curtain01-hero[data-aznet-curtain-cinematic].is-cinematic-ready .aznet-theme-curtain01-hero__grid::after {
+    animation: aznet-curtain01-hero-light 11s ease-in-out 1.2s infinite alternate;
+}
+
+@keyframes aznet-curtain01-hero-reveal {
+    from {
+        opacity: 0.78;
+        transform: scale(1.012);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes aznet-curtain01-hero-breathe {
+    from { scale: 1.025; }
+    to { scale: 1.052; }
+}
+
+@keyframes aznet-curtain01-hero-light {
+    from {
+        opacity: 0.12;
+        transform: translate3d(-13%, 0, 0) rotate(-4deg);
+    }
+    to {
+        opacity: 0.32;
+        transform: translate3d(13%, 0, 0) rotate(-4deg);
+    }
+}
+
+@media (max-width: 47.999rem) {
+    .aznet-theme-curtain01-hero[data-aznet-curtain-cinematic] :where(
+        .wp-block-cover__image-background,
+        .aznet-theme-curtain01-hero__image
+    ) {
+        scale: 1.015;
+    }
+
+    .aznet-theme-curtain01-hero[data-aznet-curtain-cinematic].is-cinematic-ready :where(
+        .wp-block-cover__image-background,
+        .aznet-theme-curtain01-hero__image
+    ) {
+        animation-duration: 18s;
+    }
+
+    .aznet-theme-curtain01-hero[data-aznet-curtain-cinematic].is-cinematic-ready .aznet-theme-curtain01-hero__library::after,
+    .aznet-theme-curtain01-hero[data-aznet-curtain-cinematic].is-cinematic-ready .aznet-theme-curtain01-hero__grid::after {
+        opacity: 0.14;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .aznet-theme-curtain01-hero[data-aznet-curtain-cinematic] :where(
+        .wp-block-cover__image-background,
+        .aznet-theme-curtain01-hero__image
+    ) {
+        animation: none !important;
+        transform: none !important;
+        scale: 1 !important;
+        transition: none !important;
+        will-change: auto;
+    }
+
+    .aznet-theme-curtain01-hero[data-aznet-curtain-cinematic].is-cinematic-ready .aznet-theme-curtain01-hero__library,
+    .aznet-theme-curtain01-hero[data-aznet-curtain-cinematic].is-cinematic-ready .aznet-theme-curtain01-hero__grid {
+        animation: none;
+    }
+
+    .aznet-theme-curtain01-hero[data-aznet-curtain-cinematic]::before,
+    .aznet-theme-curtain01-hero[data-aznet-curtain-cinematic] .aznet-theme-curtain01-hero__library::after,
+    .aznet-theme-curtain01-hero[data-aznet-curtain-cinematic] .aznet-theme-curtain01-hero__grid::after {
+        display: none;
+    }
+}
+
 /* About */
 .aznet-theme-curtain01-about {
     background: #fff;
