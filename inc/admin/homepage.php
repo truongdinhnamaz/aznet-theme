@@ -98,6 +98,17 @@ function homepage_page_select( string $key, string $label, int $current, array $
     echo '</select></label>';
 }
 
+/** Render one published WordPress synced-block selector. */
+function homepage_block_select( string $key, string $label, int $current, array $blocks ): void {
+    echo '<label class="aznet-theme-field"><span>' . esc_html( $label ) . '</span><select name="aznet_theme_settings[' . esc_attr( $key ) . ']">';
+    echo '<option value="0">' . esc_html__( '— Chưa chọn —', 'aznet-theme' ) . '</option>';
+    foreach ( $blocks as $block ) {
+        if ( ! $block instanceof \WP_Post || 'wp_block' !== $block->post_type || 'publish' !== $block->post_status ) { continue; }
+        echo '<option value="' . esc_attr( (string) $block->ID ) . '" ' . selected( $current, (int) $block->ID, false ) . '>' . esc_html( get_the_title( $block ) ) . '</option>';
+    }
+    echo '</select></label>';
+}
+
 /**
  * Render the D-030 Hero Library without storing Hero copy in Theme settings.
  *
@@ -186,6 +197,13 @@ function render_homepage_settings(): void {
     $s = settings();
     $pages = get_pages( [ 'post_status' => 'publish', 'sort_column' => 'post_title' ] );
     $categories = get_categories( [ 'hide_empty' => false ] );
+    $blocks = get_posts( [
+        'post_type'      => 'wp_block',
+        'post_status'    => 'publish',
+        'posts_per_page' => -1,
+        'orderby'        => 'title',
+        'order'          => 'ASC',
+    ] );
 
     $preset_visible = [ 'homepage_preset', 'homepage_law01_variant' ];
     echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="aznet-theme-panel">';
@@ -210,11 +228,17 @@ function render_homepage_settings(): void {
         'homepage_knowledge_terms', 'homepage_case_analysis_term', 'homepage_legal_news_term',
         'homepage_process_page', 'homepage_faq_page', 'homepage_contact_page',
     ];
+    if ( 'curtain-01' === (string) $s['homepage_preset'] ) {
+        $source_visible[] = 'homepage_proof_block';
+    }
     echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="aznet-theme-panel">';
     echo '<input type="hidden" name="action" value="aznet_theme_save_settings">';
     wp_nonce_field( 'aznet_theme_save_settings' );
     render_hidden_settings( $source_visible );
     echo '<h2>' . esc_html__( 'Nguồn nội dung', 'aznet-theme' ) . '</h2>';
+    if ( 'curtain-01' === (string) $s['homepage_preset'] ) {
+        homepage_block_select( 'homepage_proof_block', 'Bằng chứng nhanh', (int) $s['homepage_proof_block'], $blocks );
+    }
     homepage_page_select( 'homepage_services_page', 'Dịch vụ pháp lý', (int) $s['homepage_services_page'], $pages );
     homepage_page_select( 'homepage_about_page', 'Giới thiệu', (int) $s['homepage_about_page'], $pages );
     homepage_page_select( 'homepage_team_page', 'Đội ngũ', (int) $s['homepage_team_page'], $pages );

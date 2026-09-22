@@ -1,0 +1,25 @@
+name: Curtain 01 Proof Strip
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'inc/theme/settings.php'
+      - 'inc/theme/homepage-composer.php'
+      - 'inc/admin/homepage.php'
+      - 'template-parts/homepage/curtain-01/proof-strip.php'
+      - 'assets/css/components/homepage-curtain-01.css'
+      - 'tests/offline/curtain01-proof-strip-contract.php'
+      - '.github/workflows/curtain01-proof-strip.yml'
+
+jobs:
+  proof-strip-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+      - name: Run proof strip contract
+        run: php tests/offline/curtain01-proof-strip-contract.php

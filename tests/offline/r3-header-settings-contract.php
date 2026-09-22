@@ -57,6 +57,7 @@ $valid_expected = [
     'homepage_law01_variant'        => 'navy-gold',
     'homepage_hero_variant'          => 'split',
     'homepage_hero_block'            => 0,
+    'homepage_proof_block'           => 0,
     'homepage_hero_page'            => 0,
     'homepage_services_page'        => 0,
     'homepage_about_page'           => 0,
