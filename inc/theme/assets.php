@@ -213,6 +213,14 @@ function enqueue_homepage_curtain01_asset( ?string $version = null ): void {
         [ 'aznet-theme-tokens', 'aznet-theme-homepage' ],
         asset_content_version( '/assets/css/components/homepage-curtain-01.css', $version )
     );
+
+    wp_enqueue_script(
+        'aznet-theme-homepage-curtain-01-motion',
+        get_theme_file_uri( '/assets/js/homepage-curtain-01.js' ),
+        [],
+        asset_content_version( '/assets/js/homepage-curtain-01.js', $version ),
+        true
+    );
 }
 
 /** Determine whether the native Post comments surface will render. */

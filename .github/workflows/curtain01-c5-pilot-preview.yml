@@ -14,6 +14,8 @@ on:
       - 'template-parts/homepage/curtain-01/**'
       - 'assets/css/presets/curtain-01.css'
       - 'assets/css/components/homepage-curtain-01.css'
+      - 'assets/js/homepage-curtain-01.js'
+      - 'tests/offline/curtain01-cinematic-hero-contract.php'
       - 'tests/browser/curtain01-c5-pilot-preview.mjs'
       - '.github/workflows/curtain01-c5-pilot-preview.yml'
   workflow_dispatch:
@@ -250,12 +252,25 @@ jobs:
           $shop = curtain01_page( 'Sản phẩm', 'san-pham', 'Danh mục sản phẩm WooCommerce.' );
           update_option( 'woocommerce_shop_page_id', $shop );
 
-          $hero_url = wp_get_attachment_url( $front_image );
-          $hero_content = sprintf(
-              '<!-- wp:cover {"url":"%1$s","id":%2$d,"dimRatio":35,"minHeight":620,"minHeightUnit":"px","contentPosition":"center center"} --><div class="wp-block-cover" style="min-height:620px"><span aria-hidden="true" class="wp-block-cover__background has-background-dim-35 has-background-dim"></span><img class="wp-block-cover__image-background wp-image-%2$d" alt="" src="%1$s" data-object-fit="cover"/><div class="wp-block-cover__inner-container"><!-- wp:paragraph {"align":"center"} --><p class="has-text-align-center">HƠN HAI THẬP KỶ GÌN GIỮ NGHỀ RÈM</p><!-- /wp:paragraph --><!-- wp:heading {"textAlign":"center","level":1} --><h1 class="wp-block-heading has-text-align-center">Từ nghề truyền thống đến giải pháp không gian</h1><!-- /wp:heading --><!-- wp:paragraph {"align":"center"} --><p class="has-text-align-center">Rèm được lựa chọn theo ánh sáng, công năng và thẩm mỹ của từng không gian.</p><!-- /wp:paragraph --></div></div><!-- /wp:cover -->',
-              esc_url_raw( (string) $hero_url ),
-              $front_image
-          );
+          $hero_images = [
+              $front_image,
+              curtain01_image( $front, 'hero-02', 1600, 1000 ),
+              curtain01_image( $front, 'hero-03', 1600, 1000 ),
+          ];
+          $hero_slides = [];
+          foreach ( $hero_images as $index => $hero_image ) {
+              $hero_url = wp_get_attachment_url( $hero_image );
+              $semantic = 0 === $index
+                  ? '<div class="wp-block-cover__inner-container"><!-- wp:heading {"textAlign":"center","level":1,"className":"screen-reader-text"} --><h1 class="wp-block-heading has-text-align-center screen-reader-text">Từ nghề truyền thống đến giải pháp không gian</h1><!-- /wp:heading --></div>'
+                  : '<div class="wp-block-cover__inner-container"></div>';
+              $hero_slides[] = sprintf(
+                  '<!-- wp:cover {"url":"%1$s","id":%2$d,"dimRatio":0,"minHeight":620,"minHeightUnit":"px"} --><div class="wp-block-cover" style="min-height:620px"><img class="wp-block-cover__image-background wp-image-%2$d" alt="" src="%1$s" data-object-fit="cover"/>%3$s</div><!-- /wp:cover -->',
+                  esc_url_raw( (string) $hero_url ),
+                  (int) $hero_image,
+                  $semantic
+              );
+          }
+          $hero_content = '<!-- wp:group --><div class="wp-block-group">' . implode( '', $hero_slides ) . '</div><!-- /wp:group -->';
           $hero = wp_insert_post(
               [
                   'post_type' => 'wp_block',

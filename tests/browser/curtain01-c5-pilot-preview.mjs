@@ -97,6 +97,45 @@ async function verifyHomepage(viewportName, viewport) {
   const nativeSentinel = page.locator('#curtain01-native-body');
   if (await nativeSentinel.count() !== 1) throw new Error(`${viewportName}: native Front Page content boundary sentinel missing`);
 
+  const cinematicHero = page.locator('.aznet-theme-curtain01-hero[data-aznet-curtain-cinematic]');
+  const cinematicSlides = cinematicHero.locator('[data-aznet-curtain-slide]');
+  const cinematicDots = cinematicHero.locator('.aznet-theme-curtain01-hero__dot');
+  if (await cinematicSlides.count() !== 3) throw new Error(`${viewportName}: expected 3 cinematic Hero slides`);
+  if (await cinematicDots.count() !== 3) throw new Error(`${viewportName}: expected 3 cinematic Hero controls`);
+  if (await cinematicSlides.filter({ has: page.locator('.is-active') }).count() > 0) {
+    throw new Error(`${viewportName}: invalid nested active-state probe`);
+  }
+  if (!(await cinematicSlides.nth(0).getAttribute('class') || '').includes('is-active')) {
+    throw new Error(`${viewportName}: first cinematic Hero slide must start active`);
+  }
+
+  const cinematicGeometry = await cinematicHero.evaluate((hero) => {
+    const stage = hero.querySelector('.aznet-theme-curtain01-hero__slide-stage');
+    const slides = [...hero.querySelectorAll('[data-aznet-curtain-slide]')];
+    const heroRect = hero.getBoundingClientRect();
+    const stageRect = stage ? stage.getBoundingClientRect() : null;
+    return {
+      heroWidth: heroRect.width,
+      stageWidth: stageRect ? stageRect.width : 0,
+      slideWidths: slides.map((slide) => slide.getBoundingClientRect().width),
+    };
+  });
+  if (cinematicGeometry.stageWidth < cinematicGeometry.heroWidth * 0.95) {
+    throw new Error(`${viewportName}: cinematic Hero stage collapsed; ${JSON.stringify(cinematicGeometry)}`);
+  }
+  if (cinematicGeometry.slideWidths.some((width) => width < cinematicGeometry.heroWidth * 0.95)) {
+    throw new Error(`${viewportName}: cinematic Hero slide collapsed; ${JSON.stringify(cinematicGeometry)}`);
+  }
+  await cinematicDots.nth(1).click();
+  await page.waitForTimeout(80);
+  if (!(await cinematicSlides.nth(1).getAttribute('class') || '').includes('is-active')) {
+    throw new Error(`${viewportName}: cinematic Hero control did not activate slide 2`);
+  }
+  const heroHeadingHiddenBySlide = await page.locator('.aznet-theme-curtain01-hero h1').evaluate((heading) => Boolean(heading.closest('[aria-hidden="true"]')));
+  if (heroHeadingHiddenBySlide) {
+    throw new Error(`${viewportName}: cinematic transition must not remove the semantic Hero heading from the accessibility tree`);
+  }
+
   const visibleText = (await page.locator('body').innerText()).toLowerCase();
   for (const forbidden of ['[section', '[ux_', '[row', '[col', '[blog_posts', '[ux_products']) {
     if (visibleText.includes(forbidden)) throw new Error(`${viewportName}: legacy Flatsome shortcode leaked visibly: ${forbidden}`);
