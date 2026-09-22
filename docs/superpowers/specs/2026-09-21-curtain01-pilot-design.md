@@ -117,6 +117,9 @@ Initial reference direction: warm premium interior presentation rather than lega
 - restrained bronze or warm wood accent;
 - large interior photography;
 - generous whitespace and full-bleed media bands;
+- full-bleed outer sections with constrained inner content containers; no site-wide boxed canvas;
+- the first Hero starts flush immediately below the Header with zero Theme-owned top gap;
+- the Hero outer edge spans the available viewport width without an outer radius/shadow; radius may be used only on intentional inner media/cards;
 - product cards with quiet borders and strong image priority;
 - minimal motion, no heavy slider dependency by default;
 - Vietnamese long-title and mobile-first geometry retained.
