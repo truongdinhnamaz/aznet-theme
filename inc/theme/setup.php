@@ -16,6 +16,10 @@ function setup(): void {
 
     add_theme_support( 'title-tag' );
     add_theme_support( 'post-thumbnails' );
+    add_theme_support( 'woocommerce' );
+    add_theme_support( 'wc-product-gallery-zoom' );
+    add_theme_support( 'wc-product-gallery-lightbox' );
+    add_theme_support( 'wc-product-gallery-slider' );
     add_theme_support( 'custom-logo' );
     add_theme_support( 'responsive-embeds' );
     add_theme_support( 'wp-block-styles' );
