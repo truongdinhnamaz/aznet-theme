@@ -826,7 +826,7 @@
     color: var(--aznet-theme-curtain-accent);
     content: counter(aznet-curtain01-process, decimal-leading-zero);
     font-size: 0.68rem;
-    font-weight: 800;
+    font-weight: var(--aznet-theme-font-weight-bold);
     letter-spacing: 0.08em;
 }
 
