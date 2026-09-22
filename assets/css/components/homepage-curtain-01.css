@@ -141,7 +141,7 @@
 
 /* Hero */
 .aznet-theme-curtain01-hero {
-    padding-top: clamp(1.5rem, 3vw, 3rem);
+    padding: 0;
     background:
         radial-gradient(circle at 10% 10%, rgba(181, 154, 118, 0.18), transparent 34rem),
         var(--aznet-theme-curtain-surface);
@@ -149,13 +149,16 @@
 
 .aznet-theme-curtain01-hero__grid {
     display: grid;
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
     min-height: min(72vh, 760px);
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.35fr);
     align-items: stretch;
     overflow: hidden;
-    border-radius: calc(var(--aznet-theme-curtain-radius) * 1.25);
+    border-radius: 0;
     background: #fff;
-    box-shadow: var(--aznet-theme-curtain-shadow);
+    box-shadow: none;
 }
 
 .aznet-theme-curtain01-hero__grid--text {
@@ -197,10 +200,19 @@
 }
 
 .aznet-theme-curtain01-hero__library {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
     overflow: hidden;
-    border-radius: calc(var(--aznet-theme-curtain-radius) * 1.25);
+    border-radius: 0;
     background: #fff;
-    box-shadow: var(--aznet-theme-curtain-shadow);
+    box-shadow: none;
+}
+
+.aznet-theme-curtain01-hero__library > .wp-block-cover {
+    width: 100%;
+    max-width: none;
+    margin: 0;
 }
 
 .aznet-theme-curtain01-hero__library > :first-child {

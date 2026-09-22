@@ -109,6 +109,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-promotion-workfl
 printf '%s\n' '==> Y1 Page Experience contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-page-experience-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/page-full-bleed-sections-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/fullwidth-shell-standard-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-services-root-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/service-detail-premium-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/service-card-consistency-contract.php

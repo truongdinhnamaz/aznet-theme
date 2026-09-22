@@ -32,3 +32,13 @@ body {
     margin-inline: auto;
     padding-block: var(--aznet-theme-space-4);
 }
+
+/* Full-bleed Front Page outer shell; sections own viewport geometry while
+ * explicit inner containers continue to constrain readable content. */
+.aznet-theme-main--front-page {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    padding-block: 0;
+    overflow-x: clip;
+}
