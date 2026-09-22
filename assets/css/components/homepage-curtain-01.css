@@ -474,6 +474,18 @@
     object-fit: cover;
 }
 
+.aznet-theme-curtain01-about__content h2 {
+    max-width: 20ch;
+    font-family: Cambria, Georgia, "Times New Roman", serif;
+    font-weight: 500;
+    letter-spacing: -0.018em;
+    line-height: 1.02;
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+    text-wrap: balance;
+}
+
 .aznet-theme-curtain01-about__content .aznet-theme-curtain01-text-link {
     margin-top: 1.75rem;
 }
