@@ -120,4 +120,15 @@ if (str_contains($js, "setAttribute('aria-hidden'") || str_contains($css, 'visib
     $fail('Crossfade must not hide the stable Hero heading from the accessibility tree.');
 }
 
+foreach ([
+    '.aznet-theme-curtain01-hero__dot {',
+    'min-width: 2.75rem;',
+    'min-height: 2.75rem;',
+    '.aznet-theme-curtain01-hero__dot::before {',
+] as $targetSizeNeedle) {
+    if (!str_contains($css, $targetSizeNeedle)) {
+        $fail('Curtain 01 Hero slide controls must expose a >=44px pointer target while keeping the visual indicator compact: ' . $targetSizeNeedle);
+    }
+}
+
 echo "PASS: Curtain 01 cinematic Hero supports three-slide crossfade, scoped motion and reduced-motion safety\n";

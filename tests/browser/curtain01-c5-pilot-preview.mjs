@@ -102,6 +102,13 @@ async function verifyHomepage(viewportName, viewport) {
   const cinematicDots = cinematicHero.locator('.aznet-theme-curtain01-hero__dot');
   if (await cinematicSlides.count() !== 3) throw new Error(`${viewportName}: expected 3 cinematic Hero slides`);
   if (await cinematicDots.count() !== 3) throw new Error(`${viewportName}: expected 3 cinematic Hero controls`);
+  const cinematicDotRects = await cinematicDots.evaluateAll((nodes) => nodes.map((node) => {
+    const rect = node.getBoundingClientRect();
+    return { width: rect.width, height: rect.height };
+  }));
+  if (cinematicDotRects.some(({ width, height }) => width < 44 || height < 44)) {
+    throw new Error(`${viewportName}: cinematic Hero controls must provide at least 44x44px pointer targets; ${JSON.stringify(cinematicDotRects)}`);
+  }
   if (await cinematicSlides.filter({ has: page.locator('.is-active') }).count() > 0) {
     throw new Error(`${viewportName}: invalid nested active-state probe`);
   }
