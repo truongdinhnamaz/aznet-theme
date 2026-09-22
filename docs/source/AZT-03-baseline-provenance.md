@@ -1,7 +1,7 @@
 # AZT-03 — Current Baseline và Code Provenance
 
 **Version:** v0.73
-**Status:** Working Source  
+**Status:** Working Source
 **Date:** 22/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
 
@@ -435,4 +435,3 @@ Exact merge verification is PASS: V1 Exact Main Verification run `35718432856` a
 Production provenance remains deliberately separate. The Rèm Quốc Anh pilot currently reports active AZnet Theme `1.3.30`; canonical repository metadata at the font-fix merge remains `1.3.28`, so the repository package must not be used to overwrite the live pilot as a downgrade. A WPVibe draft was therefore prepared from the live `1.3.30` baseline and patched only at the typography layer. Preview evidence confirms three Vietnamese Roboto faces (400/500/700), three Vietnamese unicode-range declarations, retained Latin faces, Theme version `1.3.30`, and correct Unicode content projection. Production publish has owner approval but has not completed because the connected WPVibe account reached its rolling daily limit; no live mutation is claimed from the blocked attempts.
 
 Evidence: `docs/evidence/CURTAIN01_VIETNAMESE_FONT_FIX_20260922.md`.
-
