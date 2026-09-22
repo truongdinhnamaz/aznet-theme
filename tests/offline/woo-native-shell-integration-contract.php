@@ -25,6 +25,14 @@ $fail = static function (string $message): never {
 if (!preg_match("/add_theme_support\s*\(\s*'woocommerce'\s*\)/", $setup)) {
     $fail('AZnet Theme must declare native WooCommerce theme support');
 }
+foreach (['wc-product-gallery-zoom', 'wc-product-gallery-lightbox', 'wc-product-gallery-slider'] as $feature) {
+    if (false === strpos($setup, "add_theme_support( '{$feature}' );")) {
+        $fail('missing native Woo gallery support: ' . $feature);
+    }
+}
+if (preg_match('/(?:remove|add)_action\s*\(\s*[\'\"]woocommerce_(?:before|after)_main_content/i', $presentation)) {
+    $fail('Theme must not take over WooCommerce main-content wrapper hooks');
+}
 
 if (!preg_match('/\.single-product\s+\.aznet-theme-main\s+\.product\s*>\s*\*\s*\{[^}]*grid-column\s*:\s*1\s*\/\s*-1/is', $css)) {
     $fail('direct Product extension children must default to full-width grid placement');
