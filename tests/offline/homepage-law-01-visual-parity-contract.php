@@ -244,8 +244,9 @@ $must(
 );
 $must(
     str_contains($footer, 'if ( \'\' !== $primary_menu )') &&
-    str_contains($footer, 'if ( \'professional\' !== $preset && \'\' !== $contact_menu )') &&
-    str_contains($footer, 'if ( \'\' !== $social_menu || \'\' !== $policy_menu )'),
+    str_contains($footer, '&& \'\' !== $contact_menu )') &&
+    str_contains($footer, 'if ( \'\' !== $social_menu )') &&
+    str_contains($footer, 'if ( \'\' !== $policy_menu )'),
     'Independent Footer must keep empty WordPress menu projections fail-soft with no placeholder data.'
 );
 
