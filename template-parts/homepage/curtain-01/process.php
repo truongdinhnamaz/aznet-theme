@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$page = homepage_page_reference( (int) setting( 'homepage_process_page', 0 ) );
+$page = homepage_page_reference( (int) setting( 'homepage_curtain01_process_page', 0 ) );
 if ( ! $page instanceof \WP_Post ) {
     return;
 }
