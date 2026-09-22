@@ -90,8 +90,17 @@ foreach ([
     }
 }
 
-if (!str_contains($js, '7000') || !str_contains($css, 'opacity 1400ms')) {
-    $fail('Curtain 01 crossfade timing must remain slow and restrained.');
+if (!str_contains($js, '5000') || !str_contains($css, 'opacity 1400ms')) {
+    $fail('Curtain 01 crossfade must advance every 5 seconds with the existing soft fade.');
+}
+
+foreach ([
+    "hero.addEventListener('pointerenter', clearSlideTimer",
+    "hero.addEventListener('pointerleave', scheduleNextSlide",
+] as $forbiddenPause) {
+    if (str_contains($js, $forbiddenPause)) {
+        $fail('Curtain 01 autoplay must not pause merely because the pointer is over the Hero: ' . $forbiddenPause);
+    }
 }
 
 foreach ([
