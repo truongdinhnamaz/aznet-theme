@@ -7,13 +7,14 @@ $composerPath = $root . '/inc/theme/homepage-composer.php';
 $wooPath      = $root . '/inc/integrations/woocommerce.php';
 $partPath     = $root . '/template-parts/homepage/curtain-01/category-showcase.php';
 $cssPath      = $root . '/assets/css/components/homepage-curtain-01.css';
+$jsPath       = $root . '/assets/js/homepage-curtain-01.js';
 
 $fail = static function (string $message): void {
     fwrite(STDERR, "FAIL: {$message}\n");
     exit(1);
 };
 
-foreach ([$composerPath, $wooPath, $cssPath] as $path) {
+foreach ([$composerPath, $wooPath, $cssPath, $jsPath] as $path) {
     if (!is_file($path)) {
         $fail('missing Curtain 01 category-showcase dependency: ' . basename($path));
     }
@@ -27,6 +28,7 @@ $composer = (string) file_get_contents($composerPath);
 $woo      = (string) file_get_contents($wooPath);
 $part     = (string) file_get_contents($partPath);
 $css      = (string) file_get_contents($cssPath);
+$js       = (string) file_get_contents($jsPath);
 
 if (!str_contains($composer, "'about', 'category-showcase', 'catalogue'")) {
     $fail('Category showcase must render between About and Catalogue.');
@@ -63,10 +65,18 @@ foreach ([
     'get_term_link',
     'aznet-theme-curtain01-category-showcase',
     'Khám phá theo dòng rèm',
+    'data-aznet-curtain-category-carousel',
+    'aznet-theme-curtain01-category-showcase__control--prev',
+    'aznet-theme-curtain01-category-showcase__control--next',
+    'aria-controls',
 ] as $needle) {
     if (!str_contains($part, $needle)) {
         $fail('Curtain 01 category showcase template missing behavior marker: ' . $needle);
     }
+}
+
+if (str_contains($part, 'if ( 4 === count( $cards ) )')) {
+    $fail('Curtain 01 category showcase must not truncate valid public WooCommerce categories at four cards.');
 }
 
 if (str_contains($part, 'get_term_meta(')) {
@@ -78,10 +88,27 @@ foreach ([
     '.aznet-theme-curtain01-category-showcase__grid',
     '.aznet-theme-curtain01-category-showcase__card',
     '.aznet-theme-curtain01-category-showcase__media',
+    '.aznet-theme-curtain01-category-showcase__controls',
+    '.aznet-theme-curtain01-category-showcase__control',
+    'overflow-x: auto',
+    'scroll-snap-type: x mandatory',
+    'scroll-snap-align: start',
 ] as $needle) {
     if (!str_contains($css, $needle)) {
-        $fail('Curtain 01 category showcase CSS missing: ' . $needle);
+        $fail('Curtain 01 category showcase CSS missing carousel behavior: ' . $needle);
     }
 }
 
-echo "PASS: Curtain 01 category showcase uses public WooCommerce category output and fails soft\n";
+foreach ([
+    '[data-aznet-curtain-category-carousel]',
+    'scrollBy',
+    'scrollLeft',
+    'aria-disabled',
+    'prefers-reduced-motion: reduce',
+] as $needle) {
+    if (!str_contains($js, $needle)) {
+        $fail('Curtain 01 category showcase JS missing carousel behavior: ' . $needle);
+    }
+}
+
+echo "PASS: Curtain 01 category showcase consumes public WooCommerce categories and provides bounded carousel navigation\n";
