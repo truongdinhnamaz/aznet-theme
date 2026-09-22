@@ -89,6 +89,7 @@ foreach ([
     'max-width: 20ch;',
     'overflow-wrap: normal;',
     'word-break: normal;',
+    'hyphens: none;',
     'text-wrap: balance;',
 ] as $aboutTypographyRule) {
     if (! str_contains((string) $css, $aboutTypographyRule)) {
