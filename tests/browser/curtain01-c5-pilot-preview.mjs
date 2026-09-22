@@ -226,14 +226,60 @@ async function verifyHomepage(viewportName, viewport) {
     if (visibleText.includes(forbidden)) throw new Error(`${viewportName}: legacy Flatsome shortcode leaked visibly: ${forbidden}`);
   }
 
-  const categoryShowcaseCards = await page.locator('.aznet-theme-curtain01-category-showcase__card').count();
-  if (categoryShowcaseCards !== 4) throw new Error(`${viewportName}: expected 4 category showcase cards, got ${categoryShowcaseCards}`);
+  const categoryShowcase = page.locator('.aznet-theme-curtain01-category-showcase');
+  const categoryTrack = categoryShowcase.locator('.aznet-theme-curtain01-category-showcase__grid');
+  const categoryCards = categoryShowcase.locator('.aznet-theme-curtain01-category-showcase__card');
+  const categoryShowcaseCards = await categoryCards.count();
+  if (categoryShowcaseCards !== 6) throw new Error(`${viewportName}: expected 6 category showcase cards, got ${categoryShowcaseCards}`);
 
-  const categoryShowcaseImages = await page.locator('.aznet-theme-curtain01-category-showcase__card img').count();
-  if (categoryShowcaseImages !== 4) throw new Error(`${viewportName}: expected 4 category showcase images, got ${categoryShowcaseImages}`);
+  const categoryShowcaseImages = await categoryShowcase.locator('.aznet-theme-curtain01-category-showcase__card img').count();
+  if (categoryShowcaseImages !== 6) throw new Error(`${viewportName}: expected 6 category showcase images, got ${categoryShowcaseImages}`);
 
-  const categoryShowcasePlaceholders = await page.locator('.aznet-theme-curtain01-category-showcase__card img[src*="woocommerce-placeholder"]').count();
+  const categoryShowcasePlaceholders = await categoryShowcase.locator('.aznet-theme-curtain01-category-showcase__card img[src*="woocommerce-placeholder"]').count();
   if (categoryShowcasePlaceholders !== 0) throw new Error(`${viewportName}: category showcase must skip missing category images instead of rendering Woo placeholders`);
+
+  const categoryPrev = categoryShowcase.locator('.aznet-theme-curtain01-category-showcase__control--prev');
+  const categoryNext = categoryShowcase.locator('.aznet-theme-curtain01-category-showcase__control--next');
+  if (await categoryPrev.count() !== 1 || await categoryNext.count() !== 1) {
+    throw new Error(`${viewportName}: category carousel must expose previous and next controls when more than four valid categories exist`);
+  }
+  if ((await categoryPrev.getAttribute('aria-disabled')) !== 'true') {
+    throw new Error(`${viewportName}: category previous control must start disabled at the left edge`);
+  }
+  if ((await categoryNext.getAttribute('aria-disabled')) !== 'false') {
+    throw new Error(`${viewportName}: category next control must start enabled when the rail overflows`);
+  }
+
+  const categoryGeometry = await categoryTrack.evaluate((track) => ({
+    clientWidth: track.clientWidth,
+    scrollWidth: track.scrollWidth,
+    scrollLeft: track.scrollLeft,
+  }));
+  if (categoryGeometry.scrollWidth <= categoryGeometry.clientWidth + 1) {
+    throw new Error(`${viewportName}: category rail must overflow locally instead of truncating cards; ${JSON.stringify(categoryGeometry)}`);
+  }
+
+  if (viewportName === 'desktop') {
+    const widths = await categoryCards.evaluateAll((nodes) => nodes.slice(0, 4).map((node) => node.getBoundingClientRect().width));
+    const trackWidth = categoryGeometry.clientWidth;
+    const visibleWidth = widths.reduce((sum, width) => sum + width, 0);
+    if (visibleWidth > trackWidth + 2) {
+      throw new Error(`${viewportName}: first four category cards must fit in the visible rail; ${JSON.stringify({ widths, trackWidth })}`);
+    }
+  }
+
+  await categoryNext.click();
+  await page.waitForTimeout(450);
+  const scrolledRight = await categoryTrack.evaluate((track) => track.scrollLeft);
+  if (scrolledRight <= 1) throw new Error(`${viewportName}: category next control did not scroll the rail right`);
+  if ((await categoryPrev.getAttribute('aria-disabled')) !== 'false') {
+    throw new Error(`${viewportName}: category previous control must enable after scrolling right`);
+  }
+
+  await categoryPrev.click();
+  await page.waitForTimeout(450);
+  const scrolledHome = await categoryTrack.evaluate((track) => track.scrollLeft);
+  if (scrolledHome > 2) throw new Error(`${viewportName}: category previous control did not return the rail to the left edge; scrollLeft=${scrolledHome}`);
 
     const productCards = await page.locator('.aznet-theme-curtain01-product-card').count();
   if (productCards !== 6) throw new Error(`${viewportName}: expected 6 Homepage product cards, got ${productCards}`);
