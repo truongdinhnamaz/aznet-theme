@@ -376,7 +376,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 
 ## 10B. Rèm 01 curtain/interior pilot — ACCEPTED
 
-**State:** SOURCE/DESIGN APPROVED. Production implementation remains gated on canonical source merge; after merge, C1 read-only pilot inventory is the exact next evidence slice.
+**State:** LIVE PILOT CUTOVER EXECUTED — production Theme/Page migration completed on 22/09/2026 with fresh L3 runtime smoke PASS and rollback retained. Fresh independent live L4 browser/a11y parity and provider-specific L5 certification remain UNKNOWN and are not inferred.
 
 **Pilot:** `https://remquocanh.vn/` is the migration/reference pilot. The reusable output is a generic Rèm 01 presentation, not a hardcoded Rèm Quốc Anh site.
 
@@ -384,7 +384,13 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 
 **Intent:** replace a Flatsome presentation layer with AZnet Theme while preserving WordPress/WooCommerce/provider ownership, keeping Flatsome rollback until destination QA passes, and avoiding a proprietary builder or Flatsome runtime compatibility engine.
 
-**First execution gate after approval:** read-only pilot inventory and classification of existing surfaces/content as KEEP, MAP, REBUILD PRESENTATION, OWNER CONTRACT or RETIRE LATER. Live pilot parity, exact UX Builder dependency and cutover readiness remain UNKNOWN until that inventory exists.
+**Current checkpoint:** C1 read-only inventory is complete; C2-C4 Theme-owned Rèm 01 implementation is integrated; C5 repository-native pilot-shaped browser/a11y preview is PASS; the owner separately approved production cutover after confirming a fresh site backup. The live pilot now runs `homepage_preset=curtain-01` and `visual_preset=curtain-01` with WordPress-owned Hero block #985, About Page #35, Knowledge Category #57, Contact Page #45 and WooCommerce-owned catalogue data. Page #2 no longer exposes UX Builder shortcodes in live output; its legacy 4006-character body remains recoverable from WordPress revisions #988/#935. WPVibe retained a Theme-file rollback copy and Flatsome/Flatsome Child remain inactive.
+
+**Live QA disposition:** Homepage, Shop and Single Product fresh runtime/DOM smoke is PASS at L3, including no visible UX Builder shortcode leakage and direct Header → Main adjacency for the accepted D-035 full-bleed/flush-Hero geometry. Fresh independent live L4 pixel/browser/keyboard/axe verification remains UNKNOWN because the available automated browser path is constrained by the site protection layer. Provider-specific L5 remains unclaimed.
+
+**Evidence:** `docs/evidence/C6_CURTAIN01_PAGE2_PREWRITE_SNAPSHOT_20260921.md` and `docs/evidence/C6_CURTAIN01_LIVE_CUTOVER_20260922.md`.
+
+**Exact Next:** obtain one fresh production-browser L4 pass when a safe browser path is available; do not reopen already-PASS Theme-owned implementation or mutate provider/domain data merely to satisfy that evidence gap.
 
 ## 11. Open questions
 
