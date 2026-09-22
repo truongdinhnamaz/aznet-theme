@@ -113,6 +113,10 @@ async function verifyHomepage(viewportName, viewport) {
   if (!(await cinematicSlides.nth(1).getAttribute('class') || '').includes('is-active')) {
     throw new Error(`${viewportName}: cinematic Hero control did not activate slide 2`);
   }
+  const heroHeadingHiddenBySlide = await page.locator('.aznet-theme-curtain01-hero h1').evaluate((heading) => Boolean(heading.closest('[aria-hidden="true"]')));
+  if (heroHeadingHiddenBySlide) {
+    throw new Error(`${viewportName}: cinematic transition must not remove the semantic Hero heading from the accessibility tree`);
+  }
 
   const visibleText = (await page.locator('body').innerText()).toLowerCase();
   for (const forbidden of ['[section', '[ux_', '[row', '[col', '[blog_posts', '[ux_products']) {
