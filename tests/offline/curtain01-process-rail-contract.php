@@ -20,7 +20,7 @@ if (! is_string($settings) || ! is_string($composer) || ! is_string($admin) || !
 
 foreach ([
     "'homepage_curtain01_process_page' => 0",
-    "'homepage_curtain01_process_page' => \\$normalize_id",
+    "'homepage_curtain01_process_page' => \$normalize_id",
 ] as $needle) {
     if (! str_contains($settings, $needle)) {
         fwrite(STDERR, "FAIL: Rèm 01 process source must use its own normalized setting, isolated from Law 01: {$needle}\n");
