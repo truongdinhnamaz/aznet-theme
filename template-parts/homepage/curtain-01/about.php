@@ -16,11 +16,7 @@ if ( ! $page instanceof \WP_Post ) {
     return;
 }
 
-$summary = trim( (string) get_the_excerpt( $page ) );
-if ( '' === $summary ) {
-    $plain = trim( wp_strip_all_tags( strip_shortcodes( (string) $page->post_content ) ) );
-    $summary = '' !== $plain ? wp_trim_words( $plain, 42, '…' ) : '';
-}
+$summary = trim( (string) $page->post_excerpt );
 
 $image = has_post_thumbnail( $page )
     ? get_the_post_thumbnail( $page, 'large', [ 'class' => 'aznet-theme-curtain01-about__image' ] )
