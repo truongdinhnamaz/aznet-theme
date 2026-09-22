@@ -21,7 +21,7 @@ if ( $hero_block instanceof \WP_Post ) {
 
 if ( '' !== $hero_html ) :
     ?>
-    <section class="aznet-theme-curtain01-section aznet-theme-curtain01-hero aznet-theme-curtain01-hero--library" aria-label="<?php echo esc_attr__( 'Hero trang chủ', 'aznet-theme' ); ?>">
+    <section class="aznet-theme-curtain01-section aznet-theme-curtain01-hero aznet-theme-curtain01-hero--library" data-aznet-curtain-cinematic aria-label="<?php echo esc_attr__( 'Hero trang chủ', 'aznet-theme' ); ?>">
         <div class="aznet-theme-curtain01-shell aznet-theme-curtain01-hero__library">
             <?php echo wp_kses_post( $hero_html ); ?>
         </div>
@@ -61,7 +61,7 @@ if ( '' === $title && '' === $lede && '' === $image ) {
     return;
 }
 ?>
-<section class="aznet-theme-curtain01-section aznet-theme-curtain01-hero" aria-labelledby="aznet-curtain01-hero-title">
+<section class="aznet-theme-curtain01-section aznet-theme-curtain01-hero" data-aznet-curtain-cinematic aria-labelledby="aznet-curtain01-hero-title">
     <div class="aznet-theme-curtain01-shell aznet-theme-curtain01-hero__grid<?php echo '' === $image ? ' aznet-theme-curtain01-hero__grid--text' : ''; ?>">
         <div class="aznet-theme-curtain01-hero__content">
             <?php if ( '' !== $title ) : ?>
