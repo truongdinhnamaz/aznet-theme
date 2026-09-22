@@ -84,6 +84,7 @@ async function verifyHomepage(viewportName, viewport) {
     '.aznet-theme-homepage--curtain-01',
     '.aznet-theme-curtain01-hero',
     '.aznet-theme-curtain01-about',
+    '.aznet-theme-curtain01-category-showcase',
     '.aznet-theme-curtain01-catalogue',
     '.aznet-theme-curtain01-knowledge',
     '.aznet-theme-curtain01-final-cta',
@@ -193,7 +194,16 @@ async function verifyHomepage(viewportName, viewport) {
     if (visibleText.includes(forbidden)) throw new Error(`${viewportName}: legacy Flatsome shortcode leaked visibly: ${forbidden}`);
   }
 
-  const productCards = await page.locator('.aznet-theme-curtain01-product-card').count();
+  const categoryShowcaseCards = await page.locator('.aznet-theme-curtain01-category-showcase__card').count();
+  if (categoryShowcaseCards !== 4) throw new Error(`${viewportName}: expected 4 category showcase cards, got ${categoryShowcaseCards}`);
+
+  const categoryShowcaseImages = await page.locator('.aznet-theme-curtain01-category-showcase__card img').count();
+  if (categoryShowcaseImages !== 4) throw new Error(`${viewportName}: expected 4 category showcase images, got ${categoryShowcaseImages}`);
+
+  const categoryShowcasePlaceholders = await page.locator('.aznet-theme-curtain01-category-showcase__card img[src*="woocommerce-placeholder"]').count();
+  if (categoryShowcasePlaceholders !== 0) throw new Error(`${viewportName}: category showcase must skip missing category images instead of rendering Woo placeholders`);
+
+    const productCards = await page.locator('.aznet-theme-curtain01-product-card').count();
   if (productCards !== 6) throw new Error(`${viewportName}: expected 6 Homepage product cards, got ${productCards}`);
 
   const knowledgeCards = await page.locator('.aznet-theme-curtain01-knowledge-card').count();
@@ -214,7 +224,7 @@ async function verifyHomepage(viewportName, viewport) {
   const a11y = await assertA11y(page, viewportName + '-home');
   await page.screenshot({ path: path.join(outDir, `${viewportName}-home.png`), fullPage: true });
 
-  results[viewportName] = { productCards, knowledgeCards, categoryChips, overflow, a11y };
+  results[viewportName] = { categoryShowcaseCards, productCards, knowledgeCards, categoryChips, overflow, a11y };
   await context.close();
 }
 

@@ -16,6 +16,7 @@ on:
       - 'assets/css/components/homepage-curtain-01.css'
       - 'assets/js/homepage-curtain-01.js'
       - 'tests/offline/curtain01-cinematic-hero-contract.php'
+      - 'tests/offline/curtain01-category-showcase-contract.php'
       - 'tests/browser/curtain01-c5-pilot-preview.mjs'
       - '.github/workflows/curtain01-c5-pilot-preview.yml'
   workflow_dispatch:
@@ -231,6 +232,11 @@ jobs:
               'rem-cau-vong' => curtain01_product_category( 'Rèm Cầu Vồng', 'rem-cau-vong' ),
               'rem-roman' => curtain01_product_category( 'Rèm Roman', 'rem-roman' ),
           ];
+
+          foreach ( $product_categories as $slug => $category_id ) {
+              $category_image = curtain01_image( 0, 'category-' . $slug, 900, 1125 );
+              update_term_meta( $category_id, 'thumbnail_id', $category_image );
+          }
 
           $products = [
               [ 'Rèm vải đơn sắc', 'rem-vai-don-sac', 'rem-vai' ],

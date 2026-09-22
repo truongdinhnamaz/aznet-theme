@@ -88,6 +88,42 @@ function homepage_product_categories( int $limit = 4 ): array {
 }
 
 /**
+ * Return top-level public WooCommerce product categories for a visual
+ * Homepage gateway. Theme code receives only public taxonomy objects and
+ * lets WooCommerce render its own category thumbnails.
+ *
+ * @return array<int, \WP_Term>
+ */
+function homepage_product_category_showcase_terms( int $limit = 8 ): array {
+    if ( ! available() || ! function_exists( 'taxonomy_exists' ) || ! taxonomy_exists( 'product_cat' ) ) {
+        return [];
+    }
+
+    $limit = max( 4, min( 12, $limit ) );
+    $terms = get_terms(
+        [
+            'taxonomy'   => 'product_cat',
+            'hide_empty' => true,
+            'parent'     => 0,
+            'number'     => $limit,
+            'orderby'    => 'count',
+            'order'      => 'DESC',
+        ]
+    );
+
+    if ( is_wp_error( $terms ) || ! is_array( $terms ) ) {
+        return [];
+    }
+
+    return array_values(
+        array_filter(
+            $terms,
+            static fn ( $term ): bool => $term instanceof \WP_Term && (int) $term->count > 0
+        )
+    );
+}
+
+/**
  * Return public WooCommerce products for Homepage presentation.
  *
  * @return array<int, object>
