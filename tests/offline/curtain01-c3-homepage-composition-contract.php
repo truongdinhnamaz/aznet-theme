@@ -72,6 +72,31 @@ if (! str_contains((string) $about, "homepage_about_page")) {
     exit(1);
 }
 
+foreach (["get_the_excerpt(", "wp_strip_all_tags(", "wp_trim_words("] as $forbiddenAboutSummary) {
+    if (str_contains((string) $about, $forbiddenAboutSummary)) {
+        fwrite(STDERR, "FAIL: Curtain 01 About must not auto-extract summary text from complex Page content: {$forbiddenAboutSummary}\n");
+        exit(1);
+    }
+}
+
+if (! str_contains((string) $about, "post_excerpt")) {
+    fwrite(STDERR, "FAIL: Curtain 01 About summary must consume only the explicitly authored Page excerpt.\n");
+    exit(1);
+}
+
+foreach ([
+    '.aznet-theme-curtain01-about__content h2 {',
+    'max-width: 20ch;',
+    'overflow-wrap: normal;',
+    'word-break: normal;',
+    'text-wrap: balance;',
+] as $aboutTypographyRule) {
+    if (! str_contains((string) $css, $aboutTypographyRule)) {
+        fwrite(STDERR, "FAIL: Curtain 01 About heading must preserve natural Vietnamese word shaping/wrapping: {$aboutTypographyRule}\n");
+        exit(1);
+    }
+}
+
 if (! str_contains((string) $catalogue, 'homepage_products') || ! str_contains((string) $catalogue, 'homepage_product_categories')) {
     fwrite(STDERR, "FAIL: Curtain 01 catalogue must consume the public WooCommerce adapter.\n");
     exit(1);
