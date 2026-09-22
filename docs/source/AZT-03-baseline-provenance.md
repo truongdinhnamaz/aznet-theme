@@ -1,8 +1,8 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.72
-**Status:** Working Source  
-**Date:** 20/09/2026
+**Version:** v0.73
+**Status:** Working Source
+**Date:** 22/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
 
 ## 1. Source ownership
@@ -425,3 +425,13 @@ Evidence: `docs/evidence/V1_3_15_LSTAMDUCHN_DEPLOYMENT_PREFLIGHT_BLOCKED_2026092
 ### AZnet Theme 1.3.21 About Page technical closure — 20/09/2026
 
 Owner-approved About presentation PR #196 merged to `main@aab636d3fe1c21be924ba62ea30b7a910cf2e019`. Release PR #197 followed RED -> GREEN promotion to Theme metadata `1.3.21` and merged to canonical `main@998a8dcf342b09824b197059524c50c013dba828`. Exact GREEN head `f7107f301485839d361fd00e9cb11c0837074434` completed 14/14 triggered workflows SUCCESS; fresh exact-main V1 `35518082825` and X6 `35518082833` also completed SUCCESS. X6 browser/axe passed 32/32; deterministic `aznet-theme-1.3.21.zip` has 158 package files, 113 packaged PHP lint PASS and SHA-256 `da695f2b33aafc38172a9a412a3b1afd16263db3f03d305be4304eba877e09e2`. Current published GitHub Release remains `v1.3.20`; no `v1.3.21` publication or production deployment is claimed. Evidence: `docs/evidence/V1_3_21_ABOUT_PAGE_TECHNICAL_CLOSURE_20260920.md`.
+
+### Rèm 01 Vietnamese font corrective checkpoint — 22/09/2026
+
+Owner-approved font correction PR #247 merged exact verified head `272d2d7043871bdb808b51870b7a22706ae8e47a` to canonical `main@15681fc7f02a9dcf5e6a9036665c9d10fc4d1b2e`. The change keeps typography inside Theme presentation ownership: Roboto now has explicit bounded Latin and Vietnamese coverage for weights 400/500/700, Curtain 01 no longer overrides the canonical Theme heading family with Cambria/Georgia/Times, and regression coverage requires the Vietnamese faces to reach loaded state in browser testing.
+
+Exact merge verification is PASS: V1 Exact Main Verification run `35718432856` and X6 Cross-surface Release Closure run `35718432826` both completed SUCCESS on merge SHA `15681fc7f02a9dcf5e6a9036665c9d10fc4d1b2e`.
+
+Production provenance remains deliberately separate. The Rèm Quốc Anh pilot currently reports active AZnet Theme `1.3.30`; canonical repository metadata at the font-fix merge remains `1.3.28`, so the repository package must not be used to overwrite the live pilot as a downgrade. A WPVibe draft was therefore prepared from the live `1.3.30` baseline and patched only at the typography layer. Preview evidence confirms three Vietnamese Roboto faces (400/500/700), three Vietnamese unicode-range declarations, retained Latin faces, Theme version `1.3.30`, and correct Unicode content projection. Production publish has owner approval but has not completed because the connected WPVibe account reached its rolling daily limit; no live mutation is claimed from the blocked attempts.
+
+Evidence: `docs/evidence/CURTAIN01_VIETNAMESE_FONT_FIX_20260922.md`.
