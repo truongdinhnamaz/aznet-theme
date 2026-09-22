@@ -51,6 +51,12 @@ foreach ([
     "--aznet-curtain-shift-y",
     "--aznet-curtain-scroll-shift",
     "is-cinematic-ready",
+    "data-aznet-curtain-slide",
+    "aznet-theme-curtain01-hero__dots",
+    "setActiveSlide",
+    "scheduleNextSlide",
+    "clearTimeout",
+    "visibilitychange",
 ] as $needle) {
     if (!str_contains($js, $needle)) {
         $fail('Curtain 01 cinematic JS missing behavior marker: ' . $needle);
@@ -64,6 +70,9 @@ foreach ([
     "@keyframes aznet-curtain01-hero-reveal",
     "@keyframes aznet-curtain01-hero-breathe",
     "@media (prefers-reduced-motion: reduce)",
+    ".aznet-theme-curtain01-hero__slide",
+    ".aznet-theme-curtain01-hero__slide.is-active",
+    ".aznet-theme-curtain01-hero__dots",
 ] as $needle) {
     if (!str_contains($css, $needle)) {
         $fail('Curtain 01 cinematic CSS missing presentation marker: ' . $needle);
@@ -72,7 +81,6 @@ foreach ([
 
 foreach ([
     "setInterval(",
-    "setTimeout(",
     "gsap",
     "swiper",
     "slick",
@@ -82,4 +90,8 @@ foreach ([
     }
 }
 
-echo "PASS: Curtain 01 cinematic Hero is scoped, lightweight and reduced-motion safe\n";
+if (!str_contains($js, '7000') || !str_contains($css, 'opacity 1400ms')) {
+    $fail('Curtain 01 crossfade timing must remain slow and restrained.');
+}
+
+echo "PASS: Curtain 01 cinematic Hero supports three-slide crossfade, scoped motion and reduced-motion safety\n";
