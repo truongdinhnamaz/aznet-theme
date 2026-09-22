@@ -189,6 +189,38 @@ async function verifyHomepage(viewportName, viewport) {
     }
   }
 
+  const vietnameseFontProbe = await page.evaluate(async () => {
+    const sample = 'Rèm Cầu Vồng Rèm Cuốn chống cháy xuyên sáng cản sáng';
+    const weights = ['400', '500', '700'];
+
+    await document.fonts.ready;
+    await Promise.all(weights.map((weight) => document.fonts.load(`${weight} 32px Roboto`, sample)));
+
+    const faces = [...document.fonts]
+      .filter((face) => String(face.family).replaceAll('"', '').replaceAll("'", '') === 'Roboto')
+      .map((face) => ({
+        weight: String(face.weight),
+        status: face.status,
+        unicodeRange: String(face.unicodeRange || ''),
+      }));
+
+    return {
+      sample,
+      faces: weights.map((weight) => faces.filter((face) => face.weight === weight)),
+    };
+  });
+
+  for (const [index, weight] of ['400', '500', '700'].entries()) {
+    const faces = vietnameseFontProbe.faces[index] || [];
+    const vietnameseFace = faces.find((face) => /1EA0-1EF9/i.test(face.unicodeRange));
+    if (!vietnameseFace) {
+      throw new Error(`${viewportName}: Roboto ${weight} Vietnamese font face missing at runtime; ${JSON.stringify(vietnameseFontProbe)}`);
+    }
+    if (vietnameseFace.status !== 'loaded') {
+      throw new Error(`${viewportName}: Roboto ${weight} Vietnamese font face failed to load; ${JSON.stringify(vietnameseFontProbe)}`);
+    }
+  }
+
   const visibleText = (await page.locator('body').innerText()).toLowerCase();
   for (const forbidden of ['[section', '[ux_', '[row', '[col', '[blog_posts', '[ux_products']) {
     if (visibleText.includes(forbidden)) throw new Error(`${viewportName}: legacy Flatsome shortcode leaked visibly: ${forbidden}`);
