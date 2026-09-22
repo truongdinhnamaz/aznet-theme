@@ -37,7 +37,6 @@
                 slide.classList.add('aznet-theme-curtain01-hero__slide');
                 slide.setAttribute('data-aznet-curtain-slide', String(index + 1));
                 slide.classList.toggle('is-active', 0 === index);
-                slide.setAttribute('aria-hidden', 0 === index ? 'false' : 'true');
             });
         }
 
@@ -58,7 +57,6 @@
             slides.forEach(function (slide, slideIndex) {
                 var active = slideIndex === activeSlide;
                 slide.classList.toggle('is-active', active);
-                slide.setAttribute('aria-hidden', active ? 'false' : 'true');
             });
 
             dots.forEach(function (dot, dotIndex) {
