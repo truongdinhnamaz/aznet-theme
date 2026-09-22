@@ -377,7 +377,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 
 ## 10B. Rèm 01 curtain/interior pilot — ACCEPTED
 
-**State:** LIVE PILOT CUTOVER EXECUTED — production Theme/Page migration completed on 22/09/2026 with fresh L3 runtime smoke PASS and rollback retained. Fresh independent live L4 browser/a11y parity and provider-specific L5 certification remain UNKNOWN and are not inferred.
+**State:** LIVE PILOT CUTOVER + FOLLOW-UP PRESENTATION FIXES EXECUTED — production migration, cinematic 3-image Hero, About typography/excerpt correction and D-036 desktop heading-flow rule are live. Fresh authenticated live L3 smoke is PASS; exact-main repository-native L1-L4/L6 regression is PASS on `main@66c734dc285b6e1e4a1b39e3074466fd4b866818`. Independent pixel-level L4 verification on the protected production hostname and provider-specific L5 certification remain UNKNOWN and are not inferred.
 
 **Pilot:** `https://remquocanh.vn/` is the migration/reference pilot. The reusable output is a generic Rèm 01 presentation, not a hardcoded Rèm Quốc Anh site.
 
@@ -385,13 +385,13 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 
 **Intent:** replace a Flatsome presentation layer with AZnet Theme while preserving WordPress/WooCommerce/provider ownership, keeping Flatsome rollback until destination QA passes, and avoiding a proprietary builder or Flatsome runtime compatibility engine.
 
-**Current checkpoint:** C1 read-only inventory is complete; C2-C4 Theme-owned Rèm 01 implementation is integrated; C5 repository-native pilot-shaped browser/a11y preview is PASS; the owner separately approved production cutover after confirming a fresh site backup. The live pilot now runs `homepage_preset=curtain-01` and `visual_preset=curtain-01` with WordPress-owned Hero block #985, About Page #35, Knowledge Category #57, Contact Page #45 and WooCommerce-owned catalogue data. Page #2 no longer exposes UX Builder shortcodes in live output; its legacy 4006-character body remains recoverable from WordPress revisions #988/#935. WPVibe retained a Theme-file rollback copy and Flatsome/Flatsome Child remain inactive.
+**Current checkpoint:** C1 read-only inventory is complete; C2-C4 Theme-owned Rèm 01 implementation is integrated; C5 repository-native pilot-shaped browser/a11y preview is PASS; the owner separately approved production cutover after confirming a fresh site backup. Follow-up owner-approved PR #239 added the WordPress-owned three-image cinematic Hero and 5-second crossfade; PR #240 added explicit About excerpt handling, stable Vietnamese typography and accepted D-036 natural desktop heading flow. The live pilot runs `homepage_preset=curtain-01` and `visual_preset=curtain-01` with WordPress-owned Hero block #991 (Media #669/#670/#671), About Page #35, Knowledge Category #57, Contact Page #45 and WooCommerce-owned catalogue data. Page #2 still exposes no UX Builder shortcodes in live output; its legacy 4006-character body remains recoverable from WordPress revisions #988/#935. WPVibe retains a Theme-file rollback copy and Flatsome/Flatsome Child remain inactive.
 
-**Live QA disposition:** Homepage, Shop and Single Product fresh runtime/DOM smoke is PASS at L3, including no visible UX Builder shortcode leakage and direct Header → Main adjacency for the accepted D-035 full-bleed/flush-Hero geometry. Fresh independent live L4 pixel/browser/keyboard/axe verification remains UNKNOWN because the available automated browser path is constrained by the site protection layer. Provider-specific L5 remains unclaimed.
+**Live QA disposition:** fresh authenticated Homepage runtime/DOM smoke is PASS at L3 for Hero #991, all three mapped Hero media, scoped cinematic JS, clean About title/excerpt and no visible UX Builder shortcode leakage; prior Shop/Single Product L3 smoke remains retained unless invalidated. Exact-main run `35702406349` completed V1 Exact Main Verification SUCCESS and exact-main X6 run `35702406200` completed static/contracts, WordPress runtime, integrated Playwright/axe, deterministic package/source identity, packaged PHP lint, lifecycle/rollback and ownership-boundary checks SUCCESS. Fresh independent pixel-level live-host L4 remains UNKNOWN because the production protection layer still constrains the independent browser path. Provider-specific L5 remains unclaimed.
 
-**Evidence:** `docs/evidence/C6_CURTAIN01_PAGE2_PREWRITE_SNAPSHOT_20260921.md` and `docs/evidence/C6_CURTAIN01_LIVE_CUTOVER_20260922.md`.
+**Evidence:** `docs/evidence/C6_CURTAIN01_PAGE2_PREWRITE_SNAPSHOT_20260921.md`, `docs/evidence/C6_CURTAIN01_LIVE_CUTOVER_20260922.md`, and `docs/evidence/CURTAIN01_EXACT_MAIN_FOLLOWUP_20260922.md`.
 
-**Exact Next:** obtain one fresh production-browser L4 pass when a safe browser path is available; do not reopen already-PASS Theme-owned implementation or mutate provider/domain data merely to satisfy that evidence gap.
+**Exact Next:** obtain one fresh independent production-browser L4 pass when a safe browser path is available; do not reopen the now-PASS Theme-owned Hero/About/heading-flow implementation or mutate provider/domain data merely to satisfy that remaining evidence gap.
 
 ## 11. Open questions
 
