@@ -610,14 +610,72 @@
     background: #fff;
 }
 
+.aznet-theme-curtain01-category-showcase__controls {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-left: auto;
+}
+
+.aznet-theme-curtain01-category-showcase__control {
+    display: inline-flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--aznet-theme-curtain-border);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--aznet-theme-curtain-text);
+    cursor: pointer;
+    font: inherit;
+    font-size: 1.15rem;
+    transition:
+        border-color 180ms ease,
+        background 180ms ease,
+        color 180ms ease,
+        opacity 180ms ease;
+}
+
+.aznet-theme-curtain01-category-showcase__control:hover:not(:disabled),
+.aznet-theme-curtain01-category-showcase__control:focus-visible:not(:disabled) {
+    border-color: var(--aznet-theme-curtain-accent);
+    background: var(--aznet-theme-curtain-text);
+    color: #fff;
+}
+
+.aznet-theme-curtain01-category-showcase__control:focus-visible {
+    outline: 3px solid var(--aznet-theme-curtain-accent-soft);
+    outline-offset: 3px;
+}
+
+.aznet-theme-curtain01-category-showcase__control:disabled {
+    cursor: default;
+    opacity: 0.34;
+}
+
 .aznet-theme-curtain01-category-showcase__grid {
+    --aznet-theme-curtain01-category-gap: clamp(0.85rem, 1.8vw, 1.4rem);
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: clamp(0.85rem, 1.8vw, 1.4rem);
+    grid-auto-columns: calc((100% - (3 * var(--aznet-theme-curtain01-category-gap))) / 4);
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    gap: var(--aznet-theme-curtain01-category-gap);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+}
+
+.aznet-theme-curtain01-category-showcase__grid::-webkit-scrollbar {
+    display: none;
 }
 
 .aznet-theme-curtain01-category-showcase__card {
     min-width: 0;
+    scroll-snap-align: start;
     overflow: hidden;
     border-radius: var(--aznet-theme-curtain-radius);
     background: var(--aznet-theme-curtain-surface-strong);
@@ -900,7 +958,10 @@
         order: -1;
     }
 
-    .aznet-theme-curtain01-category-showcase__grid,
+    .aznet-theme-curtain01-category-showcase__grid {
+        grid-auto-columns: calc((100% - var(--aznet-theme-curtain01-category-gap)) / 2);
+    }
+
     .aznet-theme-curtain01-product-grid,
     .aznet-theme-curtain01-knowledge__grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -978,7 +1039,10 @@
         min-height: min(24rem, 72vw);
     }
 
-    .aznet-theme-curtain01-category-showcase__grid,
+    .aznet-theme-curtain01-category-showcase__grid {
+        grid-auto-columns: min(84vw, 18rem);
+    }
+
     .aznet-theme-curtain01-product-grid,
     .aznet-theme-curtain01-knowledge__grid {
         grid-template-columns: 1fr;
