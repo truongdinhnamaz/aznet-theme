@@ -5,7 +5,9 @@ on:
     branches:
       - main
     paths:
+      - 'inc/theme/settings.php'
       - 'inc/theme/homepage-composer.php'
+      - 'inc/admin/homepage.php'
       - 'template-parts/homepage/curtain-01/process.php'
       - 'assets/css/components/homepage-curtain-01.css'
       - 'tests/offline/curtain01-process-rail-contract.php'
