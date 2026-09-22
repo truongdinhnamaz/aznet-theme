@@ -59,6 +59,7 @@ foreach ([
 foreach ([
     'homepage_product_category_showcase_terms',
     'woocommerce_subcategory_thumbnail',
+    'woocommerce-placeholder',
     'get_term_link',
     'aznet-theme-curtain01-category-showcase',
     'Khám phá theo dòng rèm',
