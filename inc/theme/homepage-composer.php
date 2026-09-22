@@ -76,6 +76,7 @@ function render_homepage_before_content(): void {
     if ( 'curtain-01' === homepage_preset() ) {
         echo '<div class="aznet-theme-homepage aznet-theme-homepage--curtain-01">';
         render_curtain01_part( 'hero' );
+        render_curtain01_part( 'proof-strip' );
         return;
     }
 
