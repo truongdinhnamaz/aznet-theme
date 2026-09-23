@@ -223,6 +223,26 @@
     margin-bottom: 0;
 }
 
+/* Reserve the cinematic stage before JavaScript boots to avoid a stacked-slide layout shift. */
+.aznet-theme-curtain01-hero[data-aznet-curtain-slide-count] .aznet-theme-curtain01-hero__library > .wp-block-group {
+    display: grid;
+    width: 100%;
+    max-width: none !important;
+    margin: 0 !important;
+}
+
+.aznet-theme-curtain01-hero[data-aznet-curtain-slide-count] .aznet-theme-curtain01-hero__library > .wp-block-group > .wp-block-cover {
+    grid-area: 1 / 1;
+    width: 100%;
+    max-width: none !important;
+    margin: 0 !important;
+}
+
+.aznet-theme-curtain01-hero[data-aznet-curtain-slide-count]:not(.is-cinematic-ready) .aznet-theme-curtain01-hero__library > .wp-block-group > .wp-block-cover:not(:first-child) {
+    opacity: 0;
+    pointer-events: none;
+}
+
 /* Cinematic Hero enhancement: progressive, scoped and motion-preference safe. */
 .aznet-theme-curtain01-hero[data-aznet-curtain-cinematic] {
     --aznet-curtain-shift-x: 0px;
