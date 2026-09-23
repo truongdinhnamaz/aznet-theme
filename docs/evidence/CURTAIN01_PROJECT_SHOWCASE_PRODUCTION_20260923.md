@@ -1,9 +1,9 @@
 # Curtain 01 — Project Showcase production checkpoint
 
-**Date:** 23/09/2026  
-**Pilot:** `https://remquocanh.vn/`  
-**Theme:** AZnet Theme `1.3.31`  
-**Canonical implementation:** `main@f84d45a58261ec41d9b0c11a5e02a0873edb28ff`  
+**Date:** 23/09/2026
+**Pilot:** `https://remquocanh.vn/`
+**Theme:** AZnet Theme `1.3.31`
+**Canonical implementation:** `main@f84d45a58261ec41d9b0c11a5e02a0873edb28ff`
 **Scope:** Theme-owned Curtain 01 presentation + WordPress-owned project content mapping
 
 ## Owner approvals
@@ -70,4 +70,3 @@ This production checkpoint does not transfer or infer ownership from WooCommerce
 ## Result
 
 **PASS** — Project Showcase content publication, mapping, Theme production publish and scoped live L3/L4 accessibility/best-practices verification.
-
