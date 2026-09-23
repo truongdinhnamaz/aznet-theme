@@ -70,6 +70,17 @@ function homepage_slot_statuses(): array {
         $statuses['knowledge'] = [] === $valid ? 'INVALID' : ( [] === homepage_latest_posts( $knowledge_ids, 1 ) ? 'EMPTY' : 'READY' );
     }
 
+    if ( 'curtain-01' === (string) ( $s['homepage_preset'] ?? 'off' ) ) {
+        $project_term_id = (int) ( $s['homepage_curtain01_projects_term'] ?? 0 );
+        if ( $project_term_id <= 0 ) {
+            $statuses['projects'] = 'UNMAPPED';
+        } elseif ( null === homepage_category_reference( $project_term_id ) ) {
+            $statuses['projects'] = 'INVALID';
+        } else {
+            $statuses['projects'] = [] === homepage_latest_posts( [ $project_term_id ], 1 ) ? 'EMPTY' : 'READY';
+        }
+    }
+
     foreach ( [ 'case_analysis' => 'homepage_case_analysis_term', 'legal_news' => 'homepage_legal_news_term' ] as $slot => $key ) {
         $id = (int) ( $s[ $key ] ?? 0 );
         if ( $id <= 0 ) {
@@ -233,6 +244,7 @@ function render_homepage_settings(): void {
     if ( 'curtain-01' === (string) $s['homepage_preset'] ) {
         $source_visible[] = 'homepage_proof_block';
         $source_visible[] = 'homepage_curtain01_process_page';
+        $source_visible[] = 'homepage_curtain01_projects_term';
     } else {
         $source_visible[] = 'homepage_process_page';
     }
@@ -260,6 +272,7 @@ function render_homepage_settings(): void {
     homepage_category_select( 'homepage_legal_news_term', 'Tin pháp luật', (int) $s['homepage_legal_news_term'], $categories );
     if ( 'curtain-01' === (string) $s['homepage_preset'] ) {
         homepage_page_select( 'homepage_curtain01_process_page', 'Quy trình Rèm 01', (int) $s['homepage_curtain01_process_page'], $pages );
+        homepage_category_select( 'homepage_curtain01_projects_term', 'Công trình Rèm 01', (int) $s['homepage_curtain01_projects_term'], $categories );
     } else {
         homepage_page_select( 'homepage_process_page', 'Quy trình tư vấn', (int) $s['homepage_process_page'], $pages );
     }
