@@ -45,6 +45,11 @@
     grid-column: 2;
 }
 
+.single-product .woocommerce-breadcrumb,
+.single-product .woocommerce-breadcrumb a {
+    color: var(--aznet-theme-muted, #626873);
+}
+
 .single-product #main .woocommerce-product-gallery,
 .single-product #main .summary {
     float: none;
