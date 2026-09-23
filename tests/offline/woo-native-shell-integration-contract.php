@@ -52,6 +52,10 @@ if (!preg_match('/\\.single-product\\s+#main\\s+\\.price\\s*\\{[^}]*color\\s*:\\
     $fail('native Woo price must receive accessible Theme text color on the actual #main wrapper');
 }
 
+if (!preg_match('/\\.single-product\\s+#main\\s+\\.variations\\s+select\\s*\\{[^}]*margin\\s*:\\s*0\\s*;/is', $css)) {
+    $fail('native Woo variation select must reset the provider 1em right margin to prevent page overflow');
+}
+
 foreach (['choiceguide_', '.choiceguide-', 'convertflow'] as $forbidden) {
     if (false !== stripos($presentation . "\n" . $css, $forbidden)) {
         $fail('Theme Product shell must stay provider-agnostic; found forbidden coupling: ' . $forbidden);
