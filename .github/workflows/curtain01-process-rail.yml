@@ -1,0 +1,25 @@
+name: Curtain 01 Process Rail
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'inc/theme/settings.php'
+      - 'inc/theme/homepage-composer.php'
+      - 'inc/admin/homepage.php'
+      - 'template-parts/homepage/curtain-01/process.php'
+      - 'assets/css/components/homepage-curtain-01.css'
+      - 'tests/offline/curtain01-process-rail-contract.php'
+      - '.github/workflows/curtain01-process-rail.yml'
+
+jobs:
+  process-rail-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+      - name: Run process rail contract
+        run: php tests/offline/curtain01-process-rail-contract.php

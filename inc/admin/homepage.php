@@ -38,7 +38,9 @@ function homepage_slot_statuses(): array {
         'services' => 'homepage_services_page',
         'about'    => 'homepage_about_page',
         'team'     => 'homepage_team_page',
-        'process'  => 'homepage_process_page',
+        'process'  => 'curtain-01' === (string) ( $s['homepage_preset'] ?? 'off' )
+            ? 'homepage_curtain01_process_page'
+            : 'homepage_process_page',
         'faq'      => 'homepage_faq_page',
         'contact'  => 'homepage_contact_page',
     ];
@@ -226,10 +228,13 @@ function render_homepage_settings(): void {
     $source_visible = [
         'homepage_services_page', 'homepage_about_page', 'homepage_team_page',
         'homepage_knowledge_terms', 'homepage_case_analysis_term', 'homepage_legal_news_term',
-        'homepage_process_page', 'homepage_faq_page', 'homepage_contact_page',
+        'homepage_faq_page', 'homepage_contact_page',
     ];
     if ( 'curtain-01' === (string) $s['homepage_preset'] ) {
         $source_visible[] = 'homepage_proof_block';
+        $source_visible[] = 'homepage_curtain01_process_page';
+    } else {
+        $source_visible[] = 'homepage_process_page';
     }
     echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="aznet-theme-panel">';
     echo '<input type="hidden" name="action" value="aznet_theme_save_settings">';
@@ -253,7 +258,11 @@ function render_homepage_settings(): void {
 
     homepage_category_select( 'homepage_case_analysis_term', 'Phân tích vụ việc', (int) $s['homepage_case_analysis_term'], $categories );
     homepage_category_select( 'homepage_legal_news_term', 'Tin pháp luật', (int) $s['homepage_legal_news_term'], $categories );
-    homepage_page_select( 'homepage_process_page', 'Quy trình tư vấn', (int) $s['homepage_process_page'], $pages );
+    if ( 'curtain-01' === (string) $s['homepage_preset'] ) {
+        homepage_page_select( 'homepage_curtain01_process_page', 'Quy trình Rèm 01', (int) $s['homepage_curtain01_process_page'], $pages );
+    } else {
+        homepage_page_select( 'homepage_process_page', 'Quy trình tư vấn', (int) $s['homepage_process_page'], $pages );
+    }
     homepage_page_select( 'homepage_faq_page', 'Câu hỏi thường gặp', (int) $s['homepage_faq_page'], $pages );
     homepage_page_select( 'homepage_contact_page', 'Liên hệ', (int) $s['homepage_contact_page'], $pages );
     submit_button( __( 'Lưu nguồn nội dung', 'aznet-theme' ) );

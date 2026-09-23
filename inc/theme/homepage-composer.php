@@ -90,7 +90,7 @@ function render_homepage_after_content(): void {
     if ( ! homepage_composer_active() ) { return; }
 
     if ( 'curtain-01' === homepage_preset() ) {
-        foreach ( [ 'about', 'category-showcase', 'catalogue', 'knowledge', 'final-cta' ] as $section ) {
+        foreach ( [ 'about', 'category-showcase', 'catalogue', 'process', 'knowledge', 'final-cta' ] as $section ) {
             render_curtain01_part( $section );
         }
         echo '</div>';
