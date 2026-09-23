@@ -1,0 +1,37 @@
+name: Curtain 01 Project Showcase
+
+on:
+  push:
+    paths:
+      - 'tests/offline/curtain01-project-showcase-contract.php'
+      - 'inc/theme/settings.php'
+      - 'inc/theme/homepage-composer.php'
+      - 'inc/admin/homepage.php'
+      - 'template-parts/homepage/curtain-01/projects.php'
+      - 'assets/css/components/homepage-curtain-01.css'
+      - '.github/workflows/curtain01-project-showcase.yml'
+  pull_request:
+    paths:
+      - 'tests/offline/curtain01-project-showcase-contract.php'
+      - 'inc/theme/settings.php'
+      - 'inc/theme/homepage-composer.php'
+      - 'inc/admin/homepage.php'
+      - 'template-parts/homepage/curtain-01/projects.php'
+      - 'assets/css/components/homepage-curtain-01.css'
+      - '.github/workflows/curtain01-project-showcase.yml'
+
+jobs:
+  project-showcase-contract:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+      - name: PHP syntax
+        run: |
+          php -l tests/offline/curtain01-project-showcase-contract.php
+          if [ -f template-parts/homepage/curtain-01/projects.php ]; then php -l template-parts/homepage/curtain-01/projects.php; fi
+      - name: Curtain 01 project showcase contract
+        run: php tests/offline/curtain01-project-showcase-contract.php
