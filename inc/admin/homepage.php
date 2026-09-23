@@ -38,7 +38,9 @@ function homepage_slot_statuses(): array {
         'services' => 'homepage_services_page',
         'about'    => 'homepage_about_page',
         'team'     => 'homepage_team_page',
-        'process'  => 'homepage_process_page',
+        'process'  => 'curtain-01' === (string) ( $s['homepage_preset'] ?? 'off' )
+            ? 'homepage_curtain01_process_page'
+            : 'homepage_process_page',
         'faq'      => 'homepage_faq_page',
         'contact'  => 'homepage_contact_page',
     ];
