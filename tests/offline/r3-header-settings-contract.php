@@ -65,6 +65,7 @@ $valid_expected = [
     'homepage_about_kicker'         => '',
     'homepage_about_heading'        => '',
     'homepage_about_quote'          => '',
+    'homepage_curtain01_process_page' => 0,
     'homepage_team_page'            => 0,
     'homepage_knowledge_terms'      => [],
     'homepage_case_analysis_term'   => 0,
