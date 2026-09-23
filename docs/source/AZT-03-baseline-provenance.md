@@ -1,8 +1,8 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.73
+**Version:** v0.74
 **Status:** Working Source
-**Date:** 22/09/2026
+**Date:** 23/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
 
 ## 1. Source ownership
@@ -14,6 +14,7 @@ Live implementation facts are resolved from GitHub. Historical evidence is not r
 ## 2. Current canonical baseline
 
 - Live `main` HEAD is resolved from GitHub at execution time; stable provenance checkpoints are recorded below rather than treated as permanently current.
+- Rèm 01 production checkpoint — owner-approved PR #262 and PR #263 are integrated through canonical `main@f84d45a58261ec41d9b0c11a5e02a0873edb28ff`, Theme metadata `1.3.31`. Exact-main V1 run `35870034014`, X6 run `35870034255` and dedicated Project Showcase run `35870033789` completed SUCCESS. On `remquocanh.vn`, WordPress Post #999 is published in Category #80 `Công trình rèm`, Theme Mod `homepage_curtain01_projects_term = 80`, and the live Homepage renders the Project Showcase after Process and before Knowledge. Owner confirmed a fresh site-wide backup before WPVibe production publish. A stale draft-only `max-width: 22ch` Process heading rule was detected by live-to-canonical comparison, removed by resetting Curtain 01 CSS/JS to exact canonical bytes and republishing, then freshly reverified. Active Theme remains `1.3.31`; live Curtain 01 CSS/JS and `theme.json` are byte-identical to canonical main; production Lighthouse is Accessibility 100 / Best Practices 100 on mobile and desktop. Public-host independent pixel-level verification, provider L5 and a dedicated browser font-face `loaded` assertion remain separate/UNKNOWN. Evidence: `docs/evidence/CURTAIN01_PROJECT_SHOWCASE_PRODUCTION_20260923.md`.
 - Current canonical repository release baseline: owner-approved PR #202 promoted AZnet Theme to `1.3.23` and merged exact verified head `2ae0721435889ecf8862ee76e5bfe931edf7cd6c` to canonical `main@c3d991199bb5c95dec3bac6e0ae06072c8a249f2` with zero file delta. Fresh exact-main V1 run `35521890888` and X6 run `35521890901` completed SUCCESS. Deterministic `aznet-theme-1.3.23.zip` has 159 production files, 113 packaged PHP files verified and SHA-256 `7129b1506131c6b9e413bcba3087475fce75f52df7b71593c5f2804e90c4f005`. Evidence: `docs/evidence/V1_3_23_REPOSITORY_NATIVE_RELEASE_20260920.md`.
 - Previous published corrective baseline: owner-approved PR #159 final head `4b8fc7c78fb17e32fbc9c4fb9399bdeaf3f98744` completed 28/28 workflows SUCCESS and merged with zero file delta to `main@7c73f7e050e95c23c5c968b2365b643753431246`, Theme metadata `1.3.12`. Fresh exact-main V1 run `35434502224` and X6 push closure `35434502232` both completed SUCCESS.
 - Current published GitHub Release is `v1.3.23`: annotated tag object `2bc3077cfc915ead5bb96770d7b2907503e43a44` dereferences to exact canonical implementation `c3d991199bb5c95dec3bac6e0ae06072c8a249f2`; Release `392490797`; asset `577120116` `aznet-theme-1.3.23.zip`, SHA-256 `7129b1506131c6b9e413bcba3087475fce75f52df7b71593c5f2804e90c4f005`. Publication run `35522052972` completed SUCCESS; evidence artifact `10609216014` digest `sha256:df9b1993ebcfac4336db12de3ac1b13ab34d63ab85a4557aaec103fa4cb0c750`. Evidence: `docs/evidence/V1_3_23_REPOSITORY_NATIVE_RELEASE_20260920.md`.
