@@ -821,6 +821,85 @@
     text-decoration: none;
 }
 
+
+/* Process rail */
+.aznet-theme-curtain01-process {
+    position: relative;
+    overflow: hidden;
+    background:
+        linear-gradient(180deg, rgba(249, 246, 240, 0.98), rgba(243, 238, 229, 0.96));
+}
+
+.aznet-theme-curtain01-process__heading {
+    margin-bottom: clamp(2.4rem, 5vw, 4.6rem);
+}
+
+.aznet-theme-curtain01-process__rail {
+    position: relative;
+}
+
+.aznet-theme-curtain01-process__rail > * {
+    margin-block: 0;
+}
+
+.aznet-theme-curtain01-process__rail ol {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: aznet-curtain01-process;
+}
+
+.aznet-theme-curtain01-process__rail li {
+    position: relative;
+    min-width: 0;
+    margin: 0;
+    padding: 2.7rem clamp(0.45rem, 1.2vw, 0.9rem) 0;
+    color: var(--aznet-theme-curtain-text);
+    font-size: clamp(0.82rem, 1vw, 0.94rem);
+    font-weight: 650;
+    line-height: 1.45;
+    text-align: center;
+    counter-increment: aznet-curtain01-process;
+}
+
+.aznet-theme-curtain01-process__rail li::before {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 50%;
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    transform: translateX(-50%);
+    border: 1px solid rgba(125, 92, 56, 0.42);
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 0 0 0.45rem rgba(243, 238, 229, 0.96);
+    color: var(--aznet-theme-curtain-accent);
+    content: counter(aznet-curtain01-process, decimal-leading-zero);
+    font-size: 0.68rem;
+    font-weight: var(--aznet-theme-font-weight-bold);
+    letter-spacing: 0.08em;
+}
+
+.aznet-theme-curtain01-process__rail li::after {
+    position: absolute;
+    z-index: 1;
+    top: 0.95rem;
+    right: 50%;
+    left: -50%;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(125, 92, 56, 0.22), rgba(125, 92, 56, 0.52));
+    content: "";
+}
+
+.aznet-theme-curtain01-process__rail li:first-child::after {
+    display: none;
+}
+
 /* Knowledge */
 .aznet-theme-curtain01-knowledge {
     background: #fff;
@@ -977,6 +1056,39 @@
 }
 
 @media (max-width: 640px) {
+    .aznet-theme-curtain01-process__heading {
+        margin-bottom: 2.2rem;
+    }
+
+    .aznet-theme-curtain01-process__rail ol {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+        padding-left: 0.2rem;
+    }
+
+    .aznet-theme-curtain01-process__rail li {
+        min-height: 4rem;
+        padding: 0.2rem 0 1.45rem 3.4rem;
+        text-align: left;
+    }
+
+    .aznet-theme-curtain01-process__rail li::before {
+        top: 0;
+        left: 1rem;
+        transform: none;
+    }
+
+    .aznet-theme-curtain01-process__rail li::after {
+        top: -1.6rem;
+        right: auto;
+        bottom: auto;
+        left: 1.98rem;
+        width: 1px;
+        height: 1.8rem;
+        background: linear-gradient(180deg, rgba(125, 92, 56, 0.22), rgba(125, 92, 56, 0.52));
+    }
+
     .aznet-theme-curtain01-proof-strip__inner {
         padding-block: 0.75rem;
     }
