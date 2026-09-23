@@ -58,6 +58,9 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/r5-control-center-s
 printf '%s\n' '==> Woo asset scope regression'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/w1-woocommerce-asset-scope-contract.php
 
+printf '%s\n' '==> Woo native Single Product shell regression'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/woo-native-shell-integration-contract.php
+
 printf '%s\n' '==> R6 contracts'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/r6-asset-scope-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/r6-convertflow-asset-gate-contract.php
