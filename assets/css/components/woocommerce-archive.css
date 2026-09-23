@@ -28,6 +28,11 @@ body.aznet-theme-woo-card--compact {
     --aznet-theme-woo-card-media-ratio: 1 / 1;
 }
 
+.woocommerce .woocommerce-breadcrumb,
+.woocommerce .woocommerce-breadcrumb a {
+    color: var(--aznet-theme-muted, #626873);
+}
+
 .woocommerce .woocommerce-result-count,
 .woocommerce .woocommerce-ordering {
     margin-bottom: var(--aznet-theme-space-4, 1.5rem);
