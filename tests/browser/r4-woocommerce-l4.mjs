@@ -153,7 +153,38 @@ async function verifyBasePage(page, kind, viewportName, result) {
   if (mainCount !== 1) throw new Error(`${kind}: expected exactly one main#main, got ${mainCount}`);
 
   result.overflowPx = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-  if (result.overflowPx > 1) throw new Error(`${kind}: horizontal overflow ${result.overflowPx}px at ${viewportName}`);
+  if (result.overflowPx > 1) {
+    const overflowOffenders = await page.evaluate(() => {
+      const viewportWidth = document.documentElement.clientWidth;
+      return Array.from(document.querySelectorAll('body *'))
+        .map((node) => {
+          const rect = node.getBoundingClientRect();
+          const style = getComputedStyle(node);
+          const overflowRight = Math.max(0, rect.right - viewportWidth);
+          const overflowLeft = Math.max(0, -rect.left);
+          return {
+            tag: node.tagName.toLowerCase(),
+            id: node.id || '',
+            className: typeof node.className === 'string' ? node.className : '',
+            left: Math.round(rect.left * 100) / 100,
+            right: Math.round(rect.right * 100) / 100,
+            width: Math.round(rect.width * 100) / 100,
+            overflowRight: Math.round(overflowRight * 100) / 100,
+            overflowLeft: Math.round(overflowLeft * 100) / 100,
+            boxSizing: style.boxSizing,
+            position: style.position,
+            marginLeft: style.marginLeft,
+            marginRight: style.marginRight,
+            paddingLeft: style.paddingLeft,
+            paddingRight: style.paddingRight,
+          };
+        })
+        .filter((item) => item.overflowRight > 0.5 || item.overflowLeft > 0.5)
+        .sort((a, b) => Math.max(b.overflowRight, b.overflowLeft) - Math.max(a.overflowRight, a.overflowLeft))
+        .slice(0, 12);
+    });
+    throw new Error(`${kind}: horizontal overflow ${result.overflowPx}px at ${viewportName}; offenders=${JSON.stringify(overflowOffenders)}`);
+  }
 
   result.firstFocus = await firstKeyboardFocus(page);
   if (!result.firstFocus?.visible || !result.firstFocus.hasIndicator || !result.firstFocus.className.includes('aznet-theme-skip-link') || result.firstFocus.href !== '#main') {
