@@ -148,7 +148,7 @@ foreach ([
 foreach ([
     ".aznet-theme-curtain01-hero[data-aznet-curtain-slide-count] .aznet-theme-curtain01-hero__library > .wp-block-group {",
     ".aznet-theme-curtain01-hero[data-aznet-curtain-slide-count] .aznet-theme-curtain01-hero__library > .wp-block-group > .wp-block-cover {",
-    ".aznet-theme-curtain01-hero[data-aznet-curtain-slide-count] .aznet-theme-curtain01-hero__library > .wp-block-group > .wp-block-cover:not(:first-child) {",
+    ".aznet-theme-curtain01-hero[data-aznet-curtain-slide-count]:not(.is-cinematic-ready) .aznet-theme-curtain01-hero__library > .wp-block-group > .wp-block-cover:not(:first-child) {",
     "grid-area: 1 / 1;",
     "opacity: 0;",
 ] as $prepaintNeedle) {
