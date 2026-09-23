@@ -1,13 +1,15 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.78
+**Version:** v0.79
 **Status:** Working Execution Map / derived  
-**Date:** 20/09/2026
+**Date:** 23/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** exact verified implementation is `c3d991199bb5c95dec3bac6e0ae06072c8a249f2`, Theme metadata `1.3.23`; exact-main V1 `35521890888` and X6 `35521890901` are SUCCESS. Deterministic `aznet-theme-1.3.23.zip` SHA-256 is `7129b1506131c6b9e413bcba3087475fce75f52df7b71593c5f2804e90c4f005` (159 production files, 113 packaged PHP files verified). Current published GitHub Release is `v1.3.23` from publication run `35522052972`. Repository technical verification and publication are connector-independent under D-033; production deployment is a separate operation.
+> **Canonical-main checkpoint:** exact current implementation is `f84d45a58261ec41d9b0c11a5e02a0873edb28ff`, Theme metadata `1.3.31`; exact-main V1 `35870034014`, X6 `35870034255` and dedicated Curtain 01 Project Showcase `35870033789` are SUCCESS. Current published GitHub Release remains `v1.3.23`; later canonical implementation and pilot-specific production deployment do not silently redefine the GitHub Release boundary. Repository technical verification/publication remain connector-independent under D-033.
+
+> **Rèm 01 production checkpoint:** `remquocanh.vn` runs AZnet Theme `1.3.31` with owner-approved Process Rail and Project Showcase. WordPress owns Process Page #997 and Project Post #999 / Category #80; Theme owns only typed references, composition and presentation. Fresh production Lighthouse is Accessibility 100 / Best Practices 100 on mobile and desktop after corrective reconciliation of Curtain 01 CSS/JS to canonical main. Independent external pixel-level L4, dedicated Vietnamese font loaded-state proof and provider L5 remain separate/UNKNOWN.
 
 **Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication/deployment PASS -> Y1-Y5 -> PR #98 -> v1.3.0 publication/deployment PASS -> corrective releases through v1.3.16 publication PASS -> D-032 expansion -> PR #193 premium Homepage refinement -> PR #194 v1.3.20 publication -> final Homepage approval -> PR #196 About presentation -> PR #197 v1.3.21 technical promotion -> PR #199 mapped Service Page landing presentation -> PR #200 v1.3.22 promotion -> exact-main V1/X6 PASS -> v1.3.22 publication PASS`. Current release boundary: `v1.3.22 TECHNICAL PASS / PUBLICATION PASS / PRODUCTION DEPLOYMENT BLOCKED_EXTERNAL_ACCESS`. -> PR #202 v1.3.23 repository-native promotion -> exact-main V1/X6 PASS -> v1.3.23 publication PASS
 
