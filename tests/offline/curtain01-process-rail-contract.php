@@ -28,8 +28,11 @@ foreach ([
     }
 }
 
-$curtain_sections = "[ 'about', 'category-showcase', 'catalogue', 'process', 'knowledge', 'final-cta' ]";
-if (! str_contains($composer, $curtain_sections)) {
+$catalogue_pos = strpos($composer, "'catalogue'");
+$process_pos = strpos($composer, "'process'");
+$knowledge_pos = strpos($composer, "'knowledge'");
+if (false === $catalogue_pos || false === $process_pos || false === $knowledge_pos
+    || ! ($catalogue_pos < $process_pos && $process_pos < $knowledge_pos)) {
     fwrite(STDERR, "FAIL: Curtain 01 process must render after catalogue and before knowledge.\n");
     exit(1);
 }
