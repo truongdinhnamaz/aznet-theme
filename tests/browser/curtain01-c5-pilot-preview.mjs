@@ -103,6 +103,30 @@ async function verifyHomepage(viewportName, viewport) {
   const cinematicDots = cinematicHero.locator('.aznet-theme-curtain01-hero__dot');
   if (await cinematicSlides.count() !== 3) throw new Error(`${viewportName}: expected 3 cinematic Hero slides`);
   if (await cinematicDots.count() !== 3) throw new Error(`${viewportName}: expected 3 cinematic Hero controls`);
+  if ((await cinematicHero.getAttribute('data-aznet-curtain-slide-count')) !== '3') {
+    throw new Error(`${viewportName}: server-rendered cinematic slide count must reserve pre-paint geometry`);
+  }
+
+  const cinematicImages = cinematicHero.locator('.wp-block-cover__image-background');
+  if (await cinematicImages.count() !== 3) throw new Error(`${viewportName}: expected 3 cinematic Hero images`);
+  const cinematicImageAttrs = await cinematicImages.evaluateAll((nodes) => nodes.map((node) => ({
+    loading: node.getAttribute('loading'),
+    fetchpriority: node.getAttribute('fetchpriority'),
+    decoding: node.getAttribute('decoding'),
+    width: node.getAttribute('width'),
+    height: node.getAttribute('height'),
+    srcset: node.getAttribute('srcset'),
+    sizes: node.getAttribute('sizes'),
+  })));
+  if (cinematicImageAttrs[0]?.loading !== 'eager' || cinematicImageAttrs[0]?.fetchpriority !== 'high') {
+    throw new Error(`${viewportName}: primary cinematic image must be eager/high priority; ${JSON.stringify(cinematicImageAttrs)}`);
+  }
+  if (cinematicImageAttrs.slice(1).some((attrs) => attrs.loading !== 'lazy' || attrs.fetchpriority !== 'low')) {
+    throw new Error(`${viewportName}: secondary cinematic images must be lazy/low priority; ${JSON.stringify(cinematicImageAttrs)}`);
+  }
+  if (cinematicImageAttrs.some((attrs) => !attrs.width || !attrs.height || !attrs.srcset || !attrs.sizes || attrs.decoding !== 'async')) {
+    throw new Error(`${viewportName}: cinematic images must expose intrinsic/responsive loading metadata; ${JSON.stringify(cinematicImageAttrs)}`);
+  }
   const cinematicDotRects = await cinematicDots.evaluateAll((nodes) => nodes.map((node) => {
     const rect = node.getBoundingClientRect();
     return { width: rect.width, height: rect.height };

@@ -131,4 +131,30 @@ foreach ([
     }
 }
 
+foreach ([
+    "data-aznet-curtain-slide-count",
+    "WP_HTML_Tag_Processor",
+    "wp_get_attachment_image_srcset",
+    "wp_get_attachment_image_sizes",
+    "fetchpriority",
+    "loading",
+    "decoding",
+] as $performanceNeedle) {
+    if (!str_contains($hero, $performanceNeedle)) {
+        $fail('Curtain 01 Hero must expose stable pre-paint slide geometry and responsive loading metadata: ' . $performanceNeedle);
+    }
+}
+
+foreach ([
+    ".aznet-theme-curtain01-hero[data-aznet-curtain-slide-count] .aznet-theme-curtain01-hero__library > .wp-block-group {",
+    ".aznet-theme-curtain01-hero[data-aznet-curtain-slide-count] .aznet-theme-curtain01-hero__library > .wp-block-group > .wp-block-cover {",
+    ".aznet-theme-curtain01-hero[data-aznet-curtain-slide-count]:not(.is-cinematic-ready) .aznet-theme-curtain01-hero__library > .wp-block-group > .wp-block-cover:not(:first-child) {",
+    "grid-area: 1 / 1;",
+    "opacity: 0;",
+] as $prepaintNeedle) {
+    if (!str_contains($css, $prepaintNeedle)) {
+        $fail('Curtain 01 Hero must avoid JS-induced layout shift before cinematic initialization: ' . $prepaintNeedle);
+    }
+}
+
 echo "PASS: Curtain 01 cinematic Hero supports three-slide crossfade, scoped motion and reduced-motion safety\n";

@@ -13,17 +13,72 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $hero_block = homepage_block_reference( (int) setting( 'homepage_hero_block', 0 ) );
 $hero_html = '';
+$hero_slide_count = 0;
 
 if ( $hero_block instanceof \WP_Post ) {
     $raw = trim( (string) $hero_block->post_content );
     $hero_html = '' !== $raw ? do_blocks( $raw ) : '';
+
+    if ( '' !== $hero_html ) {
+        $hero_slide_count = substr_count( $hero_html, 'wp-block-cover__image-background' );
+
+        if ( class_exists( '\\WP_HTML_Tag_Processor' ) ) {
+            $processor = new \WP_HTML_Tag_Processor( $hero_html );
+            $hero_image_index = 0;
+
+            while ( $processor->next_tag( 'IMG' ) ) {
+                $class_name = (string) $processor->get_attribute( 'class' );
+
+                if ( ! str_contains( $class_name, 'wp-block-cover__image-background' ) ) {
+                    continue;
+                }
+
+                $is_primary = 0 === $hero_image_index;
+                ++$hero_image_index;
+
+                $processor->set_attribute( 'decoding', 'async' );
+                $processor->set_attribute( 'loading', $is_primary ? 'eager' : 'lazy' );
+                $processor->set_attribute( 'fetchpriority', $is_primary ? 'high' : 'low' );
+
+                if ( ! preg_match( '/(?:^|\\s)wp-image-(\\d+)(?:\\s|$)/', $class_name, $matches ) ) {
+                    continue;
+                }
+
+                $attachment_id = (int) $matches[1];
+                $image_src = wp_get_attachment_image_src( $attachment_id, 'full' );
+
+                if ( is_array( $image_src ) && isset( $image_src[1], $image_src[2] ) ) {
+                    $processor->set_attribute( 'width', (string) (int) $image_src[1] );
+                    $processor->set_attribute( 'height', (string) (int) $image_src[2] );
+                }
+
+                $srcset = wp_get_attachment_image_srcset( $attachment_id, 'full' );
+                if ( is_string( $srcset ) && '' !== $srcset ) {
+                    $processor->set_attribute( 'srcset', $srcset );
+                }
+
+                $sizes = wp_get_attachment_image_sizes( $attachment_id, 'full' );
+                if ( is_string( $sizes ) && '' !== $sizes ) {
+                    $processor->set_attribute( 'sizes', $sizes );
+                }
+            }
+
+            $hero_html = $processor->get_updated_html();
+        }
+    }
 }
 
 if ( '' !== $hero_html ) :
+    $hero_allowed_html = wp_kses_allowed_html( 'post' );
+    if ( isset( $hero_allowed_html['img'] ) && is_array( $hero_allowed_html['img'] ) ) {
+        foreach ( [ 'decoding', 'fetchpriority', 'loading', 'srcset', 'sizes', 'width', 'height' ] as $image_attribute ) {
+            $hero_allowed_html['img'][ $image_attribute ] = true;
+        }
+    }
     ?>
-    <section class="aznet-theme-curtain01-section aznet-theme-curtain01-hero aznet-theme-curtain01-hero--library" data-aznet-curtain-cinematic aria-label="<?php echo esc_attr__( 'Hero trang chủ', 'aznet-theme' ); ?>">
+    <section class="aznet-theme-curtain01-section aznet-theme-curtain01-hero aznet-theme-curtain01-hero--library" data-aznet-curtain-cinematic<?php if ( $hero_slide_count > 1 ) : ?> data-aznet-curtain-slide-count="<?php echo esc_attr( (string) $hero_slide_count ); ?>"<?php endif; ?> aria-label="<?php echo esc_attr__( 'Hero trang chủ', 'aznet-theme' ); ?>">
         <div class="aznet-theme-curtain01-shell aznet-theme-curtain01-hero__library">
-            <?php echo wp_kses_post( $hero_html ); ?>
+            <?php echo wp_kses( $hero_html, $hero_allowed_html ); ?>
         </div>
     </section>
     <?php
