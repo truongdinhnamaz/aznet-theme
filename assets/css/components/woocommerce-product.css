@@ -194,6 +194,7 @@
 
 .single-product #main .variations select {
     width: 100%;
+    margin: 0;
     padding-inline: var(--aznet-theme-space-3, 1rem);
 }
 
