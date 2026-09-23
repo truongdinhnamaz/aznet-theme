@@ -1,15 +1,17 @@
 # AZnet Theme Source Manifest
 
-Canonical technical implementation baseline is exact `main@c3d991199bb5c95dec3bac6e0ae06072c8a249f2`, Theme metadata `1.3.23`. Exact-main V1 `35521890888` and X6 `35521890901` PASS; deterministic `aznet-theme-1.3.23.zip` has 159 production files, 113 packaged PHP files verified and SHA-256 `7129b1506131c6b9e413bcba3087475fce75f52df7b71593c5f2804e90c4f005`. Current published GitHub Release is `v1.3.23`: publication run `35522052972`, tag object `2bc3077cfc915ead5bb96770d7b2907503e43a44`, Release `392490797`, asset `577120116`. Repository release verification/publication is connector-independent under D-033; production deployment is separate.
+Canonical technical implementation baseline is exact `main@f84d45a58261ec41d9b0c11a5e02a0873edb28ff`, Theme metadata `1.3.31`. Exact-main V1 `35870034014` and X6 `35870034255` PASS; dedicated Curtain 01 Project Showcase `35870033789` PASS. Current published GitHub Release remains `v1.3.23`; repository implementation and release publication are distinct from pilot-specific production deployment under D-033. Rèm Quốc Anh production now runs Theme `1.3.31` with owner-approved Process Rail + Project Showcase at the verified scope; evidence: `docs/evidence/CURTAIN01_PROJECT_SHOWCASE_PRODUCTION_20260923.md`.
 | Source | Semantic version | Role |
 | --- | --- | --- |
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.14 | Theme architecture, public integration contracts, D-027 Standalone Core boundary and complete WordPress-owned D-030 Hero authoring rule |
-| `AZT-03-baseline-provenance.md` | v0.72 | Canonical provenance through v1.3.23 repository-native technical/publication closure |
-| `AZT-04-roadmap-qa-decisions.md` | v0.88 | Roadmap/QA through v1.3.23 connector-independent technical/publication PASS |
-| `AZT-EXEC-MAP.md` | v0.78 | Derived execution map through v1.3.23 publication |
+| `AZT-03-baseline-provenance.md` | v0.74 | Canonical provenance through Rèm 01 1.3.31 Project Showcase production checkpoint |
+| `AZT-04-roadmap-qa-decisions.md` | v0.91 | Roadmap/QA through Rèm 01 Process Rail + Project Showcase production PASS at verified scope |
+| `AZT-EXEC-MAP.md` | v0.79 | Derived execution map through Rèm 01 1.3.31 production checkpoint |
+
+23/09/2026 Rèm 01 production evidence: `docs/evidence/CURTAIN01_PROJECT_SHOWCASE_PRODUCTION_20260923.md` records PR #262/#263 integration through `main@f84d45a58261ec41d9b0c11a5e02a0873edb28ff`, owner-backed WPVibe production publication, Post #999 / Category #80 mapping, corrective removal of one stale draft-only D-036-incompatible heading cap, exact live Curtain CSS/JS/`theme.json` reconciliation, and fresh mobile/desktop Accessibility 100 / Best Practices 100. Current GitHub Release remains `v1.3.23`; this pilot production state does not silently create a new Release.
 
 20/09/2026 v1.3.23 repository-native release evidence: `docs/evidence/V1_3_23_REPOSITORY_NATIVE_RELEASE_20260920.md` records PR #202 RED->GREEN promotion, exact-main V1 `35521890888`, exact-main X6 `35521890901`, deterministic package SHA-256 `7129b1506131c6b9e413bcba3087475fce75f52df7b71593c5f2804e90c4f005`, publication run `35522052972`, annotated `v1.3.23`, Release `392490797`, asset `577120116`, and the retained D-033 rule that repository release verification/publication does not depend on WPVibe or another production-site connector.
 

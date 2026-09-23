@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.90
+**Version:** v0.91
 **Status:** Working Source  
-**Date:** 22/09/2026
+**Date:** 23/09/2026
 
 ## 1. Purpose
 
@@ -378,7 +378,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 
 ## 10B. Rèm 01 curtain/interior pilot — ACCEPTED
 
-**State:** LIVE PILOT CUTOVER + FOLLOW-UP PRESENTATION FIXES EXECUTED; VIETNAMESE FONT CORRECTIVE SOURCE PASS / LIVE PUBLISH PENDING. Production migration, cinematic 3-image Hero, About typography/excerpt correction and D-036 desktop heading-flow rule are live. The D-037 Vietnamese Roboto corrective fix is canonical and exact-main verified, but its live publish is still pending because the approved WPVibe publish path is temporarily rate-limited. Independent pixel-level L4 verification on the protected production hostname and provider-specific L5 certification remain UNKNOWN and are not inferred.
+**State:** LIVE PILOT CUTOVER + FOLLOW-UP PRESENTATION + PROCESS RAIL + PROJECT SHOWCASE PRODUCTION PASS AT THE VERIFIED SCOPE. The live pilot now runs AZnet Theme `1.3.31`; the owner-approved Process Rail and fail-soft Project Showcase are live with WordPress-owned sources. D-037 Vietnamese Roboto declarations are live and emitted by the public Homepage, while a dedicated public-host browser assertion that every Vietnamese face reaches `loaded` remains UNKNOWN. Independent pixel-level external L4 verification and provider-specific L5 certification remain separate and are not inferred.
 
 **Pilot:** `https://remquocanh.vn/` is the migration/reference pilot. The reusable output is a generic Rèm 01 presentation, not a hardcoded Rèm Quốc Anh site.
 
@@ -386,13 +386,13 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 
 **Intent:** replace a Flatsome presentation layer with AZnet Theme while preserving WordPress/WooCommerce/provider ownership, keeping Flatsome rollback until destination QA passes, and avoiding a proprietary builder or Flatsome runtime compatibility engine.
 
-**Current checkpoint:** C1 read-only inventory is complete; C2-C4 Theme-owned Rèm 01 implementation is integrated; C5 repository-native pilot-shaped browser/a11y preview is PASS; the owner separately approved production cutover after confirming a fresh site backup. Follow-up owner-approved PR #239 added the WordPress-owned three-image cinematic Hero and 5-second crossfade; PR #240 added explicit About excerpt handling, stable Vietnamese typography and accepted D-036 natural desktop heading flow. The live pilot runs `homepage_preset=curtain-01` and `visual_preset=curtain-01` with WordPress-owned Hero block #991 (Media #669/#670/#671), About Page #35, Knowledge Category #57, Contact Page #45 and WooCommerce-owned catalogue data. Page #2 still exposes no UX Builder shortcodes in live output; its legacy 4006-character body remains recoverable from WordPress revisions #988/#935. WPVibe retains a Theme-file rollback copy and Flatsome/Flatsome Child remain inactive.
+**Current checkpoint:** C1 read-only inventory is complete; C2-C5 Theme-owned Rèm 01 implementation and repository-native browser/a11y verification are retained PASS. Owner-approved PR #262 added the WordPress-owned Process Rail source (Page #997) and PR #263 added a fail-soft Project Showcase using one explicit WordPress Category mapping. Canonical implementation is `main@f84d45a58261ec41d9b0c11a5e02a0873edb28ff`, Theme metadata `1.3.31`; exact-main V1 `35870034014`, X6 `35870034255` and Project Showcase `35870033789` are SUCCESS. The live pilot runs `homepage_preset=curtain-01` and `visual_preset=curtain-01` with Hero block #991, About Page #35, Process Page #997, Project Category #80, Knowledge Category #57, Contact Page #45 and WooCommerce-owned catalogue data. Post #999 is the first published WordPress-native project source. WPVibe retains `aznet-theme-wpvibe-backup`; Flatsome/Flatsome Child remain inactive.
 
-**Live QA disposition:** fresh authenticated Homepage runtime/DOM smoke is PASS at L3 for Hero #991, all three mapped Hero media, scoped cinematic JS, clean About title/excerpt and no visible UX Builder shortcode leakage; prior Shop/Single Product L3 smoke remains retained unless invalidated. Exact-main run `35702406349` completed V1 Exact Main Verification SUCCESS and exact-main X6 run `35702406200` completed static/contracts, WordPress runtime, integrated Playwright/axe, deterministic package/source identity, packaged PHP lint, lifecycle/rollback and ownership-boundary checks SUCCESS. Fresh independent pixel-level live-host L4 remains UNKNOWN because the production protection layer still constrains the independent browser path. Provider-specific L5 remains unclaimed.
+**Live QA disposition:** fresh production readback proves Theme `1.3.31`, `homepage_curtain01_projects_term = 80`, live composition order `about -> category-showcase -> catalogue -> process -> projects -> knowledge -> final-cta`, and a rendered Project Showcase card for Post #999. A stale draft-only `max-width: 22ch` Process heading rule was detected after the first publish by direct live-to-canonical comparison, removed by resetting Curtain 01 CSS/JS to exact canonical bytes, previewed, and republished. Fresh production verification then confirmed live Curtain 01 CSS/JS and `theme.json` byte-identical to canonical main. Lighthouse on the public Homepage is Accessibility 100 / Best Practices 100 for both mobile and desktop. The public head emits Vietnamese Roboto Regular/Medium/Bold face URLs; dedicated browser loaded-state verification remains UNKNOWN. Independent pixel-level external L4 and provider-specific L5 remain unclaimed.
 
-**Evidence:** `docs/evidence/C6_CURTAIN01_PAGE2_PREWRITE_SNAPSHOT_20260921.md`, `docs/evidence/C6_CURTAIN01_LIVE_CUTOVER_20260922.md`, and `docs/evidence/CURTAIN01_EXACT_MAIN_FOLLOWUP_20260922.md`.
+**Evidence:** `docs/evidence/C6_CURTAIN01_PAGE2_PREWRITE_SNAPSHOT_20260921.md`, `docs/evidence/C6_CURTAIN01_LIVE_CUTOVER_20260922.md`, `docs/evidence/CURTAIN01_EXACT_MAIN_FOLLOWUP_20260922.md`, and `docs/evidence/CURTAIN01_PROJECT_SHOWCASE_PRODUCTION_20260923.md`.
 
-**Exact Next:** when the approved WPVibe path is available, publish the already-previewed D-037 font-only draft on the live `1.3.30` baseline, then verify Vietnamese Roboto 400/500/700 and the affected Curtain 01 text on production. Do not replace live `1.3.30` with the lower repository metadata package merely to deliver this fix. After live font verification, retain the separate independent production-browser L4 gap for later closure.
+**Exact Next:** preserve the live Project Showcase/Process PASS and WordPress ownership boundaries. Do not open another Theme/provider feature merely because the pilot is live. The remaining verification gaps are a dedicated public-host Vietnamese font loaded-state assertion and independent external pixel-level L4; provider-specific L5 remains separate. Additional project cards should come from verified WordPress-native project Posts, not Theme hard-coding or provider heuristics.
 
 ## 11. Open questions
 
