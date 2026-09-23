@@ -72,6 +72,13 @@ if (! str_contains($admin, 'homepage_curtain01_process_page') || ! str_contains(
     exit(1);
 }
 
+if (! str_contains($admin, "'process'  => 'curtain-01' === (string) ( $s['homepage_preset'] ?? 'off' )")
+    || ! str_contains($admin, "? 'homepage_curtain01_process_page'")
+    || ! str_contains($admin, ": 'homepage_process_page'")) {
+    fwrite(STDERR, "FAIL: Homepage diagnostics must report the process source owned by the active preset.\n");
+    exit(1);
+}
+
 foreach ([
     '.aznet-theme-curtain01-process {',
     '.aznet-theme-curtain01-process__rail ol {',
