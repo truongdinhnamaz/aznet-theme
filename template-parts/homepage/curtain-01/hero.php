@@ -69,10 +69,16 @@ if ( $hero_block instanceof \WP_Post ) {
 }
 
 if ( '' !== $hero_html ) :
+    $hero_allowed_html = wp_kses_allowed_html( 'post' );
+    if ( isset( $hero_allowed_html['img'] ) && is_array( $hero_allowed_html['img'] ) ) {
+        foreach ( [ 'decoding', 'fetchpriority', 'loading', 'srcset', 'sizes', 'width', 'height' ] as $image_attribute ) {
+            $hero_allowed_html['img'][ $image_attribute ] = true;
+        }
+    }
     ?>
     <section class="aznet-theme-curtain01-section aznet-theme-curtain01-hero aznet-theme-curtain01-hero--library" data-aznet-curtain-cinematic<?php if ( $hero_slide_count > 1 ) : ?> data-aznet-curtain-slide-count="<?php echo esc_attr( (string) $hero_slide_count ); ?>"<?php endif; ?> aria-label="<?php echo esc_attr__( 'Hero trang chủ', 'aznet-theme' ); ?>">
         <div class="aznet-theme-curtain01-shell aznet-theme-curtain01-hero__library">
-            <?php echo wp_kses_post( $hero_html ); ?>
+            <?php echo wp_kses( $hero_html, $hero_allowed_html ); ?>
         </div>
     </section>
     <?php
