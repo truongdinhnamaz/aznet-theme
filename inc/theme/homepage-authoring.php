@@ -111,3 +111,51 @@ function homepage_source_value( string $preset, string $slot, ?array $settings =
 
     return homepage_source_neutral_value( $type );
 }
+
+
+/**
+ * Find other preset slots that resolve to the same typed WordPress source.
+ *
+ * @param array<string, mixed>|null $settings Normalized settings override.
+ * @return array<int, array{preset:string,slot:string,source_ids:array<int,int>}>
+ */
+function homepage_shared_source_uses( string $preset, string $slot, ?array $settings = null ): array {
+    $settings = null === $settings ? settings() : $settings;
+    $descriptor = homepage_source_descriptor( $preset, $slot );
+    if ( null === $descriptor ) { return []; }
+    $type = (string) ( $descriptor['type'] ?? '' );
+    if ( 'variant' === $type ) { return []; }
+
+    $to_ids = static function ( mixed $value, string $source_type ): array {
+        $values = 'categories' === $source_type ? (array) $value : [ $value ];
+        $ids = [];
+        foreach ( $values as $candidate ) {
+            $id = is_numeric( $candidate ) ? (int) $candidate : 0;
+            if ( $id > 0 && ! in_array( $id, $ids, true ) ) { $ids[] = $id; }
+        }
+        sort( $ids );
+        return $ids;
+    };
+    $compatible = static function ( string $a, string $b ): bool {
+        if ( $a === $b ) { return true; }
+        return in_array( $a, [ 'category', 'categories' ], true ) && in_array( $b, [ 'category', 'categories' ], true );
+    };
+
+    $source_ids = $to_ids( homepage_source_value( $preset, $slot, $settings ), $type );
+    if ( [] === $source_ids ) { return []; }
+
+    $uses = [];
+    foreach ( homepage_preset_registry() as $other_preset => $slots ) {
+        if ( $other_preset === $preset || ! is_array( $slots ) ) { continue; }
+        foreach ( $slots as $other_slot => $other_descriptor ) {
+            if ( ! is_array( $other_descriptor ) ) { continue; }
+            $other_type = (string) ( $other_descriptor['type'] ?? '' );
+            if ( ! $compatible( $type, $other_type ) ) { continue; }
+            $other_ids = $to_ids( homepage_source_value( (string) $other_preset, (string) $other_slot, $settings ), $other_type );
+            $overlap = array_values( array_intersect( $source_ids, $other_ids ) );
+            if ( [] === $overlap ) { continue; }
+            $uses[] = [ 'preset' => (string) $other_preset, 'slot' => (string) $other_slot, 'source_ids' => $overlap ];
+        }
+    }
+    return $uses;
+}

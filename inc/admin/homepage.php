@@ -11,6 +11,7 @@ use function AZnet\Theme\homepage_page_reference;
 use function AZnet\Theme\homepage_source_descriptor;
 use function AZnet\Theme\homepage_source_key;
 use function AZnet\Theme\homepage_source_value;
+use function AZnet\Theme\homepage_shared_source_uses;
 use function AZnet\Theme\settings;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
@@ -277,10 +278,20 @@ function render_homepage_authoring_console( string $preset ): void {
         echo '<article class="aznet-theme-homepage-section-card">';
         echo '<div class="aznet-theme-homepage-section-card__heading"><h3>' . esc_html( homepage_authoring_label( $slot ) ) . '</h3><code class="aznet-theme-homepage-section-card__status">' . esc_html( (string) $summary['status'] ) . '</code></div>';
         echo '<p><strong>' . esc_html__( 'Nguồn:', 'aznet-theme' ) . '</strong> ' . esc_html( (string) $summary['title'] ) . '</p>';
+        $shared_uses = homepage_shared_source_uses( $preset, $slot );
+        if ( [] !== $shared_uses ) {
+            $other_preset = (string) ( $shared_uses[0]['preset'] ?? '' );
+            $other_label = 'law-01' === $other_preset ? __( 'Luật 01', 'aznet-theme' ) : __( 'Rèm 01', 'aznet-theme' );
+            echo '<div class="notice notice-warning inline aznet-theme-homepage-shared-source"><p>' . esc_html( sprintf( __( 'Nguồn này hiện cũng được mẫu %s sử dụng. Sửa nội dung nguồn sẽ ảnh hưởng cả hai mẫu.', 'aznet-theme' ), $other_label ) ) . '</p></div>';
+        }
         echo '<div class="aznet-theme-homepage-section-card__actions">';
         echo '<button type="button" class="button aznet-theme-homepage-quick-edit" data-preset="' . esc_attr( $preset ) . '" data-slot="' . esc_attr( $slot ) . '">' . esc_html__( 'Sửa nhanh', 'aznet-theme' ) . '</button>';
         if ( '' !== (string) $summary['edit'] ) { echo '<a class="button" href="' . esc_url( (string) $summary['edit'] ) . '">' . esc_html__( 'Chỉnh đầy đủ', 'aznet-theme' ) . '</a>'; }
         echo '<a class="button" href="#aznet-theme-homepage-sources">' . esc_html__( 'Đổi nguồn', 'aznet-theme' ) . '</a>';
+        $descriptor = homepage_source_descriptor( $preset, $slot );
+        if ( [] !== $shared_uses && is_array( $descriptor ) && in_array( (string) ( $descriptor['type'] ?? '' ), [ 'page', 'wp_block' ], true ) ) {
+            echo '<span class="button disabled" aria-disabled="true" title="' . esc_attr__( 'Sẽ được kích hoạt ở bước tách nguồn an toàn.', 'aznet-theme' ) . '">' . esc_html__( 'Tạo nguồn riêng cho mẫu này', 'aznet-theme' ) . '</span>';
+        }
         echo '</div></article>';
     }
     echo '</div></div>';

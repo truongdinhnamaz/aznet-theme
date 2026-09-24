@@ -89,3 +89,12 @@ $initialized = AZnet\Theme\normalize_settings([
 assert(AZnet\Theme\homepage_source_value('law-01', 'about', $initialized) === 0);
 
 echo "PASS: D-038 preset-isolated Homepage source registry\n";
+
+$shared = AZnet\Theme\normalize_settings(['homepage_law01_about_page'=>91,'homepage_curtain01_about_page'=>91]);
+$uses = AZnet\Theme\homepage_shared_source_uses('law-01','about',$shared);
+assert(count($uses)===1); assert($uses[0]['preset']==='curtain-01'); assert($uses[0]['slot']==='about'); assert($uses[0]['source_ids']===[91]);
+$distinct=AZnet\Theme\normalize_settings(['homepage_law01_about_page'=>91,'homepage_curtain01_about_page'=>92]);
+assert(AZnet\Theme\homepage_shared_source_uses('law-01','about',$distinct)===[]);
+$termShared=AZnet\Theme\normalize_settings(['homepage_law01_knowledge_terms'=>[17,19],'homepage_curtain01_knowledge_terms'=>[19,21]]);
+$termUses=AZnet\Theme\homepage_shared_source_uses('law-01','knowledge',$termShared);
+assert(count($termUses)===1); assert($termUses[0]['source_ids']===[19]);
