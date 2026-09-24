@@ -37,6 +37,10 @@ function register_control_center(): void {
             [],
             AZNET_THEME_VERSION
         );
+        wp_add_inline_style(
+            'aznet-theme-control-center',
+            '.aznet-theme-control-center--homepage{max-width:none!important;width:auto!important}.aznet-theme-homepage-section-grid,.aznet-theme-homepage-section-list{display:block!important;width:100%!important;max-width:100%!important;grid-template-columns:none!important;columns:auto!important}.aznet-theme-homepage-section-grid>.aznet-theme-homepage-section-card,.aznet-theme-homepage-section-list>.aznet-theme-homepage-section-card{display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;flex:0 0 100%!important;float:none!important;clear:both!important;grid-column:1/-1!important;box-sizing:border-box!important;margin-left:0!important;margin-right:0!important}.aznet-theme-homepage-section-grid>.aznet-theme-homepage-section-card+.aznet-theme-homepage-section-card,.aznet-theme-homepage-section-list>.aznet-theme-homepage-section-card+.aznet-theme-homepage-section-card{margin-top:14px!important}'
+        );
         wp_enqueue_media();
         wp_enqueue_script(
             'aznet-theme-homepage-authoring',
