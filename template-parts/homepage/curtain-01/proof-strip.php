@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$proof_block = homepage_block_reference( (int) setting( 'homepage_proof_block', 0 ) );
+$proof_block = homepage_block_reference( (int) homepage_source_value( 'curtain-01', 'proof' ) );
 if ( ! $proof_block instanceof \WP_Post ) {
     return;
 }
