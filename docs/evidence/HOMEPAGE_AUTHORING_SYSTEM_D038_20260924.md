@@ -132,6 +132,22 @@ Status: **BLOCKED_EXTERNAL_EXECUTION**.
 
 This checkpoint does not interpret the runner-level condition as a code-test failure.
 
+### Full V1 executable-checkout blocker — 24/09/2026
+
+A fresh full `scripts/verify-v1-core.sh` run was attempted but could not be started on an exact branch checkout:
+
+- container `git clone` of the canonical repository failed before checkout because the execution environment could not resolve `github.com`;
+- exact-main PASS artifacts were inspected as the safer fallback;
+- `v1-main-static-contracts` contains only `checkout-sha.txt`;
+- `v1-main-clean-runtime-browser` contains runtime/browser evidence, not repository source;
+- `x6-cross-surface-release-evidence` contains the packaged Theme tree but does not contain repository `tests/` or `scripts/`;
+- the third exact-main workflow had no downloadable artifact;
+- no connector action is available to export/clone a repository archive directly into the execution container.
+
+Therefore reconstructing the entire repository file-by-file would be a high-cost synthetic checkout and is intentionally not used as evidence for the full V1 gate.
+
+Status remains **BLOCKED_EXTERNAL_EXECUTION** for the full L1/L2 suite. Existing bounded exact-blob/local contract evidence remains valid but is not promoted to full V1 PASS.
+
 ### Not yet verified
 
 - full `scripts/verify-v1-core.sh` on a complete executable checkout;
