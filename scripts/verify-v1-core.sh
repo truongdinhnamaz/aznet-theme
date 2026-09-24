@@ -149,6 +149,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-c
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-control-center-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-diagnostics-scoped-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-authoring-actions-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-quick-edit-validation-order-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-scoped-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-editorial-source-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-preset-isolation-contract.php

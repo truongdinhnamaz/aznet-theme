@@ -53,14 +53,15 @@ function handle_homepage_quick_edit_source(): void {
         }
         $title = isset( $_POST['homepage_source_title'] ) ? sanitize_text_field( wp_unslash( $_POST['homepage_source_title'] ) ) : '';
         $excerpt = isset( $_POST['homepage_source_excerpt'] ) ? sanitize_textarea_field( wp_unslash( $_POST['homepage_source_excerpt'] ) ) : '';
+        $image_id = isset( $_POST['homepage_featured_image_id'] ) ? absint( $_POST['homepage_featured_image_id'] ) : 0;
+        if ( $image_id > 0 && ! wp_attachment_is_image( $image_id ) ) {
+            wp_die( esc_html__( 'Ảnh đại diện không hợp lệ.', 'aznet-theme' ) );
+        }
+
         $result = wp_update_post( [ 'ID' => $source_id, 'post_title' => $title, 'post_excerpt' => $excerpt ], true );
         if ( is_wp_error( $result ) ) { wp_die( esc_html( $result->get_error_message() ) ); }
 
-        $image_id = isset( $_POST['homepage_featured_image_id'] ) ? absint( $_POST['homepage_featured_image_id'] ) : 0;
         if ( $image_id > 0 ) {
-            if ( ! wp_attachment_is_image( $image_id ) ) {
-                wp_die( esc_html__( 'Ảnh đại diện không hợp lệ.', 'aznet-theme' ) );
-            }
             set_post_thumbnail( $source_id, $image_id );
         } else {
             delete_post_thumbnail( $source_id );
