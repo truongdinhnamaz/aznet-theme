@@ -235,12 +235,12 @@ Each returned surface has this stable internal shape:
     'template' => 'services',
     'anchor'   => 'aznet-homepage-services',
     'status'   => 'active',
-    'source'   => [
-        'type'  => 'page',
-        'id'    => 123,
-        'title' => 'Dịch vụ',
-    ],
     'model'    => [
+        'source'  => [
+            'type'  => 'page',
+            'id'    => 123,
+            'title' => 'Dịch vụ',
+        ],
         'summary' => [],
         'items'   => [],
     ],
@@ -353,6 +353,8 @@ return [
     'team'  => $team,
 ];
 ```
+
+Every non-null read model includes a `source` entry describing the exact effective WordPress source or a bounded composite source descriptor. For Profile, the `model` carries separate `about` and `team` source/read submodels.
 
 For Latest/Topics/Analysis/News/Process/FAQ/Final CTA, reuse the exact existing source/query helpers and limits already used by their templates. Do not broaden query scope.
 
@@ -748,13 +750,19 @@ echo '</details>';
 
 Once initialization is complete, do not show a migration action again; inside the advanced disclosure render at most a compact read-only “Đã khởi tạo mapping riêng” note.
 
-If `homepage_preset` is `off` or unsupported, do not fabricate map cards. Render a primary native-state message:
+If `homepage_preset` is `off`, do not fabricate map cards. Render:
 
 ```text
 Trang chủ hiện đang dùng luồng WordPress mặc định. Chọn một mẫu trong Nguồn & cài đặt nâng cao để dùng Homepage Composer.
 ```
 
-Keep the advanced disclosure available so the administrator can choose a supported preset.
+If `homepage_preset` is `curtain-01`, preserve its existing controls and render:
+
+```text
+Rèm 01 đang hoạt động. Homepage Map trực quan trong slice này áp dụng cho Luật 01; dùng Nguồn & cài đặt nâng cao để quản lý Rèm 01.
+```
+
+Keep the advanced disclosure available in both cases.
 
 - [ ] **Step 6: Add scoped one-column map CSS**
 
@@ -1063,7 +1071,7 @@ $services = current( array_filter( $surfaces, static fn( array $surface ): bool 
 assert( 6 === count( $services['model']['items'] ) );
 
 $hero = current( array_filter( $surfaces, static fn( array $surface ): bool => 'hero' === $surface['key'] ) );
-assert( (int) $draft_hero_id !== (int) ( $hero['source']['id'] ?? 0 ), 'Draft Hero candidate must not become the effective public Hero.' );
+assert( (int) $draft_hero_id !== (int) ( $hero['model']['source']['id'] ?? 0 ), 'Draft Hero candidate must not become the effective public Hero.' );
 
 echo wp_json_encode(
     [
