@@ -301,6 +301,18 @@ function homepage_category_select( string $key, string $label, int $current, arr
     echo '</select></label>';
 }
 
+/** Render Hero Library as a dedicated AZnet Theme backend screen. */
+function render_homepage_hero_library_screen(): void {
+    $settings = settings();
+    $back_url = add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'homepage' ], admin_url( 'admin.php' ) );
+    echo '<div class="aznet-theme-panel aznet-theme-homepage-hero-library-screen">';
+    echo '<p><a class="button" href="' . esc_url( $back_url ) . '">← ' . esc_html__( 'Quay lại Trang chủ', 'aznet-theme' ) . '</a></p>';
+    echo '<h2>' . esc_html__( 'Thiết kế Hero', 'aznet-theme' ) . '</h2>';
+    echo '<p class="description">' . esc_html__( 'Chọn mẫu và chỉnh Hero tại đây. Màn hình Trang chủ chỉ phản ánh cấu trúc đang hiển thị ngoài frontend.', 'aznet-theme' ) . '</p>';
+    echo '</div>';
+    render_homepage_hero_library( $settings );
+}
+
 /** Return authoring sections in frontend reading order for one preset. */
 function homepage_authoring_sections( string $preset ): array {
     if ( 'law-01' === $preset ) {
@@ -415,7 +427,7 @@ function render_homepage_authoring_console( string $preset ): void {
     $preset_label = 'law-01' === $preset ? __( 'Luật 01', 'aznet-theme' ) : __( 'Rèm 01', 'aznet-theme' );
     echo '<div class="aznet-theme-panel aznet-theme-homepage-authoring">';
     echo '<h2>' . esc_html( sprintf( __( 'Mẫu đang chỉnh: %s', 'aznet-theme' ), $preset_label ) ) . '</h2>';
-    echo '<p class="description">' . esc_html__( 'Mỗi mục dùng nguồn WordPress của chính mẫu. Sửa nhanh chỉnh nội dung nguồn đã ánh xạ; Đổi nguồn chọn nguồn WordPress khác.', 'aznet-theme' ) . '</p>';
+    echo '<p class="description">' . esc_html__( 'Các section được xếp theo thứ tự frontend. Hero mở khu thiết kế riêng; các section còn lại chỉnh nội dung nguồn đã ánh xạ hoặc đổi nguồn khi cần.', 'aznet-theme' ) . '</p>';
     echo '<div class="aznet-theme-homepage-section-list" style="display:block;width:100%;max-width:none">';
     foreach ( homepage_authoring_sections( $preset ) as $slot ) {
         $summary = homepage_authoring_source_summary( $preset, $slot );
@@ -433,14 +445,18 @@ function render_homepage_authoring_console( string $preset ): void {
         $descriptor = homepage_source_descriptor( $preset, $slot );
         $source_type = is_array( $descriptor ) ? (string) ( $descriptor['type'] ?? '' ) : '';
         $source_value = homepage_source_value( $preset, $slot );
-        if ( 'law-01' === $preset && 'hero' === $slot && 'wp_block' === $source_type && (int) $source_value > 0 ) { echo '<a class="button button-primary" href="#aznet-theme-homepage-hero-simple-form">' . esc_html__( 'Sửa Hero đơn giản', 'aznet-theme' ) . '</a>'; }
-        if ( 'page' === $source_type || 'category' === $source_type ) {
-            render_homepage_quick_edit_form( $preset, $slot, (int) $source_value );
-        } elseif ( 'categories' === $source_type ) {
-            foreach ( (array) $source_value as $term_id ) { render_homepage_quick_edit_form( $preset, $slot, (int) $term_id ); }
+        if ( 'law-01' === $preset && 'hero' === $slot ) {
+            $hero_library_url = add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'hero-library' ], admin_url( 'admin.php' ) );
+            echo '<a class="button button-primary" href="' . esc_url( $hero_library_url ) . '">' . esc_html__( 'Thiết kế Hero', 'aznet-theme' ) . '</a>';
+        } else {
+            if ( 'page' === $source_type || 'category' === $source_type ) {
+                render_homepage_quick_edit_form( $preset, $slot, (int) $source_value );
+            } elseif ( 'categories' === $source_type ) {
+                foreach ( (array) $source_value as $term_id ) { render_homepage_quick_edit_form( $preset, $slot, (int) $term_id ); }
+            }
+            echo '<a class="button" href="#aznet-theme-homepage-sources">' . esc_html__( 'Đổi nguồn', 'aznet-theme' ) . '</a>';
         }
-        echo '<a class="button" href="#aznet-theme-homepage-sources">' . esc_html__( 'Đổi nguồn', 'aznet-theme' ) . '</a>';
-        if ( [] !== $shared_uses && is_array( $descriptor ) && in_array( (string) ( $descriptor['type'] ?? '' ), [ 'page', 'wp_block' ], true ) && (int) $source_value > 0 ) {
+        if ( 'hero' !== $slot && [] !== $shared_uses && is_array( $descriptor ) && in_array( (string) ( $descriptor['type'] ?? '' ), [ 'page', 'wp_block' ], true ) && (int) $source_value > 0 ) {
             echo '<form class="aznet-theme-homepage-separate-source" method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
             echo '<input type="hidden" name="action" value="aznet_theme_duplicate_homepage_source">';
             echo '<input type="hidden" name="homepage_preset_scope" value="' . esc_attr( $preset ) . '">';
@@ -522,9 +538,6 @@ function render_homepage_settings(): void {
 
     render_homepage_authoring_console( $active_preset );
 
-    if ( 'law-01' === $active_preset ) {
-        render_homepage_hero_library( $s );
-    }
 
     $source_slots = 'law-01' === $active_preset
         ? [ 'services', 'about', 'team', 'knowledge', 'case_analysis', 'legal_news', 'process', 'faq', 'contact' ]
