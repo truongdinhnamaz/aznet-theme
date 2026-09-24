@@ -240,8 +240,10 @@ Each returned surface has this stable internal shape:
         'id'    => 123,
         'title' => 'Dịch vụ',
     ],
-    'summary'  => [],
-    'items'    => [],
+    'model'    => [
+        'summary' => [],
+        'items'   => [],
+    ],
 ]
 ```
 
