@@ -8,6 +8,9 @@ use function AZnet\Theme\homepage_direct_published_children;
 use function AZnet\Theme\homepage_latest_posts;
 use function AZnet\Theme\homepage_block_reference;
 use function AZnet\Theme\homepage_page_reference;
+use function AZnet\Theme\homepage_source_descriptor;
+use function AZnet\Theme\homepage_source_key;
+use function AZnet\Theme\homepage_source_value;
 use function AZnet\Theme\settings;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
@@ -205,6 +208,84 @@ function homepage_category_select( string $key, string $label, int $current, arr
     echo '</select></label>';
 }
 
+/** Return authoring sections in frontend reading order for one preset. */
+function homepage_authoring_sections( string $preset ): array {
+    if ( 'law-01' === $preset ) {
+        return [ 'hero', 'services', 'about', 'team', 'knowledge', 'case_analysis', 'legal_news', 'process', 'faq', 'contact' ];
+    }
+    if ( 'curtain-01' === $preset ) {
+        return [ 'hero', 'proof', 'about', 'process', 'projects', 'knowledge', 'contact' ];
+    }
+    return [];
+}
+
+/** Human label for one Homepage slot. */
+function homepage_authoring_label( string $slot ): string {
+    return [
+        'hero' => __( 'Hero', 'aznet-theme' ),
+        'services' => __( 'Dịch vụ', 'aznet-theme' ),
+        'about' => __( 'Giới thiệu', 'aznet-theme' ),
+        'team' => __( 'Đội ngũ', 'aznet-theme' ),
+        'knowledge' => __( 'Bài viết / kiến thức', 'aznet-theme' ),
+        'case_analysis' => __( 'Phân tích vụ việc', 'aznet-theme' ),
+        'legal_news' => __( 'Tin pháp luật', 'aznet-theme' ),
+        'process' => __( 'Quy trình', 'aznet-theme' ),
+        'faq' => __( 'Câu hỏi thường gặp', 'aznet-theme' ),
+        'contact' => __( 'Liên hệ / CTA cuối', 'aznet-theme' ),
+        'proof' => __( 'Bằng chứng nhanh', 'aznet-theme' ),
+        'projects' => __( 'Công trình', 'aznet-theme' ),
+    ][ $slot ] ?? $slot;
+}
+
+/** Resolve a human-readable source title and native edit URL. */
+function homepage_authoring_source_summary( string $preset, string $slot ): array {
+    $descriptor = homepage_source_descriptor( $preset, $slot );
+    if ( null === $descriptor ) { return [ 'title' => __( 'Chưa hỗ trợ', 'aznet-theme' ), 'edit' => '', 'status' => 'UNMAPPED' ]; }
+    $type = (string) ( $descriptor['type'] ?? '' );
+    $value = homepage_source_value( $preset, $slot );
+    if ( in_array( $type, [ 'page', 'wp_block' ], true ) ) {
+        $id = (int) $value;
+        $post = $id > 0 ? get_post( $id ) : null;
+        if ( ! $post instanceof \WP_Post ) { return [ 'title' => __( 'Chưa chọn nguồn', 'aznet-theme' ), 'edit' => '', 'status' => $id > 0 ? 'INVALID' : 'UNMAPPED' ]; }
+        $edit = get_edit_post_link( $post->ID, 'raw' );
+        return [ 'title' => get_the_title( $post ), 'edit' => is_string( $edit ) ? $edit : '', 'status' => 'publish' === $post->post_status ? 'READY' : strtoupper( (string) $post->post_status ) ];
+    }
+    if ( 'category' === $type ) {
+        $id = (int) $value;
+        $term = $id > 0 ? homepage_category_reference( $id ) : null;
+        if ( ! $term instanceof \WP_Term ) { return [ 'title' => __( 'Chưa chọn nguồn', 'aznet-theme' ), 'edit' => '', 'status' => $id > 0 ? 'INVALID' : 'UNMAPPED' ]; }
+        $edit = get_edit_term_link( $term->term_id, 'category' );
+        return [ 'title' => $term->name, 'edit' => is_string( $edit ) ? $edit : '', 'status' => 'READY' ];
+    }
+    if ( 'categories' === $type ) {
+        $terms = homepage_category_references( (array) $value );
+        return [ 'title' => [] === $terms ? __( 'Chưa chọn nguồn', 'aznet-theme' ) : implode( ', ', array_map( static fn( \WP_Term $term ): string => $term->name, $terms ) ), 'edit' => '', 'status' => [] === $terms ? 'UNMAPPED' : 'READY' ];
+    }
+    return [ 'title' => __( 'Nguồn trình bày', 'aznet-theme' ), 'edit' => '', 'status' => 'READY' ];
+}
+
+/** Render preset-aware Homepage section cards. */
+function render_homepage_authoring_console( string $preset ): void {
+    if ( ! in_array( $preset, [ 'law-01', 'curtain-01' ], true ) ) { return; }
+    $preset_label = 'law-01' === $preset ? __( 'Luật 01', 'aznet-theme' ) : __( 'Rèm 01', 'aznet-theme' );
+    echo '<div class="aznet-theme-panel aznet-theme-homepage-authoring">';
+    echo '<h2>' . esc_html( sprintf( __( 'Mẫu đang chỉnh: %s', 'aznet-theme' ), $preset_label ) ) . '</h2>';
+    echo '<p class="description">' . esc_html__( 'Mỗi mục dùng nguồn WordPress của chính mẫu. Sửa nhanh chỉ thay đổi nguồn đã ánh xạ; Chỉnh đầy đủ mở trình soạn thảo WordPress.', 'aznet-theme' ) . '</p>';
+    echo '<div class="aznet-theme-homepage-section-grid">';
+    foreach ( homepage_authoring_sections( $preset ) as $slot ) {
+        $summary = homepage_authoring_source_summary( $preset, $slot );
+        echo '<article class="aznet-theme-homepage-section-card">';
+        echo '<div class="aznet-theme-homepage-section-card__heading"><h3>' . esc_html( homepage_authoring_label( $slot ) ) . '</h3><code class="aznet-theme-homepage-section-card__status">' . esc_html( (string) $summary['status'] ) . '</code></div>';
+        echo '<p><strong>' . esc_html__( 'Nguồn:', 'aznet-theme' ) . '</strong> ' . esc_html( (string) $summary['title'] ) . '</p>';
+        echo '<div class="aznet-theme-homepage-section-card__actions">';
+        echo '<button type="button" class="button aznet-theme-homepage-quick-edit" data-preset="' . esc_attr( $preset ) . '" data-slot="' . esc_attr( $slot ) . '">' . esc_html__( 'Sửa nhanh', 'aznet-theme' ) . '</button>';
+        if ( '' !== (string) $summary['edit'] ) { echo '<a class="button" href="' . esc_url( (string) $summary['edit'] ) . '">' . esc_html__( 'Chỉnh đầy đủ', 'aznet-theme' ) . '</a>'; }
+        echo '<a class="button" href="#aznet-theme-homepage-sources">' . esc_html__( 'Đổi nguồn', 'aznet-theme' ) . '</a>';
+        echo '</div></article>';
+    }
+    echo '</div></div>';
+}
+
 /** Render Homepage presentation preset and typed source mapping. */
 function render_homepage_settings(): void {
     $s = settings();
@@ -254,50 +335,48 @@ function render_homepage_settings(): void {
         echo '</div>';
     }
 
+    render_homepage_authoring_console( $active_preset );
+
     render_homepage_hero_library( $s );
 
-    $source_visible = [
-        'homepage_services_page', 'homepage_about_page', 'homepage_team_page',
-        'homepage_knowledge_terms', 'homepage_case_analysis_term', 'homepage_legal_news_term',
-        'homepage_faq_page', 'homepage_contact_page',
-    ];
-    if ( 'curtain-01' === (string) $s['homepage_preset'] ) {
-        $source_visible[] = 'homepage_proof_block';
-        $source_visible[] = 'homepage_curtain01_process_page';
-        $source_visible[] = 'homepage_curtain01_projects_term';
-    } else {
-        $source_visible[] = 'homepage_process_page';
+    $source_slots = 'law-01' === $active_preset
+        ? [ 'services', 'about', 'team', 'knowledge', 'case_analysis', 'legal_news', 'process', 'faq', 'contact' ]
+        : ( 'curtain-01' === $active_preset ? [ 'proof', 'about', 'knowledge', 'process', 'projects', 'contact' ] : [] );
+    $source_visible = [];
+    foreach ( $source_slots as $slot ) {
+        $source_key = homepage_source_key( $active_preset, $slot );
+        if ( is_string( $source_key ) && '' !== $source_key ) { $source_visible[] = $source_key; }
     }
+    echo '<details class="aznet-theme-homepage-diagnostics" id="aznet-theme-homepage-sources"><summary>' . esc_html__( 'Nguồn & chẩn đoán', 'aznet-theme' ) . '</summary>';
     echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="aznet-theme-panel">';
     echo '<input type="hidden" name="action" value="aznet_theme_save_settings">';
     wp_nonce_field( 'aznet_theme_save_settings' );
     render_hidden_settings( $source_visible );
     echo '<h2>' . esc_html__( 'Nguồn nội dung', 'aznet-theme' ) . '</h2>';
-    if ( 'curtain-01' === (string) $s['homepage_preset'] ) {
-        homepage_block_select( 'homepage_proof_block', 'Bằng chứng nhanh', (int) $s['homepage_proof_block'], $blocks );
-    }
-    homepage_page_select( 'homepage_services_page', 'Dịch vụ pháp lý', (int) $s['homepage_services_page'], $pages );
-    homepage_page_select( 'homepage_about_page', 'Giới thiệu', (int) $s['homepage_about_page'], $pages );
-    homepage_page_select( 'homepage_team_page', 'Đội ngũ', (int) $s['homepage_team_page'], $pages );
 
-    echo '<label class="aznet-theme-field"><span>' . esc_html__( 'Chủ đề kiến thức', 'aznet-theme' ) . '</span><select multiple size="8" name="aznet_theme_settings[homepage_knowledge_terms][]">';
-    foreach ( $categories as $category ) {
-        if ( ! $category instanceof \WP_Term ) { continue; }
-        $selected = in_array( (int) $category->term_id, (array) $s['homepage_knowledge_terms'], true ) ? ' selected' : '';
-        echo '<option value="' . esc_attr( (string) $category->term_id ) . '"' . $selected . '>' . esc_html( $category->name ) . '</option>';
+    foreach ( $source_slots as $slot ) {
+        $descriptor = homepage_source_descriptor( $active_preset, $slot );
+        $key = homepage_source_key( $active_preset, $slot );
+        if ( null === $descriptor || null === $key || '' === $key ) { continue; }
+        $type = (string) ( $descriptor['type'] ?? '' );
+        $label = homepage_authoring_label( $slot );
+        $value = homepage_source_value( $active_preset, $slot, $s );
+        if ( 'page' === $type ) {
+            homepage_page_select( $key, $label, (int) $value, $pages );
+        } elseif ( 'wp_block' === $type ) {
+            homepage_block_select( $key, $label, (int) $value, $blocks );
+        } elseif ( 'category' === $type ) {
+            homepage_category_select( $key, $label, (int) $value, $categories );
+        } elseif ( 'categories' === $type ) {
+            echo '<label class="aznet-theme-field"><span>' . esc_html( $label ) . '</span><select multiple size="8" name="aznet_theme_settings[' . esc_attr( $key ) . '][]">';
+            foreach ( $categories as $category ) {
+                if ( ! $category instanceof \WP_Term ) { continue; }
+                $selected = in_array( (int) $category->term_id, (array) $value, true ) ? ' selected' : '';
+                echo '<option value="' . esc_attr( (string) $category->term_id ) . '"' . $selected . '>' . esc_html( $category->name ) . '</option>';
+            }
+            echo '</select></label>';
+        }
     }
-    echo '</select></label>';
-
-    homepage_category_select( 'homepage_case_analysis_term', 'Phân tích vụ việc', (int) $s['homepage_case_analysis_term'], $categories );
-    homepage_category_select( 'homepage_legal_news_term', 'Tin pháp luật', (int) $s['homepage_legal_news_term'], $categories );
-    if ( 'curtain-01' === (string) $s['homepage_preset'] ) {
-        homepage_page_select( 'homepage_curtain01_process_page', 'Quy trình Rèm 01', (int) $s['homepage_curtain01_process_page'], $pages );
-        homepage_category_select( 'homepage_curtain01_projects_term', 'Công trình Rèm 01', (int) $s['homepage_curtain01_projects_term'], $categories );
-    } else {
-        homepage_page_select( 'homepage_process_page', 'Quy trình tư vấn', (int) $s['homepage_process_page'], $pages );
-    }
-    homepage_page_select( 'homepage_faq_page', 'Câu hỏi thường gặp', (int) $s['homepage_faq_page'], $pages );
-    homepage_page_select( 'homepage_contact_page', 'Liên hệ', (int) $s['homepage_contact_page'], $pages );
     submit_button( __( 'Lưu nguồn nội dung', 'aznet-theme' ) );
     echo '</form>';
 
@@ -306,4 +385,5 @@ function render_homepage_settings(): void {
         echo '<tr><th>' . esc_html( $slot ) . '</th><td><code>' . esc_html( $status ) . '</code></td></tr>';
     }
     echo '</tbody></table></div>';
+    echo '</details>';
 }
