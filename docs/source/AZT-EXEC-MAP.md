@@ -1,13 +1,15 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.79
+**Version:** v0.80
 **Status:** Working Execution Map / derived  
-**Date:** 23/09/2026
+**Date:** 24/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** exact current implementation is `f84d45a58261ec41d9b0c11a5e02a0873edb28ff`, Theme metadata `1.3.31`; exact-main V1 `35870034014`, X6 `35870034255` and dedicated Curtain 01 Project Showcase `35870033789` are SUCCESS. Current published GitHub Release remains `v1.3.23`; later canonical implementation and pilot-specific production deployment do not silently redefine the GitHub Release boundary. Repository technical verification/publication remain connector-independent under D-033.
+> **Last full exact-main technical checkpoint:** verified implementation is `f84d45a58261ec41d9b0c11a5e02a0873edb28ff`, Theme metadata `1.3.31`; exact-main V1 `35870034014`, X6 `35870034255` and dedicated Curtain 01 Project Showcase `35870033789` are SUCCESS. Current published GitHub Release remains `v1.3.23`; later canonical implementation and pilot-specific production deployment do not silently redefine the GitHub Release boundary. Repository technical verification/publication remain connector-independent under D-033.
+
+> **D-038 branch/source checkpoint:** approved Homepage Authoring System design is based on current `main@9b93fd76f7d3238734bec58e247bf98d61851618`. This source-only checkpoint does not promote later main commits to a fresh full V1/X6 certification and does not claim D-038 implementation PASS.
 
 > **Rèm 01 production checkpoint:** `remquocanh.vn` runs AZnet Theme `1.3.31` with owner-approved Process Rail and Project Showcase. WordPress owns Process Page #997 and Project Post #999 / Category #80; Theme owns only typed references, composition and presentation. Fresh production Lighthouse is Accessibility 100 / Best Practices 100 on mobile and desktop after corrective reconciliation of Curtain 01 CSS/JS to canonical main. Independent external pixel-level L4, dedicated Vietnamese font loaded-state proof and provider L5 remain separate/UNKNOWN.
 
@@ -609,3 +611,16 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - State: **v1.3.21 TECHNICAL PASS / PUBLICATION GATED / PRODUCTION DEPLOYMENT NOT CLAIMED**.
 - Current public GitHub Release remains `v1.3.20`.
 - Evidence: `docs/evidence/V1_3_21_ABOUT_PAGE_TECHNICAL_CLOSURE_20260920.md`.
+
+
+## 15.20 Homepage Authoring System — D-038 — 24/09/2026
+
+- Owner-approved architecture: one shared Homepage Authoring System with preset-isolated typed references.
+- WordPress remains owner of editorial Page/Post/Category/Media/`wp_block` content; Theme owns registry, references, authoring bridge and presentation.
+- Control Center Quick Edit is allowed only over the exact mapped WordPress object through public APIs with capability/nonce/type/identity validation.
+- Legacy generic mappings remain compatibility fallbacks; migration is explicit, reference-only and idempotent.
+- Shared Page/`wp_block` use is warned; separation is explicit and draft-first. Category-backed slots are remapped rather than cloned.
+- D-030 Hero ownership/draft-first rules remain intact and new mappings are scoped per preset.
+- Production implementation and QA are not claimed by this source decision.
+
+**Exact Next:** implement D-038 preset registry/resolver with RED -> GREEN isolation contracts; keep legacy mappings and production content untouched.

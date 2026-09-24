@@ -4,9 +4,9 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.14 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.15 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 19/09/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 24/09/2026 |
 
 | **Kiến trúc lõi: **Theme chỉ sở hữu presentation/configuration/reference cần thiết. Dữ liệu authoritative và business state ở lại owner. Boundary giữa hai bên là public/versioned provider contract hoặc adapter tối thiểu. |
 | --- |
@@ -334,3 +334,22 @@ Law01 provisioning must complete from resources shipped with the Theme package p
 The exact final package must pass a zero-plugin standalone path before Core Ready/publication: install -> activate -> setup -> provision -> representative runtime/browser/a11y -> update/theme-switch continuity. Optional L5 compatibility certification is additive and cannot substitute for Standalone Core PASS. Development/QA tools such as GitHub Actions, WP-CLI, Playwright and axe are allowed because they are not website runtime dependencies.
 
 A QA runner's inability to resolve/authenticate to a pilot site is recorded as `P4 PILOT ACCESS BLOCKED`; it is not evidence that the Theme requires a connector/plugin.
+
+
+# 17. Homepage Authoring System — D-038
+
+Homepage authoring uses one Theme-owned preset registry over WordPress-owned content. The authoring system is a presentation/configuration bridge, not a page builder or parallel editorial store.
+
+- Each Homepage preset owns an independent set of typed source references. Changing a Law 01 mapping must not mutate Curtain 01 mapping state, and vice versa.
+- The same WordPress object may be shared only by explicit mapping. Sharing is never inferred from a generic global key.
+- Theme settings store typed references and presentation state only. Editorial heading/body/excerpt/media, taxonomy content and synced-block content remain WordPress-owned.
+- Control Center MAY provide bounded Quick Edit over the exact mapped WordPress object through public WordPress APIs. Every mutation must validate capability, nonce, preset, slot, source type and exact mapped object before write.
+- Preset switching is content-mutation free. It must not create, rewrite, duplicate, delete, publish, reclassify or remap WordPress content.
+- Legacy generic Homepage mappings remain compatibility fallbacks only. They are not deleted or silently migrated in this implementation.
+- Reference migration is explicit, idempotent and copies references only. Existing scoped references must never be overwritten by a legacy fallback.
+- Shared Page or `wp_block` sources may be separated only by an explicit draft-first duplication action. Category-backed sources are separated by selecting another Category; Theme does not clone taxonomy semantics or post membership.
+- Missing or invalid sources fail soft. Slug/title/URL/Page-ID heuristics are forbidden as authoritative repair.
+- D-030 remains authoritative for Hero ownership: WordPress owns Core-block `wp_block` Hero content; Theme owns presentation variants and typed references. New preset mappings are scoped and legacy Hero migration remains explicit/draft-first.
+- Law 01 authoring completeness requires site-specific editorial copy visible on the Homepage to resolve from WordPress-native sources. Generic UI microcopy may remain Theme-owned and translatable.
+
+This decision does not widen RootProfile, ConvertFlow or WooCommerce integration contracts and does not authorize provider-private reads or domain mutation.

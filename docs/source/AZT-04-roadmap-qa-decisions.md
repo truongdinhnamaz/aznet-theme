@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.91
+**Version:** v0.92
 **Status:** Working Source  
-**Date:** 23/09/2026
+**Date:** 24/09/2026
 
 ## 1. Purpose
 
@@ -353,6 +353,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-035** | **AZnet Theme uses a full-bleed outer presentation shell by default: page/front-page/section backgrounds may span the viewport while readable content is constrained only by explicit inner containers. A first Hero must sit flush directly below the Header with no Theme-owned top gap, outer gutter, boxed shell, rounded outer edge or shadow unless a preset specification explicitly opts into one.** | **Accepted — owner approved 22/09/2026** |
 | **D-036** | **On desktop, AZnet Theme must not artificially wrap a heading onto an additional line when the heading can fit within its actual available container width. Presentation may not use narrow decorative width caps to force wrapping, and must not use `white-space: nowrap` to create overflow. Natural wrapping remains correct when the real container is insufficient; tablet/mobile may wrap responsively for readability.** | **Accepted — owner approved 22/09/2026** |
 | **D-037** | **Self-hosted Theme fonts used for Vietnamese content must explicitly prove Vietnamese glyph coverage for every shipped production weight. The canonical typography family must be consumed through Theme tokens/presets; presentation presets may not silently replace it with unrelated serif/system stacks. A font fix is not production PASS until the Vietnamese face is verified at runtime/browser level; repository PASS and live-site publish remain separate gates.** | **Accepted — owner approved 22/09/2026** |
+| **D-038** | **Homepage Authoring System uses preset-isolated typed references with WordPress-native editorial ownership. Control Center may provide bounded Quick Edit over the exact mapped WordPress object through public APIs, while preset switching remains mutation-free. Legacy generic mappings are compatibility-only; migration is explicit/reference-only/idempotent; shared source use is warned and source separation is explicit/draft-first. No proprietary Homepage content store or heuristic source repair is allowed.** | **Accepted — owner approved 24/09/2026** |
 
 ## 10A. v1.3 Client Delivery System
 
@@ -711,3 +712,15 @@ The product owner approved the refined About / Giới thiệu presentation and e
 Release PR #197 followed RED -> GREEN. RED head `d7d91627d325dc76433c9e693140fcd37192ee17` failed the intended Y5 `1.3.21` metadata assertion. Exact GREEN head `f7107f301485839d361fd00e9cb11c0837074434` completed 14/14 triggered workflows SUCCESS and merged to canonical `main@998a8dcf342b09824b197059524c50c013dba828`.
 
 Fresh exact-main V1 `35518082825` and X6 `35518082833` completed SUCCESS. X6 browser/axe passed 32/32; deterministic `aznet-theme-1.3.21.zip` has 158 files, 113 packaged PHP lint PASS and SHA-256 `da695f2b33aafc38172a9a412a3b1afd16263db3f03d305be4304eba877e09e2`. This closes `v1.3.21` technically only. Current GitHub Release remains `v1.3.20`; no `v1.3.21` publication or production deployment is claimed. Evidence: `docs/evidence/V1_3_21_ABOUT_PAGE_TECHNICAL_CLOSURE_20260920.md`.
+
+
+### D-038 Homepage Authoring System implementation gate — 24/09/2026
+
+Approved design: `docs/superpowers/specs/2026-09-24-homepage-authoring-system-design.md`.
+
+Implementation gate:
+- L0: this source decision must exist before production implementation.
+- L1: static ownership checks must prove no new Theme-owned editorial copy store, no provider-private access and no heuristic source repair.
+- L2: RED -> GREEN contracts must prove preset isolation, legacy compatibility, explicit/idempotent reference migration, stale-target rejection and shared-source handling.
+- Law 01 authoring completion additionally requires an inventory proving no unclassified site-specific editorial copy remains hard-coded in the audited Homepage template scope.
+- L3 runtime, L4 browser/a11y, release publication and production deployment remain distinct later gates and may not be inferred from L1/L2.
