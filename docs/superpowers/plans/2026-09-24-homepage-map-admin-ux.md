@@ -367,7 +367,10 @@ function homepage_effective_surface_map( ?array $settings = null ): array {
     $settings = is_array( $settings ) ? $settings : settings();
     if ( 'law-01' !== (string) ( $settings['homepage_preset'] ?? 'off' ) ) { return []; }
 
-    $variant = homepage_law01_variant();
+    $variant = (string) ( $settings['homepage_law01_variant'] ?? 'navy-gold' );
+    if ( ! in_array( $variant, [ 'navy-gold', 'burgundy-gold' ], true ) ) {
+        $variant = 'navy-gold';
+    }
     $surfaces = [];
 
     foreach ( homepage_law01_surface_specs( $variant ) as $spec ) {
@@ -507,11 +510,17 @@ aznet-homepage-faq
 aznet-homepage-contact
 ```
 
-Each template applies the model anchor to its outer section:
+Each template applies the model anchor and the shared surface key to its outer section:
 
 ```php
-<section id="<?php echo esc_attr( $anchor ); ?>" class="...">
+<section
+    id="<?php echo esc_attr( $anchor ); ?>"
+    data-aznet-homepage-surface="<?php echo esc_attr( (string) $surface['key'] ); ?>"
+    class="..."
+>
 ```
+
+The `data-aznet-homepage-surface` attribute is a Theme-owned presentation/testing marker only; it is not a routing or domain contract.
 
 - [ ] **Step 5: Extend the browser test to assert anchor/order parity**
 
