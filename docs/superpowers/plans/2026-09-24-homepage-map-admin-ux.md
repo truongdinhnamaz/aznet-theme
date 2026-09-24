@@ -391,7 +391,7 @@ Add fixture-level or source-level assertions that pin:
 - Profile remains present when only About or Team resolves;
 - null model removes optional surfaces.
 
-Where a real WordPress object is required, add those assertions in Task 6 runtime fixtures rather than mocking `WP_Post`.
+Where a real WordPress object is required, add those assertions in Task 7 runtime fixtures rather than mocking `WP_Post`.
 
 - [ ] **Step 7: Register the contract in the core verifier and run GREEN**
 
@@ -452,7 +452,13 @@ assert(! str_contains($composer, "[ 'hero', 'services', 'profile' ]"));
 assert(! str_contains($composer, "[ 'latest', 'topics', 'analysis', 'news', 'process', 'faq', 'final-cta' ]"));
 ```
 
-Run the contract and confirm RED on the current hard-coded composer.
+Run:
+
+```bash
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-contract.php
+```
+
+Expected: FAIL because the current composer still owns hard-coded Law 01 section arrays.
 
 - [ ] **Step 2: Render pre-content and post-content regions from the shared model**
 
@@ -605,7 +611,13 @@ assert(str_contains($source, 'homepage_effective_surface_map'));
 assert(! str_contains($source, "esc_html( (string) \$summary['status'] )"));
 ```
 
-Run RED before implementation.
+Run:
+
+```bash
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-control-center-contract.php
+```
+
+Expected: FAIL because the Homepage Map functions/copy do not exist yet.
 
 - [ ] **Step 2: Import the shared model into the admin module**
 
@@ -691,6 +703,37 @@ Do not show `Đổi nguồn` as a primary card action.
 For the Profile surface, render two subregions from `$surface['model']['about']` and `$surface['model']['team']`; do not split them into two top-level cards.
 
 For Services, render exactly `$surface['model']['items']` from the shared model.
+
+Use these primary actions in the map:
+
+| Surface | Primary authoring path |
+| --- | --- |
+| Hero | Render the existing bounded Hero simple form in the Hero card; button label **Sửa Hero**. Keep Hero variant/source library controls in Advanced. |
+| Dịch vụ | Parent and visible child Pages use `render_homepage_quick_edit_form('law-01', 'services', $id, 'Chỉnh nội dung')`. |
+| Giới thiệu & Đội ngũ | About uses slot `about`; Team uses slot `team`; each subregion gets its own **Chỉnh nội dung** disclosure. |
+| Bài viết | Link to `admin_url('edit.php')` with label **Quản lý bài viết**; do not invent a Theme post editor. |
+| Chủ đề | Each mapped term uses slot `knowledge` and the bounded category quick-edit form. |
+| Phân tích vụ việc | Use slot `case_analysis` with the bounded category quick-edit form when this surface is effective. |
+| Tin pháp luật | Use slot `legal_news` with the bounded category quick-edit form when this surface is effective. |
+| Quy trình | Use slot `process` with the Page quick-edit form. |
+| Câu hỏi thường gặp | Use slot `faq` with the Page quick-edit form. |
+| Liên hệ | Use slot `contact` with the Page quick-edit form. |
+
+Extend the existing helper without changing its current callers:
+
+```php
+function render_homepage_quick_edit_form(
+    string $preset,
+    string $slot,
+    int $source_id,
+    string $summary_label = ''
+): void {
+    $summary_label = '' !== $summary_label ? $summary_label : __( 'Sửa nhanh', 'aznet-theme' );
+    // Existing bounded form body remains unchanged.
+}
+```
+
+The map passes `__( 'Chỉnh nội dung', 'aznet-theme' )`; advanced/legacy callers may retain the default **Sửa nhanh** label.
 
 - [ ] **Step 5: Move existing preset/mapping/migration UI into one advanced disclosure**
 
@@ -819,7 +862,13 @@ assert(str_contains($homepage, 'Nguồn & cài đặt nâng cao'));
 echo "PASS: Homepage Map authoring return/diagnostic contract\n";
 ```
 
-Run it and confirm RED.
+Run:
+
+```bash
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-map-authoring-contract.php
+```
+
+Expected: FAIL because the return-anchor helper and advanced status wording are not implemented yet.
 
 - [ ] **Step 2: Add one slot-to-map anchor helper**
 
@@ -1027,9 +1076,16 @@ echo wp_json_encode(
 
 If reconciled 1.3.38 uses different normalized key names for the same accepted slots, change only those keys to the exact canonical names discovered in Task 1; do not introduce aliases or a second settings schema.
 
-- [ ] **Step 2: Run runtime RED/GREEN through the same WordPress 6.9 fixture harness used by Homepage/R5 workflows**
+- [ ] **Step 2: Run the runtime fixture through the existing WordPress 6.9 harness**
 
-Expected after implementation: all assertions pass; no direct plugin/provider storage is needed.
+After the workflow has installed WordPress and activated the exact candidate Theme, run:
+
+```bash
+wp eval-file "$GITHUB_WORKSPACE/tests/runtime/homepage-map-runtime.php" --path=/tmp/wp --allow-root | tee /tmp/homepage-map-runtime.json
+jq -e '.services == 6 and (.keys[0] == "hero") and (.keys[1] == "services")' /tmp/homepage-map-runtime.json
+```
+
+Expected: both commands exit 0; no direct plugin/provider storage is required.
 
 - [ ] **Step 3: Compare frontend DOM order to admin map order in Playwright**
 
@@ -1051,7 +1107,7 @@ if (JSON.stringify(adminLabels) !== JSON.stringify(publicKeys)) {
 }
 ```
 
-Add `data-aznet-homepage-surface="<key>"` to the frontend section wrapper only as a Theme-owned presentation/testing marker if needed; it is not a routing/domain contract.
+The frontend wrapper already carries `data-aznet-homepage-surface="<key>"` from Task 4. Treat it only as a Theme-owned presentation/testing marker; it is not a routing/domain contract.
 
 - [ ] **Step 4: Verify Services item parity**
 
