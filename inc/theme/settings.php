@@ -31,6 +31,26 @@ function settings_defaults(): array {
         'woo_product_preset'            => 'classic',
         'homepage_preset'               => 'off',
         'homepage_law01_variant'        => 'navy-gold',
+        'homepage_law01_sources_initialized' => false,
+        'homepage_curtain01_sources_initialized' => false,
+        'homepage_law01_hero_variant'   => '',
+        'homepage_law01_hero_block'     => 0,
+        'homepage_law01_hero_page'      => 0,
+        'homepage_law01_services_page'  => 0,
+        'homepage_law01_about_page'     => 0,
+        'homepage_law01_team_page'      => 0,
+        'homepage_law01_knowledge_terms' => [],
+        'homepage_law01_case_analysis_term' => 0,
+        'homepage_law01_legal_news_term' => 0,
+        'homepage_law01_process_page'   => 0,
+        'homepage_law01_faq_page'       => 0,
+        'homepage_law01_contact_page'   => 0,
+        'homepage_curtain01_hero_block' => 0,
+        'homepage_curtain01_proof_block' => 0,
+        'homepage_curtain01_about_page' => 0,
+        'homepage_curtain01_about_image' => 0,
+        'homepage_curtain01_knowledge_terms' => [],
+        'homepage_curtain01_contact_page' => 0,
         'homepage_hero_variant'          => 'split',
         'homepage_hero_block'            => 0,
         'homepage_proof_block'           => 0,
@@ -100,6 +120,10 @@ function normalize_settings( array $raw ): array {
         ? (string) $raw['homepage_hero_variant']
         : 'split';
 
+    $homepage_law01_hero_variant = isset( $raw['homepage_law01_hero_variant'] ) && in_array( $raw['homepage_law01_hero_variant'], [ 'split', 'centered', 'inverse', 'media-left' ], true )
+        ? (string) $raw['homepage_law01_hero_variant']
+        : '';
+
     $normalize_boolean = static function ( string $key, bool $default ) use ( $raw ): bool {
         if ( ! array_key_exists( $key, $raw ) ) {
             return $default;
@@ -157,6 +181,26 @@ function normalize_settings( array $raw ): array {
         'woo_product_preset'            => $woo_product_preset,
         'homepage_preset'               => $homepage_preset,
         'homepage_law01_variant'        => $homepage_law01_variant,
+        'homepage_law01_sources_initialized' => $normalize_boolean( 'homepage_law01_sources_initialized', false ),
+        'homepage_curtain01_sources_initialized' => $normalize_boolean( 'homepage_curtain01_sources_initialized', false ),
+        'homepage_law01_hero_variant'   => $homepage_law01_hero_variant,
+        'homepage_law01_hero_block'     => $normalize_id( $raw['homepage_law01_hero_block'] ?? 0 ),
+        'homepage_law01_hero_page'      => $normalize_id( $raw['homepage_law01_hero_page'] ?? 0 ),
+        'homepage_law01_services_page'  => $normalize_id( $raw['homepage_law01_services_page'] ?? 0 ),
+        'homepage_law01_about_page'     => $normalize_id( $raw['homepage_law01_about_page'] ?? 0 ),
+        'homepage_law01_team_page'      => $normalize_id( $raw['homepage_law01_team_page'] ?? 0 ),
+        'homepage_law01_knowledge_terms' => $normalize_ids( $raw['homepage_law01_knowledge_terms'] ?? [] ),
+        'homepage_law01_case_analysis_term' => $normalize_id( $raw['homepage_law01_case_analysis_term'] ?? 0 ),
+        'homepage_law01_legal_news_term' => $normalize_id( $raw['homepage_law01_legal_news_term'] ?? 0 ),
+        'homepage_law01_process_page'   => $normalize_id( $raw['homepage_law01_process_page'] ?? 0 ),
+        'homepage_law01_faq_page'       => $normalize_id( $raw['homepage_law01_faq_page'] ?? 0 ),
+        'homepage_law01_contact_page'   => $normalize_id( $raw['homepage_law01_contact_page'] ?? 0 ),
+        'homepage_curtain01_hero_block' => $normalize_id( $raw['homepage_curtain01_hero_block'] ?? 0 ),
+        'homepage_curtain01_proof_block' => $normalize_id( $raw['homepage_curtain01_proof_block'] ?? 0 ),
+        'homepage_curtain01_about_page' => $normalize_id( $raw['homepage_curtain01_about_page'] ?? 0 ),
+        'homepage_curtain01_about_image' => $normalize_id( $raw['homepage_curtain01_about_image'] ?? 0 ),
+        'homepage_curtain01_knowledge_terms' => $normalize_ids( $raw['homepage_curtain01_knowledge_terms'] ?? [] ),
+        'homepage_curtain01_contact_page' => $normalize_id( $raw['homepage_curtain01_contact_page'] ?? 0 ),
         'homepage_hero_variant'          => $homepage_hero_variant,
         'homepage_hero_block'            => $normalize_id( $raw['homepage_hero_block'] ?? 0 ),
         'homepage_proof_block'           => $normalize_id( $raw['homepage_proof_block'] ?? 0 ),
