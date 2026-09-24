@@ -159,7 +159,9 @@ function handle_homepage_hero_form_save(): void {
     if(''===$expected_hash||!hash_equals(homepage_hero_form_content_hash((string)$hero->post_content),$expected_hash)){wp_die(esc_html__('Hero đã thay đổi ở nơi khác. Hãy tải lại trang trước khi lưu.','aznet-theme'));}
     $model=homepage_hero_form_post_model();if((int)$model['image_id']>0&&!wp_attachment_is_image((int)$model['image_id'])){wp_die(esc_html__('Ảnh Hero không hợp lệ.','aznet-theme'));}
     $updated_content=homepage_hero_form_updated_content((string)$hero->post_content,$model);if(''===$updated_content){wp_die(esc_html__('Không thể cập nhật Hero bằng form đơn giản.','aznet-theme'));}
-    $result=wp_update_post(['ID'=>$hero->ID,'post_content'=>$updated_content],true);if(is_wp_error($result)){wp_die(esc_html($result->get_error_message()));}
+    $update=['ID'=>$hero->ID,'post_content'=>$updated_content];
+    if('draft'===$hero->post_status){if(!current_user_can('publish_posts')){wp_die(esc_html__('Bạn không có quyền xuất bản Hero lên website.','aznet-theme'));}$update['post_status']='publish';}
+    $result=wp_update_post($update,true);if(is_wp_error($result)){wp_die(esc_html($result->get_error_message()));}
     $variants=homepage_hero_library_variants();$requested=isset($_POST['homepage_hero_variant'])?sanitize_key(wp_unslash($_POST['homepage_hero_variant'])):'split';$theme_settings=settings();$theme_settings['homepage_law01_hero_variant']=isset($variants[$requested])?$requested:'split';set_theme_mod('aznet_theme_settings',normalize_settings($theme_settings));
     wp_safe_redirect(add_query_arg(['page'=>'aznet-theme','section'=>'homepage','hero_form'=>'saved'],admin_url('admin.php')));exit;
 }
