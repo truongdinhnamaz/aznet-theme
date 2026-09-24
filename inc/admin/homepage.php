@@ -416,7 +416,7 @@ function render_homepage_authoring_console( string $preset ): void {
     echo '<div class="aznet-theme-panel aznet-theme-homepage-authoring">';
     echo '<h2>' . esc_html( sprintf( __( 'Mẫu đang chỉnh: %s', 'aznet-theme' ), $preset_label ) ) . '</h2>';
     echo '<p class="description">' . esc_html__( 'Mỗi mục dùng nguồn WordPress của chính mẫu. Sửa nhanh chỉnh nội dung nguồn đã ánh xạ; Đổi nguồn chọn nguồn WordPress khác.', 'aznet-theme' ) . '</p>';
-    echo '<div class="aznet-theme-homepage-section-grid">';
+    echo '<div class="aznet-theme-homepage-section-list">';
     foreach ( homepage_authoring_sections( $preset ) as $slot ) {
         $summary = homepage_authoring_source_summary( $preset, $slot );
         echo '<article class="aznet-theme-homepage-section-card">';
