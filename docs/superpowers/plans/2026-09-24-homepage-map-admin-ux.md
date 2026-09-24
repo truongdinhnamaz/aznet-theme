@@ -576,6 +576,7 @@ git commit -m "refactor: drive Law 01 frontend from surface model"
 **Interfaces:**
 - Consumes: `\AZnet\Theme\homepage_effective_surface_map(): array`.
 - Produces:
+  - `homepage_map_active_preset_label(): string`
   - `render_homepage_map(array $surfaces): void`
   - `render_homepage_map_card(array $surface): void`
   - primary map section `#aznet-theme-homepage-map`
@@ -616,9 +617,30 @@ use function AZnet\Theme\homepage_effective_surface_map;
 
 Keep existing typed source/mapping helpers for the advanced disclosure.
 
-- [ ] **Step 3: Render the map before advanced settings**
+- [ ] **Step 3: Render the active preset summary and the map before advanced settings**
 
-Implement:
+Implement the preset label helper:
+
+```php
+function homepage_map_active_preset_label(): string {
+    $settings = settings();
+    $preset = (string) ( $settings['homepage_preset'] ?? 'off' );
+
+    if ( 'law-01' === $preset ) {
+        $variant = (string) ( $settings['homepage_law01_variant'] ?? 'navy-gold' );
+        $variant_label = 'burgundy-gold' === $variant ? 'Burgundy + Gold' : 'Navy + Gold';
+        return sprintf( __( 'Luật 01 · %s', 'aznet-theme' ), $variant_label );
+    }
+
+    if ( 'curtain-01' === $preset ) {
+        return __( 'Rèm 01', 'aznet-theme' );
+    }
+
+    return __( 'WordPress mặc định', 'aznet-theme' );
+}
+```
+
+Then render the map:
 
 ```php
 function render_homepage_map( array $surfaces ): void {
