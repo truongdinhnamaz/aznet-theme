@@ -170,6 +170,43 @@ Delivery candidate:
 
 This remains bounded L1/L2 + package integrity evidence. Full repository V1, disposable L3 WordPress runtime, L4 browser/visual and release gates remain separate.
 
+### Hero simple-form public handoff bug — 24/09/2026
+
+Production symptom reproduced from the user workflow: changing the Hero image in the simple form persisted the mapped `wp_block` content but the public Homepage continued showing the previous Hero image.
+
+Root cause:
+- the simple form can edit a mapped Hero candidate in `draft` state;
+- `handle_homepage_hero_form_save()` previously updated only `post_content` and preserved `draft`;
+- public `homepage_block_reference()` is intentionally publish-only;
+- therefore the frontend correctly ignored the edited draft and continued the legacy/fallback Hero.
+
+RED:
+- `bb32b57d3fcfab26c53c0c12bd7d7f47339cd92a` added the publish-handoff regression;
+- after correcting a test-string interpolation defect in `f6b5b89f5b4b3b5fe0f706406fa2444ddd90226d`, the regression failed on the missing explicit draft-state handling as expected.
+
+GREEN:
+- `eaa032e3ec3817fd9a67e2eae137b0bb072adf69` makes simple-form save publish the Hero when the mapped Hero is still a draft;
+- publishing requires `publish_posts`; already-published Hero blocks remain ordinary content updates;
+- public resolver remains publish-only.
+
+Regression hardening:
+- `e68f92033f0f0f7a4e6fa3cc49c27d76f4a3c583` makes the test formatting-agnostic and wires the regression into V1 verification.
+
+Fresh local verification:
+```text
+PASS: Law 01 Hero simple-form contract
+PASS: Hero simple form accepts relative links safely
+PASS: Hero simple form publishes draft before public handoff
+PASS: D-038 scoped Law 01 Hero migration contract
+PASS: Law 01 Hero backward compatibility contract
+PHP lint: 133 production PHP files, 0 syntax errors
+ZIP integrity: no errors
+```
+
+Delivery candidate:
+- AZnet Theme `1.3.34`
+- SHA-256 `0db7c15d74d4292ac0247e9a3cf3076cd9fe02d1090cb3e72cd358b8bc2f6678`
+
 ## BLOCKED / UNKNOWN
 
 ### GitHub Actions execution
