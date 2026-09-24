@@ -2,7 +2,7 @@
 /** Law 01 Knowledge topics. */
 namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-$terms = homepage_category_references( (array) setting( 'homepage_knowledge_terms', [] ) );
+$terms = homepage_category_references( (array) homepage_source_value( 'law-01', 'knowledge' ) );
 if ( [] === $terms ) { return; }
 ?>
 <section class="aznet-theme-law01-section aznet-theme-law01-topics" aria-labelledby="aznet-law01-topics-title"><div class="aznet-theme-law01-container">

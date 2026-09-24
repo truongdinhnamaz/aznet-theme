@@ -2,7 +2,7 @@
 /** Law 01 Services. */
 namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-$parent = homepage_page_reference( (int) setting( 'homepage_services_page', 0 ) );
+$parent = homepage_page_reference( (int) homepage_source_value( 'law-01', 'services' ) );
 if ( ! $parent instanceof \WP_Post ) { return; }
 $items = homepage_direct_published_children( (int) $parent->ID, 6 );
 if ( [] === $items ) { return; }

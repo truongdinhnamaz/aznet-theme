@@ -3,8 +3,8 @@
 namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-$hero_block = homepage_block_reference( (int) setting( 'homepage_hero_block', 0 ) );
-$hero_variant = (string) setting( 'homepage_hero_variant', 'split' );
+$hero_block = homepage_block_reference( (int) homepage_source_value( 'law-01', 'hero' ) );
+$hero_variant = (string) homepage_source_value( 'law-01', 'hero_variant' );
 if ( ! in_array( $hero_variant, [ 'split', 'centered', 'inverse', 'media-left' ], true ) ) {
     $hero_variant = 'split';
 }
@@ -26,7 +26,7 @@ $body_html = '';
 $image = '';
 
 if ( '' === $hero_block_html ) {
-    $hero = homepage_page_reference( (int) setting( 'homepage_hero_page', 0 ) );
+    $hero = homepage_page_reference( (int) homepage_source_value( 'law-01', 'hero_page' ) );
 
     if ( $hero instanceof \WP_Post ) {
         $title = trim( (string) get_the_title( $hero ) );
@@ -49,8 +49,8 @@ if ( '' === $hero_block_html ) {
     }
 }
 
-$contact = homepage_page_reference( (int) setting( 'homepage_contact_page', 0 ) );
-$services = homepage_page_reference( (int) setting( 'homepage_services_page', 0 ) );
+$contact = homepage_page_reference( (int) homepage_source_value( 'law-01', 'contact' ) );
+$services = homepage_page_reference( (int) homepage_source_value( 'law-01', 'services' ) );
 if ( '' === $hero_block_html && '' === $title ) { return; }
 
 $trust_items = [];

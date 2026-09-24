@@ -2,7 +2,7 @@
 /** Law 01 final contact handoff. */
 namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-$page = homepage_page_reference( (int) setting( 'homepage_contact_page', 0 ) );
+$page = homepage_page_reference( (int) homepage_source_value( 'law-01', 'contact' ) );
 $model = function_exists( __NAMESPACE__ . '\\contact_surface_model' ) ? contact_surface_model() : null;
 $phone = '';
 if ( is_array( $model ) ) {
