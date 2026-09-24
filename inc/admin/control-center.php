@@ -8,7 +8,7 @@ use function AZnet\Theme\Integrations\WooCommerce\available as woo_available;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 function control_center_section(): string {
-    $allowed = [ 'overview', 'design', 'header', 'footer', 'homepage', 'provisioning', 'commerce', 'system-health' ];
+    $allowed = [ 'overview', 'design', 'header', 'footer', 'homepage', 'hero-library', 'provisioning', 'commerce', 'system-health' ];
     $value = isset( $_GET['section'] ) ? sanitize_key( wp_unslash( $_GET['section'] ) ) : 'overview';
     if ( 'commerce' === $value && ! woo_available() ) { return 'overview'; }
     return in_array( $value, $allowed, true ) ? $value : 'overview';
@@ -162,6 +162,8 @@ function render_control_center(): void {
         submit_button( 'Đặt lại', 'delete', 'submit', false ); echo '</form></div>';
     } elseif ( 'homepage' === $section ) {
         render_homepage_settings();
+    } elseif ( 'hero-library' === $section ) {
+        render_homepage_hero_library_screen();
     } elseif ( 'provisioning' === $section ) {
         render_provisioning_wizard();
     } elseif ( 'system-health' === $section ) {
