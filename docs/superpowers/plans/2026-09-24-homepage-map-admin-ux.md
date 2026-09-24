@@ -903,18 +903,92 @@ git commit -m "feat: preserve Homepage Map authoring context"
 
 - [ ] **Step 1: Create a real WordPress runtime fixture test**
 
-`tests/runtime/homepage-map-runtime.php` must seed:
-- static Front Page;
-- published Hero fallback plus a draft synced Hero candidate;
-- Services parent with 8 published children and known `menu_order`;
-- About Page;
-- Team Page;
-- mapped knowledge categories/posts;
-- one optional section with no renderable content.
-
-Assertions:
+Create `tests/runtime/homepage-map-runtime.php` as a `wp eval-file` fixture/assertion script:
 
 ```php
+<?php
+declare(strict_types=1);
+
+if ( ! defined( 'ABSPATH' ) ) { exit( 1 ); }
+
+$insert_page = static function ( string $title, int $parent = 0, string $excerpt = '', string $content = '' ): int {
+    $id = wp_insert_post(
+        [
+            'post_type'    => 'page',
+            'post_status'  => 'publish',
+            'post_title'   => $title,
+            'post_parent'  => $parent,
+            'post_excerpt' => $excerpt,
+            'post_content' => $content,
+        ],
+        true
+    );
+    if ( is_wp_error( $id ) ) { throw new RuntimeException( $id->get_error_message() ); }
+    return (int) $id;
+};
+
+$front_id = $insert_page( 'Homepage Map Front', 0, 'Fallback Hero excerpt', '<p>Fallback Hero body</p>' );
+update_option( 'show_on_front', 'page' );
+update_option( 'page_on_front', $front_id );
+
+$services_id = $insert_page( 'Dịch vụ', 0, 'Dịch vụ cho cá nhân và doanh nghiệp' );
+for ( $i = 1; $i <= 8; $i++ ) {
+    $child_id = $insert_page( 'Dịch vụ ' . $i, $services_id, 'Mô tả dịch vụ ' . $i );
+    wp_update_post( [ 'ID' => $child_id, 'menu_order' => $i ] );
+}
+
+$about_id = $insert_page( 'Giới thiệu', 0, 'Giới thiệu văn phòng' );
+$team_id = $insert_page( 'Đội ngũ', 0, 'Đội ngũ tư vấn' );
+$contact_id = $insert_page( 'Liên hệ', 0, 'Thông tin liên hệ' );
+$faq_id = $insert_page( 'Câu hỏi thường gặp', 0, '', '' );
+
+$term = wp_insert_term( 'Kiến thức pháp luật', 'category' );
+if ( is_wp_error( $term ) ) { throw new RuntimeException( $term->get_error_message() ); }
+$term_id = (int) $term['term_id'];
+
+for ( $i = 1; $i <= 3; $i++ ) {
+    $post_id = wp_insert_post(
+        [
+            'post_type' => 'post',
+            'post_status' => 'publish',
+            'post_title' => 'Bài viết ' . $i,
+            'post_content' => '<p>Nội dung bài viết</p>',
+        ],
+        true
+    );
+    if ( is_wp_error( $post_id ) ) { throw new RuntimeException( $post_id->get_error_message() ); }
+    wp_set_post_categories( (int) $post_id, [ $term_id ] );
+}
+
+$draft_hero_id = wp_insert_post(
+    [
+        'post_type' => 'wp_block',
+        'post_status' => 'draft',
+        'post_title' => 'Hero draft candidate',
+        'post_content' => '<!-- wp:heading {"level":1} --><h1>Draft Hero must not be public</h1><!-- /wp:heading -->',
+    ],
+    true
+);
+if ( is_wp_error( $draft_hero_id ) ) { throw new RuntimeException( $draft_hero_id->get_error_message() ); }
+
+set_theme_mod(
+    'aznet_theme_settings',
+    \AZnet\Theme\normalize_settings(
+        [
+            'schema_version' => 3,
+            'homepage_preset' => 'law-01',
+            'homepage_law01_variant' => 'burgundy-gold',
+            'homepage_hero_block' => (int) $draft_hero_id,
+            'homepage_services_page' => $services_id,
+            'homepage_about_page' => $about_id,
+            'homepage_team_page' => $team_id,
+            'homepage_knowledge_terms' => [ $term_id ],
+            'homepage_faq_page' => $faq_id,
+            'homepage_contact_page' => $contact_id,
+        ]
+    )
+);
+
 $surfaces = \AZnet\Theme\homepage_effective_surface_map();
 $keys = array_column( $surfaces, 'key' );
 
@@ -925,9 +999,20 @@ assert( ! in_array( 'faq', $keys, true ), 'Empty FAQ must not enter the effectiv
 
 $services = current( array_filter( $surfaces, static fn( array $surface ): bool => 'services' === $surface['key'] ) );
 assert( 6 === count( $services['model']['items'] ) );
+
+$hero = current( array_filter( $surfaces, static fn( array $surface ): bool => 'hero' === $surface['key'] ) );
+assert( (int) $draft_hero_id !== (int) ( $hero['source']['id'] ?? 0 ), 'Draft Hero candidate must not become the effective public Hero.' );
+
+echo wp_json_encode(
+    [
+        'keys' => $keys,
+        'services' => count( $services['model']['items'] ),
+    ],
+    JSON_PRETTY_PRINT
+) . PHP_EOL;
 ```
 
-Also assert the Hero model source ID is the public fallback/effective source, not the draft candidate.
+If reconciled 1.3.38 uses different normalized key names for the same accepted slots, change only those keys to the exact canonical names discovered in Task 1; do not introduce aliases or a second settings schema.
 
 - [ ] **Step 2: Run runtime RED/GREEN through the same WordPress 6.9 fixture harness used by Homepage/R5 workflows**
 
