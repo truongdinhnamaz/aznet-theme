@@ -265,6 +265,46 @@ function homepage_authoring_source_summary( string $preset, string $slot ): arra
     return [ 'title' => __( 'Nguồn trình bày', 'aznet-theme' ), 'edit' => '', 'status' => 'READY' ];
 }
 
+/** Render bounded Quick Edit fields for one concrete WordPress source. */
+function render_homepage_quick_edit_form( string $preset, string $slot, int $source_id ): void {
+    $descriptor = homepage_source_descriptor( $preset, $slot );
+    if ( null === $descriptor || $source_id <= 0 ) { return; }
+    $type = (string) ( $descriptor['type'] ?? '' );
+    $title = '';
+    $excerpt = '';
+    $image_id = 0;
+    if ( 'page' === $type ) {
+        $post = get_post( $source_id );
+        if ( ! $post instanceof \WP_Post || 'page' !== $post->post_type ) { return; }
+        $title = (string) $post->post_title;
+        $excerpt = (string) $post->post_excerpt;
+        $image_id = (int) get_post_thumbnail_id( $source_id );
+    } elseif ( in_array( $type, [ 'category', 'categories' ], true ) ) {
+        $term = homepage_category_reference( $source_id );
+        if ( ! $term instanceof \WP_Term ) { return; }
+        $title = (string) $term->name;
+        $excerpt = (string) $term->description;
+    } else { return; }
+
+    echo '<details class="aznet-theme-homepage-quick-edit-panel"><summary class="button">' . esc_html__( 'Sửa nhanh', 'aznet-theme' ) . '</summary>';
+    echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+    echo '<input type="hidden" name="action" value="aznet_theme_quick_edit_homepage_source">';
+    echo '<input type="hidden" name="homepage_preset_scope" value="' . esc_attr( $preset ) . '">';
+    echo '<input type="hidden" name="homepage_source_slot" value="' . esc_attr( $slot ) . '">';
+    echo '<input type="hidden" name="homepage_source_id" value="' . esc_attr( (string) $source_id ) . '">';
+    wp_nonce_field( 'aznet_theme_quick_edit_homepage_source' );
+    echo '<label><span>' . esc_html__( 'Tiêu đề', 'aznet-theme' ) . '</span><input class="widefat" type="text" name="homepage_source_title" value="' . esc_attr( $title ) . '"></label>';
+    echo '<label><span>' . esc_html__( 'Mô tả ngắn', 'aznet-theme' ) . '</span><textarea class="widefat" rows="3" name="homepage_source_excerpt">' . esc_textarea( $excerpt ) . '</textarea></label>';
+    if ( 'page' === $type ) {
+        echo '<input type="hidden" name="homepage_featured_image_id" value="' . esc_attr( (string) $image_id ) . '">';
+        echo '<div class="aznet-theme-homepage-media-preview">';
+        if ( $image_id > 0 ) { echo wp_kses_post( wp_get_attachment_image( $image_id, 'thumbnail' ) ); }
+        echo '</div><p><button type="button" class="button aznet-theme-homepage-media-select">' . esc_html__( 'Thay ảnh', 'aznet-theme' ) . '</button> <button type="button" class="button-link-delete aznet-theme-homepage-media-clear">' . esc_html__( 'Bỏ ảnh', 'aznet-theme' ) . '</button></p>';
+    }
+    submit_button( __( 'Lưu sửa nhanh', 'aznet-theme' ), 'primary', 'submit', false );
+    echo '</form></details>';
+}
+
 /** Render preset-aware Homepage section cards. */
 function render_homepage_authoring_console( string $preset ): void {
     if ( ! in_array( $preset, [ 'law-01', 'curtain-01' ], true ) ) { return; }
@@ -285,14 +325,36 @@ function render_homepage_authoring_console( string $preset ): void {
             echo '<div class="notice notice-warning inline aznet-theme-homepage-shared-source"><p>' . esc_html( sprintf( __( 'Nguồn này hiện cũng được mẫu %s sử dụng. Sửa nội dung nguồn sẽ ảnh hưởng cả hai mẫu.', 'aznet-theme' ), $other_label ) ) . '</p></div>';
         }
         echo '<div class="aznet-theme-homepage-section-card__actions">';
-        echo '<button type="button" class="button aznet-theme-homepage-quick-edit" data-preset="' . esc_attr( $preset ) . '" data-slot="' . esc_attr( $slot ) . '">' . esc_html__( 'Sửa nhanh', 'aznet-theme' ) . '</button>';
+        $descriptor = homepage_source_descriptor( $preset, $slot );
+        $source_type = is_array( $descriptor ) ? (string) ( $descriptor['type'] ?? '' ) : '';
+        $source_value = homepage_source_value( $preset, $slot );
+        if ( 'page' === $source_type || 'category' === $source_type ) {
+            render_homepage_quick_edit_form( $preset, $slot, (int) $source_value );
+        } elseif ( 'categories' === $source_type ) {
+            foreach ( (array) $source_value as $term_id ) { render_homepage_quick_edit_form( $preset, $slot, (int) $term_id ); }
+        }
         if ( '' !== (string) $summary['edit'] ) { echo '<a class="button" href="' . esc_url( (string) $summary['edit'] ) . '">' . esc_html__( 'Chỉnh đầy đủ', 'aznet-theme' ) . '</a>'; }
         echo '<a class="button" href="#aznet-theme-homepage-sources">' . esc_html__( 'Đổi nguồn', 'aznet-theme' ) . '</a>';
-        $descriptor = homepage_source_descriptor( $preset, $slot );
         if ( [] !== $shared_uses && is_array( $descriptor ) && in_array( (string) ( $descriptor['type'] ?? '' ), [ 'page', 'wp_block' ], true ) ) {
             echo '<span class="button disabled" aria-disabled="true" title="' . esc_attr__( 'Sẽ được kích hoạt ở bước tách nguồn an toàn.', 'aznet-theme' ) . '">' . esc_html__( 'Tạo nguồn riêng cho mẫu này', 'aznet-theme' ) . '</span>';
         }
-        echo '</div></article>';
+        echo '</div>';
+        if ( is_array( $descriptor ) && ! empty( $descriptor['children'] ) && 'page' === $source_type && (int) $source_value > 0 ) {
+            $children = homepage_direct_published_children( (int) $source_value, 'services' === $slot ? 6 : 4 );
+            if ( [] !== $children ) {
+                echo '<div class="aznet-theme-homepage-collection-items"><strong>' . esc_html__( 'Các mục đang hiển thị', 'aznet-theme' ) . '</strong>';
+                foreach ( $children as $child ) {
+                    if ( ! $child instanceof \WP_Post ) { continue; }
+                    echo '<div class="aznet-theme-homepage-collection-item"><span>' . esc_html( get_the_title( $child ) ) . '</span><div>';
+                    render_homepage_quick_edit_form( $preset, $slot, (int) $child->ID );
+                    $child_edit = get_edit_post_link( $child->ID, 'raw' );
+                    if ( is_string( $child_edit ) && '' !== $child_edit ) { echo '<a class="button button-small" href="' . esc_url( $child_edit ) . '">' . esc_html__( 'Chỉnh đầy đủ', 'aznet-theme' ) . '</a>'; }
+                    echo '</div></div>';
+                }
+                echo '</div>';
+            }
+        }
+        echo '</article>';
     }
     echo '</div></div>';
 }
