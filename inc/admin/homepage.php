@@ -443,7 +443,7 @@ function render_homepage_settings(): void {
 
     $source_slots = 'law-01' === $active_preset
         ? [ 'services', 'about', 'team', 'knowledge', 'case_analysis', 'legal_news', 'process', 'faq', 'contact' ]
-        : ( 'curtain-01' === $active_preset ? [ 'proof', 'about', 'knowledge', 'process', 'projects', 'contact' ] : [] );
+        : ( 'curtain-01' === $active_preset ? [ 'hero', 'proof', 'about', 'knowledge', 'process', 'projects', 'contact' ] : [] );
     $source_visible = [];
     foreach ( $source_slots as $slot ) {
         $source_key = homepage_source_key( $active_preset, $slot );
