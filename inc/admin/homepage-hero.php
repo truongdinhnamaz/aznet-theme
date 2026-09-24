@@ -358,7 +358,7 @@ function handle_homepage_hero_form_save(): void {
     $theme_settings = settings();
     $theme_settings['homepage_law01_hero_variant'] = isset( $variants[ $requested ] ) ? $requested : 'split';
     set_theme_mod( 'aznet_theme_settings', normalize_settings( $theme_settings ) );
-    wp_safe_redirect( add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'homepage', 'hero_form' => 'saved' ], admin_url( 'admin.php' ) ) ); exit;
+    wp_safe_redirect( add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'hero-library', 'hero_form' => 'saved' ], admin_url( 'admin.php' ) ) ); exit;
 }
 
 /** Explicitly upgrade only the exact old default scaffold into role-managed form content. */
@@ -371,7 +371,7 @@ function handle_homepage_hero_form_upgrade(): void {
     if ( '' === $content ) { wp_die( esc_html__( 'Không thể khởi tạo cấu trúc Hero form.', 'aznet-theme' ) ); }
     $result = wp_update_post( [ 'ID' => $hero->ID, 'post_content' => $content ], true );
     if ( is_wp_error( $result ) ) { wp_die( esc_html( $result->get_error_message() ) ); }
-    wp_safe_redirect( add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'homepage', 'hero_form' => 'upgraded' ], admin_url( 'admin.php' ) ) ); exit;
+    wp_safe_redirect( add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'hero-library', 'hero_form' => 'upgraded' ], admin_url( 'admin.php' ) ) ); exit;
 }
 
 function handle_homepage_hero_apply(): void {
@@ -393,7 +393,7 @@ function handle_homepage_hero_apply(): void {
     }
     $theme_settings['homepage_law01_hero_variant']=$variant;
     set_theme_mod('aznet_theme_settings',normalize_settings($theme_settings));
-    wp_safe_redirect(add_query_arg(['page'=>'aznet-theme','section'=>'homepage','hero'=>$hero instanceof \WP_Post&&'draft'===$hero->post_status?'draft':'ready'],admin_url('admin.php'))); exit;
+    wp_safe_redirect(add_query_arg(['page'=>'aznet-theme','section'=>'hero-library','hero'=>$hero instanceof \WP_Post&&'draft'===$hero->post_status?'draft':'ready'],admin_url('admin.php'))); exit;
 }
 function homepage_legacy_page_to_hero_content( \WP_Post $page ): string {
     $title=trim((string)get_the_title($page)); $excerpt=trim((string)$page->post_excerpt);
@@ -417,5 +417,5 @@ function handle_homepage_hero_legacy_migration(): void {
     $effective_variant=(string)homepage_source_value('law-01','hero_variant',$theme_settings);
     $theme_settings['homepage_law01_hero_variant']=in_array($effective_variant,array_keys(homepage_hero_library_variants()),true)?$effective_variant:'split';
     set_theme_mod('aznet_theme_settings',normalize_settings($theme_settings));
-    wp_safe_redirect(add_query_arg(['page'=>'aznet-theme','section'=>'homepage','hero'=>'migrated-draft'],admin_url('admin.php'))); exit;
+    wp_safe_redirect(add_query_arg(['page'=>'aznet-theme','section'=>'hero-library','hero'=>'migrated-draft'],admin_url('admin.php'))); exit;
 }
