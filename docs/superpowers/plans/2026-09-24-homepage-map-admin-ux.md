@@ -358,6 +358,8 @@ For Latest/Topics/Analysis/News/Process/FAQ/Final CTA, reuse the exact existing 
 
 For Hero, preserve the current published synced Hero → legacy/fallback precedence. A draft candidate is diagnostic state and must not replace the effective public model.
 
+For Final CTA/contact, preserve the current mapped Contact Page plus accepted public provider enhancement rules. Provider absence must remove provider-only fields without removing a valid WordPress-owned contact fallback.
+
 - [ ] **Step 5: Implement `homepage_effective_surface_map()`**
 
 ```php
@@ -580,6 +582,8 @@ foreach ([
     'render_homepage_map_card',
     'Trang chủ đang hiển thị',
     'Chỉnh các phần theo đúng thứ tự đang hiển thị trên website.',
+    'Luật 01',
+    'Burgundy + Gold',
     'Nguồn & cài đặt nâng cao',
     'Xem trên trang chủ',
     'aznet-theme-homepage-map',
@@ -612,7 +616,8 @@ function render_homepage_map( array $surfaces ): void {
     echo '<section id="aznet-theme-homepage-map" class="aznet-theme-homepage-map">';
     echo '<div class="aznet-theme-homepage-map__intro">';
     echo '<div><h2>' . esc_html__( 'Trang chủ đang hiển thị', 'aznet-theme' ) . '</h2>';
-    echo '<p class="description">' . esc_html__( 'Chỉnh các phần theo đúng thứ tự đang hiển thị trên website.', 'aznet-theme' ) . '</p></div>';
+    echo '<p class="description">' . esc_html__( 'Chỉnh các phần theo đúng thứ tự đang hiển thị trên website.', 'aznet-theme' ) . '</p>';
+    echo '<p class="aznet-theme-homepage-map__preset">' . esc_html( homepage_map_active_preset_label() ) . '</p></div>';
     echo '<a class="button" href="' . esc_url( home_url( '/' ) ) . '" target="_blank" rel="noopener">' . esc_html__( 'Xem trang chủ', 'aznet-theme' ) . '</a>';
     echo '</div>';
 
@@ -635,6 +640,8 @@ Each card includes:
 - primary bounded edit action;
 - deep link `home_url('/#' . $surface['anchor'])`.
 
+For Latest Articles, show the bounded rule in human wording such as `3 bài mới nhất` plus exactly the selected titles from the model. For Topics, show exactly the ordered category names currently rendered.
+
 Do not show `Đổi nguồn` as a primary card action.
 
 For the Profile surface, render two subregions from `$surface['model']['about']` and `$surface['model']['team']`; do not split them into two top-level cards.
@@ -652,7 +659,15 @@ echo '<summary>' . esc_html__( 'Nguồn & cài đặt nâng cao', 'aznet-theme' 
 echo '</details>';
 ```
 
-Once initialization is complete, do not show the one-time migration panel outside this disclosure.
+Once initialization is complete, do not show a migration action again; inside the advanced disclosure render at most a compact read-only “Đã khởi tạo mapping riêng” note.
+
+If `homepage_preset` is `off` or unsupported, do not fabricate map cards. Render a primary native-state message:
+
+```text
+Trang chủ hiện đang dùng luồng WordPress mặc định. Chọn một mẫu trong Nguồn & cài đặt nâng cao để dùng Homepage Composer.
+```
+
+Keep the advanced disclosure available so the administrator can choose a supported preset.
 
 - [ ] **Step 6: Add scoped one-column map CSS**
 
@@ -693,7 +708,7 @@ if (await map.getByText('DRAFT', { exact: true }).count()) throw new Error('raw 
 if (await map.getByRole('link', { name: 'Đổi nguồn' }).count()) throw new Error('Đổi nguồn must remain advanced-only');
 ```
 
-Also assert Profile appears once as `Giới thiệu & Đội ngũ`.
+Also assert Profile appears once as `Giới thiệu & Đội ngũ`, the active preset summary is visible, and a separate fixture with `homepage_preset=off` shows the native-state explanation with zero `.aznet-theme-homepage-map__card` elements.
 
 - [ ] **Step 8: Extend R5 workflow triggers**
 
