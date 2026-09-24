@@ -1,15 +1,15 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.79
+**Version:** v0.80
 **Status:** Working Execution Map / derived  
-**Date:** 23/09/2026
+**Date:** 24/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** exact current implementation is `f84d45a58261ec41d9b0c11a5e02a0873edb28ff`, Theme metadata `1.3.31`; exact-main V1 `35870034014`, X6 `35870034255` and dedicated Curtain 01 Project Showcase `35870033789` are SUCCESS. Current published GitHub Release remains `v1.3.23`; later canonical implementation and pilot-specific production deployment do not silently redefine the GitHub Release boundary. Repository technical verification/publication remain connector-independent under D-033.
+> **Canonical-main checkpoint:** exact current implementation is `9b93fd76f7d3238734bec58e247bf98d61851618`, Theme metadata `1.3.31`; exact-main V1 `35888794704`, X6 `35888794683` and dedicated Curtain 01 Project Showcase `35888794974` are SUCCESS. Current published GitHub Release remains `v1.3.23`; later canonical implementation and pilot-specific production deployment do not silently redefine the GitHub Release boundary. Repository technical verification/publication remain connector-independent under D-033.
 
-> **Rèm 01 production checkpoint:** `remquocanh.vn` runs AZnet Theme `1.3.31` with owner-approved Process Rail and Project Showcase. WordPress owns Process Page #997 and Project Post #999 / Category #80; Theme owns only typed references, composition and presentation. Fresh production Lighthouse is Accessibility 100 / Best Practices 100 on mobile and desktop after corrective reconciliation of Curtain 01 CSS/JS to canonical main. Independent external pixel-level L4, dedicated Vietnamese font loaded-state proof and provider L5 remain separate/UNKNOWN.
+> **Rèm 01 production checkpoint:** `remquocanh.vn` runs AZnet Theme `1.3.31` with owner-approved Process Rail, Project Showcase and PR #266 Hero performance correction. WordPress still owns Hero block #991 / Media #669/#670/#671, Process Page #997 and Project Post #999 / Category #80; Theme owns typed references, composition, geometry and presentation attributes only. Fresh mobile Lighthouse after the Hero fix is Performance 86, LCP 4.2 s, CLS 0, TBT 0 ms, FCP 1.2 s and Speed Index 2.3 s (lab only; no CrUX field data). WPVibe retains `aznet-theme-wpvibe-backup` for immediate Theme-file rollback. Independent external pixel-level L4, dedicated Vietnamese font loaded-state proof and provider L5 remain separate/UNKNOWN.
 
 **Completed execution:** `PR #58 canonical integration -> D-027 closure -> P4 public/authenticated PASS -> P1 cleanup PASS -> P5 v1.1 publication/deployment PASS -> X1 -> X2 -> X3 -> X4 -> X5 -> X6 exact-final-head PASS -> PR #87 merge -> exact-main V1/X6 PASS -> owner-approved v1.2.0 publication/deployment PASS -> Y1-Y5 -> PR #98 -> v1.3.0 publication/deployment PASS -> corrective releases through v1.3.16 publication PASS -> D-032 expansion -> PR #193 premium Homepage refinement -> PR #194 v1.3.20 publication -> final Homepage approval -> PR #196 About presentation -> PR #197 v1.3.21 technical promotion -> PR #199 mapped Service Page landing presentation -> PR #200 v1.3.22 promotion -> exact-main V1/X6 PASS -> v1.3.22 publication PASS`. Current release boundary: `v1.3.22 TECHNICAL PASS / PUBLICATION PASS / PRODUCTION DEPLOYMENT BLOCKED_EXTERNAL_ACCESS`. -> PR #202 v1.3.23 repository-native promotion -> exact-main V1/X6 PASS -> v1.3.23 publication PASS
 
