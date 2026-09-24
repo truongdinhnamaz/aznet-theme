@@ -10,7 +10,7 @@ $intro = trim( (string) get_the_excerpt( $parent ) );
 ?>
 <section class="aznet-theme-law01-section aznet-theme-law01-services" aria-labelledby="aznet-law01-services-title">
 <div class="aznet-theme-law01-container">
-<div class="aznet-theme-law01-section-heading"><div><p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Dịch vụ nổi bật', 'aznet-theme' ); ?></p><h2 id="aznet-law01-services-title" class="aznet-theme-law01-services__heading"><?php esc_html_e( 'Các dịch vụ pháp lý dành cho bạn', 'aznet-theme' ); ?></h2></div><a class="aznet-theme-law01-text-link" href="<?php echo esc_url( get_permalink( $parent ) ); ?>"><?php esc_html_e( 'Xem tất cả dịch vụ', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a></div>
+<div class="aznet-theme-law01-section-heading"><div><p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Dịch vụ', 'aznet-theme' ); ?></p><h2 id="aznet-law01-services-title" class="aznet-theme-law01-services__heading"><?php echo esc_html( get_the_title( $parent ) ); ?></h2></div><a class="aznet-theme-law01-text-link" href="<?php echo esc_url( get_permalink( $parent ) ); ?>"><?php esc_html_e( 'Xem tất cả dịch vụ', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a></div>
 <?php if ( '' !== $intro ) : ?><p class="aznet-theme-law01-lede aznet-theme-law01-services__intro"><?php echo esc_html( $intro ); ?></p><?php endif; ?>
 <div class="aznet-theme-law01-grid aznet-theme-law01-grid--services" data-count="<?php echo esc_attr( (string) count( $items ) ); ?>">
 <?php foreach ( $items as $index => $item ) : if ( ! $item instanceof \WP_Post ) { continue; } ?>

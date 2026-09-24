@@ -45,7 +45,7 @@ if ( $faq_page instanceof \WP_Post ) {
 }
 
 $section_label = $has_team
-    ? ( $has_about ? __( 'Giới thiệu và đội ngũ', 'aznet-theme' ) : __( 'Đội ngũ luật sư', 'aznet-theme' ) )
+    ? ( $has_about ? __( 'Giới thiệu và đội ngũ', 'aznet-theme' ) : __( 'Đội ngũ', 'aznet-theme' ) )
     : __( 'Giới thiệu', 'aznet-theme' );
 
 $container_classes = 'aznet-theme-law01-container aznet-theme-law01-profile__container';
@@ -60,7 +60,7 @@ if ( ! $has_team ) {
     <?php if ( $about instanceof \WP_Post ) : ?>
     <div class="aznet-theme-law01-profile__about-grid">
         <div class="aznet-theme-law01-profile__about-copy aznet-theme-law01-editorial">
-            <p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Giới thiệu về văn phòng', 'aznet-theme' ); ?></p>
+            <p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Giới thiệu', 'aznet-theme' ); ?></p>
             <h2><?php echo esc_html( get_the_title( $about ) ); ?></h2>
             <?php if ( '' !== $about_summary ) : ?><p class="aznet-theme-law01-lede"><?php echo esc_html( $about_summary ); ?></p><?php endif; ?>
             <p><a class="aznet-theme-law01-button" href="<?php echo esc_url( get_permalink( $about ) ); ?>"><?php esc_html_e( 'Tìm hiểu thêm', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a></p>
@@ -83,7 +83,7 @@ if ( ! $has_team ) {
     <div class="aznet-theme-law01-profile__team-band aznet-theme-law01-team">
         <div class="aznet-theme-law01-section-heading">
             <div>
-                <p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Đội ngũ luật sư', 'aznet-theme' ); ?></p>
+                <p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Đội ngũ', 'aznet-theme' ); ?></p>
                 <h2><?php echo esc_html( get_the_title( $team ) ); ?></h2>
                 <?php if ( '' !== $team_summary ) : ?><p class="aznet-theme-law01-lede"><?php echo esc_html( $team_summary ); ?></p><?php endif; ?>
             </div>

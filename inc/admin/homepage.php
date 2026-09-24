@@ -132,12 +132,12 @@ function homepage_block_select( string $key, string $label, int $current, array 
  * @param array<string, mixed> $settings Normalized Theme presentation/reference settings.
  */
 function render_homepage_hero_library( array $settings ): void {
-    $hero_id = (int) ( $settings['homepage_hero_block'] ?? 0 );
+    $hero_id = (int) homepage_source_value( 'law-01', 'hero', $settings );
     $hero_block = homepage_block_reference( $hero_id );
     $hero_candidate = homepage_hero_candidate_reference( $hero_id );
     $hero_block_has_content = $hero_block instanceof \WP_Post && '' !== trim( (string) $hero_block->post_content );
-    $legacy_page = homepage_page_reference( (int) ( $settings['homepage_hero_page'] ?? 0 ) );
-    $current_variant = (string) ( $settings['homepage_hero_variant'] ?? 'split' );
+    $legacy_page = homepage_page_reference( (int) homepage_source_value( 'law-01', 'hero_page', $settings ) );
+    $current_variant = (string) homepage_source_value( 'law-01', 'hero_variant', $settings );
     $variants = homepage_hero_library_variants();
 
     echo '<div class="aznet-theme-panel aznet-theme-homepage-hero-editor">';
@@ -157,6 +157,12 @@ function render_homepage_hero_library( array $settings ): void {
     } elseif ( $legacy_page instanceof \WP_Post ) {
         echo '<div class="aznet-theme-homepage-hero-editor__status aznet-theme-homepage-hero-editor__status--warning"><strong>' . esc_html__( 'Nguồn Hero hiện tại:', 'aznet-theme' ) . '</strong> ' . esc_html__( 'Hero Page cũ', 'aznet-theme' ) . '</div>';
         echo '<p class="notice notice-warning inline aznet-theme-homepage-hero-editor__notice">' . esc_html__( 'Website vẫn đang dùng Page Hero cũ để tương thích. Chọn một mẫu sẽ tạo Hero WordPress ở trạng thái bản nháp; Page cũ tiếp tục hiển thị cho đến khi Hero mới được xuất bản và không bị xóa.', 'aznet-theme' ) . '</p>';
+        echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="aznet-theme-homepage-hero-migration">';
+        echo '<input type="hidden" name="action" value="aznet_theme_migrate_legacy_homepage_hero">';
+        echo '<input type="hidden" name="homepage_preset_scope" value="law-01">';
+        wp_nonce_field( 'aznet_theme_migrate_legacy_homepage_hero' );
+        submit_button( __( 'Nâng cấp Hero hiện tại', 'aznet-theme' ), 'secondary', 'submit', false );
+        echo '</form>';
     } else {
         echo '<div class="aznet-theme-homepage-hero-editor__status aznet-theme-homepage-hero-editor__status--warning"><strong>' . esc_html__( 'Nguồn Hero hiện tại:', 'aznet-theme' ) . '</strong> ' . esc_html__( 'Dữ liệu dự phòng', 'aznet-theme' ) . '</div>';
         echo '<p class="notice notice-warning inline aznet-theme-homepage-hero-editor__notice">' . esc_html__( 'Chưa có Hero WordPress riêng. Chọn một mẫu để tạo bản nháp Hero mà không cần tạo Page; website hiện tại chưa đổi cho đến khi Hero mới được xuất bản.', 'aznet-theme' ) . '</p>';
@@ -164,6 +170,7 @@ function render_homepage_hero_library( array $settings ): void {
 
     echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="aznet-theme-homepage-hero-library">';
     echo '<input type="hidden" name="action" value="aznet_theme_apply_homepage_hero">';
+    echo '<input type="hidden" name="homepage_preset_scope" value="law-01">';
     wp_nonce_field( 'aznet_theme_apply_homepage_hero' );
     echo '<fieldset class="aznet-theme-homepage-hero-library__fieldset">';
     echo '<legend class="screen-reader-text">' . esc_html__( 'Chọn mẫu Hero', 'aznet-theme' ) . '</legend>';
@@ -417,7 +424,9 @@ function render_homepage_settings(): void {
 
     render_homepage_authoring_console( $active_preset );
 
-    render_homepage_hero_library( $s );
+    if ( 'law-01' === $active_preset ) {
+        render_homepage_hero_library( $s );
+    }
 
     $source_slots = 'law-01' === $active_preset
         ? [ 'services', 'about', 'team', 'knowledge', 'case_analysis', 'legal_news', 'process', 'faq', 'contact' ]
