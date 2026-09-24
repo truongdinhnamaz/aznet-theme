@@ -207,6 +207,59 @@ Delivery candidate:
 - AZnet Theme `1.3.34`
 - SHA-256 `0db7c15d74d4292ac0247e9a3cf3076cd9fe02d1090cb3e72cd358b8bc2f6678`
 
+### Hero form placeholder-handoff regression — 24/09/2026
+
+User-reported production symptom after 1.3.34:
+- the newly selected Hero image became public successfully;
+- however the public Hero switched to the managed wp_block while that block still contained default placeholder copy (`Thông điệp mở đầu`, `Viết tiêu đề Hero của bạn tại đây`, etc.), replacing the previously correct public Hero content.
+
+Runtime evidence from `lstamduchn.vn`:
+- mapped managed Hero block: ID `273`;
+- selected new image: attachment `274`;
+- legacy/public Hero Page: ID `225`, title `Giải pháp pháp lý rõ ràng cho cá nhân và doanh nghiệp`;
+- Page 225 also contains the existing excerpt/body copy that previously rendered on the public Hero.
+
+Immediate live recovery:
+- Page 225 featured image was updated to attachment 274;
+- block 273 was returned to `draft`;
+- WordPress object cache was flushed;
+- recheck: block 273 = `draft`, Page 225 = `publish`, featured_media = `274`.
+This restores the previous public content path while preserving the newly selected image.
+
+Root cause:
+- 1.3.34 correctly fixed draft→publish handoff;
+- but the draft being published was originally created from the generic scaffold defaults instead of inheriting the current public Hero content.
+
+RED:
+- `47dced6632cd29ba63446e1f0bd384f3538e03bb` adds a regression requiring managed Hero drafts to seed from current public sources.
+- Observed local RED: `Missing Hero seed helper: homepage_hero_form_seed_model_from_public_sources`.
+
+GREEN:
+- `490b9793ef866830205c258884ac92d788c3d444`;
+- new drafts are created from the current public Hero model rather than placeholder copy;
+- an existing draft that still contains the untouched placeholder model displays seeded current public content in the simple form, while retaining its selected image;
+- seed priority: mapped legacy Hero Page → static front Page fallback;
+- site title, Page title, excerpt/body/tagline, CTA destinations and image are carried into the managed form where available;
+- no mutation of the legacy Page occurs as part of seeding.
+
+Fresh local verification:
+```text
+PASS: Law 01 Hero simple-form contract
+PASS: Hero simple form accepts relative links safely
+PASS: Hero simple form publishes draft before public handoff
+PASS: Hero simple form seeds from current public Hero
+PASS: D-038 scoped Law 01 Hero migration contract
+PASS: Law 01 Hero backward compatibility contract
+No syntax errors detected in inc/admin/homepage-hero.php
+No syntax errors detected in inc/admin/homepage.php
+```
+
+Delivery candidate:
+- AZnet Theme `1.3.35`
+- 133 production PHP files lint clean
+- ZIP integrity clean
+- SHA-256 `16811c50ba81ceb8ed0bec78cb09882c6d50f9d4ab196e092192e0d4eddd26fc`
+
 ## BLOCKED / UNKNOWN
 
 ### GitHub Actions execution
