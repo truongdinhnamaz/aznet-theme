@@ -142,6 +142,9 @@ function render_homepage_hero_simple_form( array $settings, ?\WP_Post $hero_cand
     if ( ! $hero_candidate instanceof \WP_Post ) { return false; }
     $edit_link = get_edit_post_link( $hero_candidate->ID, 'raw' ); $edit_link = is_string( $edit_link ) ? $edit_link : '';
     $model = homepage_hero_form_model_from_content( (string) $hero_candidate->post_content );
+    if ( is_array( $model ) && 'draft' === $hero_candidate->post_status && homepage_hero_form_is_default_model( $model ) ) {
+        $model = homepage_hero_form_seed_model_from_public_sources( (int) ( $model['image_id'] ?? 0 ) );
+    }
     if ( is_array( $model ) ) {
         $variants=homepage_hero_library_variants();$current_variant=(string)homepage_source_value('law-01','hero_variant',$settings);if(!isset($variants[$current_variant])){$current_variant='split';}$image_id=(int)($model['image_id']??0);
         echo '<div id="aznet-theme-homepage-hero-simple-form" class="aznet-theme-homepage-hero-simple-form"><h3>'.esc_html__('Sửa Hero đơn giản','aznet-theme').'</h3><p class="description">'.esc_html__('Sửa nội dung thường dùng ngay tại đây. Nội dung vẫn được lưu trong Hero WordPress, không tạo bản sao trong thiết lập Theme.','aznet-theme').'</p>';

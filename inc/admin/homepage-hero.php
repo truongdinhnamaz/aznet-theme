@@ -105,6 +105,49 @@ function homepage_hero_form_model_from_content( string $content ): ?array {
     ];
 }
 function homepage_hero_form_is_managed_content( string $content ): bool { return null !== homepage_hero_form_model_from_content( $content ); }
+function homepage_hero_form_seed_model_from_public_sources( int $preferred_image_id = 0 ): array {
+    $model = homepage_hero_form_default_model();
+    $theme_settings = settings();
+    $page = homepage_page_reference((int)homepage_source_value('law-01','hero_page',$theme_settings));
+    if ( ! $page instanceof \WP_Post ) {
+        $front_id = (int) get_option( 'page_on_front', 0 );
+        $page = $front_id > 0 ? homepage_page_reference( $front_id ) : null;
+    }
+
+    $site_title = trim( (string) get_bloginfo('name') );
+    $site_tagline = trim( (string) get_bloginfo('description') );
+    $page_title = $page instanceof \WP_Post ? trim( (string) get_the_title( $page ) ) : '';
+    $excerpt = $page instanceof \WP_Post ? trim( (string) get_the_excerpt( $page ) ) : '';
+    $body = $page instanceof \WP_Post ? trim( wp_strip_all_tags( (string) $page->post_content ) ) : '';
+
+    $model['eyebrow'] = __( 'Văn phòng luật sư', 'aznet-theme' );
+    $model['title'] = '' !== $site_title ? $site_title : $page_title;
+    $model['value'] = '' !== $page_title && 0 !== strcasecmp( $page_title, (string) $model['title'] ) ? $page_title : $excerpt;
+    $support = [];
+    foreach ( [ $excerpt, $body, $site_tagline ] as $line ) {
+        if ( '' !== $line && ! in_array( $line, $support, true ) ) { $support[] = $line; }
+    }
+    $model['lead'] = implode( ' — ', $support );
+
+    $contact = homepage_page_reference( (int) homepage_source_value( 'law-01', 'contact', $theme_settings ) );
+    $services = homepage_page_reference( (int) homepage_source_value( 'law-01', 'services', $theme_settings ) );
+    if ( $contact instanceof \WP_Post ) { $url = get_permalink( $contact ); if ( is_string( $url ) ) { $model['primary_url'] = $url; } }
+    if ( $services instanceof \WP_Post ) { $url = get_permalink( $services ); if ( is_string( $url ) ) { $model['secondary_url'] = $url; } }
+
+    if ( $preferred_image_id > 0 && wp_attachment_is_image( $preferred_image_id ) ) {
+        $model['image_id'] = $preferred_image_id;
+    } elseif ( $page instanceof \WP_Post ) {
+        $model['image_id'] = (int) get_post_thumbnail_id( $page->ID );
+    }
+    return $model;
+}
+function homepage_hero_form_is_default_model( array $model ): bool {
+    $defaults = homepage_hero_form_default_model();
+    foreach ( [ 'eyebrow', 'title', 'value', 'lead', 'primary_label', 'secondary_label', 'trust_1', 'trust_2', 'trust_3', 'trust_4' ] as $key ) {
+        if ( (string) ( $model[ $key ] ?? '' ) !== (string) ( $defaults[ $key ] ?? '' ) ) { return false; }
+    }
+    return true;
+}
 function homepage_hero_form_default_model(): array {
     return [
         'eyebrow'=>__( 'Thông điệp mở đầu','aznet-theme' ), 'title'=>__( 'Viết tiêu đề Hero của bạn tại đây','aznet-theme' ),
@@ -183,7 +226,7 @@ function handle_homepage_hero_apply(): void {
     $hero=homepage_hero_candidate_reference($hero_id);
     if(!$hero instanceof \WP_Post){
         if(!current_user_can('publish_posts')){wp_die(esc_html__('Bạn không có quyền tạo nội dung Hero WordPress.','aznet-theme'));}
-        $content=homepage_hero_scaffold_content();
+        $content=homepage_hero_form_managed_content(homepage_hero_form_seed_model_from_public_sources());
         if(''===$content){wp_die(esc_html__('Không thể khởi tạo nội dung Hero WordPress.','aznet-theme'));}
         $hero_id=wp_insert_post(['post_type'=>'wp_block','post_status'=>'draft','post_title'=>__('Hero trang chủ — Luật 01','aznet-theme'),'post_content'=>$content],true);
         if(is_wp_error($hero_id)||(int)$hero_id<=0){wp_die(esc_html__('Không thể tạo Hero WordPress.','aznet-theme'));}
