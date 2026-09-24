@@ -24,75 +24,86 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 function homepage_slot_statuses(): array {
     $s = settings();
     $statuses = [];
-
-    $hero_block_id = (int) ( $s['homepage_hero_block'] ?? 0 );
-    $legacy_hero_page_id = (int) ( $s['homepage_hero_page'] ?? 0 );
-    $hero_block = homepage_block_reference( $hero_block_id );
-    if ( $hero_block instanceof \WP_Post ) {
-        $statuses['hero'] = '' !== trim( (string) $hero_block->post_content ) ? 'READY' : 'EMPTY';
-    } elseif ( null !== homepage_hero_candidate_reference( $hero_block_id ) ) {
-        $statuses['hero'] = 'DRAFT';
-    } elseif ( null !== homepage_page_reference( $legacy_hero_page_id ) ) {
-        $statuses['hero'] = 'LEGACY_PAGE';
-    } else {
-        $statuses['hero'] = 'FALLBACK';
+    $preset = (string) ( $s['homepage_preset'] ?? 'off' );
+    if ( ! in_array( $preset, [ 'law-01', 'curtain-01' ], true ) ) {
+        return $statuses;
     }
 
-    $page_slots = [
-        'services' => 'homepage_services_page',
-        'about'    => 'homepage_about_page',
-        'team'     => 'homepage_team_page',
-        'process'  => 'curtain-01' === (string) ( $s['homepage_preset'] ?? 'off' )
-            ? 'homepage_curtain01_process_page'
-            : 'homepage_process_page',
-        'faq'      => 'homepage_faq_page',
-        'contact'  => 'homepage_contact_page',
-    ];
+    foreach ( homepage_authoring_sections( $preset ) as $slot ) {
+        $descriptor = homepage_source_descriptor( $preset, $slot );
+        if ( null === $descriptor ) { continue; }
+        $type = (string) ( $descriptor['type'] ?? '' );
+        $value = homepage_source_value( $preset, $slot, $s );
 
-    foreach ( $page_slots as $slot => $key ) {
-        $id = (int) ( $s[ $key ] ?? 0 );
-        if ( $id <= 0 ) {
-            $statuses[ $slot ] = 'UNMAPPED';
+        if ( 'wp_block' === $type ) {
+            $id = (int) $value;
+            if ( $id <= 0 ) {
+                if ( 'hero' === $slot && 'law-01' === $preset ) {
+                    $legacy_page_id = (int) homepage_source_value( 'law-01', 'hero_page', $s );
+                    $statuses[ $slot ] = null !== homepage_page_reference( $legacy_page_id ) ? 'LEGACY_PAGE' : 'FALLBACK';
+                } else {
+                    $statuses[ $slot ] = 'UNMAPPED';
+                }
+                continue;
+            }
+            $block = homepage_block_reference( $id );
+            if ( $block instanceof \WP_Post ) {
+                $statuses[ $slot ] = '' !== trim( (string) $block->post_content ) ? 'READY' : 'EMPTY';
+            } elseif ( null !== homepage_hero_candidate_reference( $id ) ) {
+                $statuses[ $slot ] = 'DRAFT';
+            } else {
+                $statuses[ $slot ] = 'INVALID';
+            }
             continue;
         }
-        if ( null === homepage_page_reference( $id ) ) {
-            $statuses[ $slot ] = 'INVALID';
+
+        if ( 'page' === $type ) {
+            $id = (int) $value;
+            if ( $id <= 0 ) {
+                $statuses[ $slot ] = 'UNMAPPED';
+                continue;
+            }
+            $page = homepage_page_reference( $id );
+            if ( ! $page instanceof \WP_Post ) {
+                $candidate = get_post( $id );
+                $statuses[ $slot ] = $candidate instanceof \WP_Post && 'page' === $candidate->post_type && 'draft' === $candidate->post_status ? 'DRAFT' : 'INVALID';
+                continue;
+            }
+            if ( 'services' === $slot && [] === homepage_direct_published_children( $id, 1 ) ) {
+                $statuses[ $slot ] = 'EMPTY';
+                continue;
+            }
+            $statuses[ $slot ] = 'READY';
             continue;
         }
-        if ( 'services' === $slot && [] === homepage_direct_published_children( $id, 1 ) ) {
-            $statuses[ $slot ] = 'EMPTY';
+
+        if ( 'category' === $type ) {
+            $id = (int) $value;
+            if ( $id <= 0 ) {
+                $statuses[ $slot ] = 'UNMAPPED';
+            } elseif ( null === homepage_category_reference( $id ) ) {
+                $statuses[ $slot ] = 'INVALID';
+            } else {
+                $statuses[ $slot ] = [] === homepage_latest_posts( [ $id ], 1 ) ? 'EMPTY' : 'READY';
+            }
             continue;
         }
-        $statuses[ $slot ] = 'READY';
-    }
 
-    $knowledge_ids = (array) ( $s['homepage_knowledge_terms'] ?? [] );
-    if ( [] === $knowledge_ids ) {
-        $statuses['knowledge'] = 'UNMAPPED';
-    } else {
-        $valid = homepage_category_references( $knowledge_ids );
-        $statuses['knowledge'] = [] === $valid ? 'INVALID' : ( [] === homepage_latest_posts( $knowledge_ids, 1 ) ? 'EMPTY' : 'READY' );
-    }
-
-    if ( 'curtain-01' === (string) ( $s['homepage_preset'] ?? 'off' ) ) {
-        $project_term_id = (int) ( $s['homepage_curtain01_projects_term'] ?? 0 );
-        if ( $project_term_id <= 0 ) {
-            $statuses['projects'] = 'UNMAPPED';
-        } elseif ( null === homepage_category_reference( $project_term_id ) ) {
-            $statuses['projects'] = 'INVALID';
-        } else {
-            $statuses['projects'] = [] === homepage_latest_posts( [ $project_term_id ], 1 ) ? 'EMPTY' : 'READY';
+        if ( 'categories' === $type ) {
+            $ids = (array) $value;
+            if ( [] === $ids ) {
+                $statuses[ $slot ] = 'UNMAPPED';
+            } else {
+                $valid = homepage_category_references( $ids );
+                $statuses[ $slot ] = [] === $valid ? 'INVALID' : ( [] === homepage_latest_posts( $ids, 1 ) ? 'EMPTY' : 'READY' );
+            }
         }
     }
 
-    foreach ( [ 'case_analysis' => 'homepage_case_analysis_term', 'legal_news' => 'homepage_legal_news_term' ] as $slot => $key ) {
-        $id = (int) ( $s[ $key ] ?? 0 );
-        if ( $id <= 0 ) {
-            $statuses[ $slot ] = 'UNMAPPED';
-        } elseif ( null === homepage_category_reference( $id ) ) {
-            $statuses[ $slot ] = 'INVALID';
-        } else {
-            $statuses[ $slot ] = [] === homepage_latest_posts( [ $id ], 1 ) ? 'EMPTY' : 'READY';
+    if ( 'curtain-01' === $preset ) {
+        $project_term_id = (int) homepage_source_value( $preset, 'projects', $s );
+        if ( $project_term_id > 0 && ! isset( $statuses['projects'] ) ) {
+            $statuses['projects'] = null === homepage_category_reference( $project_term_id ) ? 'INVALID' : ( [] === homepage_latest_posts( [ $project_term_id ], 1 ) ? 'EMPTY' : 'READY' );
         }
     }
 
@@ -401,6 +412,8 @@ function render_homepage_settings(): void {
     }
     submit_button( __( 'Lưu mẫu trang chủ', 'aznet-theme' ) );
     echo '</form>';
+
+    $active_preset = (string) ( $s['homepage_preset'] ?? 'off' );
 
     if ( in_array( (string) $s['homepage_preset'], [ 'law-01', 'curtain-01' ], true ) ) {
         $scope = (string) $s['homepage_preset'];
