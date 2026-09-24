@@ -77,13 +77,54 @@ Verified behavior:
 - renderer ordering remains published scoped Hero → mapped legacy Hero Page → historical Site/Front Page fallback.
 - `tests/offline/homepage-hero-scoped-contract.php@16cf24aabe7e9e610a1e1a26d51757f71782bfac` remains consistent with current production files.
 
+### Fresh executable reconstruction check — 24/09/2026
+
+Because GitHub Actions jobs are not receiving runners, an exact-main artifact was used as an executable base instead of treating CI failure as code failure.
+
+Base:
+- successful X6 artifact `x6-cross-surface-release-evidence` from exact-main run `35888794683`;
+- artifact checkout SHA: `9b93fd76f7d3238734bec58e247bf98d61851618`;
+- extracted Theme base: `x6/expected/aznet-theme`.
+
+A bounded D-038 core overlay was then linted and exercised locally. Fresh observed output:
+
+```text
+No syntax errors detected in inc/theme/settings.php
+No syntax errors detected in inc/theme/bootstrap.php
+No syntax errors detected in inc/theme/homepage-authoring.php
+No syntax errors detected in inc/admin/bootstrap.php
+No syntax errors detected in inc/admin/homepage-authoring.php
+No syntax errors detected in inc/admin/homepage-hero.php
+No syntax errors detected in inc/admin/homepage-migration.php
+
+PASS: D-038 preset-isolated Homepage source registry
+PASS: D-038 explicit reference-only preset migration
+PASS: Homepage Quick Edit validates featured image before Page mutation
+```
+
+Fresh contract commands:
+
+```bash
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-preset-isolation-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-preset-migration-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-quick-edit-validation-order-contract.php
+```
+
+Evidence limitation:
+- this is a bounded executable reconstruction, not a substitute for a complete exact-branch checkout;
+- exact byte identity was confirmed for the key settings/bootstrap/Hero/migration files already recorded through GitHub evidence;
+- two locally materialized core files differed from their GitHub blob size by one byte and are therefore **not** promoted as exact-byte branch evidence by this local run;
+- full `scripts/verify-v1-core.sh` is still not claimed because the local checkout is not a complete exact-branch reconstruction.
+
+The fresh local results strengthen the existing L1/L2 checkpoint but do not advance L3/L4 or release state.
+
 ## BLOCKED / UNKNOWN
 
 ### GitHub Actions execution
 
 GitHub Actions cannot currently supply fresh CI evidence.
 
-V1 Core PR CI run `35947060015` was attempted twice. Both jobs ended before any workflow step with no assigned runner (`steps=[]`, `runner_id=0`).
+V1 Core PR CI run `35947060015` was attempted twice. Both jobs ended before any workflow step with no assigned runner (`steps=[]`, `runner_id=0`). The later run `35954746280` was also rerun once and again completed before steps were allocated (`steps=null`).
 
 After the Hero contract commits, V1 run `35954418385` showed the same condition: jobs ended with no workflow steps. Adjacent PR workflows also exhibited pre-step failure.
 
