@@ -135,6 +135,41 @@ GREEN:
 
 This fix changes only Theme-owned source-selection presentation/configuration. It does not mutate WordPress content and does not widen any external provider contract.
 
+### Law 01 Hero simple-form authoring — 24/09/2026
+
+User-approved bounded authoring slice: common Hero edits must be possible from AZnet Theme Control Center without requiring Gutenberg expertise. WordPress `wp_block` remains the editorial owner; Theme settings still store only presentation/reference state.
+
+RED evidence:
+- `e483bba0c341c8470dedc26022155993a81f8fd5` — managed Hero role/form contract; first failure: missing `aznet-hero-eyebrow` metadata.
+- `0d26ccc76e60510b33974a4c801a2012c0be7b5c` — relative CTA-link contract; observed failure because HTML `type=url` rejected site-relative paths such as `/lien-he/`.
+
+GREEN:
+- `553ed75cd97ba35c59167f9597f8a01f4da78b44` — role-managed Law 01 Hero simple form.
+- Form fields: eyebrow, title, value line, lead, two CTA labels/links, Hero image, four trust lines, and presentation variant.
+- Content is written back to the mapped WordPress `wp_block`; no parallel Hero-copy store was added to Theme settings.
+- Save is scoped to `law-01`, validates exact mapped source, capability, nonce, image type, and a content hash to reject stale concurrent edits.
+- Only role-marked blocks are updated; unrelated advanced blocks are preserved.
+- Existing pre-form default scaffold is upgraded only by an explicit action and only when its exact known scaffold hash matches.
+- Customized legacy Hero content is left untouched and remains editable through WordPress.
+- CTA links accept absolute and site-relative URLs and are sanitized server-side.
+- The retained D-030 mutation assertion was narrowed to `handle_homepage_hero_apply()`; the new explicit form handler is allowed to update WordPress-owned Hero content.
+
+Fresh local verification against the delivery tree:
+```text
+PASS: Law 01 Hero simple-form contract
+PASS: Hero simple form accepts relative links safely
+PASS: D-038 scoped Law 01 Hero migration contract
+PASS: Law 01 Hero backward compatibility contract
+PHP lint: 133 production PHP files, 0 syntax errors
+ZIP integrity: no errors
+```
+
+Delivery candidate:
+- `AZnet Theme 1.3.33`
+- ZIP SHA-256: `8a1af2e764f268986fc970ff68515faf3e761cff060340a33c3636cc2de8d71c`
+
+This remains bounded L1/L2 + package integrity evidence. Full repository V1, disposable L3 WordPress runtime, L4 browser/visual and release gates remain separate.
+
 ## BLOCKED / UNKNOWN
 
 ### GitHub Actions execution
