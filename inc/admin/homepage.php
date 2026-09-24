@@ -416,10 +416,10 @@ function render_homepage_authoring_console( string $preset ): void {
     echo '<div class="aznet-theme-panel aznet-theme-homepage-authoring">';
     echo '<h2>' . esc_html( sprintf( __( 'Mẫu đang chỉnh: %s', 'aznet-theme' ), $preset_label ) ) . '</h2>';
     echo '<p class="description">' . esc_html__( 'Mỗi mục dùng nguồn WordPress của chính mẫu. Sửa nhanh chỉnh nội dung nguồn đã ánh xạ; Đổi nguồn chọn nguồn WordPress khác.', 'aznet-theme' ) . '</p>';
-    echo '<div class="aznet-theme-homepage-section-list">';
+    echo '<div class="aznet-theme-homepage-section-list" style="display:block;width:100%;max-width:none">';
     foreach ( homepage_authoring_sections( $preset ) as $slot ) {
         $summary = homepage_authoring_source_summary( $preset, $slot );
-        echo '<article class="aznet-theme-homepage-section-card">';
+        echo '<article class="aznet-theme-homepage-section-card" style="display:block;width:100%;max-width:none;min-width:0;box-sizing:border-box;float:none;clear:both">';
         $status_badge = homepage_authoring_status_badge( (string) $summary['status'] );
         echo '<div class="aznet-theme-homepage-section-card__heading"><h3>' . esc_html( homepage_authoring_label( $slot ) ) . '</h3><span class="aznet-theme-homepage-section-card__status aznet-theme-homepage-section-card__status--' . esc_attr( (string) $status_badge['class'] ) . '" style="display:inline-flex;align-items:center;gap:.35rem;padding:.28rem .55rem;border-radius:999px;font-size:12px;font-weight:600;line-height:1;' . esc_attr( (string) $status_badge['style'] ) . '"><span aria-hidden="true">' . esc_html( (string) $status_badge['icon'] ) . '</span>' . esc_html( (string) $status_badge['label'] ) . '</span></div>';
         echo '<p><strong>' . esc_html__( 'Nguồn:', 'aznet-theme' ) . '</strong> ' . esc_html( (string) $summary['title'] ) . '</p>';
