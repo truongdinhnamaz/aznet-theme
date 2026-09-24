@@ -335,8 +335,15 @@ function render_homepage_authoring_console( string $preset ): void {
         }
         if ( '' !== (string) $summary['edit'] ) { echo '<a class="button" href="' . esc_url( (string) $summary['edit'] ) . '">' . esc_html__( 'Chỉnh đầy đủ', 'aznet-theme' ) . '</a>'; }
         echo '<a class="button" href="#aznet-theme-homepage-sources">' . esc_html__( 'Đổi nguồn', 'aznet-theme' ) . '</a>';
-        if ( [] !== $shared_uses && is_array( $descriptor ) && in_array( (string) ( $descriptor['type'] ?? '' ), [ 'page', 'wp_block' ], true ) ) {
-            echo '<span class="button disabled" aria-disabled="true" title="' . esc_attr__( 'Sẽ được kích hoạt ở bước tách nguồn an toàn.', 'aznet-theme' ) . '">' . esc_html__( 'Tạo nguồn riêng cho mẫu này', 'aznet-theme' ) . '</span>';
+        if ( [] !== $shared_uses && is_array( $descriptor ) && in_array( (string) ( $descriptor['type'] ?? '' ), [ 'page', 'wp_block' ], true ) && (int) $source_value > 0 ) {
+            echo '<form class="aznet-theme-homepage-separate-source" method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+            echo '<input type="hidden" name="action" value="aznet_theme_duplicate_homepage_source">';
+            echo '<input type="hidden" name="homepage_preset_scope" value="' . esc_attr( $preset ) . '">';
+            echo '<input type="hidden" name="homepage_source_slot" value="' . esc_attr( $slot ) . '">';
+            echo '<input type="hidden" name="homepage_source_id" value="' . esc_attr( (string) (int) $source_value ) . '">';
+            wp_nonce_field( 'aznet_theme_duplicate_homepage_source' );
+            submit_button( __( 'Tạo nguồn riêng cho mẫu này', 'aznet-theme' ), 'secondary small', 'submit', false );
+            echo '</form>';
         }
         echo '</div>';
         if ( is_array( $descriptor ) && ! empty( $descriptor['children'] ) && 'page' === $source_type && (int) $source_value > 0 ) {
