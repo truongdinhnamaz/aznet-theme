@@ -3,7 +3,7 @@
 namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-$term_id = (int) setting( 'homepage_case_analysis_term', 0 );
+$term_id = (int) homepage_source_value( 'law-01', 'case_analysis' );
 $term = homepage_category_reference( $term_id );
 if ( ! $term instanceof \WP_Term ) { return; }
 

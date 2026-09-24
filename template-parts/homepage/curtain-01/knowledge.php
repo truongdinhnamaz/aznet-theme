@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$category_ids = (array) setting( 'homepage_knowledge_terms', [] );
+$category_ids = (array) homepage_source_value( 'curtain-01', 'knowledge' );
 $posts = homepage_latest_posts( $category_ids, 3, homepage_ledger_ids() );
 
 if ( [] === $posts ) {

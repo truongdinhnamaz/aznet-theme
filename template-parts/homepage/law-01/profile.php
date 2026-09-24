@@ -3,8 +3,8 @@
 namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-$about = homepage_page_reference( (int) setting( 'homepage_about_page', 0 ) );
-$team = homepage_page_reference( (int) setting( 'homepage_team_page', 0 ) );
+$about = homepage_page_reference( (int) homepage_source_value( 'law-01', 'about' ) );
+$team = homepage_page_reference( (int) homepage_source_value( 'law-01', 'team' ) );
 $has_about = $about instanceof \WP_Post;
 $has_team = $team instanceof \WP_Post;
 if ( ! $has_about && ! $has_team ) { return; }
@@ -15,9 +15,9 @@ $team_summary = $team instanceof \WP_Post ? trim( (string) get_the_excerpt( $tea
 $members = $has_team ? homepage_direct_published_children( (int) $team->ID, 4 ) : [];
 $has_members = [] !== $members;
 
-$services_page = homepage_page_reference( (int) setting( 'homepage_services_page', 0 ) );
-$process_page = homepage_page_reference( (int) setting( 'homepage_process_page', 0 ) );
-$faq_page = homepage_page_reference( (int) setting( 'homepage_faq_page', 0 ) );
+$services_page = homepage_page_reference( (int) homepage_source_value( 'law-01', 'services' ) );
+$process_page = homepage_page_reference( (int) homepage_source_value( 'law-01', 'process' ) );
+$faq_page = homepage_page_reference( (int) homepage_source_value( 'law-01', 'faq' ) );
 $service_count = $services_page instanceof \WP_Post
     ? count( homepage_direct_published_children( (int) $services_page->ID, 24 ) )
     : 0;
@@ -45,7 +45,7 @@ if ( $faq_page instanceof \WP_Post ) {
 }
 
 $section_label = $has_team
-    ? ( $has_about ? __( 'Giới thiệu và đội ngũ', 'aznet-theme' ) : __( 'Đội ngũ luật sư', 'aznet-theme' ) )
+    ? ( $has_about ? __( 'Giới thiệu và đội ngũ', 'aznet-theme' ) : __( 'Đội ngũ', 'aznet-theme' ) )
     : __( 'Giới thiệu', 'aznet-theme' );
 
 $container_classes = 'aznet-theme-law01-container aznet-theme-law01-profile__container';
@@ -60,7 +60,7 @@ if ( ! $has_team ) {
     <?php if ( $about instanceof \WP_Post ) : ?>
     <div class="aznet-theme-law01-profile__about-grid">
         <div class="aznet-theme-law01-profile__about-copy aznet-theme-law01-editorial">
-            <p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Giới thiệu về văn phòng', 'aznet-theme' ); ?></p>
+            <p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Giới thiệu', 'aznet-theme' ); ?></p>
             <h2><?php echo esc_html( get_the_title( $about ) ); ?></h2>
             <?php if ( '' !== $about_summary ) : ?><p class="aznet-theme-law01-lede"><?php echo esc_html( $about_summary ); ?></p><?php endif; ?>
             <p><a class="aznet-theme-law01-button" href="<?php echo esc_url( get_permalink( $about ) ); ?>"><?php esc_html_e( 'Tìm hiểu thêm', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a></p>
@@ -83,7 +83,7 @@ if ( ! $has_team ) {
     <div class="aznet-theme-law01-profile__team-band aznet-theme-law01-team">
         <div class="aznet-theme-law01-section-heading">
             <div>
-                <p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Đội ngũ luật sư', 'aznet-theme' ); ?></p>
+                <p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Đội ngũ', 'aznet-theme' ); ?></p>
                 <h2><?php echo esc_html( get_the_title( $team ) ); ?></h2>
                 <?php if ( '' !== $team_summary ) : ?><p class="aznet-theme-law01-lede"><?php echo esc_html( $team_summary ); ?></p><?php endif; ?>
             </div>

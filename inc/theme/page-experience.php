@@ -100,7 +100,7 @@ function page_breadcrumb_items( ?int $post_id = null ): array {
  */
 function contact_page_is_mapped( ?int $post_id = null ): bool {
     $post_id = $post_id ?: (int) get_queried_object_id();
-    $contact_id = (int) setting( 'homepage_contact_page', 0 );
+    $contact_id = (int) homepage_source_value( 'law-01', 'contact' );
 
     if ( $post_id <= 0 || $contact_id <= 0 || $post_id !== $contact_id ) {
         return false;
@@ -133,7 +133,7 @@ function contact_page_presentation_active( ?int $post_id = null ): bool {
  */
 function services_page_is_mapped( ?int $post_id = null ): bool {
     $post_id = $post_id ?: (int) get_queried_object_id();
-    $services_id = (int) setting( 'homepage_services_page', 0 );
+    $services_id = (int) homepage_source_value( 'law-01', 'services' );
 
     if ( $post_id <= 0 || $services_id <= 0 || $post_id !== $services_id ) {
         return false;
@@ -162,7 +162,7 @@ function services_page_presentation_active( ?int $post_id = null ): bool {
  * @return array<int, \WP_Post>
  */
 function services_page_children( int $limit = 12 ): array {
-    $services_id = (int) setting( 'homepage_services_page', 0 );
+    $services_id = (int) homepage_source_value( 'law-01', 'services' );
     if ( $services_id <= 0 ) {
         return [];
     }
@@ -195,7 +195,7 @@ function service_page_is_detail( ?int $post_id = null ): bool {
         return false;
     }
 
-    $services_id = (int) setting( 'homepage_services_page', 0 );
+    $services_id = (int) homepage_source_value( 'law-01', 'services' );
     if ( $services_id <= 0 || $post_id === $services_id ) {
         return false;
     }
@@ -212,7 +212,7 @@ function service_page_is_detail( ?int $post_id = null ): bool {
  * Return the explicitly mapped Contact Page URL for service CTA presentation.
  */
 function service_page_contact_url(): string {
-    $contact_id = (int) setting( 'homepage_contact_page', 0 );
+    $contact_id = (int) homepage_source_value( 'law-01', 'contact' );
     if ( $contact_id <= 0 ) {
         return '';
     }
@@ -238,7 +238,7 @@ function service_page_siblings( ?int $post_id = null, int $limit = 6 ): array {
         return [];
     }
 
-    $services_id = (int) setting( 'homepage_services_page', 0 );
+    $services_id = (int) homepage_source_value( 'law-01', 'services' );
     $limit = max( 1, min( 12, $limit ) );
     $posts = get_posts(
         [

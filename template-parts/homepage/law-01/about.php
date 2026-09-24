@@ -2,7 +2,7 @@
 /** Law 01 About. */
 namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-$page = homepage_page_reference( (int) setting( 'homepage_about_page', 0 ) );
+$page = homepage_page_reference( (int) homepage_source_value( 'law-01', 'about' ) );
 if ( ! $page instanceof \WP_Post ) { return; }
 $summary = trim( (string) get_the_excerpt( $page ) );
 $image = has_post_thumbnail( $page ) ? get_the_post_thumbnail( $page, 'large', [ 'class' => 'aznet-theme-law01-editorial__image' ] ) : '';
