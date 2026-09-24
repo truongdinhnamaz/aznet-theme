@@ -118,6 +118,23 @@ Evidence limitation:
 
 The fresh local results strengthen the existing L1/L2 checkpoint but do not advance L3/L4 or release state.
 
+### Curtain 01 Hero source-selector regression — 24/09/2026
+
+Bounded static review found a functional gap in the preset-aware Control Center: Curtain 01 rendered a Hero section card, but the preset-scoped source selector omitted the `hero` slot. The card's `Đổi nguồn` action therefore pointed to a diagnostics/source form that could not actually change `homepage_curtain01_hero_block`.
+
+RED:
+- commit `f3ba39178f3cd897a8e712c8bd244d798da3eb1c`;
+- new contract: `tests/offline/homepage-curtain01-hero-source-control-contract.php`;
+- observed failure: `FAIL: Curtain 01 Hero is not available in the preset-scoped source selector`.
+
+GREEN:
+- commit `3390f615d80c70299df78298970f176070540382`;
+- Curtain 01 source slots now include `hero` before `proof`;
+- the new regression is wired into `scripts/verify-v1-core.sh`;
+- bounded local execution observed: `PASS: Curtain 01 Hero has a preset-scoped source selector`.
+
+This fix changes only Theme-owned source-selection presentation/configuration. It does not mutate WordPress content and does not widen any external provider contract.
+
 ## BLOCKED / UNKNOWN
 
 ### GitHub Actions execution
