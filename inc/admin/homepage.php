@@ -234,6 +234,26 @@ function render_homepage_settings(): void {
     submit_button( __( 'Lưu mẫu trang chủ', 'aznet-theme' ) );
     echo '</form>';
 
+    if ( in_array( (string) $s['homepage_preset'], [ 'law-01', 'curtain-01' ], true ) ) {
+        $scope = (string) $s['homepage_preset'];
+        $marker_key = \AZnet\Theme\homepage_source_initialization_key( $scope );
+        $initialized = null !== $marker_key && ! empty( $s[ $marker_key ] );
+        echo '<div class="aznet-theme-panel aznet-theme-homepage-migration">';
+        echo '<h2>' . esc_html__( 'Tách cấu hình nội dung theo mẫu', 'aznet-theme' ) . '</h2>';
+        if ( $initialized ) {
+            echo '<p class="description">' . esc_html__( 'Đã tách mapping cho mẫu đang dùng.', 'aznet-theme' ) . '</p>';
+        } else {
+            echo '<p>' . esc_html__( 'Thao tác này chỉ sao chép các mapping nguồn hiện có sang phạm vi riêng của mẫu. Nội dung WordPress không bị sao chép, sửa hoặc xuất bản.', 'aznet-theme' ) . '</p>';
+            echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+            echo '<input type="hidden" name="action" value="aznet_theme_migrate_homepage_preset">';
+            echo '<input type="hidden" name="homepage_preset_scope" value="' . esc_attr( $scope ) . '">';
+            wp_nonce_field( 'aznet_theme_migrate_homepage_preset' );
+            submit_button( __( 'Khởi tạo mapping riêng cho mẫu này', 'aznet-theme' ), 'secondary', 'submit', false );
+            echo '</form>';
+        }
+        echo '</div>';
+    }
+
     render_homepage_hero_library( $s );
 
     $source_visible = [

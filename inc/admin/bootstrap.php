@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 require_once __DIR__ . '/control-center.php';
 require_once __DIR__ . '/homepage-hero.php';
+require_once __DIR__ . '/homepage-migration.php';
 require_once __DIR__ . '/homepage.php';
 require_once __DIR__ . '/provisioning.php';
 require_once __DIR__ . '/settings-actions.php';
@@ -42,6 +43,7 @@ if ( is_admin() ) {
     add_action( 'admin_menu', __NAMESPACE__ . '\\register_control_center' );
     add_action( 'admin_post_aznet_theme_save_settings', __NAMESPACE__ . '\\handle_save_settings' );
     add_action( 'admin_post_aznet_theme_apply_homepage_hero', __NAMESPACE__ . '\\handle_homepage_hero_apply' );
+    add_action( 'admin_post_aznet_theme_migrate_homepage_preset', __NAMESPACE__ . '\\handle_homepage_preset_migration' );
     add_action( 'admin_post_aznet_theme_reset_settings', __NAMESPACE__ . '\\handle_reset_settings' );
     add_action( 'admin_post_aznet_theme_export_settings', __NAMESPACE__ . '\\handle_export_settings' );
     add_action( 'admin_post_aznet_theme_import_settings', __NAMESPACE__ . '\\handle_import_settings' );
