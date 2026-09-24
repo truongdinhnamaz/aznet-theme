@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'AZNET_THEME_VERSION' ) ) {
-    define( 'AZNET_THEME_VERSION', '1.3.41' );
+    define( 'AZNET_THEME_VERSION', '1.3.42' );
 }
 
 require_once __DIR__ . '/inc/theme/bootstrap.php';
