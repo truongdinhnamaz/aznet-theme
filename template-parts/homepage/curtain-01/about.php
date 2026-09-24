@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$page = homepage_page_reference( (int) setting( 'homepage_about_page', 0 ) );
+$page = homepage_page_reference( (int) homepage_source_value( 'curtain-01', 'about' ) );
 if ( ! $page instanceof \WP_Post ) {
     return;
 }
@@ -20,7 +20,7 @@ $summary = trim( (string) $page->post_excerpt );
 $kicker = trim( (string) setting( 'homepage_about_kicker', '' ) );
 $heading = trim( (string) setting( 'homepage_about_heading', '' ) );
 $quote = trim( (string) setting( 'homepage_about_quote', '' ) );
-$image_id = (int) setting( 'homepage_about_image', 0 );
+$image_id = (int) homepage_source_value( 'curtain-01', 'about_image' );
 
 if ( '' === $kicker ) {
     $kicker = __( 'Hành trình thương hiệu', 'aznet-theme' );

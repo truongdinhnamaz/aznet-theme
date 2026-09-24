@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$hero_block = homepage_block_reference( (int) setting( 'homepage_hero_block', 0 ) );
+$hero_block = homepage_block_reference( (int) homepage_source_value( 'curtain-01', 'hero' ) );
 $hero_html = '';
 $hero_slide_count = 0;
 
@@ -107,7 +107,7 @@ $image = $front_id > 0 && has_post_thumbnail( $front_id )
     )
     : '';
 
-$contact = homepage_page_reference( (int) setting( 'homepage_contact_page', 0 ) );
+$contact = homepage_page_reference( (int) homepage_source_value( 'curtain-01', 'contact' ) );
 $shop_url = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\shop_url' )
     ? \AZnet\Theme\Integrations\WooCommerce\shop_url()
     : '';

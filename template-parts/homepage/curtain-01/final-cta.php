@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$page = homepage_page_reference( (int) setting( 'homepage_contact_page', 0 ) );
+$page = homepage_page_reference( (int) homepage_source_value( 'curtain-01', 'contact' ) );
 $model = function_exists( __NAMESPACE__ . '\\contact_surface_model' ) ? contact_surface_model() : null;
 
 $phone = '';

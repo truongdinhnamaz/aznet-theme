@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$category_id = (int) setting( 'homepage_curtain01_projects_term', 0 );
+$category_id = (int) homepage_source_value( 'curtain-01', 'projects' );
 $category = homepage_category_reference( $category_id );
 if ( ! $category instanceof \WP_Term ) {
     return;

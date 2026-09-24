@@ -126,14 +126,19 @@ function provisioning_apply_homepage_mapping( array $page_ids, array $term_ids, 
     $page_sources = (array) ( $operation['page_sources'] ?? [] );
     $category_sources = (array) ( $operation['category_sources'] ?? [] );
     $page_map = [
-        'hero' => 'homepage_hero_page',
-        'services' => 'homepage_services_page', 'about' => 'homepage_about_page', 'team' => 'homepage_team_page',
-        'process' => 'homepage_process_page', 'faq' => 'homepage_faq_page', 'contact' => 'homepage_contact_page',
+        'hero' => [ 'key' => 'homepage_law01_hero_page', 'slot' => 'hero_page' ],
+        'services' => [ 'key' => 'homepage_law01_services_page', 'slot' => 'services' ],
+        'about' => [ 'key' => 'homepage_law01_about_page', 'slot' => 'about' ],
+        'team' => [ 'key' => 'homepage_law01_team_page', 'slot' => 'team' ],
+        'process' => [ 'key' => 'homepage_law01_process_page', 'slot' => 'process' ],
+        'faq' => [ 'key' => 'homepage_law01_faq_page', 'slot' => 'faq' ],
+        'contact' => [ 'key' => 'homepage_law01_contact_page', 'slot' => 'contact' ],
     ];
-    foreach ( $page_map as $role => $key ) {
+    foreach ( $page_map as $role => $mapping ) {
         if ( ! isset( $page_ids[ $role ] ) ) { continue; }
+        $key = (string) $mapping['key'];
         $resolved = (int) $page_ids[ $role ];
-        $current = (int) ( $s[ $key ] ?? 0 );
+        $current = (int) homepage_source_value( 'law-01', (string) $mapping['slot'], $s );
         $action = (string) ( $page_sources[ $role ]['action'] ?? '' );
         if ( 'create' === $action && $current > 0 && $current !== $resolved && provisioning_existing_page_mapping_is_valid( $current ) ) { continue; }
         $s[ $key ] = $resolved;
@@ -144,17 +149,17 @@ function provisioning_apply_homepage_mapping( array $page_ids, array $term_ids, 
         if ( isset( $term_ids[ $role ] ) ) { $knowledge[] = (int) $term_ids[ $role ]; $knowledge_actions[] = (string) ( $category_sources[ $role ]['action'] ?? '' ); }
     }
     if ( [] !== $knowledge ) {
-        $current_knowledge = array_values( array_filter( array_map( 'intval', (array) ( $s['homepage_knowledge_terms'] ?? [] ) ) ) );
+        $current_knowledge = array_values( array_filter( array_map( 'intval', (array) homepage_source_value( 'law-01', 'knowledge', $s ) ) ) );
         $preserve_current = [] !== $current_knowledge && ! in_array( 'reuse', $knowledge_actions, true );
         if ( $preserve_current ) {
             foreach ( $current_knowledge as $current_id ) { if ( ! provisioning_existing_term_mapping_is_valid( $current_id ) ) { $preserve_current = false; break; } }
         }
-        if ( ! $preserve_current ) { $s['homepage_knowledge_terms'] = $knowledge; }
+        if ( ! $preserve_current ) { $s['homepage_law01_knowledge_terms'] = $knowledge; }
     }
-    foreach ( [ 'case_analysis' => 'homepage_case_analysis_term', 'legal_news' => 'homepage_legal_news_term' ] as $role => $key ) {
+    foreach ( [ 'case_analysis' => 'homepage_law01_case_analysis_term', 'legal_news' => 'homepage_law01_legal_news_term' ] as $role => $key ) {
         if ( ! isset( $term_ids[ $role ] ) ) { continue; }
         $resolved = (int) $term_ids[ $role ];
-        $current = (int) ( $s[ $key ] ?? 0 );
+        $current = (int) homepage_source_value( 'law-01', $role, $s );
         $action = (string) ( $category_sources[ $role ]['action'] ?? '' );
         if ( 'create' === $action && $current > 0 && $current !== $resolved && provisioning_existing_term_mapping_is_valid( $current ) ) { continue; }
         $s[ $key ] = $resolved;

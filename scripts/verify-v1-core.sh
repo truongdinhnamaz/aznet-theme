@@ -148,6 +148,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-content-ma
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-control-center-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-preset-isolation-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-consumer-isolation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-library-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/curtain01-cinematic-hero-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/curtain01-category-showcase-contract.php
