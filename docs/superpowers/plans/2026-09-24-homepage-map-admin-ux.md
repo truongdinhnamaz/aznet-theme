@@ -446,8 +446,8 @@ In `tests/offline/homepage-composer-contract.php`, add:
 
 ```php
 assert(str_contains($composer, 'homepage_effective_surface_map('));
-assert(str_contains($composer, "$surface['region']"));
-assert(str_contains($composer, "$surface['template']"));
+assert(str_contains($composer, "\$surface['region']"));
+assert(str_contains($composer, "\$surface['template']"));
 assert(! str_contains($composer, "[ 'hero', 'services', 'profile' ]"));
 assert(! str_contains($composer, "[ 'latest', 'topics', 'analysis', 'news', 'process', 'faq', 'final-cta' ]"));
 ```
@@ -602,7 +602,7 @@ foreach ([
 }
 
 assert(str_contains($source, 'homepage_effective_surface_map'));
-assert(! str_contains($source, "esc_html( (string) $summary['status'] )"));
+assert(! str_contains($source, "esc_html( (string) \$summary['status'] )"));
 ```
 
 Run RED before implementation.
@@ -662,6 +662,13 @@ function render_homepage_map( array $surfaces ): void {
 
 - [ ] **Step 4: Render one semantic card per effective frontend surface**
 
+Each card starts with stable identity markup:
+
+```php
+$key = sanitize_html_class( (string) $surface['key'] );
+echo '<article id="homepage-map-' . esc_attr( $key ) . '" class="aznet-theme-homepage-map__card" data-surface-key="' . esc_attr( $key ) . '">';
+```
+
 Each card includes:
 - position number;
 - label;
@@ -670,6 +677,12 @@ Each card includes:
 - current visible data summary;
 - primary bounded edit action;
 - deep link `home_url('/#' . $surface['anchor'])`.
+
+Collection rows that are compared with frontend output use:
+
+```php
+echo '<li data-homepage-map-item>' . esc_html( $item_title ) . '</li>';
+```
 
 For Latest Articles, show the bounded rule in human wording such as `3 bài mới nhất` plus exactly the selected titles from the model. For Topics, show exactly the ordered category names currently rendered.
 
@@ -816,7 +829,7 @@ In `inc/admin/homepage-authoring.php`:
 function homepage_map_admin_anchor( string $slot ): string {
     return match ( $slot ) {
         'about', 'team' => 'homepage-map-profile',
-        'knowledge' => 'homepage-map-articles',
+        'knowledge' => 'homepage-map-topics',
         'contact' => 'homepage-map-final-cta',
         default => 'homepage-map-' . sanitize_html_class( $slot ),
     };
