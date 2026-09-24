@@ -52,6 +52,8 @@ if ( is_admin() ) {
     add_action( 'admin_menu', __NAMESPACE__ . '\\register_control_center' );
     add_action( 'admin_post_aznet_theme_save_settings', __NAMESPACE__ . '\\handle_save_settings' );
     add_action( 'admin_post_aznet_theme_apply_homepage_hero', __NAMESPACE__ . '\\handle_homepage_hero_apply' );
+    add_action( 'admin_post_aznet_theme_save_homepage_hero_form', __NAMESPACE__ . '\\handle_homepage_hero_form_save' );
+    add_action( 'admin_post_aznet_theme_upgrade_homepage_hero_form', __NAMESPACE__ . '\\handle_homepage_hero_form_upgrade' );
     add_action( 'admin_post_aznet_theme_migrate_legacy_homepage_hero', __NAMESPACE__ . '\\handle_homepage_hero_legacy_migration' );
     add_action( 'admin_post_aznet_theme_migrate_homepage_preset', __NAMESPACE__ . '\\handle_homepage_preset_migration' );
     add_action( 'admin_post_aznet_theme_quick_edit_homepage_source', __NAMESPACE__ . '\\handle_homepage_quick_edit_source' );

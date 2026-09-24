@@ -52,10 +52,8 @@ foreach ([
     'Nút phụ',
     'Liên kết nút phụ',
     'Ảnh Hero',
-    'Cam kết 1',
-    'Cam kết 2',
-    'Cam kết 3',
-    'Cam kết 4',
+    'Cam kết %d',
+    'homepage_hero_trust_',
     'Chỉnh nâng cao bằng WordPress',
 ] as $label) {
     assert(str_contains($homepageAdmin, $label), "Missing Hero simple-form UI: {$label}");

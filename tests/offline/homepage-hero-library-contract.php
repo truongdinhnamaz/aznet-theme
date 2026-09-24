@@ -66,8 +66,12 @@ assert(! str_contains($hero_action, 'wp_safe_redirect( $edit_link )'), 'Hero Lib
 assert(str_contains($hero_action, "'hero'    => \$hero instanceof \\WP_Post && 'draft' === \$hero->post_status ? 'draft' : 'ready'"), 'Hero Library redirect state must reflect the actual draft/published Hero state.');
 
 assert(str_contains($settings, "'schema_version'                => 3"), 'D-030 additive Hero settings must retain Theme settings schema v3.');
+$hero_apply_start = strpos($hero_action, 'function handle_homepage_hero_apply');
+$hero_apply_end = false === $hero_apply_start ? false : strpos($hero_action, 'function homepage_legacy_page_to_hero_content', $hero_apply_start);
+$hero_apply_source = false !== $hero_apply_start && false !== $hero_apply_end ? substr($hero_action, $hero_apply_start, $hero_apply_end - $hero_apply_start) : '';
+assert('' !== $hero_apply_source, 'Hero variant action source must remain discoverable.');
 foreach (['wp_update_post(', 'wp_delete_post(', 'wp_trash_post('] as $forbidden_mutation) {
-    assert(! str_contains($hero_action, $forbidden_mutation), "Hero variant action must not rewrite/delete WordPress Hero content: {$forbidden_mutation}");
+    assert(! str_contains($hero_apply_source, $forbidden_mutation), "Hero variant action must not rewrite/delete WordPress Hero content: {$forbidden_mutation}");
 }
 
 foreach ([

@@ -137,6 +137,35 @@ function homepage_block_select( string $key, string $label, int $current, array 
     echo '</select></label>';
 }
 
+/** Render the easy Law 01 Hero form when the source is role-managed. */
+function render_homepage_hero_simple_form( array $settings, ?\WP_Post $hero_candidate ): bool {
+    if ( ! $hero_candidate instanceof \WP_Post ) { return false; }
+    $edit_link = get_edit_post_link( $hero_candidate->ID, 'raw' ); $edit_link = is_string( $edit_link ) ? $edit_link : '';
+    $model = homepage_hero_form_model_from_content( (string) $hero_candidate->post_content );
+    if ( is_array( $model ) ) {
+        $variants=homepage_hero_library_variants();$current_variant=(string)homepage_source_value('law-01','hero_variant',$settings);if(!isset($variants[$current_variant])){$current_variant='split';}$image_id=(int)($model['image_id']??0);
+        echo '<div id="aznet-theme-homepage-hero-simple-form" class="aznet-theme-homepage-hero-simple-form"><h3>'.esc_html__('Sửa Hero đơn giản','aznet-theme').'</h3><p class="description">'.esc_html__('Sửa nội dung thường dùng ngay tại đây. Nội dung vẫn được lưu trong Hero WordPress, không tạo bản sao trong thiết lập Theme.','aznet-theme').'</p>';
+        echo '<form method="post" action="'.esc_url(admin_url('admin-post.php')).'"><input type="hidden" name="action" value="aznet_theme_save_homepage_hero_form"><input type="hidden" name="homepage_preset_scope" value="law-01"><input type="hidden" name="homepage_hero_source_id" value="'.esc_attr((string)$hero_candidate->ID).'"><input type="hidden" name="homepage_hero_content_hash" value="'.esc_attr(homepage_hero_form_content_hash((string)$hero_candidate->post_content)).'">';wp_nonce_field('aznet_theme_save_homepage_hero_form');
+        echo '<div class="aznet-theme-homepage-hero-simple-form__grid">';
+        echo '<label class="aznet-theme-field"><span>'.esc_html__('Thông điệp mở đầu','aznet-theme').'</span><input type="text" name="homepage_hero_eyebrow" value="'.esc_attr((string)($model['eyebrow']??'')).'"></label>';
+        echo '<label class="aznet-theme-field aznet-theme-homepage-hero-simple-form__wide"><span>'.esc_html__('Tiêu đề Hero','aznet-theme').'</span><input type="text" name="homepage_hero_title" value="'.esc_attr((string)($model['title']??'')).'"></label>';
+        echo '<label class="aznet-theme-field aznet-theme-homepage-hero-simple-form__wide"><span>'.esc_html__('Mô tả chính','aznet-theme').'</span><input type="text" name="homepage_hero_value" value="'.esc_attr((string)($model['value']??'')).'"></label>';
+        echo '<label class="aznet-theme-field aznet-theme-homepage-hero-simple-form__wide"><span>'.esc_html__('Thông điệp hỗ trợ','aznet-theme').'</span><textarea rows="3" name="homepage_hero_lead">'.esc_textarea((string)($model['lead']??'')).'</textarea></label>';
+        echo '<label class="aznet-theme-field"><span>'.esc_html__('Nút chính','aznet-theme').'</span><input type="text" name="homepage_hero_primary_label" value="'.esc_attr((string)($model['primary_label']??'')).'"></label>';
+        echo '<label class="aznet-theme-field"><span>'.esc_html__('Liên kết nút chính','aznet-theme').'</span><input type="text" name="homepage_hero_primary_url" value="'.esc_attr((string)($model['primary_url']??'')).'" placeholder="https://… hoặc /lien-he/"></label>';
+        echo '<label class="aznet-theme-field"><span>'.esc_html__('Nút phụ','aznet-theme').'</span><input type="text" name="homepage_hero_secondary_label" value="'.esc_attr((string)($model['secondary_label']??'')).'"></label>';
+        echo '<label class="aznet-theme-field"><span>'.esc_html__('Liên kết nút phụ','aznet-theme').'</span><input type="text" name="homepage_hero_secondary_url" value="'.esc_attr((string)($model['secondary_url']??'')).'" placeholder="https://… hoặc /dich-vu/"></label>';
+        echo '<label class="aznet-theme-field"><span>'.esc_html__('Kiểu trình bày Hero','aznet-theme').'</span><select name="homepage_hero_variant">';foreach($variants as $slug=>$label){echo '<option value="'.esc_attr($slug).'" '.selected($current_variant,$slug,false).'>'.esc_html($label).'</option>';}echo '</select></label>';
+        echo '<div class="aznet-theme-field aznet-theme-homepage-hero-simple-form__media"><span>'.esc_html__('Ảnh Hero','aznet-theme').'</span><input type="hidden" name="homepage_featured_image_id" value="'.esc_attr((string)$image_id).'"><div class="aznet-theme-homepage-media-preview">';if($image_id>0){echo wp_kses_post(wp_get_attachment_image($image_id,'medium'));}echo '</div><p><button type="button" class="button aznet-theme-homepage-media-select" data-title="'.esc_attr__('Chọn ảnh Hero','aznet-theme').'" data-button="'.esc_attr__('Dùng ảnh này','aznet-theme').'">'.esc_html__('Chọn / thay ảnh','aznet-theme').'</button> <button type="button" class="button-link-delete aznet-theme-homepage-media-clear">'.esc_html__('Bỏ ảnh','aznet-theme').'</button></p></div>';
+        for($i=1;$i<=4;$i++){echo '<label class="aznet-theme-field"><span>'.esc_html(sprintf(__('Cam kết %d','aznet-theme'),$i)).'</span><input type="text" name="homepage_hero_trust_'.esc_attr((string)$i).'" value="'.esc_attr((string)($model['trust_'.$i]??'')).'"></label>';}
+        echo '</div><div class="aznet-theme-homepage-hero-simple-form__actions">';submit_button(__('Lưu Hero','aznet-theme'),'primary','submit',false);if(''!==$edit_link){echo '<a class="button" href="'.esc_url($edit_link).'">'.esc_html__('Chỉnh nâng cao bằng WordPress','aznet-theme').'</a>';}echo '</div></form></div>';return true;
+    }
+    if(homepage_hero_form_is_legacy_scaffold_content((string)$hero_candidate->post_content)){
+        echo '<div id="aznet-theme-homepage-hero-simple-form" class="aznet-theme-homepage-hero-simple-form"><h3>'.esc_html__('Sửa Hero đơn giản','aznet-theme').'</h3><p>'.esc_html__('Hero này đang dùng đúng scaffold mặc định cũ. Có thể chuyển sang chế độ form đơn giản mà không đổi nội dung đang hiển thị.','aznet-theme').'</p><form method="post" action="'.esc_url(admin_url('admin-post.php')).'"><input type="hidden" name="action" value="aznet_theme_upgrade_homepage_hero_form"><input type="hidden" name="homepage_preset_scope" value="law-01"><input type="hidden" name="homepage_hero_source_id" value="'.esc_attr((string)$hero_candidate->ID).'">';wp_nonce_field('aznet_theme_upgrade_homepage_hero_form');submit_button(__('Bật sửa Hero đơn giản','aznet-theme'),'primary','submit',false);if(''!==$edit_link){echo ' <a class="button" href="'.esc_url($edit_link).'">'.esc_html__('Chỉnh nâng cao bằng WordPress','aznet-theme').'</a>';}echo '</form></div>';return true;
+    }
+    echo '<div id="aznet-theme-homepage-hero-simple-form" class="notice notice-info inline"><p>'.esc_html__('Hero này đã có cấu trúc tùy biến. Theme không tự viết lại để tránh mất nội dung; hãy dùng trình soạn thảo WordPress cho Hero này.','aznet-theme').'</p>';if(''!==$edit_link){echo '<p><a class="button" href="'.esc_url($edit_link).'">'.esc_html__('Chỉnh nâng cao bằng WordPress','aznet-theme').'</a></p>';}echo '</div>';return false;
+}
+
 /**
  * Render the D-030 Hero Library without storing Hero copy in Theme settings.
  *
@@ -177,6 +206,12 @@ function render_homepage_hero_library( array $settings ): void {
     } else {
         echo '<div class="aznet-theme-homepage-hero-editor__status aznet-theme-homepage-hero-editor__status--warning"><strong>' . esc_html__( 'Nguồn Hero hiện tại:', 'aznet-theme' ) . '</strong> ' . esc_html__( 'Dữ liệu dự phòng', 'aznet-theme' ) . '</div>';
         echo '<p class="notice notice-warning inline aznet-theme-homepage-hero-editor__notice">' . esc_html__( 'Chưa có Hero WordPress riêng. Chọn một mẫu để tạo bản nháp Hero mà không cần tạo Page; website hiện tại chưa đổi cho đến khi Hero mới được xuất bản.', 'aznet-theme' ) . '</p>';
+    }
+
+    if ( render_homepage_hero_simple_form( $settings, $hero_candidate ) ) {
+        echo '<p class="description aznet-theme-homepage-hero-editor__ownership">' . esc_html__( 'Form đơn giản chỉ cập nhật Hero WordPress của Luật 01. Gutenberg vẫn là chế độ nâng cao và Rèm 01 không bị thay đổi.', 'aznet-theme' ) . '</p>';
+        echo '</div>';
+        return;
     }
 
     echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="aznet-theme-homepage-hero-library">';
@@ -346,6 +381,7 @@ function render_homepage_authoring_console( string $preset ): void {
         $descriptor = homepage_source_descriptor( $preset, $slot );
         $source_type = is_array( $descriptor ) ? (string) ( $descriptor['type'] ?? '' ) : '';
         $source_value = homepage_source_value( $preset, $slot );
+        if ( 'law-01' === $preset && 'hero' === $slot && 'wp_block' === $source_type && (int) $source_value > 0 ) { echo '<a class="button button-primary" href="#aznet-theme-homepage-hero-simple-form">' . esc_html__( 'Sửa Hero đơn giản', 'aznet-theme' ) . '</a>'; }
         if ( 'page' === $source_type || 'category' === $source_type ) {
             render_homepage_quick_edit_form( $preset, $slot, (int) $source_value );
         } elseif ( 'categories' === $source_type ) {
