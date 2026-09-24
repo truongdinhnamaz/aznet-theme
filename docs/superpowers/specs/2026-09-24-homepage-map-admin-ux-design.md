@@ -1,7 +1,7 @@
 # AZnet Theme — Homepage Map Admin UX Design
 
 **Date:** 2026-09-24  
-**Status:** Design approved in chat; written-spec review required before implementation  
+**Status:** Written spec approved by product owner on 2026-09-24; implementation planning authorized  
 **Product:** AZnet Theme  
 **Scope:** Homepage Control Center authoring UX only  
 **Implementation baseline:** production `lstamduchn.vn` AZnet Theme 1.3.38 behavior; canonical GitHub source is currently behind that production lineage and must be reconciled before production-code implementation.
