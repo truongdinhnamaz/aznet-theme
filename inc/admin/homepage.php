@@ -6,6 +6,8 @@ use function AZnet\Theme\homepage_category_reference;
 use function AZnet\Theme\homepage_category_references;
 use function AZnet\Theme\homepage_direct_published_children;
 use function AZnet\Theme\homepage_effective_surface_map;
+use function AZnet\Theme\homepage_effective_source_value;
+use function AZnet\Theme\homepage_effective_source_key;
 use function AZnet\Theme\homepage_latest_posts;
 use function AZnet\Theme\homepage_block_reference;
 use function AZnet\Theme\homepage_page_reference;
@@ -774,7 +776,7 @@ function render_homepage_settings(): void {
         : ( 'curtain-01' === $active_preset ? [ 'hero', 'proof', 'about', 'knowledge', 'process', 'projects', 'contact' ] : [] );
     $source_visible = [];
     foreach ( $source_slots as $slot ) {
-        $source_key = homepage_source_key( $active_preset, $slot );
+        $source_key = homepage_effective_source_key( $active_preset, $slot );
         if ( is_string( $source_key ) && '' !== $source_key ) { $source_visible[] = $source_key; }
     }
     echo '<details class="aznet-theme-homepage-diagnostics" id="aznet-theme-homepage-sources"><summary>' . esc_html__( 'Nguồn & cài đặt nâng cao', 'aznet-theme' ) . '</summary>';
@@ -807,11 +809,11 @@ function render_homepage_settings(): void {
 
     foreach ( $source_slots as $slot ) {
         $descriptor = homepage_source_descriptor( $active_preset, $slot );
-        $key = homepage_source_key( $active_preset, $slot );
+        $key = homepage_effective_source_key( $active_preset, $slot );
         if ( null === $descriptor || null === $key || '' === $key ) { continue; }
         $type = (string) ( $descriptor['type'] ?? '' );
         $label = homepage_authoring_label( $slot );
-        $value = homepage_source_value( $active_preset, $slot, $s );
+        $value = homepage_effective_source_value( $active_preset, $slot, $s );
         if ( 'page' === $type ) {
             homepage_page_select( $key, $label, (int) $value, $pages );
         } elseif ( 'wp_block' === $type ) {
