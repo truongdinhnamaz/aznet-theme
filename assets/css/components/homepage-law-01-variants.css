@@ -608,12 +608,25 @@
     transform: rotate(45deg);
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__media {
+    position: relative;
     min-width: 0;
+    overflow: hidden;
+    background: #efe3d2;
+    isolation: isolate;
+}
+.aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__media::before {
+    position: absolute;
+    z-index: 2;
+    inset: 0 auto 0 0;
+    width: clamp(5rem, 8vw, 9rem);
+    pointer-events: none;
+    background: linear-gradient(90deg, var(--law01-client-cream, #f7f1e8) 0%, rgba(247, 241, 232, .88) 24%, rgba(247, 241, 232, .52) 50%, rgba(247, 241, 232, .18) 74%, transparent 100%);
+    content: '';
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__media .wp-block-image {
     overflow: hidden;
     margin: 0;
-    border-radius: var(--aznet-theme-radius-lg);
+    border-radius: 0;
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__media .wp-block-image img {
     display: block;
