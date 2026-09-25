@@ -349,3 +349,12 @@ Law 01 Team directory uses the explicitly mapped WordPress Team parent Page. Eac
 - Add-member authoring is draft-first and must create only an ordinary child Page after capability/nonce validation.
 - Existing mapped Team Pages are reused and are not auto-renamed, duplicated or destructively migrated.
 
+## D-039 amendment — Team Add Member publishes immediately
+
+Owner approval on 25/09/2026 supersedes the D-038 draft-first authoring detail for the bounded Homepage Team form.
+
+- The **Thêm nhân sự** action creates an ordinary WordPress child Page with `post_status=publish` immediately after capability, nonce and input validation.
+- Immediate publication is authorized only for this bounded Team add-member flow because the administrator supplies the public presentation fields (name, optional role, optional portrait) in the same action.
+- WordPress remains the data owner; Theme does not gain a personnel store or publication-state authority outside this action.
+- Manual WordPress draft/private Team child Pages remain valid and must stay excluded from public Team resolvers.
+
