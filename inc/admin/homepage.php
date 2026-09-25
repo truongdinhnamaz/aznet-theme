@@ -13,6 +13,7 @@ use function AZnet\Theme\homepage_source_descriptor;
 use function AZnet\Theme\homepage_source_key;
 use function AZnet\Theme\homepage_source_value;
 use function AZnet\Theme\homepage_shared_source_uses;
+use function AZnet\Theme\setting;
 use function AZnet\Theme\settings;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
@@ -569,7 +570,6 @@ function render_homepage_map( string $preset ): void {
     if ( 'law-01' !== $preset ) { return; }
 
     $surfaces = homepage_effective_surface_map( $preset );
-    $variant = (string) homepage_source_value( 'law-01', 'hero_variant' );
     $variant_label = 'burgundy-gold' === (string) setting( 'homepage_law01_variant', 'navy-gold' )
         ? __( 'Burgundy + Gold', 'aznet-theme' )
         : __( 'Navy + Gold', 'aznet-theme' );
