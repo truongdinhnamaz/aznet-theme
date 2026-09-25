@@ -4,7 +4,7 @@ namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 function team_directory_parent(): ?\WP_Post {
-    $id = (int) homepage_source_value( 'law-01', 'team' );
+    $id = (int) homepage_effective_source_value( 'law-01', 'team' );
     return $id > 0 ? homepage_page_reference( $id ) : null;
 }
 
