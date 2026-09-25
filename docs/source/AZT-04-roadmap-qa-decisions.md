@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.91
+**Version:** v0.92
 **Status:** Working Source  
-**Date:** 23/09/2026
+**Date:** 25/09/2026
 
 ## 1. Purpose
 
@@ -711,3 +711,35 @@ The product owner approved the refined About / Giới thiệu presentation and e
 Release PR #197 followed RED -> GREEN. RED head `d7d91627d325dc76433c9e693140fcd37192ee17` failed the intended Y5 `1.3.21` metadata assertion. Exact GREEN head `f7107f301485839d361fd00e9cb11c0837074434` completed 14/14 triggered workflows SUCCESS and merged to canonical `main@998a8dcf342b09824b197059524c50c013dba828`.
 
 Fresh exact-main V1 `35518082825` and X6 `35518082833` completed SUCCESS. X6 browser/axe passed 32/32; deterministic `aznet-theme-1.3.21.zip` has 158 files, 113 packaged PHP lint PASS and SHA-256 `da695f2b33aafc38172a9a412a3b1afd16263db3f03d305be4304eba877e09e2`. This closes `v1.3.21` technically only. Current GitHub Release remains `v1.3.20`; no `v1.3.21` publication or production deployment is claimed. Evidence: `docs/evidence/V1_3_21_ABOUT_PAGE_TECHNICAL_CLOSURE_20260920.md`.
+
+## D-040 — Remote Template Library / commercial distribution
+
+**Status:** ACCEPTED — owner approval 25/09/2026.  
+**Tracking:** issue #273.  
+**Implementation branch:** `work/d040-template-library-td1`; draft PR #274.  
+**Canonical base when opened:** `main@5d2d34074c1b1b0006151b399b6b652927a19d49` (Theme 1.3.32). Draft PR #272 contains newer Law 01 candidate work and is not silently absorbed by D-040.
+
+Decision:
+
+- AZnet may host and commercially distribute a large catalog of Theme presentation templates.
+- The full catalog is not bundled into the customer Theme package.
+- Customers browse the catalog from Theme admin; an entitled template is downloaded on demand and activated locally.
+- Catalog/pricing/license/entitlement/download authorization/signing belong to an external AZnet Template Distribution Service.
+- Theme owns only the bounded consumer UX, local presentation selection, validation/install orchestration and rollback.
+- Remote packages may not contain executable PHP or copied authoritative domain state.
+- Frontend rendering of an installed template must remain independent of remote-service availability.
+- D-027 Standalone Core remains mandatory and complete without the remote library.
+
+Execution gates:
+
+| Slice | Outcome | Gate |
+| --- | --- | --- |
+| TD0 | Governance/ownership/contract source update | Source owner docs record D-040; no implementation PASS inferred |
+| TD1 | Template Library admin presentation | RED -> GREEN; scalable cards/search/category filter; existing local presets compatible; admin-only assets |
+| TD2 | Versioned distribution consumer adapter | public contract normalization, absence/error/version mismatch fail-soft; no private service access |
+| TD3 | Secure package installer | manifest allow-list, integrity/signature, staging, atomic activation and rollback; no executable PHP |
+| TD4 | WordPress runtime/browser/a11y | real wp-admin flows, responsive/keyboard/focus/console evidence |
+| TD5 | Actual service integration | **BLOCKED_EXTERNAL** until the real Distribution Service exists and exposes the accepted contract; fixture cannot claim L5 |
+| TD6 | Release closure | regression/package/provenance; merge/release remain explicit owner gates |
+
+Current TD1 candidate on PR #274 replaces the flat Homepage preset selector with a card-based Template Library, search and category filtering while retaining `off`, `law-01` and `curtain-01`. This is L0-L2/static-contract scope only until runtime/browser evidence is fresh.
