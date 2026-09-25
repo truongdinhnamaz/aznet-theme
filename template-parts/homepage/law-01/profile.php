@@ -3,8 +3,9 @@
 namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-$about = homepage_page_reference( (int) setting( 'homepage_about_page', 0 ) );
-$team = homepage_page_reference( (int) setting( 'homepage_team_page', 0 ) );
+$settings = settings();
+$about = homepage_page_reference( (int) homepage_effective_source_value( 'law-01', 'about', $settings ) );
+$team = homepage_page_reference( (int) homepage_effective_source_value( 'law-01', 'team', $settings ) );
 $has_about = $about instanceof \WP_Post;
 $has_team = $team instanceof \WP_Post;
 if ( ! $has_about && ! $has_team ) { return; }
