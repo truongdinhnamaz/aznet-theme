@@ -1,8 +1,8 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.74
+**Version:** v0.75
 **Status:** Working Source
-**Date:** 23/09/2026
+**Date:** 25/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
 
 ## 1. Source ownership
@@ -436,3 +436,16 @@ Exact merge verification is PASS: V1 Exact Main Verification run `35718432856` a
 Production provenance remains deliberately separate. The Rèm Quốc Anh pilot currently reports active AZnet Theme `1.3.30`; canonical repository metadata at the font-fix merge remains `1.3.28`, so the repository package must not be used to overwrite the live pilot as a downgrade. A WPVibe draft was therefore prepared from the live `1.3.30` baseline and patched only at the typography layer. Preview evidence confirms three Vietnamese Roboto faces (400/500/700), three Vietnamese unicode-range declarations, retained Latin faces, Theme version `1.3.30`, and correct Unicode content projection. Production publish has owner approval but has not completed because the connected WPVibe account reached its rolling daily limit; no live mutation is claimed from the blocked attempts.
 
 Evidence: `docs/evidence/CURTAIN01_VIETNAMESE_FONT_FIX_20260922.md`.
+
+### Unified Homepage backend candidate / PR #276 — 25/09/2026
+
+- Canonical `main` at branch start: `5d2d34074c1b1b0006151b399b6b652927a19d49`, Theme metadata `1.3.32`.
+- Candidate parent: PR #272 head `46d07c1a2b7cd82130b813742d9b78d619d7b6ef`, Theme metadata `1.3.54`; this remains unmerged to `main`.
+- Unified branch: `work/homepage-backend-unified-20260925`; draft PR #276 targets `main` only to obtain review/QA evidence and is not merge-authorized.
+- Candidate combines the D-040 Template Library admin presentation with the D-041 shared effective-surface Homepage Map while retaining WordPress/provider ownership.
+- RED checkpoint: `tests/offline/homepage-surface-map-contract.php` was committed before the shared resolver. Subsequent production/test deltas add the shared Law 01 model, frontend/admin consumption, effective-source compatibility, stable section anchors, runtime assertion and browser parity checks.
+- Fresh PR #276 verification is `BLOCKED_EXTERNAL_RUNNER`: V1 `36108772953`, R5 static `36108772680`, R5 browser `36108772757`, and Homepage Law 01 browser `36108772671` all ended before any step with runner ID `0` and blank runner name.
+- Therefore no fresh executable L1/L2/L3/L4 PASS or Theme-code failure is inferred. Main merge, release and deployment remain gated.
+- D-040 real Distribution Service L5 remains separately `BLOCKED_EXTERNAL`.
+
+Evidence: `docs/evidence/HOMEPAGE_BACKEND_UNIFIED_CANDIDATE_20260925.md`.
