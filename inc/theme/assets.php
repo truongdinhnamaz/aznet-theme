@@ -177,6 +177,16 @@ function asset_content_version( string $relative_path, ?string $fallback = null 
 }
 
 /** Enqueue Law 01 only for its active Front Page presentation surface. */
+/** Enqueue the shared Team card presentation for Team surfaces only. */
+function enqueue_team_card_asset( ?string $version = null ): void {
+    wp_enqueue_style(
+        'aznet-theme-team-card',
+        get_theme_file_uri( '/assets/css/components/team-card.css' ),
+        [ 'aznet-theme-tokens' ],
+        asset_content_version( '/assets/css/components/team-card.css', $version )
+    );
+}
+
 function enqueue_homepage_law01_asset( ?string $version = null ): void {
     if ( ! function_exists( __NAMESPACE__ . '\\homepage_composer_active' ) || ! homepage_composer_active() ) {
         return;
@@ -184,10 +194,11 @@ function enqueue_homepage_law01_asset( ?string $version = null ): void {
     if ( 'law-01' !== homepage_preset() ) {
         return;
     }
+    enqueue_team_card_asset( $version );
     wp_enqueue_style(
         'aznet-theme-homepage-law-01',
         get_theme_file_uri( '/assets/css/components/homepage-law-01.css' ),
-        [ 'aznet-theme-tokens' ],
+        [ 'aznet-theme-tokens', 'aznet-theme-team-card' ],
         asset_content_version( '/assets/css/components/homepage-law-01.css', $version )
     );
     wp_enqueue_style(
