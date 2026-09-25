@@ -158,6 +158,8 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-control-ce
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-library-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-source-parity-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-effective-source-parity-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-profile-facts-compat-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-profile-regression-restore-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-frontend-layout-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-header-gap-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/curtain01-cinematic-hero-contract.php
