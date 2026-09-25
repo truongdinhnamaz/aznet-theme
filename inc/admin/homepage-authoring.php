@@ -108,11 +108,11 @@ function handle_homepage_quick_edit_source(): void {
     exit;
 }
 
-/** Build one ordinary draft child Page payload for a Team member. */
+/** Build one ordinary published child Page payload for a Team member. */
 function homepage_team_member_insert_data( \WP_Post $parent, string $name, string $role ): array {
     return [
         'post_type'    => 'page',
-        'post_status'  => 'draft',
+        'post_status'  => 'publish',
         'post_parent'  => (int) $parent->ID,
         'post_title'   => $name,
         'post_excerpt' => $role,
@@ -120,7 +120,7 @@ function homepage_team_member_insert_data( \WP_Post $parent, string $name, strin
     ];
 }
 
-/** Create one draft WordPress Page child under the exact mapped Team parent. */
+/** Create one published WordPress Page child under the exact mapped Team parent. */
 function handle_homepage_team_member_create(): void {
     if ( ! current_user_can( 'edit_theme_options' ) ) {
         wp_die( esc_html__( 'Bạn không có quyền thêm nhân sự.', 'aznet-theme' ) );
