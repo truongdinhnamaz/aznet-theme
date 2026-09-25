@@ -1,9 +1,9 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.79
+**Version:** v0.80
 **Status:** Working Execution Map / derived  
-**Date:** 23/09/2026
+**Date:** 25/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
@@ -609,3 +609,19 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - State: **v1.3.21 TECHNICAL PASS / PUBLICATION GATED / PRODUCTION DEPLOYMENT NOT CLAIMED**.
 - Current public GitHub Release remains `v1.3.20`.
 - Evidence: `docs/evidence/V1_3_21_ABOUT_PAGE_TECHNICAL_CLOSURE_20260920.md`.
+
+## TD — Remote Template Library execution track (D-040)
+
+State: **ACTIVE / TD1 candidate on draft PR #274**. D-040 is accepted in source. External catalog/service implementation is outside `aznet-theme`.
+
+| Slice | State | Exact boundary |
+| --- | --- | --- |
+| TD0 Governance | PASS | D-040 ownership + security + optional-runtime boundary recorded in AZT-01/02/04 |
+| TD1 Admin Template Library | ACTIVE candidate | Replace flat preset select with scalable card grid/search/category filter; keep existing preset IDs/settings compatibility; no remote service logic |
+| TD2 Distribution consumer | LOCKED | Open only after TD1 local gate; consume public/versioned service contract, fail-soft |
+| TD3 Secure installer | LOCKED | Declarative package only; allow-list + integrity/signature + staging + atomic activation + rollback |
+| TD4 Runtime/browser/a11y | LOCKED | WordPress real runtime and wp-admin browser evidence |
+| TD5 Actual service L5 | BLOCKED_EXTERNAL | Requires real AZnet Template Distribution Service; Theme must not create dependency source in this repo |
+| TD6 Release closure | LOCKED | Full regression/package/provenance; merge/release owner-gated |
+
+**Current exact next:** diagnose PR #274 check failures at the shallowest reproducible layer, make TD1 GREEN on exact branch head, then run focused admin runtime/browser evidence. Do not merge main while TD1 gates are incomplete.
