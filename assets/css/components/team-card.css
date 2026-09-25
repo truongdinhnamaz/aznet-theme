@@ -1,0 +1,7 @@
+.aznet-theme-team-card{min-width:0}
+.aznet-theme-team-card__media{display:block;overflow:hidden;border-radius:.35rem;background:var(--aznet-theme-color-surface-subtle)}
+.aznet-theme-team-card__image{display:block;width:100%;aspect-ratio:4/5;height:auto;object-fit:cover}
+.aznet-theme-team-card__body{padding-top:.85rem}
+.aznet-theme-team-card__name{margin:0;font-size:var(--aznet-theme-text-h4);line-height:var(--aznet-theme-line-height-h4)}
+.aznet-theme-team-card__name a{color:inherit;text-decoration:none}
+.aznet-theme-team-card__role{margin:.35rem 0 0;color:var(--aznet-theme-color-text-muted)}

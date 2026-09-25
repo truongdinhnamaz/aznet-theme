@@ -177,6 +177,16 @@ function asset_content_version( string $relative_path, ?string $fallback = null 
 }
 
 /** Enqueue Law 01 only for its active Front Page presentation surface. */
+/** Enqueue the shared Team card presentation for Team surfaces only. */
+function enqueue_team_card_asset( ?string $version = null ): void {
+    wp_enqueue_style(
+        'aznet-theme-team-card',
+        get_theme_file_uri( '/assets/css/components/team-card.css' ),
+        [ 'aznet-theme-tokens' ],
+        asset_content_version( '/assets/css/components/team-card.css', $version )
+    );
+}
+
 function enqueue_homepage_law01_asset( ?string $version = null ): void {
     if ( ! function_exists( __NAMESPACE__ . '\\homepage_composer_active' ) || ! homepage_composer_active() ) {
         return;
@@ -184,10 +194,11 @@ function enqueue_homepage_law01_asset( ?string $version = null ): void {
     if ( 'law-01' !== homepage_preset() ) {
         return;
     }
+    enqueue_team_card_asset( $version );
     wp_enqueue_style(
         'aznet-theme-homepage-law-01',
         get_theme_file_uri( '/assets/css/components/homepage-law-01.css' ),
-        [ 'aznet-theme-tokens' ],
+        [ 'aznet-theme-tokens', 'aznet-theme-team-card' ],
         asset_content_version( '/assets/css/components/homepage-law-01.css', $version )
     );
     wp_enqueue_style(
@@ -440,6 +451,28 @@ function enqueue_services_page_assets( ?string $version = null ): void {
     );
 }
 
+/** Determine whether the mapped Team directory Page presentation can render. */
+function should_enqueue_team_page_assets(): bool {
+    return function_exists( __NAMESPACE__ . '\\team_page_presentation_active' )
+        && team_page_presentation_active();
+}
+
+/** Enqueue scoped Team directory Page presentation only for the exact mapped Team Page. */
+function enqueue_team_page_assets( ?string $version = null ): void {
+    if ( ! should_enqueue_team_page_assets() ) {
+        return;
+    }
+
+    enqueue_team_card_asset( $version );
+
+    wp_enqueue_style(
+        'aznet-theme-team-directory',
+        get_theme_file_uri( '/assets/css/components/team-directory.css' ),
+        [ 'aznet-theme-page', 'aznet-theme-team-card' ],
+        asset_content_version( '/assets/css/components/team-directory.css', $version )
+    );
+}
+
 /** Determine whether the mapped Services child landing presentation can render. */
 function should_enqueue_service_page_assets(): bool {
     if ( ! function_exists( __NAMESPACE__ . '\\service_page_is_detail' ) ) {
@@ -584,6 +617,7 @@ function enqueue_assets(): void {
     enqueue_page_assets( $version );
     enqueue_contact_page_assets( $version );
     enqueue_services_page_assets( $version );
+    enqueue_team_page_assets( $version );
     enqueue_service_page_assets( $version );
     enqueue_form_assets( $version );
     enqueue_navigation_assets( $version );

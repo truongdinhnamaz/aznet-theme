@@ -14,6 +14,11 @@ on:
       - 'template-parts/contact/page.php'
       - 'template-parts/services/page.php'
       - 'template-parts/services/card.php'
+      - 'tests/offline/team-page-presentation-contract.php'
+      - 'assets/css/components/team-directory.css'
+      - 'assets/css/components/team-card.css'
+      - 'inc/theme/team-directory.php'
+      - 'template-parts/team/**'
       - 'inc/theme/page-experience.php'
       - 'inc/theme/settings.php'
       - 'inc/theme/bootstrap.php'
@@ -120,13 +125,14 @@ jobs:
         run: |
           set -euo pipefail
           wp eval-file "$GITHUB_WORKSPACE/tests/runtime/y1-page-experience.php" --path=/tmp/wp --allow-root > /tmp/y1/fixture.json
-          jq -e '.parent_id > 0 and .child_id > 0 and .wide_id > 0 and .landing_id > 0 and .commerce_looking_id > 0 and .attachment_id > 0' /tmp/y1/fixture.json
+          jq -e '.parent_id > 0 and .child_id > 0 and .wide_id > 0 and .landing_id > 0 and .commerce_looking_id > 0 and .attachment_id > 0 and .team_id > 0' /tmp/y1/fixture.json
           {
             echo "Y1_SERVICES_URL=$(jq -r '.parent_url' /tmp/y1/fixture.json)"
             echo "Y1_CHILD_URL=$(jq -r '.child_url' /tmp/y1/fixture.json)"
             echo "Y1_WIDE_URL=$(jq -r '.wide_url' /tmp/y1/fixture.json)"
             echo "Y1_LANDING_URL=$(jq -r '.landing_url' /tmp/y1/fixture.json)"
             echo "Y1_CONTACT_URL=$(jq -r '.contact_url' /tmp/y1/fixture.json)"
+            echo "Y1_TEAM_URL=$(jq -r '.team_url' /tmp/y1/fixture.json)"
           } >> "$GITHUB_ENV"
       - name: Start WordPress runtime
         run: |
@@ -184,6 +190,14 @@ jobs:
           grep -F 'aznet-theme-page--contact' /tmp/y1/contact.html
           grep -F 'aznet-theme-contact-page-css' /tmp/y1/contact.html
           grep -F 'y1-contact-content' /tmp/y1/contact.html
+          request team "$(jq -r '.team_url' /tmp/y1/fixture.json)" standard no
+          grep -F 'aznet-theme-page--team-directory' /tmp/y1/team.html
+          grep -F 'aznet-theme-team-directory-css' /tmp/y1/team.html
+          test "$(grep -o 'aznet-theme-team-card' /tmp/y1/team.html | wc -l)" -ge 5
+          if grep -F 'Y1 Draft Team Member' /tmp/y1/team.html; then
+            echo 'FAIL: draft Team member leaked into Y1 Team directory' >&2
+            exit 1
+          fi
           if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/y1/server.log; then
             echo 'FAIL: Theme-caused PHP error marker found in Y1 runtime' >&2
             exit 1
@@ -205,6 +219,7 @@ jobs:
           Y1_WIDE_URL: ${{ env.Y1_WIDE_URL }}
           Y1_LANDING_URL: ${{ env.Y1_LANDING_URL }}
           Y1_CONTACT_URL: ${{ env.Y1_CONTACT_URL }}
+          Y1_TEAM_URL: ${{ env.Y1_TEAM_URL }}
           Y1_PAGE_STATE_DIR: /tmp/y1-page-l4
         run: node tests/browser/y1-page-experience-l4.mjs
       - name: Verify Y1 ownership and diff boundary

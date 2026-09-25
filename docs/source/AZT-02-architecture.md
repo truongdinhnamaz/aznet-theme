@@ -334,3 +334,27 @@ Law01 provisioning must complete from resources shipped with the Theme package p
 The exact final package must pass a zero-plugin standalone path before Core Ready/publication: install -> activate -> setup -> provision -> representative runtime/browser/a11y -> update/theme-switch continuity. Optional L5 compatibility certification is additive and cannot substitute for Standalone Core PASS. Development/QA tools such as GitHub Actions, WP-CLI, Playwright and axe are allowed because they are not website runtime dependencies.
 
 A QA runner's inability to resolve/authenticate to a pilot site is recorded as `P4 PILOT ACCESS BLOCKED`; it is not evidence that the Theme requires a connector/plugin.
+
+# 17. WordPress-native Team Directory — D-038
+
+Law 01 Team directory uses the explicitly mapped WordPress Team parent Page. Each team member is a direct child Page.
+
+- WordPress owns member title/name, excerpt/role, Featured Image/portrait, body/biography, publication state, permalink, hierarchy and `menu_order`.
+- AZnet Theme owns only the typed Team Page mapping, bounded admin authoring presentation, Homepage/directory presentation and provisioning orchestration.
+- No Team CPT, personnel repeater/meta store, JSON personnel blob, second Theme Mod store or private provider storage is allowed.
+- Team child Pages are editorial website content and MUST NOT be treated as authoritative RootProfile Person identity/profile truth.
+- Team resolution MUST use the exact mapped Team parent Page ID. Title, slug, URL and fuzzy heuristics are forbidden.
+- Homepage Team may render at most four published direct children in `menu_order title` order; the mapped Team directory Page may render all published direct children.
+- Missing portrait is presentation-safe text-only output. Theme MUST NOT substitute generated/reference/AI person imagery.
+- Add-member authoring is draft-first and must create only an ordinary child Page after capability/nonce validation.
+- Existing mapped Team Pages are reused and are not auto-renamed, duplicated or destructively migrated.
+
+## D-039 amendment — Team Add Member publishes immediately
+
+Owner approval on 25/09/2026 supersedes the D-038 draft-first authoring detail for the bounded Homepage Team form.
+
+- The **Thêm nhân sự** action creates an ordinary WordPress child Page with `post_status=publish` immediately after capability, nonce and input validation.
+- Immediate publication is authorized only for this bounded Team add-member flow because the administrator supplies the public presentation fields (name, optional role, optional portrait) in the same action.
+- WordPress remains the data owner; Theme does not gain a personnel store or publication-state authority outside this action.
+- Manual WordPress draft/private Team child Pages remain valid and must stay excluded from public Team resolvers.
+

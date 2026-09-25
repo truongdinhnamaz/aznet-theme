@@ -103,3 +103,7 @@ Current release boundary: **v1.3.21 TECHNICAL PASS / GitHub publication v1.3.20 
 
 
 19/09/2026 v1.3.11 publication evidence: `docs/evidence/V1_3_11_PUBLICATION_20260919.md` records owner-approved publication of annotated `v1.3.11` -> exact D-030 implementation `01ddbff1...`, GitHub Release `391924224`, asset `574135564`, SHA-256 `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`, 147 production files and 110/110 packaged PHP lint PASS. Repair run `35424304502` corrected the release-note rendering defect without changing tag/package identity; temporary publication helper cleanup leaves zero net file delta. Verified production remains `v1.3.0`.
+
+25/09/2026 D-038 WordPress-native Team directory: owner-approved design/spec is `docs/superpowers/specs/2026-09-25-wordpress-native-team-directory-design.md`; implementation plan is `docs/superpowers/plans/2026-09-25-wordpress-native-team-directory.md`. Authoritative ownership decision is AZT-02 D-038 architecture + AZT-04 D-038 decision. WordPress owns Team parent/child Page data; Theme owns typed mapping, bounded authoring and presentation only. Release/deployment are not implied.
+
+25/09/2026 D-039 Team publication amendment: owner approved immediate publication from the bounded Homepage **Thêm nhân sự** action; this supersedes only D-038 draft-first Add Member behavior. WordPress ownership, exact parent/child mapping, provisioning and no-fake-person constraints remain unchanged.
