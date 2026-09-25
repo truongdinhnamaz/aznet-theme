@@ -3,6 +3,8 @@
 namespace AZnet\Theme\Admin;
 
 use function AZnet\Theme\homepage_category_reference;
+use function AZnet\Theme\homepage_effective_source_key;
+use function AZnet\Theme\homepage_effective_source_value;
 use function AZnet\Theme\homepage_source_descriptor;
 use function AZnet\Theme\homepage_source_value;
 
@@ -15,7 +17,7 @@ function homepage_quick_edit_featured_image_allowed( string $preset, string $slo
     }
 
     if ( 'law-01' === $preset && 'team' === $slot ) {
-        return (int) homepage_source_value( $preset, $slot ) !== $source_id;
+        return (int) homepage_effective_source_value( $preset, $slot ) !== $source_id;
     }
 
     return true;
@@ -232,7 +234,7 @@ function handle_homepage_duplicate_source(): void {
         }
     }
 
-    $key = (string) ( $descriptor['key'] ?? '' );
+    $key = (string) ( homepage_effective_source_key( $preset, $slot ) ?? '' );
     if ( '' === $key ) { wp_die( esc_html__( 'Không xác định được mapping của mẫu.', 'aznet-theme' ) ); }
     $theme_settings = \AZnet\Theme\settings();
     $theme_settings[ $key ] = (int) $new_id;
