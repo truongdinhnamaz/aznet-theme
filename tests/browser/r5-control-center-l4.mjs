@@ -256,6 +256,10 @@ async function verifyHomepageMap(page, viewportName) {
   if (!adminKeys.includes('front-page-content')) throw new Error('Homepage Map is missing the native Front Page content surface: ' + JSON.stringify(adminKeys));
   const nativeFrontCard = map.locator('[data-surface-key="front-page-content"]');
   if (await nativeFrontCard.getByRole('link', { name: 'Chỉnh nội dung trang' }).count() !== 1) throw new Error('Native Front Page content edit action missing');
+  const processCard = map.locator('[data-surface-key="process"]');
+  if (await processCard.count() && await processCard.getByRole('link', { name: 'Sửa các bước' }).count() !== 1) throw new Error('Process full-content edit action missing');
+  const faqCard = map.locator('[data-surface-key="faq"]');
+  if (await faqCard.count() && await faqCard.getByRole('link', { name: 'Sửa câu hỏi' }).count() !== 1) throw new Error('FAQ full-content edit action missing');
   if (await map.getByText('READY', { exact: true }).count()) throw new Error('raw READY leaked into primary Homepage Map');
   if (await map.getByText('DRAFT', { exact: true }).count()) throw new Error('raw DRAFT leaked into primary Homepage Map');
   if (await map.getByRole('link', { name: 'Đổi nguồn' }).count()) throw new Error('Đổi nguồn must stay in advanced settings');
