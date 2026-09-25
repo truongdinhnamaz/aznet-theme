@@ -233,6 +233,7 @@ jobs:
           ], true );
           if ( is_wp_error( $draft_member ) ) { throw new RuntimeException( $draft_member->get_error_message() ); }
           law01_featured_fixture( $member_a, 'team-a', 800, 1000 );
+          law01_featured_fixture( $member_c, 'team-c', 800, 1000 );
           law01_featured_fixture( $member_d, 'team-d', 800, 1000 );
           law01_featured_fixture( $member_e, 'team-e', 800, 1000 );
           law01_featured_fixture( $member_f, 'team-f', 800, 1000 );
