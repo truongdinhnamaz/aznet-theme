@@ -70,7 +70,7 @@ if ( '' !== $hero_block_html ) {
     $section_classes .= ' aznet-theme-law01-hero--library aznet-theme-law01-hero--' . $hero_variant;
 }
 ?>
-<section class="<?php echo esc_attr( $section_classes ); ?>" <?php echo '' !== $hero_block_html ? 'aria-label="' . esc_attr__( 'Hero trang chủ', 'aznet-theme' ) . '"' : 'aria-labelledby="aznet-law01-title"'; ?>>
+<section id="aznet-homepage-hero" data-aznet-homepage-surface="hero" class="<?php echo esc_attr( $section_classes ); ?>" <?php echo '' !== $hero_block_html ? 'aria-label="' . esc_attr__( 'Hero trang chủ', 'aznet-theme' ) . '"' : 'aria-labelledby="aznet-law01-title"'; ?>>
     <?php if ( '' !== $hero_block_html ) : ?>
         <div class="aznet-theme-law01-container aznet-theme-law01-hero__library-content">
             <?php echo wp_kses_post( $hero_block_html ); ?>
