@@ -461,7 +461,7 @@ function render_homepage_team_authoring(): void {
     echo '<input type="hidden" name="homepage_featured_image_id" value="0">';
     echo '<div class="aznet-theme-homepage-media-preview"></div>';
     echo '<p><button type="button" class="button aznet-theme-homepage-media-select">' . esc_html__( 'Chọn ảnh', 'aznet-theme' ) . '</button> <button type="button" class="button-link-delete aznet-theme-homepage-media-clear">' . esc_html__( 'Bỏ ảnh', 'aznet-theme' ) . '</button></p>';
-    submit_button( __( 'Tạo bản nháp nhân sự', 'aznet-theme' ), 'primary', 'submit', false );
+    submit_button( __( 'Thêm nhân sự', 'aznet-theme' ), 'primary', 'submit', false );
     echo '</form></details>';
     echo '</section>';
 }
