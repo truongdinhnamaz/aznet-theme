@@ -170,7 +170,13 @@ async function resetSettings(page) {
 async function verifyHomepageHeroEditingBridge(page, viewportName) {
   await gotoCenter(page, 'homepage');
   const presetForm = page.locator('form.aznet-theme-panel').filter({ has: page.getByRole('heading', { name: 'Mẫu trang chủ' }) });
-  await presetForm.locator('select[name="aznet_theme_settings[homepage_preset]"]').selectOption('law-01');
+  const templateLibrary = presetForm.locator('[data-aznet-template-library]');
+  if (await templateLibrary.count() !== 1) throw new Error('Template Library root missing');
+  if (await templateLibrary.locator('[data-aznet-template-search]').count() !== 1) throw new Error('Template Library search missing');
+  if (await templateLibrary.locator('[data-aznet-template-category]').count() !== 1) throw new Error('Template Library category filter missing');
+  const lawPreset = presetForm.locator('input[name="aznet_theme_settings[homepage_preset]"][value="law-01"]');
+  if (await lawPreset.count() !== 1) throw new Error('Law 01 Template Library card missing');
+  await lawPreset.check();
   await Promise.all([
     page.waitForURL(/updated=1/, { timeout: 20000 }),
     presetForm.getByRole('button', { name: 'Lưu mẫu trang chủ' }).click(),
@@ -239,6 +245,42 @@ async function verifyHomepageTeamAuthoring(page, viewportName) {
   if (!(await addDetails.locator('summary').evaluate((node) => document.activeElement === node))) throw new Error('Thêm nhân sự is not keyboard focusable');
   return await checkLayoutAndA11y(page, viewportName + '-homepage-team-' + (expectWoo ? 'woo' : 'clean'));
 }
+async function verifyHomepageMap(page, viewportName) {
+  await gotoCenter(page, 'homepage');
+  const map = page.locator('#aznet-theme-homepage-map');
+  if (await map.count() !== 1) throw new Error('Homepage Map is missing for Law 01');
+  if ((await map.getByRole('heading', { name: 'Trang chủ đang hiển thị' }).count()) !== 1) throw new Error('Homepage Map heading missing');
+
+  const adminKeys = await map.locator('[data-surface-key]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-surface-key')));
+  if (!adminKeys.length || adminKeys[0] !== 'hero') throw new Error('Homepage Map does not start with effective Hero surface: ' + JSON.stringify(adminKeys));
+  if (await map.getByText('READY', { exact: true }).count()) throw new Error('raw READY leaked into primary Homepage Map');
+  if (await map.getByText('DRAFT', { exact: true }).count()) throw new Error('raw DRAFT leaked into primary Homepage Map');
+  if (await map.getByRole('link', { name: 'Đổi nguồn' }).count()) throw new Error('Đổi nguồn must stay in advanced settings');
+
+  const advanced = page.locator('#aznet-theme-homepage-sources');
+  if (await advanced.count() !== 1) throw new Error('Homepage advanced source disclosure missing');
+  if (!((await advanced.locator('summary').textContent()) || '').includes('Nguồn & cài đặt nâng cao')) throw new Error('Homepage advanced source disclosure label mismatch');
+
+  const publicPage = await page.context().newPage();
+  try {
+    await publicPage.goto(baseUrl + '/', { waitUntil: 'networkidle' });
+    const publicKeys = await publicPage.locator('[data-aznet-homepage-surface]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-aznet-homepage-surface')));
+    if (JSON.stringify(adminKeys) !== JSON.stringify(publicKeys)) {
+      throw new Error('Homepage admin/frontend surface order mismatch: admin=' + JSON.stringify(adminKeys) + ' public=' + JSON.stringify(publicKeys));
+    }
+    for (const key of adminKeys) {
+      const card = map.locator('[data-surface-key="' + key + '"]');
+      if (await card.getByRole('link', { name: 'Xem trên trang chủ' }).count() !== 1) {
+        throw new Error('Homepage Map deep link missing for ' + key);
+      }
+    }
+  } finally {
+    await publicPage.close();
+  }
+
+  return await checkLayoutAndA11y(page, viewportName + '-homepage-map-' + (expectWoo ? 'woo' : 'clean'));
+}
+
 async function verifySystemHealth(page) {
   await gotoCenter(page, 'system-health');
   const text = await page.locator('.aznet-theme-control-center').innerText();
@@ -300,9 +342,10 @@ try {
       await resetSettings(page);
       const homepageHero = await verifyHomepageHeroEditingBridge(page, viewportName);
       const homepageTeam = await verifyHomepageTeamAuthoring(page, viewportName);
+      const homepageMap = await verifyHomepageMap(page, viewportName);
       await verifySystemHealth(page);
       const layout = await checkLayoutAndA11y(page, viewportName + '-' + (expectWoo ? 'woo' : 'clean'));
-      results.push({ viewportName, homepageHero, homepageTeam, ...layout });
+      results.push({ viewportName, homepageHero, homepageTeam, homepageMap, ...layout });
     } catch (error) {
       failures.push(`${viewportName}: ${error instanceof Error ? error.message : String(error)}`);
       await page.screenshot({ path: path.join(outputDir, `${viewportName}-failure.png`), fullPage: true }).catch(() => {});
