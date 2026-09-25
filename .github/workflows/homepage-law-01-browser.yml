@@ -455,8 +455,13 @@ jobs:
               exit( 1 );
           }
           $s = get_theme_mod( 'aznet_theme_settings', [] );
-          $s['homepage_hero_block'] = (int) $block;
-          $s['homepage_hero_variant'] = 'media-left';
+          // Reproduce the real regression boundary: Law 01 admin writes the scoped
+          // source while legacy keys may still point elsewhere or remain empty.
+          $s['homepage_law01_sources_initialized'] = true;
+          $s['homepage_law01_hero_block'] = (int) $block;
+          $s['homepage_law01_hero_variant'] = 'media-left';
+          $s['homepage_hero_block'] = 0;
+          $s['homepage_hero_variant'] = 'centered';
           set_theme_mod( 'aznet_theme_settings', AZnet\Theme\normalize_settings( $s ) );
           echo (int) $block;
           PHP
@@ -470,7 +475,7 @@ jobs:
             echo 'Legacy Hero Page must not win when synced Hero block is valid' >&2
             exit 1
           fi
-          echo 'PASS: D-030 synced Hero block precedence at runtime'
+          echo 'PASS: D-030 scoped Hero source parity and precedence at runtime'
 
       - name: Run D-030 Hero Library browser verification
         env:
