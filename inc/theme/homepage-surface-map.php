@@ -18,9 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Return the Theme setting key that currently owns effective presentation
  * selection for one Homepage slot.
  *
- * A small Law 01 compatibility set intentionally remains on the proven legacy
- * keys from the 1.3.53 recovery. Keeping that exception explicit here prevents
- * admin/frontend drift while avoiding a risky silent source migration.
+ * This wrapper is the single read/key boundary used by the unified Homepage
+ * backend. It delegates to the preset-scoped resolver, which already preserves
+ * legacy fallback until a scoped source becomes explicit.
  */
 function homepage_effective_source_key( string $preset, string $slot ): ?string {
     return homepage_source_key( $preset, $slot );
