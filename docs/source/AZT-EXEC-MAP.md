@@ -615,9 +615,10 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - **TD0 Source ratification** — D-038 ownership + execution map accepted.
 - **TD1 Team read model + shared card** — exact mapped parent, direct published children, shared member card.
 - **TD2 Homepage Team frontend** — max 4 real members, no generated/reference person fallback, Xem tất cả CTA.
-- **TD3 Homepage Team authoring** — bounded edit + draft-only Add Member under exact mapped parent.
+- **TD3 Homepage Team authoring** — bounded edit + immediate-publish Add Member under exact mapped parent.
 - **TD4 Team directory Page** — exact mapped parent presentation with all published members.
 - **TD5 Law 01 provisioning** — Team becomes required core Page; create/reuse parent only, no sample members.
 - **TD6 Runtime/browser/a11y parity** — admin/Homepage/directory order + data parity and accessibility evidence.
 - **TD7 Technical closure/release gate** — full regression, ownership review, evidence; release remains separately approved.
 
+- **D-039 immediate publication amendment** — TD3 Add Member publishes the validated WordPress child Page immediately; manual draft/private children remain public-excluded.
