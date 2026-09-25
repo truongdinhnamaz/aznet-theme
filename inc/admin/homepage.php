@@ -638,7 +638,12 @@ function render_homepage_map( string $preset ): void {
                 echo '<a class="button button-primary" href="' . esc_url( $edit_url ) . '">' . esc_html__( 'Chỉnh nội dung trang', 'aznet-theme' ) . '</a>';
             }
         } elseif ( in_array( $key, [ 'process', 'faq' ], true ) && $source_id > 0 ) {
-            render_homepage_quick_edit_form( 'law-01', $key, $source_id, __( 'Chỉnh nội dung', 'aznet-theme' ) );
+            render_homepage_quick_edit_form( 'law-01', $key, $source_id, __( 'Sửa tiêu đề & mô tả', 'aznet-theme' ) );
+            $edit_url = get_edit_post_link( $source_id, 'raw' );
+            if ( is_string( $edit_url ) && '' !== $edit_url ) {
+                $edit_label = 'process' === $key ? __( 'Sửa các bước', 'aznet-theme' ) : __( 'Sửa câu hỏi', 'aznet-theme' );
+                echo '<a class="button button-primary" href="' . esc_url( $edit_url ) . '">' . esc_html( $edit_label ) . '</a>';
+            }
         } elseif ( 'final-cta' === $key && 'page' === $source_type && $source_id > 0 ) {
             render_homepage_quick_edit_form( 'law-01', 'contact', $source_id, __( 'Chỉnh nội dung', 'aznet-theme' ) );
         } elseif ( 'latest' === $key ) {
