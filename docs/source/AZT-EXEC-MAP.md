@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.81
+**Version:** v0.82
 **Status:** Working Execution Map / derived  
 **Date:** 25/09/2026
 
@@ -629,8 +629,8 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 
 | Slice | State | Exact boundary |
 | --- | --- | --- |
-| TPL0 Governance | ACCEPTED / branch source candidate | D-040 product/architecture/roadmap source updates prepared; canonical-main merge remains gated |
-| TPL1 Admin Template Library | IMPLEMENTED CANDIDATE / BLOCKED_EXTERNAL_RUNNER | Card grid/search/category filter integrated on unified Homepage branch; fresh executable QA cannot start because PR #276 jobs terminate with runner_id=0 / zero steps |
+| TPL0 Governance | PASS / canonical | D-040 product/architecture/roadmap source updates are integrated on canonical main through PR #276 |
+| TPL1 Admin Template Library | PASS L1-L2 / canonical | Card grid/search/category filter integrated on main through PR #276; direct exact-main source verification PASS. L3/L4 remain separate. |
 | TPL2 Distribution consumer | LOCKED | Open only after TPL1 local/runtime gate; consume public/versioned external contract and fail soft |
 | TPL3 Secure installer | LOCKED | Declarative package only; allow-list + integrity/signature + staging + atomic activation + rollback |
 | TPL4 Runtime/browser/a11y | OPEN NEXT after shallow gates | Real wp-admin responsive/keyboard/focus/console evidence |
@@ -641,12 +641,12 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 
 | Slice | State | Exact boundary |
 | --- | --- | --- |
-| HB0 Governance | ACCEPTED / branch source candidate | D-041 shared-model/admin UX decision recorded |
-| HB1 Shared effective-surface model | IMPLEMENTED CANDIDATE | Law 01 request-local model resolves only effective renderable surfaces; no persistent second content store |
-| HB2 Frontend shared composition | IMPLEMENTED CANDIDATE | Law 01 before/after composition consumes the shared model; Curtain 01 unchanged |
-| HB3 Primary Homepage Map | IMPLEMENTED CANDIDATE | One-column effective map, bounded editing, frontend deep links, advanced source disclosure |
+| HB0 Governance | PASS / canonical | D-041 shared-model/admin UX decision recorded and integrated through PR #276 |
+| HB1 Shared effective-surface model | PASS L1-L2 / canonical | Law 01 request-local model resolves only effective renderable surfaces; no persistent second content store |
+| HB2 Frontend shared composition | PASS L1-L2 / canonical | Law 01 before/after composition consumes the shared model; Curtain 01 unchanged |
+| HB3 Primary Homepage Map | PASS L1-L2 / canonical | One-column effective map, bounded editing, frontend deep links, advanced source disclosure |
 | HB4 Static/TDD closure | PASS / runner-independent | RED contract added before implementation; direct exact-branch source verification then passed with 0 contract failures after correcting two defects found during review. GitHub runner remains unavailable but is no longer a dependency for L1/L2 evidence. |
 | HB5 WordPress runtime + browser/a11y parity | UNKNOWN / not release-claimed | Runtime parity test and R5/Homepage browser assertions are wired. Owner directed implementation/merge not to depend on hosted runner availability; no L3/L4 PASS is inferred from source verification. |
-| HB6 Integration/release | LOCKED | No L5/L6 inference, no main merge/release/deploy until prior gates close |
+| HB6 Integration/release | LOCKED | Canonical merge is complete; no L5/L6, release or deployment inference until separate runtime/browser/release gates close |
 
-**Current exact next:** owner approved proceeding without hosted-runner dependency. Merge the verified L1/L2 candidate only; keep L3/L4 as UNKNOWN and keep release/deployment gated until separate runtime/browser evidence exists.
+**Current exact next:** canonical main is `5f89436a710977f8ba03f9607f4cfc0a1d7d1340` after PR #276. Preserve L1/L2 PASS; L3/L4 remain UNKNOWN. Do not publish or deploy from this checkpoint.

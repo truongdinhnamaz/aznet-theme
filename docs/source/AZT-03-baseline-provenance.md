@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.75
+**Version:** v0.76
 **Status:** Working Source
 **Date:** 25/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -437,15 +437,14 @@ Production provenance remains deliberately separate. The Rèm Quốc Anh pilot c
 
 Evidence: `docs/evidence/CURTAIN01_VIETNAMESE_FONT_FIX_20260922.md`.
 
-### Unified Homepage backend candidate / PR #276 — 25/09/2026
+### Unified Homepage backend merge closure / PR #276 — 25/09/2026
 
-- Canonical `main` at branch start: `5d2d34074c1b1b0006151b399b6b652927a19d49`, Theme metadata `1.3.32`.
-- Candidate parent: PR #272 head `46d07c1a2b7cd82130b813742d9b78d619d7b6ef`, Theme metadata `1.3.54`; this remains unmerged to `main`.
-- Unified branch: `work/homepage-backend-unified-20260925`; draft PR #276 targets `main` only to obtain review/QA evidence and is not merge-authorized.
-- Candidate combines the D-040 Template Library admin presentation with the D-041 shared effective-surface Homepage Map while retaining WordPress/provider ownership.
-- RED checkpoint: `tests/offline/homepage-surface-map-contract.php` was committed before the shared resolver. Subsequent production/test deltas add the shared Law 01 model, frontend/admin consumption, effective-source compatibility, stable section anchors, runtime assertion and browser parity checks.
-- Final production-code checkpoint before evidence-only updates: `2291207482de4d1fee9b4a4470851ab21e5a17a2`. Fresh exact-head PR #276 verification is `BLOCKED_EXTERNAL_RUNNER`: V1 `36108984511`, R5 static `36108984342`, R5 browser `36108984398`, and Homepage Law 01 browser `36108984549` all ended before any step with runner ID `0` and blank runner name.
-- Therefore no fresh executable L1/L2/L3/L4 PASS or Theme-code failure is inferred. Main merge, release and deployment remain gated.
+- Owner-approved runner-independent PR #276 merged by squash to canonical `main@5f89436a710977f8ba03f9607f4cfc0a1d7d1340`.
+- The merged scope unifies Template Library + Law 01 shared effective-surface Homepage Map + bounded authoring/advanced sources while preserving WordPress/provider ownership.
+- RED contract existed before implementation. Direct exact-branch source verification passed with 0 contract failures after correcting two defects found during review: Latest Posts source alignment and Quick Edit/duplicate-source authorization alignment.
+- Fresh exact-main direct source verification on `main@5f89436...` also passed with 0 failures across shared model, frontend/admin consumption, ownership-forbidden reads, effective-source alignment and all ten Law 01 surface markers.
+- GitHub-hosted runner jobs remained unavailable (`runner_id=0`, zero executed steps). This no longer blocks L1/L2 provenance, but **L3 WordPress runtime and L4 browser/a11y remain UNKNOWN** and are not inferred.
+- No release publication or production deployment is claimed.
 - D-040 real Distribution Service L5 remains separately `BLOCKED_EXTERNAL`.
 
 Evidence: `docs/evidence/HOMEPAGE_BACKEND_UNIFIED_CANDIDATE_20260925.md`.
