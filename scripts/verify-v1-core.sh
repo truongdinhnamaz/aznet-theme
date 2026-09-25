@@ -156,6 +156,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-direc
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-control-center-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-surface-map-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-native-content-surface-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/d040-td1-template-library-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-backend-unified-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-library-contract.php
