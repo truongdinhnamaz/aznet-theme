@@ -82,6 +82,7 @@ async function inspectViewport(browser, name, viewport) {
     teamCards: null,
     heroImages: null,
     teamImages: null,
+    teamDirectoryCards: null,
     articleImages: null,
     footerColumns: null,
     utilityLinks: null,
@@ -354,12 +355,12 @@ async function inspectViewport(browser, name, viewport) {
     }
 
     result.teamCards = await page.locator('.aznet-theme-law01-team-card').count();
-    if (result.teamCards !== 4) throw new Error(`expected 4 WordPress-owned team child Page cards for the reference portrait row, got ${result.teamCards}`);
+    if (result.teamCards !== 4) throw new Error(`expected 4 WordPress-owned Team child Page cards on Homepage, got ${result.teamCards}`);
 
     result.heroImages = await page.locator('.aznet-theme-law01-hero__media img').count();
     if (result.heroImages !== 1) throw new Error(`visual QA fixture must provide 1 Hero featured image, got ${result.heroImages}`);
     result.teamImages = await page.locator('.aznet-theme-law01-team-card__media img').count();
-    if (result.teamImages !== 4) throw new Error(`visual QA fixture must provide 4 Team featured images, got ${result.teamImages}`);
+    if (result.teamImages !== 3) throw new Error(`Homepage fixture must keep one of the first four Team members text-only, got ${result.teamImages} images`);
     result.articleImages = await page.locator('.aznet-theme-law01-article-card__media img').count();
     if (result.articleImages !== 3) throw new Error(`visual QA fixture must provide 3 Latest Posts featured images, got ${result.articleImages}`);
 
@@ -419,6 +420,30 @@ async function inspectViewport(browser, name, viewport) {
       await page.keyboard.press('Escape');
       await panel.waitFor({ state: 'hidden' });
       if (await trigger.getAttribute('aria-expanded') !== 'false') throw new Error('mobile nav did not collapse after Escape');
+    }
+
+    const teamCta = page.locator('.aznet-theme-law01-team-more a');
+    if (await teamCta.count() !== 1) throw new Error('Team Xem tất cả CTA missing');
+    const teamCtaText = ((await teamCta.textContent()) || '').trim();
+    if (!teamCtaText.startsWith('Xem tất cả')) throw new Error(`Team CTA copy mismatch: ${teamCtaText}`);
+    const teamHref = await teamCta.getAttribute('href');
+    if (!teamHref) throw new Error('Team Xem tất cả CTA has no URL');
+
+    const directoryPage = await context.newPage();
+    try {
+      const directoryResponse = await directoryPage.goto(teamHref, { waitUntil: 'networkidle' });
+      if (!directoryResponse || directoryResponse.status() !== 200) throw new Error(`Team directory HTTP status was ${directoryResponse?.status() ?? 'missing'}`);
+      if (await directoryPage.locator('.aznet-theme-page--team-directory').count() !== 1) throw new Error('mapped Team directory presentation missing');
+      result.teamDirectoryCards = await directoryPage.locator('.aznet-theme-team-directory__grid .aznet-theme-team-card').count();
+      if (result.teamDirectoryCards !== 6) throw new Error(`Team directory must render all 6 published members, got ${result.teamDirectoryCards}`);
+      if (await directoryPage.getByText('Draft Team Member', { exact: true }).count()) throw new Error('draft Team member leaked into public directory');
+      const directoryOverflow = await directoryPage.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      if (directoryOverflow > 1) throw new Error(`Team directory horizontal overflow: ${directoryOverflow}px`);
+      const directoryAxe = await new AxeBuilder({ page: directoryPage }).analyze();
+      const directoryBlocking = directoryAxe.violations.filter((violation) => ['critical', 'serious'].includes(violation.impact));
+      if (directoryBlocking.length > 0) throw new Error(`Team directory blocking axe violations: ${directoryBlocking.map((item) => item.id).join(', ')}`);
+    } finally {
+      await directoryPage.close();
     }
 
     const axeResults = await new AxeBuilder({ page }).analyze();
