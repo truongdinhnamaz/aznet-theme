@@ -39,7 +39,7 @@ if (! str_contains($bootstrap, "require_once __DIR__ . '/team-directory.php';"))
     exit(1);
 }
 
-foreach (['team_member', 'member_image', 'member_role', 'get_permalink'] as $needle) {
+foreach (['team_member', 'member_image', 'member_role', 'get_permalink', 'aznet-theme-law01-profile__member', 'aznet-theme-law01-team-card__media', 'aznet-theme-law01-profile__member-image', 'aznet-theme-law01-team-card__body'] as $needle) {
     if (! str_contains($card, $needle)) {
         fwrite(STDERR, "FAIL: shared Team card missing {$needle}\n");
         exit(1);
