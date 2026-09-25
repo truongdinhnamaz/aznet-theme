@@ -67,16 +67,16 @@ foreach (['wp_update_post(', 'wp_delete_post(', 'wp_trash_post('] as $forbidden_
 }
 
 foreach ([
-    "setting( 'homepage_hero_block', 0 )",
-    "setting( 'homepage_hero_variant', 'split' )",
+    "homepage_source_value( 'law-01', 'hero', \$theme_settings )",
+    "homepage_source_value( 'law-01', 'hero_variant', \$theme_settings )",
     'homepage_block_reference',
     'aznet-theme-law01-hero--library',
 ] as $needle) {
     assert(str_contains($hero, $needle), "D-030 Hero render contract missing: {$needle}");
 }
 
-assert(strpos($hero, "setting( 'homepage_hero_block', 0 )") < strpos($hero, "setting( 'homepage_hero_page', 0 )"), 'Synced Hero block must take precedence over legacy Hero Page.');
-assert(str_contains($hero, "setting( 'homepage_hero_page', 0 )"), 'Legacy Hero Page compatibility must remain.');
+assert(strpos($hero, "homepage_source_value( 'law-01', 'hero', \$theme_settings )") < strpos($hero, "homepage_source_value( 'law-01', 'hero_page', \$theme_settings )"), 'Synced Hero block must take precedence over legacy Hero Page.');
+assert(str_contains($hero, "homepage_source_value( 'law-01', 'hero_page', \$theme_settings )"), 'Legacy Hero Page compatibility must remain through the scoped source resolver.');
 assert(str_contains($hero, "get_bloginfo( 'name' )"), 'Pre-v1.3.4 Site/Front Page fallback must remain.');
 
 assert(is_file($pattern), 'D-030 requires a portable Core-block Hero content scaffold pattern.');
