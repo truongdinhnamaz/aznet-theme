@@ -59,7 +59,7 @@ function provisioning_readiness(): array {
     $missing = [];
     if ( 'page' !== (string) get_option( 'show_on_front', 'posts' ) || ! provisioning_readiness_page_ok( (int) get_option( 'page_on_front', 0 ) ) ) { $missing[] = 'front_page'; }
     if ( 'law-01' !== (string) ( $s['homepage_preset'] ?? 'off' ) ) { $missing[] = 'law01_preset'; }
-    foreach ( [ 'services', 'about', 'contact' ] as $role ) {
+    foreach ( [ 'services', 'about', 'team', 'contact' ] as $role ) {
         if ( ! provisioning_readiness_page_ok( (int) homepage_source_value( 'law-01', $role, $s ) ) ) { $missing[] = $role; }
     }
     $locations = function_exists( 'get_nav_menu_locations' ) ? get_nav_menu_locations() : [];
@@ -67,7 +67,7 @@ function provisioning_readiness(): array {
     if ( ! function_exists( __NAMESPACE__ . '\\homepage_composer_active' ) ) { $missing[] = 'homepage_composer'; }
 
     $optional = [];
-    foreach ( [ 'team', 'process', 'faq' ] as $role ) {
+    foreach ( [ 'process', 'faq' ] as $role ) {
         if ( (int) homepage_source_value( 'law-01', $role, $s ) <= 0 ) { $optional[] = $role; }
     }
     if ( [] === (array) homepage_source_value( 'law-01', 'knowledge', $s ) ) { $optional[] = 'knowledge'; }
