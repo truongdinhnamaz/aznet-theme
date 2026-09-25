@@ -10,7 +10,7 @@ $keys = array_values( array_map(
     $surfaces
 ) );
 
-$expected = [ 'hero', 'services', 'profile', 'latest', 'topics', 'analysis', 'news', 'process', 'faq', 'final-cta' ];
+$expected = [ 'hero', 'services', 'profile', 'front-page-content', 'latest', 'topics', 'analysis', 'news', 'process', 'faq', 'final-cta' ];
 if ( $keys !== $expected ) {
     fwrite( STDERR, 'Homepage surface order mismatch: ' . wp_json_encode( $keys ) . PHP_EOL );
     exit( 1 );
@@ -33,7 +33,7 @@ if ( 6 !== count( $service_items ) ) {
 foreach ( $surfaces as $surface ) {
     $anchor = trim( (string) ( $surface['anchor'] ?? '' ) );
     $boundary = (string) ( $surface['boundary'] ?? '' );
-    if ( '' === $anchor || ! in_array( $boundary, [ 'before', 'after' ], true ) ) {
+    if ( '' === $anchor || ! in_array( $boundary, [ 'before', 'native', 'after' ], true ) ) {
         fwrite( STDERR, 'Homepage effective surface metadata is incomplete for ' . (string) ( $surface['key'] ?? 'unknown' ) . PHP_EOL );
         exit( 1 );
     }
