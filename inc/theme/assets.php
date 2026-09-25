@@ -451,6 +451,28 @@ function enqueue_services_page_assets( ?string $version = null ): void {
     );
 }
 
+/** Determine whether the mapped Team directory Page presentation can render. */
+function should_enqueue_team_page_assets(): bool {
+    return function_exists( __NAMESPACE__ . '\\team_page_presentation_active' )
+        && team_page_presentation_active();
+}
+
+/** Enqueue scoped Team directory Page presentation only for the exact mapped Team Page. */
+function enqueue_team_page_assets( ?string $version = null ): void {
+    if ( ! should_enqueue_team_page_assets() ) {
+        return;
+    }
+
+    enqueue_team_card_asset( $version );
+
+    wp_enqueue_style(
+        'aznet-theme-team-directory',
+        get_theme_file_uri( '/assets/css/components/team-directory.css' ),
+        [ 'aznet-theme-page', 'aznet-theme-team-card' ],
+        asset_content_version( '/assets/css/components/team-directory.css', $version )
+    );
+}
+
 /** Determine whether the mapped Services child landing presentation can render. */
 function should_enqueue_service_page_assets(): bool {
     if ( ! function_exists( __NAMESPACE__ . '\\service_page_is_detail' ) ) {
@@ -595,6 +617,7 @@ function enqueue_assets(): void {
     enqueue_page_assets( $version );
     enqueue_contact_page_assets( $version );
     enqueue_services_page_assets( $version );
+    enqueue_team_page_assets( $version );
     enqueue_service_page_assets( $version );
     enqueue_form_assets( $version );
     enqueue_navigation_assets( $version );
