@@ -40,7 +40,14 @@ Additional retained/new contracts are now wired into `scripts/verify-v1-core.sh`
 
 At this checkpoint, repository/code structure and source reconciliation are present on the branch, but **fresh executable L1/L2/L3/L4 PASS is not claimed**.
 
-Prior PR #272/#274 GitHub Actions reruns terminated before executing workflow steps (`runner_id=0`, empty step list). That is treated as runner/infrastructure evidence, not as a Theme regression and not as a PASS.
+Draft PR #276 was opened against canonical `main` specifically to obtain fresh repository-native verification. The first fresh runs reproduced the external runner failure before any job step executed:
+
+- V1 Core Pull Request CI run `36108772953`: `static-contracts` job `107987242275` and `clean-runtime` job `107987242397` both ended with `runner_id=0`, blank runner name and `steps=[]`;
+- R5 Control Center Static Contracts run `36108772680`: job `107987241706`, same zero-runner/zero-step failure;
+- R5 Control Center Browser Quality run `36108772757`: job `107987241626`, same zero-runner/zero-step failure;
+- Homepage Composer Law 01 Browser Quality run `36108772671`: job `107987241567`, same zero-runner/zero-step failure.
+
+This independently reproduces the earlier PR #272/#274 infrastructure symptom on the new candidate. State is therefore **BLOCKED_EXTERNAL_RUNNER** for executable L1-L4 verification. It is not evidence of a Theme test failure and not a PASS.
 
 ## Remaining gates
 
@@ -53,4 +60,4 @@ Prior PR #272/#274 GitHub Actions reruns terminated before executing workflow st
 
 ## Exact next
 
-Open a draft review PR to canonical `main` to trigger the repository-native QA matrix. If runners execute, close L1/L2 first and continue immediately to L3/L4. If jobs again end with zero executed steps/runner ID, record `BLOCKED_EXTERNAL_RUNNER` and keep the branch recoverable.
+Keep draft PR #276 and branch `work/homepage-backend-unified-20260925` recoverable. Resume with the same exact-head QA chain when GitHub runners can execute jobs: L1/L2 first, then Law 01 L3 and R5/Homepage L4 parity. Do not merge, release or deploy while `BLOCKED_EXTERNAL_RUNNER` remains.
