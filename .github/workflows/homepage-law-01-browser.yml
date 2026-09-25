@@ -12,6 +12,12 @@ on:
       - 'inc/theme/settings.php'
       - 'inc/theme/assets.php'
       - 'inc/theme/bootstrap.php'
+      - 'inc/theme/team-directory.php'
+      - 'template-parts/team/**'
+      - 'assets/css/components/team-card.css'
+      - 'assets/css/components/team-directory.css'
+      - 'tests/runtime/team-directory-parity.php'
+      - 'tests/runtime/homepage-team-authoring.php'
       - 'inc/admin/homepage.php'
       - 'inc/admin/homepage-hero.php'
       - 'inc/admin/control-center.php'
@@ -67,6 +73,11 @@ jobs:
           set -euo pipefail
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-settings-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-content-map-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-directory-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-directory-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-authoring-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-page-presentation-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-provisioning-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-control-center-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-library-contract.php
@@ -207,14 +218,24 @@ jobs:
               law01_page( $title, $slug, 'Nội dung mô tả dịch vụ được quản lý bằng Page WordPress.', '', $services, $order++ );
           }
           $team = law01_page( 'Đội ngũ luật sư', 'doi-ngu-luat-su', 'Tìm hiểu đội ngũ và cách chúng tôi phối hợp trong quá trình tư vấn.' );
-          $member_a = law01_page( 'Luật sư tư vấn doanh nghiệp', 'luat-su-doanh-nghiep', 'Hồ sơ nhân sự mẫu kiểm thử được quản lý bằng Page WordPress.', '', $team, 1 );
-          $member_b = law01_page( 'Luật sư tư vấn dân sự', 'luat-su-dan-su', 'Hồ sơ nhân sự mẫu kiểm thử thứ hai được quản lý bằng Page WordPress.', '', $team, 2 );
-          $member_c = law01_page( 'Luật sư tư vấn hình sự', 'luat-su-hinh-su', 'Hồ sơ nhân sự mẫu kiểm thử thứ ba được quản lý bằng Page WordPress.', '', $team, 3 );
-          $member_d = law01_page( 'Luật sư tư vấn đất đai', 'luat-su-dat-dai', 'Hồ sơ nhân sự mẫu kiểm thử thứ tư được quản lý bằng Page WordPress.', '', $team, 4 );
+          $member_a = law01_page( 'Luật sư tư vấn doanh nghiệp', 'luat-su-doanh-nghiep', 'Luật sư Doanh nghiệp', '', $team, 10 );
+          $member_b = law01_page( 'Luật sư tư vấn dân sự', 'luat-su-dan-su', 'Luật sư Dân sự', '', $team, 20 );
+          $member_c = law01_page( 'Luật sư tư vấn hình sự', 'luat-su-hinh-su', '', '', $team, 30 );
+          $member_d = law01_page( 'Luật sư tư vấn đất đai', 'luat-su-dat-dai', 'Luật sư Đất đai', '', $team, 40 );
+          $member_e = law01_page( 'Luật sư tư vấn lao động', 'luat-su-lao-dong', 'Luật sư Lao động', '', $team, 50 );
+          $member_f = law01_page( 'Luật sư tư vấn gia đình', 'luat-su-gia-dinh', 'Luật sư Hôn nhân & Gia đình', '', $team, 60 );
+          $draft_member = wp_insert_post( [
+              'post_type' => 'page',
+              'post_status' => 'draft',
+              'post_title' => 'Draft Team Member',
+              'post_parent' => $team,
+              'menu_order' => 5,
+          ], true );
+          if ( is_wp_error( $draft_member ) ) { throw new RuntimeException( $draft_member->get_error_message() ); }
           law01_featured_fixture( $member_a, 'team-a', 800, 1000 );
-          law01_featured_fixture( $member_b, 'team-b', 800, 1000 );
-          law01_featured_fixture( $member_c, 'team-c', 800, 1000 );
           law01_featured_fixture( $member_d, 'team-d', 800, 1000 );
+          law01_featured_fixture( $member_e, 'team-e', 800, 1000 );
+          law01_featured_fixture( $member_f, 'team-f', 800, 1000 );
           $brand_logo = law01_featured_fixture( $team, 'brand-logo', 300, 300 );
           set_theme_mod( 'custom_logo', $brand_logo );
           $process = law01_page(
@@ -318,6 +339,12 @@ jobs:
 
           wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
           wp rewrite flush --hard --path=/tmp/wp --allow-root
+
+      - name: Verify Team directory runtime parity
+        run: |
+          set -euo pipefail
+          wp eval-file "$GITHUB_WORKSPACE/tests/runtime/team-directory-parity.php" --path=/tmp/wp --allow-root
+          wp eval-file "$GITHUB_WORKSPACE/tests/runtime/homepage-team-authoring.php" --path=/tmp/wp --allow-root
 
       - name: Start WordPress runtime and verify Law 01 surface
         run: |
