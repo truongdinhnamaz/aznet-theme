@@ -444,7 +444,7 @@ Evidence: `docs/evidence/CURTAIN01_VIETNAMESE_FONT_FIX_20260922.md`.
 - Unified branch: `work/homepage-backend-unified-20260925`; draft PR #276 targets `main` only to obtain review/QA evidence and is not merge-authorized.
 - Candidate combines the D-040 Template Library admin presentation with the D-041 shared effective-surface Homepage Map while retaining WordPress/provider ownership.
 - RED checkpoint: `tests/offline/homepage-surface-map-contract.php` was committed before the shared resolver. Subsequent production/test deltas add the shared Law 01 model, frontend/admin consumption, effective-source compatibility, stable section anchors, runtime assertion and browser parity checks.
-- Fresh PR #276 verification is `BLOCKED_EXTERNAL_RUNNER`: V1 `36108772953`, R5 static `36108772680`, R5 browser `36108772757`, and Homepage Law 01 browser `36108772671` all ended before any step with runner ID `0` and blank runner name.
+- Final production-code checkpoint before evidence-only updates: `2291207482de4d1fee9b4a4470851ab21e5a17a2`. Fresh exact-head PR #276 verification is `BLOCKED_EXTERNAL_RUNNER`: V1 `36108984511`, R5 static `36108984342`, R5 browser `36108984398`, and Homepage Law 01 browser `36108984549` all ended before any step with runner ID `0` and blank runner name.
 - Therefore no fresh executable L1/L2/L3/L4 PASS or Theme-code failure is inferred. Main merge, release and deployment remain gated.
 - D-040 real Distribution Service L5 remains separately `BLOCKED_EXTERNAL`.
 
