@@ -1,7 +1,7 @@
 # AZnet Theme — WordPress-native Team Directory Design
 
 **Date:** 2026-09-25  
-**Status:** Written spec approved by product owner on 2026-09-25; implementation planning authorized  
+**Status:** Written spec approved by product owner on 2026-09-25; amended by D-039 on 2026-09-25 for immediate Team member publication  
 **Product:** AZnet Theme  
 **Scope:** Law 01 Team authoring, Homepage Team presentation, Team directory Page presentation, and Law 01 provisioning  
 **Baseline:** Current AZnet Theme work branch `work/homepage-map-v1-3-38-baseline`, including the separated Hero Library work through 1.3.44 candidate behavior.
@@ -210,7 +210,7 @@ The action opens a bounded form requiring:
 
 On submit:
 
-- create an ordinary WordPress **draft Page**;
+- create an ordinary WordPress **published Page**;
 - set `post_parent` to the mapped Team parent Page;
 - save name to title;
 - save role/title to excerpt;
@@ -220,7 +220,7 @@ On submit:
 
 No sample person, invented credentials, biography, phone, email, award, specialty, or avatar is generated.
 
-Publishing remains an explicit WordPress content action. A draft member never appears publicly.
+The bounded **Thêm nhân sự** action publishes the validated child Page immediately so the new member can appear on Homepage/Team directory without a second WordPress publish step. Manual WordPress draft/private child Pages remain valid and stay excluded from public resolvers.
 
 ## 8. Public Team directory Page
 
@@ -358,7 +358,7 @@ Tests prove:
 - order is stable and shared between admin/frontend;
 - title/excerpt/thumbnail map to name/role/portrait;
 - draft member does not render;
-- add-member action creates a draft direct child;
+- add-member action creates a published direct child;
 - quick edit rejects non-child Page IDs.
 
 ### L3 — Provisioning runtime
@@ -401,7 +401,7 @@ The feature is complete only when all are true:
 1. The mapped Team parent is ordinary WordPress Page content.
 2. Each member is one direct child Page; no parallel Theme personnel store exists.
 3. Admin can enter/edit member name, role/title and portrait through bounded controls.
-4. Add Member creates a draft child Page under the exact mapped Team parent.
+4. Add Member creates a published child Page under the exact mapped Team parent.
 5. Homepage shows the same first four published members/order as the admin preview.
 6. Homepage Team cards show portrait, name and role when those native fields exist.
 7. No fake/reference/AI portrait is presented as a team member.
@@ -426,7 +426,6 @@ This design does not authorize:
 - arbitrary drag-and-drop builder;
 - automatic scraping/import of staff;
 - AI-generated people;
-- automatic publication of a newly added member;
 - destructive conversion of existing Team content.
 
 Those require separate owner/source and UX decisions if needed later.
