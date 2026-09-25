@@ -146,6 +146,11 @@ printf '%s\n' '==> Homepage Composer + Law 01 contracts'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-settings-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-content-map-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-directory-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-reference-team-illustration-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-provisioning-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-page-presentation-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-authoring-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-directory-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-control-center-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-library-contract.php
