@@ -4,9 +4,9 @@ Product Charter và Ownership
 
 Định nghĩa AZnet Theme là gì, không là gì, sở hữu phần nào và phải nhường ownership cho hệ thống nào.
 
-| **Mã tài liệu** | AZT-01 | **Phiên bản** | v0.4 |
+| **Mã tài liệu** | AZT-01 | **Phiên bản** | v0.5 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 07/09/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 25/09/2026 |
 
 | **Định vị: AZnet Theme là house/reference WordPress theme ưu tiên cho website greenfield do AZnet triển khai. Theme phải hoạt động như một sản phẩm độc lập trên WordPress sạch; RootProfile, ConvertFlow, WooCommerce và provider khác là capability tích hợp tùy chọn, không định nghĩa readiness của core Theme.** |
 | --- |
@@ -132,3 +132,18 @@ V1.1 cũng **không** biến Theme thành application platform. Không thuộc s
 # 8. v1.1 product quality rule
 
 V1.1 được xem là hoàn thành khi các capability đã chọn đạt QA tương ứng và được chứng minh trên final candidate bytes, không phải khi Theme có feature-count ngang một commercial theme khác. Khi so sánh với các điểm mạnh của Flatsome hoặc theme thương mại tương tự, AZnet Theme chỉ tiếp thu **outcome có giá trị** như authoring speed, visual consistency, Header/Woo usability và operational confidence; không sao chép proprietary builder/domain ownership hoặc architecture coupling để đạt outcome đó.
+
+# 9. Remote Template Library / commercial distribution — D-040
+
+AZnet Theme may present a scalable Template Library whose catalog is operated by an external AZnet Template Distribution Service. This is an **optional distribution capability**, not a mandatory runtime dependency and not a replacement for the complete WordPress-clean core promised by D-027.
+
+Ownership is fixed as follows:
+
+- **AZnet Theme owns** the wp-admin Template Library presentation, local active-template selection, preview/composition UX, compatibility checks exposed by the Theme, and secure local install/rollback orchestration for Theme-owned presentation packages.
+- **AZnet Template Distribution Service owns** catalog publication, commercial pricing/policy, customer license/entitlement, download authorization, package metadata/signing and service-side account state.
+- **WordPress, RootProfile, ConvertFlow and WooCommerce** keep their existing authoritative content/domain ownership. A purchasable template does not transfer those domains into Theme or Distribution Service.
+- The full remote catalog is not bundled into every Theme release. A customer site downloads only the approved package it is entitled to install.
+- Remote availability must never define Core readiness. Existing installed presentation and the WordPress-clean Theme path remain usable if the Distribution Service is absent or unavailable.
+- Commercial entitlement is authorization to obtain a package; it is not Theme-owned business truth and must not be reconstructed from local heuristics.
+
+Remote templates are presentation products, not a parallel CMS/domain store. They may declare layout/presentation metadata and bounded assets, but must not carry authoritative customer content, plugin private storage, Journey semantics, identity/profile truth, commerce state, secrets or license-signing material.
