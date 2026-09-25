@@ -3,7 +3,10 @@
 namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-$page = homepage_page_reference( (int) setting( 'homepage_process_page', 0 ) );
+$page = homepage_page_reference( (int) homepage_source_value( 'law-01', 'process' ) );
+if ( ! $page instanceof \WP_Post ) {
+    $page = homepage_page_reference( (int) setting( 'homepage_process_page', 0 ) );
+}
 if ( ! $page instanceof \WP_Post ) { return; }
 
 $summary = trim( (string) get_the_excerpt( $page ) );
