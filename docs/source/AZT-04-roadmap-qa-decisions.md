@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.93
+**Version:** v0.94
 **Status:** Working Source  
 **Date:** 25/09/2026
 
@@ -780,3 +780,5 @@ Accepted rules:
 - Homepage Map is not a proprietary page builder, arbitrary section store, iframe editor or DOM scraper.
 - Initial implementation is bounded to Law 01. Curtain 01 retains its already-proven authoring/composition path until a separate parity slice is verified.
 - RED -> GREEN and fresh L3/L4 admin/frontend parity evidence are required before technical closure. No release/deployment is implied by this approval.
+
+**D-041 completeness correction — 25/09/2026:** the normal WordPress Front Page `the_content()` boundary is an effective Homepage surface and must appear in `Trang chủ đang hiển thị` between the Theme-composed before/after surfaces. Its edit action opens the native WordPress Page editor. Process and FAQ remain WordPress Page-owned; because their rendered list/details content comes from `post_content`, the Homepage backend must expose native full-content editor actions in addition to bounded title/excerpt Quick Edit. This is a correctness completion of D-041, not a new ownership or page-builder capability.
