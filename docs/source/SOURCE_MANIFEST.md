@@ -85,7 +85,7 @@ Derived DOCX source material remains archival/export evidence only. Canonical so
 
 19/09/2026 Homepage Hero editing UX evidence: `docs/evidence/HOMEPAGE_HERO_EDITOR_UX_20260919.md` records PR #150 canonical merge + exact-main V1/X6 PASS, PR #151 RED->GREEN authoring bridge, reconciliation to canonical 1.3.10 and 19/19 final workflow success. Hero copy remains WordPress-owned; Theme does not create a parallel Hero content store.
 
-**Exact next:** verify the unified Homepage backend candidate on `work/homepage-backend-unified-20260925` at executable L1/L2 first, then Law 01 L3 and R5/Homepage L4 parity. Do not merge `main`, publish or deploy while those gates are incomplete. If GitHub jobs again terminate with zero executed steps/runner ID, record `BLOCKED_EXTERNAL_RUNNER` rather than treating that as a Theme-code regression.
+**Exact next:** preserve draft PR #276 and `work/homepage-backend-unified-20260925` without merge. Fresh PR #276 V1/R5/Homepage jobs reproduced `runner_id=0` with zero executed steps, so executable L1-L4 state is `BLOCKED_EXTERNAL_RUNNER`. When runners execute again, resume at L1/L2 on the exact head, then continue to Law 01 L3 and R5/Homepage L4 parity.
 
 
 19/09/2026 PR #151 merge-closure evidence: `docs/evidence/HOMEPAGE_HERO_EDITOR_UX_MERGE_CLOSURE_20260919.md` records owner-approved merge to `main@39df23c3...`, zero file delta from the 22/22-verified final head and fresh exact-main V1 run `35412829723` SUCCESS.
@@ -111,3 +111,5 @@ Current release boundary: **v1.3.21 TECHNICAL PASS / GitHub publication v1.3.20 
 25/09/2026 D-040 Remote Template Library: AZT-01 v0.5, AZT-02 v0.16 and AZT-04 v0.93 preserve the external Distribution Service ownership boundary, declarative-package rule, Standalone Core independence and real-service L5 block. The derived execution labels are reconciled to TPL0-TPL6 to avoid collision with the existing Team Directory TD track.
 
 25/09/2026 D-041 unified Homepage backend: owner approved the operator flow **Template Library -> Trang chủ đang hiển thị -> bounded authoring -> Nguồn & cài đặt nâng cao**. The Law 01 candidate uses one request-local effective-surface model for both frontend composition and the primary admin map, with WordPress/provider ownership unchanged. Curtain 01 remains on its proven authoring path until a separately verified parity slice. Implementation exists only on `work/homepage-backend-unified-20260925`; L3/L4 and canonical merge are not claimed.
+
+25/09/2026 PR #276 external runner evidence: V1 run `36108772953`, R5 static `36108772680`, R5 browser `36108772757` and Homepage Law 01 browser `36108772671` all terminated before any workflow step with runner ID `0` and blank runner name. This is `BLOCKED_EXTERNAL_RUNNER`, not Theme-code failure/PASS. Evidence: `docs/evidence/HOMEPAGE_BACKEND_UNIFIED_CANDIDATE_20260925.md`.
