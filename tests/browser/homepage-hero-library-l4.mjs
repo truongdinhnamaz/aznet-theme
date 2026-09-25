@@ -29,24 +29,43 @@ try {
       if (await hero.locator('.aznet-theme-homepage-hero-content__media-help').isVisible()) throw new Error('Hero media authoring hint must not leak into public presentation');
 
       const metrics = await hero.evaluate((node) => {
+        const shell = node.querySelector('.aznet-theme-law01-hero__library-content');
+        const content = node.querySelector('.aznet-theme-homepage-hero-content');
         const layout = node.querySelector('.aznet-theme-homepage-hero-content__layout');
         const copy = node.querySelector('.aznet-theme-homepage-hero-content__copy');
         const media = node.querySelector('.aznet-theme-homepage-hero-content__media');
+        const mediaImage = node.querySelector('.aznet-theme-homepage-hero-content__media img');
         const titleNode = node.querySelector('.aznet-theme-homepage-hero-content__title');
         const trust = node.querySelector('.aznet-theme-homepage-hero-content__trust-grid');
+        const primary = node.querySelector('.aznet-theme-homepage-hero-content__actions .wp-block-button:not(.is-style-outline) .wp-block-button__link');
+        const probe = document.createElement('span');
+        probe.style.background = 'var(--law01-navy)';
+        node.appendChild(probe);
+        const expectedPrimaryBackground = getComputedStyle(probe).backgroundColor;
+        probe.remove();
         return {
           overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+          shellWidth: shell ? shell.getBoundingClientRect().width : 0,
+          contentWidth: content ? content.getBoundingClientRect().width : 0,
+          layoutWidth: layout ? layout.getBoundingClientRect().width : 0,
           columns: layout ? getComputedStyle(layout).gridTemplateColumns : '',
           copyOrder: copy ? getComputedStyle(copy).order : '',
           mediaOrder: media ? getComputedStyle(media).order : '',
+          mediaHeight: mediaImage ? mediaImage.getBoundingClientRect().height : 0,
           titleMaxWidth: titleNode ? getComputedStyle(titleNode).maxWidth : '',
           trustColumns: trust ? getComputedStyle(trust).gridTemplateColumns : '',
+          primaryBackground: primary ? getComputedStyle(primary).backgroundColor : '',
+          expectedPrimaryBackground,
         };
       });
       if (metrics.overflow > 1) throw new Error('Hero Library horizontal overflow: ' + metrics.overflow);
+      if (metrics.shellWidth <= 0 || metrics.layoutWidth < metrics.shellWidth * 0.94) throw new Error('Hero Library layout is still constrained inside the Law 01 shell: ' + JSON.stringify(metrics));
+      if (metrics.contentWidth < metrics.shellWidth * 0.94) throw new Error('Hero managed content is still constrained: ' + JSON.stringify(metrics));
+      if (metrics.primaryBackground !== metrics.expectedPrimaryBackground) throw new Error('Hero primary CTA does not use the Law 01 palette: ' + JSON.stringify(metrics));
       if (metrics.copyOrder !== '2' || metrics.mediaOrder !== '1') throw new Error('media-left variant order mismatch: ' + JSON.stringify(metrics));
       if (item.width >= 960 && !metrics.columns.includes('px')) throw new Error('desktop Hero Library grid columns unavailable');
       if (item.width >= 960 && metrics.titleMaxWidth !== 'none') throw new Error('desktop Hero title must not retain a narrow character cap: ' + metrics.titleMaxWidth);
+      if (item.width >= 960 && (metrics.mediaHeight < 360 || metrics.mediaHeight > 560)) throw new Error('desktop Hero media height is outside the bounded presentation range: ' + metrics.mediaHeight);
       if (item.width >= 960 && !metrics.trustColumns.includes('px')) throw new Error('desktop editable trust grid columns unavailable');
       if (item.width < 960 && metrics.columns.split(' ').length > 1) throw new Error('mobile Hero Library must collapse to one column');
 
