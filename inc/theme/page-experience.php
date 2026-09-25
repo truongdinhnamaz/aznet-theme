@@ -184,6 +184,31 @@ function services_page_children( int $limit = 12 ): array {
 }
 
 /**
+ * Whether the current native Page is the explicitly mapped Team directory Page.
+ */
+function team_page_is_mapped( ?int $post_id = null ): bool {
+    $post_id = $post_id ?: (int) get_queried_object_id();
+    $team_id = (int) homepage_source_value( 'law-01', 'team' );
+
+    if ( $post_id <= 0 || $team_id <= 0 || $post_id !== $team_id ) {
+        return false;
+    }
+
+    $post = get_post( $post_id );
+
+    return $post instanceof \WP_Post
+        && 'page' === $post->post_type
+        && 'publish' === $post->post_status;
+}
+
+/** Whether the premium Law 01 Team directory Page presentation is active. */
+function team_page_presentation_active( ?int $post_id = null ): bool {
+    return team_page_is_mapped( $post_id )
+        && function_exists( __NAMESPACE__ . '\\header_law01_active' )
+        && header_law01_active();
+}
+
+/**
  * Whether one native Page is an explicitly mapped direct child of the Services Page.
  *
  * The Services Page ID comes from the Theme Content Map. This deliberately avoids
