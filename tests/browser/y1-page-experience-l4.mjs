@@ -9,6 +9,7 @@ const routes = {
   wide: { url: process.env.Y1_WIDE_URL, variant: 'wide', breadcrumbs: false },
   landing: { url: process.env.Y1_LANDING_URL, variant: 'landing', breadcrumbs: false },
   contact: { url: process.env.Y1_CONTACT_URL || 'http://127.0.0.1:8080/y1-contact/', variant: 'standard', breadcrumbs: false, contact: true },
+  team: { url: process.env.Y1_TEAM_URL, variant: 'standard', breadcrumbs: false, team: true },
 };
 
 const outputDir = process.env.Y1_PAGE_STATE_DIR || '/tmp/y1-page-l4';
@@ -78,6 +79,7 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
     servicesPrimaryFocus: null,
     servicePrimaryFocus: null,
     contactPrimaryFocus: null,
+    teamCards: null,
     status: 'failed',
     error: null,
   };
@@ -212,6 +214,17 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
       if (!result.contactPrimaryFocus?.visible || !result.contactPrimaryFocus.focusVisible || result.contactPrimaryFocus.outlineStyle === 'none' || result.contactPrimaryFocus.outlineWidth < 1) {
         throw new Error(`Contact primary CTA lacks visible focus evidence: ${JSON.stringify(result.contactPrimaryFocus)}`);
       }
+    }
+
+    if (config.team) {
+      if (await page.locator('.aznet-theme-page--team-directory').count() !== 1) throw new Error('Expected mapped Team directory Page presentation');
+      result.teamCards = await page.locator('.aznet-theme-team-directory__grid .aznet-theme-team-card').count();
+      if (result.teamCards !== 5) throw new Error(`Expected five published Team member cards, got ${result.teamCards}`);
+      if (await page.getByText('Y1 Draft Team Member', { exact: true }).count()) throw new Error('Draft Team member leaked into Team directory');
+      if (await page.getByText('Y1 Team Member C', { exact: true }).count() !== 1) throw new Error('Text-only Team member missing from directory');
+      const teamStyles = await page.evaluate(() => Array.from(document.styleSheets).map((sheet) => sheet.href).filter(Boolean));
+      if (!teamStyles.some((href) => href.includes('/assets/css/components/team-directory.css'))) throw new Error('Team directory stylesheet not observed');
+      if (!teamStyles.some((href) => href.includes('/assets/css/components/team-card.css'))) throw new Error('Team card stylesheet not observed');
     }
 
     if (config.breadcrumbs) {
