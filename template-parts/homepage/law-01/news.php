@@ -3,7 +3,7 @@
 namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-$term_id = (int) setting( 'homepage_legal_news_term', 0 );
+$term_id = (int) homepage_effective_source_value( 'law-01', 'legal_news' );
 $term = homepage_category_reference( $term_id );
 if ( ! $term instanceof \WP_Term ) { return; }
 
