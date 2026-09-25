@@ -106,3 +106,4 @@ Current release boundary: **v1.3.21 TECHNICAL PASS / GitHub publication v1.3.20 
 
 25/09/2026 D-038 WordPress-native Team directory: owner-approved design/spec is `docs/superpowers/specs/2026-09-25-wordpress-native-team-directory-design.md`; implementation plan is `docs/superpowers/plans/2026-09-25-wordpress-native-team-directory.md`. Authoritative ownership decision is AZT-02 D-038 architecture + AZT-04 D-038 decision. WordPress owns Team parent/child Page data; Theme owns typed mapping, bounded authoring and presentation only. Release/deployment are not implied.
 
+25/09/2026 D-039 Team publication amendment: owner approved immediate publication from the bounded Homepage **Thêm nhân sự** action; this supersedes only D-038 draft-first Add Member behavior. WordPress ownership, exact parent/child mapping, provisioning and no-fake-person constraints remain unchanged.
