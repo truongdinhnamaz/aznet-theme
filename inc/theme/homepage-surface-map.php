@@ -118,9 +118,15 @@ function homepage_surface_entry(
  * @return array<int,array<string,mixed>>
  */
 function homepage_effective_surface_map( ?string $preset = null ): array {
+    static $cache = [];
+
     $preset = null === $preset ? homepage_preset() : $preset;
+    if ( array_key_exists( $preset, $cache ) ) {
+        return $cache[ $preset ];
+    }
     if ( 'law-01' !== $preset ) {
-        return [];
+        $cache[ $preset ] = [];
+        return $cache[ $preset ];
     }
 
     $settings = settings();
@@ -386,5 +392,6 @@ function homepage_effective_surface_map( ?string $preset = null ): array {
         }
     }
 
-    return $surfaces;
+    $cache[ $preset ] = $surfaces;
+    return $cache[ $preset ];
 }
