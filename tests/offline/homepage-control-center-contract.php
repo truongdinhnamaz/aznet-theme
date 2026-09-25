@@ -9,7 +9,7 @@ $bootstrap = file_get_contents($root . '/inc/admin/bootstrap.php');
 $css = file_get_contents($root . '/assets/css/admin/control-center.css');
 $settingsSource = file_get_contents($root . '/inc/theme/settings.php');
 
-foreach (['render_homepage_settings', 'homepage_slot_statuses', 'READY', 'DRAFT', 'EMPTY', 'UNMAPPED', 'INVALID', 'PROVIDER_UNAVAILABLE', 'law-01', 'homepage_hero_page', 'homepage_hero_block', 'homepage_hero_variant', 'homepage_knowledge_terms][', 'get_pages(', 'get_categories('] as $required) {
+foreach (['render_homepage_settings', 'homepage_slot_statuses', 'READY', 'DRAFT', 'EMPTY', 'UNMAPPED', 'INVALID', 'PROVIDER_UNAVAILABLE', 'law-01', 'homepage_source_descriptor', 'homepage_source_key', 'homepage_source_value', 'homepage_hero_variant', 'get_pages(', 'get_categories('] as $required) {
     assert(str_contains($source, $required), "Missing Homepage admin contract: {$required}");
 }
 
