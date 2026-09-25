@@ -6,7 +6,7 @@
  * Description: Portable Core-block content scaffold for the Homepage Hero Library.
  */
 ?>
-<!-- wp:group {"metadata":{"name":"aznet-hero-managed-v1"},"className":"aznet-theme-homepage-hero-content","lock":{"move":true,"remove":true},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"name":"aznet-hero-managed-v1"},"className":"aznet-theme-homepage-hero-content","lock":{"move":true,"remove":true},"layout":{"type":"default"}} -->
 <div class="wp-block-group aznet-theme-homepage-hero-content">
 <!-- wp:columns {"verticalAlignment":"center","className":"aznet-theme-homepage-hero-content__layout","lock":{"move":true,"remove":true}} -->
 <div class="wp-block-columns are-vertically-aligned-center aznet-theme-homepage-hero-content__layout">
