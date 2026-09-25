@@ -80,11 +80,15 @@ jobs:
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-provisioning-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-control-center-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-surface-map-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/d040-td1-template-library-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-backend-unified-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-library-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/f2-front-page-content-boundary-contract.php
           php -l front-page.php
           php -l inc/theme/homepage-content-map.php
+          php -l inc/theme/homepage-surface-map.php
           php -l inc/theme/homepage-composer.php
           php -l inc/admin/homepage.php
 
@@ -346,6 +350,7 @@ jobs:
           set -euo pipefail
           wp eval-file "$GITHUB_WORKSPACE/tests/runtime/team-directory-parity.php" --path=/tmp/wp --allow-root
           wp eval-file "$GITHUB_WORKSPACE/tests/runtime/homepage-team-authoring.php" --path=/tmp/wp --allow-root
+          wp eval-file "$GITHUB_WORKSPACE/tests/runtime/homepage-map-runtime.php" --path=/tmp/wp --allow-root | tee /tmp/homepage-law01/homepage-map-runtime.json
 
       - name: Start WordPress runtime and verify Law 01 surface
         run: |
