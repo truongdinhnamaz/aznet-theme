@@ -30,7 +30,7 @@ WordPress remains authoritative for Front Page, Process and FAQ Page content, pu
 
 ## Verification state
 
-Direct exact-branch source/contract verification is required before review. GitHub-hosted runner availability is not a prerequisite for L1/L2 source evidence. L3 WordPress runtime and L4 browser/a11y remain separate and must not be inferred from source checks.
+Direct exact-branch source/contract verification **PASS** on snapshot `69a067d487e09e7196a910da3f8eea069e51d804`: 14 affected production/test/source files checked, 0 failures. The check covered native surface/model/marker order, Front Page edit reachability, Process/FAQ full-content editor actions, ownership-forbidden reads, runtime/browser assertions, retained gate wiring and source-governance updates. GitHub-hosted runner availability is not a prerequisite for this L1/L2 source evidence. L3 WordPress runtime and L4 browser/a11y remain UNKNOWN and are not inferred from source checks.
 
 ## Branch
 
