@@ -23,7 +23,7 @@ foreach ([
 foreach ([
     'function homepage_team_member_insert_data',
     'function handle_homepage_team_member_create',
-    "'post_status'  => 'draft'",
+    "'post_status'  => 'publish'",
     "'post_parent'",
     'team_directory_next_menu_order()',
     'wp_insert_post(',
