@@ -37,13 +37,13 @@ function homepage_slot_statuses(): array {
         $descriptor = homepage_source_descriptor( $preset, $slot );
         if ( null === $descriptor ) { continue; }
         $type = (string) ( $descriptor['type'] ?? '' );
-        $value = homepage_source_value( $preset, $slot, $s );
+        $value = homepage_effective_source_value( $preset, $slot, $s );
 
         if ( 'wp_block' === $type ) {
             $id = (int) $value;
             if ( $id <= 0 ) {
                 if ( 'hero' === $slot && 'law-01' === $preset ) {
-                    $legacy_page_id = (int) homepage_source_value( 'law-01', 'hero_page', $s );
+                    $legacy_page_id = (int) homepage_effective_source_value( 'law-01', 'hero_page', $s );
                     $statuses[ $slot ] = null !== homepage_page_reference( $legacy_page_id ) ? 'LEGACY_PAGE' : 'FALLBACK';
                 } else {
                     $statuses[ $slot ] = 'UNMAPPED';
