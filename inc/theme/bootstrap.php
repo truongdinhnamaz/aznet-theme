@@ -17,6 +17,7 @@ require_once __DIR__ . '/archive-presentation.php';
 require_once __DIR__ . '/professional-page-kits.php';
 require_once __DIR__ . '/homepage-authoring.php';
 require_once __DIR__ . '/homepage-content-map.php';
+require_once __DIR__ . '/homepage-surface-map.php';
 require_once __DIR__ . '/team-directory.php';
 require_once __DIR__ . '/homepage-composer.php';
 require_once __DIR__ . '/provisioning-professional-services.php';
