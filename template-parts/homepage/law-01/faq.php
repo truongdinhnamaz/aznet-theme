@@ -25,7 +25,7 @@ while ( [] !== $queue && count( $details ) < 5 ) {
     }
 }
 ?>
-<section class="aznet-theme-law01-section aznet-theme-law01-faq" aria-labelledby="aznet-law01-faq-title">
+<section id="aznet-homepage-faq" data-aznet-homepage-surface="faq" class="aznet-theme-law01-section aznet-theme-law01-faq" aria-labelledby="aznet-law01-faq-title">
     <div class="aznet-theme-law01-container">
         <div class="aznet-theme-law01-faq__intro">
             <p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Hỏi đáp', 'aznet-theme' ); ?></p>
