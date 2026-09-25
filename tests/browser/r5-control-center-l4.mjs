@@ -184,10 +184,10 @@ async function verifyHomepageHeroEditingBridge(page, viewportName) {
 
   await gotoCenter(page, 'homepage');
   if (await page.locator('form.aznet-theme-homepage-hero-library').count()) throw new Error('Hero Library must not render inline inside Homepage Map');
-  const designLink = page.getByRole('link', { name: 'Thiết kế Hero' }).first();
-  if (await designLink.count() !== 1) throw new Error('Homepage Hero row must expose exactly one Thiết kế Hero path');
+  const designLink = page.getByRole('link', { name: 'Sửa Hero' }).first();
+  if (await designLink.count() !== 1) throw new Error('Homepage Hero row must expose exactly one Sửa Hero path');
   const designHref = await designLink.getAttribute('href');
-  if (!designHref || !designHref.includes('section=hero-library')) throw new Error('Thiết kế Hero does not route to dedicated Hero Library: ' + designHref);
+  if (!designHref || !designHref.includes('section=hero-library')) throw new Error('Sửa Hero does not route to dedicated Hero Library: ' + designHref);
 
   await designLink.click();
   await page.waitForURL(/section=hero-library/, { timeout: 20000 });
