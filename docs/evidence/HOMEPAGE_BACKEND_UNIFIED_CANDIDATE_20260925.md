@@ -19,7 +19,7 @@ Unified branch: `work/homepage-backend-unified-20260925`.
 - Primary wp-admin `Trang chủ đang hiển thị` map consumes the same model.
 - Stable Theme-owned frontend anchors/data markers support deep links and admin/frontend parity checks.
 - Source switching/migration/technical diagnostics moved behind `Nguồn & cài đặt nâng cao`.
-- Effective-source compatibility is centralized: the proven 1.3.53 legacy paths for Law 01 About, Team, Case Analysis and Legal News remain explicit rather than being silently migrated.
+- Effective-source compatibility is centralized through the preset-scoped resolver. Existing legacy values remain fallback-only until a scoped source is explicit; frontend, backend and bounded authoring now consume the same resolved source.
 - Team directory/Profile/admin source controls consume the same effective Team source.
 - New offline contracts, runtime assertion and R5/Homepage browser parity assertions are wired into existing QA infrastructure.
 
@@ -85,3 +85,16 @@ Owner approved continuing the candidate at the current gate. The four minimum ve
 - Homepage Law 01 Browser `36109081848`, attempt 2: job `107988638067`, same.
 
 The retry therefore confirms the external runner block is still active. No executable Theme assertion ran. The candidate remains unmerged; release and deployment remain gated.
+
+### Runner-independent direct source verification
+
+Because GitHub-hosted jobs remain unavailable, a direct repository-source verification was executed against the exact branch through the canonical GitHub file API instead of waiting for a runner. The check covered the shared surface resolver, frontend composer consumption, Homepage Map, Template Library integration, effective-source alignment for Team/Profile/Analysis/News/Latest, ownership-forbidden reads, all ten Law 01 frontend surface markers, runtime assertion wiring and core-verifier wiring.
+
+Result: **PASS — 0 contract failures** across both the core/unified source check and the ten-section frontend marker/source check.
+
+During this runner-independent review two real defects were found and corrected before handoff:
+
+1. Latest Posts surface still read the raw Knowledge resolver instead of the unified effective resolver.
+2. Quick Edit / duplicate-source authorization still compared against the old raw resolver, which could reject a valid effective source.
+
+These were corrected on the same branch before this checkpoint. This evidence is L1/L2 source/contract verification only; it does not pretend to be WordPress runtime/browser evidence.
