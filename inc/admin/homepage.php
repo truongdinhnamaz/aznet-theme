@@ -382,7 +382,9 @@ function render_homepage_quick_edit_form( string $preset, string $slot, int $sou
         if ( ! $post instanceof \WP_Post || 'page' !== $post->post_type ) { return; }
         $title = (string) $post->post_title;
         $excerpt = (string) $post->post_excerpt;
-        $image_id = (int) get_post_thumbnail_id( $source_id );
+        if ( homepage_quick_edit_featured_image_allowed( $preset, $slot, $source_id, $descriptor ) ) {
+            $image_id = (int) get_post_thumbnail_id( $source_id );
+        }
     } elseif ( in_array( $type, [ 'category', 'categories' ], true ) ) {
         $term = homepage_category_reference( $source_id );
         if ( ! $term instanceof \WP_Term ) { return; }
@@ -400,7 +402,7 @@ function render_homepage_quick_edit_form( string $preset, string $slot, int $sou
     wp_nonce_field( 'aznet_theme_quick_edit_homepage_source' );
     echo '<label><span>' . esc_html__( 'Tiêu đề', 'aznet-theme' ) . '</span><input class="widefat" type="text" name="homepage_source_title" value="' . esc_attr( $title ) . '"></label>';
     echo '<label><span>' . esc_html__( 'Mô tả ngắn', 'aznet-theme' ) . '</span><textarea class="widefat" rows="3" name="homepage_source_excerpt">' . esc_textarea( $excerpt ) . '</textarea></label>';
-    if ( 'page' === $type ) {
+    if ( 'page' === $type && homepage_quick_edit_featured_image_allowed( $preset, $slot, $source_id, $descriptor ) ) {
         echo '<input type="hidden" name="homepage_featured_image_id" value="' . esc_attr( (string) $image_id ) . '">';
         echo '<div class="aznet-theme-homepage-media-preview">';
         if ( $image_id > 0 ) { echo wp_kses_post( wp_get_attachment_image( $image_id, 'thumbnail' ) ); }
