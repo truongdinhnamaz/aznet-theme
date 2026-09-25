@@ -4,9 +4,9 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.14 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.15 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 19/09/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 25/09/2026 |
 
 | **Kiến trúc lõi: **Theme chỉ sở hữu presentation/configuration/reference cần thiết. Dữ liệu authoritative và business state ở lại owner. Boundary giữa hai bên là public/versioned provider contract hoặc adapter tối thiểu. |
 | --- |
@@ -334,3 +334,53 @@ Law01 provisioning must complete from resources shipped with the Theme package p
 The exact final package must pass a zero-plugin standalone path before Core Ready/publication: install -> activate -> setup -> provision -> representative runtime/browser/a11y -> update/theme-switch continuity. Optional L5 compatibility certification is additive and cannot substitute for Standalone Core PASS. Development/QA tools such as GitHub Actions, WP-CLI, Playwright and axe are allowed because they are not website runtime dependencies.
 
 A QA runner's inability to resolve/authenticate to a pilot site is recorded as `P4 PILOT ACCESS BLOCKED`; it is not evidence that the Theme requires a connector/plugin.
+
+# 17. Remote Template Distribution Contract — D-040
+
+D-040 adds an optional remote-distribution boundary without weakening D-027 Standalone Core.
+
+## 17.1. Layering
+
+`AZnet Template Distribution Service -> public/versioned distribution contract -> Theme consumer/installer -> local presentation package`
+
+The external service is source owner for catalog, entitlement, download authorization and package authenticity metadata. AZnet Theme is a bounded consumer. Theme must not implement a second license ledger, infer entitlement from URLs/domains, scrape private service storage or treat a fixture as the real service.
+
+## 17.2. Distribution contract minimum
+
+The consumer contract must be public/versioned, normalized, bounded, fail-soft and testable. At minimum it must distinguish:
+
+- stable `template_id` and package version;
+- display metadata needed by the Template Library;
+- compatibility requirements;
+- availability/entitlement state;
+- authorized package locator/token semantics owned by the service;
+- package SHA-256 and/or signature metadata sufficient for authenticity/integrity verification;
+- explicit error/version-mismatch states.
+
+Commercial price/payment/account fields remain service-domain data and should be exposed only when required for presentation; Theme must not become the transaction engine.
+
+## 17.3. Secure install boundary
+
+Remote install/update must follow a fail-closed sequence:
+
+1. negotiate contract/version and template identity;
+2. confirm entitlement through the external owner;
+3. obtain an authorized download;
+4. validate manifest schema and an explicit file/type allow-list;
+5. verify SHA-256/signature before activation;
+6. verify Theme/WordPress compatibility;
+7. stage files outside the active template state;
+8. activate atomically only after validation;
+9. preserve a rollback reference to the last known-good local package.
+
+Remote template packages are **declarative presentation packages**. They must not deliver executable PHP, arbitrary server-side code, plugin private-storage migrations, secrets or business-domain logic. New PHP capability ships through the normal AZnet Theme release path and its QA/release gates.
+
+## 17.4. Runtime independence and fail-soft behavior
+
+The public frontend must not require a live Distribution Service request to render an already installed template. Catalog/service outage may disable browsing/install/update actions in wp-admin but must not break the active site.
+
+D-027 remains intact: the supported WordPress-clean core/provisioning path does not require the remote catalog. D-040 is additive. No remote template or purchase is required to make AZnet Theme Core complete.
+
+## 17.5. Evidence boundary
+
+Theme-local fixtures can prove L1/L2 consumer and presentation contracts only. L5 integration requires evidence against the actual Distribution Service owned outside `aznet-theme`. Theme must not create the external service inside this repository merely to self-unblock integration.
