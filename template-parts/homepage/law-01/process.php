@@ -25,7 +25,7 @@ while ( [] !== $queue ) {
     }
 }
 ?>
-<section class="aznet-theme-law01-section aznet-theme-law01-process" aria-labelledby="aznet-law01-process-title">
+<section id="aznet-homepage-process" data-aznet-homepage-surface="process" class="aznet-theme-law01-section aznet-theme-law01-process" aria-labelledby="aznet-law01-process-title">
     <div class="aznet-theme-law01-container aznet-theme-law01-panel">
         <div class="aznet-theme-law01-process__intro">
             <p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Quy trình', 'aznet-theme' ); ?></p>
