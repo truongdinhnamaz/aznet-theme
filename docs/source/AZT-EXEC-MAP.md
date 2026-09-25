@@ -645,8 +645,8 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 | HB1 Shared effective-surface model | IMPLEMENTED CANDIDATE | Law 01 request-local model resolves only effective renderable surfaces; no persistent second content store |
 | HB2 Frontend shared composition | IMPLEMENTED CANDIDATE | Law 01 before/after composition consumes the shared model; Curtain 01 unchanged |
 | HB3 Primary Homepage Map | IMPLEMENTED CANDIDATE | One-column effective map, bounded editing, frontend deep links, advanced source disclosure |
-| HB4 Static/TDD closure | BLOCKED_EXTERNAL_RUNNER | RED contract added then implementation written; PR #276 V1/R5 static jobs reproduced runner_id=0 with zero executed steps, so code PASS/failure is not inferred |
-| HB5 WordPress runtime + browser/a11y parity | BLOCKED_EXTERNAL_RUNNER | Runtime parity test and R5/Homepage browser assertions are wired, but fresh PR #276 browser jobs terminate before any step executes |
+| HB4 Static/TDD closure | PASS / runner-independent | RED contract added before implementation; direct exact-branch source verification then passed with 0 contract failures after correcting two defects found during review. GitHub runner remains unavailable but is no longer a dependency for L1/L2 evidence. |
+| HB5 WordPress runtime + browser/a11y parity | UNKNOWN / not release-claimed | Runtime parity test and R5/Homepage browser assertions are wired. Owner directed implementation/merge not to depend on hosted runner availability; no L3/L4 PASS is inferred from source verification. |
 | HB6 Integration/release | LOCKED | No L5/L6 inference, no main merge/release/deploy until prior gates close |
 
-**Current exact next:** preserve draft PR #276 and the unified branch without merge. When GitHub runners can execute jobs, resume the exact-head chain at L1/L2, then continue immediately through Law 01 L3 and R5/Homepage L4 parity. Current executable verification state is `BLOCKED_EXTERNAL_RUNNER`, supported by fresh PR #276 zero-runner/zero-step jobs.
+**Current exact next:** owner approved proceeding without hosted-runner dependency. Merge the verified L1/L2 candidate only; keep L3/L4 as UNKNOWN and keep release/deployment gated until separate runtime/browser evidence exists.
