@@ -1,7 +1,7 @@
 # AZnet Theme — WordPress-native Team Directory Design
 
 **Date:** 2026-09-25  
-**Status:** Design approved in chat; written-spec review required before implementation  
+**Status:** Written spec approved by product owner on 2026-09-25; implementation planning authorized  
 **Product:** AZnet Theme  
 **Scope:** Law 01 Team authoring, Homepage Team presentation, Team directory Page presentation, and Law 01 provisioning  
 **Baseline:** Current AZnet Theme work branch `work/homepage-map-v1-3-38-baseline`, including the separated Hero Library work through 1.3.44 candidate behavior.
