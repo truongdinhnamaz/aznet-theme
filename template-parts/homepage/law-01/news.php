@@ -14,7 +14,7 @@ homepage_ledger_add( array_map( static fn( $post ): int => (int) $post->ID, $pos
 $featured = array_shift( $posts );
 $featured_excerpt = $featured instanceof \WP_Post ? trim( (string) get_the_excerpt( $featured ) ) : '';
 ?>
-<section class="aznet-theme-law01-section aznet-theme-law01-news" aria-labelledby="aznet-law01-news-title">
+<section id="aznet-homepage-news" data-aznet-homepage-surface="news" class="aznet-theme-law01-section aznet-theme-law01-news" aria-labelledby="aznet-law01-news-title">
     <div class="aznet-theme-law01-container">
         <p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Cập nhật', 'aznet-theme' ); ?></p>
         <h2 id="aznet-law01-news-title"><?php echo esc_html( $term->name ); ?></h2>
