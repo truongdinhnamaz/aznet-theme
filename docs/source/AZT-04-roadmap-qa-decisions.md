@@ -711,3 +711,22 @@ The product owner approved the refined About / Giới thiệu presentation and e
 Release PR #197 followed RED -> GREEN. RED head `d7d91627d325dc76433c9e693140fcd37192ee17` failed the intended Y5 `1.3.21` metadata assertion. Exact GREEN head `f7107f301485839d361fd00e9cb11c0837074434` completed 14/14 triggered workflows SUCCESS and merged to canonical `main@998a8dcf342b09824b197059524c50c013dba828`.
 
 Fresh exact-main V1 `35518082825` and X6 `35518082833` completed SUCCESS. X6 browser/axe passed 32/32; deterministic `aznet-theme-1.3.21.zip` has 158 files, 113 packaged PHP lint PASS and SHA-256 `da695f2b33aafc38172a9a412a3b1afd16263db3f03d305be4304eba877e09e2`. This closes `v1.3.21` technically only. Current GitHub Release remains `v1.3.20`; no `v1.3.21` publication or production deployment is claimed. Evidence: `docs/evidence/V1_3_21_ABOUT_PAGE_TECHNICAL_CLOSURE_20260920.md`.
+
+### D-038 — WordPress-native Team directory + Law 01 provisioning — ACCEPTED — 25/09/2026
+
+The product owner approved a WordPress-native Team directory.
+
+- The exact mapped Team Page is the directory parent; each member is one direct child Page.
+- WordPress owns names, roles, portraits, biographies, status, permalink and `menu_order`; Theme owns presentation and bounded authoring only.
+- New Law 01 recommended setup creates/reuses the Team parent. New creation title: **Đội ngũ của chúng tôi**. Existing mapped Team Pages are reused unchanged.
+- Homepage renders at most four published direct members; the Team directory Page renders all published direct members using the same order.
+- Add Member creates a draft child Page only. Provisioning creates no sample people.
+- Generated/reference/AI portraits may not be presented as real Team members.
+- No RootProfile private storage/identity semantics, Team CPT, parallel personnel store or title/slug/URL ownership heuristic is authorized.
+- L1 static/ownership, L2 behavior, L3 WordPress runtime/provisioning and L4 browser/visual/a11y evidence are required before release.
+- Publication/deployment remain separate explicit gates.
+
+Derived implementation artifacts:
+- `docs/superpowers/specs/2026-09-25-wordpress-native-team-directory-design.md`
+- `docs/superpowers/plans/2026-09-25-wordpress-native-team-directory.md`
+
