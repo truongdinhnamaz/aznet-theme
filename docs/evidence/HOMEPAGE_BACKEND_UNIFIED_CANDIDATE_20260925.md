@@ -74,3 +74,14 @@ That exact head triggered the matrix again and independently reproduced the same
 - Homepage Law 01 Browser `36108984549`: job `107987889896` — same.
 
 This exact-head recheck supersedes the earlier PR #276 runner observation for current-code verification. The disposition remains `BLOCKED_EXTERNAL_RUNNER`; no executable Theme assertion has run.
+
+### Owner approval + runner retry — 25/09/2026
+
+Owner approved continuing the candidate at the current gate. The four minimum verification workflows were re-run on current branch head `6d7abe74da8c7976a8730ac16f598bf409b8d1ee`:
+
+- V1 Core `36109081989`, attempt 2: jobs `107988591446` and `107988591667` ended with `runner_id=0`, blank runner name and zero executed steps;
+- R5 Static `36109082090`, attempt 2: job `107988609451`, same zero-runner/zero-step result;
+- R5 Browser `36109081994`, attempt 2: job `107988624356`, same;
+- Homepage Law 01 Browser `36109081848`, attempt 2: job `107988638067`, same.
+
+The retry therefore confirms the external runner block is still active. No executable Theme assertion ran. The candidate remains unmerged; release and deployment remain gated.
