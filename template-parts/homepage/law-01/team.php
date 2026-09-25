@@ -2,7 +2,7 @@
 /** Law 01 Team presentation from WordPress-owned Pages. */
 namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-$page = homepage_page_reference( (int) homepage_source_value( 'law-01', 'team' ) );
+$page = homepage_page_reference( (int) setting( 'homepage_team_page', 0 ) );
 if ( ! $page instanceof \WP_Post ) { return; }
 $summary = trim( (string) get_the_excerpt( $page ) );
 $members = homepage_direct_published_children( (int) $page->ID, 8 );
