@@ -5,6 +5,7 @@ $root = dirname(__DIR__, 2);
 $homepage = file_get_contents($root . '/inc/admin/homepage.php');
 $authoring = file_get_contents($root . '/inc/admin/homepage-authoring.php');
 $bootstrap = file_get_contents($root . '/inc/admin/bootstrap.php');
+$js = file_get_contents($root . '/assets/js/admin/homepage-authoring.js');
 
 foreach ([
     'function render_homepage_team_authoring',
@@ -28,6 +29,13 @@ foreach ([
 ] as $needle) {
     if (! str_contains((string) $authoring, $needle)) {
         fwrite(STDERR, "FAIL: Team create action missing {$needle}\n");
+        exit(1);
+    }
+}
+
+foreach (['aznet-theme-homepage-media-select', 'wp.media', 'homepage_featured_image_id'] as $needle) {
+    if (! str_contains((string) $js, $needle)) {
+        fwrite(STDERR, "FAIL: media authoring JS missing {$needle}\n");
         exit(1);
     }
 }
