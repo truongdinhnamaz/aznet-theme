@@ -299,7 +299,7 @@ Create `assets/css/components/team-card.css` with:
 
 ```css
 .aznet-theme-team-card{min-width:0}
-.aznet-theme-team-card__media{display:block;overflow:hidden;border-radius:.35rem;background:var(--aznet-theme-color-surface-muted)}
+.aznet-theme-team-card__media{display:block;overflow:hidden;border-radius:.35rem;background:var(--aznet-theme-color-surface-subtle)}
 .aznet-theme-team-card__image{display:block;width:100%;aspect-ratio:4/5;height:auto;object-fit:cover}
 .aznet-theme-team-card__body{padding-top:.85rem}
 .aznet-theme-team-card__name{margin:0;font-size:var(--aznet-theme-text-h4);line-height:var(--aznet-theme-line-height-h4)}
@@ -344,7 +344,9 @@ git commit -m "feat: add WordPress-native Team read model"
 
 **Interfaces:**
 - Consumes: `team_directory_members(4)`, shared Team card.
-- Produces: Homepage Team section with at most four real published member children and **Xem tất cả** CTA.
+- Produces:
+  - `enqueue_team_card_asset(?string $version = null): void`
+  - Homepage Team section with at most four real published member children and **Xem tất cả** CTA.
 
 - [ ] **Step 1: Write RED contract for no fake people and shared model use**
 
@@ -426,11 +428,24 @@ Keep destination `get_permalink( $team )`, but render:
 <?php esc_html_e( 'Xem tất cả', 'aznet-theme' ); ?> <span aria-hidden="true">→</span>
 ```
 
-- [ ] **Step 5: Enqueue shared Team card CSS on Law 01 Homepage**
+- [ ] **Step 5: Add one reusable Team-card asset helper and consume it on Homepage**
 
-In `enqueue_homepage_law01_asset()`, enqueue `aznet-theme-team-card` before the Law 01 Homepage stylesheet and add it as a dependency.
+In `inc/theme/assets.php` add:
 
-Do not enqueue Team card CSS globally.
+```php
+function enqueue_team_card_asset( ?string $version = null ): void {
+    wp_enqueue_style(
+        'aznet-theme-team-card',
+        get_theme_file_uri( '/assets/css/components/team-card.css' ),
+        [ 'aznet-theme-tokens' ],
+        asset_content_version( '/assets/css/components/team-card.css', $version )
+    );
+}
+```
+
+Then in `enqueue_homepage_law01_asset()`, call `enqueue_team_card_asset( $version )` before enqueuing the Law 01 Homepage stylesheet and add `aznet-theme-team-card` to that stylesheet's dependency list.
+
+Do not call `enqueue_team_card_asset()` from the global asset path; it is consumed only by Homepage Team and Team directory surfaces.
 
 - [ ] **Step 6: Update the old illustration regression**
 
@@ -543,9 +558,24 @@ if ( 'law-01' === $preset && 'team' === $slot ) {
 
 This pins Review Focus item 5.
 
-- [ ] **Step 4: Implement Team member create action**
+- [ ] **Step 4: Implement the insert-data helper and Team member create action**
 
-Add to `inc/admin/homepage-authoring.php`:
+Add the pure insert-data helper first:
+
+```php
+function homepage_team_member_insert_data( \WP_Post $parent, string $name, string $role ): array {
+    return [
+        'post_type'    => 'page',
+        'post_status'  => 'draft',
+        'post_parent'  => (int) $parent->ID,
+        'post_title'   => $name,
+        'post_excerpt' => $role,
+        'menu_order'   => \AZnet\Theme\team_directory_next_menu_order(),
+    ];
+}
+```
+
+Then add the HTTP handler:
 
 ```php
 function handle_homepage_team_member_create(): void {
@@ -577,14 +607,7 @@ function handle_homepage_team_member_create(): void {
     }
 
     $id = wp_insert_post(
-        [
-            'post_type'    => 'page',
-            'post_status'  => 'draft',
-            'post_parent'  => (int) $parent->ID,
-            'post_title'   => $name,
-            'post_excerpt' => $role,
-            'menu_order'   => \AZnet\Theme\team_directory_next_menu_order(),
-        ],
+        homepage_team_member_insert_data( $parent, $name, $role ),
         true
     );
     if ( is_wp_error( $id ) ) {
@@ -613,18 +636,33 @@ add_action( 'admin_post_aznet_theme_create_team_member', __NAMESPACE__ . '\handl
 
 - [ ] **Step 6: Render Team-specific admin UI**
 
-Add `render_homepage_team_authoring()` in `homepage.php`.
+Add `render_homepage_team_authoring()` in `homepage.php` with this outer identity:
 
-It must:
-- use exact mapped parent;
-- show parent title and published member count;
-- list exactly `team_directory_members(4)`;
-- for each member show thumbnail, name, excerpt/role and existing quick-edit disclosure;
-- show **Xem tất cả trên website** to the parent permalink;
-- show an **Thêm nhân sự** disclosure/form with fields `team_member_name`, `team_member_role`, and the existing media selector markup/classes;
-- never list unrelated Pages.
+```php
+function render_homepage_team_authoring(): void {
+    $parent = \AZnet\Theme\team_directory_parent();
+    if ( ! $parent instanceof \WP_Post ) { return; }
 
-In `render_homepage_authoring_console()`, special-case `law-01/team` so the generic children rendering does not duplicate the Team UI.
+    $members = \AZnet\Theme\team_directory_members( 4 );
+    $url = get_permalink( $parent );
+    $url = is_string( $url ) ? $url : '';
+
+    echo '<section id="homepage-team" class="aznet-theme-homepage-team-authoring">';
+    // Parent summary, visible member preview, add-member form.
+    echo '</section>';
+}
+```
+
+Inside it:
+- show parent title and `count( \AZnet\Theme\team_directory_members() )` published member count;
+- list exactly `$members`;
+- for each member show thumbnail, name, excerpt/role and `render_homepage_quick_edit_form( 'law-01', 'team', (int) $member->ID )`;
+- show **Xem tất cả trên website** only when `$url !== ''`;
+- show an **Thêm nhân sự** disclosure/form with `action=aznet_theme_create_team_member`, nonce `aznet_theme_create_team_member`, fields `team_member_name`, `team_member_role`, and the existing media selector markup/classes using hidden `homepage_featured_image_id`;
+- add `data-team-member-name` to each visible member-name element for browser parity tests;
+- never query or list unrelated Pages.
+
+In `render_homepage_authoring_console()`, for `law-01/team` render the parent source actions once, call `render_homepage_team_authoring()`, and skip the generic child collection block so Team children are not duplicated.
 
 - [ ] **Step 7: Add Team admin CSS**
 
@@ -826,6 +864,8 @@ Add `should_enqueue_team_page_assets()` and `enqueue_team_page_assets()` in `ass
 The Team directory stylesheet depends on:
 - `aznet-theme-page`;
 - `aznet-theme-team-card`.
+
+Call the `enqueue_team_card_asset( $version )` helper from Task 3 before enqueuing `aznet-theme-team-directory`.
 
 Add `assets/css/components/team-directory.css` with a responsive 4→2→1 grid and Law 01-compatible typography/surfaces. Do not load it globally.
 
