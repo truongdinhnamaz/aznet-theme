@@ -125,7 +125,7 @@ For each published direct child Page:
 
 If the excerpt is empty, omit the role line rather than inventing text.
 
-If the portrait is missing, render a neutral presentation-safe placeholder or a text-only card; do not substitute an AI/generated person portrait.
+If the portrait is missing, render a text-only card; do not substitute an AI/generated person portrait.
 
 ### Homepage limit
 
@@ -222,12 +222,6 @@ No sample person, invented credentials, biography, phone, email, award, specialt
 
 Publishing remains an explicit WordPress content action. A draft member never appears publicly.
 
-### Manage all
-
-Provide **Quản lý tất cả** as a secondary action that opens the WordPress Pages list filtered/navigated as closely as the existing native UI safely allows.
-
-Do not create a Theme-owned personnel management screen that duplicates WordPress.
-
 ## 8. Public Team directory Page
 
 When the current queried Page is the exact mapped Team parent Page, AZnet Theme may apply a Team-specific presentation because the mapping is an explicit Theme presentation reference.
@@ -253,17 +247,11 @@ If there are zero published members, render the parent Page normally and omit th
 
 ## 9. Member child Page presentation
 
-A member child Page remains an ordinary WordPress Page.
+A member child Page remains an ordinary WordPress Page and uses the existing standard Page presentation in this slice.
 
-This slice does not create a complex profile system.
+It may show the normal Featured Image, Page title and Page body according to the existing generic Page template.
 
-At minimum the standard Page template remains valid and can show:
-
-- Featured Image;
-- Page title;
-- excerpt/body according to existing Page presentation.
-
-A dedicated member-detail presentation may be added only if it is a small Theme presentation refinement and does not introduce new data semantics.
+No dedicated member-profile template or new person-specific data semantics are introduced in this slice.
 
 ## 10. Law 01 provisioning / Thiết lập nhanh
 
@@ -339,7 +327,7 @@ This avoids destructive migration and duplicate content.
 
 - Portraits use WordPress attachment alt text.
 - Card names are proper headings at the correct hierarchy.
-- Buttons/links have clear names: **Sửa**, **Thêm nhân sự**, **Quản lý tất cả**, **Xem tất cả**.
+- Buttons/links have clear names: **Sửa**, **Thêm nhân sự**, **Xem tất cả**.
 - Media controls remain keyboard-accessible using the existing WordPress media workflow.
 - Team grids collapse responsively without horizontal overflow.
 - Missing images must not remove the accessible member name/role.
