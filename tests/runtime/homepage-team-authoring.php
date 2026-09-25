@@ -35,10 +35,10 @@ if ( $unrelated_id > 0 && \AZnet\Theme\Admin\homepage_quick_edit_target_allowed(
 
 $data = \AZnet\Theme\Admin\homepage_team_member_insert_data( $parent, 'Nguyễn An', 'Luật sư' );
 assert( 'page' === $data['post_type'] );
-assert( 'draft' === $data['post_status'] );
+assert( 'publish' === $data['post_status'] );
 assert( (int) $parent->ID === (int) $data['post_parent'] );
 assert( 'Nguyễn An' === $data['post_title'] );
 assert( 'Luật sư' === $data['post_excerpt'] );
 assert( isset( $data['menu_order'] ) && is_int( $data['menu_order'] ) );
 
-echo "PASS: Team authoring is bounded to mapped direct children and draft-first creation.\n";
+echo "PASS: Team authoring is bounded to mapped direct children and immediate publication.\n";
