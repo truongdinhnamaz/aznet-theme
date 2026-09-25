@@ -370,7 +370,7 @@ function homepage_authoring_source_summary( string $preset, string $slot ): arra
 }
 
 /** Render bounded Quick Edit fields for one concrete WordPress source. */
-function render_homepage_quick_edit_form( string $preset, string $slot, int $source_id ): void {
+function render_homepage_quick_edit_form( string $preset, string $slot, int $source_id, string $summary_label = '' ): void {
     $descriptor = homepage_source_descriptor( $preset, $slot );
     if ( null === $descriptor || $source_id <= 0 ) { return; }
     $type = (string) ( $descriptor['type'] ?? '' );
@@ -390,7 +390,8 @@ function render_homepage_quick_edit_form( string $preset, string $slot, int $sou
         $excerpt = (string) $term->description;
     } else { return; }
 
-    echo '<details class="aznet-theme-homepage-quick-edit-panel"><summary class="button">' . esc_html__( 'Sửa nhanh', 'aznet-theme' ) . '</summary>';
+    $summary_label = '' !== $summary_label ? $summary_label : __( 'Sửa nhanh', 'aznet-theme' );
+    echo '<details class="aznet-theme-homepage-quick-edit-panel"><summary class="button">' . esc_html( $summary_label ) . '</summary>';
     echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
     echo '<input type="hidden" name="action" value="aznet_theme_quick_edit_homepage_source">';
     echo '<input type="hidden" name="homepage_preset_scope" value="' . esc_attr( $preset ) . '">';
@@ -442,7 +443,7 @@ function render_homepage_team_authoring(): void {
             if ( '' !== $role ) { echo '<p class="aznet-theme-homepage-team-member__role">' . esc_html( $role ) . '</p>'; }
             echo '</div>';
             echo '<div class="aznet-theme-homepage-team-member__actions">';
-            render_homepage_quick_edit_form( 'law-01', 'team', (int) $member->ID );
+            render_homepage_quick_edit_form( 'law-01', 'team', (int) $member->ID, __( 'Sửa', 'aznet-theme' ) );
             echo '</div></div>';
         }
         echo '</div>';
