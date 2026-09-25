@@ -7,9 +7,9 @@ Canonical repository baseline at the D-040/D-041 decision checkpoint is exact `m
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.5 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.16 | Theme architecture, public integration contracts, D-027 Standalone Core boundary and complete WordPress-owned D-030 Hero authoring rule |
-| `AZT-03-baseline-provenance.md` | v0.75 | Canonical provenance through Rèm 01 1.3.31 Project Showcase production checkpoint |
+| `AZT-03-baseline-provenance.md` | v0.76 | Canonical provenance through Rèm 01 1.3.31 Project Showcase production checkpoint |
 | `AZT-04-roadmap-qa-decisions.md` | v0.93 | Roadmap/QA through Rèm 01 Process Rail + Project Showcase production PASS at verified scope |
-| `AZT-EXEC-MAP.md` | v0.81 | Derived execution map through Rèm 01 1.3.31 production checkpoint |
+| `AZT-EXEC-MAP.md` | v0.82 | Derived execution map through Rèm 01 1.3.31 production checkpoint |
 
 23/09/2026 Rèm 01 production evidence: `docs/evidence/CURTAIN01_PROJECT_SHOWCASE_PRODUCTION_20260923.md` records PR #262/#263 integration through `main@f84d45a58261ec41d9b0c11a5e02a0873edb28ff`, owner-backed WPVibe production publication, Post #999 / Category #80 mapping, corrective removal of one stale draft-only D-036-incompatible heading cap, exact live Curtain CSS/JS/`theme.json` reconciliation, and fresh mobile/desktop Accessibility 100 / Best Practices 100. Current GitHub Release remains `v1.3.23`; this pilot production state does not silently create a new Release.
 
