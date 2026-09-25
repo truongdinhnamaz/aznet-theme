@@ -17,6 +17,7 @@ on:
       - 'inc/theme/homepage-composer.php'
       - 'tests/offline/homepage-surface-map-contract.php'
       - 'tests/offline/homepage-native-content-surface-contract.php'
+      - 'tests/offline/homepage-process-faq-authoring-completeness-contract.php'
       - 'tests/offline/homepage-backend-unified-contract.php'
       - 'tests/offline/d040-td1-template-library-contract.php'
       - 'tests/offline/homepage-team-authoring-contract.php'
