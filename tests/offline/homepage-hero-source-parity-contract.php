@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 $root = dirname(__DIR__, 2);
 $hero = (string) file_get_contents($root . '/template-parts/homepage/law-01/hero.php');
+$admin = (string) file_get_contents($root . '/inc/admin/homepage-hero.php');
 
 foreach ([
     "homepage_source_value( 'law-01', 'hero', \$theme_settings )",
@@ -12,9 +13,14 @@ foreach ([
     "homepage_source_value( 'law-01', 'services', \$theme_settings )",
 ] as $needle) {
     if (! str_contains($hero, $needle)) {
-        fwrite(STDERR, "FAIL: Law 01 frontend is not consuming the same effective source as Hero admin: {$needle}\n");
+        fwrite(STDERR, "FAIL: Law 01 frontend is not consuming the effective scoped source: {$needle}\n");
         exit(1);
     }
+}
+
+if (! str_contains($admin, "homepage_source_value( 'law-01', 'hero', settings() )")) {
+    fwrite(STDERR, "FAIL: Hero save path is not bound to the effective Law 01 Hero source.\n");
+    exit(1);
 }
 
 foreach ([
@@ -30,4 +36,4 @@ foreach ([
     }
 }
 
-echo "PASS: Law 01 Hero admin and frontend share the same scoped source resolver.\n";
+echo "PASS: Hero save and Law 01 frontend share the same effective scoped source resolver.\n";
