@@ -231,6 +231,31 @@ function homepage_effective_surface_map( ?string $preset = null ): array {
         );
     }
 
+    $front_id = (int) get_option( 'page_on_front', 0 );
+    $front_page = homepage_page_reference( $front_id );
+    if ( $front_page instanceof \WP_Post ) {
+        $front_content = trim( (string) $front_page->post_content );
+        $front_summary = homepage_surface_text_summary( (string) get_the_excerpt( $front_page ) );
+        if ( '' === $front_summary && '' !== $front_content ) {
+            $front_summary = homepage_surface_text_summary( (string) do_blocks( $front_content ) );
+        }
+
+        $surfaces[] = homepage_surface_entry(
+            'front-page-content',
+            __( 'Nội dung trang chủ', 'aznet-theme' ),
+            '',
+            'native',
+            'post-' . (string) $front_page->ID,
+            'front_page',
+            (int) $front_page->ID,
+            [
+                'title'   => get_the_title( $front_page ),
+                'summary' => $front_summary,
+                'source'  => __( 'Page được chọn làm Trang chủ trong WordPress', 'aznet-theme' ),
+            ]
+        );
+    }
+
     $after_order = 'burgundy-gold' === $variant
         ? [ 'latest', 'topics', 'analysis', 'news', 'process', 'faq', 'final-cta' ]
         : [ 'topics', 'latest', 'analysis', 'news', 'process', 'faq', 'final-cta' ];
