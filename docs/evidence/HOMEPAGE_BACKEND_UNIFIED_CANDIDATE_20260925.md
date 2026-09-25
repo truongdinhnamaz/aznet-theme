@@ -61,3 +61,16 @@ This independently reproduces the earlier PR #272/#274 infrastructure symptom on
 ## Exact next
 
 Keep draft PR #276 and branch `work/homepage-backend-unified-20260925` recoverable. Resume with the same exact-head QA chain when GitHub runners can execute jobs: L1/L2 first, then Law 01 L3 and R5/Homepage L4 parity. Do not merge, release or deploy while `BLOCKED_EXTERNAL_RUNNER` remains.
+
+### Exact-head recheck after source-compatibility review
+
+Final production-code checkpoint before this evidence update: `2291207482de4d1fee9b4a4470851ab21e5a17a2`.
+
+That exact head triggered the matrix again and independently reproduced the same infrastructure block:
+
+- V1 Core `36108984511`: `clean-runtime` job `107987889397` and `static-contracts` job `107987889558` — `runner_id=0`, blank runner, zero steps;
+- R5 Static `36108984342`: job `107987888165` — same;
+- R5 Browser `36108984398`: job `107987888785` — same;
+- Homepage Law 01 Browser `36108984549`: job `107987889896` — same.
+
+This exact-head recheck supersedes the earlier PR #276 runner observation for current-code verification. The disposition remains `BLOCKED_EXTERNAL_RUNNER`; no executable Theme assertion has run.
