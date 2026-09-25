@@ -262,7 +262,7 @@ function render_provisioning_wizard(): void {
         foreach ( $blueprint['categories'] as $role => $definition ) { provisioning_render_recommendation_card( 'categories', $role, $definition, (array) ( $recommendations['categories'][ $role ] ?? [] ), $state['categories'] ); }
         echo '</div>';
         echo '<details class="aznet-theme-provision-advanced"><summary>' . esc_html__( 'Tùy chỉnh nâng cao', 'aznet-theme' ) . '</summary>';
-        $required_page_roles = $is_law ? [ 'home','about','services','contact' ] : [ 'home','about','services','team','contact' ];
+        $required_page_roles = [ 'home','about','services','team','contact' ];
         foreach ( $blueprint['pages'] as $role => $definition ) { provisioning_action_select( 'pages', $role, $state['pages'], $new_site, in_array( $role, $required_page_roles, true ), (array) ( $recommendations['pages'][ $role ] ?? [] ) ); }
         foreach ( $blueprint['categories'] as $role => $definition ) { provisioning_action_select( 'categories', $role, $state['categories'], $new_site, false, (array) ( $recommendations['categories'][ $role ] ?? [] ) ); }
         $menu_default = (int) $state['primary_menu_id'] > 0 ? 'reuse' : 'create';
