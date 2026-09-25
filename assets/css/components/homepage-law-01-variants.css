@@ -499,7 +499,7 @@
 
 /* D-030 Homepage Hero Library: presentation variants over WordPress-owned Core-block content. */
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-law01-hero__library-content {
-    padding-block: clamp(2.5rem, 5vw, 5rem);
+    padding-block: 0;
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content {
     width: 100%;
