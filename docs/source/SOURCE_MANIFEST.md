@@ -1,4 +1,4 @@
-# AZnet Theme Source Manifest
+Canonical repository baseline after PR #276/#277 is exact `main@2ffb3941b3a3cace9452b58fc2ee8dbaf27754f7`, Theme metadata `1.3.54`. Branch `fix/homepage-native-content-surface-20260925` is a bounded D-041 correctness candidate only; it adds the native Front Page content surface plus complete Process/FAQ editor reachability and is not canonical until merged. Current published GitHub Release remains `v1.3.23`; publication, canonical implementation and pilot production remain distinct boundaries.
 
 Canonical repository baseline at the D-040/D-041 decision checkpoint is exact `main@5d2d34074c1b1b0006151b399b6b652927a19d49`, Theme metadata `1.3.32`. PR #272 carries a newer unmerged `1.3.54` Law 01/authoring candidate; branch `work/homepage-backend-unified-20260925` continues from that candidate and is not canonical main. Earlier exact-main V1 `35870034014`, X6 `35870034255` and Curtain 01 Project Showcase `35870033789` remain retained evidence for their tested bytes only. Current published GitHub Release remains `v1.3.23`; publication, canonical implementation and pilot production are distinct boundaries.
 | Source | Semantic version | Role |
@@ -6,10 +6,10 @@ Canonical repository baseline at the D-040/D-041 decision checkpoint is exact `m
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.5 | Product scope/ownership and v1.1 objective/non-goals |
-| `AZT-02-architecture.md` | v0.16 | Theme architecture, public integration contracts, D-027 Standalone Core boundary and complete WordPress-owned D-030 Hero authoring rule |
+| `AZT-02-architecture.md` | v0.17 | Theme architecture, public integration contracts, D-027 Standalone Core boundary and complete WordPress-owned D-030 Hero authoring rule |
 | `AZT-03-baseline-provenance.md` | v0.76 | Canonical provenance through Rèm 01 1.3.31 Project Showcase production checkpoint |
-| `AZT-04-roadmap-qa-decisions.md` | v0.93 | Roadmap/QA through Rèm 01 Process Rail + Project Showcase production PASS at verified scope |
-| `AZT-EXEC-MAP.md` | v0.82 | Derived execution map through Rèm 01 1.3.31 production checkpoint |
+| `AZT-04-roadmap-qa-decisions.md` | v0.94 | Roadmap/QA through Rèm 01 Process Rail + Project Showcase production PASS at verified scope |
+| `AZT-EXEC-MAP.md` | v0.83 | Derived execution map through Rèm 01 1.3.31 production checkpoint |
 
 23/09/2026 Rèm 01 production evidence: `docs/evidence/CURTAIN01_PROJECT_SHOWCASE_PRODUCTION_20260923.md` records PR #262/#263 integration through `main@f84d45a58261ec41d9b0c11a5e02a0873edb28ff`, owner-backed WPVibe production publication, Post #999 / Category #80 mapping, corrective removal of one stale draft-only D-036-incompatible heading cap, exact live Curtain CSS/JS/`theme.json` reconciliation, and fresh mobile/desktop Accessibility 100 / Best Practices 100. Current GitHub Release remains `v1.3.23`; this pilot production state does not silently create a new Release.
 
@@ -115,3 +115,5 @@ Current release boundary: **v1.3.21 TECHNICAL PASS / GitHub publication v1.3.20 
 25/09/2026 PR #276 external runner evidence: final production-code checkpoint `2291207482de4d1fee9b4a4470851ab21e5a17a2` reproduced the block on V1 `36108984511`, R5 static `36108984342`, R5 browser `36108984398` and Homepage Law 01 browser `36108984549`; each relevant job ended before any workflow step with runner ID `0` and blank runner name. This is `BLOCKED_EXTERNAL_RUNNER`, not Theme-code failure/PASS. Evidence: `docs/evidence/HOMEPAGE_BACKEND_UNIFIED_CANDIDATE_20260925.md`.
 
 25/09/2026 PR #276 canonical merge closure: squash merge `5f89436a710977f8ba03f9607f4cfc0a1d7d1340` integrates D-040/D-041 backend work. Direct exact-main source verification rechecked shared surface composition, Template Library, effective source alignment, ownership boundaries and ten Law 01 surface markers with 0 failures. Hosted runner remained unavailable and is not used as evidence. L3/L4, release and deployment are not claimed.
+
+25/09/2026 D-041 completeness correction candidate: branch `fix/homepage-native-content-surface-20260925` closes two source-level gaps found after PR #276: the native WordPress Front Page `the_content()` boundary was absent from the primary Homepage Map, and Process/FAQ cards did not expose a path to edit the `post_content` blocks that actually render. RED contracts were added first; implementation keeps WordPress content ownership, adds the native surface in reading order, and exposes native Page-editor links for Process/FAQ. L3/L4 remain unclaimed until runtime/browser evidence exists.
