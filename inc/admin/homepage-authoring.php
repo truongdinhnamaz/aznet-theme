@@ -8,6 +8,19 @@ use function AZnet\Theme\homepage_source_value;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+/** Whether Quick Edit may author Featured Image for this exact Homepage source. */
+function homepage_quick_edit_featured_image_allowed( string $preset, string $slot, int $source_id, array $descriptor ): bool {
+    if ( 'page' !== (string) ( $descriptor['type'] ?? '' ) || $source_id <= 0 ) {
+        return false;
+    }
+
+    if ( 'law-01' === $preset && 'team' === $slot ) {
+        return (int) homepage_source_value( $preset, $slot ) !== $source_id;
+    }
+
+    return true;
+}
+
 /** Whether one exact source ID is authorized by the preset/slot mapping. */
 function homepage_quick_edit_target_allowed( string $preset, string $slot, int $source_id, array $descriptor ): bool {
     $mapped = homepage_source_value( $preset, $slot );
@@ -58,17 +71,21 @@ function handle_homepage_quick_edit_source(): void {
         $title = isset( $_POST['homepage_source_title'] ) ? sanitize_text_field( wp_unslash( $_POST['homepage_source_title'] ) ) : '';
         $excerpt = isset( $_POST['homepage_source_excerpt'] ) ? sanitize_textarea_field( wp_unslash( $_POST['homepage_source_excerpt'] ) ) : '';
         $image_id = isset( $_POST['homepage_featured_image_id'] ) ? absint( $_POST['homepage_featured_image_id'] ) : 0;
-        if ( $image_id > 0 && ! wp_attachment_is_image( $image_id ) ) {
-            wp_die( esc_html__( 'Ảnh đại diện không hợp lệ.', 'aznet-theme' ) );
+        if ( homepage_quick_edit_featured_image_allowed( $preset, $slot, $source_id, $descriptor ) ) {
+            if ( $image_id > 0 && ! wp_attachment_is_image( $image_id ) ) {
+                wp_die( esc_html__( 'Ảnh đại diện không hợp lệ.', 'aznet-theme' ) );
+            }
         }
 
         $result = wp_update_post( [ 'ID' => $source_id, 'post_title' => $title, 'post_excerpt' => $excerpt ], true );
         if ( is_wp_error( $result ) ) { wp_die( esc_html( $result->get_error_message() ) ); }
 
-        if ( $image_id > 0 ) {
-            set_post_thumbnail( $source_id, $image_id );
-        } else {
-            delete_post_thumbnail( $source_id );
+        if ( homepage_quick_edit_featured_image_allowed( $preset, $slot, $source_id, $descriptor ) ) {
+            if ( $image_id > 0 ) {
+                set_post_thumbnail( $source_id, $image_id );
+            } else {
+                delete_post_thumbnail( $source_id );
+            }
         }
     } elseif ( in_array( $type, [ 'category', 'categories' ], true ) ) {
         $term = homepage_category_reference( $source_id );
