@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.76
+**Version:** v0.77
 **Status:** Working Source
 **Date:** 25/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -448,3 +448,14 @@ Evidence: `docs/evidence/CURTAIN01_VIETNAMESE_FONT_FIX_20260922.md`.
 - D-040 real Distribution Service L5 remains separately `BLOCKED_EXTERNAL`.
 
 Evidence: `docs/evidence/HOMEPAGE_BACKEND_UNIFIED_CANDIDATE_20260925.md`.
+
+### Homepage backend completeness merge closure / PR #278 — 25/09/2026
+
+- Owner-approved PR #278 merged by squash to canonical `main@6bcdc918a6ec5286ced572b4fd86491adf28f207`, Theme metadata `1.3.54`.
+- The correction closes two D-041 truth gaps without changing ownership: the native WordPress Front Page `the_content()` boundary is now represented in `Trang chủ đang hiển thị`, and Process/FAQ cards expose native Page-editor paths for the `post_content` blocks they actually render.
+- RED contracts preceded implementation: `homepage-native-content-surface-contract.php` and `homepage-process-faq-authoring-completeness-contract.php`.
+- Direct exact-branch L1/L2 source verification passed with 0 failures across 14 affected files. After merge, the same exact-main source verification on `main@6bcdc918...` also passed with 0 failures.
+- WordPress remains authoritative for Front Page, Process and FAQ Page content/publication/edit lifecycle. Theme only owns projection/order/presentation and bounded/native editor links.
+- L3 WordPress runtime and L4 browser/a11y remain **UNKNOWN** and are not inferred from source checks. No release publication or production deployment is claimed.
+
+Evidence: `docs/evidence/HOMEPAGE_BACKEND_COMPLETENESS_CORRECTION_20260925.md`.
