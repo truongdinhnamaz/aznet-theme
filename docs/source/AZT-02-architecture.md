@@ -4,7 +4,7 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.16 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.17 |
 | --- | --- | --- | --- |
 | **Trạng thái** | Working Source | **Ngày** | 25/09/2026 |
 
@@ -428,6 +428,8 @@ The model is Theme-owned presentation/read state only. It is never persisted as 
 
 A surface enters the primary map only when the same Theme rendering rules say that surface can actually render. Configured-but-draft, invalid, hidden or otherwise non-effective sources belong in advanced diagnostics rather than being represented as live.
 
+The native WordPress Front Page body is itself one effective surface when Law 01 composition is active. It sits between Theme-composed `before` and `after` surfaces, remains WordPress-owned through the normal `the_content()` boundary, and must appear in the same Homepage Map order rather than being invisible to the administrator.
+
 ## 19.2. Ownership
 
 - WordPress remains authoritative for Page/Post/Category/Media/`wp_block` content, status, taxonomy membership and native edit lifecycle.
@@ -441,7 +443,7 @@ The steady-state Homepage admin should be surface-centric:
 
 - **Template Library** selects presentation preset/template.
 - **Trang chủ đang hiển thị** lists effective surfaces in frontend reading order.
-- Each surface exposes the smallest safe content-edit action plus a deep link to the rendered frontend section.
+- Each surface exposes the smallest safe content-edit action plus a deep link to the rendered frontend section. The native Front Page body links to the native WordPress Page editor; Theme does not duplicate its content into Theme settings.
 - Raw mapping IDs, migration controls, source switching, shared-source warnings and technical diagnostics live under **Nguồn & cài đặt nâng cao**.
 - Raw technical states such as `READY` or `INVALID` must not be the primary administrator-facing language.
 
