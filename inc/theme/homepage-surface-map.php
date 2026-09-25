@@ -14,6 +14,44 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+/**
+ * Return the Theme setting key that currently owns effective presentation
+ * selection for one Homepage slot.
+ *
+ * A small Law 01 compatibility set intentionally remains on the proven legacy
+ * keys from the 1.3.53 recovery. Keeping that exception explicit here prevents
+ * admin/frontend drift while avoiding a risky silent source migration.
+ */
+function homepage_effective_source_key( string $preset, string $slot ): ?string {
+    $descriptor = homepage_source_descriptor( $preset, $slot );
+    if ( null === $descriptor ) { return null; }
+
+    if ( 'law-01' === $preset && in_array( $slot, [ 'about', 'team', 'case_analysis', 'legal_news' ], true ) ) {
+        $legacy = (string) ( $descriptor['legacy'] ?? '' );
+        return '' !== $legacy ? $legacy : null;
+    }
+
+    $key = (string) ( $descriptor['key'] ?? '' );
+    return '' !== $key ? $key : null;
+}
+
+/** Resolve the effective presentation source while preserving proven compatibility paths. */
+function homepage_effective_source_value( string $preset, string $slot, ?array $settings = null ): mixed {
+    $settings = null === $settings ? settings() : $settings;
+    $descriptor = homepage_source_descriptor( $preset, $slot );
+    if ( null === $descriptor ) { return null; }
+
+    if ( 'law-01' === $preset && in_array( $slot, [ 'about', 'team', 'case_analysis', 'legal_news' ], true ) ) {
+        $legacy = (string) ( $descriptor['legacy'] ?? '' );
+        $type = (string) ( $descriptor['type'] ?? '' );
+        return '' !== $legacy && array_key_exists( $legacy, $settings )
+            ? $settings[ $legacy ]
+            : homepage_source_neutral_value( $type );
+    }
+
+    return homepage_source_value( $preset, $slot, $settings );
+}
+
 /** Return compact plain-text copy for an admin presentation summary. */
 function homepage_surface_text_summary( string $value, int $words = 24 ): string {
     $value = trim( wp_strip_all_tags( $value ) );
@@ -89,7 +127,7 @@ function homepage_effective_surface_map( ?string $preset = null ): array {
     $variant = homepage_law01_variant();
     $surfaces = [];
 
-    $hero_block_id = (int) homepage_source_value( 'law-01', 'hero', $settings );
+    $hero_block_id = (int) homepage_effective_source_value( 'law-01', 'hero', $settings );
     $hero_block = homepage_block_reference( $hero_block_id );
     $hero_block_html = '';
     if ( $hero_block instanceof \WP_Post ) {
@@ -114,7 +152,7 @@ function homepage_effective_surface_map( ?string $preset = null ): array {
             ]
         );
     } else {
-        $hero_page_id = (int) homepage_source_value( 'law-01', 'hero_page', $settings );
+        $hero_page_id = (int) homepage_effective_source_value( 'law-01', 'hero_page', $settings );
         $hero_page = homepage_page_reference( $hero_page_id );
         if ( $hero_page instanceof \WP_Post ) {
             $surfaces[] = homepage_surface_entry(
@@ -155,7 +193,7 @@ function homepage_effective_surface_map( ?string $preset = null ): array {
         }
     }
 
-    $services_id = (int) homepage_source_value( 'law-01', 'services', $settings );
+    $services_id = (int) homepage_effective_source_value( 'law-01', 'services', $settings );
     $services_page = homepage_page_reference( $services_id );
     $service_items = $services_page instanceof \WP_Post
         ? homepage_direct_published_children( (int) $services_page->ID, 6 )
@@ -179,8 +217,8 @@ function homepage_effective_surface_map( ?string $preset = null ): array {
     }
 
     // Profile currently consumes the proven legacy Page settings path on the frontend.
-    $about = homepage_page_reference( (int) setting( 'homepage_about_page', 0 ) );
-    $team = homepage_page_reference( (int) setting( 'homepage_team_page', 0 ) );
+    $about = homepage_page_reference( (int) homepage_effective_source_value( 'law-01', 'about', $settings ) );
+    $team = homepage_page_reference( (int) homepage_effective_source_value( 'law-01', 'team', $settings ) );
     if ( $about instanceof \WP_Post || $team instanceof \WP_Post ) {
         $surfaces[] = homepage_surface_entry(
             'profile',
@@ -216,7 +254,7 @@ function homepage_effective_surface_map( ?string $preset = null ): array {
 
     foreach ( $after_order as $surface_key ) {
         if ( 'topics' === $surface_key ) {
-            $terms = homepage_category_references( (array) homepage_source_value( 'law-01', 'knowledge', $settings ) );
+            $terms = homepage_category_references( (array) homepage_effective_source_value( 'law-01', 'knowledge', $settings ) );
             if ( [] !== $terms ) {
                 $surfaces[] = homepage_surface_entry(
                     'topics',
@@ -264,7 +302,8 @@ function homepage_effective_surface_map( ?string $preset = null ): array {
 
         if ( 'analysis' === $surface_key || 'news' === $surface_key ) {
             $setting_key = 'analysis' === $surface_key ? 'homepage_case_analysis_term' : 'homepage_legal_news_term';
-            $term_id = (int) setting( $setting_key, 0 );
+            $slot = 'analysis' === $surface_key ? 'case_analysis' : 'legal_news';
+            $term_id = (int) homepage_effective_source_value( 'law-01', $slot, $settings );
             $term = homepage_category_reference( $term_id );
             $limit = 'analysis' === $surface_key ? 3 : 5;
             $posts = $term instanceof \WP_Term ? homepage_latest_posts( [ $term_id ], $limit, $exclude_ids ) : [];
@@ -289,7 +328,7 @@ function homepage_effective_surface_map( ?string $preset = null ): array {
         }
 
         if ( 'process' === $surface_key || 'faq' === $surface_key ) {
-            $page = homepage_page_reference( (int) homepage_source_value( 'law-01', $surface_key, $settings ) );
+            $page = homepage_page_reference( (int) homepage_effective_source_value( 'law-01', $surface_key, $settings ) );
             if ( ! $page instanceof \WP_Post ) {
                 $legacy_key = 'process' === $surface_key ? 'homepage_process_page' : 'homepage_faq_page';
                 $page = homepage_page_reference( (int) setting( $legacy_key, 0 ) );
@@ -314,7 +353,7 @@ function homepage_effective_surface_map( ?string $preset = null ): array {
         }
 
         if ( 'final-cta' === $surface_key ) {
-            $page = homepage_page_reference( (int) homepage_source_value( 'law-01', 'contact', $settings ) );
+            $page = homepage_page_reference( (int) homepage_effective_source_value( 'law-01', 'contact', $settings ) );
             $phone = '';
             if ( function_exists( __NAMESPACE__ . '\\contact_surface_model' ) ) {
                 $contact_model = contact_surface_model();
