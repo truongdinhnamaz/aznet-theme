@@ -7,7 +7,7 @@ Canonical repository baseline at the D-040/D-041 decision checkpoint is exact `m
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.5 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.16 | Theme architecture, public integration contracts, D-027 Standalone Core boundary and complete WordPress-owned D-030 Hero authoring rule |
-| `AZT-03-baseline-provenance.md` | v0.74 | Canonical provenance through Rèm 01 1.3.31 Project Showcase production checkpoint |
+| `AZT-03-baseline-provenance.md` | v0.75 | Canonical provenance through Rèm 01 1.3.31 Project Showcase production checkpoint |
 | `AZT-04-roadmap-qa-decisions.md` | v0.93 | Roadmap/QA through Rèm 01 Process Rail + Project Showcase production PASS at verified scope |
 | `AZT-EXEC-MAP.md` | v0.81 | Derived execution map through Rèm 01 1.3.31 production checkpoint |
 
