@@ -156,6 +156,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-direc
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-control-center-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-library-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-source-parity-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/curtain01-cinematic-hero-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/curtain01-category-showcase-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/curtain01-desktop-heading-flow-contract.php
