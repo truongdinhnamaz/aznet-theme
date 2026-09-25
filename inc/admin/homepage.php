@@ -301,6 +301,88 @@ function homepage_category_select( string $key, string $label, int $current, arr
     echo '</select></label>';
 }
 
+/**
+ * Return the bounded Theme-side Template Library model.
+ *
+ * TD1 intentionally contains only locally available presentation presets.
+ * Remote catalog, entitlement, pricing and download authorization belong to
+ * the external AZnet Template Distribution Service.
+ *
+ * @return array<int, array<string, mixed>>
+ */
+function homepage_template_library_items(): array {
+    return [
+        [
+            'template_id'   => 'law-01',
+            'name'          => __( 'Luật 01', 'aznet-theme' ),
+            'category'      => 'legal',
+            'category_name' => __( 'Luật', 'aznet-theme' ),
+            'description'   => __( 'Website dịch vụ pháp lý kết hợp nội dung chuyên môn.', 'aznet-theme' ),
+            'availability'  => 'bundled',
+            'install_state' => 'installed',
+            'variant_count' => 2,
+        ],
+        [
+            'template_id'   => 'curtain-01',
+            'name'          => __( 'Rèm 01', 'aznet-theme' ),
+            'category'      => 'interior',
+            'category_name' => __( 'Rèm / Nội thất', 'aznet-theme' ),
+            'description'   => __( 'Website rèm và giải pháp kiểm soát ánh sáng.', 'aznet-theme' ),
+            'availability'  => 'bundled',
+            'install_state' => 'installed',
+            'variant_count' => 1,
+        ],
+    ];
+}
+
+/** Render the scalable Theme-side Template Library selector. */
+function render_homepage_template_library( string $current ): void {
+    $items = homepage_template_library_items();
+    $categories = [];
+
+    foreach ( $items as $item ) {
+        $category = (string) ( $item['category'] ?? '' );
+        if ( '' !== $category ) {
+            $categories[ $category ] = (string) ( $item['category_name'] ?? $category );
+        }
+    }
+
+    echo '<div class="aznet-theme-template-library" data-aznet-template-library>';
+    echo '<div class="aznet-theme-template-library__toolbar">';
+    echo '<label for="homepage-template-search"><span>' . esc_html__( 'Tìm mẫu', 'aznet-theme' ) . '</span><input id="homepage-template-search" type="search" placeholder="' . esc_attr__( 'Tên hoặc mô tả mẫu…', 'aznet-theme' ) . '" data-aznet-template-search></label>';
+    echo '<label for="homepage-template-category"><span>' . esc_html__( 'Nhóm', 'aznet-theme' ) . '</span><select id="homepage-template-category" data-aznet-template-category><option value="">' . esc_html__( 'Tất cả', 'aznet-theme' ) . '</option>';
+    foreach ( $categories as $slug => $label ) {
+        echo '<option value="' . esc_attr( $slug ) . '">' . esc_html( $label ) . '</option>';
+    }
+    echo '</select></label>';
+    echo '</div>';
+
+    echo '<fieldset class="aznet-theme-template-library__fieldset">';
+    echo '<legend class="screen-reader-text">' . esc_html__( 'Chọn mẫu trang chủ', 'aznet-theme' ) . '</legend>';
+    echo '<div class="aznet-theme-template-library__grid">';
+    foreach ( $items as $item ) {
+        $template_id = (string) $item['template_id'];
+        $name = (string) $item['name'];
+        $description = (string) $item['description'];
+        $category = (string) $item['category'];
+        $category_name = (string) $item['category_name'];
+        $state = $template_id === $current ? 'active' : (string) $item['install_state'];
+        $search = strtolower( $name . ' ' . $description . ' ' . $category_name );
+
+        echo '<label class="aznet-theme-template-library__card" data-template-category="' . esc_attr( $category ) . '" data-template-search="' . esc_attr( $search ) . '">';
+        echo '<input type="radio" name="aznet_theme_settings[homepage_preset]" value="' . esc_attr( $template_id ) . '" ' . checked( $current, $template_id, false ) . '>';
+        echo '<span class="aznet-theme-template-library__preview aznet-theme-template-library__preview--' . esc_attr( $template_id ) . '" aria-hidden="true"><span></span><span></span><span></span></span>';
+        echo '<span class="aznet-theme-template-library__meta"><span class="aznet-theme-template-library__category">' . esc_html( $category_name ) . '</span><strong>' . esc_html( $name ) . '</strong><span>' . esc_html( $description ) . '</span>';
+        echo '<span class="aznet-theme-template-library__state">' . esc_html( 'active' === $state ? __( 'Đang dùng', 'aznet-theme' ) : __( 'Đã cài', 'aznet-theme' ) ) . '</span></span>';
+        echo '</label>';
+    }
+    echo '</div></fieldset>';
+
+    echo '<label class="aznet-theme-template-library__off"><input type="radio" name="aznet_theme_settings[homepage_preset]" value="off" ' . checked( $current, 'off', false ) . '> <span>' . esc_html__( 'Không dùng mẫu trang chủ (WordPress mặc định)', 'aznet-theme' ) . '</span></label>';
+    echo '<p class="description">' . esc_html__( 'Thư viện hiện chỉ hiển thị các mẫu đã có trong Theme. Catalog trực tuyến, mẫu Premium và quyền tải sẽ được cung cấp qua dịch vụ AZnet riêng; Theme không lưu dữ liệu thanh toán hoặc license như business truth.', 'aznet-theme' ) . '</p>';
+    echo '</div>';
+}
+
 /** Render Hero Library as a dedicated AZnet Theme backend screen. */
 function render_homepage_hero_library_screen(): void {
     $settings = settings();
@@ -563,7 +645,7 @@ function render_homepage_settings(): void {
     wp_nonce_field( 'aznet_theme_save_settings' );
     render_hidden_settings( $preset_visible );
     echo '<h2>' . esc_html__( 'Mẫu trang chủ', 'aznet-theme' ) . '</h2>';
-    field_select( 'homepage_preset', __( 'Mẫu', 'aznet-theme' ), [ 'off' => 'Tắt Composer', 'law-01' => 'Luật 01', 'curtain-01' => 'Rèm 01' ], (string) $s['homepage_preset'] );
+    render_homepage_template_library( (string) $s['homepage_preset'] );
     if ( 'law-01' === (string) $s['homepage_preset'] ) {
         field_select( 'homepage_law01_variant', __( 'Biến thể Luật 01', 'aznet-theme' ), [ 'navy-gold' => 'Navy + Gold', 'burgundy-gold' => 'Burgundy + Gold' ], (string) $s['homepage_law01_variant'] );
         echo '<p class="description">' . esc_html__( 'Luật 01: website dịch vụ pháp lý kết hợp nội dung chuyên môn. Áp dụng mẫu chỉ đổi presentation, không sửa nội dung WordPress.', 'aznet-theme' ) . '</p>';
