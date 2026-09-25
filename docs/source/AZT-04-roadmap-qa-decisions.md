@@ -730,3 +730,13 @@ Derived implementation artifacts:
 - `docs/superpowers/specs/2026-09-25-wordpress-native-team-directory-design.md`
 - `docs/superpowers/plans/2026-09-25-wordpress-native-team-directory.md`
 
+### D-039 — Team Add Member immediate publication — ACCEPTED — 25/09/2026
+
+The product owner explicitly changed the D-038 Team authoring publication behavior.
+
+- **Thêm nhân sự** now creates the direct child WordPress Page with `post_status=publish` immediately.
+- The admin action label must be **Thêm nhân sự**; draft wording is no longer correct for this flow.
+- Existing/manual draft or private Team child Pages remain excluded from public Homepage/directory resolvers.
+- Ownership remains unchanged: WordPress owns the child Page and its publication state; Theme only orchestrates the bounded create action and presentation.
+- D-039 supersedes only the D-038 **draft-first Add Member** detail. All D-038 ownership, mapping, no-fake-person, provisioning and QA constraints remain in force.
+
