@@ -23,32 +23,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * admin/frontend drift while avoiding a risky silent source migration.
  */
 function homepage_effective_source_key( string $preset, string $slot ): ?string {
-    $descriptor = homepage_source_descriptor( $preset, $slot );
-    if ( null === $descriptor ) { return null; }
-
-    if ( 'law-01' === $preset && in_array( $slot, [ 'about', 'team', 'case_analysis', 'legal_news' ], true ) ) {
-        $legacy = (string) ( $descriptor['legacy'] ?? '' );
-        return '' !== $legacy ? $legacy : null;
-    }
-
-    $key = (string) ( $descriptor['key'] ?? '' );
-    return '' !== $key ? $key : null;
+    return homepage_source_key( $preset, $slot );
 }
 
 /** Resolve the effective presentation source while preserving proven compatibility paths. */
 function homepage_effective_source_value( string $preset, string $slot, ?array $settings = null ): mixed {
-    $settings = null === $settings ? settings() : $settings;
-    $descriptor = homepage_source_descriptor( $preset, $slot );
-    if ( null === $descriptor ) { return null; }
-
-    if ( 'law-01' === $preset && in_array( $slot, [ 'about', 'team', 'case_analysis', 'legal_news' ], true ) ) {
-        $legacy = (string) ( $descriptor['legacy'] ?? '' );
-        $type = (string) ( $descriptor['type'] ?? '' );
-        return '' !== $legacy && array_key_exists( $legacy, $settings )
-            ? $settings[ $legacy ]
-            : homepage_source_neutral_value( $type );
-    }
-
     return homepage_source_value( $preset, $slot, $settings );
 }
 
@@ -281,7 +260,7 @@ function homepage_effective_surface_map( ?string $preset = null ): array {
         }
 
         if ( 'latest' === $surface_key ) {
-            $posts = homepage_latest_posts( (array) homepage_source_value( 'law-01', 'knowledge', $settings ), 3, $exclude_ids );
+            $posts = homepage_latest_posts( (array) homepage_effective_source_value( 'law-01', 'knowledge', $settings ), 3, $exclude_ids );
             if ( [] !== $posts ) {
                 $exclude_ids = array_values( array_unique( array_merge( $exclude_ids, array_map( static fn ( \WP_Post $post ): int => (int) $post->ID, $posts ) ) ) );
                 $posts_page_id = (int) get_option( 'page_for_posts', 0 );
@@ -307,7 +286,6 @@ function homepage_effective_surface_map( ?string $preset = null ): array {
         }
 
         if ( 'analysis' === $surface_key || 'news' === $surface_key ) {
-            $setting_key = 'analysis' === $surface_key ? 'homepage_case_analysis_term' : 'homepage_legal_news_term';
             $slot = 'analysis' === $surface_key ? 'case_analysis' : 'legal_news';
             $term_id = (int) homepage_effective_source_value( 'law-01', $slot, $settings );
             $term = homepage_category_reference( $term_id );
