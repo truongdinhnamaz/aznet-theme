@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.91
+**Version:** v0.93
 **Status:** Working Source  
-**Date:** 23/09/2026
+**Date:** 25/09/2026
 
 ## 1. Purpose
 
@@ -740,3 +740,43 @@ The product owner explicitly changed the D-038 Team authoring publication behavi
 - Ownership remains unchanged: WordPress owns the child Page and its publication state; Theme only orchestrates the bounded create action and presentation.
 - D-039 supersedes only the D-038 **draft-first Add Member** detail. All D-038 ownership, mapping, no-fake-person, provisioning and QA constraints remain in force.
 
+
+
+## D-040 — Remote Template Library / commercial distribution
+
+**Status:** ACCEPTED — owner approval 25/09/2026.  
+**Tracking:** issue #273.
+
+Decision:
+
+- AZnet may operate a large remote catalog of Theme presentation templates.
+- The full catalog is not bundled into the Theme release; entitled packages are downloaded on demand.
+- Catalog/pricing/license/entitlement/download authorization/signing belong to an external AZnet Template Distribution Service.
+- Theme owns bounded Template Library UX, local active-template selection, secure package validation/install orchestration and rollback only.
+- Remote packages are declarative presentation packages and may not contain executable PHP or copied authoritative domain state.
+- Installed frontend presentation must remain independent of remote-service availability.
+- D-027 Standalone Core remains complete without the remote catalog.
+- Real service L5 remains **BLOCKED_EXTERNAL** until that external owner exposes the accepted public/versioned contract; Theme fixtures cannot claim L5.
+
+The historical D-040 planning labels `TD0-TD6` collided with the later WordPress-native Team Directory execution labels on the reconciled PR #272 lineage. The authoritative D-040 semantics are unchanged; the derived execution map uses `TPL0-TPL6` for Remote Template Library work to remove the label collision.
+
+
+## D-041 — Unified Homepage Backend / shared effective-surface model
+
+**Status:** ACCEPTED — owner approval 25/09/2026.
+
+The Homepage backend is unified around one operator flow:
+
+**Template Library -> Trang chủ đang hiển thị -> bounded section authoring -> Nguồn & cài đặt nâng cao.**
+
+Accepted rules:
+
+- The primary Homepage Map and frontend Theme composition consume the same request-local effective-surface model; no manually duplicated admin-only live-section order is authoritative.
+- Only surfaces that are actually effective/renderable appear as live primary cards. Draft, invalid, hidden or non-effective candidates remain advanced diagnostics.
+- WordPress keeps content/publication/taxonomy/media ownership. Theme owns presentation/composition/typed references and bounded native authoring bridges only.
+- RootProfile/ConvertFlow/WooCommerce ownership and public-contract boundaries remain unchanged.
+- Stable frontend section anchors/data markers are presentation/deep-link/QA markers only, not routing/domain identifiers.
+- Source switching, migration and technical diagnostics are secondary/advanced actions; primary UX edits what the administrator is actually seeing.
+- Homepage Map is not a proprietary page builder, arbitrary section store, iframe editor or DOM scraper.
+- Initial implementation is bounded to Law 01. Curtain 01 retains its already-proven authoring/composition path until a separate parity slice is verified.
+- RED -> GREEN and fresh L3/L4 admin/frontend parity evidence are required before technical closure. No release/deployment is implied by this approval.
