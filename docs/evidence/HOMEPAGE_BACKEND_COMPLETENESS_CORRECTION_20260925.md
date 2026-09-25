@@ -35,3 +35,11 @@ Direct exact-branch source/contract verification **PASS** on snapshot `69a067d48
 ## Branch
 
 `fix/homepage-native-content-surface-20260925`
+
+## Merge closure
+
+- Owner-approved PR #278 merged by squash to canonical `main@6bcdc918a6ec5286ced572b4fd86491adf28f207`.
+- Direct exact-main source verification repeated after merge across the same 14 affected production/test/source files: **PASS, 0 failures**.
+- Canonical Theme metadata remains `1.3.54`.
+- L3 WordPress runtime and L4 browser/a11y remain **UNKNOWN**; this evidence does not promote them.
+- No release publication or production deployment is claimed.
