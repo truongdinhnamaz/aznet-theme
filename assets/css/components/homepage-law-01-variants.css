@@ -502,7 +502,19 @@
     padding-block: clamp(2.5rem, 5vw, 5rem);
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content {
+    width: 100%;
     max-width: none;
+}
+.aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content > .aznet-theme-homepage-hero-content__layout,
+.aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content > .aznet-theme-homepage-hero-content__trust {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+}
+.aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__trust > .aznet-theme-homepage-hero-content__trust-grid {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__layout {
     display: grid;
@@ -549,6 +561,11 @@
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__actions {
     margin-top: 1.25rem;
+}
+.aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__actions .wp-block-button:not(.is-style-outline) .wp-block-button__link {
+    border-color: var(--law01-navy);
+    background: var(--law01-navy) !important;
+    color: #fff !important;
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__secondary .wp-block-button__link {
     border: 1px solid rgba(122, 14, 24, .38);
@@ -601,7 +618,7 @@
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__media .wp-block-image img {
     display: block;
     width: 100%;
-    min-height: clamp(20rem, 32vw, 34rem);
+    height: clamp(24rem, 32vw, 34rem);
     object-fit: cover;
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__media-help {
@@ -677,6 +694,9 @@
     }
     .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__title {
         max-width: 18ch;
+    }
+    .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__media .wp-block-image img {
+        height: clamp(18rem, 60vw, 30rem);
     }
     .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--media-left .aznet-theme-homepage-hero-content__media {
         order: 1;
