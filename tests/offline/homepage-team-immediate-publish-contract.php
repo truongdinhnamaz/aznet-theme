@@ -5,13 +5,21 @@ $root = dirname(__DIR__, 2);
 $authoring = (string) file_get_contents($root . '/inc/admin/homepage-authoring.php');
 $homepage = (string) file_get_contents($root . '/inc/admin/homepage.php');
 
-if (! str_contains($authoring, "'post_status'  => 'publish'")) {
+$start = strpos($authoring, 'function homepage_team_member_insert_data');
+$end = strpos($authoring, 'function handle_homepage_team_member_create', $start === false ? 0 : $start);
+if (false === $start || false === $end || $end <= $start) {
+    fwrite(STDERR, "FAIL: Team member insert-data helper boundaries missing.\n");
+    exit(1);
+}
+$insertHelper = substr($authoring, $start, $end - $start);
+
+if (! str_contains($insertHelper, "'post_status'  => 'publish'")) {
     fwrite(STDERR, "FAIL: Add Member still does not publish immediately.\n");
     exit(1);
 }
 
-if (str_contains($authoring, "'post_status'  => 'draft'")) {
-    fwrite(STDERR, "FAIL: Add Member still creates a draft Page.\n");
+if (str_contains($insertHelper, "'post_status'  => 'draft'")) {
+    fwrite(STDERR, "FAIL: Team Add Member helper still creates a draft Page.\n");
     exit(1);
 }
 
