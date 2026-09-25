@@ -4,11 +4,13 @@
 
 **Goal:** Add a WordPress-native Team directory where the mapped Team parent Page owns the directory, direct child Pages own individual members, Homepage shows the first four published members, and Law 01 provisioning creates/reuses the Team parent without fabricating people.
 
-**Architecture:** Keep WordPress as the content owner. Add one focused Team read-model/helper module that resolves the exact mapped parent and direct child Pages; reuse that model in Homepage presentation, Homepage admin preview, and the public Team directory Page. Add-member authoring creates only draft child Pages, while provisioning creates/reuses only the parent Page.
+**Architecture:** Keep WordPress as the content owner. Add one focused Team read-model/helper module that resolves the exact mapped parent and direct child Pages; reuse that model in Homepage presentation, Homepage admin preview, and the public Team directory Page. Add-member authoring creates only published child Pages, while provisioning creates/reuses only the parent Page.
 
 **Tech Stack:** WordPress 6.9+, PHP 8.1+, AZnet Theme hybrid PHP + `theme.json`, native Pages/Featured Images, existing Homepage authoring/provisioning framework, scoped CSS, existing Playwright/axe browser harness.
 
 **Spec:** `docs/superpowers/specs/2026-09-25-wordpress-native-team-directory-design.md`
+> **D-039 amendment (2026-09-25):** owner approval supersedes the original draft-first Add Member behavior. The bounded Team form now creates the validated child Page with `post_status=publish` immediately; manual draft/private child Pages remain excluded from public rendering.
+
 
 ## Global Constraints
 
@@ -19,7 +21,7 @@
 - No title/slug/URL heuristic for detecting the Team parent Page; use the exact mapped Team Page ID only.
 - Homepage shows at most 4 published direct child members.
 - Team directory Page shows all published direct child members.
-- Add Member creates a draft Page only; it never auto-publishes or fabricates person data.
+- Add Member creates a published Page immediately after validation; it never fabricates person data.
 - Missing portrait means text-only member presentation; no generated/reference/AI person portrait fallback.
 - Existing mapped Team Pages are reused and are not auto-renamed or duplicated.
 - Release version bump/package/deployment remains a separate gate after technical closure.
@@ -566,7 +568,7 @@ Add the pure insert-data helper first:
 function homepage_team_member_insert_data( \WP_Post $parent, string $name, string $role ): array {
     return [
         'post_type'    => 'page',
-        'post_status'  => 'draft',
+        'post_status'  => 'publish',
         'post_parent'  => (int) $parent->ID,
         'post_title'   => $name,
         'post_excerpt' => $role,
@@ -676,7 +678,7 @@ Add scoped rules:
 @media(max-width:782px){.aznet-theme-homepage-team-member{grid-template-columns:52px minmax(0,1fr)}.aznet-theme-homepage-team-member__actions{grid-column:1/-1}}
 ```
 
-- [ ] **Step 8: Write runtime fixture for draft-only creation and authorization**
+- [ ] **Step 8: Write runtime fixture for immediate publication and authorization**
 
 Create `tests/runtime/homepage-team-authoring.php` for `wp eval-file`.
 
@@ -874,7 +876,7 @@ Add `assets/css/components/team-directory.css` with a responsive 4→2→1 grid 
 Extend Y1 fixture to create:
 - mapped Team parent;
 - 5 published direct child members with known `menu_order`;
-- one draft direct child.
+- one published direct child.
 
 Assert:
 - mapped parent has `.aznet-theme-page--team-directory`;
@@ -1167,7 +1169,7 @@ Confirm:
 - no new personnel meta/repeater store;
 - no RootProfile private storage;
 - no slug/title/URL Team Page heuristic;
-- add-member is draft-only;
+- add-member publishes immediately;
 - provisioning creates Team parent only;
 - reference/AI portraits no longer impersonate Team members.
 
