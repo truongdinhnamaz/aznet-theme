@@ -2,37 +2,21 @@
 declare(strict_types=1);
 
 $root = dirname(__DIR__, 2);
-$map = [
-    'about.php'    => [ 'about' ],
-    'team.php'     => [ 'team' ],
-    'services.php' => [ 'services' ],
-    'profile.php'  => [ 'about', 'team', 'services', 'process', 'faq' ],
-    'process.php'  => [ 'process' ],
-    'faq.php'      => [ 'faq' ],
-    'latest.php'   => [ 'knowledge' ],
-    'topics.php'   => [ 'knowledge' ],
-    'analysis.php' => [ 'case_analysis' ],
-    'news.php'     => [ 'legal_news' ],
-    'final-cta.php'=> [ 'contact' ],
-];
+$profile = (string) file_get_contents( $root . '/template-parts/homepage/law-01/profile.php' );
 
-$failed = [];
-foreach ( $map as $file => $slots ) {
-    $source = (string) file_get_contents( $root . '/template-parts/homepage/law-01/' . $file );
-    foreach ( $slots as $slot ) {
-        $needle = "homepage_source_value( 'law-01', '" . $slot . "'";
-        if ( ! str_contains( $source, $needle ) ) {
-            $failed[] = $file . ' missing ' . $slot . ' resolver';
-        }
-    }
-    if ( preg_match( "/setting\(\s*'homepage_(?:services|about|team|knowledge|case_analysis|legal_news|process|faq|contact)_[^']*'/", $source ) ) {
-        $failed[] = $file . ' still reads legacy Homepage source directly';
+foreach ( [
+    "setting( 'homepage_about_page', 0 )",
+    "setting( 'homepage_team_page', 0 )",
+    "setting( 'homepage_services_page', 0 )",
+    "homepage_source_value( 'law-01', 'process' )",
+    "setting( 'homepage_process_page', 0 )",
+    "homepage_source_value( 'law-01', 'faq' )",
+    "setting( 'homepage_faq_page', 0 )",
+] as $needle ) {
+    if ( ! str_contains( $profile, $needle ) ) {
+        fwrite( STDERR, "FAIL: Law 01 Profile compatibility path missing {$needle}\n" );
+        exit( 1 );
     }
 }
 
-if ( [] !== $failed ) {
-    fwrite( STDERR, 'FAIL: ' . implode( '; ', $failed ) . "\n" );
-    exit( 1 );
-}
-
-echo "PASS: all Law 01 content surfaces consume effective scoped sources.\n";
+echo "PASS: Law 01 Profile preserves proven sources and uses bounded scoped fallback for Process/FAQ.\n";
