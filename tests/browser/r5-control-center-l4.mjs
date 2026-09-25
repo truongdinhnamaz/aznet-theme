@@ -16,6 +16,8 @@ if (!adminPass) throw new Error('R5_ADMIN_PASS is required');
 const viewports = {
   '1440x1000': { width: 1440, height: 1000 },
   '1024x768': { width: 1024, height: 768 },
+  '782x900': { width: 782, height: 900 },
+  '390x844': { width: 390, height: 844 },
 };
 
 const results = [];
@@ -167,70 +169,116 @@ async function resetSettings(page) {
 
 async function verifyHomepageHeroEditingBridge(page, viewportName) {
   await gotoCenter(page, 'homepage');
-  const center = page.locator('.aznet-theme-control-center');
   const presetForm = page.locator('form.aznet-theme-panel').filter({ has: page.getByRole('heading', { name: 'Mẫu trang chủ' }) });
-  await presetForm.locator('select[name="aznet_theme_settings[homepage_preset]"]').selectOption('law-01');
+  const templateLibrary = presetForm.locator('[data-aznet-template-library]');
+  if (await templateLibrary.count() !== 1) throw new Error('Template Library root missing');
+  if (await templateLibrary.locator('[data-aznet-template-search]').count() !== 1) throw new Error('Template Library search missing');
+  if (await templateLibrary.locator('[data-aznet-template-category]').count() !== 1) throw new Error('Template Library category filter missing');
+  const lawPreset = presetForm.locator('input[name="aznet_theme_settings[homepage_preset]"][value="law-01"]');
+  if (await lawPreset.count() !== 1) throw new Error('Law 01 Template Library card missing');
+  await lawPreset.check();
   await Promise.all([
     page.waitForURL(/updated=1/, { timeout: 20000 }),
     presetForm.getByRole('button', { name: 'Lưu mẫu trang chủ' }).click(),
   ]);
 
   await gotoCenter(page, 'homepage');
-  const text = await center.innerText();
-  for (const needle of ['Thư viện Hero', 'Nguồn Hero hiện tại:', 'Dữ liệu dự phòng', 'không cần tạo Page']) {
-    if (!text.includes(needle)) throw new Error('Homepage Hero Library fallback UX missing ' + needle);
-  }
+  if (await page.locator('form.aznet-theme-homepage-hero-library').count()) throw new Error('Hero Library must not render inline inside Homepage Map');
+  const designLink = page.getByRole('link', { name: 'Sửa Hero' }).first();
+  if (await designLink.count() !== 1) throw new Error('Homepage Hero row must expose exactly one Sửa Hero path');
+  const designHref = await designLink.getAttribute('href');
+  if (!designHref || !designHref.includes('section=hero-library')) throw new Error('Sửa Hero does not route to dedicated Hero Library: ' + designHref);
 
-  await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded' });
-  const legacyHero = page.locator('.aznet-theme-law01-hero');
-  if (await legacyHero.count() !== 1) throw new Error('Law 01 fallback Hero must render before D-030 initialization');
-  if (await page.locator('.aznet-theme-law01-hero--library').count()) throw new Error('Library Hero must not exist before explicit initialization');
-  const legacyTitleBefore = ((await legacyHero.locator('h1').textContent()) || '').trim();
-  if (!legacyTitleBefore) throw new Error('Fallback Hero title must remain visible before D-030 initialization');
-
-  await gotoCenter(page, 'homepage');
+  await designLink.click();
+  await page.waitForURL(/section=hero-library/, { timeout: 20000 });
   const libraryForm = page.locator('form.aznet-theme-homepage-hero-library');
-  if (await libraryForm.count() !== 1) throw new Error('Homepage Hero Library form missing');
-  if (await libraryForm.locator('input[name="homepage_hero_variant"]').count() !== 4) throw new Error('Homepage Hero Library must expose exactly four bounded variants');
-  if (await page.locator('select[name="aznet_theme_settings[homepage_hero_page]"]').count()) throw new Error('New Hero UX must not require a dedicated Page selector');
+  if (await libraryForm.count() !== 1) throw new Error('Dedicated Hero Library form missing');
+  if (await libraryForm.locator('input[name="homepage_hero_variant"]').count() !== 4) throw new Error('Hero Library must expose exactly four bounded variants');
+  const backLink = page.getByRole('link', { name: /Quay lại Trang chủ/ }).first();
+  if (await backLink.count() !== 1) throw new Error('Hero Library back-to-Homepage action missing');
+  const backHref = await backLink.getAttribute('href');
+  if (!backHref || !backHref.includes('section=homepage')) throw new Error('Hero Library back link mismatch: ' + backHref);
+  return await checkLayoutAndA11y(page, viewportName + '-hero-library-' + (expectWoo ? 'woo' : 'clean'));
+}
 
-  for (const forbidden of ['homepage_hero_title', 'homepage_hero_subtitle', 'homepage_hero_slogan', 'homepage_hero_body', 'homepage_hero_image']) {
-    if (await page.locator('[name*="' + forbidden + '"]').count()) throw new Error('Theme-owned Hero copy input must not exist: ' + forbidden);
+async function verifyHomepageTeamAuthoring(page, viewportName) {
+  await gotoCenter(page, 'homepage');
+  const sources = page.locator('#aznet-theme-homepage-sources');
+  if (!(await sources.evaluate((node) => node.hasAttribute('open')))) await sources.locator('summary').click();
+  const sourceForm = sources.locator('form.aznet-theme-panel').filter({ has: page.getByRole('heading', { name: 'Nguồn nội dung' }) });
+  const teamSelect = sourceForm.locator('select[name="aznet_theme_settings[homepage_team_page]"]');
+  if (await teamSelect.count() !== 1) throw new Error('Law 01 Team source selector missing');
+  await teamSelect.selectOption({ label: 'R5 Team Parent' });
+  await Promise.all([
+    page.waitForURL(/updated=1/, { timeout: 20000 }),
+    sourceForm.getByRole('button', { name: 'Lưu nguồn nội dung' }).click(),
+  ]);
+  await gotoCenter(page, 'homepage');
+  const team = page.locator('#homepage-team');
+  if (await team.count() !== 1) throw new Error('Homepage Team authoring panel missing');
+  const names = (await team.locator('[data-team-member-name]').allTextContents()).map((value) => value.trim());
+  const expected = ['R5 Team Member A', 'R5 Team Member B', 'R5 Team Member C', 'R5 Team Member D'];
+  if (JSON.stringify(names) !== JSON.stringify(expected)) throw new Error('Homepage Team member order mismatch: ' + JSON.stringify(names));
+  if (await team.getByText('Thêm nhân sự', { exact: true }).count() !== 1) throw new Error('Thêm nhân sự action missing');
+  if (await team.getByRole('link', { name: 'Xem tất cả trên website' }).count() !== 1) throw new Error('Xem tất cả trên website action missing');
+  const firstQuickEdit = team.locator('.aznet-theme-homepage-quick-edit-panel').first();
+  await firstQuickEdit.locator('summary').click();
+  if (await firstQuickEdit.locator('input[name="homepage_source_title"]').inputValue() !== expected[0]) throw new Error('Team quick edit title is not WordPress child Page title');
+  if (!(await firstQuickEdit.locator('textarea[name="homepage_source_excerpt"]').inputValue()).includes('Vai trò A')) throw new Error('Team quick edit role is not WordPress child Page excerpt');
+  if (await firstQuickEdit.locator('input[name="homepage_featured_image_id"]').count() !== 1) throw new Error('Team quick edit portrait field missing');
+  const publicPage = await page.context().newPage();
+  try {
+    await publicPage.goto(baseUrl + '/', { waitUntil: 'networkidle' });
+    const publicNames = (await publicPage.locator('.aznet-theme-law01-profile__members .aznet-theme-team-card__name').allTextContents()).map((value) => value.trim());
+    if (JSON.stringify(publicNames) !== JSON.stringify(names)) {
+      throw new Error('Team admin/Homepage member order mismatch: admin=' + JSON.stringify(names) + ' public=' + JSON.stringify(publicNames));
+    }
+    if (await publicPage.locator('.aznet-theme-law01-profile__members .aznet-theme-team-card__media img').count() !== 0) {
+      throw new Error('R5 text-only Team fixture unexpectedly rendered portrait media');
+    }
+  } finally {
+    await publicPage.close();
   }
 
-  await libraryForm.locator('input[name="homepage_hero_variant"][value="inverse"]').check();
-  await Promise.all([
-    page.waitForURL(/admin\.php\?page=aznet-theme&section=homepage&hero=draft/, { timeout: 20000 }),
-    libraryForm.getByRole('button', { name: 'Dùng mẫu này' }).click(),
-  ]);
-  const firstEditUrl = await page.getByRole('link', { name: 'Tiếp tục sửa Hero' }).getAttribute('href');
-  if (!firstEditUrl || !/post\.php\?post=\d+&action=edit/.test(firstEditUrl)) throw new Error('Draft Hero native edit link missing');
-
-  await page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded' });
-  if (await page.locator('.aznet-theme-law01-hero--library').count()) throw new Error('Draft Hero must not replace the current public Hero before publication');
-  const legacyTitleAfter = ((await page.locator('.aznet-theme-law01-hero h1').textContent()) || '').trim();
-  if (legacyTitleAfter !== legacyTitleBefore) throw new Error('Draft-first initialization changed the public fallback Hero title');
-
+  const addDetails = team.locator('.aznet-theme-homepage-team-create');
+  await addDetails.locator('summary').focus();
+  if (!(await addDetails.locator('summary').evaluate((node) => document.activeElement === node))) throw new Error('Thêm nhân sự is not keyboard focusable');
+  return await checkLayoutAndA11y(page, viewportName + '-homepage-team-' + (expectWoo ? 'woo' : 'clean'));
+}
+async function verifyHomepageMap(page, viewportName) {
   await gotoCenter(page, 'homepage');
-  const draftText = await center.innerText();
-  for (const needle of ['Thư viện Hero', 'Hero WordPress đang soạn', 'Tiếp tục sửa Hero']) {
-    if (!draftText.includes(needle)) throw new Error('Homepage draft-first Hero UX missing ' + needle);
+  const map = page.locator('#aznet-theme-homepage-map');
+  if (await map.count() !== 1) throw new Error('Homepage Map is missing for Law 01');
+  if ((await map.getByRole('heading', { name: 'Trang chủ đang hiển thị' }).count()) !== 1) throw new Error('Homepage Map heading missing');
+
+  const adminKeys = await map.locator('[data-surface-key]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-surface-key')));
+  if (!adminKeys.length || adminKeys[0] !== 'hero') throw new Error('Homepage Map does not start with effective Hero surface: ' + JSON.stringify(adminKeys));
+  if (await map.getByText('READY', { exact: true }).count()) throw new Error('raw READY leaked into primary Homepage Map');
+  if (await map.getByText('DRAFT', { exact: true }).count()) throw new Error('raw DRAFT leaked into primary Homepage Map');
+  if (await map.getByRole('link', { name: 'Đổi nguồn' }).count()) throw new Error('Đổi nguồn must stay in advanced settings');
+
+  const advanced = page.locator('#aznet-theme-homepage-sources');
+  if (await advanced.count() !== 1) throw new Error('Homepage advanced source disclosure missing');
+  if (!((await advanced.locator('summary').textContent()) || '').includes('Nguồn & cài đặt nâng cao')) throw new Error('Homepage advanced source disclosure label mismatch');
+
+  const publicPage = await page.context().newPage();
+  try {
+    await publicPage.goto(baseUrl + '/', { waitUntil: 'networkidle' });
+    const publicKeys = await publicPage.locator('[data-aznet-homepage-surface]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-aznet-homepage-surface')));
+    if (JSON.stringify(adminKeys) !== JSON.stringify(publicKeys)) {
+      throw new Error('Homepage admin/frontend surface order mismatch: admin=' + JSON.stringify(adminKeys) + ' public=' + JSON.stringify(publicKeys));
+    }
+    for (const key of adminKeys) {
+      const card = map.locator('[data-surface-key="' + key + '"]');
+      if (await card.getByRole('link', { name: 'Xem trên trang chủ' }).count() !== 1) {
+        throw new Error('Homepage Map deep link missing for ' + key);
+      }
+    }
+  } finally {
+    await publicPage.close();
   }
-  if (!(await page.locator('input[name="homepage_hero_variant"][value="inverse"]').isChecked())) throw new Error('Initial Hero presentation variant did not persist');
 
-  const draftForm = page.locator('form.aznet-theme-homepage-hero-library');
-  await draftForm.locator('input[name="homepage_hero_variant"][value="media-left"]').check();
-  await Promise.all([
-    page.waitForURL(/admin\.php\?page=aznet-theme&section=homepage&hero=draft/, { timeout: 20000 }),
-    draftForm.getByRole('button', { name: 'Dùng mẫu này' }).click(),
-  ]);
-  const secondEditUrl = await page.getByRole('link', { name: 'Tiếp tục sửa Hero' }).getAttribute('href');
-  if (!secondEditUrl || secondEditUrl !== firstEditUrl) throw new Error('Changing a draft Hero variant must reuse the same WordPress content source');
-
-  await gotoCenter(page, 'homepage');
-  if (!(await page.locator('input[name="homepage_hero_variant"][value="media-left"]').isChecked())) throw new Error('Hero presentation variant did not persist');
-
-  return await checkLayoutAndA11y(page, viewportName + '-homepage-hero-' + (expectWoo ? 'woo' : 'clean'));
+  return await checkLayoutAndA11y(page, viewportName + '-homepage-map-' + (expectWoo ? 'woo' : 'clean'));
 }
 
 async function verifySystemHealth(page) {
@@ -293,9 +341,11 @@ try {
       await exportImport(page, viewportName);
       await resetSettings(page);
       const homepageHero = await verifyHomepageHeroEditingBridge(page, viewportName);
+      const homepageTeam = await verifyHomepageTeamAuthoring(page, viewportName);
+      const homepageMap = await verifyHomepageMap(page, viewportName);
       await verifySystemHealth(page);
-      const layout = await checkLayoutAndA11y(page, `${viewportName}-${expectWoo ? 'woo' : 'clean'}`);
-      results.push({ viewportName, homepageHero, ...layout });
+      const layout = await checkLayoutAndA11y(page, viewportName + '-' + (expectWoo ? 'woo' : 'clean'));
+      results.push({ viewportName, homepageHero, homepageTeam, homepageMap, ...layout });
     } catch (error) {
       failures.push(`${viewportName}: ${error instanceof Error ? error.message : String(error)}`);
       await page.screenshot({ path: path.join(outputDir, `${viewportName}-failure.png`), fullPage: true }).catch(() => {});

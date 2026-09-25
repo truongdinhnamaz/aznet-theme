@@ -13,6 +13,18 @@ on:
       - 'inc/theme/settings.php'
       - 'inc/theme/setup.php'
       - 'inc/theme/bootstrap.php'
+      - 'inc/theme/homepage-surface-map.php'
+      - 'inc/theme/homepage-composer.php'
+      - 'tests/offline/homepage-surface-map-contract.php'
+      - 'tests/offline/homepage-backend-unified-contract.php'
+      - 'tests/offline/d040-td1-template-library-contract.php'
+      - 'tests/offline/homepage-team-authoring-contract.php'
+      - 'assets/js/admin/homepage-authoring.js'
+      - 'assets/js/admin/template-library.js'
+      - 'assets/css/components/team-directory.css'
+      - 'assets/css/components/team-card.css'
+      - 'template-parts/team/**'
+      - 'inc/theme/team-directory.php'
       - 'assets/css/admin/control-center.css'
   workflow_dispatch:
 
@@ -57,6 +69,9 @@ jobs:
         run: |
           php tests/offline/r5-control-center-static-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-library-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-directory-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-authoring-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-page-presentation-contract.php
 
       - name: Prepare prior R4 theme and exact R5 candidate
         run: |
@@ -121,6 +136,18 @@ jobs:
           wp eval "if ( ! has_custom_logo() || ! has_nav_menu( 'primary' ) ) { exit(1); }" --path=/tmp/wp --allow-root
           test "$(wp theme mod get custom_logo --path=/tmp/wp --allow-root)" != ''
           echo 'PASS: R5 in-place update retained Theme settings, logo, menu, content and external sentinel'
+
+      - name: Seed Team authoring fixture
+        run: |
+          set -euo pipefail
+          TEAM_ID=$(wp post create --post_type=page --post_status=publish --post_title='R5 Team Parent' --post_excerpt='Đội ngũ kiểm thử WordPress-native' --porcelain --path=/tmp/wp --allow-root)
+          wp post create --post_type=page --post_status=publish --post_parent="$TEAM_ID" --post_title='R5 Team Member A' --post_excerpt='Vai trò A' --menu_order=10 --porcelain --path=/tmp/wp --allow-root >/dev/null
+          wp post create --post_type=page --post_status=publish --post_parent="$TEAM_ID" --post_title='R5 Team Member B' --post_excerpt='Vai trò B' --menu_order=20 --porcelain --path=/tmp/wp --allow-root >/dev/null
+          wp post create --post_type=page --post_status=publish --post_parent="$TEAM_ID" --post_title='R5 Team Member C' --post_excerpt='' --menu_order=30 --porcelain --path=/tmp/wp --allow-root >/dev/null
+          wp post create --post_type=page --post_status=publish --post_parent="$TEAM_ID" --post_title='R5 Team Member D' --post_excerpt='Vai trò D' --menu_order=40 --porcelain --path=/tmp/wp --allow-root >/dev/null
+          wp post create --post_type=page --post_status=draft --post_parent="$TEAM_ID" --post_title='R5 Draft Team Member' --menu_order=5 --porcelain --path=/tmp/wp --allow-root >/dev/null
+          test "$(wp post list --post_type=page --post_parent="$TEAM_ID" --post_status=publish --format=count --path=/tmp/wp --allow-root)" = '4'
+          echo "R5_TEAM_ID=$TEAM_ID" >> "$GITHUB_ENV"
 
       - name: Start WordPress runtime
         run: |

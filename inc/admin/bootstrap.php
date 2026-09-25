@@ -6,6 +6,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 require_once __DIR__ . '/control-center.php';
 require_once __DIR__ . '/homepage-hero.php';
+require_once __DIR__ . '/homepage-migration.php';
+require_once __DIR__ . '/homepage-authoring.php';
 require_once __DIR__ . '/homepage.php';
 require_once __DIR__ . '/provisioning.php';
 require_once __DIR__ . '/settings-actions.php';
@@ -35,6 +37,25 @@ function register_control_center(): void {
             [],
             AZNET_THEME_VERSION
         );
+        wp_add_inline_style(
+            'aznet-theme-control-center',
+            '.aznet-theme-control-center--homepage{max-width:none!important;width:auto!important}.aznet-theme-homepage-section-grid,.aznet-theme-homepage-section-list{display:block!important;width:100%!important;max-width:100%!important;grid-template-columns:none!important;columns:auto!important}.aznet-theme-homepage-section-grid>.aznet-theme-homepage-section-card,.aznet-theme-homepage-section-list>.aznet-theme-homepage-section-card{display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;flex:0 0 100%!important;float:none!important;clear:both!important;grid-column:1/-1!important;box-sizing:border-box!important;margin-left:0!important;margin-right:0!important}.aznet-theme-homepage-section-grid>.aznet-theme-homepage-section-card+.aznet-theme-homepage-section-card,.aznet-theme-homepage-section-list>.aznet-theme-homepage-section-card+.aznet-theme-homepage-section-card{margin-top:14px!important}'
+        );
+        wp_enqueue_media();
+        wp_enqueue_script(
+            'aznet-theme-homepage-authoring',
+            get_theme_file_uri( 'assets/js/admin/homepage-authoring.js' ),
+            [],
+            AZNET_THEME_VERSION,
+            true
+        );
+        wp_enqueue_script(
+            'aznet-theme-template-library',
+            get_theme_file_uri( 'assets/js/admin/template-library.js' ),
+            [],
+            AZNET_THEME_VERSION,
+            true
+        );
     } );
 }
 
@@ -42,6 +63,13 @@ if ( is_admin() ) {
     add_action( 'admin_menu', __NAMESPACE__ . '\\register_control_center' );
     add_action( 'admin_post_aznet_theme_save_settings', __NAMESPACE__ . '\\handle_save_settings' );
     add_action( 'admin_post_aznet_theme_apply_homepage_hero', __NAMESPACE__ . '\\handle_homepage_hero_apply' );
+    add_action( 'admin_post_aznet_theme_save_homepage_hero_form', __NAMESPACE__ . '\\handle_homepage_hero_form_save' );
+    add_action( 'admin_post_aznet_theme_upgrade_homepage_hero_form', __NAMESPACE__ . '\\handle_homepage_hero_form_upgrade' );
+    add_action( 'admin_post_aznet_theme_migrate_legacy_homepage_hero', __NAMESPACE__ . '\\handle_homepage_hero_legacy_migration' );
+    add_action( 'admin_post_aznet_theme_migrate_homepage_preset', __NAMESPACE__ . '\\handle_homepage_preset_migration' );
+    add_action( 'admin_post_aznet_theme_quick_edit_homepage_source', __NAMESPACE__ . '\\handle_homepage_quick_edit_source' );
+    add_action( 'admin_post_aznet_theme_create_team_member', __NAMESPACE__ . '\\handle_homepage_team_member_create' );
+    add_action( 'admin_post_aznet_theme_duplicate_homepage_source', __NAMESPACE__ . '\\handle_homepage_duplicate_source' );
     add_action( 'admin_post_aznet_theme_reset_settings', __NAMESPACE__ . '\\handle_reset_settings' );
     add_action( 'admin_post_aznet_theme_export_settings', __NAMESPACE__ . '\\handle_export_settings' );
     add_action( 'admin_post_aznet_theme_import_settings', __NAMESPACE__ . '\\handle_import_settings' );

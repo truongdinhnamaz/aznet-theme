@@ -92,10 +92,54 @@ $contact_id = y1_create_page(
     ]
 );
 
+$team_id = y1_create_page(
+    [
+        'post_title'   => 'Y1 Team Directory',
+        'post_excerpt' => 'WordPress-native Team directory fixture.',
+        'post_name'    => 'y1-team-directory',
+        'post_content' => '<p id="y1-team-content">Team Page content owned by WordPress.</p>',
+    ]
+);
+
+foreach (
+    [
+        [ 'Y1 Team Member A', 'Vai trò A', 10 ],
+        [ 'Y1 Team Member B', 'Vai trò B', 20 ],
+        [ 'Y1 Team Member C', '', 30 ],
+        [ 'Y1 Team Member D', 'Vai trò D', 40 ],
+        [ 'Y1 Team Member E', 'Vai trò E', 50 ],
+    ] as $member
+) {
+    y1_create_page(
+        [
+            'post_title'   => $member[0],
+            'post_excerpt' => $member[1],
+            'post_parent'  => $team_id,
+            'menu_order'   => $member[2],
+            'post_content' => '<p>Member detail owned by WordPress.</p>',
+        ]
+    );
+}
+
+$draft_team_member = wp_insert_post(
+    [
+        'post_type'   => 'page',
+        'post_status' => 'draft',
+        'post_title'  => 'Y1 Draft Team Member',
+        'post_parent' => $team_id,
+        'menu_order'  => 5,
+    ],
+    true
+);
+if ( is_wp_error( $draft_team_member ) ) {
+    WP_CLI::error( 'Unable to create Y1 draft Team member.' );
+}
+
 $settings = get_theme_mod( 'aznet_theme_settings', [] );
 $settings = is_array( $settings ) ? $settings : [];
 $settings['homepage_services_page'] = $services_id;
 $settings['homepage_contact_page']  = $contact_id;
+$settings['homepage_team_page']     = $team_id;
 $settings['homepage_preset']        = 'law-01';
 $settings['homepage_law01_variant'] = 'burgundy-gold';
 set_theme_mod( 'aznet_theme_settings', $settings );
@@ -147,6 +191,7 @@ foreach (
         'commerce_looking_url' => $commerce_looking_id,
         'service_detail_url'    => $service_detail_id,
         'contact_url'           => $contact_id,
+        'team_url'              => $team_id,
     ] as $key => $post_id
 ) {
     $url = get_permalink( $post_id );
@@ -168,6 +213,7 @@ $result = array_merge(
         'service_detail_id'    => $service_detail_id,
         'service_sibling_id'   => $service_sibling_id,
         'contact_id'           => $contact_id,
+        'team_id'              => $team_id,
         'attachment_id'        => (int) $attachment_id,
     ]
 );

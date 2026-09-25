@@ -82,20 +82,22 @@ function provisioning_discovered_blueprints(): array {
 function provisioning_discovery(): array {
     $s = settings();
     $locations = function_exists( 'get_nav_menu_locations' ) ? get_nav_menu_locations() : [];
-    $slot_keys = [
-        'hero' => 'homepage_hero_page',
-        'services' => 'homepage_services_page',
-        'about' => 'homepage_about_page',
-        'team' => 'homepage_team_page',
-        'knowledge' => 'homepage_knowledge_terms',
-        'case_analysis' => 'homepage_case_analysis_term',
-        'legal_news' => 'homepage_legal_news_term',
-        'process' => 'homepage_process_page',
-        'faq' => 'homepage_faq_page',
-        'contact' => 'homepage_contact_page',
+    $slot_roles = [
+        'hero' => 'hero_page',
+        'services' => 'services',
+        'about' => 'about',
+        'team' => 'team',
+        'knowledge' => 'knowledge',
+        'case_analysis' => 'case_analysis',
+        'legal_news' => 'legal_news',
+        'process' => 'process',
+        'faq' => 'faq',
+        'contact' => 'contact',
     ];
     $slots = [];
-    foreach ( $slot_keys as $role => $key ) { $slots[ $role ] = $s[ $key ] ?? ( 'knowledge' === $role ? [] : 0 ); }
+    foreach ( $slot_roles as $role => $source_slot ) {
+        $slots[ $role ] = homepage_source_value( 'law-01', $source_slot, $s );
+    }
     $pages = provisioning_page_candidates();
     $categories = provisioning_category_candidates();
     return [

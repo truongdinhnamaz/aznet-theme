@@ -1,13 +1,13 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.79
+**Version:** v0.81
 **Status:** Working Execution Map / derived  
-**Date:** 23/09/2026
+**Date:** 25/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** exact current implementation is `f84d45a58261ec41d9b0c11a5e02a0873edb28ff`, Theme metadata `1.3.31`; exact-main V1 `35870034014`, X6 `35870034255` and dedicated Curtain 01 Project Showcase `35870033789` are SUCCESS. Current published GitHub Release remains `v1.3.23`; later canonical implementation and pilot-specific production deployment do not silently redefine the GitHub Release boundary. Repository technical verification/publication remain connector-independent under D-033.
+> **Canonical-main checkpoint:** exact current canonical `main` is `5d2d34074c1b1b0006151b399b6b652927a19d49`, Theme metadata `1.3.32`. The earlier exact-main V1 `35870034014`, X6 `35870034255` and Curtain 01 Project Showcase `35870033789` remain retained evidence for their tested bytes; they are not re-labelled as fresh 1.3.32 verification. PR #272 carries a newer unmerged 1.3.54 candidate; the unified Homepage backend branch continues from that candidate and does not redefine canonical main.
 
 > **Rèm 01 production checkpoint:** `remquocanh.vn` runs AZnet Theme `1.3.31` with owner-approved Process Rail and Project Showcase. WordPress owns Process Page #997 and Project Post #999 / Category #80; Theme owns only typed references, composition and presentation. Fresh production Lighthouse is Accessibility 100 / Best Practices 100 on mobile and desktop after corrective reconciliation of Curtain 01 CSS/JS to canonical main. Independent external pixel-level L4, dedicated Vietnamese font loaded-state proof and provider L5 remain separate/UNKNOWN.
 
@@ -609,3 +609,44 @@ At every slice, commit bounded changes on a work/feature branch and retain a cle
 - State: **v1.3.21 TECHNICAL PASS / PUBLICATION GATED / PRODUCTION DEPLOYMENT NOT CLAIMED**.
 - Current public GitHub Release remains `v1.3.20`.
 - Evidence: `docs/evidence/V1_3_21_ABOUT_PAGE_TECHNICAL_CLOSURE_20260920.md`.
+
+## TD — WordPress-native Team Directory
+
+- **TD0 Source ratification** — D-038 ownership + execution map accepted.
+- **TD1 Team read model + shared card** — exact mapped parent, direct published children, shared member card.
+- **TD2 Homepage Team frontend** — max 4 real members, no generated/reference person fallback, Xem tất cả CTA.
+- **TD3 Homepage Team authoring** — bounded edit + immediate-publish Add Member under exact mapped parent.
+- **TD4 Team directory Page** — exact mapped parent presentation with all published members.
+- **TD5 Law 01 provisioning** — Team becomes required core Page; create/reuse parent only, no sample members.
+- **TD6 Runtime/browser/a11y parity** — admin/Homepage/directory order + data parity and accessibility evidence.
+- **TD7 Technical closure/release gate** — full regression, ownership review, evidence; release remains separately approved.
+
+- **D-039 immediate publication amendment** — TD3 Add Member publishes the validated WordPress child Page immediately; manual draft/private children remain public-excluded.
+
+## TPL — Remote Template Library execution track (D-040)
+
+The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `TD` is already used by the WordPress-native Team Directory track on the current lineage. This is a derived execution-label correction only; D-040 semantics do not change.
+
+| Slice | State | Exact boundary |
+| --- | --- | --- |
+| TPL0 Governance | ACCEPTED / branch source candidate | D-040 product/architecture/roadmap source updates prepared; canonical-main merge remains gated |
+| TPL1 Admin Template Library | IMPLEMENTED CANDIDATE / BLOCKED_EXTERNAL_RUNNER | Card grid/search/category filter integrated on unified Homepage branch; fresh executable QA cannot start because PR #276 jobs terminate with runner_id=0 / zero steps |
+| TPL2 Distribution consumer | LOCKED | Open only after TPL1 local/runtime gate; consume public/versioned external contract and fail soft |
+| TPL3 Secure installer | LOCKED | Declarative package only; allow-list + integrity/signature + staging + atomic activation + rollback |
+| TPL4 Runtime/browser/a11y | OPEN NEXT after shallow gates | Real wp-admin responsive/keyboard/focus/console evidence |
+| TPL5 Actual service L5 | BLOCKED_EXTERNAL | Requires real AZnet Template Distribution Service; Theme must not self-implement the dependency |
+| TPL6 Release closure | LOCKED | Full regression/package/provenance; merge/release remain owner-gated |
+
+## HB — Unified Homepage Backend execution track (D-041)
+
+| Slice | State | Exact boundary |
+| --- | --- | --- |
+| HB0 Governance | ACCEPTED / branch source candidate | D-041 shared-model/admin UX decision recorded |
+| HB1 Shared effective-surface model | IMPLEMENTED CANDIDATE | Law 01 request-local model resolves only effective renderable surfaces; no persistent second content store |
+| HB2 Frontend shared composition | IMPLEMENTED CANDIDATE | Law 01 before/after composition consumes the shared model; Curtain 01 unchanged |
+| HB3 Primary Homepage Map | IMPLEMENTED CANDIDATE | One-column effective map, bounded editing, frontend deep links, advanced source disclosure |
+| HB4 Static/TDD closure | PASS / runner-independent | RED contract added before implementation; direct exact-branch source verification then passed with 0 contract failures after correcting two defects found during review. GitHub runner remains unavailable but is no longer a dependency for L1/L2 evidence. |
+| HB5 WordPress runtime + browser/a11y parity | UNKNOWN / not release-claimed | Runtime parity test and R5/Homepage browser assertions are wired. Owner directed implementation/merge not to depend on hosted runner availability; no L3/L4 PASS is inferred from source verification. |
+| HB6 Integration/release | LOCKED | No L5/L6 inference, no main merge/release/deploy until prior gates close |
+
+**Current exact next:** owner approved proceeding without hosted-runner dependency. Merge the verified L1/L2 candidate only; keep L3/L4 as UNKNOWN and keep release/deployment gated until separate runtime/browser evidence exists.

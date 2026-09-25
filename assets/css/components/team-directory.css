@@ -1,0 +1,10 @@
+.aznet-theme-page--team-directory{background:var(--aznet-theme-color-surface-subtle)}
+.aznet-theme-team-directory{padding-block:clamp(3rem,6vw,6rem)}
+.aznet-theme-team-directory__header{max-width:52rem;margin-bottom:clamp(2rem,4vw,3.5rem)}
+.aznet-theme-team-directory__eyebrow{margin:0 0 .75rem;color:var(--aznet-theme-color-text-muted);font-size:var(--aznet-theme-text-label);font-weight:var(--aznet-theme-font-weight-bold);letter-spacing:.12em;text-transform:uppercase}
+.aznet-theme-team-directory__header h1{margin:0 0 1rem}
+.aznet-theme-team-directory__lead{max-width:60ch;margin:0;color:var(--aznet-theme-color-text-muted);font-size:var(--aznet-theme-text-lead);line-height:var(--aznet-theme-line-height-lead)}
+.aznet-theme-team-directory__intro{max-width:52rem;margin-bottom:2.5rem}
+.aznet-theme-team-directory__grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(1rem,2vw,1.5rem)}
+@media(max-width:64rem){.aznet-theme-team-directory__grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:40rem){.aznet-theme-team-directory__grid{grid-template-columns:1fr}}

@@ -103,9 +103,9 @@ assert(str_contains($assets, "has_nav_menu( 'header-utility' )"), 'Header utilit
 $heroSource = file_get_contents($root . '/template-parts/homepage/law-01/hero.php');
 $servicesSource = file_get_contents($root . '/template-parts/homepage/law-01/services.php');
 $teamSource = file_get_contents($root . '/template-parts/homepage/law-01/team.php');
-assert(str_contains($heroSource, "setting( 'homepage_hero_block', 0 )"), 'Hero must prefer the WordPress-native synced Hero block reference.');
+assert(str_contains($heroSource, "homepage_source_value( 'law-01', 'hero', \$theme_settings )"), 'Hero must prefer the effective Law 01 WordPress-native synced Hero block reference.');
 assert(str_contains($heroSource, 'homepage_block_reference'), 'Hero synced content must resolve through the bounded wp_block helper.');
-assert(str_contains($heroSource, "setting( 'homepage_hero_page', 0 )"), 'Legacy Hero Page reference must remain for compatibility.');
+assert(str_contains($heroSource, "homepage_source_value( 'law-01', 'hero_page', \$theme_settings )"), 'Legacy Hero Page compatibility must remain through the effective Law 01 resolver.');
 assert(str_contains($heroSource, 'homepage_page_reference'), 'Legacy Hero Page source must still resolve through the bounded Page helper.');
 assert(str_contains($heroSource, "get_bloginfo( 'description' )"), 'Legacy Site Tagline fallback must preserve existing Law 01 Hero presentation when the dedicated Hero Page is unmapped.');
 assert(str_contains($servicesSource, 'get_the_excerpt( $parent )'), 'Services intro must come from the mapped Services Page excerpt.');

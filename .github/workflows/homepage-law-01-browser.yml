@@ -12,6 +12,12 @@ on:
       - 'inc/theme/settings.php'
       - 'inc/theme/assets.php'
       - 'inc/theme/bootstrap.php'
+      - 'inc/theme/team-directory.php'
+      - 'template-parts/team/**'
+      - 'assets/css/components/team-card.css'
+      - 'assets/css/components/team-directory.css'
+      - 'tests/runtime/team-directory-parity.php'
+      - 'tests/runtime/homepage-team-authoring.php'
       - 'inc/admin/homepage.php'
       - 'inc/admin/homepage-hero.php'
       - 'inc/admin/control-center.php'
@@ -67,13 +73,22 @@ jobs:
           set -euo pipefail
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-settings-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-content-map-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-directory-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-directory-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-authoring-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-page-presentation-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-provisioning-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-control-center-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-surface-map-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/d040-td1-template-library-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-backend-unified-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-library-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-law-01-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/f2-front-page-content-boundary-contract.php
           php -l front-page.php
           php -l inc/theme/homepage-content-map.php
+          php -l inc/theme/homepage-surface-map.php
           php -l inc/theme/homepage-composer.php
           php -l inc/admin/homepage.php
 
@@ -207,14 +222,25 @@ jobs:
               law01_page( $title, $slug, 'Nội dung mô tả dịch vụ được quản lý bằng Page WordPress.', '', $services, $order++ );
           }
           $team = law01_page( 'Đội ngũ luật sư', 'doi-ngu-luat-su', 'Tìm hiểu đội ngũ và cách chúng tôi phối hợp trong quá trình tư vấn.' );
-          $member_a = law01_page( 'Luật sư tư vấn doanh nghiệp', 'luat-su-doanh-nghiep', 'Hồ sơ nhân sự mẫu kiểm thử được quản lý bằng Page WordPress.', '', $team, 1 );
-          $member_b = law01_page( 'Luật sư tư vấn dân sự', 'luat-su-dan-su', 'Hồ sơ nhân sự mẫu kiểm thử thứ hai được quản lý bằng Page WordPress.', '', $team, 2 );
-          $member_c = law01_page( 'Luật sư tư vấn hình sự', 'luat-su-hinh-su', 'Hồ sơ nhân sự mẫu kiểm thử thứ ba được quản lý bằng Page WordPress.', '', $team, 3 );
-          $member_d = law01_page( 'Luật sư tư vấn đất đai', 'luat-su-dat-dai', 'Hồ sơ nhân sự mẫu kiểm thử thứ tư được quản lý bằng Page WordPress.', '', $team, 4 );
+          $member_a = law01_page( 'Luật sư tư vấn doanh nghiệp', 'luat-su-doanh-nghiep', 'Luật sư Doanh nghiệp', '', $team, 10 );
+          $member_b = law01_page( 'Luật sư tư vấn dân sự', 'luat-su-dan-su', 'Luật sư Dân sự', '', $team, 20 );
+          $member_c = law01_page( 'Luật sư tư vấn hình sự', 'luat-su-hinh-su', '', '', $team, 30 );
+          $member_d = law01_page( 'Luật sư tư vấn đất đai', 'luat-su-dat-dai', 'Luật sư Đất đai', '', $team, 40 );
+          $member_e = law01_page( 'Luật sư tư vấn lao động', 'luat-su-lao-dong', 'Luật sư Lao động', '', $team, 50 );
+          $member_f = law01_page( 'Luật sư tư vấn gia đình', 'luat-su-gia-dinh', 'Luật sư Hôn nhân & Gia đình', '', $team, 60 );
+          $draft_member = wp_insert_post( [
+              'post_type' => 'page',
+              'post_status' => 'draft',
+              'post_title' => 'Draft Team Member',
+              'post_parent' => $team,
+              'menu_order' => 5,
+          ], true );
+          if ( is_wp_error( $draft_member ) ) { throw new RuntimeException( $draft_member->get_error_message() ); }
           law01_featured_fixture( $member_a, 'team-a', 800, 1000 );
-          law01_featured_fixture( $member_b, 'team-b', 800, 1000 );
           law01_featured_fixture( $member_c, 'team-c', 800, 1000 );
           law01_featured_fixture( $member_d, 'team-d', 800, 1000 );
+          law01_featured_fixture( $member_e, 'team-e', 800, 1000 );
+          law01_featured_fixture( $member_f, 'team-f', 800, 1000 );
           $brand_logo = law01_featured_fixture( $team, 'brand-logo', 300, 300 );
           set_theme_mod( 'custom_logo', $brand_logo );
           $process = law01_page(
@@ -318,6 +344,13 @@ jobs:
 
           wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
           wp rewrite flush --hard --path=/tmp/wp --allow-root
+
+      - name: Verify Team directory runtime parity
+        run: |
+          set -euo pipefail
+          wp eval-file "$GITHUB_WORKSPACE/tests/runtime/team-directory-parity.php" --path=/tmp/wp --allow-root
+          wp eval-file "$GITHUB_WORKSPACE/tests/runtime/homepage-team-authoring.php" --path=/tmp/wp --allow-root
+          wp eval-file "$GITHUB_WORKSPACE/tests/runtime/homepage-map-runtime.php" --path=/tmp/wp --allow-root | tee /tmp/homepage-law01/homepage-map-runtime.json
 
       - name: Start WordPress runtime and verify Law 01 surface
         run: |
@@ -427,8 +460,13 @@ jobs:
               exit( 1 );
           }
           $s = get_theme_mod( 'aznet_theme_settings', [] );
-          $s['homepage_hero_block'] = (int) $block;
-          $s['homepage_hero_variant'] = 'media-left';
+          // Reproduce the real regression boundary: Law 01 admin writes the scoped
+          // source while legacy keys may still point elsewhere or remain empty.
+          $s['homepage_law01_sources_initialized'] = true;
+          $s['homepage_law01_hero_block'] = (int) $block;
+          $s['homepage_law01_hero_variant'] = 'media-left';
+          $s['homepage_hero_block'] = 0;
+          $s['homepage_hero_variant'] = 'centered';
           set_theme_mod( 'aznet_theme_settings', AZnet\Theme\normalize_settings( $s ) );
           echo (int) $block;
           PHP
@@ -442,7 +480,7 @@ jobs:
             echo 'Legacy Hero Page must not win when synced Hero block is valid' >&2
             exit 1
           fi
-          echo 'PASS: D-030 synced Hero block precedence at runtime'
+          echo 'PASS: D-030 scoped Hero source parity and precedence at runtime'
 
       - name: Run D-030 Hero Library browser verification
         env:

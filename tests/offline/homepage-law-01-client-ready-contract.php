@@ -73,10 +73,10 @@ foreach ([
 
 
 foreach ([
-    "setting( 'homepage_hero_block', 0 )",
-    "setting( 'homepage_hero_variant', 'split' )",
+    "homepage_source_value( 'law-01', 'hero', \$theme_settings )",
+    "homepage_source_value( 'law-01', 'hero_variant', \$theme_settings )",
     'homepage_block_reference',
-    "setting( 'homepage_hero_page', 0 )",
+    "homepage_source_value( 'law-01', 'hero_page', \$theme_settings )",
     'homepage_page_reference',
     'post_content',
     'aznet-theme-law01-hero__value',

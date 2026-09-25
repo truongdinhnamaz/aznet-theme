@@ -18,6 +18,7 @@ $is_law01_service_detail = $is_service_detail
     && \AZnet\Theme\header_law01_active();
 $is_contact_page = \AZnet\Theme\contact_page_presentation_active( (int) get_the_ID() );
 $is_services_page = \AZnet\Theme\services_page_presentation_active( (int) get_the_ID() );
+$is_team_page = \AZnet\Theme\team_page_presentation_active( (int) get_the_ID() );
 $service_contact_url = $is_service_detail ? \AZnet\Theme\service_page_contact_url() : '';
 $service_siblings = $is_service_detail ? \AZnet\Theme\service_page_siblings( (int) get_the_ID() ) : [];
 $service_positions = [];
@@ -39,6 +40,9 @@ if ( $is_contact_page ) {
 if ( $is_services_page ) {
     $page_classes .= ' aznet-theme-page--services-root';
 }
+if ( $is_team_page ) {
+    $page_classes .= ' aznet-theme-page--team-directory';
+}
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( $page_classes ); ?>>
     <?php if ( $is_contact_page ) : ?>
@@ -55,6 +59,16 @@ if ( $is_services_page ) {
         <?php
         get_template_part(
             'template-parts/services/page',
+            null,
+            [
+                'excerpt' => $excerpt,
+            ]
+        );
+        ?>
+    <?php elseif ( $is_team_page ) : ?>
+        <?php
+        get_template_part(
+            'template-parts/team/page',
             null,
             [
                 'excerpt' => $excerpt,

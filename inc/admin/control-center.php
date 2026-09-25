@@ -8,7 +8,7 @@ use function AZnet\Theme\Integrations\WooCommerce\available as woo_available;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 function control_center_section(): string {
-    $allowed = [ 'overview', 'design', 'header', 'footer', 'homepage', 'provisioning', 'commerce', 'system-health' ];
+    $allowed = [ 'overview', 'design', 'header', 'footer', 'homepage', 'hero-library', 'provisioning', 'commerce', 'system-health' ];
     $value = isset( $_GET['section'] ) ? sanitize_key( wp_unslash( $_GET['section'] ) ) : 'overview';
     if ( 'commerce' === $value && ! woo_available() ) { return 'overview'; }
     return in_array( $value, $allowed, true ) ? $value : 'overview';
@@ -127,7 +127,8 @@ function render_control_center(): void {
     if ( woo_available() ) {
         $tabs = [ 'overview' => 'Tổng quan', 'design' => 'Thiết kế', 'header' => 'Header', 'footer' => 'Footer', 'homepage' => 'Trang chủ', 'provisioning' => 'Thiết lập nhanh', 'commerce' => 'Commerce', 'system-health' => 'System Health' ];
     }
-    echo '<div class="wrap aznet-theme-control-center"><h1>AZnet Theme</h1><nav class="nav-tab-wrapper">';
+    $center_class = 'wrap aznet-theme-control-center' . ( 'homepage' === $section ? ' aznet-theme-control-center--homepage' : '' );
+    echo '<div class="' . esc_attr( $center_class ) . '"' . ( 'homepage' === $section ? ' style="max-width:none;width:auto"' : '' ) . '><h1>AZnet Theme</h1><nav class="nav-tab-wrapper">';
     foreach ( $tabs as $slug => $label ) {
         $url = add_query_arg( [ 'page' => 'aznet-theme', 'section' => $slug ], admin_url( 'admin.php' ) );
         echo '<a class="nav-tab ' . ( $section === $slug ? 'nav-tab-active' : '' ) . '" href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a>';
@@ -161,6 +162,8 @@ function render_control_center(): void {
         submit_button( 'Đặt lại', 'delete', 'submit', false ); echo '</form></div>';
     } elseif ( 'homepage' === $section ) {
         render_homepage_settings();
+    } elseif ( 'hero-library' === $section ) {
+        render_homepage_hero_library_screen();
     } elseif ( 'provisioning' === $section ) {
         render_provisioning_wizard();
     } elseif ( 'system-health' === $section ) {

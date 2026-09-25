@@ -52,6 +52,7 @@ if ( 'existing' === $scenario ) {
     $home     = aznet_provision_page( 'Existing Home', 'KEEP HOME' );
     $about    = aznet_provision_page( 'Existing About', 'KEEP ABOUT' );
     $services = aznet_provision_page( 'Existing Services', 'KEEP SERVICES' );
+    $team     = aznet_provision_page( 'Đội ngũ', 'KEEP TEAM' );
     $contact  = aznet_provision_page( 'Existing Contact', 'KEEP CONTACT' );
     update_option( 'show_on_front', 'page' );
     update_option( 'page_on_front', $home );
@@ -64,6 +65,7 @@ if ( 'existing' === $scenario ) {
         $home     => get_post( $home )->post_content,
         $about    => get_post( $about )->post_content,
         $services => get_post( $services )->post_content,
+        $team     => get_post( $team )->post_content,
         $contact  => get_post( $contact )->post_content,
     ];
     $selection = [
@@ -71,6 +73,7 @@ if ( 'existing' === $scenario ) {
             'home'     => [ 'action' => 'reuse', 'object_id' => $home ],
             'about'    => [ 'action' => 'reuse', 'object_id' => $about ],
             'services' => [ 'action' => 'reuse', 'object_id' => $services ],
+            'team'     => [ 'action' => 'reuse', 'object_id' => $team ],
             'contact'  => [ 'action' => 'reuse', 'object_id' => $contact ],
         ],
         'categories' => [],
@@ -83,7 +86,12 @@ if ( 'existing' === $scenario ) {
     foreach ( $before as $id => $content ) {
         aznet_provision_must( get_post( $id )->post_content === $content, 'existing content overwritten' );
     }
-    aznet_provision_must( AZnet\Theme\settings()['homepage_about_page'] === $about, 'explicit reuse not mapped' );
+    $settings = AZnet\Theme\settings();
+    aznet_provision_must( $settings['homepage_about_page'] === $about, 'explicit reuse not mapped' );
+    aznet_provision_must( $settings['homepage_team_page'] === $team, 'existing Team Page not reused' );
+    aznet_provision_must( 'Đội ngũ' === get_post( $team )->post_title, 'existing Team Page was auto-renamed' );
+    $team_children = get_posts( [ 'post_type' => 'page', 'post_status' => 'any', 'post_parent' => $team, 'posts_per_page' => -1 ] );
+    aznet_provision_must( 0 === count( $team_children ), 'existing-site provisioning created sample Team members' );
     echo "PASS: existing-site no-overwrite\n";
     return;
 }

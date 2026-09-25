@@ -7,8 +7,9 @@ $source = file_get_contents($admin);
 $control = file_get_contents($root . '/inc/admin/control-center.php');
 $bootstrap = file_get_contents($root . '/inc/admin/bootstrap.php');
 $css = file_get_contents($root . '/assets/css/admin/control-center.css');
+$settingsSource = file_get_contents($root . '/inc/theme/settings.php');
 
-foreach (['render_homepage_settings', 'homepage_slot_statuses', 'READY', 'DRAFT', 'EMPTY', 'UNMAPPED', 'INVALID', 'PROVIDER_UNAVAILABLE', 'law-01', 'homepage_hero_page', 'homepage_hero_block', 'homepage_hero_variant', 'homepage_knowledge_terms][', 'get_pages(', 'get_categories('] as $required) {
+foreach (['render_homepage_settings', 'homepage_slot_statuses', 'READY', 'DRAFT', 'EMPTY', 'UNMAPPED', 'INVALID', 'PROVIDER_UNAVAILABLE', 'law-01', 'homepage_source_descriptor', 'homepage_source_key', 'homepage_source_value', 'homepage_hero_variant', 'get_pages(', 'get_categories('] as $required) {
     assert(str_contains($source, $required), "Missing Homepage admin contract: {$required}");
 }
 
@@ -49,7 +50,7 @@ assert(str_contains($source, "AZnet\\\\Theme\\\\Integrations\\\\RootProfile\\\\p
 assert(! str_contains($source, "AZnet\\\\Theme\\\\Integrations\\\\RootProfile\\\\available"), 'Homepage diagnostics must not probe a nonexistent RootProfile capability');
 
 foreach (['homepage_hero_title', 'homepage_hero_subtitle', 'homepage_hero_slogan', 'homepage_hero_body'] as $forbidden) {
-    assert(! str_contains($source, $forbidden), "Hero copy must remain WordPress-owned instead of becoming Theme settings: {$forbidden}");
+    assert(! str_contains((string) $settingsSource, "'" . $forbidden . "' =>"), "Hero copy must remain WordPress-owned instead of becoming persisted Theme settings: {$forbidden}");
 }
 
 foreach (['wp_insert_post(', 'wp_update_post(', 'wp_delete_post(', 'wp_insert_term(', 'wp_delete_term('] as $forbidden) {

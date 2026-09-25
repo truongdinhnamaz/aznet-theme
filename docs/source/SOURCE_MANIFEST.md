@@ -1,15 +1,15 @@
 # AZnet Theme Source Manifest
 
-Canonical technical implementation baseline is exact `main@f84d45a58261ec41d9b0c11a5e02a0873edb28ff`, Theme metadata `1.3.31`. Exact-main V1 `35870034014` and X6 `35870034255` PASS; dedicated Curtain 01 Project Showcase `35870033789` PASS. Current published GitHub Release remains `v1.3.23`; repository implementation and release publication are distinct from pilot-specific production deployment under D-033. Rèm Quốc Anh production now runs Theme `1.3.31` with owner-approved Process Rail + Project Showcase at the verified scope; evidence: `docs/evidence/CURTAIN01_PROJECT_SHOWCASE_PRODUCTION_20260923.md`.
+Canonical repository baseline at the D-040/D-041 decision checkpoint is exact `main@5d2d34074c1b1b0006151b399b6b652927a19d49`, Theme metadata `1.3.32`. PR #272 carries a newer unmerged `1.3.54` Law 01/authoring candidate; branch `work/homepage-backend-unified-20260925` continues from that candidate and is not canonical main. Earlier exact-main V1 `35870034014`, X6 `35870034255` and Curtain 01 Project Showcase `35870033789` remain retained evidence for their tested bytes only. Current published GitHub Release remains `v1.3.23`; publication, canonical implementation and pilot production are distinct boundaries.
 | Source | Semantic version | Role |
 | --- | --- | --- |
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
-| `AZT-01-product-charter.md` | v0.4 | Product scope/ownership and v1.1 objective/non-goals |
-| `AZT-02-architecture.md` | v0.14 | Theme architecture, public integration contracts, D-027 Standalone Core boundary and complete WordPress-owned D-030 Hero authoring rule |
-| `AZT-03-baseline-provenance.md` | v0.74 | Canonical provenance through Rèm 01 1.3.31 Project Showcase production checkpoint |
-| `AZT-04-roadmap-qa-decisions.md` | v0.91 | Roadmap/QA through Rèm 01 Process Rail + Project Showcase production PASS at verified scope |
-| `AZT-EXEC-MAP.md` | v0.79 | Derived execution map through Rèm 01 1.3.31 production checkpoint |
+| `AZT-01-product-charter.md` | v0.5 | Product scope/ownership and v1.1 objective/non-goals |
+| `AZT-02-architecture.md` | v0.16 | Theme architecture, public integration contracts, D-027 Standalone Core boundary and complete WordPress-owned D-030 Hero authoring rule |
+| `AZT-03-baseline-provenance.md` | v0.75 | Canonical provenance through Rèm 01 1.3.31 Project Showcase production checkpoint |
+| `AZT-04-roadmap-qa-decisions.md` | v0.93 | Roadmap/QA through Rèm 01 Process Rail + Project Showcase production PASS at verified scope |
+| `AZT-EXEC-MAP.md` | v0.81 | Derived execution map through Rèm 01 1.3.31 production checkpoint |
 
 23/09/2026 Rèm 01 production evidence: `docs/evidence/CURTAIN01_PROJECT_SHOWCASE_PRODUCTION_20260923.md` records PR #262/#263 integration through `main@f84d45a58261ec41d9b0c11a5e02a0873edb28ff`, owner-backed WPVibe production publication, Post #999 / Category #80 mapping, corrective removal of one stale draft-only D-036-incompatible heading cap, exact live Curtain CSS/JS/`theme.json` reconciliation, and fresh mobile/desktop Accessibility 100 / Best Practices 100. Current GitHub Release remains `v1.3.23`; this pilot production state does not silently create a new Release.
 
@@ -85,7 +85,7 @@ Derived DOCX source material remains archival/export evidence only. Canonical so
 
 19/09/2026 Homepage Hero editing UX evidence: `docs/evidence/HOMEPAGE_HERO_EDITOR_UX_20260919.md` records PR #150 canonical merge + exact-main V1/X6 PASS, PR #151 RED->GREEN authoring bridge, reconciliation to canonical 1.3.10 and 19/19 final workflow success. Hero copy remains WordPress-owned; Theme does not create a parallel Hero content store.
 
-**Exact next:** preserve canonical `v1.3.21` technical PASS. Current public GitHub Release remains `v1.3.20`; `v1.3.21` publication is separate. Production deployment remains a separate gate requiring safe authenticated target-site preflight and rollback evidence. RootProfile Team remains blocked at issue #112.
+**Exact next:** preserve draft PR #276 and `work/homepage-backend-unified-20260925` without merge. Fresh PR #276 V1/R5/Homepage jobs reproduced `runner_id=0` with zero executed steps, so executable L1-L4 state is `BLOCKED_EXTERNAL_RUNNER`. When runners execute again, resume at L1/L2 on the exact head, then continue to Law 01 L3 and R5/Homepage L4 parity.
 
 
 19/09/2026 PR #151 merge-closure evidence: `docs/evidence/HOMEPAGE_HERO_EDITOR_UX_MERGE_CLOSURE_20260919.md` records owner-approved merge to `main@39df23c3...`, zero file delta from the 22/22-verified final head and fresh exact-main V1 run `35412829723` SUCCESS.
@@ -103,3 +103,13 @@ Current release boundary: **v1.3.21 TECHNICAL PASS / GitHub publication v1.3.20 
 
 
 19/09/2026 v1.3.11 publication evidence: `docs/evidence/V1_3_11_PUBLICATION_20260919.md` records owner-approved publication of annotated `v1.3.11` -> exact D-030 implementation `01ddbff1...`, GitHub Release `391924224`, asset `574135564`, SHA-256 `723f502f81033136410a49ee1196ff098837b20edbdadaf754cadf522efe9fb0`, 147 production files and 110/110 packaged PHP lint PASS. Repair run `35424304502` corrected the release-note rendering defect without changing tag/package identity; temporary publication helper cleanup leaves zero net file delta. Verified production remains `v1.3.0`.
+
+25/09/2026 D-038 WordPress-native Team directory: owner-approved design/spec is `docs/superpowers/specs/2026-09-25-wordpress-native-team-directory-design.md`; implementation plan is `docs/superpowers/plans/2026-09-25-wordpress-native-team-directory.md`. Authoritative ownership decision is AZT-02 D-038 architecture + AZT-04 D-038 decision. WordPress owns Team parent/child Page data; Theme owns typed mapping, bounded authoring and presentation only. Release/deployment are not implied.
+
+25/09/2026 D-039 Team publication amendment: owner approved immediate publication from the bounded Homepage **Thêm nhân sự** action; this supersedes only D-038 draft-first Add Member behavior. WordPress ownership, exact parent/child mapping, provisioning and no-fake-person constraints remain unchanged.
+
+25/09/2026 D-040 Remote Template Library: AZT-01 v0.5, AZT-02 v0.16 and AZT-04 v0.93 preserve the external Distribution Service ownership boundary, declarative-package rule, Standalone Core independence and real-service L5 block. The derived execution labels are reconciled to TPL0-TPL6 to avoid collision with the existing Team Directory TD track.
+
+25/09/2026 D-041 unified Homepage backend: owner approved the operator flow **Template Library -> Trang chủ đang hiển thị -> bounded authoring -> Nguồn & cài đặt nâng cao**. The Law 01 candidate uses one request-local effective-surface model for both frontend composition and the primary admin map, with WordPress/provider ownership unchanged. Curtain 01 remains on its proven authoring path until a separately verified parity slice. Implementation exists only on `work/homepage-backend-unified-20260925`; L3/L4 and canonical merge are not claimed.
+
+25/09/2026 PR #276 external runner evidence: final production-code checkpoint `2291207482de4d1fee9b4a4470851ab21e5a17a2` reproduced the block on V1 `36108984511`, R5 static `36108984342`, R5 browser `36108984398` and Homepage Law 01 browser `36108984549`; each relevant job ended before any workflow step with runner ID `0` and blank runner name. This is `BLOCKED_EXTERNAL_RUNNER`, not Theme-code failure/PASS. Evidence: `docs/evidence/HOMEPAGE_BACKEND_UNIFIED_CANDIDATE_20260925.md`.

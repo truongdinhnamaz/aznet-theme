@@ -4,9 +4,9 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.14 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.16 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 19/09/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 25/09/2026 |
 
 | **Kiến trúc lõi: **Theme chỉ sở hữu presentation/configuration/reference cần thiết. Dữ liệu authoritative và business state ở lại owner. Boundary giữa hai bên là public/versioned provider contract hoặc adapter tối thiểu. |
 | --- |
@@ -334,3 +334,125 @@ Law01 provisioning must complete from resources shipped with the Theme package p
 The exact final package must pass a zero-plugin standalone path before Core Ready/publication: install -> activate -> setup -> provision -> representative runtime/browser/a11y -> update/theme-switch continuity. Optional L5 compatibility certification is additive and cannot substitute for Standalone Core PASS. Development/QA tools such as GitHub Actions, WP-CLI, Playwright and axe are allowed because they are not website runtime dependencies.
 
 A QA runner's inability to resolve/authenticate to a pilot site is recorded as `P4 PILOT ACCESS BLOCKED`; it is not evidence that the Theme requires a connector/plugin.
+
+# 17. WordPress-native Team Directory — D-038
+
+Law 01 Team directory uses the explicitly mapped WordPress Team parent Page. Each team member is a direct child Page.
+
+- WordPress owns member title/name, excerpt/role, Featured Image/portrait, body/biography, publication state, permalink, hierarchy and `menu_order`.
+- AZnet Theme owns only the typed Team Page mapping, bounded admin authoring presentation, Homepage/directory presentation and provisioning orchestration.
+- No Team CPT, personnel repeater/meta store, JSON personnel blob, second Theme Mod store or private provider storage is allowed.
+- Team child Pages are editorial website content and MUST NOT be treated as authoritative RootProfile Person identity/profile truth.
+- Team resolution MUST use the exact mapped Team parent Page ID. Title, slug, URL and fuzzy heuristics are forbidden.
+- Homepage Team may render at most four published direct children in `menu_order title` order; the mapped Team directory Page may render all published direct children.
+- Missing portrait is presentation-safe text-only output. Theme MUST NOT substitute generated/reference/AI person imagery.
+- Add-member authoring is draft-first and must create only an ordinary child Page after capability/nonce validation.
+- Existing mapped Team Pages are reused and are not auto-renamed, duplicated or destructively migrated.
+
+## D-039 amendment — Team Add Member publishes immediately
+
+Owner approval on 25/09/2026 supersedes the D-038 draft-first authoring detail for the bounded Homepage Team form.
+
+- The **Thêm nhân sự** action creates an ordinary WordPress child Page with `post_status=publish` immediately after capability, nonce and input validation.
+- Immediate publication is authorized only for this bounded Team add-member flow because the administrator supplies the public presentation fields (name, optional role, optional portrait) in the same action.
+- WordPress remains the data owner; Theme does not gain a personnel store or publication-state authority outside this action.
+- Manual WordPress draft/private Team child Pages remain valid and must stay excluded from public Team resolvers.
+
+
+
+# 18. Remote Template Distribution Contract — D-040
+
+D-040 adds an optional remote-distribution boundary without weakening D-027 Standalone Core.
+
+## 18.1. Layering
+
+`AZnet Template Distribution Service -> public/versioned distribution contract -> Theme consumer/installer -> local presentation package`
+
+The external service is source owner for catalog, entitlement, download authorization and package authenticity metadata. AZnet Theme is a bounded consumer. Theme must not implement a second license ledger, infer entitlement from URLs/domains, scrape private service storage or treat a fixture as the real service.
+
+## 18.2. Distribution contract minimum
+
+The consumer contract must be public/versioned, normalized, bounded, fail-soft and testable. At minimum it must distinguish:
+
+- stable `template_id` and package version;
+- display metadata needed by the Template Library;
+- compatibility requirements;
+- availability/entitlement state;
+- authorized package locator/token semantics owned by the service;
+- package SHA-256 and/or signature metadata sufficient for authenticity/integrity verification;
+- explicit error/version-mismatch states.
+
+Commercial price/payment/account fields remain service-domain data and should be exposed only when required for presentation; Theme must not become the transaction engine.
+
+## 18.3. Secure install boundary
+
+Remote install/update must follow a fail-closed sequence:
+
+1. negotiate contract/version and template identity;
+2. confirm entitlement through the external owner;
+3. obtain an authorized download;
+4. validate manifest schema and an explicit file/type allow-list;
+5. verify SHA-256/signature before activation;
+6. verify Theme/WordPress compatibility;
+7. stage files outside the active template state;
+8. activate atomically only after validation;
+9. preserve a rollback reference to the last known-good local package.
+
+Remote template packages are **declarative presentation packages**. They must not deliver executable PHP, arbitrary server-side code, plugin private-storage migrations, secrets or business-domain logic. New PHP capability ships through the normal AZnet Theme release path and its QA/release gates.
+
+## 18.4. Runtime independence and fail-soft behavior
+
+The public frontend must not require a live Distribution Service request to render an already installed template. Catalog/service outage may disable browsing/install/update actions in wp-admin but must not break the active site.
+
+D-027 remains intact: the supported WordPress-clean core/provisioning path does not require the remote catalog. D-040 is additive. No remote template or purchase is required to make AZnet Theme Core complete.
+
+## 18.5. Evidence boundary
+
+Theme-local fixtures can prove L1/L2 consumer and presentation contracts only. L5 integration requires evidence against the actual Distribution Service owned outside `aznet-theme`. Theme must not create the external service inside this repository merely to self-unblock integration.
+
+
+# 19. Unified Homepage Backend / effective-surface model — D-041
+
+The Homepage backend uses one presentation architecture rather than parallel source-centric consoles:
+
+`Template Library -> Homepage Map -> bounded section authoring -> Nguồn & cài đặt nâng cao`.
+
+## 19.1. Shared effective-surface invariant
+
+For a supported Homepage preset, one request-local **effective Homepage surface model** drives both:
+
+- frontend Theme composition/order; and
+- the primary wp-admin Homepage Map.
+
+The model is Theme-owned presentation/read state only. It is never persisted as a second content store and never becomes a public domain contract.
+
+A surface enters the primary map only when the same Theme rendering rules say that surface can actually render. Configured-but-draft, invalid, hidden or otherwise non-effective sources belong in advanced diagnostics rather than being represented as live.
+
+## 19.2. Ownership
+
+- WordPress remains authoritative for Page/Post/Category/Media/`wp_block` content, status, taxonomy membership and native edit lifecycle.
+- RootProfile, ConvertFlow and WooCommerce retain their existing domain ownership and may only contribute through accepted public-safe contracts.
+- AZnet Theme owns presentation presets, typed source references, section composition/order, effective-surface projection, admin presentation and bounded authoring bridges.
+- Theme must not reconstruct authoritative source ownership from slug/title/URL heuristics and must not create a parallel Homepage content snapshot.
+
+## 19.3. Primary admin UX
+
+The steady-state Homepage admin should be surface-centric:
+
+- **Template Library** selects presentation preset/template.
+- **Trang chủ đang hiển thị** lists effective surfaces in frontend reading order.
+- Each surface exposes the smallest safe content-edit action plus a deep link to the rendered frontend section.
+- Raw mapping IDs, migration controls, source switching, shared-source warnings and technical diagnostics live under **Nguồn & cài đặt nâng cao**.
+- Raw technical states such as `READY` or `INVALID` must not be the primary administrator-facing language.
+
+Homepage Map is not a page builder, iframe editor or DOM scraper. It does not authorize arbitrary section creation/reordering or frontend inline editing.
+
+## 19.4. Initial bounded rollout
+
+Law 01 is the first preset migrated to the shared effective-surface model. Its frontend and primary admin map must consume the same resolver. Stable section IDs/data markers are presentation/deep-link/testing anchors only.
+
+Curtain 01 keeps its already-proven existing authoring/composition path until a separate bounded parity slice migrates it to the same shared model with fresh regression evidence. Lack of Curtain 01 migration in the Law 01 slice must not be misrepresented as complete cross-preset parity.
+
+## 19.5. QA boundary
+
+D-041 requires RED -> GREEN at the shallowest layer, then fresh L3 WordPress runtime and L4 browser/a11y parity evidence. Admin order and frontend order must be compared from the shared model/markers. L5 provider integration and L6 release remain separate gates and are never inferred from fixture/static PASS.

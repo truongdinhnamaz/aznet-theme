@@ -82,7 +82,10 @@ function render_homepage_before_content(): void {
 
     $variant = homepage_law01_variant();
     echo '<div class="aznet-theme-homepage aznet-theme-homepage--law-01 aznet-theme-homepage--law-01-' . esc_attr( $variant ) . '">';
-    foreach ( [ 'hero', 'services', 'profile' ] as $section ) { render_law01_part( $section ); }
+    foreach ( homepage_effective_surface_map( 'law-01' ) as $surface ) {
+        if ( 'before' !== ( $surface['boundary'] ?? '' ) ) { continue; }
+        render_law01_part( (string) ( $surface['template'] ?? '' ) );
+    }
 }
 
 /** Render Law 01 sections after the native Front Page body boundary. */
@@ -97,8 +100,9 @@ function render_homepage_after_content(): void {
         return;
     }
 
-    $variant = homepage_law01_variant();
-    $sections = 'burgundy-gold' === $variant ? [ 'latest', 'topics', 'analysis', 'news', 'process', 'faq', 'final-cta' ] : [ 'topics', 'latest', 'analysis', 'news', 'process', 'faq', 'final-cta' ];
-    foreach ( $sections as $section ) { render_law01_part( $section ); }
+    foreach ( homepage_effective_surface_map( 'law-01' ) as $surface ) {
+        if ( 'after' !== ( $surface['boundary'] ?? '' ) ) { continue; }
+        render_law01_part( (string) ( $surface['template'] ?? '' ) );
+    }
     echo '</div>';
 }

@@ -145,9 +145,27 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/typography-token-ca
 printf '%s\n' '==> Homepage Composer + Law 01 contracts'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-settings-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-content-map-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-directory-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-reference-team-illustration-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-provisioning-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-page-presentation-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-authoring-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-parent-image-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-immediate-publish-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-directory-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-control-center-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-surface-map-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/d040-td1-template-library-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-backend-unified-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-library-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-source-parity-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-effective-source-parity-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-profile-facts-compat-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-profile-regression-restore-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-process-faq-source-compat-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-frontend-layout-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-header-gap-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/curtain01-cinematic-hero-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/curtain01-category-showcase-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/curtain01-desktop-heading-flow-contract.php

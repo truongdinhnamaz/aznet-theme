@@ -40,7 +40,16 @@ $terms = get_terms( [
 aznet_empty_must( ! is_wp_error( $terms ) && 9 === count( $terms ), 'expected 9 provisioned Categories' );
 $settings = AZnet\Theme\settings();
 aznet_empty_must( 'law-01' === $settings['homepage_preset'], 'Law01 preset not active' );
-aznet_empty_must( $settings['homepage_services_page'] > 0 && $settings['homepage_about_page'] > 0 && $settings['homepage_contact_page'] > 0, 'required Content Map missing' );
+aznet_empty_must( $settings['homepage_services_page'] > 0 && $settings['homepage_about_page'] > 0 && $settings['homepage_team_page'] > 0 && $settings['homepage_contact_page'] > 0, 'required Content Map missing' );
+$team = get_post( (int) $settings['homepage_team_page'] );
+aznet_empty_must( $team instanceof WP_Post && 'Đội ngũ của chúng tôi' === $team->post_title, 'expected provisioned Team parent title' );
+$team_children = get_posts( [
+    'post_type'      => 'page',
+    'post_status'    => 'any',
+    'post_parent'    => (int) $team->ID,
+    'posts_per_page' => -1,
+] );
+aznet_empty_must( 0 === count( $team_children ), 'provisioning must not create sample Team members' );
 aznet_empty_must( 6 === count( $settings['homepage_knowledge_terms'] ), 'knowledge mappings missing' );
 aznet_empty_must( 'page' === get_option( 'show_on_front' ) && (int) get_option( 'page_on_front' ) > 0, 'Front Page not assigned' );
 $locations = get_nav_menu_locations();
