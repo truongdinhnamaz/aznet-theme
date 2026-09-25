@@ -409,6 +409,60 @@ function render_homepage_quick_edit_form( string $preset, string $slot, int $sou
     echo '</form></details>';
 }
 
+/** Render Team-specific Homepage authoring from the exact mapped Team parent. */
+function render_homepage_team_authoring(): void {
+    $parent = \AZnet\Theme\team_directory_parent();
+    if ( ! $parent instanceof \WP_Post ) { return; }
+
+    $members = \AZnet\Theme\team_directory_members( 4 );
+    $all_members = \AZnet\Theme\team_directory_members();
+    $url = get_permalink( $parent );
+    $url = is_string( $url ) ? $url : '';
+
+    echo '<section id="homepage-team" class="aznet-theme-homepage-team-authoring">';
+    echo '<div class="aznet-theme-homepage-team-authoring__summary">';
+    echo '<p><strong>' . esc_html__( 'Nhân sự đang công khai:', 'aznet-theme' ) . '</strong> ' . esc_html( (string) count( $all_members ) ) . '</p>';
+    if ( '' !== $url ) {
+        echo '<p><a class="button" href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . esc_html__( 'Xem tất cả trên website', 'aznet-theme' ) . '</a></p>';
+    }
+    echo '</div>';
+
+    if ( [] !== $members ) {
+        echo '<div class="aznet-theme-homepage-team-members">';
+        foreach ( $members as $member ) {
+            if ( ! $member instanceof \WP_Post ) { continue; }
+            $image_id = (int) get_post_thumbnail_id( $member->ID );
+            $role = trim( (string) $member->post_excerpt );
+            echo '<div class="aznet-theme-homepage-team-member">';
+            echo '<div class="aznet-theme-homepage-team-member__image">';
+            if ( $image_id > 0 ) { echo wp_kses_post( wp_get_attachment_image( $image_id, 'thumbnail' ) ); }
+            echo '</div>';
+            echo '<div class="aznet-theme-homepage-team-member__copy">';
+            echo '<strong data-team-member-name>' . esc_html( get_the_title( $member ) ) . '</strong>';
+            if ( '' !== $role ) { echo '<p class="aznet-theme-homepage-team-member__role">' . esc_html( $role ) . '</p>'; }
+            echo '</div>';
+            echo '<div class="aznet-theme-homepage-team-member__actions">';
+            render_homepage_quick_edit_form( 'law-01', 'team', (int) $member->ID );
+            echo '</div></div>';
+        }
+        echo '</div>';
+    }
+
+    echo '<details class="aznet-theme-homepage-team-create">';
+    echo '<summary class="button button-primary">' . esc_html__( 'Thêm nhân sự', 'aznet-theme' ) . '</summary>';
+    echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+    echo '<input type="hidden" name="action" value="aznet_theme_create_team_member">';
+    wp_nonce_field( 'aznet_theme_create_team_member' );
+    echo '<label><span>' . esc_html__( 'Tên nhân sự', 'aznet-theme' ) . '</span><input class="widefat" type="text" name="team_member_name" required></label>';
+    echo '<label><span>' . esc_html__( 'Chức vụ / chuyên môn ngắn', 'aznet-theme' ) . '</span><textarea class="widefat" rows="2" name="team_member_role"></textarea></label>';
+    echo '<input type="hidden" name="homepage_featured_image_id" value="0">';
+    echo '<div class="aznet-theme-homepage-media-preview"></div>';
+    echo '<p><button type="button" class="button aznet-theme-homepage-media-select">' . esc_html__( 'Chọn ảnh', 'aznet-theme' ) . '</button> <button type="button" class="button-link-delete aznet-theme-homepage-media-clear">' . esc_html__( 'Bỏ ảnh', 'aznet-theme' ) . '</button></p>';
+    submit_button( __( 'Tạo bản nháp nhân sự', 'aznet-theme' ), 'primary', 'submit', false );
+    echo '</form></details>';
+    echo '</section>';
+}
+
 /** Map technical source states to administrator-facing status badges. */
 function homepage_authoring_status_badge( string $status ): array {
     return match ( $status ) {
@@ -467,7 +521,9 @@ function render_homepage_authoring_console( string $preset ): void {
             echo '</form>';
         }
         echo '</div>';
-        if ( is_array( $descriptor ) && ! empty( $descriptor['children'] ) && 'page' === $source_type && (int) $source_value > 0 ) {
+        if ( 'law-01' === $preset && 'team' === $slot ) {
+            render_homepage_team_authoring();
+        } elseif ( is_array( $descriptor ) && ! empty( $descriptor['children'] ) && 'page' === $source_type && (int) $source_value > 0 ) {
             $children = homepage_direct_published_children( (int) $source_value, 'services' === $slot ? 6 : 4 );
             if ( [] !== $children ) {
                 echo '<div class="aznet-theme-homepage-collection-items"><strong>' . esc_html__( 'Các mục đang hiển thị', 'aznet-theme' ) . '</strong>';
