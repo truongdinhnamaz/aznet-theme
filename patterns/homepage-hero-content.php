@@ -45,7 +45,7 @@
 <!-- /wp:column -->
 </div>
 <!-- /wp:columns -->
-<!-- wp:group {"className":"aznet-theme-homepage-hero-content__trust","lock":{"move":true,"remove":true},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"className":"aznet-theme-homepage-hero-content__trust","lock":{"move":true,"remove":true},"layout":{"type":"default"}} -->
 <div class="wp-block-group aznet-theme-homepage-hero-content__trust">
 <!-- wp:columns {"className":"aznet-theme-homepage-hero-content__trust-grid","lock":{"move":true,"remove":true}} -->
 <div class="wp-block-columns aznet-theme-homepage-hero-content__trust-grid">
