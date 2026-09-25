@@ -3,8 +3,8 @@
 namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-$about = homepage_page_reference( (int) setting( 'homepage_about_page', 0 ) );
-$team = homepage_page_reference( (int) setting( 'homepage_team_page', 0 ) );
+$about = homepage_page_reference( (int) homepage_source_value( 'law-01', 'about' ) );
+$team = homepage_page_reference( (int) homepage_source_value( 'law-01', 'team' ) );
 $has_about = $about instanceof \WP_Post;
 $has_team = $team instanceof \WP_Post;
 if ( ! $has_about && ! $has_team ) { return; }
@@ -14,9 +14,9 @@ $about_image = $about instanceof \WP_Post && has_post_thumbnail( $about ) ? get_
 $team_summary = $team instanceof \WP_Post ? trim( (string) get_the_excerpt( $team ) ) : '';
 $members = $has_team ? team_directory_members( 4 ) : [];
 
-$services_page = homepage_page_reference( (int) setting( 'homepage_services_page', 0 ) );
-$process_page = homepage_page_reference( (int) setting( 'homepage_process_page', 0 ) );
-$faq_page = homepage_page_reference( (int) setting( 'homepage_faq_page', 0 ) );
+$services_page = homepage_page_reference( (int) homepage_source_value( 'law-01', 'services' ) );
+$process_page = homepage_page_reference( (int) homepage_source_value( 'law-01', 'process' ) );
+$faq_page = homepage_page_reference( (int) homepage_source_value( 'law-01', 'faq' ) );
 $service_count = $services_page instanceof \WP_Post
     ? count( homepage_direct_published_children( (int) $services_page->ID, 24 ) )
     : 0;
