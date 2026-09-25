@@ -6,7 +6,6 @@ use function AZnet\Theme\homepage_category_reference;
 use function AZnet\Theme\homepage_effective_source_key;
 use function AZnet\Theme\homepage_effective_source_value;
 use function AZnet\Theme\homepage_source_descriptor;
-use function AZnet\Theme\homepage_source_value;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
@@ -25,7 +24,7 @@ function homepage_quick_edit_featured_image_allowed( string $preset, string $slo
 
 /** Whether one exact source ID is authorized by the preset/slot mapping. */
 function homepage_quick_edit_target_allowed( string $preset, string $slot, int $source_id, array $descriptor ): bool {
-    $mapped = homepage_source_value( $preset, $slot );
+    $mapped = homepage_effective_source_value( $preset, $slot );
     $type = (string) ( $descriptor['type'] ?? '' );
 
     if ( 'categories' === $type ) {
@@ -206,7 +205,7 @@ function handle_homepage_duplicate_source(): void {
     $source_id = isset( $_POST['homepage_source_id'] ) ? absint( $_POST['homepage_source_id'] ) : 0;
     $descriptor = homepage_source_descriptor( $preset, $slot );
     $type = is_array( $descriptor ) ? (string) ( $descriptor['type'] ?? '' ) : '';
-    $mapped_id = (int) homepage_source_value( $preset, $slot );
+    $mapped_id = (int) homepage_effective_source_value( $preset, $slot );
 
     if ( ! in_array( $preset, [ 'law-01', 'curtain-01' ], true )
         || ! is_array( $descriptor )
