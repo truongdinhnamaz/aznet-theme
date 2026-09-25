@@ -15,7 +15,7 @@ $about_image = $about instanceof \WP_Post && has_post_thumbnail( $about ) ? get_
 $team_summary = $team instanceof \WP_Post ? trim( (string) get_the_excerpt( $team ) ) : '';
 $members = $has_team ? team_directory_members( 4 ) : [];
 
-$services_page = homepage_page_reference( (int) setting( 'homepage_services_page', 0 ) );
+$services_page = homepage_page_reference( (int) homepage_effective_source_value( 'law-01', 'services', $settings ) );
 $process_page = homepage_page_reference( (int) homepage_source_value( 'law-01', 'process' ) );
 if ( ! $process_page instanceof \WP_Post ) {
     $process_page = homepage_page_reference( (int) setting( 'homepage_process_page', 0 ) );
