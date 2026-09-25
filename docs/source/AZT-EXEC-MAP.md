@@ -630,7 +630,7 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 | Slice | State | Exact boundary |
 | --- | --- | --- |
 | TPL0 Governance | ACCEPTED / branch source candidate | D-040 product/architecture/roadmap source updates prepared; canonical-main merge remains gated |
-| TPL1 Admin Template Library | IMPLEMENTED CANDIDATE / QA UNKNOWN | Card grid/search/category filter integrated on unified Homepage branch; existing `off`, `law-01`, `curtain-01` compatibility retained |
+| TPL1 Admin Template Library | IMPLEMENTED CANDIDATE / BLOCKED_EXTERNAL_RUNNER | Card grid/search/category filter integrated on unified Homepage branch; fresh executable QA cannot start because PR #276 jobs terminate with runner_id=0 / zero steps |
 | TPL2 Distribution consumer | LOCKED | Open only after TPL1 local/runtime gate; consume public/versioned external contract and fail soft |
 | TPL3 Secure installer | LOCKED | Declarative package only; allow-list + integrity/signature + staging + atomic activation + rollback |
 | TPL4 Runtime/browser/a11y | OPEN NEXT after shallow gates | Real wp-admin responsive/keyboard/focus/console evidence |
@@ -645,8 +645,8 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 | HB1 Shared effective-surface model | IMPLEMENTED CANDIDATE | Law 01 request-local model resolves only effective renderable surfaces; no persistent second content store |
 | HB2 Frontend shared composition | IMPLEMENTED CANDIDATE | Law 01 before/after composition consumes the shared model; Curtain 01 unchanged |
 | HB3 Primary Homepage Map | IMPLEMENTED CANDIDATE | One-column effective map, bounded editing, frontend deep links, advanced source disclosure |
-| HB4 Static/TDD closure | PARTIAL / executable evidence UNKNOWN | RED contract added then implementation written; new contracts wired into core gate but CI runner has not executed steps successfully |
-| HB5 WordPress runtime + browser/a11y parity | UNKNOWN | Runtime parity test and R5/browser assertions wired; requires fresh runner execution |
+| HB4 Static/TDD closure | BLOCKED_EXTERNAL_RUNNER | RED contract added then implementation written; PR #276 V1/R5 static jobs reproduced runner_id=0 with zero executed steps, so code PASS/failure is not inferred |
+| HB5 WordPress runtime + browser/a11y parity | BLOCKED_EXTERNAL_RUNNER | Runtime parity test and R5/Homepage browser assertions are wired, but fresh PR #276 browser jobs terminate before any step executes |
 | HB6 Integration/release | LOCKED | No L5/L6 inference, no main merge/release/deploy until prior gates close |
 
-**Current exact next:** obtain fresh executable L1/L2 results on the unified branch. If GREEN, continue immediately through Law 01 L3 runtime and R5/Homepage L4 parity. If CI again terminates with zero executed steps/runner ID, record `BLOCKED_EXTERNAL_RUNNER`; do not diagnose it as a Theme regression.
+**Current exact next:** preserve draft PR #276 and the unified branch without merge. When GitHub runners can execute jobs, resume the exact-head chain at L1/L2, then continue immediately through Law 01 L3 and R5/Homepage L4 parity. Current executable verification state is `BLOCKED_EXTERNAL_RUNNER`, supported by fresh PR #276 zero-runner/zero-step jobs.
