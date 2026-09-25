@@ -19,6 +19,10 @@ function homepage_quick_edit_target_allowed( string $preset, string $slot, int $
 
     if ( (int) $mapped === $source_id ) { return true; }
 
+    if ( 'law-01' === $preset && 'team' === $slot && 'page' === $type ) {
+        return \AZnet\Theme\team_directory_member_is_child( $source_id );
+    }
+
     if ( 'page' === $type && ! empty( $descriptor['children'] ) && (int) $mapped > 0 ) {
         $target = get_post( $source_id );
         return $target instanceof \WP_Post
@@ -79,7 +83,72 @@ function handle_homepage_quick_edit_source(): void {
         wp_die( esc_html__( 'Loại nguồn này chỉ được chỉnh trong trình soạn thảo WordPress đầy đủ.', 'aznet-theme' ) );
     }
 
-    wp_safe_redirect( add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'homepage', 'homepage_quick_edited' => '1' ], admin_url( 'admin.php' ) ) );
+    $redirect = add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'homepage', 'homepage_quick_edited' => '1' ], admin_url( 'admin.php' ) );
+    if ( 'law-01' === $preset && 'team' === $slot ) {
+        $redirect .= '#homepage-team';
+    }
+    wp_safe_redirect( $redirect );
+    exit;
+}
+
+/** Build one ordinary draft child Page payload for a Team member. */
+function homepage_team_member_insert_data( \WP_Post $parent, string $name, string $role ): array {
+    return [
+        'post_type'    => 'page',
+        'post_status'  => 'draft',
+        'post_parent'  => (int) $parent->ID,
+        'post_title'   => $name,
+        'post_excerpt' => $role,
+        'menu_order'   => \AZnet\Theme\team_directory_next_menu_order(),
+    ];
+}
+
+/** Create one draft WordPress Page child under the exact mapped Team parent. */
+function handle_homepage_team_member_create(): void {
+    if ( ! current_user_can( 'edit_theme_options' ) ) {
+        wp_die( esc_html__( 'Bạn không có quyền thêm nhân sự.', 'aznet-theme' ) );
+    }
+    check_admin_referer( 'aznet_theme_create_team_member' );
+
+    $parent = \AZnet\Theme\team_directory_parent();
+    if ( ! $parent instanceof \WP_Post || ! current_user_can( 'edit_post', $parent->ID ) ) {
+        wp_die( esc_html__( 'Page Đội ngũ chưa hợp lệ.', 'aznet-theme' ) );
+    }
+
+    $name = isset( $_POST['team_member_name'] )
+        ? sanitize_text_field( wp_unslash( $_POST['team_member_name'] ) )
+        : '';
+    $role = isset( $_POST['team_member_role'] )
+        ? sanitize_textarea_field( wp_unslash( $_POST['team_member_role'] ) )
+        : '';
+    $image_id = isset( $_POST['homepage_featured_image_id'] )
+        ? absint( $_POST['homepage_featured_image_id'] )
+        : 0;
+
+    if ( '' === $name ) {
+        wp_die( esc_html__( 'Tên nhân sự không được để trống.', 'aznet-theme' ) );
+    }
+    if ( $image_id > 0 && ! wp_attachment_is_image( $image_id ) ) {
+        wp_die( esc_html__( 'Ảnh nhân sự không hợp lệ.', 'aznet-theme' ) );
+    }
+
+    $id = wp_insert_post(
+        homepage_team_member_insert_data( $parent, $name, $role ),
+        true
+    );
+    if ( is_wp_error( $id ) ) {
+        wp_die( esc_html( $id->get_error_message() ) );
+    }
+
+    if ( $image_id > 0 ) {
+        set_post_thumbnail( (int) $id, $image_id );
+    }
+
+    $url = add_query_arg(
+        [ 'page' => 'aznet-theme', 'section' => 'homepage', 'team_member_created' => '1' ],
+        admin_url( 'admin.php' )
+    );
+    wp_safe_redirect( $url . '#homepage-team' );
     exit;
 }
 
