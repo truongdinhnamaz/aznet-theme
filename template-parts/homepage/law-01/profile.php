@@ -60,7 +60,7 @@ if ( ! $has_team ) {
     $container_classes .= ' aznet-theme-law01-profile__container--team-only';
 }
 ?>
-<section class="aznet-theme-law01-section aznet-theme-law01-profile" aria-label="<?php echo esc_attr( $section_label ); ?>">
+<section id="aznet-homepage-profile" data-aznet-homepage-surface="profile" class="aznet-theme-law01-section aznet-theme-law01-profile" aria-label="<?php echo esc_attr( $section_label ); ?>">
 <div class="<?php echo esc_attr( $container_classes ); ?>">
     <?php if ( $about instanceof \WP_Post ) : ?>
     <div class="aznet-theme-law01-profile__about-grid">
