@@ -12,6 +12,7 @@ foreach ([
     "team_directory_members( 4 )",
     'Thêm nhân sự',
     'Xem tất cả trên website',
+    "render_homepage_quick_edit_form( 'law-01', 'team', (int) \\$member->ID, __( 'Sửa'",
 ] as $needle) {
     if (! str_contains((string) $homepage, $needle)) {
         fwrite(STDERR, "FAIL: Team admin missing {$needle}\n");
