@@ -167,6 +167,27 @@ foreach ($patternFiles as $filename => $slug) {
     }
 }
 
+
+$aboutPath = $root . '/patterns/page-about.php';
+$about = file_get_contents($aboutPath);
+if (false === $about) {
+    y2_fail('unable to read About Page Kit pattern');
+}
+foreach ([
+    'aznet-theme-page-kit__intro',
+    'aznet-theme-page-kit__story',
+    'aznet-theme-page-kit__principles',
+    'aznet-theme-page-kit__process',
+    'aznet-theme-page-kit__capabilities',
+    'aznet-theme-page-kit__team-teaser',
+    'aznet-theme-page-kit__trust',
+    'aznet-theme-page-kit__cta',
+] as $aboutSectionClass) {
+    if (! str_contains($about, $aboutSectionClass)) {
+        y2_fail('About Page Kit missing approved editorial section class ' . $aboutSectionClass);
+    }
+}
+
 $pageCss = file_get_contents($root . '/assets/css/components/page.css');
 if (false === $pageCss) {
     y2_fail('unable to read Page stylesheet');
@@ -176,6 +197,10 @@ foreach ([
     '.aznet-theme-page-kit__section',
     '.aznet-theme-page-kit__card',
     '.aznet-theme-page-kit__cta',
+    '.aznet-theme-page-kit--about .aznet-theme-page-kit__story',
+    '.aznet-theme-page-kit--about .aznet-theme-page-kit__principles',
+    '.aznet-theme-page-kit--about .aznet-theme-page-kit__process',
+    '.aznet-theme-page-kit--about .aznet-theme-page-kit__team-teaser',
 ] as $selector) {
     if (! str_contains($pageCss, $selector)) {
         y2_fail('Page Kit stylesheet missing shared selector ' . $selector);
