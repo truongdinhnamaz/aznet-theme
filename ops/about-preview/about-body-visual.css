@@ -1,0 +1,176 @@
+/* Visual layer for the existing About preview; no Hero, data or global changes. */
+#aznet-theme-about-content {
+    --aznet-theme-about-icon-dialog: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 11a8 8 0 0 1-8 8H7l-4 3v-7a8 8 0 1 1 17-4Z'/%3E%3Cpath d='M7 8h9M7 12h6'/%3E%3C/svg%3E");
+    --aznet-theme-about-icon-compass: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='m16 8-2.5 5.5L8 16l2.5-5.5L16 8Z'/%3E%3C/svg%3E");
+    --aznet-theme-about-icon-shield: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m12 2 8 3v6c0 5-4 8-8 11-4-3-8-6-8-11V5l8-3Z'/%3E%3Cpath d='m8 11 3 3 5-6'/%3E%3C/svg%3E");
+    --aznet-theme-about-icon-scales: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3v17M7 21h10M4 7h16M6 7l-4 7h8L6 7Zm12 0-4 7h8l-4-7ZM2 14a4 4 0 0 0 8 0m4 0a4 4 0 0 0 8 0'/%3E%3C/svg%3E");
+    --aznet-theme-about-icon-building: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 21V6l8-3 8 3v15M2 21h20M9 21v-5h6v5M8 8h1m6 0h1M8 12h1m6 0h1'/%3E%3C/svg%3E");
+    --aznet-theme-about-icon-gavel: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m13 3 8 8-3 3-8-8 3-3ZM3 13l8 8 3-3-8-8-3 3ZM10 12l4-4M12 14l4-4M14 21h8M17 18h5'/%3E%3C/svg%3E");
+    --aznet-theme-about-icon-home: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m2 11 10-8 10 8M5 10v11h14V10M9 21v-7h6v7'/%3E%3Cpath d='M16 5V3h3v5'/%3E%3C/svg%3E");
+    --aznet-theme-about-icon-people: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='8' cy='7' r='3'/%3E%3Ccircle cx='17' cy='8' r='2.5'/%3E%3Cpath d='M2 21v-4a6 6 0 0 1 12 0v4m2-8a5 5 0 0 1 6 5v3'/%3E%3C/svg%3E");
+    --aznet-theme-about-icon-briefcase: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='7' width='18' height='14' rx='2'/%3E%3Cpath d='M8 7V4h8v3M3 12c6 3 12 3 18 0M10 13v3h4v-3'/%3E%3C/svg%3E");
+    --aznet-theme-about-icon-document: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 2h10l5 5v15H5V2Zm10 0v6h5M8 12h9M8 16h9M8 19h5'/%3E%3C/svg%3E");
+
+}
+/* Editorial image/text pairing: use the existing authored picture, no new identity. */
+#aznet-theme-about-content .aznet-theme-page-kit--about > .aznet-theme-page-kit__story {
+    display: grid;
+    grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: center;
+    background: #fff;
+}
+#aznet-theme-about-content .aznet-theme-page-kit__story > .wp-block-column:first-child {
+    display: block;
+    width: 100%;
+    max-width: none;
+}
+#aznet-theme-about-content .aznet-theme-page-kit__story > .wp-block-column:first-child::before { content: none; }
+#aznet-theme-about-content .aznet-theme-page-kit__story > .wp-block-column:first-child > p:last-child { margin-top: 1.5rem; }
+#aznet-theme-about-content .aznet-theme-page-kit__story > .wp-block-column:last-child { display: block; min-width: 0; }
+#aznet-theme-about-content .aznet-theme-page-kit__story-media {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 96%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 7%, #000 96%, transparent);
+}
+#aznet-theme-about-content .aznet-theme-page-kit__story-media img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+}
+/* Open icon-led principles: warm field, no three repeated bordered boxes. */
+#aznet-theme-about-content .aznet-theme-page-kit__principles > .wp-block-columns { counter-reset: none; gap: clamp(1.5rem, 4vw, 4rem); }
+#aznet-theme-about-content .aznet-theme-page-kit__principles > .wp-block-columns > .aznet-theme-page-kit__card {
+    position: relative;
+    padding: .5rem 0 0;
+    border: 0;
+    counter-increment: none;
+}
+#aznet-theme-about-content .aznet-theme-page-kit__principles .aznet-theme-page-kit__card::before {
+    position: static;
+    display: block;
+    width: 46px;
+    height: 46px;
+    margin: 0 0 1rem;
+    background: var(--aznet-theme-about-detail);
+    content: "";
+    -webkit-mask: var(--aznet-theme-about-icon-dialog) center / contain no-repeat;
+    mask: var(--aznet-theme-about-icon-dialog) center / contain no-repeat;
+}
+#aznet-theme-about-content .aznet-theme-page-kit__principles .aznet-theme-page-kit__card:nth-child(2)::before {
+    -webkit-mask-image: var(--aznet-theme-about-icon-compass);
+    mask-image: var(--aznet-theme-about-icon-compass);
+}
+#aznet-theme-about-content .aznet-theme-page-kit__principles .aznet-theme-page-kit__card:nth-child(3)::before {
+    -webkit-mask-image: var(--aznet-theme-about-icon-shield);
+    mask-image: var(--aznet-theme-about-icon-shield);
+}
+/* Process reads as a connected route, not a table. */
+#aznet-theme-about-content .aznet-theme-page-kit__process > .wp-block-columns { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; }
+#aznet-theme-about-content .aznet-theme-page-kit__process > .wp-block-columns > .wp-block-column {
+    position: relative;
+    padding: 0;
+    border: 0;
+}
+#aznet-theme-about-content .aznet-theme-page-kit__process > .wp-block-columns > .wp-block-column:not(:last-child)::after {
+    position: absolute;
+    top: 21px;
+    left: 58px;
+    right: 0;
+    height: 1px;
+    content: "";
+    background: var(--aznet-theme-about-border);
+}
+#aznet-theme-about-content .aznet-theme-page-kit__process .aznet-theme-page-kit__step-label {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    margin: 0 0 1.2rem;
+    border-radius: 50%;
+    background: var(--aznet-theme-about-accent);
+    font-family: var(--aznet-theme-font-family-base);
+    font-size: var(--aznet-theme-text-label);
+    color: #fff !important;
+}
+#aznet-theme-about-content .aznet-theme-page-kit__capabilities > .wp-block-columns > .aznet-theme-page-kit__card {
+    position: relative;
+    overflow: hidden;
+    padding: 1.4rem 6.8rem 1.4rem 1.4rem;
+    border: 0;
+    border-radius: .25rem;
+    background: linear-gradient(110deg, #fff 58%, #f3e8d8);
+}
+/* Decorative practice motifs; no route lookup, provider meaning or domain inference. */
+#aznet-theme-about-content .aznet-theme-page-kit__capabilities .aznet-theme-page-kit__card::before {
+    position: absolute;
+    right: 1.1rem;
+    top: 50%;
+    width: 64px;
+    height: 64px;
+    margin-top: -32px;
+    background: #b9892f;
+    opacity: .68;
+    pointer-events: none;
+    content: "";
+    -webkit-mask: var(--aznet-theme-about-icon-scales) center / contain no-repeat;
+    mask: var(--aznet-theme-about-icon-scales) center / contain no-repeat;
+}
+#aznet-theme-about-content .aznet-theme-page-kit__capabilities > .wp-block-columns:first-of-type > .aznet-theme-page-kit__card:nth-child(1)::before { -webkit-mask-image: var(--aznet-theme-about-icon-building); mask-image: var(--aznet-theme-about-icon-building); }
+#aznet-theme-about-content .aznet-theme-page-kit__capabilities > .wp-block-columns:first-of-type > .aznet-theme-page-kit__card:nth-child(3)::before { -webkit-mask-image: var(--aznet-theme-about-icon-gavel); mask-image: var(--aznet-theme-about-icon-gavel); }
+#aznet-theme-about-content .aznet-theme-page-kit__capabilities > .wp-block-columns:nth-of-type(2) > .aznet-theme-page-kit__card:nth-child(1)::before { -webkit-mask-image: var(--aznet-theme-about-icon-home); mask-image: var(--aznet-theme-about-icon-home); }
+#aznet-theme-about-content .aznet-theme-page-kit__capabilities > .wp-block-columns:nth-of-type(2) > .aznet-theme-page-kit__card:nth-child(2)::before { -webkit-mask-image: var(--aznet-theme-about-icon-people); mask-image: var(--aznet-theme-about-icon-people); }
+#aznet-theme-about-content .aznet-theme-page-kit__capabilities > .wp-block-columns:nth-of-type(2) > .aznet-theme-page-kit__card:nth-child(3)::before { -webkit-mask-image: var(--aznet-theme-about-icon-briefcase); mask-image: var(--aznet-theme-about-icon-briefcase); }
+#aznet-theme-about-content .aznet-theme-page-kit__trust > .wp-block-columns > .wp-block-column {
+    padding: 0;
+    border: 0;
+}
+#aznet-theme-about-content .aznet-theme-page-kit__trust > .wp-block-columns > .wp-block-column::before {
+    display: block;
+    width: 32px;
+    height: 32px;
+    margin-bottom: 1rem;
+    background: var(--aznet-theme-about-detail);
+    content: "";
+    -webkit-mask: var(--aznet-theme-about-icon-document) center / contain no-repeat;
+    mask: var(--aznet-theme-about-icon-document) center / contain no-repeat;
+}
+/* A legal emblem belongs to the statement, not invented business statistics. */
+#aznet-theme-about-content .aznet-theme-page-kit__intro > h2::before {
+    display: block;
+    width: 42px;
+    height: 42px;
+    margin: 0 0 1rem;
+    background: #f0d39a;
+    content: "";
+    -webkit-mask: var(--aznet-theme-about-icon-scales) center / contain no-repeat;
+    mask: var(--aznet-theme-about-icon-scales) center / contain no-repeat;
+}
+@media (max-width: 63.999rem) and (min-width: 40rem) {
+    #aznet-theme-about-content .aznet-theme-page-kit__process > .wp-block-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #aznet-theme-about-content .aznet-theme-page-kit__capabilities .aznet-theme-page-kit__card { padding: 1.15rem; }
+    #aznet-theme-about-content .aznet-theme-page-kit__capabilities .aznet-theme-page-kit__card::before { position: static; display: block; margin: 0 0 1rem; width: 42px; height: 42px; }
+    #aznet-theme-about-content .aznet-theme-page-kit__process > .wp-block-columns > .wp-block-column:nth-child(2)::after { content: none; }
+}
+@media (max-width: 48rem) {
+    #aznet-theme-about-content .aznet-theme-page-kit--about > .aznet-theme-page-kit__story { grid-template-columns: 1fr; gap: 1.5rem; }
+    #aznet-theme-about-content .aznet-theme-page-kit__story > .wp-block-column:first-child { display: block; }
+    #aznet-theme-about-content .aznet-theme-page-kit__story-media { -webkit-mask-image: none; mask-image: none; }
+}
+@media (max-width: 39.999rem) {
+    #aznet-theme-about-content .aznet-theme-page-kit__process > .wp-block-columns { grid-template-columns: 1fr; }
+    #aznet-theme-about-content .aznet-theme-page-kit__principles > .wp-block-columns > .aznet-theme-page-kit__card { padding-left: 66px; min-height: 58px; }
+    #aznet-theme-about-content .aznet-theme-page-kit__principles .aznet-theme-page-kit__card::before { position: absolute; left: 0; top: .5rem; width: 42px; height: 42px; }
+    #aznet-theme-about-content .aznet-theme-page-kit__process > .wp-block-columns > .wp-block-column { padding-left: 64px; }
+    #aznet-theme-about-content .aznet-theme-page-kit__process .aznet-theme-page-kit__step-label { position: absolute; left: 0; top: 0; }
+    #aznet-theme-about-content .aznet-theme-page-kit__process > .wp-block-columns > .wp-block-column:not(:last-child)::after { left: 21px; top: 56px; right: auto; bottom: -8px; width: 1px; height: auto; }
+}
