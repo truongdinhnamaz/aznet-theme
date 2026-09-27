@@ -88,11 +88,390 @@ function homepage_surface_entry(
 }
 
 /**
+ * Return the exact Curtain 01 category-showcase cards that can render.
+ *
+ * @return array<int,array{term:\WP_Term,url:string,image:string}>
+ */
+function homepage_curtain01_category_showcase_cards(): array {
+    if (
+        ! function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\homepage_product_category_showcase_terms' )
+        || ! function_exists( 'woocommerce_subcategory_thumbnail' )
+    ) {
+        return [];
+    }
+
+    $cards = [];
+    $terms = \AZnet\Theme\Integrations\WooCommerce\homepage_product_category_showcase_terms( 12 );
+    foreach ( $terms as $term ) {
+        if ( ! $term instanceof \WP_Term ) {
+            continue;
+        }
+
+        $url = get_term_link( $term );
+        if ( is_wp_error( $url ) ) {
+            continue;
+        }
+
+        ob_start();
+        woocommerce_subcategory_thumbnail( $term );
+        $image = trim( (string) ob_get_clean() );
+
+        if (
+            '' === $image
+            || ! str_contains( $image, '<img' )
+            || str_contains( $image, 'woocommerce-placeholder' )
+        ) {
+            continue;
+        }
+
+        $cards[] = [
+            'term'  => $term,
+            'url'   => (string) $url,
+            'image' => $image,
+        ];
+    }
+
+    return $cards;
+}
+
+/**
+ * Return the filtered public WooCommerce projection used by Curtain 01 catalogue.
+ *
+ * @return array{categories:array<int,\WP_Term>,products:array<int,object>,shop_url:string}
+ */
+function homepage_curtain01_catalogue_model(): array {
+    $categories = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\homepage_product_categories' )
+        ? \AZnet\Theme\Integrations\WooCommerce\homepage_product_categories( 4 )
+        : [];
+    $products = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\homepage_products' )
+        ? \AZnet\Theme\Integrations\WooCommerce\homepage_products( 6 )
+        : [];
+    $shop_url = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\shop_url' )
+        ? \AZnet\Theme\Integrations\WooCommerce\shop_url()
+        : '';
+
+    $categories = array_values(
+        array_filter(
+            $categories,
+            static function ( $term ): bool {
+                if ( ! $term instanceof \WP_Term ) {
+                    return false;
+                }
+                return ! is_wp_error( get_term_link( $term ) );
+            }
+        )
+    );
+
+    $products = array_values(
+        array_filter(
+            $products,
+            static function ( $product ): bool {
+                if ( ! is_object( $product ) || ! method_exists( $product, 'get_name' ) || ! method_exists( $product, 'get_permalink' ) ) {
+                    return false;
+                }
+                return '' !== trim( (string) $product->get_name() ) && '' !== (string) $product->get_permalink();
+            }
+        )
+    );
+
+    return [
+        'categories' => $categories,
+        'products'   => $products,
+        'shop_url'   => $shop_url,
+    ];
+}
+
+/** @return array<int,array<string,mixed>> */
+function homepage_curtain01_effective_surface_map( ?array $settings = null ): array {
+    $settings = null === $settings ? settings() : $settings;
+    $surfaces = [];
+
+    $hero_id = (int) homepage_effective_source_value( 'curtain-01', 'hero', $settings );
+    $hero = homepage_block_reference( $hero_id );
+    $hero_html = '';
+    if ( $hero instanceof \WP_Post ) {
+        $raw = trim( (string) $hero->post_content );
+        $hero_html = '' !== $raw ? trim( (string) do_blocks( $raw ) ) : '';
+    }
+
+    if ( '' !== $hero_html ) {
+        $surfaces[] = homepage_surface_entry(
+            'hero',
+            __( 'Hero', 'aznet-theme' ),
+            'hero',
+            'before',
+            'aznet-homepage-curtain-hero',
+            'wp_block',
+            (int) $hero->ID,
+            [
+                'title'   => homepage_surface_first_heading( (string) $hero->post_content ),
+                'summary' => homepage_surface_text_summary( $hero_html ),
+                'source'  => get_the_title( $hero ),
+            ]
+        );
+    } else {
+        $front_id = (int) get_option( 'page_on_front', 0 );
+        $front_page = homepage_page_reference( $front_id );
+        $title = trim( (string) get_bloginfo( 'name' ) );
+        if ( '' === $title && $front_page instanceof \WP_Post ) {
+            $title = trim( (string) get_the_title( $front_page ) );
+        }
+        $lede = $front_page instanceof \WP_Post ? trim( (string) get_the_excerpt( $front_page ) ) : '';
+        if ( '' === $lede ) {
+            $lede = trim( (string) get_bloginfo( 'description' ) );
+        }
+        $has_image = $front_page instanceof \WP_Post && has_post_thumbnail( $front_page );
+
+        if ( '' !== $title || '' !== $lede || $has_image ) {
+            $surfaces[] = homepage_surface_entry(
+                'hero',
+                __( 'Hero', 'aznet-theme' ),
+                'hero',
+                'before',
+                'aznet-homepage-curtain-hero',
+                'fallback',
+                $front_page instanceof \WP_Post ? (int) $front_page->ID : 0,
+                [
+                    'title'   => $title,
+                    'summary' => $lede,
+                    'source'  => __( 'Dữ liệu WordPress dự phòng', 'aznet-theme' ),
+                ]
+            );
+        }
+    }
+
+    $proof_id = (int) homepage_effective_source_value( 'curtain-01', 'proof', $settings );
+    $proof = homepage_block_reference( $proof_id );
+    if ( $proof instanceof \WP_Post ) {
+        $raw = trim( (string) $proof->post_content );
+        $proof_html = '' !== $raw ? trim( (string) do_blocks( $raw ) ) : '';
+        if ( '' !== $proof_html ) {
+            $surfaces[] = homepage_surface_entry(
+                'proof',
+                __( 'Bằng chứng nhanh', 'aznet-theme' ),
+                'proof-strip',
+                'before',
+                'aznet-homepage-curtain-proof',
+                'wp_block',
+                (int) $proof->ID,
+                [
+                    'title'   => get_the_title( $proof ),
+                    'summary' => homepage_surface_text_summary( $proof_html ),
+                    'source'  => get_the_title( $proof ),
+                ]
+            );
+        }
+    }
+
+    $front_id = (int) get_option( 'page_on_front', 0 );
+    $front_page = homepage_page_reference( $front_id );
+    if ( $front_page instanceof \WP_Post ) {
+        $front_content = trim( (string) $front_page->post_content );
+        $front_summary = homepage_surface_text_summary( (string) get_the_excerpt( $front_page ) );
+        if ( '' === $front_summary && '' !== $front_content ) {
+            $front_summary = homepage_surface_text_summary( (string) do_blocks( $front_content ) );
+        }
+        $surfaces[] = homepage_surface_entry(
+            'front-page-content',
+            __( 'Nội dung trang chủ', 'aznet-theme' ),
+            '',
+            'native',
+            'post-' . (string) $front_page->ID,
+            'front_page',
+            (int) $front_page->ID,
+            [
+                'title'   => get_the_title( $front_page ),
+                'summary' => $front_summary,
+                'source'  => __( 'Page được chọn làm Trang chủ trong WordPress', 'aznet-theme' ),
+            ]
+        );
+    }
+
+    $about_id = (int) homepage_effective_source_value( 'curtain-01', 'about', $settings );
+    $about = homepage_page_reference( $about_id );
+    if ( $about instanceof \WP_Post ) {
+        $heading = trim( (string) setting( 'homepage_about_heading', '' ) );
+        $surfaces[] = homepage_surface_entry(
+            'about',
+            __( 'Giới thiệu', 'aznet-theme' ),
+            'about',
+            'after',
+            'aznet-homepage-curtain-about',
+            'page',
+            (int) $about->ID,
+            [
+                'title'   => '' !== $heading ? $heading : get_the_title( $about ),
+                'summary' => homepage_surface_text_summary( (string) get_the_excerpt( $about ) ),
+                'source'  => get_the_title( $about ),
+            ]
+        );
+    }
+
+    $showcase_cards = homepage_curtain01_category_showcase_cards();
+    if ( [] !== $showcase_cards ) {
+        $showcase_terms = array_values(
+            array_filter(
+                array_map(
+                    static fn ( array $card ) => $card['term'] ?? null,
+                    $showcase_cards
+                ),
+                static fn ( $term ): bool => $term instanceof \WP_Term
+            )
+        );
+        $surfaces[] = homepage_surface_entry(
+            'category-showcase',
+            __( 'Bộ sưu tập dòng rèm', 'aznet-theme' ),
+            'category-showcase',
+            'after',
+            'aznet-homepage-curtain-category-showcase',
+            'woocommerce',
+            0,
+            [
+                'title'  => __( 'Khám phá theo dòng rèm', 'aznet-theme' ),
+                'items'  => $showcase_terms,
+                'source' => __( 'Danh mục sản phẩm công khai từ WooCommerce', 'aznet-theme' ),
+            ]
+        );
+    }
+
+    $catalogue = homepage_curtain01_catalogue_model();
+    if ( [] !== $catalogue['categories'] || [] !== $catalogue['products'] ) {
+        $surfaces[] = homepage_surface_entry(
+            'catalogue',
+            __( 'Sản phẩm & giải pháp rèm', 'aznet-theme' ),
+            'catalogue',
+            'after',
+            'aznet-homepage-curtain-catalogue',
+            'woocommerce',
+            0,
+            [
+                'title'  => __( 'Sản phẩm & giải pháp rèm', 'aznet-theme' ),
+                'items'  => $catalogue['categories'],
+                'source' => __( 'Catalog công khai từ WooCommerce', 'aznet-theme' ),
+            ]
+        );
+    }
+
+    $process_id = (int) homepage_effective_source_value( 'curtain-01', 'process', $settings );
+    $process = homepage_page_reference( $process_id );
+    if ( $process instanceof \WP_Post ) {
+        $raw = trim( (string) $process->post_content );
+        $content = '' !== $raw ? trim( (string) apply_filters( 'the_content', $raw ) ) : '';
+        if ( '' !== $content ) {
+            $surfaces[] = homepage_surface_entry(
+                'process',
+                __( 'Quy trình', 'aznet-theme' ),
+                'process',
+                'after',
+                'aznet-homepage-curtain-process',
+                'page',
+                (int) $process->ID,
+                [
+                    'title'   => get_the_title( $process ),
+                    'summary' => homepage_surface_text_summary( $content ),
+                    'source'  => get_the_title( $process ),
+                ]
+            );
+        }
+    }
+
+    $exclude_ids = [];
+    $project_term_id = (int) homepage_effective_source_value( 'curtain-01', 'projects', $settings );
+    $project_term = homepage_category_reference( $project_term_id );
+    $project_posts = $project_term instanceof \WP_Term
+        ? homepage_latest_posts( [ $project_term_id ], 3, $exclude_ids )
+        : [];
+    if ( $project_term instanceof \WP_Term && [] !== $project_posts ) {
+        $exclude_ids = array_values(
+            array_unique(
+                array_merge(
+                    $exclude_ids,
+                    array_map( static fn ( \WP_Post $post ): int => (int) $post->ID, $project_posts )
+                )
+            )
+        );
+        $surfaces[] = homepage_surface_entry(
+            'projects',
+            __( 'Công trình', 'aznet-theme' ),
+            'projects',
+            'after',
+            'aznet-homepage-curtain-projects',
+            'category',
+            (int) $project_term->term_id,
+            [
+                'title'  => __( 'Câu chuyện từ công trình', 'aznet-theme' ),
+                'items'  => $project_posts,
+                'source' => $project_term->name,
+            ]
+        );
+    }
+
+    $knowledge_ids = (array) homepage_effective_source_value( 'curtain-01', 'knowledge', $settings );
+    $knowledge_terms = homepage_category_references( $knowledge_ids );
+    $knowledge_posts = homepage_latest_posts( $knowledge_ids, 3, $exclude_ids );
+    if ( [] !== $knowledge_posts ) {
+        $surfaces[] = homepage_surface_entry(
+            'knowledge',
+            __( 'Kiến thức', 'aznet-theme' ),
+            'knowledge',
+            'after',
+            'aznet-homepage-curtain-knowledge',
+            'categories',
+            0,
+            [
+                'title'  => __( 'Gợi ý để chọn rèm phù hợp', 'aznet-theme' ),
+                'items'  => $knowledge_posts,
+                'source' => [] !== $knowledge_terms
+                    ? implode( ', ', array_map( static fn ( \WP_Term $term ): string => $term->name, $knowledge_terms ) )
+                    : __( 'Bài viết công khai', 'aznet-theme' ),
+            ]
+        );
+    }
+
+    $contact_id = (int) homepage_effective_source_value( 'curtain-01', 'contact', $settings );
+    $contact = homepage_page_reference( $contact_id );
+    $phone = '';
+    if ( function_exists( __NAMESPACE__ . '\\contact_surface_model' ) ) {
+        $contact_model = contact_surface_model();
+        if ( is_array( $contact_model ) ) {
+            foreach ( (array) ( $contact_model['contact']['points'] ?? [] ) as $point ) {
+                if ( is_array( $point ) && 'phone' === ( $point['kind'] ?? '' ) ) {
+                    $candidate = trim( (string) ( $point['value'] ?? '' ) );
+                    if ( '' !== $candidate ) {
+                        $phone = $candidate;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    if ( $contact instanceof \WP_Post || '' !== $phone ) {
+        $surfaces[] = homepage_surface_entry(
+            'final-cta',
+            __( 'Liên hệ', 'aznet-theme' ),
+            'final-cta',
+            'after',
+            'aznet-homepage-curtain-contact',
+            $contact instanceof \WP_Post ? 'page' : 'provider',
+            $contact instanceof \WP_Post ? (int) $contact->ID : 0,
+            [
+                'title'   => __( 'Trao đổi để tìm giải pháp rèm phù hợp', 'aznet-theme' ),
+                'summary' => $contact instanceof \WP_Post ? homepage_surface_text_summary( (string) get_the_excerpt( $contact ) ) : $phone,
+                'phone'   => $phone,
+                'source'  => $contact instanceof \WP_Post ? get_the_title( $contact ) : __( 'RootProfile public contact provider', 'aznet-theme' ),
+            ]
+        );
+    }
+
+    return $surfaces;
+}
+
+/**
  * Resolve the effective Homepage surfaces that can actually render now.
  *
- * The returned model is request-local and never persisted. Law 01 is the first
- * shared-model implementation. Curtain 01 keeps its existing authoring path
- * until its own parity slice is opened.
+ * The returned model is request-local and never persisted. Law 01 and
+ * Curtain 01 both consume this shared model for frontend composition and the
+ * primary Homepage Map.
  *
  * @return array<int,array<string,mixed>>
  */
@@ -101,6 +480,10 @@ function homepage_effective_surface_map( ?string $preset = null ): array {
 
     $preset = null === $preset ? homepage_preset() : $preset;
     if ( array_key_exists( $preset, $cache ) ) {
+        return $cache[ $preset ];
+    }
+    if ( 'curtain-01' === $preset ) {
+        $cache[ $preset ] = homepage_curtain01_effective_surface_map();
         return $cache[ $preset ];
     }
     if ( 'law-01' !== $preset ) {
