@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.79
+**Version:** v0.80
 **Status:** Working Source
 **Date:** 27/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -487,3 +487,15 @@ Evidence: `docs/evidence/CURTAIN01_HOMEPAGE_MAP_PARITY_CANDIDATE_20260927.md`.
 - Hosted GitHub jobs around PR #281 continued to terminate before workflow steps executed. This remains external-runner evidence and is not promoted to Theme PASS/FAIL.
 
 Evidence: `docs/evidence/CURTAIN01_HOMEPAGE_MAP_PARITY_CANDIDATE_20260927.md`.
+
+
+### Curtain 01 About presentation authoring merge closure / PR #283 — 27/09/2026
+
+- Owner-approved PR #283 was squash-merged to canonical `main@9794080339dedd3950aa390a87107088e8df204c`, Theme metadata `1.3.54`.
+- PR head `a7470bba9f951aabaf4f7e032f4fe6ce7cae12bc` and merged main share exact Git tree `374f795a7ffcd8399d91eed2ec654e4055c8e4ac`; reviewed candidate bytes and canonical merged bytes are identical.
+- Fresh exact-main runner-independent verification rechecked the Curtain About presentation form/action handler, scoped `about_image` mapping, schema-normalized save path, retained browser assertion and frontend source reads with **0 failures**.
+- The correction exposes only Theme-owned presentation state (kicker, presentation heading, quote and scoped About image). WordPress remains authoritative for the About Page title/excerpt/content.
+- The isolated `remquocanh.vn` draft remained healthy before merge: one main landmark, no WordPress critical error, Theme assets at `ver=1.3.54`, exact ten-surface Curtain order unchanged. Authenticated draft-admin interaction remains UNKNOWN.
+- Live `remquocanh.vn` remains Theme `1.3.31`; no release publication, draft publish, live Theme switch or production content mutation is claimed.
+
+Evidence: `docs/evidence/CURTAIN01_ABOUT_PRESENTATION_AUTHORING_20260927.md`.

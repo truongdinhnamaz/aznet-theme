@@ -1,13 +1,13 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.86
+**Version:** v0.87
 **Status:** Working Execution Map / derived  
 **Date:** 27/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** exact current canonical `main` is `d3c4014599e326e1efe3091ed6e979a19535a2d4`, Theme metadata `1.3.54`. Owner-approved PR #281 is integrated. PR head `8b56078...` and merged main share tree `16cb685f...`; fresh exact-main Curtain shared-map L1/L2 verification PASS with 0 failures.
+> **Canonical-main checkpoint:** exact current canonical `main` is `9794080339dedd3950aa390a87107088e8df204c`, Theme metadata `1.3.54`. Owner-approved PR #281 and #283 are integrated. PR #283 head `a7470bba...` and merged main share exact tree `374f795a...`; fresh exact-main Curtain About authoring L1/L2 verification PASS with 0 failures.
 
 > **Rèm 01 production checkpoint:** `remquocanh.vn` runs AZnet Theme `1.3.31` with owner-approved Process Rail and Project Showcase. WordPress owns Process Page #997 and Project Post #999 / Category #80; Theme owns only typed references, composition and presentation. Fresh production Lighthouse is Accessibility 100 / Best Practices 100 on mobile and desktop after corrective reconciliation of Curtain 01 CSS/JS to canonical main. Independent external pixel-level L4, dedicated Vietnamese font loaded-state proof and provider L5 remain separate/UNKNOWN.
 
@@ -647,8 +647,9 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 | HB3 Primary Homepage Map | PASS L1-L2 / canonical | One-column effective map, bounded editing, frontend deep links, advanced source disclosure |
 | HB3A Native Front Page / rendered-content authoring completeness | PASS L1-L2 / canonical | PR #278 merged the native `the_content()` surface plus Process/FAQ full-content edit reachability to canonical main. Shared map includes native Front Page in reading order; Process/FAQ expose native WordPress editor actions while preserving bounded Quick Edit. |
 | HB3B Curtain 01 shared-map parity | PASS L1-L2 / CANONICAL; PUBLIC DRAFT L3/L4 PARTIAL | PR #281 merged to `main@d3c4014599e326e1efe3091ed6e979a19535a2d4`. Frontend/admin composition share one effective model. Fresh exact-main source verification 0 failures; isolated byte-identical remquocanh.vn draft renders exact 10-surface order with Accessibility/Best Practices 100 mobile. Authenticated draft admin parity remains UNKNOWN; production untouched at 1.3.31. |
+| HB3C Curtain 01 About presentation authoring completeness | PASS L1-L2 / CANONICAL | PR #283 exposes Theme-owned About kicker/heading/quote/scoped image inside the effective About card while preserving WordPress Page ownership. Exact-main source verification 0 failures; isolated public draft remained healthy. Authenticated draft-admin interaction remains UNKNOWN. |
 | HB4 Static/TDD closure | PASS / runner-independent | RED contract added before implementation; direct exact-branch source verification then passed with 0 contract failures after correcting two defects found during review. GitHub runner remains unavailable but is no longer a dependency for L1/L2 evidence. |
 | HB5 WordPress runtime + browser/a11y parity | UNKNOWN / not release-claimed | Runtime parity test and R5/Homepage browser assertions are wired. Owner directed implementation/merge not to depend on hosted runner availability; no L3/L4 PASS is inferred from source verification. |
 | HB6 Integration/release | LOCKED | Canonical merge is complete; no L5/L6, release or deployment inference until separate runtime/browser/release gates close |
 
-**Current exact next:** preserve canonical D-041 cross-preset L1/L2 PASS on `main@d3c4014599e326e1efe3091ed6e979a19535a2d4`. Do not publish the Rèm Quốc Anh WPVibe draft or deploy production from this checkpoint. Authenticated admin runtime/browser parity and any release/deployment remain separate gates.
+**Current exact next:** preserve canonical D-041 cross-preset/backend-authoring L1/L2 PASS on `main@9794080339dedd3950aa390a87107088e8df204c`. Do not publish the Rèm Quốc Anh WPVibe draft or deploy production from this checkpoint. Authenticated admin runtime/browser parity and any release/deployment remain separate gates.
