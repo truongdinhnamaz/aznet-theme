@@ -7,6 +7,7 @@ on:
     paths:
       - '.github/workflows/_build-1354-profile-restore-facts-candidate.yml'
       - 'tests/offline/law01-profile-regression-restore-contract.php'
+      - 'tests/offline/law01-effective-source-parity-contract.php'
 
 permissions:
   contents: read
@@ -25,7 +26,80 @@ jobs:
           set -euo pipefail
           CANONICAL_SHA=6fd5db5bb1178e4ecaf48eb98995b2816b8d7b9b
           git cat-file -e "${CANONICAL_SHA}^{commit}"
-          UNEXPECTED="$(git diff --name-only "${CANONICAL_SHA}...HEAD" | grep -Ev '^(\.github/workflows/_build-1354-profile-restore-facts-candidate\.yml|tests/offline/law01-profile-regression-restore-contract\.php)$' || true)"
+          UNEXPECTED="$(git diff --name-only "${CANONICAL_SHA}...HEAD" | grep -Ev '^(\.github/workflows/_build-1354-profile-restore-facts-candidate\.yml|tests/offline/law01-profile-regression-restore-contract\.php|tests/offline/law01-effective-source-parity-contract\.php) || true)"
+          if [ -n "${UNEXPECTED}" ]; then
+            printf 'Unexpected delta from canonical source:\n%s\n' "${UNEXPECTED}"
+            exit 1
+          fi
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Verify inherited Profile restore/facts contracts
+        run: |
+          set -euo pipefail
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-profile-regression-restore-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-profile-facts-compat-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-effective-source-parity-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-process-faq-source-compat-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-backend-unified-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-curtain01-map-parity-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/curtain01-about-presentation-authoring-contract.php
+
+      - name: Build deterministic 1.3.54 candidate twice
+        run: |
+          set -euo pipefail
+          CANONICAL_SHA=6fd5db5bb1178e4ecaf48eb98995b2816b8d7b9b
+          rm -rf /tmp/aznet-1354-src /tmp/aznet-1354-out
+          mkdir -p /tmp/aznet-1354-src /tmp/aznet-1354-out
+          git archive "${CANONICAL_SHA}" | tar -x -C /tmp/aznet-1354-src
+          python3 scripts/build-release-package.py --source /tmp/aznet-1354-src --output /tmp/aznet-1354-out/a.zip --version 1.3.54
+          python3 scripts/build-release-package.py --source /tmp/aznet-1354-src --output /tmp/aznet-1354-out/b.zip --version 1.3.54
+          cmp /tmp/aznet-1354-out/a.zip /tmp/aznet-1354-out/b.zip
+          mv /tmp/aznet-1354-out/a.zip /tmp/aznet-1354-out/aznet-theme-1.3.54-profile-restore-facts-candidate.zip
+          rm /tmp/aznet-1354-out/b.zip
+
+      - name: Verify package identity and syntax
+        run: |
+          set -euo pipefail
+          ZIP=/tmp/aznet-1354-out/aznet-theme-1.3.54-profile-restore-facts-candidate.zip
+          unzip -t "${ZIP}"
+          rm -rf /tmp/aznet-1354-unpack
+          mkdir -p /tmp/aznet-1354-unpack
+          unzip -q "${ZIP}" -d /tmp/aznet-1354-unpack
+          test -f /tmp/aznet-1354-unpack/aznet-theme/style.css
+          test -f /tmp/aznet-1354-unpack/aznet-theme/functions.php
+          grep -Eq '^Version:[[:space:]]+1\.3\.54$' /tmp/aznet-1354-unpack/aznet-theme/style.css
+          grep -F "AZNET_THEME_VERSION', '1.3.54'" /tmp/aznet-1354-unpack/aznet-theme/functions.php
+          test ! -d /tmp/aznet-1354-unpack/aznet-theme/tests
+          while IFS= read -r -d '' file; do php -l "${file}" >/dev/null; done < <(find /tmp/aznet-1354-unpack/aznet-theme -type f -name '*.php' -print0)
+          if command -v node >/dev/null 2>&1; then
+            while IFS= read -r -d '' file; do node --check "${file}" >/dev/null; done < <(find /tmp/aznet-1354-unpack/aznet-theme -type f -name '*.js' -print0)
+          fi
+          sha256sum "${ZIP}" | tee /tmp/aznet-1354-out/SHA256SUMS.txt
+          find /tmp/aznet-1354-unpack/aznet-theme -type f | sed 's#^/tmp/aznet-1354-unpack/##' | LC_ALL=C sort > /tmp/aznet-1354-out/FILELIST.txt
+          {
+            echo 'candidate=aznet-theme-1.3.54-profile-restore-facts-candidate.zip'
+            echo 'canonical_sha=6fd5db5bb1178e4ecaf48eb98995b2816b8d7b9b'
+            echo 'version=1.3.54'
+            echo 'inherits_profile_restore_facts_contracts=PASS'
+            echo 'base_candidate_sha256=345b6b30a3826d043ca23bd57f9b8e9d8ef0a1c8b778fa44a3c5d3cc04e39923'
+          } > /tmp/aznet-1354-out/PROVENANCE.txt
+
+      - name: Upload candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: aznet-theme-1.3.54-profile-restore-facts-candidate
+          path: |
+            /tmp/aznet-1354-out/aznet-theme-1.3.54-profile-restore-facts-candidate.zip
+            /tmp/aznet-1354-out/SHA256SUMS.txt
+            /tmp/aznet-1354-out/FILELIST.txt
+            /tmp/aznet-1354-out/PROVENANCE.txt
+          if-no-files-found: error
+ || true)"
           if [ -n "${UNEXPECTED}" ]; then
             printf 'Unexpected delta from canonical source:\n%s\n' "${UNEXPECTED}"
             exit 1
