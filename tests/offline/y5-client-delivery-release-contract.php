@@ -50,11 +50,11 @@ foreach ( $required_y5 as $relative ) {
 
 $style = (string) file_get_contents( $root . '/style.css' );
 $functions = (string) file_get_contents( $root . '/functions.php' );
-$must( 1 === preg_match( '/^Version:\s*1\.3\.32\s*$/m', $style ), 'Y5 promoted style.css must be exactly 1.3.32' );
-$must( str_contains( $functions, "define( 'AZNET_THEME_VERSION', '1.3.32' );" ), 'Y5 promoted AZNET_THEME_VERSION must be exactly 1.3.32' );
+$must( 1 === preg_match( '/^Version:\s*1\.3\.32\s*$/m', $style ), 'Y5 promoted style.css must be exactly 1.3.54' );
+$must( str_contains( $functions, "define( 'AZNET_THEME_VERSION', '1.3.54' );" ), 'Y5 promoted AZNET_THEME_VERSION must be exactly 1.3.54' );
 
 $runtime = (string) file_get_contents( $root . '/tests/runtime/y5-client-delivery.php' );
-$must( str_contains( $runtime, "'1.3.32' === AZNET_THEME_VERSION" ), 'Y5 runtime fixture must validate promoted Theme version 1.3.32' );
+$must( str_contains( $runtime, "'1.3.54' === AZNET_THEME_VERSION" ), 'Y5 runtime fixture must validate promoted Theme version 1.3.54' );
 
 $workflow = (string) file_get_contents( $root . '/.github/workflows/y5-client-delivery-release.yml' );
 foreach ( [
@@ -62,7 +62,7 @@ foreach ( [
     'PHP 8.1',
     'zero active third-party plugins',
     'build-release-package.py',
-    'aznet-theme-1.3.32.zip',
+    'aznet-theme-1.3.54.zip',
     'twentytwentyfive',
     'y5-client-delivery.php',
     'y5-client-delivery-l4.mjs',
