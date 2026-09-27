@@ -27,7 +27,7 @@ $shop_url = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\shop_url'
     ? \AZnet\Theme\Integrations\WooCommerce\shop_url()
     : '';
 ?>
-<section class="aznet-theme-curtain01-section aznet-theme-curtain01-catalogue" aria-labelledby="aznet-curtain01-catalogue-title">
+<section id="aznet-homepage-curtain-catalogue" data-aznet-homepage-surface="catalogue" class="aznet-theme-curtain01-section aznet-theme-curtain01-catalogue" aria-labelledby="aznet-curtain01-catalogue-title">
     <div class="aznet-theme-curtain01-shell">
         <div class="aznet-theme-curtain01-section-heading">
             <div>
