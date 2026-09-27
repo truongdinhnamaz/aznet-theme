@@ -1,0 +1,101 @@
+name: OPS Tam Duc Homepage 1.3.54 Runtime Staging
+
+on:
+  push:
+    branches:
+      - ops/tamduc-homepage-1354-runtime-staging
+    paths:
+      - 'tests/offline/tamduc-homepage-1354-runtime-staging-contract.php'
+      - 'tests/browser/tamduc-homepage-1354-runtime-staging.mjs'
+      - '.github/workflows/_ops-tamduc-homepage-1354-runtime-staging.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  staging-runtime:
+    if: contains(github.event.head_commit.message, '[deploy-tamduc-staging-1.3.54]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify ops branch has no production source delta
+        run: |
+          set -euo pipefail
+          CANONICAL_SHA=55dda598adc7bd677ea2d5301fb42ecc90eae94a
+          git cat-file -e "${CANONICAL_SHA}^{commit}"
+          UNEXPECTED="$(git diff --name-only "${CANONICAL_SHA}...HEAD" | grep -Ev '^(\.github/|tests/|docs/)' || true)"
+          if [ -n "${UNEXPECTED}" ]; then
+            echo "Unexpected production-source delta on ops branch:"
+            printf '%s\n' "${UNEXPECTED}"
+            exit 1
+          fi
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Verify staging guard contract
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/tamduc-homepage-1354-runtime-staging-contract.php
+
+      - name: Build exact target and rollback packages
+        run: |
+          set -euo pipefail
+          CANONICAL_SHA=55dda598adc7bd677ea2d5301fb42ecc90eae94a
+          ROLLBACK_SHA=89cc97599068c57f3446e617d0076e9f67936e35
+          mkdir -p /tmp/tamduc-target-src /tmp/tamduc-rollback-src /tmp/tamduc-packages
+          git archive "${CANONICAL_SHA}" | tar -x -C /tmp/tamduc-target-src
+          git archive "${ROLLBACK_SHA}" | tar -x -C /tmp/tamduc-rollback-src
+          python3 scripts/build-release-package.py             --source /tmp/tamduc-target-src             --output /tmp/tamduc-packages/aznet-theme-1.3.54-a.zip             --version 1.3.54
+          python3 scripts/build-release-package.py             --source /tmp/tamduc-target-src             --output /tmp/tamduc-packages/aznet-theme-1.3.54-b.zip             --version 1.3.54
+          sha256sum /tmp/tamduc-packages/aznet-theme-1.3.54-a.zip /tmp/tamduc-packages/aznet-theme-1.3.54-b.zip
+          test "$(sha256sum /tmp/tamduc-packages/aznet-theme-1.3.54-a.zip | cut -d' ' -f1)" = "$(sha256sum /tmp/tamduc-packages/aznet-theme-1.3.54-b.zip | cut -d' ' -f1)"
+          mv /tmp/tamduc-packages/aznet-theme-1.3.54-a.zip /tmp/tamduc-packages/aznet-theme-1.3.54.zip
+          rm /tmp/tamduc-packages/aznet-theme-1.3.54-b.zip
+          python3 scripts/build-release-package.py             --source /tmp/tamduc-rollback-src             --output /tmp/tamduc-packages/aznet-theme-1.3.1.zip             --version 1.3.1
+          sha256sum /tmp/tamduc-packages/aznet-theme-1.3.54.zip /tmp/tamduc-packages/aznet-theme-1.3.1.zip | tee /tmp/tamduc-packages/SHA256SUMS.txt
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install browser QA dependencies
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Check staging harness syntax
+        run: node --check tests/browser/tamduc-homepage-1354-runtime-staging.mjs
+
+      - name: Deploy exact canonical Theme to staging and verify L3/L4
+        env:
+          TAMDUC_BASE_URL: https://tamduchanoi.aznet.vn
+          PILOT_WP_USER: ${{ secrets.PILOT_WP_USER }}
+          PILOT_WP_PASSWORD: ${{ secrets.PILOT_WP_PASSWORD }}
+          TARGET_THEME_ZIP: /tmp/tamduc-packages/aznet-theme-1.3.54.zip
+          ROLLBACK_THEME_ZIP: /tmp/tamduc-packages/aznet-theme-1.3.1.zip
+          TAMDUC_STATE_DIR: /tmp/tamduc-homepage-1354-runtime-staging
+        run: node tests/browser/tamduc-homepage-1354-runtime-staging.mjs
+
+      - name: Copy package identity into evidence
+        if: always()
+        run: |
+          mkdir -p /tmp/tamduc-homepage-1354-runtime-staging
+          cp /tmp/tamduc-packages/SHA256SUMS.txt /tmp/tamduc-homepage-1354-runtime-staging/SHA256SUMS.txt 2>/dev/null || true
+          printf '%s\n' 'canonical_sha=55dda598adc7bd677ea2d5301fb42ecc90eae94a' > /tmp/tamduc-homepage-1354-runtime-staging/CANONICAL.txt
+          printf '%s\n' 'rollback_sha=89cc97599068c57f3446e617d0076e9f67936e35' >> /tmp/tamduc-homepage-1354-runtime-staging/CANONICAL.txt
+
+      - name: Upload staging runtime evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tamduc-homepage-1354-runtime-staging
+          path: /tmp/tamduc-homepage-1354-runtime-staging
+          if-no-files-found: error
