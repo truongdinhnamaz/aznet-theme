@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$page = homepage_page_reference( (int) setting( 'homepage_curtain01_process_page', 0 ) );
+$page = homepage_page_reference( (int) homepage_effective_source_value( 'curtain-01', 'process' ) );
 if ( ! $page instanceof \WP_Post ) {
     return;
 }
@@ -26,7 +26,7 @@ if ( '' === trim( (string) $content ) ) {
     return;
 }
 ?>
-<section class="aznet-theme-curtain01-section aznet-theme-curtain01-process" aria-labelledby="aznet-curtain01-process-title">
+<section id="aznet-homepage-curtain-process" data-aznet-homepage-surface="process" class="aznet-theme-curtain01-section aznet-theme-curtain01-process" aria-labelledby="aznet-curtain01-process-title">
     <div class="aznet-theme-curtain01-shell">
         <div class="aznet-theme-curtain01-section-heading aznet-theme-curtain01-process__heading">
             <div>
