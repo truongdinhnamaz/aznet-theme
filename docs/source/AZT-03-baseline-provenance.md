@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.80
+**Version:** v0.81
 **Status:** Working Source
 **Date:** 27/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -499,3 +499,18 @@ Evidence: `docs/evidence/CURTAIN01_HOMEPAGE_MAP_PARITY_CANDIDATE_20260927.md`.
 - Live `remquocanh.vn` remains Theme `1.3.31`; no release publication, draft publish, live Theme switch or production content mutation is claimed.
 
 Evidence: `docs/evidence/CURTAIN01_ABOUT_PRESENTATION_AUTHORING_20260927.md`.
+
+
+### AZnet Theme 1.3.54 Profile Restore Facts candidate — 27/09/2026
+
+- User-designated prior delivered package: `aznet-theme-1.3.53-profile-restore-facts-candidate.zip`, SHA256 `345b6b30a3826d043ca23bd57f9b8e9d8ef0a1c8b778fa44a3c5d3cc04e39923`.
+- New candidate is built from exact canonical `main@6fd5db5bb1178e4ecaf48eb98995b2816b8d7b9b`, Theme metadata/runtime `1.3.54`.
+- Candidate artifact: `aznet-theme-1.3.54-profile-restore-facts-candidate.zip`, SHA256 `b6bb3b73a42d6b88f11146ff51bca043032f28fe7986fc001e9c5aab17d13cfb`.
+- GitHub Actions run `36310502953`, job `108595373429` completed SUCCESS on PHP 8.1. Exact-source guard, Profile restore/facts compatibility tests, deterministic double-build, package identity/syntax verification and artifact upload all passed.
+- Package inheritance comparison: the delivered 1.3.53 package contains 196 files; the 1.3.54 package contains 198 files; **0** prior package files are missing. Two new package paths are `assets/js/admin/template-library.js` and `inc/theme/homepage-surface-map.php`.
+- Package syntax verification: 137 PHP files / 0 failures; 5 JavaScript files / 0 failures; ZIP integrity PASS; no `tests/` directory shipped.
+- Two stale source-text QA contracts were modernized only on the build branch to assert behavior through the accepted scoped/legacy resolver. The installable package itself is archived from exact canonical `6fd5db...`, so build-only QA changes are not shipped.
+- Artifact is stored in the user's Library at `/AZnet Theme/aznet-theme-1.3.54-profile-restore-facts-candidate.zip`.
+- This is a candidate package only: no GitHub Release/tag or production deployment is claimed.
+
+Evidence: `docs/evidence/AZNET_THEME_1354_PROFILE_RESTORE_FACTS_CANDIDATE_20260927.md`.
