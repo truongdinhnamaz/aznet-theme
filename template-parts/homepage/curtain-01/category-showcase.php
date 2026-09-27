@@ -11,49 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-if (
-    ! function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\homepage_product_category_showcase_terms' )
-    || ! function_exists( 'woocommerce_subcategory_thumbnail' )
-) {
-    return;
-}
-
-$terms = \AZnet\Theme\Integrations\WooCommerce\homepage_product_category_showcase_terms( 12 );
-if ( [] === $terms ) {
-    return;
-}
-
-$cards = [];
-foreach ( $terms as $term ) {
-    if ( ! $term instanceof \WP_Term ) {
-        continue;
-    }
-
-    $url = get_term_link( $term );
-    if ( is_wp_error( $url ) ) {
-        continue;
-    }
-
-    ob_start();
-    woocommerce_subcategory_thumbnail( $term );
-    $image = trim( (string) ob_get_clean() );
-
-    if (
-        '' === $image
-        || ! str_contains( $image, '<img' )
-        || str_contains( $image, 'woocommerce-placeholder' )
-    ) {
-        continue;
-    }
-
-    $cards[] = [
-        'term'  => $term,
-        'url'   => (string) $url,
-        'image' => $image,
-    ];
-
-}
-
+$cards = homepage_curtain01_category_showcase_cards();
 if ( [] === $cards ) {
     return;
 }
