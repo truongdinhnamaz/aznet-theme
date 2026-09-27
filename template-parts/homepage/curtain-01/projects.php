@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$category_id = (int) setting( 'homepage_curtain01_projects_term', 0 );
+$category_id = (int) homepage_effective_source_value( 'curtain-01', 'projects' );
 $category = homepage_category_reference( $category_id );
 if ( ! $category instanceof \WP_Term ) {
     return;
@@ -34,7 +34,7 @@ if ( is_wp_error( $archive_url ) ) {
     $archive_url = '';
 }
 ?>
-<section class="aznet-theme-curtain01-section aznet-theme-curtain01-projects" aria-labelledby="aznet-curtain01-projects-title">
+<section id="aznet-homepage-curtain-projects" data-aznet-homepage-surface="projects" class="aznet-theme-curtain01-section aznet-theme-curtain01-projects" aria-labelledby="aznet-curtain01-projects-title">
     <div class="aznet-theme-curtain01-shell">
         <div class="aznet-theme-curtain01-section-heading aznet-theme-curtain01-projects__heading">
             <div>

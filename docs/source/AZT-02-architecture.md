@@ -4,9 +4,9 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.17 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.18 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 25/09/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 27/09/2026 |
 
 | **Kiến trúc lõi: **Theme chỉ sở hữu presentation/configuration/reference cần thiết. Dữ liệu authoritative và business state ở lại owner. Boundary giữa hai bên là public/versioned provider contract hoặc adapter tối thiểu. |
 | --- |
@@ -428,7 +428,7 @@ The model is Theme-owned presentation/read state only. It is never persisted as 
 
 A surface enters the primary map only when the same Theme rendering rules say that surface can actually render. Configured-but-draft, invalid, hidden or otherwise non-effective sources belong in advanced diagnostics rather than being represented as live.
 
-The native WordPress Front Page body is itself one effective surface when Law 01 composition is active. It sits between Theme-composed `before` and `after` surfaces, remains WordPress-owned through the normal `the_content()` boundary, and must appear in the same Homepage Map order rather than being invisible to the administrator.
+The native WordPress Front Page body is itself one effective surface when a supported composed Homepage preset is active. It sits between Theme-composed `before` and `after` surfaces, remains WordPress-owned through the normal `the_content()` boundary, and must appear in the same Homepage Map order rather than being invisible to the administrator.
 
 ## 19.2. Ownership
 
@@ -451,9 +451,9 @@ Homepage Map is not a page builder, iframe editor or DOM scraper. It does not au
 
 ## 19.4. Initial bounded rollout
 
-Law 01 is the first preset migrated to the shared effective-surface model. Its frontend and primary admin map must consume the same resolver. Stable section IDs/data markers are presentation/deep-link/testing anchors only.
+Law 01 is the first preset migrated to the shared effective-surface model. Curtain 01 is the second bounded parity slice. For both presets, frontend composition and the primary admin map must consume the same request-local resolver; stable section IDs/data markers are presentation/deep-link/testing anchors only.
 
-Curtain 01 keeps its already-proven existing authoring/composition path until a separate bounded parity slice migrates it to the same shared model with fresh regression evidence. Lack of Curtain 01 migration in the Law 01 slice must not be misrepresented as complete cross-preset parity.
+Curtain 01 parity includes only effective surfaces that the existing frontend can render: Hero, Proof, native Front Page content, About, public WooCommerce category showcase/catalogue, Process, Projects, Knowledge and final Contact CTA. WooCommerce availability/content truth stays with WooCommerce; Page/Post/Category/wp_block truth stays with WordPress. The shared model may normalize those public projections for presentation parity but must not persist a second store or read provider-private data.
 
 ## 19.5. QA boundary
 

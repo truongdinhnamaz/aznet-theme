@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.94
+**Version:** v0.95
 **Status:** Working Source  
-**Date:** 25/09/2026
+**Date:** 27/09/2026
 
 ## 1. Purpose
 
@@ -782,3 +782,5 @@ Accepted rules:
 - RED -> GREEN and fresh L3/L4 admin/frontend parity evidence are required before technical closure. No release/deployment is implied by this approval.
 
 **D-041 completeness correction — 25/09/2026:** the normal WordPress Front Page `the_content()` boundary is an effective Homepage surface and must appear in `Trang chủ đang hiển thị` between the Theme-composed before/after surfaces. Its edit action opens the native WordPress Page editor. Process and FAQ remain WordPress Page-owned; because their rendered list/details content comes from `post_content`, the Homepage backend must expose native full-content editor actions in addition to bounded title/excerpt Quick Edit. This is a correctness completion of D-041, not a new ownership or page-builder capability.
+
+**D-041 Curtain 01 parity slice — 27/09/2026:** the previously deferred Rèm 01 path is now the bounded second-preset execution of the same accepted architecture. Its frontend composition and primary Homepage Map must consume one shared request-local effective model; public WooCommerce category/catalogue projections are visibility inputs only and remain WooCommerce-owned. RED precedes GREEN. Candidate closure requires L1/L2 shared-model parity plus fresh runtime/browser evidence at the layer actually exercised. Production publication/deployment of the Rèm Quốc Anh pilot remains a separate owner gate and is not implied by draft evidence.

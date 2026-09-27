@@ -1,8 +1,8 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.77
+**Version:** v0.78
 **Status:** Working Source
-**Date:** 25/09/2026
+**Date:** 27/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
 
 ## 1. Source ownership
@@ -459,3 +459,18 @@ Evidence: `docs/evidence/HOMEPAGE_BACKEND_UNIFIED_CANDIDATE_20260925.md`.
 - L3 WordPress runtime and L4 browser/a11y remain **UNKNOWN** and are not inferred from source checks. No release publication or production deployment is claimed.
 
 Evidence: `docs/evidence/HOMEPAGE_BACKEND_COMPLETENESS_CORRECTION_20260925.md`.
+
+
+### Curtain 01 unified Homepage Map parity candidate — 27/09/2026
+
+- Canonical base remains `main@55dda598adc7bd677ea2d5301fb42ecc90eae94a`, Theme metadata `1.3.54`; branch `work/homepage-curtain01-map-parity-20260927` is not canonical until merge.
+- RED contract `tests/offline/homepage-curtain01-map-parity-contract.php` preceded the implementation.
+- Direct exact-branch L1/L2 source verification PASS with 0 failures across the shared resolver/composer/admin/test set plus all 9 Curtain 01 Theme templates.
+- The candidate migrates Curtain 01 to the same request-local effective Homepage model used by the primary admin map while keeping WordPress/WooCommerce/provider ownership unchanged.
+- On `remquocanh.vn`, current live production remains AZnet Theme `1.3.31`. An isolated WPVibe draft was synchronized to canonical 1.3.54 production-source bytes and then overlaid with the Curtain parity candidate; no live publish/theme switch/content mutation occurred.
+- Fresh draft public readback rendered one main landmark, no WordPress critical-error page, Theme assets at `ver=1.3.54`, and exact surface order `hero -> proof -> front-page-content -> about -> category-showcase -> catalogue -> process -> projects -> knowledge -> final-cta`.
+- Fresh mobile Lighthouse on the candidate draft: Accessibility 100, Best Practices 100, Performance 62; LCP 5.6 s, CLS 0, TBT 480 ms, FCP 2.3 s, Speed Index 4.7 s. Performance is recorded as lab evidence only.
+- Authenticated wp-admin draft runtime remains UNKNOWN because the WPVibe preview token does not authenticate the draft Theme into wp-admin. Repository C5 runtime/browser tests have been extended to assert admin/public order parity when an executable runner is available.
+- No production deployment/release is claimed.
+
+Evidence: `docs/evidence/CURTAIN01_HOMEPAGE_MAP_PARITY_CANDIDATE_20260927.md`.

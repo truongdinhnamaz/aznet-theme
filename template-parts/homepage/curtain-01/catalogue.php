@@ -11,23 +11,16 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$categories = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\homepage_product_categories' )
-    ? \AZnet\Theme\Integrations\WooCommerce\homepage_product_categories( 4 )
-    : [];
-
-$products = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\homepage_products' )
-    ? \AZnet\Theme\Integrations\WooCommerce\homepage_products( 6 )
-    : [];
+$catalogue = homepage_curtain01_catalogue_model();
+$categories = $catalogue['categories'];
+$products = $catalogue['products'];
+$shop_url = $catalogue['shop_url'];
 
 if ( [] === $categories && [] === $products ) {
     return;
 }
-
-$shop_url = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\shop_url' )
-    ? \AZnet\Theme\Integrations\WooCommerce\shop_url()
-    : '';
 ?>
-<section class="aznet-theme-curtain01-section aznet-theme-curtain01-catalogue" aria-labelledby="aznet-curtain01-catalogue-title">
+<section id="aznet-homepage-curtain-catalogue" data-aznet-homepage-surface="catalogue" class="aznet-theme-curtain01-section aznet-theme-curtain01-catalogue" aria-labelledby="aznet-curtain01-catalogue-title">
     <div class="aznet-theme-curtain01-shell">
         <div class="aznet-theme-curtain01-section-heading">
             <div>

@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$category_ids = (array) setting( 'homepage_knowledge_terms', [] );
+$category_ids = (array) homepage_effective_source_value( 'curtain-01', 'knowledge' );
 $posts = homepage_latest_posts( $category_ids, 3, homepage_ledger_ids() );
 
 if ( [] === $posts ) {
@@ -34,7 +34,7 @@ if ( [] !== $terms ) {
     }
 }
 ?>
-<section class="aznet-theme-curtain01-section aznet-theme-curtain01-knowledge" aria-labelledby="aznet-curtain01-knowledge-title">
+<section id="aznet-homepage-curtain-knowledge" data-aznet-homepage-surface="knowledge" class="aznet-theme-curtain01-section aznet-theme-curtain01-knowledge" aria-labelledby="aznet-curtain01-knowledge-title">
     <div class="aznet-theme-curtain01-shell">
         <div class="aznet-theme-curtain01-section-heading">
             <div>
