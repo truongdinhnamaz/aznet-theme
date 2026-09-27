@@ -498,6 +498,32 @@ function render_homepage_quick_edit_form( string $preset, string $slot, int $sou
     echo '</form></details>';
 }
 
+/** Render Theme-owned Curtain 01 About presentation fields without copying Page content. */
+function render_curtain_about_presentation_form(): void {
+    $s = settings();
+    $image_id = (int) homepage_effective_source_value( 'curtain-01', 'about_image', $s );
+
+    echo '<details class="aznet-theme-homepage-quick-edit-panel"><summary class="button">' . esc_html__( 'Sửa phần giới thiệu', 'aznet-theme' ) . '</summary>';
+    echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+    echo '<input type="hidden" name="action" value="aznet_theme_save_curtain_about_presentation">';
+    wp_nonce_field( 'aznet_theme_save_curtain_about_presentation' );
+
+    echo '<label><span>' . esc_html__( 'Dòng giới thiệu', 'aznet-theme' ) . '</span><input class="widefat" type="text" name="homepage_about_kicker" value="' . esc_attr( (string) ( $s['homepage_about_kicker'] ?? '' ) ) . '"></label>';
+    echo '<label><span>' . esc_html__( 'Tiêu đề phần giới thiệu', 'aznet-theme' ) . '</span><input class="widefat" type="text" name="homepage_about_heading" value="' . esc_attr( (string) ( $s['homepage_about_heading'] ?? '' ) ) . '"></label>';
+    echo '<label><span>' . esc_html__( 'Câu nhấn / trích dẫn', 'aznet-theme' ) . '</span><textarea class="widefat" rows="3" name="homepage_about_quote">' . esc_textarea( (string) ( $s['homepage_about_quote'] ?? '' ) ) . '</textarea></label>';
+
+    echo '<input type="hidden" name="homepage_featured_image_id" value="' . esc_attr( (string) $image_id ) . '">';
+    echo '<div class="aznet-theme-homepage-media-preview">';
+    if ( $image_id > 0 && wp_attachment_is_image( $image_id ) ) {
+        echo wp_kses_post( wp_get_attachment_image( $image_id, 'thumbnail' ) );
+    }
+    echo '</div>';
+    echo '<p><button type="button" class="button aznet-theme-homepage-media-select">' . esc_html__( 'Chọn / thay ảnh giới thiệu', 'aznet-theme' ) . '</button> <button type="button" class="button-link-delete aznet-theme-homepage-media-clear">' . esc_html__( 'Bỏ ảnh', 'aznet-theme' ) . '</button></p>';
+
+    submit_button( __( 'Lưu phần giới thiệu', 'aznet-theme' ), 'primary', 'submit', false );
+    echo '</form></details>';
+}
+
 /** Render Team-specific Homepage authoring from the exact mapped Team parent. */
 function render_homepage_team_authoring(): void {
     $parent = \AZnet\Theme\team_directory_parent();
@@ -650,6 +676,7 @@ function render_homepage_map( string $preset ): void {
             if ( $about instanceof \WP_Post ) { render_homepage_quick_edit_form( 'law-01', 'about', (int) $about->ID, __( 'Chỉnh Giới thiệu', 'aznet-theme' ) ); }
             if ( $team instanceof \WP_Post ) { render_homepage_quick_edit_form( 'law-01', 'team', (int) $team->ID, __( 'Chỉnh Đội ngũ', 'aznet-theme' ) ); }
         } elseif ( 'about' === $key && 'curtain-01' === $preset && $source_id > 0 ) {
+            render_curtain_about_presentation_form();
             render_homepage_quick_edit_form( 'curtain-01', 'about', $source_id, __( 'Sửa mô tả', 'aznet-theme' ) );
             $edit_url = get_edit_post_link( $source_id, 'raw' );
             if ( is_string( $edit_url ) && '' !== $edit_url ) {
