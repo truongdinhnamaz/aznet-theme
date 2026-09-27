@@ -1,13 +1,13 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.84
+**Version:** v0.85
 **Status:** Working Execution Map / derived  
-**Date:** 25/09/2026
+**Date:** 27/09/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** exact current canonical `main` is `6bcdc918a6ec5286ced572b4fd86491adf28f207`, Theme metadata `1.3.54`. PR #276/#277/#278 are integrated. Direct exact-main L1/L2 source verification for the D-041 completeness correction PASS with 0 failures; L3/L4 remain UNKNOWN.
+> **Canonical-main checkpoint:** exact current canonical `main` is `55dda598adc7bd677ea2d5301fb42ecc90eae94a`, Theme metadata `1.3.54`. PR #276/#277/#278/#279/#280 are integrated. Law 01 unified Homepage L1/L2 remains retained; branch `work/homepage-curtain01-map-parity-20260927` is a non-canonical second-preset D-041 candidate.
 
 > **Rèm 01 production checkpoint:** `remquocanh.vn` runs AZnet Theme `1.3.31` with owner-approved Process Rail and Project Showcase. WordPress owns Process Page #997 and Project Post #999 / Category #80; Theme owns only typed references, composition and presentation. Fresh production Lighthouse is Accessibility 100 / Best Practices 100 on mobile and desktop after corrective reconciliation of Curtain 01 CSS/JS to canonical main. Independent external pixel-level L4, dedicated Vietnamese font loaded-state proof and provider L5 remain separate/UNKNOWN.
 
@@ -646,8 +646,9 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 | HB2 Frontend shared composition | PASS L1-L2 / canonical | Law 01 before/after composition consumes the shared model; Curtain 01 unchanged |
 | HB3 Primary Homepage Map | PASS L1-L2 / canonical | One-column effective map, bounded editing, frontend deep links, advanced source disclosure |
 | HB3A Native Front Page / rendered-content authoring completeness | PASS L1-L2 / canonical | PR #278 merged the native `the_content()` surface plus Process/FAQ full-content edit reachability to canonical main. Shared map includes native Front Page in reading order; Process/FAQ expose native WordPress editor actions while preserving bounded Quick Edit. |
+| HB3B Curtain 01 shared-map parity | PASS L1-L2 / BRANCH CANDIDATE; PUBLIC DRAFT L3/L4 PARTIAL | RED->GREEN candidate moves Rèm 01 frontend/admin composition to one effective model. Direct source verification 0 failures; isolated remquocanh.vn draft renders exact 10-surface order with Accessibility/Best Practices 100 mobile. Authenticated draft admin parity remains UNKNOWN; production untouched at 1.3.31. |
 | HB4 Static/TDD closure | PASS / runner-independent | RED contract added before implementation; direct exact-branch source verification then passed with 0 contract failures after correcting two defects found during review. GitHub runner remains unavailable but is no longer a dependency for L1/L2 evidence. |
 | HB5 WordPress runtime + browser/a11y parity | UNKNOWN / not release-claimed | Runtime parity test and R5/Homepage browser assertions are wired. Owner directed implementation/merge not to depend on hosted runner availability; no L3/L4 PASS is inferred from source verification. |
 | HB6 Integration/release | LOCKED | Canonical merge is complete; no L5/L6, release or deployment inference until separate runtime/browser/release gates close |
 
-**Current exact next:** preserve canonical D-041 L1/L2 PASS on `main@6bcdc918a6ec5286ced572b4fd86491adf28f207`. L3 WordPress runtime and L4 browser/a11y remain UNKNOWN; release/deployment stay separately gated.
+**Current exact next:** close the Curtain 01 candidate at review/merge gate after preserving its L1/L2 PASS and isolated public-draft evidence. Do not publish the Rèm Quốc Anh WPVibe draft or deploy production from this checkpoint. Authenticated admin runtime/browser parity remains separate/UNKNOWN.
