@@ -394,6 +394,14 @@ async function verifyHomepageAdmin() {
   const proofCard = map.locator('[data-surface-key="proof"]');
   if (await proofCard.getByRole('link', { name: 'Sửa bằng chứng' }).count() !== 1) throw new Error('admin: Curtain proof edit action missing');
 
+  const aboutCard = map.locator('[data-surface-key="about"]');
+  const aboutPresentation = aboutCard.locator('details').filter({ has: page.getByText('Sửa phần giới thiệu', { exact: true }) });
+  if (await aboutPresentation.count() !== 1) throw new Error('admin: Curtain About presentation authoring control missing');
+  if (await aboutPresentation.locator('input[name="homepage_about_kicker"]').count() !== 1) throw new Error('admin: Curtain About kicker field missing');
+  if (await aboutPresentation.locator('input[name="homepage_about_heading"]').count() !== 1) throw new Error('admin: Curtain About heading field missing');
+  if (await aboutPresentation.locator('textarea[name="homepage_about_quote"]').count() !== 1) throw new Error('admin: Curtain About quote field missing');
+  if (await aboutPresentation.locator('input[name="homepage_featured_image_id"]').count() !== 1) throw new Error('admin: Curtain About image field missing');
+
   const processCard = map.locator('[data-surface-key="process"]');
   if (await processCard.getByRole('link', { name: 'Sửa các bước' }).count() !== 1) throw new Error('admin: Curtain Process full editor action missing');
 

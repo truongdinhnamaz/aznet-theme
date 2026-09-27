@@ -6,6 +6,8 @@ use function AZnet\Theme\homepage_category_reference;
 use function AZnet\Theme\homepage_effective_source_key;
 use function AZnet\Theme\homepage_effective_source_value;
 use function AZnet\Theme\homepage_source_descriptor;
+use function AZnet\Theme\normalize_settings;
+use function AZnet\Theme\settings;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
@@ -106,6 +108,55 @@ function handle_homepage_quick_edit_source(): void {
         $redirect .= '#homepage-team';
     }
     wp_safe_redirect( $redirect );
+    exit;
+}
+
+/** Save Theme-owned Curtain 01 About presentation fields without mutating WordPress Page content. */
+function handle_curtain_about_presentation_save(): void {
+    if ( ! current_user_can( 'edit_theme_options' ) ) {
+        wp_die( esc_html__( 'Bạn không có quyền thay đổi thiết lập Theme.', 'aznet-theme' ) );
+    }
+    check_admin_referer( 'aznet_theme_save_curtain_about_presentation' );
+
+    $kicker = isset( $_POST['homepage_about_kicker'] )
+        ? sanitize_text_field( wp_unslash( $_POST['homepage_about_kicker'] ) )
+        : '';
+    $heading = isset( $_POST['homepage_about_heading'] )
+        ? sanitize_text_field( wp_unslash( $_POST['homepage_about_heading'] ) )
+        : '';
+    $quote = isset( $_POST['homepage_about_quote'] )
+        ? sanitize_textarea_field( wp_unslash( $_POST['homepage_about_quote'] ) )
+        : '';
+    $image_id = isset( $_POST['homepage_featured_image_id'] )
+        ? absint( $_POST['homepage_featured_image_id'] )
+        : 0;
+
+    if ( $image_id > 0 && ! wp_attachment_is_image( $image_id ) ) {
+        wp_die( esc_html__( 'Ảnh phần giới thiệu không hợp lệ.', 'aznet-theme' ) );
+    }
+
+    $image_key = homepage_effective_source_key( 'curtain-01', 'about_image' );
+    if ( ! is_string( $image_key ) || '' === $image_key ) {
+        wp_die( esc_html__( 'Không xác định được nguồn ảnh phần giới thiệu.', 'aznet-theme' ) );
+    }
+
+    $theme_settings = settings();
+    $theme_settings['homepage_about_kicker'] = $kicker;
+    $theme_settings['homepage_about_heading'] = $heading;
+    $theme_settings['homepage_about_quote'] = $quote;
+    $theme_settings[ $image_key ] = $image_id;
+
+    set_theme_mod( 'aznet_theme_settings', normalize_settings( $theme_settings ) );
+
+    $redirect = add_query_arg(
+        [
+            'page' => 'aznet-theme',
+            'section' => 'homepage',
+            'curtain_about_updated' => '1',
+        ],
+        admin_url( 'admin.php' )
+    );
+    wp_safe_redirect( $redirect . '#homepage-map-about' );
     exit;
 }
 
