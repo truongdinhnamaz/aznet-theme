@@ -61,7 +61,7 @@ if ( [] === $cards ) {
 $has_carousel = 4 < count( $cards );
 $track_id     = 'aznet-curtain01-category-track';
 ?>
-<section class="aznet-theme-curtain01-section aznet-theme-curtain01-category-showcase" aria-labelledby="aznet-curtain01-category-showcase-title" data-aznet-curtain-category-carousel>
+<section id="aznet-homepage-curtain-category-showcase" data-aznet-homepage-surface="category-showcase" class="aznet-theme-curtain01-section aznet-theme-curtain01-category-showcase" aria-labelledby="aznet-curtain01-category-showcase-title" data-aznet-curtain-category-carousel>
     <div class="aznet-theme-curtain01-shell">
         <div class="aznet-theme-curtain01-section-heading">
             <div>
