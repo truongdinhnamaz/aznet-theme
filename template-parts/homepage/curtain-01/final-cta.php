@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$page = homepage_page_reference( (int) setting( 'homepage_contact_page', 0 ) );
+$page = homepage_page_reference( (int) homepage_effective_source_value( 'curtain-01', 'contact' ) );
 $model = function_exists( __NAMESPACE__ . '\\contact_surface_model' ) ? contact_surface_model() : null;
 
 $phone = '';
@@ -34,7 +34,7 @@ if ( ! $page instanceof \WP_Post && '' === $phone ) {
 
 $summary = $page instanceof \WP_Post ? trim( (string) get_the_excerpt( $page ) ) : '';
 ?>
-<section class="aznet-theme-curtain01-section aznet-theme-curtain01-final-cta" aria-labelledby="aznet-curtain01-cta-title">
+<section id="aznet-homepage-curtain-contact" data-aznet-homepage-surface="final-cta" class="aznet-theme-curtain01-section aznet-theme-curtain01-final-cta" aria-labelledby="aznet-curtain01-cta-title">
     <div class="aznet-theme-curtain01-shell aznet-theme-curtain01-final-cta__inner">
         <div>
             <p class="aznet-theme-curtain01-kicker aznet-theme-curtain01-kicker--inverse"><?php esc_html_e( 'Bắt đầu từ không gian của bạn', 'aznet-theme' ); ?></p>
