@@ -48,6 +48,9 @@ jobs:
       - name: Record exact candidate
         run: git rev-parse HEAD
 
+      - name: Verify Curtain 01 shared Homepage Map contract
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-curtain01-map-parity-contract.php
+
       - name: Set up PHP 8.1
         uses: shivammathur/setup-php@v2
         with:
@@ -210,6 +213,34 @@ jobs:
           $knowledge_page = curtain01_page( 'Kiến thức', 'kien-thuc', 'Kinh nghiệm chọn và sử dụng rèm.' );
           $contact = curtain01_page( 'Liên hệ', 'lien-he', 'Trao đổi nhu cầu để nhận tư vấn phù hợp.' );
           $quote = curtain01_page( 'Báo giá rèm tại Rèm Quốc Anh', 'bao-gia-rem', 'Gửi thông tin để nhận báo giá theo nhu cầu.' );
+          $process = curtain01_page(
+              'Sự chỉn chu không bắt đầu ở lúc lắp rèm',
+              'quy-trinh-rem',
+              '',
+              '<!-- wp:list {"ordered":true} --><ol class="wp-block-list"><li>Khảo sát không gian</li><li>Tư vấn giải pháp</li><li>Chọn mẫu và vật liệu</li><li>Đo đạc</li><li>Sản xuất</li><li>Thi công</li><li>Nghiệm thu và bảo hành</li></ol><!-- /wp:list -->'
+          );
+
+          $proof_content = '<!-- wp:list --><ul class="wp-block-list"><li>2 thế hệ tiếp nối nghề rèm</li><li>Tư vấn — sản xuất — thi công</li><li>Không gian sống & công trình chuyên nghiệp</li><li>Đồng hành từ khảo sát đến hoàn thiện</li></ul><!-- /wp:list -->';
+          $proof = wp_insert_post(
+              [
+                  'post_type' => 'wp_block',
+                  'post_status' => 'publish',
+                  'post_title' => 'Bằng chứng nhanh Rèm 01',
+                  'post_content' => $proof_content,
+              ],
+              true
+          );
+          if ( is_wp_error( $proof ) ) { throw new RuntimeException( $proof->get_error_message() ); }
+
+          $projects_term = wp_insert_term( 'Công trình rèm', 'category', [ 'slug' => 'cong-trinh-rem' ] );
+          if ( is_wp_error( $projects_term ) ) { throw new RuntimeException( $projects_term->get_error_message() ); }
+          $projects_term_id = (int) $projects_term['term_id'];
+          $project_post = curtain01_post(
+              'Hoàn thiện rèm cuốn tại công trình y tế',
+              'hoan-thien-rem-cuon-cong-trinh-y-te',
+              $projects_term_id,
+              '2026-09-01 09:00:00'
+          );
 
           $knowledge_term = wp_insert_term( 'Tư vấn chọn rèm', 'category', [ 'slug' => 'tu-van-chon-rem' ] );
           if ( is_wp_error( $knowledge_term ) ) { throw new RuntimeException( $knowledge_term->get_error_message() ); }
@@ -312,8 +343,21 @@ jobs:
                   'homepage_hero_variant' => 'split',
                   'homepage_hero_block' => (int) $hero,
                   'homepage_about_page' => $about,
+                  'homepage_about_image' => (int) get_post_thumbnail_id( $about ),
                   'homepage_knowledge_terms' => [ $knowledge_id ],
                   'homepage_contact_page' => $contact,
+                  'homepage_proof_block' => (int) $proof,
+                  'homepage_curtain01_process_page' => $process,
+                  'homepage_curtain01_projects_term' => $projects_term_id,
+                  'homepage_curtain01_sources_initialized' => true,
+                  'homepage_curtain01_hero_block' => (int) $hero,
+                  'homepage_curtain01_proof_block' => (int) $proof,
+                  'homepage_curtain01_about_page' => $about,
+                  'homepage_curtain01_about_image' => (int) get_post_thumbnail_id( $about ),
+                  'homepage_curtain01_knowledge_terms' => [ $knowledge_id ],
+                  'homepage_curtain01_contact_page' => $contact,
+                  'homepage_curtain01_process_page' => $process,
+                  'homepage_curtain01_projects_term' => $projects_term_id,
               ]
           );
 
@@ -331,6 +375,10 @@ jobs:
                   'quote',
                   'shop',
                   'hero',
+                  'proof',
+                  'process',
+                  'projects_term_id',
+                  'project_post',
                   'knowledge_id',
                   'product_ids'
               )
@@ -374,6 +422,8 @@ jobs:
             echo 'Legacy Flatsome shortcode unexpectedly present in migrated Front Page fixture.' >&2
             exit 1
           fi
+
+          wp eval-file "$GITHUB_WORKSPACE/tests/runtime/homepage-curtain01-map-runtime.php" --path=/tmp/wp --allow-root | tee /tmp/curtain01-c5/homepage-map-runtime.json
 
       - name: Start candidate runtime
         run: |
@@ -453,6 +503,7 @@ jobs:
             /tmp/curtain01-c5/*-axe.json
             /tmp/curtain01-c5/summary.json
             /tmp/curtain01-c5/fixture.json
+            /tmp/curtain01-c5/homepage-map-runtime.json
             /tmp/curtain01-c5/server.log
           if-no-files-found: error
 
