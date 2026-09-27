@@ -14,6 +14,19 @@ const viewports = {
   narrow: { width: 320, height: 780 },
 };
 
+const expectedHomepageSurfaces = [
+  'hero',
+  'proof',
+  'front-page-content',
+  'about',
+  'category-showcase',
+  'catalogue',
+  'process',
+  'projects',
+  'knowledge',
+  'final-cta',
+];
+
 const browser = await chromium.launch({ headless: true });
 const results = {};
 
@@ -83,9 +96,12 @@ async function verifyHomepage(viewportName, viewport) {
   const required = [
     '.aznet-theme-homepage--curtain-01',
     '.aznet-theme-curtain01-hero',
+    '.aznet-theme-curtain01-proof-strip',
     '.aznet-theme-curtain01-about',
     '.aznet-theme-curtain01-category-showcase',
     '.aznet-theme-curtain01-catalogue',
+    '.aznet-theme-curtain01-process',
+    '.aznet-theme-curtain01-projects',
     '.aznet-theme-curtain01-knowledge',
     '.aznet-theme-curtain01-final-cta',
     '.aznet-theme-site-header',
@@ -97,6 +113,11 @@ async function verifyHomepage(viewportName, viewport) {
 
   const nativeSentinel = page.locator('#curtain01-native-body');
   if (await nativeSentinel.count() !== 1) throw new Error(`${viewportName}: native Front Page content boundary sentinel missing`);
+
+  const surfaceKeys = await page.locator('[data-aznet-homepage-surface]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-aznet-homepage-surface')));
+  if (JSON.stringify(surfaceKeys) !== JSON.stringify(expectedHomepageSurfaces)) {
+    throw new Error(`${viewportName}: Curtain 01 effective surface order mismatch: ${JSON.stringify(surfaceKeys)}`);
+  }
 
   const cinematicHero = page.locator('.aznet-theme-curtain01-hero[data-aznet-curtain-cinematic]');
   const cinematicSlides = cinematicHero.locator('[data-aznet-curtain-slide]');
@@ -326,13 +347,83 @@ async function verifyHomepage(viewportName, viewport) {
   const a11y = await assertA11y(page, viewportName + '-home');
   await page.screenshot({ path: path.join(outDir, `${viewportName}-home.png`), fullPage: true });
 
-  results[viewportName] = { categoryShowcaseCards, productCards, knowledgeCards, categoryChips, overflow, a11y };
+  results[viewportName] = { surfaceKeys, categoryShowcaseCards, productCards, knowledgeCards, categoryChips, overflow, a11y };
   await context.close();
 }
 
 for (const [name, viewport] of Object.entries(viewports)) {
   await verifyHomepage(name, viewport);
 }
+
+async function verifyHomepageAdmin() {
+  const context = await browser.newContext({ viewport: viewports.desktop });
+  const page = await context.newPage();
+
+  await page.goto(baseUrl + '/wp-login.php', { waitUntil: 'domcontentloaded' });
+  await page.locator('#user_login').fill('admin');
+  await page.locator('#user_pass').fill('curtain01-preview-password');
+  await Promise.all([
+    page.waitForURL(/\/wp-admin\//, { timeout: 20000 }),
+    page.locator('#wp-submit').click(),
+  ]);
+
+  await page.goto(baseUrl + '/wp-admin/admin.php?page=aznet-theme&section=homepage', { waitUntil: 'domcontentloaded' });
+  const center = page.locator('.aznet-theme-control-center');
+  await center.waitFor({ state: 'visible', timeout: 20000 });
+
+  const library = center.locator('[data-aznet-template-library]');
+  if (await library.count() !== 1) throw new Error('admin: Template Library missing');
+  if (await library.locator('[data-aznet-template-search]').count() !== 1) throw new Error('admin: Template Library search missing');
+  if (await library.locator('[data-aznet-template-category]').count() !== 1) throw new Error('admin: Template Library category filter missing');
+
+  const map = center.locator('#aznet-theme-homepage-map');
+  if (await map.count() !== 1) throw new Error('admin: Curtain 01 Homepage Map missing');
+  if ((await map.getByRole('heading', { name: 'Trang chủ đang hiển thị' }).count()) !== 1) throw new Error('admin: Homepage Map heading missing');
+
+  const adminKeys = await map.locator('[data-surface-key]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-surface-key')));
+  if (JSON.stringify(adminKeys) !== JSON.stringify(expectedHomepageSurfaces)) {
+    throw new Error(`admin: Curtain 01 map order mismatch: ${JSON.stringify(adminKeys)}`);
+  }
+
+  const frontCard = map.locator('[data-surface-key="front-page-content"]');
+  if (await frontCard.getByRole('link', { name: 'Chỉnh nội dung trang' }).count() !== 1) throw new Error('admin: native Front Page edit action missing');
+
+  const heroCard = map.locator('[data-surface-key="hero"]');
+  if (await heroCard.getByRole('link', { name: 'Sửa Hero' }).count() !== 1) throw new Error('admin: Curtain Hero edit action missing');
+
+  const proofCard = map.locator('[data-surface-key="proof"]');
+  if (await proofCard.getByRole('link', { name: 'Sửa bằng chứng' }).count() !== 1) throw new Error('admin: Curtain proof edit action missing');
+
+  const processCard = map.locator('[data-surface-key="process"]');
+  if (await processCard.getByRole('link', { name: 'Sửa các bước' }).count() !== 1) throw new Error('admin: Curtain Process full editor action missing');
+
+  const categoryCard = map.locator('[data-surface-key="category-showcase"]');
+  if (await categoryCard.getByRole('link', { name: 'Quản lý dòng rèm' }).count() !== 1) throw new Error('admin: Curtain category management action missing');
+
+  const catalogueCard = map.locator('[data-surface-key="catalogue"]');
+  if (await catalogueCard.getByRole('link', { name: 'Quản lý sản phẩm' }).count() !== 1) throw new Error('admin: Curtain product management action missing');
+
+  if (await map.getByText('READY', { exact: true }).count()) throw new Error('admin: raw READY leaked into primary Curtain Homepage Map');
+  if (await map.getByText('DRAFT', { exact: true }).count()) throw new Error('admin: raw DRAFT leaked into primary Curtain Homepage Map');
+
+  const advanced = center.locator('#aznet-theme-homepage-sources');
+  if (await advanced.count() !== 1) throw new Error('admin: advanced source disclosure missing');
+  if (!((await advanced.locator('summary').textContent()) || '').includes('Nguồn & cài đặt nâng cao')) {
+    throw new Error('admin: advanced source disclosure label mismatch');
+  }
+
+  const overflow = await assertNoOverflow(page, 'admin-homepage');
+  const axe = await new AxeBuilder({ page }).include('.aznet-theme-control-center').analyze();
+  const serious = axe.violations.filter((item) => ['critical', 'serious'].includes(item.impact || ''));
+  fs.writeFileSync(path.join(outDir, 'admin-homepage-axe.json'), JSON.stringify(axe, null, 2));
+  if (serious.length) throw new Error(`admin: axe serious/critical violations: ${serious.map((item) => item.id).join(',')}`);
+
+  await page.screenshot({ path: path.join(outDir, 'admin-homepage.png'), fullPage: true });
+  results.adminHomepage = { surfaceKeys: adminKeys, overflow, axe: { serious: serious.length } };
+  await context.close();
+}
+
+await verifyHomepageAdmin();
 
 const context = await browser.newContext({ viewport: viewports.desktop });
 const page = await context.newPage();
