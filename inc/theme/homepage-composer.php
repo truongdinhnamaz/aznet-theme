@@ -75,8 +75,10 @@ function render_homepage_before_content(): void {
 
     if ( 'curtain-01' === homepage_preset() ) {
         echo '<div class="aznet-theme-homepage aznet-theme-homepage--curtain-01">';
-        render_curtain01_part( 'hero' );
-        render_curtain01_part( 'proof-strip' );
+        foreach ( homepage_effective_surface_map( 'curtain-01' ) as $surface ) {
+            if ( 'before' !== ( $surface['boundary'] ?? '' ) ) { continue; }
+            render_curtain01_part( (string) ( $surface['template'] ?? '' ) );
+        }
         return;
     }
 
@@ -93,8 +95,9 @@ function render_homepage_after_content(): void {
     if ( ! homepage_composer_active() ) { return; }
 
     if ( 'curtain-01' === homepage_preset() ) {
-        foreach ( [ 'about', 'category-showcase', 'catalogue', 'process', 'projects', 'knowledge', 'final-cta' ] as $section ) {
-            render_curtain01_part( $section );
+        foreach ( homepage_effective_surface_map( 'curtain-01' ) as $surface ) {
+            if ( 'after' !== ( $surface['boundary'] ?? '' ) ) { continue; }
+            render_curtain01_part( (string) ( $surface['template'] ?? '' ) );
         }
         echo '</div>';
         return;
