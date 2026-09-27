@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$proof_block = homepage_block_reference( (int) homepage_source_value( 'curtain-01', 'proof' ) );
+$proof_block = homepage_block_reference( (int) homepage_effective_source_value( 'curtain-01', 'proof' ) );
 if ( ! $proof_block instanceof \WP_Post ) {
     return;
 }
@@ -26,7 +26,7 @@ if ( '' === trim( $proof_html ) ) {
     return;
 }
 ?>
-<section class="aznet-theme-curtain01-proof-strip" aria-label="<?php echo esc_attr__( 'Bằng chứng nhanh', 'aznet-theme' ); ?>">
+<section id="aznet-homepage-curtain-proof" data-aznet-homepage-surface="proof" class="aznet-theme-curtain01-proof-strip" aria-label="<?php echo esc_attr__( 'Bằng chứng nhanh', 'aznet-theme' ); ?>">
     <div class="aznet-theme-curtain01-shell aznet-theme-curtain01-proof-strip__inner">
         <?php echo wp_kses_post( $proof_html ); ?>
     </div>
