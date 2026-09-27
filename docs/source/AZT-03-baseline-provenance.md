@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.78
+**Version:** v0.79
 **Status:** Working Source
 **Date:** 27/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -472,5 +472,18 @@ Evidence: `docs/evidence/HOMEPAGE_BACKEND_COMPLETENESS_CORRECTION_20260925.md`.
 - Fresh mobile Lighthouse on the candidate draft: Accessibility 100, Best Practices 100, Performance 62; LCP 5.6 s, CLS 0, TBT 480 ms, FCP 2.3 s, Speed Index 4.7 s. Performance is recorded as lab evidence only.
 - Authenticated wp-admin draft runtime remains UNKNOWN because the WPVibe preview token does not authenticate the draft Theme into wp-admin. Repository C5 runtime/browser tests have been extended to assert admin/public order parity when an executable runner is available.
 - No production deployment/release is claimed.
+
+Evidence: `docs/evidence/CURTAIN01_HOMEPAGE_MAP_PARITY_CANDIDATE_20260927.md`.
+
+
+### Curtain 01 unified Homepage Map merge closure / PR #281 — 27/09/2026
+
+- Owner-approved PR #281 was squash-merged to canonical `main@d3c4014599e326e1efe3091ed6e979a19535a2d4`, Theme metadata `1.3.54`.
+- PR head `8b56078ca6bc20cd6b70730b02e8ce4f24df17be` and merged main share the exact Git tree `16cb685f3680085c72075f5beec6f5d914e5c617`; therefore the merged repository bytes are identical to the reviewed candidate bytes.
+- Fresh runner-independent exact-main verification rechecked the shared Curtain resolver, composer, admin map, ownership guardrails and retained runtime/browser contract wiring with **0 failures**.
+- D-041 shared effective-surface parity is now canonical for both `law-01` and `curtain-01`. WordPress/WooCommerce/provider ownership remains unchanged.
+- The isolated `remquocanh.vn` draft evidence from the reviewed candidate applies to the identical merged tree: exact ten-surface public order, no critical error, mobile Accessibility 100 / Best Practices 100. Authenticated wp-admin draft parity remains UNKNOWN.
+- Live `remquocanh.vn` remains AZnet Theme `1.3.31`; no production publish/deploy/theme switch is claimed.
+- Hosted GitHub jobs around PR #281 continued to terminate before workflow steps executed. This remains external-runner evidence and is not promoted to Theme PASS/FAIL.
 
 Evidence: `docs/evidence/CURTAIN01_HOMEPAGE_MAP_PARITY_CANDIDATE_20260927.md`.

@@ -1,4 +1,4 @@
-Canonical repository baseline is exact `main@55dda598adc7bd677ea2d5301fb42ecc90eae94a`, Theme metadata `1.3.54`. Law 01 unified Homepage backend remains canonical. Branch `work/homepage-curtain01-map-parity-20260927` is a bounded D-041 Curtain 01 parity candidate with runner-independent L1/L2 PASS and isolated public-draft runtime/browser evidence; it is not canonical and has not been published/deployed. Current published GitHub Release remains `v1.3.23`; repository implementation, release publication and pilot production remain distinct boundaries.
+Canonical repository baseline is exact `main@d3c4014599e326e1efe3091ed6e979a19535a2d4`, Theme metadata `1.3.54`. Owner-approved PR #281 makes D-041 shared effective-surface parity canonical for both Law 01 and Curtain 01. PR head `8b56078ca6bc20cd6b70730b02e8ce4f24df17be` and merged main share exact tree `16cb685f3680085c72075f5beec6f5d914e5c617`; fresh exact-main L1/L2 source verification PASS with 0 failures. `remquocanh.vn` live production remains Theme `1.3.31`; authenticated draft-admin parity, release publication and production deployment remain separately gated. Current published GitHub Release remains `v1.3.23`.
 
 Historical D-040/D-041 decision checkpoint was exact `main@5d2d34074c1b1b0006151b399b6b652927a19d49`, Theme metadata `1.3.32`. PR #272 carries a newer unmerged `1.3.54` Law 01/authoring candidate; branch `work/homepage-backend-unified-20260925` continues from that candidate and is not canonical main. Earlier exact-main V1 `35870034014`, X6 `35870034255` and Curtain 01 Project Showcase `35870033789` remain retained evidence for their tested bytes only. Current published GitHub Release remains `v1.3.23`; publication, canonical implementation and pilot production are distinct boundaries.
 | Source | Semantic version | Role |
@@ -7,9 +7,9 @@ Historical D-040/D-041 decision checkpoint was exact `main@5d2d34074c1b1b0006151
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.5 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.18 | Theme architecture, public integration contracts, D-027 Standalone Core boundary and complete WordPress-owned D-030 Hero authoring rule |
-| `AZT-03-baseline-provenance.md` | v0.78 | Canonical provenance through Rèm 01 1.3.31 Project Showcase production checkpoint |
-| `AZT-04-roadmap-qa-decisions.md` | v0.95 | Roadmap/QA through Rèm 01 Process Rail + Project Showcase production PASS at verified scope |
-| `AZT-EXEC-MAP.md` | v0.85 | Derived execution map through Rèm 01 1.3.31 production checkpoint |
+| `AZT-03-baseline-provenance.md` | v0.79 | Canonical provenance through Rèm 01 1.3.31 Project Showcase production checkpoint |
+| `AZT-04-roadmap-qa-decisions.md` | v0.96 | Roadmap/QA through Rèm 01 Process Rail + Project Showcase production PASS at verified scope |
+| `AZT-EXEC-MAP.md` | v0.86 | Derived execution map through Rèm 01 1.3.31 production checkpoint |
 
 23/09/2026 Rèm 01 production evidence: `docs/evidence/CURTAIN01_PROJECT_SHOWCASE_PRODUCTION_20260923.md` records PR #262/#263 integration through `main@f84d45a58261ec41d9b0c11a5e02a0873edb28ff`, owner-backed WPVibe production publication, Post #999 / Category #80 mapping, corrective removal of one stale draft-only D-036-incompatible heading cap, exact live Curtain CSS/JS/`theme.json` reconciliation, and fresh mobile/desktop Accessibility 100 / Best Practices 100. Current GitHub Release remains `v1.3.23`; this pilot production state does not silently create a new Release.
 
@@ -120,3 +120,6 @@ Current release boundary: **v1.3.21 TECHNICAL PASS / GitHub publication v1.3.20 
 
 
 27/09/2026 Curtain 01 unified Homepage Map parity candidate: branch `work/homepage-curtain01-map-parity-20260927` completes the previously deferred D-041 second-preset path without changing ownership. RED contract preceded GREEN. Direct exact-branch source verification PASS with 0 failures; an isolated `remquocanh.vn` WPVibe draft based on Theme 1.3.54 renders the exact ten-surface Curtain order with no critical error and fresh mobile Accessibility 100 / Best Practices 100. Live production remains Theme 1.3.31 and was not published/switched/mutated. Authenticated draft admin L3/L4 remains UNKNOWN. Evidence: `docs/evidence/CURTAIN01_HOMEPAGE_MAP_PARITY_CANDIDATE_20260927.md`.
+
+
+27/09/2026 PR #281 Curtain 01 merge closure: owner-approved squash merge produced canonical `main@d3c4014599e326e1efe3091ed6e979a19535a2d4`. The reviewed head and merged main share exact tree `16cb685f3680085c72075f5beec6f5d914e5c617`. Fresh exact-main runner-independent L1/L2 verification PASS with 0 failures. The previously recorded isolated `remquocanh.vn` public-draft runtime/browser evidence applies to the byte-identical merged tree; authenticated wp-admin draft parity remains UNKNOWN. Live production remains Theme 1.3.31 and no release/deployment is claimed.

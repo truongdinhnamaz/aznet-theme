@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.95
+**Version:** v0.96
 **Status:** Working Source  
 **Date:** 27/09/2026
 
@@ -784,3 +784,6 @@ Accepted rules:
 **D-041 completeness correction — 25/09/2026:** the normal WordPress Front Page `the_content()` boundary is an effective Homepage surface and must appear in `Trang chủ đang hiển thị` between the Theme-composed before/after surfaces. Its edit action opens the native WordPress Page editor. Process and FAQ remain WordPress Page-owned; because their rendered list/details content comes from `post_content`, the Homepage backend must expose native full-content editor actions in addition to bounded title/excerpt Quick Edit. This is a correctness completion of D-041, not a new ownership or page-builder capability.
 
 **D-041 Curtain 01 parity slice — 27/09/2026:** the previously deferred Rèm 01 path is now the bounded second-preset execution of the same accepted architecture. Its frontend composition and primary Homepage Map must consume one shared request-local effective model; public WooCommerce category/catalogue projections are visibility inputs only and remain WooCommerce-owned. RED precedes GREEN. Candidate closure requires L1/L2 shared-model parity plus fresh runtime/browser evidence at the layer actually exercised. Production publication/deployment of the Rèm Quốc Anh pilot remains a separate owner gate and is not implied by draft evidence.
+
+
+**D-041 Curtain 01 merge closure — 27/09/2026:** owner-approved PR #281 is canonical at `main@d3c4014599e326e1efe3091ed6e979a19535a2d4`. The reviewed PR head and merged main share the exact Git tree `16cb685f3680085c72075f5beec6f5d914e5c617`. Fresh exact-main L1/L2 verification PASS with 0 failures. The isolated Rèm Quốc Anh public draft remains retained runtime/browser evidence for the identical tree, while authenticated wp-admin draft parity remains UNKNOWN. Production deployment remains a separate explicit owner gate; live `remquocanh.vn` stays on Theme 1.3.31.
