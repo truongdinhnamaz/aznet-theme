@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.96
+**Version:** v0.97
 **Status:** Working Source  
 **Date:** 27/09/2026
 
@@ -787,3 +787,6 @@ Accepted rules:
 
 
 **D-041 Curtain 01 merge closure — 27/09/2026:** owner-approved PR #281 is canonical at `main@d3c4014599e326e1efe3091ed6e979a19535a2d4`. The reviewed PR head and merged main share the exact Git tree `16cb685f3680085c72075f5beec6f5d914e5c617`. Fresh exact-main L1/L2 verification PASS with 0 failures. The isolated Rèm Quốc Anh public draft remains retained runtime/browser evidence for the identical tree, while authenticated wp-admin draft parity remains UNKNOWN. Production deployment remains a separate explicit owner gate; live `remquocanh.vn` stays on Theme 1.3.31.
+
+
+**D-041 Curtain 01 About authoring completeness — 27/09/2026:** owner-approved PR #283 is canonical at `main@9794080339dedd3950aa390a87107088e8df204c`. The unified Rèm 01 Homepage Map now reaches all currently-rendered Theme-owned About presentation state (kicker, presentation heading, quote and preset-scoped About image) while WordPress Page title/excerpt/content remain WordPress-owned. RED preceded GREEN; fresh exact-main L1/L2 verification PASS with 0 failures. Authenticated draft-admin interaction remains UNKNOWN. Production deployment remains a separate explicit owner gate.
