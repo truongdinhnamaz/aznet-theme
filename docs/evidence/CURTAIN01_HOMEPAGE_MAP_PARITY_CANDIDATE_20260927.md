@@ -71,3 +71,12 @@ Performance is recorded as evidence, not promoted to a performance PASS criterio
 - Live `remquocanh.vn` Theme remains `1.3.31`.
 - No production publish/deploy was performed.
 - The current WPVibe draft is a review/runtime candidate only and must not be published before canonical merge/release/deployment gates are separately approved.
+
+
+## PR #281 runner checkpoint
+
+PR #281 was opened against canonical `main@55dda598adc7bd677ea2d5301fb42ecc90eae94a`.
+
+Fresh repository workflows were triggered on head `36233be6cb4c526140bbefdc6f307f4a060b5218`. The relevant C5 Curtain 01 run `36299625250` / job `108564754171`, R5 browser run `36299625329` / job `108564754556`, V1 static job `108564754360`, and R5 static job `108564754590` all completed failure with an empty step list. This reproduces the hosted-runner pre-execution failure and does not invalidate the runner-independent L1/L2 or isolated WPVibe draft evidence.
+
+PR mergeability resolved to `mergeable=true`; the unstable state is caused by the failing external checks. Main merge remains owner-gated.
