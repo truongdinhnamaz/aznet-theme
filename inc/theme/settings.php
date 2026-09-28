@@ -11,6 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+if ( ! function_exists( __NAMESPACE__ . '\\template_visual_preset_ids' ) ) {
+    require_once __DIR__ . '/template-registry.php';
+}
+register_builtin_template_manifests();
+
 /**
  * Return normalized defaults for Theme-owned presentation settings.
  *
@@ -80,7 +85,7 @@ function settings_defaults(): array {
  * @return array<string, mixed>
  */
 function normalize_settings( array $raw ): array {
-    $preset = isset( $raw['visual_preset'] ) && in_array( $raw['visual_preset'], [ 'default', 'editorial', 'commerce', 'curtain-01' ], true )
+    $preset = isset( $raw['visual_preset'] ) && in_array( $raw['visual_preset'], template_visual_preset_ids(), true )
         ? (string) $raw['visual_preset']
         : 'default';
 
@@ -108,7 +113,7 @@ function normalize_settings( array $raw ): array {
         ? (string) $raw['woo_product_preset']
         : 'classic';
 
-    $homepage_preset = isset( $raw['homepage_preset'] ) && in_array( $raw['homepage_preset'], [ 'off', 'law-01', 'curtain-01' ], true )
+    $homepage_preset = isset( $raw['homepage_preset'] ) && in_array( $raw['homepage_preset'], template_homepage_preset_ids(), true )
         ? (string) $raw['homepage_preset']
         : 'off';
 

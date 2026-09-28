@@ -20,8 +20,13 @@ $design = file_get_contents($root . '/inc/theme/design-system.php');
 $control = file_get_contents($root . '/inc/admin/control-center.php');
 $presetPath = $root . '/assets/css/presets/curtain-01.css';
 
-if (! is_string($design) || ! str_contains($design, "'curtain-01'")) {
-    fwrite(STDERR, "FAIL: Design System does not recognize Curtain 01 visual preset.\n");
+if (! is_string($design) || ! str_contains($design, 'template_visual_preset_ids()')) {
+    fwrite(STDERR, "FAIL: Design System does not resolve visual presets through the Template Registry.\n");
+    exit(1);
+}
+
+if (! in_array('curtain-01', AZnet\Theme\template_visual_preset_ids(), true)) {
+    fwrite(STDERR, "FAIL: Curtain 01 visual preset is missing from the built-in Template Registry.\n");
     exit(1);
 }
 
