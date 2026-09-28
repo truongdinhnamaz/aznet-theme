@@ -26,19 +26,32 @@ if (0 !== ($invalid['homepage_proof_block'] ?? null)) {
 }
 
 $composer = file_get_contents($root . '/inc/theme/homepage-composer.php');
+$surface = file_get_contents($root . '/inc/theme/homepage-surface-map.php');
 $template_path = $root . '/template-parts/homepage/curtain-01/proof-strip.php';
 $css = file_get_contents($root . '/assets/css/components/homepage-curtain-01.css');
 $admin = file_get_contents($root . '/inc/admin/homepage.php');
 
-if (! is_string($composer) || ! str_contains($composer, "render_curtain01_part( 'proof-strip' )")) {
-    fwrite(STDERR, "FAIL: Curtain 01 proof strip must render immediately after the Hero.\n");
+if (! is_string($composer) || ! str_contains($composer, "homepage_effective_surface_map( 'curtain-01' )")) {
+    fwrite(STDERR, "FAIL: Curtain 01 composer must consume the shared effective surface map.\n");
     exit(1);
 }
 
-$hero_pos = strpos($composer, "render_curtain01_part( 'hero' )");
-$proof_pos = strpos($composer, "render_curtain01_part( 'proof-strip' )");
+if (! is_string($surface)) {
+    fwrite(STDERR, "FAIL: Curtain 01 shared surface model is missing.\n");
+    exit(1);
+}
+
+$curtain_start = strpos($surface, 'function homepage_curtain01_effective_surface_map(');
+$curtain_end = strpos($surface, 'function homepage_effective_surface_map(', false === $curtain_start ? 0 : $curtain_start);
+if (false === $curtain_start || false === $curtain_end || $curtain_end <= $curtain_start) {
+    fwrite(STDERR, "FAIL: Curtain 01 effective surface-map function boundary is missing.\n");
+    exit(1);
+}
+$curtain_map = substr($surface, $curtain_start, $curtain_end - $curtain_start);
+$hero_pos = strpos($curtain_map, "'hero'");
+$proof_pos = strpos($curtain_map, "'proof'");
 if (false === $hero_pos || false === $proof_pos || $proof_pos <= $hero_pos) {
-    fwrite(STDERR, "FAIL: proof strip ordering must follow the Curtain 01 Hero.\n");
+    fwrite(STDERR, "FAIL: shared Curtain 01 map must place proof after Hero.\n");
     exit(1);
 }
 
