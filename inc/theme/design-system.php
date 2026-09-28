@@ -16,10 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function visual_preset(): string {
     $preset = setting( 'visual_preset', 'default' );
-
-    return in_array( $preset, [ 'default', 'editorial', 'commerce', 'curtain-01', 'industrial-01' ], true )
-        ? (string) $preset
-        : 'default';
+    return is_string( $preset ) && '' !== $preset ? $preset : 'default';
 }
 
 /**
