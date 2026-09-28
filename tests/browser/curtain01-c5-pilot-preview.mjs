@@ -29,6 +29,9 @@ const expectedHomepageSurfaces = [
 
 const browser = await chromium.launch({ headless: true });
 const results = {};
+const fixturePath = path.join(outDir, 'fixture.json');
+if (!fs.existsSync(fixturePath)) throw new Error(`Missing Curtain 01 fixture: ${fixturePath}`);
+const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
 
 async function assertA11y(page, label) {
   const axe = await new AxeBuilder({ page }).analyze();
@@ -363,7 +366,7 @@ async function verifyHomepageAdmin() {
   await page.locator('#user_login').fill('admin');
   await page.locator('#user_pass').fill('curtain01-preview-password');
   await Promise.all([
-    page.waitForURL(/\/wp-admin\//, { timeout: 20000 }),
+    page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 20000 }),
     page.locator('#wp-submit').click(),
   ]);
 
@@ -436,7 +439,8 @@ await verifyHomepageAdmin();
 const context = await browser.newContext({ viewport: viewports.desktop });
 const page = await context.newPage();
 
-await page.goto(baseUrl + '/san-pham/', { waitUntil: 'networkidle' });
+const shopPath = fixture.shop_url ? new URL(fixture.shop_url).pathname : '/shop/';
+await page.goto(baseUrl + shopPath, { waitUntil: 'networkidle' });
 if (!(await page.locator('body').getAttribute('class') || '').includes('aznet-theme-preset--curtain-01')) {
   throw new Error('shop: Curtain 01 visual preset missing');
 }

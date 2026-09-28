@@ -367,6 +367,8 @@ jobs:
           $logo = curtain01_image( 0, 'logo', 520, 180 );
           set_theme_mod( 'custom_logo', $logo );
 
+          $shop_url = (string) wc_get_page_permalink( 'shop' );
+
           echo wp_json_encode(
               compact(
                   'front',
@@ -377,6 +379,7 @@ jobs:
                   'contact',
                   'quote',
                   'shop',
+                  'shop_url',
                   'hero',
                   'proof',
                   'process',

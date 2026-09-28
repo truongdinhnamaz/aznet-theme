@@ -17,7 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 function visual_preset(): string {
     $preset = setting( 'visual_preset', 'default' );
 
-    return in_array( $preset, [ 'default', 'editorial', 'commerce', 'curtain-01' ], true )
+    $supported = function_exists( __NAMESPACE__ . '\\template_supported_visual_presets' )
+        ? template_supported_visual_presets()
+        : [ 'default', 'editorial', 'commerce', 'curtain-01' ];
+
+    return in_array( $preset, $supported, true )
         ? (string) $preset
         : 'default';
 }

@@ -141,3 +141,53 @@ function template_manifest( string $id ): ?array {
     $store = template_manifest_store();
     return $store[ $id ] ?? null;
 }
+
+
+/** @return array<int,string> */
+function template_presentation_preset_ids( string $key ): array {
+    if ( ! in_array( $key, [ 'visual_preset', 'homepage_preset' ], true ) ) {
+        return [];
+    }
+
+    $values = [];
+    foreach ( template_manifests() as $manifest ) {
+        $value = trim( (string) ( $manifest['presentation'][ $key ] ?? '' ) );
+        if ( '' !== $value && 1 === preg_match( '/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $value ) ) {
+            $values[] = $value;
+        }
+    }
+
+    return array_values( array_unique( $values ) );
+}
+
+/**
+ * Return Core-native visual presets plus visual presets contributed by registered templates.
+ *
+ * @return array<int,string>
+ */
+function template_supported_visual_presets(): array {
+    return array_values(
+        array_unique(
+            array_merge(
+                [ 'default', 'editorial', 'commerce' ],
+                template_presentation_preset_ids( 'visual_preset' )
+            )
+        )
+    );
+}
+
+/**
+ * Return the native/off Homepage path plus Homepage presets contributed by registered templates.
+ *
+ * @return array<int,string>
+ */
+function template_supported_homepage_presets(): array {
+    return array_values(
+        array_unique(
+            array_merge(
+                [ 'off' ],
+                template_presentation_preset_ids( 'homepage_preset' )
+            )
+        )
+    );
+}
