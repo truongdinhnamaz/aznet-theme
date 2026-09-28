@@ -1,7 +1,5 @@
 <?php
 /** Runtime parity assertions for the shared Law 01 Homepage surface model. */
-declare(strict_types=1);
-
 if ( ! defined( 'ABSPATH' ) ) { exit( 1 ); }
 
 $surfaces = \AZnet\Theme\homepage_effective_surface_map( 'law-01' );
