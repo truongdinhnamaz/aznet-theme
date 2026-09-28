@@ -219,13 +219,13 @@ $must(
     'Law 01 reference Hero must be able to reuse the WordPress-owned phone/hotline menu below its CTAs.'
 );
 $must(
-    str_contains($css, '.aznet-theme-law01-hero__contact-list a {') &&
-    str_contains($css, 'font-size: 0;') &&
-    str_contains($css, 'width: 2.75rem;') &&
-    str_contains($css, 'height: 2.75rem;') &&
-    str_contains($css, 'a[href^="tel:"]::before') &&
-    str_contains($css, 'a[href^="mailto:"]::before') &&
-    str_contains($css, 'a[href*="facebook.com"]::before'),
+    str_contains($referenceCss, '.aznet-theme-law01-hero__contact-list a {') &&
+    str_contains($referenceCss, 'font-size: 0;') &&
+    str_contains($referenceCss, 'width: 2.75rem;') &&
+    str_contains($referenceCss, 'height: 2.75rem;') &&
+    str_contains($referenceCss, 'a[href^="tel:"]::before') &&
+    str_contains($referenceCss, 'a[href^="mailto:"]::before') &&
+    str_contains($referenceCss, 'a[href*="facebook.com"]::before'),
     'Law 01 Hero quick-contact values must render as compact icon-only controls while retaining WordPress-owned link text for accessibility.'
 );
 $must(
