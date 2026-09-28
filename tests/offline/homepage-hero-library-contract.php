@@ -40,7 +40,7 @@ foreach ([
 foreach ([
     'handle_homepage_hero_apply',
     'homepage_hero_candidate_reference',
-    "'post_status'  => 'draft'",
+    "'post_status'=>'draft'",
     'wp_insert_post(',
     'current_user_can(',
     "current_user_can( 'publish_posts' )",
