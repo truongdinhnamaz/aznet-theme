@@ -47,7 +47,7 @@ if (! is_file($template_path)) {
 
 $template = file_get_contents($template_path);
 foreach ([
-    "setting( 'homepage_curtain01_projects_term', 0 )",
+    "homepage_effective_source_value( 'curtain-01', 'projects' )",
     'homepage_category_reference',
     'homepage_latest_posts',
     'homepage_ledger_ids',
