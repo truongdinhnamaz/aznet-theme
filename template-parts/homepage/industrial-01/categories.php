@@ -9,20 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$terms = [];
-if ( taxonomy_exists( 'product_cat' ) ) {
-    $result = get_terms(
-        [
-            'taxonomy'   => 'product_cat',
-            'hide_empty' => true,
-            'number'     => 8,
-            'parent'     => 0,
-        ]
-    );
-    if ( ! is_wp_error( $result ) && is_array( $result ) ) {
-        $terms = $result;
-    }
-}
+$terms = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\homepage_product_category_showcase_terms' )
+    ? \AZnet\Theme\Integrations\WooCommerce\homepage_product_category_showcase_terms( 8 )
+    : [];
 
 if ( [] === $terms ) {
     return;
