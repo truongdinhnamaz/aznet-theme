@@ -105,6 +105,37 @@ function homepage_direct_published_children( int $parent_id, int $limit ): array
 }
 
 /**
+ * Resolve public child Pages that can render a meaningful card.
+ *
+ * WordPress remains the source owner. Missing titles are not inferred from
+ * slugs, URLs, IDs, authors, custom fields, or provider-private state.
+ *
+ * @return array<int, \WP_Post>
+ */
+function homepage_renderable_child_pages( int $parent_id, int $limit ): array {
+    $limit = max( 1, min( 24, $limit ) );
+    $renderable = [];
+
+    foreach ( homepage_direct_published_children( $parent_id, 24 ) as $post ) {
+        if ( ! $post instanceof \WP_Post || '' === trim( (string) get_the_title( $post ) ) ) {
+            continue;
+        }
+
+        $url = get_permalink( $post );
+        if ( ! is_string( $url ) || '' === trim( $url ) ) {
+            continue;
+        }
+
+        $renderable[] = $post;
+        if ( count( $renderable ) >= $limit ) {
+            break;
+        }
+    }
+
+    return $renderable;
+}
+
+/**
  * Resolve newest native Posts from mapped Categories.
  *
  * @param array<int, mixed> $category_ids Mapped Category IDs.
