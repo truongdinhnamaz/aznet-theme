@@ -421,10 +421,7 @@
     box-shadow: 0 .45rem 1.25rem rgba(74, 46, 31, .04);
 }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__heading {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
+    display: block;
 }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__heading h3 {
     margin: 0;
@@ -438,19 +435,6 @@
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__heading h3 a:hover,
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__heading h3 a:focus-visible {
     color: var(--law01-client-burgundy);
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__category-link {
-    flex: 0 0 auto;
-    color: var(--law01-client-burgundy);
-    font-size: .8rem;
-    font-weight: 700;
-    text-decoration: none;
-    white-space: nowrap;
-}
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__category-link:hover,
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__category-link:focus-visible {
-    text-decoration: underline;
-    text-underline-offset: 3px;
 }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__posts {
     display: grid;
@@ -498,11 +482,6 @@
 @media (max-width: 640px) {
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-grid--topics {
         grid-template-columns: 1fr;
-    }
-    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__heading {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: .45rem;
     }
 }
 
@@ -628,16 +607,20 @@
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__heading h3 {
     min-width: 0;
 }
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__category-link {
-    align-self: center;
-}
 
 @media (max-width: 640px) {
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__heading {
         padding: .7rem .75rem .85rem;
     }
-    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__category-link {
-        align-self: flex-start;
-        margin-inline-start: 2.65rem;
+}
+
+
+/* Category title is the sole category CTA: keep headings balanced on one row. */
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__title-wrap h3 {
+    white-space: nowrap;
+}
+@media (max-width: 640px) {
+    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__title-wrap h3 {
+        white-space: normal;
     }
 }
