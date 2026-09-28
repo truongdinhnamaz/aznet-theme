@@ -194,6 +194,8 @@ jobs:
 
           update_option( 'blogname', 'Rèm Quốc Anh' );
           update_option( 'blogdescription', 'Từ nghề truyền thống đến giải pháp không gian.' );
+          update_option( 'woocommerce_coming_soon', 'no' );
+          update_option( 'woocommerce_store_pages_only', 'no' );
 
           $front = curtain01_page(
               'Rèm Quốc Anh',
