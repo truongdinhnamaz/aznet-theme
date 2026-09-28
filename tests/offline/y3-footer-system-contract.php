@@ -230,6 +230,22 @@ if (! str_contains($template, '<span class="screen-reader-text"><?php echo esc_h
 if (! str_contains($template, "! in_array( \$preset, [ 'professional', 'law-01' ], true )")) {
     y3_fail('Law 01 Footer must not duplicate the social menu again in the bottom bar.');
 }
+
+foreach (['facebook', 'youtube', 'linkedin', 'tiktok', 'instagram'] as $channel) {
+    if (! str_contains($helper, "'{$channel}'")) {
+        y3_fail('Law 01 Footer helper must allow managed social channel: ' . $channel);
+    }
+}
+
+$footerProfile = file_get_contents($root . '/inc/admin/footer-profile.php');
+if (false === $footerProfile) {
+    y3_fail('unable to read Footer profile admin adapter');
+}
+foreach (['facebook', 'youtube', 'linkedin', 'tiktok', 'instagram'] as $channel) {
+    if (! str_contains($footerProfile, "'{$channel}'")) {
+        y3_fail('Footer profile admin must expose managed social channel: ' . $channel);
+    }
+}
 foreach (['aznet-theme-site-footer__social-column', "'professional' === \$preset", 'Kết nối với chúng tôi'] as $needle) {
     if (! str_contains($template, $needle)) {
         y3_fail('Professional Footer demo composition missing: ' . $needle);
@@ -247,6 +263,11 @@ foreach ($expectedMenuKeys as $location) {
 $css = file_get_contents($root . '/assets/css/components/site-footer.css');
 if (false === $css) {
     y3_fail('unable to read Footer stylesheet');
+}
+foreach (['facebook', 'youtube', 'linkedin', 'tiktok', 'instagram'] as $channel) {
+    if (! str_contains($css, '.aznet-theme-site-footer__channel-link--' . $channel)) {
+        y3_fail('Law 01 Footer stylesheet must provide icon presentation for social channel: ' . $channel);
+    }
 }
 $professionalContactPos = strpos($template, "if ( 'professional' === \$preset && '' !== \$contact_menu )");
 $professionalNavigationPos = strpos($template, "if ( '' !== \$primary_menu )");
