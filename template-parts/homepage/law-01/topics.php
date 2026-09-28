@@ -74,7 +74,6 @@ if ( [] === $terms ) { return; }
                                 </span>
                                 <h3><a href="<?php echo esc_url( $link ); ?>"><?php echo esc_html( $term->name ); ?></a></h3>
                             </div>
-                            <a class="aznet-theme-law01-topic-card__category-link" href="<?php echo esc_url( $link ); ?>"><?php esc_html_e( 'Xem chuyên mục', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a>
                         </div>
 
                         <?php if ( [] !== $posts ) : ?>
