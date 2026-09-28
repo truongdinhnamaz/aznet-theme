@@ -200,7 +200,7 @@ foreach ([
 ] as $needle) {
     assert(str_contains($css, $needle), "Law 01 demo-aligned Profile/Team presentation missing: {$needle}");
 }
-assert(str_contains($latest, "homepage_latest_posts( (array) setting( 'homepage_knowledge_terms', [] ), 3, homepage_ledger_ids() )"), 'Latest presentation must stay at three client-ready cards.');
+assert(str_contains($latest, "homepage_latest_posts( (array) homepage_source_value( 'law-01', 'knowledge' ), 3, homepage_ledger_ids() )"), 'Latest presentation must stay at three client-ready cards through the scoped Law 01 source resolver.');
 assert(str_contains($latest, 'aznet-theme-law01-article-card__media'), 'Latest cards must render featured media when available.');
 assert(str_contains($latest, 'get_the_category'), 'Latest cards must expose WordPress-owned taxonomy labels.');
 assert(str_contains($latest, "'style' => 'display:block;width:100%;height:auto;'"), 'Latest featured media must constrain intrinsic image width for every Law 01 visual variant.');
