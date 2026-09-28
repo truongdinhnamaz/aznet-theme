@@ -5,6 +5,9 @@ declare(strict_types=1);
 if (! defined('ABSPATH')) { define('ABSPATH', __DIR__ . '/'); }
 
 $root = dirname(__DIR__, 2);
+require_once $root . '/inc/theme/template-registry.php';
+require_once $root . '/inc/theme/template-loader.php';
+\AZnet\Theme\load_local_template_manifests();
 require_once $root . '/inc/theme/settings.php';
 
 $normalized = AZnet\Theme\normalize_settings([
@@ -16,12 +19,12 @@ if (($normalized['visual_preset'] ?? null) !== 'curtain-01') {
     exit(1);
 }
 
-$design = file_get_contents($root . '/inc/theme/design-system.php');
+$manifest = \AZnet\Theme\template_manifest('curtain-01');
 $control = file_get_contents($root . '/inc/admin/control-center.php');
 $presetPath = $root . '/assets/css/presets/curtain-01.css';
 
-if (! is_string($design) || ! str_contains($design, "'curtain-01'")) {
-    fwrite(STDERR, "FAIL: Design System does not recognize Curtain 01 visual preset.\n");
+if (! is_array($manifest) || 'curtain-01' !== ($manifest['presentation']['visual_preset'] ?? null)) {
+    fwrite(STDERR, "FAIL: Template Registry does not expose Curtain 01 visual preset.\n");
     exit(1);
 }
 
