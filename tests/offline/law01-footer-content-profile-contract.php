@@ -13,7 +13,7 @@ $fail = static function (string $message): never {
     exit(1);
 };
 
-foreach (['about_intro', 'services'] as $needle) {
+foreach (['about_intro', 'services', 'contact_links', 'social_channels'] as $needle) {
     if (! str_contains($footer, "'{$needle}'")) {
         $fail("Footer context missing source-backed {$needle}");
     }
@@ -23,7 +23,7 @@ foreach (["homepage_source_value( 'law-01', 'about' )", "homepage_source_value( 
         $fail("Footer must consume mapped WordPress sources: {$needle}");
     }
 }
-foreach (['Dịch vụ chính', 'aznet-theme-site-footer__services', 'about_intro', 'aznet-theme-site-footer__channel-link', 'aria-label', 'title='] as $needle) {
+foreach (['Dịch vụ chính', 'aznet-theme-site-footer__services', 'about_intro', 'contact_links', 'aznet-theme-site-footer__contact-link', 'aznet-theme-site-footer__channel-link', 'aria-label', 'title='] as $needle) {
     if (! str_contains($template, $needle)) {
         $fail("Law 01 Footer template missing {$needle}");
     }
