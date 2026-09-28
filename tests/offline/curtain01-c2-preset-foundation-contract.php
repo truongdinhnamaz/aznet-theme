@@ -40,8 +40,12 @@ if (! str_contains($assets, '/assets/css/components/homepage-curtain-01.css')) {
     exit(1);
 }
 
-if (! is_string($admin) || ! str_contains($admin, "'curtain-01' => 'Rèm 01'")) {
-    fwrite(STDERR, "FAIL: Curtain 01 is not exposed as a selectable Homepage preset.\n");
+if (
+    ! is_string($admin)
+    || ! str_contains($admin, "'template_id'   => 'curtain-01'")
+    || ! str_contains($admin, "'name'          => __( 'Rèm 01', 'aznet-theme' )")
+) {
+    fwrite(STDERR, "FAIL: Curtain 01 is not exposed in the current Template Library model.\n");
     exit(1);
 }
 
