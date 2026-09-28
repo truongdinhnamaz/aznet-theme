@@ -150,6 +150,20 @@ foreach ([
 
 assert(1 === preg_match('/homepage-hero-content__eyebrow\\s*\\{[^}]*color:\\s*var\\(--law01-gold-text,\\s*#8a632b\\);/s', $css), 'Hero Library eyebrow must use an accessible dark-gold text token on the light Hero surface.');
 assert(1 === preg_match('/law01-hero--inverse \\.aznet-theme-homepage-hero-content__eyebrow\\s*\\{[^}]*color:\\s*var\\(--law01-client-cream,\\s*#fffaf1\\);/s', $css), 'Inverse Hero Library eyebrow must use a light accessible color on the dark surface.');
+assert(
+    1 === preg_match(
+        '/law01-hero--library \\.aznet-theme-homepage-hero-content__title\\s*\\{[^}]*text-transform:\\s*uppercase;/s',
+        $css
+    ),
+    'Law 01 reference demo requires the WordPress-owned Hero title to present in uppercase without mutating its source text.'
+);
+assert(
+    1 === preg_match(
+        '/hero--library \\.aznet-theme-homepage-hero-content__actions \\.wp-block-button:not\\(\\.is-style-outline\\) \\.wp-block-button__link\\s*\\{[^}]*background:\\s*var\\(--law01-client-burgundy\\) !important;/s',
+        $css
+    ),
+    'Law 01 reference demo requires the Hero Library primary CTA to use the burgundy presentation token.'
+);
 
 foreach ([
     'aznet-theme-law01-hero--split',
