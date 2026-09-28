@@ -455,6 +455,28 @@ jobs:
               exit( 1 );
           }
           $content = str_replace( 'Viết tiêu đề Hero của bạn tại đây', 'Hero Library WordPress', (string) $pattern['content'] );
+          $s = get_theme_mod( 'aznet_theme_settings', [] );
+          $legacy_hero_id = isset( $s['homepage_hero_page'] ) ? (int) $s['homepage_hero_page'] : 0;
+          $image_id = $legacy_hero_id > 0 ? (int) get_post_thumbnail_id( $legacy_hero_id ) : 0;
+          $image_url = $image_id > 0 ? wp_get_attachment_image_url( $image_id, 'large' ) : false;
+          if ( $image_id <= 0 || ! is_string( $image_url ) || '' === $image_url ) {
+              fwrite( STDERR, "D-030 browser fixture requires the existing WordPress Hero image\n" );
+              exit( 1 );
+          }
+          $image_block = '<!-- wp:image {"id":' . $image_id . ',"sizeSlug":"large","linkDestination":"none"} -->'
+              . '<figure class="wp-block-image size-large"><img src="' . esc_url( $image_url ) . '" alt="" class="wp-image-' . $image_id . '"/></figure>'
+              . '<!-- /wp:image -->';
+          $content = preg_replace(
+              '/<!-- wp:paragraph \\{"align":"center","className":"aznet-theme-homepage-hero-content__media-help","fontSize":"sm"\\} -->.*?<!-- \\/wp:paragraph -->/s',
+              $image_block,
+              $content,
+              1,
+              $media_replacements
+          );
+          if ( ! is_string( $content ) || 1 !== $media_replacements ) {
+              fwrite( STDERR, "Unable to seed the D-030 fixture with a valid Core Image block\n" );
+              exit( 1 );
+          }
           $block = wp_insert_post(
               [
                   'post_type' => 'wp_block',
@@ -468,7 +490,6 @@ jobs:
               fwrite( STDERR, "Unable to create synced Hero block\n" );
               exit( 1 );
           }
-          $s = get_theme_mod( 'aznet_theme_settings', [] );
           // Reproduce the real regression boundary: Law 01 admin writes the scoped
           // source while legacy keys may still point elsewhere or remain empty.
           $s['homepage_law01_sources_initialized'] = true;
