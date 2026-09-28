@@ -1,3 +1,4 @@
+# Law 01 Phase A baseline trigger: comment-only, no workflow behavior change.
 name: Homepage Composer Law 01 Browser Quality
 
 on:
@@ -18,6 +19,7 @@ on:
       - 'assets/css/components/team-directory.css'
       - 'tests/runtime/team-directory-parity.php'
       - 'tests/runtime/homepage-team-authoring.php'
+      - 'tests/runtime/law01-homepage-source-gaps.php'
       - 'inc/admin/homepage.php'
       - 'inc/admin/homepage-hero.php'
       - 'inc/admin/control-center.php'
@@ -347,6 +349,11 @@ jobs:
           wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
           wp rewrite flush --hard --path=/tmp/wp --allow-root
 
+      - name: Verify Law 01 source-gap runtime contracts
+        run: |
+          set -euo pipefail
+          wp eval-file "$GITHUB_WORKSPACE/tests/runtime/law01-homepage-source-gaps.php" --path=/tmp/wp --allow-root
+
       - name: Verify Team directory runtime parity
         run: |
           set -euo pipefail
@@ -448,6 +455,28 @@ jobs:
               exit( 1 );
           }
           $content = str_replace( 'Viết tiêu đề Hero của bạn tại đây', 'Hero Library WordPress', (string) $pattern['content'] );
+          $s = get_theme_mod( 'aznet_theme_settings', [] );
+          $legacy_hero_id = isset( $s['homepage_hero_page'] ) ? (int) $s['homepage_hero_page'] : 0;
+          $image_id = $legacy_hero_id > 0 ? (int) get_post_thumbnail_id( $legacy_hero_id ) : 0;
+          $image_url = $image_id > 0 ? wp_get_attachment_image_url( $image_id, 'large' ) : false;
+          if ( $image_id <= 0 || ! is_string( $image_url ) || '' === $image_url ) {
+              fwrite( STDERR, "D-030 browser fixture requires the existing WordPress Hero image\n" );
+              exit( 1 );
+          }
+          $image_block = '<!-- wp:image {"id":' . $image_id . ',"sizeSlug":"large","linkDestination":"none"} -->'
+              . '<figure class="wp-block-image size-large"><img src="' . esc_url( $image_url ) . '" alt="" class="wp-image-' . $image_id . '"/></figure>'
+              . '<!-- /wp:image -->';
+          $content = preg_replace(
+              '/<!-- wp:paragraph \\{"align":"center","className":"aznet-theme-homepage-hero-content__media-help","fontSize":"sm"\\} -->.*?<!-- \\/wp:paragraph -->/s',
+              $image_block,
+              $content,
+              1,
+              $media_replacements
+          );
+          if ( ! is_string( $content ) || 1 !== $media_replacements ) {
+              fwrite( STDERR, "Unable to seed the D-030 fixture with a valid Core Image block\n" );
+              exit( 1 );
+          }
           $block = wp_insert_post(
               [
                   'post_type' => 'wp_block',
@@ -461,7 +490,6 @@ jobs:
               fwrite( STDERR, "Unable to create synced Hero block\n" );
               exit( 1 );
           }
-          $s = get_theme_mod( 'aznet_theme_settings', [] );
           // Reproduce the real regression boundary: Law 01 admin writes the scoped
           // source while legacy keys may still point elsewhere or remain empty.
           $s['homepage_law01_sources_initialized'] = true;

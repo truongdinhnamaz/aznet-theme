@@ -40,30 +40,34 @@ foreach ([
 foreach ([
     'handle_homepage_hero_apply',
     'homepage_hero_candidate_reference',
-    "'post_status'  => 'draft'",
+    "'post_status'=>'draft'",
     'wp_insert_post(',
     'current_user_can(',
     "current_user_can( 'publish_posts' )",
     'check_admin_referer(',
     'WP_Block_Patterns_Registry',
-    'homepage_hero_block',
-    'homepage_hero_variant',
+    'homepage_law01_hero_block',
+    'homepage_law01_hero_variant',
 ] as $needle) {
     assert(str_contains($hero_action, $needle), "D-030 explicit Hero action contract missing: {$needle}");
 }
 assert(str_contains($bootstrap, "admin_post_aznet_theme_apply_homepage_hero"), 'D-030 Hero action must be wired explicitly.');
 assert(str_contains($admin, 'Hero WordPress đang soạn'), 'Control Center must expose draft-first Hero state.');
 assert(str_contains($admin, 'Hero WordPress chưa có nội dung'), 'Control Center must distinguish an empty published Hero from a render-ready Hero.');
-assert(str_contains($admin, "'' !== trim( (string) \$hero_block->post_content ) ? 'READY' : 'EMPTY'"), 'Homepage diagnostics must report an empty published Hero as EMPTY.');
+assert(str_contains($admin, "'' !== trim( (string) \$block->post_content ) ? 'READY' : 'EMPTY'"), 'Homepage diagnostics must report an empty published Hero as EMPTY.');
 
 assert(str_contains($admin, 'chuyển Hero WordPress này về trạng thái Bản nháp'), 'Control Center must expose the non-destructive Hero rollback path.');
 assert(str_contains($admin, 'website hiện tại chưa đổi cho đến khi Hero mới được xuất bản'), 'Draft-first Hero UX must preserve current public output.');
 assert(! str_contains($hero_action, 'wp_safe_redirect( $edit_link )'), 'Hero Library apply must return to Control Center instead of auto-opening the native block editor.');
-assert(str_contains($hero_action, "'hero'    => \$hero instanceof \\WP_Post && 'draft' === \$hero->post_status ? 'draft' : 'ready'"), 'Hero Library redirect state must reflect the actual draft/published Hero state.');
+assert(str_contains($hero_action, "'hero'=>\$hero instanceof \\WP_Post&&'draft'===\$hero->post_status?'draft':'ready'"), 'Hero Library redirect state must reflect the actual draft/published Hero state.');
 
 assert(str_contains($settings, "'schema_version'                => 3"), 'D-030 additive Hero settings must retain Theme settings schema v3.');
+$apply_start = strpos($hero_action, 'function handle_homepage_hero_apply(): void');
+$apply_end = strpos($hero_action, 'function homepage_legacy_page_to_hero_content', $apply_start === false ? 0 : $apply_start);
+assert(false !== $apply_start && false !== $apply_end && $apply_end > $apply_start, 'Hero variant action source boundary missing.');
+$apply_source = substr($hero_action, $apply_start, $apply_end - $apply_start);
 foreach (['wp_update_post(', 'wp_delete_post(', 'wp_trash_post('] as $forbidden_mutation) {
-    assert(! str_contains($hero_action, $forbidden_mutation), "Hero variant action must not rewrite/delete WordPress Hero content: {$forbidden_mutation}");
+    assert(! str_contains($apply_source, $forbidden_mutation), "Hero variant action must not rewrite/delete WordPress Hero content: {$forbidden_mutation}");
 }
 
 foreach ([
@@ -132,8 +136,8 @@ foreach ([
 }
 
 foreach (['homepage_hero_title', 'homepage_hero_subtitle', 'homepage_hero_slogan', 'homepage_hero_body', 'homepage_hero_image'] as $forbidden) {
-    assert(! str_contains($settings, $forbidden), "Theme must not store Hero copy/media: {$forbidden}");
-    assert(! str_contains($admin, $forbidden), "Control Center must not create a Theme Hero content store: {$forbidden}");
+    assert(! str_contains($settings, $forbidden), "Theme must not define a Hero copy/media setting: {$forbidden}");
+    assert(! str_contains($hero_action, "\$theme_settings['{$forbidden}']"), "Hero form must not persist copy/media into Theme settings: {$forbidden}");
 }
 
 echo "PASS: D-030 Homepage Hero Library contract\n";

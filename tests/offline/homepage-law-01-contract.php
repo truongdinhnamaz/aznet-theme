@@ -57,6 +57,7 @@ assert(str_contains($settingsSource, "'burgundy-gold'"));
 
 $homepageAdmin = file_get_contents($root . '/inc/admin/homepage.php');
 assert(str_contains($homepageAdmin, 'homepage_law01_variant'), 'Homepage admin must expose the Law 01 variant selector.');
+assert(str_contains($homepageAdmin, 'homepage_renderable_child_pages( $id, 1 )'), 'Services readiness must use the renderable public child projection.');
 assert(str_contains($homepageAdmin, 'Burgundy + Gold'));
 assert(str_contains($composer, 'homepage_law01_variant()'), 'Composer must project the normalized variant into presentation markup.');
 $variantPath = $root . '/assets/css/components/homepage-law-01-variants.css';
@@ -102,6 +103,8 @@ assert(str_contains($assets, "has_nav_menu( 'header-utility' )"), 'Header utilit
 
 $heroSource = file_get_contents($root . '/template-parts/homepage/law-01/hero.php');
 $servicesSource = file_get_contents($root . '/template-parts/homepage/law-01/services.php');
+$profileSource = file_get_contents($root . '/template-parts/homepage/law-01/profile.php');
+$surfaceMapSource = file_get_contents($root . '/inc/theme/homepage-surface-map.php');
 $teamSource = file_get_contents($root . '/template-parts/homepage/law-01/team.php');
 assert(str_contains($heroSource, "homepage_source_value( 'law-01', 'hero', \$theme_settings )"), 'Hero must prefer the effective Law 01 WordPress-native synced Hero block reference.');
 assert(str_contains($heroSource, 'homepage_block_reference'), 'Hero synced content must resolve through the bounded wp_block helper.');
@@ -109,6 +112,9 @@ assert(str_contains($heroSource, "homepage_source_value( 'law-01', 'hero_page', 
 assert(str_contains($heroSource, 'homepage_page_reference'), 'Legacy Hero Page source must still resolve through the bounded Page helper.');
 assert(str_contains($heroSource, "get_bloginfo( 'description' )"), 'Legacy Site Tagline fallback must preserve existing Law 01 Hero presentation when the dedicated Hero Page is unmapped.');
 assert(str_contains($servicesSource, 'get_the_excerpt( $parent )'), 'Services intro must come from the mapped Services Page excerpt.');
+assert(str_contains($servicesSource, 'homepage_renderable_child_pages'), 'Public Services cards must consume only renderable WordPress child Pages.');
+assert(str_contains($surfaceMapSource, 'homepage_renderable_child_pages( (int) $services_page->ID, 6 )'), 'Shared Services surface must expose the same renderable public Page projection.');
+assert(str_contains($profileSource, 'homepage_renderable_child_pages( (int) $services_page->ID, 24 )'), 'Profile service count must reflect only renderable public Service Pages.');
 assert(str_contains($teamSource, 'homepage_direct_published_children'), 'Team presentation must use WordPress-owned child Pages when available.');
 assert(str_contains($teamSource, 'get_the_post_thumbnail'), 'Team cards must support WordPress featured images.');
 foreach (['Tâm Đức', 'Tam Duc', 'Trọn Tâm với khách', 'Vẹn Đức với nghề'] as $clientString) {

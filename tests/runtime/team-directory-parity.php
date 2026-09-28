@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 if ( ! defined( 'ABSPATH' ) ) { exit( 1 ); }
 
 $parent = \AZnet\Theme\team_directory_parent();

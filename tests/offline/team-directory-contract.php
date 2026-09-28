@@ -16,7 +16,7 @@ foreach ([
     'function team_directory_members',
     'function team_directory_member_is_child',
     'function team_directory_next_menu_order',
-    "homepage_source_value( 'law-01', 'team'",
+    "homepage_effective_source_value( 'law-01', 'team'",
     "'post_parent'",
     "'post_status'    => 'publish'",
     "'orderby'        => 'menu_order title'",
