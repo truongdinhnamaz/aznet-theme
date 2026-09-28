@@ -23,6 +23,20 @@ if (!is_file($templatePath)) {
 }
 $template = (string) file_get_contents($templatePath);
 
+$pageExperiencePath = $root . '/inc/theme/page-experience.php';
+if (!is_file($pageExperiencePath)) {
+    $fail('missing page-experience source');
+}
+$pageExperience = (string) file_get_contents($pageExperiencePath);
+foreach ([
+    'function service_page_siblings',
+    'homepage_renderable_child_pages( $services_id, 24 )',
+] as $needle) {
+    if (!str_contains($pageExperience, $needle)) {
+        $fail('service-detail sibling projection missing marker: ' . $needle);
+    }
+}
+
 foreach ([
     '$is_law01_service_detail',
     'header_law01_active()',
