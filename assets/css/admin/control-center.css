@@ -148,3 +148,14 @@
 .aznet-theme-homepage-map__details{padding-top:10px;border-top:1px solid #f0f0f1}
 .aznet-theme-homepage-map__details>summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center}
 @media(max-width:782px){.aznet-theme-homepage-map__intro{display:grid}.aznet-theme-homepage-map__utilities{justify-content:flex-start}.aznet-theme-homepage-map__card{padding:14px}.aznet-theme-homepage-map__status{margin-left:0}.aznet-theme-homepage-map__items{grid-template-columns:1fr}}
+
+
+/* Keep destructive Homepage media action above WCAG AA contrast on WP admin surfaces. */
+.aznet-theme-control-center .aznet-theme-homepage-media-clear.button-link-delete {
+    color: #b32d2e;
+}
+
+.aznet-theme-control-center .aznet-theme-homepage-media-clear.button-link-delete:hover,
+.aznet-theme-control-center .aznet-theme-homepage-media-clear.button-link-delete:focus-visible {
+    color: #8f2424;
+}
