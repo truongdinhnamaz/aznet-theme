@@ -154,7 +154,7 @@ jobs:
       - name: Start WordPress runtime
         run: |
           set -euo pipefail
-          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/r5-control-center/server.log 2>&1 &
+          nohup env PHP_CLI_SERVER_WORKERS=8 php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/r5-control-center/server.log 2>&1 &
           echo $! > /tmp/r5-control-center/server.pid
           for attempt in $(seq 1 30); do
             curl -fsS http://127.0.0.1:8080/wp-login.php >/tmp/r5-control-center/login-smoke.html && break

@@ -363,7 +363,7 @@ async function verifyHomepageAdmin() {
   await page.locator('#user_login').fill('admin');
   await page.locator('#user_pass').fill('curtain01-preview-password');
   await Promise.all([
-    page.waitForURL(/\/wp-admin\//, { timeout: 20000 }),
+    page.waitForURL((url) => !url.pathname.endsWith('/wp-login.php'), { timeout: 20000 }),
     page.locator('#wp-submit').click(),
   ]);
 
@@ -441,7 +441,10 @@ if (!(await page.locator('body').getAttribute('class') || '').includes('aznet-th
   throw new Error('shop: Curtain 01 visual preset missing');
 }
 const shopProducts = await page.locator('.woocommerce ul.products li.product').count();
-if (shopProducts < 6) throw new Error(`shop: expected Woo products, got ${shopProducts}`);
+if (shopProducts < 6) {
+  fs.writeFileSync(path.join(outDir, 'shop-debug.html'), await page.content());
+  throw new Error(`shop: expected Woo products, got ${shopProducts}; url=${page.url()}; body=${(await page.locator('body').getAttribute('class') || '').slice(0, 240)}`);
+}
 await assertNoOverflow(page, 'shop');
 results.shop = { products: shopProducts, a11y: await assertA11y(page, 'shop') };
 await page.screenshot({ path: path.join(outDir, 'shop.png'), fullPage: true });

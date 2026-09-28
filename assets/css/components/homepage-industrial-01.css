@@ -1,0 +1,253 @@
+.aznet-theme-homepage--industrial-01 {
+    --industrial01-ink: #17212b;
+    --industrial01-muted: #5d6a75;
+    --industrial01-line: #d7e0e7;
+    --industrial01-surface: #ffffff;
+    --industrial01-surface-soft: #f3f6f8;
+    --industrial01-accent: var(--aznet-theme-color-primary);
+    color: var(--industrial01-ink);
+    background: var(--industrial01-surface);
+}
+
+.aznet-theme-homepage--industrial-01 .aznet-theme-entry--front-page {
+    margin: 0;
+}
+
+.aznet-theme-industrial01-shell {
+    width: min(calc(100% - (2 * var(--aznet-theme-gutter))), var(--aznet-theme-container-shell));
+    margin-inline: auto;
+}
+
+.aznet-theme-industrial01-section {
+    padding-block: clamp(3.5rem, 6vw, 6rem);
+}
+
+.aznet-theme-industrial01-kicker {
+    margin: 0 0 .75rem;
+    color: var(--industrial01-accent);
+    font-size: var(--aznet-theme-text-label);
+    font-weight: var(--aznet-theme-font-weight-bold);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.aznet-theme-industrial01-lede {
+    max-width: 60ch;
+    margin: 1rem 0 0;
+    color: var(--industrial01-muted);
+    font-size: var(--aznet-theme-text-lead);
+    line-height: var(--aznet-theme-line-height-lead);
+}
+
+.aznet-theme-industrial01-hero {
+    padding-block: 0;
+    border-bottom: 1px solid var(--industrial01-line);
+    background: linear-gradient(135deg, #f7fafc 0%, #eef3f6 100%);
+}
+
+.aznet-theme-industrial01-hero__grid {
+    display: grid;
+    min-height: clamp(32rem, 68vh, 44rem);
+    grid-template-columns: minmax(0, 1.08fr) minmax(18rem, .92fr);
+    align-items: stretch;
+}
+
+.aznet-theme-industrial01-hero__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-block: clamp(4rem, 7vw, 7rem);
+    padding-right: clamp(2rem, 5vw, 6rem);
+}
+
+.aznet-theme-industrial01-hero h1,
+.aznet-theme-industrial01-heading h2,
+.aznet-theme-industrial01-cta h2 {
+    margin: 0;
+    color: var(--industrial01-ink);
+    font-family: var(--aznet-theme-font-family-heading);
+    font-weight: var(--aznet-theme-font-weight-bold);
+    letter-spacing: -.03em;
+    text-wrap: balance;
+}
+
+.aznet-theme-industrial01-hero h1 {
+    max-width: 13ch;
+    font-size: clamp(2.7rem, 5.2vw, 5.5rem);
+    line-height: .98;
+}
+
+.aznet-theme-industrial01-hero__visual {
+    display: grid;
+    place-items: center;
+    padding: clamp(2rem, 5vw, 4.5rem);
+}
+
+.aznet-theme-industrial01-hero__panel {
+    width: min(100%, 30rem);
+    aspect-ratio: 4 / 3;
+    border: 1px solid var(--industrial01-line);
+    background:
+        linear-gradient(90deg, transparent 49.5%, rgba(23,74,124,.12) 49.5% 50.5%, transparent 50.5%),
+        linear-gradient(transparent 49.5%, rgba(23,74,124,.12) 49.5% 50.5%, transparent 50.5%),
+        var(--industrial01-surface);
+    box-shadow: var(--aznet-theme-shadow-float);
+}
+
+.aznet-theme-industrial01-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.4rem;
+    margin-top: 2rem;
+}
+
+.aznet-theme-industrial01-button {
+    display: inline-flex;
+    min-height: 3.2rem;
+    align-items: center;
+    justify-content: center;
+    padding: .8rem 1.35rem;
+    border: 1px solid var(--industrial01-accent);
+    border-radius: var(--aznet-theme-radius-control);
+    background: var(--industrial01-accent);
+    color: #fff;
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    text-decoration: none;
+}
+
+.aznet-theme-industrial01-text-link {
+    color: var(--industrial01-ink);
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    text-decoration-thickness: 1px;
+    text-underline-offset: .25em;
+}
+
+.aznet-theme-industrial01-heading {
+    margin-bottom: clamp(1.75rem, 4vw, 3rem);
+}
+
+.aznet-theme-industrial01-heading h2,
+.aznet-theme-industrial01-cta h2 {
+    max-width: 16ch;
+    font-size: clamp(2rem, 3.6vw, 3.5rem);
+    line-height: 1.05;
+}
+
+.aznet-theme-industrial01-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.aznet-theme-industrial01-grid--categories {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.aznet-theme-industrial01-grid--products {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.aznet-theme-industrial01-card {
+    border: 1px solid var(--industrial01-line);
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--industrial01-surface);
+}
+
+.aznet-theme-industrial01-category-card {
+    display: flex;
+    min-height: 9rem;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.35rem;
+    color: inherit;
+    text-decoration: none;
+}
+
+.aznet-theme-industrial01-category-card span {
+    color: var(--industrial01-muted);
+    line-height: 1.55;
+}
+
+.aznet-theme-industrial01-products {
+    background: var(--industrial01-surface-soft);
+}
+
+.aznet-theme-industrial01-product-card {
+    overflow: hidden;
+}
+
+.aznet-theme-industrial01-product-card__media {
+    display: block;
+    aspect-ratio: 4 / 3;
+    background: #fff;
+}
+
+.aznet-theme-industrial01-product-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.aznet-theme-industrial01-product-card__body {
+    padding: 1.1rem;
+}
+
+.aznet-theme-industrial01-product-card h3 {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.45;
+}
+
+.aznet-theme-industrial01-product-card h3 a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.aznet-theme-industrial01-product-card__price {
+    margin-top: .65rem;
+    color: var(--industrial01-accent);
+    font-weight: var(--aznet-theme-font-weight-bold);
+}
+
+.aznet-theme-industrial01-cta {
+    border-top: 1px solid var(--industrial01-line);
+    background: var(--industrial01-ink);
+}
+
+.aznet-theme-industrial01-cta .aznet-theme-industrial01-kicker {
+    color: #9fc9ef;
+}
+
+.aznet-theme-industrial01-cta h2,
+.aznet-theme-industrial01-cta .aznet-theme-industrial01-lede {
+    color: #fff;
+}
+
+@media (max-width: 64rem) {
+    .aznet-theme-industrial01-grid--categories,
+    .aznet-theme-industrial01-grid--products {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 48rem) {
+    .aznet-theme-industrial01-hero__grid {
+        min-height: 0;
+        grid-template-columns: 1fr;
+    }
+
+    .aznet-theme-industrial01-hero__content {
+        padding-right: 0;
+        padding-bottom: 2rem;
+    }
+
+    .aznet-theme-industrial01-hero__visual {
+        padding: 0 0 3rem;
+    }
+
+    .aznet-theme-industrial01-grid--categories,
+    .aznet-theme-industrial01-grid--products {
+        grid-template-columns: 1fr;
+    }
+}

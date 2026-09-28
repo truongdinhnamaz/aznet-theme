@@ -209,6 +209,23 @@ function enqueue_homepage_law01_asset( ?string $version = null ): void {
     );
 }
 
+/** Enqueue Industrial 01 only for its active Front Page presentation surface. */
+function enqueue_homepage_industrial01_asset( ?string $version = null ): void {
+    if ( ! function_exists( __NAMESPACE__ . '\\homepage_composer_active' ) || ! homepage_composer_active() ) {
+        return;
+    }
+    if ( 'industrial-01' !== homepage_preset() ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'aznet-theme-homepage-industrial-01',
+        get_theme_file_uri( '/assets/css/components/homepage-industrial-01.css' ),
+        [ 'aznet-theme-tokens', 'aznet-theme-homepage' ],
+        asset_content_version( '/assets/css/components/homepage-industrial-01.css', $version )
+    );
+}
+
 /** Enqueue Curtain 01 only for its active Front Page presentation surface. */
 function enqueue_homepage_curtain01_asset( ?string $version = null ): void {
     if ( ! function_exists( __NAMESPACE__ . '\\homepage_composer_active' ) || ! homepage_composer_active() ) {
@@ -623,6 +640,7 @@ function enqueue_assets(): void {
     enqueue_homepage_blueprint_asset( $version );
     enqueue_homepage_law01_asset( $version );
     enqueue_homepage_curtain01_asset( $version );
+    enqueue_homepage_industrial01_asset( $version );
 
     if ( should_enqueue_generic_content_assets() ) {
         wp_enqueue_style(

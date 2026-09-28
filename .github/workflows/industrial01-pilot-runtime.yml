@@ -1,0 +1,182 @@
+name: Industrial 01 Pilot Runtime
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/industrial01-pilot-runtime.yml'
+      - 'tests/browser/industrial01-pilot-l4.mjs'
+      - 'inc/theme/settings.php'
+      - 'inc/theme/design-system.php'
+      - 'inc/theme/homepage-composer.php'
+      - 'inc/theme/preset-lexicon.php'
+      - 'inc/theme/assets.php'
+      - 'inc/integrations/woocommerce.php'
+      - 'template-parts/homepage/industrial-01/**'
+      - 'assets/css/presets/industrial-01.css'
+      - 'assets/css/components/homepage-industrial-01.css'
+      - 'assets/css/components/woocommerce-*.css'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  industrial01-pilot-runtime:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install WordPress 6.9, Theme and WooCommerce
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          rm -rf /tmp/wp /tmp/industrial01-pilot
+          mkdir -p /tmp/wp /tmp/industrial01-pilot
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='Industrial 01 Pilot' --admin_user=admin --admin_password='industrial01-test-password' --admin_email=industrial@example.test --skip-email --allow-root
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='README.md' --exclude='aznet-preview.png' ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          wp plugin install woocommerce --version=10.9.4 --activate --path=/tmp/wp --allow-root
+          wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
+
+      - name: Seed public WordPress and WooCommerce pilot fixture
+        run: |
+          set -euo pipefail
+          cat > /tmp/industrial01-fixture.php <<'PHP'
+          <?php
+          $front = wp_insert_post([
+              'post_type' => 'page',
+              'post_status' => 'publish',
+              'post_title' => 'Industrial 01',
+              'post_name' => 'home',
+              'post_content' => '<p>Industrial 01 native WordPress body.</p>',
+          ], true);
+          if ( is_wp_error( $front ) ) { throw new RuntimeException( $front->get_error_message() ); }
+          update_option( 'show_on_front', 'page' );
+          update_option( 'page_on_front', (int) $front );
+          update_option( 'blogname', 'Industrial Pilot' );
+          update_option( 'blogdescription', 'Thiết bị công nghiệp và phụ kiện cho nhu cầu B2B.' );
+
+          $shop = get_page_by_path( 'shop' );
+          if ( ! $shop instanceof WP_Post ) {
+              $shop_id = wp_insert_post([ 'post_type' => 'page', 'post_status' => 'publish', 'post_title' => 'Shop', 'post_name' => 'shop' ], true);
+              if ( is_wp_error( $shop_id ) ) { throw new RuntimeException( $shop_id->get_error_message() ); }
+              update_option( 'woocommerce_shop_page_id', (int) $shop_id );
+          }
+
+          $categories = [];
+          foreach ([
+              'Động cơ' => 'dong-co',
+              'Cảm biến' => 'cam-bien',
+              'Biến tần' => 'bien-tan',
+              'Khí nén' => 'khi-nen',
+              'Phụ kiện' => 'phu-kien',
+              'Điều khiển' => 'dieu-khien',
+          ] as $name => $slug ) {
+              $term = term_exists( $slug, 'product_cat' );
+              if ( ! $term ) { $term = wp_insert_term( $name, 'product_cat', [ 'slug' => $slug ] ); }
+              if ( is_wp_error( $term ) ) { throw new RuntimeException( $term->get_error_message() ); }
+              $categories[] = (int) ( is_array( $term ) ? $term['term_id'] : $term );
+          }
+
+          for ( $i = 1; $i <= 8; $i++ ) {
+              $product = new WC_Product_Simple();
+              $product->set_name( 1 === $i ? 'Industrial Motor 01' : sprintf( 'Industrial Device %02d', $i ) );
+              $product->set_slug( 1 === $i ? 'industrial-motor-01' : sprintf( 'industrial-device-%02d', $i ) );
+              $product->set_status( 'publish' );
+              $product->set_catalog_visibility( 'visible' );
+              $product->set_regular_price( (string) ( 1000000 + $i * 100000 ) );
+              $product->set_short_description( 'Public WooCommerce fixture for Industrial 01 presentation verification.' );
+              $id = $product->save();
+              wp_set_object_terms( $id, [ $categories[ ( $i - 1 ) % count( $categories ) ] ], 'product_cat' );
+          }
+
+          set_theme_mod( 'aznet_theme_settings', [
+              'schema_version' => 2,
+              'visual_preset' => 'industrial-01',
+              'header_preset' => 'commerce',
+              'header_sticky' => 'sticky',
+              'header_search' => true,
+              'header_utilities' => true,
+              'footer_preset' => 'professional',
+              'woo_catalog_preset' => 'grid',
+              'woo_product_card_density' => 'balanced',
+              'woo_product_preset' => 'focus',
+              'homepage_preset' => 'industrial-01',
+          ] );
+          PHP
+          wp eval-file /tmp/industrial01-fixture.php --path=/tmp/wp --allow-root
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+          test "$(wp post list --post_type=product --post_status=publish --format=count --path=/tmp/wp --allow-root)" -ge 8
+
+      - name: Start candidate runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/industrial01-pilot/server.log 2>&1 &
+          echo $! > /tmp/industrial01-pilot/server.pid
+          for attempt in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:8080/ >/tmp/industrial01-pilot/home-smoke.html && break
+            sleep 1
+          done
+          grep -F 'aznet-theme-homepage--industrial-01' /tmp/industrial01-pilot/home-smoke.html
+          curl -fsS http://127.0.0.1:8080/shop/ >/tmp/industrial01-pilot/shop-smoke.html
+          grep -F 'Industrial Motor 01' /tmp/industrial01-pilot/shop-smoke.html
+
+      - name: Install Playwright and axe
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Verify Industrial 01 Homepage Shop Product and mobile
+        env:
+          INDUSTRIAL01_BASE_URL: http://127.0.0.1:8080
+          INDUSTRIAL01_OUT_DIR: /tmp/industrial01-pilot
+        run: node tests/browser/industrial01-pilot-l4.mjs
+
+      - name: Verify runtime boundary
+        run: |
+          set -euo pipefail
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/industrial01-pilot/server.log; then
+            echo 'FAIL: PHP runtime error marker found during Industrial 01 pilot verification' >&2
+            exit 1
+          fi
+          test -f /tmp/industrial01-pilot/summary.json
+
+      - name: Upload Industrial 01 pilot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: industrial01-pilot-runtime
+          path: /tmp/industrial01-pilot
+          if-no-files-found: error

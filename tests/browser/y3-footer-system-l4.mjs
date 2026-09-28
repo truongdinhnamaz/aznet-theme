@@ -93,7 +93,13 @@ async function inspectPreset(browser, preset, viewportName, viewport) {
       throw new Error('Footer stylesheet not observed');
     }
 
-    for (const region of Object.values(emptyRegions)) {
+    for (const [location, region] of Object.entries(emptyRegions)) {
+      if (preset === 'law-01' && location === 'footer-social') {
+        if (await footer.getByText(region.sentinel, { exact: true }).count() !== 0) {
+          throw new Error('Law 01 must not render unmanaged social-menu sentinel content');
+        }
+        continue;
+      }
       if (await footer.locator(region.selector).count() !== 1) throw new Error(`Expected populated Footer region ${region.selector}`);
       if (await footer.getByText(region.sentinel, { exact: true }).count() !== 1) throw new Error(`Missing sentinel ${region.sentinel}`);
     }

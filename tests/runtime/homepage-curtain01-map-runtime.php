@@ -1,6 +1,9 @@
 <?php
-/** Runtime parity assertions for the shared Curtain 01 Homepage surface model. */
-declare(strict_types=1);
+/** Runtime parity assertions for the shared Curtain 01 Homepage surface model.
+ *
+ * Intentionally no strict_types declaration: WP-CLI eval-file evaluates this
+ * harness inside its own generated context.
+ */
 
 if ( ! defined( 'ABSPATH' ) ) { exit( 1 ); }
 

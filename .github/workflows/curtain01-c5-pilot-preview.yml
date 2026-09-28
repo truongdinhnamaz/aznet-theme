@@ -194,6 +194,8 @@ jobs:
 
           update_option( 'blogname', 'Rèm Quốc Anh' );
           update_option( 'blogdescription', 'Từ nghề truyền thống đến giải pháp không gian.' );
+          update_option( 'woocommerce_coming_soon', 'no' );
+          update_option( 'woocommerce_store_pages_only', 'no' );
 
           $front = curtain01_page(
               'Rèm Quốc Anh',
@@ -293,8 +295,22 @@ jobs:
               $product_ids[] = curtain01_product( $row[0], $row[1], $product_categories[ $row[2] ], $index + 1 );
           }
 
-          $shop = curtain01_page( 'Sản phẩm', 'san-pham', 'Danh mục sản phẩm WooCommerce.' );
-          update_option( 'woocommerce_shop_page_id', $shop );
+          $shop = (int) wc_get_page_id( 'shop' );
+          if ( $shop <= 0 ) {
+              $shop = curtain01_page( 'Sản phẩm', 'san-pham', 'Danh mục sản phẩm WooCommerce.' );
+              update_option( 'woocommerce_shop_page_id', $shop );
+          } else {
+              wp_update_post(
+                  [
+                      'ID'         => $shop,
+                      'post_title' => 'Sản phẩm',
+                      'post_name'  => 'san-pham',
+                  ]
+              );
+          }
+          if ( function_exists( 'wc_update_product_lookup_tables' ) ) {
+              wc_update_product_lookup_tables();
+          }
 
           $hero_images = [
               $front_image,
@@ -441,7 +457,7 @@ jobs:
           require '/tmp/wp/index.php';
           PHP
 
-          nohup php -S 127.0.0.1:8080 -t /tmp/wp /tmp/wp-router.php > /tmp/curtain01-c5/server.log 2>&1 &
+          nohup env PHP_CLI_SERVER_WORKERS=8 php -S 127.0.0.1:8080 -t /tmp/wp /tmp/wp-router.php > /tmp/curtain01-c5/server.log 2>&1 &
           echo $! > /tmp/curtain01-c5/server.pid
 
           for attempt in $(seq 1 40); do
@@ -498,6 +514,7 @@ jobs:
           cat /tmp/curtain01-c5/summary.json
 
       - name: Upload C5 preview evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: curtain01-c5-pilot-preview-${{ github.sha }}
@@ -508,6 +525,7 @@ jobs:
             /tmp/curtain01-c5/fixture.json
             /tmp/curtain01-c5/homepage-map-runtime.json
             /tmp/curtain01-c5/server.log
+            /tmp/curtain01-c5/shop-debug.html
           if-no-files-found: error
 
       - name: Stop runtime
