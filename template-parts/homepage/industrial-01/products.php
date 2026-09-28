@@ -9,19 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-if ( ! function_exists( 'wc_get_products' ) ) {
-    return;
-}
-
-$products = wc_get_products(
-    [
-        'status'  => 'publish',
-        'limit'   => 8,
-        'orderby' => 'date',
-        'order'   => 'DESC',
-        'return'  => 'objects',
-    ]
-);
+$products = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\homepage_products' )
+    ? \AZnet\Theme\Integrations\WooCommerce\homepage_products( 8 )
+    : [];
 
 if ( ! is_array( $products ) || [] === $products ) {
     return;
