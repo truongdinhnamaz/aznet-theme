@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $site_title   = isset( $args['site_title'] ) ? (string) $args['site_title'] : '';
+$site_tagline = isset( $args['site_tagline'] ) ? trim( (string) $args['site_tagline'] ) : '';
 $home_url     = isset( $args['home_url'] ) ? (string) $args['home_url'] : home_url( '/' );
 $logo_html    = isset( $args['logo_html'] ) ? (string) $args['logo_html'] : '';
 $law01_header = ! empty( $args['law01_header'] );
@@ -24,6 +25,7 @@ $brand_label  = $law01_header
             <span class="aznet-theme-site-header__brand-copy">
                 <span class="aznet-theme-site-header__brand-title"><?php echo esc_html( $site_title ); ?></span>
                 <?php if ( $law01_header ) : ?><span class="aznet-theme-site-header__brand-kicker"><?php esc_html_e( 'Văn phòng luật sư', 'aznet-theme' ); ?></span><?php endif; ?>
+                <?php if ( $law01_header && '' !== $site_tagline ) : ?><span class="aznet-theme-site-header__brand-tagline"><?php echo esc_html( $site_tagline ); ?></span><?php endif; ?>
             </span>
         <?php endif; ?>
     <?php else : ?>

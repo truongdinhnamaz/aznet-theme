@@ -2,13 +2,14 @@
  * This asset is loaded only on the existing Burgundy/Gold front-page surface.
  */
 .aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__inner {
-    min-height: 88px;
+    min-height: 76px;
     gap: clamp(.8rem, 1.3vw, 1.5rem);
 }
 .aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__logo {
-    width: 64px;
-    max-height: 64px;
-    flex: 0 0 64px;
+    width: 56px;
+    max-width: 56px;
+    max-height: 56px;
+    flex: 0 0 56px;
 }
 .aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__brand-copy {
     max-width: 17rem;
