@@ -219,6 +219,16 @@ $must(
     'Law 01 reference Hero must be able to reuse the WordPress-owned phone/hotline menu below its CTAs.'
 );
 $must(
+    str_contains($css, '.aznet-theme-law01-hero__contact-list a {') &&
+    str_contains($css, 'font-size: 0;') &&
+    str_contains($css, 'width: 2.75rem;') &&
+    str_contains($css, 'height: 2.75rem;') &&
+    str_contains($css, 'a[href^="tel:"]::before') &&
+    str_contains($css, 'a[href^="mailto:"]::before') &&
+    str_contains($css, 'a[href*="facebook.com"]::before'),
+    'Law 01 Hero quick-contact values must render as compact icon-only controls while retaining WordPress-owned link text for accessibility.'
+);
+$must(
     str_contains($css, '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-services__intro { display: none; }'),
     'Law 01 reference Services band must visually omit the mapped excerpt in the compact reference composition.'
 );
