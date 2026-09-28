@@ -70,6 +70,9 @@ foreach (['get_option(', 'get_post_meta(', 'update_option(', 'update_post_meta('
     assert(! str_contains($categories . $products, $privateStoreNeedle), "Industrial 01 must not read or mutate private/domain storage directly: {$privateStoreNeedle}");
 }
 
+$controlCenterSource = file_get_contents($root . '/inc/admin/control-center.php');
+assert(is_string($controlCenterSource) && str_contains($controlCenterSource, "'industrial-01' => 'Industrial 01'"), 'Industrial 01 visual preset must be selectable in Design and Quick Setup.');
+
 $adminSource = file_get_contents($root . '/inc/admin/homepage.php');
 assert(is_string($adminSource) && str_contains($adminSource, "'template_id'   => 'industrial-01'"), 'Industrial 01 must be selectable in the Theme Template Library.');
 assert(str_contains($adminSource, "'name'          => __( 'Industrial 01', 'aznet-theme' )"), 'Industrial 01 Template Library card label must be present.');
