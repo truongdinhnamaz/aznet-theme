@@ -75,7 +75,7 @@ foreach ([
 }
 assert(! str_contains($variantCss, 'max-width: 10.5ch;'), 'Legacy Law 01 Hero title must not be artificially capped to a narrow character width.');
 assert(! str_contains($variantCss, 'max-width: 13ch;'), 'D-030 Hero Library title must not inherit the old narrow character cap.');
-assert(str_contains($variantCss, '.aznet-theme-law01-hero--media-left .aznet-theme-homepage-hero-content__layout { grid-template-columns: minmax(0, 54%) minmax(0, 46%); }'), 'Media-left Hero must preserve the wider copy column after reversing media/copy order.');
+assert(str_contains($variantCss, '.aznet-theme-law01-hero--media-left .aznet-theme-homepage-hero-content__layout { grid-template-columns: minmax(0, 46%) minmax(0, 54%); }'), 'Media-left Hero must preserve the wider copy column after reversing media/copy order.');
 
 foreach ([
     '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-services {',
