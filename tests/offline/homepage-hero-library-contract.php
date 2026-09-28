@@ -40,7 +40,6 @@ foreach ([
 foreach ([
     'handle_homepage_hero_apply',
     'homepage_hero_candidate_reference',
-    "'post_status'  => 'draft'",
     'wp_insert_post(',
     'current_user_can(',
     "current_user_can( 'publish_posts' )",
@@ -51,6 +50,20 @@ foreach ([
 ] as $needle) {
     assert(str_contains($hero_action, $needle), "D-030 explicit Hero action contract missing: {$needle}");
 }
+
+assert(
+    1 === preg_match(
+        "/wp_insert_post\\(\\[.*?'post_type'\\s*=>\\s*'wp_block'.*?'post_status'\\s*=>\\s*'draft'/s",
+        $hero_action
+    ),
+    'D-030 explicit Hero initialization must create a WordPress wp_block as draft before publication.'
+);
+
+$apply_start = strpos($hero_action, 'function handle_homepage_hero_apply');
+$apply_end = false === $apply_start ? false : strpos($hero_action, 'function homepage_legacy_page_to_hero_content', $apply_start);
+assert(false !== $apply_start && false !== $apply_end && $apply_end > $apply_start, 'Hero apply action boundary missing.');
+$apply_action = substr($hero_action, $apply_start, $apply_end - $apply_start);
+assert(! str_contains($apply_action, 'wp_update_post('), 'Hero Library apply action must not rewrite existing WordPress Hero content.');
 assert(str_contains($bootstrap, "admin_post_aznet_theme_apply_homepage_hero"), 'D-030 Hero action must be wired explicitly.');
 assert(str_contains($admin, 'Hero WordPress đang soạn'), 'Control Center must expose draft-first Hero state.');
 assert(str_contains($admin, 'Hero WordPress chưa có nội dung'), 'Control Center must distinguish an empty published Hero from a render-ready Hero.');
@@ -62,9 +75,11 @@ assert(! str_contains($hero_action, 'wp_safe_redirect( $edit_link )'), 'Hero Lib
 assert(str_contains($hero_action, "'hero'    => \$hero instanceof \\WP_Post && 'draft' === \$hero->post_status ? 'draft' : 'ready'"), 'Hero Library redirect state must reflect the actual draft/published Hero state.');
 
 assert(str_contains($settings, "'schema_version'                => 3"), 'D-030 additive Hero settings must retain Theme settings schema v3.');
-foreach (['wp_update_post(', 'wp_delete_post(', 'wp_trash_post('] as $forbidden_mutation) {
-    assert(! str_contains($hero_action, $forbidden_mutation), "Hero variant action must not rewrite/delete WordPress Hero content: {$forbidden_mutation}");
+foreach (['wp_delete_post(', 'wp_trash_post('] as $forbidden_mutation) {
+    assert(! str_contains($hero_action, $forbidden_mutation), "Hero authoring must not delete/trash WordPress Hero content: {$forbidden_mutation}");
 }
+assert(str_contains($hero_action, 'function handle_homepage_hero_form_save'), 'Bounded Hero simple-form save action must remain explicit.');
+assert(str_contains($hero_action, 'wp_update_post( $update, true )'), 'Hero simple-form save may update only the explicitly mapped WordPress-owned Hero source.');
 
 foreach ([
     "homepage_source_value( 'law-01', 'hero', \$theme_settings )",
