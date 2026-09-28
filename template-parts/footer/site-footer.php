@@ -19,8 +19,9 @@ $tagline      = (string) ( $context['tagline'] ?? '' );
 $home_url     = (string) ( $context['home_url'] ?? '' );
 $logo_html    = (string) ( $context['logo_html'] ?? '' );
 $about_intro  = (string) ( $context['about_intro'] ?? '' );
-$services     = is_array( $context['services'] ?? null ) ? $context['services'] : [];
-$menus        = is_array( $context['menus'] ?? null ) ? $context['menus'] : [];
+$services        = is_array( $context['services'] ?? null ) ? $context['services'] : [];
+$social_channels = is_array( $context['social_channels'] ?? null ) ? $context['social_channels'] : [];
+$menus           = is_array( $context['menus'] ?? null ) ? $context['menus'] : [];
 $primary_menu = (string) ( $menus['footer'] ?? '' );
 $contact_menu = (string) ( $menus['footer-contact'] ?? '' );
 $social_menu  = (string) ( $menus['footer-social'] ?? '' );
@@ -53,6 +54,29 @@ $navigation_heading = __( 'Liên kết nhanh', 'aznet-theme' );
                 <?php if ( 'law-01' === $preset && '' !== $about_intro ) : ?>
                     <p class="aznet-theme-site-footer__about"><?php echo esc_html( $about_intro ); ?></p>
                 <?php endif; ?>
+                <?php if ( 'law-01' === $preset && ! empty( $social_channels ) ) : ?>
+                    <nav class="aznet-theme-site-footer__channels" aria-label="<?php echo esc_attr__( 'Kênh mạng xã hội', 'aznet-theme' ); ?>">
+                        <?php foreach ( $social_channels as $channel ) : ?>
+                            <?php
+                            $channel_key   = sanitize_html_class( (string) ( $channel['key'] ?? '' ) );
+                            $channel_title = (string) ( $channel['title'] ?? '' );
+                            $channel_url   = (string) ( $channel['url'] ?? '' );
+                            if ( '' === $channel_key || '' === $channel_title || '' === $channel_url ) {
+                                continue;
+                            }
+                            ?>
+                            <a class="aznet-theme-site-footer__channel-link aznet-theme-site-footer__channel-link--<?php echo esc_attr( $channel_key ); ?>"
+                               href="<?php echo esc_url( $channel_url ); ?>"
+                               aria-label="<?php echo esc_attr( $channel_title ); ?>"
+                               title="<?php echo esc_attr( $channel_title ); ?>"
+                               target="_blank"
+                               rel="noopener noreferrer">
+                                <span class="aznet-theme-site-footer__channel-icon" aria-hidden="true"></span>
+                                <span class="screen-reader-text"><?php echo esc_html( $channel_title ); ?></span>
+                            </a>
+                        <?php endforeach; ?>
+                    </nav>
+                <?php endif; ?>
             </div>
 
             <?php if ( 'law-01' === $preset && ! empty( $services ) ) : ?>
@@ -80,19 +104,12 @@ $navigation_heading = __( 'Liên kết nhanh', 'aznet-theme' );
                 </nav>
             <?php endif; ?>
 
-            <?php if ( 'law-01' === $preset && ( '' !== $contact_menu || '' !== $social_menu ) ) : ?>
+            <?php if ( 'law-01' === $preset && '' !== $contact_menu ) : ?>
                 <div class="aznet-theme-site-footer__contact aznet-theme-site-footer__contact-social">
-                    <h2 class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Liên hệ & kết nối', 'aznet-theme' ); ?></h2>
-                    <?php if ( '' !== $contact_menu ) : ?>
-                        <nav aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
-                            <?php echo $contact_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
-                        </nav>
-                    <?php endif; ?>
-                    <?php if ( '' !== $social_menu ) : ?>
-                        <nav class="aznet-theme-site-footer__social" aria-label="<?php echo esc_attr__( 'Mạng xã hội', 'aznet-theme' ); ?>">
-                            <?php echo $social_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
-                        </nav>
-                    <?php endif; ?>
+                    <h2 class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Thông tin liên hệ', 'aznet-theme' ); ?></h2>
+                    <nav aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
+                        <?php echo $contact_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
+                    </nav>
                 </div>
             <?php elseif ( 'professional' !== $preset && '' !== $contact_menu ) : ?>
                 <nav class="aznet-theme-site-footer__contact" aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
