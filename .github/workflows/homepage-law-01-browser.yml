@@ -1,3 +1,4 @@
+# Law 01 Phase A baseline trigger: comment-only, no workflow behavior change.
 name: Homepage Composer Law 01 Browser Quality
 
 on:
