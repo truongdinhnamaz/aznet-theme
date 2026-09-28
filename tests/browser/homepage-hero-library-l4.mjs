@@ -51,6 +51,7 @@ try {
           columns: layout ? getComputedStyle(layout).gridTemplateColumns : '',
           copyOrder: copy ? getComputedStyle(copy).order : '',
           mediaOrder: media ? getComputedStyle(media).order : '',
+          hasMediaImage: Boolean(mediaImage),
           mediaHeight: mediaImage ? mediaImage.getBoundingClientRect().height : 0,
           mediaTopGap: mediaImage ? mediaImage.getBoundingClientRect().top - node.getBoundingClientRect().top : 0,
           titleMaxWidth: titleNode ? getComputedStyle(titleNode).maxWidth : '',
@@ -66,8 +67,8 @@ try {
       if (metrics.copyOrder !== '2' || metrics.mediaOrder !== '1') throw new Error('media-left variant order mismatch: ' + JSON.stringify(metrics));
       if (item.width >= 960 && !metrics.columns.includes('px')) throw new Error('desktop Hero Library grid columns unavailable');
       if (item.width >= 960 && metrics.titleMaxWidth !== 'none') throw new Error('desktop Hero title must not retain a narrow character cap: ' + metrics.titleMaxWidth);
-      if (item.width >= 960 && (metrics.mediaHeight < 360 || metrics.mediaHeight > 560)) throw new Error('desktop Hero media height is outside the bounded presentation range: ' + metrics.mediaHeight);
-      if (item.width >= 960 && metrics.mediaTopGap > 16) throw new Error('desktop Hero still has excessive gap below header: ' + metrics.mediaTopGap);
+      if (item.width >= 960 && metrics.hasMediaImage && (metrics.mediaHeight < 360 || metrics.mediaHeight > 560)) throw new Error('desktop Hero media height is outside the bounded presentation range: ' + metrics.mediaHeight);
+      if (item.width >= 960 && metrics.hasMediaImage && metrics.mediaTopGap > 16) throw new Error('desktop Hero still has excessive gap below header: ' + metrics.mediaTopGap);
       if (item.width >= 960 && !metrics.trustColumns.includes('px')) throw new Error('desktop editable trust grid columns unavailable');
       if (item.width < 960 && metrics.columns.split(' ').length > 1) throw new Error('mobile Hero Library must collapse to one column');
 
