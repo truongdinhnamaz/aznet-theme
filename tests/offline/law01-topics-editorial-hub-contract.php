@@ -12,6 +12,9 @@ foreach ([
     'aznet-theme-law01-topic-card',
     'aznet-theme-law01-topic-card__posts',
     'aznet-theme-law01-topic-card__category-link',
+    'aznet-theme-law01-topic-card--featured',
+    'has_post_thumbnail( $post )',
+    'get_the_post_thumbnail(',
     'Xem chuyên mục',
 ] as $needle) {
     if (! str_contains($template, $needle)) {
@@ -25,6 +28,8 @@ foreach ([
     'grid-template-columns: repeat(3, minmax(0, 1fr));',
     '.aznet-theme-law01-topic-card',
     '.aznet-theme-law01-topic-card__posts',
+    '.aznet-theme-law01-topic-card--featured',
+    '.aznet-theme-law01-topic-card__featured-media',
     '@media (max-width: 960px)',
     '@media (max-width: 640px)',
 ] as $needle) {
@@ -39,4 +44,4 @@ if (str_contains($template, "get_page_by_path(") || str_contains($template, "REQ
     exit(1);
 }
 
-echo "PASS: Law 01 Topics renders up to two newest WordPress Posts per mapped category\n";
+echo "PASS: Law 01 Topics renders up to two newest WordPress Posts per mapped category, with featured media for the first mapped priority topics\n";
