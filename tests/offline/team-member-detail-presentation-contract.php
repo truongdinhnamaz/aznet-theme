@@ -45,6 +45,8 @@ foreach ([
     'the_title()',
     'the_content()',
     'team_member_portrait_id',
+    'aznet-theme-team-member__portrait-placeholder-icon',
+    'aznet-theme-team-member__actions',
 ] as $needle) {
     if (! str_contains($memberTemplate, $needle)) {
         fwrite(STDERR, "FAIL: Team member template missing {$needle}\n");
@@ -56,6 +58,8 @@ foreach ([
     '.aznet-theme-team-member__hero',
     'grid-template-columns',
     '.aznet-theme-team-member__portrait img',
+    '.aznet-theme-team-member__portrait-placeholder-icon',
+    'mask:',
     '@media (max-width: 47.999rem)',
 ] as $needle) {
     if (! str_contains($memberCss, $needle)) {
@@ -74,6 +78,11 @@ foreach ([
         fwrite(STDERR, "FAIL: Team member assets missing {$needle}\n");
         exit(1);
     }
+}
+
+if (str_contains($memberTemplate, 'aznet-theme-team-member__note')) {
+    fwrite(STDERR, "FAIL: Team member hero must not inject explanatory Theme copy between the source-backed role and CTAs\n");
+    exit(1);
 }
 
 foreach (["get_page_by_path(", "REQUEST_URI", "post_name"] as $forbidden) {
