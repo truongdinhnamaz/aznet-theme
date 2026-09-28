@@ -8,7 +8,7 @@
 namespace AZnet\Theme;
 
 /**
- * Load local Theme template manifests from inc/theme/templates/*/manifest.php.
+ * Load local Theme template manifests from each local template directory.
  *
  * @return array{loaded:array<int,string>,rejected:array<int,string>}
  */
