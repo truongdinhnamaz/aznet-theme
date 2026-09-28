@@ -360,6 +360,8 @@ async function inspectViewport(browser, name, viewport) {
 
     result.teamCards = await page.locator('.aznet-theme-law01-team-card').count();
     if (result.teamCards !== 4) throw new Error(`expected 4 WordPress-owned Team child Page cards on Homepage, got ${result.teamCards}`);
+    const homepageTeamNames = await page.locator('.aznet-theme-law01-team-card h3').allTextContents();
+    if (homepageTeamNames.some((name) => !name.trim())) throw new Error('Homepage rendered unnamed Team member');
 
     result.heroImages = await page.locator('.aznet-theme-law01-hero__media img').count();
     if (result.heroImages !== 1) throw new Error(`visual QA fixture must provide 1 Hero featured image, got ${result.heroImages}`);
@@ -439,7 +441,9 @@ async function inspectViewport(browser, name, viewport) {
       if (!directoryResponse || directoryResponse.status() !== 200) throw new Error(`Team directory HTTP status was ${directoryResponse?.status() ?? 'missing'}`);
       if (await directoryPage.locator('.aznet-theme-page--team-directory').count() !== 1) throw new Error('mapped Team directory presentation missing');
       result.teamDirectoryCards = await directoryPage.locator('.aznet-theme-team-directory__grid .aznet-theme-team-card').count();
-      if (result.teamDirectoryCards !== 6) throw new Error(`Team directory must render all 6 published members, got ${result.teamDirectoryCards}`);
+      if (result.teamDirectoryCards !== 6) throw new Error(`Team directory must render all 6 named public members, got ${result.teamDirectoryCards}`);
+      const directoryNames = await directoryPage.locator('.aznet-theme-team-card h3').allTextContents();
+      if (directoryNames.some((name) => !name.trim())) throw new Error('Team directory rendered unnamed Team member');
       if (await directoryPage.getByText('Draft Team Member', { exact: true }).count()) throw new Error('draft Team member leaked into public directory');
       const directoryOverflow = await directoryPage.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       if (directoryOverflow > 1) throw new Error(`Team directory horizontal overflow: ${directoryOverflow}px`);
