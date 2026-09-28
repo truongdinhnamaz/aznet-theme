@@ -75,7 +75,7 @@ $authored_content = trim( (string) get_the_content() );
                     }
 
                     $service_excerpt = trim( (string) $service_page->post_excerpt );
-                    $subservices = homepage_renderable_child_pages( (int) $service_page->ID, 8 );
+                    $subservices = \AZnet\Theme\homepage_renderable_child_pages( (int) $service_page->ID, 8 );
                     ?>
                     <article class="aznet-theme-services-page__group">
                         <div class="aznet-theme-services-page__group-top">
