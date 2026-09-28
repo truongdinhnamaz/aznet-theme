@@ -74,7 +74,6 @@ $authored_content = trim( (string) get_the_content() );
                         continue;
                     }
 
-                    $service_excerpt = trim( (string) $service_page->post_excerpt );
                     $subservices = \AZnet\Theme\homepage_renderable_child_pages( (int) $service_page->ID, 8 );
                     ?>
                     <article class="aznet-theme-services-page__group">
@@ -86,10 +85,6 @@ $authored_content = trim( (string) get_the_content() );
                         <h3 class="aznet-theme-services-page__group-title">
                             <a href="<?php echo esc_url( $service_url ); ?>"><?php echo esc_html( get_the_title( $service_page ) ); ?></a>
                         </h3>
-
-                        <?php if ( '' !== $service_excerpt ) : ?>
-                            <p class="aznet-theme-services-page__group-excerpt"><?php echo esc_html( $service_excerpt ); ?></p>
-                        <?php endif; ?>
 
                         <?php if ( [] !== $subservices ) : ?>
                             <ul class="aznet-theme-services-page__subservices">
