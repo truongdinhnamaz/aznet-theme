@@ -23,7 +23,7 @@ foreach (["homepage_source_value( 'law-01', 'about' )", "homepage_source_value( 
         $fail("Footer must consume mapped WordPress sources: {$needle}");
     }
 }
-foreach (['Dịch vụ chính', 'aznet-theme-site-footer__services', 'about_intro'] as $needle) {
+foreach (['Dịch vụ chính', 'aznet-theme-site-footer__services', 'about_intro', 'aznet-theme-site-footer__channel-link', 'aria-label', 'title='] as $needle) {
     if (! str_contains($template, $needle)) {
         $fail("Law 01 Footer template missing {$needle}");
     }
@@ -41,9 +41,19 @@ foreach (['handle_footer_profile_save', 'footer_profile_from_menus'] as $needle)
         $fail("Footer profile WordPress-menu adapter missing {$needle}");
     }
 }
-foreach (['aznet-theme-site-footer__services', 'grid-template-columns: minmax(280px, 1.3fr) repeat(3, minmax(160px, .75fr))'] as $needle) {
+foreach (['aznet-theme-site-footer__services', 'grid-template-columns: minmax(280px, 1.3fr) repeat(3, minmax(160px, .75fr))', 'aznet-theme-site-footer__channel-link', 'aznet-theme-site-footer__channel-icon', 'aznet-theme-footer-field-facebook', 'aznet-theme-footer-field-tiktok', 'aznet-theme-footer-field-instagram'] as $needle) {
     if (! str_contains($css, $needle)) {
         $fail("Footer CSS missing {$needle}");
     }
 }
-echo "PASS: Law 01 Footer uses WordPress-native about/services plus optional contact/social menu fields\n";
+$profile = (string) file_get_contents($root . '/inc/admin/footer-profile.php');
+foreach ([
+    "'menu-item-title'   => $display_title",
+    "'tel' === $definition['type'] || 'email' === $definition['type']",
+] as $needle) {
+    if (! str_contains($profile, $needle)) {
+        $fail("Footer profile must render phone/email values rather than generic labels: {$needle}");
+    }
+}
+
+echo "PASS: Law 01 Footer renders saved contact values and icon channel buttons\n";
