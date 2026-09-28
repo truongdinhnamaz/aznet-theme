@@ -40,8 +40,12 @@ $terms = get_terms( [
 aznet_empty_must( ! is_wp_error( $terms ) && 9 === count( $terms ), 'expected 9 provisioned Categories' );
 $settings = AZnet\Theme\settings();
 aznet_empty_must( 'law-01' === $settings['homepage_preset'], 'Law01 preset not active' );
-aznet_empty_must( $settings['homepage_services_page'] > 0 && $settings['homepage_about_page'] > 0 && $settings['homepage_team_page'] > 0 && $settings['homepage_contact_page'] > 0, 'required Content Map missing' );
-$team = get_post( (int) $settings['homepage_team_page'] );
+$services_source = (int) AZnet\Theme\homepage_source_value( 'law-01', 'services', $settings );
+$about_source = (int) AZnet\Theme\homepage_source_value( 'law-01', 'about', $settings );
+$team_source = (int) AZnet\Theme\homepage_source_value( 'law-01', 'team', $settings );
+$contact_source = (int) AZnet\Theme\homepage_source_value( 'law-01', 'contact', $settings );
+aznet_empty_must( $services_source > 0 && $about_source > 0 && $team_source > 0 && $contact_source > 0, 'required effective Homepage sources missing' );
+$team = get_post( $team_source );
 aznet_empty_must( $team instanceof WP_Post && 'Đội ngũ của chúng tôi' === $team->post_title, 'expected provisioned Team parent title' );
 $team_children = get_posts( [
     'post_type'      => 'page',
@@ -50,7 +54,7 @@ $team_children = get_posts( [
     'posts_per_page' => -1,
 ] );
 aznet_empty_must( 0 === count( $team_children ), 'provisioning must not create sample Team members' );
-aznet_empty_must( 6 === count( $settings['homepage_knowledge_terms'] ), 'knowledge mappings missing' );
+aznet_empty_must( 6 === count( (array) AZnet\Theme\homepage_source_value( 'law-01', 'knowledge', $settings ) ), 'knowledge mappings missing' );
 aznet_empty_must( 'page' === get_option( 'show_on_front' ) && (int) get_option( 'page_on_front' ) > 0, 'Front Page not assigned' );
 $locations = get_nav_menu_locations();
 aznet_empty_must( (int) ( $locations['primary'] ?? 0 ) > 0, 'Primary Menu not assigned' );
