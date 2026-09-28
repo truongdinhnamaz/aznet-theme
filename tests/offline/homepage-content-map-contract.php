@@ -30,7 +30,7 @@ assert(
     str_contains($source, 'function homepage_renderable_child_pages('),
     'Public Homepage child projection must exist before Law 01 Services can reject untitled source Pages.'
 );
-foreach (['get_page_by_title(', 'get_page_by_path(', "get_term_by( 'slug'", 'url_to_postid('] as $forbidden) {
+foreach (['get_page_by_title(', 'get_page_by_path(', "get_term_by( 'slug'", 'url_to_postid(', 'post_name'] as $forbidden) {
     assert(! str_contains($source, $forbidden));
 }
 echo "PASS: Homepage Content Map contract\n";
