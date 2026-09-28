@@ -109,6 +109,7 @@ assert(str_contains($heroSource, "homepage_source_value( 'law-01', 'hero_page', 
 assert(str_contains($heroSource, 'homepage_page_reference'), 'Legacy Hero Page source must still resolve through the bounded Page helper.');
 assert(str_contains($heroSource, "get_bloginfo( 'description' )"), 'Legacy Site Tagline fallback must preserve existing Law 01 Hero presentation when the dedicated Hero Page is unmapped.');
 assert(str_contains($servicesSource, 'get_the_excerpt( $parent )'), 'Services intro must come from the mapped Services Page excerpt.');
+assert(str_contains($servicesSource, 'homepage_renderable_child_pages'), 'Public Services cards must consume only renderable WordPress child Pages.');
 assert(str_contains($teamSource, 'homepage_direct_published_children'), 'Team presentation must use WordPress-owned child Pages when available.');
 assert(str_contains($teamSource, 'get_the_post_thumbnail'), 'Team cards must support WordPress featured images.');
 foreach (['Tâm Đức', 'Tam Duc', 'Trọn Tâm với khách', 'Vẹn Đức với nghề'] as $clientString) {
