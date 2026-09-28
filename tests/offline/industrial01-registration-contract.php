@@ -89,5 +89,17 @@ assert(is_file($industrialCssPath), 'Industrial 01 visual preset stylesheet must
 $industrialCss = file_get_contents($industrialCssPath);
 assert(is_string($industrialCss) && str_contains($industrialCss, 'body.aznet-theme-preset--industrial-01'));
 assert(! str_contains($industrialCss, 'minhnguyen'), 'Client identity must not be hard-coded into the reusable Industrial 01 preset.');
+foreach ([
+    'body.aznet-theme-preset--industrial-01 .aznet-theme-site-header',
+    'body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer',
+    'body.aznet-theme-preset--industrial-01 .woocommerce ul.products li.product',
+    'body.aznet-theme-preset--industrial-01.single-product #main .woocommerce-product-gallery',
+    'body.aznet-theme-preset--industrial-01.single-product #main .summary',
+    '@media (max-width: 48rem)',
+] as $pilotReadySelector) {
+    assert(str_contains($industrialCss, $pilotReadySelector), "Industrial 01 pilot-ready presentation missing: {$pilotReadySelector}");
+}
+assert(! str_contains($industrialCss, 'display: none'), 'Industrial 01 preset must not hide WooCommerce truth-bearing surfaces to simulate a design.');
+
 
 echo "PASS: Industrial 01 registration and lexicon isolation contract\n";
