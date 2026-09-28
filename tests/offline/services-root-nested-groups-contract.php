@@ -6,7 +6,7 @@ $template = (string) file_get_contents($root . '/template-parts/services/page.ph
 $css = (string) file_get_contents($root . '/assets/css/components/services-page.css');
 
 foreach ([
-    'homepage_renderable_child_pages( (int) $service_page->ID, 8 )',
+    '\\AZnet\\Theme\\homepage_renderable_child_pages( (int) $service_page->ID, 8 )',
     'aznet-theme-services-page__group-grid',
     'aznet-theme-services-page__subservices',
     'aznet-theme-services-page__subservice-link',
@@ -28,6 +28,11 @@ foreach ([
         fwrite(STDERR, "FAIL: nested Services root CSS missing {$needle}\n");
         exit(1);
     }
+}
+
+if (preg_match('/(?<!AZnet\\\\Theme\\\\)homepage_renderable_child_pages\\s*\\(/', $template)) {
+    fwrite(STDERR, "FAIL: Services root must call the namespaced Theme child-page resolver from the global template scope\n");
+    exit(1);
 }
 
 echo "PASS: Services root renders four primary groups in a two-column grid with native child-service links\n";
