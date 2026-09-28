@@ -116,8 +116,8 @@
 }
 
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__main {
-    grid-template-columns: minmax(260px, 1.2fr) minmax(180px, .9fr) minmax(160px, .7fr) minmax(150px, .65fr);
-    gap: clamp(1.5rem, 3vw, 3.5rem);
+    grid-template-columns: minmax(280px, 1.3fr) repeat(3, minmax(160px, .75fr));
+    gap: clamp(1.5rem, 3vw, 3.25rem);
 }
 
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__identity {
@@ -160,6 +160,44 @@
     line-height: var(--aznet-theme-line-height-body);
 }
 
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__identity .aznet-theme-site-footer__about {
+    max-width: 34rem;
+    margin-top: var(--aznet-theme-space-3);
+    color: var(--aznet-theme-footer-muted);
+    font-size: var(--aznet-theme-text-small);
+    line-height: 1.7;
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__services-menu {
+    display: grid;
+    gap: .72rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__services-menu li {
+    margin: 0;
+    padding: 0;
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__services-menu a {
+    color: var(--aznet-theme-footer-muted);
+    font-size: var(--aznet-theme-text-small);
+    line-height: var(--aznet-theme-line-height-small);
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-social .aznet-theme-site-footer__social {
+    margin-top: var(--aznet-theme-space-4);
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-social .aznet-theme-site-footer__social-menu {
+    display: grid;
+    justify-content: stretch;
+    gap: .72rem;
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__services,
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__navigation,
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact {
     padding-inline-start: var(--aznet-theme-space-4);
@@ -421,6 +459,7 @@
     .aznet-theme-site-footer--professional .aznet-theme-site-footer__navigation,
     .aznet-theme-site-footer--professional .aznet-theme-site-footer__contact,
     .aznet-theme-site-footer--professional .aznet-theme-site-footer__social-column,
+    .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__services,
     .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__navigation,
     .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact {
         padding-inline-start: 0;
