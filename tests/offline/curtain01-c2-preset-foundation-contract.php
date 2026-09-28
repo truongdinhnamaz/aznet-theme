@@ -45,8 +45,8 @@ if (! in_array('curtain-01', AZnet\Theme\template_homepage_preset_ids(), true)) 
     exit(1);
 }
 
-if (! is_string($admin) || ! str_contains($admin, "'curtain-01' => 'Rèm 01'")) {
-    fwrite(STDERR, "FAIL: Curtain 01 admin presentation label is missing.\n");
+if (! is_string($admin) || ! str_contains($admin, 'homepage_template_library_items')) {
+    fwrite(STDERR, "FAIL: Homepage Template Library admin surface is missing.\n");
     exit(1);
 }
 
