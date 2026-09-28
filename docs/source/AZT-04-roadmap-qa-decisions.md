@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.99
+**Version:** v0.100
 **Status:** Working Source  
-**Date:** 28/09/2026
+**Date:** 29/09/2026
 
 ## 1. Purpose
 
@@ -798,6 +798,8 @@ The product owner approved the third equal pilot and the current three-pilot upd
 All three pilots are peer verification targets. A shared-Core or shared-presentation change that can affect more than one preset must retain regression coverage for all affected pilots; no pilot may be treated as the default semantic owner for another. Industrial 01 remains reusable Theme presentation over WordPress/WooCommerce/public-provider data, with WooCommerce retaining Product/price/stock/commerce truth and Theme retaining presentation only.
 
 Current owner approval authorizes review/merge and pilot update for these three targets once the relevant CI, backup/rollback, access and per-site runtime/browser gates are satisfied. Approval does not waive a failed gate or permit private-storage/domain takeover.
+
+**D-042 Industrial 01 repository closure — 29/09/2026:** PR #301 merged to canonical `main@51d9ba537bf4a91e94c13bfc6a2a28cbbb78c189` after final head `73ef211b91a533ca3089764f16c888237426ecdd` completed 47/47 triggered workflows SUCCESS. Merge tree `df8078b5c9123ab95ad1eafe94cc4ba46121cc02` is byte-identical to the verified final head. This closes the repository MVP at L1-L4/retained-regression scope only; `minhnguyen.vn` draft/live verification and production publication remain separate site-side gates under D-042/D-043.
 
 **D-042 preset-language acceptance:** each pilot keeps the shared Theme presentation system while using a bounded preset lexicon. The accepted vocabulary is presentation-only and follows the fallback **preset term -> shared generic term -> WordPress-native label**. Shared components must not hard-code industry terms or derive authoritative behavior from labels.
 
