@@ -21,6 +21,7 @@ $logo_html    = (string) ( $context['logo_html'] ?? '' );
 $about_intro  = (string) ( $context['about_intro'] ?? '' );
 $services        = is_array( $context['services'] ?? null ) ? $context['services'] : [];
 $social_channels = is_array( $context['social_channels'] ?? null ) ? $context['social_channels'] : [];
+$contact_links   = is_array( $context['contact_links'] ?? null ) ? $context['contact_links'] : [];
 $menus           = is_array( $context['menus'] ?? null ) ? $context['menus'] : [];
 $primary_menu = (string) ( $menus['footer'] ?? '' );
 $contact_menu = (string) ( $menus['footer-contact'] ?? '' );
@@ -104,12 +105,28 @@ $navigation_heading = __( 'Liên kết nhanh', 'aznet-theme' );
                 </nav>
             <?php endif; ?>
 
-            <?php if ( 'law-01' === $preset && '' !== $contact_menu ) : ?>
+            <?php if ( 'law-01' === $preset && ! empty( $contact_links ) ) : ?>
                 <div class="aznet-theme-site-footer__contact aznet-theme-site-footer__contact-social">
                     <h2 class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Thông tin liên hệ', 'aznet-theme' ); ?></h2>
-                    <nav aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
-                        <?php echo $contact_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
-                    </nav>
+                    <ul class="aznet-theme-site-footer__contact-links">
+                        <?php foreach ( $contact_links as $contact ) : ?>
+                            <?php
+                            $contact_key   = sanitize_html_class( (string) ( $contact['key'] ?? '' ) );
+                            $contact_title = (string) ( $contact['title'] ?? '' );
+                            $contact_url   = (string) ( $contact['url'] ?? '' );
+                            if ( '' === $contact_key || '' === $contact_title || '' === $contact_url ) {
+                                continue;
+                            }
+                            ?>
+                            <li>
+                                <a class="aznet-theme-site-footer__contact-link aznet-theme-site-footer__contact-link--<?php echo esc_attr( $contact_key ); ?>"
+                                   href="<?php echo esc_url( $contact_url, [ 'http', 'https', 'tel', 'mailto' ] ); ?>">
+                                    <span class="aznet-theme-site-footer__contact-icon" aria-hidden="true"></span>
+                                    <span><?php echo esc_html( $contact_title ); ?></span>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
                 </div>
             <?php elseif ( 'professional' !== $preset && '' !== $contact_menu ) : ?>
                 <nav class="aznet-theme-site-footer__contact" aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
