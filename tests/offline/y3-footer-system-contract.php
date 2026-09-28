@@ -224,6 +224,9 @@ foreach (['Thông tin liên hệ', 'Liên kết nhanh'] as $heading) {
 if (! str_contains($template, "in_array( \$preset, [ 'professional', 'law-01' ], true )")) {
     y3_fail('Law 01 Footer demo fidelity requires the social menu to render as its own main-column surface.');
 }
+if (! str_contains($template, "! in_array( \$preset, [ 'professional', 'law-01' ], true )")) {
+    y3_fail('Law 01 Footer demo fidelity must not duplicate the social menu again in the bottom bar.');
+}
 foreach (['aznet-theme-site-footer__social-column', "'professional' === \$preset", 'Kết nối với chúng tôi'] as $needle) {
     if (! str_contains($template, $needle)) {
         y3_fail('Professional Footer demo composition missing: ' . $needle);
