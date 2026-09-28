@@ -168,19 +168,8 @@ function services_page_children( int $limit = 12 ): array {
     }
 
     $limit = max( 1, min( 24, $limit ) );
-    $posts = get_posts(
-        [
-            'post_type'      => 'page',
-            'post_status'    => 'publish',
-            'post_parent'    => $services_id,
-            'orderby'        => 'menu_order title',
-            'order'          => 'ASC',
-            'posts_per_page' => $limit,
-            'no_found_rows'  => true,
-        ]
-    );
 
-    return is_array( $posts ) ? $posts : [];
+    return homepage_renderable_child_pages( $services_id, $limit );
 }
 
 /**
@@ -265,18 +254,12 @@ function service_page_siblings( ?int $post_id = null, int $limit = 6 ): array {
 
     $services_id = (int) homepage_source_value( 'law-01', 'services' );
     $limit = max( 1, min( 12, $limit ) );
-    $posts = get_posts(
-        [
-            'post_type'      => 'page',
-            'post_status'    => 'publish',
-            'post_parent'    => $services_id,
-            'post__not_in'   => [ $post_id ],
-            'orderby'        => 'menu_order title',
-            'order'          => 'ASC',
-            'posts_per_page' => $limit,
-            'no_found_rows'  => true,
-        ]
+    $siblings = array_values(
+        array_filter(
+            homepage_renderable_child_pages( $services_id, 24 ),
+            static fn ( $page ): bool => $page instanceof \WP_Post && (int) $page->ID !== $post_id
+        )
     );
 
-    return is_array( $posts ) ? $posts : [];
+    return array_slice( $siblings, 0, $limit );
 }
