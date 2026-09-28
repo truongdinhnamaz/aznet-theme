@@ -116,8 +116,8 @@
 }
 
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__main {
-    grid-template-columns: minmax(290px, 1.35fr) repeat(2, minmax(170px, .72fr));
-    gap: clamp(2rem, 4vw, 4.5rem);
+    grid-template-columns: minmax(260px, 1.2fr) minmax(180px, .9fr) minmax(160px, .7fr) minmax(150px, .65fr);
+    gap: clamp(1.5rem, 3vw, 3.5rem);
 }
 
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__identity {

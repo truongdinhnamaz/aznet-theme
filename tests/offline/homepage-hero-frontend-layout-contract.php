@@ -12,7 +12,7 @@ foreach ([
     'max-width: none;',
     'margin-inline: 0;',
     '.aznet-theme-homepage-hero-content__actions .wp-block-button:not(.is-style-outline) .wp-block-button__link',
-    'background: var(--law01-navy) !important;',
+    'background: var(--law01-client-burgundy) !important;',
     'height: clamp(24rem, 32vw, 34rem);',
 ] as $needle) {
     if (! str_contains($css, $needle)) {

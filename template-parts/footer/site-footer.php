@@ -71,7 +71,7 @@ $navigation_heading = __( 'Liên kết nhanh', 'aznet-theme' );
                 </nav>
             <?php endif; ?>
 
-            <?php if ( 'professional' === $preset && '' !== $social_menu ) : ?>
+            <?php if ( in_array( $preset, [ 'professional', 'law-01' ], true ) && '' !== $social_menu ) : ?>
                 <nav class="aznet-theme-site-footer__social-column aznet-theme-site-footer__social" aria-label="<?php echo esc_attr__( 'Kết nối với chúng tôi', 'aznet-theme' ); ?>">
                     <h2 class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Kết nối với chúng tôi', 'aznet-theme' ); ?></h2>
                     <?php echo $social_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
@@ -85,7 +85,7 @@ $navigation_heading = __( 'Liên kết nhanh', 'aznet-theme' );
             </p>
             <?php if ( '' !== $social_menu || '' !== $policy_menu ) : ?>
                 <div class="aznet-theme-site-footer__bottom-nav">
-                    <?php if ( '' !== $social_menu && 'professional' !== $preset ) : ?>
+                    <?php if ( '' !== $social_menu && ! in_array( $preset, [ 'professional', 'law-01' ], true ) ) : ?>
                         <nav class="aznet-theme-site-footer__social" aria-label="<?php echo esc_attr__( 'Mạng xã hội', 'aznet-theme' ); ?>">
                             <?php echo $social_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
                         </nav>

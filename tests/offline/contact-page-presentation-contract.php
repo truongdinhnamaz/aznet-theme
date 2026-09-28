@@ -30,7 +30,7 @@ $css = (string) file_get_contents($root . '/assets/css/components/contact-page.c
 
 foreach ([
     'function contact_page_is_mapped',
-    "setting( 'homepage_contact_page', 0 )",
+    "homepage_source_value( 'law-01', 'contact' )",
 ] as $needle) {
     if (!str_contains($pageExperience, $needle)) {
         $fail('mapped Contact Page helper missing marker: ' . $needle);

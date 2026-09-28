@@ -33,7 +33,7 @@ function wp_create_nav_menu($name){return 300;}
 function wp_delete_nav_menu($id){return true;}
 function wp_get_nav_menu_items($id){return [];}
 function wp_update_nav_menu_item($menu,$item,$args){return 1;}
-require_once dirname(__DIR__,2).'/inc/theme/settings.php';require_once dirname(__DIR__,2).'/inc/theme/provisioning-blueprints.php';require_once dirname(__DIR__,2).'/inc/theme/provisioning-discovery.php';require_once dirname(__DIR__,2).'/inc/theme/provisioning-plan.php';
+require_once dirname(__DIR__,2).'/inc/theme/settings.php';require_once dirname(__DIR__,2).'/inc/theme/homepage-authoring.php';require_once dirname(__DIR__,2).'/inc/theme/provisioning-blueprints.php';require_once dirname(__DIR__,2).'/inc/theme/provisioning-discovery.php';require_once dirname(__DIR__,2).'/inc/theme/provisioning-plan.php';
 $prov=dirname(__DIR__,2).'/inc/theme/provisioning-provenance.php';$runner=dirname(__DIR__,2).'/inc/theme/provisioning-runner.php';if(!is_file($prov)||!is_file($runner)){fwrite(STDERR,"FAIL: provisioning runner modules missing\n");exit(1);}require_once $prov;require_once $runner;
 $d=\AZnet\Theme\provisioning_discovery();
 $sel=['pages'=>['home'=>['action'=>'create','object_id'=>0],'about'=>['action'=>'reuse','object_id'=>42],'services'=>['action'=>'create','object_id'=>0],'contact'=>['action'=>'reuse','object_id'=>51]],'categories'=>[],'menu'=>['action'=>'skip','menu_id'=>0],'front_page'=>['action'=>'set_to_role','role'=>'home']];

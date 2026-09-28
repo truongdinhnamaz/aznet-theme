@@ -5,6 +5,7 @@ namespace AZnet\Theme\Admin;
 use function AZnet\Theme\homepage_category_reference;
 use function AZnet\Theme\homepage_category_references;
 use function AZnet\Theme\homepage_direct_published_children;
+use function AZnet\Theme\homepage_renderable_child_pages;
 use function AZnet\Theme\homepage_effective_surface_map;
 use function AZnet\Theme\homepage_effective_source_value;
 use function AZnet\Theme\homepage_effective_source_key;
@@ -73,7 +74,7 @@ function homepage_slot_statuses(): array {
                 $statuses[ $slot ] = $candidate instanceof \WP_Post && 'page' === $candidate->post_type && 'draft' === $candidate->post_status ? 'DRAFT' : 'INVALID';
                 continue;
             }
-            if ( 'services' === $slot && [] === homepage_direct_published_children( $id, 1 ) ) {
+            if ( 'services' === $slot && [] === homepage_renderable_child_pages( $id, 1 ) ) {
                 $statuses[ $slot ] = 'EMPTY';
                 continue;
             }
@@ -531,12 +532,13 @@ function render_homepage_team_authoring(): void {
 
     $members = \AZnet\Theme\team_directory_members( 4 );
     $all_members = \AZnet\Theme\team_directory_members();
+    $public_members = \AZnet\Theme\team_directory_public_members();
     $url = get_permalink( $parent );
     $url = is_string( $url ) ? $url : '';
 
     echo '<section id="homepage-team" class="aznet-theme-homepage-team-authoring">';
     echo '<div class="aznet-theme-homepage-team-authoring__summary">';
-    echo '<p><strong>' . esc_html__( 'Nhân sự đang công khai:', 'aznet-theme' ) . '</strong> ' . esc_html( (string) count( $all_members ) ) . '</p>';
+    echo '<p><strong>' . esc_html__( 'Nhân sự hiển thị công khai:', 'aznet-theme' ) . '</strong> ' . esc_html( (string) count( $public_members ) ) . ' / ' . esc_html( (string) count( $all_members ) ) . ' ' . esc_html__( 'nguồn đã xuất bản', 'aznet-theme' ) . '</p>';
     if ( '' !== $url ) {
         echo '<p><a class="button" href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . esc_html__( 'Xem tất cả trên website', 'aznet-theme' ) . '</a></p>';
     }
@@ -553,7 +555,8 @@ function render_homepage_team_authoring(): void {
             if ( $image_id > 0 ) { echo wp_kses_post( wp_get_attachment_image( $image_id, 'thumbnail' ) ); }
             echo '</div>';
             echo '<div class="aznet-theme-homepage-team-member__copy">';
-            echo '<strong data-team-member-name>' . esc_html( get_the_title( $member ) ) . '</strong>';
+            $member_name = trim( (string) get_the_title( $member ) );
+            echo '<strong data-team-member-name>' . esc_html( '' !== $member_name ? $member_name : __( 'Chưa có tên', 'aznet-theme' ) ) . '</strong>';
             if ( '' !== $role ) { echo '<p class="aznet-theme-homepage-team-member__role">' . esc_html( $role ) . '</p>'; }
             echo '</div>';
             echo '<div class="aznet-theme-homepage-team-member__actions">';

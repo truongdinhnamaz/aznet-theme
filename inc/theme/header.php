@@ -101,8 +101,9 @@ function header_mobile_panel_enabled(): bool {
  * @return array<string, mixed>
  */
 function header_context(): array {
-    $site_title = trim( (string) get_bloginfo( 'name' ) );
-    $home_url   = (string) home_url( '/' );
+    $site_title   = trim( (string) get_bloginfo( 'name' ) );
+    $site_tagline = trim( (string) get_bloginfo( 'description' ) );
+    $home_url     = (string) home_url( '/' );
     $logo_id    = (int) get_theme_mod( 'custom_logo', 0 );
     $logo_html  = '';
 
@@ -152,6 +153,7 @@ function header_context(): array {
 
     return [
         'site_title'        => $site_title,
+        'site_tagline'      => $site_tagline,
         'home_url'          => $home_url,
         'logo_id'           => $logo_id,
         'logo_html'         => $logo_html,

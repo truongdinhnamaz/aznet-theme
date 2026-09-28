@@ -41,6 +41,14 @@ $must(
     'Law 01 reference Profile band must place About and Team side-by-side at the approved 48/52 desktop ratio.'
 );
 $must(
+    str_contains($css, '.aznet-theme-law01-hero__grid { grid-template-columns: minmax(0, 54%) minmax(0, 46%);'),
+    'Law 01 demo fidelity requires the desktop Hero to favor the copy column at a 54/46 ratio.'
+);
+$must(
+    str_contains($css, '.aznet-theme-law01-profile__members .aznet-theme-law01-team-card { border: 0; background: transparent; box-shadow: none; }'),
+    'Law 01 demo fidelity requires Homepage Team cards to read as portrait tiles, not boxed directory cards.'
+);
+$must(
     str_contains($css, '.aznet-theme-law01-profile__about-media { display: none; }'),
     'Law 01 reference About column must remain text-led instead of adding a second large media panel.'
 );
@@ -52,6 +60,22 @@ $must(
     str_contains($css, 'grid-template-columns: repeat(4, minmax(0, 1fr));'),
     'Law 01 target Team presentation must retain four portrait slots on wide desktop.'
 );
+$must(
+    str_contains($profile, 'data-count="<?php echo esc_attr( (string) count( $members ) ); ?>"'),
+    'Homepage Team member grid must expose its renderable public count for fail-soft presentation.'
+);
+foreach ([
+    '.aznet-theme-law01-grid--services[data-count="4"]',
+    '.aznet-theme-law01-grid--services[data-count="5"]',
+    '.aznet-theme-law01-profile__members[data-count="1"]',
+    '.aznet-theme-law01-profile__members[data-count="2"]',
+    '.aznet-theme-law01-profile__members[data-count="3"]',
+] as $responsiveCountSelector) {
+    $must(
+        str_contains($css, $responsiveCountSelector),
+        'Law 01 source-gap presentation missing count-aware layout: ' . $responsiveCountSelector
+    );
+}
 $must(
     str_contains($css, '.aznet-theme-law01-grid--articles .aznet-theme-law01-article-card {'),
     'Law 01 target Latest cards must retain an explicit card presentation rule.'
@@ -65,8 +89,8 @@ $must(
     'Law 01 target Latest media must use the approved 3:2 editorial image ratio.'
 );
 $must(
-    str_contains($latest, "homepage_latest_posts( (array) setting( 'homepage_knowledge_terms', [] ), 3, homepage_ledger_ids() )"),
-    'Law 01 Latest must remain bounded to three WordPress-native Posts.'
+    str_contains($latest, "homepage_latest_posts( (array) homepage_source_value( 'law-01', 'knowledge' ), 3, homepage_ledger_ids() )"),
+    'Law 01 Latest must remain bounded to three WordPress-native Posts through the scoped Law 01 source resolver.'
 );
 
 echo "PASS: Law 01 About/Profile + Latest visual parity contract\n";

@@ -60,10 +60,20 @@ if (header_law01_active()) {
 }
 
 $siteHeader = (string) file_get_contents($root . '/template-parts/header/site-header.php');
+$headerCss = (string) file_get_contents($root . '/assets/css/components/header-law-01.css');
 $brand = (string) file_get_contents($root . '/template-parts/header/brand.php');
 $topbar = (string) file_get_contents($root . '/template-parts/header/law01-topbar.php');
 $mobile = (string) file_get_contents($root . '/template-parts/header/mobile-panel.php');
+$headerContext = (string) file_get_contents($root . '/inc/theme/header.php');
+$headerCss = (string) file_get_contents($root . '/assets/css/components/header-law-01.css');
+$referenceCss = (string) file_get_contents($root . '/assets/css/components/homepage-law-01-reference.css');
 
+if (str_contains($siteHeader, "get_template_part( 'template-parts/header/law01-topbar'")) {
+    $fail('Law 01 demo fidelity requires the desktop header to start directly with the main navigation row, without a separate topbar.');
+}
+if (!str_contains($headerCss, 'min-height: 78px;')) {
+    $fail('Law 01 demo fidelity requires a compact 78px desktop header row.');
+}
 if (
     str_contains($siteHeader, 'homepage_composer_active()') ||
     !str_contains($siteHeader, "['law01_header']")
@@ -78,6 +88,19 @@ foreach ([
 ] as $label => $source) {
     if (!str_contains($source, 'law01_header')) {
         $fail("{$label} must consume the site-wide Law 01 Header context.");
+    }
+}
+
+foreach ([
+    "'site_tagline'" => $headerContext,
+    'aznet-theme-site-header__brand-tagline' => $brand,
+    '.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-law01-topbar {' => $headerCss,
+    'display: none;' => $headerCss,
+    'min-height: 76px;' => $referenceCss,
+    'width: 56px;' => $referenceCss,
+] as $needle => $source) {
+    if (!str_contains($source, $needle)) {
+        $fail("Demo-aligned Law 01 Header missing marker: {$needle}");
     }
 }
 

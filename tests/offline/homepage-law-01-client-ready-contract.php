@@ -6,6 +6,7 @@ $root = dirname(__DIR__, 2);
 $files = [
     'css' => $root . '/assets/css/components/homepage-law-01-variants.css',
     'composer' => $root . '/inc/theme/homepage-composer.php',
+    'surface_map' => $root . '/inc/theme/homepage-surface-map.php',
     'hero' => $root . '/template-parts/homepage/law-01/hero.php',
     'services' => $root . '/template-parts/homepage/law-01/services.php',
     'profile' => $root . '/template-parts/homepage/law-01/profile.php',
@@ -23,6 +24,7 @@ foreach ($files as $label => $path) {
 
 $css = file_get_contents($files['css']);
 $composer = file_get_contents($files['composer']);
+$surfaceMap = file_get_contents($files['surface_map']);
 $hero = file_get_contents($files['hero']);
 $services = file_get_contents($files['services']);
 $profile = file_get_contents($files['profile']);
@@ -57,9 +59,13 @@ foreach ([
 assert(! str_contains($css, '.aznet-theme-site-footer--law01-'), 'Law 01 variant CSS must not own Footer presentation.');
 assert(str_contains($footerCss, '.aznet-theme-site-footer'), 'Independent Footer component stylesheet must own Footer presentation.');
 
-assert(str_contains($composer, "[ 'hero', 'services', 'profile' ]"), 'Composer must render the combined client-ready profile band.');
-assert(str_contains($composer, "[ 'latest', 'topics', 'analysis', 'news', 'process', 'faq', 'final-cta' ]"), 'Burgundy Law 01 Homepage must extend the locked v1.3.18 baseline after Latest with mapped knowledge, analysis, news, process, FAQ and final CTA sections.');
-assert(! str_contains($composer, "[ 'hero', 'services', 'about', 'team' ]"), 'Composer must not render duplicate legacy About/Team sections.');
+assert(str_contains($composer, "homepage_effective_surface_map( 'law-01' )"), 'Composer must render Law 01 from the shared effective-surface model.');
+$law01MapStart = strpos($surfaceMap, "function homepage_effective_surface_map");
+assert(false !== $law01MapStart, 'Shared Law 01 surface resolver missing.');
+$law01Map = substr($surfaceMap, $law01MapStart);
+assert(str_contains($law01Map, "            'profile',"), 'Shared Law 01 surface model must expose the combined client-ready profile band.');
+assert(str_contains($law01Map, "? [ 'latest', 'topics', 'analysis', 'news', 'process', 'faq', 'final-cta' ]"), 'Burgundy Law 01 Homepage must extend the locked v1.3.18 baseline after Latest with mapped knowledge, analysis, news, process, FAQ and final CTA sections.');
+assert(! str_contains($law01Map, "homepage_surface_entry(\n            'about',") && ! str_contains($law01Map, "homepage_surface_entry(\n            'team',"), 'Law 01 shared surface model must not render duplicate legacy About/Team sections.');
 foreach ([
     '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topics',
     '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-analysis',
@@ -126,7 +132,7 @@ foreach ([
 
 
 foreach ([
-    'grid-template-columns: minmax(0, 46%) minmax(0, 54%);',
+    'grid-template-columns: minmax(0, 54%) minmax(0, 46%);',
     'min-height: clamp(36rem, 38vw, 40rem);',
     '--law01-type-hero-title: clamp(2.7rem, 4.2vw, 3.4rem);',
     'font-size: clamp(2.55rem, 3.6vw, 3.4rem);',
@@ -159,11 +165,12 @@ foreach ([
 assert(! str_contains($services, 'str_pad('), 'Demo-aligned Law 01 service cards must not render numeric presentation badges.');
 
 foreach ([
-    'Các dịch vụ pháp lý dành cho bạn',
+    'get_the_title( $parent )',
     'aznet-theme-law01-services__heading',
 ] as $needle) {
     assert(str_contains($services, $needle), "Law 01 balanced services content hierarchy missing: {$needle}");
 }
+assert(! str_contains($services, 'Các dịch vụ pháp lý dành cho bạn'), 'Services heading must remain WordPress-owned instead of reverting to Theme-authored business copy.');
 foreach ([
     '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-container',
     'width: min(calc(100% - (2 * var(--aznet-theme-gutter))), 96rem);',
@@ -193,7 +200,7 @@ foreach ([
 ] as $needle) {
     assert(str_contains($css, $needle), "Law 01 demo-aligned Profile/Team presentation missing: {$needle}");
 }
-assert(str_contains($latest, "homepage_latest_posts( (array) setting( 'homepage_knowledge_terms', [] ), 3, homepage_ledger_ids() )"), 'Latest presentation must stay at three client-ready cards.');
+assert(str_contains($latest, "homepage_latest_posts( (array) homepage_source_value( 'law-01', 'knowledge' ), 3, homepage_ledger_ids() )"), 'Latest presentation must stay at three client-ready cards through the scoped Law 01 source resolver.');
 assert(str_contains($latest, 'aznet-theme-law01-article-card__media'), 'Latest cards must render featured media when available.');
 assert(str_contains($latest, 'get_the_category'), 'Latest cards must expose WordPress-owned taxonomy labels.');
 assert(str_contains($latest, "'style' => 'display:block;width:100%;height:auto;'"), 'Latest featured media must constrain intrinsic image width for every Law 01 visual variant.');

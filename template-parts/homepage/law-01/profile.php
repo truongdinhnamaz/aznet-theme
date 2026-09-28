@@ -13,7 +13,7 @@ if ( ! $has_about && ! $has_team ) { return; }
 $about_summary = $about instanceof \WP_Post ? trim( (string) get_the_excerpt( $about ) ) : '';
 $about_image = $about instanceof \WP_Post && has_post_thumbnail( $about ) ? get_the_post_thumbnail( $about, 'large', [ 'class' => 'aznet-theme-law01-profile__about-image' ] ) : '';
 $team_summary = $team instanceof \WP_Post ? trim( (string) get_the_excerpt( $team ) ) : '';
-$members = $has_team ? team_directory_members( 4 ) : [];
+$members = $has_team ? team_directory_public_members( 4 ) : [];
 
 $services_page = homepage_page_reference( (int) homepage_effective_source_value( 'law-01', 'services', $settings ) );
 $process_page = homepage_page_reference( (int) homepage_source_value( 'law-01', 'process' ) );
@@ -25,7 +25,7 @@ if ( ! $faq_page instanceof \WP_Post ) {
     $faq_page = homepage_page_reference( (int) setting( 'homepage_faq_page', 0 ) );
 }
 $service_count = $services_page instanceof \WP_Post
-    ? count( homepage_direct_published_children( (int) $services_page->ID, 24 ) )
+    ? count( homepage_renderable_child_pages( (int) $services_page->ID, 24 ) )
     : 0;
 $profile_facts = [];
 if ( $service_count > 0 && $services_page instanceof \WP_Post ) {
@@ -95,7 +95,7 @@ if ( ! $has_team ) {
             </div>
         </div>
         <?php if ( [] !== $members ) : ?>
-        <div class="aznet-theme-law01-profile__members">
+        <div class="aznet-theme-law01-profile__members" data-count="<?php echo esc_attr( (string) count( $members ) ); ?>">
             <?php foreach ( $members as $member ) : ?>
                 <?php
                 if ( ! $member instanceof \WP_Post ) { continue; }

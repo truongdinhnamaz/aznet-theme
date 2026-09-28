@@ -13,7 +13,7 @@ $url = is_string( $url ) ? $url : '';
 ?>
 <article class="aznet-theme-team-card aznet-theme-law01-profile__member aznet-theme-law01-team-card">
     <?php if ( '' !== $member_image && '' !== $url ) : ?>
-        <a class="aznet-theme-team-card__media aznet-theme-law01-team-card__media" href="<?php echo esc_url( $url ); ?>">
+        <a class="aznet-theme-team-card__media aznet-theme-law01-team-card__media" href="<?php echo esc_url( $url ); ?>" aria-label="<?php echo esc_attr( get_the_title( $team_member ) ); ?>">
             <?php echo wp_kses_post( $member_image ); ?>
         </a>
     <?php endif; ?>

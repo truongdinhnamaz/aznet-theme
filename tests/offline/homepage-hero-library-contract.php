@@ -40,31 +40,63 @@ foreach ([
 foreach ([
     'handle_homepage_hero_apply',
     'homepage_hero_candidate_reference',
-    "'post_status'  => 'draft'",
     'wp_insert_post(',
     'current_user_can(',
     "current_user_can( 'publish_posts' )",
     'check_admin_referer(',
     'WP_Block_Patterns_Registry',
-    'homepage_hero_block',
-    'homepage_hero_variant',
+    'homepage_law01_hero_block',
+    'homepage_law01_hero_variant',
 ] as $needle) {
     assert(str_contains($hero_action, $needle), "D-030 explicit Hero action contract missing: {$needle}");
 }
+
+assert(
+    1 === preg_match(
+        "/wp_insert_post\\(\\[.*?'post_type'\\s*=>\\s*'wp_block'.*?'post_status'\\s*=>\\s*'draft'/s",
+        $hero_action
+    ),
+    'D-030 explicit Hero initialization must create a WordPress wp_block as draft before publication.'
+);
+
+$apply_start = strpos($hero_action, 'function handle_homepage_hero_apply');
+$apply_end = false === $apply_start ? false : strpos($hero_action, 'function homepage_legacy_page_to_hero_content', $apply_start);
+assert(false !== $apply_start && false !== $apply_end && $apply_end > $apply_start, 'Hero apply action boundary missing.');
+$apply_action = substr($hero_action, $apply_start, $apply_end - $apply_start);
+assert(! str_contains($apply_action, 'wp_update_post('), 'Hero Library apply action must not rewrite existing WordPress Hero content.');
 assert(str_contains($bootstrap, "admin_post_aznet_theme_apply_homepage_hero"), 'D-030 Hero action must be wired explicitly.');
 assert(str_contains($admin, 'Hero WordPress đang soạn'), 'Control Center must expose draft-first Hero state.');
 assert(str_contains($admin, 'Hero WordPress chưa có nội dung'), 'Control Center must distinguish an empty published Hero from a render-ready Hero.');
-assert(str_contains($admin, "'' !== trim( (string) \$hero_block->post_content ) ? 'READY' : 'EMPTY'"), 'Homepage diagnostics must report an empty published Hero as EMPTY.');
+
+$status_start = strpos( $admin, 'function homepage_slot_statuses' );
+$status_end = false === $status_start ? false : strpos( $admin, '/** Render one Page selector.', $status_start );
+assert( false !== $status_start && false !== $status_end && $status_end > $status_start, 'Homepage diagnostics function boundary missing.' );
+$status_body = substr( $admin, $status_start, $status_end - $status_start );
+assert( str_contains( $status_body, 'homepage_block_reference' ), 'Homepage diagnostics must resolve the published Hero block through the typed resolver.' );
+assert( str_contains( $status_body, '->post_content' ), 'Homepage diagnostics must inspect WordPress-owned Hero block content.' );
+assert( str_contains( $status_body, "'READY' : 'EMPTY'" ), 'Homepage diagnostics must distinguish render-ready and empty published Hero content.' );
 
 assert(str_contains($admin, 'chuyển Hero WordPress này về trạng thái Bản nháp'), 'Control Center must expose the non-destructive Hero rollback path.');
 assert(str_contains($admin, 'website hiện tại chưa đổi cho đến khi Hero mới được xuất bản'), 'Draft-first Hero UX must preserve current public output.');
 assert(! str_contains($hero_action, 'wp_safe_redirect( $edit_link )'), 'Hero Library apply must return to Control Center instead of auto-opening the native block editor.');
-assert(str_contains($hero_action, "'hero'    => \$hero instanceof \\WP_Post && 'draft' === \$hero->post_status ? 'draft' : 'ready'"), 'Hero Library redirect state must reflect the actual draft/published Hero state.');
+$redirect_start = strpos( $apply_action, 'wp_safe_redirect' );
+assert( false !== $redirect_start, 'Hero Library apply action must redirect back to Control Center.' );
+$redirect_body = substr( $apply_action, $redirect_start );
+foreach ( [
+    "add_query_arg",
+    "'section'=>'hero-library'",
+    "'hero'=>",
+    "'draft'===\$hero->post_status?'draft':'ready'",
+] as $needle ) {
+    assert( str_contains( $redirect_body, $needle ), 'Hero Library redirect state must preserve draft/ready state through the actual apply redirect.' );
+}
 
 assert(str_contains($settings, "'schema_version'                => 3"), 'D-030 additive Hero settings must retain Theme settings schema v3.');
-foreach (['wp_update_post(', 'wp_delete_post(', 'wp_trash_post('] as $forbidden_mutation) {
-    assert(! str_contains($hero_action, $forbidden_mutation), "Hero variant action must not rewrite/delete WordPress Hero content: {$forbidden_mutation}");
+foreach (['wp_delete_post(', 'wp_trash_post('] as $forbidden_mutation) {
+    assert(! str_contains($hero_action, $forbidden_mutation), "Hero authoring must not delete/trash WordPress Hero content: {$forbidden_mutation}");
 }
+assert(str_contains($hero_action, 'function handle_homepage_hero_form_save'), 'Bounded Hero simple-form save action must remain explicit.');
+assert(str_contains($hero_action, 'wp_update_post( $update, true )'), 'Hero simple-form save may update only the explicitly mapped WordPress-owned Hero source.');
 
 foreach ([
     "homepage_source_value( 'law-01', 'hero', \$theme_settings )",
@@ -118,6 +150,20 @@ foreach ([
 
 assert(1 === preg_match('/homepage-hero-content__eyebrow\\s*\\{[^}]*color:\\s*var\\(--law01-gold-text,\\s*#8a632b\\);/s', $css), 'Hero Library eyebrow must use an accessible dark-gold text token on the light Hero surface.');
 assert(1 === preg_match('/law01-hero--inverse \\.aznet-theme-homepage-hero-content__eyebrow\\s*\\{[^}]*color:\\s*var\\(--law01-client-cream,\\s*#fffaf1\\);/s', $css), 'Inverse Hero Library eyebrow must use a light accessible color on the dark surface.');
+assert(
+    1 === preg_match(
+        '/law01-hero--library \\.aznet-theme-homepage-hero-content__title\\s*\\{[^}]*text-transform:\\s*uppercase;/s',
+        $css
+    ),
+    'Law 01 reference demo requires the WordPress-owned Hero title to present in uppercase without mutating its source text.'
+);
+assert(
+    1 === preg_match(
+        '/hero--library \\.aznet-theme-homepage-hero-content__actions \\.wp-block-button:not\\(\\.is-style-outline\\) \\.wp-block-button__link\\s*\\{[^}]*background:\\s*var\\(--law01-client-burgundy\\) !important;/s',
+        $css
+    ),
+    'Law 01 reference demo requires the Hero Library primary CTA to use the burgundy presentation token.'
+);
 
 foreach ([
     'aznet-theme-law01-hero--split',
@@ -133,7 +179,11 @@ foreach ([
 
 foreach (['homepage_hero_title', 'homepage_hero_subtitle', 'homepage_hero_slogan', 'homepage_hero_body', 'homepage_hero_image'] as $forbidden) {
     assert(! str_contains($settings, $forbidden), "Theme must not store Hero copy/media: {$forbidden}");
-    assert(! str_contains($admin, $forbidden), "Control Center must not create a Theme Hero content store: {$forbidden}");
+    assert(
+        ! str_contains($hero_action, "\$theme_settings['{$forbidden}']")
+        && ! str_contains($hero_action, "\$theme_settings[ \"{$forbidden}\" ]"),
+        "Hero authoring must not persist WordPress-owned Hero copy/media into Theme settings: {$forbidden}"
+    );
 }
 
 echo "PASS: D-030 Homepage Hero Library contract\n";

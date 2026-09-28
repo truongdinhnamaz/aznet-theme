@@ -4,7 +4,7 @@ namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 $parent = homepage_page_reference( (int) homepage_source_value( 'law-01', 'services' ) );
 if ( ! $parent instanceof \WP_Post ) { return; }
-$items = homepage_direct_published_children( (int) $parent->ID, 6 );
+$items = homepage_renderable_child_pages( (int) $parent->ID, 6 );
 if ( [] === $items ) { return; }
 $intro = trim( (string) get_the_excerpt( $parent ) );
 ?>

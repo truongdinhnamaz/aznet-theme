@@ -36,7 +36,7 @@ foreach ([
 }
 
 foreach ([
-    'team_directory_members()',
+    'team_directory_public_members()',
     "'template-parts/team/card'",
     'aznet-theme-team-directory__grid',
 ] as $needle) {

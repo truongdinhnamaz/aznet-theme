@@ -50,11 +50,16 @@ foreach ( $required_y5 as $relative ) {
 
 $style = (string) file_get_contents( $root . '/style.css' );
 $functions = (string) file_get_contents( $root . '/functions.php' );
-$must( 1 === preg_match( '/^Version:\s*1\.3\.32\s*$/m', $style ), 'Y5 promoted style.css must be exactly 1.3.32' );
-$must( str_contains( $functions, "define( 'AZNET_THEME_VERSION', '1.3.32' );" ), 'Y5 promoted AZNET_THEME_VERSION must be exactly 1.3.32' );
+$style_match = [];
+$function_match = [];
+$must( 1 === preg_match( '/^Version:\s*([0-9]+\\.[0-9]+\\.[0-9]+)\s*$/m', $style, $style_match ), 'Current Theme style.css version must be readable' );
+$must( 1 === preg_match( "/define\\( 'AZNET_THEME_VERSION', '([0-9]+\\.[0-9]+\\.[0-9]+)' \\);/", $functions, $function_match ), 'Current AZNET_THEME_VERSION must be readable' );
+$current_version = (string) ( $style_match[1] ?? '' );
+$must( $current_version === (string) ( $function_match[1] ?? '' ), 'Current Theme version markers must remain synchronized' );
+$must( version_compare( $current_version, '1.3.32', '>=' ), 'Current Theme must not regress below the historical Y5 promoted release 1.3.32' );
 
 $runtime = (string) file_get_contents( $root . '/tests/runtime/y5-client-delivery.php' );
-$must( str_contains( $runtime, "'1.3.32' === AZNET_THEME_VERSION" ), 'Y5 runtime fixture must validate promoted Theme version 1.3.32' );
+$must( str_contains( $runtime, "'1.3.32' === AZNET_THEME_VERSION" ), 'Historical Y5 runtime fixture must retain the promoted Theme version 1.3.32' );
 
 $workflow = (string) file_get_contents( $root . '/.github/workflows/y5-client-delivery-release.yml' );
 foreach ( [

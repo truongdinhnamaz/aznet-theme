@@ -30,12 +30,12 @@ namespace AZnet\Theme {
     }
 
     $profile = file_get_contents(dirname(__DIR__, 2) . '/template-parts/homepage/law-01/profile.php');
-    $must(is_string($profile) && str_contains($profile, 'law01_reference_art_urls'), 'Team presentation must consume the scoped reference-art helper');
-    $must(is_string($profile) && str_contains($profile, 'Hình ảnh minh họa'), 'AI portrait fallback must visibly disclose that it is illustrative');
-    $must(is_string($profile) && str_contains($profile, '$has_members'), 'real WordPress Team member records must keep precedence');
+    $must(is_string($profile) && ! str_contains($profile, 'law01_reference_art_urls'), 'Public Team presentation must not consume illustrative reference art after the WordPress-native directory migration.');
+    $must(is_string($profile) && ! str_contains($profile, 'Hình ảnh minh họa'), 'Public Team presentation must not expose the retired illustrative-person fallback.');
+    $must(is_string($profile) && str_contains($profile, 'team_directory_public_members( 4 )'), 'Public Team presentation must consume only the WordPress-native public member projection.');
 
     $hero_source = file_get_contents(dirname(__DIR__, 2) . '/template-parts/homepage/law-01/hero.php');
     $must(is_string($hero_source) && ! str_contains($hero_source, 'aznet-theme-law01-hero__image--reference'), 'Hero must continue rendering WordPress-owned featured media');
 
-    echo "PASS: Law 01 generated Team art remains scoped, illustrative and source-safe while Hero stays WordPress-owned\n";
+    echo "PASS: Law 01 reference art remains a presentation asset only and public Team uses WordPress-native members\n";
 }

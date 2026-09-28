@@ -8,7 +8,7 @@ $authoring = (string) file_get_contents($root . '/inc/admin/homepage-authoring.p
 foreach ([
     'function homepage_quick_edit_featured_image_allowed',
     "'law-01' === \$preset && 'team' === \$slot",
-    'homepage_source_value( $preset, $slot ) !== $source_id',
+    'homepage_effective_source_value( $preset, $slot ) !== $source_id',
 ] as $needle) {
     if (! str_contains($authoring, $needle)) {
         fwrite(STDERR, "FAIL: missing Team parent image policy: {$needle}\n");

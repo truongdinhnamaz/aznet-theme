@@ -16,7 +16,7 @@ foreach ([
     }
 }
 
-if (! str_contains($profile, 'team_directory_members( 4 )')) {
+if (! str_contains($profile, 'team_directory_public_members( 4 )')) {
     fwrite(STDERR, "FAIL: Law 01 Team does not use the WordPress-native Team directory.\n");
     exit(1);
 }

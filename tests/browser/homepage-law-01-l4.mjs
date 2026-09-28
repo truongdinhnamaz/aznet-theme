@@ -134,6 +134,14 @@ async function inspectViewport(browser, name, viewport) {
       if (await page.locator(selector).count() < 1) throw new Error(`Expanded Burgundy Homepage missing mapped section ${selector}`);
     }
 
+    const renderedSurfaceOrder = await page.locator('[data-aznet-homepage-surface]').evaluateAll(
+      (nodes) => nodes.map((node) => node.getAttribute('data-aznet-homepage-surface'))
+    );
+    const expectedSurfaceOrder = ['hero', 'services', 'profile', 'front-page-content', 'latest', 'topics', 'analysis', 'news', 'process', 'faq', 'final-cta'];
+    if (JSON.stringify(renderedSurfaceOrder) !== JSON.stringify(expectedSurfaceOrder)) {
+      throw new Error(`Law 01 rendered surface order mismatch: ${JSON.stringify(renderedSurfaceOrder)}`);
+    }
+
     const homepageFont = await page.locator('.aznet-theme-homepage--law-01-burgundy-gold').evaluate((node) => getComputedStyle(node).fontFamily);
     if (!homepageFont.toLowerCase().includes('roboto')) throw new Error(`Agreed Roboto Homepage typography missing: ${homepageFont}`);
 
@@ -229,6 +237,10 @@ async function inspectViewport(browser, name, viewport) {
 
     result.serviceCards = await page.locator('.aznet-theme-law01-services .aznet-theme-law01-card').count();
     if (result.serviceCards !== 6) throw new Error(`expected 6 mapped service cards, got ${result.serviceCards}`);
+    const serviceTitles = await page.locator('.aznet-theme-law01-services .aznet-theme-law01-card h3').allTextContents();
+    if (serviceTitles.length !== 6 || serviceTitles.some((title) => !title.trim())) {
+      throw new Error(`Services rendered an unnamed public card: ${JSON.stringify(serviceTitles)}`);
+    }
 
     const parityMetrics = await page.evaluate(() => {
       const heroSection = document.querySelector('.aznet-theme-law01-hero')?.getBoundingClientRect();
@@ -307,7 +319,7 @@ async function inspectViewport(browser, name, viewport) {
         throw new Error('desktop Footer and Law 01 content must align to the same reference shell');
       }
       const contentRatio = parityMetrics.content.width / parityMetrics.heroGrid.width;
-      if (contentRatio < 0.44 || contentRatio > 0.48) throw new Error(`desktop Hero content column must stay near approved 46% shell target, got ${contentRatio.toFixed(3)}`);
+      if (contentRatio < 0.52 || contentRatio > 0.56) throw new Error(`desktop Hero content column must stay near approved 54% shell target, got ${contentRatio.toFixed(3)}`);
       if (Math.abs(parityMetrics.content.y - parityMetrics.visual.y) > 2) throw new Error('desktop Hero columns must align on one row');
       const visualRight = parityMetrics.visual.x + parityMetrics.visual.width;
       if (Math.abs(visualRight - viewport.width) > 2) {
@@ -356,6 +368,8 @@ async function inspectViewport(browser, name, viewport) {
 
     result.teamCards = await page.locator('.aznet-theme-law01-team-card').count();
     if (result.teamCards !== 4) throw new Error(`expected 4 WordPress-owned Team child Page cards on Homepage, got ${result.teamCards}`);
+    const homepageTeamNames = await page.locator('.aznet-theme-law01-team-card h3').allTextContents();
+    if (homepageTeamNames.some((name) => !name.trim())) throw new Error('Homepage rendered unnamed Team member');
 
     result.heroImages = await page.locator('.aznet-theme-law01-hero__media img').count();
     if (result.heroImages !== 1) throw new Error(`visual QA fixture must provide 1 Hero featured image, got ${result.heroImages}`);
@@ -435,7 +449,9 @@ async function inspectViewport(browser, name, viewport) {
       if (!directoryResponse || directoryResponse.status() !== 200) throw new Error(`Team directory HTTP status was ${directoryResponse?.status() ?? 'missing'}`);
       if (await directoryPage.locator('.aznet-theme-page--team-directory').count() !== 1) throw new Error('mapped Team directory presentation missing');
       result.teamDirectoryCards = await directoryPage.locator('.aznet-theme-team-directory__grid .aznet-theme-team-card').count();
-      if (result.teamDirectoryCards !== 6) throw new Error(`Team directory must render all 6 published members, got ${result.teamDirectoryCards}`);
+      if (result.teamDirectoryCards !== 6) throw new Error(`Team directory must render all 6 named public members, got ${result.teamDirectoryCards}`);
+      const directoryNames = await directoryPage.locator('.aznet-theme-team-card h3').allTextContents();
+      if (directoryNames.some((name) => !name.trim())) throw new Error('Team directory rendered unnamed Team member');
       if (await directoryPage.getByText('Draft Team Member', { exact: true }).count()) throw new Error('draft Team member leaked into public directory');
       const directoryOverflow = await directoryPage.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       if (directoryOverflow > 1) throw new Error(`Team directory horizontal overflow: ${directoryOverflow}px`);

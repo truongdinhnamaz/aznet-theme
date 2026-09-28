@@ -15,7 +15,7 @@ assert(str_contains($pageExperience, 'function page_variant'));
 assert(str_contains($pageExperience, 'function page_breadcrumb_items'));
 assert(str_contains($pageExperience, 'function page_excerpt'));
 assert(str_contains($pageExperience, 'function service_page_is_detail'), 'service detail detector missing');
-assert(str_contains($pageExperience, "'homepage_services_page'"), 'service detector must use explicit mapped Services Page');
+assert(str_contains($pageExperience, "homepage_source_value( 'law-01', 'services' )"), 'service detector must use the scoped explicit mapped Services Page');
 assert(str_contains($pageExperience, 'function service_page_contact_url'), 'service contact resolver missing');
 assert(str_contains($pageExperience, 'function service_page_siblings'), 'service sibling resolver missing');
 assert(!str_contains($pageExperience, 'get_page_by_path'), 'service presentation must not infer by slug/path');

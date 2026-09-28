@@ -43,7 +43,7 @@ foreach ([
     "is_category()",
     'header_law01_active()',
     'function archive_contact_page_url',
-    "setting( 'homepage_contact_page', 0 )",
+    "homepage_source_value( 'law-01', 'contact' )",
 ] as $needle) {
     if (!str_contains($helper, $needle)) {
         $fail('archive presentation helper missing marker: ' . $needle);
@@ -119,6 +119,10 @@ foreach ([
 }
 
 $production = $archive . "\n" . $helper . "\n" . $template . "\n" . $item;
+if (str_contains($helper, "setting( 'homepage_contact_page', 0 )")) {
+    $fail('Archive Contact CTA must consume the scoped Law 01 source resolver, not the legacy setting directly.');
+}
+
 foreach ([
     'new WP_Query',
     'WP_Query(',

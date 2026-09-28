@@ -17,7 +17,7 @@
 
 .aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__inner {
     width: min(calc(100% - (2 * var(--aznet-theme-gutter))), 96rem);
-    min-height: 88px;
+    min-height: 78px;
     gap: clamp(.8rem, 1.3vw, 1.5rem);
 }
 
@@ -57,6 +57,16 @@
     letter-spacing: .09em;
     line-height: 1.2;
     text-transform: uppercase;
+}
+
+.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__brand-tagline {
+    display: block;
+    color: #6f675f;
+    font-family: var(--aznet-theme-font-family-heading);
+    font-size: .66rem;
+    font-style: italic;
+    line-height: 1.2;
+    white-space: nowrap;
 }
 
 .aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__menu {
@@ -167,6 +177,7 @@
 }
 
 .aznet-theme-site-header--law01-burgundy-gold .aznet-theme-law01-topbar {
+    display: none;
     border-bottom: 1px solid #eee7dd;
     background: #f9f6f0;
     color: #56402a;
@@ -246,6 +257,10 @@
     .aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__brand-title {
         font-size: 1rem;
         overflow-wrap: anywhere;
+    }
+
+    .aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__brand-tagline {
+        display: none;
     }
 
     .aznet-theme-site-header--law01-burgundy-gold .aznet-theme-law01-topbar__inner {

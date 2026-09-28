@@ -18,6 +18,8 @@ on:
       - 'assets/css/components/team-directory.css'
       - 'tests/runtime/team-directory-parity.php'
       - 'tests/runtime/homepage-team-authoring.php'
+      - 'tests/runtime/law01-homepage-source-gaps.php'
+      - 'tests/runtime/law01-empty-editorial-surfaces.php'
       - 'inc/admin/homepage.php'
       - 'inc/admin/homepage-hero.php'
       - 'inc/admin/control-center.php'
@@ -211,19 +213,22 @@ jobs:
           $about = law01_page( 'Giới thiệu', 'gioi-thieu', 'Một đội ngũ hướng tới tư vấn rõ ràng, bảo mật và giải pháp thực tiễn.' );
           law01_featured_fixture( $about, 'about', 1200, 800 );
           $services = law01_page( 'Dịch vụ pháp lý', 'dich-vu-phap-ly', 'Các dịch vụ pháp lý dành cho cá nhân và doanh nghiệp.' );
+          law01_page( '', 'dich-vu-khong-tieu-de', 'Nguồn WordPress cố ý thiếu tiêu đề để kiểm tra fail-soft presentation.', '', $services, 0 );
           $service_titles = [
               'Luật Doanh nghiệp' => 'luat-doanh-nghiep',
-              'Dân sự và Tranh chấp' => 'dan-su-tranh-chap',
+              'Tư vấn và giải quyết tranh chấp dân sự, hợp đồng và nghĩa vụ liên quan' => 'dan-su-tranh-chap',
               'Hình sự' => 'hinh-su',
               'Đất đai và Bất động sản' => 'dat-dai-bat-dong-san',
               'Hôn nhân và Gia đình' => 'hon-nhan-gia-dinh',
               'Lao động' => 'lao-dong',
           ];
-          $order = 1;
+          $order = 10;
           foreach ( $service_titles as $title => $slug ) {
-              law01_page( $title, $slug, 'Nội dung mô tả dịch vụ được quản lý bằng Page WordPress.', '', $services, $order++ );
+              law01_page( $title, $slug, 'Nội dung mô tả dịch vụ được quản lý bằng Page WordPress.', '', $services, $order );
+              $order += 10;
           }
           $team = law01_page( 'Đội ngũ luật sư', 'doi-ngu-luat-su', 'Tìm hiểu đội ngũ và cách chúng tôi phối hợp trong quá trình tư vấn.' );
+          law01_page( '', 'ls-khong-ten', '', '', $team, 5 );
           $member_a = law01_page( 'Luật sư tư vấn doanh nghiệp', 'luat-su-doanh-nghiep', 'Luật sư Doanh nghiệp', '', $team, 10 );
           $member_b = law01_page( 'Luật sư tư vấn dân sự', 'luat-su-dan-su', 'Luật sư Dân sự', '', $team, 20 );
           $member_c = law01_page( 'Luật sư tư vấn hình sự', 'luat-su-hinh-su', '', '', $team, 30 );
@@ -346,6 +351,16 @@ jobs:
 
           wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
           wp rewrite flush --hard --path=/tmp/wp --allow-root
+
+      - name: Verify Law 01 Services source-gap runtime
+        run: |
+          set -euo pipefail
+          wp eval-file "$GITHUB_WORKSPACE/tests/runtime/law01-homepage-source-gaps.php" --path=/tmp/wp --allow-root
+
+      - name: Verify Law 01 empty editorial fail-soft
+        run: |
+          set -euo pipefail
+          wp eval-file "$GITHUB_WORKSPACE/tests/runtime/law01-empty-editorial-surfaces.php" --path=/tmp/wp --allow-root
 
       - name: Verify Team directory runtime parity
         run: |
