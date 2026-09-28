@@ -61,6 +61,22 @@ $must(
     'Law 01 target Team presentation must retain four portrait slots on wide desktop.'
 );
 $must(
+    str_contains($profile, 'data-count="<?php echo esc_attr( (string) count( $members ) ); ?>"'),
+    'Homepage Team member grid must expose its renderable public count for fail-soft presentation.'
+);
+foreach ([
+    '.aznet-theme-law01-grid--services[data-count="4"]',
+    '.aznet-theme-law01-grid--services[data-count="5"]',
+    '.aznet-theme-law01-profile__members[data-count="1"]',
+    '.aznet-theme-law01-profile__members[data-count="2"]',
+    '.aznet-theme-law01-profile__members[data-count="3"]',
+] as $responsiveCountSelector) {
+    $must(
+        str_contains($css, $responsiveCountSelector),
+        'Law 01 source-gap presentation missing count-aware layout: ' . $responsiveCountSelector
+    );
+}
+$must(
     str_contains($css, '.aznet-theme-law01-grid--articles .aznet-theme-law01-article-card {'),
     'Law 01 target Latest cards must retain an explicit card presentation rule.'
 );
