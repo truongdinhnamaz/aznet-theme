@@ -11,6 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+if ( ! function_exists( __NAMESPACE__ . '\\template_visual_preset_ids' ) ) {
+    require_once __DIR__ . '/template-registry.php';
+}
+register_builtin_template_manifests();
+
 /**
  * Return normalized defaults for Theme-owned presentation settings.
  *
