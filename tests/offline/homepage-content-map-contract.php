@@ -26,6 +26,10 @@ assert(($GLOBALS['hc_last_query']['post_status'] ?? null) === 'publish');
 assert(($GLOBALS['hc_last_query']['category__in'] ?? null) === [8]);
 assert(($GLOBALS['hc_last_query']['post__not_in'] ?? null) === [99]);
 $source = file_get_contents($path);
+assert(
+    str_contains($source, 'function homepage_renderable_child_pages('),
+    'Public Homepage child projection must exist before Law 01 Services can reject untitled source Pages.'
+);
 foreach (['get_page_by_title(', 'get_page_by_path(', "get_term_by( 'slug'", 'url_to_postid('] as $forbidden) {
     assert(! str_contains($source, $forbidden));
 }
