@@ -221,6 +221,9 @@ foreach (['Thông tin liên hệ', 'Liên kết nhanh'] as $heading) {
         y3_fail('Footer must keep the approved page-independent professional heading: ' . $heading);
     }
 }
+if (! str_contains($template, "in_array( \$preset, [ 'professional', 'law-01' ], true )")) {
+    y3_fail('Law 01 Footer demo fidelity requires the social menu to render as its own main-column surface.');
+}
 foreach (['aznet-theme-site-footer__social-column', "'professional' === \$preset", 'Kết nối với chúng tôi'] as $needle) {
     if (! str_contains($template, $needle)) {
         y3_fail('Professional Footer demo composition missing: ' . $needle);
@@ -254,6 +257,9 @@ foreach (['repeat(3, minmax(140px, .75fr))', '.aznet-theme-site-footer__social-c
     if (! str_contains($css, $needle)) {
         y3_fail('Professional Footer demo grid missing: ' . $needle);
     }
+}
+if (! str_contains($css, '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__main {') || ! str_contains($css, 'grid-template-columns: minmax(260px, 1.2fr) minmax(180px, .9fr) minmax(160px, .7fr) minmax(150px, .65fr);')) {
+    y3_fail('Law 01 Footer demo fidelity requires a four-column desktop grid for identity, contact, links and social.');
 }
 foreach ([
     '--aznet-theme-law01-burgundy-deep',
