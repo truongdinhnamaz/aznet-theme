@@ -58,7 +58,7 @@ if (! is_file($template_path)) {
 
 $template = file_get_contents($template_path);
 foreach ([
-    "setting( 'homepage_curtain01_process_page', 0 )",
+    "homepage_effective_source_value( 'curtain-01', 'process' )",
     'homepage_page_reference',
     "apply_filters( 'the_content'",
     'aznet-theme-curtain01-process__rail',
