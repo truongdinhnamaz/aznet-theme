@@ -25,8 +25,14 @@ foreach (['hero', 'about', 'catalogue', 'knowledge', 'final-cta'] as $slug) {
     }
 }
 
-if (! str_contains($composer, "render_curtain01_part( 'hero' )")) {
-    fwrite(STDERR, "FAIL: Curtain 01 Hero must render before the native Front Page body.\n");
+$surfaceMap = file_get_contents($root . '/inc/theme/homepage-surface-map.php');
+if (
+    ! str_contains($composer, "homepage_effective_surface_map( 'curtain-01' )")
+    || ! is_string($surfaceMap)
+    || ! str_contains($surfaceMap, "'hero',")
+    || ! str_contains($surfaceMap, "'before',")
+) {
+    fwrite(STDERR, "FAIL: Curtain 01 Hero must remain on the shared effective surface map before the native Front Page body.\n");
     exit(1);
 }
 
