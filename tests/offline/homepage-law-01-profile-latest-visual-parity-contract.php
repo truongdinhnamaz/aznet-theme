@@ -65,8 +65,8 @@ $must(
     'Law 01 target Latest media must use the approved 3:2 editorial image ratio.'
 );
 $must(
-    str_contains($latest, "homepage_latest_posts( (array) setting( 'homepage_knowledge_terms', [] ), 3, homepage_ledger_ids() )"),
-    'Law 01 Latest must remain bounded to three WordPress-native Posts.'
+    str_contains($latest, "homepage_latest_posts( (array) homepage_source_value( 'law-01', 'knowledge' ), 3, homepage_ledger_ids() )"),
+    'Law 01 Latest must remain bounded to three WordPress-native Posts through the scoped Law 01 source resolver.'
 );
 
 echo "PASS: Law 01 About/Profile + Latest visual parity contract\n";
