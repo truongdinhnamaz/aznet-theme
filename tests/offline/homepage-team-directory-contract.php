@@ -4,6 +4,7 @@ declare(strict_types=1);
 $root = dirname(__DIR__, 2);
 $profile = file_get_contents($root . '/template-parts/homepage/law-01/profile.php');
 $assets = file_get_contents($root . '/inc/theme/assets.php');
+$card = file_get_contents($root . '/template-parts/team/card.php');
 
 foreach ([
     'team_directory_members( 4 )',
@@ -29,6 +30,11 @@ foreach ([
 
 if (! str_contains((string) $assets, "'aznet-theme-team-card'")) {
     fwrite(STDERR, "FAIL: Homepage Team does not enqueue shared Team card CSS\n");
+    exit(1);
+}
+
+if (! preg_match('/<a class="aznet-theme-team-card__media[^>]+aria-label=/', (string) $card)) {
+    fwrite(STDERR, "FAIL: Team media link must keep an accessible name when the featured image alt is empty\n");
     exit(1);
 }
 
