@@ -57,6 +57,7 @@ assert(str_contains($settingsSource, "'burgundy-gold'"));
 
 $homepageAdmin = file_get_contents($root . '/inc/admin/homepage.php');
 assert(str_contains($homepageAdmin, 'homepage_law01_variant'), 'Homepage admin must expose the Law 01 variant selector.');
+assert(str_contains($homepageAdmin, 'homepage_renderable_child_pages( $id, 1 )'), 'Services readiness must use the renderable public child projection.');
 assert(str_contains($homepageAdmin, 'Burgundy + Gold'));
 assert(str_contains($composer, 'homepage_law01_variant()'), 'Composer must project the normalized variant into presentation markup.');
 $variantPath = $root . '/assets/css/components/homepage-law-01-variants.css';
