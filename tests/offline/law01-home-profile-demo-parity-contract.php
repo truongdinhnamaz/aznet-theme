@@ -27,6 +27,10 @@ foreach ([
     '.aznet-theme-law01-profile__members',
     'grid-template-columns: repeat(4, minmax(0, 1fr));',
     '.aznet-theme-law01-profile__team-heading',
+    '.aznet-theme-law01-profile__team-title-row',
+    'grid-template-columns: minmax(0, 48%) minmax(0, 52%);',
+    '.aznet-theme-law01-profile__members[data-count="2"]',
+    'grid-template-columns: repeat(2, minmax(0, 1fr));',
 ] as $needle) {
     $must(str_contains($referenceCss, $needle), "Profile demo CSS missing {$needle}");
 }
@@ -37,4 +41,8 @@ $must(
     'Profile demo parity must preserve tablet/mobile collapse rules.'
 );
 
-echo "PASS: Law 01 Homepage Profile demo parity contract\n";
+$ctaPos = strpos($profile, 'aznet-theme-law01-team-more');
+$membersPos = strpos($profile, 'aznet-theme-law01-profile__members');
+$must(false !== $ctaPos && false !== $membersPos && $ctaPos < $membersPos, 'Approved Team CTA must remain in the title row before member cards.');
+
+echo "PASS: Law 01 Homepage Profile approved-layout lock contract\n";
