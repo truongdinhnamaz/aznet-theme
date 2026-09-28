@@ -2,7 +2,7 @@
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 $excerpt = isset( $args['excerpt'] ) ? trim( (string) $args['excerpt'] ) : '';
-$members = \AZnet\Theme\team_directory_members();
+$members = \AZnet\Theme\team_directory_public_members();
 ?>
 <section class="aznet-theme-team-directory">
     <div class="aznet-theme-page__section-inner">
