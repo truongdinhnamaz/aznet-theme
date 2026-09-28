@@ -45,8 +45,8 @@ foreach ([
     "current_user_can( 'publish_posts' )",
     'check_admin_referer(',
     'WP_Block_Patterns_Registry',
-    'homepage_hero_block',
-    'homepage_hero_variant',
+    'homepage_law01_hero_block',
+    'homepage_law01_hero_variant',
 ] as $needle) {
     assert(str_contains($hero_action, $needle), "D-030 explicit Hero action contract missing: {$needle}");
 }
@@ -72,7 +72,10 @@ assert(str_contains($admin, "'' !== trim( (string) \$hero_block->post_content ) 
 assert(str_contains($admin, 'chuyển Hero WordPress này về trạng thái Bản nháp'), 'Control Center must expose the non-destructive Hero rollback path.');
 assert(str_contains($admin, 'website hiện tại chưa đổi cho đến khi Hero mới được xuất bản'), 'Draft-first Hero UX must preserve current public output.');
 assert(! str_contains($hero_action, 'wp_safe_redirect( $edit_link )'), 'Hero Library apply must return to Control Center instead of auto-opening the native block editor.');
-assert(str_contains($hero_action, "'hero'    => \$hero instanceof \\WP_Post && 'draft' === \$hero->post_status ? 'draft' : 'ready'"), 'Hero Library redirect state must reflect the actual draft/published Hero state.');
+assert(
+    1 === preg_match("/'hero'\\s*=>\\s*\\$hero instanceof \\\\WP_Post\\s*&&\\s*'draft'\\s*===\\s*\\$hero->post_status\\s*\\?\\s*'draft'\\s*:\\s*'ready'/", $hero_action),
+    'Hero Library redirect state must reflect the actual draft/published Hero state.'
+);
 
 assert(str_contains($settings, "'schema_version'                => 3"), 'D-030 additive Hero settings must retain Theme settings schema v3.');
 foreach (['wp_delete_post(', 'wp_trash_post('] as $forbidden_mutation) {
