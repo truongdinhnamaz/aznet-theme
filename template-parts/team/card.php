@@ -4,8 +4,11 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 $team_member = $args['team_member'] ?? null;
 if ( ! $team_member instanceof \WP_Post ) { return; }
 
-$member_image = has_post_thumbnail( $team_member )
-    ? get_the_post_thumbnail( $team_member, 'medium_large', [ 'class' => 'aznet-theme-team-card__image aznet-theme-law01-profile__member-image aznet-theme-law01-team-card__image' ] )
+$portrait_id = function_exists( 'AZnet\\Theme\\team_member_portrait_id' )
+    ? \AZnet\Theme\team_member_portrait_id( (int) $team_member->ID )
+    : 0;
+$member_image = $portrait_id > 0
+    ? wp_get_attachment_image( $portrait_id, 'medium_large', false, [ 'class' => 'aznet-theme-team-card__image aznet-theme-law01-profile__member-image aznet-theme-law01-team-card__image' ] )
     : '';
 $member_role = trim( (string) $team_member->post_excerpt );
 $url = get_permalink( $team_member );
