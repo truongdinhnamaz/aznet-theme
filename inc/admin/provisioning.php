@@ -301,8 +301,10 @@ function render_provisioning_wizard(): void {
             }
         } elseif ( 'professional-services-v1' === $blueprint_key ) {
             echo '<p class="description">' . esc_html__( 'Professional Services chỉ tạo hoặc map các Page và Primary Menu đã xác nhận; không tạo dữ liệu chuyên ngành, người, chứng nhận hay thông tin liên hệ giả định.', 'aznet-theme' ) . '</p>';
-        } else {
+        } elseif ( 'curtain-v1' === $blueprint_key ) {
             echo '<p class="description">' . esc_html__( 'Rèm 01 chỉ tạo hoặc map cấu trúc WordPress-native đã xác nhận. Sản phẩm, giá, tồn kho và commerce state vẫn thuộc WooCommerce; Theme không tạo dữ liệu thương mại hay thông tin doanh nghiệp giả định.', 'aznet-theme' ) . '</p>';
+        } else {
+            echo '<p class="description">' . esc_html__( 'Industrial 01 chỉ tạo hoặc map cấu trúc WordPress-native đã xác nhận. Sản phẩm, giá, tồn kho và commerce state vẫn thuộc WooCommerce; Theme không tạo dữ liệu thương mại, chứng nhận hoặc thông tin doanh nghiệp giả định.', 'aznet-theme' ) . '</p>';
         }
         submit_button( __( 'Dùng các thiết lập được khuyến nghị', 'aznet-theme' ) ); echo '</form>';
     } elseif ( 3 === $step ) {
