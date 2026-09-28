@@ -94,7 +94,8 @@ if ( $about_fallback ) {
             <p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Đội ngũ luật sư', 'aznet-theme' ); ?></p>
             <div class="aznet-theme-law01-profile__team-title-row">
                 <h2><?php echo esc_html( get_the_title( $team ) ); ?></h2>
-                    </div>
+                <p class="aznet-theme-law01-team-more"><a class="aznet-theme-law01-button aznet-theme-law01-button--secondary" href="<?php echo esc_url( get_permalink( $team ) ); ?>"><?php esc_html_e( 'Xem thêm về đội ngũ', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a></p>
+            </div>
             <?php if ( '' !== $team_summary ) : ?><p class="aznet-theme-law01-lede"><?php echo esc_html( $team_summary ); ?></p><?php endif; ?>
         </div>
         <?php if ( [] !== $members ) : ?>
@@ -111,7 +112,6 @@ if ( $about_fallback ) {
             <?php endforeach; ?>
         </div>
         <?php endif; ?>
-        <p class="aznet-theme-law01-team-more"><a class="aznet-theme-law01-button aznet-theme-law01-button--secondary" href="<?php echo esc_url( get_permalink( $team ) ); ?>"><?php esc_html_e( 'Xem thêm về đội ngũ', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a></p>
     </div>
     <?php endif; ?>
 </div>
