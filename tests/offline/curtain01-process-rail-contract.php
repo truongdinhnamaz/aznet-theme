@@ -4,16 +4,18 @@ declare(strict_types=1);
 $root = dirname(__DIR__, 2);
 $settings_path = $root . '/inc/theme/settings.php';
 $composer_path = $root . '/inc/theme/homepage-composer.php';
+$surface_path = $root . '/inc/theme/homepage-surface-map.php';
 $admin_path = $root . '/inc/admin/homepage.php';
 $template_path = $root . '/template-parts/homepage/curtain-01/process.php';
 $css_path = $root . '/assets/css/components/homepage-curtain-01.css';
 
 $settings = is_file($settings_path) ? file_get_contents($settings_path) : false;
 $composer = is_file($composer_path) ? file_get_contents($composer_path) : false;
+$surface = is_file($surface_path) ? file_get_contents($surface_path) : false;
 $admin = is_file($admin_path) ? file_get_contents($admin_path) : false;
 $css = is_file($css_path) ? file_get_contents($css_path) : false;
 
-if (! is_string($settings) || ! is_string($composer) || ! is_string($admin) || ! is_string($css)) {
+if (! is_string($settings) || ! is_string($composer) || ! is_string($surface) || ! is_string($admin) || ! is_string($css)) {
     fwrite(STDERR, "FAIL: Curtain 01 process source files missing.\n");
     exit(1);
 }
@@ -28,12 +30,24 @@ foreach ([
     }
 }
 
-$catalogue_pos = strpos($composer, "'catalogue'");
-$process_pos = strpos($composer, "'process'");
-$knowledge_pos = strpos($composer, "'knowledge'");
+if (! str_contains($composer, "homepage_effective_surface_map( 'curtain-01' )")) {
+    fwrite(STDERR, "FAIL: Curtain 01 composer must consume the shared effective surface map.\n");
+    exit(1);
+}
+
+$curtain_start = strpos($surface, 'function homepage_curtain01_effective_surface_map(');
+$curtain_end = strpos($surface, 'function homepage_effective_surface_map(', false === $curtain_start ? 0 : $curtain_start);
+if (false === $curtain_start || false === $curtain_end || $curtain_end <= $curtain_start) {
+    fwrite(STDERR, "FAIL: Curtain 01 effective surface-map function boundary is missing.\n");
+    exit(1);
+}
+$curtain_map = substr($surface, $curtain_start, $curtain_end - $curtain_start);
+$catalogue_pos = strpos($curtain_map, "'catalogue'");
+$process_pos = strpos($curtain_map, "'process'");
+$knowledge_pos = strpos($curtain_map, "'knowledge'");
 if (false === $catalogue_pos || false === $process_pos || false === $knowledge_pos
     || ! ($catalogue_pos < $process_pos && $process_pos < $knowledge_pos)) {
-    fwrite(STDERR, "FAIL: Curtain 01 process must render after catalogue and before knowledge.\n");
+    fwrite(STDERR, "FAIL: shared Curtain 01 map must place process after catalogue and before knowledge.\n");
     exit(1);
 }
 
