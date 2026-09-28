@@ -78,18 +78,15 @@ foreach ([
     }
 }
 
-if (! str_contains($admin, 'homepage_curtain01_projects_term') || ! str_contains($admin, 'Công trình Rèm 01')) {
-    fwrite(STDERR, "FAIL: Homepage admin must expose the independent Rèm 01 project Category mapping.\n");
-    exit(1);
-}
-
 foreach ([
-    "\$statuses['projects'] = 'UNMAPPED'",
-    "\$statuses['projects'] = 'INVALID'",
-    "\$statuses['projects'] = [] === homepage_latest_posts( [ \$project_term_id ], 1 ) ? 'EMPTY' : 'READY'",
+    "'projects' => __( 'Công trình', 'aznet-theme' )",
+    "homepage_source_value( \$preset, 'projects', \$s )",
+    "\$statuses[ \$slot ] = 'UNMAPPED'",
+    "\$statuses[ \$slot ] = 'INVALID'",
+    "homepage_latest_posts( [ \$id ], 1 ) ? 'EMPTY' : 'READY'",
 ] as $needle) {
     if (! str_contains($admin, $needle)) {
-        fwrite(STDERR, "FAIL: Homepage diagnostics must expose fail-soft project source state: {$needle}\n");
+        fwrite(STDERR, "FAIL: Homepage admin must expose the Curtain project source through the shared typed authoring/diagnostic model: {$needle}\n");
         exit(1);
     }
 }
