@@ -1,4 +1,4 @@
-Canonical repository baseline is exact `main@be4e382cb53b9d697fe343c15dab2f19afff73b6`, Theme metadata `1.3.54`. D-042 establishes the three peer pilots (Law 01, Rèm 01, Industrial 01), and D-043 establishes the generic Template Extension Contract. PR #301 remains an unmerged Industrial 01 candidate; repository CI evidence on that branch must not be promoted to canonical-main or production PASS. Current published GitHub Release remains `v1.3.23`.
+Canonical repository baseline is exact `main@51d9ba537bf4a91e94c13bfc6a2a28cbbb78c189`, Theme metadata `1.3.57`. Owner-approved PR #301 merged Industrial 01 MVP after final head `73ef211b91a533ca3089764f16c888237426ecdd` completed 47/47 triggered workflows SUCCESS. Merge and verified head share exact tree `df8078b5c9123ab95ad1eafe94cc4ba46121cc02`; no fresh exact-main workflow run is claimed. D-042 three-pilot parity and D-043 Template Extension Contract remain authoritative. `minhnguyen.vn` production remains separately gated and unclaimed. Current published GitHub Release remains `v1.3.23`.
 
 Historical D-040/D-041 decision checkpoint was exact `main@5d2d34074c1b1b0006151b399b6b652927a19d49`, Theme metadata `1.3.32`. PR #272 carries a newer unmerged `1.3.54` Law 01/authoring candidate; branch `work/homepage-backend-unified-20260925` continues from that candidate and is not canonical main. Earlier exact-main V1 `35870034014`, X6 `35870034255` and Curtain 01 Project Showcase `35870033789` remain retained evidence for their tested bytes only. Current published GitHub Release remains `v1.3.23`; publication, canonical implementation and pilot production are distinct boundaries.
 | Source | Semantic version | Role |
@@ -7,8 +7,8 @@ Historical D-040/D-041 decision checkpoint was exact `main@5d2d34074c1b1b0006151
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.5 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.20 | Theme architecture, public integration contracts, Template Extension Contract and preset lexicon presentation boundary |
-| `AZT-03-baseline-provenance.md` | v0.80 | Canonical provenance through Rèm 01 1.3.31 Project Showcase production checkpoint |
-| `AZT-04-roadmap-qa-decisions.md` | v0.99 | Roadmap/QA decisions through D-042 three-pilot parity and D-043 template-extension governance |
+| `AZT-03-baseline-provenance.md` | v0.81 | Canonical provenance through Industrial 01 MVP merge checkpoint; pilot production remains separate |
+| `AZT-04-roadmap-qa-decisions.md` | v0.100 | Roadmap/QA through D-042 Industrial 01 repository closure and D-043 template-extension governance |
 | `AZT-EXEC-MAP.md` | v0.87 | Derived execution map through Rèm 01 1.3.31 production checkpoint |
 
 23/09/2026 Rèm 01 production evidence: `docs/evidence/CURTAIN01_PROJECT_SHOWCASE_PRODUCTION_20260923.md` records PR #262/#263 integration through `main@f84d45a58261ec41d9b0c11a5e02a0873edb28ff`, owner-backed WPVibe production publication, Post #999 / Category #80 mapping, corrective removal of one stale draft-only D-036-incompatible heading cap, exact live Curtain CSS/JS/`theme.json` reconciliation, and fresh mobile/desktop Accessibility 100 / Best Practices 100. Current GitHub Release remains `v1.3.23`; this pilot production state does not silently create a new Release.
