@@ -28,7 +28,7 @@ foreach (['Dịch vụ chính', 'aznet-theme-site-footer__services', 'about_intr
         $fail("Law 01 Footer template missing {$needle}");
     }
 }
-if (! str_contains($template, "array_slice( $services, 0, 4 )")) {
+if (! str_contains($template, 'array_slice( $services, 0, 4 )')) {
     $fail('Footer must cap the primary-service column at four mapped services');
 }
 foreach (['Thông tin chân trang', 'footer_profile_phone', 'footer_profile_email', 'footer_profile_facebook', 'footer_profile_tiktok', 'footer_profile_instagram'] as $needle) {
@@ -48,8 +48,8 @@ foreach (['aznet-theme-site-footer__services', 'grid-template-columns: minmax(28
 }
 $profile = (string) file_get_contents($root . '/inc/admin/footer-profile.php');
 foreach ([
-    "'menu-item-title'   => $display_title",
-    "'tel' === $definition['type'] || 'email' === $definition['type']",
+    '\'menu-item-title\'   => $display_title',
+    '\'tel\' === $definition[\'type\'] || \'email\' === $definition[\'type\']',
 ] as $needle) {
     if (! str_contains($profile, $needle)) {
         $fail("Footer profile must render phone/email values rather than generic labels: {$needle}");
