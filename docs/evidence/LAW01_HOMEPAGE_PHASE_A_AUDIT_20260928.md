@@ -187,3 +187,41 @@ The clean branch is based directly on canonical `main@6fd5db5bb1178e4ecaf48eb989
 ### Exact next
 
 Wait only for the already-created exact-head CI runs. If any run fails, reproduce the first real failure at the shallowest layer and open one corrective RED→GREEN micro-slice. If the relevant exact-head Law 01/core regressions pass, finalize Phase A evidence and review PR #289. Do not merge, release, version-bump or deploy without the separate gate.
+
+
+## Phase A final candidate checkpoint — 1.3.55
+
+Phase A Homepage gates are complete on the exact pre-candidate source head.
+
+- Pre-candidate exact head: `3e4d4b7de4fabe980cf5c77eb05ecd9e1c44df7c`
+- Law 01 Reference Regression: run `36378379021` — SUCCESS
+- Homepage Composer Law 01 Browser Quality: run `36378378995` — SUCCESS
+- Retained full core verification: PASS
+- Isolated component browser checks: PASS
+- WordPress 6.9 Law 01 runtime fixture and source-gap verification: PASS
+- Law 01 browser visual/accessibility, Hero precedence and Hero Library verification: PASS
+
+### Candidate metadata
+
+Theme candidate version is promoted from `1.3.54` to `1.3.55` only after the exact pre-candidate Reference and Browser Quality gates completed successfully. Version metadata remains synchronized between `style.css` and `AZNET_THEME_VERSION` in `functions.php`.
+
+### Scope retained
+
+- Services public projection omits untitled/unlinkable WordPress child Pages without inferring names from slug, URL or Page ID.
+- Team public projection omits untitled/unlinkable member Pages while admin authoring retains raw published source visibility for repair.
+- Empty Analysis/News sources fail soft; Theme does not fabricate editorial/domain content.
+- Native Front Page content remains an explicit `front-page-content` surface in the shared Homepage surface map.
+- Team media links retain accessible names.
+- Legacy/reference tests were aligned to the accepted scoped/effective Homepage source model; production ownership boundaries were not weakened.
+
+### Remaining external status
+
+Pilot `lstamduchn.vn` remains outside this candidate verification path and read-only. Its previously observed public snapshot redirect loop means fresh pilot L4 remains UNKNOWN; no production deployment or pilot mutation is claimed here.
+
+### Rollback
+
+The candidate remains isolated on branch `work/law01-phase-a-native-clean-20260928`. No merge, release, tag or deployment is part of this checkpoint. Rollback remains a branch-level revert to the tested pre-candidate head above or bounded reverts of individual Phase A commits.
+
+### Exact next
+
+Run exact-head verification for the `1.3.55` metadata/evidence candidate commit. If green, perform the required whole-branch review for PR #289 before any merge/release decision.
