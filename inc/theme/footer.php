@@ -46,6 +46,129 @@ function footer_context(): array {
         );
     }
 
+    $about_intro = '';
+    $services    = [];
+
+    if ( 'law-01' === footer_preset() ) {
+        if ( function_exists( __NAMESPACE__ . '\\homepage_source_value' ) ) {
+            $about_id = (int) homepage_source_value( 'law-01', 'about' );
+            if ( $about_id > 0 && function_exists( 'get_post_field' ) ) {
+                $about_intro = trim( (string) get_post_field( 'post_excerpt', $about_id ) );
+            }
+
+            $services_id = (int) homepage_source_value( 'law-01', 'services' );
+            if ( $services_id > 0 && function_exists( __NAMESPACE__ . '\\homepage_renderable_child_pages' ) ) {
+                foreach ( homepage_renderable_child_pages( $services_id, 4 ) as $service_page ) {
+                    if ( ! $service_page instanceof \WP_Post ) {
+                        continue;
+                    }
+                    $title = trim( (string) get_the_title( $service_page ) );
+                    $url   = (string) get_permalink( $service_page );
+                    if ( '' !== $title && '' !== $url ) {
+                        $services[] = [
+                            'title' => $title,
+                            'url'   => $url,
+                        ];
+                    }
+                }
+            }
+        }
+    }
+
+    $social_channels = [];
+    if ( 'law-01' === footer_preset() && function_exists( 'get_nav_menu_locations' ) && function_exists( 'wp_get_nav_menu_items' ) ) {
+        $locations = get_nav_menu_locations();
+        $social_menu_id = (int) ( $locations['footer-social'] ?? 0 );
+        if ( $social_menu_id > 0 ) {
+            $social_items = wp_get_nav_menu_items( $social_menu_id );
+            if ( is_array( $social_items ) ) {
+                foreach ( $social_items as $item ) {
+                    if ( 'publish' !== (string) ( $item->post_status ?? '' ) ) {
+                        continue;
+                    }
+                    $classes = is_array( $item->classes ?? null ) ? $item->classes : [];
+                    $key = '';
+                    foreach ( [ 'facebook', 'tiktok', 'instagram' ] as $candidate ) {
+                        if ( in_array( 'aznet-theme-footer-field-' . $candidate, $classes, true ) ) {
+                            $key = $candidate;
+                            break;
+                        }
+                    }
+                    $url = trim( (string) ( $item->url ?? '' ) );
+                    if ( '' === $key || '' === $url ) {
+                        continue;
+                    }
+                    $title = trim( (string) ( $item->title ?? '' ) );
+                    $social_channels[] = [
+                        'key'   => $key,
+                        'title' => '' !== $title ? $title : ucfirst( $key ),
+                        'url'   => $url,
+                    ];
+                }
+            }
+        }
+    }
+
+    $contact_links = [];
+    if ( 'law-01' === footer_preset() && function_exists( 'get_nav_menu_locations' ) && function_exists( 'wp_get_nav_menu_items' ) ) {
+        $locations       = get_nav_menu_locations();
+        $contact_menu_id = (int) ( $locations['footer-contact'] ?? 0 );
+        if ( $contact_menu_id > 0 ) {
+            $contact_items = wp_get_nav_menu_items( $contact_menu_id );
+            if ( is_array( $contact_items ) ) {
+                $has_managed_phone = false;
+                $has_managed_email = false;
+
+                foreach ( $contact_items as $item ) {
+                    $classes = is_array( $item->classes ?? null ) ? $item->classes : [];
+                    $has_managed_phone = $has_managed_phone || in_array( 'aznet-theme-footer-field-phone', $classes, true );
+                    $has_managed_email = $has_managed_email || in_array( 'aznet-theme-footer-field-email', $classes, true );
+                }
+
+                foreach ( $contact_items as $item ) {
+                    if ( 'publish' !== (string) ( $item->post_status ?? '' ) ) {
+                        continue;
+                    }
+
+                    $url     = trim( (string) ( $item->url ?? '' ) );
+                    $title   = trim( (string) ( $item->title ?? '' ) );
+                    $classes = is_array( $item->classes ?? null ) ? $item->classes : [];
+                    $key     = '';
+
+                    if ( in_array( 'aznet-theme-footer-field-phone', $classes, true ) ) {
+                        $key   = 'phone';
+                        $title = preg_replace( '/^tel:/i', '', $url ) ?? '';
+                    } elseif ( in_array( 'aznet-theme-footer-field-email', $classes, true ) ) {
+                        $key   = 'email';
+                        $title = preg_replace( '/^mailto:/i', '', $url ) ?? '';
+                    } elseif ( str_starts_with( strtolower( $url ), 'tel:' ) ) {
+                        if ( $has_managed_phone ) {
+                            continue;
+                        }
+                        $key = 'phone';
+                    } elseif ( str_starts_with( strtolower( $url ), 'mailto:' ) ) {
+                        if ( $has_managed_email ) {
+                            continue;
+                        }
+                        $key = 'email';
+                    } else {
+                        $key = 'location';
+                    }
+
+                    if ( '' === $title || '' === $url ) {
+                        continue;
+                    }
+
+                    $contact_links[] = [
+                        'key'   => $key,
+                        'title' => $title,
+                        'url'   => $url,
+                    ];
+                }
+            }
+        }
+    }
+
     $menu_html = static function ( string $location, string $class_name ): string {
         if ( ! function_exists( 'wp_nav_menu' ) ) {
             return '';
@@ -71,7 +194,11 @@ function footer_context(): array {
         'tagline'     => $tagline,
         'home_url'    => $home_url,
         'logo_html'   => $logo_html,
-        'menus'       => [
+        'about_intro' => $about_intro,
+        'services'        => $services,
+        'social_channels' => $social_channels,
+        'contact_links'   => $contact_links,
+        'menus'           => [
             'footer'         => $menu_html( 'footer', 'aznet-theme-site-footer__menu' ),
             'footer-contact' => $menu_html( 'footer-contact', 'aznet-theme-site-footer__contact-menu' ),
             'footer-social'  => $menu_html( 'footer-social', 'aznet-theme-site-footer__social-menu' ),
