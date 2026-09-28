@@ -67,10 +67,7 @@ foreach ([
 }
 
 foreach ([
-    'homepage_product_category_showcase_terms',
-    'woocommerce_subcategory_thumbnail',
-    'woocommerce-placeholder',
-    'get_term_link',
+    'homepage_curtain01_category_showcase_cards',
     'aznet-theme-curtain01-category-showcase',
     'Khám phá theo dòng rèm',
     'data-aznet-curtain-category-carousel',
@@ -80,6 +77,18 @@ foreach ([
 ] as $needle) {
     if (!str_contains($part, $needle)) {
         $fail('Curtain 01 category showcase template missing behavior marker: ' . $needle);
+    }
+}
+
+foreach ([
+    'homepage_curtain01_category_showcase_cards',
+    'homepage_product_category_showcase_terms',
+    'woocommerce_subcategory_thumbnail',
+    'woocommerce-placeholder',
+    'get_term_link',
+] as $needle) {
+    if (!str_contains($surfaceMap, $needle)) {
+        $fail('Curtain 01 category showcase shared projection missing behavior marker: ' . $needle);
     }
 }
 
