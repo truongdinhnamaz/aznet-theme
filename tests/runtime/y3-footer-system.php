@@ -130,9 +130,15 @@ foreach ( [ 'standard', 'professional', 'compact', 'law-01' ] as $preset ) {
     if ( ! str_contains( $footer, 'aznet-theme-site-footer--' . $preset ) ) {
         y3_runtime_fail( 'normalized Footer preset class missing: ' . $preset );
     }
-    foreach ( $menu_definitions as $definition ) {
+    foreach ( $menu_definitions as $location => $definition ) {
+        if ( 'law-01' === $preset && 'footer-social' === $location ) {
+            if ( str_contains( $footer, (string) $definition[1] ) ) {
+                y3_runtime_fail( 'Law 01 must use its scoped social-channel presentation instead of the generic Footer Social menu' );
+            }
+            continue;
+        }
         if ( ! str_contains( $footer, (string) $definition[1] ) ) {
-            y3_runtime_fail( 'assigned sentinel link missing for preset ' . $preset );
+            y3_runtime_fail( 'assigned sentinel link missing for preset ' . $preset . ': ' . $location );
         }
     }
 }
