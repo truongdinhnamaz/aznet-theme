@@ -2,6 +2,9 @@
 declare(strict_types=1);
 if (! defined('ABSPATH')) { define('ABSPATH', __DIR__ . '/'); }
 $root = dirname(__DIR__, 2);
+require_once $root . '/inc/theme/template-registry.php';
+require_once $root . '/inc/theme/template-loader.php';
+\AZnet\Theme\load_local_template_manifests();
 require_once $root . '/inc/theme/settings.php';
 $defaults = AZnet\Theme\settings_defaults();
 assert($defaults['schema_version'] === 3);
