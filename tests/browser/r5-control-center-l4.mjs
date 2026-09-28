@@ -206,8 +206,8 @@ async function verifyHomepageTeamAuthoring(page, viewportName) {
   const sources = page.locator('#aznet-theme-homepage-sources');
   if (!(await sources.evaluate((node) => node.hasAttribute('open')))) await sources.locator('summary').click();
   const sourceForm = sources.locator('form.aznet-theme-panel').filter({ has: page.getByRole('heading', { name: 'Nguồn nội dung' }) });
-  const teamSelect = sourceForm.locator('select[name="aznet_theme_settings[homepage_team_page]"]');
-  if (await teamSelect.count() !== 1) throw new Error('Law 01 Team source selector missing');
+  const teamSelect = sourceForm.locator('select[name="aznet_theme_settings[homepage_law01_team_page]"]');
+  if (await teamSelect.count() !== 1) throw new Error('Law 01 scoped Team source selector missing');
   await teamSelect.selectOption({ label: 'R5 Team Parent' });
   await Promise.all([
     page.waitForURL(/updated=1/, { timeout: 20000 }),
