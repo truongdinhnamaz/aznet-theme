@@ -14,6 +14,7 @@ if (false === $module || false === $bootstrap || false === $card) {
 foreach ([
     'function team_directory_parent',
     'function team_directory_members',
+    'function team_directory_public_members',
     'function team_directory_member_is_child',
     'function team_directory_next_menu_order',
     "homepage_source_value( 'law-01', 'team'",
