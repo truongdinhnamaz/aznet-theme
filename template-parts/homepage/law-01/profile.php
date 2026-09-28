@@ -92,7 +92,9 @@ if ( $about_fallback ) {
     <div class="aznet-theme-law01-profile__team-band aznet-theme-law01-team">
         <div class="aznet-theme-law01-profile__team-heading">
             <p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Đội ngũ luật sư', 'aznet-theme' ); ?></p>
-            <h2><?php echo esc_html( get_the_title( $team ) ); ?></h2>
+            <div class="aznet-theme-law01-profile__team-title-row">
+                <h2><?php echo esc_html( get_the_title( $team ) ); ?></h2>
+                    </div>
             <?php if ( '' !== $team_summary ) : ?><p class="aznet-theme-law01-lede"><?php echo esc_html( $team_summary ); ?></p><?php endif; ?>
         </div>
         <?php if ( [] !== $members ) : ?>
