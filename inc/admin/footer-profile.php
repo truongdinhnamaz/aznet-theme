@@ -196,11 +196,15 @@ function handle_footer_profile_save(): void {
             continue;
         }
 
+        $display_title = ( 'tel' === $definition['type'] || 'email' === $definition['type'] )
+            ? $value
+            : (string) $definition['title'];
+
         wp_update_nav_menu_item(
             $menu_id,
             $item_id,
             [
-                'menu-item-title'   => $definition['title'],
+                'menu-item-title'   => $display_title,
                 'menu-item-url'     => '' !== $url ? $url : '#',
                 'menu-item-status'  => '' !== $value ? 'publish' : 'draft',
                 'menu-item-type'    => 'custom',
