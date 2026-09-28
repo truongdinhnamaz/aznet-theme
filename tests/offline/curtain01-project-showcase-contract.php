@@ -28,9 +28,15 @@ foreach ([
     }
 }
 
-$curtain_sections = "[ 'about', 'category-showcase', 'catalogue', 'process', 'projects', 'knowledge', 'final-cta' ]";
-if (! str_contains($composer, $curtain_sections)) {
-    fwrite(STDERR, "FAIL: Curtain 01 projects must render after process and before knowledge without reordering approved sections.\n");
+$runtime_contract = file_get_contents($root . '/tests/runtime/homepage-curtain01-map-runtime.php');
+if (
+    ! is_string($runtime_contract)
+    || ! str_contains($composer, "homepage_effective_surface_map( 'curtain-01' )")
+    || ! str_contains($runtime_contract, "'process',")
+    || ! str_contains($runtime_contract, "'projects',")
+    || ! str_contains($runtime_contract, "'knowledge',")
+) {
+    fwrite(STDERR, "FAIL: Curtain 01 projects must remain in the accepted shared surface-map order between process and knowledge.\n");
     exit(1);
 }
 
