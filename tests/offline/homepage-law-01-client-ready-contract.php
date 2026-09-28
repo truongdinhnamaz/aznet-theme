@@ -6,6 +6,7 @@ $root = dirname(__DIR__, 2);
 $files = [
     'css' => $root . '/assets/css/components/homepage-law-01-variants.css',
     'composer' => $root . '/inc/theme/homepage-composer.php',
+    'surface_map' => $root . '/inc/theme/homepage-surface-map.php',
     'hero' => $root . '/template-parts/homepage/law-01/hero.php',
     'services' => $root . '/template-parts/homepage/law-01/services.php',
     'profile' => $root . '/template-parts/homepage/law-01/profile.php',
@@ -23,6 +24,7 @@ foreach ($files as $label => $path) {
 
 $css = file_get_contents($files['css']);
 $composer = file_get_contents($files['composer']);
+$surfaceMap = file_get_contents($files['surface_map']);
 $hero = file_get_contents($files['hero']);
 $services = file_get_contents($files['services']);
 $profile = file_get_contents($files['profile']);
@@ -57,9 +59,10 @@ foreach ([
 assert(! str_contains($css, '.aznet-theme-site-footer--law01-'), 'Law 01 variant CSS must not own Footer presentation.');
 assert(str_contains($footerCss, '.aznet-theme-site-footer'), 'Independent Footer component stylesheet must own Footer presentation.');
 
-assert(str_contains($composer, "[ 'hero', 'services', 'profile' ]"), 'Composer must render the combined client-ready profile band.');
-assert(str_contains($composer, "[ 'latest', 'topics', 'analysis', 'news', 'process', 'faq', 'final-cta' ]"), 'Burgundy Law 01 Homepage must extend the locked v1.3.18 baseline after Latest with mapped knowledge, analysis, news, process, FAQ and final CTA sections.');
-assert(! str_contains($composer, "[ 'hero', 'services', 'about', 'team' ]"), 'Composer must not render duplicate legacy About/Team sections.');
+assert(str_contains($composer, "homepage_effective_surface_map( 'law-01' )"), 'Composer must render Law 01 from the shared effective-surface model.');
+assert(str_contains($surfaceMap, "            'profile',"), 'Shared Law 01 surface model must expose the combined client-ready profile band.');
+assert(str_contains($surfaceMap, "? [ 'latest', 'topics', 'analysis', 'news', 'process', 'faq', 'final-cta' ]"), 'Burgundy Law 01 Homepage must extend the locked v1.3.18 baseline after Latest with mapped knowledge, analysis, news, process, FAQ and final CTA sections.');
+assert(! str_contains($surfaceMap, "homepage_surface_entry(\n            'about',") && ! str_contains($surfaceMap, "homepage_surface_entry(\n            'team',"), 'Law 01 shared surface model must not render duplicate legacy About/Team sections.');
 foreach ([
     '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topics',
     '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-analysis',
