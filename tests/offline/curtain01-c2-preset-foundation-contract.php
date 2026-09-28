@@ -40,8 +40,13 @@ if (! str_contains($assets, '/assets/css/components/homepage-curtain-01.css')) {
     exit(1);
 }
 
+if (! in_array('curtain-01', AZnet\Theme\template_homepage_preset_ids(), true)) {
+    fwrite(STDERR, "FAIL: Curtain 01 is not exposed by the Template Registry as a selectable Homepage preset.\n");
+    exit(1);
+}
+
 if (! is_string($admin) || ! str_contains($admin, "'curtain-01' => 'Rèm 01'")) {
-    fwrite(STDERR, "FAIL: Curtain 01 is not exposed as a selectable Homepage preset.\n");
+    fwrite(STDERR, "FAIL: Curtain 01 admin presentation label is missing.\n");
     exit(1);
 }
 
