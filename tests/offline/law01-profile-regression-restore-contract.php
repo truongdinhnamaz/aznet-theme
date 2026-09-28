@@ -5,9 +5,9 @@ $root = dirname(__DIR__, 2);
 $profile = (string) file_get_contents($root . '/template-parts/homepage/law-01/profile.php');
 
 foreach ([
-    "setting( 'homepage_about_page', 0 )",
-    "setting( 'homepage_team_page', 0 )",
-    "setting( 'homepage_services_page', 0 )",
+    "homepage_effective_source_value( 'law-01', 'about', \$settings )",
+    "homepage_effective_source_value( 'law-01', 'team', \$settings )",
+    "homepage_effective_source_value( 'law-01', 'services', \$settings )",
 ] as $needle) {
     if (! str_contains($profile, $needle)) {
         fwrite(STDERR, "FAIL: Profile primary surface no longer preserves the proven legacy mapping: {$needle}\n");
@@ -15,4 +15,4 @@ foreach ([
     }
 }
 
-echo "PASS: Profile primary About/Team/Services surface preserves the pre-1.3.52 mapping path.\n";
+echo "PASS: Profile primary About/Team/Services surface preserves the effective scoped mapping path.\n";
