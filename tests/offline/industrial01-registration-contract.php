@@ -62,11 +62,11 @@ foreach (['hero', 'categories', 'products', 'cta'] as $section) {
 
 $categories = file_get_contents($root . '/template-parts/homepage/industrial-01/categories.php');
 $products = file_get_contents($root . '/template-parts/homepage/industrial-01/products.php');
-assert(is_string($categories) && str_contains($categories, "taxonomy_exists( 'product_cat' )"), 'Industrial categories must fail soft when WooCommerce taxonomy is absent.');
-assert(str_contains($categories, "get_terms("), 'Industrial categories must consume public WordPress taxonomy APIs.');
-assert(is_string($products) && str_contains($products, "function_exists( 'wc_get_products' )"), 'Industrial products must fail soft when WooCommerce is absent.');
-assert(str_contains($products, 'wc_get_products('), 'Industrial products must consume WooCommerce public product APIs.');
-foreach (['get_option(', 'get_post_meta(', 'update_option(', 'update_post_meta('] as $privateStoreNeedle) {
+assert(is_string($categories) && str_contains($categories, 'Integrations\\WooCommerce\\homepage_product_category_showcase_terms'), 'Industrial categories must consume the bounded WooCommerce integration adapter.');
+assert(is_string($products) && str_contains($products, 'Integrations\\WooCommerce\\homepage_products'), 'Industrial products must consume the bounded WooCommerce integration adapter.');
+$heroSource = file_get_contents($root . '/template-parts/homepage/industrial-01/hero.php');
+assert(is_string($heroSource) && str_contains($heroSource, 'Integrations\\WooCommerce\\shop_url'), 'Industrial shop CTA must consume the bounded WooCommerce integration adapter.');
+foreach (['get_option(', 'get_post_meta(', 'update_option(', 'update_post_meta(', 'wc_get_products(', 'get_terms('] as $privateStoreNeedle) {
     assert(! str_contains($categories . $products, $privateStoreNeedle), "Industrial 01 must not read or mutate private/domain storage directly: {$privateStoreNeedle}");
 }
 
