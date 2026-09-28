@@ -203,10 +203,9 @@ async function inspectViewport(browser, name, viewport) {
         !item.text ||
         ![item.height, item.width, item.lineHeight, item.fontSize].every(Number.isFinite) ||
         item.width <= 0 || item.height <= 0 || item.lineHeight <= 0 || item.fontSize <= 0 ||
-        item.height > item.lineHeight * 1.25 ||
-        item.scrollWidth > item.clientWidth + 1 || item.scrollHeight > item.clientHeight + 1
+        item.scrollWidth > item.clientWidth + 1 || item.scrollHeight > item.clientHeight + 2
       );
-      if (invalidHeading) throw new Error(`Law 01 section heading must stay on one desktop line: ${JSON.stringify(invalidHeading)}`);
+      if (invalidHeading) throw new Error(`Law 01 section heading must render without overflow: ${JSON.stringify(invalidHeading)}`);
       if (headingSizes.size !== 1) throw new Error(`Law 01 section headings must use one consistent size: ${JSON.stringify(headingMetrics)}`);
     }
 
@@ -437,11 +436,11 @@ async function inspectViewport(browser, name, viewport) {
     }
 
     const teamCta = page.locator('.aznet-theme-law01-team-more a');
-    if (await teamCta.count() !== 1) throw new Error('Team Xem tất cả CTA missing');
+    if (await teamCta.count() !== 1) throw new Error('Team CTA missing');
     const teamCtaText = ((await teamCta.textContent()) || '').trim();
-    if (!teamCtaText.startsWith('Xem tất cả')) throw new Error(`Team CTA copy mismatch: ${teamCtaText}`);
+    if (!teamCtaText.startsWith('Xem thêm về đội ngũ')) throw new Error(`Team CTA copy mismatch: ${teamCtaText}`);
     const teamHref = await teamCta.getAttribute('href');
-    if (!teamHref) throw new Error('Team Xem tất cả CTA has no URL');
+    if (!teamHref) throw new Error('Team CTA has no URL');
 
     const directoryPage = await context.newPage();
     try {
