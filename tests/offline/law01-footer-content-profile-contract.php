@@ -49,7 +49,7 @@ foreach (['aznet-theme-site-footer__services', 'grid-template-columns: minmax(28
 $profile = (string) file_get_contents($root . '/inc/admin/footer-profile.php');
 foreach ([
     "'menu-item-title'   => $display_title",
-    "'tel' === \$definition['type'] || 'email' === \$definition['type']",
+    "'tel' === $definition['type'] || 'email' === $definition['type']",
 ] as $needle) {
     if (! str_contains($profile, $needle)) {
         $fail("Footer profile must render phone/email values rather than generic labels: {$needle}");
