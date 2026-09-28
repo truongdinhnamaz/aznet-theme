@@ -28,17 +28,18 @@ $must(
 
 $must(
     1 === preg_match(
-        '/\.aznet-theme-homepage--law-01-burgundy-gold \.aznet-theme-law01-hero__contact-list a\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*2rem minmax\(0,\s*1fr\);[^}]*min-height:\s*3\.5rem;/s',
+        '/\.aznet-theme-homepage--law-01-burgundy-gold \.aznet-theme-law01-hero__contact-list a\s*\{[^}]*display:\s*inline-flex;[^}]*width:\s*2\.75rem;[^}]*height:\s*2\.75rem;[^}]*font-size:\s*0;/s',
         $css
     ),
-    'Law 01 Hero contact items must reserve a compact icon rail without changing menu-owned text.'
+    'Law 01 Hero contact items must render as compact icon-only controls while preserving menu-owned link text in the DOM.'
 );
 
 $must(
     str_contains($css, '.aznet-theme-law01-hero__contact-list a::before') &&
     str_contains($css, 'a[href^="tel:"]::before') &&
-    str_contains($css, 'a[href^="mailto:"]::before'),
-    'Law 01 Hero contact strip must add presentation-only location/phone/email icon treatment from semantic link schemes.'
+    str_contains($css, 'a[href^="mailto:"]::before') &&
+    str_contains($css, 'a[href*="facebook.com"]::before'),
+    'Law 01 Hero contact strip must add presentation-only link-type icons for location/default, phone, email and Facebook/Page sources.'
 );
 
 $must(
@@ -49,10 +50,10 @@ $must(
 
 $must(
     1 === preg_match(
-        '/@media \(max-width:\s*640px\)[\s\S]*\.aznet-theme-homepage--law-01-burgundy-gold \.aznet-theme-law01-hero__contact-list\s*\{[^}]*grid-template-columns:\s*1fr;/s',
+        '/@media \(max-width:\s*640px\)[\s\S]*\.aznet-theme-homepage--law-01-burgundy-gold \.aznet-theme-law01-hero__contact-list\s*\{[^}]*display:\s*flex;[^}]*flex-wrap:\s*wrap;[^}]*gap:\s*\.55rem;/s',
         $css
     ),
-    'Law 01 Hero contact strip must stack safely on narrow mobile.'
+    'Law 01 Hero icon-only contact controls must wrap safely on narrow mobile.'
 );
 
 echo "PASS: Law 01 reference Hero contact-strip presentation contract\n";

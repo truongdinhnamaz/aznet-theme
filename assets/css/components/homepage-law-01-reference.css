@@ -153,23 +153,25 @@
     border-inline-start: 1px solid rgba(133, 13, 18, .12);
 }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__contact-list a {
-    display: grid;
-    grid-template-columns: 2rem minmax(0, 1fr);
-    min-height: 3.5rem;
+    display: inline-flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    min-height: 2.75rem;
     align-items: center;
-    gap: .65rem;
-    padding: .45rem .9rem;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid rgba(133, 13, 18, .16);
+    border-radius: 50%;
+    background: #fffdf8;
     color: #40372f;
-    font-size: var(--aznet-theme-text-small);
-    font-weight: var(--aznet-theme-font-weight-semibold);
-    line-height: 1.35;
+    font-size: 0;
+    line-height: 1;
     text-decoration: none;
-    overflow-wrap: anywhere;
 }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__contact-list a::before {
-    width: 1.15rem;
-    height: 1.15rem;
-    justify-self: center;
+    width: 1.2rem;
+    height: 1.2rem;
+    flex: 0 0 1.2rem;
     background: currentColor;
     color: var(--law01-client-gold);
     content: "";
@@ -185,6 +187,12 @@
     content: "";
     -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M3 6h18v12H3V6Zm1 1 8 6 8-6'/%3E%3C/svg%3E");
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M3 6h18v12H3V6Zm1 1 8 6 8-6'/%3E%3C/svg%3E");
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__contact-list a[href*="facebook.com"]::before,
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__contact-list a[href*="fb.com"]::before {
+    content: "";
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M13.6 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5H17V4a23 23 0 0 0-2.5-.1c-2.5 0-4.2 1.5-4.2 4.3V10H7.5v3h2.8v8h3.3Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M13.6 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5H17V4a23 23 0 0 0-2.5-.1c-2.5 0-4.2 1.5-4.2 4.3V10H7.5v3h2.8v8h3.3Z'/%3E%3C/svg%3E");
 }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__contact-list a:hover,
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__contact-list a:focus-visible {
@@ -331,14 +339,14 @@
         padding-top: .75rem;
     }
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__contact-list {
-        grid-template-columns: 1fr;
+        display: flex;
+        grid-template-columns: none;
+        flex-wrap: wrap;
+        gap: .55rem;
     }
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__contact-list > li + li {
         border-inline-start: 0;
-        border-top: 1px solid rgba(133, 13, 18, .1);
-    }
-    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-hero__contact-list a {
-        padding-inline: .2rem;
+        border-top: 0;
     }
 }
 
