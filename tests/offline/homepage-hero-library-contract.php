@@ -67,13 +67,14 @@ assert(! str_contains($apply_action, 'wp_update_post('), 'Hero Library apply act
 assert(str_contains($bootstrap, "admin_post_aznet_theme_apply_homepage_hero"), 'D-030 Hero action must be wired explicitly.');
 assert(str_contains($admin, 'Hero WordPress đang soạn'), 'Control Center must expose draft-first Hero state.');
 assert(str_contains($admin, 'Hero WordPress chưa có nội dung'), 'Control Center must distinguish an empty published Hero from a render-ready Hero.');
-assert(
-    1 === preg_match(
-        "/\\$statuses\\[\\s*\\$slot\\s*\\]\\s*=\\s*''\\s*!==\\s*trim\\(\\s*\\(string\\)\\s*\\$[A-Za-z_][A-Za-z0-9_]*->post_content\\s*\\)\\s*\\?\\s*'READY'\\s*:\\s*'EMPTY'/",
-        $admin
-    ),
-    'Homepage diagnostics must report an empty published Hero as EMPTY without coupling the contract to a local variable name.'
-);
+
+$status_start = strpos( $admin, 'function homepage_slot_statuses' );
+$status_end = false === $status_start ? false : strpos( $admin, '/** Render one Page selector.', $status_start );
+assert( false !== $status_start && false !== $status_end && $status_end > $status_start, 'Homepage diagnostics function boundary missing.' );
+$status_body = substr( $admin, $status_start, $status_end - $status_start );
+assert( str_contains( $status_body, 'homepage_block_reference' ), 'Homepage diagnostics must resolve the published Hero block through the typed resolver.' );
+assert( str_contains( $status_body, '->post_content' ), 'Homepage diagnostics must inspect WordPress-owned Hero block content.' );
+assert( str_contains( $status_body, "'READY' : 'EMPTY'" ), 'Homepage diagnostics must distinguish render-ready and empty published Hero content.' );
 
 assert(str_contains($admin, 'chuyển Hero WordPress này về trạng thái Bản nháp'), 'Control Center must expose the non-destructive Hero rollback path.');
 assert(str_contains($admin, 'website hiện tại chưa đổi cho đến khi Hero mới được xuất bản'), 'Draft-first Hero UX must preserve current public output.');
