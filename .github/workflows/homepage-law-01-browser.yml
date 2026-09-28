@@ -226,6 +226,7 @@ jobs:
               $order += 10;
           }
           $team = law01_page( 'Đội ngũ luật sư', 'doi-ngu-luat-su', 'Tìm hiểu đội ngũ và cách chúng tôi phối hợp trong quá trình tư vấn.' );
+          law01_page( '', 'ls-khong-ten', '', '', $team, 5 );
           $member_a = law01_page( 'Luật sư tư vấn doanh nghiệp', 'luat-su-doanh-nghiep', 'Luật sư Doanh nghiệp', '', $team, 10 );
           $member_b = law01_page( 'Luật sư tư vấn dân sự', 'luat-su-dan-su', 'Luật sư Dân sự', '', $team, 20 );
           $member_c = law01_page( 'Luật sư tư vấn hình sự', 'luat-su-hinh-su', '', '', $team, 30 );
