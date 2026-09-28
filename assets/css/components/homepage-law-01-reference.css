@@ -525,6 +525,17 @@
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__team-heading {
     max-width: 42rem;
 }
+
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__team-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__team-title-row h2 {
+    min-width: 0;
+    flex: 1 1 auto;
+}
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__team-heading .aznet-theme-law01-lede {
     max-width: 42rem;
     margin: .8rem 0 0;
@@ -588,7 +599,8 @@
     line-height: 1.35;
 }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-team-more {
-    margin: 1.55rem 0 0;
+    flex: 0 0 auto;
+    margin: 0;
 }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-team-more .aznet-theme-law01-button {
     min-width: 13.8rem;
@@ -612,6 +624,17 @@
 }
 
 @media (max-width: 640px) {
+    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__team-title-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: .85rem;
+    }
+    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__team-title-row .aznet-theme-law01-team-more {
+        width: 100%;
+    }
+    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__team-title-row .aznet-theme-law01-button {
+        width: 100%;
+    }
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile {
         padding-block: 2rem;
     }
