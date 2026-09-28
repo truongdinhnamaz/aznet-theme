@@ -20,9 +20,9 @@ $profile = (string) file_get_contents($profilePath);
 $profileRequired = [
     'aznet-theme-law01-profile__facts',
     'aznet-theme-law01-profile__fact-value',
-    'homepage_services_page',
-    'homepage_process_page',
-    'homepage_faq_page',
+    "homepage_effective_source_value( 'law-01', 'services', \$settings )",
+    "homepage_source_value( 'law-01', 'process' )",
+    "homepage_source_value( 'law-01', 'faq' )",
 ];
 
 foreach ($profileRequired as $needle) {
