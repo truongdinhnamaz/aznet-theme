@@ -61,7 +61,7 @@ if (! is_file($template_path)) {
 }
 
 $template = file_get_contents($template_path);
-foreach (["setting( 'homepage_proof_block', 0 )", 'homepage_block_reference', 'do_blocks'] as $needle) {
+foreach (["homepage_effective_source_value( 'curtain-01', 'proof' )", 'homepage_block_reference', 'do_blocks'] as $needle) {
     if (! is_string($template) || ! str_contains($template, $needle)) {
         fwrite(STDERR, "FAIL: proof strip must consume a WordPress-owned synced block: {$needle}\n");
         exit(1);
