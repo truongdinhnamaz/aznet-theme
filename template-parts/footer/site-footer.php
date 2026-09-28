@@ -122,7 +122,7 @@ $navigation_heading = __( 'Liên kết nhanh', 'aznet-theme' );
                                 <a class="aznet-theme-site-footer__contact-link aznet-theme-site-footer__contact-link--<?php echo esc_attr( $contact_key ); ?>"
                                    href="<?php echo esc_url( $contact_url, [ 'http', 'https', 'tel', 'mailto' ] ); ?>">
                                     <span class="aznet-theme-site-footer__contact-icon" aria-hidden="true"></span>
-                                    <span><?php echo esc_html( $contact_title ); ?></span>
+                                    <span class="screen-reader-text"><?php echo esc_html( $contact_title ); ?></span>
                                 </a>
                             </li>
                         <?php endforeach; ?>

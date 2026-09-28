@@ -89,13 +89,21 @@ foreach ( $menu_definitions as $location => $definition ) {
         y3_runtime_fail( 'unable to create menu for ' . $location );
     }
 
+    $managed_class = '';
+    if ( 'footer-social' === $location ) {
+        $managed_class = 'aznet-theme-footer-field-facebook';
+    } elseif ( 'footer-contact' === $location ) {
+        $managed_class = 'aznet-theme-footer-field-location';
+    }
+
     $item_id = wp_update_nav_menu_item(
         (int) $menu_id,
         0,
         [
-            'menu-item-title'  => $label,
-            'menu-item-url'    => home_url( $path ),
-            'menu-item-status' => 'publish',
+            'menu-item-title'   => $label,
+            'menu-item-url'     => home_url( $path ),
+            'menu-item-status'  => 'publish',
+            'menu-item-classes' => $managed_class,
         ]
     );
     if ( is_wp_error( $item_id ) || 0 >= (int) $item_id ) {
