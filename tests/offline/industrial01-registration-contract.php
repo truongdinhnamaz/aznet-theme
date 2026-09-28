@@ -70,6 +70,11 @@ foreach (['get_option(', 'get_post_meta(', 'update_option(', 'update_post_meta('
     assert(! str_contains($categories . $products, $privateStoreNeedle), "Industrial 01 must not read or mutate private/domain storage directly: {$privateStoreNeedle}");
 }
 
+$adminSource = file_get_contents($root . '/inc/admin/homepage.php');
+assert(is_string($adminSource) && str_contains($adminSource, "'template_id'   => 'industrial-01'"), 'Industrial 01 must be selectable in the Theme Template Library.');
+assert(str_contains($adminSource, "'name'          => __( 'Industrial 01', 'aznet-theme' )"), 'Industrial 01 Template Library card label must be present.');
+assert(str_contains($adminSource, 'website B2B bán thiết bị công nghiệp và phụ kiện'), 'Industrial 01 admin copy must describe its reusable B2B industrial purpose.');
+
 $homepageCssPath = $root . '/assets/css/components/homepage-industrial-01.css';
 assert(is_file($homepageCssPath), 'Industrial 01 homepage stylesheet must exist.');
 $homepageCss = file_get_contents($homepageCssPath);
