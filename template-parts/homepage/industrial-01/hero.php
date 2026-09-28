@@ -11,7 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $site_name = get_bloginfo( 'name' );
 $tagline   = get_bloginfo( 'description' );
-$shop_url  = function_exists( 'wc_get_page_id' ) ? get_permalink( wc_get_page_id( 'shop' ) ) : home_url( '/' );
+$shop_url  = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\shop_url' )
+    ? \AZnet\Theme\Integrations\WooCommerce\shop_url()
+    : '';
 ?>
 <section class="aznet-theme-industrial01-section aznet-theme-industrial01-hero">
     <div class="aznet-theme-industrial01-shell aznet-theme-industrial01-hero__grid">
@@ -22,7 +24,7 @@ $shop_url  = function_exists( 'wc_get_page_id' ) ? get_permalink( wc_get_page_id
                 <p class="aznet-theme-industrial01-lede"><?php echo esc_html( $tagline ); ?></p>
             <?php endif; ?>
             <div class="aznet-theme-industrial01-actions">
-                <a class="aznet-theme-industrial01-button" href="<?php echo esc_url( $shop_url ?: home_url( '/' ) ); ?>">
+                <a class="aznet-theme-industrial01-button" href="<?php echo esc_url( '' !== $shop_url ? $shop_url : home_url( '/' ) ); ?>">
                     <?php echo esc_html( \AZnet\Theme\preset_term( 'primary_group', __( 'Danh mục thiết bị', 'aznet-theme' ), 'industrial-01' ) ); ?>
                 </a>
                 <a class="aznet-theme-industrial01-text-link" href="#aznet-industrial01-quote">
