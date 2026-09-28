@@ -264,6 +264,21 @@ foreach (['repeat(3, minmax(140px, .75fr))', '.aznet-theme-site-footer__social-c
 if (! str_contains($css, '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__main {') || ! str_contains($css, 'grid-template-columns: minmax(260px, 1.2fr) minmax(180px, .9fr) minmax(160px, .7fr) minmax(150px, .65fr);')) {
     y3_fail('Law 01 Footer demo fidelity requires a four-column desktop grid for identity, contact, links and social.');
 }
+
+$law01ContactPos = strpos($template, "if ( in_array( $preset, [ 'professional', 'law-01' ], true ) && '' !== $contact_menu )");
+$law01NavigationPos = strpos($template, "if ( '' !== $primary_menu )");
+if (false === $law01ContactPos || false === $law01NavigationPos || $law01ContactPos > $law01NavigationPos) {
+    y3_fail('Law 01 Footer must render Contact before primary navigation to match the approved reference composition.');
+}
+foreach ([
+    '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__main > *',
+    'min-width: 0;',
+    'overflow-wrap: anywhere;',
+] as $needle) {
+    if (! str_contains($css, $needle)) {
+        y3_fail('Law 01 Footer must contain overflow-safe presentation guard: ' . $needle);
+    }
+}
 foreach ([
     '--aznet-theme-law01-burgundy-deep',
     '--aznet-theme-law01-gold',
