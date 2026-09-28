@@ -30,6 +30,11 @@ foreach ([
     }
 }
 
+if (str_contains($template, 'aznet-theme-services-page__group-excerpt')) {
+    fwrite(STDERR, "FAIL: Services root group cards must not reuse primary-service excerpts that are already locked for Homepage cards.\n");
+    exit(1);
+}
+
 if (preg_match('/(?<!AZnet\\\\Theme\\\\)homepage_renderable_child_pages\\s*\\(/', $template)) {
     fwrite(STDERR, "FAIL: Services root must call the namespaced Theme child-page resolver from the global template scope\n");
     exit(1);
