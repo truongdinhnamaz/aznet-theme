@@ -3,6 +3,8 @@
 namespace AZnet\Theme\Admin;
 
 use function AZnet\Theme\provisioning_blueprint;
+use function AZnet\Theme\provisioning_blueprint_keys;
+use function AZnet\Theme\provisioning_blueprint_catalog;
 use function AZnet\Theme\provisioning_build_plan;
 use function AZnet\Theme\provisioning_discovery;
 use function AZnet\Theme\provisioning_plan_fingerprint;
@@ -106,7 +108,7 @@ function handle_provisioning_plan(): void {
     if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Bạn không có quyền thực hiện thao tác này.', 'aznet-theme' ) ); }
     check_admin_referer( 'aznet_theme_provisioning' );
     $blueprint = isset( $_POST['blueprint'] ) ? sanitize_key( wp_unslash( $_POST['blueprint'] ) ) : '';
-    if ( ! in_array( $blueprint, [ 'law01-v1', 'law01-v1-1', 'law01-v1-2', 'professional-services-v1' ], true ) ) { wp_die( esc_html__( 'Blueprint không hợp lệ.', 'aznet-theme' ) ); }
+    if ( ! in_array( $blueprint, provisioning_blueprint_keys(), true ) ) { wp_die( esc_html__( 'Blueprint không hợp lệ.', 'aznet-theme' ) ); }
     $raw_pages = isset( $_POST['pages'] ) && is_array( $_POST['pages'] ) ? wp_unslash( $_POST['pages'] ) : [];
     $raw_categories = isset( $_POST['categories'] ) && is_array( $_POST['categories'] ) ? wp_unslash( $_POST['categories'] ) : [];
     $menu_action = isset( $_POST['menu_action'] ) ? sanitize_key( wp_unslash( $_POST['menu_action'] ) ) : 'skip';
@@ -236,7 +238,8 @@ function render_provisioning_wizard(): void {
     if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Bạn không có quyền thực hiện thao tác này.', 'aznet-theme' ) ); }
     $step = isset( $_GET['step'] ) ? max( 1, min( 4, (int) $_GET['step'] ) ) : 1;
     $blueprint_key = isset( $_GET['blueprint'] ) ? sanitize_key( wp_unslash( $_GET['blueprint'] ) ) : 'law01-v1-2';
-    if ( ! in_array( $blueprint_key, [ 'law01-v1-2', 'professional-services-v1' ], true ) ) { $blueprint_key = 'law01-v1-2'; }
+    $blueprint_catalog = provisioning_blueprint_catalog();
+    if ( ! array_key_exists( $blueprint_key, $blueprint_catalog ) ) { $blueprint_key = 'law01-v1-2'; }
     $state = provisioning_discovery();
     $blueprint = provisioning_blueprint( $blueprint_key );
     $is_law = 'law01-v1-2' === $blueprint_key;
@@ -246,7 +249,11 @@ function render_provisioning_wizard(): void {
         echo '<p><strong>' . esc_html__( 'Chế độ đề xuất:', 'aznet-theme' ) . '</strong> <code>' . esc_html( provisioning_site_mode( $state ) ) . '</code></p>';
         echo '<p class="description">' . esc_html__( 'Bước kiểm tra này chỉ đọc dữ liệu và không thay đổi website.', 'aznet-theme' ) . '</p>';
         echo '<form method="get" action="' . esc_url( admin_url( 'admin.php' ) ) . '"><input type="hidden" name="page" value="aznet-theme"><input type="hidden" name="section" value="provisioning"><input type="hidden" name="step" value="2">';
-        echo '<p><label for="aznet-theme-provision-blueprint"><strong>' . esc_html__( 'Blueprint', 'aznet-theme' ) . '</strong></label><br><select id="aznet-theme-provision-blueprint" name="blueprint"><option value="law01-v1-2">Law 01</option><option value="professional-services-v1">Professional Services</option></select></p>';
+        echo '<p><label for="aznet-theme-provision-blueprint"><strong>' . esc_html__( 'Blueprint', 'aznet-theme' ) . '</strong></label><br><select id="aznet-theme-provision-blueprint" name="blueprint">';
+        foreach ( $blueprint_catalog as $value => $label ) {
+            echo '<option value="' . esc_attr( $value ) . '" ' . selected( $blueprint_key, $value, false ) . '>' . esc_html( $label ) . '</option>';
+        }
+        echo '</select></p>';
         submit_button( __( 'Tiếp tục', 'aznet-theme' ), 'primary', 'submit', false );
         echo '</form>';
     } elseif ( 2 === $step && is_array( $blueprint ) ) {
@@ -292,8 +299,10 @@ function render_provisioning_wizard(): void {
                 echo '<input type="hidden" name="apply_starter_site_defaults" value="0"><input type="hidden" name="publish_starter_posts" value="0"><input type="hidden" name="discourage_indexing" value="0">';
                 echo '<p class="description">' . esc_html__( 'Website đang hoạt động: giữ nguyên Site Title/Tagline; starter Posts mới sẽ giữ Draft. Theme không noindex toàn site và không ghi private SEO meta.', 'aznet-theme' ) . '</p>';
             }
-        } else {
+        } elseif ( 'professional-services-v1' === $blueprint_key ) {
             echo '<p class="description">' . esc_html__( 'Professional Services chỉ tạo hoặc map các Page và Primary Menu đã xác nhận; không tạo dữ liệu chuyên ngành, người, chứng nhận hay thông tin liên hệ giả định.', 'aznet-theme' ) . '</p>';
+        } else {
+            echo '<p class="description">' . esc_html__( 'Rèm 01 chỉ tạo hoặc map cấu trúc WordPress-native đã xác nhận. Sản phẩm, giá, tồn kho và commerce state vẫn thuộc WooCommerce; Theme không tạo dữ liệu thương mại hay thông tin doanh nghiệp giả định.', 'aznet-theme' ) . '</p>';
         }
         submit_button( __( 'Dùng các thiết lập được khuyến nghị', 'aznet-theme' ) ); echo '</form>';
     } elseif ( 3 === $step ) {
