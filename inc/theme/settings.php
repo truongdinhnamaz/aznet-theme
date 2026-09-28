@@ -80,7 +80,14 @@ function settings_defaults(): array {
  * @return array<string, mixed>
  */
 function normalize_settings( array $raw ): array {
-    $preset = isset( $raw['visual_preset'] ) && in_array( $raw['visual_preset'], template_supported_visual_presets(), true )
+    $visual_presets = function_exists( __NAMESPACE__ . '\\template_supported_visual_presets' )
+        ? template_supported_visual_presets()
+        : [ 'default', 'editorial', 'commerce', 'curtain-01' ];
+    $homepage_presets = function_exists( __NAMESPACE__ . '\\template_supported_homepage_presets' )
+        ? template_supported_homepage_presets()
+        : [ 'off', 'law-01', 'curtain-01' ];
+
+    $preset = isset( $raw['visual_preset'] ) && in_array( $raw['visual_preset'], $visual_presets, true )
         ? (string) $raw['visual_preset']
         : 'default';
 
@@ -108,7 +115,7 @@ function normalize_settings( array $raw ): array {
         ? (string) $raw['woo_product_preset']
         : 'classic';
 
-    $homepage_preset = isset( $raw['homepage_preset'] ) && in_array( $raw['homepage_preset'], template_supported_homepage_presets(), true )
+    $homepage_preset = isset( $raw['homepage_preset'] ) && in_array( $raw['homepage_preset'], $homepage_presets, true )
         ? (string) $raw['homepage_preset']
         : 'off';
 
