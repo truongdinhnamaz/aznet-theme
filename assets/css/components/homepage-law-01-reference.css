@@ -504,7 +504,7 @@
 }
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__fact-value {
     color: var(--law01-client-burgundy);
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: var(--aznet-theme-font-family-heading);
     font-size: clamp(1.8rem, 2.6vw, 2.6rem);
     font-weight: 700;
     line-height: 1;
