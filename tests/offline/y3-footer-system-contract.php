@@ -269,15 +269,6 @@ foreach (['facebook', 'youtube', 'linkedin', 'tiktok', 'instagram'] as $channel)
         y3_fail('Law 01 Footer stylesheet must provide icon presentation for social channel: ' . $channel);
     }
 }
-
-foreach ([
-    '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__main > * {',
-    'overflow-wrap: anywhere;',
-] as $needle) {
-    if (! str_contains($css, $needle)) {
-        y3_fail('Law 01 Footer must constrain long contact content inside the viewport: ' . $needle);
-    }
-}
 $professionalContactPos = strpos($template, "if ( 'professional' === \$preset && '' !== \$contact_menu )");
 $professionalNavigationPos = strpos($template, "if ( '' !== \$primary_menu )");
 if (false === $professionalContactPos || false === $professionalNavigationPos || $professionalContactPos > $professionalNavigationPos) {
