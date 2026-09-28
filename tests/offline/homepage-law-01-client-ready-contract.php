@@ -165,11 +165,12 @@ foreach ([
 assert(! str_contains($services, 'str_pad('), 'Demo-aligned Law 01 service cards must not render numeric presentation badges.');
 
 foreach ([
-    'Các dịch vụ pháp lý dành cho bạn',
+    'get_the_title( $parent )',
     'aznet-theme-law01-services__heading',
 ] as $needle) {
     assert(str_contains($services, $needle), "Law 01 balanced services content hierarchy missing: {$needle}");
 }
+assert(! str_contains($services, 'Các dịch vụ pháp lý dành cho bạn'), 'Services heading must remain WordPress-owned instead of reverting to Theme-authored business copy.');
 foreach ([
     '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-container',
     'width: min(calc(100% - (2 * var(--aznet-theme-gutter))), 96rem);',
