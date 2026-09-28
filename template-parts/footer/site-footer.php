@@ -18,6 +18,8 @@ $site_title   = (string) ( $context['site_title'] ?? '' );
 $tagline      = (string) ( $context['tagline'] ?? '' );
 $home_url     = (string) ( $context['home_url'] ?? '' );
 $logo_html    = (string) ( $context['logo_html'] ?? '' );
+$about_intro  = (string) ( $context['about_intro'] ?? '' );
+$services     = is_array( $context['services'] ?? null ) ? $context['services'] : [];
 $menus        = is_array( $context['menus'] ?? null ) ? $context['menus'] : [];
 $primary_menu = (string) ( $menus['footer'] ?? '' );
 $contact_menu = (string) ( $menus['footer-contact'] ?? '' );
@@ -46,9 +48,23 @@ $navigation_heading = __( 'Liên kết nhanh', 'aznet-theme' );
                     <?php endif; ?>
                 </a>
                 <?php if ( '' !== $tagline ) : ?>
-                    <p><?php echo esc_html( $tagline ); ?></p>
+                    <p class="aznet-theme-site-footer__tagline"><?php echo esc_html( $tagline ); ?></p>
+                <?php endif; ?>
+                <?php if ( 'law-01' === $preset && '' !== $about_intro ) : ?>
+                    <p class="aznet-theme-site-footer__about"><?php echo esc_html( $about_intro ); ?></p>
                 <?php endif; ?>
             </div>
+
+            <?php if ( 'law-01' === $preset && ! empty( $services ) ) : ?>
+                <nav class="aznet-theme-site-footer__services" aria-label="<?php echo esc_attr__( 'Dịch vụ chính', 'aznet-theme' ); ?>">
+                    <h2 class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Dịch vụ chính', 'aznet-theme' ); ?></h2>
+                    <ul class="aznet-theme-site-footer__services-menu">
+                        <?php foreach ( array_slice( $services, 0, 4 ) as $service ) : ?>
+                            <li><a href="<?php echo esc_url( (string) ( $service['url'] ?? '' ) ); ?>"><?php echo esc_html( (string) ( $service['title'] ?? '' ) ); ?></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </nav>
+            <?php endif; ?>
 
             <?php if ( 'professional' === $preset && '' !== $contact_menu ) : ?>
                 <nav class="aznet-theme-site-footer__contact" aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
@@ -64,14 +80,28 @@ $navigation_heading = __( 'Liên kết nhanh', 'aznet-theme' );
                 </nav>
             <?php endif; ?>
 
-            <?php if ( 'professional' !== $preset && '' !== $contact_menu ) : ?>
+            <?php if ( 'law-01' === $preset && ( '' !== $contact_menu || '' !== $social_menu ) ) : ?>
+                <div class="aznet-theme-site-footer__contact aznet-theme-site-footer__contact-social">
+                    <h2 class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Liên hệ & kết nối', 'aznet-theme' ); ?></h2>
+                    <?php if ( '' !== $contact_menu ) : ?>
+                        <nav aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
+                            <?php echo $contact_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
+                        </nav>
+                    <?php endif; ?>
+                    <?php if ( '' !== $social_menu ) : ?>
+                        <nav class="aznet-theme-site-footer__social" aria-label="<?php echo esc_attr__( 'Mạng xã hội', 'aznet-theme' ); ?>">
+                            <?php echo $social_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
+                        </nav>
+                    <?php endif; ?>
+                </div>
+            <?php elseif ( 'professional' !== $preset && '' !== $contact_menu ) : ?>
                 <nav class="aznet-theme-site-footer__contact" aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
                     <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $contact_heading ); ?></h2>
                     <?php echo $contact_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
                 </nav>
             <?php endif; ?>
 
-            <?php if ( in_array( $preset, [ 'professional', 'law-01' ], true ) && '' !== $social_menu ) : ?>
+            <?php if ( 'professional' === $preset && '' !== $social_menu ) : ?>
                 <nav class="aznet-theme-site-footer__social-column aznet-theme-site-footer__social" aria-label="<?php echo esc_attr__( 'Kết nối với chúng tôi', 'aznet-theme' ); ?>">
                     <h2 class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Kết nối với chúng tôi', 'aznet-theme' ); ?></h2>
                     <?php echo $social_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
