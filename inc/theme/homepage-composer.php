@@ -69,6 +69,13 @@ function render_curtain01_part( string $slug, array $args = [] ): void {
     get_template_part( 'template-parts/homepage/curtain-01/' . $slug, null, $args );
 }
 
+/** @param string $slug Industrial 01 section slug. @param array<string, mixed> $args Section arguments. */
+function render_industrial01_part( string $slug, array $args = [] ): void {
+    $path = get_theme_file_path( 'template-parts/homepage/industrial-01/' . $slug . '.php' );
+    if ( ! is_file( $path ) ) { return; }
+    get_template_part( 'template-parts/homepage/industrial-01/' . $slug, null, $args );
+}
+
 /** Render Law 01 sections that precede the native Front Page body boundary. */
 function render_homepage_before_content(): void {
     if ( ! homepage_composer_active() ) { return; }
@@ -78,6 +85,14 @@ function render_homepage_before_content(): void {
         foreach ( homepage_effective_surface_map( 'curtain-01' ) as $surface ) {
             if ( 'before' !== ( $surface['boundary'] ?? '' ) ) { continue; }
             render_curtain01_part( (string) ( $surface['template'] ?? '' ) );
+        }
+        return;
+    }
+
+    if ( 'industrial-01' === homepage_preset() ) {
+        echo '<div class="aznet-theme-homepage aznet-theme-homepage--industrial-01">';
+        foreach ( [ 'hero', 'categories', 'products' ] as $slug ) {
+            render_industrial01_part( $slug );
         }
         return;
     }
@@ -99,6 +114,12 @@ function render_homepage_after_content(): void {
             if ( 'after' !== ( $surface['boundary'] ?? '' ) ) { continue; }
             render_curtain01_part( (string) ( $surface['template'] ?? '' ) );
         }
+        echo '</div>';
+        return;
+    }
+
+    if ( 'industrial-01' === homepage_preset() ) {
+        render_industrial01_part( 'cta' );
         echo '</div>';
         return;
     }
