@@ -30,9 +30,9 @@ foreach ([
     }
 }
 
-$process_pos = strpos($surface_map, "$surfaces[] = homepage_surface_entry(\n                'process',");
-$projects_pos = strpos($surface_map, "$surfaces[] = homepage_surface_entry(\n            'projects',");
-$knowledge_pos = strpos($surface_map, "$surfaces[] = homepage_surface_entry(\n            'knowledge',");
+$process_pos = strpos($surface_map, "\$surfaces[] = homepage_surface_entry(\n                'process',");
+$projects_pos = strpos($surface_map, "\$surfaces[] = homepage_surface_entry(\n            'projects',");
+$knowledge_pos = strpos($surface_map, "\$surfaces[] = homepage_surface_entry(\n            'knowledge',");
 if (
     false === $process_pos
     || false === $projects_pos
