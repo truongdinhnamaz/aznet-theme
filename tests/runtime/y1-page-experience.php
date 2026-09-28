@@ -64,6 +64,16 @@ update_post_meta( $landing_id, '_wp_page_template', 'page-templates/landing.php'
 
 $services_id = $parent_id;
 
+$untitled_service_id = y1_create_page(
+    [
+        'post_title'   => '',
+        'post_parent'  => $services_id,
+        'post_name'    => 'y1-untitled-service-source-gap',
+        'menu_order'   => 0,
+        'post_content' => '<p>Untitled service source gap owned by WordPress.</p>',
+    ]
+);
+
 $service_detail_id = y1_create_page(
     [
         'post_title'   => 'Y1 Business Service',
@@ -211,6 +221,7 @@ $result = array_merge(
         'commerce_looking_id' => $commerce_looking_id,
         'services_id'          => $services_id,
         'service_detail_id'    => $service_detail_id,
+        'untitled_service_id'  => $untitled_service_id,
         'service_sibling_id'   => $service_sibling_id,
         'contact_id'           => $contact_id,
         'team_id'              => $team_id,
