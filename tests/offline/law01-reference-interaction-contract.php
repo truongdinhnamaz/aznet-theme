@@ -5,6 +5,7 @@ namespace AZnet\Theme;
 define('ABSPATH', __DIR__);
 $GLOBALS['law01_test_posts'] = [(object) ['ID' => 41, 'post_title' => 'Example article']];
 function homepage_latest_posts(...$args): array { return $GLOBALS['law01_test_posts']; }
+function homepage_source_value($preset, $slot, $settings = null) { return []; }
 function setting($key, $default = null) { return $default; }
 function homepage_ledger_ids(): array { return []; }
 function homepage_ledger_add(array $ids): void {}
