@@ -11,8 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-require_once __DIR__ . '/settings.php';
 require_once __DIR__ . '/template-registry.php';
+require_once __DIR__ . '/template-manifests.php';
+require_once __DIR__ . '/settings.php';
 require_once __DIR__ . '/page-experience.php';
 require_once __DIR__ . '/archive-presentation.php';
 require_once __DIR__ . '/professional-page-kits.php';
