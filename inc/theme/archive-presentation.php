@@ -30,7 +30,7 @@ function law01_category_archive_active(): bool {
  * Return the explicitly mapped public Contact Page URL for the archive consultation CTA.
  */
 function archive_contact_page_url(): string {
-    $contact_id = (int) setting( 'homepage_contact_page', 0 );
+    $contact_id = (int) homepage_source_value( 'law-01', 'contact' );
     if ( $contact_id <= 0 ) {
         return '';
     }
