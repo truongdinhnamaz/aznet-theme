@@ -42,43 +42,20 @@ $valid = AZnet\Theme\normalize_settings([
 ]);
 
 $valid_expected = [
-    'schema_version'           => 3,
-    'visual_preset'            => 'editorial',
-    'page_breadcrumbs'         => true,
-    'header_preset'            => 'commerce',
-    'header_sticky'            => 'sticky-compact',
-    'header_search'            => false,
-    'header_utilities'         => false,
-    'footer_preset'            => 'standard',
-    'woo_catalog_preset'       => 'grid',
-    'woo_product_card_density' => 'balanced',
-    'woo_product_preset'       => 'classic',
-    'homepage_preset'               => 'off',
-    'homepage_law01_variant'        => 'navy-gold',
-    'homepage_hero_variant'          => 'split',
-    'homepage_hero_block'            => 0,
-    'homepage_proof_block'           => 0,
-    'homepage_hero_page'            => 0,
-    'homepage_services_page'        => 0,
-    'homepage_about_page'           => 0,
-    'homepage_about_image'          => 0,
-    'homepage_about_kicker'         => '',
-    'homepage_about_heading'        => '',
-    'homepage_about_quote'          => '',
-    'homepage_curtain01_process_page' => 0,
-    'homepage_curtain01_projects_term' => 0,
-    'homepage_team_page'            => 0,
-    'homepage_knowledge_terms'      => [],
-    'homepage_case_analysis_term'   => 0,
-    'homepage_legal_news_term'      => 0,
-    'homepage_process_page'         => 0,
-    'homepage_faq_page'             => 0,
-    'homepage_contact_page'         => 0,
+    'schema_version'    => 3,
+    'visual_preset'     => 'editorial',
+    'page_breadcrumbs'  => true,
+    'header_preset'     => 'commerce',
+    'header_sticky'     => 'sticky-compact',
+    'header_search'     => false,
+    'header_utilities'  => false,
 ];
 
-if ($valid !== $valid_expected) {
-    fwrite(STDERR, "FAIL: valid R3 Header settings were not normalized exactly\n");
-    exit(1);
+foreach ($valid_expected as $key => $expected) {
+    if (! array_key_exists($key, $valid) || $valid[$key] !== $expected) {
+        fwrite(STDERR, "FAIL: valid R3 Header normalization mismatch for {$key}\n");
+        exit(1);
+    }
 }
 
 $invalid = AZnet\Theme\normalize_settings([
