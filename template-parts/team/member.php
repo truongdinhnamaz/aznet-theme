@@ -23,6 +23,9 @@ if ( [] !== $crumbs ) {
 $contact_url = function_exists( 'AZnet\\Theme\\service_page_contact_url' )
     ? \AZnet\Theme\service_page_contact_url()
     : '';
+$portrait_id = function_exists( 'AZnet\\Theme\\team_member_portrait_id' )
+    ? \AZnet\Theme\team_member_portrait_id( (int) get_the_ID() )
+    : 0;
 $has_body = '' !== trim( (string) get_post_field( 'post_content', (int) get_the_ID() ) );
 ?>
 <section class="aznet-theme-team-member" aria-labelledby="aznet-theme-team-member-title">
@@ -40,8 +43,8 @@ $has_body = '' !== trim( (string) get_post_field( 'post_content', (int) get_the_
 
         <div class="aznet-theme-team-member__hero">
             <div class="aznet-theme-team-member__portrait">
-                <?php if ( has_post_thumbnail() ) : ?>
-                    <?php the_post_thumbnail( 'large', [ 'fetchpriority' => 'high' ] ); ?>
+                <?php if ( $portrait_id > 0 ) : ?>
+                    <?php echo wp_get_attachment_image( $portrait_id, 'large', false, [ 'fetchpriority' => 'high' ] ); ?>
                 <?php else : ?>
                     <div class="aznet-theme-team-member__portrait-placeholder" aria-hidden="true"></div>
                 <?php endif; ?>
