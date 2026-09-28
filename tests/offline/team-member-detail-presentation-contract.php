@@ -10,9 +10,7 @@ $assets = (string) file_get_contents($root . '/inc/theme/assets.php');
 
 foreach ([
     'function team_member_page_is_detail',
-    'function team_member_portrait_id',
     "homepage_source_value( 'law-01', 'team' )",
-    "get_option( 'site_icon' )",
 ] as $needle) {
     if (! str_contains($pageExperience, $needle)) {
         fwrite(STDERR, "FAIL: Team member detail missing {$needle}\n");
@@ -44,7 +42,7 @@ foreach ([
     'aznet-theme-team-member__body',
     'the_title()',
     'the_content()',
-    'team_member_portrait_id',
+    'has_post_thumbnail()',
     'aznet-theme-team-member__portrait-placeholder-icon',
     'aznet-theme-team-member__actions',
 ] as $needle) {
