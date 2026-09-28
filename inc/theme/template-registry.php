@@ -141,3 +141,33 @@ function template_manifest( string $id ): ?array {
     $store = template_manifest_store();
     return $store[ $id ] ?? null;
 }
+
+
+/** @return array<int,string> */
+function core_visual_preset_ids(): array {
+    return [ 'default', 'editorial', 'commerce' ];
+}
+
+/** @return array<int,string> */
+function registered_visual_preset_ids(): array {
+    $ids = core_visual_preset_ids();
+    foreach ( template_manifests() as $manifest ) {
+        $preset = trim( (string) ( $manifest['presentation']['visual_preset'] ?? '' ) );
+        if ( '' !== $preset ) {
+            $ids[] = $preset;
+        }
+    }
+    return array_values( array_unique( $ids ) );
+}
+
+/** @return array<int,string> */
+function registered_homepage_preset_ids(): array {
+    $ids = [ 'off' ];
+    foreach ( template_manifests() as $manifest ) {
+        $preset = trim( (string) ( $manifest['presentation']['homepage_preset'] ?? '' ) );
+        if ( '' !== $preset ) {
+            $ids[] = $preset;
+        }
+    }
+    return array_values( array_unique( $ids ) );
+}
