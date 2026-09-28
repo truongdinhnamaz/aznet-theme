@@ -25,14 +25,20 @@ foreach (['hero', 'about', 'catalogue', 'knowledge', 'final-cta'] as $slug) {
     }
 }
 
-if (! str_contains($composer, "render_curtain01_part( 'hero' )")) {
-    fwrite(STDERR, "FAIL: Curtain 01 Hero must render before the native Front Page body.\n");
+$surfaceMap = file_get_contents($root . '/inc/theme/homepage-surface-map.php');
+if (
+    ! str_contains($composer, "homepage_effective_surface_map( 'curtain-01' )")
+    || ! is_string($surfaceMap)
+    || ! str_contains($surfaceMap, "'hero',")
+    || ! str_contains($surfaceMap, "'before',")
+) {
+    fwrite(STDERR, "FAIL: Curtain 01 Hero must remain on the shared effective surface map before the native Front Page body.\n");
     exit(1);
 }
 
 foreach (['about', 'catalogue', 'knowledge', 'final-cta'] as $slug) {
-    if (! str_contains($composer, "'{$slug}'")) {
-        fwrite(STDERR, "FAIL: Curtain 01 post-content composition missing: {$slug}.\n");
+    if (! str_contains((string) $surfaceMap, "'{$slug}'")) {
+        fwrite(STDERR, "FAIL: Curtain 01 shared surface map missing post-content surface: {$slug}.\n");
         exit(1);
     }
 }
@@ -67,8 +73,8 @@ if (! str_contains((string) $hero, 'homepage_block_reference') || ! str_contains
     exit(1);
 }
 
-if (! str_contains((string) $about, "homepage_about_page")) {
-    fwrite(STDERR, "FAIL: Curtain 01 About must use the explicit typed Page mapping.\n");
+if (! str_contains((string) $about, "homepage_effective_source_value( 'curtain-01', 'about' )")) {
+    fwrite(STDERR, "FAIL: Curtain 01 About must resolve its explicit typed Page through the preset-scoped source resolver.\n");
     exit(1);
 }
 
@@ -117,8 +123,12 @@ if (str_contains((string) $css, 'white-space: nowrap;')) {
     exit(1);
 }
 
-if (! str_contains((string) $catalogue, 'homepage_products') || ! str_contains((string) $catalogue, 'homepage_product_categories')) {
-    fwrite(STDERR, "FAIL: Curtain 01 catalogue must consume the public WooCommerce adapter.\n");
+if (
+    ! str_contains((string) $catalogue, 'homepage_curtain01_catalogue_model')
+    || ! str_contains((string) $surfaceMap, 'Integrations\\WooCommerce\\homepage_products')
+    || ! str_contains((string) $surfaceMap, 'Integrations\\WooCommerce\\homepage_product_categories')
+) {
+    fwrite(STDERR, "FAIL: Curtain 01 catalogue must consume the bounded public WooCommerce adapter through its shared catalogue model.\n");
     exit(1);
 }
 
@@ -132,7 +142,7 @@ if (! str_contains((string) $knowledge, 'homepage_latest_posts')) {
     exit(1);
 }
 
-if (! str_contains((string) $cta, 'contact_surface_model') || ! str_contains((string) $cta, "homepage_contact_page")) {
+if (! str_contains((string) $cta, 'contact_surface_model') || ! str_contains((string) $cta, "homepage_effective_source_value( 'curtain-01', 'contact' )")) {
     fwrite(STDERR, "FAIL: Curtain 01 CTA must hand off through mapped WordPress/public contact sources.\n");
     exit(1);
 }
