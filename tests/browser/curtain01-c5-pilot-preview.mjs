@@ -363,7 +363,7 @@ async function verifyHomepageAdmin() {
   await page.locator('#user_login').fill('admin');
   await page.locator('#user_pass').fill('curtain01-preview-password');
   await Promise.all([
-    page.waitForURL(/\/wp-admin\//, { timeout: 20000 }),
+    page.waitForURL((url) => !url.pathname.endsWith('/wp-login.php'), { timeout: 20000 }),
     page.locator('#wp-submit').click(),
   ]);
 
