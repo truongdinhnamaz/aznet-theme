@@ -25,7 +25,6 @@ $brand_label  = $law01_header
             <span class="aznet-theme-site-header__brand-copy">
                 <span class="aznet-theme-site-header__brand-title"><?php echo esc_html( $site_title ); ?></span>
                 <?php if ( $law01_header ) : ?><span class="aznet-theme-site-header__brand-kicker"><?php esc_html_e( 'Văn phòng luật sư', 'aznet-theme' ); ?></span><?php endif; ?>
-                <?php if ( $law01_header && '' !== $site_tagline ) : ?><span class="aznet-theme-site-header__brand-tagline"><?php echo esc_html( $site_tagline ); ?></span><?php endif; ?>
             </span>
         <?php endif; ?>
     <?php else : ?>

@@ -93,7 +93,6 @@ foreach ([
 
 foreach ([
     "'site_tagline'" => $headerContext,
-    'aznet-theme-site-header__brand-tagline' => $brand,
     '.aznet-theme-site-header--law01-burgundy-gold .aznet-theme-law01-topbar {' => $headerCss,
     'display: none;' => $headerCss,
     'min-height: 76px;' => $referenceCss,
@@ -102,6 +101,10 @@ foreach ([
     if (!str_contains($source, $needle)) {
         $fail("Demo-aligned Law 01 Header missing marker: {$needle}");
     }
+}
+
+if (str_contains($brand, 'aznet-theme-site-header__brand-tagline')) {
+    $fail('Law 01 demo fidelity requires a two-line Header lockup: site title plus Văn phòng luật sư, without the site tagline.');
 }
 
 if (!function_exists(__NAMESPACE__ . '\\enqueue_header_law01_asset')) {
