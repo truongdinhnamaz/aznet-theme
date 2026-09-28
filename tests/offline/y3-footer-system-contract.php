@@ -108,7 +108,7 @@ if ('professional' !== \AZnet\Theme\footer_preset()) {
 }
 
 $context = \AZnet\Theme\footer_context();
-$expectedContextKeys = ['preset', 'site_title', 'tagline', 'home_url', 'logo_html', 'about_intro', 'services', 'menus', 'year'];
+$expectedContextKeys = ['preset', 'site_title', 'tagline', 'home_url', 'logo_html', 'about_intro', 'services', 'social_channels', 'menus', 'year'];
 if ($expectedContextKeys !== array_keys($context)) {
     y3_fail('footer_context() shape changed');
 }
