@@ -137,3 +137,53 @@ This checkpoint is documentation only. No production code or pilot content was m
 ## Exact next
 
 Task 2: create the RED Services public-renderability contract and fixture on the execution branch, observe the exact-branch workflow fail for the intended missing helper/behavior, then implement the minimal Theme-owned GREEN projection.
+
+
+## Native execution checkpoint — clean branch
+
+Execution moved to a clean branch from canonical main after the earlier work branch was found to contain unrelated changes.
+
+Branch: `work/law01-phase-a-native-clean-20260928`  
+Draft PR: #289  
+Current exact head at this checkpoint: `bcffb5e7810e52c09436808a2af81fb58083aef7`
+
+### Theme-owned changes completed on the clean branch
+
+- Added `homepage_renderable_child_pages()` as a presentation-only projection over raw published child Pages.
+- Law 01 Services template, shared effective surface map and Profile service-count presentation now consume only renderable Service Pages.
+- Homepage admin Services READY/EMPTY state now uses the same public renderability rule.
+- Added `team_directory_public_members()` while retaining raw `team_directory_members()` for WordPress/admin authoring.
+- Homepage Team presentation, shared surface map and public Team directory now omit unnamed/unlinkable published child Pages without inferring identity from slug/URL/Page ID.
+- Homepage Team admin still exposes raw published source Pages for repair, but distinguishes public renderable count and labels an untitled admin row as `Chưa có tên` instead of presenting an empty name.
+- Added source-gap fixtures/regressions for untitled Service and Team Pages.
+- Added runtime regression for empty Analysis/Legal News Categories.
+- Added exact Burgundy Homepage Theme-surface order assertion.
+- Added explicit no-`post_name` heuristic guard to the Homepage content-map contract.
+
+### TDD evidence observed
+
+Services helper RED was observed on exact PR CI:
+`Public Homepage child projection must exist before Law 01 Services can reject untitled source Pages.`
+
+The minimal helper implementation then passed the targeted Homepage content-map contract and PHP syntax verification in the isolated verification container.
+
+Team public-projection RED was separately observed against the pre-helper source state before adding `team_directory_public_members()`.
+
+### Current external QA state
+
+At the exact head above, GitHub Actions runs have been created but remain queued. The Law 01 Browser Quality run is queued, as are the core/offline/reference regressions. Therefore no exact-head L3/L4 PASS is claimed yet.
+
+Pilot `lstamduchn.vn` remains read-only for this program:
+
+- live Theme observed at `1.3.53`;
+- canonical main remains `1.3.54`;
+- WPVibe Connect remains inactive;
+- public DOM snapshot remains blocked by redirect-loop behavior.
+
+### Rollback
+
+The clean branch is based directly on canonical `main@6fd5db5bb1178e4ecaf48eb98995b2816b8d7b9b`. Production behavior changes are bounded to Services/Team public presentation projections plus their consumers and can be reverted independently by commit.
+
+### Exact next
+
+Wait only for the already-created exact-head CI runs. If any run fails, reproduce the first real failure at the shallowest layer and open one corrective RED→GREEN micro-slice. If the relevant exact-head Law 01/core regressions pass, finalize Phase A evidence and review PR #289. Do not merge, release, version-bump or deploy without the separate gate.
