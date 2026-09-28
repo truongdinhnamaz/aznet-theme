@@ -33,8 +33,7 @@ foreach ([
     "homepage_source_value( 'law-01', 'services' )",
     'function services_page_presentation_active',
     'function services_page_children',
-    "'post_parent'    => \$services_id",
-    "'orderby'        => 'menu_order title'",
+    'homepage_renderable_child_pages( $services_id, $limit )',
 ] as $needle) {
     if (! str_contains($pageExperience, $needle)) {
         $fail('page-experience missing mapped Services Page marker: ' . $needle);
