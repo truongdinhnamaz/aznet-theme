@@ -88,7 +88,7 @@ function footer_context(): array {
                     }
                     $classes = is_array( $item->classes ?? null ) ? $item->classes : [];
                     $key = '';
-                    foreach ( [ 'facebook', 'tiktok', 'instagram' ] as $candidate ) {
+                    foreach ( [ 'facebook', 'youtube', 'linkedin', 'tiktok', 'instagram' ] as $candidate ) {
                         if ( in_array( 'aznet-theme-footer-field-' . $candidate, $classes, true ) ) {
                             $key = $candidate;
                             break;

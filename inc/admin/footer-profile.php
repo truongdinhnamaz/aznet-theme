@@ -40,6 +40,18 @@ function footer_profile_definitions(): array {
             'type'     => 'url',
             'title'    => __( 'Facebook', 'aznet-theme' ),
         ],
+        'youtube' => [
+            'label'    => __( 'YouTube', 'aznet-theme' ),
+            'location' => 'footer-social',
+            'type'     => 'url',
+            'title'    => __( 'YouTube', 'aznet-theme' ),
+        ],
+        'linkedin' => [
+            'label'    => __( 'LinkedIn', 'aznet-theme' ),
+            'location' => 'footer-social',
+            'type'     => 'url',
+            'title'    => __( 'LinkedIn', 'aznet-theme' ),
+        ],
         'tiktok' => [
             'label'    => __( 'TikTok', 'aznet-theme' ),
             'location' => 'footer-social',

@@ -90,9 +90,7 @@ foreach ( $menu_definitions as $location => $definition ) {
     }
 
     $managed_class = '';
-    if ( 'footer-social' === $location ) {
-        $managed_class = 'aznet-theme-footer-field-facebook';
-    } elseif ( 'footer-contact' === $location ) {
+    if ( 'footer-contact' === $location ) {
         $managed_class = 'aznet-theme-footer-field-location';
     }
 
@@ -108,6 +106,30 @@ foreach ( $menu_definitions as $location => $definition ) {
     );
     if ( is_wp_error( $item_id ) || 0 >= (int) $item_id ) {
         y3_runtime_fail( 'unable to create sentinel menu item for ' . $location );
+    }
+
+    if ( 'footer-social' === $location ) {
+        foreach ( [
+            'facebook'  => 'Facebook',
+            'youtube'   => 'YouTube',
+            'linkedin'  => 'LinkedIn',
+            'tiktok'    => 'TikTok',
+            'instagram' => 'Instagram',
+        ] as $social_key => $social_label ) {
+            $social_item_id = wp_update_nav_menu_item(
+                (int) $menu_id,
+                0,
+                [
+                    'menu-item-title'   => 'Y3 Managed ' . $social_label,
+                    'menu-item-url'     => home_url( '/y3-social-' . $social_key . '/' ),
+                    'menu-item-status'  => 'publish',
+                    'menu-item-classes' => 'aznet-theme-footer-field-' . $social_key,
+                ]
+            );
+            if ( is_wp_error( $social_item_id ) || 0 >= (int) $social_item_id ) {
+                y3_runtime_fail( 'unable to create managed social fixture: ' . $social_key );
+            }
+        }
     }
 
     $menu_ids[ $location ] = (int) $menu_id;

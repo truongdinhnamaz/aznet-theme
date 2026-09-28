@@ -98,6 +98,12 @@ async function inspectPreset(browser, preset, viewportName, viewport) {
         if (await footer.getByText(region.sentinel, { exact: true }).count() !== 0) {
           throw new Error('Law 01 must not render unmanaged social-menu sentinel content');
         }
+        for (const channel of ['facebook', 'youtube', 'linkedin', 'tiktok', 'instagram']) {
+          const link = footer.locator(`.aznet-theme-site-footer__channel-link--${channel}`);
+          if (await link.count() !== 1) throw new Error(`Missing managed Law 01 social icon: ${channel}`);
+          if (await link.getAttribute('target') !== '_blank') throw new Error(`Managed Law 01 social link must open safely: ${channel}`);
+          if (!(await link.getAttribute('aria-label'))) throw new Error(`Managed Law 01 social link needs accessible label: ${channel}`);
+        }
         continue;
       }
       if (await footer.locator(region.selector).count() !== 1) throw new Error(`Expected populated Footer region ${region.selector}`);
