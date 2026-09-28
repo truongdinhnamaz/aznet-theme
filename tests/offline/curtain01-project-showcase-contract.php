@@ -4,16 +4,18 @@ declare(strict_types=1);
 $root = dirname(__DIR__, 2);
 $settings_path = $root . '/inc/theme/settings.php';
 $composer_path = $root . '/inc/theme/homepage-composer.php';
+$surface_map_path = $root . '/inc/theme/homepage-surface-map.php';
 $admin_path = $root . '/inc/admin/homepage.php';
 $template_path = $root . '/template-parts/homepage/curtain-01/projects.php';
 $css_path = $root . '/assets/css/components/homepage-curtain-01.css';
 
 $settings = is_file($settings_path) ? file_get_contents($settings_path) : false;
 $composer = is_file($composer_path) ? file_get_contents($composer_path) : false;
+$surface_map = is_file($surface_map_path) ? file_get_contents($surface_map_path) : false;
 $admin = is_file($admin_path) ? file_get_contents($admin_path) : false;
 $css = is_file($css_path) ? file_get_contents($css_path) : false;
 
-if (! is_string($settings) || ! is_string($composer) || ! is_string($admin) || ! is_string($css)) {
+if (! is_string($settings) || ! is_string($composer) || ! is_string($surface_map) || ! is_string($admin) || ! is_string($css)) {
     fwrite(STDERR, "FAIL: Curtain 01 project showcase source files missing.\n");
     exit(1);
 }
@@ -28,9 +30,16 @@ foreach ([
     }
 }
 
-$curtain_sections = "[ 'about', 'category-showcase', 'catalogue', 'process', 'projects', 'knowledge', 'final-cta' ]";
-if (! str_contains($composer, $curtain_sections)) {
-    fwrite(STDERR, "FAIL: Curtain 01 projects must render after process and before knowledge without reordering approved sections.\n");
+$process_pos = strpos($surface_map, "\$surfaces[] = homepage_surface_entry(\n                'process',");
+$projects_pos = strpos($surface_map, "\$surfaces[] = homepage_surface_entry(\n            'projects',");
+$knowledge_pos = strpos($surface_map, "\$surfaces[] = homepage_surface_entry(\n            'knowledge',");
+if (
+    false === $process_pos
+    || false === $projects_pos
+    || false === $knowledge_pos
+    || ! ($process_pos < $projects_pos && $projects_pos < $knowledge_pos)
+) {
+    fwrite(STDERR, "FAIL: Curtain 01 shared surface map must keep projects after process and before knowledge.\n");
     exit(1);
 }
 
@@ -41,7 +50,7 @@ if (! is_file($template_path)) {
 
 $template = file_get_contents($template_path);
 foreach ([
-    "setting( 'homepage_curtain01_projects_term', 0 )",
+    "homepage_effective_source_value( 'curtain-01', 'projects' )",
     'homepage_category_reference',
     'homepage_latest_posts',
     'homepage_ledger_ids',
@@ -69,18 +78,15 @@ foreach ([
     }
 }
 
-if (! str_contains($admin, 'homepage_curtain01_projects_term') || ! str_contains($admin, 'Công trình Rèm 01')) {
-    fwrite(STDERR, "FAIL: Homepage admin must expose the independent Rèm 01 project Category mapping.\n");
-    exit(1);
-}
-
 foreach ([
-    "\$statuses['projects'] = 'UNMAPPED'",
-    "\$statuses['projects'] = 'INVALID'",
-    "\$statuses['projects'] = [] === homepage_latest_posts( [ \$project_term_id ], 1 ) ? 'EMPTY' : 'READY'",
+    "'projects' => __( 'Công trình', 'aznet-theme' )",
+    "homepage_source_value( \$preset, 'projects', \$s )",
+    "\$statuses[ \$slot ] = 'UNMAPPED'",
+    "\$statuses[ \$slot ] = 'INVALID'",
+    "homepage_latest_posts( [ \$id ], 1 ) ? 'EMPTY' : 'READY'",
 ] as $needle) {
     if (! str_contains($admin, $needle)) {
-        fwrite(STDERR, "FAIL: Homepage diagnostics must expose fail-soft project source state: {$needle}\n");
+        fwrite(STDERR, "FAIL: Homepage admin must expose the Curtain project source through the shared typed authoring/diagnostic model: {$needle}\n");
         exit(1);
     }
 }
