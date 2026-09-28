@@ -564,7 +564,7 @@ function homepage_effective_surface_map( ?string $preset = null ): array {
     $services_id = (int) homepage_effective_source_value( 'law-01', 'services', $settings );
     $services_page = homepage_page_reference( $services_id );
     $service_items = $services_page instanceof \WP_Post
-        ? homepage_direct_published_children( (int) $services_page->ID, 6 )
+        ? homepage_renderable_child_pages( (int) $services_page->ID, 6 )
         : [];
     if ( $services_page instanceof \WP_Post && [] !== $service_items ) {
         $surfaces[] = homepage_surface_entry(
