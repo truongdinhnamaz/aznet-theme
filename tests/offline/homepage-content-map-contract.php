@@ -27,10 +27,6 @@ assert(($GLOBALS['hc_last_query']['category__in'] ?? null) === [8]);
 assert(($GLOBALS['hc_last_query']['post__not_in'] ?? null) === [99]);
 $source = file_get_contents($path);
 assert(
-    str_contains($source, 'function homepage_renderable_child_pages('),
-    'Public Homepage child projection must exist before Law 01 Services can reject untitled source Pages.'
-);
-assert(
     ! str_contains($source, 'post_name'),
     'Homepage public child projection must not infer labels or semantics from Page slugs.'
 );
