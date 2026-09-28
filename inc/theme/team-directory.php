@@ -30,6 +30,30 @@ function team_directory_members( int $limit = 0 ): array {
         : [];
 }
 
+/** @return array<int,\WP_Post> */
+function team_directory_public_members( int $limit = 0 ): array {
+    $members = team_directory_members();
+    $public = [];
+
+    foreach ( $members as $member ) {
+        if ( '' === trim( (string) get_the_title( $member ) ) ) {
+            continue;
+        }
+
+        $url = get_permalink( $member );
+        if ( ! is_string( $url ) || '' === trim( $url ) ) {
+            continue;
+        }
+
+        $public[] = $member;
+        if ( $limit > 0 && count( $public ) >= min( 24, $limit ) ) {
+            break;
+        }
+    }
+
+    return $public;
+}
+
 function team_directory_member_is_child( int $post_id ): bool {
     $parent = team_directory_parent();
     if ( ! $parent instanceof \WP_Post || $post_id <= 0 ) { return false; }
