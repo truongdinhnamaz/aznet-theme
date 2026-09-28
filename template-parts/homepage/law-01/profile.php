@@ -95,7 +95,7 @@ if ( ! $has_team ) {
             </div>
         </div>
         <?php if ( [] !== $members ) : ?>
-        <div class="aznet-theme-law01-profile__members">
+        <div class="aznet-theme-law01-profile__members" data-count="<?php echo esc_attr( (string) count( $members ) ); ?>">
             <?php foreach ( $members as $member ) : ?>
                 <?php
                 if ( ! $member instanceof \WP_Post ) { continue; }
