@@ -168,6 +168,96 @@
     line-height: 1.7;
 }
 
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__channels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .65rem;
+    margin-top: var(--aznet-theme-space-4);
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__channel-link {
+    display: inline-grid;
+    width: 2.65rem;
+    height: 2.65rem;
+    place-items: center;
+    border: 1px solid var(--aznet-theme-footer-border);
+    border-radius: .7rem;
+    background: color-mix(in srgb, var(--aznet-theme-law01-ivory) 8%, transparent);
+    color: var(--aznet-theme-law01-ivory);
+    transition:
+        transform var(--aznet-theme-motion-fast) ease,
+        background var(--aznet-theme-motion-fast) ease,
+        border-color var(--aznet-theme-motion-fast) ease;
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__channel-link:hover,
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__channel-link:focus-visible {
+    border-color: color-mix(in srgb, var(--aznet-theme-law01-gold) 70%, transparent);
+    background: color-mix(in srgb, var(--aznet-theme-law01-ivory) 14%, transparent);
+    color: var(--aznet-theme-law01-gold-soft);
+    text-decoration: none;
+    transform: translateY(-2px);
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__channel-icon {
+    width: 1.15rem;
+    height: 1.15rem;
+    background: currentColor;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__channel-link--facebook .aznet-theme-site-footer__channel-icon {
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M13.5 22v-9h3l.45-3.5H13.5V7.25c0-1.01.28-1.7 1.73-1.7H17V2.42A23.8 23.8 0 0 0 14.42 2C11.87 2 10 3.56 10 6.42V9.5H7V13h3v9h3.5Z'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M13.5 22v-9h3l.45-3.5H13.5V7.25c0-1.01.28-1.7 1.73-1.7H17V2.42A23.8 23.8 0 0 0 14.42 2C11.87 2 10 3.56 10 6.42V9.5H7V13h3v9h3.5Z'/%3E%3C/svg%3E");
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__channel-link--tiktok .aznet-theme-site-footer__channel-icon {
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M15.4 3c.5 2.5 1.9 4 4.6 4.2v3.1a8.2 8.2 0 0 1-4.5-1.4v6.2a6.1 6.1 0 1 1-5.3-6v3.2a3 3 0 1 0 2.2 2.9V3h3Z'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M15.4 3c.5 2.5 1.9 4 4.6 4.2v3.1a8.2 8.2 0 0 1-4.5-1.4v6.2a6.1 6.1 0 1 1-5.3-6v3.2a3 3 0 1 0 2.2 2.9V3h3Z'/%3E%3C/svg%3E");
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__channel-link--instagram .aznet-theme-site-footer__channel-icon {
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 3a2 2 0 0 0-2 2v10c0 1.1.9 2 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7Zm11.25 1.5a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 3a2 2 0 0 0-2 2v10c0 1.1.9 2 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7Zm11.25 1.5a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z'/%3E%3C/svg%3E");
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-menu li.aznet-theme-footer-field-phone > a,
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-menu li.aznet-theme-footer-field-email > a {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-menu li.aznet-theme-footer-field-phone > a::before,
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-menu li.aznet-theme-footer-field-email > a::before {
+    width: 1rem;
+    height: 1rem;
+    flex: 0 0 1rem;
+    background: var(--aznet-theme-law01-gold-soft);
+    content: '';
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-menu li.aznet-theme-footer-field-phone > a::before {
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.7 21 3 13.3 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1l-2.2 2.2Z'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.7 21 3 13.3 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1l-2.2 2.2Z'/%3E%3C/svg%3E");
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-menu li.aznet-theme-footer-field-email > a::before {
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 5h18v14H3V5Zm2.4 2L12 12l6.6-5H5.4ZM19 9.5l-7 5.3-7-5.3V17h14V9.5Z'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 5h18v14H3V5Zm2.4 2L12 12l6.6-5H5.4ZM19 9.5l-7 5.3-7-5.3V17h14V9.5Z'/%3E%3C/svg%3E");
+}
+
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__services-menu {
     display: grid;
     gap: .72rem;
