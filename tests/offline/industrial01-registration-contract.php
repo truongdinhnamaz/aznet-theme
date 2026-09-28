@@ -8,17 +8,16 @@
 declare(strict_types=1);
 
 $root = dirname(__DIR__, 2);
-$settings = file_get_contents($root . '/inc/theme/settings.php');
-$design = file_get_contents($root . '/inc/theme/design-system.php');
+require_once $root . '/inc/theme/template-registry.php';
+require_once $root . '/inc/theme/template-loader.php';
+\AZnet\Theme\load_local_template_manifests();
+$manifest = \AZnet\Theme\template_manifest('industrial-01');
 $composer = file_get_contents($root . '/inc/theme/homepage-composer.php');
 
-foreach ([
-    [$settings, "'industrial-01'", 'Settings must register Industrial 01.'],
-    [$design, "'industrial-01'", 'Visual preset allow-list must register Industrial 01.'],
-    [$composer, "'industrial-01'", 'Homepage Composer must register Industrial 01.'],
-] as [$source, $needle, $message]) {
-    assert(is_string($source) && str_contains($source, $needle), $message);
-}
+assert(is_array($manifest), 'Template Registry must register Industrial 01.');
+assert('industrial-01' === ($manifest['presentation']['visual_preset'] ?? null), 'Industrial 01 visual preset must come from its manifest.');
+assert('industrial-01' === ($manifest['presentation']['homepage_preset'] ?? null), 'Industrial 01 Homepage preset must come from its manifest.');
+assert(is_string($composer) && str_contains($composer, "'industrial-01'"), 'Homepage Composer must retain Industrial 01 until C3 migration.');
 
 $lexiconPath = $root . '/inc/theme/preset-lexicon.php';
 assert(is_file($lexiconPath), 'Preset lexicon adapter must exist.');
