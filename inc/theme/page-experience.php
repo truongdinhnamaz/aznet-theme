@@ -225,6 +225,27 @@ function team_member_page_is_detail( ?int $post_id = null ): bool {
 }
 
 /**
+ * Return a member portrait attachment ID suitable for presentation.
+ *
+ * WordPress remains authoritative for the featured image. The Theme only avoids
+ * rendering the global Site Icon as if it were a person's portrait.
+ */
+function team_member_portrait_id( int $post_id ): int {
+    if ( $post_id <= 0 || ! function_exists( 'get_post_thumbnail_id' ) ) {
+        return 0;
+    }
+
+    $thumbnail_id = (int) get_post_thumbnail_id( $post_id );
+    if ( $thumbnail_id <= 0 ) {
+        return 0;
+    }
+
+    $site_icon_id = function_exists( 'get_option' ) ? (int) get_option( 'site_icon' ) : 0;
+
+    return $site_icon_id > 0 && $thumbnail_id === $site_icon_id ? 0 : $thumbnail_id;
+}
+
+/**
  * Whether one native Page is an explicitly mapped direct child of the Services Page.
  *
  * The Services Page ID comes from the Theme Content Map. This deliberately avoids
