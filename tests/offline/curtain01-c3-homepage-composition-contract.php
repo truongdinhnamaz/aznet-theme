@@ -124,8 +124,14 @@ if (str_contains((string) $css, 'white-space: nowrap;')) {
     exit(1);
 }
 
-if (! str_contains((string) $catalogue, 'homepage_products') || ! str_contains((string) $catalogue, 'homepage_product_categories')) {
-    fwrite(STDERR, "FAIL: Curtain 01 catalogue must consume the public WooCommerce adapter.\n");
+$surfaceMapSource = file_get_contents($root . '/inc/theme/homepage-surface-map.php');
+if (
+    ! str_contains((string) $catalogue, 'homepage_curtain01_catalogue_model')
+    || ! is_string($surfaceMapSource)
+    || ! str_contains($surfaceMapSource, 'Integrations\\WooCommerce\\homepage_products')
+    || ! str_contains($surfaceMapSource, 'Integrations\\WooCommerce\\homepage_product_categories')
+) {
+    fwrite(STDERR, "FAIL: Curtain 01 catalogue must consume the bounded public WooCommerce adapter through its shared catalogue model.\n");
     exit(1);
 }
 
