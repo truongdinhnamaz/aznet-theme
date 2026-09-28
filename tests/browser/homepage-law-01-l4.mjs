@@ -134,6 +134,14 @@ async function inspectViewport(browser, name, viewport) {
       if (await page.locator(selector).count() < 1) throw new Error(`Expanded Burgundy Homepage missing mapped section ${selector}`);
     }
 
+    const renderedSurfaceOrder = await page.locator('[data-aznet-homepage-surface]').evaluateAll(
+      (nodes) => nodes.map((node) => node.getAttribute('data-aznet-homepage-surface'))
+    );
+    const expectedSurfaceOrder = ['hero', 'services', 'profile', 'latest', 'topics', 'analysis', 'news', 'process', 'faq', 'final-cta'];
+    if (JSON.stringify(renderedSurfaceOrder) !== JSON.stringify(expectedSurfaceOrder)) {
+      throw new Error(`Law 01 rendered surface order mismatch: ${JSON.stringify(renderedSurfaceOrder)}`);
+    }
+
     const homepageFont = await page.locator('.aznet-theme-homepage--law-01-burgundy-gold').evaluate((node) => getComputedStyle(node).fontFamily);
     if (!homepageFont.toLowerCase().includes('roboto')) throw new Error(`Agreed Roboto Homepage typography missing: ${homepageFont}`);
 
