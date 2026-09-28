@@ -5,6 +5,7 @@ namespace AZnet\Theme\Admin;
 use function AZnet\Theme\homepage_category_reference;
 use function AZnet\Theme\homepage_category_references;
 use function AZnet\Theme\homepage_direct_published_children;
+use function AZnet\Theme\homepage_renderable_child_pages;
 use function AZnet\Theme\homepage_effective_surface_map;
 use function AZnet\Theme\homepage_effective_source_value;
 use function AZnet\Theme\homepage_effective_source_key;
@@ -73,7 +74,7 @@ function homepage_slot_statuses(): array {
                 $statuses[ $slot ] = $candidate instanceof \WP_Post && 'page' === $candidate->post_type && 'draft' === $candidate->post_status ? 'DRAFT' : 'INVALID';
                 continue;
             }
-            if ( 'services' === $slot && [] === homepage_direct_published_children( $id, 1 ) ) {
+            if ( 'services' === $slot && [] === homepage_renderable_child_pages( $id, 1 ) ) {
                 $statuses[ $slot ] = 'EMPTY';
                 continue;
             }
