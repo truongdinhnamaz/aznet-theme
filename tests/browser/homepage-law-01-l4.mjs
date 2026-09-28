@@ -440,8 +440,14 @@ async function inspectViewport(browser, name, viewport) {
       const directoryOverflow = await directoryPage.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       if (directoryOverflow > 1) throw new Error(`Team directory horizontal overflow: ${directoryOverflow}px`);
       const directoryAxe = await new AxeBuilder({ page: directoryPage }).analyze();
+      fs.writeFileSync(path.join(axeDir, `law01-team-directory-${name}.json`), JSON.stringify(directoryAxe, null, 2));
       const directoryBlocking = directoryAxe.violations.filter((violation) => ['critical', 'serious'].includes(violation.impact));
-      if (directoryBlocking.length > 0) throw new Error(`Team directory blocking axe violations: ${directoryBlocking.map((item) => item.id).join(', ')}`);
+      if (directoryBlocking.length > 0) {
+        const directoryBlockingTargets = directoryBlocking.flatMap(
+          (violation) => violation.nodes.map((node) => `${violation.id}:${node.target.join(' > ')}`)
+        );
+        throw new Error(`Team directory blocking axe violations: ${directoryBlockingTargets.join(', ')}`);
+      }
     } finally {
       await directoryPage.close();
     }
