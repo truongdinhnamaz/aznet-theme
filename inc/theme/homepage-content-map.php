@@ -105,6 +105,38 @@ function homepage_direct_published_children( int $parent_id, int $limit ): array
 }
 
 /**
+ * Resolve direct published child Pages that can render meaningful public cards.
+ *
+ * Raw WordPress children remain authoritative for authoring/admin. This helper
+ * is presentation-only and never infers a missing label from slug, URL or meta.
+ *
+ * @return array<int, \WP_Post>
+ */
+function homepage_renderable_child_pages( int $parent_id, int $limit ): array {
+    $limit = max( 1, min( 24, $limit ) );
+    $posts = homepage_direct_published_children( $parent_id, 24 );
+    $renderable = [];
+
+    foreach ( $posts as $post ) {
+        if ( ! $post instanceof \WP_Post || '' === trim( (string) get_the_title( $post ) ) ) {
+            continue;
+        }
+
+        $url = get_permalink( $post );
+        if ( ! is_string( $url ) || '' === trim( $url ) ) {
+            continue;
+        }
+
+        $renderable[] = $post;
+        if ( count( $renderable ) >= $limit ) {
+            break;
+        }
+    }
+
+    return $renderable;
+}
+
+/**
  * Resolve newest native Posts from mapped Categories.
  *
  * @param array<int, mixed> $category_ids Mapped Category IDs.
