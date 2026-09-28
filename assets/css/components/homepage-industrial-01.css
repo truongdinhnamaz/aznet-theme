@@ -215,6 +215,10 @@
     background: var(--industrial01-ink);
 }
 
+.aznet-theme-industrial01-cta .aznet-theme-industrial01-kicker {
+    color: #9fc9ef;
+}
+
 .aznet-theme-industrial01-cta h2,
 .aznet-theme-industrial01-cta .aznet-theme-industrial01-lede {
     color: #fff;
