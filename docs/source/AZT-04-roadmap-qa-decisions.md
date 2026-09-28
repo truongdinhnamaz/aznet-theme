@@ -790,3 +790,11 @@ Accepted rules:
 
 
 **D-041 Curtain 01 About authoring completeness — 27/09/2026:** owner-approved PR #283 is canonical at `main@9794080339dedd3950aa390a87107088e8df204c`. The unified Rèm 01 Homepage Map now reaches all currently-rendered Theme-owned About presentation state (kicker, presentation heading, quote and preset-scoped About image) while WordPress Page title/excerpt/content remain WordPress-owned. RED preceded GREEN; fresh exact-main L1/L2 verification PASS with 0 failures. Authenticated draft-admin interaction remains UNKNOWN. Production deployment remains a separate explicit owner gate.
+
+## D-042 — Three-pilot parity / Industrial 01 approval — ACCEPTED — 28/09/2026
+
+The product owner approved the third equal pilot and the current three-pilot update scope. The canonical pilot mapping is: **Law 01 → `lstamduchn.vn`**, **Curtain 01 / Rèm 01 → `remquocanh.vn`**, and **Industrial 01 → `minhnguyen.vn`**.
+
+All three pilots are peer verification targets. A shared-Core or shared-presentation change that can affect more than one preset must retain regression coverage for all affected pilots; no pilot may be treated as the default semantic owner for another. Industrial 01 remains reusable Theme presentation over WordPress/WooCommerce/public-provider data, with WooCommerce retaining Product/price/stock/commerce truth and Theme retaining presentation only.
+
+Current owner approval authorizes review/merge and pilot update for these three targets once the relevant CI, backup/rollback, access and per-site runtime/browser gates are satisfied. Approval does not waive a failed gate or permit private-storage/domain takeover.
