@@ -13,6 +13,7 @@ foreach ([
     'aznet-theme-law01-topic-card__posts',
     'aznet-theme-law01-topic-card__category-link',
     'aznet-theme-law01-topic-card--featured',
+    'aznet-theme-law01-topic-card__icon',
     'has_post_thumbnail( $post )',
     'get_the_post_thumbnail(',
     'Xem chuyên mục',
@@ -29,7 +30,9 @@ foreach ([
     '.aznet-theme-law01-topic-card',
     '.aznet-theme-law01-topic-card__posts',
     '.aznet-theme-law01-topic-card--featured',
+    '.aznet-theme-law01-topic-card__icon',
     '.aznet-theme-law01-topic-card__featured-media',
+    'linear-gradient',
     '@media (max-width: 960px)',
     '@media (max-width: 640px)',
 ] as $needle) {
