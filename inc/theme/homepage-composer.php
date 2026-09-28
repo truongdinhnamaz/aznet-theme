@@ -24,7 +24,7 @@ function homepage_law01_variant(): string {
 
 /** Whether Theme-owned Homepage composition is active for this request. */
 function homepage_composer_active(): bool {
-    if ( ! function_exists( 'is_front_page' ) || ! is_front_page() || ! in_array( homepage_preset(), [ 'law-01', 'curtain-01' ], true ) ) {
+    if ( ! function_exists( 'is_front_page' ) || ! is_front_page() || ! in_array( homepage_preset(), [ 'law-01', 'curtain-01', 'industrial-01' ], true ) ) {
         return false;
     }
 
