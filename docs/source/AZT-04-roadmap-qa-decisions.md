@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.99
+**Version:** v0.100
 **Status:** Working Source  
-**Date:** 28/09/2026
+**Date:** 29/09/2026
 
 ## 1. Purpose
 
@@ -798,6 +798,10 @@ The product owner approved the third equal pilot and the current three-pilot upd
 All three pilots are peer verification targets. A shared-Core or shared-presentation change that can affect more than one preset must retain regression coverage for all affected pilots; no pilot may be treated as the default semantic owner for another. Industrial 01 remains reusable Theme presentation over WordPress/WooCommerce/public-provider data, with WooCommerce retaining Product/price/stock/commerce truth and Theme retaining presentation only.
 
 Current owner approval authorizes review/merge and pilot update for these three targets once the relevant CI, backup/rollback, access and per-site runtime/browser gates are satisfied. Approval does not waive a failed gate or permit private-storage/domain takeover.
+
+**D-042 Industrial 01 repository + package convergence closure — 29/09/2026:** PR #301 merged the reusable Industrial 01 MVP. Follow-up PR #323 then strengthened the Y5 promoted-release gate so any canonical package must retain Industrial 01 registration, lexicon, scoped CSS/Homepage sections and bounded WooCommerce adapters. PR #323 final head `1b30a2de4a35106d6f62fe373e35c524c9441be6` completed 7/7 triggered workflows SUCCESS and merged to `main@856b19e7e51defe40a137f3874fec229995e2c1e` with exact tree identity `c8b02e3fc37205ec49e3fa3eed1e5fcac8445da0`. Y5 produced deterministic `aznet-theme-1.3.57.zip` SHA-256 `4081de49b54a1e28d32535eaa7e66f2dc1f8545ca67e69a1cce30b09a73c4f70`, exact-package runtime/browser PASS and theme switch continuity PASS.
+
+**D-042 Industrial 01 Minh Nguyên pilot production — 29/09/2026:** owner-approved publish completed on `minhnguyen.vn`. Live Homepage/Shop/Product surfaces render Industrial 01 over WordPress/WooCommerce native/public data; fresh mobile Lighthouse is Accessibility 100, Best Practices 100, SEO 100, Performance 95. The installed pilot remains a bounded Theme `1.3.53` patch, so canonical `1.3.57` package deployment and L6 release parity are still separate gates and are not inferred from the site pilot PASS.
 
 **D-042 preset-language acceptance:** each pilot keeps the shared Theme presentation system while using a bounded preset lexicon. The accepted vocabulary is presentation-only and follows the fallback **preset term -> shared generic term -> WordPress-native label**. Shared components must not hard-code industry terms or derive authoritative behavior from labels.
 
