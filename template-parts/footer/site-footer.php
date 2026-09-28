@@ -50,7 +50,7 @@ $navigation_heading = __( 'Liên kết nhanh', 'aznet-theme' );
                 <?php endif; ?>
             </div>
 
-            <?php if ( 'professional' === $preset && '' !== $contact_menu ) : ?>
+            <?php if ( in_array( $preset, [ 'professional', 'law-01' ], true ) && '' !== $contact_menu ) : ?>
                 <nav class="aznet-theme-site-footer__contact" aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
                     <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $contact_heading ); ?></h2>
                     <?php echo $contact_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
@@ -64,7 +64,7 @@ $navigation_heading = __( 'Liên kết nhanh', 'aznet-theme' );
                 </nav>
             <?php endif; ?>
 
-            <?php if ( 'professional' !== $preset && '' !== $contact_menu ) : ?>
+            <?php if ( ! in_array( $preset, [ 'professional', 'law-01' ], true ) && '' !== $contact_menu ) : ?>
                 <nav class="aznet-theme-site-footer__contact" aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
                     <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $contact_heading ); ?></h2>
                     <?php echo $contact_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
