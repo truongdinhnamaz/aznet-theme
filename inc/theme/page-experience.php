@@ -198,6 +198,62 @@ function team_page_presentation_active( ?int $post_id = null ): bool {
 }
 
 /**
+ * Whether one native Page is a published direct child of the explicitly mapped Team Page.
+ *
+ * The mapped Team parent is the authoritative relation. No slug, title or URL heuristics
+ * are used to decide whether a Page is a Team member detail surface.
+ */
+function team_member_page_is_detail( ?int $post_id = null ): bool {
+    $post_id = $post_id ?: (int) get_queried_object_id();
+    if ( $post_id <= 0 ) {
+        return false;
+    }
+
+    $team_id = (int) homepage_source_value( 'law-01', 'team' );
+    if ( $team_id <= 0 || $post_id === $team_id ) {
+        return false;
+    }
+
+    $post = get_post( $post_id );
+    if ( ! $post instanceof \WP_Post || 'page' !== $post->post_type || 'publish' !== $post->post_status ) {
+        return false;
+    }
+
+    return $team_id === (int) $post->post_parent
+        && function_exists( __NAMESPACE__ . '\\header_law01_active' )
+        && header_law01_active();
+}
+
+/**
+ * Return a Team member portrait attachment ID suitable for presentation.
+ *
+ * WordPress remains authoritative for the featured image. When the featured image
+ * resolves to the public Site Icon URL, treat it as a site-level fallback rather
+ * than a person's portrait and let the Team template render its neutral placeholder.
+ */
+function team_member_portrait_id( int $post_id ): int {
+    if ( $post_id <= 0 || ! function_exists( 'get_post_thumbnail_id' ) ) {
+        return 0;
+    }
+
+    $thumbnail_id = (int) get_post_thumbnail_id( $post_id );
+    if ( $thumbnail_id <= 0 ) {
+        return 0;
+    }
+
+    if ( function_exists( 'get_site_icon_url' ) && function_exists( 'wp_get_attachment_image_url' ) ) {
+        $site_icon_url = (string) get_site_icon_url( 512 );
+        $thumbnail_url = wp_get_attachment_image_url( $thumbnail_id, [ 512, 512 ] );
+
+        if ( '' !== $site_icon_url && is_string( $thumbnail_url ) && $site_icon_url === $thumbnail_url ) {
+            return 0;
+        }
+    }
+
+    return $thumbnail_id;
+}
+
+/**
  * Whether one native Page is an explicitly mapped direct child of the Services Page.
  *
  * The Services Page ID comes from the Theme Content Map. This deliberately avoids
