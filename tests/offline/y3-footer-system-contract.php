@@ -108,7 +108,7 @@ if ('professional' !== \AZnet\Theme\footer_preset()) {
 }
 
 $context = \AZnet\Theme\footer_context();
-$expectedContextKeys = ['preset', 'site_title', 'tagline', 'home_url', 'logo_html', 'menus', 'year'];
+$expectedContextKeys = ['preset', 'site_title', 'tagline', 'home_url', 'logo_html', 'about_intro', 'services', 'menus', 'year'];
 if ($expectedContextKeys !== array_keys($context)) {
     y3_fail('footer_context() shape changed');
 }
@@ -221,11 +221,11 @@ foreach (['Thông tin liên hệ', 'Liên kết nhanh'] as $heading) {
         y3_fail('Footer must keep the approved page-independent professional heading: ' . $heading);
     }
 }
-if (! str_contains($template, "in_array( \$preset, [ 'professional', 'law-01' ], true )")) {
-    y3_fail('Law 01 Footer demo fidelity requires the social menu to render as its own main-column surface.');
+if (! str_contains($template, "'law-01' === \$preset") || ! str_contains($template, 'aznet-theme-site-footer__contact-social')) {
+    y3_fail('Law 01 Footer must combine optional contact and social links in one main-column surface.');
 }
 if (! str_contains($template, "! in_array( \$preset, [ 'professional', 'law-01' ], true )")) {
-    y3_fail('Law 01 Footer demo fidelity must not duplicate the social menu again in the bottom bar.');
+    y3_fail('Law 01 Footer must not duplicate the social menu again in the bottom bar.');
 }
 foreach (['aznet-theme-site-footer__social-column', "'professional' === \$preset", 'Kết nối với chúng tôi'] as $needle) {
     if (! str_contains($template, $needle)) {
@@ -261,8 +261,8 @@ foreach (['repeat(3, minmax(140px, .75fr))', '.aznet-theme-site-footer__social-c
         y3_fail('Professional Footer demo grid missing: ' . $needle);
     }
 }
-if (! str_contains($css, '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__main {') || ! str_contains($css, 'grid-template-columns: minmax(260px, 1.2fr) minmax(180px, .9fr) minmax(160px, .7fr) minmax(150px, .65fr);')) {
-    y3_fail('Law 01 Footer demo fidelity requires a four-column desktop grid for identity, contact, links and social.');
+if (! str_contains($css, '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__main {') || ! str_contains($css, 'grid-template-columns: minmax(280px, 1.3fr) repeat(3, minmax(160px, .75fr));')) {
+    y3_fail('Law 01 Footer requires a four-column desktop grid for identity, services, links and contact/social.');
 }
 foreach ([
     '--aznet-theme-law01-burgundy-deep',
