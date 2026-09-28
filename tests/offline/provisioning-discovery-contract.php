@@ -11,6 +11,7 @@ function wp_count_posts($type='post'){return (object)['publish'=>10,'draft'=>2,'
 function get_nav_menu_locations(){return ['primary'=>9];}
 function get_theme_mod($k,$d=[]){return $k==='aznet_theme_settings'?['schema_version'=>2,'homepage_preset'=>'off']: $d;}
 require_once dirname(__DIR__,2).'/inc/theme/settings.php';
+require_once dirname(__DIR__,2).'/inc/theme/homepage-authoring.php';
 require_once dirname(__DIR__,2).'/inc/theme/provisioning-discovery.php';
 $state=\AZnet\Theme\provisioning_discovery();
 assert($state['page_count']===3);assert($state['category_count']===4);assert($state['post_count']===12);assert($state['front_page_id']===44);assert($state['homepage_preset']==='off');assert(isset($state['homepage_slots']));assert($state['primary_menu_id']===9);
