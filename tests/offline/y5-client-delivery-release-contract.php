@@ -58,6 +58,36 @@ $current_version = (string) ( $style_match[1] ?? '' );
 $must( $current_version === (string) ( $function_match[1] ?? '' ), 'Current Theme version markers must remain synchronized' );
 $must( version_compare( $current_version, '1.3.32', '>=' ), 'Current Theme must not regress below the historical Y5 promoted release 1.3.32' );
 
+$industrial_required = [
+    'inc/theme/preset-lexicon.php',
+    'assets/css/presets/industrial-01.css',
+    'assets/css/components/homepage-industrial-01.css',
+    'template-parts/homepage/industrial-01/hero.php',
+    'template-parts/homepage/industrial-01/categories.php',
+    'template-parts/homepage/industrial-01/products.php',
+    'template-parts/homepage/industrial-01/cta.php',
+    'tests/offline/industrial01-registration-contract.php',
+    'tests/browser/industrial01-pilot-l4.mjs',
+];
+
+foreach ( $industrial_required as $relative ) {
+    $must( is_file( $root . '/' . $relative ), 'Y5 convergence package requires Industrial 01 retained artifact: ' . $relative );
+}
+
+$industrial_settings = (string) file_get_contents( $root . '/inc/theme/settings.php' );
+$industrial_composer = (string) file_get_contents( $root . '/inc/theme/homepage-composer.php' );
+$industrial_woo = (string) file_get_contents( $root . '/inc/integrations/woocommerce.php' );
+
+$must( str_contains( $industrial_settings, "'industrial-01'" ), 'Y5 convergence package must retain Industrial 01 settings registration' );
+$must( str_contains( $industrial_composer, 'render_industrial01_part' ), 'Y5 convergence package must retain Industrial 01 Homepage composition' );
+foreach ( [
+    'homepage_product_category_showcase_terms',
+    'homepage_products',
+    'shop_url',
+] as $adapter ) {
+    $must( str_contains( $industrial_woo, $adapter ), 'Y5 convergence package must retain public Woo adapter: ' . $adapter );
+}
+
 $runtime = (string) file_get_contents( $root . '/tests/runtime/y5-client-delivery.php' );
 $must( str_contains( $runtime, "wp_get_theme()->get( 'Version' ) === AZNET_THEME_VERSION" ), 'Y5 runtime fixture must verify current Theme version synchronization' );
 
