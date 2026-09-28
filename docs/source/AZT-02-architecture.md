@@ -4,7 +4,7 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.19 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.20 |
 | --- | --- | --- | --- |
 | **Trạng thái** | Working Source | **Ngày** | 28/09/2026 |
 
@@ -485,7 +485,20 @@ Rules:
 - Registration is runtime-local Theme presentation state, not a second content/domain store.
 - A future remote package path under D-040 must consume the same manifest semantics after package integrity/compatibility validation. D-040's prohibition on executable remote PHP remains unchanged.
 
-## 20.3. Migration invariant
+## 20.3. Preset Lexicon Contract
+
+Each preset/template is composed as **Shared Presentation System + Preset-specific Language**.
+
+Accepted rules:
+
+- Shared Core/admin components use generic presentation vocabulary and must not hard-code industry-specific terminology.
+- Preset-specific terminology is bounded presentation configuration only; it does not create authoritative domain semantics, routing, identity, commerce state or provider ownership inside Theme.
+- Consumer lookup order is **preset term -> shared generic term -> WordPress-native label**. A missing preset term must fail soft to the generic/native label rather than infer a domain meaning.
+- Reusable components may render the resolved display string but may not branch business behavior from that string, slug, title, URL, Page ID or other heuristic.
+- Lexicon values are public-safe UI copy. They must not be used as a parallel domain store or as evidence that a provider capability/data source exists.
+- Law 01, Rèm 01, Industrial 01 and future templates consume the same lexicon mechanism; adding a new template must not require industry-specific branches in generic Core.
+
+## 20.4. Migration invariant
 
 Law 01, Rèm 01 and Industrial 01 are migration consumers of the generic contract, not semantic owners of Core. Migration proceeds in bounded slices:
 
@@ -500,7 +513,7 @@ Law 01, Rèm 01 and Industrial 01 are migration consumers of the generic contrac
 
 A Core extension-model PASS requires a fourth-template fixture to register and participate through the contract without adding a new Core industry branch.
 
-## 20.4. Safety and compatibility
+## 20.5. Safety and compatibility
 
 - Current public presentation must remain unchanged unless a separately scoped template slice explicitly changes it.
 - Template absence/invalid manifest/version mismatch must fail soft.
