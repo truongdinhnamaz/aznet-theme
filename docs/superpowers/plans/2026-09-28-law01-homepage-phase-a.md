@@ -478,7 +478,7 @@ Add:
 wp eval-file tests/runtime/law01-empty-editorial-surfaces.php --path=/tmp/wp --allow-root
 ```
 
-after the typed fixture exists and before browser execution.
+after the typed fixture exists and before browser execution. Also add both new runtime files to the workflow \`paths\` trigger so their changes cannot bypass this workflow.
 
 - [ ] **Step 6: Commit the audit-regression slice**
 
