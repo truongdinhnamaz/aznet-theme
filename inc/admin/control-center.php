@@ -97,6 +97,35 @@ function render_quick_setup_form(): void {
 /**
  * Render read-only WordPress-native Homepage setup guidance.
  */
+
+function render_footer_profile_form(): void {
+    $values = function_exists( __NAMESPACE__ . '\\footer_profile_from_menus' ) ? footer_profile_from_menus() : [];
+    $fields = [
+        'phone'     => [ 'footer_profile_phone', __( 'Số điện thoại', 'aznet-theme' ), 'text', '024 3716 4123' ],
+        'email'     => [ 'footer_profile_email', __( 'Email', 'aznet-theme' ), 'email', 'lienhe@example.com' ],
+        'facebook'  => [ 'footer_profile_facebook', __( 'Fanpage Facebook', 'aznet-theme' ), 'url', 'https://facebook.com/...' ],
+        'tiktok'    => [ 'footer_profile_tiktok', __( 'TikTok', 'aznet-theme' ), 'url', 'https://tiktok.com/@...' ],
+        'instagram' => [ 'footer_profile_instagram', __( 'Instagram', 'aznet-theme' ), 'url', 'https://instagram.com/...' ],
+    ];
+
+    echo '<div class="aznet-theme-panel">';
+    echo '<h2>' . esc_html__( 'Thông tin chân trang', 'aznet-theme' ) . '</h2>';
+    echo '<p>' . esc_html__( 'Các trường có dữ liệu sẽ xuất hiện ở chân trang. Dữ liệu được lưu thành Menu WordPress để không phụ thuộc storage riêng của Theme.', 'aznet-theme' ) . '</p>';
+    if ( isset( $_GET['footer_saved'] ) && '1' === sanitize_key( wp_unslash( $_GET['footer_saved'] ) ) ) {
+        echo '<div class="notice notice-success inline"><p>' . esc_html__( 'Đã lưu thông tin chân trang.', 'aznet-theme' ) . '</p></div>';
+    }
+    echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+    echo '<input type="hidden" name="action" value="aznet_theme_save_footer_profile">';
+    wp_nonce_field( 'aznet_theme_save_footer_profile' );
+    foreach ( $fields as $key => $field ) {
+        echo '<label class="aznet-theme-field" for="' . esc_attr( $field[0] ) . '"><span>' . esc_html( $field[1] ) . '</span>';
+        echo '<input class="regular-text" id="' . esc_attr( $field[0] ) . '" type="' . esc_attr( $field[2] ) . '" name="aznet_theme_footer_profile[' . esc_attr( $key ) . ']" value="' . esc_attr( (string) ( $values[ $key ] ?? '' ) ) . '" placeholder="' . esc_attr( $field[3] ) . '">';
+        echo '</label>';
+    }
+    submit_button( __( 'Lưu thông tin chân trang', 'aznet-theme' ), 'primary', 'submit', false );
+    echo '</form></div>';
+}
+
 function render_homepage_setup_card(): void {
     $show_on_front = (string) get_option( 'show_on_front', 'posts' );
     $front_page_id = (int) get_option( 'page_on_front', 0 );
@@ -137,6 +166,7 @@ function render_control_center(): void {
 
     if ( 'overview' === $section ) {
         render_quick_setup_form();
+        render_footer_profile_form();
         render_provisioning_invitation();
         render_homepage_setup_card();
         echo '<div class="aznet-theme-grid">';
