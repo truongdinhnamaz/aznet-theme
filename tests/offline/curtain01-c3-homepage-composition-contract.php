@@ -74,8 +74,8 @@ if (! str_contains((string) $hero, 'homepage_block_reference') || ! str_contains
     exit(1);
 }
 
-if (! str_contains((string) $about, "homepage_about_page")) {
-    fwrite(STDERR, "FAIL: Curtain 01 About must use the explicit typed Page mapping.\n");
+if (! str_contains((string) $about, "homepage_effective_source_value( 'curtain-01', 'about' )")) {
+    fwrite(STDERR, "FAIL: Curtain 01 About must resolve its explicit typed Page through the preset-scoped source resolver.\n");
     exit(1);
 }
 
