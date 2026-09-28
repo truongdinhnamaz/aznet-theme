@@ -39,7 +39,7 @@ try {
         const trust = node.querySelector('.aznet-theme-homepage-hero-content__trust-grid');
         const primary = node.querySelector('.aznet-theme-homepage-hero-content__actions .wp-block-button:not(.is-style-outline) .wp-block-button__link');
         const probe = document.createElement('span');
-        probe.style.background = 'var(--law01-navy)';
+        probe.style.background = 'var(--law01-client-burgundy)';
         node.appendChild(probe);
         const expectedPrimaryBackground = getComputedStyle(probe).backgroundColor;
         probe.remove();
