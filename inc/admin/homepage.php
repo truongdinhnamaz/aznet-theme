@@ -337,6 +337,16 @@ function homepage_template_library_items(): array {
             'install_state' => 'installed',
             'variant_count' => 1,
         ],
+        [
+            'template_id'   => 'industrial-01',
+            'name'          => __( 'Industrial 01', 'aznet-theme' ),
+            'category'      => 'industrial',
+            'category_name' => __( 'Thiết bị công nghiệp', 'aznet-theme' ),
+            'description'   => __( 'Website B2B bán thiết bị công nghiệp và phụ kiện.', 'aznet-theme' ),
+            'availability'  => 'bundled',
+            'install_state' => 'installed',
+            'variant_count' => 1,
+        ],
     ];
 }
 
@@ -837,6 +847,8 @@ function render_homepage_settings(): void {
         echo '<p class="description">' . esc_html__( 'Luật 01: website dịch vụ pháp lý kết hợp nội dung chuyên môn. Áp dụng mẫu chỉ đổi presentation, không sửa nội dung WordPress.', 'aznet-theme' ) . '</p>';
     } elseif ( 'curtain-01' === (string) $s['homepage_preset'] ) {
         echo '<p class="description">' . esc_html__( 'Rèm 01: website rèm và giải pháp kiểm soát ánh sáng. Đây là mẫu độc lập; áp dụng mẫu không sửa nội dung WordPress và không thay đổi cấu hình Luật 01.', 'aznet-theme' ) . '</p>';
+    } elseif ( 'industrial-01' === (string) $s['homepage_preset'] ) {
+        echo '<p class="description">' . esc_html__( 'Industrial 01: website B2B bán thiết bị công nghiệp và phụ kiện. Mẫu dùng dữ liệu WordPress/WooCommerce hiện có và không tạo kho dữ liệu sản phẩm riêng.', 'aznet-theme' ) . '</p>';
     }
     submit_button( __( 'Lưu mẫu trang chủ', 'aznet-theme' ) );
     echo '</form>';
