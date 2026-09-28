@@ -66,18 +66,57 @@ $authored_content = trim( (string) get_the_content() );
                 <p><?php esc_html_e( 'Mỗi trang dịch vụ trình bày phạm vi hỗ trợ và những thông tin nên chuẩn bị trước khi trao đổi.', 'aznet-theme' ); ?></p>
             </header>
 
-            <div class="aznet-theme-services-page__grid aznet-theme-service-card-grid">
+            <div class="aznet-theme-services-page__group-grid">
                 <?php foreach ( $services as $index => $service_page ) : ?>
                     <?php
-                    get_template_part(
-                        'template-parts/services/card',
-                        null,
-                        [
-                            'service_page' => $service_page,
-                            'index'        => $index + 1,
-                        ]
-                    );
+                    $service_url = get_permalink( $service_page );
+                    if ( ! is_string( $service_url ) || '' === $service_url ) {
+                        continue;
+                    }
+
+                    $service_excerpt = trim( (string) $service_page->post_excerpt );
+                    $subservices = homepage_renderable_child_pages( (int) $service_page->ID, 8 );
                     ?>
+                    <article class="aznet-theme-services-page__group">
+                        <div class="aznet-theme-services-page__group-top">
+                            <span class="aznet-theme-services-page__group-index" aria-hidden="true"><?php echo esc_html( str_pad( (string) ( $index + 1 ), 2, '0', STR_PAD_LEFT ) ); ?></span>
+                            <span class="aznet-theme-services-page__group-icon" aria-hidden="true"></span>
+                        </div>
+
+                        <h3 class="aznet-theme-services-page__group-title">
+                            <a href="<?php echo esc_url( $service_url ); ?>"><?php echo esc_html( get_the_title( $service_page ) ); ?></a>
+                        </h3>
+
+                        <?php if ( '' !== $service_excerpt ) : ?>
+                            <p class="aznet-theme-services-page__group-excerpt"><?php echo esc_html( $service_excerpt ); ?></p>
+                        <?php endif; ?>
+
+                        <?php if ( [] !== $subservices ) : ?>
+                            <ul class="aznet-theme-services-page__subservices">
+                                <?php foreach ( $subservices as $subservice ) : ?>
+                                    <?php
+                                    if ( ! $subservice instanceof \WP_Post ) {
+                                        continue;
+                                    }
+                                    $subservice_url = get_permalink( $subservice );
+                                    if ( ! is_string( $subservice_url ) || '' === $subservice_url ) {
+                                        continue;
+                                    }
+                                    ?>
+                                    <li>
+                                        <a class="aznet-theme-services-page__subservice-link" href="<?php echo esc_url( $subservice_url ); ?>">
+                                            <span><?php echo esc_html( get_the_title( $subservice ) ); ?></span>
+                                            <span aria-hidden="true">→</span>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+
+                        <a class="aznet-theme-services-page__group-link" href="<?php echo esc_url( $service_url ); ?>">
+                            <?php esc_html_e( 'Xem nhóm dịch vụ', 'aznet-theme' ); ?> <span aria-hidden="true">→</span>
+                        </a>
+                    </article>
                 <?php endforeach; ?>
             </div>
         </section>
