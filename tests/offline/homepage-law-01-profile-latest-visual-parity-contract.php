@@ -41,6 +41,14 @@ $must(
     'Law 01 reference Profile band must place About and Team side-by-side at the approved 48/52 desktop ratio.'
 );
 $must(
+    str_contains($css, '.aznet-theme-law01-hero__grid { grid-template-columns: minmax(0, 54%) minmax(0, 46%);'),
+    'Law 01 demo fidelity requires the desktop Hero to favor the copy column at a 54/46 ratio.'
+);
+$must(
+    str_contains($css, '.aznet-theme-law01-profile__members .aznet-theme-law01-team-card { border: 0; background: transparent; box-shadow: none; }'),
+    'Law 01 demo fidelity requires Homepage Team cards to read as portrait tiles, not boxed directory cards.'
+);
+$must(
     str_contains($css, '.aznet-theme-law01-profile__about-media { display: none; }'),
     'Law 01 reference About column must remain text-led instead of adding a second large media panel.'
 );
