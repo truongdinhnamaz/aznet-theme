@@ -60,10 +60,17 @@ if (header_law01_active()) {
 }
 
 $siteHeader = (string) file_get_contents($root . '/template-parts/header/site-header.php');
+$headerCss = (string) file_get_contents($root . '/assets/css/components/header-law-01.css');
 $brand = (string) file_get_contents($root . '/template-parts/header/brand.php');
 $topbar = (string) file_get_contents($root . '/template-parts/header/law01-topbar.php');
 $mobile = (string) file_get_contents($root . '/template-parts/header/mobile-panel.php');
 
+if (str_contains($siteHeader, "get_template_part( 'template-parts/header/law01-topbar'")) {
+    $fail('Law 01 demo fidelity requires the desktop header to start directly with the main navigation row, without a separate topbar.');
+}
+if (!str_contains($headerCss, 'min-height: 78px;')) {
+    $fail('Law 01 demo fidelity requires a compact 78px desktop header row.');
+}
 if (
     str_contains($siteHeader, 'homepage_composer_active()') ||
     !str_contains($siteHeader, "['law01_header']")
