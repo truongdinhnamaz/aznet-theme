@@ -75,18 +75,24 @@ foreach ([
     }
 }
 
-if (! str_contains($admin, 'homepage_curtain01_projects_term') || ! str_contains($admin, 'Công trình Rèm 01')) {
-    fwrite(STDERR, "FAIL: Homepage admin must expose the independent Rèm 01 project Category mapping.\n");
+$authoring = file_get_contents($root . '/inc/theme/homepage-authoring.php');
+if (
+    ! is_string($authoring)
+    || ! str_contains($authoring, "'projects'    => [ 'type' => 'category', 'key' => 'homepage_curtain01_projects_term'")
+    || ! str_contains($admin, "'projects' => __( 'Công trình', 'aznet-theme' )")
+    || ! str_contains($admin, "homepage_effective_source_key( \$active_preset, \$slot )")
+) {
+    fwrite(STDERR, "FAIL: Homepage admin must expose the independent Rèm 01 project Category through the shared typed-source model.\n");
     exit(1);
 }
 
 foreach ([
-    "\$statuses['projects'] = 'UNMAPPED'",
-    "\$statuses['projects'] = 'INVALID'",
-    "\$statuses['projects'] = [] === homepage_latest_posts( [ \$project_term_id ], 1 ) ? 'EMPTY' : 'READY'",
+    "homepage_source_value( \$preset, 'projects', \$s )",
+    "null === homepage_category_reference( \$project_term_id ) ? 'INVALID'",
+    "[] === homepage_latest_posts( [ \$project_term_id ], 1 ) ? 'EMPTY' : 'READY'",
 ] as $needle) {
     if (! str_contains($admin, $needle)) {
-        fwrite(STDERR, "FAIL: Homepage diagnostics must expose fail-soft project source state: {$needle}\n");
+        fwrite(STDERR, "FAIL: Homepage diagnostics must expose fail-soft project source state through the current shared diagnostics model: {$needle}\n");
         exit(1);
     }
 }
