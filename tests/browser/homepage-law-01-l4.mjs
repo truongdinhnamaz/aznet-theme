@@ -229,6 +229,10 @@ async function inspectViewport(browser, name, viewport) {
 
     result.serviceCards = await page.locator('.aznet-theme-law01-services .aznet-theme-law01-card').count();
     if (result.serviceCards !== 6) throw new Error(`expected 6 mapped service cards, got ${result.serviceCards}`);
+    const serviceTitles = await page.locator('.aznet-theme-law01-services .aznet-theme-law01-card h3').allTextContents();
+    if (serviceTitles.length !== 6 || serviceTitles.some((title) => !title.trim())) {
+      throw new Error(`Services rendered an unnamed public card: ${JSON.stringify(serviceTitles)}`);
+    }
 
     const parityMetrics = await page.evaluate(() => {
       const heroSection = document.querySelector('.aznet-theme-law01-hero')?.getBoundingClientRect();
