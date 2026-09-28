@@ -8,6 +8,11 @@ if (! defined('ABSPATH')) {
 
 $root = dirname(__DIR__, 2);
 require_once $root . '/inc/theme/template-registry.php';
+require_once $root . '/inc/theme/settings.php';
+
+assert(['default', 'editorial', 'commerce'] === \AZnet\Theme\visual_preset_ids());
+assert(['off'] === \AZnet\Theme\homepage_preset_ids());
+
 $loaderPath = $root . '/inc/theme/template-loader.php';
 if (! is_file($loaderPath)) {
     fwrite(STDERR, "FAIL: C1 template loader file is missing.\n");
@@ -26,11 +31,6 @@ foreach ([
         exit(1);
     }
 }
-
-require_once $root . '/inc/theme/settings.php';
-
-assert(['default', 'editorial', 'commerce'] === \AZnet\Theme\visual_preset_ids());
-assert(['off'] === \AZnet\Theme\homepage_preset_ids());
 
 $summary = \AZnet\Theme\load_local_template_manifests();
 assert(in_array('law-01', $summary['loaded'], true));
