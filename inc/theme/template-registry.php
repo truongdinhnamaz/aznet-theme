@@ -141,3 +141,82 @@ function template_manifest( string $id ): ?array {
     $store = template_manifest_store();
     return $store[ $id ] ?? null;
 }
+
+
+/**
+ * Return visual preset ids available to Theme settings.
+ *
+ * Core-native visual presets remain available independently of templates.
+ *
+ * @return array<int,string>
+ */
+function template_visual_preset_ids(): array {
+    $ids = [ 'default', 'editorial', 'commerce' ];
+    foreach ( template_manifests() as $manifest ) {
+        $preset = trim( (string) ( $manifest['presentation']['visual_preset'] ?? '' ) );
+        if ( '' !== $preset ) {
+            $ids[] = $preset;
+        }
+    }
+    return array_values( array_unique( $ids ) );
+}
+
+/** @return array<int,string> */
+function template_homepage_preset_ids(): array {
+    $ids = [ 'off' ];
+    foreach ( template_manifests() as $manifest ) {
+        $preset = trim( (string) ( $manifest['presentation']['homepage_preset'] ?? '' ) );
+        if ( '' !== $preset ) {
+            $ids[] = $preset;
+        }
+    }
+    return array_values( array_unique( $ids ) );
+}
+
+/**
+ * Register Theme-shipped template manifests.
+ *
+ * This is presentation metadata only. It does not provision or mutate content.
+ */
+function register_builtin_template_manifests(): void {
+    $builtins = [
+        [
+            'contract_version' => AZNET_THEME_TEMPLATE_MANIFEST_VERSION,
+            'id' => 'law-01',
+            'name' => 'Law 01',
+            'version' => '1.0.0',
+            'category' => 'professional',
+            'description' => 'Mẫu trình bày cho website dịch vụ chuyên nghiệp/pháp lý.',
+            'capabilities' => [ 'homepage' ],
+            'presentation' => [
+                'visual_preset' => 'default',
+                'homepage_preset' => 'law-01',
+            ],
+            'assets' => [],
+            'homepage' => [],
+            'provisioning' => [],
+        ],
+        [
+            'contract_version' => AZNET_THEME_TEMPLATE_MANIFEST_VERSION,
+            'id' => 'curtain-01',
+            'name' => 'Rèm 01',
+            'version' => '1.0.0',
+            'category' => 'commerce',
+            'description' => 'Mẫu trình bày cho website rèm/nội thất có WooCommerce.',
+            'capabilities' => [ 'homepage', 'woocommerce' ],
+            'presentation' => [
+                'visual_preset' => 'curtain-01',
+                'homepage_preset' => 'curtain-01',
+            ],
+            'assets' => [],
+            'homepage' => [],
+            'provisioning' => [],
+        ],
+    ];
+
+    foreach ( $builtins as $manifest ) {
+        if ( null === template_manifest( (string) $manifest['id'] ) ) {
+            register_template_manifest( $manifest );
+        }
+    }
+}
