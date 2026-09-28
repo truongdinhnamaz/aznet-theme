@@ -46,6 +46,35 @@ function footer_context(): array {
         );
     }
 
+    $about_intro = '';
+    $services    = [];
+
+    if ( 'law-01' === footer_preset() ) {
+        if ( function_exists( __NAMESPACE__ . '\\homepage_source_value' ) ) {
+            $about_id = (int) homepage_source_value( 'law-01', 'about' );
+            if ( $about_id > 0 && function_exists( 'get_post_field' ) ) {
+                $about_intro = trim( (string) get_post_field( 'post_excerpt', $about_id ) );
+            }
+
+            $services_id = (int) homepage_source_value( 'law-01', 'services' );
+            if ( $services_id > 0 && function_exists( __NAMESPACE__ . '\\homepage_renderable_child_pages' ) ) {
+                foreach ( homepage_renderable_child_pages( $services_id, 4 ) as $service_page ) {
+                    if ( ! $service_page instanceof \WP_Post ) {
+                        continue;
+                    }
+                    $title = trim( (string) get_the_title( $service_page ) );
+                    $url   = (string) get_permalink( $service_page );
+                    if ( '' !== $title && '' !== $url ) {
+                        $services[] = [
+                            'title' => $title,
+                            'url'   => $url,
+                        ];
+                    }
+                }
+            }
+        }
+    }
+
     $menu_html = static function ( string $location, string $class_name ): string {
         if ( ! function_exists( 'wp_nav_menu' ) ) {
             return '';
@@ -71,6 +100,8 @@ function footer_context(): array {
         'tagline'     => $tagline,
         'home_url'    => $home_url,
         'logo_html'   => $logo_html,
+        'about_intro' => $about_intro,
+        'services'    => $services,
         'menus'       => [
             'footer'         => $menu_html( 'footer', 'aznet-theme-site-footer__menu' ),
             'footer-contact' => $menu_html( 'footer-contact', 'aznet-theme-site-footer__contact-menu' ),
