@@ -211,17 +211,19 @@ jobs:
           $about = law01_page( 'Giới thiệu', 'gioi-thieu', 'Một đội ngũ hướng tới tư vấn rõ ràng, bảo mật và giải pháp thực tiễn.' );
           law01_featured_fixture( $about, 'about', 1200, 800 );
           $services = law01_page( 'Dịch vụ pháp lý', 'dich-vu-phap-ly', 'Các dịch vụ pháp lý dành cho cá nhân và doanh nghiệp.' );
+          law01_page( '', 'dich-vu-khong-tieu-de', 'Nguồn WordPress cố ý thiếu tiêu đề để kiểm tra fail-soft presentation.', '', $services, 0 );
           $service_titles = [
               'Luật Doanh nghiệp' => 'luat-doanh-nghiep',
-              'Dân sự và Tranh chấp' => 'dan-su-tranh-chap',
+              'Tư vấn và giải quyết tranh chấp dân sự, hợp đồng và nghĩa vụ liên quan' => 'dan-su-tranh-chap',
               'Hình sự' => 'hinh-su',
               'Đất đai và Bất động sản' => 'dat-dai-bat-dong-san',
               'Hôn nhân và Gia đình' => 'hon-nhan-gia-dinh',
               'Lao động' => 'lao-dong',
           ];
-          $order = 1;
+          $order = 10;
           foreach ( $service_titles as $title => $slug ) {
-              law01_page( $title, $slug, 'Nội dung mô tả dịch vụ được quản lý bằng Page WordPress.', '', $services, $order++ );
+              law01_page( $title, $slug, 'Nội dung mô tả dịch vụ được quản lý bằng Page WordPress.', '', $services, $order );
+              $order += 10;
           }
           $team = law01_page( 'Đội ngũ luật sư', 'doi-ngu-luat-su', 'Tìm hiểu đội ngũ và cách chúng tôi phối hợp trong quá trình tư vấn.' );
           $member_a = law01_page( 'Luật sư tư vấn doanh nghiệp', 'luat-su-doanh-nghiep', 'Luật sư Doanh nghiệp', '', $team, 10 );
