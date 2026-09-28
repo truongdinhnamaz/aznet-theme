@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.100
+**Version:** v0.101
 **Status:** Working Source  
 **Date:** 29/09/2026
 
@@ -800,6 +800,8 @@ All three pilots are peer verification targets. A shared-Core or shared-presenta
 Current owner approval authorizes review/merge and pilot update for these three targets once the relevant CI, backup/rollback, access and per-site runtime/browser gates are satisfied. Approval does not waive a failed gate or permit private-storage/domain takeover.
 
 **D-042 Industrial 01 repository closure — 29/09/2026:** PR #301 merged to canonical `main@51d9ba537bf4a91e94c13bfc6a2a28cbbb78c189` after final head `73ef211b91a533ca3089764f16c888237426ecdd` completed 47/47 triggered workflows SUCCESS. Merge tree `df8078b5c9123ab95ad1eafe94cc4ba46121cc02` is byte-identical to the verified final head. This closes the repository MVP at L1-L4/retained-regression scope only; `minhnguyen.vn` draft/live verification and production publication remain separate site-side gates under D-042/D-043.
+
+**D-042 Industrial 01 pilot production closure — 29/09/2026:** owner-approved publish to `https://minhnguyen.vn/` completed. Theme-owned settings activate `visual_preset=industrial-01` and `homepage_preset=industrial-01`; live Homepage/Shop/Product surfaces consume WordPress/WooCommerce native/public data. The legacy Homepage builder body was cleared using a reversible WordPress post update after publish because the source Page still contained Flatsome shortcodes that AZnet Theme does not own or execute. Fresh live mobile Lighthouse: Accessibility 100, Best Practices 100, SEO 100, Performance 95. WPVibe created theme-file rollback `aznet-theme-wpvibe-backup`. Pilot active metadata remains `1.3.53` because this was a bounded pilot delta from the installed 1.3.53 baseline; canonical 1.3.57 package deployment and L6 release parity are not claimed.
 
 **D-042 preset-language acceptance:** each pilot keeps the shared Theme presentation system while using a bounded preset lexicon. The accepted vocabulary is presentation-only and follows the fallback **preset term -> shared generic term -> WordPress-native label**. Shared components must not hard-code industry terms or derive authoritative behavior from labels.
 
