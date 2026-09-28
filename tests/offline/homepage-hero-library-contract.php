@@ -86,7 +86,7 @@ foreach ( [
     "add_query_arg",
     "'section'=>'hero-library'",
     "'hero'=>",
-    "'draft'===$hero->post_status?'draft':'ready'",
+    "'draft'===\$hero->post_status?'draft':'ready'",
 ] as $needle ) {
     assert( str_contains( $redirect_body, $needle ), 'Hero Library redirect state must preserve draft/ready state through the actual apply redirect.' );
 }
