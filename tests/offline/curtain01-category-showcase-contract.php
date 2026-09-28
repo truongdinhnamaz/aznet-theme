@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 $root = dirname(__DIR__, 2);
-$composerPath = $root . '/inc/theme/homepage-composer.php';
+$surfaceMapPath = $root . '/inc/theme/homepage-surface-map.php';
 $wooPath      = $root . '/inc/integrations/woocommerce.php';
 $partPath     = $root . '/template-parts/homepage/curtain-01/category-showcase.php';
 $cssPath      = $root . '/assets/css/components/homepage-curtain-01.css';
@@ -14,7 +14,7 @@ $fail = static function (string $message): void {
     exit(1);
 };
 
-foreach ([$composerPath, $wooPath, $cssPath, $jsPath] as $path) {
+foreach ([$surfaceMapPath, $wooPath, $cssPath, $jsPath] as $path) {
     if (!is_file($path)) {
         $fail('missing Curtain 01 category-showcase dependency: ' . basename($path));
     }
@@ -24,14 +24,22 @@ if (!is_file($partPath)) {
     $fail('Curtain 01 category showcase template part is missing.');
 }
 
-$composer = (string) file_get_contents($composerPath);
+$surfaceMap = (string) file_get_contents($surfaceMapPath);
 $woo      = (string) file_get_contents($wooPath);
 $part     = (string) file_get_contents($partPath);
 $css      = (string) file_get_contents($cssPath);
 $js       = (string) file_get_contents($jsPath);
 
-if (!str_contains($composer, "'about', 'category-showcase', 'catalogue'")) {
-    $fail('Category showcase must render between About and Catalogue.');
+$aboutPos = strpos($surfaceMap, "            'about',");
+$showcasePos = strpos($surfaceMap, "            'category-showcase',");
+$cataloguePos = strpos($surfaceMap, "            'catalogue',");
+if (
+    false === $aboutPos ||
+    false === $showcasePos ||
+    false === $cataloguePos ||
+    !($aboutPos < $showcasePos && $showcasePos < $cataloguePos)
+) {
+    $fail('Category showcase must render between About and Catalogue in the shared effective-surface model.');
 }
 
 foreach ([
