@@ -4,9 +4,10 @@ declare(strict_types=1);
 $root = dirname(__DIR__, 2);
 $profile = file_get_contents($root . '/template-parts/homepage/law-01/profile.php');
 $assets = file_get_contents($root . '/inc/theme/assets.php');
+$surfaceMap = file_get_contents($root . '/inc/theme/homepage-surface-map.php');
 
 foreach ([
-    'team_directory_members( 4 )',
+    'team_directory_public_members( 4 )',
     "'template-parts/team/card'",
     "esc_html_e( 'Xem tất cả'",
 ] as $needle) {
@@ -25,6 +26,11 @@ foreach ([
         fwrite(STDERR, "FAIL: Homepage Team still exposes fake-person fallback {$forbidden}\n");
         exit(1);
     }
+}
+
+if (! str_contains((string) $surfaceMap, 'team_directory_public_members( 4 )')) {
+    fwrite(STDERR, "FAIL: shared Homepage Team surface must use public member projection\n");
+    exit(1);
 }
 
 if (! str_contains((string) $assets, "'aznet-theme-team-card'")) {
