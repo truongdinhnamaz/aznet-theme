@@ -34,13 +34,15 @@ if ( ! is_array( $products ) || [] === $products ) {
                 $product_id = method_exists( $product, 'get_id' ) ? (int) $product->get_id() : 0;
                 ?>
                 <article class="aznet-theme-industrial01-card aznet-theme-industrial01-product-card">
-                    <a class="aznet-theme-industrial01-product-card__media" href="<?php echo esc_url( $product->get_permalink() ); ?>">
-                        <?php
-                        if ( $product_id > 0 && has_post_thumbnail( $product_id ) ) {
-                            echo get_the_post_thumbnail( $product_id, 'woocommerce_thumbnail', [ 'loading' => 'lazy' ] );
-                        }
-                        ?>
-                    </a>
+                    <?php if ( $product_id > 0 && has_post_thumbnail( $product_id ) ) : ?>
+                        <a
+                            class="aznet-theme-industrial01-product-card__media"
+                            href="<?php echo esc_url( $product->get_permalink() ); ?>"
+                            aria-label="<?php echo esc_attr( $product->get_name() ); ?>"
+                        >
+                            <?php echo get_the_post_thumbnail( $product_id, 'woocommerce_thumbnail', [ 'loading' => 'lazy' ] ); ?>
+                        </a>
+                    <?php endif; ?>
                     <div class="aznet-theme-industrial01-product-card__body">
                         <h3><a href="<?php echo esc_url( $product->get_permalink() ); ?>"><?php echo esc_html( $product->get_name() ); ?></a></h3>
                         <?php if ( method_exists( $product, 'get_price_html' ) ) : ?>
