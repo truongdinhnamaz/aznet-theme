@@ -25,7 +25,7 @@ if ( ! $faq_page instanceof \WP_Post ) {
     $faq_page = homepage_page_reference( (int) setting( 'homepage_faq_page', 0 ) );
 }
 $service_count = $services_page instanceof \WP_Post
-    ? count( homepage_direct_published_children( (int) $services_page->ID, 24 ) )
+    ? count( homepage_renderable_child_pages( (int) $services_page->ID, 24 ) )
     : 0;
 $profile_facts = [];
 if ( $service_count > 0 && $services_page instanceof \WP_Post ) {
