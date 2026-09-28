@@ -30,6 +30,7 @@ $surface = file_get_contents($root . '/inc/theme/homepage-surface-map.php');
 $template_path = $root . '/template-parts/homepage/curtain-01/proof-strip.php';
 $css = file_get_contents($root . '/assets/css/components/homepage-curtain-01.css');
 $admin = file_get_contents($root . '/inc/admin/homepage.php');
+$authoring = file_get_contents($root . '/inc/theme/homepage-authoring.php');
 
 if (! is_string($composer) || ! str_contains($composer, "homepage_effective_surface_map( 'curtain-01' )")) {
     fwrite(STDERR, "FAIL: Curtain 01 composer must consume the shared effective surface map.\n");
@@ -91,8 +92,11 @@ foreach ([
     }
 }
 
-if (! is_string($admin) || ! str_contains($admin, 'homepage_proof_block') || ! str_contains($admin, 'Bằng chứng nhanh')) {
-    fwrite(STDERR, "FAIL: Homepage admin must expose the WordPress source mapping for Bằng chứng nhanh.\n");
+if (! is_string($authoring)
+    || ! str_contains($authoring, "'proof'       => [ 'type' => 'wp_block', 'key' => 'homepage_curtain01_proof_block'")
+    || ! is_string($admin)
+    || ! str_contains($admin, "'proof' => __( 'Bằng chứng nhanh'")) {
+    fwrite(STDERR, "FAIL: Homepage authoring must expose the Curtain 01 proof source through the preset registry.\n");
     exit(1);
 }
 
