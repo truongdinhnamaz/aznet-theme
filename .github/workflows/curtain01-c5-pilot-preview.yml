@@ -512,6 +512,7 @@ jobs:
           cat /tmp/curtain01-c5/summary.json
 
       - name: Upload C5 preview evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: curtain01-c5-pilot-preview-${{ github.sha }}
@@ -522,6 +523,7 @@ jobs:
             /tmp/curtain01-c5/fixture.json
             /tmp/curtain01-c5/homepage-map-runtime.json
             /tmp/curtain01-c5/server.log
+            /tmp/curtain01-c5/shop-debug.html
           if-no-files-found: error
 
       - name: Stop runtime
