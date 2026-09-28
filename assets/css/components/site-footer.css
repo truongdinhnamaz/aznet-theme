@@ -120,6 +120,35 @@
     gap: clamp(1.5rem, 3vw, 3.5rem);
 }
 
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__main > *,
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__identity,
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact,
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__navigation,
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__social-column,
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-menu,
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__menu,
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__social-menu,
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__policy-menu {
+    min-width: 0;
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-menu li,
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__menu li,
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__social-menu li,
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__policy-menu li {
+    min-width: 0;
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-menu a,
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__menu a,
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__social-menu a,
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__policy-menu a,
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__identity p {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__identity {
     max-width: 36rem;
 }
