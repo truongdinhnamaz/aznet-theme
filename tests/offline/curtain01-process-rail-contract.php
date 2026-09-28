@@ -6,6 +6,7 @@ $settings_path = $root . '/inc/theme/settings.php';
 $composer_path = $root . '/inc/theme/homepage-composer.php';
 $surface_path = $root . '/inc/theme/homepage-surface-map.php';
 $admin_path = $root . '/inc/admin/homepage.php';
+$authoring_path = $root . '/inc/theme/homepage-authoring.php';
 $template_path = $root . '/template-parts/homepage/curtain-01/process.php';
 $css_path = $root . '/assets/css/components/homepage-curtain-01.css';
 
@@ -13,9 +14,10 @@ $settings = is_file($settings_path) ? file_get_contents($settings_path) : false;
 $composer = is_file($composer_path) ? file_get_contents($composer_path) : false;
 $surface = is_file($surface_path) ? file_get_contents($surface_path) : false;
 $admin = is_file($admin_path) ? file_get_contents($admin_path) : false;
+$authoring = is_file($authoring_path) ? file_get_contents($authoring_path) : false;
 $css = is_file($css_path) ? file_get_contents($css_path) : false;
 
-if (! is_string($settings) || ! is_string($composer) || ! is_string($surface) || ! is_string($admin) || ! is_string($css)) {
+if (! is_string($settings) || ! is_string($composer) || ! is_string($surface) || ! is_string($admin) || ! is_string($authoring) || ! is_string($css)) {
     fwrite(STDERR, "FAIL: Curtain 01 process source files missing.\n");
     exit(1);
 }
@@ -84,15 +86,9 @@ foreach ([
     }
 }
 
-if (! str_contains($admin, 'homepage_curtain01_process_page') || ! str_contains($admin, 'Quy trình Rèm 01')) {
-    fwrite(STDERR, "FAIL: Homepage admin must expose the independent Rèm 01 process Page mapping.\n");
-    exit(1);
-}
-
-if (! str_contains($admin, "'process'  => 'curtain-01' === (string) ( \$s['homepage_preset'] ?? 'off' )")
-    || ! str_contains($admin, "? 'homepage_curtain01_process_page'")
-    || ! str_contains($admin, ": 'homepage_process_page'")) {
-    fwrite(STDERR, "FAIL: Homepage diagnostics must report the process source owned by the active preset.\n");
+if (! str_contains($authoring, "'process'     => [ 'type' => 'page', 'key' => 'homepage_curtain01_process_page'")
+    || ! str_contains($admin, "return [ 'hero', 'proof', 'about', 'process', 'projects', 'knowledge', 'contact' ]")) {
+    fwrite(STDERR, "FAIL: Homepage authoring must expose the independent Curtain 01 process Page through the preset registry.\n");
     exit(1);
 }
 
