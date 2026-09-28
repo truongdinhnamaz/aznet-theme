@@ -46,8 +46,8 @@ foreach ([
     "current_user_can( 'publish_posts' )",
     'check_admin_referer(',
     'WP_Block_Patterns_Registry',
-    'homepage_hero_block',
-    'homepage_hero_variant',
+    'homepage_law01_hero_block',
+    'homepage_law01_hero_variant',
 ] as $needle) {
     assert(str_contains($hero_action, $needle), "D-030 explicit Hero action contract missing: {$needle}");
 }
