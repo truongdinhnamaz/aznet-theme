@@ -10,6 +10,27 @@
 
 **Spec:** `docs/superpowers/specs/2026-09-28-law01-completion-audit-design.md`
 
+## Execution subdivision — small recoverable micro-slices
+
+To reduce timeout/progress-loss risk, execute the plan below as independent checkpoints. Never combine two production behaviors into one commit.
+
+- **A0 — L0 audit checkpoint:** evidence/state only. Already separated from production code.
+- **A1 — Services RED only:** add the failing runtime/static contract for untitled Service children. No production code.
+- **A2 — Services helper GREEN:** add only `homepage_renderable_child_pages()`; run its narrow tests; commit.
+- **A3 — Services consumer parity:** switch Services surface/template/profile/admin public-preview decisions to the helper; regression; commit.
+- **A4 — Services browser fixture:** add one untitled Service source Page + long-title stress and browser assertions; commit.
+- **B1 — Team RED only:** add failing raw-vs-public Team projection tests. No production code.
+- **B2 — Team helper GREEN:** add only `team_directory_public_members()`; run narrow tests; commit.
+- **B3 — Team public consumers:** Homepage/shared map/public directory use the public projection; admin keeps raw members; regression; commit.
+- **B4 — Team browser fixture:** add one untitled Team child and public-card assertions; commit.
+- **C1 — Empty editorial runtime regression:** Analysis/News empty-category test only; no production change unless it exposes a real defect.
+- **C2 — Homepage surface-order browser regression:** exact Burgundy order assertion only; retain existing viewport/a11y gates.
+- **D1 — Final static/core verification:** no fixes bundled; any failure opens its own RED→GREEN corrective micro-slice.
+- **D2 — Evidence closure:** update evidence only.
+- **D3 — Draft PR review checkpoint:** no merge, release, version bump, or deployment.
+
+Each micro-slice must end recoverably before the next begins. If a deeper failure appears, stop that micro-slice, reproduce it at the shallowest layer, and fix it in a new bounded checkpoint rather than expanding the current slice.
+
 ## Global Constraints
 
 - Canonical repository is `truongdinhnamaz/aznet-theme`; implementation starts from the latest valid `main`, not from historical Law 01 PRs.
