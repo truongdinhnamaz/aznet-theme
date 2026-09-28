@@ -36,9 +36,10 @@ if (
     exit(1);
 }
 
+$runtimeMap = file_get_contents($root . '/tests/runtime/homepage-curtain01-map-runtime.php');
 foreach (['about', 'catalogue', 'knowledge', 'final-cta'] as $slug) {
-    if (! str_contains($composer, "'{$slug}'")) {
-        fwrite(STDERR, "FAIL: Curtain 01 post-content composition missing: {$slug}.\n");
+    if (! is_string($runtimeMap) || ! str_contains($runtimeMap, "'{$slug}',")) {
+        fwrite(STDERR, "FAIL: Curtain 01 shared surface-map contract missing post-content surface: {$slug}.\n");
         exit(1);
     }
 }
