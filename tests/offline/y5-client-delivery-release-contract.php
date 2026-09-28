@@ -59,7 +59,7 @@ $must( $current_version === (string) ( $function_match[1] ?? '' ), 'Current Them
 $must( version_compare( $current_version, '1.3.32', '>=' ), 'Current Theme must not regress below the historical Y5 promoted release 1.3.32' );
 
 $runtime = (string) file_get_contents( $root . '/tests/runtime/y5-client-delivery.php' );
-$must( str_contains( $runtime, "'1.3.32' === AZNET_THEME_VERSION" ), 'Historical Y5 runtime fixture must retain the promoted Theme version 1.3.32' );
+$must( str_contains( $runtime, "wp_get_theme()->get( 'Version' ) === AZNET_THEME_VERSION" ), 'Y5 runtime fixture must verify current Theme version synchronization' );
 
 $workflow = (string) file_get_contents( $root . '/.github/workflows/y5-client-delivery-release.yml' );
 foreach ( [
@@ -67,7 +67,8 @@ foreach ( [
     'PHP 8.1',
     'zero active third-party plugins',
     'build-release-package.py',
-    'aznet-theme-1.3.32.zip',
+    'THEME_VERSION',
+    'aznet-theme-$THEME_VERSION.zip',
     'twentytwentyfive',
     'y5-client-delivery.php',
     'y5-client-delivery-l4.mjs',
