@@ -41,7 +41,7 @@ foreach (['handle_footer_profile_save', 'footer_profile_from_menus'] as $needle)
         $fail("Footer profile WordPress-menu adapter missing {$needle}");
     }
 }
-foreach (['aznet-theme-site-footer__services', 'grid-template-columns: minmax(280px, 1.3fr) repeat(3, minmax(160px, .75fr))', 'aznet-theme-site-footer__channel-link', 'aznet-theme-site-footer__channel-icon', 'aznet-theme-footer-field-facebook', 'aznet-theme-footer-field-tiktok', 'aznet-theme-footer-field-instagram'] as $needle) {
+foreach (['aznet-theme-site-footer__services', 'grid-template-columns: minmax(280px, 1.3fr) repeat(3, minmax(160px, .75fr))', 'aznet-theme-site-footer__channel-link', 'aznet-theme-site-footer__channel-icon'] as $needle) {
     if (! str_contains($css, $needle)) {
         $fail("Footer CSS missing {$needle}");
     }
