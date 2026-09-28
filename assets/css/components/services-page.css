@@ -324,12 +324,6 @@
     color: var(--law01-services-burgundy);
 }
 
-.aznet-theme-services-page__group-excerpt {
-    margin: .75rem 0 0;
-    color: var(--law01-services-muted);
-    line-height: 1.65;
-}
-
 .aznet-theme-services-page__subservices {
     display: grid;
     gap: 0;
