@@ -579,3 +579,65 @@
         grid-template-columns: 1fr;
     }
 }
+
+
+/* Topic heading polish: icon + subtle band + divider for editorial hierarchy. */
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__heading {
+    position: relative;
+    padding: .75rem .8rem .9rem;
+    border-radius: .22rem;
+    background:
+        linear-gradient(90deg, rgba(185, 137, 47, .11), rgba(185, 137, 47, .025) 70%, transparent);
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__heading::after {
+    position: absolute;
+    right: .8rem;
+    bottom: 0;
+    left: .8rem;
+    height: 1px;
+    background: linear-gradient(90deg, var(--law01-client-gold), rgba(185, 137, 47, .12), transparent);
+    content: "";
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__title-wrap {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: .65rem;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__icon {
+    display: inline-grid;
+    width: 2rem;
+    height: 2rem;
+    flex: 0 0 2rem;
+    place-items: center;
+    border: 1px solid rgba(185, 137, 47, .45);
+    border-radius: 50%;
+    background: rgba(255,255,255,.72);
+    color: var(--law01-client-gold);
+    box-shadow: 0 .2rem .65rem rgba(74,46,31,.05);
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__icon svg {
+    width: 1.05rem;
+    height: 1.05rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__heading h3 {
+    min-width: 0;
+}
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__category-link {
+    align-self: center;
+}
+
+@media (max-width: 640px) {
+    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__heading {
+        padding: .7rem .75rem .85rem;
+    }
+    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-topic-card__category-link {
+        align-self: flex-start;
+        margin-inline-start: 2.65rem;
+    }
+}
