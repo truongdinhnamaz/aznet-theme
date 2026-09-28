@@ -1,0 +1,63 @@
+name: Industrial 01 MVP Contracts
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'inc/theme/settings.php'
+      - 'inc/theme/design-system.php'
+      - 'inc/theme/homepage-composer.php'
+      - 'inc/theme/preset-lexicon.php'
+      - 'inc/theme/assets.php'
+      - 'inc/admin/control-center.php'
+      - 'inc/admin/homepage.php'
+      - 'template-parts/homepage/industrial-01/**'
+      - 'assets/css/presets/industrial-01.css'
+      - 'assets/css/components/homepage-industrial-01.css'
+      - 'tests/offline/industrial01-registration-contract.php'
+      - '.github/workflows/industrial01-mvp-contracts.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  industrial01-mvp:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Verify diff hygiene
+        run: |
+          git fetch origin main:refs/remotes/origin/main
+          git diff --check origin/main...HEAD
+
+      - name: Run Industrial 01 contract
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-registration-contract.php
+
+      - name: Retain shared preset and Homepage boundaries
+        run: |
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/r1-settings-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/r1-visual-preset-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/f3-homepage-ownership-static-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/f5-homepage-absent-failsoft-contract.php
+
+      - name: Lint Industrial 01 PHP
+        run: |
+          php -l inc/theme/preset-lexicon.php
+          php -l inc/theme/homepage-composer.php
+          php -l template-parts/homepage/industrial-01/hero.php
+          php -l template-parts/homepage/industrial-01/categories.php
+          php -l template-parts/homepage/industrial-01/products.php
+          php -l template-parts/homepage/industrial-01/cta.php
