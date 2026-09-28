@@ -11,12 +11,10 @@ foreach ([
     "'orderby'        => 'date'",
     'aznet-theme-law01-topic-card',
     'aznet-theme-law01-topic-card__posts',
-    'aznet-theme-law01-topic-card__category-link',
     'aznet-theme-law01-topic-card--featured',
     'aznet-theme-law01-topic-card__icon',
     'has_post_thumbnail( $post )',
     'get_the_post_thumbnail(',
-    'Xem chuyên mục',
 ] as $needle) {
     if (! str_contains($template, $needle)) {
         fwrite(STDERR, "FAIL: editorial Topics template missing {$needle}\n");
@@ -40,6 +38,11 @@ foreach ([
         fwrite(STDERR, "FAIL: editorial Topics CSS missing {$needle}\n");
         exit(1);
     }
+}
+
+if (str_contains($template, 'aznet-theme-law01-topic-card__category-link') || str_contains($template, 'Xem chuyên mục')) {
+    fwrite(STDERR, "FAIL: Topics card must not render a separate category CTA; the category title itself is the link.\n");
+    exit(1);
 }
 
 if (str_contains($template, "get_page_by_path(") || str_contains($template, "REQUEST_URI")) {
