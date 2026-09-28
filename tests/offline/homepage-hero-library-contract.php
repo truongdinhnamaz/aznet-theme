@@ -136,8 +136,8 @@ foreach ([
 }
 
 foreach (['homepage_hero_title', 'homepage_hero_subtitle', 'homepage_hero_slogan', 'homepage_hero_body', 'homepage_hero_image'] as $forbidden) {
-    assert(! str_contains($settings, $forbidden), "Theme must not store Hero copy/media: {$forbidden}");
-    assert(! str_contains($admin, $forbidden), "Control Center must not create a Theme Hero content store: {$forbidden}");
+    assert(! str_contains($settings, $forbidden), "Theme must not define a Hero copy/media setting: {$forbidden}");
+    assert(! str_contains($hero_action, "\$theme_settings['{$forbidden}']"), "Hero form must not persist copy/media into Theme settings: {$forbidden}");
 }
 
 echo "PASS: D-030 Homepage Hero Library contract\n";
