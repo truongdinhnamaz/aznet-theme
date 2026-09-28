@@ -18,6 +18,7 @@ on:
       - 'assets/css/components/team-directory.css'
       - 'tests/runtime/team-directory-parity.php'
       - 'tests/runtime/homepage-team-authoring.php'
+      - 'tests/runtime/law01-homepage-source-gaps.php'
       - 'tests/runtime/law01-empty-editorial-surfaces.php'
       - 'inc/admin/homepage.php'
       - 'inc/admin/homepage-hero.php'
@@ -350,6 +351,11 @@ jobs:
 
           wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
           wp rewrite flush --hard --path=/tmp/wp --allow-root
+
+      - name: Verify Law 01 Services source-gap runtime
+        run: |
+          set -euo pipefail
+          wp eval-file "$GITHUB_WORKSPACE/tests/runtime/law01-homepage-source-gaps.php" --path=/tmp/wp --allow-root
 
       - name: Verify Law 01 empty editorial fail-soft
         run: |
