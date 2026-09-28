@@ -6,7 +6,7 @@ $template = (string) file_get_contents($root . '/template-parts/homepage/law-01/
 $css = (string) file_get_contents($root . '/assets/css/components/homepage-law-01-reference.css');
 
 foreach ([
-    '$services_scrollable = count( $items ) > 4;',
+    '$services_scrollable = count( $items ) > 6;',
     'aznet-theme-law01-grid--services-scroll',
     'tabindex="0"',
 ] as $needle) {
@@ -19,7 +19,7 @@ foreach ([
 foreach ([
     '.aznet-theme-law01-grid--services-scroll',
     'grid-auto-flow: column;',
-    'grid-auto-columns: calc((100% - 2.25rem) / 4);',
+    'grid-auto-columns: calc((100% - 3.75rem) / 6);',
     'overflow-x: auto;',
     'scroll-snap-type: x proximity;',
     'scroll-snap-align: start;',
@@ -30,4 +30,4 @@ foreach ([
     }
 }
 
-echo "PASS: Law 01 Services becomes horizontally scrollable only when more than four cards render\n";
+echo "PASS: Law 01 Services becomes horizontally scrollable only when more than six cards render\n";
