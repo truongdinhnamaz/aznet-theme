@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.98
+**Version:** v0.99
 **Status:** Working Source  
 **Date:** 28/09/2026
 
@@ -798,6 +798,16 @@ The product owner approved the third equal pilot and the current three-pilot upd
 All three pilots are peer verification targets. A shared-Core or shared-presentation change that can affect more than one preset must retain regression coverage for all affected pilots; no pilot may be treated as the default semantic owner for another. Industrial 01 remains reusable Theme presentation over WordPress/WooCommerce/public-provider data, with WooCommerce retaining Product/price/stock/commerce truth and Theme retaining presentation only.
 
 Current owner approval authorizes review/merge and pilot update for these three targets once the relevant CI, backup/rollback, access and per-site runtime/browser gates are satisfied. Approval does not waive a failed gate or permit private-storage/domain takeover.
+
+**D-042 preset-language acceptance:** each pilot keeps the shared Theme presentation system while using a bounded preset lexicon. The accepted vocabulary is presentation-only and follows the fallback **preset term -> shared generic term -> WordPress-native label**. Shared components must not hard-code industry terms or derive authoritative behavior from labels.
+
+Current accepted examples:
+
+- offering: Rèm 01 `Dòng rèm/Giải pháp`; Law 01 `Lĩnh vực hành nghề`; Industrial 01 `Danh mục thiết bị`;
+- showcase: Rèm 01 `Công trình`; Law 01 `Vụ việc/Hồ sơ tiêu biểu`; Industrial 01 `Dự án/Ứng dụng`;
+- people: Rèm 01 `Đội ngũ`; Law 01 `Luật sư/Chuyên gia`; Industrial 01 `Kỹ sư/Đội ngũ`;
+- primary CTA: Rèm 01 `Nhận tư vấn/Báo giá`; Law 01 `Đặt lịch tư vấn`; Industrial 01 `Yêu cầu báo giá`;
+- catalogue/knowledge examples remain preset-specific display language only and do not transfer WooCommerce/WordPress/provider ownership into Theme.
 
 
 ## D-043 — Core Template Extension Contract — ACCEPTED — 28/09/2026
