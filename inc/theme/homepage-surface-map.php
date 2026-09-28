@@ -600,7 +600,7 @@ function homepage_effective_surface_map( ?string $preset = null ): array {
                 'title' => __( 'Giới thiệu & Đội ngũ', 'aznet-theme' ),
                 'about' => $about,
                 'team'  => $team,
-                'items' => $team instanceof \WP_Post ? team_directory_members( 4 ) : [],
+                'items' => $team instanceof \WP_Post ? team_directory_public_members( 4 ) : [],
                 'source' => implode(
                     ' + ',
                     array_filter(
