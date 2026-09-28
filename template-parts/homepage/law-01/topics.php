@@ -56,7 +56,24 @@ if ( [] === $terms ) { return; }
 
                     <div class="aznet-theme-law01-topic-card__content">
                         <div class="aznet-theme-law01-topic-card__heading">
-                            <h3><a href="<?php echo esc_url( $link ); ?>"><?php echo esc_html( $term->name ); ?></a></h3>
+                            <div class="aznet-theme-law01-topic-card__title-wrap">
+                                <span class="aznet-theme-law01-topic-card__icon" aria-hidden="true">
+                                    <?php if ( 0 === $index ) : ?>
+                                        <svg viewBox="0 0 24 24" focusable="false"><path d="M7 4h10v16H7zM9 8h6M9 12h6M9 16h4"/></svg>
+                                    <?php elseif ( 1 === $index ) : ?>
+                                        <svg viewBox="0 0 24 24" focusable="false"><path d="M4 10.5 12 4l8 6.5M6 9.5V20h12V9.5M9 20v-6h6v6"/></svg>
+                                    <?php elseif ( 2 === $index ) : ?>
+                                        <svg viewBox="0 0 24 24" focusable="false"><path d="M4 20V8h16v12M8 8V5h8v3M8 12h2M14 12h2M8 16h2M14 16h2"/></svg>
+                                    <?php elseif ( 3 === $index ) : ?>
+                                        <svg viewBox="0 0 24 24" focusable="false"><path d="M12 3v18M6 7h12M8 7l-3 5h6L8 7Zm8 0-3 5h6l-3-5ZM9 21h6"/></svg>
+                                    <?php elseif ( 4 === $index ) : ?>
+                                        <svg viewBox="0 0 24 24" focusable="false"><path d="M12 20s-7-4.2-7-10a4 4 0 0 1 7-2.7A4 4 0 0 1 19 10c0 5.8-7 10-7 10Z"/></svg>
+                                    <?php else : ?>
+                                        <svg viewBox="0 0 24 24" focusable="false"><path d="M8 4h8v4H8zM5 8h14v12H5zM9 12h6M9 16h4"/></svg>
+                                    <?php endif; ?>
+                                </span>
+                                <h3><a href="<?php echo esc_url( $link ); ?>"><?php echo esc_html( $term->name ); ?></a></h3>
+                            </div>
                             <a class="aznet-theme-law01-topic-card__category-link" href="<?php echo esc_url( $link ); ?>"><?php esc_html_e( 'Xem chuyên mục', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a>
                         </div>
 
