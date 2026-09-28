@@ -65,14 +65,10 @@ with sync_playwright() as p:
         cases.append(metric)
         if metric["overflow"] > 1:
             failures.append(f"{width}: horizontal overflow")
-        if width == 1440:
-            if metric["cols"] != 3 or metric["rows"] != 1:
-                failures.append(f"{width}: expected one three-column row, got cols={metric['cols']} rows={metric['rows']}")
-        else:
-            if metric["cols"] != 1 or metric["rows"] != 3:
-                failures.append(f"{width}: expected three stacked contact rows, got cols={metric['cols']} rows={metric['rows']}")
-        if any(h < 55 for h in metric["minHeights"]):
-            failures.append(f"{width}: contact target height below intended 3.5rem rail")
+        if metric["rows"] != 1:
+            failures.append(f"{width}: icon-only contact controls should remain on one compact row, got rows={metric['rows']}")
+        if any(h < 44 for h in metric["minHeights"]):
+            failures.append(f"{width}: icon-only contact target height below 44px")
         if any(mask in ("none", "") for mask in metric["iconMasks"]):
             failures.append(f"{width}: missing decorative contact icon mask")
         if any(content != '""' for content in metric["iconContents"]):
