@@ -4,9 +4,9 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.18 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.19 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 27/09/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 28/09/2026 |
 
 | **Kiến trúc lõi: **Theme chỉ sở hữu presentation/configuration/reference cần thiết. Dữ liệu authoritative và business state ở lại owner. Boundary giữa hai bên là public/versioned provider contract hoặc adapter tối thiểu. |
 | --- |
@@ -458,3 +458,52 @@ Curtain 01 parity includes only effective surfaces that the existing frontend ca
 ## 19.5. QA boundary
 
 D-041 requires RED -> GREEN at the shallowest layer, then fresh L3 WordPress runtime and L4 browser/a11y parity evidence. Admin order and frontend order must be compared from the shared model/markers. L5 provider integration and L6 release remain separate gates and are never inferred from fixture/static PASS.
+
+
+# 20. Template Extension Contract — D-043
+
+AZnet Theme Core is the reusable presentation root. Industry/site templates are extension packages registered through one versioned **Template Manifest Contract**; Core must not need industry-specific business logic when a new template is added.
+
+## 20.1. Core/template boundary
+
+- Core owns the manifest registry, validation, lifecycle/orchestration, shared design tokens, site shell, generic templates, effective-surface composition, bounded authoring framework, asset orchestration and fail-soft behavior.
+- A template owns presentation-only metadata and implementation: template identity/version, display metadata, presentation capabilities, visual/Homepage preset references, scoped assets, surface renderers/descriptors and an optional provisioning recipe reference.
+- WordPress, WooCommerce, RootProfile, ConvertFlow and other providers retain their existing authoritative data/domain ownership. Registering a template never transfers domain state into Theme storage.
+- Core must not branch on industry semantics such as law, curtains or industrial equipment. Existing template IDs may temporarily remain in compatibility code during migration, but the end-state extension path must not require editing generic Core allow-lists or adding template-specific branches.
+
+## 20.2. Manifest contract
+
+Template Manifest contract version 1 is strict, bounded and presentation-only. The initial top-level vocabulary is:
+
+`contract_version`, `id`, `name`, `version`, `category`, `description`, `capabilities`, `presentation`, `assets`, `homepage`, `provisioning`.
+
+Rules:
+
+- `id` is a stable lowercase machine identifier; duplicate registration is rejected rather than silently replacing an existing template.
+- Unknown top-level keys are rejected at the contract boundary so a package cannot smuggle product/identity/conversion stores or arbitrary runtime state into Core.
+- Contract evolution requires an explicit contract-version change plus compatibility tests; existing manifests are not silently reinterpreted.
+- Registration is runtime-local Theme presentation state, not a second content/domain store.
+- A future remote package path under D-040 must consume the same manifest semantics after package integrity/compatibility validation. D-040's prohibition on executable remote PHP remains unchanged.
+
+## 20.3. Migration invariant
+
+Law 01, Rèm 01 and Industrial 01 are migration consumers of the generic contract, not semantic owners of Core. Migration proceeds in bounded slices:
+
+1. registry/manifest contract;
+2. settings/design preset resolution;
+3. Template Library catalog;
+4. Homepage composition;
+5. authoring/surface descriptors;
+6. asset registry;
+7. provisioning bridge;
+8. three-pilot regression plus a synthetic fourth-template fixture.
+
+A Core extension-model PASS requires a fourth-template fixture to register and participate through the contract without adding a new Core industry branch.
+
+## 20.4. Safety and compatibility
+
+- Current public presentation must remain unchanged unless a separately scoped template slice explicitly changes it.
+- Template absence/invalid manifest/version mismatch must fail soft.
+- Template switching must not delete or rewrite WordPress/plugin-owned content or domain data.
+- Shared-Core changes affecting multiple templates require D-042 peer-pilot regression evidence.
+- Remote distribution, licensing, entitlement and package download remain D-040/external-service concerns; D-043 does not create those service capabilities inside Theme.

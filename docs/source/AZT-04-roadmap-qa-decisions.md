@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.97
+**Version:** v0.98
 **Status:** Working Source  
-**Date:** 27/09/2026
+**Date:** 28/09/2026
 
 ## 1. Purpose
 
@@ -798,3 +798,18 @@ The product owner approved the third equal pilot and the current three-pilot upd
 All three pilots are peer verification targets. A shared-Core or shared-presentation change that can affect more than one preset must retain regression coverage for all affected pilots; no pilot may be treated as the default semantic owner for another. Industrial 01 remains reusable Theme presentation over WordPress/WooCommerce/public-provider data, with WooCommerce retaining Product/price/stock/commerce truth and Theme retaining presentation only.
 
 Current owner approval authorizes review/merge and pilot update for these three targets once the relevant CI, backup/rollback, access and per-site runtime/browser gates are satisfied. Approval does not waive a failed gate or permit private-storage/domain takeover.
+
+
+## D-043 — Core Template Extension Contract — ACCEPTED — 28/09/2026
+
+The product owner approved AZnet Theme Core as the reusable root for future presentation templates and approved sequential implementation plus rollout to the three D-042 pilots after each relevant gate passes.
+
+Accepted rules:
+
+- New templates register through one versioned Template Manifest Contract; generic Core must not accumulate industry-specific allow-lists/branches as the extension mechanism.
+- Core owns registry/lifecycle/composition/authoring/assets/provisioning orchestration and fail-soft behavior; templates own presentation only.
+- WordPress/WooCommerce/RootProfile/ConvertFlow ownership is unchanged; no template may carry a parallel authoritative domain store.
+- Migration order is **C0 Registry/Manifest -> C1 Settings/Design -> C2 Template Library -> C3 Homepage Composition -> C4 Authoring -> C5 Assets -> C6 Provisioning bridge -> C7 three-pilot regression -> C8 synthetic fourth-template proof**.
+- Each production-behavior slice uses RED -> minimal GREEN -> retained regression at the shallowest sufficient layer.
+- D-042 pilot order for rollout/verification is Law 01 (`lstamduchn.vn`), Rèm 01 (`remquocanh.vn`), Industrial 01 (`minhnguyen.vn`). A pilot update requires relevant CI plus site backup/rollback and fresh per-site runtime/browser evidence; no PASS is inferred across pilots.
+- D-040 remote distribution remains separate: remote packages stay declarative and non-executable, and external catalog/license/entitlement/download authority stays outside Theme.
