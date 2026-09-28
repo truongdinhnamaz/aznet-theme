@@ -83,6 +83,9 @@ assert(is_file($homepageCssPath), 'Industrial 01 homepage stylesheet must exist.
 $homepageCss = file_get_contents($homepageCssPath);
 assert(is_string($homepageCss) && str_contains($homepageCss, '.aznet-theme-homepage--industrial-01'));
 assert(! str_contains($homepageCss, 'minhnguyen'), 'Client identity must not leak into reusable Industrial 01 homepage presentation.');
+assert(str_contains($homepageCss, '.aznet-theme-industrial01-cta .aznet-theme-industrial01-kicker'), 'Industrial 01 dark CTA must provide an explicit accessible kicker color.');
+assert(str_contains((string) $products, 'aria-label="<?php echo esc_attr( $product->get_name() ); ?>"'), 'Industrial 01 product media links must have discernible accessible names.');
+
 
 $industrialCssPath = $root . '/assets/css/presets/industrial-01.css';
 assert(is_file($industrialCssPath), 'Industrial 01 visual preset stylesheet must exist.');
