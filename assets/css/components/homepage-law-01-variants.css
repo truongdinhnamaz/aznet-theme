@@ -548,6 +548,7 @@
     letter-spacing: -.025em;
     overflow-wrap: normal;
     word-break: normal;
+    text-transform: uppercase;
     text-wrap: balance;
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__value {
@@ -571,8 +572,8 @@
     margin-top: 1.25rem;
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__actions .wp-block-button:not(.is-style-outline) .wp-block-button__link {
-    border-color: var(--law01-navy);
-    background: var(--law01-navy) !important;
+    border-color: var(--law01-client-burgundy);
+    background: var(--law01-client-burgundy) !important;
     color: #fff !important;
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-hero--library .aznet-theme-homepage-hero-content__secondary .wp-block-button__link {
