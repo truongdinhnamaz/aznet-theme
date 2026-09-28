@@ -293,8 +293,22 @@ jobs:
               $product_ids[] = curtain01_product( $row[0], $row[1], $product_categories[ $row[2] ], $index + 1 );
           }
 
-          $shop = curtain01_page( 'Sản phẩm', 'san-pham', 'Danh mục sản phẩm WooCommerce.' );
-          update_option( 'woocommerce_shop_page_id', $shop );
+          $shop = (int) wc_get_page_id( 'shop' );
+          if ( $shop <= 0 ) {
+              $shop = curtain01_page( 'Sản phẩm', 'san-pham', 'Danh mục sản phẩm WooCommerce.' );
+              update_option( 'woocommerce_shop_page_id', $shop );
+          } else {
+              wp_update_post(
+                  [
+                      'ID'         => $shop,
+                      'post_title' => 'Sản phẩm',
+                      'post_name'  => 'san-pham',
+                  ]
+              );
+          }
+          if ( function_exists( 'wc_update_product_lookup_tables' ) ) {
+              wc_update_product_lookup_tables();
+          }
 
           $hero_images = [
               $front_image,
