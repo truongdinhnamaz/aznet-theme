@@ -108,6 +108,23 @@ foreach ( $menu_definitions as $location => $definition ) {
         y3_runtime_fail( 'unable to create sentinel menu item for ' . $location );
     }
 
+    if ( 'footer-contact' === $location ) {
+        $long_email = 'tranchithanh1069tamduc.footer-overflow-regression@example-legal-services-domain.test';
+        $email_item_id = wp_update_nav_menu_item(
+            (int) $menu_id,
+            0,
+            [
+                'menu-item-title'   => $long_email,
+                'menu-item-url'     => 'mailto:' . $long_email,
+                'menu-item-status'  => 'publish',
+                'menu-item-classes' => 'aznet-theme-footer-field-email',
+            ]
+        );
+        if ( is_wp_error( $email_item_id ) || 0 >= (int) $email_item_id ) {
+            y3_runtime_fail( 'unable to create long managed email overflow regression fixture' );
+        }
+    }
+
     if ( 'footer-social' === $location ) {
         foreach ( [
             'facebook'  => 'Facebook',
