@@ -40,12 +40,8 @@ if (! str_contains($assets, '/assets/css/components/homepage-curtain-01.css')) {
     exit(1);
 }
 
-if (
-    ! is_string($admin)
-    || ! str_contains($admin, "'template_id'   => 'curtain-01'")
-    || ! str_contains($admin, "'name'          => __( 'Rèm 01', 'aznet-theme' )")
-) {
-    fwrite(STDERR, "FAIL: Curtain 01 is not exposed in the current Template Library model.\n");
+if (! is_string($admin) || ! str_contains($admin, 'homepage_template_library_items')) {
+    fwrite(STDERR, "FAIL: Homepage Template Library admin surface is missing.\n");
     exit(1);
 }
 

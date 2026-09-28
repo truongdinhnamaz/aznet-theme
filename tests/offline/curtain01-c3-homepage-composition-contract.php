@@ -36,10 +36,9 @@ if (
     exit(1);
 }
 
-$runtimeMap = file_get_contents($root . '/tests/runtime/homepage-curtain01-map-runtime.php');
 foreach (['about', 'catalogue', 'knowledge', 'final-cta'] as $slug) {
-    if (! is_string($runtimeMap) || ! str_contains($runtimeMap, "'{$slug}',")) {
-        fwrite(STDERR, "FAIL: Curtain 01 shared surface-map contract missing post-content surface: {$slug}.\n");
+    if (! str_contains((string) $surfaceMap, "'{$slug}'")) {
+        fwrite(STDERR, "FAIL: Curtain 01 shared surface map missing post-content surface: {$slug}.\n");
         exit(1);
     }
 }
@@ -124,12 +123,10 @@ if (str_contains((string) $css, 'white-space: nowrap;')) {
     exit(1);
 }
 
-$surfaceMapSource = file_get_contents($root . '/inc/theme/homepage-surface-map.php');
 if (
     ! str_contains((string) $catalogue, 'homepage_curtain01_catalogue_model')
-    || ! is_string($surfaceMapSource)
-    || ! str_contains($surfaceMapSource, 'Integrations\\WooCommerce\\homepage_products')
-    || ! str_contains($surfaceMapSource, 'Integrations\\WooCommerce\\homepage_product_categories')
+    || ! str_contains((string) $surfaceMap, 'Integrations\\WooCommerce\\homepage_products')
+    || ! str_contains((string) $surfaceMap, 'Integrations\\WooCommerce\\homepage_product_categories')
 ) {
     fwrite(STDERR, "FAIL: Curtain 01 catalogue must consume the bounded public WooCommerce adapter through its shared catalogue model.\n");
     exit(1);
