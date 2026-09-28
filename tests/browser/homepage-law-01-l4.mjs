@@ -137,7 +137,7 @@ async function inspectViewport(browser, name, viewport) {
     const renderedSurfaceOrder = await page.locator('[data-aznet-homepage-surface]').evaluateAll(
       (nodes) => nodes.map((node) => node.getAttribute('data-aznet-homepage-surface'))
     );
-    const expectedSurfaceOrder = ['hero', 'services', 'profile', 'latest', 'topics', 'analysis', 'news', 'process', 'faq', 'final-cta'];
+    const expectedSurfaceOrder = ['hero', 'services', 'profile', 'front-page-content', 'latest', 'topics', 'analysis', 'news', 'process', 'faq', 'final-cta'];
     if (JSON.stringify(renderedSurfaceOrder) !== JSON.stringify(expectedSurfaceOrder)) {
       throw new Error(`Law 01 rendered surface order mismatch: ${JSON.stringify(renderedSurfaceOrder)}`);
     }
