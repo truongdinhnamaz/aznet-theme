@@ -145,7 +145,7 @@ if (! str_contains((string) $knowledge, 'homepage_latest_posts')) {
     exit(1);
 }
 
-if (! str_contains((string) $cta, 'contact_surface_model') || ! str_contains((string) $cta, "homepage_contact_page")) {
+if (! str_contains((string) $cta, 'contact_surface_model') || ! str_contains((string) $cta, "homepage_effective_source_value( 'curtain-01', 'contact' )")) {
     fwrite(STDERR, "FAIL: Curtain 01 CTA must hand off through mapped WordPress/public contact sources.\n");
     exit(1);
 }
