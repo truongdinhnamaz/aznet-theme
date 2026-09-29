@@ -34,6 +34,12 @@ function footer_profile_definitions(): array {
             'type'     => 'tel',
             'title'    => __( 'Điện thoại', 'aznet-theme' ),
         ],
+        'website' => [
+            'label'    => __( 'Website', 'aznet-theme' ),
+            'location' => 'footer-contact',
+            'type'     => 'url',
+            'title'    => __( 'Website', 'aznet-theme' ),
+        ],
         'email' => [
             'label'    => __( 'Email', 'aznet-theme' ),
             'location' => 'footer-contact',
@@ -225,7 +231,9 @@ function handle_footer_profile_save(): void {
 
         $display_title = ( 'text' === $definition['type'] || 'tel' === $definition['type'] || 'email' === $definition['type'] )
             ? $value
-            : (string) $definition['title'];
+            : ( 'website' === $key
+                ? ( preg_replace( '#^https?://#i', '', rtrim( $value, '/' ) ) ?? $value )
+                : (string) $definition['title'] );
 
         wp_update_nav_menu_item(
             $menu_id,
