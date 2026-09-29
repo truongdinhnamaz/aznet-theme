@@ -404,14 +404,14 @@ foreach ([
     }
 }
 
-$footerSectionPos = strpos($controlCenter, "'footer' === \\$section");
+$footerSectionPos = strpos($controlCenter, "'footer' === " . '$section');
 $footerProfileRenderPos = strpos($controlCenter, 'render_footer_profile_form();');
 if (false === $footerSectionPos || false === $footerProfileRenderPos || $footerProfileRenderPos < $footerSectionPos) {
     y3_fail('Footer content editor must render inside the Footer section after template selection');
 }
 
-$overviewBlockStart = strpos($controlCenter, "if ( 'overview' === \\$section )");
-$homepageBlockStart = strpos($controlCenter, "} elseif ( 'homepage' === \\$section )");
+$overviewBlockStart = strpos($controlCenter, "if ( 'overview' === " . '$section' . " )");
+$homepageBlockStart = strpos($controlCenter, "} elseif ( 'homepage' === " . '$section' . " )");
 if (false !== $overviewBlockStart && false !== $homepageBlockStart) {
     $overviewBlock = substr($controlCenter, $overviewBlockStart, $homepageBlockStart - $overviewBlockStart);
     if (str_contains($overviewBlock, 'render_footer_profile_form();')) {
