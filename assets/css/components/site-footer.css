@@ -273,49 +273,49 @@
 }
 
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-links {
-    display: grid;
-    gap: .72rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .65rem;
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-links li {
-    min-width: 0;
     margin: 0;
     padding: 0;
 }
 
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-link {
-    display: flex;
-    min-width: 0;
-    align-items: flex-start;
-    gap: .65rem;
-    color: var(--aznet-theme-footer-muted);
-    font-size: var(--aznet-theme-text-small);
-    line-height: 1.5;
+    display: inline-grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    place-items: center;
+    border: 1px solid var(--aznet-theme-footer-border);
+    border-radius: .7rem;
+    background: color-mix(in srgb, var(--aznet-theme-law01-ivory) 8%, transparent);
+    color: var(--aznet-theme-law01-ivory);
+    line-height: 1;
     text-decoration: none;
+    transition:
+        transform var(--aznet-theme-motion-fast) ease,
+        background var(--aznet-theme-motion-fast) ease,
+        border-color var(--aznet-theme-motion-fast) ease;
 }
 
 .aznet-theme-site-footer--law-01 a.aznet-theme-site-footer__contact-link:hover,
 .aznet-theme-site-footer--law-01 a.aznet-theme-site-footer__contact-link:focus-visible {
+    border-color: color-mix(in srgb, var(--aznet-theme-law01-gold) 70%, transparent);
+    background: color-mix(in srgb, var(--aznet-theme-law01-ivory) 14%, transparent);
     color: var(--aznet-theme-law01-gold-soft);
-    text-decoration: underline;
-    text-underline-offset: .18em;
-}
-
-.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-text {
-    min-width: 0;
-    overflow-wrap: anywhere;
-    word-break: break-word;
+    text-decoration: none;
+    transform: translateY(-2px);
 }
 
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-icon {
-    width: 1rem;
-    height: 1rem;
-    flex: 0 0 1rem;
-    margin-top: .2em;
-    background: var(--aznet-theme-law01-gold-soft);
+    width: 1.15rem;
+    height: 1.15rem;
+    background: currentColor;
     mask-position: center;
     mask-repeat: no-repeat;
     mask-size: contain;
