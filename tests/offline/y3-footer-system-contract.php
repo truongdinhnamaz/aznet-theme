@@ -224,8 +224,8 @@ foreach (['Thông tin liên hệ', 'Liên kết nhanh'] as $heading) {
 if (! str_contains($template, "'law-01' === \$preset") || ! str_contains($template, 'aznet-theme-site-footer__contact-social')) {
     y3_fail('Law 01 Footer must combine optional contact and social links in one main-column surface.');
 }
-if (! str_contains($template, 'aznet-theme-site-footer__contact-text')) {
-    y3_fail('Law 01 Footer contact values must remain visibly rendered in the contact column.');
+if (! str_contains($template, 'screen-reader-text') || ! str_contains($template, 'aria-label="<?php echo esc_attr( $contact_title ); ?>"')) {
+    y3_fail('Law 01 Footer contact values must remain accessible while rendering as icon-only controls.');
 }
 if (! str_contains($template, "! in_array( \$preset, [ 'professional', 'law-01' ], true )")) {
     y3_fail('Law 01 Footer must not duplicate the social menu again in the bottom bar.');
@@ -280,8 +280,15 @@ foreach (['footer_profile_location', 'footer_profile_youtube', 'footer_profile_l
         y3_fail('AZnet Theme overview must render Footer profile input: ' . $fieldId);
     }
 }
-if (! str_contains($template, 'aznet-theme-site-footer__contact-text')) {
-    y3_fail('Law 01 Footer must render visible contact values instead of icon-only labels.');
+foreach ([
+    '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-link {',
+    'width: 2.75rem;',
+    'height: 2.75rem;',
+    'place-items: center;',
+] as $needle) {
+    if (! str_contains($css, $needle)) {
+        y3_fail('Law 01 Footer icon-only contact presentation missing: ' . $needle);
+    }
 }
 $professionalContactPos = strpos($template, "if ( 'professional' === \$preset && '' !== \$contact_menu )");
 $professionalNavigationPos = strpos($template, "if ( '' !== \$primary_menu )");
