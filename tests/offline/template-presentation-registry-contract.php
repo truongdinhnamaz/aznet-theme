@@ -13,15 +13,9 @@ $settings = $root . '/inc/theme/settings.php';
 
 require_once $registry;
 
-foreach ([
-    'AZnet\\Theme\\template_presentation_ids',
-    'AZnet\\Theme\\visual_preset_ids',
-    'AZnet\\Theme\\homepage_preset_ids',
-] as $function) {
-    if (! function_exists($function)) {
-        fwrite(STDERR, "FAIL: missing C1 function {$function}.\n");
-        exit(1);
-    }
+if (! function_exists('AZnet\\Theme\\template_presentation_ids')) {
+    fwrite(STDERR, "FAIL: missing C1 function AZnet\\Theme\\template_presentation_ids.\n");
+    exit(1);
 }
 
 if (! is_file($loader)) {
@@ -42,6 +36,14 @@ $summary = \AZnet\Theme\load_local_template_manifests();
 if (! is_array($summary)) {
     fwrite(STDERR, "FAIL: local manifest loader did not return summary.\n");
     exit(1);
+}
+
+require_once $settings;
+foreach (['AZnet\\Theme\\visual_preset_ids', 'AZnet\\Theme\\homepage_preset_ids'] as $function) {
+    if (! function_exists($function)) {
+        fwrite(STDERR, "FAIL: missing C1 function {$function}.\n");
+        exit(1);
+    }
 }
 
 $homepage = \AZnet\Theme\homepage_preset_ids();
@@ -118,7 +120,6 @@ if (['off'] !== \AZnet\Theme\homepage_preset_ids()) {
     exit(1);
 }
 
-require_once $settings;
 $normalized = \AZnet\Theme\normalize_settings([
     'visual_preset' => 'removed-template',
     'homepage_preset' => 'removed-template',
