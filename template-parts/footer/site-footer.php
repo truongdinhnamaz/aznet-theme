@@ -55,29 +55,6 @@ $navigation_heading = __( 'Liên kết nhanh', 'aznet-theme' );
                 <?php if ( 'law-01' === $preset && '' !== $about_intro ) : ?>
                     <p class="aznet-theme-site-footer__about"><?php echo esc_html( $about_intro ); ?></p>
                 <?php endif; ?>
-                <?php if ( 'law-01' === $preset && ! empty( $social_channels ) ) : ?>
-                    <nav class="aznet-theme-site-footer__channels" aria-label="<?php echo esc_attr__( 'Kênh mạng xã hội', 'aznet-theme' ); ?>">
-                        <?php foreach ( $social_channels as $channel ) : ?>
-                            <?php
-                            $channel_key   = sanitize_html_class( (string) ( $channel['key'] ?? '' ) );
-                            $channel_title = (string) ( $channel['title'] ?? '' );
-                            $channel_url   = (string) ( $channel['url'] ?? '' );
-                            if ( '' === $channel_key || '' === $channel_title || '' === $channel_url ) {
-                                continue;
-                            }
-                            ?>
-                            <a class="aznet-theme-site-footer__channel-link aznet-theme-site-footer__channel-link--<?php echo esc_attr( $channel_key ); ?>"
-                               href="<?php echo esc_url( $channel_url ); ?>"
-                               aria-label="<?php echo esc_attr( $channel_title ); ?>"
-                               title="<?php echo esc_attr( $channel_title ); ?>"
-                               target="_blank"
-                               rel="noopener noreferrer">
-                                <span class="aznet-theme-site-footer__channel-icon" aria-hidden="true"></span>
-                                <span class="screen-reader-text"><?php echo esc_html( $channel_title ); ?></span>
-                            </a>
-                        <?php endforeach; ?>
-                    </nav>
-                <?php endif; ?>
             </div>
 
             <?php if ( 'law-01' === $preset && ! empty( $services ) ) : ?>
@@ -114,19 +91,51 @@ $navigation_heading = __( 'Liên kết nhanh', 'aznet-theme' );
                             $contact_key   = sanitize_html_class( (string) ( $contact['key'] ?? '' ) );
                             $contact_title = (string) ( $contact['title'] ?? '' );
                             $contact_url   = (string) ( $contact['url'] ?? '' );
-                            if ( '' === $contact_key || '' === $contact_title || '' === $contact_url ) {
+                            if ( '' === $contact_key || '' === $contact_title ) {
                                 continue;
                             }
+                            $contact_is_link = '' !== $contact_url && '#' !== $contact_url;
                             ?>
                             <li>
-                                <a class="aznet-theme-site-footer__contact-link aznet-theme-site-footer__contact-link--<?php echo esc_attr( $contact_key ); ?>"
-                                   href="<?php echo esc_url( $contact_url, [ 'http', 'https', 'tel', 'mailto' ] ); ?>">
-                                    <span class="aznet-theme-site-footer__contact-icon" aria-hidden="true"></span>
-                                    <span class="screen-reader-text"><?php echo esc_html( $contact_title ); ?></span>
-                                </a>
+                                <?php if ( $contact_is_link ) : ?>
+                                    <a class="aznet-theme-site-footer__contact-link aznet-theme-site-footer__contact-link--<?php echo esc_attr( $contact_key ); ?>"
+                                       href="<?php echo esc_url( $contact_url, [ 'http', 'https', 'tel', 'mailto' ] ); ?>">
+                                        <span class="aznet-theme-site-footer__contact-icon" aria-hidden="true"></span>
+                                        <span class="aznet-theme-site-footer__contact-text"><?php echo esc_html( $contact_title ); ?></span>
+                                    </a>
+                                <?php else : ?>
+                                    <span class="aznet-theme-site-footer__contact-link aznet-theme-site-footer__contact-link--<?php echo esc_attr( $contact_key ); ?> aznet-theme-site-footer__contact-link--static">
+                                        <span class="aznet-theme-site-footer__contact-icon" aria-hidden="true"></span>
+                                        <span class="aznet-theme-site-footer__contact-text"><?php echo esc_html( $contact_title ); ?></span>
+                                    </span>
+                                <?php endif; ?>
                             </li>
                         <?php endforeach; ?>
                     </ul>
+
+                    <?php if ( ! empty( $social_channels ) ) : ?>
+                        <nav class="aznet-theme-site-footer__channels" aria-label="<?php echo esc_attr__( 'Kênh mạng xã hội', 'aznet-theme' ); ?>">
+                            <?php foreach ( $social_channels as $channel ) : ?>
+                                <?php
+                                $channel_key   = sanitize_html_class( (string) ( $channel['key'] ?? '' ) );
+                                $channel_title = (string) ( $channel['title'] ?? '' );
+                                $channel_url   = (string) ( $channel['url'] ?? '' );
+                                if ( '' === $channel_key || '' === $channel_title || '' === $channel_url ) {
+                                    continue;
+                                }
+                                ?>
+                                <a class="aznet-theme-site-footer__channel-link aznet-theme-site-footer__channel-link--<?php echo esc_attr( $channel_key ); ?>"
+                                   href="<?php echo esc_url( $channel_url ); ?>"
+                                   aria-label="<?php echo esc_attr( $channel_title ); ?>"
+                                   title="<?php echo esc_attr( $channel_title ); ?>"
+                                   target="_blank"
+                                   rel="noopener noreferrer">
+                                    <span class="aznet-theme-site-footer__channel-icon" aria-hidden="true"></span>
+                                    <span class="screen-reader-text"><?php echo esc_html( $channel_title ); ?></span>
+                                </a>
+                            <?php endforeach; ?>
+                        </nav>
+                    <?php endif; ?>
                 </div>
             <?php elseif ( 'professional' !== $preset && '' !== $contact_menu ) : ?>
                 <nav class="aznet-theme-site-footer__contact" aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
