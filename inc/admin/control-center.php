@@ -8,7 +8,7 @@ use function AZnet\Theme\Integrations\WooCommerce\available as woo_available;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 function control_center_section(): string {
-    $allowed = [ 'overview', 'design', 'header', 'footer', 'homepage', 'hero-library', 'provisioning', 'commerce', 'system-health' ];
+    $allowed = [ 'overview', 'header', 'footer', 'homepage', 'hero-library', 'provisioning', 'commerce', 'system-health' ];
     $value = isset( $_GET['section'] ) ? sanitize_key( wp_unslash( $_GET['section'] ) ) : 'overview';
     if ( 'commerce' === $value && ! woo_available() ) { return 'overview'; }
     return in_array( $value, $allowed, true ) ? $value : 'overview';
@@ -47,9 +47,7 @@ function render_hidden_settings( array $visible_keys ): void {
 function render_settings_form( string $section ): void {
     $s = settings();
     $visible_keys = [];
-    if ( 'design' === $section ) {
-        $visible_keys = [ 'visual_preset', 'page_breadcrumbs' ];
-    } elseif ( 'header' === $section ) {
+    if ( 'header' === $section ) {
         $visible_keys = [ 'header_preset', 'header_sticky', 'header_search', 'header_utilities' ];
     } elseif ( 'footer' === $section ) {
         $visible_keys = [ 'footer_preset' ];
@@ -62,10 +60,7 @@ function render_settings_form( string $section ): void {
     wp_nonce_field( 'aznet_theme_save_settings' );
     render_hidden_settings( $visible_keys );
 
-    if ( 'design' === $section ) {
-        field_select( 'visual_preset', __( 'Phong cách', 'aznet-theme' ), [ 'default' => 'Default', 'editorial' => 'Editorial', 'commerce' => 'Commerce', 'curtain-01' => 'Rèm 01', 'industrial-01' => 'Industrial 01' ], (string) $s['visual_preset'] );
-        field_checkbox( 'page_breadcrumbs', __( 'Hiển thị breadcrumb cho Page con', 'aznet-theme' ), (bool) $s['page_breadcrumbs'] );
-    } elseif ( 'header' === $section ) {
+    if ( 'header' === $section ) {
         field_select( 'header_preset', __( 'Kiểu Header', 'aznet-theme' ), [ 'standard' => 'Standard', 'compact' => 'Compact', 'commerce' => 'Commerce', 'overlay' => 'Overlay' ], (string) $s['header_preset'] );
         field_select( 'header_sticky', __( 'Sticky', 'aznet-theme' ), [ 'off' => 'Off', 'sticky' => 'Sticky', 'sticky-compact' => 'Sticky Compact' ], (string) $s['header_sticky'] );
         field_checkbox( 'header_search', __( 'Hiển thị tìm kiếm', 'aznet-theme' ), (bool) $s['header_search'] );
@@ -156,9 +151,9 @@ function render_homepage_setup_card(): void {
 function render_control_center(): void {
     if ( ! current_user_can( 'edit_theme_options' ) ) { return; }
     $section = control_center_section();
-    $tabs = [ 'overview' => 'Tổng quan', 'design' => 'Thiết kế', 'header' => 'Header', 'footer' => 'Footer', 'homepage' => 'Trang chủ', 'provisioning' => 'Thiết lập nhanh', 'system-health' => 'System Health' ];
+    $tabs = [ 'overview' => 'Tổng quan', 'header' => 'Header', 'footer' => 'Footer', 'homepage' => 'Trang chủ', 'provisioning' => 'Thiết lập nhanh', 'system-health' => 'System Health' ];
     if ( woo_available() ) {
-        $tabs = [ 'overview' => 'Tổng quan', 'design' => 'Thiết kế', 'header' => 'Header', 'footer' => 'Footer', 'homepage' => 'Trang chủ', 'provisioning' => 'Thiết lập nhanh', 'commerce' => 'Commerce', 'system-health' => 'System Health' ];
+        $tabs = [ 'overview' => 'Tổng quan', 'header' => 'Header', 'footer' => 'Footer', 'homepage' => 'Trang chủ', 'provisioning' => 'Thiết lập nhanh', 'commerce' => 'Commerce', 'system-health' => 'System Health' ];
     }
     $center_class = 'wrap aznet-theme-control-center' . ( 'homepage' === $section ? ' aznet-theme-control-center--homepage' : '' );
     echo '<div class="' . esc_attr( $center_class ) . '"' . ( 'homepage' === $section ? ' style="max-width:none;width:auto"' : '' ) . '><h1>AZnet Theme</h1><nav class="nav-tab-wrapper">';
@@ -175,7 +170,6 @@ function render_control_center(): void {
         render_homepage_setup_card();
         echo '<div class="aznet-theme-grid">';
         $cards = [
-            [ 'Phong cách', 'Chọn visual preset toàn Theme.', add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'design' ], admin_url( 'admin.php' ) ) ],
             [ 'Logo', 'Dùng Custom Logo native của WordPress.', admin_url( 'customize.php?autofocus[control]=custom_logo' ) ],
             [ 'Menu', 'Quản lý menu bằng WordPress.', admin_url( 'nav-menus.php' ) ],
             [ 'Header', 'Chọn preset và sticky mode.', add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'header' ], admin_url( 'admin.php' ) ) ],
