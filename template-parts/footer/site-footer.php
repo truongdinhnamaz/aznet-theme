@@ -99,14 +99,19 @@ $navigation_heading = __( 'Liên kết nhanh', 'aznet-theme' );
                             <li>
                                 <?php if ( $contact_is_link ) : ?>
                                     <a class="aznet-theme-site-footer__contact-link aznet-theme-site-footer__contact-link--<?php echo esc_attr( $contact_key ); ?>"
-                                       href="<?php echo esc_url( $contact_url, [ 'http', 'https', 'tel', 'mailto' ] ); ?>">
+                                       href="<?php echo esc_url( $contact_url, [ 'http', 'https', 'tel', 'mailto' ] ); ?>"
+                                       aria-label="<?php echo esc_attr( $contact_title ); ?>"
+                                       title="<?php echo esc_attr( $contact_title ); ?>">
                                         <span class="aznet-theme-site-footer__contact-icon" aria-hidden="true"></span>
-                                        <span class="aznet-theme-site-footer__contact-text"><?php echo esc_html( $contact_title ); ?></span>
+                                        <span class="screen-reader-text"><?php echo esc_html( $contact_title ); ?></span>
                                     </a>
                                 <?php else : ?>
-                                    <span class="aznet-theme-site-footer__contact-link aznet-theme-site-footer__contact-link--<?php echo esc_attr( $contact_key ); ?> aznet-theme-site-footer__contact-link--static">
+                                    <span class="aznet-theme-site-footer__contact-link aznet-theme-site-footer__contact-link--<?php echo esc_attr( $contact_key ); ?> aznet-theme-site-footer__contact-link--static"
+                                          role="img"
+                                          aria-label="<?php echo esc_attr( $contact_title ); ?>"
+                                          title="<?php echo esc_attr( $contact_title ); ?>">
                                         <span class="aznet-theme-site-footer__contact-icon" aria-hidden="true"></span>
-                                        <span class="aznet-theme-site-footer__contact-text"><?php echo esc_html( $contact_title ); ?></span>
+                                        <span class="screen-reader-text"><?php echo esc_html( $contact_title ); ?></span>
                                     </span>
                                 <?php endif; ?>
                             </li>
