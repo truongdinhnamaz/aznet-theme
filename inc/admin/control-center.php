@@ -82,6 +82,37 @@ function render_footer_template_gallery( string $current ): void {
     echo '</div>';
 }
 
+function render_footer_template_fields( array $settings, string $current ): void {
+    $presets = [ 'minimal', 'classic', 'professional', 'split', 'centered', 'compact' ];
+    $fields = [
+        'primary_heading' => __( 'Tiêu đề cột liên kết', 'aznet-theme' ),
+        'contact_heading' => __( 'Tiêu đề cột liên hệ', 'aznet-theme' ),
+        'social_heading'  => __( 'Tiêu đề cột mạng xã hội', 'aznet-theme' ),
+        'policy_heading'  => __( 'Nhãn khu vực chính sách', 'aznet-theme' ),
+    ];
+
+    echo '<div class="aznet-theme-footer-template-content">';
+    echo '<h2>' . esc_html__( 'Tùy chỉnh mẫu đã chọn', 'aznet-theme' ) . '</h2>';
+    echo '<p>' . esc_html__( 'Các trường dưới đây chỉ là nhãn trình bày của từng mẫu. Thông tin liên hệ và mạng xã hội vẫn được quản lý một lần ở Tổng quan.', 'aznet-theme' ) . '</p>';
+
+    foreach ( $presets as $preset ) {
+        $hidden = $current === $preset ? '' : ' hidden';
+        echo '<div class="aznet-theme-footer-template-fields" data-footer-template-fields="' . esc_attr( $preset ) . '"' . $hidden . '>';
+        foreach ( $fields as $field => $label ) {
+            $key = 'footer_' . $preset . '_' . $field;
+            echo '<label class="aznet-theme-field"><span>' . esc_html( $label ) . '</span>';
+            echo '<input class="regular-text" type="text" name="aznet_theme_settings[' . esc_attr( $key ) . ']" value="' . esc_attr( (string) ( $settings[ $key ] ?? '' ) ) . '">';
+            echo '</label>';
+        }
+        echo '</div>';
+    }
+
+    if ( ! in_array( $current, $presets, true ) ) {
+        echo '<p class="description" data-footer-template-fields-empty>' . esc_html__( 'Chọn một mẫu Footer ở trên để nhập nhãn trình bày riêng cho mẫu đó.', 'aznet-theme' ) . '</p>';
+    }
+    echo '</div>';
+}
+
 function render_settings_form( string $section ): void {
     $s = settings();
     $visible_keys = [];
@@ -89,6 +120,11 @@ function render_settings_form( string $section ): void {
         $visible_keys = [ 'header_preset', 'header_sticky', 'header_search', 'header_utilities' ];
     } elseif ( 'footer' === $section ) {
         $visible_keys = [ 'footer_preset' ];
+        foreach ( [ 'minimal', 'classic', 'professional', 'split', 'centered', 'compact' ] as $preset ) {
+            foreach ( [ 'primary_heading', 'contact_heading', 'social_heading', 'policy_heading' ] as $field ) {
+                $visible_keys[] = 'footer_' . $preset . '_' . $field;
+            }
+        }
     } elseif ( 'commerce' === $section ) {
         $visible_keys = [ 'woo_catalog_preset', 'woo_product_card_density', 'woo_product_preset' ];
     }
@@ -105,6 +141,7 @@ function render_settings_form( string $section ): void {
         field_checkbox( 'header_utilities', __( 'Hiển thị tiện ích Header', 'aznet-theme' ), (bool) $s['header_utilities'] );
     } elseif ( 'footer' === $section ) {
         render_footer_template_gallery( (string) $s['footer_preset'] );
+        render_footer_template_fields( $s, (string) $s['footer_preset'] );
     } elseif ( 'commerce' === $section ) {
         field_select( 'woo_catalog_preset', __( 'Catalog', 'aznet-theme' ), [ 'grid' => 'Grid', 'compact-grid' => 'Compact Grid', 'editorial' => 'Editorial' ], (string) $s['woo_catalog_preset'] );
         field_select( 'woo_product_card_density', __( 'Mật độ thẻ sản phẩm', 'aznet-theme' ), [ 'comfortable' => 'Comfortable', 'balanced' => 'Balanced', 'compact' => 'Compact' ], (string) $s['woo_product_card_density'] );
@@ -234,7 +271,6 @@ function render_control_center(): void {
         submit_button( 'Đặt lại', 'delete', 'submit', false ); echo '</form></div>';
     } elseif ( 'footer' === $section ) {
         render_settings_form( $section );
-        render_footer_profile_form();
     } elseif ( 'homepage' === $section ) {
         render_homepage_settings();
     } elseif ( 'hero-library' === $section ) {

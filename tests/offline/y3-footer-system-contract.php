@@ -107,8 +107,34 @@ if ('professional' !== \AZnet\Theme\footer_preset()) {
     y3_fail('footer_preset() must read the normalized Theme setting');
 }
 
+foreach (['minimal', 'classic', 'professional', 'split', 'centered', 'compact'] as $preset) {
+    foreach (['primary_heading', 'contact_heading', 'social_heading', 'policy_heading'] as $field) {
+        $key = 'footer_' . $preset . '_' . $field;
+        if (! array_key_exists($key, $defaults)) {
+            y3_fail('missing per-template Footer content default: ' . $key);
+        }
+    }
+}
+$customLabels = \AZnet\Theme\normalize_settings([
+    'footer_preset' => 'split',
+    'footer_split_primary_heading' => 'Điều hướng thử nghiệm',
+    'footer_split_contact_heading' => 'Liên hệ thử nghiệm',
+    'footer_split_social_heading' => 'Kết nối thử nghiệm',
+    'footer_split_policy_heading' => 'Chính sách thử nghiệm',
+]);
+foreach ([
+    'footer_split_primary_heading' => 'Điều hướng thử nghiệm',
+    'footer_split_contact_heading' => 'Liên hệ thử nghiệm',
+    'footer_split_social_heading' => 'Kết nối thử nghiệm',
+    'footer_split_policy_heading' => 'Chính sách thử nghiệm',
+] as $key => $expected) {
+    if (($customLabels[$key] ?? null) !== $expected) {
+        y3_fail('per-template Footer content did not survive normalization: ' . $key);
+    }
+}
+
 $context = \AZnet\Theme\footer_context();
-$expectedContextKeys = ['preset', 'site_title', 'tagline', 'home_url', 'logo_html', 'about_intro', 'services', 'social_channels', 'contact_links', 'menus', 'year'];
+$expectedContextKeys = ['preset', 'site_title', 'tagline', 'home_url', 'logo_html', 'about_intro', 'services', 'social_channels', 'contact_links', 'menus', 'labels', 'year'];
 if ($expectedContextKeys !== array_keys($context)) {
     y3_fail('footer_context() shape changed');
 }
@@ -126,6 +152,11 @@ if (! str_contains($context['logo_html'], 'aznet-theme-site-footer__logo')) {
 }
 if ('2026' !== $context['year']) {
     y3_fail('footer_context() must use WordPress date context');
+}
+foreach (['primary_heading', 'contact_heading', 'social_heading', 'policy_heading'] as $labelKey) {
+    if (! isset($context['labels'][$labelKey]) || '' === trim((string) $context['labels'][$labelKey])) {
+        y3_fail('footer_context() missing selected-template presentation label: ' . $labelKey);
+    }
 }
 
 $expectedMenuKeys = ['footer', 'footer-contact', 'footer-social', 'footer-policy'];
@@ -193,13 +224,34 @@ foreach ([
     'aznet-theme-footer-template-gallery',
     'aznet-theme-footer-template-card',
     'aznet-theme-footer-live-preview',
-    'render_footer_profile_form();',
-    'customize.php?autofocus[control]=custom_logo',
-    'nav-menus.php',
+    'render_footer_template_fields(',
     'data-footer-preset-fallback',
 ] as $needle) {
     if (! str_contains($controlCenter, $needle)) {
-        y3_fail('Footer Control Center gallery/shared-content surface missing: ' . $needle);
+        y3_fail('Footer Control Center template surface missing: ' . $needle);
+    }
+}
+$rendererPos = strpos($controlCenter, 'function render_control_center(): void {');
+if (false === $rendererPos) {
+    y3_fail('unable to isolate Control Center renderer');
+}
+$renderer = substr($controlCenter, $rendererPos);
+$footerSectionPos = strpos($renderer, "} elseif ( 'footer' === \$section ) {");
+$homepageSectionPos = strpos($renderer, "} elseif ( 'homepage' === \$section ) {");
+if (false === $footerSectionPos || false === $homepageSectionPos || $homepageSectionPos <= $footerSectionPos) {
+    y3_fail('unable to isolate Footer Control Center section');
+}
+$footerSection = substr($renderer, $footerSectionPos, $homepageSectionPos - $footerSectionPos);
+if (str_contains($footerSection, 'render_footer_profile_form();')) {
+    y3_fail('Footer tab must not duplicate Overview contact/social profile fields');
+}
+$overviewPos = strpos($renderer, "if ( 'overview' === \$section ) {");
+if (false === $overviewPos || ! str_contains(substr($renderer, $overviewPos, $footerSectionPos - $overviewPos), 'render_footer_profile_form();')) {
+    y3_fail('Overview must remain the single contact/social Footer profile editor');
+}
+foreach (['primary_heading', 'contact_heading', 'social_heading', 'policy_heading'] as $field) {
+    if (! str_contains($controlCenter, $field)) {
+        y3_fail('Footer selected-template content field missing: ' . $field);
     }
 }
 if (! str_contains($controlCenter, 'render_hidden_settings( $visible_keys );')) {
@@ -252,9 +304,9 @@ foreach (['homepage_composer_active', 'homepage_law01_variant', '$law01_homepage
         y3_fail('Footer presentation must remain page-independent and must not inspect Homepage state: ' . $forbidden);
     }
 }
-foreach (['Thông tin liên hệ', 'Liên kết nhanh'] as $heading) {
-    if (! str_contains($template, $heading)) {
-        y3_fail('Footer must keep the approved page-independent professional heading: ' . $heading);
+foreach (["['primary_heading']", "['contact_heading']", "['social_heading']", "['policy_heading']"] as $labelUsage) {
+    if (! str_contains($template, $labelUsage)) {
+        y3_fail('Footer template must consume selected-template presentation label: ' . $labelUsage);
     }
 }
 if (! str_contains($template, "'law-01' === \$preset") || ! str_contains($template, 'aznet-theme-site-footer__contact-social')) {

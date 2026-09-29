@@ -23,6 +23,7 @@ $services        = is_array( $context['services'] ?? null ) ? $context['services
 $social_channels = is_array( $context['social_channels'] ?? null ) ? $context['social_channels'] : [];
 $contact_links   = is_array( $context['contact_links'] ?? null ) ? $context['contact_links'] : [];
 $menus           = is_array( $context['menus'] ?? null ) ? $context['menus'] : [];
+$labels          = is_array( $context['labels'] ?? null ) ? $context['labels'] : [];
 $primary_menu = (string) ( $menus['footer'] ?? '' );
 $contact_menu = (string) ( $menus['footer-contact'] ?? '' );
 $social_menu  = (string) ( $menus['footer-social'] ?? '' );
@@ -34,8 +35,10 @@ $footer_classes = [
     'aznet-theme-site-footer--' . $preset,
 ];
 
-$contact_heading    = __( 'Thông tin liên hệ', 'aznet-theme' );
-$navigation_heading = __( 'Liên kết nhanh', 'aznet-theme' );
+$contact_heading    = (string) ( $labels['contact_heading'] ?? __( 'Thông tin liên hệ', 'aznet-theme' ) );
+$navigation_heading = (string) ( $labels['primary_heading'] ?? __( 'Liên kết nhanh', 'aznet-theme' ) );
+$social_heading     = (string) ( $labels['social_heading'] ?? __( 'Kết nối với chúng tôi', 'aznet-theme' ) );
+$policy_heading     = (string) ( $labels['policy_heading'] ?? __( 'Chính sách', 'aznet-theme' ) );
 ?>
 <footer class="<?php echo esc_attr( implode( ' ', $footer_classes ) ); ?>" data-aznet-theme-site-footer role="contentinfo">
     <div class="aznet-theme-site-footer__inner">
@@ -84,7 +87,7 @@ $navigation_heading = __( 'Liên kết nhanh', 'aznet-theme' );
 
             <?php if ( 'law-01' === $preset && ! empty( $contact_links ) ) : ?>
                 <div class="aznet-theme-site-footer__contact aznet-theme-site-footer__contact-social">
-                    <h2 class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Thông tin liên hệ', 'aznet-theme' ); ?></h2>
+                    <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $contact_heading ); ?></h2>
                     <ul class="aznet-theme-site-footer__contact-links">
                         <?php foreach ( $contact_links as $contact ) : ?>
                             <?php
@@ -143,8 +146,8 @@ $navigation_heading = __( 'Liên kết nhanh', 'aznet-theme' );
             <?php endif; ?>
 
             <?php if ( 'professional' === $preset && '' !== $social_menu ) : ?>
-                <nav class="aznet-theme-site-footer__social-column aznet-theme-site-footer__social" aria-label="<?php echo esc_attr__( 'Kết nối với chúng tôi', 'aznet-theme' ); ?>">
-                    <h2 class="aznet-theme-site-footer__heading"><?php esc_html_e( 'Kết nối với chúng tôi', 'aznet-theme' ); ?></h2>
+                <nav class="aznet-theme-site-footer__social-column aznet-theme-site-footer__social" aria-label="<?php echo esc_attr( $social_heading ); ?>">
+                    <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $social_heading ); ?></h2>
                     <?php echo $social_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
                 </nav>
             <?php endif; ?>
@@ -162,7 +165,7 @@ $navigation_heading = __( 'Liên kết nhanh', 'aznet-theme' );
                         </nav>
                     <?php endif; ?>
                     <?php if ( '' !== $policy_menu ) : ?>
-                        <nav class="aznet-theme-site-footer__policies" aria-label="<?php echo esc_attr__( 'Chính sách', 'aznet-theme' ); ?>">
+                        <nav class="aznet-theme-site-footer__policies" aria-label="<?php echo esc_attr( $policy_heading ); ?>">
                             <?php echo $policy_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
                         </nav>
                     <?php endif; ?>

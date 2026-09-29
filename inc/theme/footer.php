@@ -23,9 +23,38 @@ function footer_preset(): string {
 }
 
 /**
+ * Return Theme-owned presentation labels for the selected generic Footer template.
+ *
+ * Shared identity/contact/social data remains WordPress-owned.
+ *
+ * @return array{primary_heading:string,contact_heading:string,social_heading:string,policy_heading:string}
+ */
+function footer_template_labels( string $preset ): array {
+    $generic_presets = [ 'minimal', 'classic', 'professional', 'split', 'centered', 'compact' ];
+    if ( ! in_array( $preset, $generic_presets, true ) ) {
+        return [
+            'primary_heading' => 'Liên kết nhanh',
+            'contact_heading' => 'Thông tin liên hệ',
+            'social_heading'  => 'Kết nối với chúng tôi',
+            'policy_heading'  => 'Chính sách',
+        ];
+    }
+
+    $all = settings();
+    $prefix = 'footer_' . $preset . '_';
+
+    return [
+        'primary_heading' => trim( (string) ( $all[ $prefix . 'primary_heading' ] ?? 'Liên kết nhanh' ) ),
+        'contact_heading' => trim( (string) ( $all[ $prefix . 'contact_heading' ] ?? 'Thông tin liên hệ' ) ),
+        'social_heading'  => trim( (string) ( $all[ $prefix . 'social_heading' ] ?? 'Kết nối với chúng tôi' ) ),
+        'policy_heading'  => trim( (string) ( $all[ $prefix . 'policy_heading' ] ?? 'Chính sách' ) ),
+    ];
+}
+
+/**
  * Build Footer presentation context from WordPress-native state.
  *
- * @return array{preset:string,site_title:string,tagline:string,home_url:string,logo_html:string,menus:array<string,string>,year:string}
+ * @return array{preset:string,site_title:string,tagline:string,home_url:string,logo_html:string,menus:array<string,string>,labels:array<string,string>,year:string}
  */
 function footer_context(): array {
     $site_title = trim( (string) get_bloginfo( 'name' ) );
@@ -230,6 +259,7 @@ function footer_context(): array {
             'footer-social'  => $menu_html( 'footer-social', 'aznet-theme-site-footer__social-menu' ),
             'footer-policy'  => $menu_html( 'footer-policy', 'aznet-theme-site-footer__policy-menu' ),
         ],
+        'labels'      => footer_template_labels( footer_preset() ),
         'year'        => function_exists( 'wp_date' ) ? (string) wp_date( 'Y' ) : '',
     ];
 }
