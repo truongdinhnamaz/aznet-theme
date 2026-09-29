@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.99
+**Version:** v0.100
 **Status:** Working Source  
-**Date:** 28/09/2026
+**Date:** 29/09/2026
 
 ## 1. Purpose
 
@@ -11,6 +11,15 @@ AZT-04 owns milestone sequencing, QA layers, release gates, accepted decisions a
 AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme readiness is release-critical; optional provider compatibility is a separate certification track unless a future approved source explicitly makes it mandatory.**
 
 ## 2. Current roadmap state
+
+### D-044 — Industrial 01 production closure and convergence boundary — ACCEPTED 29/09/2026
+
+Industrial 01 pilot production on `minhnguyen.vn` is PASS at the tested Theme-owned L3/L4 production scope after explicit owner publish approval and fresh site-wide/host backup confirmation. The deployed Theme is `1.3.57`, sourced from exact candidate `0da4af03af3d3362357734b7d0f1dd6a2b1449e3` / deterministic package SHA-256 `977330b813bebef21130be19cfa71c1953e117b117356723afad20efdf7e455c`.
+
+Repository and production remain separate provenance boundaries. Current `main@22632cbc4cdf41f447a1050d44ef1785098cf13d` advanced after the deployed candidate and is not byte-identical to the verified production candidate. Do not infer current-main deployment, GitHub Release publication, tag promotion or L5 provider certification from the pilot production PASS.
+
+Exact next release-governance action is repository/source reconciliation only. Any merge to `main`, tag/GitHub Release, or deployment of newer current-main production bytes remains a separate owner-approved gate.
+
 
 | ID | Workstream | State | Current meaning |
 | --- | --- | --- | --- |
