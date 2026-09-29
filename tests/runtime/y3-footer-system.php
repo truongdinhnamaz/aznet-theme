@@ -110,8 +110,9 @@ foreach ( $menu_definitions as $location => $definition ) {
 
     if ( 'footer-contact' === $location ) {
         foreach ( [
-            'phone' => [ '02437164123', 'tel:02437164123' ],
-            'email' => [ 'contact-overflow-regression@example-legal-services-domain.test', 'mailto:contact-overflow-regression@example-legal-services-domain.test' ],
+            'phone'   => [ '02437164123', 'tel:02437164123' ],
+            'website' => [ 'example.test', 'https://example.test/' ],
+            'email'   => [ 'contact-overflow-regression@example-legal-services-domain.test', 'mailto:contact-overflow-regression@example-legal-services-domain.test' ],
         ] as $contact_key => $contact_fixture ) {
             $contact_item_id = wp_update_nav_menu_item(
                 (int) $menu_id,

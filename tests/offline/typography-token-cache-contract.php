@@ -17,4 +17,11 @@ assert(
     )
 );
 
-echo "PASS: typography token cache-busting contract\n";
+
+$footer_needle = "asset_content_version( '/assets/css/components/site-footer.css', \$version )";
+assert(
+    str_contains($assets, $footer_needle),
+    'Footer stylesheet must use content-aware cache busting after Footer publishes.'
+);
+
+echo "PASS: typography and Footer cache-busting contract\n";

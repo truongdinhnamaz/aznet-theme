@@ -224,8 +224,8 @@ foreach (['Thông tin liên hệ', 'Liên kết nhanh'] as $heading) {
 if (! str_contains($template, "'law-01' === \$preset") || ! str_contains($template, 'aznet-theme-site-footer__contact-social')) {
     y3_fail('Law 01 Footer must combine optional contact and social links in one main-column surface.');
 }
-if (! str_contains($template, 'screen-reader-text') || ! str_contains($template, 'aria-label="<?php echo esc_attr( $contact_title ); ?>"')) {
-    y3_fail('Law 01 Footer contact values must remain accessible while rendering as icon-only controls.');
+if (! str_contains($template, 'aznet-theme-site-footer__contact-text')) {
+    y3_fail('Law 01 Footer contact values must remain visible and readable.');
 }
 if (! str_contains($template, "! in_array( \$preset, [ 'professional', 'law-01' ], true )")) {
     y3_fail('Law 01 Footer must not duplicate the social menu again in the bottom bar.');
@@ -270,26 +270,38 @@ foreach (['facebook', 'youtube', 'linkedin', 'tiktok', 'instagram'] as $channel)
     }
 }
 
-foreach (['location', 'phone', 'email', 'facebook', 'youtube', 'linkedin', 'tiktok', 'instagram'] as $field) {
+foreach (['location', 'phone', 'website', 'email', 'facebook', 'youtube', 'linkedin', 'tiktok', 'instagram'] as $field) {
     if (! str_contains($footerProfile, "'{$field}'")) {
         y3_fail('Footer overview profile must expose managed field: ' . $field);
     }
 }
-foreach (['footer_profile_location', 'footer_profile_youtube', 'footer_profile_linkedin'] as $fieldId) {
+foreach (['footer_profile_location', 'footer_profile_website', 'footer_profile_youtube', 'footer_profile_linkedin'] as $fieldId) {
     if (! str_contains($controlCenter, $fieldId)) {
         y3_fail('AZnet Theme overview must render Footer profile input: ' . $fieldId);
     }
 }
+if (! str_contains($template, 'aznet-theme-site-footer__contact-text')) {
+    y3_fail('Law 01 Footer must visibly render address, phone, website and email text.');
+}
+if (str_contains($template, 'aznet-theme-site-footer__contact-icon')) {
+    y3_fail('Law 01 Footer contact details must not use icon-only controls; icons are reserved for social links.');
+}
 foreach ([
-    '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-link {',
-    'width: 2.75rem;',
-    'height: 2.75rem;',
-    'place-items: center;',
+    '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-links {',
+    'display: grid;',
+    'overflow-wrap: anywhere;',
 ] as $needle) {
     if (! str_contains($css, $needle)) {
-        y3_fail('Law 01 Footer icon-only contact presentation missing: ' . $needle);
+        y3_fail('Law 01 Footer visible contact presentation missing: ' . $needle);
     }
 }
+if (! str_contains($template, 'aznet-theme-site-footer__channel-icon')) {
+    y3_fail('Law 01 Footer social links must retain icon presentation.');
+}
+if (str_contains($helper, "wp_parse_url( $home_url") || str_contains($helper, "'key'   => 'website'")) {
+    y3_fail('Law 01 Footer website must come only from populated Footer profile data, never be synthesized from home_url.');
+}
+
 $professionalContactPos = strpos($template, "if ( 'professional' === \$preset && '' !== \$contact_menu )");
 $professionalNavigationPos = strpos($template, "if ( '' !== \$primary_menu )");
 if (false === $professionalContactPos || false === $professionalNavigationPos || $professionalContactPos > $professionalNavigationPos) {

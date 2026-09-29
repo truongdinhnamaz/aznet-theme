@@ -103,6 +103,7 @@ function render_footer_profile_form(): void {
     $fields = [
         'location'  => [ 'footer_profile_location', __( 'Địa chỉ', 'aznet-theme' ), 'text', '62 Cửa Bắc, Ba Đình, Hà Nội' ],
         'phone'     => [ 'footer_profile_phone', __( 'Số điện thoại', 'aznet-theme' ), 'text', '024 3716 4123' ],
+        'website'   => [ 'footer_profile_website', __( 'Website', 'aznet-theme' ), 'url', 'https://example.com' ],
         'email'     => [ 'footer_profile_email', __( 'Email', 'aznet-theme' ), 'email', 'lienhe@example.com' ],
         'facebook'  => [ 'footer_profile_facebook', __( 'Fanpage Facebook', 'aznet-theme' ), 'url', 'https://facebook.com/...' ],
         'youtube'   => [ 'footer_profile_youtube', __( 'YouTube', 'aznet-theme' ), 'url', 'https://youtube.com/@...' ],
