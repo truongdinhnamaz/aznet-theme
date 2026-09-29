@@ -270,12 +270,12 @@ foreach (['facebook', 'youtube', 'linkedin', 'tiktok', 'instagram'] as $channel)
     }
 }
 
-foreach (['location', 'phone', 'email', 'facebook', 'youtube', 'linkedin', 'tiktok', 'instagram'] as $field) {
+foreach (['location', 'phone', 'website', 'email', 'facebook', 'youtube', 'linkedin', 'tiktok', 'instagram'] as $field) {
     if (! str_contains($footerProfile, "'{$field}'")) {
         y3_fail('Footer overview profile must expose managed field: ' . $field);
     }
 }
-foreach (['footer_profile_location', 'footer_profile_youtube', 'footer_profile_linkedin'] as $fieldId) {
+foreach (['footer_profile_location', 'footer_profile_website', 'footer_profile_youtube', 'footer_profile_linkedin'] as $fieldId) {
     if (! str_contains($controlCenter, $fieldId)) {
         y3_fail('AZnet Theme overview must render Footer profile input: ' . $fieldId);
     }
@@ -298,6 +298,10 @@ foreach ([
 if (! str_contains($template, 'aznet-theme-site-footer__channel-icon')) {
     y3_fail('Law 01 Footer social links must retain icon presentation.');
 }
+if (str_contains($helper, "wp_parse_url( $home_url") || str_contains($helper, "'key'   => 'website'")) {
+    y3_fail('Law 01 Footer website must come only from populated Footer profile data, never be synthesized from home_url.');
+}
+
 $professionalContactPos = strpos($template, "if ( 'professional' === \$preset && '' !== \$contact_menu )");
 $professionalNavigationPos = strpos($template, "if ( '' !== \$primary_menu )");
 if (false === $professionalContactPos || false === $professionalNavigationPos || $professionalContactPos > $professionalNavigationPos) {
