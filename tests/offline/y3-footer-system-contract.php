@@ -224,8 +224,8 @@ foreach (['Thông tin liên hệ', 'Liên kết nhanh'] as $heading) {
 if (! str_contains($template, "'law-01' === \$preset") || ! str_contains($template, 'aznet-theme-site-footer__contact-social')) {
     y3_fail('Law 01 Footer must combine optional contact and social links in one main-column surface.');
 }
-if (! str_contains($template, '<span class="screen-reader-text"><?php echo esc_html( $contact_title ); ?></span>')) {
-    y3_fail('Law 01 Footer contact values must remain accessible while rendering as icon-only controls.');
+if (! str_contains($template, 'aznet-theme-site-footer__contact-text')) {
+    y3_fail('Law 01 Footer contact values must remain visibly rendered in the contact column.');
 }
 if (! str_contains($template, "! in_array( \$preset, [ 'professional', 'law-01' ], true )")) {
     y3_fail('Law 01 Footer must not duplicate the social menu again in the bottom bar.');
@@ -268,6 +268,20 @@ foreach (['facebook', 'youtube', 'linkedin', 'tiktok', 'instagram'] as $channel)
     if (! str_contains($css, '.aznet-theme-site-footer__channel-link--' . $channel)) {
         y3_fail('Law 01 Footer stylesheet must provide icon presentation for social channel: ' . $channel);
     }
+}
+
+foreach (['location', 'phone', 'email', 'facebook', 'youtube', 'linkedin', 'tiktok', 'instagram'] as $field) {
+    if (! str_contains($footerProfile, "'{$field}'")) {
+        y3_fail('Footer overview profile must expose managed field: ' . $field);
+    }
+}
+foreach (['footer_profile_location', 'footer_profile_youtube', 'footer_profile_linkedin'] as $fieldId) {
+    if (! str_contains($controlCenter, $fieldId)) {
+        y3_fail('AZnet Theme overview must render Footer profile input: ' . $fieldId);
+    }
+}
+if (! str_contains($template, 'aznet-theme-site-footer__contact-text')) {
+    y3_fail('Law 01 Footer must render visible contact values instead of icon-only labels.');
 }
 $professionalContactPos = strpos($template, "if ( 'professional' === \$preset && '' !== \$contact_menu )");
 $professionalNavigationPos = strpos($template, "if ( '' !== \$primary_menu )");

@@ -98,11 +98,26 @@ async function inspectPreset(browser, preset, viewportName, viewport) {
         if (await footer.getByText(region.sentinel, { exact: true }).count() !== 0) {
           throw new Error('Law 01 must not render unmanaged social-menu sentinel content');
         }
+        const contactBlock = footer.locator('.aznet-theme-site-footer__contact-social');
+        const identityBlock = footer.locator('.aznet-theme-site-footer__identity');
         for (const channel of ['facebook', 'youtube', 'linkedin', 'tiktok', 'instagram']) {
-          const link = footer.locator(`.aznet-theme-site-footer__channel-link--${channel}`);
-          if (await link.count() !== 1) throw new Error(`Missing managed Law 01 social icon: ${channel}`);
+          const link = contactBlock.locator(`.aznet-theme-site-footer__channel-link--${channel}`);
+          if (await link.count() !== 1) throw new Error(`Missing managed Law 01 social icon in contact column: ${channel}`);
           if (await link.getAttribute('target') !== '_blank') throw new Error(`Managed Law 01 social link must open safely: ${channel}`);
           if (!(await link.getAttribute('aria-label'))) throw new Error(`Managed Law 01 social link needs accessible label: ${channel}`);
+        }
+        if (await identityBlock.locator('.aznet-theme-site-footer__channels').count() !== 0) {
+          throw new Error('Law 01 social icon row must live under contact information, not identity');
+        }
+        for (const label of ['Y3 Contact Sentinel', '02437164123', 'contact-overflow-regression@example-legal-services-domain.test']) {
+          const text = contactBlock.getByText(label, { exact: true });
+          if (await text.count() !== 1 || !await text.isVisible()) {
+            throw new Error(`Law 01 contact value must be visibly rendered: ${label}`);
+          }
+        }
+        const website = contactBlock.locator('.aznet-theme-site-footer__contact-link--website');
+        if (await website.count() !== 1 || !await website.isVisible()) {
+          throw new Error('Law 01 contact column must visibly render the WordPress site URL');
         }
         continue;
       }
