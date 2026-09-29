@@ -1,8 +1,8 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.80
+**Version:** v0.81
 **Status:** Working Source
-**Date:** 27/09/2026
+**Date:** 29/09/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
 
 ## 1. Source ownership
@@ -12,6 +12,17 @@ AZT-03 owns the canonical implementation baseline, provenance rules, registered 
 Live implementation facts are resolved from GitHub. Historical evidence is not rewritten merely to make the document look current.
 
 ## 2. Current canonical baseline
+
+### Industrial 01 production convergence — 29/09/2026
+
+- Canonical repository `main` observed for this checkpoint: `22632cbc4cdf41f447a1050d44ef1785098cf13d`, Theme metadata `1.3.57`.
+- Industrial 01 exact release candidate is PR #331 head `0da4af03af3d3362357734b7d0f1dd6a2b1449e3`. Its exact-head CI closed **7/7 SUCCESS**. Y5 exact-package lifecycle produced deterministic `aznet-theme-1.3.57.zip` with **213 production files**, **149 packaged PHP lint PASS**, SHA-256 `977330b813bebef21130be19cfa71c1953e117b117356723afad20efdf7e455c`; artifact ID `11044907457`, uploaded artifact digest `0b3d8ab70b1d30f19092b9cc3eddff4d3d4086b0bb736fa577661a6f9f08aed9`.
+- Owner-approved WPVibe production publication to `minhnguyen.vn` completed after explicit fresh site-wide/host backup confirmation. Active Theme is now `aznet-theme` **1.3.57**; previous live Theme files are retained as `aznet-theme-wpvibe-backup` **1.3.53**. Production maintenance mode is off.
+- Fresh production verification PASS at the tested Theme-owned scope: Industrial Homepage, Woo Shop with **168 results**, representative Product, Header/Footer and runtime. Fresh mobile Lighthouse on live production returned Performance **100**, Accessibility **100**, Best Practices **100**, SEO **100**, with LCP **1.4 s**, CLS **0**, TBT **0 ms**, FCP **1.4 s**, Speed Index **2.2 s**.
+- Production byte identity is bound to the verified PR #331 exact candidate/package above, **not** to current `main@22632cbc4cdf41f447a1050d44ef1785098cf13d`: current main advanced after the candidate and differs in production files including Footer/asset code. Therefore no exact-current-main production parity is claimed.
+- Product content still contains a legacy `test-minhnguyen.aznet.vn` image URL on the sampled product. This is WordPress/WooCommerce content data, not Theme-owned state, and was not mutated during Theme convergence.
+- PR #330 and PR #331 are superseded as merge vehicles by the production-convergence reconciliation slice; neither is evidence of canonical-main merge. Evidence: `docs/evidence/INDUSTRIAL01_PRODUCTION_CONVERGENCE_20260929.md`.
+
 
 - Live `main` HEAD is resolved from GitHub at execution time; stable provenance checkpoints are recorded below rather than treated as permanently current.
 - Rèm 01 production checkpoint — owner-approved PR #262 and PR #263 are integrated through canonical `main@f84d45a58261ec41d9b0c11a5e02a0873edb28ff`, Theme metadata `1.3.31`. Exact-main V1 run `35870034014`, X6 run `35870034255` and dedicated Project Showcase run `35870033789` completed SUCCESS. On `remquocanh.vn`, WordPress Post #999 is published in Category #80 `Công trình rèm`, Theme Mod `homepage_curtain01_projects_term = 80`, and the live Homepage renders the Project Showcase after Process and before Knowledge. Owner confirmed a fresh site-wide backup before WPVibe production publish. A stale draft-only `max-width: 22ch` Process heading rule was detected by live-to-canonical comparison, removed by resetting Curtain 01 CSS/JS to exact canonical bytes and republishing, then freshly reverified. Active Theme remains `1.3.31`; live Curtain 01 CSS/JS and `theme.json` are byte-identical to canonical main; production Lighthouse is Accessibility 100 / Best Practices 100 on mobile and desktop. Public-host independent pixel-level verification, provider L5 and a dedicated browser font-face `loaded` assertion remain separate/UNKNOWN. Evidence: `docs/evidence/CURTAIN01_PROJECT_SHOWCASE_PRODUCTION_20260923.md`.
