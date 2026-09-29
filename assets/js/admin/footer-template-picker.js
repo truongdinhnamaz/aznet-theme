@@ -10,16 +10,23 @@
     const previewLabel = gallery.querySelector('[data-footer-preview-label]');
     const footerPresetFallback = gallery.querySelector('[data-footer-preset-fallback]');
     const cards = Array.from(gallery.querySelectorAll('[data-footer-template]'));
+    const fieldGroups = Array.from(document.querySelectorAll('[data-footer-template-fields]'));
+    const emptyState = document.querySelector('[data-footer-template-fields-empty]');
 
     const applyPreview = (preset, label) => {
-        if (!preview) {
-            return;
+        if (preview) {
+            preview.dataset.preset = preset;
+            preview.className = 'aznet-theme-footer-live-preview aznet-theme-footer-live-preview--' + preset;
+            if (previewLabel) {
+                previewLabel.textContent = label;
+            }
         }
 
-        preview.dataset.preset = preset;
-        preview.className = 'aznet-theme-footer-live-preview aznet-theme-footer-live-preview--' + preset;
-        if (previewLabel) {
-            previewLabel.textContent = label;
+        fieldGroups.forEach((group) => {
+            group.hidden = group.dataset.footerTemplateFields !== preset;
+        });
+        if (emptyState) {
+            emptyState.hidden = true;
         }
     };
 
