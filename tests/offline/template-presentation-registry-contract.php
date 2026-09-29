@@ -133,4 +133,15 @@ if (false !== $normalized['header_search']) {
     exit(1);
 }
 
+$settingsSource = (string) file_get_contents($root . '/inc/theme/settings.php');
+$designSource = (string) file_get_contents($root . '/inc/theme/design-system.php');
+if (str_contains($settingsSource, "in_array( $raw['homepage_preset'], [ 'off', 'law-01'")) {
+    fwrite(STDERR, "FAIL: generic settings still hard-code template Homepage validity.\n");
+    exit(1);
+}
+if (str_contains($designSource, "in_array( $preset, [ 'default', 'editorial', 'commerce'")) {
+    fwrite(STDERR, "FAIL: Design System still duplicates visual preset validity.\n");
+    exit(1);
+}
+
 echo "PASS: Core C1 Template Presentation Registry\n";
