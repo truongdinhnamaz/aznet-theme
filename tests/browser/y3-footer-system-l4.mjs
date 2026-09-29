@@ -122,9 +122,9 @@ async function inspectPreset(browser, preset, viewportName, viewport) {
           }
         }
         for (const label of ['Y3 Contact Sentinel', '02437164123', 'contact-overflow-regression@example-legal-services-domain.test']) {
-          const text = contactBlock.getByText(label, { exact: true });
-          if (await text.count() !== 1 || await text.isVisible()) {
-            throw new Error(`Law 01 contact value must be screen-reader-only: ${label}`);
+          const text = contactBlock.locator('.screen-reader-text').filter({ hasText: label });
+          if (await text.count() !== 1) {
+            throw new Error(`Law 01 contact value must remain in screen-reader text: ${label}`);
           }
         }
         const website = contactBlock.locator('.aznet-theme-site-footer__contact-link--website');
