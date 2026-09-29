@@ -629,3 +629,108 @@
         justify-content: flex-start;
     }
 }
+
+
+/* Generic Footer template library.
+ * All templates consume the same WordPress-owned identity, menu, contact and social sources.
+ * Only composition changes by preset.
+ */
+.aznet-theme-site-footer--minimal .aznet-theme-site-footer__main {
+    grid-template-columns: minmax(260px, 1.4fr) minmax(180px, .6fr);
+    gap: var(--aznet-theme-space-5);
+    align-items: end;
+}
+.aznet-theme-site-footer--minimal .aznet-theme-site-footer__contact {
+    display: none;
+}
+.aznet-theme-site-footer--minimal .aznet-theme-site-footer__bottom {
+    margin-top: var(--aznet-theme-space-4);
+    padding-top: var(--aznet-theme-space-3);
+}
+
+.aznet-theme-site-footer--classic .aznet-theme-site-footer__main {
+    grid-template-columns: minmax(240px, 1.2fr) repeat(2, minmax(160px, .8fr));
+    gap: var(--aznet-theme-space-6);
+}
+.aznet-theme-site-footer--classic .aznet-theme-site-footer__heading {
+    padding-bottom: var(--aznet-theme-space-2);
+    border-bottom: 1px solid var(--aznet-theme-footer-border);
+}
+
+.aznet-theme-site-footer--split .aznet-theme-site-footer__main {
+    grid-template-columns: minmax(320px, 1.6fr) repeat(2, minmax(160px, .7fr));
+    gap: clamp(1.5rem, 3vw, 3.5rem);
+}
+.aznet-theme-site-footer--split .aznet-theme-site-footer__identity {
+    padding-inline-end: var(--aznet-theme-space-6);
+    border-inline-end: 1px solid var(--aznet-theme-footer-border);
+}
+.aznet-theme-site-footer--split .aznet-theme-site-footer__brand {
+    max-width: 320px;
+}
+.aznet-theme-site-footer--split .aznet-theme-site-footer__identity p {
+    max-width: 32rem;
+}
+
+.aznet-theme-site-footer--centered .aznet-theme-site-footer__main {
+    grid-template-columns: minmax(0, 760px);
+    justify-content: center;
+    text-align: center;
+}
+.aznet-theme-site-footer--centered .aznet-theme-site-footer__identity,
+.aznet-theme-site-footer--centered .aznet-theme-site-footer__brand {
+    margin-inline: auto;
+}
+.aznet-theme-site-footer--centered .aznet-theme-site-footer__identity p {
+    margin-inline: auto;
+}
+.aznet-theme-site-footer--centered .aznet-theme-site-footer__menu,
+.aznet-theme-site-footer--centered .aznet-theme-site-footer__contact-menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--aznet-theme-space-3) var(--aznet-theme-space-5);
+}
+.aznet-theme-site-footer--centered .aznet-theme-site-footer__bottom {
+    justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
+}
+.aznet-theme-site-footer--centered .aznet-theme-site-footer__bottom-nav,
+.aznet-theme-site-footer--centered .aznet-theme-site-footer__policy-menu,
+.aznet-theme-site-footer--centered .aznet-theme-site-footer__social-menu {
+    justify-content: center;
+}
+
+@media (max-width: 64rem) {
+    .aznet-theme-site-footer--minimal .aznet-theme-site-footer__main,
+    .aznet-theme-site-footer--classic .aznet-theme-site-footer__main,
+    .aznet-theme-site-footer--split .aznet-theme-site-footer__main,
+    .aznet-theme-site-footer--centered .aznet-theme-site-footer__main {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .aznet-theme-site-footer--centered .aznet-theme-site-footer__identity {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 48rem) {
+    .aznet-theme-site-footer--minimal .aznet-theme-site-footer__main,
+    .aznet-theme-site-footer--classic .aznet-theme-site-footer__main,
+    .aznet-theme-site-footer--split .aznet-theme-site-footer__main,
+    .aznet-theme-site-footer--centered .aznet-theme-site-footer__main {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .aznet-theme-site-footer--split .aznet-theme-site-footer__identity {
+        padding-inline-end: 0;
+        border-inline-end: 0;
+    }
+
+    .aznet-theme-site-footer--centered .aznet-theme-site-footer__menu,
+    .aznet-theme-site-footer--centered .aznet-theme-site-footer__contact-menu {
+        display: grid;
+        justify-content: center;
+    }
+}

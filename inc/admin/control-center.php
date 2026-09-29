@@ -44,6 +44,44 @@ function render_hidden_settings( array $visible_keys ): void {
     }
 }
 
+function render_footer_template_gallery( string $current ): void {
+    $templates = [
+        'minimal'      => [ __( 'Minimal', 'aznet-theme' ), __( 'Gọn, ưu tiên thương hiệu và các liên kết thiết yếu.', 'aznet-theme' ) ],
+        'classic'      => [ __( 'Classic', 'aznet-theme' ), __( 'Bố cục ba cột quen thuộc cho website doanh nghiệp.', 'aznet-theme' ) ],
+        'professional' => [ __( 'Professional', 'aznet-theme' ), __( 'Bốn cột rõ ràng cho website dịch vụ và doanh nghiệp.', 'aznet-theme' ) ],
+        'split'        => [ __( 'Split', 'aznet-theme' ), __( 'Khối thương hiệu nổi bật bên trái, nội dung ở bên phải.', 'aznet-theme' ) ],
+        'centered'     => [ __( 'Centered', 'aznet-theme' ), __( 'Bố cục cân giữa, phù hợp website thương hiệu gọn.', 'aznet-theme' ) ],
+        'compact'      => [ __( 'Compact', 'aznet-theme' ), __( 'Footer thấp, tiết kiệm không gian hiển thị.', 'aznet-theme' ) ],
+    ];
+
+    echo '<div class="aznet-theme-footer-template-gallery" data-footer-template-gallery>';
+    echo '<div class="aznet-theme-footer-template-gallery__heading"><h2>' . esc_html__( 'Chọn mẫu Footer', 'aznet-theme' ) . '</h2><p>' . esc_html__( 'Đổi mẫu chỉ thay cách trình bày. Toàn bộ nội dung Footer dùng chung và được giữ nguyên.', 'aznet-theme' ) . '</p></div>';
+    if ( ! isset( $templates[ $current ] ) ) {
+        echo '<input type="hidden" name="aznet_theme_settings[footer_preset]" value="' . esc_attr( $current ) . '" data-footer-preset-fallback>';
+    }
+    echo '<fieldset class="aznet-theme-footer-template-gallery__grid"><legend class="screen-reader-text">' . esc_html__( 'Mẫu Footer', 'aznet-theme' ) . '</legend>';
+    foreach ( $templates as $preset => $template ) {
+        $checked = checked( $current, $preset, false );
+        echo '<label class="aznet-theme-footer-template-card aznet-theme-footer-template-card--' . esc_attr( $preset ) . '" data-footer-template="' . esc_attr( $preset ) . '">';
+        echo '<input type="radio" name="aznet_theme_settings[footer_preset]" value="' . esc_attr( $preset ) . '" ' . $checked . '>';
+        echo '<span class="aznet-theme-footer-template-card__preview" aria-hidden="true"><span></span><span></span><span></span><span></span></span>';
+        echo '<span class="aznet-theme-footer-template-card__meta"><strong>' . esc_html( $template[0] ) . '</strong><small>' . esc_html( $template[1] ) . '</small></span>';
+        echo '</label>';
+    }
+    echo '</fieldset>';
+
+    $preview_preset = isset( $templates[ $current ] ) ? $current : 'classic';
+    echo '<div class="aznet-theme-footer-live-preview aznet-theme-footer-live-preview--' . esc_attr( $preview_preset ) . '" data-footer-live-preview data-preset="' . esc_attr( $preview_preset ) . '">';
+    echo '<div class="aznet-theme-footer-live-preview__toolbar"><strong>' . esc_html__( 'Xem trước bố cục', 'aznet-theme' ) . '</strong><span data-footer-preview-label>' . esc_html( $templates[ $preview_preset ][0] ) . '</span></div>';
+    echo '<div class="aznet-theme-footer-live-preview__canvas" aria-hidden="true"><span class="aznet-theme-footer-live-preview__brand"></span><span></span><span></span><span></span></div>';
+    echo '</div>';
+
+    if ( ! isset( $templates[ $current ] ) && 'standard' !== $current ) {
+        echo '<p class="description">' . esc_html__( 'Website đang dùng một preset Footer tương thích cũ/chuyên biệt. Chọn một mẫu ở trên để chuyển sang thư viện mẫu chung.', 'aznet-theme' ) . '</p>';
+    }
+    echo '</div>';
+}
+
 function render_settings_form( string $section ): void {
     $s = settings();
     $visible_keys = [];
@@ -66,7 +104,7 @@ function render_settings_form( string $section ): void {
         field_checkbox( 'header_search', __( 'Hiển thị tìm kiếm', 'aznet-theme' ), (bool) $s['header_search'] );
         field_checkbox( 'header_utilities', __( 'Hiển thị tiện ích Header', 'aznet-theme' ), (bool) $s['header_utilities'] );
     } elseif ( 'footer' === $section ) {
-        field_select( 'footer_preset', __( 'Kiểu Footer', 'aznet-theme' ), [ 'standard' => 'Standard', 'professional' => 'Professional', 'compact' => 'Compact', 'law-01' => 'Law 01' ], (string) $s['footer_preset'] );
+        render_footer_template_gallery( (string) $s['footer_preset'] );
     } elseif ( 'commerce' === $section ) {
         field_select( 'woo_catalog_preset', __( 'Catalog', 'aznet-theme' ), [ 'grid' => 'Grid', 'compact-grid' => 'Compact Grid', 'editorial' => 'Editorial' ], (string) $s['woo_catalog_preset'] );
         field_select( 'woo_product_card_density', __( 'Mật độ thẻ sản phẩm', 'aznet-theme' ), [ 'comfortable' => 'Comfortable', 'balanced' => 'Balanced', 'compact' => 'Compact' ], (string) $s['woo_product_card_density'] );
@@ -108,7 +146,13 @@ function render_footer_profile_form(): void {
     ];
 
     echo '<div class="aznet-theme-panel">';
-    echo '<h2>' . esc_html__( 'Thông tin chân trang', 'aznet-theme' ) . '</h2>';
+    echo '<h2>' . esc_html__( 'Nội dung Footer', 'aznet-theme' ) . '</h2>';
+    echo '<p>' . esc_html__( 'Thông tin chân trang dùng chung cho tất cả mẫu. Đổi mẫu không làm mất nội dung.', 'aznet-theme' ) . '</p>';
+    echo '<div class="aznet-theme-footer-owner-links">';
+    echo '<a class="button" href="' . esc_url( admin_url( 'customize.php?autofocus[control]=custom_logo' ) ) . '">' . esc_html__( 'Sửa Logo', 'aznet-theme' ) . '</a>';
+    echo '<a class="button" href="' . esc_url( admin_url( 'options-general.php' ) ) . '">' . esc_html__( 'Sửa tên & mô tả website', 'aznet-theme' ) . '</a>';
+    echo '<a class="button" href="' . esc_url( admin_url( 'nav-menus.php' ) ) . '">' . esc_html__( 'Sửa Menu Footer', 'aznet-theme' ) . '</a>';
+    echo '</div>';
     echo '<p>' . esc_html__( 'Các trường có dữ liệu sẽ xuất hiện ở chân trang. Dữ liệu được lưu thành Menu WordPress để không phụ thuộc storage riêng của Theme.', 'aznet-theme' ) . '</p>';
     if ( isset( $_GET['footer_saved'] ) && '1' === sanitize_key( wp_unslash( $_GET['footer_saved'] ) ) ) {
         echo '<div class="notice notice-success inline"><p>' . esc_html__( 'Đã lưu thông tin chân trang.', 'aznet-theme' ) . '</p></div>';
@@ -188,6 +232,9 @@ function render_control_center(): void {
         wp_nonce_field( 'aznet_theme_reset_settings' );
         echo '<label><input type="checkbox" name="confirm_reset" value="1" required> ' . esc_html__( 'Tôi xác nhận chỉ đặt lại thiết lập trình bày của AZnet Theme.', 'aznet-theme' ) . '</label> ';
         submit_button( 'Đặt lại', 'delete', 'submit', false ); echo '</form></div>';
+    } elseif ( 'footer' === $section ) {
+        render_settings_form( $section );
+        render_footer_profile_form();
     } elseif ( 'homepage' === $section ) {
         render_homepage_settings();
     } elseif ( 'hero-library' === $section ) {

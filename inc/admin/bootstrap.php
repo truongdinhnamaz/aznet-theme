@@ -57,6 +57,13 @@ function register_control_center(): void {
             AZNET_THEME_VERSION,
             true
         );
+        wp_enqueue_script(
+            'aznet-theme-footer-template-picker',
+            get_theme_file_uri( 'assets/js/admin/footer-template-picker.js' ),
+            [],
+            AZNET_THEME_VERSION,
+            true
+        );
     } );
 }
 
