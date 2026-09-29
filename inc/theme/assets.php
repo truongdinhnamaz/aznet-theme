@@ -634,7 +634,7 @@ function enqueue_assets(): void {
         'aznet-theme-site-footer',
         get_theme_file_uri( '/assets/css/components/site-footer.css' ),
         [ 'aznet-theme-tokens' ],
-        asset_content_version( '/assets/css/components/site-footer.css', $version )
+        $version
     );
 
     enqueue_homepage_blueprint_asset( $version );
