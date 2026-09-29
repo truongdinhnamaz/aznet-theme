@@ -75,6 +75,23 @@ function normalize_template_manifest( array $manifest ): ?array {
         }
     }
 
+    $presentation = (array) ( $manifest['presentation'] ?? [] );
+    foreach ( array_keys( $presentation ) as $key ) {
+        if ( ! is_string( $key ) || ! in_array( $key, [ 'visual_preset', 'homepage_preset' ], true ) ) {
+            return null;
+        }
+    }
+    foreach ( $presentation as $key => $value ) {
+        if ( ! is_string( $value ) ) {
+            return null;
+        }
+        $value = trim( $value );
+        if ( '' === $value || 1 !== preg_match( '/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $value ) ) {
+            return null;
+        }
+        $presentation[ $key ] = $value;
+    }
+
     return [
         'contract_version' => AZNET_THEME_TEMPLATE_MANIFEST_VERSION,
         'id'               => $id,
@@ -83,7 +100,7 @@ function normalize_template_manifest( array $manifest ): ?array {
         'category'         => $category,
         'description'      => $description,
         'capabilities'     => $capabilities,
-        'presentation'     => (array) ( $manifest['presentation'] ?? [] ),
+        'presentation'     => $presentation,
         'assets'           => (array) ( $manifest['assets'] ?? [] ),
         'homepage'         => (array) ( $manifest['homepage'] ?? [] ),
         'provisioning'     => (array) ( $manifest['provisioning'] ?? [] ),
@@ -140,4 +157,27 @@ function template_manifest( string $id ): ?array {
 
     $store = template_manifest_store();
     return $store[ $id ] ?? null;
+}
+
+
+/**
+ * Return unique registered presentation ids for one supported slot.
+ *
+ * @return array<int,string>
+ */
+function template_presentation_ids( string $slot ): array {
+    if ( ! in_array( $slot, [ 'visual_preset', 'homepage_preset' ], true ) ) {
+        return [];
+    }
+
+    $ids = [];
+    foreach ( template_manifests() as $manifest ) {
+        $value = $manifest['presentation'][ $slot ] ?? null;
+        if ( ! is_string( $value ) || '' === $value || in_array( $value, $ids, true ) ) {
+            continue;
+        }
+        $ids[] = $value;
+    }
+
+    return $ids;
 }
