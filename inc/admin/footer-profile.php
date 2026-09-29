@@ -251,7 +251,7 @@ function handle_footer_profile_save(): void {
     $redirect = add_query_arg(
         [
             'page'         => 'aznet-theme',
-            'section'      => 'overview',
+            'section'      => 'footer',
             'footer_saved' => '1',
         ],
         admin_url( 'admin.php' )

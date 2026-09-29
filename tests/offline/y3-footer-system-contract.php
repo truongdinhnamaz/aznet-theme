@@ -298,7 +298,7 @@ foreach ([
 if (! str_contains($template, 'aznet-theme-site-footer__channel-icon')) {
     y3_fail('Law 01 Footer social links must retain icon presentation.');
 }
-if (str_contains($helper, "wp_parse_url( $home_url") || str_contains($helper, "'key'   => 'website'")) {
+if (str_contains($helper, 'wp_parse_url( ' . '$home_url') || str_contains($helper, "'key'   => 'website'")) {
     y3_fail('Law 01 Footer website must come only from populated Footer profile data, never be synthesized from home_url.');
 }
 
@@ -372,6 +372,55 @@ if (! preg_match("/define\(\s*'AZNET_THEME_VERSION'\s*,\s*'([0-9]+\.[0-9]+\.[0-9
 }
 if ($styleVersion[1] !== $functionVersion[1]) {
     y3_fail('Theme version declarations must remain consistent');
+}
+
+$controlCenterCss = file_get_contents($root . '/assets/css/admin/control-center.css');
+if (false === $controlCenterCss) {
+    y3_fail('unable to read Control Center stylesheet');
+}
+
+foreach ([
+    'function render_footer_template_library',
+    'aznet-theme-footer-library',
+    'aznet-theme-footer-template-card',
+    'aznet-theme-footer-template-preview',
+    "render_footer_profile_form();",
+] as $needle) {
+    if (! str_contains($controlCenter, $needle)) {
+        y3_fail('Footer template library/admin authoring surface missing: ' . $needle);
+    }
+}
+
+foreach ([
+    'aznet-theme-footer-template-card',
+    'aznet-theme-footer-template-preview',
+    'aznet-theme-footer-template-preview--standard',
+    'aznet-theme-footer-template-preview--professional',
+    'aznet-theme-footer-template-preview--compact',
+    'aznet-theme-footer-template-preview--law-01',
+] as $needle) {
+    if (! str_contains($controlCenterCss, $needle)) {
+        y3_fail('Footer template library preview CSS missing: ' . $needle);
+    }
+}
+
+$footerSectionNeedle = "} elseif ( 'footer' === " . '$section' . " ) {";
+$footerSectionPos = strpos($controlCenter, $footerSectionNeedle);
+$footerProfileRenderPos = false === $footerSectionPos ? false : strpos($controlCenter, 'render_footer_profile_form();', $footerSectionPos);
+if (false === $footerSectionPos || false === $footerProfileRenderPos) {
+    y3_fail('Footer content editor must render inside the Footer section after template selection');
+}
+
+$overviewBlockStart = strpos($controlCenter, "if ( 'overview' === " . '$section' . " )");
+if (false !== $overviewBlockStart && false !== $footerSectionPos) {
+    $overviewBlock = substr($controlCenter, $overviewBlockStart, $footerSectionPos - $overviewBlockStart);
+    if (str_contains($overviewBlock, 'render_footer_profile_form();')) {
+        y3_fail('Footer profile editor must not remain duplicated on Overview');
+    }
+}
+
+if (! str_contains($footerProfile, "'section'      => 'footer'")) {
+    y3_fail('Footer profile save must return users to the Footer section');
 }
 
 echo "PASS: Y3 Footer System 2.0 ownership/settings/presentation contract\n";

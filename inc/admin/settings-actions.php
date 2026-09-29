@@ -19,7 +19,13 @@ function handle_save_settings(): void {
         ? wp_unslash( $_POST['aznet_theme_settings'] )
         : [];
     set_theme_mod( 'aznet_theme_settings', normalize_settings( $raw ) );
-    wp_safe_redirect( add_query_arg( [ 'page' => 'aznet-theme', 'updated' => '1' ], admin_url( 'admin.php' ) ) );
+    $return_section = isset( $_POST['aznet_theme_return_section'] ) ? sanitize_key( wp_unslash( $_POST['aznet_theme_return_section'] ) ) : '';
+    $allowed_sections = [ 'header', 'footer', 'homepage', 'provisioning', 'commerce', 'system-health' ];
+    $redirect_args = [ 'page' => 'aznet-theme', 'updated' => '1' ];
+    if ( in_array( $return_section, $allowed_sections, true ) ) {
+        $redirect_args['section'] = $return_section;
+    }
+    wp_safe_redirect( add_query_arg( $redirect_args, admin_url( 'admin.php' ) ) );
     exit;
 }
 
