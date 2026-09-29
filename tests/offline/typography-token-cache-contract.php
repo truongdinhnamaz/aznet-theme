@@ -18,7 +18,7 @@ assert(
 );
 
 
-$footer_needle = "asset_content_version( '/assets/css/components/site-footer.css', $version )";
+$footer_needle = "asset_content_version( '/assets/css/components/site-footer.css', \$version )";
 assert(
     str_contains($assets, $footer_needle),
     'Footer stylesheet must use content-aware cache busting after Footer publishes.'
