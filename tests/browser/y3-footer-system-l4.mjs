@@ -8,6 +8,8 @@ const baseUrl = process.env.Y3_BASE_URL || 'http://127.0.0.1:8080';
 const fixturePath = process.env.Y3_FIXTURE_PATH || '/tmp/y3/fixture.json';
 const stateDir = process.env.Y3_STATE_DIR || '/tmp/y3-footer-l4';
 const wpPath = process.env.Y3_WP_PATH || '/tmp/wp';
+const adminUser = process.env.Y3_ADMIN_USER || 'admin';
+const adminPassword = process.env.Y3_ADMIN_PASSWORD || 'y3-browser-password';
 
 if (!fs.existsSync(fixturePath)) throw new Error(`Missing Y3 fixture: ${fixturePath}`);
 const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
@@ -204,6 +206,78 @@ async function inspectEmptyMenu(browser, location, region) {
   }
 }
 
+
+async function inspectAdminFooterLibrary(browser) {
+  const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+  const page = await context.newPage();
+  const result = { status: 'failed', selectedPreset: null, cardCount: 0, blockingAxeViolations: null, error: null };
+
+  try {
+    await page.goto(`${baseUrl}/wp-login.php`, { waitUntil: 'networkidle' });
+    await page.locator('#user_login').fill(adminUser);
+    await page.locator('#user_pass').fill(adminPassword);
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'networkidle' }),
+      page.locator('#wp-submit').click(),
+    ]);
+
+    const response = await page.goto(`${baseUrl}/wp-admin/admin.php?page=aznet-theme&section=footer`, { waitUntil: 'networkidle' });
+    if (!response || response.status() !== 200) throw new Error(`Expected Footer admin HTTP 200, got ${response?.status() ?? 'missing'}`);
+
+    const library = page.locator('.aznet-theme-footer-library');
+    if (await library.count() !== 1) throw new Error('Expected one Footer template library');
+
+    const cards = library.locator('.aznet-theme-footer-template-card');
+    result.cardCount = await cards.count();
+    if (result.cardCount !== 4) throw new Error(`Expected four Footer template cards, got ${result.cardCount}`);
+
+    for (const preset of presets) {
+      if (await library.locator(`input[name="aznet_theme_settings[footer_preset]"][value="${preset}"]`).count() !== 1) {
+        throw new Error(`Missing Footer template choice ${preset}`);
+      }
+      if (await library.locator(`.aznet-theme-footer-template-preview--${preset}`).count() !== 1) {
+        throw new Error(`Missing Footer template preview ${preset}`);
+      }
+    }
+
+    const editor = page.locator('.aznet-theme-footer-content-editor');
+    if (await editor.count() !== 1) throw new Error('Expected Footer content editor');
+    if (await editor.locator('input[name^="aznet_theme_footer_profile["]').count() !== 9) {
+      throw new Error('Footer content editor must expose nine managed contact/social fields');
+    }
+    if (await editor.getByRole('link', { name: 'Sửa Logo', exact: true }).count() !== 1) throw new Error('Missing native Logo authoring link');
+    if (await editor.getByRole('link', { name: 'Sửa liên kết Footer', exact: true }).count() !== 1) throw new Error('Missing native Footer menu authoring link');
+
+    const compact = library.locator('input[name="aznet_theme_settings[footer_preset]"][value="compact"]');
+    await compact.check();
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'networkidle' }),
+      library.getByRole('button', { name: 'Áp dụng mẫu Footer', exact: true }).click(),
+    ]);
+
+    if (!page.url().includes('section=footer')) throw new Error('Footer template save did not return to Footer section');
+    const selected = page.locator('input[name="aznet_theme_settings[footer_preset]"]:checked');
+    result.selectedPreset = await selected.getAttribute('value');
+    if (result.selectedPreset !== 'compact') throw new Error(`Expected compact selected after save, got ${result.selectedPreset}`);
+
+    const axe = await new AxeBuilder({ page }).include('.aznet-theme-control-center').analyze();
+    const blocking = axe.violations.filter((violation) => ['critical', 'serious'].includes(violation.impact));
+    result.blockingAxeViolations = blocking.length;
+    fs.writeFileSync(path.join(stateDir, 'axe-footer-admin-library.json'), JSON.stringify(axe, null, 2));
+    if (blocking.length) throw new Error(`Blocking Footer admin axe violations: ${blocking.length}`);
+
+    await page.screenshot({ path: path.join(stateDir, 'y3-footer-admin-library.png'), fullPage: true });
+    result.status = 'passed';
+  } catch (error) {
+    result.error = error instanceof Error ? error.message : String(error);
+    failures.push(`admin/library: ${result.error}`);
+    await page.screenshot({ path: path.join(stateDir, 'y3-footer-admin-library-failure.png'), fullPage: true }).catch(() => {});
+  } finally {
+    summary.admin = result;
+    await context.close();
+  }
+}
+
 restoreAllMenus();
 const browser = await chromium.launch();
 try {
@@ -218,6 +292,8 @@ try {
   for (const [location, region] of Object.entries(emptyRegions)) {
     await inspectEmptyMenu(browser, location, region);
   }
+
+  await inspectAdminFooterLibrary(browser);
 } finally {
   restoreAllMenus();
   setPreset('standard');
