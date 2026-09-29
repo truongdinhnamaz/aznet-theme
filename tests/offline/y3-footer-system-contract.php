@@ -231,17 +231,22 @@ foreach ([
         y3_fail('Footer Control Center template surface missing: ' . $needle);
     }
 }
-$footerSectionPos = strpos($controlCenter, "} elseif ( 'footer' === \$section ) {");
-$homepageSectionPos = strpos($controlCenter, "} elseif ( 'homepage' === \$section ) {");
+$rendererPos = strpos($controlCenter, 'function render_control_center(): void {');
+if (false === $rendererPos) {
+    y3_fail('unable to isolate Control Center renderer');
+}
+$renderer = substr($controlCenter, $rendererPos);
+$footerSectionPos = strpos($renderer, "} elseif ( 'footer' === \$section ) {");
+$homepageSectionPos = strpos($renderer, "} elseif ( 'homepage' === \$section ) {");
 if (false === $footerSectionPos || false === $homepageSectionPos || $homepageSectionPos <= $footerSectionPos) {
     y3_fail('unable to isolate Footer Control Center section');
 }
-$footerSection = substr($controlCenter, $footerSectionPos, $homepageSectionPos - $footerSectionPos);
+$footerSection = substr($renderer, $footerSectionPos, $homepageSectionPos - $footerSectionPos);
 if (str_contains($footerSection, 'render_footer_profile_form();')) {
     y3_fail('Footer tab must not duplicate Overview contact/social profile fields');
 }
-$overviewPos = strpos($controlCenter, "if ( 'overview' === \$section ) {");
-if (false === $overviewPos || ! str_contains(substr($controlCenter, $overviewPos, $footerSectionPos - $overviewPos), 'render_footer_profile_form();')) {
+$overviewPos = strpos($renderer, "if ( 'overview' === \$section ) {");
+if (false === $overviewPos || ! str_contains(substr($renderer, $overviewPos, $footerSectionPos - $overviewPos), 'render_footer_profile_form();')) {
     y3_fail('Overview must remain the single contact/social Footer profile editor');
 }
 foreach (['primary_heading', 'contact_heading', 'social_heading', 'policy_heading'] as $field) {
