@@ -6,7 +6,118 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 /** @return array<int,string> */
 function provisioning_blueprint_keys(): array {
-    return [ 'law01-v1', 'law01-v1-1', 'law01-v1-2', 'professional-services-v1' ];
+    return [ 'law01-v1', 'law01-v1-1', 'law01-v1-2', 'professional-services-v1', 'curtain-v1', 'industrial-v1' ];
+}
+
+/** @return array<string,string> */
+function provisioning_blueprint_catalog(): array {
+    return [
+        'law01-v1-2'              => 'Law 01',
+        'professional-services-v1' => 'Professional Services',
+        'curtain-v1'               => 'Rèm 01',
+        'industrial-v1'             => 'Industrial 01',
+    ];
+}
+
+/** @return array<string,mixed> */
+function curtain_blueprint(): array {
+    $page = static fn( string $title, string $excerpt, string $content ): array => [
+        'title'       => $title,
+        'status'      => 'publish',
+        'excerpt'     => $excerpt,
+        'content'     => $content,
+        'parent_role' => null,
+    ];
+    $category = static fn( string $name ): array => [
+        'name'        => $name,
+        'parent_role' => null,
+    ];
+
+    return [
+        'key'             => 'curtain-v1',
+        'homepage_preset' => 'curtain-01',
+        'pages'           => [
+            'home'        => $page( 'Trang chủ', 'Trang chủ mẫu Rèm 01 sử dụng nội dung WordPress-native và trình bày của AZnet Theme.', '<p>Hãy thay nội dung này bằng giới thiệu ngắn về thương hiệu, bộ sưu tập và giá trị phục vụ thực tế.</p>' ),
+            'about'       => $page( 'Giới thiệu', 'Giới thiệu doanh nghiệp, nghề, cách làm việc và thông tin thực tế cần được biên tập.', '<p>Hãy cập nhật câu chuyện thương hiệu, năng lực và thông tin thực tế của doanh nghiệp.</p>' ),
+            'collections' => $page( 'Bộ sưu tập', 'Trang tổng hợp các dòng rèm hoặc giải pháp không gian do website sở hữu nội dung.', '<p>Hãy tổ chức các dòng sản phẩm hoặc giải pháp thực tế của website tại đây.</p>' ),
+            'projects'    => $page( 'Công trình', 'Trang giới thiệu các công trình hoặc dự án thực tế bằng nội dung WordPress-native.', '<p>Hãy bổ sung các công trình thực tế cùng hình ảnh và nội dung có nguồn xác nhận.</p>' ),
+            'knowledge'   => $page( 'Kiến thức', 'Trang dẫn tới nội dung tư vấn, hướng dẫn và bài viết chuyên môn.', '<p>Hãy biên tập nội dung kiến thức phù hợp với khách hàng và sản phẩm thực tế.</p>' ),
+            'process'     => $page( 'Quy trình', 'Trang mô tả quy trình phục vụ thực tế của doanh nghiệp.', '<p>Hãy mô tả quy trình khảo sát, tư vấn, thi công hoặc bàn giao theo cách vận hành thực tế.</p>' ),
+            'contact'     => $page( 'Liên hệ', 'Trang liên hệ dùng dữ liệu thực tế của website hoặc provider phù hợp.', '<p>Hãy cập nhật phương thức liên hệ thực tế trước khi đưa website vào vận hành chính thức.</p>' ),
+        ],
+        'categories'      => [
+            'projects'  => $category( 'Công trình' ),
+            'knowledge' => $category( 'Kiến thức' ),
+        ],
+        'menu'            => [
+            'location' => 'primary',
+            'label'    => 'AZnet Primary',
+            'roles'    => [ 'home', 'about', 'collections', 'projects', 'knowledge', 'contact' ],
+            'labels'   => [
+                'home'        => 'Trang chủ',
+                'about'       => 'Giới thiệu',
+                'collections' => 'Bộ sưu tập',
+                'projects'    => 'Công trình',
+                'knowledge'   => 'Kiến thức',
+                'contact'     => 'Liên hệ',
+            ],
+        ],
+        'editorial_examples' => [
+            'status' => 'draft',
+            'items'  => [],
+        ],
+    ];
+}
+
+/** @return array<string,mixed> */
+function industrial_blueprint(): array {
+    $page = static fn( string $title, string $excerpt, string $content ): array => [
+        'title'       => $title,
+        'status'      => 'publish',
+        'excerpt'     => $excerpt,
+        'content'     => $content,
+        'parent_role' => null,
+    ];
+    $category = static fn( string $name ): array => [
+        'name'        => $name,
+        'parent_role' => null,
+    ];
+
+    return [
+        'key'             => 'industrial-v1',
+        'homepage_preset' => 'industrial-01',
+        'pages'           => [
+            'home'       => $page( 'Trang chủ', 'Trang chủ mẫu Industrial 01 theo hướng kỹ thuật, rõ ràng và ưu tiên sản phẩm.', '<p>Hãy thay nội dung này bằng giới thiệu ngắn về doanh nghiệp, nhóm sản phẩm và năng lực phục vụ thực tế.</p>' ),
+            'about'      => $page( 'Giới thiệu', 'Giới thiệu doanh nghiệp, năng lực, hệ thống làm việc và thông tin thực tế cần được biên tập.', '<p>Hãy cập nhật thông tin doanh nghiệp, năng lực và các dữ kiện có nguồn xác nhận.</p>' ),
+            'products'   => $page( 'Sản phẩm', 'Trang dẫn vào danh mục sản phẩm thực tế; dữ liệu sản phẩm và commerce state vẫn do WooCommerce sở hữu khi WooCommerce hiện diện.', '<p>Hãy tổ chức đường dẫn và nội dung giới thiệu cho các nhóm sản phẩm thực tế. Theme không tạo giá, tồn kho hoặc dữ liệu sản phẩm mẫu.</p>' ),
+            'solutions'  => $page( 'Giải pháp', 'Trang trình bày các nhóm giải pháp hoặc ứng dụng bằng nội dung WordPress-native.', '<p>Hãy mô tả các giải pháp và ứng dụng thực tế dựa trên phạm vi cung cấp của doanh nghiệp.</p>' ),
+            'projects'   => $page( 'Dự án', 'Trang giới thiệu dự án hoặc công trình thực tế bằng nội dung WordPress-native.', '<p>Hãy bổ sung dự án thực tế cùng hình ảnh, phạm vi và dữ kiện có nguồn xác nhận.</p>' ),
+            'knowledge'  => $page( 'Kiến thức', 'Trang dẫn tới tài liệu kỹ thuật, hướng dẫn và bài viết chuyên môn.', '<p>Hãy biên tập nội dung kỹ thuật và kiến thức phù hợp với sản phẩm, khách hàng và phạm vi thực tế.</p>' ),
+            'contact'    => $page( 'Liên hệ', 'Trang liên hệ dùng dữ liệu thực tế của website hoặc provider phù hợp.', '<p>Hãy cập nhật phương thức liên hệ thực tế trước khi đưa website vào vận hành chính thức.</p>' ),
+        ],
+        'categories'      => [
+            'projects'  => $category( 'Dự án' ),
+            'knowledge' => $category( 'Kiến thức' ),
+        ],
+        'menu'            => [
+            'location' => 'primary',
+            'label'    => 'AZnet Primary',
+            'roles'    => [ 'home', 'about', 'products', 'solutions', 'projects', 'knowledge', 'contact' ],
+            'labels'   => [
+                'home'      => 'Trang chủ',
+                'about'     => 'Giới thiệu',
+                'products'  => 'Sản phẩm',
+                'solutions' => 'Giải pháp',
+                'projects'  => 'Dự án',
+                'knowledge' => 'Kiến thức',
+                'contact'   => 'Liên hệ',
+            ],
+        ],
+        'editorial_examples' => [
+            'status' => 'draft',
+            'items'  => [],
+        ],
+    ];
 }
 
 /** @return array<string,mixed>|null */
@@ -14,6 +125,12 @@ function provisioning_blueprint( string $key ): ?array {
     if ( ! in_array( $key, provisioning_blueprint_keys(), true ) ) { return null; }
     if ( 'professional-services-v1' === $key ) {
         return function_exists( __NAMESPACE__ . '\\professional_services_blueprint' ) ? professional_services_blueprint() : null;
+    }
+    if ( 'curtain-v1' === $key ) {
+        return curtain_blueprint();
+    }
+    if ( 'industrial-v1' === $key ) {
+        return industrial_blueprint();
     }
 
     $page = static fn( string $title, string $excerpt, string $content, ?string $parent = null ): array => [

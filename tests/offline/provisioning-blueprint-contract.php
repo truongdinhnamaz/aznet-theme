@@ -10,7 +10,21 @@ assert(is_array($bp));
 assert($bp['key'] === 'law01-v1');
 assert($bp['homepage_preset'] === 'law-01');
 assert(\AZnet\Theme\provisioning_blueprint('unknown') === null);
-assert(\AZnet\Theme\provisioning_blueprint_keys() === ['law01-v1', 'law01-v1-1', 'law01-v1-2', 'professional-services-v1']);
+assert(\AZnet\Theme\provisioning_blueprint_keys() === ['law01-v1', 'law01-v1-1', 'law01-v1-2', 'professional-services-v1', 'curtain-v1', 'industrial-v1']);
+assert(\AZnet\Theme\provisioning_blueprint_catalog() === [
+    'law01-v1-2' => 'Law 01',
+    'professional-services-v1' => 'Professional Services',
+    'curtain-v1' => 'Rèm 01',
+    'industrial-v1' => 'Industrial 01',
+]);
+$curtain = \AZnet\Theme\provisioning_blueprint('curtain-v1');
+assert(is_array($curtain));
+assert($curtain['key'] === 'curtain-v1');
+assert($curtain['homepage_preset'] === 'curtain-01');
+$industrial = \AZnet\Theme\provisioning_blueprint('industrial-v1');
+assert(is_array($industrial));
+assert($industrial['key'] === 'industrial-v1');
+assert($industrial['homepage_preset'] === 'industrial-01');
 $pageRoles = ['home','about','services','service_business','service_civil','service_criminal','service_real_estate','service_family','service_labor','team','process','faq','contact'];
 $categoryRoles = ['knowledge','knowledge_business','knowledge_civil','knowledge_criminal','knowledge_real_estate','knowledge_family','knowledge_labor','case_analysis','legal_news'];
 assert(array_keys($bp['pages']) === $pageRoles);
