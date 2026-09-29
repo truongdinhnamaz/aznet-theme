@@ -298,7 +298,7 @@ foreach ([
 if (! str_contains($template, 'aznet-theme-site-footer__channel-icon')) {
     y3_fail('Law 01 Footer social links must retain icon presentation.');
 }
-if (str_contains($helper, "wp_parse_url( $home_url") || str_contains($helper, "'key'   => 'website'")) {
+if (str_contains($helper, 'wp_parse_url( ' . '$home_url') || str_contains($helper, "'key'   => 'website'")) {
     y3_fail('Law 01 Footer website must come only from populated Footer profile data, never be synthesized from home_url.');
 }
 
@@ -404,16 +404,16 @@ foreach ([
     }
 }
 
-$footerSectionPos = strpos($controlCenter, "'footer' === " . '$section');
-$footerProfileRenderPos = strpos($controlCenter, 'render_footer_profile_form();');
-if (false === $footerSectionPos || false === $footerProfileRenderPos || $footerProfileRenderPos < $footerSectionPos) {
+$footerSectionNeedle = "} elseif ( 'footer' === " . '$section' . " ) {";
+$footerSectionPos = strpos($controlCenter, $footerSectionNeedle);
+$footerProfileRenderPos = false === $footerSectionPos ? false : strpos($controlCenter, 'render_footer_profile_form();', $footerSectionPos);
+if (false === $footerSectionPos || false === $footerProfileRenderPos) {
     y3_fail('Footer content editor must render inside the Footer section after template selection');
 }
 
 $overviewBlockStart = strpos($controlCenter, "if ( 'overview' === " . '$section' . " )");
-$homepageBlockStart = strpos($controlCenter, "} elseif ( 'homepage' === " . '$section' . " )");
-if (false !== $overviewBlockStart && false !== $homepageBlockStart) {
-    $overviewBlock = substr($controlCenter, $overviewBlockStart, $homepageBlockStart - $overviewBlockStart);
+if (false !== $overviewBlockStart && false !== $footerSectionPos) {
+    $overviewBlock = substr($controlCenter, $overviewBlockStart, $footerSectionPos - $overviewBlockStart);
     if (str_contains($overviewBlock, 'render_footer_profile_form();')) {
         y3_fail('Footer profile editor must not remain duplicated on Overview');
     }
