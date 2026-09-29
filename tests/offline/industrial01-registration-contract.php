@@ -8,17 +8,15 @@
 declare(strict_types=1);
 
 $root = dirname(__DIR__, 2);
-$settings = file_get_contents($root . '/inc/theme/settings.php');
-$design = file_get_contents($root . '/inc/theme/design-system.php');
+if (! defined('ABSPATH')) {
+    define('ABSPATH', $root . '/');
+}
+require_once $root . '/inc/theme/settings.php';
 $composer = file_get_contents($root . '/inc/theme/homepage-composer.php');
 
-foreach ([
-    [$settings, "'industrial-01'", 'Settings must register Industrial 01.'],
-    [$design, "'industrial-01'", 'Visual preset allow-list must register Industrial 01.'],
-    [$composer, "'industrial-01'", 'Homepage Composer must register Industrial 01.'],
-] as [$source, $needle, $message]) {
-    assert(is_string($source) && str_contains($source, $needle), $message);
-}
+assert(in_array('industrial-01', AZnet\Theme\homepage_preset_ids(), true), 'Template Registry must register Industrial 01 Homepage preset.');
+assert(in_array('industrial-01', AZnet\Theme\visual_preset_ids(), true), 'Template Registry must register Industrial 01 visual preset.');
+assert(is_string($composer) && str_contains($composer, "'industrial-01'"), 'Homepage Composer must retain Industrial 01 until C3 migration.');
 
 $lexiconPath = $root . '/inc/theme/preset-lexicon.php';
 assert(is_file($lexiconPath), 'Preset lexicon adapter must exist.');

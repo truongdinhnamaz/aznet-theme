@@ -11,6 +11,42 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+if ( ! function_exists( __NAMESPACE__ . '\\template_presentation_ids' ) ) {
+    require_once __DIR__ . '/template-registry.php';
+}
+if ( ! function_exists( __NAMESPACE__ . '\\load_local_template_manifests' ) ) {
+    require_once __DIR__ . '/template-loader.php';
+}
+if ( [] === template_manifest_ids() ) {
+    load_local_template_manifests();
+}
+
+/**
+ * Return valid Theme-owned visual preset ids.
+ *
+ * @return array<int,string>
+ */
+function visual_preset_ids(): array {
+    $ids = [ 'default', 'editorial', 'commerce' ];
+    if ( function_exists( __NAMESPACE__ . '\\template_presentation_ids' ) ) {
+        $ids = array_merge( $ids, template_presentation_ids( 'visual_preset' ) );
+    }
+    return array_values( array_unique( $ids ) );
+}
+
+/**
+ * Return valid Theme-owned Homepage preset ids.
+ *
+ * @return array<int,string>
+ */
+function homepage_preset_ids(): array {
+    $ids = [ 'off' ];
+    if ( function_exists( __NAMESPACE__ . '\\template_presentation_ids' ) ) {
+        $ids = array_merge( $ids, template_presentation_ids( 'homepage_preset' ) );
+    }
+    return array_values( array_unique( $ids ) );
+}
+
 /**
  * Return normalized defaults for Theme-owned presentation settings.
  *
@@ -80,7 +116,7 @@ function settings_defaults(): array {
  * @return array<string, mixed>
  */
 function normalize_settings( array $raw ): array {
-    $preset = isset( $raw['visual_preset'] ) && in_array( $raw['visual_preset'], [ 'default', 'editorial', 'commerce', 'curtain-01', 'industrial-01' ], true )
+    $preset = isset( $raw['visual_preset'] ) && in_array( $raw['visual_preset'], visual_preset_ids(), true )
         ? (string) $raw['visual_preset']
         : 'default';
 
@@ -108,7 +144,7 @@ function normalize_settings( array $raw ): array {
         ? (string) $raw['woo_product_preset']
         : 'classic';
 
-    $homepage_preset = isset( $raw['homepage_preset'] ) && in_array( $raw['homepage_preset'], [ 'off', 'law-01', 'curtain-01', 'industrial-01' ], true )
+    $homepage_preset = isset( $raw['homepage_preset'] ) && in_array( $raw['homepage_preset'], homepage_preset_ids(), true )
         ? (string) $raw['homepage_preset']
         : 'off';
 

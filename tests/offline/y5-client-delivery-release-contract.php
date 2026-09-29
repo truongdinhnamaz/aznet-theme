@@ -60,6 +60,7 @@ $must( version_compare( $current_version, '1.3.32', '>=' ), 'Current Theme must 
 
 $industrial_required = [
     'inc/theme/preset-lexicon.php',
+    'inc/theme/templates/industrial-01/manifest.php',
     'assets/css/presets/industrial-01.css',
     'assets/css/components/homepage-industrial-01.css',
     'template-parts/homepage/industrial-01/hero.php',
@@ -74,11 +75,15 @@ foreach ( $industrial_required as $relative ) {
     $must( is_file( $root . '/' . $relative ), 'Y5 convergence package requires Industrial 01 retained artifact: ' . $relative );
 }
 
-$industrial_settings = (string) file_get_contents( $root . '/inc/theme/settings.php' );
+if ( ! defined( 'ABSPATH' ) ) {
+    define( 'ABSPATH', $root . '/' );
+}
+require_once $root . '/inc/theme/settings.php';
 $industrial_composer = (string) file_get_contents( $root . '/inc/theme/homepage-composer.php' );
 $industrial_woo = (string) file_get_contents( $root . '/inc/integrations/woocommerce.php' );
 
-$must( str_contains( $industrial_settings, "'industrial-01'" ), 'Y5 convergence package must retain Industrial 01 settings registration' );
+$must( in_array( 'industrial-01', AZnet\Theme\homepage_preset_ids(), true ), 'Y5 convergence package must retain Industrial 01 Homepage registration through the Template Registry' );
+$must( in_array( 'industrial-01', AZnet\Theme\visual_preset_ids(), true ), 'Y5 convergence package must retain Industrial 01 visual registration through the Template Registry' );
 $must( str_contains( $industrial_composer, 'render_industrial01_part' ), 'Y5 convergence package must retain Industrial 01 Homepage composition' );
 foreach ( [
     'homepage_product_category_showcase_terms',
