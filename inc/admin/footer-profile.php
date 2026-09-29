@@ -223,7 +223,7 @@ function handle_footer_profile_save(): void {
             continue;
         }
 
-        $display_title = in_array( $definition['type'], [ 'text', 'tel', 'email' ], true )
+        $display_title = ( 'text' === $definition['type'] || 'tel' === $definition['type'] || 'email' === $definition['type'] )
             ? $value
             : (string) $definition['title'];
 
