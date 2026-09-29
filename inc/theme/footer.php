@@ -118,12 +118,14 @@ function footer_context(): array {
             if ( is_array( $contact_items ) ) {
                 $has_managed_location = false;
                 $has_managed_phone    = false;
+                $has_managed_website  = false;
                 $has_managed_email    = false;
 
                 foreach ( $contact_items as $item ) {
                     $classes = is_array( $item->classes ?? null ) ? $item->classes : [];
                     $has_managed_location = $has_managed_location || in_array( 'aznet-theme-footer-field-location', $classes, true );
                     $has_managed_phone    = $has_managed_phone || in_array( 'aznet-theme-footer-field-phone', $classes, true );
+                    $has_managed_website  = $has_managed_website || in_array( 'aznet-theme-footer-field-website', $classes, true );
                     $has_managed_email    = $has_managed_email || in_array( 'aznet-theme-footer-field-email', $classes, true );
                 }
 
@@ -143,6 +145,8 @@ function footer_context(): array {
                     } elseif ( in_array( 'aznet-theme-footer-field-phone', $classes, true ) ) {
                         $key   = 'phone';
                         $title = preg_replace( '/^tel:/i', '', $url ) ?? '';
+                    } elseif ( in_array( 'aznet-theme-footer-field-website', $classes, true ) ) {
+                        $key = 'website';
                     } elseif ( in_array( 'aznet-theme-footer-field-email', $classes, true ) ) {
                         $key   = 'email';
                         $title = preg_replace( '/^mailto:/i', '', $url ) ?? '';
@@ -173,20 +177,6 @@ function footer_context(): array {
                         'url'   => $url,
                     ];
                 }
-            }
-        }
-
-        if ( ! empty( $contact_links ) ) {
-            $website_title = function_exists( 'wp_parse_url' ) ? (string) wp_parse_url( $home_url, PHP_URL_HOST ) : '';
-            if ( '' === $website_title ) {
-                $website_title = preg_replace( '#^https?://#i', '', rtrim( $home_url, '/' ) ) ?? '';
-            }
-            if ( '' !== $website_title && '' !== $home_url ) {
-                $contact_links[] = [
-                    'key'   => 'website',
-                    'title' => $website_title,
-                    'url'   => $home_url,
-                ];
             }
         }
 
