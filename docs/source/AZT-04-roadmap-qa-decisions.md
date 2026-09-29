@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.99
+**Version:** v0.100
 **Status:** Working Source  
-**Date:** 28/09/2026
+**Date:** 29/09/2026
 
 ## 1. Purpose
 
@@ -798,6 +798,8 @@ The product owner approved the third equal pilot and the current three-pilot upd
 All three pilots are peer verification targets. A shared-Core or shared-presentation change that can affect more than one preset must retain regression coverage for all affected pilots; no pilot may be treated as the default semantic owner for another. Industrial 01 remains reusable Theme presentation over WordPress/WooCommerce/public-provider data, with WooCommerce retaining Product/price/stock/commerce truth and Theme retaining presentation only.
 
 Current owner approval authorizes review/merge and pilot update for these three targets once the relevant CI, backup/rollback, access and per-site runtime/browser gates are satisfied. Approval does not waive a failed gate or permit private-storage/domain takeover.
+
+**D-042 Industrial 01 current closure state — 29/09/2026:** repository MVP and canonical-package capability are PASS at their verified scopes through merged PR #301 and PR #323. The deterministic `1.3.57` package checkpoint is retained as package evidence only. `minhnguyen.vn` is separately live on a bounded `1.3.53` Industrial pilot and has a `1.3.57` WPVibe draft candidate; neither state may be relabeled as canonical-package deployment without a fresh site-side convergence slice. Current `main` may advance independently after the verified package checkpoint, so any future site update must first bind to one exact canonical commit/package and reverify that candidate before publication. Stale/diverged governance PRs are not implementation authority.
 
 **D-042 preset-language acceptance:** each pilot keeps the shared Theme presentation system while using a bounded preset lexicon. The accepted vocabulary is presentation-only and follows the fallback **preset term -> shared generic term -> WordPress-native label**. Shared components must not hard-code industry terms or derive authoritative behavior from labels.
 
