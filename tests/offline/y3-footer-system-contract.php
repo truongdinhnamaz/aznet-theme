@@ -79,7 +79,7 @@ if (($defaults['footer_preset'] ?? null) !== 'standard') {
     y3_fail('footer_preset default must be standard');
 }
 
-foreach (['standard', 'professional', 'compact', 'law-01'] as $preset) {
+foreach (['standard', 'minimal', 'classic', 'professional', 'split', 'centered', 'compact', 'law-01'] as $preset) {
     $normalized = \AZnet\Theme\normalize_settings(['footer_preset' => $preset]);
     if (($normalized['footer_preset'] ?? null) !== $preset) {
         y3_fail('valid footer_preset was not preserved: ' . $preset);
@@ -184,16 +184,48 @@ if (! str_contains($controlCenter, "'footer'")) {
 if (! str_contains($controlCenter, "[ 'footer_preset' ]")) {
     y3_fail('Footer Control Center section must expose only footer_preset');
 }
-if (! str_contains($controlCenter, "field_select( 'footer_preset'")) {
-    y3_fail('Footer Control Center must render footer_preset with field_select()');
-}
-foreach (['standard', 'professional', 'compact', 'law-01'] as $preset) {
+foreach (['minimal', 'classic', 'professional', 'split', 'centered', 'compact'] as $preset) {
     if (! str_contains($controlCenter, "'{$preset}'")) {
-        y3_fail('Footer preset choice missing from Control Center: ' . $preset);
+        y3_fail('Footer template gallery choice missing from Control Center: ' . $preset);
+    }
+}
+foreach ([
+    'aznet-theme-footer-template-gallery',
+    'aznet-theme-footer-template-card',
+    'aznet-theme-footer-live-preview',
+    'render_footer_profile_form();',
+    'customize.php?autofocus[control]=custom_logo',
+    'nav-menus.php',
+] as $needle) {
+    if (! str_contains($controlCenter, $needle)) {
+        y3_fail('Footer Control Center gallery/shared-content surface missing: ' . $needle);
     }
 }
 if (! str_contains($controlCenter, 'render_hidden_settings( $visible_keys );')) {
     y3_fail('Control Center must preserve unrelated Theme settings');
+}
+
+$adminCss = file_get_contents($root . '/assets/css/admin/control-center.css');
+if (false === $adminCss) {
+    y3_fail('unable to read Control Center stylesheet');
+}
+foreach ([
+    '.aznet-theme-footer-template-gallery',
+    '.aznet-theme-footer-template-card',
+    '.aznet-theme-footer-live-preview',
+] as $selector) {
+    if (! str_contains($adminCss, $selector)) {
+        y3_fail('Footer template gallery stylesheet missing selector: ' . $selector);
+    }
+}
+
+$adminBootstrap = file_get_contents($root . '/inc/admin/bootstrap.php');
+if (false === $adminBootstrap || ! str_contains($adminBootstrap, 'aznet-theme-footer-template-picker')) {
+    y3_fail('Footer template picker script must be loaded by the Control Center');
+}
+$pickerScript = file_get_contents($root . '/assets/js/admin/footer-template-picker.js');
+if (false === $pickerScript || ! str_contains($pickerScript, 'data-footer-template')) {
+    y3_fail('Footer template picker must provide unsaved live-preview switching');
 }
 
 $template = file_get_contents($root . '/template-parts/footer/site-footer.php');
@@ -308,7 +340,7 @@ if (false === $professionalContactPos || false === $professionalNavigationPos ||
     y3_fail('Professional Footer must render Contact before primary navigation to match approved demo composition');
 }
 
-foreach (['.aznet-theme-site-footer--professional', '.aznet-theme-site-footer--compact', '.aznet-theme-site-footer--law-01'] as $selector) {
+foreach (['.aznet-theme-site-footer--minimal', '.aznet-theme-site-footer--classic', '.aznet-theme-site-footer--professional', '.aznet-theme-site-footer--split', '.aznet-theme-site-footer--centered', '.aznet-theme-site-footer--compact', '.aznet-theme-site-footer--law-01'] as $selector) {
     if (! str_contains($css, $selector)) {
         y3_fail('Footer stylesheet missing preset selector ' . $selector);
     }
