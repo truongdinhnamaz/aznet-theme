@@ -108,6 +108,27 @@ foreach ( $menu_definitions as $location => $definition ) {
         y3_runtime_fail( 'unable to create sentinel menu item for ' . $location );
     }
 
+    if ( 'footer-contact' === $location ) {
+        foreach ( [
+            'phone' => [ '02437164123', 'tel:02437164123' ],
+            'email' => [ 'contact-overflow-regression@example-legal-services-domain.test', 'mailto:contact-overflow-regression@example-legal-services-domain.test' ],
+        ] as $contact_key => $contact_fixture ) {
+            $contact_item_id = wp_update_nav_menu_item(
+                (int) $menu_id,
+                0,
+                [
+                    'menu-item-title'   => $contact_fixture[0],
+                    'menu-item-url'     => $contact_fixture[1],
+                    'menu-item-status'  => 'publish',
+                    'menu-item-classes' => 'aznet-theme-footer-field-' . $contact_key,
+                ]
+            );
+            if ( is_wp_error( $contact_item_id ) || 0 >= (int) $contact_item_id ) {
+                y3_runtime_fail( 'unable to create managed contact fixture: ' . $contact_key );
+            }
+        }
+    }
+
     if ( 'footer-social' === $location ) {
         foreach ( [
             'facebook'  => 'Facebook',
