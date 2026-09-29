@@ -11,6 +11,16 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+if ( ! function_exists( __NAMESPACE__ . '\\template_presentation_ids' ) ) {
+    require_once __DIR__ . '/template-registry.php';
+}
+if ( ! function_exists( __NAMESPACE__ . '\\load_local_template_manifests' ) ) {
+    require_once __DIR__ . '/template-loader.php';
+}
+if ( [] === template_manifest_ids() ) {
+    load_local_template_manifests();
+}
+
 /**
  * Return valid Theme-owned visual preset ids.
  *
