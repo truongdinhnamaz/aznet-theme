@@ -8,6 +8,7 @@
 
     const preview = gallery.querySelector('[data-footer-live-preview]');
     const previewLabel = gallery.querySelector('[data-footer-preview-label]');
+    const footerPresetFallback = gallery.querySelector('[data-footer-preset-fallback]');
     const cards = Array.from(gallery.querySelectorAll('[data-footer-template]'));
 
     const applyPreview = (preset, label) => {
@@ -33,6 +34,10 @@
         input.addEventListener('change', () => {
             if (!input.checked) {
                 return;
+            }
+            if (footerPresetFallback) {
+                const fallback = footerPresetFallback;
+                fallback.disabled = true;
             }
             applyPreview(card.dataset.footerTemplate || input.value, label ? label.textContent : input.value);
         });
