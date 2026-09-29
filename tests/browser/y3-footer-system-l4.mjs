@@ -109,15 +109,27 @@ async function inspectPreset(browser, preset, viewportName, viewport) {
         if (await identityBlock.locator('.aznet-theme-site-footer__channels').count() !== 0) {
           throw new Error('Law 01 social icon row must live under contact information, not identity');
         }
+        const contactControls = contactBlock.locator('.aznet-theme-site-footer__contact-link');
+        if (await contactControls.count() !== 4) {
+          throw new Error(`Law 01 contact column must render four icon controls, got ${await contactControls.count()}`);
+        }
+        for (const control of await contactControls.all()) {
+          const label = await control.getAttribute('aria-label');
+          if (!label) throw new Error('Law 01 contact icon control needs an accessible label');
+          const box = await control.boundingBox();
+          if (!box || box.width < 44 || box.height < 44) {
+            throw new Error(`Law 01 contact icon control below 44x44px: ${label}`);
+          }
+        }
         for (const label of ['Y3 Contact Sentinel', '02437164123', 'contact-overflow-regression@example-legal-services-domain.test']) {
           const text = contactBlock.getByText(label, { exact: true });
-          if (await text.count() !== 1 || !await text.isVisible()) {
-            throw new Error(`Law 01 contact value must be visibly rendered: ${label}`);
+          if (await text.count() !== 1 || await text.isVisible()) {
+            throw new Error(`Law 01 contact value must be screen-reader-only: ${label}`);
           }
         }
         const website = contactBlock.locator('.aznet-theme-site-footer__contact-link--website');
-        if (await website.count() !== 1 || !await website.isVisible()) {
-          throw new Error('Law 01 contact column must visibly render the WordPress site URL');
+        if (await website.count() !== 1 || !await website.isVisible() || !(await website.getAttribute('aria-label'))) {
+          throw new Error('Law 01 website contact must render as an accessible icon control');
         }
         continue;
       }
