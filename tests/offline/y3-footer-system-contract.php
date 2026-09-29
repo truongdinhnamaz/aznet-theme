@@ -196,6 +196,7 @@ foreach ([
     'render_footer_profile_form();',
     'customize.php?autofocus[control]=custom_logo',
     'nav-menus.php',
+    'data-footer-preset-fallback',
 ] as $needle) {
     if (! str_contains($controlCenter, $needle)) {
         y3_fail('Footer Control Center gallery/shared-content surface missing: ' . $needle);
@@ -226,6 +227,9 @@ if (false === $adminBootstrap || ! str_contains($adminBootstrap, 'aznet-theme-fo
 $pickerScript = file_get_contents($root . '/assets/js/admin/footer-template-picker.js');
 if (false === $pickerScript || ! str_contains($pickerScript, 'data-footer-template')) {
     y3_fail('Footer template picker must provide unsaved live-preview switching');
+}
+if (! str_contains($pickerScript, 'footerPresetFallback') || ! str_contains($pickerScript, 'fallback.disabled = true')) {
+    y3_fail('Selecting a generic Footer template must disable the legacy preset fallback instead of submitting duplicate values');
 }
 
 $template = file_get_contents($root . '/template-parts/footer/site-footer.php');
