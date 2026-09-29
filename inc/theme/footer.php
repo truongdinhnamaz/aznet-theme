@@ -116,13 +116,15 @@ function footer_context(): array {
         if ( $contact_menu_id > 0 ) {
             $contact_items = wp_get_nav_menu_items( $contact_menu_id );
             if ( is_array( $contact_items ) ) {
-                $has_managed_phone = false;
-                $has_managed_email = false;
+                $has_managed_location = false;
+                $has_managed_phone    = false;
+                $has_managed_email    = false;
 
                 foreach ( $contact_items as $item ) {
                     $classes = is_array( $item->classes ?? null ) ? $item->classes : [];
-                    $has_managed_phone = $has_managed_phone || in_array( 'aznet-theme-footer-field-phone', $classes, true );
-                    $has_managed_email = $has_managed_email || in_array( 'aznet-theme-footer-field-email', $classes, true );
+                    $has_managed_location = $has_managed_location || in_array( 'aznet-theme-footer-field-location', $classes, true );
+                    $has_managed_phone    = $has_managed_phone || in_array( 'aznet-theme-footer-field-phone', $classes, true );
+                    $has_managed_email    = $has_managed_email || in_array( 'aznet-theme-footer-field-email', $classes, true );
                 }
 
                 foreach ( $contact_items as $item ) {
@@ -135,7 +137,10 @@ function footer_context(): array {
                     $classes = is_array( $item->classes ?? null ) ? $item->classes : [];
                     $key     = '';
 
-                    if ( in_array( 'aznet-theme-footer-field-phone', $classes, true ) ) {
+                    if ( in_array( 'aznet-theme-footer-field-location', $classes, true ) ) {
+                        $key = 'location';
+                        $url = '';
+                    } elseif ( in_array( 'aznet-theme-footer-field-phone', $classes, true ) ) {
                         $key   = 'phone';
                         $title = preg_replace( '/^tel:/i', '', $url ) ?? '';
                     } elseif ( in_array( 'aznet-theme-footer-field-email', $classes, true ) ) {
@@ -152,10 +157,13 @@ function footer_context(): array {
                         }
                         $key = 'email';
                     } else {
+                        if ( $has_managed_location ) {
+                            continue;
+                        }
                         $key = 'location';
                     }
 
-                    if ( '' === $title || '' === $url ) {
+                    if ( '' === $title ) {
                         continue;
                     }
 
@@ -167,6 +175,32 @@ function footer_context(): array {
                 }
             }
         }
+
+        $website_title = function_exists( 'wp_parse_url' ) ? (string) wp_parse_url( $home_url, PHP_URL_HOST ) : '';
+        if ( '' === $website_title ) {
+            $website_title = preg_replace( '#^https?://#i', '', rtrim( $home_url, '/' ) ) ?? '';
+        }
+        if ( '' !== $website_title && '' !== $home_url ) {
+            $contact_links[] = [
+                'key'   => 'website',
+                'title' => $website_title,
+                'url'   => $home_url,
+            ];
+        }
+
+        $contact_order = [
+            'location' => 10,
+            'phone'    => 20,
+            'website'  => 30,
+            'email'    => 40,
+        ];
+        usort(
+            $contact_links,
+            static fn ( array $left, array $right ): int =>
+                ( $contact_order[ (string) ( $left['key'] ?? '' ) ] ?? 99 )
+                <=>
+                ( $contact_order[ (string) ( $right['key'] ?? '' ) ] ?? 99 )
+        );
     }
 
     $menu_html = static function ( string $location, string $class_name ): string {
