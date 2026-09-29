@@ -111,25 +111,20 @@ async function inspectPreset(browser, preset, viewportName, viewport) {
         }
         const contactControls = contactBlock.locator('.aznet-theme-site-footer__contact-link');
         if (await contactControls.count() !== 4) {
-          throw new Error(`Law 01 contact column must render four icon controls, got ${await contactControls.count()}`);
+          throw new Error(`Law 01 contact column must render four populated contact rows, got ${await contactControls.count()}`);
         }
-        for (const control of await contactControls.all()) {
-          const label = await control.getAttribute('aria-label');
-          if (!label) throw new Error('Law 01 contact icon control needs an accessible label');
-          const box = await control.boundingBox();
-          if (!box || box.width < 44 || box.height < 44) {
-            throw new Error(`Law 01 contact icon control below 44x44px: ${label}`);
+        for (const label of ['Y3 Contact Sentinel', '02437164123', 'example.test', 'contact-overflow-regression@example-legal-services-domain.test']) {
+          const text = contactBlock.locator('.aznet-theme-site-footer__contact-text').filter({ hasText: label });
+          if (await text.count() !== 1 || !await text.isVisible()) {
+            throw new Error(`Law 01 populated contact value must be visibly rendered: ${label}`);
           }
         }
-        for (const label of ['Y3 Contact Sentinel', '02437164123', 'contact-overflow-regression@example-legal-services-domain.test']) {
-          const text = contactBlock.locator('.screen-reader-text').filter({ hasText: label });
-          if (await text.count() !== 1) {
-            throw new Error(`Law 01 contact value must remain in screen-reader text: ${label}`);
-          }
+        if (await contactBlock.locator('.aznet-theme-site-footer__contact-icon').count() !== 0) {
+          throw new Error('Law 01 contact rows must not render icons; icons are reserved for social links.');
         }
         const website = contactBlock.locator('.aznet-theme-site-footer__contact-link--website');
-        if (await website.count() !== 1 || !await website.isVisible() || !(await website.getAttribute('aria-label'))) {
-          throw new Error('Law 01 website contact must render as an accessible icon control');
+        if (await website.count() !== 1 || !await website.isVisible()) {
+          throw new Error('Law 01 website contact must render only when website profile data exists');
         }
         continue;
       }
