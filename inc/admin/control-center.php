@@ -147,7 +147,7 @@ function render_footer_profile_form(): void {
 
     echo '<div class="aznet-theme-panel">';
     echo '<h2>' . esc_html__( 'Nội dung Footer', 'aznet-theme' ) . '</h2>';
-    echo '<p>' . esc_html__( 'Một bộ dữ liệu dùng chung cho tất cả mẫu. Đổi mẫu không làm mất nội dung.', 'aznet-theme' ) . '</p>';
+    echo '<p>' . esc_html__( 'Thông tin chân trang dùng chung cho tất cả mẫu. Đổi mẫu không làm mất nội dung.', 'aznet-theme' ) . '</p>';
     echo '<div class="aznet-theme-footer-owner-links">';
     echo '<a class="button" href="' . esc_url( admin_url( 'customize.php?autofocus[control]=custom_logo' ) ) . '">' . esc_html__( 'Sửa Logo', 'aznet-theme' ) . '</a>';
     echo '<a class="button" href="' . esc_url( admin_url( 'options-general.php' ) ) . '">' . esc_html__( 'Sửa tên & mô tả website', 'aznet-theme' ) . '</a>';
