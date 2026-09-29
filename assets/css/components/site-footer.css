@@ -120,6 +120,10 @@
     gap: clamp(1.5rem, 3vw, 3.25rem);
 }
 
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__main > * {
+    min-width: 0;
+}
+
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__identity {
     max-width: 36rem;
 }
@@ -269,40 +273,49 @@
 }
 
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .65rem;
+    display: grid;
+    gap: .72rem;
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-links li {
+    min-width: 0;
     margin: 0;
     padding: 0;
 }
 
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-link {
-    display: inline-grid;
-    width: 2.75rem;
-    height: 2.75rem;
-    place-items: center;
-    border: 1px solid var(--aznet-theme-footer-border);
-    border-radius: .7rem;
-    background: color-mix(in srgb, var(--aznet-theme-law01-ivory) 8%, transparent);
-    color: var(--aznet-theme-law01-ivory);
-    line-height: 1;
+    display: flex;
+    min-width: 0;
+    align-items: flex-start;
+    gap: .65rem;
+    color: var(--aznet-theme-footer-muted);
+    font-size: var(--aznet-theme-text-small);
+    line-height: 1.5;
     text-decoration: none;
-    transition:
-        transform var(--aznet-theme-motion-fast) ease,
-        background var(--aznet-theme-motion-fast) ease,
-        border-color var(--aznet-theme-motion-fast) ease;
+}
+
+.aznet-theme-site-footer--law-01 a.aznet-theme-site-footer__contact-link:hover,
+.aznet-theme-site-footer--law-01 a.aznet-theme-site-footer__contact-link:focus-visible {
+    color: var(--aznet-theme-law01-gold-soft);
+    text-decoration: underline;
+    text-underline-offset: .18em;
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-text {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-icon {
-    width: 1.15rem;
-    height: 1.15rem;
-    background: currentColor;
+    width: 1rem;
+    height: 1rem;
+    flex: 0 0 1rem;
+    margin-top: .2em;
+    background: var(--aznet-theme-law01-gold-soft);
     mask-position: center;
     mask-repeat: no-repeat;
     mask-size: contain;
@@ -321,18 +334,18 @@
     -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 5h18v14H3V5Zm2.4 2L12 12l6.6-5H5.4ZM19 9.5l-7 5.3-7-5.3V17h14V9.5Z'/%3E%3C/svg%3E");
 }
 
-.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-link:hover,
-.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-link:focus-visible {
-    border-color: color-mix(in srgb, var(--aznet-theme-law01-gold) 70%, transparent);
-    background: color-mix(in srgb, var(--aznet-theme-law01-ivory) 14%, transparent);
-    color: var(--aznet-theme-law01-gold-soft);
-    text-decoration: none;
-    transform: translateY(-2px);
-}
-
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-link--location .aznet-theme-site-footer__contact-icon {
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a7 7 0 0 1 7 7c0 5.2-7 13-7 13S5 14.2 5 9a7 7 0 0 1 7-7Zm0 4a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z'/%3E%3C/svg%3E");
     -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a7 7 0 0 1 7 7c0 5.2-7 13-7 13S5 14.2 5 9a7 7 0 0 1 7-7Zm0 4a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z'/%3E%3C/svg%3E");
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-link--website .aznet-theme-site-footer__contact-icon {
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm6.92 9h-3.03a15.8 15.8 0 0 0-1.22-5.02A8.04 8.04 0 0 1 18.92 11ZM12 4c-.88 1.07-1.84 3.31-2.05 7h4.1C13.84 7.31 12.88 5.07 12 4ZM9.95 13c.21 3.69 1.17 5.93 2.05 7 .88-1.07 1.84-3.31 2.05-7h-4.1Zm-2.62-7.02A15.8 15.8 0 0 0 6.11 11H3.08a8.04 8.04 0 0 1 4.25-5.02ZM3.08 13h3.03a15.8 15.8 0 0 0 1.22 5.02A8.04 8.04 0 0 1 3.08 13Zm11.59 5.02A15.8 15.8 0 0 0 15.89 13h3.03a8.04 8.04 0 0 1-4.25 5.02Z'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm6.92 9h-3.03a15.8 15.8 0 0 0-1.22-5.02A8.04 8.04 0 0 1 18.92 11ZM12 4c-.88 1.07-1.84 3.31-2.05 7h4.1C13.84 7.31 12.88 5.07 12 4ZM9.95 13c.21 3.69 1.17 5.93 2.05 7 .88-1.07 1.84-3.31 2.05-7h-4.1Zm-2.62-7.02A15.8 15.8 0 0 0 6.11 11H3.08a8.04 8.04 0 0 1 4.25-5.02ZM3.08 13h3.03a15.8 15.8 0 0 0 1.22 5.02A8.04 8.04 0 0 1 3.08 13Zm11.59 5.02A15.8 15.8 0 0 0 15.89 13h3.03a8.04 8.04 0 0 1-4.25 5.02Z'/%3E%3C/svg%3E");
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-social .aznet-theme-site-footer__channels {
+    margin-top: var(--aznet-theme-space-4);
 }
 
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__services-menu {
