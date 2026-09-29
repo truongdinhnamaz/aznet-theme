@@ -280,15 +280,23 @@ foreach (['footer_profile_location', 'footer_profile_youtube', 'footer_profile_l
         y3_fail('AZnet Theme overview must render Footer profile input: ' . $fieldId);
     }
 }
+if (! str_contains($template, 'aznet-theme-site-footer__contact-text')) {
+    y3_fail('Law 01 Footer must visibly render address, phone, website and email text.');
+}
+if (str_contains($template, 'aznet-theme-site-footer__contact-icon')) {
+    y3_fail('Law 01 Footer contact details must not use icon-only controls; icons are reserved for social links.');
+}
 foreach ([
-    '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-link {',
-    'width: 2.75rem;',
-    'height: 2.75rem;',
-    'place-items: center;',
+    '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-links {',
+    'display: grid;',
+    'overflow-wrap: anywhere;',
 ] as $needle) {
     if (! str_contains($css, $needle)) {
-        y3_fail('Law 01 Footer icon-only contact presentation missing: ' . $needle);
+        y3_fail('Law 01 Footer visible contact presentation missing: ' . $needle);
     }
+}
+if (! str_contains($template, 'aznet-theme-site-footer__channel-icon')) {
+    y3_fail('Law 01 Footer social links must retain icon presentation.');
 }
 $professionalContactPos = strpos($template, "if ( 'professional' === \$preset && '' !== \$contact_menu )");
 $professionalNavigationPos = strpos($template, "if ( '' !== \$primary_menu )");
