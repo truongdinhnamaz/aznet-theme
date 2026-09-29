@@ -176,6 +176,7 @@ function render_footer_profile_form(): void {
     echo '<p>' . esc_html__( 'Thông tin liên hệ và mạng xã hội được giữ nguyên khi đổi mẫu. Dữ liệu được lưu bằng Menu WordPress để không phụ thuộc Theme.', 'aznet-theme' ) . '</p></div>';
     echo '<div class="aznet-theme-footer-content-editor__actions">';
     echo '<a class="button" href="' . esc_url( admin_url( 'customize.php?autofocus[control]=custom_logo' ) ) . '">' . esc_html__( 'Sửa Logo', 'aznet-theme' ) . '</a>';
+    echo '<a class="button" href="' . esc_url( admin_url( 'options-general.php' ) ) . '">' . esc_html__( 'Sửa tên & mô tả', 'aznet-theme' ) . '</a>';
     echo '<a class="button" href="' . esc_url( admin_url( 'nav-menus.php' ) ) . '">' . esc_html__( 'Sửa liên kết Footer', 'aznet-theme' ) . '</a>';
     echo '</div></div>';
     if ( isset( $_GET['footer_saved'] ) && '1' === sanitize_key( wp_unslash( $_GET['footer_saved'] ) ) ) {
