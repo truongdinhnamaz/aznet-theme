@@ -22,6 +22,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function footer_profile_definitions(): array {
     return [
+        'location' => [
+            'label'    => __( 'Địa chỉ', 'aznet-theme' ),
+            'location' => 'footer-contact',
+            'type'     => 'text',
+            'title'    => __( 'Địa chỉ', 'aznet-theme' ),
+        ],
         'phone' => [
             'label'    => __( 'Số điện thoại', 'aznet-theme' ),
             'location' => 'footer-contact',
@@ -102,6 +108,10 @@ function footer_profile_from_menus(): array {
             }
 
             $url = (string) ( $item->url ?? '' );
+            if ( 'text' === $definition['type'] ) {
+                $values[ $key ] = trim( (string) ( $item->title ?? '' ) );
+                break;
+            }
             if ( 'tel' === $definition['type'] ) {
                 $url = preg_replace( '/^tel:/i', '', $url ) ?? '';
             } elseif ( 'email' === $definition['type'] ) {
@@ -166,6 +176,9 @@ function footer_profile_item_id( int $menu_id, string $key ): int {
 
 function footer_profile_sanitize_value( string $type, mixed $raw ): string {
     $value = is_string( $raw ) ? trim( wp_unslash( $raw ) ) : '';
+    if ( 'text' === $type ) {
+        return sanitize_text_field( $value );
+    }
     if ( 'email' === $type ) {
         return sanitize_email( $value );
     }
@@ -198,7 +211,9 @@ function handle_footer_profile_save(): void {
 
         $item_id = footer_profile_item_id( $menu_id, $key );
         $url     = $value;
-        if ( '' !== $value && 'tel' === $definition['type'] ) {
+        if ( '' !== $value && 'text' === $definition['type'] ) {
+            $url = '#';
+        } elseif ( '' !== $value && 'tel' === $definition['type'] ) {
             $url = 'tel:' . $value;
         } elseif ( '' !== $value && 'email' === $definition['type'] ) {
             $url = 'mailto:' . $value;
@@ -208,7 +223,7 @@ function handle_footer_profile_save(): void {
             continue;
         }
 
-        $display_title = ( 'tel' === $definition['type'] || 'email' === $definition['type'] )
+        $display_title = in_array( $definition['type'], [ 'text', 'tel', 'email' ], true )
             ? $value
             : (string) $definition['title'];
 
