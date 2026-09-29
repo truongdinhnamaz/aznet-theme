@@ -176,16 +176,18 @@ function footer_context(): array {
             }
         }
 
-        $website_title = function_exists( 'wp_parse_url' ) ? (string) wp_parse_url( $home_url, PHP_URL_HOST ) : '';
-        if ( '' === $website_title ) {
-            $website_title = preg_replace( '#^https?://#i', '', rtrim( $home_url, '/' ) ) ?? '';
-        }
-        if ( '' !== $website_title && '' !== $home_url ) {
-            $contact_links[] = [
-                'key'   => 'website',
-                'title' => $website_title,
-                'url'   => $home_url,
-            ];
+        if ( ! empty( $contact_links ) ) {
+            $website_title = function_exists( 'wp_parse_url' ) ? (string) wp_parse_url( $home_url, PHP_URL_HOST ) : '';
+            if ( '' === $website_title ) {
+                $website_title = preg_replace( '#^https?://#i', '', rtrim( $home_url, '/' ) ) ?? '';
+            }
+            if ( '' !== $website_title && '' !== $home_url ) {
+                $contact_links[] = [
+                    'key'   => 'website',
+                    'title' => $website_title,
+                    'url'   => $home_url,
+                ];
+            }
         }
 
         $contact_order = [
