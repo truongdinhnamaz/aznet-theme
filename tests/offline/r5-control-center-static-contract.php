@@ -52,6 +52,17 @@ foreach ( $must as [ $haystack, $needle ] ) {
 }
 
 foreach ( [
+    "'design' => 'Thiết kế'",
+    "'design' === $section",
+    "'section' => 'design'",
+] as $needle ) {
+    if ( false !== strpos( $control, $needle ) ) {
+        fwrite( STDERR, "FAIL: obsolete Design control-center surface still present {$needle}\n" );
+        exit( 1 );
+    }
+}
+
+foreach ( [
     'PHP (Fatal error|Warning|Parse error)|Uncaught',
     'WP_Query::rewind_posts known core warning',
     'Undefined array key 0 in /tmp/wp/wp-includes/class-wp-query.php on line 3872',
