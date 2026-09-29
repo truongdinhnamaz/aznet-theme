@@ -60,6 +60,7 @@ $must( version_compare( $current_version, '1.3.32', '>=' ), 'Current Theme must 
 
 $industrial_required = [
     'inc/theme/preset-lexicon.php',
+    'inc/theme/template-loader.php',
     'inc/theme/templates/industrial-01/manifest.php',
     'assets/css/presets/industrial-01.css',
     'assets/css/components/homepage-industrial-01.css',
@@ -84,6 +85,10 @@ $industrial_woo = (string) file_get_contents( $root . '/inc/integrations/woocomm
 
 $must( in_array( 'industrial-01', AZnet\Theme\homepage_preset_ids(), true ), 'Y5 convergence package must retain Industrial 01 Homepage registration through the Template Registry' );
 $must( in_array( 'industrial-01', AZnet\Theme\visual_preset_ids(), true ), 'Y5 convergence package must retain Industrial 01 visual registration through the Template Registry' );
+$template_loader = (string) file_get_contents( $root . '/inc/theme/template-loader.php' );
+$industrial_manifest = (string) file_get_contents( $root . '/inc/theme/templates/industrial-01/manifest.php' );
+$must( str_contains( $template_loader, 'template_manifest' ), 'Y5 convergence package must retain the generic Template Manifest loader' );
+$must( str_contains( $industrial_manifest, "'industrial-01'" ), 'Y5 convergence package must retain the Industrial 01 manifest identity' );
 $must( str_contains( $industrial_composer, 'render_industrial01_part' ), 'Y5 convergence package must retain Industrial 01 Homepage composition' );
 foreach ( [
     'homepage_product_category_showcase_terms',
