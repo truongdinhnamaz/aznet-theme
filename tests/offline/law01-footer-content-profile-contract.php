@@ -31,9 +31,9 @@ foreach (['Dịch vụ chính', 'aznet-theme-site-footer__services', 'about_intr
 if (! str_contains($template, 'array_slice( $services, 0, 4 )')) {
     $fail('Footer must cap the primary-service column at four mapped services');
 }
-foreach (['Thông tin chân trang', 'footer_profile_phone', 'footer_profile_email', 'footer_profile_facebook', 'footer_profile_tiktok', 'footer_profile_instagram'] as $needle) {
+foreach (['Sửa nội dung Footer', 'footer_profile_phone', 'footer_profile_email', 'footer_profile_facebook', 'footer_profile_tiktok', 'footer_profile_instagram'] as $needle) {
     if (! str_contains($admin, $needle)) {
-        $fail("Overview Footer profile form missing {$needle}");
+        $fail("Footer content editor missing {$needle}");
     }
 }
 foreach (['handle_footer_profile_save', 'footer_profile_from_menus'] as $needle) {
