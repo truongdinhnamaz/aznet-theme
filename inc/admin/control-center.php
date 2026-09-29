@@ -56,6 +56,9 @@ function render_footer_template_gallery( string $current ): void {
 
     echo '<div class="aznet-theme-footer-template-gallery" data-footer-template-gallery>';
     echo '<div class="aznet-theme-footer-template-gallery__heading"><h2>' . esc_html__( 'Chọn mẫu Footer', 'aznet-theme' ) . '</h2><p>' . esc_html__( 'Đổi mẫu chỉ thay cách trình bày. Toàn bộ nội dung Footer dùng chung và được giữ nguyên.', 'aznet-theme' ) . '</p></div>';
+    if ( ! isset( $templates[ $current ] ) ) {
+        echo '<input type="hidden" name="aznet_theme_settings[footer_preset]" value="' . esc_attr( $current ) . '" data-footer-preset-fallback>';
+    }
     echo '<fieldset class="aznet-theme-footer-template-gallery__grid"><legend class="screen-reader-text">' . esc_html__( 'Mẫu Footer', 'aznet-theme' ) . '</legend>';
     foreach ( $templates as $preset => $template ) {
         $checked = checked( $current, $preset, false );
