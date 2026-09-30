@@ -2,7 +2,7 @@
 
 **Version:** v0.99
 **Status:** Working Source  
-**Date:** 28/09/2026
+**Date:** 29/09/2026
 
 ## 1. Purpose
 
@@ -823,3 +823,21 @@ Accepted rules:
 - Each production-behavior slice uses RED -> minimal GREEN -> retained regression at the shallowest sufficient layer.
 - D-042 pilot order for rollout/verification is Law 01 (`lstamduchn.vn`), Rèm 01 (`remquocanh.vn`), Industrial 01 (`minhnguyen.vn`). A pilot update requires relevant CI plus site backup/rollback and fresh per-site runtime/browser evidence; no PASS is inferred across pilots.
 - D-040 remote distribution remains separate: remote packages stay declarative and non-executable, and external catalog/license/entitlement/download authority stays outside Theme.
+
+## D-044 — Owner-approved direct pilot application / bounded-change governance — ACCEPTED — 29/09/2026
+
+The product owner changed the default pilot execution workflow for AZnet Theme.
+
+Accepted rules:
+
+- For the canonical pilots, a WordPress draft-theme stage is **not required by default** after the owner has reviewed and explicitly approved a bounded Theme change. The approved change may be applied directly to the active Theme on that pilot, followed by fresh production verification.
+- Approval is **slice-bounded**. Approval of one requested change authorizes only that change and the minimum technical dependencies required to make it work. It does not authorize opportunistic redesign, cleanup, refactor, spacing/color changes, or edits to adjacent surfaces that the owner has already approved or has not discussed.
+- Previously approved presentation must be preserved unless the current request explicitly supersedes it.
+- If implementation genuinely requires touching another already-approved or not-yet-discussed surface, the assistant/implementer must warn the owner **before** making that cross-surface change, stating what must change, why it is necessary, and the expected risk/impact.
+- Every direct pilot application must remain bounded and reversible: record the exact pre-change checkpoint/identity and the changed files or scope so the just-applied slice can be rolled back without discarding unrelated later work.
+- Direct pilot application does not waive relevant CI, ownership, security, backup/rollback, access, runtime/browser or integration gates. A failed hard gate still blocks the affected action.
+- Fresh production verification after application is required at the layer actually changed. PASS must not be inferred for unrelated surfaces or other pilots.
+- D-044 changes the pilot deployment workflow only. It does not change Theme/domain ownership, provider contracts, repository release provenance, or the D-042 requirement that cross-preset shared changes retain regression coverage for all affected pilots.
+
+For `lstamduchn.vn`, `remquocanh.vn`, and `minhnguyen.vn`, this decision supersedes any prior workflow assumption that a WPVibe draft-theme preview is always mandatory before applying an owner-approved bounded pilot change. Draft/staging remains available when useful for risk reduction, but it is no longer the default mandatory gate.
+
