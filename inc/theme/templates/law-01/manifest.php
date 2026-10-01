@@ -12,6 +12,13 @@ return [
         'homepage_preset' => 'law-01',
     ],
     'assets'           => [],
-    'homepage'         => [],
+    'homepage'         => [
+        'hero' => [
+            'enabled'        => true,
+            'admin_renderer' => 'render_homepage_hero_library',
+            'content_owner'  => 'wordpress',
+            'source_type'    => 'wp_block',
+        ],
+    ],
     'provisioning'     => [],
 ];
