@@ -389,7 +389,7 @@ async function verifyHomepageAdmin() {
   if (await frontCard.getByRole('link', { name: 'Chỉnh nội dung trang' }).count() !== 1) throw new Error('admin: native Front Page edit action missing');
 
   const heroCard = map.locator('[data-surface-key="hero"]');
-  if (await heroCard.getByRole('link', { name: 'Sửa Hero' }).count() !== 1) throw new Error('admin: Curtain Hero edit action missing');
+  if (await heroCard.getByRole('link', { name: 'Thiết kế Hero' }).count() !== 1) throw new Error('admin: Curtain Hero edit action missing');
 
   const proofCard = map.locator('[data-surface-key="proof"]');
   if (await proofCard.getByRole('link', { name: 'Sửa bằng chứng' }).count() !== 1) throw new Error('admin: Curtain proof edit action missing');
