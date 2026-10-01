@@ -658,11 +658,11 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 
 | Slice | State | Exact boundary |
 | --- | --- | --- |
-| HD0 Core/Template boundary | PASS source + implementation candidate | Core Homepage Design shell has no template-id branching; template manifests declare Hero adapters |
-| HD1 Hero Core entry + routing | PASS L1 candidate | Shared Homepage Design entrypoint and Hero screen route through Core |
-| HD2 Hero adapter migration | PARTIAL | Law 01 = WordPress managed Hero; Rèm 01 = WordPress native Hero; Industrial 01 = explicit legacy Theme-setting compatibility adapter |
-| HD3 Pilot draft verification | PARTIAL | `lstamduchn.vn` and `minhnguyen.vn` WPVibe drafts updated; `remquocanh.vn` currently blocked by repeated WPVibe HTTP 503 |
-| HD4 Runtime/browser/a11y | UNKNOWN | Requires authenticated wp-admin interaction evidence per pilot; no L3/L4 inference from source/draft writes |
-| HD5 Canonical merge/release | LOCKED | PR review, regression and separate release/deployment approvals required |
+| HD0 Core/Template boundary | PASS / canonical | PR #339 merged; Core Homepage Design shell has no template-id branching and template manifests declare Hero adapters |
+| HD1 Hero Core entry + routing | PASS L1-L2 / canonical | Shared Homepage Design entrypoint and Hero screen route through Core; final PR head completed 44/44 workflows SUCCESS |
+| HD2 Hero adapter migration | PARTIAL / canonical compatibility | Law 01 = WordPress managed Hero; Rèm 01 = WordPress native Hero; Industrial 01 = explicit bounded legacy Theme-setting compatibility adapter pending future WordPress-owned content migration |
+| HD3 Pilot draft verification | PARTIAL | `lstamduchn.vn` and `minhnguyen.vn` drafts retain the Core Hero slice and fresh preview URLs; `remquocanh.vn` remains blocked by WPVibe HTTP 503 |
+| HD4 Runtime/browser/a11y | UNKNOWN | Authenticated per-pilot wp-admin interaction evidence is still required; no L3/L4 pilot PASS is inferred from repository CI or draft writes |
+| HD5 Canonical merge/release | MERGE PASS / RELEASE LOCKED | PR #339 merged to `main@f759489180b9f00bca3e47f090a1c3ce69f184bb`; release publication and production deployment remain separate gates |
 
-**Exact next:** verify the Core Hero backend interactively on the Law 01 and Industrial 01 drafts, then apply/verify the same Core slice on Rèm 01 when WPVibe access recovers. Do not publish any pilot draft from this checkpoint.
+**Exact next:** obtain authenticated Core Hero backend runtime/browser evidence for Law 01 and Industrial 01, then apply/verify the same Core slice on Rèm 01 when WPVibe access recovers. Do not publish any pilot draft or deploy production from this checkpoint.
