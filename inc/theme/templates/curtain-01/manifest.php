@@ -13,6 +13,13 @@ return [
         'homepage_preset' => 'curtain-01',
     ],
     'assets'           => [],
-    'homepage'         => [],
+    'homepage'         => [
+        'hero' => [
+            'enabled'        => true,
+            'admin_renderer' => 'render_homepage_native_hero_editor',
+            'content_owner'  => 'wordpress',
+            'source_type'    => 'wp_block',
+        ],
+    ],
     'provisioning'     => [],
 ];

@@ -398,16 +398,9 @@ function render_homepage_template_library( string $current ): void {
     echo '</div>';
 }
 
-/** Render Hero Library as a dedicated AZnet Theme backend screen. */
+/** Render Core Homepage Design > Hero screen. */
 function render_homepage_hero_library_screen(): void {
-    $settings = settings();
-    $back_url = add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'homepage' ], admin_url( 'admin.php' ) );
-    echo '<div class="aznet-theme-panel aznet-theme-homepage-hero-library-screen">';
-    echo '<p><a class="button" href="' . esc_url( $back_url ) . '">← ' . esc_html__( 'Quay lại Trang chủ', 'aznet-theme' ) . '</a></p>';
-    echo '<h2>' . esc_html__( 'Thiết kế Hero', 'aznet-theme' ) . '</h2>';
-    echo '<p class="description">' . esc_html__( 'Chọn mẫu và chỉnh Hero tại đây. Màn hình Trang chủ chỉ phản ánh cấu trúc đang hiển thị ngoài frontend.', 'aznet-theme' ) . '</p>';
-    echo '</div>';
-    render_homepage_hero_library( $settings );
+    render_homepage_design_hero_screen();
 }
 
 /** Return authoring sections in frontend reading order for one preset. */
@@ -667,9 +660,9 @@ function render_homepage_map( string $preset ): void {
 
         echo '<div class="aznet-theme-homepage-map__actions">';
         if ( 'hero' === $key ) {
-            if ( 'law-01' === $preset ) {
+            if ( homepage_hero_design_available( $preset ) ) {
                 $hero_library_url = add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'hero-library' ], admin_url( 'admin.php' ) );
-                echo '<a class="button button-primary" href="' . esc_url( $hero_library_url ) . '">' . esc_html__( 'Sửa Hero', 'aznet-theme' ) . '</a>';
+                echo '<a class="button button-primary" href="' . esc_url( $hero_library_url ) . '">' . esc_html__( 'Thiết kế Hero', 'aznet-theme' ) . '</a>';
             } elseif ( 'wp_block' === $source_type && $source_id > 0 ) {
                 $edit_url = get_edit_post_link( $source_id, 'raw' );
                 if ( is_string( $edit_url ) && '' !== $edit_url ) {
@@ -780,7 +773,7 @@ function render_homepage_authoring_console( string $preset ): void {
         $descriptor = homepage_source_descriptor( $preset, $slot );
         $source_type = is_array( $descriptor ) ? (string) ( $descriptor['type'] ?? '' ) : '';
         $source_value = homepage_source_value( $preset, $slot );
-        if ( 'law-01' === $preset && 'hero' === $slot ) {
+        if ( 'hero' === $slot && homepage_hero_design_available( $preset ) ) {
             $hero_library_url = add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'hero-library' ], admin_url( 'admin.php' ) );
             echo '<a class="button button-primary" href="' . esc_url( $hero_library_url ) . '">' . esc_html__( 'Thiết kế Hero', 'aznet-theme' ) . '</a>';
         } else {
@@ -854,6 +847,7 @@ function render_homepage_settings(): void {
     echo '</form>';
 
     $active_preset = (string) ( $s['homepage_preset'] ?? 'off' );
+    render_homepage_design_entrypoint( $active_preset );
 
     if ( in_array( $active_preset, [ 'law-01', 'curtain-01' ], true ) ) {
         render_homepage_map( $active_preset );

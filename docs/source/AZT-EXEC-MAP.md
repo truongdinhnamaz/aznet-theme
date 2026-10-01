@@ -653,3 +653,16 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 | HB6 Integration/release | LOCKED | Canonical merge is complete; no L5/L6, release or deployment inference until separate runtime/browser/release gates close |
 
 **Current exact next:** preserve canonical D-041 cross-preset/backend-authoring L1/L2 PASS on `main@9794080339dedd3950aa390a87107088e8df204c`. Do not publish the Rèm Quốc Anh WPVibe draft or deploy production from this checkpoint. Authenticated admin runtime/browser parity and any release/deployment remain separate gates.
+
+## HD — Core Homepage Design execution track (D-043 refinement)
+
+| Slice | State | Exact boundary |
+| --- | --- | --- |
+| HD0 Core/Template boundary | PASS source + implementation candidate | Core Homepage Design shell has no template-id branching; template manifests declare Hero adapters |
+| HD1 Hero Core entry + routing | PASS L1 candidate | Shared Homepage Design entrypoint and Hero screen route through Core |
+| HD2 Hero adapter migration | PARTIAL | Law 01 = WordPress managed Hero; Rèm 01 = WordPress native Hero; Industrial 01 = explicit legacy Theme-setting compatibility adapter |
+| HD3 Pilot draft verification | PARTIAL | `lstamduchn.vn` and `minhnguyen.vn` WPVibe drafts updated; `remquocanh.vn` currently blocked by repeated WPVibe HTTP 503 |
+| HD4 Runtime/browser/a11y | UNKNOWN | Requires authenticated wp-admin interaction evidence per pilot; no L3/L4 inference from source/draft writes |
+| HD5 Canonical merge/release | LOCKED | PR review, regression and separate release/deployment approvals required |
+
+**Exact next:** verify the Core Hero backend interactively on the Law 01 and Industrial 01 drafts, then apply/verify the same Core slice on Rèm 01 when WPVibe access recovers. Do not publish any pilot draft from this checkpoint.
