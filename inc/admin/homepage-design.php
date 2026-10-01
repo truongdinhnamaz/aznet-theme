@@ -52,6 +52,99 @@ function homepage_hero_design_renderer( string $preset ): string {
     return trim( (string) ( $config['admin_renderer'] ?? '' ) );
 }
 
+
+/** @return array<int,array<string,mixed>> */
+function homepage_hero_design_settings_fields( string $preset ): array {
+    $config = homepage_design_surface_config( $preset, 'hero' );
+    $fields = $config['settings_fields'] ?? [];
+    if ( ! is_array( $fields ) ) {
+        return [];
+    }
+
+    $normalized = [];
+    foreach ( $fields as $field ) {
+        if ( ! is_array( $field ) ) { continue; }
+        $key = trim( (string) ( $field['key'] ?? '' ) );
+        $type = trim( (string) ( $field['type'] ?? 'text' ) );
+        $label = trim( (string) ( $field['label'] ?? '' ) );
+        if ( '' === $key || '' === $label || ! in_array( $type, [ 'text', 'textarea', 'url', 'image' ], true ) ) {
+            continue;
+        }
+        $normalized[] = [
+            'key'         => $key,
+            'type'        => $type,
+            'label'       => $label,
+            'placeholder' => (string) ( $field['placeholder'] ?? '' ),
+            'help'        => (string) ( $field['help'] ?? '' ),
+        ];
+    }
+
+    return $normalized;
+}
+
+/**
+ * Generic Core renderer for a template that declares Theme presentation
+ * settings as a compatibility adapter. Template-specific field definitions
+ * live in its manifest; Core owns only the form lifecycle/UI primitives.
+ */
+function render_homepage_manifest_settings_hero_editor( array $theme_settings, string $preset ): void {
+    $fields = homepage_hero_design_settings_fields( $preset );
+    if ( [] === $fields ) {
+        echo '<div class="aznet-theme-panel"><p class="notice notice-info inline">' . esc_html__( 'Mẫu này chưa khai báo trường thiết kế Hero.', 'aznet-theme' ) . '</p></div>';
+        return;
+    }
+
+    $keys = array_values( array_map( static fn( array $field ): string => (string) $field['key'], $fields ) );
+    echo '<section class="aznet-theme-panel aznet-theme-homepage-manifest-hero-editor">';
+    echo '<p class="description">' . esc_html__( 'Các trường riêng của mẫu được khai báo trong manifest; Core AZnet Theme chỉ cung cấp form, media picker và vòng đời lưu chung.', 'aznet-theme' ) . '</p>';
+    echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+    echo '<input type="hidden" name="action" value="aznet_theme_save_settings">';
+    wp_nonce_field( 'aznet_theme_save_settings' );
+    render_hidden_settings( $keys );
+    echo '<div class="aznet-theme-homepage-hero-simple-form__grid">';
+
+    foreach ( $fields as $field ) {
+        $key = (string) $field['key'];
+        $type = (string) $field['type'];
+        $label = (string) $field['label'];
+        $placeholder = (string) $field['placeholder'];
+        $help = (string) $field['help'];
+        $value = $theme_settings[ $key ] ?? ( 'image' === $type ? 0 : '' );
+
+        if ( 'image' === $type ) {
+            $id = (int) $value;
+            $input_id = 'aznet-homepage-design-' . sanitize_html_class( str_replace( '_', '-', $key ) );
+            $preview_id = $input_id . '-preview';
+            echo '<div class="aznet-theme-field aznet-theme-homepage-hero-simple-form__media"><span>' . esc_html( $label ) . '</span>';
+            echo '<input id="' . esc_attr( $input_id ) . '" type="hidden" name="aznet_theme_settings[' . esc_attr( $key ) . ']" value="' . esc_attr( (string) $id ) . '">';
+            echo '<div id="' . esc_attr( $preview_id ) . '" class="aznet-theme-homepage-media-preview">';
+            if ( $id > 0 ) { echo wp_kses_post( wp_get_attachment_image( $id, 'medium' ) ); }
+            echo '</div><p>';
+            echo '<button type="button" class="button aznet-theme-homepage-media-select" data-media-input="' . esc_attr( $input_id ) . '" data-media-preview="' . esc_attr( $preview_id ) . '">' . esc_html__( 'Chọn / thay ảnh', 'aznet-theme' ) . '</button> ';
+            echo '<button type="button" class="button-link-delete aznet-theme-homepage-media-clear" data-media-input="' . esc_attr( $input_id ) . '" data-media-preview="' . esc_attr( $preview_id ) . '">' . esc_html__( 'Bỏ ảnh', 'aznet-theme' ) . '</button>';
+            echo '</p>';
+            if ( '' !== $help ) { echo '<small class="description">' . esc_html( $help ) . '</small>'; }
+            echo '</div>';
+            continue;
+        }
+
+        $wide = 'textarea' === $type ? ' aznet-theme-homepage-hero-simple-form__wide' : '';
+        echo '<label class="aznet-theme-field' . esc_attr( $wide ) . '"><span>' . esc_html( $label ) . '</span>';
+        if ( 'textarea' === $type ) {
+            echo '<textarea rows="3" name="aznet_theme_settings[' . esc_attr( $key ) . ']" placeholder="' . esc_attr( $placeholder ) . '">' . esc_textarea( (string) $value ) . '</textarea>';
+        } else {
+            $html_type = 'url' === $type ? 'url' : 'text';
+            echo '<input type="' . esc_attr( $html_type ) . '" name="aznet_theme_settings[' . esc_attr( $key ) . ']" value="' . esc_attr( (string) $value ) . '" placeholder="' . esc_attr( $placeholder ) . '">';
+        }
+        if ( '' !== $help ) { echo '<small class="description">' . esc_html( $help ) . '</small>'; }
+        echo '</label>';
+    }
+
+    echo '</div>';
+    submit_button( __( 'Lưu Hero', 'aznet-theme' ) );
+    echo '</form></section>';
+}
+
 /**
  * Core fallback for template Heroes that are WordPress-owned blocks but do not
  * need a custom form. This keeps content editing in WordPress and keeps Core
@@ -111,7 +204,7 @@ function render_homepage_design_hero_screen(): void {
     }
 
     $callback = __NAMESPACE__ . '\\' . $renderer;
-    if ( 'render_homepage_native_hero_editor' === $renderer ) {
+    if ( in_array( $renderer, [ 'render_homepage_native_hero_editor', 'render_homepage_manifest_settings_hero_editor' ], true ) ) {
         $callback( $theme_settings, $preset );
         return;
     }
