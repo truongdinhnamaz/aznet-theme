@@ -175,9 +175,36 @@ function render_homepage_hero_simple_form( array $settings, ?\WP_Post $hero_cand
         echo '<label class="aznet-theme-field"><span>' . esc_html__( 'Liên kết nút chính', 'aznet-theme' ) . '</span><input type="text" name="homepage_hero_primary_url" value="' . esc_attr( (string) ( $model['primary_url'] ?? '' ) ) . '" placeholder="https://… hoặc /lien-he/"></label>';
         echo '<label class="aznet-theme-field"><span>' . esc_html__( 'Nút phụ', 'aznet-theme' ) . '</span><input type="text" name="homepage_hero_secondary_label" value="' . esc_attr( (string) ( $model['secondary_label'] ?? '' ) ) . '"></label>';
         echo '<label class="aznet-theme-field"><span>' . esc_html__( 'Liên kết nút phụ', 'aznet-theme' ) . '</span><input type="text" name="homepage_hero_secondary_url" value="' . esc_attr( (string) ( $model['secondary_url'] ?? '' ) ) . '" placeholder="https://… hoặc /dich-vu/"></label>';
-        echo '<label class="aznet-theme-field"><span>' . esc_html__( 'Kiểu trình bày Hero', 'aznet-theme' ) . '</span><select name="homepage_hero_variant">';
-        foreach ( $variants as $slug => $label ) { echo '<option value="' . esc_attr( $slug ) . '" ' . selected( $current_variant, $slug, false ) . '>' . esc_html( $label ) . '</option>'; }
-        echo '</select></label>';
+        $variant_descriptions = [
+            'split'      => __( 'Nội dung bên trái, ảnh bên phải.', 'aznet-theme' ),
+            'centered'   => __( 'Nội dung căn giữa, tập trung thông điệp.', 'aznet-theme' ),
+            'inverse'    => __( 'Nền đậm tương phản, nhấn CTA và thông điệp.', 'aznet-theme' ),
+            'media-left' => __( 'Ảnh bên trái, nội dung bên phải.', 'aznet-theme' ),
+        ];
+        echo '<div class="aznet-theme-homepage-hero-template-gallery aznet-theme-homepage-hero-simple-form__wide" data-hero-template-gallery>';
+        echo '<div class="aznet-theme-homepage-hero-template-gallery__heading"><span>' . esc_html__( 'Chọn bố cục Hero', 'aznet-theme' ) . '</span><small>' . esc_html__( 'Đổi bố cục chỉ đổi presentation; nội dung Hero WordPress được giữ nguyên.', 'aznet-theme' ) . '</small></div>';
+        echo '<fieldset class="aznet-theme-homepage-hero-library__grid"><legend class="screen-reader-text">' . esc_html__( 'Kiểu trình bày Hero', 'aznet-theme' ) . '</legend>';
+        foreach ( $variants as $slug => $label ) {
+            echo '<label class="aznet-theme-homepage-hero-library__card aznet-theme-homepage-hero-library__card--' . esc_attr( $slug ) . '">';
+            echo '<input type="radio" name="homepage_hero_variant" value="' . esc_attr( $slug ) . '" ' . checked( $current_variant, $slug, false ) . ' data-hero-variant-radio>';
+            echo '<span class="aznet-theme-homepage-hero-library__preview" aria-hidden="true"><span></span><span></span></span>';
+            echo '<span class="aznet-theme-homepage-hero-library__card__meta"><strong>' . esc_html( $label ) . '</strong><small>' . esc_html( (string) ( $variant_descriptions[ $slug ] ?? '' ) ) . '</small></span>';
+            echo '</label>';
+        }
+        echo '</fieldset>';
+        echo '<div class="aznet-theme-homepage-hero-live-preview aznet-theme-homepage-hero-live-preview--' . esc_attr( $current_variant ) . '" data-hero-live-preview data-variant="' . esc_attr( $current_variant ) . '">';
+        echo '<div class="aznet-theme-homepage-hero-live-preview__toolbar"><strong>' . esc_html__( 'Xem trước bố cục', 'aznet-theme' ) . '</strong><span data-hero-preview-label>' . esc_html( (string) ( $variants[ $current_variant ] ?? '' ) ) . '</span></div>';
+        echo '<div class="aznet-theme-homepage-hero-live-preview__canvas">';
+        echo '<div class="aznet-theme-homepage-hero-live-preview__copy" data-hero-preview-copy>';
+        echo '<span class="aznet-theme-homepage-hero-live-preview__eyebrow" data-preview-field="homepage_hero_eyebrow">' . esc_html( (string) ( $model['eyebrow'] ?? '' ) ) . '</span>';
+        echo '<strong class="aznet-theme-homepage-hero-live-preview__title" data-preview-field="homepage_hero_title">' . esc_html( (string) ( $model['title'] ?? '' ) ) . '</strong>';
+        echo '<span class="aznet-theme-homepage-hero-live-preview__value" data-preview-field="homepage_hero_value">' . esc_html( (string) ( $model['value'] ?? '' ) ) . '</span>';
+        echo '<span class="aznet-theme-homepage-hero-live-preview__lead" data-preview-field="homepage_hero_lead">' . esc_html( (string) ( $model['lead'] ?? '' ) ) . '</span>';
+        echo '<span class="aznet-theme-homepage-hero-live-preview__actions"><span data-preview-field="homepage_hero_primary_label">' . esc_html( (string) ( $model['primary_label'] ?? '' ) ) . '</span><span data-preview-field="homepage_hero_secondary_label">' . esc_html( (string) ( $model['secondary_label'] ?? '' ) ) . '</span></span>';
+        echo '</div>';
+        echo '<div class="aznet-theme-homepage-hero-live-preview__media" data-hero-preview-media>';
+        if ( $image_id > 0 ) { echo wp_kses_post( wp_get_attachment_image( $image_id, 'medium_large' ) ); }
+        echo '</div></div></div></div>';
         echo '<div class="aznet-theme-field aznet-theme-homepage-hero-simple-form__media"><span>' . esc_html__( 'Ảnh Hero', 'aznet-theme' ) . '</span>';
         echo '<input type="hidden" name="homepage_featured_image_id" value="' . esc_attr( (string) $image_id ) . '">';
         echo '<div class="aznet-theme-homepage-media-preview">'; if ( $image_id > 0 ) { echo wp_kses_post( wp_get_attachment_image( $image_id, 'medium' ) ); } echo '</div>';
@@ -264,7 +291,7 @@ function render_homepage_hero_library( array $settings ): void {
     wp_nonce_field( 'aznet_theme_apply_homepage_hero' );
     echo '<fieldset class="aznet-theme-homepage-hero-library__fieldset">';
     echo '<legend class="screen-reader-text">' . esc_html__( 'Chọn mẫu Hero', 'aznet-theme' ) . '</legend>';
-    echo '<div class="aznet-theme-homepage-hero-library__grid">';
+    echo '<div class="aznet-theme-homepage-hero-library__grid" data-hero-template-gallery>';
     foreach ( $variants as $slug => $label ) {
         $checked = checked( $current_variant, $slug, false );
         echo '<label class="aznet-theme-homepage-hero-library__card aznet-theme-homepage-hero-library__card--' . esc_attr( $slug ) . '">';
