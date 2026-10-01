@@ -485,6 +485,18 @@ Rules:
 - Registration is runtime-local Theme presentation state, not a second content/domain store.
 - A future remote package path under D-040 must consume the same manifest semantics after package integrity/compatibility validation. D-040's prohibition on executable remote PHP remains unchanged.
 
+### 20.2.1. Core Homepage Design backend
+
+Homepage Design is a shared Core authoring shell. Core owns navigation, common form/media primitives, save routing and fail-soft behavior; a template declares only its surface-specific admin adapter and field/presentation metadata inside its validated `homepage` manifest section.
+
+For the Hero surface:
+
+- Core must not branch on template ids such as Law 01, Rèm 01 or Industrial 01.
+- The active template manifest may declare `homepage.hero.enabled`, an `admin_renderer`, and bounded presentation field metadata.
+- WordPress-owned Hero content remains WordPress-owned; the Core shell may deep-link or provide a bounded adapter but must not duplicate that content into a parallel Core content store.
+- Existing template-scoped Theme settings that predate this contract are compatibility adapters only and must be explicitly marked as legacy compatibility rather than treated as the target ownership model.
+- Adding a future template Hero backend must not require editing generic Core branching logic; it should register through the manifest contract and shared primitives.
+
 ## 20.3. Preset Lexicon Contract
 
 Each preset/template is composed as **Shared Presentation System + Preset-specific Language**.
