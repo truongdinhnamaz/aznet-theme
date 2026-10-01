@@ -13,6 +13,13 @@ return [
         'homepage_preset' => 'industrial-01',
     ],
     'assets'           => [],
-    'homepage'         => [],
+    'homepage'         => [
+        'hero' => [
+            'enabled'        => true,
+            'admin_renderer' => 'render_industrial01_hero_editor',
+            'content_owner'  => 'theme-legacy-compat',
+            'source_type'    => 'presentation_settings',
+        ],
+    ],
     'provisioning'     => [],
 ];
