@@ -12,6 +12,7 @@ foreach ([
     'function homepage_design_surface_config',
     'function homepage_hero_design_available',
     'function homepage_hero_design_renderer',
+    'function render_homepage_design_entrypoint',
     'function render_homepage_design_hero_screen',
     "template_manifest(",
     "'homepage'",
