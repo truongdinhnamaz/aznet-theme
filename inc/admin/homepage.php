@@ -847,6 +847,7 @@ function render_homepage_settings(): void {
     echo '</form>';
 
     $active_preset = (string) ( $s['homepage_preset'] ?? 'off' );
+    render_homepage_design_entrypoint( $active_preset );
 
     if ( in_array( $active_preset, [ 'law-01', 'curtain-01' ], true ) ) {
         render_homepage_map( $active_preset );
