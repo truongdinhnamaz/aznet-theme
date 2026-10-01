@@ -53,6 +53,20 @@ function homepage_hero_design_renderer( string $preset ): string {
 }
 
 
+function render_homepage_design_entrypoint( string $preset ): void {
+    if ( ! homepage_hero_design_available( $preset ) ) {
+        return;
+    }
+
+    $url = add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'hero-library' ], admin_url( 'admin.php' ) );
+    echo '<div class="aznet-theme-panel aznet-theme-homepage-design-entry">';
+    echo '<p class="aznet-theme-homepage-design-screen__eyebrow">' . esc_html__( 'Thiết kế Trang chủ', 'aznet-theme' ) . '</p>';
+    echo '<div class="aznet-theme-homepage-design-entry__row"><div><h2>' . esc_html__( 'Hero', 'aznet-theme' ) . '</h2><p class="description">' . esc_html__( 'Bắt đầu từ Hero. Core cung cấp backend chung; mẫu đang dùng chỉ khai báo phần presentation riêng.', 'aznet-theme' ) . '</p></div>';
+    echo '<a class="button button-primary" href="' . esc_url( $url ) . '">' . esc_html__( 'Thiết kế Hero', 'aznet-theme' ) . '</a></div>';
+    echo '</div>';
+}
+
+
 /** @return array<int,array<string,mixed>> */
 function homepage_hero_design_settings_fields( string $preset ): array {
     $config = homepage_design_surface_config( $preset, 'hero' );
