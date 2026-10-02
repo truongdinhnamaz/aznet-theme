@@ -96,6 +96,10 @@ if (($invalid['footer_preset'] ?? null) !== 'standard') {
 if (array_key_exists('foreign_state', $invalid)) {
     y3_fail('foreign setting escaped the Theme allow-list');
 }
+$richRef = \AZnet\Theme\normalize_settings(['footer_content_block' => 88]);
+if (($richRef['footer_content_block'] ?? null) !== 88) {
+    y3_fail('Footer rich-content WordPress reference must survive normalization');
+}
 
 if (! function_exists('AZnet\\Theme\\footer_preset')) {
     y3_fail('footer_preset() missing');
@@ -134,7 +138,7 @@ foreach ([
 }
 
 $context = \AZnet\Theme\footer_context();
-$expectedContextKeys = ['preset', 'site_title', 'tagline', 'home_url', 'logo_html', 'about_intro', 'services', 'social_channels', 'contact_links', 'menus', 'labels', 'year'];
+$expectedContextKeys = ['preset', 'site_title', 'tagline', 'home_url', 'logo_html', 'about_intro', 'footer_content_active', 'footer_content_html', 'services', 'social_channels', 'contact_links', 'menus', 'labels', 'year'];
 if ($expectedContextKeys !== array_keys($context)) {
     y3_fail('footer_context() shape changed');
 }
