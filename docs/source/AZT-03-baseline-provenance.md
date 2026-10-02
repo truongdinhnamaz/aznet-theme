@@ -530,3 +530,13 @@ Evidence: `docs/evidence/CORE_HOMEPAGE_DESIGN_PILOT_L4_PARTIAL_20261002.md`.
 - Fresh mobile production Lighthouse: Accessibility 100/100; Best Practices 100/100.
 - Authenticated wp-admin interaction remains UNKNOWN and is not inferred from public production checks.
 - Evidence: `docs/evidence/INDUSTRIAL01_HOMEPAGE_DESIGN_PRODUCTION_RELEASE_20261002.md`.
+
+
+### Rèm 01 WPVibe external-access blocker — 02/10/2026
+
+- User-supplied WPVibe diagnostic shows site-local REST/API prerequisites passing, but remote direct and relay checks both returned HTTP 503 on the WPVibe connection-check routes.
+- Cloudflare Ray evidence: `a43fafe09d227981-SIN` and `a43fafebdfd47981-SIN` around `2026-10-02T00:45:54Z–00:45:56Z`.
+- WPVibe diagnostic reported relay source IP `192.241.129.49`.
+- A fresh Theme-side retry still returned WP API 503; repeated retries were stopped.
+- Disposition remains **BLOCKED_EXTERNAL_ACCESS**. This does not prove bad credentials, PHP fatal, Cloudflare/WAF blocking, or an origin failure without matching provider logs.
+- Evidence: `docs/evidence/REM01_WPVIBE_503_EXTERNAL_BLOCKER_20261002.md`.
