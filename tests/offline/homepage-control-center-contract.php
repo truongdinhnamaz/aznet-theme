@@ -9,7 +9,7 @@ $bootstrap = file_get_contents($root . '/inc/admin/bootstrap.php');
 $css = file_get_contents($root . '/assets/css/admin/control-center.css');
 $settingsSource = file_get_contents($root . '/inc/theme/settings.php');
 
-foreach (['render_homepage_settings', 'homepage_slot_statuses', 'READY', 'DRAFT', 'EMPTY', 'UNMAPPED', 'INVALID', 'PROVIDER_UNAVAILABLE', 'law-01', 'homepage_source_descriptor', 'homepage_source_key', 'homepage_source_value', 'homepage_hero_variant', 'get_pages(', 'get_categories('] as $required) {
+foreach (['render_homepage_settings', 'homepage_slot_statuses', 'READY', 'DRAFT', 'EMPTY', 'UNMAPPED', 'INVALID', 'PROVIDER_UNAVAILABLE', 'law-01', 'homepage_source_descriptor', 'homepage_source_key', 'homepage_source_value', 'homepage_hero_variant', 'get_pages(', 'get_categories(', 'render_homepage_category_visibility_control', 'Chọn chuyên mục hiển thị', 'homepage_effective_source_key( $preset, $slot )'] as $required) {
     assert(str_contains($source, $required), "Missing Homepage admin contract: {$required}");
 }
 
@@ -38,6 +38,26 @@ foreach ([
     '.aznet-theme-homepage-hero-editor__actions',
 ] as $required) {
     assert(str_contains($css, $required), "Missing Homepage Hero editing UX presentation: {$required}");
+}
+
+$authoringJs = file_get_contents($root . '/assets/js/admin/homepage-authoring.js');
+foreach ([
+    'data-category-order-row',
+    'data-category-move="up"',
+    'data-category-move="down"',
+    'Đưa lên',
+    'Đưa xuống',
+    'Chỉ liệt kê chuyên mục đang có bài viết hoặc đang được chọn',
+    '$category->count > 0 || in_array( $id, $current, true )',
+] as $required) {
+    assert(str_contains($source, $required), "Missing Homepage category ordering UI: {$required}");
+}
+foreach ([
+    '[data-category-move]',
+    'insertBefore',
+    'data-category-order-row',
+] as $required) {
+    assert(str_contains((string) $authoringJs, $required), "Missing Homepage category ordering behavior: {$required}");
 }
 
 assert(str_contains($control, "'homepage'"));

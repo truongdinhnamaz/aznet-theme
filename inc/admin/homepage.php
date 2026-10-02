@@ -307,6 +307,85 @@ function homepage_category_select( string $key, string $label, int $current, arr
 }
 
 /**
+ * Render a first-class category visibility control for Homepage topic surfaces.
+ *
+ * This writes only the existing Theme-owned category-reference setting. Native
+ * WordPress Category content remains authoritative and is not copied or mutated.
+ */
+function render_homepage_category_visibility_control( string $preset, string $slot = 'knowledge' ): void {
+    $descriptor = homepage_source_descriptor( $preset, $slot );
+    if ( ! is_array( $descriptor ) || 'categories' !== (string) ( $descriptor['type'] ?? '' ) ) {
+        return;
+    }
+
+    $key = homepage_effective_source_key( $preset, $slot );
+    if ( ! is_string( $key ) || '' === $key ) {
+        return;
+    }
+
+    $current = array_values(
+        array_unique(
+            array_filter(
+                array_map( 'intval', (array) homepage_effective_source_value( $preset, $slot ) ),
+                static fn ( int $id ): bool => $id > 0
+            )
+        )
+    );
+    $categories = get_categories(
+        [
+            'hide_empty' => false,
+            'orderby'    => 'name',
+            'order'      => 'ASC',
+        ]
+    );
+
+    $categories_by_id = [];
+    foreach ( $categories as $category ) {
+        if ( ! $category instanceof \WP_Term ) { continue; }
+        $id = (int) $category->term_id;
+        if ( $category->count > 0 || in_array( $id, $current, true ) ) {
+            $categories_by_id[ $id ] = $category;
+        }
+    }
+    $ordered_categories = [];
+    foreach ( $current as $id ) {
+        if ( isset( $categories_by_id[ $id ] ) ) {
+            $ordered_categories[] = $categories_by_id[ $id ];
+            unset( $categories_by_id[ $id ] );
+        }
+    }
+    foreach ( $categories as $category ) {
+        if ( $category instanceof \WP_Term && isset( $categories_by_id[ (int) $category->term_id ] ) ) {
+            $ordered_categories[] = $category;
+        }
+    }
+
+    echo '<details class="aznet-theme-homepage-category-visibility">';
+    echo '<summary class="button button-primary">' . esc_html__( 'Chọn chuyên mục hiển thị', 'aznet-theme' ) . '</summary>';
+    echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+    echo '<input type="hidden" name="action" value="aznet_theme_save_settings">';
+    wp_nonce_field( 'aznet_theme_save_settings' );
+    render_hidden_settings( [ $key ] );
+    echo '<fieldset><legend>' . esc_html__( 'Chuyên mục được phép xuất hiện ở khối Chủ đề', 'aznet-theme' ) . '</legend>';
+    echo '<p class="description">' . esc_html__( 'Chỉ các chuyên mục được chọn mới xuất hiện tại khối Chủ đề trên trang chủ. Dùng mũi tên để đổi thứ tự; thứ tự này cũng là thứ tự hiển thị ngoài website. Bỏ chọn không xóa chuyên mục hoặc bài viết trong WordPress.', 'aznet-theme' ) . '</p>';
+    echo '<p class="description">' . esc_html__( 'Chỉ liệt kê chuyên mục đang có bài viết hoặc đang được chọn, để tránh làm rối danh sách quản trị.', 'aznet-theme' ) . '</p>';
+    echo '<div class="aznet-theme-homepage-category-visibility__list" data-category-order-list>';
+    foreach ( $ordered_categories as $category ) {
+        if ( ! $category instanceof \WP_Term ) { continue; }
+        $id = (int) $category->term_id;
+        echo '<div class="aznet-theme-homepage-category-visibility__row" data-category-order-row>';
+        echo '<label><input type="checkbox" name="aznet_theme_settings[' . esc_attr( $key ) . '][]" value="' . esc_attr( (string) $id ) . '" ' . checked( in_array( $id, $current, true ), true, false ) . '> <span>' . esc_html( $category->name ) . '</span></label>';
+        echo '<span class="aznet-theme-homepage-category-visibility__order">';
+        echo '<button type="button" class="button button-small" data-category-move="up" aria-label="' . esc_attr__( 'Đưa lên', 'aznet-theme' ) . '" title="' . esc_attr__( 'Đưa lên', 'aznet-theme' ) . '">↑</button>';
+        echo '<button type="button" class="button button-small" data-category-move="down" aria-label="' . esc_attr__( 'Đưa xuống', 'aznet-theme' ) . '" title="' . esc_attr__( 'Đưa xuống', 'aznet-theme' ) . '">↓</button>';
+        echo '</span></div>';
+    }
+    echo '</div></fieldset>';
+    submit_button( __( 'Lưu chuyên mục & thứ tự', 'aznet-theme' ), 'primary', 'submit', false );
+    echo '</form></details>';
+}
+
+/**
  * Return the bounded Theme-side Template Library model.
  *
  * TD1 intentionally contains only locally available presentation presets.
@@ -738,7 +817,10 @@ function render_homepage_map( string $preset ): void {
             render_homepage_quick_edit_form( $preset, 'contact', $source_id, __( 'Chỉnh nội dung', 'aznet-theme' ) );
         } elseif ( 'latest' === $key ) {
             echo '<a class="button button-primary" href="' . esc_url( admin_url( 'edit.php' ) ) . '">' . esc_html__( 'Quản lý bài viết', 'aznet-theme' ) . '</a>';
-        } elseif ( in_array( $key, [ 'topics', 'analysis', 'news' ], true ) ) {
+        } elseif ( 'topics' === $key ) {
+            render_homepage_category_visibility_control( $preset, 'knowledge' );
+            echo '<a class="button" href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=category' ) ) . '">' . esc_html__( 'Quản lý chuyên mục', 'aznet-theme' ) . '</a>';
+        } elseif ( in_array( $key, [ 'analysis', 'news' ], true ) ) {
             echo '<a class="button button-primary" href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=category' ) ) . '">' . esc_html__( 'Chỉnh chủ đề', 'aznet-theme' ) . '</a>';
         } elseif ( 'category-showcase' === $key ) {
             echo '<a class="button button-primary" href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=product_cat&post_type=product' ) ) . '">' . esc_html__( 'Quản lý dòng rèm', 'aznet-theme' ) . '</a>';
