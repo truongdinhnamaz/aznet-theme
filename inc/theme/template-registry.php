@@ -75,6 +75,24 @@ function normalize_template_manifest( array $manifest ): ?array {
         }
     }
 
+    $provisioning = (array) ( $manifest['provisioning'] ?? [] );
+    foreach ( array_keys( $provisioning ) as $key ) {
+        if ( ! is_string( $key ) || 'blueprint' !== $key ) {
+            return null;
+        }
+    }
+    if ( array_key_exists( 'blueprint', $provisioning ) ) {
+        $blueprint = $provisioning['blueprint'];
+        if ( ! is_string( $blueprint ) ) {
+            return null;
+        }
+        $blueprint = trim( $blueprint );
+        if ( '' === $blueprint || 1 !== preg_match( '/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $blueprint ) ) {
+            return null;
+        }
+        $provisioning['blueprint'] = $blueprint;
+    }
+
     $presentation = (array) ( $manifest['presentation'] ?? [] );
     foreach ( array_keys( $presentation ) as $key ) {
         if ( ! is_string( $key ) || ! in_array( $key, [ 'visual_preset', 'homepage_preset' ], true ) ) {
@@ -103,7 +121,7 @@ function normalize_template_manifest( array $manifest ): ?array {
         'presentation'     => $presentation,
         'assets'           => (array) ( $manifest['assets'] ?? [] ),
         'homepage'         => (array) ( $manifest['homepage'] ?? [] ),
-        'provisioning'     => (array) ( $manifest['provisioning'] ?? [] ),
+        'provisioning'     => $provisioning,
     ];
 }
 
@@ -182,6 +200,38 @@ function template_manifest_for_homepage_preset( string $preset ): ?array {
     }
 
     return null;
+}
+
+
+/**
+ * Resolve one template's optional provisioning recipe to an existing Core blueprint.
+ *
+ * Accepts either the template id or its Homepage preset. Missing templates,
+ * missing recipe references, or unavailable blueprints fail soft to null.
+ */
+function template_provisioning_blueprint_key( string $template_or_preset ): ?string {
+    $template_or_preset = trim( $template_or_preset );
+    if ( '' === $template_or_preset ) {
+        return null;
+    }
+
+    $manifest = template_manifest( $template_or_preset );
+    if ( null === $manifest ) {
+        $manifest = template_manifest_for_homepage_preset( $template_or_preset );
+    }
+    if ( ! is_array( $manifest ) ) {
+        return null;
+    }
+
+    $blueprint = $manifest['provisioning']['blueprint'] ?? null;
+    if ( ! is_string( $blueprint ) || '' === $blueprint ) {
+        return null;
+    }
+    if ( ! function_exists( __NAMESPACE__ . '\\provisioning_blueprint' ) ) {
+        return null;
+    }
+
+    return is_array( provisioning_blueprint( $blueprint ) ) ? $blueprint : null;
 }
 
 
