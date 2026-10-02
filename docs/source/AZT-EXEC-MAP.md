@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.89
+**Version:** v0.90
 **Status:** Working Execution Map / derived  
 **Date:** 02/10/2026
 
@@ -630,10 +630,10 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 | Slice | State | Exact boundary |
 | --- | --- | --- |
 | TPL0 Governance | PASS / canonical | D-040 product/architecture/roadmap source updates are integrated on canonical main through PR #276 |
-| TPL1 Admin Template Library | PASS L1-L2 / canonical | Card grid/search/category filter integrated on main through PR #276; direct exact-main source verification PASS. L3/L4 remain separate. |
+| TPL1 Admin Template Library | PASS L1-L4 / canonical | Card grid/search/category filter integrated on main; PR #365 adds authenticated WordPress 6.9 runtime/browser evidence across 1440/1024/782/390 widths with search/filter keyboard focus, matching-card filtering, no horizontal overflow, Axe critical/serious = 0 and no unexpected console/page errors. |
 | TPL2 Distribution consumer | LOCKED | Open only after TPL1 local/runtime gate; consume public/versioned external contract and fail soft |
 | TPL3 Secure installer | LOCKED | Declarative package only; allow-list + integrity/signature + staging + atomic activation + rollback |
-| TPL4 Runtime/browser/a11y | OPEN NEXT after shallow gates | Real wp-admin responsive/keyboard/focus/console evidence |
+| TPL4 Runtime/browser/a11y | PASS L3-L4 / canonical | PR #365 R5 authenticated browser matrix provides real wp-admin responsive/keyboard/focus/console/Axe evidence across 1440/1024/782/390 widths; final-head 7/7 QA SUCCESS. |
 | TPL5 Actual service L5 | BLOCKED_EXTERNAL | Requires real AZnet Template Distribution Service; Theme must not self-implement the dependency |
 | TPL6 Release closure | LOCKED | Full regression/package/provenance; merge/release remain owner-gated |
 
@@ -649,10 +649,10 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 | HB3B Curtain 01 shared-map parity | PASS L1-L2 / CANONICAL; PUBLIC DRAFT L3/L4 PARTIAL | PR #281 merged to `main@d3c4014599e326e1efe3091ed6e979a19535a2d4`. Frontend/admin composition share one effective model. Fresh exact-main source verification 0 failures; isolated byte-identical remquocanh.vn draft renders exact 10-surface order with Accessibility/Best Practices 100 mobile. Authenticated draft admin parity remains UNKNOWN; production untouched at 1.3.31. |
 | HB3C Curtain 01 About presentation authoring completeness | PASS L1-L2 / CANONICAL | PR #283 exposes Theme-owned About kicker/heading/quote/scoped image inside the effective About card while preserving WordPress Page ownership. Exact-main source verification 0 failures; isolated public draft remained healthy. Authenticated draft-admin interaction remains UNKNOWN. |
 | HB4 Static/TDD closure | PASS / runner-independent | RED contract added before implementation; direct exact-branch source verification then passed with 0 contract failures after correcting two defects found during review. GitHub runner remains unavailable but is no longer a dependency for L1/L2 evidence. |
-| HB5 WordPress runtime + browser/a11y parity | UNKNOWN / not release-claimed | Runtime parity test and R5/Homepage browser assertions are wired. Owner directed implementation/merge not to depend on hosted runner availability; no L3/L4 PASS is inferred from source verification. |
+| HB5 WordPress runtime + browser/a11y parity | LAW 01 PASS L3-L4 / CURTAIN AUTH ADMIN UNKNOWN | PR #365 closes repository-native authenticated Law 01 runtime/browser parity: Homepage Map admin/public order, Hero/Team authoring paths, responsive wp-admin, keyboard focus, Axe and console/page-error checks all pass. Curtain 01 authenticated-admin parity remains unclaimed and is not inferred from Law 01. |
 | HB6 Integration/release | LOCKED | Canonical merge is complete; no L5/L6, release or deployment inference until separate runtime/browser/release gates close |
 
-**Current exact next:** preserve canonical D-041 cross-preset/backend-authoring L1/L2 PASS on `main@9794080339dedd3950aa390a87107088e8df204c`. Do not publish the Rèm Quốc Anh WPVibe draft or deploy production from this checkpoint. Authenticated admin runtime/browser parity and any release/deployment remain separate gates.
+**Current exact next:** preserve PR #365 Law 01 repository-native authenticated L3/L4 PASS and the retained Curtain 01 public-draft evidence. Curtain 01 authenticated-admin parity remains UNKNOWN but is non-blocking for Core completion under D-044 while Rèm access is unavailable. Do not infer provider L5 or production deployment. Proceed only to Theme-owned completion/release reconciliation.
 
 ## HD — Core Homepage Design execution track (D-043 refinement)
 
@@ -662,7 +662,7 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 | HD1 Hero Core entry + routing | PASS L1-L2 / canonical | Shared Homepage Design entrypoint and Hero screen route through Core; final PR head completed 44/44 workflows SUCCESS |
 | HD2 Hero adapter migration | PARTIAL / canonical compatibility | Law 01 = WordPress managed Hero; Rèm 01 = WordPress native Hero; Industrial 01 = explicit bounded legacy Theme-setting compatibility adapter pending future WordPress-owned content migration |
 | HD3 Pilot verification | NON-BLOCKING MIXED ADOPTION | Law 01 is released on `lstamduchn.vn`; Industrial 01 is released on `minhnguyen.vn`; Rèm 01 remains `BLOCKED_EXTERNAL_ACCESS` and is deferred to manual/later adoption under D-044. Pilot rollout state does not gate Theme Core completion. |
-| HD4 Runtime/browser/a11y | LAW + INDUSTRIAL PRODUCTION L4 PASS / LAW ADMIN VISUAL PASS | Fresh mobile production Lighthouse PASS on Law 01 and Industrial 01: Accessibility 100 / Best Practices 100. Authenticated Law 01 Homepage Design desktop visual coverage is PASS for the screenshot-observable template/variant, Hero entrypoint, sections 1→8 and visible controls. Click/save, keyboard-only, live axe, mobile/tablet wp-admin and provider L5 remain unclaimed. Rèm 01 fresh L3/L4 remains externally blocked; 02/10 checks hit upstream 5xx and OneShield challenge behavior instead of the WordPress site. |
+| HD4 Runtime/browser/a11y | LAW + INDUSTRIAL PRODUCTION L4 PASS / LAW ADMIN REPO L4 PASS | Fresh production Lighthouse remains PASS on Law 01 and Industrial 01. PR #365 adds authenticated repository-native Law 01 admin/browser evidence across desktop/tablet/mobile widths, including template save, Hero route, keyboard focus, Homepage Map parity, Axe and console/page-error checks. Rèm 01 fresh L3/L4 remains externally blocked and deferred under D-044; provider L5 remains separate. |
 | HD5 Canonical merge/release | CORE PATH NON-BLOCKING BY PILOT | Industrial 01 and Law 01 production publications remain PASS with rollback backups. Rèm 01 publication/deployment stays pilot-local and deferred while access is blocked; it does not hold the Core completion path open. |
 
 **D-043 Template Extension Contract closure — 02/10/2026**
@@ -679,4 +679,4 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 | C7 Three-pilot regression | PASS L1-L2 / canonical | Law/Rèm/Industrial manifest-path regression retained |
 | C8 Synthetic fourth-template proof | PASS L1-L2 / canonical | Test-only fourth template participates without a fixture-specific Core branch |
 
-**Exact next:** run the Theme completion fast path. Preserve D-043 C0→C8 and the canonical authenticated Law/Team visual PASS states. Do not block completion on Rèm 01 or any other pilot that cannot currently be updated; record it as deferred manual/later adoption under D-044. Close only remaining Theme-owned runtime/browser/release gaps that are independently executable on repository-native or healthy-reference evidence. Optional provider L5 and external distribution/service dependencies remain separate. Any later pilot deployment still requires fresh preflight, rollback and post-update verification.
+**Exact next:** preserve D-043 C0→C8 plus PR #365 authenticated repository-native TPL4 and Law 01 HB5/HD4 L3-L4 PASS. Rèm 01 and Curtain 01 authenticated-admin parity remain pilot-local/unclaimed and do not block Core completion under D-044. The next safe work is Theme-owned completion/release reconciliation only; do not open provider/distribution implementation without its external public/versioned contract.
