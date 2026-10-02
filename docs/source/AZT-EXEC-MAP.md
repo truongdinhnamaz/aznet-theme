@@ -661,8 +661,8 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 | HD0 Core/Template boundary | PASS / canonical | PR #339 merged; Core Homepage Design shell has no template-id branching and template manifests declare Hero adapters |
 | HD1 Hero Core entry + routing | PASS L1-L2 / canonical | Shared Homepage Design entrypoint and Hero screen route through Core; final PR head completed 44/44 workflows SUCCESS |
 | HD2 Hero adapter migration | PARTIAL / canonical compatibility | Law 01 = WordPress managed Hero; Rèm 01 = WordPress native Hero; Industrial 01 = explicit bounded legacy Theme-setting compatibility adapter pending future WordPress-owned content migration |
-| HD3 Pilot draft verification | PARTIAL | `lstamduchn.vn` and `minhnguyen.vn` drafts retain the Core Hero slice and fresh preview URLs; `remquocanh.vn` remains blocked by WPVibe HTTP 503 |
-| HD4 Runtime/browser/a11y | UNKNOWN | Authenticated per-pilot wp-admin interaction evidence is still required; no L3/L4 pilot PASS is inferred from repository CI or draft writes |
-| HD5 Canonical merge/release | MERGE PASS / RELEASE LOCKED | PR #339 merged to `main@f759489180b9f00bca3e47f090a1c3ce69f184bb`; release publication and production deployment remain separate gates |
+| HD3 Pilot draft verification | PARTIAL / fresh | `lstamduchn.vn` and `minhnguyen.vn` drafts remain available and fresh preview URLs were regenerated; `remquocanh.vn` remains blocked by WPVibe HTTP 503 |
+| HD4 Runtime/browser/a11y | PUBLIC DRAFT L4 PARTIAL | Fresh mobile draft Lighthouse PASS on Law 01 and Industrial 01: Accessibility 100 / Best Practices 100. Authenticated per-pilot wp-admin interaction remains UNKNOWN; no admin L3/L4 PASS is inferred. |
+| HD5 Canonical merge/release | MERGE PASS / RELEASE LOCKED | PR #339 merged; PR #340 source closure merged to `main@24e0dfd5825f7fc5b6b4f65ab41f77d54109bd69`. Release publication and production deployment remain separate gates. |
 
-**Exact next:** obtain authenticated Core Hero backend runtime/browser evidence for Law 01 and Industrial 01, then apply/verify the same Core slice on Rèm 01 when WPVibe access recovers. Do not publish any pilot draft or deploy production from this checkpoint.
+**Exact next:** obtain authenticated Core Hero backend interaction evidence for Law 01 and Industrial 01, then apply/verify the same Core slice on Rèm 01 when WPVibe access recovers. Do not publish any pilot draft or deploy production from this checkpoint.
