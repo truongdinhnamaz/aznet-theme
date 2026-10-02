@@ -665,4 +665,18 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 | HD4 Runtime/browser/a11y | LAW + INDUSTRIAL PRODUCTION L4 PASS / ADMIN UNKNOWN | Fresh mobile production Lighthouse PASS on Law 01 and Industrial 01: Accessibility 100 / Best Practices 100, with successful public production rendering after publish. Authenticated per-pilot wp-admin interaction remains UNKNOWN. Rèm 01 fresh L3/L4 cannot proceed while WPVibe remote REST access returns 503. |
 | HD5 Canonical merge/release | LAW + INDUSTRIAL RELEASE PASS / RÈM LOCKED | Industrial 01 and Law 01 production publications are complete with rollback backups. Rèm 01 publication/deployment remains separately locked while external access is blocked. |
 
-**Exact next:** do not hold healthy pilots behind Rèm 01. Continue any remaining Theme-owned work on released Law 01 and Industrial 01 as independently gated slices; for Rèm 01, resume from the current checkpoint only after WPVibe access recovers. Authenticated Core Hero backend interaction evidence remains UNKNOWN until an authenticated admin browser session is available.
+**D-043 Template Extension Contract closure — 02/10/2026**
+
+| Slice | State | Exact boundary |
+| --- | --- | --- |
+| C0 Registry/Manifest | PASS L1-L2 / canonical | Versioned strict manifest registry retained |
+| C1 Settings/Design | PASS L1-L2 / canonical | Presentation ids/labels project from registered manifests |
+| C2 Template Library | PASS L1-L2 / canonical | Generic catalog consumes manifest metadata |
+| C3 Homepage Composition | PASS L1-L2 / canonical migration checkpoint | Activation is registry-driven; retained pilot composition regressions pass |
+| C4 Authoring | PASS L1-L2 / canonical | Law/Rèm authoring order is manifest-owned; generic console consumes descriptors |
+| C5 Assets | PASS L1-L2 / canonical | Active Homepage assets enqueue from manifest descriptors |
+| C6 Provisioning bridge | PASS L1-L2 / canonical | Optional template recipe resolves to existing Core blueprint; absent recipe fails soft |
+| C7 Three-pilot regression | PASS L1-L2 / canonical | Law/Rèm/Industrial manifest-path regression retained |
+| C8 Synthetic fourth-template proof | PASS L1-L2 / canonical | Test-only fourth template participates without a fixture-specific Core branch |
+
+**Exact next:** D-043 C0→C8 repository implementation is closed. Preserve these PASS states. Remaining work is only on independently open gates already recorded elsewhere: authenticated Homepage Design wp-admin interaction remains UNKNOWN; Rèm 01 remains `BLOCKED_EXTERNAL_ACCESS`; any future production/release or external-provider work requires its own gate and fresh evidence.
