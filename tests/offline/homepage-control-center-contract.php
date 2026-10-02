@@ -9,7 +9,7 @@ $bootstrap = file_get_contents($root . '/inc/admin/bootstrap.php');
 $css = file_get_contents($root . '/assets/css/admin/control-center.css');
 $settingsSource = file_get_contents($root . '/inc/theme/settings.php');
 
-foreach (['render_homepage_settings', 'homepage_slot_statuses', 'READY', 'DRAFT', 'EMPTY', 'UNMAPPED', 'INVALID', 'PROVIDER_UNAVAILABLE', 'law-01', 'homepage_source_descriptor', 'homepage_source_key', 'homepage_source_value', 'homepage_hero_variant', 'get_pages(', 'get_categories(', 'render_homepage_category_visibility_control', 'Chọn chuyên mục hiển thị', 'homepage_law01_knowledge_terms'] as $required) {
+foreach (['render_homepage_settings', 'homepage_slot_statuses', 'READY', 'DRAFT', 'EMPTY', 'UNMAPPED', 'INVALID', 'PROVIDER_UNAVAILABLE', 'law-01', 'homepage_source_descriptor', 'homepage_source_key', 'homepage_source_value', 'homepage_hero_variant', 'get_pages(', 'get_categories(', 'render_homepage_category_visibility_control', 'Chọn chuyên mục hiển thị', 'homepage_effective_source_key( $preset, $slot )'] as $required) {
     assert(str_contains($source, $required), "Missing Homepage admin contract: {$required}");
 }
 
