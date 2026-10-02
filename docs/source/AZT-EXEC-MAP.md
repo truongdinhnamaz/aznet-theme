@@ -1,13 +1,13 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.87
+**Version:** v0.88
 **Status:** Working Execution Map / derived  
-**Date:** 27/09/2026
+**Date:** 02/10/2026
 
 This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownership, domain semantics, public contracts or the release constitution by itself.
 
-> **Canonical-main checkpoint:** exact current canonical `main` is `9794080339dedd3950aa390a87107088e8df204c`, Theme metadata `1.3.54`. Owner-approved PR #281 and #283 are integrated. PR #283 head `a7470bba...` and merged main share exact tree `374f795a...`; fresh exact-main Curtain About authoring L1/L2 verification PASS with 0 failures.
+> **Canonical-main checkpoint:** exact current canonical `main` is `297ec533e349f8d41ed2526480f7e7c909bcc75d`. D-043 C0→C8 remains closed. Evidence-only PR #361 closes authenticated Team admin visual coverage 7/7; evidence-only PR #362 closes authenticated Law 01 Homepage Design desktop visual coverage for the screenshot-observable surface. No production code changed in those closures.
 
 > **Rèm 01 production checkpoint:** `remquocanh.vn` runs AZnet Theme `1.3.31` with owner-approved Process Rail and Project Showcase. WordPress owns Process Page #997 and Project Post #999 / Category #80; Theme owns only typed references, composition and presentation. Fresh production Lighthouse is Accessibility 100 / Best Practices 100 on mobile and desktop after corrective reconciliation of Curtain 01 CSS/JS to canonical main. Independent external pixel-level L4, dedicated Vietnamese font loaded-state proof and provider L5 remain separate/UNKNOWN.
 
@@ -662,7 +662,7 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 | HD1 Hero Core entry + routing | PASS L1-L2 / canonical | Shared Homepage Design entrypoint and Hero screen route through Core; final PR head completed 44/44 workflows SUCCESS |
 | HD2 Hero adapter migration | PARTIAL / canonical compatibility | Law 01 = WordPress managed Hero; Rèm 01 = WordPress native Hero; Industrial 01 = explicit bounded legacy Theme-setting compatibility adapter pending future WordPress-owned content migration |
 | HD3 Pilot verification | PARTIAL / mixed release state | Law 01 is released on `lstamduchn.vn`; Industrial 01 is released on `minhnguyen.vn`; Rèm 01 is `BLOCKED_EXTERNAL_ACCESS` with repeated WPVibe HTTP 503 and captured Cloudflare request evidence |
-| HD4 Runtime/browser/a11y | LAW + INDUSTRIAL PRODUCTION L4 PASS / ADMIN UNKNOWN | Fresh mobile production Lighthouse PASS on Law 01 and Industrial 01: Accessibility 100 / Best Practices 100, with successful public production rendering after publish. Authenticated per-pilot wp-admin interaction remains UNKNOWN. Rèm 01 fresh L3/L4 cannot proceed while WPVibe remote REST access returns 503. |
+| HD4 Runtime/browser/a11y | LAW + INDUSTRIAL PRODUCTION L4 PASS / LAW ADMIN VISUAL PASS | Fresh mobile production Lighthouse PASS on Law 01 and Industrial 01: Accessibility 100 / Best Practices 100. Authenticated Law 01 Homepage Design desktop visual coverage is PASS for the screenshot-observable template/variant, Hero entrypoint, sections 1→8 and visible controls. Click/save, keyboard-only, live axe, mobile/tablet wp-admin and provider L5 remain unclaimed. Rèm 01 fresh L3/L4 remains externally blocked; 02/10 checks hit upstream 5xx and OneShield challenge behavior instead of the WordPress site. |
 | HD5 Canonical merge/release | LAW + INDUSTRIAL RELEASE PASS / RÈM LOCKED | Industrial 01 and Law 01 production publications are complete with rollback backups. Rèm 01 publication/deployment remains separately locked while external access is blocked. |
 
 **D-043 Template Extension Contract closure — 02/10/2026**
@@ -679,4 +679,4 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 | C7 Three-pilot regression | PASS L1-L2 / canonical | Law/Rèm/Industrial manifest-path regression retained |
 | C8 Synthetic fourth-template proof | PASS L1-L2 / canonical | Test-only fourth template participates without a fixture-specific Core branch |
 
-**Exact next:** D-043 C0→C8 repository implementation is closed. Preserve these PASS states. Remaining work is only on independently open gates already recorded elsewhere: authenticated Homepage Design wp-admin interaction remains UNKNOWN; Rèm 01 remains `BLOCKED_EXTERNAL_ACCESS`; any future production/release or external-provider work requires its own gate and fresh evidence.
+**Exact next:** D-043 C0→C8 repository implementation is closed. Preserve these PASS states and the canonical authenticated Law 01 admin visual checkpoints. There is no new Theme implementation slice opened by the evidence closure. Rèm 01 remains `BLOCKED_EXTERNAL_ACCESS` and should be retried only after access recovery; click/save, keyboard-only, live axe, mobile/tablet wp-admin and provider L5 remain independent future gates. Any production/release or external-provider work requires its own fresh gate/evidence.
