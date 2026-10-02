@@ -152,6 +152,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-provisioning-c
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-page-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-member-detail-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-authoring-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-manager-completeness-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-parent-image-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-immediate-publish-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-directory-contract.php

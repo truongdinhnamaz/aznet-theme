@@ -9,6 +9,28 @@ function team_directory_parent(): ?\WP_Post {
 }
 
 /** @return array<int,\WP_Post> */
+/** @return array<int,\WP_Post> */
+function team_directory_admin_members(): array {
+    $parent = team_directory_parent();
+    if ( ! $parent instanceof \WP_Post ) { return []; }
+
+    $posts = get_posts(
+        [
+            'post_type'      => 'page',
+            'post_status'    => [ 'publish', 'draft', 'pending', 'private', 'future' ],
+            'post_parent'    => (int) $parent->ID,
+            'orderby'        => 'menu_order title',
+            'order'          => 'ASC',
+            'posts_per_page' => 100,
+            'no_found_rows'  => true,
+        ]
+    );
+
+    return is_array( $posts )
+        ? array_values( array_filter( $posts, static fn( $post ): bool => $post instanceof \WP_Post ) )
+        : [];
+}
+
 function team_directory_members( int $limit = 0 ): array {
     $parent = team_directory_parent();
     if ( ! $parent instanceof \WP_Post ) { return []; }

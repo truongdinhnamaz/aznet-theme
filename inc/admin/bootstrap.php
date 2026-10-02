@@ -80,6 +80,7 @@ if ( is_admin() ) {
     add_action( 'admin_post_aznet_theme_quick_edit_homepage_source', __NAMESPACE__ . '\\handle_homepage_quick_edit_source' );
     add_action( 'admin_post_aznet_theme_save_curtain_about_presentation', __NAMESPACE__ . '\\handle_curtain_about_presentation_save' );
     add_action( 'admin_post_aznet_theme_create_team_member', __NAMESPACE__ . '\\handle_homepage_team_member_create' );
+    add_action( 'admin_post_aznet_theme_update_team_member', __NAMESPACE__ . '\\handle_homepage_team_member_update' );
     add_action( 'admin_post_aznet_theme_duplicate_homepage_source', __NAMESPACE__ . '\\handle_homepage_duplicate_source' );
     add_action( 'admin_post_aznet_theme_reset_settings', __NAMESPACE__ . '\\handle_reset_settings' );
     add_action( 'admin_post_aznet_theme_export_settings', __NAMESPACE__ . '\\handle_export_settings' );

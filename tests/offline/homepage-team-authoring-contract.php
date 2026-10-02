@@ -9,12 +9,15 @@ $js = file_get_contents($root . '/assets/js/admin/homepage-authoring.js');
 
 foreach ([
     'function render_homepage_team_authoring',
-    "team_directory_members( 4 )",
+    "team_directory_admin_members()",
     "team_directory_public_members()",
     'Thêm nhân sự',
     'Chưa có tên',
     'Xem tất cả trên website',
-    'render_homepage_quick_edit_form( \'law-01\', \'team\', (int) $member->ID, __( \'Sửa\'',
+    'render_homepage_team_member_editor( $member )',
+    'Tiểu sử / giới thiệu',
+    'Thứ tự hiển thị',
+    'Chỉnh nâng cao trong WordPress',
 ] as $needle) {
     if (! str_contains((string) $homepage, $needle)) {
         fwrite(STDERR, "FAIL: Team admin missing {$needle}\n");
@@ -25,6 +28,8 @@ foreach ([
 foreach ([
     'function homepage_team_member_insert_data',
     'function handle_homepage_team_member_create',
+    'function handle_homepage_team_member_update',
+    'function homepage_team_member_update_data',
     "'post_status'  => 'publish'",
     "'post_parent'",
     'team_directory_next_menu_order()',
@@ -45,6 +50,10 @@ foreach (['aznet-theme-homepage-media-select', 'wp.media', 'homepage_featured_im
 
 if (! str_contains((string) $bootstrap, "admin_post_aznet_theme_create_team_member")) {
     fwrite(STDERR, "FAIL: Team create action not registered\n");
+    exit(1);
+}
+if (! str_contains((string) $bootstrap, "admin_post_aznet_theme_update_team_member")) {
+    fwrite(STDERR, "FAIL: Team update action not registered\n");
     exit(1);
 }
 
