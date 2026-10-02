@@ -3,6 +3,7 @@ namespace AZnet\Theme\Admin;
 
 use function AZnet\Theme\settings;
 use function AZnet\Theme\settings_defaults;
+use function AZnet\Theme\visual_preset_choices;
 use function AZnet\Theme\Integrations\WooCommerce\available as woo_available;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
@@ -158,7 +159,7 @@ function render_quick_setup_form(): void {
     wp_nonce_field( 'aznet_theme_save_settings' );
     render_hidden_settings( [ 'visual_preset', 'header_preset' ] );
     echo '<h2>' . esc_html__( 'Quick Setup', 'aznet-theme' ) . '</h2>';
-    field_select( 'visual_preset', __( 'Phong cách', 'aznet-theme' ), [ 'default' => 'Default', 'editorial' => 'Editorial', 'commerce' => 'Commerce', 'curtain-01' => 'Rèm 01', 'industrial-01' => 'Industrial 01' ], (string) $s['visual_preset'] );
+    field_select( 'visual_preset', __( 'Phong cách', 'aznet-theme' ), visual_preset_choices(), (string) $s['visual_preset'] );
     field_select( 'header_preset', __( 'Kiểu Header', 'aznet-theme' ), [ 'standard' => 'Standard', 'compact' => 'Compact', 'commerce' => 'Commerce', 'overlay' => 'Overlay' ], (string) $s['header_preset'] );
     submit_button( __( 'Lưu Quick Setup', 'aznet-theme' ), 'primary', 'submit', false );
     echo '</form>';

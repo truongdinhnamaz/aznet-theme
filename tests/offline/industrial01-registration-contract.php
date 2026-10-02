@@ -69,7 +69,8 @@ foreach (['get_option(', 'get_post_meta(', 'update_option(', 'update_post_meta('
 }
 
 $controlCenterSource = file_get_contents($root . '/inc/admin/control-center.php');
-assert(is_string($controlCenterSource) && str_contains($controlCenterSource, "'industrial-01' => 'Industrial 01'"), 'Industrial 01 visual preset must be selectable in Design and Quick Setup.');
+assert('Industrial 01' === (AZnet\Theme\visual_preset_choices()['industrial-01'] ?? null), 'Industrial 01 visual preset must be projected from Template Registry metadata.');
+assert(is_string($controlCenterSource) && str_contains($controlCenterSource, 'visual_preset_choices()'), 'Design and Quick Setup must consume manifest-driven visual choices.');
 
 $adminSource = file_get_contents($root . '/inc/admin/homepage.php');
 assert(is_string($adminSource) && str_contains($adminSource, "'template_id'   => 'industrial-01'"), 'Industrial 01 must be selectable in the Theme Template Library.');
