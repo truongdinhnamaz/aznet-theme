@@ -179,3 +179,38 @@ function homepage_latest_posts( array $category_ids, int $limit, array $exclude_
 
     return is_array( $posts ) ? $posts : [];
 }
+
+/**
+ * Resolve newest published Posts that contain meaningful editorial content.
+ *
+ * Empty placeholder Posts are skipped while preserving the native date-desc
+ * order from WordPress. This is a presentation projection only; WordPress
+ * remains the owner of Post and Category data.
+ *
+ * @param array<int, mixed> $category_ids Mapped Category IDs.
+ * @param int               $limit        Maximum number of meaningful Posts.
+ * @param array<int, mixed> $exclude_ids  Optional request-local exclusions.
+ * @return array<int, \WP_Post>
+ */
+function homepage_latest_content_posts( array $category_ids, int $limit, array $exclude_ids = [] ): array {
+    $limit = max( 1, min( 20, $limit ) );
+    $posts = homepage_latest_posts( $category_ids, 20, $exclude_ids );
+    $meaningful = [];
+
+    foreach ( $posts as $post ) {
+        if ( ! $post instanceof \WP_Post ) {
+            continue;
+        }
+
+        if ( '' === trim( (string) $post->post_content ) && '' === trim( (string) $post->post_excerpt ) ) {
+            continue;
+        }
+
+        $meaningful[] = $post;
+        if ( count( $meaningful ) >= $limit ) {
+            break;
+        }
+    }
+
+    return $meaningful;
+}
