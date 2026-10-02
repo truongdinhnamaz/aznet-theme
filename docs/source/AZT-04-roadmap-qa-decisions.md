@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v0.99
+**Version:** v1.00
 **Status:** Working Source  
-**Date:** 28/09/2026
+**Date:** 02/10/2026
 
 ## 1. Purpose
 
@@ -542,8 +542,15 @@ This remains Theme presentation only. RootProfile authoritative Team remains BLO
 
 ## 14. Exact next
 
-**NEXT — preserve the current D-043 Homepage Design checkpoint on `main@7824276e99f8b53785e1fa0938939b8923a837e7`. Law 01 (`lstamduchn.vn`) and Industrial 01 (`minhnguyen.vn`) are independently production-released with fresh public render plus mobile Accessibility/Best Practices 100/100 and rollback backups. Rèm 01 (`remquocanh.vn`) is independently `BLOCKED_EXTERNAL_ACCESS` by repeated WPVibe HTTP 503 and must not delay healthy pilots. Continue remaining Theme-owned work on healthy pilots as separately gated slices; resume Rèm 01 only after access recovers. Authenticated wp-admin interaction remains UNKNOWN until an authenticated admin browser session is available. RootProfile Team remains externally blocked at issue #112.**
+**NEXT — preserve the current D-043 Homepage Design checkpoint and the 02/10/2026 authenticated Law 01 admin visual evidence now canonical on `main@297ec533e349f8d41ed2526480f7e7c909bcc75d`. Law 01 (`lstamduchn.vn`) and Industrial 01 (`minhnguyen.vn`) remain independently production-released. Authenticated Law 01 Homepage Design desktop visual coverage is PASS for the screenshot-observable surface (template/variant, Hero entrypoint, sections 1→8 and visible authoring/view controls); click/save behavior, keyboard-only traversal, live axe, mobile/tablet wp-admin and provider L5 remain unclaimed. Rèm 01 (`remquocanh.vn`) remains independently `BLOCKED_EXTERNAL_ACCESS`: fresh 02/10 checks still hit an upstream 5xx connection failure and a OneShield security challenge instead of the WordPress site, so do not classify this as a Theme or credential defect. Resume Rèm 01 only after access recovers. RootProfile Team remains externally blocked at issue #112. No new Theme implementation slice is opened by these evidence closures.**
 
+
+
+### Authenticated Homepage Design admin visual closure — 02/10/2026
+
+Owner-supplied authenticated Law 01 wp-admin screenshots closed the previously open screenshot-observable Homepage Design admin visual gate. Evidence PR #362 merged to canonical `main@297ec533e349f8d41ed2526480f7e7c909bcc75d` after `regression-package`, `x3-quality` and `x4-quality` all passed. The evidence covers the selected Law 01 template, Burgundy + Gold variant, shared Hero design entrypoint, effective Homepage sections 1→8, visible bounded authoring/view controls and 7/7 Team summary without visible overlap/clipping in the captured desktop viewport.
+
+This is not a blanket interaction/a11y claim: click/save behavior, keyboard-only traversal, live axe, mobile/tablet wp-admin responsiveness and provider L5 remain separately unclaimed. Team management authenticated visual evidence was likewise closed by PR #361 before this Homepage Design checkpoint. No Theme production code changed in either evidence-only closure.
 
 ### Canonical 1.3.10 merge and Homepage Hero editing UX candidate — 19/09/2026
 
