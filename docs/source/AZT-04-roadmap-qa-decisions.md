@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.00
+**Version:** v1.01
 **Status:** Working Source  
 **Date:** 02/10/2026
 
@@ -353,6 +353,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-035** | **AZnet Theme uses a full-bleed outer presentation shell by default: page/front-page/section backgrounds may span the viewport while readable content is constrained only by explicit inner containers. A first Hero must sit flush directly below the Header with no Theme-owned top gap, outer gutter, boxed shell, rounded outer edge or shadow unless a preset specification explicitly opts into one.** | **Accepted — owner approved 22/09/2026** |
 | **D-036** | **On desktop, AZnet Theme must not artificially wrap a heading onto an additional line when the heading can fit within its actual available container width. Presentation may not use narrow decorative width caps to force wrapping, and must not use `white-space: nowrap` to create overflow. Natural wrapping remains correct when the real container is insufficient; tablet/mobile may wrap responsively for readability.** | **Accepted — owner approved 22/09/2026** |
 | **D-037** | **Self-hosted Theme fonts used for Vietnamese content must explicitly prove Vietnamese glyph coverage for every shipped production weight. The canonical typography family must be consumed through Theme tokens/presets; presentation presets may not silently replace it with unrelated serif/system stacks. A font fix is not production PASS until the Vietnamese face is verified at runtime/browser level; repository PASS and live-site publish remain separate gates.** | **Accepted — owner approved 22/09/2026** |
+| **D-044** | **Pilot rollout is not a Core completion gate. Once Theme-owned repository/runtime/release gates are PASS, any pilot that cannot be updated because of external access, hosting, security middleware, credentials, provider availability or deployment-path constraints is deferred to manual/later adoption and recorded as a pilot-local blocker. Do not hold AZnet Theme completion open merely to force every pilot onto the latest build. Preserve rollback and fresh verification when a deferred pilot is updated later.** | **Accepted — owner approved 02/10/2026** |
 
 ## 10A. v1.3 Client Delivery System
 
@@ -542,9 +543,23 @@ This remains Theme presentation only. RootProfile authoritative Team remains BLO
 
 ## 14. Exact next
 
-**NEXT — preserve the current D-043 Homepage Design checkpoint and the 02/10/2026 authenticated Law 01 admin visual evidence now canonical on `main@297ec533e349f8d41ed2526480f7e7c909bcc75d`. Law 01 (`lstamduchn.vn`) and Industrial 01 (`minhnguyen.vn`) remain independently production-released. Authenticated Law 01 Homepage Design desktop visual coverage is PASS for the screenshot-observable surface (template/variant, Hero entrypoint, sections 1→8 and visible authoring/view controls); click/save behavior, keyboard-only traversal, live axe, mobile/tablet wp-admin and provider L5 remain unclaimed. Rèm 01 (`remquocanh.vn`) remains independently `BLOCKED_EXTERNAL_ACCESS`: fresh 02/10 checks still hit an upstream 5xx connection failure and a OneShield security challenge instead of the WordPress site, so do not classify this as a Theme or credential defect. Resume Rèm 01 only after access recovers. RootProfile Team remains externally blocked at issue #112. No new Theme implementation slice is opened by these evidence closures.**
+**NEXT — execute the AZnet Theme completion fast path from current canonical `main@cb9bad43516a0d5691e544aecd28facfbaae36bf`: preserve all closed D-043 and authenticated Law/Team visual checkpoints; do not wait for inaccessible pilots. Under D-044, pilot rollout is non-blocking for Core completion and any pilot that cannot be updated safely is deferred to manual/later adoption with its blocker recorded. Rèm 01 (`remquocanh.vn`) therefore remains a pilot-local `BLOCKED_EXTERNAL_ACCESS`, not a Theme completion blocker. Prioritize only remaining Theme-owned technical/runtime/browser/release gates that can be closed without external-provider invention or ownership violations. Optional provider L5 and external service availability remain separate certification tracks.**
 
 
+
+
+### D-044 — Pilot rollout non-blocking completion policy — ACCEPTED — 02/10/2026
+
+The product owner explicitly prioritized finishing AZnet Theme quickly over waiting for every pilot to accept the latest Theme build. If a pilot cannot be updated safely because of external access, hosting/security middleware, credentials, provider availability or another pilot-local deployment constraint, that pilot may be updated manually later.
+
+Accepted execution effect:
+- Core/Theme completion is judged by Theme-owned source, implementation, runtime/browser and release gates, not by simultaneous deployment to every pilot.
+- A blocked pilot remains recorded with its exact blocker and last verified state; it does not invalidate PASS already earned elsewhere.
+- No workaround may bypass ownership, public contracts, rollback requirements or safe deployment gates merely to make a pilot current.
+- Deferred pilot adoption is performed later with fresh preflight, rollback and post-update verification; historical PASS is not silently projected onto the later deployment.
+- Optional provider L5/external services remain separate certification tracks and cannot become accidental Core blockers.
+
+This decision changes roadmap sequencing only. It does not authorize production mutation on any site and does not weaken QA claims for a site that is actually updated.
 
 ### Authenticated Homepage Design admin visual closure — 02/10/2026
 
