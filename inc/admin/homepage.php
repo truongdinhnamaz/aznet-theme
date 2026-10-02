@@ -409,13 +409,21 @@ function render_homepage_hero_library_screen(): void {
 
 /** Return authoring sections in frontend reading order for one preset. */
 function homepage_authoring_sections( string $preset ): array {
-    if ( 'law-01' === $preset ) {
-        return [ 'hero', 'services', 'about', 'team', 'knowledge', 'case_analysis', 'legal_news', 'process', 'faq', 'contact' ];
+    $manifest = \AZnet\Theme\template_manifest_for_homepage_preset( $preset );
+    $sections = is_array( $manifest ) ? ( $manifest['homepage']['authoring']['sections'] ?? [] ) : [];
+    if ( ! is_array( $sections ) ) {
+        return [];
     }
-    if ( 'curtain-01' === $preset ) {
-        return [ 'hero', 'proof', 'about', 'process', 'projects', 'knowledge', 'contact' ];
+
+    $normalized = [];
+    foreach ( $sections as $section ) {
+        $section = is_string( $section ) ? sanitize_key( $section ) : '';
+        if ( '' === $section || in_array( $section, $normalized, true ) ) {
+            continue;
+        }
+        $normalized[] = $section;
     }
-    return [];
+    return $normalized;
 }
 
 /** Human label for one Homepage slot. */
@@ -755,8 +763,10 @@ function render_homepage_map( string $preset ): void {
 
 /** Render preset-aware Homepage section cards. */
 function render_homepage_authoring_console( string $preset ): void {
-    if ( ! in_array( $preset, [ 'law-01', 'curtain-01' ], true ) ) { return; }
-    $preset_label = 'law-01' === $preset ? __( 'Luật 01', 'aznet-theme' ) : __( 'Rèm 01', 'aznet-theme' );
+    $manifest = \AZnet\Theme\template_manifest_for_homepage_preset( $preset );
+    $sections = homepage_authoring_sections( $preset );
+    if ( ! is_array( $manifest ) || [] === $sections ) { return; }
+    $preset_label = trim( (string) ( $manifest['name'] ?? $preset ) );
     echo '<div class="aznet-theme-panel aznet-theme-homepage-authoring">';
     echo '<h2>' . esc_html( sprintf( __( 'Mẫu đang chỉnh: %s', 'aznet-theme' ), $preset_label ) ) . '</h2>';
     echo '<p class="description">' . esc_html__( 'Các section được xếp theo thứ tự frontend. Hero mở khu thiết kế riêng; các section còn lại chỉnh nội dung nguồn đã ánh xạ hoặc đổi nguồn khi cần.', 'aznet-theme' ) . '</p>';
@@ -770,7 +780,10 @@ function render_homepage_authoring_console( string $preset ): void {
         $shared_uses = homepage_shared_source_uses( $preset, $slot );
         if ( [] !== $shared_uses ) {
             $other_preset = (string) ( $shared_uses[0]['preset'] ?? '' );
-            $other_label = 'law-01' === $other_preset ? __( 'Luật 01', 'aznet-theme' ) : __( 'Rèm 01', 'aznet-theme' );
+            $other_manifest = \AZnet\Theme\template_manifest_for_homepage_preset( $other_preset );
+            $other_label = is_array( $other_manifest )
+                ? trim( (string) ( $other_manifest['name'] ?? $other_preset ) )
+                : $other_preset;
             echo '<div class="notice notice-warning inline aznet-theme-homepage-shared-source"><p>' . esc_html( sprintf( __( 'Nguồn này hiện cũng được mẫu %s sử dụng. Sửa nội dung nguồn sẽ ảnh hưởng cả hai mẫu.', 'aznet-theme' ), $other_label ) ) . '</p></div>';
         }
         echo '<div class="aznet-theme-homepage-section-card__actions">';

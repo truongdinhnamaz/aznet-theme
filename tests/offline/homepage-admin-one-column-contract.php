@@ -20,8 +20,13 @@ if (preg_match('/\\.aznet-theme-homepage-section-grid\\s*\\{[^}]*grid-template-c
     exit(1);
 }
 
-if (! str_contains($homepage, "return [ 'hero', 'services', 'about', 'team'")) {
-    fwrite(STDERR, "FAIL: Law 01 authoring order no longer starts Hero then Services.\n");
+$lawManifest = file_get_contents($root . '/inc/theme/templates/law-01/manifest.php');
+if (! is_string($lawManifest) || ! str_contains($lawManifest, "'sections' => [ 'hero', 'services', 'about', 'team'")) {
+    fwrite(STDERR, "FAIL: Law 01 manifest authoring order no longer starts Hero then Services.\n");
+    exit(1);
+}
+if (! str_contains($homepage, "['homepage']['authoring']['sections']")) {
+    fwrite(STDERR, "FAIL: Homepage admin does not consume manifest authoring order.\n");
     exit(1);
 }
 

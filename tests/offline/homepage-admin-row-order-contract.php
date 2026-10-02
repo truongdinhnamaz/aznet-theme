@@ -4,6 +4,7 @@ declare(strict_types=1);
 $root = dirname(__DIR__, 2);
 $css = file_get_contents($root . '/assets/css/admin/control-center.css');
 $homepage = file_get_contents($root . '/inc/admin/homepage.php');
+$lawManifest = file_get_contents($root . '/inc/theme/templates/law-01/manifest.php');
 
 if (false === $css || false === $homepage) {
     fwrite(STDERR, "FAIL: unable to read Homepage admin sources\n");
@@ -15,8 +16,12 @@ if (! preg_match('/\\.aznet-theme-control-center\\s+\\.aznet-theme-homepage-sect
     exit(1);
 }
 
-if (! str_contains($homepage, "return [ 'hero', 'services', 'about', 'team'")) {
-    fwrite(STDERR, "FAIL: Law 01 order no longer starts Hero then Services.\n");
+if (! is_string($lawManifest) || ! str_contains($lawManifest, "'sections' => [ 'hero', 'services', 'about', 'team'")) {
+    fwrite(STDERR, "FAIL: Law 01 manifest order no longer starts Hero then Services.\n");
+    exit(1);
+}
+if (! str_contains($homepage, "['homepage']['authoring']['sections']")) {
+    fwrite(STDERR, "FAIL: Homepage admin no longer consumes manifest authoring order.\n");
     exit(1);
 }
 

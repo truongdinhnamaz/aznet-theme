@@ -20,7 +20,7 @@ foreach ([
     }
 }
 
-if (! str_contains($surface, "'industrial-01' === $preset")) {
+if (! str_contains($surface, "'industrial-01' === \$preset")) {
     fwrite(STDERR, "FAIL: shared Homepage surface resolver does not route Industrial 01.\n");
     exit(1);
 }
@@ -30,7 +30,7 @@ if (! str_contains($composer, "homepage_effective_surface_map( 'industrial-01' )
     exit(1);
 }
 
-if (str_contains($composer, "foreach ( [ 'hero', 'categories', 'products' ] as $slug )")) {
+if (str_contains($composer, "foreach ( [ 'hero', 'categories', 'products' ] as \$slug )")) {
     fwrite(STDERR, "FAIL: Industrial 01 before-content order is still duplicated in Homepage Composer.\n");
     exit(1);
 }

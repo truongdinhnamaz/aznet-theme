@@ -13,6 +13,9 @@ return [
     ],
     'assets'           => [],
     'homepage'         => [
+        'authoring' => [
+            'sections' => [ 'hero', 'services', 'about', 'team', 'knowledge', 'case_analysis', 'legal_news', 'process', 'faq', 'contact' ],
+        ],
         'hero' => [
             'enabled'        => true,
             'admin_renderer' => 'render_homepage_hero_library',

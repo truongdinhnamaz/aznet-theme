@@ -86,9 +86,11 @@ foreach ([
     }
 }
 
+$curtainManifest = file_get_contents($root . '/inc/theme/templates/curtain-01/manifest.php');
 if (! str_contains($authoring, "'process'     => [ 'type' => 'page', 'key' => 'homepage_curtain01_process_page'")
-    || ! str_contains($admin, "return [ 'hero', 'proof', 'about', 'process', 'projects', 'knowledge', 'contact' ]")) {
-    fwrite(STDERR, "FAIL: Homepage authoring must expose the independent Curtain 01 process Page through the preset registry.\n");
+    || ! is_string($curtainManifest)
+    || ! str_contains($curtainManifest, "'sections' => [ 'hero', 'proof', 'about', 'process', 'projects', 'knowledge', 'contact' ]")) {
+    fwrite(STDERR, "FAIL: Homepage authoring must expose the independent Curtain 01 process Page through registry + manifest descriptors.\n");
     exit(1);
 }
 
