@@ -14,6 +14,9 @@ return [
     ],
     'assets'           => [],
     'homepage'         => [
+        'authoring' => [
+            'sections' => [ 'hero', 'proof', 'about', 'process', 'projects', 'knowledge', 'contact' ],
+        ],
         'hero' => [
             'enabled'        => true,
             'admin_renderer' => 'render_homepage_native_hero_editor',
