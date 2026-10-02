@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.91
+**Version:** v0.92
 **Status:** Working Execution Map / derived  
 **Date:** 02/10/2026
 
@@ -42,7 +42,7 @@ This map is derived from AZT-05/00/01/02/03/04. It cannot change product ownersh
 | P4-C Standalone Core independence | PASS / MERGED | PR #63/#64 merged; zero-plugin L1-L4, exact-package and exact-main PASS; optional integrations remain additive |
 | P5 Publication/Deployment | PASS | Tag `v1.1.0` + GitHub Release and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
 | X v1.2 WordPress Experience Completion | PUBLICATION + PRODUCTION DEPLOYMENT PASS | X1-X5 retained; PR #87 exact-main V1 + X6 L1-L4/L6 PASS; annotated `v1.2.0` + GitHub Release publication PASS; owner-approved production deployment run `35135759389` + fresh read-only run `35136876330` PASS; provider L5 stays separate |
-| Y v1.3 Client Delivery System | v1.3.23 TECHNICAL + PUBLICATION PASS | PR #202 promoted `1.3.23`; exact-main V1/X6 PASS at `c3d991199bb5c95dec3bac6e0ae06072c8a249f2`; publication run `35522052972` publishes exact package SHA-256 `7129b1506131c6b9e413bcba3087475fce75f52df7b71593c5f2804e90c4f005`; no production-site connector is required for package creation/verification/publication under D-033 |
+| Y v1.3 Client Delivery System | v1.3.66 TECHNICAL + PUBLICATION PASS | Canonical `1.3.66` source `03978ecab109481788e16763ac32cd6785687b1b` passed exact-main runtime/static/X6 closure; publication run `36974702046` published annotated tag/Release with exact 215-file package SHA-256 `9d821d96864172f92226c9437f9aada86c616ee39b598523c5da5929822fc091`. Pilot deployment remains separate under D-044. |
 | U Historical Control Center | REFERENCE ONLY | Do not wholesale-merge; R5 owns the accepted bounded admin outcome |
 
 Canonical repository technical baseline is exact Theme `1.3.0` at owner-approved PR #98 merge `main@afa8f4eb80d83d6c8111a9dc1bc57c13c6e24b8e`, tree `020db34ca6f360d5af12e6f15abf4c9ba51179f0`. Fresh exact-main V1 + X6 release-path verification is PASS. GitHub publication is verified `v1.3.0` through run `35211254633`; production deployment is verified `v1.3.0` through deployment run `35222200660` plus fresh independent read-only run `35223053733`.
@@ -679,4 +679,4 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 | C7 Three-pilot regression | PASS L1-L2 / canonical | Law/Rèm/Industrial manifest-path regression retained |
 | C8 Synthetic fourth-template proof | PASS L1-L2 / canonical | Test-only fourth template participates without a fixture-specific Core branch |
 
-**Exact next:** reconcile version provenance before completion. Fresh read-only Law 01 + Industrial 01 pilots report `1.3.65`; canonical GitHub still declares `1.3.57`. Under D-045, reserve pilot `1.3.65` as deployment provenance and promote canonical source to new identity `1.3.66` with RED→GREEN version-boundary coverage, then run fresh package/runtime/browser release verification. Do not publish/tag or deploy until those independent gates are explicitly approved.
+**Exact next:** preserve `v1.3.66` technical + publication PASS at exact source `03978ecab109481788e16763ac32cd6785687b1b` and public package SHA-256 `9d821d96864172f92226c9437f9aada86c616ee39b598523c5da5929822fc091`. Core release path is closed. Do not open new Theme implementation merely to update pilots. Future pilot deployment is a separate approval-gated operation; Rèm 01 remains deferred under D-044 until access is healthy.
