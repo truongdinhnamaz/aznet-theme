@@ -342,10 +342,7 @@ function render_homepage_category_visibility_control( string $preset, string $sl
     $categories_by_id = [];
     foreach ( $categories as $category ) {
         if ( ! $category instanceof \WP_Term ) { continue; }
-        $id = (int) $category->term_id;
-        if ( $category->count > 0 || in_array( $id, $current, true ) ) {
-            $categories_by_id[ $id ] = $category;
-        }
+        $categories_by_id[ (int) $category->term_id ] = $category;
     }
     $ordered_categories = [];
     foreach ( $current as $id ) {
@@ -368,7 +365,7 @@ function render_homepage_category_visibility_control( string $preset, string $sl
     render_hidden_settings( [ $key ] );
     echo '<fieldset><legend>' . esc_html__( 'Chuyên mục được phép xuất hiện ở khối Chủ đề', 'aznet-theme' ) . '</legend>';
     echo '<p class="description">' . esc_html__( 'Chỉ các chuyên mục được chọn mới xuất hiện tại khối Chủ đề trên trang chủ. Dùng mũi tên để đổi thứ tự; thứ tự này cũng là thứ tự hiển thị ngoài website. Bỏ chọn không xóa chuyên mục hoặc bài viết trong WordPress.', 'aznet-theme' ) . '</p>';
-    echo '<p class="description">' . esc_html__( 'Chỉ liệt kê chuyên mục đang có bài viết hoặc đang được chọn, để tránh làm rối danh sách quản trị.', 'aznet-theme' ) . '</p>';
+    echo '<p class="description">' . esc_html__( 'Hiển thị toàn bộ chuyên mục WordPress để có thể chọn đầy đủ, kể cả chuyên mục hiện chưa có bài viết.', 'aznet-theme' ) . '</p>';
     echo '<div class="aznet-theme-homepage-category-visibility__list" data-category-order-list>';
     foreach ( $ordered_categories as $category ) {
         if ( ! $category instanceof \WP_Term ) { continue; }
