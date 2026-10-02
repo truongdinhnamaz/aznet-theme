@@ -172,10 +172,22 @@ async function verifyHomepageHeroEditingBridge(page, viewportName) {
   const presetForm = page.locator('form.aznet-theme-panel').filter({ has: page.getByRole('heading', { name: 'Mẫu trang chủ' }) });
   const templateLibrary = presetForm.locator('[data-aznet-template-library]');
   if (await templateLibrary.count() !== 1) throw new Error('Template Library root missing');
-  if (await templateLibrary.locator('[data-aznet-template-search]').count() !== 1) throw new Error('Template Library search missing');
-  if (await templateLibrary.locator('[data-aznet-template-category]').count() !== 1) throw new Error('Template Library category filter missing');
+  const templateSearch = templateLibrary.locator('[data-aznet-template-search]');
+  const templateCategory = templateLibrary.locator('[data-aznet-template-category]');
+  if (await templateSearch.count() !== 1) throw new Error('Template Library search missing');
+  if (await templateCategory.count() !== 1) throw new Error('Template Library category filter missing');
   const lawPreset = presetForm.locator('input[name="aznet_theme_settings[homepage_preset]"][value="law-01"]');
   if (await lawPreset.count() !== 1) throw new Error('Law 01 Template Library card missing');
+
+  await templateSearch.focus();
+  if (!(await templateSearch.evaluate((node) => document.activeElement === node))) throw new Error('Template Library search is not keyboard focusable');
+  const lawCard = lawPreset.locator('..');
+  await templateSearch.fill('Luật');
+  if (!(await lawCard.isVisible())) throw new Error('Template Library search hid matching Luật 01 card');
+  await templateSearch.fill('');
+  await templateCategory.focus();
+  if (!(await templateCategory.evaluate((node) => document.activeElement === node))) throw new Error('Template Library category filter is not keyboard focusable');
+  const templateLibraryA11y = await checkLayoutAndA11y(page, viewportName + '-template-library-' + (expectWoo ? 'woo' : 'clean'));
   await lawPreset.check();
   await Promise.all([
     page.waitForURL(/updated=1/, { timeout: 20000 }),
@@ -198,7 +210,8 @@ async function verifyHomepageHeroEditingBridge(page, viewportName) {
   if (await backLink.count() !== 1) throw new Error('Hero Library back-to-Homepage action missing');
   const backHref = await backLink.getAttribute('href');
   if (!backHref || !backHref.includes('section=homepage')) throw new Error('Hero Library back link mismatch: ' + backHref);
-  return await checkLayoutAndA11y(page, viewportName + '-hero-library-' + (expectWoo ? 'woo' : 'clean'));
+  const heroLibraryA11y = await checkLayoutAndA11y(page, viewportName + '-hero-library-' + (expectWoo ? 'woo' : 'clean'));
+  return { templateLibraryA11y, heroLibraryA11y };
 }
 
 async function verifyHomepageTeamAuthoring(page, viewportName) {
@@ -340,6 +353,11 @@ try {
   for (const [viewportName, viewport] of Object.entries(viewports)) {
     const context = await browser.newContext({ viewport, storageState: authState });
     const page = await context.newPage();
+    const consoleErrors = [];
+    page.on('console', (message) => {
+      if (message.type() === 'error') consoleErrors.push(message.text());
+    });
+    page.on('pageerror', (error) => consoleErrors.push(error.message));
     try {
       await gotoCenter(page);
       if ((await page.locator('h1').first().textContent())?.trim() !== 'AZnet Theme') throw new Error('Control Center heading missing');
@@ -356,6 +374,7 @@ try {
       const homepageMap = await verifyHomepageMap(page, viewportName);
       await verifySystemHealth(page);
       const layout = await checkLayoutAndA11y(page, viewportName + '-' + (expectWoo ? 'woo' : 'clean'));
+      if (consoleErrors.length) throw new Error('unexpected console/page errors: ' + consoleErrors.join(' | '));
       results.push({ viewportName, homepageHero, homepageTeam, homepageMap, ...layout });
     } catch (error) {
       failures.push(`${viewportName}: ${error instanceof Error ? error.message : String(error)}`);
