@@ -252,6 +252,46 @@ async function verifyHomepageTeamAuthoring(page, viewportName) {
   const addDetails = team.locator('.aznet-theme-homepage-team-create');
   await addDetails.locator('summary').focus();
   if (!(await addDetails.locator('summary').evaluate((node) => document.activeElement === node))) throw new Error('Thêm nhân sự is not keyboard focusable');
+
+  if ('1440x1000' === viewportName && !expectWoo) {
+    await addDetails.locator('summary').click();
+    await addDetails.locator('input[name="team_member_name"]').fill('R5 Team Member E');
+    await addDetails.locator('input[name="team_member_role"]').fill('Vai trò E');
+    await addDetails.locator('textarea[name="team_member_biography"]').fill('Tiểu sử E từ bounded Team manager.');
+    await Promise.all([
+      page.waitForURL(/team_member_created=1/, { timeout: 20000 }),
+      addDetails.getByRole('button', { name: 'Thêm nhân sự' }).click(),
+    ]);
+
+    const refreshedTeam = page.locator('#homepage-team');
+    if (await refreshedTeam.getByText('Đã thêm và xuất bản nhân sự.', { exact: true }).count() !== 1) throw new Error('Team create success feedback missing');
+    const createdCard = refreshedTeam.locator('.aznet-theme-homepage-team-member').filter({ has: page.locator('[data-team-member-name]', { hasText: 'R5 Team Member E' }) });
+    if (await createdCard.count() !== 1) throw new Error('Created Team member missing from manager');
+    const createdStatus = ((await createdCard.locator('[data-team-member-status]').textContent()) || '').trim().toLowerCase();
+    if (!createdStatus.includes('publish')) throw new Error('Created Team member is not published: ' + createdStatus);
+
+    const createdEditor = createdCard.locator('.aznet-theme-homepage-team-member__editor');
+    await createdEditor.locator('summary').click();
+    await createdEditor.locator('input[name="team_member_name"]').fill('R5 Team Member E Updated');
+    await createdEditor.locator('input[name="team_member_role"]').fill('Vai trò E cập nhật');
+    await createdEditor.locator('textarea[name="team_member_biography"]').fill('Tiểu sử E đã cập nhật.');
+    await createdEditor.locator('input[name="team_member_menu_order"]').fill('45');
+    await Promise.all([
+      page.waitForURL(/team_member_updated=1/, { timeout: 20000 }),
+      createdEditor.getByRole('button', { name: 'Lưu nhân sự' }).click(),
+    ]);
+
+    const updatedTeam = page.locator('#homepage-team');
+    if (await updatedTeam.getByText('Đã lưu thông tin nhân sự.', { exact: true }).count() !== 1) throw new Error('Team update success feedback missing');
+    const updatedCard = updatedTeam.locator('.aznet-theme-homepage-team-member').filter({ has: page.locator('[data-team-member-name]', { hasText: 'R5 Team Member E Updated' }) });
+    if (await updatedCard.count() !== 1) throw new Error('Updated Team member missing from manager');
+    const updatedEditor = updatedCard.locator('.aznet-theme-homepage-team-member__editor');
+    await updatedEditor.locator('summary').click();
+    if ((await updatedEditor.locator('input[name="team_member_role"]').inputValue()) !== 'Vai trò E cập nhật') throw new Error('Team update role did not persist');
+    if ((await updatedEditor.locator('textarea[name="team_member_biography"]').inputValue()) !== 'Tiểu sử E đã cập nhật.') throw new Error('Team update biography did not persist');
+    if ((await updatedEditor.locator('input[name="team_member_menu_order"]').inputValue()) !== '45') throw new Error('Team update display order did not persist');
+  }
+
   return await checkLayoutAndA11y(page, viewportName + '-homepage-team-' + (expectWoo ? 'woo' : 'clean'));
 }
 async function verifyHomepageMap(page, viewportName) {
