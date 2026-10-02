@@ -540,45 +540,111 @@ function render_curtain_about_presentation_form(): void {
     echo '</form></details>';
 }
 
+/** Render one complete bounded Team member editor. */
+function render_homepage_team_member_editor( \WP_Post $member ): void {
+    $member_id = (int) $member->ID;
+    $name = trim( (string) get_the_title( $member ) );
+    $role = trim( (string) $member->post_excerpt );
+    $biography = (string) $member->post_content;
+    $image_id = (int) get_post_thumbnail_id( $member_id );
+    $edit_link = get_edit_post_link( $member_id, 'raw' );
+    $edit_link = is_string( $edit_link ) ? $edit_link : '';
+    $public_url = 'publish' === $member->post_status ? get_permalink( $member ) : '';
+    $public_url = is_string( $public_url ) ? $public_url : '';
+    $expected_slug = sanitize_title( $name );
+    $slug_mismatch = '' !== $name && '' !== (string) $member->post_name && $expected_slug !== (string) $member->post_name;
+
+    echo '<article id="homepage-team-member-' . esc_attr( (string) $member_id ) . '" class="aznet-theme-homepage-team-member">';
+    echo '<div class="aznet-theme-homepage-team-member__image">';
+    if ( $image_id > 0 ) {
+        echo wp_kses_post( wp_get_attachment_image( $image_id, 'thumbnail' ) );
+    } else {
+        echo '<span class="aznet-theme-homepage-team-member__image-empty" aria-hidden="true">—</span>';
+    }
+    echo '</div>';
+
+    echo '<div class="aznet-theme-homepage-team-member__copy">';
+    echo '<div class="aznet-theme-homepage-team-member__title-row">';
+    echo '<strong data-team-member-name>' . esc_html( '' !== $name ? $name : __( 'Chưa có tên', 'aznet-theme' ) ) . '</strong>';
+    echo '<span data-team-member-status class="aznet-theme-homepage-team-member__status aznet-theme-homepage-team-member__status--' . esc_attr( sanitize_html_class( (string) $member->post_status ) ) . '">' . esc_html( get_post_status_object( $member->post_status )?->label ?? $member->post_status ) . '</span>';
+    echo '</div>';
+    if ( '' !== $role ) {
+        echo '<p class="aznet-theme-homepage-team-member__role">' . esc_html( $role ) . '</p>';
+    }
+    echo '<p class="description">' . esc_html( sprintf( __( 'Thứ tự: %d', 'aznet-theme' ), (int) $member->menu_order ) ) . '</p>';
+    if ( $slug_mismatch ) {
+        echo '<p class="notice notice-warning inline aznet-theme-homepage-team-member__permalink-warning">' . esc_html__( 'Đường dẫn hiện tại khác tên nhân sự. Có thể đồng bộ khi lưu nếu muốn thay đổi URL.', 'aznet-theme' ) . '</p>';
+    }
+    echo '</div>';
+
+    echo '<div class="aznet-theme-homepage-team-member__actions">';
+    if ( '' !== $public_url ) {
+        echo '<a class="button" href="' . esc_url( $public_url ) . '" target="_blank" rel="noopener">' . esc_html__( 'Xem hồ sơ', 'aznet-theme' ) . '</a>';
+    }
+    if ( '' !== $edit_link ) {
+        echo '<a class="button" href="' . esc_url( $edit_link ) . '">' . esc_html__( 'Chỉnh nâng cao trong WordPress', 'aznet-theme' ) . '</a>';
+    }
+    echo '</div>';
+
+    echo '<details class="aznet-theme-homepage-team-member__editor">';
+    echo '<summary class="button">' . esc_html__( 'Sửa nhân sự', 'aznet-theme' ) . '</summary>';
+    echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+    echo '<input type="hidden" name="action" value="aznet_theme_update_team_member">';
+    echo '<input type="hidden" name="team_member_id" value="' . esc_attr( (string) $member_id ) . '">';
+    wp_nonce_field( 'aznet_theme_update_team_member_' . $member_id );
+
+    echo '<div class="aznet-theme-homepage-team-member__form-grid">';
+    echo '<label><span>' . esc_html__( 'Tên nhân sự', 'aznet-theme' ) . '</span><input class="widefat" type="text" name="team_member_name" value="' . esc_attr( $name ) . '" required></label>';
+    echo '<label><span>' . esc_html__( 'Chức vụ / chuyên môn ngắn', 'aznet-theme' ) . '</span><input class="widefat" type="text" name="team_member_role" value="' . esc_attr( $role ) . '"></label>';
+    echo '<label><span>' . esc_html__( 'Thứ tự hiển thị', 'aznet-theme' ) . '</span><input class="small-text" type="number" min="0" max="9999" name="team_member_menu_order" value="' . esc_attr( (string) (int) $member->menu_order ) . '"></label>';
+    echo '<label class="aznet-theme-homepage-team-member__bio"><span>' . esc_html__( 'Tiểu sử / giới thiệu', 'aznet-theme' ) . '</span><textarea class="widefat" rows="6" name="team_member_biography">' . esc_textarea( $biography ) . '</textarea></label>';
+    echo '</div>';
+
+    echo '<div class="aznet-theme-homepage-team-member__media"><strong>' . esc_html__( 'Ảnh đại diện', 'aznet-theme' ) . '</strong>';
+    echo '<input type="hidden" name="homepage_featured_image_id" value="' . esc_attr( (string) $image_id ) . '">';
+    echo '<div class="aznet-theme-homepage-media-preview">';
+    if ( $image_id > 0 ) {
+        echo wp_kses_post( wp_get_attachment_image( $image_id, 'thumbnail' ) );
+    }
+    echo '</div><p><button type="button" class="button aznet-theme-homepage-media-select">' . esc_html__( 'Chọn / thay ảnh', 'aznet-theme' ) . '</button> <button type="button" class="button-link-delete aznet-theme-homepage-media-clear">' . esc_html__( 'Bỏ ảnh', 'aznet-theme' ) . '</button></p></div>';
+
+    echo '<label class="aznet-theme-homepage-team-member__slug-sync"><input type="checkbox" name="team_member_sync_slug" value="1"> <span>' . esc_html__( 'Cập nhật đường dẫn theo tên', 'aznet-theme' ) . '</span></label>';
+    echo '<p class="description">' . esc_html__( 'Chỉ bật khi muốn đổi URL hồ sơ. Theme không tự đổi permalink để tránh làm hỏng liên kết cũ.', 'aznet-theme' ) . '</p>';
+    submit_button( __( 'Lưu nhân sự', 'aznet-theme' ), 'primary', 'submit', false );
+    echo '</form></details>';
+    echo '</article>';
+}
+
 /** Render Team-specific Homepage authoring from the exact mapped Team parent. */
 function render_homepage_team_authoring(): void {
     $parent = \AZnet\Theme\team_directory_parent();
     if ( ! $parent instanceof \WP_Post ) { return; }
 
-    $members = \AZnet\Theme\team_directory_members( 4 );
-    $all_members = \AZnet\Theme\team_directory_members();
+    $all_members = \AZnet\Theme\team_directory_admin_members();
     $public_members = \AZnet\Theme\team_directory_public_members();
     $url = get_permalink( $parent );
     $url = is_string( $url ) ? $url : '';
 
     echo '<section id="homepage-team" class="aznet-theme-homepage-team-authoring">';
     echo '<div class="aznet-theme-homepage-team-authoring__summary">';
-    echo '<p><strong>' . esc_html__( 'Nhân sự hiển thị công khai:', 'aznet-theme' ) . '</strong> ' . esc_html( (string) count( $public_members ) ) . ' / ' . esc_html( (string) count( $all_members ) ) . ' ' . esc_html__( 'nguồn đã xuất bản', 'aznet-theme' ) . '</p>';
+    echo '<div><h3>' . esc_html__( 'Tất cả nhân sự', 'aznet-theme' ) . '</h3>';
+    echo '<p><strong>' . esc_html__( 'Đang hiển thị công khai:', 'aznet-theme' ) . '</strong> ' . esc_html( (string) count( $public_members ) ) . ' / ' . esc_html( (string) count( $all_members ) ) . ' ' . esc_html__( 'nhân sự', 'aznet-theme' ) . '</p>';
+    echo '<p class="description">' . esc_html__( 'Homepage chỉ hiển thị tối đa 4 hồ sơ công khai đầu tiên theo thứ tự; khu vực này quản lý toàn bộ nhân sự thuộc đúng Page Đội ngũ.', 'aznet-theme' ) . '</p></div>';
     if ( '' !== $url ) {
         echo '<p><a class="button" href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . esc_html__( 'Xem tất cả trên website', 'aznet-theme' ) . '</a></p>';
     }
     echo '</div>';
 
-    if ( [] !== $members ) {
+    if ( [] !== $all_members ) {
         echo '<div class="aznet-theme-homepage-team-members">';
-        foreach ( $members as $member ) {
-            if ( ! $member instanceof \WP_Post ) { continue; }
-            $image_id = (int) get_post_thumbnail_id( $member->ID );
-            $role = trim( (string) $member->post_excerpt );
-            echo '<div class="aznet-theme-homepage-team-member">';
-            echo '<div class="aznet-theme-homepage-team-member__image">';
-            if ( $image_id > 0 ) { echo wp_kses_post( wp_get_attachment_image( $image_id, 'thumbnail' ) ); }
-            echo '</div>';
-            echo '<div class="aznet-theme-homepage-team-member__copy">';
-            $member_name = trim( (string) get_the_title( $member ) );
-            echo '<strong data-team-member-name>' . esc_html( '' !== $member_name ? $member_name : __( 'Chưa có tên', 'aznet-theme' ) ) . '</strong>';
-            if ( '' !== $role ) { echo '<p class="aznet-theme-homepage-team-member__role">' . esc_html( $role ) . '</p>'; }
-            echo '</div>';
-            echo '<div class="aznet-theme-homepage-team-member__actions">';
-            render_homepage_quick_edit_form( 'law-01', 'team', (int) $member->ID, __( 'Sửa', 'aznet-theme' ) );
-            echo '</div></div>';
+        foreach ( $all_members as $member ) {
+            if ( $member instanceof \WP_Post ) {
+                render_homepage_team_member_editor( $member );
+            }
         }
         echo '</div>';
+    } else {
+        echo '<div class="notice notice-info inline"><p>' . esc_html__( 'Chưa có nhân sự nào dưới Page Đội ngũ.', 'aznet-theme' ) . '</p></div>';
     }
 
     echo '<details class="aznet-theme-homepage-team-create">';
@@ -587,10 +653,12 @@ function render_homepage_team_authoring(): void {
     echo '<input type="hidden" name="action" value="aznet_theme_create_team_member">';
     wp_nonce_field( 'aznet_theme_create_team_member' );
     echo '<label><span>' . esc_html__( 'Tên nhân sự', 'aznet-theme' ) . '</span><input class="widefat" type="text" name="team_member_name" required></label>';
-    echo '<label><span>' . esc_html__( 'Chức vụ / chuyên môn ngắn', 'aznet-theme' ) . '</span><textarea class="widefat" rows="2" name="team_member_role"></textarea></label>';
+    echo '<label><span>' . esc_html__( 'Chức vụ / chuyên môn ngắn', 'aznet-theme' ) . '</span><input class="widefat" type="text" name="team_member_role"></label>';
+    echo '<label><span>' . esc_html__( 'Tiểu sử / giới thiệu', 'aznet-theme' ) . '</span><textarea class="widefat" rows="6" name="team_member_biography"></textarea></label>';
     echo '<input type="hidden" name="homepage_featured_image_id" value="0">';
     echo '<div class="aznet-theme-homepage-media-preview"></div>';
     echo '<p><button type="button" class="button aznet-theme-homepage-media-select">' . esc_html__( 'Chọn ảnh', 'aznet-theme' ) . '</button> <button type="button" class="button-link-delete aznet-theme-homepage-media-clear">' . esc_html__( 'Bỏ ảnh', 'aznet-theme' ) . '</button></p>';
+    echo '<p class="description">' . esc_html__( 'Nhân sự mới được xuất bản ngay theo quyết định D-039. Có thể chỉnh trạng thái, permalink và nội dung nâng cao sau đó trong WordPress.', 'aznet-theme' ) . '</p>';
     submit_button( __( 'Thêm nhân sự', 'aznet-theme' ), 'primary', 'submit', false );
     echo '</form></details>';
     echo '</section>';
