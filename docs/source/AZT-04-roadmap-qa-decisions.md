@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.02
+**Version:** v1.03
 **Status:** Working Source  
 **Date:** 02/10/2026
 
@@ -354,6 +354,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-036** | **On desktop, AZnet Theme must not artificially wrap a heading onto an additional line when the heading can fit within its actual available container width. Presentation may not use narrow decorative width caps to force wrapping, and must not use `white-space: nowrap` to create overflow. Natural wrapping remains correct when the real container is insufficient; tablet/mobile may wrap responsively for readability.** | **Accepted — owner approved 22/09/2026** |
 | **D-037** | **Self-hosted Theme fonts used for Vietnamese content must explicitly prove Vietnamese glyph coverage for every shipped production weight. The canonical typography family must be consumed through Theme tokens/presets; presentation presets may not silently replace it with unrelated serif/system stacks. A font fix is not production PASS until the Vietnamese face is verified at runtime/browser level; repository PASS and live-site publish remain separate gates.** | **Accepted — owner approved 22/09/2026** |
 | **D-044** | **Pilot rollout is not a Core completion gate. Once Theme-owned repository/runtime/release gates are PASS, any pilot that cannot be updated because of external access, hosting, security middleware, credentials, provider availability or deployment-path constraints is deferred to manual/later adoption and recorded as a pilot-local blocker. Do not hold AZnet Theme completion open merely to force every pilot onto the latest build. Preserve rollback and fresh verification when a deferred pilot is updated later.** | **Accepted — owner approved 02/10/2026** |
+| **D-045** | **Version provenance reconciliation: fresh production evidence shows deployed pilot identity `1.3.65` while canonical GitHub still declares `1.3.57`. Do not reuse `1.3.65` for new canonical bytes without byte identity proof. Promote the next canonical candidate to `1.3.66`, preserving pilot `1.3.65` as deployment provenance and requiring fresh package/runtime/browser verification before any release claim.** | **Accepted — owner direction 02/10/2026** |
 
 ## 10A. v1.3 Client Delivery System
 
@@ -543,7 +544,7 @@ This remains Theme presentation only. RootProfile authoritative Team remains BLO
 
 ## 14. Exact next
 
-**NEXT — preserve canonical `main@57821e56e81f77e4d26b7dbb69e2cc7cae2f0b64` after PR #365. Repository-native authenticated WordPress runtime/browser/a11y now closes the generic Template Library TPL4 gate and the Law 01 portion of HB5/HD4: responsive wp-admin coverage across 1440/1024/782/390 widths, keyboard-focus checks, Template Library search/filter interaction, Homepage Map admin/public surface-order parity, Hero/Team authoring paths, Axe critical/serious = 0 and unexpected console/page errors = 0. Curtain 01 authenticated-admin parity remains unclaimed and Rèm 01 stays pilot-local `BLOCKED_EXTERNAL_ACCESS` under D-044. Do not reopen closed pilot work. Proceed only to remaining Theme-owned completion/release reconciliation; optional provider L5/external distribution remain separate tracks.**
+**NEXT — complete the provenance-safe `1.3.66` canonical promotion from current GitHub `1.3.57`, because fresh read-only production evidence proves Law 01 and Industrial 01 pilots already identify as `1.3.65`. Do not publish or label current canonical bytes as `1.3.57`, and do not reuse `1.3.65` for a potentially different canonical package. Preserve all D-043/PR #365 PASS evidence, D-044 pilot non-blocking policy, and pilot-local `1.3.65` evidence as deployment provenance. After `1.3.66` RED→GREEN metadata/package verification passes, reconcile Core completion against that exact package. Tag/GitHub Release and production deployment remain separate explicit approval gates.**
 
 
 
@@ -555,6 +556,14 @@ Owner-approved PR #365 merged to canonical `main@57821e56e81f77e4d26b7dbb69e2cc7
 The R5 authenticated WordPress 6.9 browser matrix now directly verifies the Theme-owned admin surfaces at 1440x1000, 1024x768, 782x900 and 390x844. It covers Template Library presence/search/category controls, keyboard focus, matching-card filtering, Homepage template save, Hero design routing, Team authoring, Homepage Map admin/public surface-order parity, horizontal-overflow checks, Axe critical/serious violations and unexpected console/page errors. This closes TPL4 and closes the Law 01 repository-native portion of HB5/HD4 without changing production Theme bytes.
 
 This does **not** claim Curtain 01 authenticated-admin parity, Rèm 01 production access, provider L5, external Template Distribution Service behavior or any production-site deployment not separately verified. D-044 keeps those pilot/external states non-blocking for Core completion.
+
+### D-045 — 1.3.65 live-lineage / 1.3.66 canonical provenance reconciliation — ACCEPTED — 02/10/2026
+
+Fresh read-only site checks supersede the earlier assumption that `1.3.57` was the latest Theme identity. `lstamduchn.vn` and `minhnguyen.vn` both report active AZnet Theme `1.3.65`. Canonical GitHub remains `1.3.57` before this promotion slice.
+
+To avoid assigning one version to unproven-identical byte sets, `1.3.65` is retained as pilot deployment provenance and is not reused for the new canonical package. The next canonical candidate is `1.3.66`. The promotion must be metadata-bounded, RED→GREEN, and freshly verified through release/package/runtime/browser gates before Core completion is restated.
+
+This decision does not retroactively claim that either pilot's `1.3.65` bytes equal canonical source, and it does not authorize tag/Release publication or production deployment.
 
 ### D-044 — Pilot rollout non-blocking completion policy — ACCEPTED — 02/10/2026
 

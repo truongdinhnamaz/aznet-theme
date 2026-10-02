@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.90
+**Version:** v0.91
 **Status:** Working Execution Map / derived  
 **Date:** 02/10/2026
 
@@ -679,4 +679,4 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 | C7 Three-pilot regression | PASS L1-L2 / canonical | Law/Rèm/Industrial manifest-path regression retained |
 | C8 Synthetic fourth-template proof | PASS L1-L2 / canonical | Test-only fourth template participates without a fixture-specific Core branch |
 
-**Exact next:** preserve D-043 C0→C8 plus PR #365 authenticated repository-native TPL4 and Law 01 HB5/HD4 L3-L4 PASS. Rèm 01 and Curtain 01 authenticated-admin parity remain pilot-local/unclaimed and do not block Core completion under D-044. The next safe work is Theme-owned completion/release reconciliation only; do not open provider/distribution implementation without its external public/versioned contract.
+**Exact next:** reconcile version provenance before completion. Fresh read-only Law 01 + Industrial 01 pilots report `1.3.65`; canonical GitHub still declares `1.3.57`. Under D-045, reserve pilot `1.3.65` as deployment provenance and promote canonical source to new identity `1.3.66` with RED→GREEN version-boundary coverage, then run fresh package/runtime/browser release verification. Do not publish/tag or deploy until those independent gates are explicitly approved.
