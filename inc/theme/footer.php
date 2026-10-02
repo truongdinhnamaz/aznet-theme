@@ -78,6 +78,17 @@ function footer_context(): array {
     $about_intro = '';
     $services    = [];
 
+    $footer_content_active = false;
+    $footer_content_html   = '';
+    $footer_content_block  = (int) setting( 'footer_content_block', 0 );
+    if ( $footer_content_block > 0 && function_exists( 'get_post' ) ) {
+        $footer_content_post = get_post( $footer_content_block );
+        if ( $footer_content_post instanceof \WP_Post && 'wp_block' === $footer_content_post->post_type ) {
+            $footer_content_active = true;
+            $footer_content_html = wp_kses_post( wpautop( (string) $footer_content_post->post_content ) );
+        }
+    }
+
     if ( 'law-01' === footer_preset() ) {
         if ( function_exists( __NAMESPACE__ . '\\homepage_source_value' ) ) {
             $about_id = (int) homepage_source_value( 'law-01', 'about' );
@@ -249,8 +260,10 @@ function footer_context(): array {
         'tagline'     => $tagline,
         'home_url'    => $home_url,
         'logo_html'   => $logo_html,
-        'about_intro' => $about_intro,
-        'services'        => $services,
+        'about_intro'          => $about_intro,
+        'footer_content_active' => $footer_content_active,
+        'footer_content_html'   => $footer_content_html,
+        'services'              => $services,
         'social_channels' => $social_channels,
         'contact_links'   => $contact_links,
         'menus'           => [
