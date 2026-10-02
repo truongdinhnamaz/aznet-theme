@@ -39,7 +39,7 @@ if (! is_array($summary)) {
 }
 
 require_once $settings;
-foreach (['AZnet\\Theme\\visual_preset_ids', 'AZnet\\Theme\\homepage_preset_ids'] as $function) {
+foreach (['AZnet\\Theme\\visual_preset_ids', 'AZnet\\Theme\\homepage_preset_ids', 'AZnet\\Theme\\visual_preset_choices'] as $function) {
     if (! function_exists($function)) {
         fwrite(STDERR, "FAIL: missing C1 function {$function}.\n");
         exit(1);
@@ -48,6 +48,7 @@ foreach (['AZnet\\Theme\\visual_preset_ids', 'AZnet\\Theme\\homepage_preset_ids'
 
 $homepage = \AZnet\Theme\homepage_preset_ids();
 $visual = \AZnet\Theme\visual_preset_ids();
+$visualChoices = \AZnet\Theme\visual_preset_choices();
 
 foreach (['off', 'law-01', 'curtain-01', 'industrial-01'] as $id) {
     if (! in_array($id, $homepage, true)) {
@@ -63,6 +64,10 @@ foreach (['default', 'editorial', 'commerce', 'curtain-01', 'industrial-01'] as 
 }
 if (in_array('law-01', $visual, true)) {
     fwrite(STDERR, "FAIL: Law 01 Homepage registration must not imply a visual preset.\n");
+    exit(1);
+}
+if ('Rèm 01' !== ($visualChoices['curtain-01'] ?? null) || 'Industrial 01' !== ($visualChoices['industrial-01'] ?? null)) {
+    fwrite(STDERR, "FAIL: Quick Setup visual labels are not projected from template manifests.\n");
     exit(1);
 }
 
@@ -95,6 +100,11 @@ if (1 !== count($shared)) {
 }
 if ([] !== \AZnet\Theme\template_presentation_ids('unsupported')) {
     fwrite(STDERR, "FAIL: unsupported presentation slot must return empty list.\n");
+    exit(1);
+}
+$fixtureChoices = \AZnet\Theme\visual_preset_choices();
+if ('Fixture Visual A' !== ($fixtureChoices['shared-visual'] ?? null)) {
+    fwrite(STDERR, "FAIL: duplicate visual preset label did not retain the first registered template deterministically.\n");
     exit(1);
 }
 
@@ -136,12 +146,21 @@ if (false !== $normalized['header_search']) {
 
 $settingsSource = (string) file_get_contents($root . '/inc/theme/settings.php');
 $designSource = (string) file_get_contents($root . '/inc/theme/design-system.php');
+$controlCenterSource = (string) file_get_contents($root . '/inc/admin/control-center.php');
 if (str_contains($settingsSource, "in_array( \$raw['homepage_preset'], [ 'off', 'law-01'")) {
     fwrite(STDERR, "FAIL: generic settings still hard-code template Homepage validity.\n");
     exit(1);
 }
 if (str_contains($designSource, "in_array( \$preset, [ 'default', 'editorial', 'commerce'")) {
     fwrite(STDERR, "FAIL: Design System still duplicates visual preset validity.\n");
+    exit(1);
+}
+if (str_contains($controlCenterSource, "'curtain-01' => 'Rèm 01'") || str_contains($controlCenterSource, "'industrial-01' => 'Industrial 01'")) {
+    fwrite(STDERR, "FAIL: generic Quick Setup still hard-codes template visual options.\n");
+    exit(1);
+}
+if (! str_contains($controlCenterSource, 'visual_preset_choices()')) {
+    fwrite(STDERR, "FAIL: generic Quick Setup does not consume manifest-driven visual choices.\n");
     exit(1);
 }
 
