@@ -466,6 +466,112 @@ function homepage_curtain01_effective_surface_map( ?array $settings = null ): ar
     return $surfaces;
 }
 
+/** @return array<int,array<string,mixed>> */
+function homepage_industrial01_effective_surface_map( ?array $settings = null ): array {
+    $settings = null === $settings ? settings() : $settings;
+    $surfaces = [];
+
+    $site_name = trim( (string) get_bloginfo( 'name' ) );
+    $tagline = trim( (string) get_bloginfo( 'description' ) );
+    $hero_title = trim( (string) ( $settings['homepage_industrial01_hero_title'] ?? '' ) );
+    $hero_lede = trim( (string) ( $settings['homepage_industrial01_hero_lede'] ?? '' ) );
+    $hero_title = '' !== $hero_title ? $hero_title : $site_name;
+    $hero_lede = '' !== $hero_lede ? $hero_lede : $tagline;
+
+    $surfaces[] = homepage_surface_entry(
+        'hero',
+        __( 'Hero', 'aznet-theme' ),
+        'hero',
+        'before',
+        'aznet-homepage-industrial-hero',
+        'presentation',
+        0,
+        [
+            'title'   => $hero_title,
+            'summary' => $hero_lede,
+            'source'  => __( 'Thiết lập trình bày Industrial 01', 'aznet-theme' ),
+        ]
+    );
+
+    $categories = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\homepage_product_category_showcase_terms' )
+        ? \AZnet\Theme\Integrations\WooCommerce\homepage_product_category_showcase_terms( 8 )
+        : [];
+    if ( [] !== $categories ) {
+        $surfaces[] = homepage_surface_entry(
+            'categories',
+            __( 'Danh mục', 'aznet-theme' ),
+            'categories',
+            'before',
+            'aznet-homepage-industrial-categories',
+            'woocommerce',
+            0,
+            [
+                'items'  => $categories,
+                'source' => __( 'Danh mục sản phẩm công khai từ WooCommerce', 'aznet-theme' ),
+            ]
+        );
+    }
+
+    $products = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\homepage_products' )
+        ? \AZnet\Theme\Integrations\WooCommerce\homepage_products( 8 )
+        : [];
+    if ( is_array( $products ) && [] !== $products ) {
+        $surfaces[] = homepage_surface_entry(
+            'products',
+            __( 'Sản phẩm', 'aznet-theme' ),
+            'products',
+            'before',
+            'aznet-homepage-industrial-products',
+            'woocommerce',
+            0,
+            [
+                'items'  => $products,
+                'source' => __( 'Sản phẩm công khai từ WooCommerce', 'aznet-theme' ),
+            ]
+        );
+    }
+
+    $front_id = (int) get_option( 'page_on_front', 0 );
+    $front_page = homepage_page_reference( $front_id );
+    if ( $front_page instanceof \WP_Post ) {
+        $front_content = trim( (string) $front_page->post_content );
+        $front_summary = homepage_surface_text_summary( (string) get_the_excerpt( $front_page ) );
+        if ( '' === $front_summary && '' !== $front_content ) {
+            $front_summary = homepage_surface_text_summary( (string) do_blocks( $front_content ) );
+        }
+        $surfaces[] = homepage_surface_entry(
+            'front-page-content',
+            __( 'Nội dung trang chủ', 'aznet-theme' ),
+            '',
+            'native',
+            'post-' . (string) $front_page->ID,
+            'front_page',
+            (int) $front_page->ID,
+            [
+                'title'   => get_the_title( $front_page ),
+                'summary' => $front_summary,
+                'source'  => __( 'Page được chọn làm Trang chủ trong WordPress', 'aznet-theme' ),
+            ]
+        );
+    }
+
+    $surfaces[] = homepage_surface_entry(
+        'cta',
+        __( 'Liên hệ', 'aznet-theme' ),
+        'cta',
+        'after',
+        'aznet-industrial01-quote',
+        'presentation',
+        0,
+        [
+            'title'  => preset_term( 'primary_cta', __( 'Yêu cầu báo giá', 'aznet-theme' ), 'industrial-01' ),
+            'source' => __( 'Trình bày Theme; dữ liệu liên hệ vẫn thuộc nguồn sở hữu', 'aznet-theme' ),
+        ]
+    );
+
+    return $surfaces;
+}
+
 /**
  * Resolve the effective Homepage surfaces that can actually render now.
  *
@@ -484,6 +590,10 @@ function homepage_effective_surface_map( ?string $preset = null ): array {
     }
     if ( 'curtain-01' === $preset ) {
         $cache[ $preset ] = homepage_curtain01_effective_surface_map();
+        return $cache[ $preset ];
+    }
+    if ( 'industrial-01' === $preset ) {
+        $cache[ $preset ] = homepage_industrial01_effective_surface_map();
         return $cache[ $preset ];
     }
     if ( 'law-01' !== $preset ) {

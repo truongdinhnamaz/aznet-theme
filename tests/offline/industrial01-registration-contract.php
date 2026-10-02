@@ -48,8 +48,9 @@ foreach ([
 $composerSource = file_get_contents($root . '/inc/theme/homepage-composer.php');
 $assetsSource = file_get_contents($root . '/inc/theme/assets.php');
 assert(is_string($composerSource) && str_contains($composerSource, 'render_industrial01_part'));
-assert(str_contains($composerSource, "[ 'hero', 'categories', 'products' ]"), 'Industrial 01 MVP must render the approved product-first homepage order before native content.');
-assert(str_contains($composerSource, "render_industrial01_part( 'cta' )"), 'Industrial 01 MVP must close with its quote CTA after native content.');
+assert(str_contains($composerSource, "homepage_effective_surface_map( 'industrial-01' )"), 'Industrial 01 composition must consume the shared effective Homepage surface map.');
+assert(! str_contains($composerSource, "[ 'hero', 'categories', 'products' ]"), 'Industrial 01 section order must not remain duplicated in the Composer.');
+assert(! str_contains($composerSource, "render_industrial01_part( 'cta' )"), 'Industrial 01 CTA must be routed through the shared surface map.');
 assert(is_string($assetsSource) && str_contains($assetsSource, 'enqueue_homepage_industrial01_asset'));
 assert(str_contains($assetsSource, 'homepage-industrial-01.css'));
 

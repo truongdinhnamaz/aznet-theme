@@ -91,8 +91,9 @@ function render_homepage_before_content(): void {
 
     if ( 'industrial-01' === homepage_preset() ) {
         echo '<div class="aznet-theme-homepage aznet-theme-homepage--industrial-01">';
-        foreach ( [ 'hero', 'categories', 'products' ] as $slug ) {
-            render_industrial01_part( $slug );
+        foreach ( homepage_effective_surface_map( 'industrial-01' ) as $surface ) {
+            if ( 'before' !== ( $surface['boundary'] ?? '' ) ) { continue; }
+            render_industrial01_part( (string) ( $surface['template'] ?? '' ) );
         }
         return;
     }
@@ -119,7 +120,10 @@ function render_homepage_after_content(): void {
     }
 
     if ( 'industrial-01' === homepage_preset() ) {
-        render_industrial01_part( 'cta' );
+        foreach ( homepage_effective_surface_map( 'industrial-01' ) as $surface ) {
+            if ( 'after' !== ( $surface['boundary'] ?? '' ) ) { continue; }
+            render_industrial01_part( (string) ( $surface['template'] ?? '' ) );
+        }
         echo '</div>';
         return;
     }
