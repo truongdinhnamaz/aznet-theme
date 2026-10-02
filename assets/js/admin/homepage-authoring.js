@@ -64,7 +64,36 @@
         target.innerHTML = url ? '<img src="' + String(url).replace(/"/g, '&quot;') + '" alt="">' : '';
     }
 
+    function moveCategoryRow(button) {
+        var row = button.closest('[data-category-order-row]');
+        var list = row ? row.closest('[data-category-order-list]') : null;
+        if (!row || !list) { return; }
+
+        var direction = button.getAttribute('data-category-move');
+        if ('up' === direction) {
+            var previous = row.previousElementSibling;
+            if (previous && previous.matches('[data-category-order-row]')) {
+                list.insertBefore(row, previous);
+            }
+            return;
+        }
+
+        if ('down' === direction) {
+            var next = row.nextElementSibling;
+            if (next && next.matches('[data-category-order-row]')) {
+                list.insertBefore(next, row);
+            }
+        }
+    }
+
     document.addEventListener('click', function (event) {
+        var categoryMove = event.target.closest('[data-category-move]');
+        if (categoryMove) {
+            event.preventDefault();
+            moveCategoryRow(categoryMove);
+            return;
+        }
+
         var selectButton = event.target.closest('.aznet-theme-homepage-media-select');
         if (selectButton) {
             event.preventDefault();
