@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.02
+**Version:** v1.03
 **Status:** Working Source  
 **Date:** 02/10/2026
 
@@ -543,10 +543,18 @@ This remains Theme presentation only. RootProfile authoritative Team remains BLO
 
 ## 14. Exact next
 
-**NEXT — preserve canonical `main@57821e56e81f77e4d26b7dbb69e2cc7cae2f0b64` after PR #365. Repository-native authenticated WordPress runtime/browser/a11y now closes the generic Template Library TPL4 gate and the Law 01 portion of HB5/HD4: responsive wp-admin coverage across 1440/1024/782/390 widths, keyboard-focus checks, Template Library search/filter interaction, Homepage Map admin/public surface-order parity, Hero/Team authoring paths, Axe critical/serious = 0 and unexpected console/page errors = 0. Curtain 01 authenticated-admin parity remains unclaimed and Rèm 01 stays pilot-local `BLOCKED_EXTERNAL_ACCESS` under D-044. Do not reopen closed pilot work. Proceed only to remaining Theme-owned completion/release reconciliation; optional provider L5/external distribution remain separate tracks.**
+**NEXT — Core technical completion for the current `1.3.57` production bytes is PASS. Preserve exact package SHA-256 `f4f0599b51f58671a0f0e0e6026f03035fbc90d1448fefe0d7194c4e7b0e5333`, exact-main V1 run `36964065495`, X6 run `36964065510`, PR #365 authenticated R5 closure and the D-044 non-blocking pilot policy. The latest public GitHub Release remains `v1.3.24`. No Theme-owned implementation or QA blocker remains on the Core completion critical path. Publishing/tagging `v1.3.57` is now the next release action and is a separate explicit owner-approval hard gate; production deployment/pilot adoption stays separate and may be done later. Optional provider L5 and the external Template Distribution Service remain non-Core tracks.**
 
 
 
+
+### AZnet Theme 1.3.57 Core technical completion reconciliation — 02/10/2026
+
+Current canonical production bytes are technically release-ready at the Core scope defined by AZT-05. The exact production-byte checkpoint `main@eada15dcc8962c364cb6e83697bdebac51c15856` completed fresh exact-main V1 run `36964065495` and X6 run `36964065510` SUCCESS. X6 verified WordPress 6.9 runtime, 32/32 browser/axe coverage, deterministic exact-package/source identity, PHP lint, theme-switch/rollback continuity and the promoted `1.3.57` ownership boundary.
+
+Deterministic package identity: `aznet-theme-1.3.57.zip`, 215 production files, SHA-256 `f4f0599b51f58671a0f0e0e6026f03035fbc90d1448fefe0d7194c4e7b0e5333`. PR #365 changed tests only and rebuilt the identical package hash while closing authenticated admin runtime/browser/a11y coverage; PR #366 changed documentation only. Thus the current canonical main retains the exact verified production package bytes.
+
+The latest public GitHub Release is still `v1.3.24`; no `v1.3.57` tag/release is claimed. Under AZT-05, D-033 and D-044, inaccessible pilots, RootProfile Team, provider L5 and external Template Distribution Service availability are not Core blockers. Release publication remains an explicit owner-approval gate, and production deployment remains a distinct later gate.
 
 ### Repository-native authenticated admin runtime/browser closure — 02/10/2026
 
