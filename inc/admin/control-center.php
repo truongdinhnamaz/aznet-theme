@@ -185,7 +185,7 @@ function render_footer_profile_form(): void {
 
     echo '<div class="aznet-theme-panel aznet-theme-footer-content-editor">';
     echo '<div class="aznet-theme-footer-content-editor__heading"><div><h2>' . esc_html__( 'Sửa nội dung Footer', 'aznet-theme' ) . '</h2>';
-    echo '<p>' . esc_html__( 'Thông tin liên hệ và mạng xã hội dùng chung cho tất cả mẫu Footer và mọi pilot. Đổi mẫu không làm mất nội dung; dữ liệu vẫn được lưu bằng Menu WordPress.', 'aznet-theme' ) . '</p></div>';
+    echo '<p>' . esc_html__( 'Thông tin chân trang, gồm liên hệ và mạng xã hội, dùng chung cho tất cả mẫu Footer và mọi pilot. Đổi mẫu không làm mất nội dung; dữ liệu vẫn được lưu bằng Menu WordPress.', 'aznet-theme' ) . '</p></div>';
     echo '<div class="aznet-theme-footer-content-editor__actions">';
     echo '<a class="button" href="' . esc_url( admin_url( 'customize.php?autofocus[control]=custom_logo' ) ) . '">' . esc_html__( 'Sửa Logo', 'aznet-theme' ) . '</a>';
     echo '<a class="button" href="' . esc_url( admin_url( 'options-general.php' ) ) . '">' . esc_html__( 'Sửa tên & mô tả', 'aznet-theme' ) . '</a>';
