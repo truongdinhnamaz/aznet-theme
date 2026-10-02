@@ -15,6 +15,55 @@
         };
     }
 
+    function heroPreviewFor(element) {
+        var form = formFor(element);
+        return form ? form.querySelector('[data-hero-live-preview]') : null;
+    }
+
+    function updateHeroVariant(radio) {
+        var preview = heroPreviewFor(radio);
+        if (!preview) { return; }
+
+        var variant = radio.value || 'split';
+        preview.className = preview.className.replace(/aznet-theme-homepage-hero-live-preview--[a-z-]+/g, '').trim();
+        preview.classList.add('aznet-theme-homepage-hero-live-preview--' + variant);
+        preview.setAttribute('data-variant', variant);
+
+        var card = radio.closest('.aznet-theme-homepage-hero-library__card');
+        var label = card ? card.querySelector('.aznet-theme-homepage-hero-library__card__meta strong') : null;
+        var target = preview.querySelector('[data-hero-preview-label]');
+        if (target && label) { target.textContent = label.textContent; }
+    }
+
+    function updateHeroPreviewField(input) {
+        var preview = heroPreviewFor(input);
+        if (!preview) { return; }
+
+        var key = input.getAttribute('data-preview-key') || '';
+        if (key) {
+            var targetByKey = preview.querySelector('[data-preview-key-target="' + key + '"]');
+            if (targetByKey) { targetByKey.textContent = input.value || ''; }
+        }
+
+        if (input.name) {
+            var targetByName = preview.querySelector('[data-preview-field="' + input.name + '"]');
+            if (targetByName) { targetByName.textContent = input.value || ''; }
+        }
+    }
+
+    function updateHeroPreviewMedia(form, key, url) {
+        if (!form) { return; }
+        var preview = form.querySelector('[data-hero-live-preview]');
+        if (!preview) { return; }
+
+        var target = key
+            ? preview.querySelector('[data-preview-media-key="' + key + '"]')
+            : preview.querySelector('[data-hero-preview-media]');
+
+        if (!target) { return; }
+        target.innerHTML = url ? '<img src="' + String(url).replace(/"/g, '&quot;') + '" alt="">' : '';
+    }
+
     document.addEventListener('click', function (event) {
         var selectButton = event.target.closest('.aznet-theme-homepage-media-select');
         if (selectButton) {
@@ -34,19 +83,25 @@
 
                 var data = attachment.toJSON();
                 var target = mediaTarget(selectButton, form, 'homepage_featured_image_id', '.aznet-theme-homepage-media-preview');
+                var key = selectButton.getAttribute('data-preview-key') || (target.input ? target.input.getAttribute('data-preview-key') || '' : '');
 
                 if (target.input) {
                     target.input.value = data.id || 0;
                 }
 
-                if (target.preview) {
-                    var url = data.sizes && data.sizes.medium
+                var url = data.sizes && data.sizes.medium_large
+                    ? data.sizes.medium_large.url
+                    : (data.sizes && data.sizes.medium
                         ? data.sizes.medium.url
-                        : (data.sizes && data.sizes.thumbnail ? data.sizes.thumbnail.url : data.url);
+                        : (data.sizes && data.sizes.thumbnail ? data.sizes.thumbnail.url : data.url));
+
+                if (target.preview) {
                     target.preview.innerHTML = url
                         ? '<img src="' + String(url).replace(/"/g, '&quot;') + '" alt="">'
                         : '';
                 }
+
+                updateHeroPreviewMedia(form, key, url);
             });
 
             frame.open();
@@ -60,8 +115,25 @@
             if (!clearForm) { return; }
 
             var target = mediaTarget(clearButton, clearForm, 'homepage_featured_image_id', '.aznet-theme-homepage-media-preview');
+            var key = clearButton.getAttribute('data-preview-key') || (target.input ? target.input.getAttribute('data-preview-key') || '' : '');
+
             if (target.input) { target.input.value = '0'; }
             if (target.preview) { target.preview.innerHTML = ''; }
+            updateHeroPreviewMedia(clearForm, key, '');
         }
     });
+
+    document.addEventListener('change', function (event) {
+        var variant = event.target.closest('input[name="homepage_hero_variant"]');
+        if (variant) { updateHeroVariant(variant); }
+    });
+
+    document.addEventListener('input', function (event) {
+        var field = event.target.closest('[data-preview-key], input[name^="homepage_hero_"], textarea[name^="homepage_hero_"]');
+        if (field && 'homepage_hero_variant' !== field.name) {
+            updateHeroPreviewField(field);
+        }
+    });
+
+    document.querySelectorAll('[data-hero-template-gallery] input[name="homepage_hero_variant"]:checked').forEach(updateHeroVariant);
 }());
