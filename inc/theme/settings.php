@@ -48,6 +48,40 @@ function homepage_preset_ids(): array {
 }
 
 /**
+ * Return manifest-driven visual preset labels for generic Theme admin controls.
+ *
+ * Core defaults remain available without templates. Registered templates own
+ * their display metadata; the first registered template wins when multiple
+ * manifests intentionally share one visual preset id.
+ *
+ * @return array<string,string>
+ */
+function visual_preset_choices(): array {
+    $choices = [
+        'default'   => 'Default',
+        'editorial' => 'Editorial',
+        'commerce'  => 'Commerce',
+    ];
+
+    if ( ! function_exists( __NAMESPACE__ . '\\template_manifests' ) ) {
+        return $choices;
+    }
+
+    foreach ( template_manifests() as $manifest ) {
+        $preset = $manifest['presentation']['visual_preset'] ?? null;
+        $name = $manifest['name'] ?? null;
+        if ( ! is_string( $preset ) || '' === $preset || ! is_string( $name ) || '' === trim( $name ) ) {
+            continue;
+        }
+        if ( ! array_key_exists( $preset, $choices ) ) {
+            $choices[ $preset ] = trim( $name );
+        }
+    }
+
+    return $choices;
+}
+
+/**
  * Return normalized defaults for Theme-owned presentation settings.
  *
  * @return array<string, mixed>
