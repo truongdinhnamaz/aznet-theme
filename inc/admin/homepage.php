@@ -626,6 +626,11 @@ function render_homepage_team_authoring(): void {
     $url = is_string( $url ) ? $url : '';
 
     echo '<section id="homepage-team" class="aznet-theme-homepage-team-authoring">';
+    if ( isset( $_GET['team_member_created'] ) && '1' === sanitize_text_field( wp_unslash( $_GET['team_member_created'] ) ) ) {
+        echo '<div class="notice notice-success inline"><p>' . esc_html__( 'Đã thêm và xuất bản nhân sự.', 'aznet-theme' ) . '</p></div>';
+    } elseif ( isset( $_GET['team_member_updated'] ) && '1' === sanitize_text_field( wp_unslash( $_GET['team_member_updated'] ) ) ) {
+        echo '<div class="notice notice-success inline"><p>' . esc_html__( 'Đã lưu thông tin nhân sự.', 'aznet-theme' ) . '</p></div>';
+    }
     echo '<div class="aznet-theme-homepage-team-authoring__summary">';
     echo '<div><h3>' . esc_html__( 'Tất cả nhân sự', 'aznet-theme' ) . '</h3>';
     echo '<p><strong>' . esc_html__( 'Đang hiển thị công khai:', 'aznet-theme' ) . '</strong> ' . esc_html( (string) count( $public_members ) ) . ' / ' . esc_html( (string) count( $all_members ) ) . ' ' . esc_html__( 'nhân sự', 'aznet-theme' ) . '</p>';
