@@ -519,3 +519,14 @@ Evidence: `docs/evidence/CURTAIN01_ABOUT_PRESENTATION_AUTHORING_20260927.md`.
 - No pilot draft was published; no release, live Theme switch, production deployment, or content mutation occurred.
 
 Evidence: `docs/evidence/CORE_HOMEPAGE_DESIGN_PILOT_L4_PARTIAL_20261002.md`.
+
+
+### Industrial 01 Homepage Design production release — 02/10/2026
+
+- Canonical implementation: PR #342 merged to `main@db7ec0621e3bc61d15d9ab74d25196b8bb3d7934`.
+- User explicitly approved production publication for `minhnguyen.vn` and confirmed a fresh backup before publish.
+- WPVibe published the draft into live `aznet-theme` and created `aznet-theme-wpvibe-backup` as the theme-directory rollback copy.
+- Post-publish production render at `https://minhnguyen.vn/` succeeded with Industrial 01 presentation active.
+- Fresh mobile production Lighthouse: Accessibility 100/100; Best Practices 100/100.
+- Authenticated wp-admin interaction remains UNKNOWN and is not inferred from public production checks.
+- Evidence: `docs/evidence/INDUSTRIAL01_HOMEPAGE_DESIGN_PRODUCTION_RELEASE_20261002.md`.
