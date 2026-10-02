@@ -319,8 +319,8 @@ foreach ([
         y3_fail('Footer rich-content adapter must persist through WordPress-native wp_block content: ' . $needle);
     }
 }
-if (! str_contains($adminBootstrap, 'aznet_theme_save_footer_content')) {
-    y3_fail('Footer rich-content save action must be registered');
+if (! str_contains($footerContentAdmin, 'aznet_theme_save_footer_content') || ! str_contains($footerContentAdmin, 'add_action(')) {
+    y3_fail('Footer rich-content save action must be registered by its admin module');
 }
 $settingsSource = file_get_contents($root . '/inc/theme/settings.php');
 if (false === $settingsSource || ! str_contains($settingsSource, "'footer_content_block'")) {
