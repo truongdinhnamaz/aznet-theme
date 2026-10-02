@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.01
+**Version:** v1.02
 **Status:** Working Source  
 **Date:** 02/10/2026
 
@@ -543,10 +543,18 @@ This remains Theme presentation only. RootProfile authoritative Team remains BLO
 
 ## 14. Exact next
 
-**NEXT — execute the AZnet Theme completion fast path from current canonical `main@cb9bad43516a0d5691e544aecd28facfbaae36bf`: preserve all closed D-043 and authenticated Law/Team visual checkpoints; do not wait for inaccessible pilots. Under D-044, pilot rollout is non-blocking for Core completion and any pilot that cannot be updated safely is deferred to manual/later adoption with its blocker recorded. Rèm 01 (`remquocanh.vn`) therefore remains a pilot-local `BLOCKED_EXTERNAL_ACCESS`, not a Theme completion blocker. Prioritize only remaining Theme-owned technical/runtime/browser/release gates that can be closed without external-provider invention or ownership violations. Optional provider L5 and external service availability remain separate certification tracks.**
+**NEXT — preserve canonical `main@57821e56e81f77e4d26b7dbb69e2cc7cae2f0b64` after PR #365. Repository-native authenticated WordPress runtime/browser/a11y now closes the generic Template Library TPL4 gate and the Law 01 portion of HB5/HD4: responsive wp-admin coverage across 1440/1024/782/390 widths, keyboard-focus checks, Template Library search/filter interaction, Homepage Map admin/public surface-order parity, Hero/Team authoring paths, Axe critical/serious = 0 and unexpected console/page errors = 0. Curtain 01 authenticated-admin parity remains unclaimed and Rèm 01 stays pilot-local `BLOCKED_EXTERNAL_ACCESS` under D-044. Do not reopen closed pilot work. Proceed only to remaining Theme-owned completion/release reconciliation; optional provider L5/external distribution remain separate tracks.**
 
 
 
+
+### Repository-native authenticated admin runtime/browser closure — 02/10/2026
+
+Owner-approved PR #365 merged to canonical `main@57821e56e81f77e4d26b7dbb69e2cc7cae2f0b64` after final-head QA completed **7/7 SUCCESS**: `static-contracts`, `clean-runtime`, `candidate-package`, `regression-package`, `x3-quality`, `x4-quality` and `r5-control-center-browser`.
+
+The R5 authenticated WordPress 6.9 browser matrix now directly verifies the Theme-owned admin surfaces at 1440x1000, 1024x768, 782x900 and 390x844. It covers Template Library presence/search/category controls, keyboard focus, matching-card filtering, Homepage template save, Hero design routing, Team authoring, Homepage Map admin/public surface-order parity, horizontal-overflow checks, Axe critical/serious violations and unexpected console/page errors. This closes TPL4 and closes the Law 01 repository-native portion of HB5/HD4 without changing production Theme bytes.
+
+This does **not** claim Curtain 01 authenticated-admin parity, Rèm 01 production access, provider L5, external Template Distribution Service behavior or any production-site deployment not separately verified. D-044 keeps those pilot/external states non-blocking for Core completion.
 
 ### D-044 — Pilot rollout non-blocking completion policy — ACCEPTED — 02/10/2026
 
