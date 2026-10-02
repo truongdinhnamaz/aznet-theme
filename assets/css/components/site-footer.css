@@ -287,7 +287,10 @@
 }
 
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-link {
-    display: block;
+    display: grid;
+    grid-template-columns: minmax(4.7rem, auto) minmax(0, 1fr);
+    align-items: start;
+    gap: .35rem .65rem;
     min-width: 0;
     color: var(--aznet-theme-footer-muted);
     font-size: var(--aznet-theme-text-small);
@@ -295,6 +298,13 @@
     text-decoration: none;
 }
 
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-label {
+    color: var(--aznet-theme-law01-gold-soft);
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    white-space: nowrap;
+}
+
+.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-value,
 .aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-text {
     display: block;
     min-width: 0;

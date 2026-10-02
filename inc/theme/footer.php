@@ -212,8 +212,8 @@ function footer_context(): array {
         $contact_order = [
             'location' => 10,
             'phone'    => 20,
-            'website'  => 30,
-            'email'    => 40,
+            'email'    => 30,
+            'website'  => 40,
         ];
         usort(
             $contact_links,

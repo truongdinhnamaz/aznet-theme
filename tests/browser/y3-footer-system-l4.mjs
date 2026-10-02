@@ -99,32 +99,32 @@ async function inspectPreset(browser, preset, viewportName, viewport) {
           throw new Error('Law 01 must not render unmanaged social-menu sentinel content');
         }
         const contactBlock = footer.locator('.aznet-theme-site-footer__contact-social');
-        const identityBlock = footer.locator('.aznet-theme-site-footer__identity');
-        for (const channel of ['facebook', 'youtube', 'linkedin', 'tiktok', 'instagram']) {
-          const link = contactBlock.locator(`.aznet-theme-site-footer__channel-link--${channel}`);
-          if (await link.count() !== 1) throw new Error(`Missing managed Law 01 social icon in contact column: ${channel}`);
-          if (await link.getAttribute('target') !== '_blank') throw new Error(`Managed Law 01 social link must open safely: ${channel}`);
-          if (!(await link.getAttribute('aria-label'))) throw new Error(`Managed Law 01 social link needs accessible label: ${channel}`);
-        }
-        if (await identityBlock.locator('.aznet-theme-site-footer__channels').count() !== 0) {
-          throw new Error('Law 01 social icon row must live under contact information, not identity');
-        }
         const contactControls = contactBlock.locator('.aznet-theme-site-footer__contact-link');
-        if (await contactControls.count() !== 4) {
-          throw new Error(`Law 01 contact column must render four populated contact rows, got ${await contactControls.count()}`);
+        if (await contactControls.count() !== 5) {
+          throw new Error(`Law 01 contact column must render five populated rows, got ${await contactControls.count()}`);
         }
-        for (const label of ['Y3 Contact Sentinel', '02437164123', 'example.test', 'contact-overflow-regression@example-legal-services-domain.test']) {
-          const text = contactBlock.locator('.aznet-theme-site-footer__contact-text').filter({ hasText: label });
+        const rowLabels = (await contactBlock.locator('.aznet-theme-site-footer__contact-label').allTextContents())
+          .map((value) => value.trim().replace(/:$/, ''));
+        const expectedRowLabels = ['Địa chỉ', 'SĐT', 'Email', 'Website', 'Fanpage'];
+        if (JSON.stringify(rowLabels) !== JSON.stringify(expectedRowLabels)) {
+          throw new Error(`Law 01 contact row order mismatch: ${JSON.stringify(rowLabels)}`);
+        }
+        for (const value of ['Y3 Contact Sentinel', '02437164123', 'contact-overflow-regression@example-legal-services-domain.test', 'example.test', 'Facebook']) {
+          const text = contactBlock.locator('.aznet-theme-site-footer__contact-text').filter({ hasText: value });
           if (await text.count() !== 1 || !await text.isVisible()) {
-            throw new Error(`Law 01 populated contact value must be visibly rendered: ${label}`);
+            throw new Error(`Law 01 populated contact value must be visibly rendered: ${value}`);
           }
         }
-        if (await contactBlock.locator('.aznet-theme-site-footer__contact-icon').count() !== 0) {
-          throw new Error('Law 01 contact rows must not render icons; icons are reserved for social links.');
+        if (await contactBlock.locator('.aznet-theme-site-footer__channel-link, .aznet-theme-site-footer__channel-icon, .aznet-theme-site-footer__contact-icon').count() !== 0) {
+          throw new Error('Law 01 contact information must be a labeled text list without icon controls.');
         }
         const website = contactBlock.locator('.aznet-theme-site-footer__contact-link--website');
         if (await website.count() !== 1 || !await website.isVisible()) {
           throw new Error('Law 01 website contact must render only when website profile data exists');
+        }
+        const fanpage = contactBlock.locator('.aznet-theme-site-footer__contact-link--fanpage');
+        if (await fanpage.count() !== 1 || await fanpage.getAttribute('target') !== '_blank') {
+          throw new Error('Law 01 Fanpage row must render the managed Facebook URL as a safe external link');
         }
         continue;
       }

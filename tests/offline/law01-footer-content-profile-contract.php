@@ -23,7 +23,7 @@ foreach (["homepage_source_value( 'law-01', 'about' )", "homepage_source_value( 
         $fail("Footer must consume mapped WordPress sources: {$needle}");
     }
 }
-foreach (['Dịch vụ chính', 'aznet-theme-site-footer__services', 'about_intro', 'contact_links', 'aznet-theme-site-footer__contact-link', 'aznet-theme-site-footer__channel-link', 'aria-label', 'title='] as $needle) {
+foreach (['Dịch vụ chính', 'aznet-theme-site-footer__services', 'about_intro', 'contact_links', 'aznet-theme-site-footer__contact-link', 'aznet-theme-site-footer__contact-label'] as $needle) {
     if (! str_contains($template, $needle)) {
         $fail("Law 01 Footer template missing {$needle}");
     }
@@ -41,7 +41,7 @@ foreach (['handle_footer_profile_save', 'footer_profile_from_menus'] as $needle)
         $fail("Footer profile WordPress-menu adapter missing {$needle}");
     }
 }
-foreach (['aznet-theme-site-footer__services', 'grid-template-columns: minmax(280px, 1.3fr) repeat(3, minmax(160px, .75fr))', 'aznet-theme-site-footer__channel-link', 'aznet-theme-site-footer__channel-icon'] as $needle) {
+foreach (['aznet-theme-site-footer__services', 'grid-template-columns: minmax(280px, 1.3fr) repeat(3, minmax(160px, .75fr))', 'aznet-theme-site-footer__contact-label', 'aznet-theme-site-footer__contact-value'] as $needle) {
     if (! str_contains($css, $needle)) {
         $fail("Footer CSS missing {$needle}");
     }
@@ -56,4 +56,4 @@ foreach ([
     }
 }
 
-echo "PASS: Law 01 Footer renders saved contact values and icon channel buttons\n";
+echo "PASS: Law 01 Footer renders labeled address, phone, email, website and fanpage rows\n";

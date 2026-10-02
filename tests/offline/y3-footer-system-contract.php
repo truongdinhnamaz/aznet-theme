@@ -315,6 +315,14 @@ if (! str_contains($template, "'law-01' === \$preset") || ! str_contains($templa
 if (! str_contains($template, 'aznet-theme-site-footer__contact-text')) {
     y3_fail('Law 01 Footer contact values must remain visible and readable.');
 }
+foreach (['Địa chỉ', 'SĐT', 'Email', 'Website', 'Fanpage'] as $contactLabel) {
+    if (! str_contains($template, $contactLabel)) {
+        y3_fail('Law 01 Footer must render the requested contact row label: ' . $contactLabel);
+    }
+}
+if (! str_contains($template, 'aznet-theme-site-footer__contact-label')) {
+    y3_fail('Law 01 Footer contact rows must separate labels from values.');
+}
 if (! str_contains($template, "! in_array( \$preset, [ 'professional', 'law-01' ], true )")) {
     y3_fail('Law 01 Footer must not duplicate the social menu again in the bottom bar.');
 }
@@ -383,8 +391,8 @@ foreach ([
         y3_fail('Law 01 Footer visible contact presentation missing: ' . $needle);
     }
 }
-if (! str_contains($template, 'aznet-theme-site-footer__channel-icon')) {
-    y3_fail('Law 01 Footer social links must retain icon presentation.');
+if (str_contains($template, 'aznet-theme-site-footer__channel-icon')) {
+    y3_fail('Law 01 Footer contact column must use labeled text rows instead of social icon buttons.');
 }
 if (str_contains($helper, "wp_parse_url( $home_url") || str_contains($helper, "'key'   => 'website'")) {
     y3_fail('Law 01 Footer website must come only from populated Footer profile data, never be synthesized from home_url.');
