@@ -27,6 +27,9 @@ foreach ([
     [$admin, 'homepage_effective_surface_map(', 'Homepage admin does not consume shared surface model'],
     [$admin, 'Trang chủ đang hiển thị', 'Homepage Map primary heading missing'],
     [$admin, 'Nguồn & cài đặt nâng cao', 'advanced source disclosure missing'],
+    [$admin, 'function render_homepage_single_category_control(', 'single-category Homepage control missing'],
+    [$admin, "render_homepage_single_category_control( $preset, 'legal_news'", 'legal-news category chooser missing from Homepage Map'],
+    [$surface, "'news' === $surface_key ? [] : $exclude_ids", 'news surface must ignore cross-section exclusions and remain strictly latest within its selected category'],
     [$bootstrap, "require_once __DIR__ . '/homepage-surface-map.php';", 'surface map is not bootstrapped'],
 ] as [$haystack, $needle, $message]) {
     if (! is_string($haystack) || ! str_contains($haystack, $needle)) {
