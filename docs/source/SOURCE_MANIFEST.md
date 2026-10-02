@@ -6,10 +6,12 @@ Historical D-040/D-041 decision checkpoint was exact `main@5d2d34074c1b1b0006151
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.5 | Product scope/ownership and v1.1 objective/non-goals |
-| `AZT-02-architecture.md` | v0.20 | Theme architecture, public integration contracts, Template Extension Contract and preset lexicon presentation boundary |
+| `AZT-02-architecture.md` | v0.21 | Theme architecture, public integration contracts, Template Extension Contract, preset lexicon boundary and reusable editorial/news media-card presentation standard |
 | `AZT-03-baseline-provenance.md` | v0.80 | Canonical provenance through Rèm 01 1.3.31 Project Showcase production checkpoint |
-| `AZT-04-roadmap-qa-decisions.md` | v0.99 | Roadmap/QA decisions through D-042 three-pilot parity and D-043 template-extension governance |
+| `AZT-04-roadmap-qa-decisions.md` | v1.05 | Roadmap/QA decisions through D-046 editorial/news media-card presentation standard |
 | `AZT-EXEC-MAP.md` | v0.87 | Derived execution map through Rèm 01 1.3.31 production checkpoint |
+
+02/10/2026 presentation standard: AZT-02 v0.21 + AZT-04 D-046 establish the reusable editorial/news card rule for Theme templates: fixed 16:9 media frame, non-distorting `cover` crop, bounded desktop card width for a single story, editorial text flow beside/then below media, stacked mobile fallback, and no change to WordPress/provider ownership. Hero/portrait/product/gallery media remain use-case-specific and are not globally forced to 16:9.
 
 23/09/2026 Rèm 01 production evidence: `docs/evidence/CURTAIN01_PROJECT_SHOWCASE_PRODUCTION_20260923.md` records PR #262/#263 integration through `main@f84d45a58261ec41d9b0c11a5e02a0873edb28ff`, owner-backed WPVibe production publication, Post #999 / Category #80 mapping, corrective removal of one stale draft-only D-036-incompatible heading cap, exact live Curtain CSS/JS/`theme.json` reconciliation, and fresh mobile/desktop Accessibility 100 / Best Practices 100. Current GitHub Release remains `v1.3.23`; this pilot production state does not silently create a new Release.
 
