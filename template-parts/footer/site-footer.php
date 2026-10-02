@@ -85,7 +85,7 @@ $policy_heading     = (string) ( $labels['policy_heading'] ?? __( 'Chính sách'
                 </nav>
             <?php endif; ?>
 
-            <?php if ( 'law-01' === $preset && ( ! empty( $contact_links ) || ! empty( $social_channels ) ) ) : ?>
+            <?php if ( 'law-01' === $preset && ! empty( $contact_links ) ) : ?>
                 <div class="aznet-theme-site-footer__contact aznet-theme-site-footer__contact-social">
                     <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $contact_heading ); ?></h2>
                     <ul class="aznet-theme-site-footer__contact-links">
