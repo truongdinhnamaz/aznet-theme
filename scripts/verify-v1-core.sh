@@ -167,6 +167,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-library-ma
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-manifest-activation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-industrial01-map-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-authoring-manifest-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-homepage-assets-manifest-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-backend-unified-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-curtain01-map-parity-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/curtain01-about-presentation-authoring-contract.php
