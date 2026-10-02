@@ -542,7 +542,7 @@ This remains Theme presentation only. RootProfile authoritative Team remains BLO
 
 ## 14. Exact next
 
-**NEXT — preserve canonical `v1.3.21` technical PASS and current public `v1.3.20` publication boundary. `v1.3.21` publication remains separate. Any production deployment remains a separate explicit gate and must revalidate authenticated target-site state plus rollback before mutation. RootProfile Team remains externally blocked at issue #112.**
+**NEXT — preserve the current D-043 Homepage Design checkpoint on `main@7824276e99f8b53785e1fa0938939b8923a837e7`. Law 01 (`lstamduchn.vn`) and Industrial 01 (`minhnguyen.vn`) are independently production-released with fresh public render plus mobile Accessibility/Best Practices 100/100 and rollback backups. Rèm 01 (`remquocanh.vn`) is independently `BLOCKED_EXTERNAL_ACCESS` by repeated WPVibe HTTP 503 and must not delay healthy pilots. Continue remaining Theme-owned work on healthy pilots as separately gated slices; resume Rèm 01 only after access recovers. Authenticated wp-admin interaction remains UNKNOWN until an authenticated admin browser session is available. RootProfile Team remains externally blocked at issue #112.**
 
 
 ### Canonical 1.3.10 merge and Homepage Hero editing UX candidate — 19/09/2026
@@ -825,3 +825,5 @@ Accepted rules:
 - D-040 remote distribution remains separate: remote packages stay declarative and non-executable, and external catalog/license/entitlement/download authority stays outside Theme.
 
 **D-043 Homepage Design refinement — 02/10/2026:** the product owner clarified that Homepage design capabilities shared across pilots belong to AZnet Theme Core, while only template-specific presentation stays in the template. Hero is the first implemented surface. Core now owns the shared Homepage Design entrypoint/screen shell and generic media/form primitives; Law 01, Rèm 01 and Industrial 01 declare their Hero admin adapters through template manifests. Generic Core must not branch on those template ids. Industrial 01's existing Theme-setting Hero fields remain an explicitly marked legacy-compatibility adapter pending a future WordPress-owned content migration; this refinement does not authorize widening that store.
+
+**D-043 pilot progression — 02/10/2026:** healthy pilots progress independently. Industrial 01 was released on `minhnguyen.vn` and Law 01 on `lstamduchn.vn`, each after explicit backup/release approval and followed by fresh public production verification with mobile Accessibility 100/100 and Best Practices 100/100. Rèm 01 remains separately `BLOCKED_EXTERNAL_ACCESS` by captured WPVibe HTTP 503 evidence and does not block the other pilots. Authenticated wp-admin interaction is still UNKNOWN and is not inferred from public production checks.
