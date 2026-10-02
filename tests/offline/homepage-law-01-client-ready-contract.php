@@ -239,6 +239,14 @@ foreach ([
     $premiumMust(str_contains($faq, $needle), "Source-authored FAQ preview missing: {$needle}");
 }
 foreach ([
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-featured {',
+    'width: min(100%, calc(50% - 1rem));',
+    'max-width: 48rem;',
+] as $needle) {
+    $premiumMust(str_contains($css, $needle), "Legal News featured card width contract missing: {$needle}");
+}
+
+foreach ([
     '.aznet-theme-law01-analysis-card__media',
     '.aznet-theme-law01-news-featured',
     '.aznet-theme-law01-process__source',
