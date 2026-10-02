@@ -222,9 +222,9 @@ async function verifyHomepageTeamAuthoring(page, viewportName) {
   if (JSON.stringify(names) !== JSON.stringify(expectedAdmin)) throw new Error('Homepage Team admin member order/status projection mismatch: ' + JSON.stringify(names));
   if (await team.locator('.aznet-theme-homepage-team-create > summary').filter({ hasText: 'Thêm nhân sự' }).count() !== 1) throw new Error('Thêm nhân sự disclosure action missing');
   if (await team.getByRole('link', { name: 'Xem tất cả trên website' }).count() !== 1) throw new Error('Xem tất cả trên website action missing');
-  const firstEditor = team.locator('.aznet-theme-homepage-team-member__editor').first();
+  const firstEditor = team.locator('.aznet-theme-homepage-team-member__editor').nth(1);
   await firstEditor.locator('summary').click();
-  if (await firstEditor.locator('input[name="team_member_name"]').inputValue() !== expected[0]) throw new Error('Team editor name is not WordPress child Page title');
+  if (await firstEditor.locator('input[name="team_member_name"]').inputValue() !== expectedPublic[0]) throw new Error('Team editor name is not WordPress child Page title');
   if (!(await firstEditor.locator('input[name="team_member_role"]').inputValue()).includes('Vai trò A')) throw new Error('Team editor role is not WordPress child Page excerpt');
   if (await firstEditor.locator('textarea[name="team_member_biography"]').count() !== 1) throw new Error('Team editor biography field missing');
   if (await firstEditor.locator('input[name="team_member_menu_order"]').count() !== 1) throw new Error('Team editor display-order field missing');
@@ -232,7 +232,9 @@ async function verifyHomepageTeamAuthoring(page, viewportName) {
   if (await firstEditor.locator('input[name="team_member_sync_slug"]').count() !== 1) throw new Error('Team editor explicit permalink-sync control missing');
   if (await team.getByRole('link', { name: 'Chỉnh nâng cao trong WordPress' }).count() !== expectedAdmin.length) throw new Error('Team native advanced-edit links missing');
   if (await team.locator('[data-team-member-status]').count() !== expectedAdmin.length) throw new Error('Team publication status badges missing');
-  if (await team.locator('[data-team-member-status]').first().textContent() !== 'Draft') throw new Error('Draft Team member status is not visible in admin manager');
+  const firstStatus = ((await team.locator('[data-team-member-status]').first().textContent()) || '').trim().toLowerCase();
+  if (!firstStatus.includes('draft')) throw new Error('Draft Team member status is not visible in admin manager: ' + firstStatus);
+  if (await team.getByRole('link', { name: 'Xem hồ sơ' }).count() !== expectedPublic.length) throw new Error('Only published Team members should expose public profile links');
   const publicPage = await page.context().newPage();
   try {
     await publicPage.goto(baseUrl + '/', { waitUntil: 'networkidle' });
