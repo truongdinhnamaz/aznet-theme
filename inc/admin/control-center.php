@@ -183,26 +183,27 @@ function render_footer_profile_form(): void {
         'instagram' => [ 'footer_profile_instagram', __( 'Instagram', 'aznet-theme' ), 'url', 'https://instagram.com/...' ],
     ];
 
-    echo '<div class="aznet-theme-panel">';
-    echo '<h2>' . esc_html__( 'Nội dung Footer', 'aznet-theme' ) . '</h2>';
-    echo '<p>' . esc_html__( 'Thông tin chân trang dùng chung cho tất cả mẫu. Đổi mẫu không làm mất nội dung.', 'aznet-theme' ) . '</p>';
-    echo '<div class="aznet-theme-footer-owner-links">';
+    echo '<div class="aznet-theme-panel aznet-theme-footer-content-editor">';
+    echo '<div class="aznet-theme-footer-content-editor__heading"><div><h2>' . esc_html__( 'Sửa nội dung Footer', 'aznet-theme' ) . '</h2>';
+    echo '<p>' . esc_html__( 'Thông tin liên hệ và mạng xã hội dùng chung cho tất cả mẫu Footer và mọi pilot. Đổi mẫu không làm mất nội dung; dữ liệu vẫn được lưu bằng Menu WordPress.', 'aznet-theme' ) . '</p></div>';
+    echo '<div class="aznet-theme-footer-content-editor__actions">';
     echo '<a class="button" href="' . esc_url( admin_url( 'customize.php?autofocus[control]=custom_logo' ) ) . '">' . esc_html__( 'Sửa Logo', 'aznet-theme' ) . '</a>';
-    echo '<a class="button" href="' . esc_url( admin_url( 'options-general.php' ) ) . '">' . esc_html__( 'Sửa tên & mô tả website', 'aznet-theme' ) . '</a>';
-    echo '<a class="button" href="' . esc_url( admin_url( 'nav-menus.php' ) ) . '">' . esc_html__( 'Sửa Menu Footer', 'aznet-theme' ) . '</a>';
-    echo '</div>';
-    echo '<p>' . esc_html__( 'Các trường có dữ liệu sẽ xuất hiện ở chân trang. Dữ liệu được lưu thành Menu WordPress để không phụ thuộc storage riêng của Theme.', 'aznet-theme' ) . '</p>';
+    echo '<a class="button" href="' . esc_url( admin_url( 'options-general.php' ) ) . '">' . esc_html__( 'Sửa tên & mô tả', 'aznet-theme' ) . '</a>';
+    echo '<a class="button" href="' . esc_url( admin_url( 'nav-menus.php' ) ) . '">' . esc_html__( 'Sửa liên kết Footer', 'aznet-theme' ) . '</a>';
+    echo '</div></div>';
     if ( isset( $_GET['footer_saved'] ) && '1' === sanitize_key( wp_unslash( $_GET['footer_saved'] ) ) ) {
         echo '<div class="notice notice-success inline"><p>' . esc_html__( 'Đã lưu thông tin chân trang.', 'aznet-theme' ) . '</p></div>';
     }
     echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
     echo '<input type="hidden" name="action" value="aznet_theme_save_footer_profile">';
     wp_nonce_field( 'aznet_theme_save_footer_profile' );
+    echo '<div class="aznet-theme-footer-content-editor__grid">';
     foreach ( $fields as $key => $field ) {
-        echo '<label class="aznet-theme-field" for="' . esc_attr( $field[0] ) . '"><span>' . esc_html( $field[1] ) . '</span>';
+        echo '<label class="aznet-theme-footer-content-editor__field" for="' . esc_attr( $field[0] ) . '"><span>' . esc_html( $field[1] ) . '</span>';
         echo '<input class="regular-text" id="' . esc_attr( $field[0] ) . '" type="' . esc_attr( $field[2] ) . '" name="aznet_theme_footer_profile[' . esc_attr( $key ) . ']" value="' . esc_attr( (string) ( $values[ $key ] ?? '' ) ) . '" placeholder="' . esc_attr( $field[3] ) . '">';
         echo '</label>';
     }
+    echo '</div>';
     submit_button( __( 'Lưu thông tin chân trang', 'aznet-theme' ), 'primary', 'submit', false );
     echo '</form></div>';
 }
@@ -247,7 +248,6 @@ function render_control_center(): void {
 
     if ( 'overview' === $section ) {
         render_quick_setup_form();
-        render_footer_profile_form();
         render_provisioning_invitation();
         render_homepage_setup_card();
         echo '<div class="aznet-theme-grid">';
@@ -272,6 +272,7 @@ function render_control_center(): void {
         submit_button( 'Đặt lại', 'delete', 'submit', false ); echo '</form></div>';
     } elseif ( 'footer' === $section ) {
         render_settings_form( $section );
+        render_footer_profile_form();
     } elseif ( 'homepage' === $section ) {
         render_homepage_settings();
     } elseif ( 'hero-library' === $section ) {
