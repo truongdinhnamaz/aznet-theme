@@ -106,3 +106,8 @@ function handle_footer_content_save(): void {
     );
     exit;
 }
+
+
+if ( is_admin() ) {
+    add_action( 'admin_post_aznet_theme_save_footer_content', __NAMESPACE__ . '\\handle_footer_content_save' );
+}
