@@ -40,6 +40,24 @@ foreach ([
     assert(str_contains($css, $required), "Missing Homepage Hero editing UX presentation: {$required}");
 }
 
+$authoringJs = file_get_contents($root . '/assets/js/admin/homepage-authoring.js');
+foreach ([
+    'data-category-order-row',
+    'data-category-move="up"',
+    'data-category-move="down"',
+    'Đưa lên',
+    'Đưa xuống',
+] as $required) {
+    assert(str_contains($source, $required), "Missing Homepage category ordering UI: {$required}");
+}
+foreach ([
+    '[data-category-move]',
+    'insertBefore',
+    'data-category-order-row',
+] as $required) {
+    assert(str_contains((string) $authoringJs, $required), "Missing Homepage category ordering behavior: {$required}");
+}
+
 assert(str_contains($control, "'homepage'"));
 assert(str_contains($control, "'Trang chủ'"));
 assert(str_contains($control, 'render_homepage_settings()'));
