@@ -25,7 +25,11 @@ assert(($GLOBALS['hc_last_query']['post_type'] ?? null) === 'post');
 assert(($GLOBALS['hc_last_query']['post_status'] ?? null) === 'publish');
 assert(($GLOBALS['hc_last_query']['category__in'] ?? null) === [8]);
 assert(($GLOBALS['hc_last_query']['post__not_in'] ?? null) === [99]);
+
 $source = file_get_contents($path);
+assert(str_contains($source, 'function homepage_latest_content_posts('), 'Homepage must expose a bounded latest-content Post projection for editorial surfaces.');
+assert(str_contains($source, "trim( (string) \$post->post_content )"), 'Latest-content projection must reject empty placeholder Posts.');
+assert(str_contains($source, "trim( (string) \$post->post_excerpt )"), 'Latest-content projection must accept meaningful excerpts.');
 assert(
     str_contains($source, 'function homepage_renderable_child_pages('),
     'Public Homepage child projection must exist before Law 01 Services can reject untitled source Pages.'
