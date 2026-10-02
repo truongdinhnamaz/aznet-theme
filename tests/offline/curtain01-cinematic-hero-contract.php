@@ -5,6 +5,7 @@ declare(strict_types=1);
 $root = dirname(__DIR__, 2);
 $assetsPath = $root . '/inc/theme/assets.php';
 $heroPath   = $root . '/template-parts/homepage/curtain-01/hero.php';
+$manifestPath = $root . '/inc/theme/templates/curtain-01/manifest.php';
 $cssPath    = $root . '/assets/css/components/homepage-curtain-01.css';
 $jsPath     = $root . '/assets/js/homepage-curtain-01.js';
 
@@ -24,6 +25,7 @@ if (!is_file($jsPath)) {
 }
 
 $assets = (string) file_get_contents($assetsPath);
+$manifest = (string) file_get_contents($manifestPath);
 $hero   = (string) file_get_contents($heroPath);
 $css    = (string) file_get_contents($cssPath);
 $js     = (string) file_get_contents($jsPath);
@@ -31,10 +33,17 @@ $js     = (string) file_get_contents($jsPath);
 foreach ([
     "aznet-theme-homepage-curtain-01-motion",
     "/assets/js/homepage-curtain-01.js",
+] as $needle) {
+    if (!str_contains($manifest, $needle)) {
+        $fail('Curtain 01 motion asset is not declared by the template manifest: ' . $needle);
+    }
+}
+foreach ([
     "enqueue_homepage_curtain01_asset",
+    "template_homepage_asset_descriptors",
 ] as $needle) {
     if (!str_contains($assets, $needle)) {
-        $fail('Curtain 01 motion asset is not surface-scoped: ' . $needle);
+        $fail('Curtain 01 motion asset is not routed through scoped Core orchestration: ' . $needle);
     }
 }
 
