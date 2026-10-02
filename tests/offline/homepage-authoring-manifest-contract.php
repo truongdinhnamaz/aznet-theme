@@ -48,11 +48,18 @@ if (str_contains($admin, "if ( 'curtain-01' === \$preset ) {\n        return [ '
     fwrite(STDERR, "FAIL: Curtain 01 authoring order remains hard-coded in generic Core.\n");
     exit(1);
 }
-if (str_contains($admin, "if ( ! in_array( \$preset, [ 'law-01', 'curtain-01' ], true ) ) { return; }")) {
+$consoleStart = strpos($admin, 'function render_homepage_authoring_console(');
+$consoleEnd = strpos($admin, '/** Render Homepage presentation preset and typed source mapping. */', false === $consoleStart ? 0 : $consoleStart);
+if (false === $consoleStart || false === $consoleEnd || $consoleEnd <= $consoleStart) {
+    fwrite(STDERR, "FAIL: authoring console function boundary missing.\n");
+    exit(1);
+}
+$console = substr($admin, $consoleStart, $consoleEnd - $consoleStart);
+if (str_contains($console, "in_array( \$preset, [ 'law-01', 'curtain-01' ], true )")) {
     fwrite(STDERR, "FAIL: authoring console still uses a template-id allow-list.\n");
     exit(1);
 }
-if (! str_contains($admin, "template_manifest_for_homepage_preset( \$preset )")) {
+if (! str_contains($console, "template_manifest_for_homepage_preset( \$preset )")) {
     fwrite(STDERR, "FAIL: authoring console does not resolve active template manifest.\n");
     exit(1);
 }
