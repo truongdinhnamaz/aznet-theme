@@ -221,11 +221,16 @@ async function verifyHomepageTeamAuthoring(page, viewportName) {
   if (JSON.stringify(names) !== JSON.stringify(expected)) throw new Error('Homepage Team member order mismatch: ' + JSON.stringify(names));
   if (await team.locator('.aznet-theme-homepage-team-create > summary').filter({ hasText: 'Thêm nhân sự' }).count() !== 1) throw new Error('Thêm nhân sự disclosure action missing');
   if (await team.getByRole('link', { name: 'Xem tất cả trên website' }).count() !== 1) throw new Error('Xem tất cả trên website action missing');
-  const firstQuickEdit = team.locator('.aznet-theme-homepage-quick-edit-panel').first();
-  await firstQuickEdit.locator('summary').click();
-  if (await firstQuickEdit.locator('input[name="homepage_source_title"]').inputValue() !== expected[0]) throw new Error('Team quick edit title is not WordPress child Page title');
-  if (!(await firstQuickEdit.locator('textarea[name="homepage_source_excerpt"]').inputValue()).includes('Vai trò A')) throw new Error('Team quick edit role is not WordPress child Page excerpt');
-  if (await firstQuickEdit.locator('input[name="homepage_featured_image_id"]').count() !== 1) throw new Error('Team quick edit portrait field missing');
+  const firstEditor = team.locator('.aznet-theme-homepage-team-member__editor').first();
+  await firstEditor.locator('summary').click();
+  if (await firstEditor.locator('input[name="team_member_name"]').inputValue() !== expected[0]) throw new Error('Team editor name is not WordPress child Page title');
+  if (!(await firstEditor.locator('input[name="team_member_role"]').inputValue()).includes('Vai trò A')) throw new Error('Team editor role is not WordPress child Page excerpt');
+  if (await firstEditor.locator('textarea[name="team_member_biography"]').count() !== 1) throw new Error('Team editor biography field missing');
+  if (await firstEditor.locator('input[name="team_member_menu_order"]').count() !== 1) throw new Error('Team editor display-order field missing');
+  if (await firstEditor.locator('input[name="homepage_featured_image_id"]').count() !== 1) throw new Error('Team editor portrait field missing');
+  if (await firstEditor.locator('input[name="team_member_sync_slug"]').count() !== 1) throw new Error('Team editor explicit permalink-sync control missing');
+  if (await team.getByRole('link', { name: 'Chỉnh nâng cao trong WordPress' }).count() !== expected.length) throw new Error('Team native advanced-edit links missing');
+  if (await team.locator('[data-team-member-status]').count() !== expected.length) throw new Error('Team publication status badges missing');
   const publicPage = await page.context().newPage();
   try {
     await publicPage.goto(baseUrl + '/', { waitUntil: 'networkidle' });
