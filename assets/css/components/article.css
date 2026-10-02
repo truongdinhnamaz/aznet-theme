@@ -309,12 +309,13 @@
 }
 
 .aznet-theme-article--law01 .aznet-theme-article__title {
-    max-width: 26ch;
+    width: 100%;
+    max-width: 50rem;
     margin: 0 auto;
     color: var(--law01-article-ink);
-    font-size: clamp(3rem, 4vw, 4rem);
-    line-height: 1.08;
-    letter-spacing: -.035em;
+    font-size: 2.5rem;
+    line-height: 1.14;
+    letter-spacing: -.03em;
     text-align: center;
     text-wrap: balance;
 }
@@ -611,7 +612,10 @@
     }
 
     .aznet-theme-article--law01 .aznet-theme-article__title {
-        font-size: clamp(2.15rem, 11vw, 3.15rem);
+        font-size: clamp(1.6rem, 6.6vw, 1.9rem);
+        line-height: 1.18;
+        letter-spacing: -.025em;
+        text-wrap: pretty;
     }
 
     .aznet-theme-article--law01 .aznet-theme-article__featured-media {
