@@ -499,3 +499,13 @@ Evidence: `docs/evidence/CURTAIN01_HOMEPAGE_MAP_PARITY_CANDIDATE_20260927.md`.
 - Live `remquocanh.vn` remains Theme `1.3.31`; no release publication, draft publish, live Theme switch or production content mutation is claimed.
 
 Evidence: `docs/evidence/CURTAIN01_ABOUT_PRESENTATION_AUTHORING_20260927.md`.
+### Core Homepage Design Hero canonical merge closure / PR #339 — 02/10/2026
+
+- Owner-approved PR #339 merged to canonical `main@f759489180b9f00bca3e47f090a1c3ce69f184bb`.
+- Final reviewed head `fce6b47e6bc351e84459005cc592dd3a67d765f5` completed **44/44** triggered workflows SUCCESS with zero failures before merge; GitHub reported `mergeable_state=clean`.
+- The merged slice establishes the shared Core Homepage Design entrypoint/screen shell, manifest-driven Hero routing and generic media/form primitives without template-id branching in Core.
+- Law 01 consumes the existing WordPress-managed Hero path; Rèm 01 declares the WordPress-native Hero adapter; Industrial 01 retains only an explicitly bounded legacy Theme-setting compatibility adapter. No widening of Theme content ownership is authorized.
+- WPVibe draft checkpoints remain present for `lstamduchn.vn` and `minhnguyen.vn`. Fresh preview URLs were regenerated after merge; no pilot draft was published and production was not mutated.
+- `remquocanh.vn` still returns WPVibe HTTP 503 for connection/read operations. This remains an external access blocker and does not justify heuristic/private-storage workarounds.
+- Authenticated per-pilot wp-admin runtime/browser/a11y evidence remains **UNKNOWN**; no L3/L4 pilot PASS is inferred from repository CI or draft file writes.
+- Release publication and production deployment remain separate approval gates.
