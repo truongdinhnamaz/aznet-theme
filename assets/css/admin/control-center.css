@@ -259,9 +259,7 @@
 .aznet-theme-footer-content-editor__heading h2{margin:0 0 6px}
 .aznet-theme-footer-content-editor__heading p{max-width:720px;margin:0;color:#646970}
 .aznet-theme-footer-content-editor__actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.aznet-theme-footer-content-editor__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px;margin-top:20px}
-.aznet-theme-footer-content-editor__field{display:grid;gap:6px}
-.aznet-theme-footer-content-editor__field>span{font-weight:600}
-.aznet-theme-footer-content-editor__field input{width:100%;max-width:none}
+.aznet-theme-footer-content-editor__editor{margin-top:20px;max-width:920px}
+.aznet-theme-footer-content-editor__editor .wp-editor-wrap{background:#fff}
 @media(max-width:900px){.aznet-theme-footer-content-editor__heading{display:grid}.aznet-theme-footer-content-editor__actions{justify-content:flex-start}}
-@media(max-width:782px){.aznet-theme-footer-content-editor{padding:16px}.aznet-theme-footer-content-editor__grid{grid-template-columns:1fr}}
+@media(max-width:782px){.aznet-theme-footer-content-editor{padding:16px}.aznet-theme-footer-content-editor__editor{max-width:none}}
