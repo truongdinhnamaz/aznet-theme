@@ -159,6 +159,31 @@ function template_manifest( string $id ): ?array {
     return $store[ $id ] ?? null;
 }
 
+/**
+ * Resolve one registered template manifest by its Homepage presentation preset.
+ *
+ * @return array<string,mixed>|null
+ */
+function template_manifest_for_homepage_preset( string $preset ): ?array {
+    $preset = trim( $preset );
+    if ( '' === $preset || 'off' === $preset ) {
+        return null;
+    }
+
+    foreach ( template_manifests() as $manifest ) {
+        if ( ! in_array( 'homepage', (array) ( $manifest['capabilities'] ?? [] ), true ) ) {
+            continue;
+        }
+
+        $candidate = $manifest['presentation']['homepage_preset'] ?? null;
+        if ( is_string( $candidate ) && $preset === $candidate ) {
+            return $manifest;
+        }
+    }
+
+    return null;
+}
+
 
 /**
  * Return unique registered presentation ids for one supported slot.
