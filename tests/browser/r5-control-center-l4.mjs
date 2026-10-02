@@ -217,8 +217,9 @@ async function verifyHomepageTeamAuthoring(page, viewportName) {
   const team = page.locator('#homepage-team');
   if (await team.count() !== 1) throw new Error('Homepage Team authoring panel missing');
   const names = (await team.locator('[data-team-member-name]').allTextContents()).map((value) => value.trim());
-  const expected = ['R5 Team Member A', 'R5 Team Member B', 'R5 Team Member C', 'R5 Team Member D'];
-  if (JSON.stringify(names) !== JSON.stringify(expected)) throw new Error('Homepage Team member order mismatch: ' + JSON.stringify(names));
+  const expectedAdmin = ['R5 Draft Team Member', 'R5 Team Member A', 'R5 Team Member B', 'R5 Team Member C', 'R5 Team Member D'];
+  const expectedPublic = ['R5 Team Member A', 'R5 Team Member B', 'R5 Team Member C', 'R5 Team Member D'];
+  if (JSON.stringify(names) !== JSON.stringify(expectedAdmin)) throw new Error('Homepage Team admin member order/status projection mismatch: ' + JSON.stringify(names));
   if (await team.locator('.aznet-theme-homepage-team-create > summary').filter({ hasText: 'Thêm nhân sự' }).count() !== 1) throw new Error('Thêm nhân sự disclosure action missing');
   if (await team.getByRole('link', { name: 'Xem tất cả trên website' }).count() !== 1) throw new Error('Xem tất cả trên website action missing');
   const firstEditor = team.locator('.aznet-theme-homepage-team-member__editor').first();
@@ -229,14 +230,15 @@ async function verifyHomepageTeamAuthoring(page, viewportName) {
   if (await firstEditor.locator('input[name="team_member_menu_order"]').count() !== 1) throw new Error('Team editor display-order field missing');
   if (await firstEditor.locator('input[name="homepage_featured_image_id"]').count() !== 1) throw new Error('Team editor portrait field missing');
   if (await firstEditor.locator('input[name="team_member_sync_slug"]').count() !== 1) throw new Error('Team editor explicit permalink-sync control missing');
-  if (await team.getByRole('link', { name: 'Chỉnh nâng cao trong WordPress' }).count() !== expected.length) throw new Error('Team native advanced-edit links missing');
-  if (await team.locator('[data-team-member-status]').count() !== expected.length) throw new Error('Team publication status badges missing');
+  if (await team.getByRole('link', { name: 'Chỉnh nâng cao trong WordPress' }).count() !== expectedAdmin.length) throw new Error('Team native advanced-edit links missing');
+  if (await team.locator('[data-team-member-status]').count() !== expectedAdmin.length) throw new Error('Team publication status badges missing');
+  if (await team.locator('[data-team-member-status]').first().textContent() !== 'Draft') throw new Error('Draft Team member status is not visible in admin manager');
   const publicPage = await page.context().newPage();
   try {
     await publicPage.goto(baseUrl + '/', { waitUntil: 'networkidle' });
     const publicNames = (await publicPage.locator('.aznet-theme-law01-profile__members .aznet-theme-team-card__name').allTextContents()).map((value) => value.trim());
-    if (JSON.stringify(publicNames) !== JSON.stringify(names)) {
-      throw new Error('Team admin/Homepage member order mismatch: admin=' + JSON.stringify(names) + ' public=' + JSON.stringify(publicNames));
+    if (JSON.stringify(publicNames) !== JSON.stringify(expectedPublic)) {
+      throw new Error('Team public projection must remain published-only: ' + JSON.stringify(publicNames));
     }
     if (await publicPage.locator('.aznet-theme-law01-profile__members .aznet-theme-team-card__media img').count() !== 0) {
       throw new Error('R5 text-only Team fixture unexpectedly rendered portrait media');
