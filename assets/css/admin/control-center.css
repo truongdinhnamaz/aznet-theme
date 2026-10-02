@@ -251,3 +251,17 @@
 .aznet-theme-homepage-hero-live-preview--media-left .aznet-theme-homepage-hero-live-preview__copy{order:2}
 .aznet-theme-homepage-hero-live-preview--media-left .aznet-theme-homepage-hero-live-preview__media{order:1}
 @media(max-width:782px){.aznet-theme-homepage-hero-live-preview__toolbar{display:grid}.aznet-theme-homepage-hero-live-preview__canvas{grid-template-columns:1fr!important;gap:16px;min-height:0;padding:18px}.aznet-theme-homepage-hero-live-preview__copy{order:1!important}.aznet-theme-homepage-hero-live-preview__media{order:2!important;min-height:150px}.aznet-theme-homepage-hero-live-preview__media img{min-height:150px;max-height:190px}.aznet-theme-homepage-hero-live-preview--centered .aznet-theme-homepage-hero-live-preview__media{display:none}.aznet-theme-homepage-hero-live-preview__title{font-size:24px}}
+
+
+/* Shared Footer content editor — WordPress-native content, Theme-owned presentation. */
+.aznet-theme-footer-content-editor{padding:22px}
+.aznet-theme-footer-content-editor__heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.aznet-theme-footer-content-editor__heading h2{margin:0 0 6px}
+.aznet-theme-footer-content-editor__heading p{max-width:720px;margin:0;color:#646970}
+.aznet-theme-footer-content-editor__actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.aznet-theme-footer-content-editor__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px;margin-top:20px}
+.aznet-theme-footer-content-editor__field{display:grid;gap:6px}
+.aznet-theme-footer-content-editor__field>span{font-weight:600}
+.aznet-theme-footer-content-editor__field input{width:100%;max-width:none}
+@media(max-width:900px){.aznet-theme-footer-content-editor__heading{display:grid}.aznet-theme-footer-content-editor__actions{justify-content:flex-start}}
+@media(max-width:782px){.aznet-theme-footer-content-editor{padding:16px}.aznet-theme-footer-content-editor__grid{grid-template-columns:1fr}}
