@@ -161,15 +161,33 @@ function handle_curtain_about_presentation_save(): void {
 }
 
 /** Build one ordinary published child Page payload for a Team member. */
-function homepage_team_member_insert_data( \WP_Post $parent, string $name, string $role ): array {
+function homepage_team_member_insert_data( \WP_Post $parent, string $name, string $role, string $biography = '' ): array {
     return [
         'post_type'    => 'page',
         'post_status'  => 'publish',
         'post_parent'  => (int) $parent->ID,
         'post_title'   => $name,
         'post_excerpt' => $role,
+        'post_content' => $biography,
         'menu_order'   => \AZnet\Theme\team_directory_next_menu_order(),
     ];
+}
+
+/** Build a bounded update payload for one existing Team child Page. */
+function homepage_team_member_update_data( \WP_Post $member, string $name, string $role, string $biography, int $menu_order, bool $sync_slug ): array {
+    $data = [
+        'ID'           => (int) $member->ID,
+        'post_title'   => $name,
+        'post_excerpt' => $role,
+        'post_content' => $biography,
+        'menu_order'   => max( 0, min( 9999, $menu_order ) ),
+    ];
+
+    if ( $sync_slug ) {
+        $data['post_name'] = sanitize_title( $name );
+    }
+
+    return $data;
 }
 
 /** Create one published WordPress Page child under the exact mapped Team parent. */
@@ -190,6 +208,9 @@ function handle_homepage_team_member_create(): void {
     $role = isset( $_POST['team_member_role'] )
         ? sanitize_textarea_field( wp_unslash( $_POST['team_member_role'] ) )
         : '';
+    $biography = isset( $_POST['team_member_biography'] )
+        ? wp_kses_post( wp_unslash( $_POST['team_member_biography'] ) )
+        : '';
     $image_id = isset( $_POST['homepage_featured_image_id'] )
         ? absint( $_POST['homepage_featured_image_id'] )
         : 0;
@@ -202,7 +223,7 @@ function handle_homepage_team_member_create(): void {
     }
 
     $id = wp_insert_post(
-        homepage_team_member_insert_data( $parent, $name, $role ),
+        homepage_team_member_insert_data( $parent, $name, $role, $biography ),
         true
     );
     if ( is_wp_error( $id ) ) {
@@ -218,6 +239,68 @@ function handle_homepage_team_member_create(): void {
         admin_url( 'admin.php' )
     );
     wp_safe_redirect( $url . '#homepage-team' );
+    exit;
+}
+
+/** Update one existing direct Team child while preserving WordPress ownership. */
+function handle_homepage_team_member_update(): void {
+    if ( ! current_user_can( 'edit_theme_options' ) ) {
+        wp_die( esc_html__( 'Bạn không có quyền sửa nhân sự.', 'aznet-theme' ) );
+    }
+
+    $member_id = isset( $_POST['team_member_id'] ) ? absint( $_POST['team_member_id'] ) : 0;
+    check_admin_referer( 'aznet_theme_update_team_member_' . $member_id );
+
+    if ( $member_id <= 0
+        || ! \AZnet\Theme\team_directory_member_is_child( $member_id )
+        || ! current_user_can( 'edit_post', $member_id ) ) {
+        wp_die( esc_html__( 'Nhân sự không còn thuộc đúng Page Đội ngũ hoặc bạn không có quyền chỉnh sửa.', 'aznet-theme' ) );
+    }
+
+    $member = get_post( $member_id );
+    if ( ! $member instanceof \WP_Post || 'page' !== $member->post_type ) {
+        wp_die( esc_html__( 'Nhân sự WordPress không hợp lệ.', 'aznet-theme' ) );
+    }
+
+    $name = isset( $_POST['team_member_name'] )
+        ? sanitize_text_field( wp_unslash( $_POST['team_member_name'] ) )
+        : '';
+    $role = isset( $_POST['team_member_role'] )
+        ? sanitize_textarea_field( wp_unslash( $_POST['team_member_role'] ) )
+        : '';
+    $biography = isset( $_POST['team_member_biography'] )
+        ? wp_kses_post( wp_unslash( $_POST['team_member_biography'] ) )
+        : '';
+    $menu_order = isset( $_POST['team_member_menu_order'] ) ? intval( $_POST['team_member_menu_order'] ) : (int) $member->menu_order;
+    $image_id = isset( $_POST['homepage_featured_image_id'] ) ? absint( $_POST['homepage_featured_image_id'] ) : 0;
+    $sync_slug = ! empty( $_POST['team_member_sync_slug'] );
+
+    if ( '' === $name ) {
+        wp_die( esc_html__( 'Tên nhân sự không được để trống.', 'aznet-theme' ) );
+    }
+    if ( $image_id > 0 && ! wp_attachment_is_image( $image_id ) ) {
+        wp_die( esc_html__( 'Ảnh nhân sự không hợp lệ.', 'aznet-theme' ) );
+    }
+
+    $result = wp_update_post(
+        homepage_team_member_update_data( $member, $name, $role, $biography, $menu_order, $sync_slug ),
+        true
+    );
+    if ( is_wp_error( $result ) ) {
+        wp_die( esc_html( $result->get_error_message() ) );
+    }
+
+    if ( $image_id > 0 ) {
+        set_post_thumbnail( $member_id, $image_id );
+    } else {
+        delete_post_thumbnail( $member_id );
+    }
+
+    $url = add_query_arg(
+        [ 'page' => 'aznet-theme', 'section' => 'homepage', 'team_member_updated' => '1' ],
+        admin_url( 'admin.php' )
+    );
+    wp_safe_redirect( $url . '#homepage-team-member-' . $member_id );
     exit;
 }
 
