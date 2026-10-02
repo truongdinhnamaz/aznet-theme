@@ -16,12 +16,50 @@ use function AZnet\Theme\provisioning_index_restore_available;
 use function AZnet\Theme\provisioning_restore_search_visibility;
 use function AZnet\Theme\provisioning_find_compatible_owned_role;
 use function AZnet\Theme\provisioning_media_role_provenance;
+use function AZnet\Theme\homepage_preset;
+use function AZnet\Theme\template_manifests;
+use function AZnet\Theme\template_provisioning_blueprint_key;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 function provisioning_url( int $step = 1 ): string { return add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'provisioning', 'step' => max( 1, min( 4, $step ) ) ], admin_url( 'admin.php' ) ); }
 function provisioning_plan_transient_key(): string { return 'aznet_theme_provisioning_plan_' . (string) get_current_user_id(); }
 function provisioning_result_transient_key(): string { return 'aznet_theme_provisioning_result_' . (string) get_current_user_id(); }
+
+/** @return array<string,string> */
+function provisioning_wizard_blueprint_choices(): array {
+    $choices = [];
+
+    foreach ( template_manifests() as $manifest ) {
+        $preset = $manifest['presentation']['homepage_preset'] ?? null;
+        if ( ! is_string( $preset ) || '' === $preset ) {
+            continue;
+        }
+        $blueprint = template_provisioning_blueprint_key( $preset );
+        if ( null === $blueprint || array_key_exists( $blueprint, $choices ) ) {
+            continue;
+        }
+        $label = trim( (string) ( $manifest['name'] ?? '' ) );
+        $choices[ $blueprint ] = '' !== $label ? $label : $blueprint;
+    }
+
+    if ( is_array( provisioning_blueprint( 'professional-services-v1' ) )
+        && ! array_key_exists( 'professional-services-v1', $choices ) ) {
+        $choices['professional-services-v1'] = 'Professional Services';
+    }
+
+    return $choices;
+}
+
+/** Resolve a fail-soft provisioning wizard default from the active template recipe. */
+function provisioning_wizard_default_blueprint(): string {
+    $active = template_provisioning_blueprint_key( homepage_preset() );
+    $choices = provisioning_wizard_blueprint_choices();
+    if ( null !== $active && array_key_exists( $active, $choices ) ) {
+        return $active;
+    }
+    return '' !== (string) array_key_first( $choices ) ? (string) array_key_first( $choices ) : '';
+}
 
 function render_provisioning_invitation(): void {
     echo '<div class="aznet-theme-panel aznet-theme-provisioning-invitation"><h2>' . esc_html__( 'Thiết lập website nhanh', 'aznet-theme' ) . '</h2>';
@@ -106,7 +144,7 @@ function handle_provisioning_plan(): void {
     if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Bạn không có quyền thực hiện thao tác này.', 'aznet-theme' ) ); }
     check_admin_referer( 'aznet_theme_provisioning' );
     $blueprint = isset( $_POST['blueprint'] ) ? sanitize_key( wp_unslash( $_POST['blueprint'] ) ) : '';
-    if ( ! in_array( $blueprint, [ 'law01-v1', 'law01-v1-1', 'law01-v1-2', 'professional-services-v1' ], true ) ) { wp_die( esc_html__( 'Blueprint không hợp lệ.', 'aznet-theme' ) ); }
+    if ( ! is_array( provisioning_blueprint( $blueprint ) ) ) { wp_die( esc_html__( 'Blueprint không hợp lệ.', 'aznet-theme' ) ); }
     $raw_pages = isset( $_POST['pages'] ) && is_array( $_POST['pages'] ) ? wp_unslash( $_POST['pages'] ) : [];
     $raw_categories = isset( $_POST['categories'] ) && is_array( $_POST['categories'] ) ? wp_unslash( $_POST['categories'] ) : [];
     $menu_action = isset( $_POST['menu_action'] ) ? sanitize_key( wp_unslash( $_POST['menu_action'] ) ) : 'skip';
@@ -235,10 +273,12 @@ function provisioning_render_plan_summary( array $plan ): void {
 function render_provisioning_wizard(): void {
     if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Bạn không có quyền thực hiện thao tác này.', 'aznet-theme' ) ); }
     $step = isset( $_GET['step'] ) ? max( 1, min( 4, (int) $_GET['step'] ) ) : 1;
-    $blueprint_key = isset( $_GET['blueprint'] ) ? sanitize_key( wp_unslash( $_GET['blueprint'] ) ) : 'law01-v1-2';
-    if ( ! in_array( $blueprint_key, [ 'law01-v1-2', 'professional-services-v1' ], true ) ) { $blueprint_key = 'law01-v1-2'; }
+    $blueprint_choices = provisioning_wizard_blueprint_choices();
+    $default_blueprint = provisioning_wizard_default_blueprint();
+    $blueprint_key = isset( $_GET['blueprint'] ) ? sanitize_key( wp_unslash( $_GET['blueprint'] ) ) : $default_blueprint;
+    if ( ! array_key_exists( $blueprint_key, $blueprint_choices ) ) { $blueprint_key = $default_blueprint; }
     $state = provisioning_discovery();
-    $blueprint = provisioning_blueprint( $blueprint_key );
+    $blueprint = '' !== $blueprint_key ? provisioning_blueprint( $blueprint_key ) : null;
     $is_law = 'law01-v1-2' === $blueprint_key;
     echo '<div class="aznet-theme-panel aznet-theme-provisioning"><h2>' . esc_html__( 'Thiết lập website nhanh', 'aznet-theme' ) . '</h2><p class="description">' . esc_html( sprintf( 'Bước %d/4', $step ) ) . '</p>';
     if ( 1 === $step ) {
@@ -246,7 +286,11 @@ function render_provisioning_wizard(): void {
         echo '<p><strong>' . esc_html__( 'Chế độ đề xuất:', 'aznet-theme' ) . '</strong> <code>' . esc_html( provisioning_site_mode( $state ) ) . '</code></p>';
         echo '<p class="description">' . esc_html__( 'Bước kiểm tra này chỉ đọc dữ liệu và không thay đổi website.', 'aznet-theme' ) . '</p>';
         echo '<form method="get" action="' . esc_url( admin_url( 'admin.php' ) ) . '"><input type="hidden" name="page" value="aznet-theme"><input type="hidden" name="section" value="provisioning"><input type="hidden" name="step" value="2">';
-        echo '<p><label for="aznet-theme-provision-blueprint"><strong>' . esc_html__( 'Blueprint', 'aznet-theme' ) . '</strong></label><br><select id="aznet-theme-provision-blueprint" name="blueprint"><option value="law01-v1-2">Law 01</option><option value="professional-services-v1">Professional Services</option></select></p>';
+        echo '<p><label for="aznet-theme-provision-blueprint"><strong>' . esc_html__( 'Blueprint', 'aznet-theme' ) . '</strong></label><br><select id="aznet-theme-provision-blueprint" name="blueprint">';
+        foreach ( $blueprint_choices as $choice_key => $choice_label ) {
+            echo '<option value="' . esc_attr( $choice_key ) . '" ' . selected( $blueprint_key, $choice_key, false ) . '>' . esc_html( $choice_label ) . '</option>';
+        }
+        echo '</select></p>';
         submit_button( __( 'Tiếp tục', 'aznet-theme' ), 'primary', 'submit', false );
         echo '</form>';
     } elseif ( 2 === $step && is_array( $blueprint ) ) {
