@@ -541,3 +541,14 @@ Evidence: `docs/evidence/CORE_HOMEPAGE_DESIGN_PILOT_L4_PARTIAL_20261002.md`.
 - One fresh post-report Theme-side preview read again returned WP API 503; retries were stopped per recovery guidance.
 - Disposition: `BLOCKED_EXTERNAL_ACCESS`; no inference of bad credentials, PHP fatal, host failure, proxy failure, or Cloudflare rule without matching logs.
 - Evidence: `docs/evidence/CURTAIN01_WPVIBE_503_EXTERNAL_ACCESS_20261002.md`.
+
+
+### Law 01 production release — 02/10/2026
+
+- User confirmed a fresh backup for `lstamduchn.vn`; the previously established release gate was therefore satisfied.
+- WPVibe published the current Law 01 draft into live `aznet-theme` and created `aznet-theme-wpvibe-backup` as the theme-directory rollback copy.
+- Post-publish production render at `https://lstamduchn.vn/` succeeded with Law 01 presentation active and WordPress-owned Hero rendered through the Hero library path.
+- Fresh mobile production Lighthouse: Accessibility 100/100; Best Practices 100/100.
+- Authenticated wp-admin interaction remains UNKNOWN and is not inferred from public production checks.
+- Rèm 01 remains independently `BLOCKED_EXTERNAL_ACCESS`; this does not invalidate the Law 01 release.
+- Evidence: `docs/evidence/LAW01_PRODUCTION_RELEASE_20261002.md`.
