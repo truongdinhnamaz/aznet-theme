@@ -44,5 +44,7 @@ return [
             'source_type'    => 'wp_block',
         ],
     ],
-    'provisioning'     => [],
+    'provisioning'     => [
+        'blueprint' => 'law01-v1-2',
+    ],
 ];
