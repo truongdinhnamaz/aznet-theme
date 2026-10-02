@@ -896,6 +896,8 @@
 
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-featured {
     display: grid;
+    width: min(100%, calc(50% - 1rem));
+    max-width: 48rem;
     grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
     overflow: hidden;
     margin-top: 1.25rem;
@@ -1064,6 +1066,10 @@
 }
 
 @media (max-width: 960px) {
+    .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-featured {
+        width: 100%;
+        max-width: none;
+    }
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-featured,
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-process .aznet-theme-law01-panel,
     .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-final-cta .aznet-theme-law01-container {
