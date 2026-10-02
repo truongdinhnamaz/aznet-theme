@@ -65,7 +65,7 @@ $variantPath = $root . '/assets/css/components/homepage-law-01-variants.css';
 assert(is_file($variantPath), 'Law 01 variant stylesheet must exist.');
 $variantCss = file_get_contents($variantPath);
 assert(str_contains($variantCss, '.aznet-theme-homepage--law-01-burgundy-gold'), 'Burgundy variant styling must be scoped to Law 01.');
-assert(str_contains($assets, 'homepage-law-01-variants.css'), 'Variant asset must be surface-aware and loaded only with Law 01.');
+assert(is_string($lawManifest) && str_contains($lawManifest, 'homepage-law-01-variants.css'), 'Variant asset must be declared by the Law 01 manifest.');
 foreach ([
     'grid-template-columns: minmax(0, 54%) minmax(0, 46%);',
     'padding: clamp(2.75rem, 4.2vw, 4.5rem) clamp(2rem, 3.4vw, 4.25rem);',
