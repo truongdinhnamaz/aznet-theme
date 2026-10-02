@@ -31,6 +31,28 @@ function team_directory_members( int $limit = 0 ): array {
 }
 
 /** @return array<int,\WP_Post> */
+function team_directory_managed_members(): array {
+    $parent = team_directory_parent();
+    if ( ! $parent instanceof \WP_Post ) { return []; }
+
+    $posts = get_posts(
+        [
+            'post_type'      => 'page',
+            'post_status'    => [ 'publish', 'draft', 'private', 'pending', 'future' ],
+            'post_parent'    => (int) $parent->ID,
+            'orderby'        => 'menu_order title',
+            'order'          => 'ASC',
+            'posts_per_page' => -1,
+            'no_found_rows'  => true,
+        ]
+    );
+
+    return is_array( $posts )
+        ? array_values( array_filter( $posts, static fn( $post ): bool => $post instanceof \WP_Post ) )
+        : [];
+}
+
+/** @return array<int,\WP_Post> */
 function team_directory_public_members( int $limit = 0 ): array {
     $members = team_directory_members();
     $public = [];

@@ -222,6 +222,37 @@ function handle_homepage_team_member_create(): void {
 }
 
 
+/** Move one Team member Page to Trash after validating the mapped Team parent. */
+function handle_homepage_team_member_delete(): void {
+    if ( ! current_user_can( 'edit_theme_options' ) ) {
+        wp_die( esc_html__( 'Bạn không có quyền xóa nhân sự.', 'aznet-theme' ) );
+    }
+
+    $member_id = isset( $_POST['team_member_id'] ) ? absint( $_POST['team_member_id'] ) : 0;
+    if ( $member_id <= 0 ) {
+        wp_die( esc_html__( 'Nhân sự không hợp lệ.', 'aznet-theme' ) );
+    }
+
+    check_admin_referer( 'aznet_theme_delete_team_member_' . $member_id );
+
+    if ( ! \AZnet\Theme\team_directory_member_is_child( $member_id ) || ! current_user_can( 'delete_post', $member_id ) ) {
+        wp_die( esc_html__( 'Nhân sự không còn thuộc Đội ngũ hoặc bạn không có quyền xóa.', 'aznet-theme' ) );
+    }
+
+    $trashed = wp_trash_post( $member_id );
+    if ( ! $trashed instanceof \WP_Post ) {
+        wp_die( esc_html__( 'Không thể chuyển nhân sự vào Thùng rác.', 'aznet-theme' ) );
+    }
+
+    $url = add_query_arg(
+        [ 'page' => 'aznet-theme', 'section' => 'homepage', 'team_member_deleted' => '1' ],
+        admin_url( 'admin.php' )
+    );
+    wp_safe_redirect( $url . '#homepage-team' );
+    exit;
+}
+
+
 /** Create one WordPress-native draft copy while reusing Media attachment references. */
 function homepage_duplicate_native_post( \WP_Post $source, string $title_suffix, int $parent_override = -1 ): int|\WP_Error {
     $new_id = wp_insert_post(

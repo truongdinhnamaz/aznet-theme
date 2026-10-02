@@ -217,21 +217,25 @@ async function verifyHomepageTeamAuthoring(page, viewportName) {
   const team = page.locator('#homepage-team');
   if (await team.count() !== 1) throw new Error('Homepage Team authoring panel missing');
   const names = (await team.locator('[data-team-member-name]').allTextContents()).map((value) => value.trim());
-  const expected = ['R5 Team Member A', 'R5 Team Member B', 'R5 Team Member C', 'R5 Team Member D'];
-  if (JSON.stringify(names) !== JSON.stringify(expected)) throw new Error('Homepage Team member order mismatch: ' + JSON.stringify(names));
+  const expectedManaged = ['R5 Draft Team Member', 'R5 Team Member A', 'R5 Team Member B', 'R5 Team Member C', 'R5 Team Member D'];
+  const expectedPublic = ['R5 Team Member A', 'R5 Team Member B', 'R5 Team Member C', 'R5 Team Member D'];
+  if (JSON.stringify(names) !== JSON.stringify(expectedManaged)) throw new Error('Homepage Team managed member order mismatch: ' + JSON.stringify(names));
+  if (await team.getByText('Bản nháp', { exact: true }).count() !== 1) throw new Error('Draft Team member state badge missing');
+  if (await team.locator('[data-team-member-delete]').count() !== expectedManaged.length) throw new Error('Team delete action missing for one or more managed members');
   if (await team.locator('.aznet-theme-homepage-team-create > summary').filter({ hasText: 'Thêm nhân sự' }).count() !== 1) throw new Error('Thêm nhân sự disclosure action missing');
   if (await team.getByRole('link', { name: 'Xem tất cả trên website' }).count() !== 1) throw new Error('Xem tất cả trên website action missing');
-  const firstQuickEdit = team.locator('.aznet-theme-homepage-quick-edit-panel').first();
+  const publishedRow = team.locator('.aznet-theme-homepage-team-member').filter({ hasText: 'R5 Team Member A' });
+  const firstQuickEdit = publishedRow.locator('.aznet-theme-homepage-quick-edit-panel');
   await firstQuickEdit.locator('summary').click();
-  if (await firstQuickEdit.locator('input[name="homepage_source_title"]').inputValue() !== expected[0]) throw new Error('Team quick edit title is not WordPress child Page title');
+  if (await firstQuickEdit.locator('input[name="homepage_source_title"]').inputValue() !== expectedPublic[0]) throw new Error('Team quick edit title is not WordPress child Page title');
   if (!(await firstQuickEdit.locator('textarea[name="homepage_source_excerpt"]').inputValue()).includes('Vai trò A')) throw new Error('Team quick edit role is not WordPress child Page excerpt');
   if (await firstQuickEdit.locator('input[name="homepage_featured_image_id"]').count() !== 1) throw new Error('Team quick edit portrait field missing');
   const publicPage = await page.context().newPage();
   try {
     await publicPage.goto(baseUrl + '/', { waitUntil: 'networkidle' });
     const publicNames = (await publicPage.locator('.aznet-theme-law01-profile__members .aznet-theme-team-card__name').allTextContents()).map((value) => value.trim());
-    if (JSON.stringify(publicNames) !== JSON.stringify(names)) {
-      throw new Error('Team admin/Homepage member order mismatch: admin=' + JSON.stringify(names) + ' public=' + JSON.stringify(publicNames));
+    if (JSON.stringify(publicNames) !== JSON.stringify(expectedPublic)) {
+      throw new Error('Team public member order mismatch: expected=' + JSON.stringify(expectedPublic) + ' public=' + JSON.stringify(publicNames));
     }
     if (await publicPage.locator('.aznet-theme-law01-profile__members .aznet-theme-team-card__media img').count() !== 0) {
       throw new Error('R5 text-only Team fixture unexpectedly rendered portrait media');

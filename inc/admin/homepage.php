@@ -545,15 +545,14 @@ function render_homepage_team_authoring(): void {
     $parent = \AZnet\Theme\team_directory_parent();
     if ( ! $parent instanceof \WP_Post ) { return; }
 
-    $members = \AZnet\Theme\team_directory_members( 4 );
-    $all_members = \AZnet\Theme\team_directory_members();
+    $members = \AZnet\Theme\team_directory_managed_members();
     $public_members = \AZnet\Theme\team_directory_public_members();
     $url = get_permalink( $parent );
     $url = is_string( $url ) ? $url : '';
 
     echo '<section id="homepage-team" class="aznet-theme-homepage-team-authoring">';
     echo '<div class="aznet-theme-homepage-team-authoring__summary">';
-    echo '<p><strong>' . esc_html__( 'Nhân sự hiển thị công khai:', 'aznet-theme' ) . '</strong> ' . esc_html( (string) count( $public_members ) ) . ' / ' . esc_html( (string) count( $all_members ) ) . ' ' . esc_html__( 'nguồn đã xuất bản', 'aznet-theme' ) . '</p>';
+    echo '<p><strong>' . esc_html__( 'Nhân sự hiển thị công khai:', 'aznet-theme' ) . '</strong> ' . esc_html( (string) count( $public_members ) ) . ' / ' . esc_html( (string) count( $members ) ) . ' ' . esc_html__( 'nhân sự đã thêm', 'aznet-theme' ) . '</p>';
     if ( '' !== $url ) {
         echo '<p><a class="button" href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . esc_html__( 'Xem tất cả trên website', 'aznet-theme' ) . '</a></p>';
     }
@@ -575,7 +574,23 @@ function render_homepage_team_authoring(): void {
             if ( '' !== $role ) { echo '<p class="aznet-theme-homepage-team-member__role">' . esc_html( $role ) . '</p>'; }
             echo '</div>';
             echo '<div class="aznet-theme-homepage-team-member__actions">';
+            if ( 'publish' !== (string) $member->post_status ) {
+                $status_label = match ( (string) $member->post_status ) {
+                    'draft' => __( 'Bản nháp', 'aznet-theme' ),
+                    'private' => __( 'Riêng tư', 'aznet-theme' ),
+                    'pending' => __( 'Chờ duyệt', 'aznet-theme' ),
+                    'future' => __( 'Đã lên lịch', 'aznet-theme' ),
+                    default => __( 'Không công khai', 'aznet-theme' ),
+                };
+                echo '<span class="aznet-theme-homepage-team-member__status">' . esc_html( $status_label ) . '</span>';
+            }
             render_homepage_quick_edit_form( 'law-01', 'team', (int) $member->ID, __( 'Sửa', 'aznet-theme' ) );
+            echo '<form class="aznet-theme-homepage-team-member__delete" method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" onsubmit="return window.confirm(' . esc_attr( wp_json_encode( __( 'Xóa nhân sự này? Nhân sự sẽ được chuyển vào Thùng rác và có thể khôi phục trong WordPress.', 'aznet-theme' ) ) ) . ');">';
+            echo '<input type="hidden" name="action" value="aznet_theme_delete_team_member">';
+            echo '<input type="hidden" name="team_member_id" value="' . esc_attr( (string) $member->ID ) . '">';
+            wp_nonce_field( 'aznet_theme_delete_team_member_' . (int) $member->ID );
+            echo '<button type="submit" class="button-link-delete" data-team-member-delete>' . esc_html__( 'Xóa', 'aznet-theme' ) . '</button>';
+            echo '</form>';
             echo '</div></div>';
         }
         echo '</div>';
