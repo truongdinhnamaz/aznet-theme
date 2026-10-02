@@ -47,11 +47,13 @@ foreach ([
     'data-category-move="down"',
     'Đưa lên',
     'Đưa xuống',
-    'Chỉ liệt kê chuyên mục đang có bài viết hoặc đang được chọn',
-    '$category->count > 0 || in_array( $id, $current, true )',
+    'Hiển thị toàn bộ chuyên mục WordPress để có thể chọn đầy đủ',
+    "'hide_empty' => false",
 ] as $required) {
     assert(str_contains($source, $required), "Missing Homepage category ordering UI: {$required}");
 }
+assert(! str_contains($source, '$category->count > 0 || in_array( $id, $current, true )'), 'Homepage topic chooser must not hide empty WordPress categories.');
+
 foreach ([
     '[data-category-move]',
     'insertBefore',

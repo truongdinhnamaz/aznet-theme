@@ -7,7 +7,7 @@ $term_id = (int) homepage_effective_source_value( 'law-01', 'legal_news' );
 $term = homepage_category_reference( $term_id );
 if ( ! $term instanceof \WP_Term ) { return; }
 
-$posts = homepage_latest_posts( [ $term_id ], 5, homepage_ledger_ids() );
+$posts = homepage_latest_content_posts( [ $term_id ], 5 );
 if ( [] === $posts ) { return; }
 homepage_ledger_add( array_map( static fn( $post ): int => (int) $post->ID, $posts ) );
 

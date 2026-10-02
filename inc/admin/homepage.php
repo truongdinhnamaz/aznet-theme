@@ -342,10 +342,7 @@ function render_homepage_category_visibility_control( string $preset, string $sl
     $categories_by_id = [];
     foreach ( $categories as $category ) {
         if ( ! $category instanceof \WP_Term ) { continue; }
-        $id = (int) $category->term_id;
-        if ( $category->count > 0 || in_array( $id, $current, true ) ) {
-            $categories_by_id[ $id ] = $category;
-        }
+        $categories_by_id[ (int) $category->term_id ] = $category;
     }
     $ordered_categories = [];
     foreach ( $current as $id ) {
@@ -368,7 +365,7 @@ function render_homepage_category_visibility_control( string $preset, string $sl
     render_hidden_settings( [ $key ] );
     echo '<fieldset><legend>' . esc_html__( 'Chuyên mục được phép xuất hiện ở khối Chủ đề', 'aznet-theme' ) . '</legend>';
     echo '<p class="description">' . esc_html__( 'Chỉ các chuyên mục được chọn mới xuất hiện tại khối Chủ đề trên trang chủ. Dùng mũi tên để đổi thứ tự; thứ tự này cũng là thứ tự hiển thị ngoài website. Bỏ chọn không xóa chuyên mục hoặc bài viết trong WordPress.', 'aznet-theme' ) . '</p>';
-    echo '<p class="description">' . esc_html__( 'Chỉ liệt kê chuyên mục đang có bài viết hoặc đang được chọn, để tránh làm rối danh sách quản trị.', 'aznet-theme' ) . '</p>';
+    echo '<p class="description">' . esc_html__( 'Hiển thị toàn bộ chuyên mục WordPress để có thể chọn đầy đủ, kể cả chuyên mục hiện chưa có bài viết.', 'aznet-theme' ) . '</p>';
     echo '<div class="aznet-theme-homepage-category-visibility__list" data-category-order-list>';
     foreach ( $ordered_categories as $category ) {
         if ( ! $category instanceof \WP_Term ) { continue; }
@@ -382,6 +379,52 @@ function render_homepage_category_visibility_control( string $preset, string $sl
     }
     echo '</div></fieldset>';
     submit_button( __( 'Lưu chuyên mục & thứ tự', 'aznet-theme' ), 'primary', 'submit', false );
+    echo '</form></details>';
+}
+
+/**
+ * Render a single-category source control for a Homepage editorial surface.
+ *
+ * WordPress Category content remains authoritative. Theme stores only the
+ * selected Category ID used by the presentation surface.
+ */
+function render_homepage_single_category_control( string $preset, string $slot, string $button_label ): void {
+    $descriptor = homepage_source_descriptor( $preset, $slot );
+    if ( ! is_array( $descriptor ) || 'category' !== (string) ( $descriptor['type'] ?? '' ) ) {
+        return;
+    }
+
+    $key = homepage_effective_source_key( $preset, $slot );
+    if ( ! is_string( $key ) || '' === $key ) {
+        return;
+    }
+
+    $current = (int) homepage_effective_source_value( $preset, $slot );
+    $categories = get_categories(
+        [
+            'hide_empty' => false,
+            'orderby'    => 'name',
+            'order'      => 'ASC',
+        ]
+    );
+
+    echo '<details class="aznet-theme-homepage-category-visibility">';
+    echo '<summary class="button button-primary">' . esc_html( $button_label ) . '</summary>';
+    echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+    echo '<input type="hidden" name="action" value="aznet_theme_save_settings">';
+    wp_nonce_field( 'aznet_theme_save_settings' );
+    render_hidden_settings( [ $key ] );
+    echo '<p class="description">' . esc_html__( 'Chọn một chuyên mục làm nguồn. Khối Tin pháp luật chỉ lấy các bài đã xuất bản mới nhất của chính chuyên mục này, theo ngày giảm dần.', 'aznet-theme' ) . '</p>';
+    echo '<label class="aznet-theme-field"><span>' . esc_html__( 'Chuyên mục nguồn', 'aznet-theme' ) . '</span><select name="aznet_theme_settings[' . esc_attr( $key ) . ']">';
+    echo '<option value="0">' . esc_html__( '— Chưa chọn —', 'aznet-theme' ) . '</option>';
+    foreach ( $categories as $category ) {
+        if ( ! $category instanceof \WP_Term ) { continue; }
+        $id = (int) $category->term_id;
+        if ( $category->count <= 0 && $id !== $current ) { continue; }
+        echo '<option value="' . esc_attr( (string) $id ) . '" ' . selected( $current, $id, false ) . '>' . esc_html( $category->name ) . '</option>';
+    }
+    echo '</select></label>';
+    submit_button( __( 'Lưu nguồn Tin pháp luật', 'aznet-theme' ), 'primary', 'submit', false );
     echo '</form></details>';
 }
 
@@ -820,7 +863,10 @@ function render_homepage_map( string $preset ): void {
         } elseif ( 'topics' === $key ) {
             render_homepage_category_visibility_control( $preset, 'knowledge' );
             echo '<a class="button" href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=category' ) ) . '">' . esc_html__( 'Quản lý chuyên mục', 'aznet-theme' ) . '</a>';
-        } elseif ( in_array( $key, [ 'analysis', 'news' ], true ) ) {
+        } elseif ( 'news' === $key ) {
+            render_homepage_single_category_control( $preset, 'legal_news', __( 'Chọn chuyên mục nguồn', 'aznet-theme' ) );
+            echo '<a class="button" href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=category' ) ) . '">' . esc_html__( 'Quản lý chuyên mục', 'aznet-theme' ) . '</a>';
+        } elseif ( 'analysis' === $key ) {
             echo '<a class="button button-primary" href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=category' ) ) . '">' . esc_html__( 'Chỉnh chủ đề', 'aznet-theme' ) . '</a>';
         } elseif ( 'category-showcase' === $key ) {
             echo '<a class="button button-primary" href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=product_cat&post_type=product' ) ) . '">' . esc_html__( 'Quản lý dòng rèm', 'aznet-theme' ) . '</a>';
