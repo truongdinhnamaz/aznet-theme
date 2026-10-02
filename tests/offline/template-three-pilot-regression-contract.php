@@ -104,4 +104,10 @@ foreach ([
     }
 }
 
+$verify = (string) file_get_contents($root . '/scripts/verify-v1-core.sh');
+if (! str_contains($verify, 'tests/offline/template-three-pilot-regression-contract.php')) {
+    fwrite(STDERR, "FAIL: C7 three-pilot regression is not retained in the V1 core verification chain.\n");
+    exit(1);
+}
+
 echo "PASS: D-043 C7 three-pilot manifest-path regression\n";
