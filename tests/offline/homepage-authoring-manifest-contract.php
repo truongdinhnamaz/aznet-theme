@@ -40,19 +40,19 @@ if (! str_contains($admin, "['homepage']['authoring']['sections']")) {
     fwrite(STDERR, "FAIL: Homepage authoring does not consume manifest authoring descriptors.\n");
     exit(1);
 }
-if (str_contains($admin, "if ( 'law-01' === $preset ) {\n        return [ 'hero', 'services', 'about', 'team'")) {
+if (str_contains($admin, "if ( 'law-01' === \$preset ) {\n        return [ 'hero', 'services', 'about', 'team'")) {
     fwrite(STDERR, "FAIL: Law 01 authoring order remains hard-coded in generic Core.\n");
     exit(1);
 }
-if (str_contains($admin, "if ( 'curtain-01' === $preset ) {\n        return [ 'hero', 'proof', 'about'")) {
+if (str_contains($admin, "if ( 'curtain-01' === \$preset ) {\n        return [ 'hero', 'proof', 'about'")) {
     fwrite(STDERR, "FAIL: Curtain 01 authoring order remains hard-coded in generic Core.\n");
     exit(1);
 }
-if (str_contains($admin, "if ( ! in_array( $preset, [ 'law-01', 'curtain-01' ], true ) ) { return; }")) {
+if (str_contains($admin, "if ( ! in_array( \$preset, [ 'law-01', 'curtain-01' ], true ) ) { return; }")) {
     fwrite(STDERR, "FAIL: authoring console still uses a template-id allow-list.\n");
     exit(1);
 }
-if (! str_contains($admin, "template_manifest_for_homepage_preset( $preset )")) {
+if (! str_contains($admin, "template_manifest_for_homepage_preset( \$preset )")) {
     fwrite(STDERR, "FAIL: authoring console does not resolve active template manifest.\n");
     exit(1);
 }
