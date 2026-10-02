@@ -70,6 +70,10 @@ if (! str_contains($assets, 'asset_content_version( \'/assets/css/components/art
     $fail('article.css must use content-aware cache versioning so Theme updates are visible immediately');
 }
 
+if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__featured-media\\s*\\{[^}]*max-width:\\s*50rem;/s', $css)) {
+    $fail('Law 01 featured media must match the 50rem article reading-content width');
+}
+
 $production = $content . "\n" . $css;
 foreach ([
     'new WP_Query',
