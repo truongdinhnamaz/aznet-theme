@@ -4,9 +4,9 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.20 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.21 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 28/09/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 02/10/2026 |
 
 | **Kiến trúc lõi: **Theme chỉ sở hữu presentation/configuration/reference cần thiết. Dữ liệu authoritative và business state ở lại owner. Boundary giữa hai bên là public/versioned provider contract hoặc adapter tối thiểu. |
 | --- |
@@ -154,6 +154,19 @@ Kiến trúc token:
 - Component tokens chỉ tồn tại khi một Theme component thực sự cần chúng.
 - `theme.json` mapping đưa curated semantic vocabulary vào block editor mà không chuyển template ownership sang FSE.
 - Existing public `--aznet-theme-*` semantics không được silently repurpose; compatibility alias được giữ khi đổi implementation vocabulary.
+
+### Editorial/news media-card standard
+
+Đây là tiêu chuẩn presentation dùng lại cho các mẫu web của AZnet Theme khi một surface hiển thị bài viết/tin tức theo kiểu editorial card. Nó không thay đổi WordPress ownership của Post, Category hay Media.
+
+- Featured/news media frame mặc định dùng **tỷ lệ 16:9** cho card editorial/news, trừ khi một template specification được owner chấp thuận quy định tỷ lệ khác cho use case thực sự khác.
+- Ảnh trong frame dùng **cover crop** để lấp đầy 16:9; việc cắt một phần biên/góc ảnh là presentation behavior được chấp nhận. Không kéo méo ảnh và không đổi file Media gốc.
+- Trên desktop, một card editorial đơn lẻ không mặc định kéo kín toàn bộ content container khi điều đó tạo cảm giác banner. Card phải dùng bounded readable width theo composition của template; reference Law 01 dùng khoảng **50% inner container**.
+- Khi composition có ảnh thumbnail/media ở đầu card, desktop có thể dùng editorial text flow: media nằm bên trái, metadata/title/excerpt/action chạy ở bên phải và được phép tiếp tục xuống dưới media khi nội dung dài hơn chiều cao ảnh.
+- Ở breakpoint hẹp, float/wrapped editorial flow phải collapse thành stacked flow: media 100% chiều ngang card, nội dung ở dưới, không horizontal overflow.
+- Tiêu chuẩn 16:9 này áp dụng cho **editorial/news card surfaces** của các template/preset. Hero, team portrait, product/catalogue, gallery, logo và các media surface có semantic khác phải dùng tỷ lệ phù hợp use case của chúng, không bị ép 16:9 chỉ vì dùng ảnh.
+- Theme chỉ sở hữu crop, ratio, layout, responsive behavior và presentation. WordPress/provider owner tiếp tục sở hữu attachment, featured-media selection, title, excerpt, publication state và taxonomy.
+- Template mới hoặc extension mới có editorial/news cards phải reuse primitive/contract tương đương và có L2 contract + L4 responsive/browser evidence trước khi claim PASS.
 
 ### Visual preset feasibility rule
 
