@@ -552,3 +552,19 @@ Evidence: `docs/evidence/CORE_HOMEPAGE_DESIGN_PILOT_L4_PARTIAL_20261002.md`.
 - Authenticated wp-admin interaction remains UNKNOWN and is not inferred from public production checks.
 - Rèm 01 remains independently `BLOCKED_EXTERNAL_ACCESS`; this does not invalidate the Law 01 release.
 - Evidence: `docs/evidence/LAW01_PRODUCTION_RELEASE_20261002.md`.
+
+
+### D-043 Template Extension Contract repository closure / PRs #348-#356 — 02/10/2026
+
+- Canonical closure commit: `main@d15eb7208d94e52ac3999e6621338e1b66e6ecd3`.
+- PR #348 made Quick Setup presentation choices registry-driven.
+- PR #349 moved Template Library catalog projection to template manifests.
+- PR #350 made Homepage Composer activation manifest-driven.
+- PR #351 moved Industrial 01 composition onto the shared Homepage effective-surface model and retained recent D-043 contracts in the V1 regression chain.
+- PR #352 moved Law 01 / Rèm 01 Homepage authoring section order into manifests and removed the generic authoring-console template-id allow-list.
+- PR #353 moved Law 01 / Rèm 01 / Industrial 01 Homepage asset declarations into manifests and added generic active-template asset orchestration.
+- PR #354 added the optional manifest provisioning recipe bridge; Law 01 references existing `law01-v1-2`, while Rèm 01 and Industrial 01 fail soft with no invented recipe.
+- PR #355 added retained three-pilot manifest-path regression coverage.
+- PR #356 added a test-only synthetic fourth template proving participation through presentation projection, generic Template Library consumption, Homepage activation, authoring descriptors, asset registry and provisioning bridge without a fixture-specific Core branch.
+- Exact-head CI before each approved merge completed with zero failures; final C8 head completed 19/19 triggered workflows SUCCESS before merge.
+- This is a repository L1-L2 architecture/contract closure only. Authenticated wp-admin interaction remains UNKNOWN. Rèm 01 remains `BLOCKED_EXTERNAL_ACCESS`. No additional provider L5, production rollout or release claim is inferred.
