@@ -242,12 +242,25 @@ if (false === $footerSectionPos || false === $homepageSectionPos || $homepageSec
     y3_fail('unable to isolate Footer Control Center section');
 }
 $footerSection = substr($renderer, $footerSectionPos, $homepageSectionPos - $footerSectionPos);
-if (str_contains($footerSection, 'render_footer_profile_form();')) {
-    y3_fail('Footer tab must not duplicate Overview contact/social profile fields');
+if (! str_contains($footerSection, 'render_footer_profile_form();')) {
+    y3_fail('Footer tab must expose the single shared Footer content editor for every preset/pilot');
 }
 $overviewPos = strpos($renderer, "if ( 'overview' === \$section ) {");
-if (false === $overviewPos || ! str_contains(substr($renderer, $overviewPos, $footerSectionPos - $overviewPos), 'render_footer_profile_form();')) {
-    y3_fail('Overview must remain the single contact/social Footer profile editor');
+if (false === $overviewPos) {
+    y3_fail('unable to isolate Overview Control Center section');
+}
+$overviewSection = substr($renderer, $overviewPos, $footerSectionPos - $overviewPos);
+if (str_contains($overviewSection, 'render_footer_profile_form();')) {
+    y3_fail('Overview must not duplicate the Footer content editor');
+}
+foreach ([
+    'Sửa nội dung Footer',
+    'aznet-theme-footer-content-editor',
+    'aznet-theme-footer-content-editor__grid',
+] as $needle) {
+    if (! str_contains($controlCenter, $needle)) {
+        y3_fail('Shared Footer content editor missing: ' . $needle);
+    }
 }
 foreach (['primary_heading', 'contact_heading', 'social_heading', 'policy_heading'] as $field) {
     if (! str_contains($controlCenter, $field)) {
@@ -266,6 +279,8 @@ foreach ([
     '.aznet-theme-footer-template-gallery',
     '.aznet-theme-footer-template-card',
     '.aznet-theme-footer-live-preview',
+    '.aznet-theme-footer-content-editor',
+    '.aznet-theme-footer-content-editor__grid',
 ] as $selector) {
     if (! str_contains($adminCss, $selector)) {
         y3_fail('Footer template gallery stylesheet missing selector: ' . $selector);
