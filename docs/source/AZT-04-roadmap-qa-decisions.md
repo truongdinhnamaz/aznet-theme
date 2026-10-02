@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.04
+**Version:** v1.05
 **Status:** Working Source  
 **Date:** 02/10/2026
 
@@ -355,6 +355,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-037** | **Self-hosted Theme fonts used for Vietnamese content must explicitly prove Vietnamese glyph coverage for every shipped production weight. The canonical typography family must be consumed through Theme tokens/presets; presentation presets may not silently replace it with unrelated serif/system stacks. A font fix is not production PASS until the Vietnamese face is verified at runtime/browser level; repository PASS and live-site publish remain separate gates.** | **Accepted — owner approved 22/09/2026** |
 | **D-044** | **Pilot rollout is not a Core completion gate. Once Theme-owned repository/runtime/release gates are PASS, any pilot that cannot be updated because of external access, hosting, security middleware, credentials, provider availability or deployment-path constraints is deferred to manual/later adoption and recorded as a pilot-local blocker. Do not hold AZnet Theme completion open merely to force every pilot onto the latest build. Preserve rollback and fresh verification when a deferred pilot is updated later.** | **Accepted — owner approved 02/10/2026** |
 | **D-045** | **Version provenance reconciliation: fresh production evidence shows deployed pilot identity `1.3.65` while canonical GitHub still declares `1.3.57`. Do not reuse `1.3.65` for new canonical bytes without byte identity proof. Promote the next canonical candidate to `1.3.66`, preserving pilot `1.3.65` as deployment provenance and requiring fresh package/runtime/browser verification before any release claim.** | **Accepted — owner direction 02/10/2026** |
+| **D-046** | **Editorial/news cards across AZnet Theme templates use a reusable presentation standard: 16:9 fixed media frame with non-distorting cover crop; desktop card width is bounded rather than automatically full-container for a single story; text may flow beside and then below the media; narrow viewports collapse to stacked full-card media. The standard applies to editorial/news card surfaces only, while Hero, portrait, product, gallery and other semantic media may define their own ratios. WordPress/provider owners retain all Post/Category/Media data authority.** | **Accepted — owner approved 02/10/2026** |
 
 ## 10A. v1.3 Client Delivery System
 
