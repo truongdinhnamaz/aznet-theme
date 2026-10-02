@@ -40,4 +40,15 @@ assert( 'Nguyễn An' === $data['post_title'] );
 assert( 'Luật sư' === $data['post_excerpt'] );
 assert( isset( $data['menu_order'] ) && is_int( $data['menu_order'] ) );
 
-echo "PASS: Team authoring is bounded to mapped direct children and immediate publication.\n";
+$update = \AZnet\Theme\Admin\homepage_team_member_update_data( $members[0], 'Nguyễn An mới', 'Luật sư thành viên', '<p>Tiểu sử</p>', 7, false );
+assert( $member_id === (int) $update['ID'] );
+assert( 'Nguyễn An mới' === $update['post_title'] );
+assert( 'Luật sư thành viên' === $update['post_excerpt'] );
+assert( '<p>Tiểu sử</p>' === $update['post_content'] );
+assert( 7 === $update['menu_order'] );
+assert( ! array_key_exists( 'post_name', $update ) );
+
+$slug_update = \AZnet\Theme\Admin\homepage_team_member_update_data( $members[0], 'Nguyễn An Mới', '', '', 0, true );
+assert( 'nguyen-an-moi' === $slug_update['post_name'] );
+
+echo "PASS: Team authoring is bounded to mapped direct children and complete WordPress-native profile updates.\n";
