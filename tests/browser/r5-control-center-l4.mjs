@@ -182,8 +182,8 @@ async function verifyHomepageHeroEditingBridge(page, viewportName) {
   await templateSearch.focus();
   if (!(await templateSearch.evaluate((node) => document.activeElement === node))) throw new Error('Template Library search is not keyboard focusable');
   const lawCard = lawPreset.locator('..');
-  await templateSearch.fill('Law');
-  if (!(await lawCard.isVisible())) throw new Error('Template Library search hid matching Law 01 card');
+  await templateSearch.fill('Luật');
+  if (!(await lawCard.isVisible())) throw new Error('Template Library search hid matching Luật 01 card');
   await templateSearch.fill('');
   await templateCategory.focus();
   if (!(await templateCategory.evaluate((node) => document.activeElement === node))) throw new Error('Template Library category filter is not keyboard focusable');
