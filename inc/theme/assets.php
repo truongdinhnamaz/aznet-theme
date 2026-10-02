@@ -176,6 +176,107 @@ function asset_content_version( string $relative_path, ?string $fallback = null 
     return null !== $fallback && '' !== $fallback ? $fallback . '-' . $fingerprint : $fingerprint;
 }
 
+/**
+ * Return normalized Homepage asset descriptors declared by one template manifest.
+ *
+ * Invalid descriptors fail soft and are skipped. The result is request-local
+ * presentation metadata only; no provider/domain state is read or stored.
+ *
+ * @return array<int,array{type:string,handle:string,path:string,dependencies:array<int,string>,in_footer:bool}>
+ */
+function template_homepage_asset_descriptors( string $preset ): array {
+    $manifest = template_manifest_for_homepage_preset( $preset );
+    $raw = is_array( $manifest ) ? ( $manifest['assets']['homepage'] ?? [] ) : [];
+    if ( ! is_array( $raw ) ) {
+        return [];
+    }
+
+    $assets = [];
+    foreach ( $raw as $descriptor ) {
+        if ( ! is_array( $descriptor ) ) {
+            continue;
+        }
+
+        $type = trim( (string) ( $descriptor['type'] ?? '' ) );
+        $handle = trim( (string) ( $descriptor['handle'] ?? '' ) );
+        $path = trim( (string) ( $descriptor['path'] ?? '' ) );
+        if ( ! in_array( $type, [ 'style', 'script' ], true )
+            || 1 !== preg_match( '/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $handle )
+            || ! str_starts_with( $path, '/assets/' )
+            || str_contains( $path, '..' ) ) {
+            continue;
+        }
+
+        $dependencies = [];
+        foreach ( (array) ( $descriptor['dependencies'] ?? [] ) as $dependency ) {
+            $dependency = trim( (string) $dependency );
+            if ( 1 !== preg_match( '/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $dependency ) ) {
+                continue;
+            }
+            if ( ! in_array( $dependency, $dependencies, true ) ) {
+                $dependencies[] = $dependency;
+            }
+        }
+
+        $assets[] = [
+            'type'         => $type,
+            'handle'       => $handle,
+            'path'         => $path,
+            'dependencies' => $dependencies,
+            'in_footer'    => true === ( $descriptor['in_footer'] ?? false ),
+        ];
+    }
+
+    return $assets;
+}
+
+/** Enqueue one registered template's Homepage assets through the generic Core path. */
+function enqueue_template_homepage_assets( string $preset, ?string $version = null ): void {
+    if ( ! function_exists( __NAMESPACE__ . '\\homepage_composer_active' ) || ! homepage_composer_active() ) {
+        return;
+    }
+    if ( ! function_exists( __NAMESPACE__ . '\\homepage_preset' ) || $preset !== homepage_preset() ) {
+        return;
+    }
+
+    foreach ( template_homepage_asset_descriptors( $preset ) as $asset ) {
+        $path = (string) $asset['path'];
+        if ( function_exists( 'get_theme_file_path' ) && ! is_file( get_theme_file_path( $path ) ) ) {
+            continue;
+        }
+
+        if ( 'style' === $asset['type'] ) {
+            wp_enqueue_style(
+                (string) $asset['handle'],
+                get_theme_file_uri( $path ),
+                (array) $asset['dependencies'],
+                asset_content_version( $path, $version )
+            );
+            continue;
+        }
+
+        wp_enqueue_script(
+            (string) $asset['handle'],
+            get_theme_file_uri( $path ),
+            (array) $asset['dependencies'],
+            asset_content_version( $path, $version ),
+            (bool) $asset['in_footer']
+        );
+    }
+}
+
+/** Enqueue Homepage assets declared by the active registered template manifest. */
+function enqueue_active_template_homepage_assets( ?string $version = null ): void {
+    if ( ! function_exists( __NAMESPACE__ . '\\homepage_preset' ) ) {
+        return;
+    }
+    $preset = homepage_preset();
+    if ( null === template_manifest_for_homepage_preset( $preset ) ) {
+        return;
+    }
+    enqueue_template_homepage_assets( $preset, $version );
+}
+
 /** Enqueue Law 01 only for its active Front Page presentation surface. */
 /** Enqueue the shared Team card presentation for Team surfaces only. */
 function enqueue_team_card_asset( ?string $version = null ): void {
@@ -188,67 +289,17 @@ function enqueue_team_card_asset( ?string $version = null ): void {
 }
 
 function enqueue_homepage_law01_asset( ?string $version = null ): void {
-    if ( ! function_exists( __NAMESPACE__ . '\\homepage_composer_active' ) || ! homepage_composer_active() ) {
-        return;
-    }
-    if ( 'law-01' !== homepage_preset() ) {
-        return;
-    }
-    enqueue_team_card_asset( $version );
-    wp_enqueue_style(
-        'aznet-theme-homepage-law-01',
-        get_theme_file_uri( '/assets/css/components/homepage-law-01.css' ),
-        [ 'aznet-theme-tokens', 'aznet-theme-team-card' ],
-        asset_content_version( '/assets/css/components/homepage-law-01.css', $version )
-    );
-    wp_enqueue_style(
-        'aznet-theme-homepage-law-01-variants',
-        get_theme_file_uri( '/assets/css/components/homepage-law-01-variants.css' ),
-        [ 'aznet-theme-homepage-law-01' ],
-        asset_content_version( '/assets/css/components/homepage-law-01-variants.css', $version )
-    );
+    enqueue_template_homepage_assets( 'law-01', $version );
 }
 
 /** Enqueue Industrial 01 only for its active Front Page presentation surface. */
 function enqueue_homepage_industrial01_asset( ?string $version = null ): void {
-    if ( ! function_exists( __NAMESPACE__ . '\\homepage_composer_active' ) || ! homepage_composer_active() ) {
-        return;
-    }
-    if ( 'industrial-01' !== homepage_preset() ) {
-        return;
-    }
-
-    wp_enqueue_style(
-        'aznet-theme-homepage-industrial-01',
-        get_theme_file_uri( '/assets/css/components/homepage-industrial-01.css' ),
-        [ 'aznet-theme-tokens', 'aznet-theme-homepage' ],
-        asset_content_version( '/assets/css/components/homepage-industrial-01.css', $version )
-    );
+    enqueue_template_homepage_assets( 'industrial-01', $version );
 }
 
 /** Enqueue Curtain 01 only for its active Front Page presentation surface. */
 function enqueue_homepage_curtain01_asset( ?string $version = null ): void {
-    if ( ! function_exists( __NAMESPACE__ . '\\homepage_composer_active' ) || ! homepage_composer_active() ) {
-        return;
-    }
-    if ( 'curtain-01' !== homepage_preset() ) {
-        return;
-    }
-
-    wp_enqueue_style(
-        'aznet-theme-homepage-curtain-01',
-        get_theme_file_uri( '/assets/css/components/homepage-curtain-01.css' ),
-        [ 'aznet-theme-tokens', 'aznet-theme-homepage' ],
-        asset_content_version( '/assets/css/components/homepage-curtain-01.css', $version )
-    );
-
-    wp_enqueue_script(
-        'aznet-theme-homepage-curtain-01-motion',
-        get_theme_file_uri( '/assets/js/homepage-curtain-01.js' ),
-        [],
-        asset_content_version( '/assets/js/homepage-curtain-01.js', $version ),
-        true
-    );
+    enqueue_template_homepage_assets( 'curtain-01', $version );
 }
 
 /** Determine whether the native Post comments surface will render. */
@@ -638,9 +689,7 @@ function enqueue_assets(): void {
     );
 
     enqueue_homepage_blueprint_asset( $version );
-    enqueue_homepage_law01_asset( $version );
-    enqueue_homepage_curtain01_asset( $version );
-    enqueue_homepage_industrial01_asset( $version );
+    enqueue_active_template_homepage_assets( $version );
 
     if ( should_enqueue_generic_content_assets() ) {
         wp_enqueue_style(

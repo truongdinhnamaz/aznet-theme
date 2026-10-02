@@ -25,11 +25,13 @@ assert(str_contains($cssSource, '.aznet-theme-homepage--law-01 .aznet-theme-law0
 assert(str_contains($cssSource, 'var(--aznet-theme-container-shell)'), 'Law 01 inner content must remain constrained while section surfaces go full width.');
 
 $assets = file_get_contents($root . '/inc/theme/assets.php');
-assert(str_contains($assets, 'homepage-law-01.css'));
+$lawManifest = file_get_contents($root . '/inc/theme/templates/law-01/manifest.php');
+assert(is_string($lawManifest) && str_contains($lawManifest, '/assets/css/components/homepage-law-01.css'));
 assert(str_contains($assets, "'law-01'"));
 assert(str_contains($assets, 'homepage_composer_active()'));
+assert(str_contains($assets, 'template_homepage_asset_descriptors'), 'Law 01 Homepage assets must flow through the generic manifest asset registry.');
 assert(str_contains($assets, 'function asset_content_version('), 'Theme must provide content-derived asset cache busting for changed scoped assets.');
-assert(str_contains($assets, "asset_content_version( '/assets/css/components/homepage-law-01.css', \$version )"), 'Law 01 stylesheet URL must change when its bytes change even if Theme metadata version is unchanged.');
+assert(str_contains($assets, 'asset_content_version( $path, $version )'), 'Manifest Homepage stylesheet URLs must change when their bytes change even if Theme metadata version is unchanged.');
 assert(str_contains($assets, "hash_file( 'sha256', \$path )"), 'Law 01 cache key must derive from file bytes rather than only the Theme version.');
 
 $composer = file_get_contents($root . '/inc/theme/homepage-composer.php');
@@ -63,7 +65,7 @@ $variantPath = $root . '/assets/css/components/homepage-law-01-variants.css';
 assert(is_file($variantPath), 'Law 01 variant stylesheet must exist.');
 $variantCss = file_get_contents($variantPath);
 assert(str_contains($variantCss, '.aznet-theme-homepage--law-01-burgundy-gold'), 'Burgundy variant styling must be scoped to Law 01.');
-assert(str_contains($assets, 'homepage-law-01-variants.css'), 'Variant asset must be surface-aware and loaded only with Law 01.');
+assert(is_string($lawManifest) && str_contains($lawManifest, 'homepage-law-01-variants.css'), 'Variant asset must be declared by the Law 01 manifest.');
 foreach ([
     'grid-template-columns: minmax(0, 54%) minmax(0, 46%);',
     'padding: clamp(2.75rem, 4.2vw, 4.5rem) clamp(2rem, 3.4vw, 4.25rem);',

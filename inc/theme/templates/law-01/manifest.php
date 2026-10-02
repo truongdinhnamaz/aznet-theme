@@ -11,7 +11,28 @@ return [
     'presentation'     => [
         'homepage_preset' => 'law-01',
     ],
-    'assets'           => [],
+    'assets'           => [
+        'homepage' => [
+            [
+                'type'         => 'style',
+                'handle'       => 'aznet-theme-team-card',
+                'path'         => '/assets/css/components/team-card.css',
+                'dependencies' => [ 'aznet-theme-tokens' ],
+            ],
+            [
+                'type'         => 'style',
+                'handle'       => 'aznet-theme-homepage-law-01',
+                'path'         => '/assets/css/components/homepage-law-01.css',
+                'dependencies' => [ 'aznet-theme-tokens', 'aznet-theme-team-card' ],
+            ],
+            [
+                'type'         => 'style',
+                'handle'       => 'aznet-theme-homepage-law-01-variants',
+                'path'         => '/assets/css/components/homepage-law-01-variants.css',
+                'dependencies' => [ 'aznet-theme-homepage-law-01' ],
+            ],
+        ],
+    ],
     'homepage'         => [
         'authoring' => [
             'sections' => [ 'hero', 'services', 'about', 'team', 'knowledge', 'case_analysis', 'legal_news', 'process', 'faq', 'contact' ],

@@ -19,11 +19,13 @@ if (($normalized['homepage_preset'] ?? null) !== 'curtain-01') {
 $composerPath = $root . '/inc/theme/homepage-composer.php';
 $assetsPath   = $root . '/inc/theme/assets.php';
 $adminPath    = $root . '/inc/admin/homepage.php';
+$manifestPath = $root . '/inc/theme/templates/curtain-01/manifest.php';
 $cssPath      = $root . '/assets/css/components/homepage-curtain-01.css';
 
 $composer = file_get_contents($composerPath);
 $assets   = file_get_contents($assetsPath);
 $admin    = file_get_contents($adminPath);
+$manifest = file_get_contents($manifestPath);
 
 if (! is_string($composer) || ! str_contains($composer, "'curtain-01'")) {
     fwrite(STDERR, "FAIL: Homepage Composer does not recognize Curtain 01 as a Theme-owned preset.\n");
@@ -35,8 +37,12 @@ if (! is_string($assets) || ! str_contains($assets, 'enqueue_homepage_curtain01_
     exit(1);
 }
 
-if (! str_contains($assets, '/assets/css/components/homepage-curtain-01.css')) {
-    fwrite(STDERR, "FAIL: Curtain 01 Homepage asset path is not registered.\n");
+if (! is_string($manifest) || ! str_contains($manifest, '/assets/css/components/homepage-curtain-01.css')) {
+    fwrite(STDERR, "FAIL: Curtain 01 Homepage asset path is not declared by its manifest.\n");
+    exit(1);
+}
+if (! str_contains($assets, 'template_homepage_asset_descriptors')) {
+    fwrite(STDERR, "FAIL: Curtain 01 Homepage assets do not consume the generic manifest registry.\n");
     exit(1);
 }
 

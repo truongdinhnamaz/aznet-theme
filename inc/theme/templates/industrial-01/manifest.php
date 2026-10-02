@@ -12,7 +12,16 @@ return [
         'visual_preset'   => 'industrial-01',
         'homepage_preset' => 'industrial-01',
     ],
-    'assets'           => [],
+    'assets'           => [
+        'homepage' => [
+            [
+                'type'         => 'style',
+                'handle'       => 'aznet-theme-homepage-industrial-01',
+                'path'         => '/assets/css/components/homepage-industrial-01.css',
+                'dependencies' => [ 'aznet-theme-tokens', 'aznet-theme-homepage' ],
+            ],
+        ],
+    ],
     'homepage'         => [
         'hero' => [
             'enabled'        => true,
