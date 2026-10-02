@@ -5,8 +5,8 @@ return [
     'id'               => 'curtain-01',
     'name'             => 'Rèm 01',
     'version'          => '1.0.0',
-    'category'         => 'commerce',
-    'description'      => 'Curtain and interior presentation.',
+    'category'         => 'Rèm / Nội thất',
+    'description'      => 'Website rèm và giải pháp kiểm soát ánh sáng.',
     'capabilities'     => [ 'homepage', 'woocommerce' ],
     'presentation'     => [
         'visual_preset'   => 'curtain-01',
