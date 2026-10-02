@@ -12,11 +12,14 @@ foreach ([
     'function homepage_design_surface_config',
     'function homepage_hero_design_available',
     'function homepage_hero_design_renderer',
+    'function homepage_hero_design_preview_config',
     'function render_homepage_design_entrypoint',
     'function render_homepage_design_hero_screen',
     "template_manifest(",
     "'homepage'",
     "'hero'",
+    'data-preview-key',
+    'data-hero-live-preview',
 ] as $needle) {
     assert(str_contains($source, $needle), "Missing Core Homepage Design contract: {$needle}");
 }
@@ -36,6 +39,9 @@ foreach ([
     $manifest = (string) file_get_contents($root . '/' . $manifestPath);
     assert(str_contains($manifest, "'hero'"), "Template must declare its Hero design adapter: {$manifestPath}");
     assert(str_contains($manifest, "'admin_renderer'"), "Template-specific Hero renderer must live in manifest: {$manifestPath}");
+    if (str_contains($manifestPath, 'industrial-01')) {
+        assert(str_contains($manifest, "'preview'"), 'Industrial 01 must declare its Hero preview role mapping in the manifest.');
+    }
 }
 
 echo "PASS: Core Homepage Design owns the Hero backend shell; templates own Hero-specific adapters.\n";
