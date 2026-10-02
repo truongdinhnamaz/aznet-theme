@@ -24,8 +24,12 @@ if (! in_array('curtain-01', AZnet\Theme\visual_preset_ids(), true)) {
     exit(1);
 }
 
-if (! is_string($control) || ! str_contains($control, "'curtain-01' => 'Rèm 01'")) {
-    fwrite(STDERR, "FAIL: Control Center does not expose Curtain 01 visual preset.\n");
+if ('Rèm 01' !== (AZnet\Theme\visual_preset_choices()['curtain-01'] ?? null)) {
+    fwrite(STDERR, "FAIL: Control Center choices do not expose Curtain 01 from Template Registry metadata.\n");
+    exit(1);
+}
+if (! is_string($control) || ! str_contains($control, 'visual_preset_choices()')) {
+    fwrite(STDERR, "FAIL: Control Center does not consume manifest-driven visual preset choices.\n");
     exit(1);
 }
 
