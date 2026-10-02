@@ -316,38 +316,42 @@ function homepage_category_select( string $key, string $label, int $current, arr
  * @return array<int, array<string, mixed>>
  */
 function homepage_template_library_items(): array {
-    return [
-        [
-            'template_id'   => 'law-01',
-            'name'          => __( 'Luật 01', 'aznet-theme' ),
-            'category'      => 'legal',
-            'category_name' => __( 'Luật', 'aznet-theme' ),
-            'description'   => __( 'Website dịch vụ pháp lý kết hợp nội dung chuyên môn.', 'aznet-theme' ),
+    $items = [];
+
+    foreach ( \AZnet\Theme\template_manifests() as $manifest ) {
+        $capabilities = (array) ( $manifest['capabilities'] ?? [] );
+        $template_id = $manifest['presentation']['homepage_preset'] ?? null;
+        if ( ! in_array( 'homepage', $capabilities, true ) || ! is_string( $template_id ) || '' === $template_id ) {
+            continue;
+        }
+
+        $name = trim( (string) ( $manifest['name'] ?? '' ) );
+        $category_name = trim( (string) ( $manifest['category'] ?? '' ) );
+        $description = trim( (string) ( $manifest['description'] ?? '' ) );
+        if ( '' === $name ) {
+            $name = $template_id;
+        }
+        if ( '' === $category_name ) {
+            $category_name = __( 'Khác', 'aznet-theme' );
+        }
+
+        $category = sanitize_title( $category_name );
+        if ( '' === $category ) {
+            $category = 'other';
+        }
+
+        $items[] = [
+            'template_id'   => $template_id,
+            'name'          => $name,
+            'category'      => $category,
+            'category_name' => $category_name,
+            'description'   => $description,
             'availability'  => 'bundled',
             'install_state' => 'installed',
-            'variant_count' => 2,
-        ],
-        [
-            'template_id'   => 'curtain-01',
-            'name'          => __( 'Rèm 01', 'aznet-theme' ),
-            'category'      => 'interior',
-            'category_name' => __( 'Rèm / Nội thất', 'aznet-theme' ),
-            'description'   => __( 'Website rèm và giải pháp kiểm soát ánh sáng.', 'aznet-theme' ),
-            'availability'  => 'bundled',
-            'install_state' => 'installed',
-            'variant_count' => 1,
-        ],
-        [
-            'template_id'   => 'industrial-01',
-            'name'          => __( 'Industrial 01', 'aznet-theme' ),
-            'category'      => 'industrial',
-            'category_name' => __( 'Thiết bị công nghiệp', 'aznet-theme' ),
-            'description'   => __( 'Website B2B bán thiết bị công nghiệp và phụ kiện.', 'aznet-theme' ),
-            'availability'  => 'bundled',
-            'install_state' => 'installed',
-            'variant_count' => 1,
-        ],
-    ];
+        ];
+    }
+
+    return $items;
 }
 
 /** Render the scalable Theme-side Template Library selector. */

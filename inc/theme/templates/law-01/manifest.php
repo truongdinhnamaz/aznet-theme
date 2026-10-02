@@ -3,10 +3,10 @@
 return [
     'contract_version' => 1,
     'id'               => 'law-01',
-    'name'             => 'Law 01',
+    'name'             => 'Luật 01',
     'version'          => '1.0.0',
-    'category'         => 'professional',
-    'description'      => 'Professional legal/editorial presentation.',
+    'category'         => 'Luật',
+    'description'      => 'Website dịch vụ pháp lý kết hợp nội dung chuyên môn.',
     'capabilities'     => [ 'homepage' ],
     'presentation'     => [
         'homepage_preset' => 'law-01',
