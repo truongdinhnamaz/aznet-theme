@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 require_once __DIR__ . '/control-center.php';
 require_once __DIR__ . '/footer-profile.php';
+require_once __DIR__ . '/footer-content.php';
 require_once __DIR__ . '/homepage-hero.php';
 require_once __DIR__ . '/homepage-design.php';
 require_once __DIR__ . '/homepage-migration.php';
@@ -72,6 +73,7 @@ if ( is_admin() ) {
     add_action( 'admin_menu', __NAMESPACE__ . '\\register_control_center' );
     add_action( 'admin_post_aznet_theme_save_settings', __NAMESPACE__ . '\\handle_save_settings' );
     add_action( 'admin_post_aznet_theme_save_footer_profile', __NAMESPACE__ . '\\handle_footer_profile_save' );
+    add_action( 'admin_post_aznet_theme_save_footer_content', __NAMESPACE__ . '\\handle_footer_content_save' );
     add_action( 'admin_post_aznet_theme_apply_homepage_hero', __NAMESPACE__ . '\\handle_homepage_hero_apply' );
     add_action( 'admin_post_aznet_theme_save_homepage_hero_form', __NAMESPACE__ . '\\handle_homepage_hero_form_save' );
     add_action( 'admin_post_aznet_theme_upgrade_homepage_hero_form', __NAMESPACE__ . '\\handle_homepage_hero_form_upgrade' );
