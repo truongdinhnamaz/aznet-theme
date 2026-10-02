@@ -12,7 +12,23 @@ return [
         'visual_preset'   => 'curtain-01',
         'homepage_preset' => 'curtain-01',
     ],
-    'assets'           => [],
+    'assets'           => [
+        'homepage' => [
+            [
+                'type'         => 'style',
+                'handle'       => 'aznet-theme-homepage-curtain-01',
+                'path'         => '/assets/css/components/homepage-curtain-01.css',
+                'dependencies' => [ 'aznet-theme-tokens', 'aznet-theme-homepage' ],
+            ],
+            [
+                'type'         => 'script',
+                'handle'       => 'aznet-theme-homepage-curtain-01-motion',
+                'path'         => '/assets/js/homepage-curtain-01.js',
+                'dependencies' => [],
+                'in_footer'    => true,
+            ],
+        ],
+    ],
     'homepage'         => [
         'authoring' => [
             'sections' => [ 'hero', 'proof', 'about', 'process', 'projects', 'knowledge', 'contact' ],
