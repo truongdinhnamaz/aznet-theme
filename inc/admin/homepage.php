@@ -386,6 +386,52 @@ function render_homepage_category_visibility_control( string $preset, string $sl
 }
 
 /**
+ * Render a single-category source control for a Homepage editorial surface.
+ *
+ * WordPress Category content remains authoritative. Theme stores only the
+ * selected Category ID used by the presentation surface.
+ */
+function render_homepage_single_category_control( string $preset, string $slot, string $button_label ): void {
+    $descriptor = homepage_source_descriptor( $preset, $slot );
+    if ( ! is_array( $descriptor ) || 'category' !== (string) ( $descriptor['type'] ?? '' ) ) {
+        return;
+    }
+
+    $key = homepage_effective_source_key( $preset, $slot );
+    if ( ! is_string( $key ) || '' === $key ) {
+        return;
+    }
+
+    $current = (int) homepage_effective_source_value( $preset, $slot );
+    $categories = get_categories(
+        [
+            'hide_empty' => false,
+            'orderby'    => 'name',
+            'order'      => 'ASC',
+        ]
+    );
+
+    echo '<details class="aznet-theme-homepage-category-visibility">';
+    echo '<summary class="button button-primary">' . esc_html( $button_label ) . '</summary>';
+    echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+    echo '<input type="hidden" name="action" value="aznet_theme_save_settings">';
+    wp_nonce_field( 'aznet_theme_save_settings' );
+    render_hidden_settings( [ $key ] );
+    echo '<p class="description">' . esc_html__( 'Chọn một chuyên mục làm nguồn. Khối Tin pháp luật chỉ lấy các bài đã xuất bản mới nhất của chính chuyên mục này, theo ngày giảm dần.', 'aznet-theme' ) . '</p>';
+    echo '<label class="aznet-theme-field"><span>' . esc_html__( 'Chuyên mục nguồn', 'aznet-theme' ) . '</span><select name="aznet_theme_settings[' . esc_attr( $key ) . ']">';
+    echo '<option value="0">' . esc_html__( '— Chưa chọn —', 'aznet-theme' ) . '</option>';
+    foreach ( $categories as $category ) {
+        if ( ! $category instanceof \WP_Term ) { continue; }
+        $id = (int) $category->term_id;
+        if ( $category->count <= 0 && $id !== $current ) { continue; }
+        echo '<option value="' . esc_attr( (string) $id ) . '" ' . selected( $current, $id, false ) . '>' . esc_html( $category->name ) . '</option>';
+    }
+    echo '</select></label>';
+    submit_button( __( 'Lưu nguồn Tin pháp luật', 'aznet-theme' ), 'primary', 'submit', false );
+    echo '</form></details>';
+}
+
+/**
  * Return the bounded Theme-side Template Library model.
  *
  * TD1 intentionally contains only locally available presentation presets.
@@ -820,7 +866,10 @@ function render_homepage_map( string $preset ): void {
         } elseif ( 'topics' === $key ) {
             render_homepage_category_visibility_control( $preset, 'knowledge' );
             echo '<a class="button" href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=category' ) ) . '">' . esc_html__( 'Quản lý chuyên mục', 'aznet-theme' ) . '</a>';
-        } elseif ( in_array( $key, [ 'analysis', 'news' ], true ) ) {
+        } elseif ( 'news' === $key ) {
+            render_homepage_single_category_control( $preset, 'legal_news', __( 'Chọn chuyên mục nguồn', 'aznet-theme' ) );
+            echo '<a class="button" href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=category' ) ) . '">' . esc_html__( 'Quản lý chuyên mục', 'aznet-theme' ) . '</a>';
+        } elseif ( 'analysis' === $key ) {
             echo '<a class="button button-primary" href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=category' ) ) . '">' . esc_html__( 'Chỉnh chủ đề', 'aznet-theme' ) . '</a>';
         } elseif ( 'category-showcase' === $key ) {
             echo '<a class="button button-primary" href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=product_cat&post_type=product' ) ) . '">' . esc_html__( 'Quản lý dòng rèm', 'aznet-theme' ) . '</a>';
