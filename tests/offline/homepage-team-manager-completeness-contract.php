@@ -29,6 +29,8 @@ foreach ([
     'Chỉnh nâng cao trong WordPress',
     'Xem hồ sơ',
     'data-team-member-status',
+    'Đã thêm và xuất bản nhân sự.',
+    'Đã lưu thông tin nhân sự.',
 ] as $needle) {
     if (! str_contains($homepage, $needle)) {
         fwrite(STDERR, "FAIL: Team manager UI missing {$needle}\n");
