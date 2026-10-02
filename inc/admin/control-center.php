@@ -8,6 +8,10 @@ use function AZnet\Theme\Integrations\WooCommerce\available as woo_available;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+if ( ! function_exists( __NAMESPACE__ . '\\footer_content_editor_value' ) ) {
+    require_once __DIR__ . '/footer-content.php';
+}
+
 function control_center_section(): string {
     $allowed = [ 'overview', 'header', 'footer', 'homepage', 'hero-library', 'provisioning', 'commerce', 'system-health' ];
     $value = isset( $_GET['section'] ) ? sanitize_key( wp_unslash( $_GET['section'] ) ) : 'overview';
