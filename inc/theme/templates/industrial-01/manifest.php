@@ -5,8 +5,8 @@ return [
     'id'               => 'industrial-01',
     'name'             => 'Industrial 01',
     'version'          => '1.0.0',
-    'category'         => 'commerce',
-    'description'      => 'Technical B2B industrial presentation.',
+    'category'         => 'Thiết bị công nghiệp',
+    'description'      => 'Website B2B bán thiết bị công nghiệp và phụ kiện.',
     'capabilities'     => [ 'homepage', 'woocommerce' ],
     'presentation'     => [
         'visual_preset'   => 'industrial-01',
