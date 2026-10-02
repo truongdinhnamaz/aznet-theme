@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.03
+**Version:** v1.04
 **Status:** Working Source  
 **Date:** 02/10/2026
 
@@ -544,7 +544,7 @@ This remains Theme presentation only. RootProfile authoritative Team remains BLO
 
 ## 14. Exact next
 
-**NEXT — complete the provenance-safe `1.3.66` canonical promotion from current GitHub `1.3.57`, because fresh read-only production evidence proves Law 01 and Industrial 01 pilots already identify as `1.3.65`. Do not publish or label current canonical bytes as `1.3.57`, and do not reuse `1.3.65` for a potentially different canonical package. Preserve all D-043/PR #365 PASS evidence, D-044 pilot non-blocking policy, and pilot-local `1.3.65` evidence as deployment provenance. After `1.3.66` RED→GREEN metadata/package verification passes, reconcile Core completion against that exact package. Tag/GitHub Release and production deployment remain separate explicit approval gates.**
+**NEXT — preserve `v1.3.66` technical + publication PASS. Exact source is `main@03978ecab109481788e16763ac32cd6785687b1b`; public package SHA-256 is `9d821d96864172f92226c9437f9aada86c616ee39b598523c5da5929822fc091`. Core release creation is closed. Under D-044, do not hold completion open for pilot rollout. Any later pilot update remains a separate explicit deployment gate with fresh preflight, backup/rollback and post-update verification. Rèm 01 remains pilot-local `BLOCKED_EXTERNAL_ACCESS`; provider L5/external Template Distribution remain non-Core tracks.**
 
 
 
@@ -556,6 +556,20 @@ Owner-approved PR #365 merged to canonical `main@57821e56e81f77e4d26b7dbb69e2cc7
 The R5 authenticated WordPress 6.9 browser matrix now directly verifies the Theme-owned admin surfaces at 1440x1000, 1024x768, 782x900 and 390x844. It covers Template Library presence/search/category controls, keyboard focus, matching-card filtering, Homepage template save, Hero design routing, Team authoring, Homepage Map admin/public surface-order parity, horizontal-overflow checks, Axe critical/serious violations and unexpected console/page errors. This closes TPL4 and closes the Law 01 repository-native portion of HB5/HD4 without changing production Theme bytes.
 
 This does **not** claim Curtain 01 authenticated-admin parity, Rèm 01 production access, provider L5, external Template Distribution Service behavior or any production-site deployment not separately verified. D-044 keeps those pilot/external states non-blocking for Core completion.
+
+### v1.3.66 publication closure — 02/10/2026
+
+Owner-approved publication run `36974702046` completed SUCCESS.
+
+- Exact release source: `03978ecab109481788e16763ac32cd6785687b1b`.
+- Annotated tag: `v1.3.66`; tag object `b0d1978b6b736045c3cff66ca5eae7e4e7ff1a8d` dereferences to the exact source commit.
+- GitHub Release: `401591321`, public, non-draft, non-prerelease.
+- Release asset: `604996470` — `aznet-theme-1.3.66.zip`.
+- Package identity: 215 production files, 150 PHP files, SHA-256 `9d821d96864172f92226c9437f9aada86c616ee39b598523c5da5929822fc091`.
+- Public release asset digest matches the deterministic local build exactly.
+- Publication evidence artifact: `11212628050`, digest `sha256:d9bc3e1a9e80fe59f663a4ecee4b19473f7e6447d5224f6bc1f5a57acb32cfc4`.
+- Temporary publication workflow cleanup commit `ae95500971bb80510101b2c20445200123eaf9b8` leaves the ops branch with zero net changed files relative to the exact release source.
+- Production deployment is not part of this publication closure.
 
 ### D-045 — 1.3.65 live-lineage / 1.3.66 canonical provenance reconciliation — ACCEPTED — 02/10/2026
 
