@@ -9,7 +9,7 @@ $js = file_get_contents($root . '/assets/js/admin/homepage-authoring.js');
 
 foreach ([
     'function render_homepage_team_authoring',
-    "team_directory_members( 4 )",
+    "team_directory_managed_members()",
     "team_directory_public_members()",
     'Thêm nhân sự',
     'Chưa có tên',
