@@ -56,13 +56,19 @@ foreach ( $category_ids as $category_id ) {
     $category = get_category( $category_id );
 
     if ( $category instanceof WP_Term && ! is_wp_error( $category ) ) {
-        $related_categories[ $category->term_id ] = $category;
+        $category_key = sanitize_title( $category->name );
+        if ( ! isset( $related_categories[ $category_key ] ) ) {
+            $related_categories[ $category_key ] = $category;
+        }
     }
 }
 
 foreach ( $related_posts as $related_post ) {
     foreach ( get_the_category( $related_post->ID ) as $category ) {
-        $related_categories[ $category->term_id ] = $category;
+        $category_key = sanitize_title( $category->name );
+        if ( ! isset( $related_categories[ $category_key ] ) ) {
+            $related_categories[ $category_key ] = $category;
+        }
     }
 }
 ?>
