@@ -47,6 +47,8 @@ foreach ([
     'data-category-move="down"',
     'Đưa lên',
     'Đưa xuống',
+    'Chỉ liệt kê chuyên mục đang có bài viết hoặc đang được chọn',
+    '$category->count > 0 || in_array( $id, $current, true )',
 ] as $required) {
     assert(str_contains($source, $required), "Missing Homepage category ordering UI: {$required}");
 }
