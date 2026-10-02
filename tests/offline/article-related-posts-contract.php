@@ -19,6 +19,12 @@ if (false === $source) {
     $fail('cannot read related Post template part');
 }
 
+$css_path = $root . '/assets/css/components/article.css';
+$css = file_get_contents($css_path);
+if (false === $css) {
+    $fail('cannot read article CSS');
+}
+
 foreach ([
     'wp_get_post_categories( $current_post_id )',
     'get_posts(',
@@ -35,9 +41,19 @@ foreach ([
     "esc_html_e( 'Đọc tiếp', 'aznet-theme' )",
     "esc_attr_e( 'Chuyên mục liên quan', 'aznet-theme' )",
     'get_category_link( $category )',
+    'sanitize_title( $category->name )',
 ] as $marker) {
     if (! str_contains($source, $marker)) {
         $fail('related Post template missing bounded native marker: ' . $marker);
+    }
+}
+
+foreach ([
+    'aspect-ratio: 16 / 9;',
+    'flex-direction: column;',
+] as $marker) {
+    if (! str_contains($css, $marker)) {
+        $fail('related Post card CSS missing landscape-card marker: ' . $marker);
     }
 }
 
