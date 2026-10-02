@@ -19,6 +19,14 @@ return [
             'admin_renderer' => 'render_homepage_manifest_settings_hero_editor',
             'content_owner'  => 'theme-legacy-compat',
             'source_type'    => 'presentation_settings',
+            'preview'         => [
+                'eyebrow'         => 'homepage_industrial01_hero_kicker',
+                'title'           => 'homepage_industrial01_hero_title',
+                'lead'            => 'homepage_industrial01_hero_lede',
+                'primary_label'   => 'homepage_industrial01_hero_primary_label',
+                'secondary_label' => 'homepage_industrial01_hero_secondary_label',
+                'image'           => 'homepage_industrial01_hero_image',
+            ],
             'settings_fields' => [
                 [ 'key' => 'homepage_industrial01_hero_kicker', 'type' => 'text', 'label' => 'Dòng giới thiệu nhỏ', 'placeholder' => 'Thiết bị & phụ kiện' ],
                 [ 'key' => 'homepage_industrial01_hero_title', 'type' => 'text', 'label' => 'Tiêu đề Hero' ],

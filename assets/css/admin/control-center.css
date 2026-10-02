@@ -209,3 +209,38 @@
 .aznet-theme-homepage-design-entry__row{display:flex;align-items:center;justify-content:space-between;gap:18px}
 .aznet-theme-homepage-design-entry__row h2{margin:0 0 6px}
 @media(max-width:782px){.aznet-theme-homepage-design-entry__row{align-items:flex-start;flex-direction:column}.aznet-theme-homepage-design-entry__row .button{width:100%;justify-content:center}}
+
+
+/* Hero backend gallery + live preview */
+.aznet-theme-homepage-hero-template-gallery{display:grid;gap:14px;margin-top:4px}
+.aznet-theme-homepage-hero-template-gallery__heading{display:grid;gap:4px}
+.aznet-theme-homepage-hero-template-gallery__heading>span{font-weight:600}
+.aznet-theme-homepage-hero-template-gallery__heading small{color:#646970;line-height:1.45}
+.aznet-theme-homepage-hero-library__card__meta{display:grid;gap:4px}
+.aznet-theme-homepage-hero-library__card__meta strong{font-size:14px}
+.aznet-theme-homepage-hero-library__card__meta small{color:#646970;line-height:1.4}
+.aznet-theme-homepage-hero-live-preview{overflow:hidden;border:1px solid #c3c4c7;border-radius:10px;background:#fff;margin:18px 0}
+.aznet-theme-homepage-hero-live-preview__toolbar{display:flex;justify-content:space-between;gap:12px;padding:10px 14px;border-bottom:1px solid #dcdcde;background:#f6f7f7}
+.aznet-theme-homepage-hero-live-preview__toolbar span{color:#50575e}
+.aznet-theme-homepage-hero-live-preview__canvas{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(180px,.95fr);gap:24px;align-items:center;min-height:260px;padding:28px;background:linear-gradient(135deg,#f8f7f5 0%,#eef1f3 100%)}
+.aznet-theme-homepage-hero-live-preview__copy{display:grid;gap:10px;min-width:0}
+.aznet-theme-homepage-hero-live-preview__eyebrow{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#646970}
+.aznet-theme-homepage-hero-live-preview__title{font-size:28px;line-height:1.1;overflow-wrap:anywhere}
+.aznet-theme-homepage-hero-live-preview__value{font-size:15px;font-weight:600}
+.aznet-theme-homepage-hero-live-preview__lead{max-width:48ch;color:#50575e;line-height:1.5}
+.aznet-theme-homepage-hero-live-preview__actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.aznet-theme-homepage-hero-live-preview__actions span{display:inline-flex;align-items:center;min-height:30px;padding:0 10px;border-radius:999px;background:#1d2327;color:#fff;font-size:11px}
+.aznet-theme-homepage-hero-live-preview__actions span+span{background:#fff;color:#1d2327;border:1px solid #c3c4c7}
+.aznet-theme-homepage-hero-live-preview__media{display:grid;place-items:center;min-height:190px;overflow:hidden;border-radius:10px;background:#dcdcde}
+.aznet-theme-homepage-hero-live-preview__media:empty:before{content:"Ảnh Hero";color:#646970;font-size:12px}
+.aznet-theme-homepage-hero-live-preview__media img{display:block;width:100%;height:100%;min-height:190px;max-height:230px;object-fit:cover}
+.aznet-theme-homepage-hero-live-preview--centered .aznet-theme-homepage-hero-live-preview__canvas{grid-template-columns:minmax(0,680px);justify-content:center;text-align:center}
+.aznet-theme-homepage-hero-live-preview--centered .aznet-theme-homepage-hero-live-preview__copy{justify-items:center}
+.aznet-theme-homepage-hero-live-preview--centered .aznet-theme-homepage-hero-live-preview__media{display:none}
+.aznet-theme-homepage-hero-live-preview--inverse .aznet-theme-homepage-hero-live-preview__canvas{background:#3f1f27;color:#fff}
+.aznet-theme-homepage-hero-live-preview--inverse .aznet-theme-homepage-hero-live-preview__eyebrow,.aznet-theme-homepage-hero-live-preview--inverse .aznet-theme-homepage-hero-live-preview__lead{color:#eadde0}
+.aznet-theme-homepage-hero-live-preview--inverse .aznet-theme-homepage-hero-live-preview__actions span{background:#fff;color:#3f1f27}
+.aznet-theme-homepage-hero-live-preview--inverse .aznet-theme-homepage-hero-live-preview__actions span+span{background:transparent;color:#fff;border-color:#d7c3c9}
+.aznet-theme-homepage-hero-live-preview--media-left .aznet-theme-homepage-hero-live-preview__copy{order:2}
+.aznet-theme-homepage-hero-live-preview--media-left .aznet-theme-homepage-hero-live-preview__media{order:1}
+@media(max-width:782px){.aznet-theme-homepage-hero-live-preview__toolbar{display:grid}.aznet-theme-homepage-hero-live-preview__canvas{grid-template-columns:1fr!important;gap:16px;min-height:0;padding:18px}.aznet-theme-homepage-hero-live-preview__copy{order:1!important}.aznet-theme-homepage-hero-live-preview__media{order:2!important;min-height:150px}.aznet-theme-homepage-hero-live-preview__media img{min-height:150px;max-height:190px}.aznet-theme-homepage-hero-live-preview--centered .aznet-theme-homepage-hero-live-preview__media{display:none}.aznet-theme-homepage-hero-live-preview__title{font-size:24px}}

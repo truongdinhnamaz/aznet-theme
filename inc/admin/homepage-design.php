@@ -52,6 +52,35 @@ function homepage_hero_design_renderer( string $preset ): string {
     return trim( (string) ( $config['admin_renderer'] ?? '' ) );
 }
 
+/**
+ * Return a normalized manifest-declared mapping from generic Hero preview roles
+ * to template-owned presentation setting keys.
+ *
+ * Core understands only presentation roles; it never derives template semantics
+ * from a preset id or from setting-name heuristics.
+ *
+ * @return array<string,string>
+ */
+function homepage_hero_design_preview_config( string $preset ): array {
+    $config = homepage_design_surface_config( $preset, 'hero' );
+    $preview = $config['preview'] ?? [];
+    if ( ! is_array( $preview ) ) {
+        return [];
+    }
+
+    $allowed_roles = [ 'eyebrow', 'title', 'value', 'lead', 'primary_label', 'secondary_label', 'image' ];
+    $normalized = [];
+
+    foreach ( $allowed_roles as $role ) {
+        $key = trim( (string) ( $preview[ $role ] ?? '' ) );
+        if ( '' !== $key ) {
+            $normalized[ $role ] = $key;
+        }
+    }
+
+    return $normalized;
+}
+
 
 function render_homepage_design_entrypoint( string $preset ): void {
     if ( ! homepage_hero_design_available( $preset ) ) {
@@ -109,6 +138,7 @@ function render_homepage_manifest_settings_hero_editor( array $theme_settings, s
     }
 
     $keys = array_values( array_map( static fn( array $field ): string => (string) $field['key'], $fields ) );
+    $preview = homepage_hero_design_preview_config( $preset );
     echo '<section class="aznet-theme-panel aznet-theme-homepage-manifest-hero-editor">';
     echo '<p class="description">' . esc_html__( 'Các trường riêng của mẫu được khai báo trong manifest; Core AZnet Theme chỉ cung cấp form, media picker và vòng đời lưu chung.', 'aznet-theme' ) . '</p>';
     echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
@@ -130,12 +160,12 @@ function render_homepage_manifest_settings_hero_editor( array $theme_settings, s
             $input_id = 'aznet-homepage-design-' . sanitize_html_class( str_replace( '_', '-', $key ) );
             $preview_id = $input_id . '-preview';
             echo '<div class="aznet-theme-field aznet-theme-homepage-hero-simple-form__media"><span>' . esc_html( $label ) . '</span>';
-            echo '<input id="' . esc_attr( $input_id ) . '" type="hidden" name="aznet_theme_settings[' . esc_attr( $key ) . ']" value="' . esc_attr( (string) $id ) . '">';
+            echo '<input id="' . esc_attr( $input_id ) . '" type="hidden" name="aznet_theme_settings[' . esc_attr( $key ) . ']" value="' . esc_attr( (string) $id ) . '" data-preview-key="' . esc_attr( $key ) . '">';
             echo '<div id="' . esc_attr( $preview_id ) . '" class="aznet-theme-homepage-media-preview">';
             if ( $id > 0 ) { echo wp_kses_post( wp_get_attachment_image( $id, 'medium' ) ); }
             echo '</div><p>';
-            echo '<button type="button" class="button aznet-theme-homepage-media-select" data-media-input="' . esc_attr( $input_id ) . '" data-media-preview="' . esc_attr( $preview_id ) . '">' . esc_html__( 'Chọn / thay ảnh', 'aznet-theme' ) . '</button> ';
-            echo '<button type="button" class="button-link-delete aznet-theme-homepage-media-clear" data-media-input="' . esc_attr( $input_id ) . '" data-media-preview="' . esc_attr( $preview_id ) . '">' . esc_html__( 'Bỏ ảnh', 'aznet-theme' ) . '</button>';
+            echo '<button type="button" class="button aznet-theme-homepage-media-select" data-media-input="' . esc_attr( $input_id ) . '" data-media-preview="' . esc_attr( $preview_id ) . '" data-preview-key="' . esc_attr( $key ) . '">' . esc_html__( 'Chọn / thay ảnh', 'aznet-theme' ) . '</button> ';
+            echo '<button type="button" class="button-link-delete aznet-theme-homepage-media-clear" data-media-input="' . esc_attr( $input_id ) . '" data-media-preview="' . esc_attr( $preview_id ) . '" data-preview-key="' . esc_attr( $key ) . '">' . esc_html__( 'Bỏ ảnh', 'aznet-theme' ) . '</button>';
             echo '</p>';
             if ( '' !== $help ) { echo '<small class="description">' . esc_html( $help ) . '</small>'; }
             echo '</div>';
@@ -145,16 +175,45 @@ function render_homepage_manifest_settings_hero_editor( array $theme_settings, s
         $wide = 'textarea' === $type ? ' aznet-theme-homepage-hero-simple-form__wide' : '';
         echo '<label class="aznet-theme-field' . esc_attr( $wide ) . '"><span>' . esc_html( $label ) . '</span>';
         if ( 'textarea' === $type ) {
-            echo '<textarea rows="3" name="aznet_theme_settings[' . esc_attr( $key ) . ']" placeholder="' . esc_attr( $placeholder ) . '">' . esc_textarea( (string) $value ) . '</textarea>';
+            echo '<textarea rows="3" name="aznet_theme_settings[' . esc_attr( $key ) . ']" data-preview-key="' . esc_attr( $key ) . '" placeholder="' . esc_attr( $placeholder ) . '">' . esc_textarea( (string) $value ) . '</textarea>';
         } else {
             $html_type = 'url' === $type ? 'url' : 'text';
-            echo '<input type="' . esc_attr( $html_type ) . '" name="aznet_theme_settings[' . esc_attr( $key ) . ']" value="' . esc_attr( (string) $value ) . '" placeholder="' . esc_attr( $placeholder ) . '">';
+            echo '<input type="' . esc_attr( $html_type ) . '" name="aznet_theme_settings[' . esc_attr( $key ) . ']" data-preview-key="' . esc_attr( $key ) . '" value="' . esc_attr( (string) $value ) . '" placeholder="' . esc_attr( $placeholder ) . '">';
         }
         if ( '' !== $help ) { echo '<small class="description">' . esc_html( $help ) . '</small>'; }
         echo '</label>';
     }
 
     echo '</div>';
+
+    if ( [] !== $preview ) {
+        $preview_value = static function ( string $role ) use ( $preview, $theme_settings ): string {
+            $key = (string) ( $preview[ $role ] ?? '' );
+            return '' !== $key ? (string) ( $theme_settings[ $key ] ?? '' ) : '';
+        };
+        $image_key = (string) ( $preview['image'] ?? '' );
+        $image_id = '' !== $image_key ? (int) ( $theme_settings[ $image_key ] ?? 0 ) : 0;
+
+        echo '<div class="aznet-theme-homepage-hero-live-preview aznet-theme-homepage-hero-live-preview--split" data-hero-live-preview>';
+        echo '<div class="aznet-theme-homepage-hero-live-preview__toolbar"><strong>' . esc_html__( 'Xem trước Hero', 'aznet-theme' ) . '</strong><span>' . esc_html__( 'Cập nhật tức thời khi chỉnh trường', 'aznet-theme' ) . '</span></div>';
+        echo '<div class="aznet-theme-homepage-hero-live-preview__canvas">';
+        echo '<div class="aznet-theme-homepage-hero-live-preview__copy">';
+        if ( isset( $preview['eyebrow'] ) ) { echo '<span class="aznet-theme-homepage-hero-live-preview__eyebrow" data-preview-key-target="' . esc_attr( $preview['eyebrow'] ) . '">' . esc_html( $preview_value( 'eyebrow' ) ) . '</span>'; }
+        if ( isset( $preview['title'] ) ) { echo '<strong class="aznet-theme-homepage-hero-live-preview__title" data-preview-key-target="' . esc_attr( $preview['title'] ) . '">' . esc_html( $preview_value( 'title' ) ) . '</strong>'; }
+        if ( isset( $preview['value'] ) ) { echo '<span class="aznet-theme-homepage-hero-live-preview__value" data-preview-key-target="' . esc_attr( $preview['value'] ) . '">' . esc_html( $preview_value( 'value' ) ) . '</span>'; }
+        if ( isset( $preview['lead'] ) ) { echo '<span class="aznet-theme-homepage-hero-live-preview__lead" data-preview-key-target="' . esc_attr( $preview['lead'] ) . '">' . esc_html( $preview_value( 'lead' ) ) . '</span>'; }
+        if ( isset( $preview['primary_label'] ) || isset( $preview['secondary_label'] ) ) {
+            echo '<span class="aznet-theme-homepage-hero-live-preview__actions">';
+            if ( isset( $preview['primary_label'] ) ) { echo '<span data-preview-key-target="' . esc_attr( $preview['primary_label'] ) . '">' . esc_html( $preview_value( 'primary_label' ) ) . '</span>'; }
+            if ( isset( $preview['secondary_label'] ) ) { echo '<span data-preview-key-target="' . esc_attr( $preview['secondary_label'] ) . '">' . esc_html( $preview_value( 'secondary_label' ) ) . '</span>'; }
+            echo '</span>';
+        }
+        echo '</div>';
+        echo '<div class="aznet-theme-homepage-hero-live-preview__media"' . ( '' !== $image_key ? ' data-preview-media-key="' . esc_attr( $image_key ) . '"' : '' ) . '>';
+        if ( $image_id > 0 ) { echo wp_kses_post( wp_get_attachment_image( $image_id, 'medium_large' ) ); }
+        echo '</div></div></div>';
+    }
+
     submit_button( __( 'Lưu Hero', 'aznet-theme' ) );
     echo '</form></section>';
 }
