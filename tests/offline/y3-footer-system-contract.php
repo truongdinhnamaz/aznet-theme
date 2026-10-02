@@ -418,8 +418,8 @@ foreach (['location', 'phone', 'website', 'email', 'facebook', 'youtube', 'linke
     }
 }
 foreach (['footer_profile_location', 'footer_profile_website', 'footer_profile_youtube', 'footer_profile_linkedin'] as $fieldId) {
-    if (! str_contains($controlCenter, $fieldId)) {
-        y3_fail('AZnet Theme overview must render Footer profile input: ' . $fieldId);
+    if (str_contains($controlCenter, $fieldId)) {
+        y3_fail('Shared Footer rich editor must replace individual profile inputs: ' . $fieldId);
     }
 }
 if (! str_contains($template, 'aznet-theme-site-footer__contact-text')) {
