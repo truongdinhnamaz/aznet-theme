@@ -1,7 +1,7 @@
 # AZnet Theme Implementation Slice Map
 
 **Document ID:** AZT-EXEC-MAP-01  
-**Version:** v0.90
+**Version:** v0.91
 **Status:** Working Execution Map / derived  
 **Date:** 02/10/2026
 
@@ -635,7 +635,7 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 | TPL3 Secure installer | LOCKED | Declarative package only; allow-list + integrity/signature + staging + atomic activation + rollback |
 | TPL4 Runtime/browser/a11y | PASS L3-L4 / canonical | PR #365 R5 authenticated browser matrix provides real wp-admin responsive/keyboard/focus/console/Axe evidence across 1440/1024/782/390 widths; final-head 7/7 QA SUCCESS. |
 | TPL5 Actual service L5 | BLOCKED_EXTERNAL | Requires real AZnet Template Distribution Service; Theme must not self-implement the dependency |
-| TPL6 Release closure | LOCKED | Full regression/package/provenance; merge/release remain owner-gated |
+| TPL6 Release closure | NON-CORE / EXTERNAL TRACK | Core Theme release does not wait for the external Template Distribution Service. Distribution consumer/installer/service certification remain separately locked until the public/versioned external contract exists. |
 
 ## HB — Unified Homepage Backend execution track (D-041)
 
@@ -650,7 +650,7 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 | HB3C Curtain 01 About presentation authoring completeness | PASS L1-L2 / CANONICAL | PR #283 exposes Theme-owned About kicker/heading/quote/scoped image inside the effective About card while preserving WordPress Page ownership. Exact-main source verification 0 failures; isolated public draft remained healthy. Authenticated draft-admin interaction remains UNKNOWN. |
 | HB4 Static/TDD closure | PASS / runner-independent | RED contract added before implementation; direct exact-branch source verification then passed with 0 contract failures after correcting two defects found during review. GitHub runner remains unavailable but is no longer a dependency for L1/L2 evidence. |
 | HB5 WordPress runtime + browser/a11y parity | LAW 01 PASS L3-L4 / CURTAIN AUTH ADMIN UNKNOWN | PR #365 closes repository-native authenticated Law 01 runtime/browser parity: Homepage Map admin/public order, Hero/Team authoring paths, responsive wp-admin, keyboard focus, Axe and console/page-error checks all pass. Curtain 01 authenticated-admin parity remains unclaimed and is not inferred from Law 01. |
-| HB6 Integration/release | LOCKED | Canonical merge is complete; no L5/L6, release or deployment inference until separate runtime/browser/release gates close |
+| HB6 Integration/release | CORE TECHNICAL CLOSURE PASS / PUBLICATION GATED | Current 1.3.57 production bytes have fresh exact-main V1 + X6 release-closure evidence and PR #365 authenticated admin L3-L4 evidence. Provider L5, Curtain pilot auth parity and production deployment remain separate/non-Core. |
 
 **Current exact next:** preserve PR #365 Law 01 repository-native authenticated L3/L4 PASS and the retained Curtain 01 public-draft evidence. Curtain 01 authenticated-admin parity remains UNKNOWN but is non-blocking for Core completion under D-044 while Rèm access is unavailable. Do not infer provider L5 or production deployment. Proceed only to Theme-owned completion/release reconciliation.
 
@@ -679,4 +679,4 @@ The original D-040 `TD0-TD6` labels are reconciled here as `TPL0-TPL6` because `
 | C7 Three-pilot regression | PASS L1-L2 / canonical | Law/Rèm/Industrial manifest-path regression retained |
 | C8 Synthetic fourth-template proof | PASS L1-L2 / canonical | Test-only fourth template participates without a fixture-specific Core branch |
 
-**Exact next:** preserve D-043 C0→C8 plus PR #365 authenticated repository-native TPL4 and Law 01 HB5/HD4 L3-L4 PASS. Rèm 01 and Curtain 01 authenticated-admin parity remain pilot-local/unclaimed and do not block Core completion under D-044. The next safe work is Theme-owned completion/release reconciliation only; do not open provider/distribution implementation without its external public/versioned contract.
+**Exact next:** Core technical completion is closed for the current `1.3.57` production package (215 production files; SHA-256 `f4f0599b51f58671a0f0e0e6026f03035fbc90d1448fefe0d7194c4e7b0e5333`). Preserve exact-main V1 `36964065495`, X6 `36964065510` and PR #365 authenticated R5 evidence. Latest public release is `v1.3.24`. The only next Core release action is owner-approved `v1.3.57` publication/tagging; production deployment and deferred pilot adoption remain separate later gates. Do not implement provider/distribution dependencies inside Theme.
