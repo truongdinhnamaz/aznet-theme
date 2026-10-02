@@ -808,7 +808,7 @@ function homepage_effective_surface_map( ?string $preset = null ): array {
             $term_id = (int) homepage_effective_source_value( 'law-01', $slot, $settings );
             $term = homepage_category_reference( $term_id );
             $limit = 'analysis' === $surface_key ? 3 : 5;
-            $posts = $term instanceof \WP_Term ? homepage_latest_posts( [ $term_id ], $limit, $exclude_ids ) : [];
+            $posts = $term instanceof \WP_Term ? homepage_latest_posts( [ $term_id ], $limit, 'news' === $surface_key ? [] : $exclude_ids ) : [];
             if ( $term instanceof \WP_Term && [] !== $posts ) {
                 $exclude_ids = array_values( array_unique( array_merge( $exclude_ids, array_map( static fn ( \WP_Post $post ): int => (int) $post->ID, $posts ) ) ) );
                 $surfaces[] = homepage_surface_entry(
