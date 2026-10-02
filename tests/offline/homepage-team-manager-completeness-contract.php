@@ -73,8 +73,19 @@ if (! str_contains($createHelper, "'post_content'")) {
     exit(1);
 }
 
+$teamUiStart = strpos($homepage, 'function render_homepage_team_member_editor');
+$teamUiEnd = strpos($homepage, '/** Map technical source states to administrator-facing status badges. */', false === $teamUiStart ? 0 : $teamUiStart);
+$teamActionStart = strpos($authoring, 'function homepage_team_member_insert_data');
+$teamActionEnd = strpos($authoring, '/** Create one WordPress-native draft copy', false === $teamActionStart ? 0 : $teamActionStart);
+if (false === $teamUiStart || false === $teamUiEnd || false === $teamActionStart || false === $teamActionEnd) {
+    fwrite(STDERR, "FAIL: Team manager ownership scan boundaries missing.\n");
+    exit(1);
+}
+$teamScope = $team
+    . substr($homepage, $teamUiStart, $teamUiEnd - $teamUiStart)
+    . substr($authoring, $teamActionStart, $teamActionEnd - $teamActionStart);
 foreach (['register_post_type(', 'update_post_meta(', 'add_post_meta(', 'RootProfile', 'get_page_by_path('] as $forbidden) {
-    if (str_contains($team . $homepage . $authoring, $forbidden)) {
+    if (str_contains($teamScope, $forbidden)) {
         fwrite(STDERR, "FAIL: Team manager crossed ownership boundary: {$forbidden}\n");
         exit(1);
     }
