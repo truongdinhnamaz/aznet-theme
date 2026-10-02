@@ -94,7 +94,7 @@ function render_footer_template_fields( array $settings, string $current ): void
 
     echo '<div class="aznet-theme-footer-template-content">';
     echo '<h2>' . esc_html__( 'Tùy chỉnh mẫu đã chọn', 'aznet-theme' ) . '</h2>';
-    echo '<p>' . esc_html__( 'Các trường dưới đây chỉ là nhãn trình bày của từng mẫu. Thông tin liên hệ và mạng xã hội vẫn được quản lý một lần ở Tổng quan.', 'aznet-theme' ) . '</p>';
+    echo '<p>' . esc_html__( 'Các trường dưới đây chỉ là nhãn trình bày của từng mẫu. Nội dung liên hệ và các liên kết được soạn một lần trong trình soạn thảo bên dưới.', 'aznet-theme' ) . '</p>';
 
     foreach ( $presets as $preset ) {
         $hidden = $current === $preset ? '' : ' hidden';
@@ -169,42 +169,41 @@ function render_quick_setup_form(): void {
  * Render read-only WordPress-native Homepage setup guidance.
  */
 
-function render_footer_profile_form(): void {
-    $values = function_exists( __NAMESPACE__ . '\\footer_profile_from_menus' ) ? footer_profile_from_menus() : [];
-    $fields = [
-        'location'  => [ 'footer_profile_location', __( 'Địa chỉ', 'aznet-theme' ), 'text', '62 Cửa Bắc, Ba Đình, Hà Nội' ],
-        'phone'     => [ 'footer_profile_phone', __( 'Số điện thoại', 'aznet-theme' ), 'text', '024 3716 4123' ],
-        'website'   => [ 'footer_profile_website', __( 'Website', 'aznet-theme' ), 'url', 'https://example.com' ],
-        'email'     => [ 'footer_profile_email', __( 'Email', 'aznet-theme' ), 'email', 'lienhe@example.com' ],
-        'facebook'  => [ 'footer_profile_facebook', __( 'Fanpage Facebook', 'aznet-theme' ), 'url', 'https://facebook.com/...' ],
-        'youtube'   => [ 'footer_profile_youtube', __( 'YouTube', 'aznet-theme' ), 'url', 'https://youtube.com/@...' ],
-        'linkedin'  => [ 'footer_profile_linkedin', __( 'LinkedIn', 'aznet-theme' ), 'url', 'https://linkedin.com/company/...' ],
-        'tiktok'    => [ 'footer_profile_tiktok', __( 'TikTok', 'aznet-theme' ), 'url', 'https://tiktok.com/@...' ],
-        'instagram' => [ 'footer_profile_instagram', __( 'Instagram', 'aznet-theme' ), 'url', 'https://instagram.com/...' ],
-    ];
+function render_footer_content_editor(): void {
+    $content = function_exists( __NAMESPACE__ . '\\footer_content_editor_value' )
+        ? footer_content_editor_value()
+        : '';
 
     echo '<div class="aznet-theme-panel aznet-theme-footer-content-editor">';
     echo '<div class="aznet-theme-footer-content-editor__heading"><div><h2>' . esc_html__( 'Sửa nội dung Footer', 'aznet-theme' ) . '</h2>';
-    echo '<p>' . esc_html__( 'Thông tin chân trang, gồm liên hệ và mạng xã hội, dùng chung cho tất cả mẫu Footer và mọi pilot. Đổi mẫu không làm mất nội dung; dữ liệu vẫn được lưu bằng Menu WordPress.', 'aznet-theme' ) . '</p></div>';
+    echo '<p>' . esc_html__( 'Soạn nội dung như văn bản bình thường. Bạn có thể chèn liên kết trực tiếp bằng trình soạn thảo; nội dung dùng chung cho mọi mẫu Footer và mọi pilot.', 'aznet-theme' ) . '</p></div>';
     echo '<div class="aznet-theme-footer-content-editor__actions">';
     echo '<a class="button" href="' . esc_url( admin_url( 'customize.php?autofocus[control]=custom_logo' ) ) . '">' . esc_html__( 'Sửa Logo', 'aznet-theme' ) . '</a>';
     echo '<a class="button" href="' . esc_url( admin_url( 'options-general.php' ) ) . '">' . esc_html__( 'Sửa tên & mô tả', 'aznet-theme' ) . '</a>';
-    echo '<a class="button" href="' . esc_url( admin_url( 'nav-menus.php' ) ) . '">' . esc_html__( 'Sửa liên kết Footer', 'aznet-theme' ) . '</a>';
+    echo '<a class="button" href="' . esc_url( admin_url( 'nav-menus.php' ) ) . '">' . esc_html__( 'Sửa Menu Footer', 'aznet-theme' ) . '</a>';
     echo '</div></div>';
+
     if ( isset( $_GET['footer_saved'] ) && '1' === sanitize_key( wp_unslash( $_GET['footer_saved'] ) ) ) {
-        echo '<div class="notice notice-success inline"><p>' . esc_html__( 'Đã lưu thông tin chân trang.', 'aznet-theme' ) . '</p></div>';
+        echo '<div class="notice notice-success inline"><p>' . esc_html__( 'Đã lưu nội dung chân trang.', 'aznet-theme' ) . '</p></div>';
     }
+
     echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
-    echo '<input type="hidden" name="action" value="aznet_theme_save_footer_profile">';
-    wp_nonce_field( 'aznet_theme_save_footer_profile' );
-    echo '<div class="aznet-theme-footer-content-editor__grid">';
-    foreach ( $fields as $key => $field ) {
-        echo '<label class="aznet-theme-footer-content-editor__field" for="' . esc_attr( $field[0] ) . '"><span>' . esc_html( $field[1] ) . '</span>';
-        echo '<input class="regular-text" id="' . esc_attr( $field[0] ) . '" type="' . esc_attr( $field[2] ) . '" name="aznet_theme_footer_profile[' . esc_attr( $key ) . ']" value="' . esc_attr( (string) ( $values[ $key ] ?? '' ) ) . '" placeholder="' . esc_attr( $field[3] ) . '">';
-        echo '</label>';
-    }
+    echo '<input type="hidden" name="action" value="aznet_theme_save_footer_content">';
+    wp_nonce_field( 'aznet_theme_save_footer_content' );
+    echo '<div class="aznet-theme-footer-content-editor__editor">';
+    wp_editor(
+        $content,
+        'aznet_theme_footer_content',
+        [
+            'textarea_name' => 'aznet_theme_footer_content',
+            'textarea_rows' => 10,
+            'media_buttons' => false,
+            'teeny'         => false,
+            'quicktags'     => true,
+        ]
+    );
     echo '</div>';
-    submit_button( __( 'Lưu thông tin chân trang', 'aznet-theme' ), 'primary', 'submit', false );
+    submit_button( __( 'Lưu nội dung chân trang', 'aznet-theme' ), 'primary', 'submit', false );
     echo '</form></div>';
 }
 
@@ -272,7 +271,7 @@ function render_control_center(): void {
         submit_button( 'Đặt lại', 'delete', 'submit', false ); echo '</form></div>';
     } elseif ( 'footer' === $section ) {
         render_settings_form( $section );
-        render_footer_profile_form();
+        render_footer_content_editor();
     } elseif ( 'homepage' === $section ) {
         render_homepage_settings();
     } elseif ( 'hero-library' === $section ) {
