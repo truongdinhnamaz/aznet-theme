@@ -18,8 +18,10 @@ $site_title   = (string) ( $context['site_title'] ?? '' );
 $tagline      = (string) ( $context['tagline'] ?? '' );
 $home_url     = (string) ( $context['home_url'] ?? '' );
 $logo_html    = (string) ( $context['logo_html'] ?? '' );
-$about_intro  = (string) ( $context['about_intro'] ?? '' );
-$services        = is_array( $context['services'] ?? null ) ? $context['services'] : [];
+$about_intro           = (string) ( $context['about_intro'] ?? '' );
+$footer_content_active  = ! empty( $context['footer_content_active'] );
+$footer_content_html    = (string) ( $context['footer_content_html'] ?? '' );
+$services               = is_array( $context['services'] ?? null ) ? $context['services'] : [];
 $social_channels = is_array( $context['social_channels'] ?? null ) ? $context['social_channels'] : [];
 $contact_links   = is_array( $context['contact_links'] ?? null ) ? $context['contact_links'] : [];
 $menus           = is_array( $context['menus'] ?? null ) ? $context['menus'] : [];
@@ -71,7 +73,14 @@ $policy_heading     = (string) ( $labels['policy_heading'] ?? __( 'Chính sách'
                 </nav>
             <?php endif; ?>
 
-            <?php if ( 'professional' === $preset && '' !== $contact_menu ) : ?>
+            <?php if ( 'professional' === $preset && $footer_content_active ) : ?>
+                <?php if ( '' !== $footer_content_html ) : ?>
+                    <div class="aznet-theme-site-footer__contact aznet-theme-site-footer__rich-content">
+                        <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $contact_heading ); ?></h2>
+                        <?php echo $footer_content_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized WordPress-owned rich content. ?>
+                    </div>
+                <?php endif; ?>
+            <?php elseif ( 'professional' === $preset && '' !== $contact_menu ) : ?>
                 <nav class="aznet-theme-site-footer__contact" aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
                     <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $contact_heading ); ?></h2>
                     <?php echo $contact_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
@@ -85,75 +94,86 @@ $policy_heading     = (string) ( $labels['policy_heading'] ?? __( 'Chính sách'
                 </nav>
             <?php endif; ?>
 
-            <?php if ( 'law-01' === $preset && ! empty( $contact_links ) ) : ?>
-                <div class="aznet-theme-site-footer__contact aznet-theme-site-footer__contact-social">
-                    <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $contact_heading ); ?></h2>
-                    <ul class="aznet-theme-site-footer__contact-links">
-                        <?php
-                        $contact_labels = [
-                            'location' => __( 'Địa chỉ', 'aznet-theme' ),
-                            'phone'    => __( 'SĐT', 'aznet-theme' ),
-                            'email'    => __( 'Email', 'aznet-theme' ),
-                            'website'  => __( 'Website', 'aznet-theme' ),
-                        ];
-                        ?>
-                        <?php foreach ( $contact_links as $contact ) : ?>
+            <?php if ( 'professional' !== $preset && $footer_content_active ) : ?>
+                <?php if ( '' !== $footer_content_html ) : ?>
+                    <div class="aznet-theme-site-footer__contact aznet-theme-site-footer__rich-content">
+                        <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $contact_heading ); ?></h2>
+                        <?php echo $footer_content_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized WordPress-owned rich content. ?>
+                    </div>
+                <?php endif; ?>
+            <?php else : ?>
+                <?php if ( 'law-01' === $preset && ! empty( $contact_links ) ) : ?>
+                    <div class="aznet-theme-site-footer__contact aznet-theme-site-footer__contact-social">
+                        <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $contact_heading ); ?></h2>
+                        <ul class="aznet-theme-site-footer__contact-links">
                             <?php
-                            $contact_key   = sanitize_html_class( (string) ( $contact['key'] ?? '' ) );
-                            $contact_title = (string) ( $contact['title'] ?? '' );
-                            $contact_url   = (string) ( $contact['url'] ?? '' );
-                            $contact_label = (string) ( $contact_labels[ $contact_key ] ?? '' );
-                            if ( '' === $contact_key || '' === $contact_title || '' === $contact_label ) {
-                                continue;
-                            }
-                            $contact_is_link = '' !== $contact_url && '#' !== $contact_url;
+                            $contact_labels = [
+                                'location' => __( 'Địa chỉ', 'aznet-theme' ),
+                                'phone'    => __( 'SĐT', 'aznet-theme' ),
+                                'email'    => __( 'Email', 'aznet-theme' ),
+                                'website'  => __( 'Website', 'aznet-theme' ),
+                            ];
                             ?>
-                            <li>
-                                <?php if ( $contact_is_link ) : ?>
-                                    <a class="aznet-theme-site-footer__contact-link aznet-theme-site-footer__contact-link--<?php echo esc_attr( $contact_key ); ?>"
-                                       href="<?php echo esc_url( $contact_url, [ 'http', 'https', 'tel', 'mailto' ] ); ?>">
-                                        <span class="aznet-theme-site-footer__contact-label"><?php echo esc_html( $contact_label ); ?>:</span>
-                                        <span class="aznet-theme-site-footer__contact-value aznet-theme-site-footer__contact-text"><?php echo esc_html( $contact_title ); ?></span>
-                                    </a>
-                                <?php else : ?>
-                                    <span class="aznet-theme-site-footer__contact-link aznet-theme-site-footer__contact-link--<?php echo esc_attr( $contact_key ); ?> aznet-theme-site-footer__contact-link--static">
-                                        <span class="aznet-theme-site-footer__contact-label"><?php echo esc_html( $contact_label ); ?>:</span>
-                                        <span class="aznet-theme-site-footer__contact-value aznet-theme-site-footer__contact-text"><?php echo esc_html( $contact_title ); ?></span>
-                                    </span>
-                                <?php endif; ?>
-                            </li>
-                        <?php endforeach; ?>
+                            <?php foreach ( $contact_links as $contact ) : ?>
+                                <?php
+                                $contact_key   = sanitize_html_class( (string) ( $contact['key'] ?? '' ) );
+                                $contact_title = (string) ( $contact['title'] ?? '' );
+                                $contact_url   = (string) ( $contact['url'] ?? '' );
+                                $contact_label = (string) ( $contact_labels[ $contact_key ] ?? '' );
+                                if ( '' === $contact_key || '' === $contact_title || '' === $contact_label ) {
+                                    continue;
+                                }
+                                $contact_is_link = '' !== $contact_url && '#' !== $contact_url;
+                                ?>
+                                <li>
+                                    <?php if ( $contact_is_link ) : ?>
+                                        <a class="aznet-theme-site-footer__contact-link aznet-theme-site-footer__contact-link--<?php echo esc_attr( $contact_key ); ?>"
+                                           href="<?php echo esc_url( $contact_url, [ 'http', 'https', 'tel', 'mailto' ] ); ?>">
+                                            <span class="aznet-theme-site-footer__contact-label"><?php echo esc_html( $contact_label ); ?>:</span>
+                                            <span class="aznet-theme-site-footer__contact-value aznet-theme-site-footer__contact-text"><?php echo esc_html( $contact_title ); ?></span>
+                                        </a>
+                                    <?php else : ?>
+                                        <span class="aznet-theme-site-footer__contact-link aznet-theme-site-footer__contact-link--<?php echo esc_attr( $contact_key ); ?> aznet-theme-site-footer__contact-link--static">
+                                            <span class="aznet-theme-site-footer__contact-label"><?php echo esc_html( $contact_label ); ?>:</span>
+                                            <span class="aznet-theme-site-footer__contact-value aznet-theme-site-footer__contact-text"><?php echo esc_html( $contact_title ); ?></span>
+                                        </span>
+                                    <?php endif; ?>
+                                </li>
+                            <?php endforeach; ?>
 
-                        <?php foreach ( $social_channels as $channel ) : ?>
-                            <?php
-                            $channel_key = sanitize_html_class( (string) ( $channel['key'] ?? '' ) );
-                            $channel_url = (string) ( $channel['url'] ?? '' );
-                            if ( 'facebook' !== $channel_key || '' === $channel_url ) {
-                                continue;
-                            }
-                            $channel_title = (string) ( $channel['title'] ?? '' );
-                            ?>
-                            <li>
-                                <a class="aznet-theme-site-footer__contact-link aznet-theme-site-footer__contact-link--fanpage"
-                                   href="<?php echo esc_url( $channel_url ); ?>"
-                                   target="_blank"
-                                   rel="noopener noreferrer">
-                                    <span class="aznet-theme-site-footer__contact-label"><?php esc_html_e( 'Fanpage', 'aznet-theme' ); ?>:</span>
-                                    <span class="aznet-theme-site-footer__contact-value aznet-theme-site-footer__contact-text"><?php echo esc_html( '' !== $channel_title ? $channel_title : $channel_url ); ?></span>
-                                </a>
-                            </li>
-                            <?php break; ?>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-            <?php elseif ( 'professional' !== $preset && '' !== $contact_menu ) : ?>
-                <nav class="aznet-theme-site-footer__contact" aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
-                    <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $contact_heading ); ?></h2>
-                    <?php echo $contact_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
-                </nav>
+                            <?php foreach ( $social_channels as $channel ) : ?>
+                                <?php
+                                $channel_key = sanitize_html_class( (string) ( $channel['key'] ?? '' ) );
+                                $channel_url = (string) ( $channel['url'] ?? '' );
+                                if ( 'facebook' !== $channel_key || '' === $channel_url ) {
+                                    continue;
+                                }
+                                $channel_title = (string) ( $channel['title'] ?? '' );
+                                ?>
+                                <li>
+                                    <a class="aznet-theme-site-footer__contact-link aznet-theme-site-footer__contact-link--fanpage"
+                                       href="<?php echo esc_url( $channel_url ); ?>"
+                                       target="_blank"
+                                       rel="noopener noreferrer">
+                                        <span class="aznet-theme-site-footer__contact-label"><?php esc_html_e( 'Fanpage', 'aznet-theme' ); ?>:</span>
+                                        <span class="aznet-theme-site-footer__contact-value aznet-theme-site-footer__contact-text"><?php echo esc_html( '' !== $channel_title ? $channel_title : $channel_url ); ?></span>
+                                    </a>
+                                </li>
+                                <?php break; ?>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php elseif ( 'professional' !== $preset && '' !== $contact_menu ) : ?>
+                    <nav class="aznet-theme-site-footer__contact" aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
+                        <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $contact_heading ); ?></h2>
+                        <?php echo $contact_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
+                    </nav>
+                <?php endif; ?>
+
+
             <?php endif; ?>
 
-            <?php if ( 'professional' === $preset && '' !== $social_menu ) : ?>
+            <?php if ( ! $footer_content_active && 'professional' === $preset && '' !== $social_menu ) : ?>
                 <nav class="aznet-theme-site-footer__social-column aznet-theme-site-footer__social" aria-label="<?php echo esc_attr( $social_heading ); ?>">
                     <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $social_heading ); ?></h2>
                     <?php echo $social_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
@@ -167,7 +187,7 @@ $policy_heading     = (string) ( $labels['policy_heading'] ?? __( 'Chính sách'
             </p>
             <?php if ( '' !== $social_menu || '' !== $policy_menu ) : ?>
                 <div class="aznet-theme-site-footer__bottom-nav">
-                    <?php if ( '' !== $social_menu && ! in_array( $preset, [ 'professional', 'law-01' ], true ) ) : ?>
+                    <?php if ( ! $footer_content_active && '' !== $social_menu && ! in_array( $preset, [ 'professional', 'law-01' ], true ) ) : ?>
                         <nav class="aznet-theme-site-footer__social" aria-label="<?php echo esc_attr__( 'Mạng xã hội', 'aznet-theme' ); ?>">
                             <?php echo $social_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
                         </nav>
