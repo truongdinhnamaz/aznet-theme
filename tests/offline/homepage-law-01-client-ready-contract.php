@@ -247,12 +247,16 @@ foreach ([
 }
 
 foreach ([
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-featured__media {',
+    'aspect-ratio: 16 / 9;',
+    'float: left;',
     '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-featured__image {',
-    'height: auto !important;',
-    'min-height: 0;',
-    'object-fit: contain;',
+    'height: 100% !important;',
+    'object-fit: cover;',
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-featured__body {',
+    'display: block;',
 ] as $needle) {
-    $premiumMust(str_contains($css, $needle), "Legal News image ratio contract missing: {$needle}");
+    $premiumMust(str_contains($css, $needle), "Legal News editorial flow contract missing: {$needle}");
 }
 
 foreach ([
