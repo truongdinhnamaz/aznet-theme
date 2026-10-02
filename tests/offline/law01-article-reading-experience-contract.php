@@ -77,6 +77,17 @@ if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__feature
     $fail('Law 01 featured media must match the 50rem article reading-content width');
 }
 
+foreach ([
+    '.aznet-theme-article__reading-layout--with-sidebar:not(:has(.aznet-theme-article__sidebar > *))',
+    'grid-template-columns: minmax(0, 50rem);',
+    '.aznet-theme-article__sidebar:not(:has(> *))',
+    'display: none;',
+] as $marker) {
+    if (! str_contains($css, $marker)) {
+        $fail('Law 01 empty article sidebar must collapse and center the reading column: ' . $marker);
+    }
+}
+
 $reading_main_pos = strpos($content, '<div class="aznet-theme-article__reading-main">');
 $featured_pos = strpos($content, '<figure class="aznet-theme-article__featured-media">');
 $content_pos = strpos($content, '<div class="aznet-theme-entry__content aznet-theme-article__content">');
