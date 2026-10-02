@@ -509,3 +509,13 @@ Evidence: `docs/evidence/CURTAIN01_ABOUT_PRESENTATION_AUTHORING_20260927.md`.
 - `remquocanh.vn` still returns WPVibe HTTP 503 for connection/read operations. This remains an external access blocker and does not justify heuristic/private-storage workarounds.
 - Authenticated per-pilot wp-admin runtime/browser/a11y evidence remains **UNKNOWN**; no L3/L4 pilot PASS is inferred from repository CI or draft file writes.
 - Release publication and production deployment remain separate approval gates.
+### Core Homepage Design pilot public-draft L4 checkpoint — 02/10/2026
+
+- Canonical source checkpoint: `main@24e0dfd5825f7fc5b6b4f65ab41f77d54109bd69`.
+- Fresh WPVibe draft preview generation succeeded for `lstamduchn.vn` and `minhnguyen.vn`.
+- Fresh mobile Lighthouse on each draft preview returned Accessibility **100/100** and Best Practices **100/100**.
+- This proves only the tested public draft browser/a11y scope. Authenticated wp-admin Core Hero backend interaction remains **UNKNOWN** for both pilots.
+- `remquocanh.vn` continues to return WPVibe HTTP 503 for connection/read operations and remains **BLOCKED_EXTERNAL_ACCESS**.
+- No pilot draft was published; no release, live Theme switch, production deployment, or content mutation occurred.
+
+Evidence: `docs/evidence/CORE_HOMEPAGE_DESIGN_PILOT_L4_PARTIAL_20261002.md`.
