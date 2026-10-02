@@ -575,7 +575,14 @@ function render_homepage_team_authoring(): void {
             echo '</div>';
             echo '<div class="aznet-theme-homepage-team-member__actions">';
             if ( 'publish' !== (string) $member->post_status ) {
-                echo '<span class="aznet-theme-homepage-team-member__status">' . esc_html( ucfirst( (string) $member->post_status ) ) . '</span>';
+                $status_label = match ( (string) $member->post_status ) {
+                    'draft' => __( 'Bản nháp', 'aznet-theme' ),
+                    'private' => __( 'Riêng tư', 'aznet-theme' ),
+                    'pending' => __( 'Chờ duyệt', 'aznet-theme' ),
+                    'future' => __( 'Đã lên lịch', 'aznet-theme' ),
+                    default => __( 'Không công khai', 'aznet-theme' ),
+                };
+                echo '<span class="aznet-theme-homepage-team-member__status">' . esc_html( $status_label ) . '</span>';
             }
             render_homepage_quick_edit_form( 'law-01', 'team', (int) $member->ID, __( 'Sửa', 'aznet-theme' ) );
             echo '<form class="aznet-theme-homepage-team-member__delete" method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" onsubmit="return window.confirm(' . esc_attr( wp_json_encode( __( 'Xóa nhân sự này? Nhân sự sẽ được chuyển vào Thùng rác và có thể khôi phục trong WordPress.', 'aznet-theme' ) ) ) . ');">';
