@@ -31,15 +31,24 @@ foreach (['Dịch vụ chính', 'aznet-theme-site-footer__services', 'about_intr
 if (! str_contains($template, 'array_slice( $services, 0, 4 )')) {
     $fail('Footer must cap the primary-service column at four mapped services');
 }
-foreach (['Thông tin chân trang', 'footer_profile_phone', 'footer_profile_email', 'footer_profile_facebook', 'footer_profile_tiktok', 'footer_profile_instagram'] as $needle) {
+foreach (['Sửa nội dung Footer', 'wp_editor(', 'aznet_theme_footer_content', 'render_footer_content_editor'] as $needle) {
     if (! str_contains($admin, $needle)) {
-        $fail("Overview Footer profile form missing {$needle}");
+        $fail("Footer rich editor missing {$needle}");
     }
 }
-foreach (['handle_footer_profile_save', 'footer_profile_from_menus'] as $needle) {
-    if (! str_contains($adminBootstrap, $needle) && ! str_contains($admin, $needle)) {
-        $fail("Footer profile WordPress-menu adapter missing {$needle}");
+foreach (['footer_profile_phone', 'footer_profile_email', 'footer_profile_facebook', 'footer_profile_tiktok', 'footer_profile_instagram'] as $needle) {
+    if (str_contains($admin, $needle)) {
+        $fail("Footer rich editor must replace individual profile field {$needle}");
     }
+}
+$rich = (string) file_get_contents($root . '/inc/admin/footer-content.php');
+foreach (['handle_footer_content_save', 'footer_content_editor_value', "'post_type'    => 'wp_block'"] as $needle) {
+    if (! str_contains($rich, $needle) && ! str_contains($adminBootstrap, $needle)) {
+        $fail("Footer WordPress-native rich-content adapter missing {$needle}");
+    }
+}
+if (! str_contains($rich, 'footer_profile_from_menus')) {
+    $fail('Footer rich editor must seed from existing WordPress-menu contact/social data before first save');
 }
 foreach (['aznet-theme-site-footer__services', 'grid-template-columns: minmax(280px, 1.3fr) repeat(3, minmax(160px, .75fr))', 'aznet-theme-site-footer__contact-label', 'aznet-theme-site-footer__contact-value'] as $needle) {
     if (! str_contains($css, $needle)) {
@@ -56,4 +65,4 @@ foreach ([
     }
 }
 
-echo "PASS: Law 01 Footer renders labeled address, phone, email, website and fanpage rows\n";
+echo "PASS: Law 01 Footer supports shared WordPress-native rich content with legacy menu fallback\n";
