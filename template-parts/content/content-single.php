@@ -44,14 +44,14 @@ if ( $has_article_sidebar ) {
         <?php get_template_part( 'template-parts/content/meta' ); ?>
     </header>
 
-    <?php if ( has_post_thumbnail() ) : ?>
-        <figure class="aznet-theme-article__featured-media">
-            <?php the_post_thumbnail( 'large', [ 'class' => 'aznet-theme-article__featured-image' ] ); ?>
-        </figure>
-    <?php endif; ?>
-
     <div class="<?php echo esc_attr( $reading_layout_class ); ?>">
         <div class="aznet-theme-article__reading-main">
+            <?php if ( has_post_thumbnail() ) : ?>
+                <figure class="aznet-theme-article__featured-media">
+                    <?php the_post_thumbnail( 'large', [ 'class' => 'aznet-theme-article__featured-image' ] ); ?>
+                </figure>
+            <?php endif; ?>
+
             <div class="aznet-theme-entry__content aznet-theme-article__content">
                 <?php the_content(); ?>
                 <?php
