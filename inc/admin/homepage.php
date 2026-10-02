@@ -339,6 +339,25 @@ function render_homepage_category_visibility_control( string $preset, string $sl
         ]
     );
 
+    $categories_by_id = [];
+    foreach ( $categories as $category ) {
+        if ( $category instanceof \WP_Term ) {
+            $categories_by_id[ (int) $category->term_id ] = $category;
+        }
+    }
+    $ordered_categories = [];
+    foreach ( $current as $id ) {
+        if ( isset( $categories_by_id[ $id ] ) ) {
+            $ordered_categories[] = $categories_by_id[ $id ];
+            unset( $categories_by_id[ $id ] );
+        }
+    }
+    foreach ( $categories as $category ) {
+        if ( $category instanceof \WP_Term && isset( $categories_by_id[ (int) $category->term_id ] ) ) {
+            $ordered_categories[] = $category;
+        }
+    }
+
     echo '<details class="aznet-theme-homepage-category-visibility">';
     echo '<summary class="button button-primary">' . esc_html__( 'Chọn chuyên mục hiển thị', 'aznet-theme' ) . '</summary>';
     echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
@@ -347,11 +366,16 @@ function render_homepage_category_visibility_control( string $preset, string $sl
     render_hidden_settings( [ $key ] );
     echo '<fieldset><legend>' . esc_html__( 'Chuyên mục được phép xuất hiện ở khối Chủ đề', 'aznet-theme' ) . '</legend>';
     echo '<p class="description">' . esc_html__( 'Chỉ các chuyên mục được chọn mới xuất hiện tại khối Chủ đề trên trang chủ. Bỏ chọn không xóa chuyên mục hoặc bài viết trong WordPress.', 'aznet-theme' ) . '</p>';
-    echo '<div class="aznet-theme-homepage-category-visibility__list">';
-    foreach ( $categories as $category ) {
+    echo '<div class="aznet-theme-homepage-category-visibility__list" data-category-order-list>';
+    foreach ( $ordered_categories as $category ) {
         if ( ! $category instanceof \WP_Term ) { continue; }
         $id = (int) $category->term_id;
+        echo '<div class="aznet-theme-homepage-category-visibility__row" data-category-order-row>';
         echo '<label><input type="checkbox" name="aznet_theme_settings[' . esc_attr( $key ) . '][]" value="' . esc_attr( (string) $id ) . '" ' . checked( in_array( $id, $current, true ), true, false ) . '> <span>' . esc_html( $category->name ) . '</span></label>';
+        echo '<span class="aznet-theme-homepage-category-visibility__order">';
+        echo '<button type="button" class="button button-small" data-category-move="up" aria-label="' . esc_attr__( 'Đưa lên', 'aznet-theme' ) . '" title="' . esc_attr__( 'Đưa lên', 'aznet-theme' ) . '">↑</button>';
+        echo '<button type="button" class="button button-small" data-category-move="down" aria-label="' . esc_attr__( 'Đưa xuống', 'aznet-theme' ) . '" title="' . esc_attr__( 'Đưa xuống', 'aznet-theme' ) . '">↓</button>';
+        echo '</span></div>';
     }
     echo '</div></fieldset>';
     submit_button( __( 'Lưu chuyên mục hiển thị', 'aznet-theme' ), 'primary', 'submit', false );
