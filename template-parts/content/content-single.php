@@ -102,6 +102,13 @@ if ( $has_article_sidebar ) {
                     <?php
                     $related_excerpt    = trim( wp_strip_all_tags( get_the_excerpt( $related_post ) ) );
                     $related_categories = get_the_category( $related_post->ID );
+                    if ( '' === $related_excerpt ) {
+                        $related_excerpt = sprintf(
+                            /* translators: %s: related post title. */
+                            __( 'Tìm hiểu thêm về %s.', 'aznet-theme' ),
+                            get_the_title( $related_post )
+                        );
+                    }
                     ?>
                     <article class="aznet-theme-related-card">
                         <a class="aznet-theme-related-card__media" href="<?php echo esc_url( get_permalink( $related_post ) ); ?>" tabindex="-1" aria-hidden="true">
