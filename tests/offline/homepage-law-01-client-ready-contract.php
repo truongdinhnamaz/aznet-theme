@@ -247,6 +247,15 @@ foreach ([
 }
 
 foreach ([
+    '.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-news-featured__image {',
+    'height: auto !important;',
+    'min-height: 0;',
+    'object-fit: contain;',
+] as $needle) {
+    $premiumMust(str_contains($css, $needle), "Legal News image ratio contract missing: {$needle}");
+}
+
+foreach ([
     '.aznet-theme-law01-analysis-card__media',
     '.aznet-theme-law01-news-featured',
     '.aznet-theme-law01-process__source',
