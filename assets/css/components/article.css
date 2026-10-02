@@ -376,6 +376,20 @@
     justify-content: center;
 }
 
+.aznet-theme-article--law01 .aznet-theme-article__reading-layout--with-sidebar:not(:has(.aznet-theme-article__sidebar > *)) {
+    grid-template-columns: minmax(0, 50rem);
+}
+
+.aznet-theme-article--law01 .aznet-theme-article__reading-layout--with-sidebar:not(:has(.aznet-theme-article__sidebar > *)) .aznet-theme-article__reading-main {
+    width: 100%;
+    max-width: 50rem;
+    margin-inline: auto;
+}
+
+.aznet-theme-article--law01 .aznet-theme-article__sidebar:not(:has(> *)) {
+    display: none;
+}
+
 .aznet-theme-article--law01 .aznet-theme-article__reading-layout--with-sidebar .aznet-theme-article__reading-main {
     max-width: none;
     margin-inline: 0;
