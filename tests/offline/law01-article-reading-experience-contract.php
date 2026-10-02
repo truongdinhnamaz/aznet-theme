@@ -74,6 +74,13 @@ if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__feature
     $fail('Law 01 featured media must match the 50rem article reading-content width');
 }
 
+$reading_main_pos = strpos($content, '<div class="aznet-theme-article__reading-main">');
+$featured_pos = strpos($content, '<figure class="aznet-theme-article__featured-media">');
+$content_pos = strpos($content, '<div class="aznet-theme-entry__content aznet-theme-article__content">');
+if (false === $reading_main_pos || false === $featured_pos || false === $content_pos || ! ($reading_main_pos < $featured_pos && $featured_pos < $content_pos)) {
+    $fail('Law 01 featured media must live inside the reading-main column before article content so sidebar width is excluded');
+}
+
 $production = $content . "\n" . $css;
 foreach ([
     'new WP_Query',
