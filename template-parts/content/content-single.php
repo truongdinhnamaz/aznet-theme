@@ -79,14 +79,64 @@ if ( $has_article_sidebar ) {
     <?php endif; ?>
 
     <?php
-    the_post_navigation(
-        [
-            'prev_text'  => '<span class="nav-subtitle">' . esc_html__( 'Bài trước', 'aznet-theme' ) . '</span><span class="nav-title">%title</span>',
-            'next_text'  => '<span class="nav-subtitle">' . esc_html__( 'Bài sau', 'aznet-theme' ) . '</span><span class="nav-title">%title</span>',
-            'aria_label' => esc_attr__( 'Post navigation', 'aznet-theme' ),
-        ]
+    $related_posts = array_values(
+        array_filter(
+            [
+                get_previous_post( true ),
+                get_next_post( true ),
+            ],
+            static fn ( $post ) => $post instanceof WP_Post
+        )
     );
     ?>
+
+    <?php if ( ! empty( $related_posts ) ) : ?>
+        <section class="aznet-theme-article__related" aria-labelledby="aznet-theme-related-title">
+            <header class="aznet-theme-article__related-header">
+                <p class="aznet-theme-article__related-kicker"><?php esc_html_e( 'Khám phá thêm', 'aznet-theme' ); ?></p>
+                <h2 id="aznet-theme-related-title" class="aznet-theme-article__related-heading"><?php esc_html_e( 'Bài liên quan', 'aznet-theme' ); ?></h2>
+            </header>
+
+            <div class="aznet-theme-article__related-grid">
+                <?php foreach ( $related_posts as $related_post ) : ?>
+                    <?php
+                    $related_excerpt    = trim( wp_strip_all_tags( get_the_excerpt( $related_post ) ) );
+                    $related_categories = get_the_category( $related_post->ID );
+                    ?>
+                    <article class="aznet-theme-related-card">
+                        <a class="aznet-theme-related-card__media" href="<?php echo esc_url( get_permalink( $related_post ) ); ?>" tabindex="-1" aria-hidden="true">
+                            <?php if ( has_post_thumbnail( $related_post ) ) : ?>
+                                <?php echo get_the_post_thumbnail( $related_post, 'medium_large', [ 'class' => 'aznet-theme-related-card__image', 'loading' => 'lazy' ] ); ?>
+                            <?php else : ?>
+                                <span class="aznet-theme-related-card__placeholder" aria-hidden="true"></span>
+                            <?php endif; ?>
+                        </a>
+
+                        <div class="aznet-theme-related-card__body">
+                            <?php if ( ! empty( $related_categories ) ) : ?>
+                                <span class="aznet-theme-related-card__category"><?php echo esc_html( $related_categories[0]->name ); ?></span>
+                            <?php endif; ?>
+
+                            <h3 class="aznet-theme-related-card__title">
+                                <a href="<?php echo esc_url( get_permalink( $related_post ) ); ?>">
+                                    <?php echo esc_html( get_the_title( $related_post ) ); ?>
+                                </a>
+                            </h3>
+
+                            <?php if ( '' !== $related_excerpt ) : ?>
+                                <p class="aznet-theme-related-card__excerpt"><?php echo esc_html( wp_trim_words( $related_excerpt, 24, '…' ) ); ?></p>
+                            <?php endif; ?>
+
+                            <a class="aznet-theme-related-card__cta" href="<?php echo esc_url( get_permalink( $related_post ) ); ?>">
+                                <?php esc_html_e( 'Đọc tiếp', 'aznet-theme' ); ?>
+                                <span aria-hidden="true">→</span>
+                            </a>
+                        </div>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        </section>
+    <?php endif; ?>
 
     <?php get_template_part( 'template-parts/content/author' ); ?>
 </article>
