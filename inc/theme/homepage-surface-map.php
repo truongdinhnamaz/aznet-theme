@@ -555,17 +555,81 @@ function homepage_industrial01_effective_surface_map( ?array $settings = null ):
         );
     }
 
+    $about = homepage_page_reference( (int) homepage_effective_source_value( 'industrial-01', 'about', $settings ) );
+    if ( $about instanceof \WP_Post ) {
+        $surfaces[] = homepage_surface_entry(
+            'about',
+            __( 'Giới thiệu', 'aznet-theme' ),
+            'about',
+            'after',
+            'aznet-homepage-industrial-about',
+            'page',
+            (int) $about->ID,
+            [
+                'title'   => get_the_title( $about ),
+                'summary' => homepage_surface_text_summary( (string) get_the_excerpt( $about ) ),
+                'source'  => get_the_title( $about ),
+            ]
+        );
+    }
+
+    $process = homepage_page_reference( (int) homepage_effective_source_value( 'industrial-01', 'process', $settings ) );
+    if ( $process instanceof \WP_Post ) {
+        $raw = trim( (string) $process->post_content );
+        $content = '' !== $raw ? trim( (string) apply_filters( 'the_content', $raw ) ) : '';
+        if ( '' !== $content ) {
+            $surfaces[] = homepage_surface_entry(
+                'process',
+                __( 'Quy trình', 'aznet-theme' ),
+                'process',
+                'after',
+                'aznet-homepage-industrial-process',
+                'page',
+                (int) $process->ID,
+                [
+                    'title'   => get_the_title( $process ),
+                    'summary' => homepage_surface_text_summary( $content ),
+                    'source'  => get_the_title( $process ),
+                ]
+            );
+        }
+    }
+
+    $knowledge_ids = (array) homepage_effective_source_value( 'industrial-01', 'knowledge', $settings );
+    $knowledge_terms = homepage_category_references( $knowledge_ids );
+    $knowledge_posts = homepage_latest_posts( $knowledge_ids, 3, [] );
+    if ( [] !== $knowledge_posts ) {
+        $surfaces[] = homepage_surface_entry(
+            'knowledge',
+            __( 'Kiến thức', 'aznet-theme' ),
+            'knowledge',
+            'after',
+            'aznet-homepage-industrial-knowledge',
+            'categories',
+            0,
+            [
+                'title'  => __( 'Kiến thức kỹ thuật', 'aznet-theme' ),
+                'items'  => $knowledge_posts,
+                'source' => [] !== $knowledge_terms
+                    ? implode( ', ', array_map( static fn ( \WP_Term $term ): string => $term->name, $knowledge_terms ) )
+                    : __( 'Bài viết công khai', 'aznet-theme' ),
+            ]
+        );
+    }
+
+    $contact = homepage_page_reference( (int) homepage_effective_source_value( 'industrial-01', 'contact', $settings ) );
     $surfaces[] = homepage_surface_entry(
         'cta',
         __( 'Liên hệ', 'aznet-theme' ),
         'cta',
         'after',
         'aznet-industrial01-quote',
-        'presentation',
-        0,
+        $contact instanceof \WP_Post ? 'page' : 'presentation',
+        $contact instanceof \WP_Post ? (int) $contact->ID : 0,
         [
-            'title'  => preset_term( 'primary_cta', __( 'Yêu cầu báo giá', 'aznet-theme' ), 'industrial-01' ),
-            'source' => __( 'Trình bày Theme; dữ liệu liên hệ vẫn thuộc nguồn sở hữu', 'aznet-theme' ),
+            'title'   => preset_term( 'primary_cta', __( 'Yêu cầu báo giá', 'aznet-theme' ), 'industrial-01' ),
+            'summary' => $contact instanceof \WP_Post ? homepage_surface_text_summary( (string) get_the_excerpt( $contact ) ) : '',
+            'source'  => $contact instanceof \WP_Post ? get_the_title( $contact ) : __( 'Trình bày Theme; dữ liệu liên hệ vẫn thuộc nguồn sở hữu', 'aznet-theme' ),
         ]
     );
 
