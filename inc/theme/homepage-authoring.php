@@ -43,6 +43,7 @@ function homepage_preset_registry(): array {
         ],
         'industrial-01' => [
             'about'     => [ 'type' => 'page', 'key' => 'homepage_industrial01_about_page', 'legacy' => '' ],
+            'solutions' => [ 'type' => 'page', 'key' => 'homepage_industrial01_solutions_page', 'legacy' => '' ],
             'process'   => [ 'type' => 'page', 'key' => 'homepage_industrial01_process_page', 'legacy' => '' ],
             'knowledge' => [ 'type' => 'categories', 'key' => 'homepage_industrial01_knowledge_terms', 'legacy' => '' ],
             'contact'   => [ 'type' => 'page', 'key' => 'homepage_industrial01_contact_page', 'legacy' => '' ],
