@@ -119,6 +119,7 @@ $authoringSource = file_get_contents($root . '/inc/theme/homepage-authoring.php'
 assert(is_string($authoringSource), 'Homepage authoring registry must be readable.');
 foreach ([
     "'about'       => [ 'type' => 'page', 'key' => 'homepage_industrial01_about_page'",
+    "'solutions'   => [ 'type' => 'page', 'key' => 'homepage_industrial01_solutions_page'",
     "'process'     => [ 'type' => 'page', 'key' => 'homepage_industrial01_process_page'",
     "'knowledge'   => [ 'type' => 'categories', 'key' => 'homepage_industrial01_knowledge_terms'",
     "'contact'     => [ 'type' => 'page', 'key' => 'homepage_industrial01_contact_page'",
@@ -126,21 +127,24 @@ foreach ([
     assert(str_contains($authoringSource, $industrialSourceDescriptor), "Industrial 01 source mapping missing: {$industrialSourceDescriptor}");
 }
 
-foreach (['about', 'process', 'knowledge'] as $section) {
+foreach (['about', 'solutions', 'process', 'knowledge'] as $section) {
     $path = $root . '/template-parts/homepage/industrial-01/' . $section . '.php';
     assert(is_file($path), "Industrial 01 standard homepage section missing: {$section}");
 }
 
 $surfaceMapSource = file_get_contents($root . '/inc/theme/homepage-surface-map.php');
 assert(is_string($surfaceMapSource));
-foreach (["'about'", "'process'", "'knowledge'"] as $surfaceKey) {
+foreach (["'about'", "'solutions'", "'process'", "'knowledge'"] as $surfaceKey) {
     assert(str_contains($surfaceMapSource, $surfaceKey), "Industrial 01 effective surface missing: {$surfaceKey}");
 }
 
 $aboutSource = file_get_contents($root . '/template-parts/homepage/industrial-01/about.php');
+$solutionsSource = file_get_contents($root . '/template-parts/homepage/industrial-01/solutions.php');
 $processSource = file_get_contents($root . '/template-parts/homepage/industrial-01/process.php');
 $knowledgeSource = file_get_contents($root . '/template-parts/homepage/industrial-01/knowledge.php');
 assert(is_string($aboutSource) && str_contains($aboutSource, "homepage_effective_source_value( 'industrial-01', 'about' )"), 'Industrial 01 About must consume a typed WordPress Page reference.');
+assert(is_string($solutionsSource) && str_contains($solutionsSource, "homepage_effective_source_value( 'industrial-01', 'solutions' )"), 'Industrial 01 Solutions must consume a typed WordPress Page reference.');
+assert(str_contains($solutionsSource, 'preg_match_all'), 'Industrial 01 Solutions must project authored headings instead of inventing solution semantics.');
 assert(is_string($processSource) && str_contains($processSource, "homepage_effective_source_value( 'industrial-01', 'process' )"), 'Industrial 01 Process must consume a typed WordPress Page reference.');
 assert(is_string($knowledgeSource) && str_contains($knowledgeSource, "homepage_effective_source_value( 'industrial-01', 'knowledge' )"), 'Industrial 01 Knowledge must consume typed WordPress categories.');
 assert(str_contains($aboutSource, 'strip_shortcodes'), 'Industrial 01 About must strip legacy builder shortcodes from homepage summary copy.');
@@ -152,6 +156,7 @@ assert(str_contains((string) $products, 'aznet-theme-industrial01-product-card__
 
 foreach ([
     '.aznet-theme-industrial01-about',
+    '.aznet-theme-industrial01-solutions',
     '.aznet-theme-industrial01-process',
     '.aznet-theme-industrial01-knowledge',
     '.aznet-theme-industrial01-category-card__media',
