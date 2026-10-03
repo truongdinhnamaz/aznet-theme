@@ -1,6 +1,6 @@
 <?php
 /**
- * Industrial 01 mapped process/support page.
+ * Industrial 01 mapped technical-service summary.
  *
  * @package AZnetTheme
  */
@@ -22,8 +22,18 @@ if ( '' === $raw ) {
 }
 
 $content = trim( (string) apply_filters( 'the_content', $raw ) );
-if ( '' === $content ) {
-    return;
+$summary_source = '' !== trim( (string) $page->post_excerpt ) ? (string) $page->post_excerpt : strip_shortcodes( $raw );
+$summary = trim( wp_strip_all_tags( $summary_source ) );
+$summary = '' !== $summary ? wp_trim_words( $summary, 44, '…' ) : '';
+
+$service_labels = [];
+if ( '' !== $content && preg_match_all( '/<h3[^>]*>(.*?)<\/h3>/is', $content, $matches ) ) {
+    foreach ( array_slice( (array) ( $matches[1] ?? [] ), 0, 4 ) as $heading ) {
+        $label = trim( wp_strip_all_tags( (string) $heading ) );
+        if ( '' !== $label ) {
+            $service_labels[] = $label;
+        }
+    }
 }
 ?>
 <section id="aznet-homepage-industrial-process" data-aznet-homepage-surface="process" class="aznet-theme-industrial01-section aznet-theme-industrial01-process" aria-labelledby="aznet-industrial01-process-title">
@@ -35,8 +45,16 @@ if ( '' === $content ) {
             </div>
             <a class="aznet-theme-industrial01-text-link" href="<?php echo esc_url( get_permalink( $page ) ); ?>"><?php esc_html_e( 'Xem đầy đủ dịch vụ', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a>
         </div>
-        <div class="aznet-theme-industrial01-process__content">
-            <?php echo wp_kses_post( $content ); ?>
-        </div>
+        <?php if ( '' !== $summary ) : ?><p class="aznet-theme-industrial01-process__summary"><?php echo esc_html( $summary ); ?></p><?php endif; ?>
+        <?php if ( [] !== $service_labels ) : ?>
+            <div class="aznet-theme-industrial01-process__grid">
+                <?php foreach ( $service_labels as $index => $label ) : ?>
+                    <div class="aznet-theme-industrial01-process__card">
+                        <span aria-hidden="true"><?php echo esc_html( str_pad( (string) ( $index + 1 ), 2, '0', STR_PAD_LEFT ) ); ?></span>
+                        <strong><?php echo esc_html( $label ); ?></strong>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     </div>
 </section>
