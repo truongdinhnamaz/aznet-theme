@@ -96,9 +96,9 @@ if (($invalid['footer_preset'] ?? null) !== 'standard') {
 if (array_key_exists('foreign_state', $invalid)) {
     y3_fail('foreign setting escaped the Theme allow-list');
 }
-$richRef = \AZnet\Theme\normalize_settings(['footer_content_block' => 88]);
-if (($richRef['footer_content_block'] ?? null) !== 88) {
-    y3_fail('Footer rich-content WordPress reference must survive normalization');
+$richRef = \AZnet\Theme\normalize_settings(['footer_professional_column_4_block' => 88]);
+if (($richRef['footer_professional_column_4_block'] ?? null) !== 88) {
+    y3_fail('Footer column WordPress reference must survive normalization');
 }
 
 if (! function_exists('AZnet\\Theme\\footer_preset')) {
@@ -246,16 +246,16 @@ if (false === $footerSectionPos || false === $homepageSectionPos || $homepageSec
     y3_fail('unable to isolate Footer Control Center section');
 }
 $footerSection = substr($renderer, $footerSectionPos, $homepageSectionPos - $footerSectionPos);
-if (! str_contains($footerSection, 'render_footer_column_editors( (string) settings()['footer_preset'] );')) {
-    y3_fail('Footer tab must expose the single shared rich-text Footer editor for every preset/pilot');
+if (! str_contains($footerSection, 'render_footer_column_editors(')) {
+    y3_fail('Footer tab must expose the selected-template Footer column editors');
 }
 $overviewPos = strpos($renderer, "if ( 'overview' === \$section ) {");
 if (false === $overviewPos) {
     y3_fail('unable to isolate Overview Control Center section');
 }
 $overviewSection = substr($renderer, $overviewPos, $footerSectionPos - $overviewPos);
-if (str_contains($overviewSection, 'render_footer_column_editors( (string) settings()['footer_preset'] );')) {
-    y3_fail('Overview must not duplicate the Footer content editor');
+if (str_contains($overviewSection, 'render_footer_column_editors(')) {
+    y3_fail('Overview must not duplicate the Footer column editors');
 }
 foreach ([
     'Sửa nội dung Footer',
@@ -265,7 +265,7 @@ foreach ([
     'data-footer-column-editors',
 ] as $needle) {
     if (! str_contains($controlCenter, $needle)) {
-        y3_fail('Shared Footer content editor missing: ' . $needle);
+        y3_fail('Footer column editor surface missing: ' . $needle);
     }
 }
 foreach (['primary_heading', 'contact_heading', 'social_heading', 'policy_heading'] as $field) {
