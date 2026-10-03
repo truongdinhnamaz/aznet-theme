@@ -23,6 +23,20 @@ function footer_preset(): string {
 }
 
 /**
+ * Resolve the visual skin independently from the Footer content/composition preset.
+ *
+ * A Law 01 site keeps its legal burgundy/gold shell even when its Footer content
+ * uses a generic column preset such as Professional.
+ */
+function footer_skin(): string {
+    $homepage_preset = (string) setting( 'homepage_preset', '' );
+
+    return ( 'law-01' === footer_preset() || 'law-01' === $homepage_preset )
+        ? 'law-01'
+        : 'default';
+}
+
+/**
  * Return Theme-owned presentation labels for the selected generic Footer template.
  *
  * Shared identity/contact/social data remains WordPress-owned.
@@ -274,6 +288,7 @@ function footer_context(): array {
 
     return [
         'preset'      => footer_preset(),
+        'skin'        => footer_skin(),
         'site_title'  => $site_title,
         'tagline'     => $tagline,
         'home_url'    => $home_url,
