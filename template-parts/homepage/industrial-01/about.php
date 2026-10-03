@@ -34,7 +34,11 @@ foreach ( $leading_phrases as $leading_phrase ) {
         $summary = (string) preg_replace( '/^' . preg_quote( $leading_phrase, '/' ) . '\s*/iu', '', $summary, 1 );
     }
 }
-$summary = '' !== $summary ? wp_trim_words( $summary, 55, '…' ) : '';
+if ( '' !== $summary ) {
+    $sentences = preg_split( '/(?<=[.!?])\s+/u', $summary, 2 );
+    $summary = is_array( $sentences ) && isset( $sentences[0] ) ? trim( (string) $sentences[0] ) : $summary;
+    $summary = wp_trim_words( $summary, 52, '…' );
+}
 $image = has_post_thumbnail( $page )
     ? get_the_post_thumbnail( $page, 'large', [ 'class' => 'aznet-theme-industrial01-about__image', 'loading' => 'lazy' ] )
     : '';
