@@ -85,6 +85,98 @@
 }
 
 
+/* Law 01 visual skin.
+ * This is deliberately independent from the Footer content/composition preset:
+ * a Law 01 site can use Professional column authoring without losing its
+ * burgundy/gold shell. Theme owns these presentation tokens and effects.
+ */
+.aznet-theme-site-footer--skin-law-01 {
+    --aznet-theme-on-inverse: var(--aznet-theme-law01-ivory);
+    --aznet-theme-surface-inverse: var(--aznet-theme-law01-burgundy-deep);
+    --aznet-theme-focus: var(--aznet-theme-law01-gold-soft);
+    --aznet-theme-footer-muted: color-mix(in srgb, var(--aznet-theme-law01-ivory) 76%, transparent);
+    --aznet-theme-footer-border: color-mix(in srgb, var(--aznet-theme-law01-gold) 28%, transparent);
+    --aznet-theme-footer-accent: var(--aznet-theme-law01-gold);
+    --aznet-theme-footer-glow: color-mix(in srgb, var(--aznet-theme-law01-gold-soft) 12%, transparent);
+    position: relative;
+    overflow: hidden;
+    border-top: 3px solid var(--aznet-theme-law01-gold);
+    background:
+        radial-gradient(circle at 88% 0%, var(--aznet-theme-footer-glow), transparent 30rem),
+        linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--aznet-theme-law01-burgundy) 76%, var(--aznet-theme-law01-burgundy-deep)) 0%,
+            var(--aznet-theme-law01-burgundy-deep) 74%
+        );
+    color: var(--aznet-theme-law01-ivory);
+}
+
+.aznet-theme-site-footer--skin-law-01::before {
+    position: absolute;
+    top: -13rem;
+    right: -9rem;
+    width: 30rem;
+    height: 30rem;
+    border: 1px solid color-mix(in srgb, var(--aznet-theme-law01-gold) 18%, transparent);
+    border-radius: 50%;
+    content: '';
+    pointer-events: none;
+}
+
+.aznet-theme-site-footer--skin-law-01 .aznet-theme-site-footer__inner {
+    position: relative;
+    z-index: 1;
+}
+
+.aznet-theme-site-footer--skin-law-01 .aznet-theme-site-footer__column-content:not(:first-child) {
+    padding-inline-start: var(--aznet-theme-space-5);
+    border-inline-start: 1px solid var(--aznet-theme-footer-border);
+}
+
+.aznet-theme-site-footer--skin-law-01 .aznet-theme-site-footer__brand-title {
+    display: block;
+    color: var(--aznet-theme-law01-ivory);
+    font-family: var(--aznet-theme-font-family-heading);
+    font-weight: var(--aznet-theme-font-weight-bold);
+    letter-spacing: .035em;
+    text-transform: uppercase;
+}
+
+.aznet-theme-site-footer--skin-law-01 .aznet-theme-site-footer__logo {
+    padding: .2rem;
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-law01-ivory);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--aznet-theme-law01-gold) 45%, transparent);
+}
+
+.aznet-theme-site-footer--skin-law-01 .aznet-theme-site-footer__rich-content h2,
+.aznet-theme-site-footer--skin-law-01 .aznet-theme-site-footer__rich-content h3,
+.aznet-theme-site-footer--skin-law-01 .aznet-theme-site-footer__rich-content h4 {
+    position: relative;
+    padding-bottom: var(--aznet-theme-space-2);
+    color: var(--aznet-theme-law01-ivory);
+    letter-spacing: .03em;
+}
+
+.aznet-theme-site-footer--skin-law-01 .aznet-theme-site-footer__rich-content h2::after,
+.aznet-theme-site-footer--skin-law-01 .aznet-theme-site-footer__rich-content h3::after,
+.aznet-theme-site-footer--skin-law-01 .aznet-theme-site-footer__rich-content h4::after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 2.5rem;
+    height: 1px;
+    background: var(--aznet-theme-law01-gold);
+    content: '';
+}
+
+@media (max-width: 48rem) {
+    .aznet-theme-site-footer--skin-law-01 .aznet-theme-site-footer__column-content:not(:first-child) {
+        padding-inline-start: 0;
+        border-inline-start: 0;
+    }
+}
+
 /* Law 01 — premium legal-services presentation.
  * Identity, contact and navigation content remain WordPress-owned; this preset
  * changes only composition and visual treatment.
