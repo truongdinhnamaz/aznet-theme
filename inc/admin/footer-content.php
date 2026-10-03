@@ -121,6 +121,7 @@ function handle_footer_columns_save(): void {
         : [];
 
     $raw = settings();
+    $raw['footer_preset'] = $preset;
 
     for ( $column = 1; $column <= $counts[ $preset ]; $column++ ) {
         $content = isset( $submitted[ $column ] )
