@@ -139,6 +139,10 @@ $knowledgeSource = file_get_contents($root . '/template-parts/homepage/industria
 assert(is_string($aboutSource) && str_contains($aboutSource, "homepage_effective_source_value( 'industrial-01', 'about' )"), 'Industrial 01 About must consume a typed WordPress Page reference.');
 assert(is_string($processSource) && str_contains($processSource, "homepage_effective_source_value( 'industrial-01', 'process' )"), 'Industrial 01 Process must consume a typed WordPress Page reference.');
 assert(is_string($knowledgeSource) && str_contains($knowledgeSource, "homepage_effective_source_value( 'industrial-01', 'knowledge' )"), 'Industrial 01 Knowledge must consume typed WordPress categories.');
+assert(str_contains($aboutSource, 'strip_shortcodes'), 'Industrial 01 About must strip legacy builder shortcodes from homepage summary copy.');
+assert(! str_contains($processSource, 'echo wp_kses_post( $content )'), 'Industrial 01 Process must not dump the complete mapped service page into the Homepage.');
+assert(str_contains($processSource, 'preg_match_all'), 'Industrial 01 Process must derive compact presentation cards from authored service headings.');
+assert(str_contains($processSource, 'wp_trim_words'), 'Industrial 01 Process must render a bounded source-derived summary.');
 assert(str_contains((string) $categories, 'woocommerce_subcategory_thumbnail'), 'Industrial 01 category cards should use WooCommerce public thumbnail presentation when available.');
 assert(str_contains((string) $products, 'aznet-theme-industrial01-product-card__action'), 'Industrial 01 product cards need a neutral detail action without inventing commerce state.');
 
