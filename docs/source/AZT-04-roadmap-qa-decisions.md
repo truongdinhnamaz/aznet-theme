@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.05
+**Version:** v1.06
 **Status:** Working Source  
-**Date:** 02/10/2026
+**Date:** 03/10/2026
 
 ## 1. Purpose
 
@@ -356,6 +356,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-044** | **Pilot rollout is not a Core completion gate. Once Theme-owned repository/runtime/release gates are PASS, any pilot that cannot be updated because of external access, hosting, security middleware, credentials, provider availability or deployment-path constraints is deferred to manual/later adoption and recorded as a pilot-local blocker. Do not hold AZnet Theme completion open merely to force every pilot onto the latest build. Preserve rollback and fresh verification when a deferred pilot is updated later.** | **Accepted — owner approved 02/10/2026** |
 | **D-045** | **Version provenance reconciliation: fresh production evidence shows deployed pilot identity `1.3.65` while canonical GitHub still declares `1.3.57`. Do not reuse `1.3.65` for new canonical bytes without byte identity proof. Promote the next canonical candidate to `1.3.66`, preserving pilot `1.3.65` as deployment provenance and requiring fresh package/runtime/browser verification before any release claim.** | **Accepted — owner direction 02/10/2026** |
 | **D-046** | **Editorial/news cards across AZnet Theme templates use a reusable presentation standard: 16:9 fixed media frame with non-distorting cover crop; desktop card width is bounded rather than automatically full-container for a single story; text may flow beside and then below the media; narrow viewports collapse to stacked full-card media. The standard applies to editorial/news card surfaces only, while Hero, portrait, product, gallery and other semantic media may define their own ratios. WordPress/provider owners retain all Post/Category/Media data authority.** | **Accepted — owner approved 02/10/2026** |
+| **D-047** | **WordPress-native Team child Pages may store exactly two bounded contact facts in Page meta: `_aznet_theme_team_phone` and `_aznet_theme_team_zalo`. These fields are not RootProfile Person/Contact authority, are not stored in `aznet_theme_settings`, and do not authorize a generic personnel metadata schema. Admin Zalo input is phone-only; Theme derives the presentation URL. Empty values fail soft.** | **Accepted — owner approved 03/10/2026** |
 
 ## 10A. v1.3 Client Delivery System
 
@@ -793,6 +794,17 @@ The product owner explicitly changed the D-038 Team authoring publication behavi
 - Existing/manual draft or private Team child Pages remain excluded from public Homepage/directory resolvers.
 - Ownership remains unchanged: WordPress owns the child Page and its publication state; Theme only orchestrates the bounded create action and presentation.
 - D-039 supersedes only the D-038 **draft-first Add Member** detail. All D-038 ownership, mapping, no-fake-person, provisioning and QA constraints remain in force.
+
+### D-047 — Team member phone/Zalo Page metadata — ACCEPTED — 03/10/2026
+
+The product owner approved adding SĐT and Zalo to the existing WordPress-native Team member authoring flow.
+
+- Storage is limited to the exact child Page meta keys `_aznet_theme_team_phone` and `_aznet_theme_team_zalo`.
+- These are bounded WordPress Page facts for Team website presentation, not authoritative RootProfile identity/profile/contact data.
+- No duplicate values may be stored in `aznet_theme_settings`, a Theme Mod contact store, Team CPT, repeater, JSON personnel blob or private provider storage.
+- Backend create/edit may accept a phone number for both SĐT and Zalo; no Zalo URL is required from the administrator.
+- Frontend Team cards may expose a `tel:` action and derived `https://zalo.me/...` action only when source values are present.
+- Theme-switch continuity must preserve the Page meta values. Release/deployment remain separate gates.
 
 
 
