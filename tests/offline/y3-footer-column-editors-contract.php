@@ -93,4 +93,20 @@ if (str_contains($admin, "'Soạn nội dung như văn bản bình thường. B�
     $fail('Footer content must no longer be represented by one shared editor across all templates');
 }
 
+
+foreach ([
+    'function render_footer_template_fields',
+    'render_footer_template_fields(',
+    'data-footer-template-fields',
+    'Tùy chỉnh mẫu đã chọn',
+    'Tiêu đề cột liên kết',
+    'Tiêu đề cột liên hệ',
+    'Tiêu đề cột mạng xã hội',
+    'Nhãn khu vực chính sách',
+] as $obsolete) {
+    if (str_contains($admin . "\n" . $script, $obsolete)) {
+        $fail('Footer Control Center must not expose the obsolete duplicate label editor: ' . $obsolete);
+    }
+}
+
 echo "PASS: Footer content editors follow the selected template column structure\n";
