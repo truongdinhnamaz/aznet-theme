@@ -16,10 +16,12 @@ if ( ! $page instanceof \WP_Post ) {
     return;
 }
 
-$summary = trim( (string) $page->post_excerpt );
-if ( '' === $summary ) {
-    $summary = homepage_surface_text_summary( (string) apply_filters( 'the_content', $page->post_content ), 55 );
+$summary_source = trim( (string) $page->post_content );
+if ( '' === $summary_source ) {
+    $summary_source = trim( (string) $page->post_excerpt );
 }
+$summary = trim( wp_strip_all_tags( strip_shortcodes( $summary_source ) ) );
+$summary = '' !== $summary ? wp_trim_words( $summary, 55, '…' ) : '';
 $image = has_post_thumbnail( $page )
     ? get_the_post_thumbnail( $page, 'large', [ 'class' => 'aznet-theme-industrial01-about__image', 'loading' => 'lazy' ] )
     : '';
