@@ -1,10 +1,13 @@
 .aznet-theme-homepage--industrial-01 {
-    --industrial01-ink: #17212b;
-    --industrial01-muted: #5d6a75;
+    --industrial01-ink: #101820;
+    --industrial01-ink-soft: #1c2934;
+    --industrial01-muted: #63717d;
     --industrial01-line: #d7e0e7;
     --industrial01-surface: #ffffff;
     --industrial01-surface-soft: #f3f6f8;
+    --industrial01-surface-dark: #0f1d29;
     --industrial01-accent: var(--aznet-theme-color-primary);
+    --industrial01-signal: #f2a900;
     color: var(--industrial01-ink);
     background: var(--industrial01-surface);
 }
@@ -19,130 +22,206 @@
 }
 
 .aznet-theme-industrial01-section {
-    padding-block: clamp(3.5rem, 6vw, 6rem);
+    padding-block: clamp(4rem, 7vw, 7rem);
 }
 
 .aznet-theme-industrial01-kicker {
-    margin: 0 0 .75rem;
+    margin: 0 0 .8rem;
     color: var(--industrial01-accent);
     font-size: var(--aznet-theme-text-label);
     font-weight: var(--aznet-theme-font-weight-bold);
-    letter-spacing: .12em;
+    letter-spacing: .14em;
     text-transform: uppercase;
 }
 
 .aznet-theme-industrial01-lede {
-    max-width: 60ch;
-    margin: 1rem 0 0;
+    max-width: 62ch;
+    margin: 1.15rem 0 0;
     color: var(--industrial01-muted);
     font-size: var(--aznet-theme-text-lead);
     line-height: var(--aznet-theme-line-height-lead);
 }
 
 .aznet-theme-industrial01-hero {
+    position: relative;
+    overflow: hidden;
     padding-block: 0;
-    border-bottom: 1px solid var(--industrial01-line);
-    background: linear-gradient(135deg, #f7fafc 0%, #eef3f6 100%);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    background:
+        linear-gradient(90deg, rgba(15,29,41,.98) 0%, rgba(15,29,41,.93) 52%, rgba(15,29,41,.72) 100%),
+        var(--industrial01-hero-background-image, none),
+        var(--industrial01-surface-dark);
+    background-position: center;
+    background-size: cover;
+}
+
+.aznet-theme-industrial01-hero::after {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+    content: "";
+    pointer-events: none;
 }
 
 .aznet-theme-industrial01-hero__grid {
+    position: relative;
+    z-index: 1;
     display: grid;
-    min-height: clamp(32rem, 68vh, 44rem);
-    grid-template-columns: minmax(0, 1.08fr) minmax(18rem, .92fr);
-    align-items: stretch;
+    min-height: clamp(34rem, 72vh, 48rem);
+    grid-template-columns: minmax(0, 1.05fr) minmax(20rem, .95fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 5rem);
 }
 
 .aznet-theme-industrial01-hero__content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-block: clamp(4rem, 7vw, 7rem);
-    padding-right: clamp(2rem, 5vw, 6rem);
+    padding-block: clamp(4.5rem, 8vw, 8rem);
+}
+
+.aznet-theme-industrial01-hero .aznet-theme-industrial01-kicker {
+    color: #b8d5ee;
 }
 
 .aznet-theme-industrial01-hero h1,
 .aznet-theme-industrial01-heading h2,
+.aznet-theme-industrial01-about h2,
 .aznet-theme-industrial01-cta h2 {
     margin: 0;
-    color: var(--industrial01-ink);
     font-family: var(--aznet-theme-font-family-heading);
     font-weight: var(--aznet-theme-font-weight-bold);
-    letter-spacing: -.03em;
+    letter-spacing: -.035em;
     text-wrap: balance;
 }
 
 .aznet-theme-industrial01-hero h1 {
-    max-width: 13ch;
-    font-size: clamp(2.7rem, 5.2vw, 5.5rem);
-    line-height: .98;
+    max-width: 14ch;
+    color: #fff;
+    font-size: clamp(3rem, 5.6vw, 6rem);
+    line-height: .96;
+}
+
+.aznet-theme-industrial01-hero .aznet-theme-industrial01-lede {
+    max-width: 56ch;
+    color: #c6d2dc;
 }
 
 .aznet-theme-industrial01-hero__visual {
     display: grid;
     place-items: center;
-    padding: clamp(2rem, 5vw, 4.5rem);
+    padding-block: clamp(2.5rem, 5vw, 5rem);
 }
 
 .aznet-theme-industrial01-hero__panel {
-    width: min(100%, 30rem);
+    position: relative;
+    width: min(100%, 34rem);
     aspect-ratio: 4 / 3;
-    border: 1px solid var(--industrial01-line);
-    background:
-        linear-gradient(90deg, transparent 49.5%, rgba(23,74,124,.12) 49.5% 50.5%, transparent 50.5%),
-        linear-gradient(transparent 49.5%, rgba(23,74,124,.12) 49.5% 50.5%, transparent 50.5%),
-        var(--industrial01-surface);
-    box-shadow: var(--aznet-theme-shadow-float);
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: calc(var(--aznet-theme-radius-card) + .25rem);
+    background: #fff;
+    box-shadow: 0 2rem 5rem rgba(0,0,0,.34);
 }
 
-.aznet-theme-industrial01-actions {
+.aznet-theme-industrial01-hero__panel::after {
+    position: absolute;
+    inset: auto 1rem 1rem auto;
+    width: 4.5rem;
+    height: .3rem;
+    border-radius: 999px;
+    background: var(--industrial01-signal);
+    content: "";
+}
+
+.aznet-theme-industrial01-hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.aznet-theme-industrial01-actions,
+.aznet-theme-industrial01-cta__actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 1rem 1.4rem;
+    gap: 1rem 1.35rem;
     margin-top: 2rem;
 }
 
 .aznet-theme-industrial01-button {
     display: inline-flex;
-    min-height: 3.2rem;
+    min-height: 3.25rem;
     align-items: center;
     justify-content: center;
-    padding: .8rem 1.35rem;
+    padding: .85rem 1.45rem;
     border: 1px solid var(--industrial01-accent);
     border-radius: var(--aznet-theme-radius-control);
     background: var(--industrial01-accent);
     color: #fff;
     font-weight: var(--aznet-theme-font-weight-semibold);
     text-decoration: none;
+    transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease;
+}
+
+.aznet-theme-industrial01-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 .75rem 1.5rem rgba(0,0,0,.18);
+}
+
+.aznet-theme-industrial01-button--light {
+    border-color: #fff;
+    background: #fff;
+    color: var(--industrial01-ink);
 }
 
 .aznet-theme-industrial01-text-link {
-    color: var(--industrial01-ink);
+    color: inherit;
     font-weight: var(--aznet-theme-font-weight-semibold);
     text-decoration-thickness: 1px;
     text-underline-offset: .25em;
 }
 
+.aznet-theme-industrial01-hero .aznet-theme-industrial01-text-link {
+    color: #fff;
+}
+
+.aznet-theme-industrial01-button:focus-visible,
+.aznet-theme-industrial01-text-link:focus-visible,
+.aznet-theme-industrial01-category-card:focus-visible,
+.aznet-theme-industrial01-product-card a:focus-visible,
+.aznet-theme-industrial01-knowledge-card a:focus-visible,
+.aznet-theme-industrial01-cta__phone:focus-visible {
+    outline: 3px solid var(--industrial01-signal);
+    outline-offset: 4px;
+}
+
 .aznet-theme-industrial01-heading {
-    margin-bottom: clamp(1.75rem, 4vw, 3rem);
+    margin-bottom: clamp(2rem, 4vw, 3.25rem);
+}
+
+.aznet-theme-industrial01-heading--split {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.5rem;
 }
 
 .aznet-theme-industrial01-heading h2,
+.aznet-theme-industrial01-about h2,
 .aznet-theme-industrial01-cta h2 {
-    max-width: 16ch;
-    font-size: clamp(2rem, 3.6vw, 3.5rem);
-    line-height: 1.05;
+    max-width: 18ch;
+    color: var(--industrial01-ink);
+    font-size: clamp(2.15rem, 3.8vw, 3.8rem);
+    line-height: 1.04;
 }
 
 .aznet-theme-industrial01-grid {
     display: grid;
-    gap: 1rem;
+    gap: 1.15rem;
 }
 
-.aznet-theme-industrial01-grid--categories {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
+.aznet-theme-industrial01-grid--categories,
 .aznet-theme-industrial01-grid--products {
     grid-template-columns: repeat(4, minmax(0, 1fr));
 }
@@ -155,31 +234,80 @@
 
 .aznet-theme-industrial01-category-card {
     display: flex;
-    min-height: 9rem;
+    min-width: 0;
     flex-direction: column;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 1.35rem;
+    overflow: hidden;
     color: inherit;
     text-decoration: none;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
 
-.aznet-theme-industrial01-category-card span {
+.aznet-theme-industrial01-category-card:hover,
+.aznet-theme-industrial01-product-card:hover,
+.aznet-theme-industrial01-knowledge-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(16,24,32,.24);
+    box-shadow: 0 1.2rem 2.5rem rgba(16,24,32,.1);
+}
+
+.aznet-theme-industrial01-category-card__media {
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: #f8fafb;
+}
+
+.aznet-theme-industrial01-category-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .35s ease;
+}
+
+.aznet-theme-industrial01-category-card:hover .aznet-theme-industrial01-category-card__media img {
+    transform: scale(1.035);
+}
+
+.aznet-theme-industrial01-category-card__body {
+    display: flex;
+    min-height: 10rem;
+    flex: 1;
+    flex-direction: column;
+    gap: .7rem;
+    padding: 1.35rem;
+}
+
+.aznet-theme-industrial01-category-card__body strong {
+    font-size: 1.08rem;
+    line-height: 1.35;
+}
+
+.aznet-theme-industrial01-category-card__body > span:not(.aznet-theme-industrial01-category-card__link) {
     color: var(--industrial01-muted);
     line-height: 1.55;
+}
+
+.aznet-theme-industrial01-category-card__link {
+    margin-top: auto;
+    color: var(--industrial01-accent);
+    font-size: .92rem;
+    font-weight: var(--aznet-theme-font-weight-semibold);
 }
 
 .aznet-theme-industrial01-products {
     background: var(--industrial01-surface-soft);
 }
 
-.aznet-theme-industrial01-product-card {
+.aznet-theme-industrial01-product-card,
+.aznet-theme-industrial01-knowledge-card {
     overflow: hidden;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
 
 .aznet-theme-industrial01-product-card__media {
     display: block;
     aspect-ratio: 4 / 3;
+    overflow: hidden;
     background: #fff;
 }
 
@@ -187,36 +315,194 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
+    transition: transform .35s ease;
+}
+
+.aznet-theme-industrial01-product-card:hover .aznet-theme-industrial01-product-card__media img {
+    transform: scale(1.035);
 }
 
 .aznet-theme-industrial01-product-card__body {
-    padding: 1.1rem;
+    display: flex;
+    min-height: 12.5rem;
+    flex-direction: column;
+    padding: 1.2rem;
 }
 
-.aznet-theme-industrial01-product-card h3 {
+.aznet-theme-industrial01-product-card h3,
+.aznet-theme-industrial01-knowledge-card h3 {
     margin: 0;
-    font-size: 1rem;
+    font-size: 1.03rem;
     line-height: 1.45;
 }
 
-.aznet-theme-industrial01-product-card h3 a {
+.aznet-theme-industrial01-product-card h3 a,
+.aznet-theme-industrial01-knowledge-card h3 a {
     color: inherit;
     text-decoration: none;
 }
 
 .aznet-theme-industrial01-product-card__price {
-    margin-top: .65rem;
+    margin-top: .7rem;
     color: var(--industrial01-accent);
     font-weight: var(--aznet-theme-font-weight-bold);
 }
 
+.aznet-theme-industrial01-product-card__action {
+    margin-top: auto;
+    padding-top: 1rem;
+    color: var(--industrial01-accent);
+    font-size: .92rem;
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    text-decoration: none;
+}
+
+.aznet-theme-industrial01-about {
+    background: #fff;
+}
+
+.aznet-theme-industrial01-about__grid {
+    display: grid;
+    grid-template-columns: minmax(18rem, .9fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: clamp(2.5rem, 6vw, 6rem);
+}
+
+.aznet-theme-industrial01-about__grid--text {
+    grid-template-columns: minmax(0, 48rem);
+}
+
+.aznet-theme-industrial01-about__media {
+    overflow: hidden;
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--industrial01-surface-soft);
+    box-shadow: var(--aznet-theme-shadow-float);
+}
+
+.aznet-theme-industrial01-about__image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
+.aznet-theme-industrial01-about__link {
+    display: inline-block;
+    margin-top: 1.5rem;
+    color: var(--industrial01-accent);
+}
+
+.aznet-theme-industrial01-process {
+    background: var(--industrial01-surface-dark);
+    color: #e9f0f5;
+}
+
+.aznet-theme-industrial01-process .aznet-theme-industrial01-kicker {
+    color: #a9cbe7;
+}
+
+.aznet-theme-industrial01-process .aznet-theme-industrial01-heading h2,
+.aznet-theme-industrial01-process .aznet-theme-industrial01-text-link {
+    color: #fff;
+}
+
+.aznet-theme-industrial01-process__content {
+    max-width: 68rem;
+    color: #cbd7e0;
+}
+
+.aznet-theme-industrial01-process__content > :first-child {
+    margin-top: 0;
+}
+
+.aznet-theme-industrial01-process__content h2,
+.aznet-theme-industrial01-process__content h3 {
+    color: #fff;
+}
+
+.aznet-theme-industrial01-process__content h2 {
+    margin-top: 2.5rem;
+    font-size: clamp(1.65rem, 2.5vw, 2.35rem);
+}
+
+.aznet-theme-industrial01-process__content h3 {
+    margin: 2rem 0 .5rem;
+    padding-left: 1rem;
+    border-left: 3px solid var(--industrial01-signal);
+    font-size: 1.15rem;
+}
+
+.aznet-theme-industrial01-process__content hr {
+    margin-block: 2rem;
+    border: 0;
+    border-top: 1px solid rgba(255,255,255,.12);
+}
+
+.aznet-theme-industrial01-knowledge {
+    background: var(--industrial01-surface-soft);
+}
+
+.aznet-theme-industrial01-knowledge__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.15rem;
+}
+
+.aznet-theme-industrial01-knowledge-card {
+    border: 1px solid var(--industrial01-line);
+    border-radius: var(--aznet-theme-radius-card);
+    background: #fff;
+}
+
+.aznet-theme-industrial01-knowledge-card__media {
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: #e9eef2;
+}
+
+.aznet-theme-industrial01-knowledge-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.aznet-theme-industrial01-knowledge-card__body {
+    padding: 1.35rem;
+}
+
+.aznet-theme-industrial01-knowledge-card time {
+    display: block;
+    margin-bottom: .65rem;
+    color: var(--industrial01-muted);
+    font-size: .85rem;
+}
+
+.aznet-theme-industrial01-knowledge-card p {
+    color: var(--industrial01-muted);
+    line-height: 1.6;
+}
+
+.aznet-theme-industrial01-knowledge-card .aznet-theme-industrial01-text-link {
+    color: var(--industrial01-accent);
+}
+
 .aznet-theme-industrial01-cta {
-    border-top: 1px solid var(--industrial01-line);
-    background: var(--industrial01-ink);
+    border-top: 1px solid rgba(255,255,255,.08);
+    background:
+        radial-gradient(circle at 85% 15%, rgba(242,169,0,.13), transparent 28rem),
+        var(--industrial01-ink);
+}
+
+.aznet-theme-industrial01-cta__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) auto;
+    align-items: center;
+    gap: clamp(2rem, 6vw, 6rem);
 }
 
 .aznet-theme-industrial01-cta .aznet-theme-industrial01-kicker {
-    color: #9fc9ef;
+    color: #b8d5ee;
 }
 
 .aznet-theme-industrial01-cta h2,
@@ -224,30 +510,80 @@
     color: #fff;
 }
 
+.aznet-theme-industrial01-cta__actions {
+    justify-content: flex-end;
+    margin-top: 0;
+}
+
+.aznet-theme-industrial01-cta__phone {
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: var(--aznet-theme-font-weight-bold);
+    text-decoration: none;
+}
+
 @media (max-width: 64rem) {
     .aznet-theme-industrial01-grid--categories,
     .aznet-theme-industrial01-grid--products {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    .aznet-theme-industrial01-cta__inner {
+        grid-template-columns: 1fr;
+    }
+
+    .aznet-theme-industrial01-cta__actions {
+        justify-content: flex-start;
+    }
 }
 
 @media (max-width: 48rem) {
-    .aznet-theme-industrial01-hero__grid {
+    .aznet-theme-industrial01-section {
+        padding-block: clamp(3.25rem, 10vw, 4.75rem);
+    }
+
+    .aznet-theme-industrial01-hero__grid,
+    .aznet-theme-industrial01-about__grid {
         min-height: 0;
         grid-template-columns: 1fr;
     }
 
     .aznet-theme-industrial01-hero__content {
-        padding-right: 0;
-        padding-bottom: 2rem;
+        padding: 4rem 0 1.5rem;
+    }
+
+    .aznet-theme-industrial01-hero h1 {
+        font-size: clamp(2.65rem, 13vw, 4.5rem);
     }
 
     .aznet-theme-industrial01-hero__visual {
         padding: 0 0 3rem;
     }
 
+    .aznet-theme-industrial01-heading--split {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
     .aznet-theme-industrial01-grid--categories,
-    .aznet-theme-industrial01-grid--products {
+    .aznet-theme-industrial01-grid--products,
+    .aznet-theme-industrial01-knowledge__grid {
         grid-template-columns: 1fr;
+    }
+
+    .aznet-theme-industrial01-category-card__body,
+    .aznet-theme-industrial01-product-card__body {
+        min-height: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .aznet-theme-industrial01-button,
+    .aznet-theme-industrial01-category-card,
+    .aznet-theme-industrial01-product-card,
+    .aznet-theme-industrial01-knowledge-card,
+    .aznet-theme-industrial01-category-card__media img,
+    .aznet-theme-industrial01-product-card__media img {
+        transition: none;
     }
 }
