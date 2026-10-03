@@ -231,7 +231,6 @@ foreach ([
     'aznet-theme-footer-template-gallery',
     'aznet-theme-footer-template-card',
     'aznet-theme-footer-live-preview',
-    'render_footer_template_fields(',
     'data-footer-preset-fallback',
 ] as $needle) {
     if (! str_contains($controlCenter, $needle)) {
@@ -271,9 +270,17 @@ foreach ([
         y3_fail('Footer column editor surface missing: ' . $needle);
     }
 }
-foreach (['primary_heading', 'contact_heading', 'social_heading', 'policy_heading'] as $field) {
-    if (! str_contains($controlCenter, $field)) {
-        y3_fail('Footer selected-template content field missing: ' . $field);
+foreach ([
+    'render_footer_template_fields',
+    'data-footer-template-fields',
+    'Tùy chỉnh mẫu đã chọn',
+    'Tiêu đề cột liên kết',
+    'Tiêu đề cột liên hệ',
+    'Tiêu đề cột mạng xã hội',
+    'Nhãn khu vực chính sách',
+] as $obsolete) {
+    if (str_contains($controlCenter, $obsolete)) {
+        y3_fail('Footer Control Center must not expose duplicate label authoring: ' . $obsolete);
     }
 }
 if (! str_contains($controlCenter, 'render_hidden_settings( $visible_keys );')) {
