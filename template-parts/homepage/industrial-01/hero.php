@@ -36,7 +36,10 @@ if ( '' === $lede ) {
 if ( '' === $lede ) {
     $about_page = \AZnet\Theme\homepage_page_reference( (int) \AZnet\Theme\homepage_effective_source_value( 'industrial-01', 'about' ) );
     if ( $about_page instanceof \WP_Post ) {
-        $about_copy = strip_shortcodes( (string) $about_page->post_content );
+        $about_source = '' !== trim( (string) $about_page->post_excerpt )
+            ? (string) $about_page->post_excerpt
+            : (string) $about_page->post_content;
+        $about_copy = strip_shortcodes( $about_source );
         $about_copy = (string) preg_replace( '/\[(?:\/)?[A-Za-z0-9_-]+(?:\s[^\]]*)?\]/', ' ', $about_copy );
         $about_copy = trim( wp_strip_all_tags( $about_copy ) );
         $about_copy = (string) preg_replace( '/\s+/u', ' ', $about_copy );
