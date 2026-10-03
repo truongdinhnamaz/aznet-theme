@@ -512,6 +512,27 @@ function homepage_industrial01_effective_surface_map( ?array $settings = null ):
         );
     }
 
+    $solutions = homepage_page_reference( (int) homepage_effective_source_value( 'industrial-01', 'solutions', $settings ) );
+    if ( $solutions instanceof \WP_Post ) {
+        $solutions_raw = trim( (string) $solutions->post_content );
+        if ( '' !== $solutions_raw ) {
+            $surfaces[] = homepage_surface_entry(
+                'solutions',
+                __( 'Giải pháp', 'aznet-theme' ),
+                'solutions',
+                'before',
+                'aznet-homepage-industrial-solutions',
+                'page',
+                (int) $solutions->ID,
+                [
+                    'title'   => get_the_title( $solutions ),
+                    'summary' => homepage_surface_text_summary( strip_shortcodes( $solutions_raw ) ),
+                    'source'  => get_the_title( $solutions ),
+                ]
+            );
+        }
+    }
+
     $products = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\homepage_products' )
         ? \AZnet\Theme\Integrations\WooCommerce\homepage_products( 8 )
         : [];
