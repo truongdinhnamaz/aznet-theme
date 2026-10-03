@@ -626,6 +626,15 @@ function render_homepage_quick_edit_form( string $preset, string $slot, int $sou
     wp_nonce_field( 'aznet_theme_quick_edit_homepage_source' );
     echo '<label><span>' . esc_html__( 'Tiêu đề', 'aznet-theme' ) . '</span><input class="widefat" type="text" name="homepage_source_title" value="' . esc_attr( $title ) . '"></label>';
     echo '<label><span>' . esc_html__( 'Mô tả ngắn', 'aznet-theme' ) . '</span><textarea class="widefat" rows="3" name="homepage_source_excerpt">' . esc_textarea( $excerpt ) . '</textarea></label>';
+    if ( 'law-01' === $preset && 'team' === $slot && 'page' === $type ) {
+        $phone = \AZnet\Theme\team_member_phone( $source_id );
+        $zalo = \AZnet\Theme\team_member_zalo( $source_id );
+        echo '<div class="aznet-theme-homepage-team-contact-fields">';
+        echo '<label><span>' . esc_html__( 'Số điện thoại', 'aznet-theme' ) . '</span><input class="widefat" type="tel" inputmode="tel" autocomplete="tel" name="team_member_phone" value="' . esc_attr( $phone ) . '" placeholder="0912.047.054"></label>';
+        echo '<label><span>' . esc_html__( 'Zalo', 'aznet-theme' ) . '</span><input class="widefat" type="tel" inputmode="tel" name="team_member_zalo" value="' . esc_attr( $zalo ) . '" placeholder="Chỉ nhập số điện thoại"></label>';
+        echo '<p class="description">' . esc_html__( 'Zalo chỉ cần nhập số điện thoại; Theme tự tạo liên kết khi hiển thị.', 'aznet-theme' ) . '</p>';
+        echo '</div>';
+    }
     if ( 'page' === $type && homepage_quick_edit_featured_image_allowed( $preset, $slot, $source_id, $descriptor ) ) {
         echo '<input type="hidden" name="homepage_featured_image_id" value="' . esc_attr( (string) $image_id ) . '">';
         echo '<div class="aznet-theme-homepage-media-preview">';
@@ -725,6 +734,11 @@ function render_homepage_team_authoring(): void {
     wp_nonce_field( 'aznet_theme_create_team_member' );
     echo '<label><span>' . esc_html__( 'Tên nhân sự', 'aznet-theme' ) . '</span><input class="widefat" type="text" name="team_member_name" required></label>';
     echo '<label><span>' . esc_html__( 'Chức vụ / chuyên môn ngắn', 'aznet-theme' ) . '</span><textarea class="widefat" rows="2" name="team_member_role"></textarea></label>';
+    echo '<div class="aznet-theme-homepage-team-contact-fields">';
+    echo '<label><span>' . esc_html__( 'Số điện thoại', 'aznet-theme' ) . '</span><input class="widefat" type="tel" inputmode="tel" autocomplete="tel" name="team_member_phone" placeholder="0912.047.054"></label>';
+    echo '<label><span>' . esc_html__( 'Zalo', 'aznet-theme' ) . '</span><input class="widefat" type="tel" inputmode="tel" name="team_member_zalo" placeholder="Chỉ nhập số điện thoại"></label>';
+    echo '<p class="description">' . esc_html__( 'Zalo chỉ cần nhập số điện thoại; không cần dán URL.', 'aznet-theme' ) . '</p>';
+    echo '</div>';
     echo '<input type="hidden" name="homepage_featured_image_id" value="0">';
     echo '<div class="aznet-theme-homepage-media-preview"></div>';
     echo '<p><button type="button" class="button aznet-theme-homepage-media-select">' . esc_html__( 'Chọn ảnh', 'aznet-theme' ) . '</button> <button type="button" class="button-link-delete aznet-theme-homepage-media-clear">' . esc_html__( 'Bỏ ảnh', 'aznet-theme' ) . '</button></p>';
