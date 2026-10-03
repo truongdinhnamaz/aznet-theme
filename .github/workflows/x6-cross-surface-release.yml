@@ -1171,9 +1171,9 @@ jobs:
                   exit 1
                 fi
                 for expected in \
-                  '-Version: 1.3.72' \
+                  '-Version: 1.3.70' \
                   '+Version: 1.3.73' \
-                  "-    define( 'AZNET_THEME_VERSION', '1.3.72' );" \
+                  "-    define( 'AZNET_THEME_VERSION', '1.3.70' );" \
                   "+    define( 'AZNET_THEME_VERSION', '1.3.73' );"; do
                   if [[ "$(printf '%s\n' "$metadata_changes" | grep -Fxc -- "$expected")" != '1' ]]; then
                     echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.73 boundary' >&2
