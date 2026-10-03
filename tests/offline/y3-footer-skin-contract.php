@@ -34,6 +34,10 @@ foreach ([
     '.aznet-theme-site-footer--skin-law-01',
     '--aznet-theme-footer-accent: var(--aznet-theme-law01-gold)',
     'var(--aznet-theme-law01-burgundy-deep)',
+    'minmax(250px, 1fr)',
+    'minmax(160px, .62fr)',
+    'minmax(320px, 1.18fr)',
+    'padding-inline-start: clamp(var(--aznet-theme-space-6), 2.35vw, var(--aznet-theme-space-7))',
 ] as $needle) {
     if (! str_contains($css, $needle)) {
         $fail('Law presentation skin must preserve burgundy/gold Footer shell: ' . $needle);
