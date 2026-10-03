@@ -596,8 +596,8 @@ function homepage_industrial01_effective_surface_map( ?array $settings = null ):
     }
 
     $knowledge_ids = (array) homepage_effective_source_value( 'industrial-01', 'knowledge', $settings );
-    $knowledge_terms = homepage_category_references( $knowledge_ids );
-    $knowledge_posts = homepage_latest_posts( $knowledge_ids, 3, [] );
+    $knowledge_terms = [] !== $knowledge_ids ? homepage_category_references( $knowledge_ids ) : [];
+    $knowledge_posts = [] !== $knowledge_ids ? homepage_latest_posts( $knowledge_ids, 3, [] ) : [];
     if ( [] !== $knowledge_posts ) {
         $surfaces[] = homepage_surface_entry(
             'knowledge',
