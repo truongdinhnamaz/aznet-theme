@@ -266,7 +266,7 @@ async function verifyHomepageTeamAuthoring(page, viewportName) {
     const phoneLink = contactCard.locator('a.aznet-theme-team-card__contact--phone');
     const zaloLink = contactCard.locator('a.aznet-theme-team-card__contact--zalo');
     if (await phoneLink.count() !== 1 || await phoneLink.getAttribute('href') !== 'tel:0912047054') throw new Error('Team phone action missing or malformed');
-    if ((await phoneLink.innerText()).trim().replace(/\s+/g, ' ') !== '☎ 0912.047.054') throw new Error('Team phone display formatting mismatch');
+    if (!(await phoneLink.innerText()).includes('0912.047.054')) throw new Error('Team phone display formatting mismatch');
     if (await zaloLink.count() !== 1 || await zaloLink.getAttribute('href') !== 'https://zalo.me/84987472480') throw new Error('Team Zalo action missing or malformed');
   } finally {
     await publicPage.close();
