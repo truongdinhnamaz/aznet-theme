@@ -101,7 +101,8 @@
 .aznet-theme-homepage-team-member__delete .button-link-delete:hover,.aznet-theme-homepage-team-member__delete .button-link-delete:focus-visible{color:#6f1c1d}
 .aznet-theme-homepage-team-create{margin-top:14px}
 .aznet-theme-homepage-team-create>form{display:grid;gap:12px;margin-top:12px;padding:14px;border:1px solid #dcdcde;border-radius:8px;background:#f6f7f7}
-@media(max-width:782px){.aznet-theme-homepage-team-member{grid-template-columns:52px minmax(0,1fr)}.aznet-theme-homepage-team-member__actions{grid-column:1/-1}}
+.aznet-theme-homepage-team-contact-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px;padding:12px;border:1px solid #dcdcde;border-radius:6px;background:#fff}.aznet-theme-homepage-team-contact-fields label{display:grid;gap:5px}.aznet-theme-homepage-team-contact-fields label>span{font-weight:600}.aznet-theme-homepage-team-contact-fields .description{grid-column:1/-1;margin:0;color:#646970}
+@media(max-width:782px){.aznet-theme-homepage-team-member{grid-template-columns:52px minmax(0,1fr)}.aznet-theme-homepage-team-member__actions{grid-column:1/-1}.aznet-theme-homepage-team-contact-fields{grid-template-columns:1fr}.aznet-theme-homepage-team-contact-fields .description{grid-column:auto}}
 
 
 /* D-040 / TD1 Template Library */
