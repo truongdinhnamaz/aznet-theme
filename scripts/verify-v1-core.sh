@@ -151,6 +151,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-reference-tea
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-provisioning-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-page-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-member-detail-presentation-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-member-contact-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-authoring-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-parent-image-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-team-immediate-publish-contract.php
