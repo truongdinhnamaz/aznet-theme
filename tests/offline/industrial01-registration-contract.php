@@ -70,7 +70,6 @@ assert(is_string($heroSource) && str_contains($heroSource, 'Integrations\\WooCom
 assert(str_contains($heroSource, "homepage_effective_source_value( 'industrial-01', 'about' )"), 'Industrial Hero should reuse mapped WordPress-owned About copy when explicit Hero lead is empty.');
 assert(str_contains($heroSource, 'strip_shortcodes'), 'Industrial Hero fallback lead must remove legacy builder shortcodes.');
 assert(str_contains($heroSource, 'preg_replace'), 'Industrial Hero fallback lead must remove unregistered legacy shortcode wrappers.');
-assert(str_contains($aboutSource, 'preg_replace'), 'Industrial About summary must remove unregistered legacy shortcode wrappers.');
 foreach (['get_option(', 'get_post_meta(', 'update_option(', 'update_post_meta(', 'wc_get_products(', 'get_terms('] as $privateStoreNeedle) {
     assert(! str_contains($categories . $products, $privateStoreNeedle), "Industrial 01 must not read or mutate private/domain storage directly: {$privateStoreNeedle}");
 }
@@ -145,6 +144,7 @@ $processSource = file_get_contents($root . '/template-parts/homepage/industrial-
 $knowledgeSource = file_get_contents($root . '/template-parts/homepage/industrial-01/knowledge.php');
 assert(is_string($aboutSource) && str_contains($aboutSource, "homepage_effective_source_value( 'industrial-01', 'about' )"), 'Industrial 01 About must consume a typed WordPress Page reference.');
 assert(str_contains($aboutSource, "homepage_effective_source_value( 'industrial-01', 'about_image' )"), 'Industrial 01 About image must consume a typed WordPress attachment reference.');
+assert(str_contains($aboutSource, 'preg_replace'), 'Industrial About summary must remove unregistered legacy shortcode wrappers.');
 assert(is_string($solutionsSource) && str_contains($solutionsSource, "homepage_effective_source_value( 'industrial-01', 'solutions' )"), 'Industrial 01 Solutions must consume a typed WordPress Page reference.');
 assert(str_contains($solutionsSource, 'preg_match_all'), 'Industrial 01 Solutions must project authored headings instead of inventing solution semantics.');
 assert(is_string($processSource) && str_contains($processSource, "homepage_effective_source_value( 'industrial-01', 'process' )"), 'Industrial 01 Process must consume a typed WordPress Page reference.');
