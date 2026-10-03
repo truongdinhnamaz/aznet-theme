@@ -14,6 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $context      = \AZnet\Theme\footer_context();
 $preset       = (string) ( $context['preset'] ?? 'standard' );
+$skin         = (string) ( $context['skin'] ?? 'default' );
 $site_title   = (string) ( $context['site_title'] ?? '' );
 $tagline      = (string) ( $context['tagline'] ?? '' );
 $home_url     = (string) ( $context['home_url'] ?? '' );
@@ -36,6 +37,10 @@ $footer_classes = [
     'aznet-theme-site-footer',
     'aznet-theme-site-footer--' . $preset,
 ];
+
+if ( 'default' !== $skin && '' !== $skin ) {
+    $footer_classes[] = 'aznet-theme-site-footer--skin-' . sanitize_html_class( $skin );
+}
 
 $contact_heading    = (string) ( $labels['contact_heading'] ?? __( 'Thông tin liên hệ', 'aznet-theme' ) );
 $navigation_heading = (string) ( $labels['primary_heading'] ?? __( 'Liên kết nhanh', 'aznet-theme' ) );
