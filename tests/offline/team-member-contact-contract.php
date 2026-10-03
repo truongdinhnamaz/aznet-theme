@@ -48,6 +48,20 @@ foreach ([
     }
 }
 
+$createStart = strpos($authoring, 'function handle_homepage_team_member_create');
+$createEnd = strpos($authoring, '/** Move one Team member Page to Trash', $createStart ?: 0);
+$createHandler = false !== $createStart ? substr($authoring, $createStart, false !== $createEnd ? $createEnd - $createStart : null) : '';
+foreach ([
+    "\$phone = isset( \$_POST['team_member_phone'] )",
+    "\$zalo = isset( \$_POST['team_member_zalo'] )",
+    "save_team_member_contact( (int) \$id, \$phone, \$zalo )",
+] as $needle) {
+    if (! str_contains($createHandler, $needle)) {
+        fwrite(STDERR, "FAIL: Team create flow missing contact input/persistence {$needle}\n");
+        exit(1);
+    }
+}
+
 if (str_contains($authoring, "aznet_theme_settings['team_member_phone']")
     || str_contains($authoring, "aznet_theme_settings['team_member_zalo']")) {
     fwrite(STDERR, "FAIL: Team contact facts must not be stored in Theme settings\n");
