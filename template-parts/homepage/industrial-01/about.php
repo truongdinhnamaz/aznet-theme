@@ -39,9 +39,13 @@ if ( '' !== $summary ) {
     $summary = is_array( $sentences ) && isset( $sentences[0] ) ? trim( (string) $sentences[0] ) : $summary;
     $summary = wp_trim_words( $summary, 52, '…' );
 }
-$image = has_post_thumbnail( $page )
-    ? get_the_post_thumbnail( $page, 'large', [ 'class' => 'aznet-theme-industrial01-about__image', 'loading' => 'lazy' ] )
+$image_id = (int) homepage_effective_source_value( 'industrial-01', 'about_image' );
+$image = $image_id > 0
+    ? wp_get_attachment_image( $image_id, 'large', false, [ 'class' => 'aznet-theme-industrial01-about__image', 'loading' => 'lazy' ] )
     : '';
+if ( '' === $image && has_post_thumbnail( $page ) ) {
+    $image = get_the_post_thumbnail( $page, 'large', [ 'class' => 'aznet-theme-industrial01-about__image', 'loading' => 'lazy' ] );
+}
 ?>
 <section id="aznet-homepage-industrial-about" data-aznet-homepage-surface="about" class="aznet-theme-industrial01-section aznet-theme-industrial01-about" aria-labelledby="aznet-industrial01-about-title">
     <div class="aznet-theme-industrial01-shell aznet-theme-industrial01-about__grid<?php echo '' === $image ? ' aznet-theme-industrial01-about__grid--text' : ''; ?>">
