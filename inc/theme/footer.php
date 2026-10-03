@@ -78,14 +78,32 @@ function footer_context(): array {
     $about_intro = '';
     $services    = [];
 
-    $footer_content_active = false;
-    $footer_content_html   = '';
-    $footer_content_block  = (int) setting( 'footer_content_block', 0 );
-    if ( $footer_content_block > 0 && function_exists( 'get_post' ) ) {
-        $footer_content_post = get_post( $footer_content_block );
-        if ( $footer_content_post instanceof \WP_Post && 'wp_block' === $footer_content_post->post_type ) {
-            $footer_content_active = true;
-            $footer_content_html = wp_kses_post( wpautop( (string) $footer_content_post->post_content ) );
+    $footer_columns_active = false;
+    $footer_columns        = [];
+    $column_counts = [
+        'minimal'      => 2,
+        'classic'      => 3,
+        'professional' => 4,
+        'split'        => 3,
+        'centered'     => 1,
+        'compact'      => 3,
+    ];
+    $active_preset = footer_preset();
+
+    if ( isset( $column_counts[ $active_preset ] ) && function_exists( 'get_post' ) ) {
+        for ( $column = 1; $column <= $column_counts[ $active_preset ]; $column++ ) {
+            $block_id = (int) setting( 'footer_' . $active_preset . '_column_' . $column . '_block', 0 );
+            $html     = '';
+
+            if ( $block_id > 0 ) {
+                $post = get_post( $block_id );
+                if ( $post instanceof \WP_Post && 'wp_block' === $post->post_type ) {
+                    $footer_columns_active = true;
+                    $html = wp_kses_post( wpautop( (string) $post->post_content ) );
+                }
+            }
+
+            $footer_columns[] = $html;
         }
     }
 
@@ -260,9 +278,9 @@ function footer_context(): array {
         'tagline'     => $tagline,
         'home_url'    => $home_url,
         'logo_html'   => $logo_html,
-        'about_intro'          => $about_intro,
-        'footer_content_active' => $footer_content_active,
-        'footer_content_html'   => $footer_content_html,
+        'about_intro'           => $about_intro,
+        'footer_columns_active' => $footer_columns_active,
+        'footer_columns'        => $footer_columns,
         'services'              => $services,
         'social_channels' => $social_channels,
         'contact_links'   => $contact_links,
