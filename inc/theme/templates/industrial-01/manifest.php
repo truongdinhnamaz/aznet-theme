@@ -23,6 +23,9 @@ return [
         ],
     ],
     'homepage'         => [
+        'authoring' => [
+            'sections' => [ 'hero', 'about', 'process', 'knowledge', 'contact' ],
+        ],
         'hero' => [
             'enabled'        => true,
             'admin_renderer' => 'render_homepage_manifest_settings_hero_editor',
