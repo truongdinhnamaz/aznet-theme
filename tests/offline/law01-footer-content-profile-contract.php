@@ -31,7 +31,7 @@ foreach (['Dịch vụ chính', 'aznet-theme-site-footer__services', 'about_intr
 if (! str_contains($template, 'array_slice( $services, 0, 4 )')) {
     $fail('Footer must cap the primary-service column at four mapped services');
 }
-foreach (['Sửa nội dung Footer', 'wp_editor(', 'aznet_theme_footer_content', 'render_footer_content_editor'] as $needle) {
+foreach (['Sửa nội dung Footer', 'wp_editor(', 'aznet_theme_footer_columns[', 'render_footer_column_editors', 'data-footer-column-editors'] as $needle) {
     if (! str_contains($admin, $needle)) {
         $fail("Footer rich editor missing {$needle}");
     }
@@ -42,9 +42,9 @@ foreach (['footer_profile_phone', 'footer_profile_email', 'footer_profile_facebo
     }
 }
 $rich = (string) file_get_contents($root . '/inc/admin/footer-content.php');
-foreach (['handle_footer_content_save', 'footer_content_editor_value', "'post_type'    => 'wp_block'"] as $needle) {
+foreach (['handle_footer_columns_save', 'footer_column_editor_value', 'footer_column_setting_key', "'post_type'    => 'wp_block'"] as $needle) {
     if (! str_contains($rich, $needle) && ! str_contains($adminBootstrap, $needle)) {
-        $fail("Footer WordPress-native rich-content adapter missing {$needle}");
+        $fail("Footer WordPress-native column-content adapter missing {$needle}");
     }
 }
 if (! str_contains($rich, 'footer_profile_from_menus')) {
@@ -65,4 +65,4 @@ foreach ([
     }
 }
 
-echo "PASS: Law 01 Footer supports shared WordPress-native rich content with legacy menu fallback\n";
+echo "PASS: Law 01 Footer remains compatible while generic Footer presets use per-column WordPress-native content\n";
