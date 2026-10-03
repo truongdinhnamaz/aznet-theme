@@ -10,7 +10,6 @@
 
     function init(hero) {
         var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-        var finePointer = window.matchMedia('(pointer: fine)').matches;
         var slides = Array.prototype.slice.call(
             hero.querySelectorAll('.aznet-theme-curtain01-hero__library .wp-block-cover')
         );
@@ -127,28 +126,16 @@
             return;
         }
 
-        var currentX = 0;
-        var currentY = 0;
         var currentScroll = 0;
-        var targetX = 0;
-        var targetY = 0;
         var targetScroll = 0;
         var frame = 0;
 
         function render() {
-            currentX += (targetX - currentX) * 0.12;
-            currentY += (targetY - currentY) * 0.12;
             currentScroll += (targetScroll - currentScroll) * 0.1;
 
-            hero.style.setProperty('--aznet-curtain-shift-x', currentX.toFixed(2) + 'px');
-            hero.style.setProperty('--aznet-curtain-shift-y', currentY.toFixed(2) + 'px');
             hero.style.setProperty('--aznet-curtain-scroll-shift', currentScroll.toFixed(2) + 'px');
 
-            if (
-                Math.abs(targetX - currentX) > 0.05 ||
-                Math.abs(targetY - currentY) > 0.05 ||
-                Math.abs(targetScroll - currentScroll) > 0.05
-            ) {
+            if (Math.abs(targetScroll - currentScroll) > 0.05) {
                 frame = window.requestAnimationFrame(render);
             } else {
                 frame = 0;
@@ -176,27 +163,7 @@
             requestRender();
         }
 
-        if (finePointer) {
-            hero.addEventListener('pointermove', function (event) {
-                var rect = hero.getBoundingClientRect();
-                if (!rect.width || !rect.height) {
-                    return;
-                }
-
-                var x = ((event.clientX - rect.left) / rect.width) - 0.5;
-                var y = ((event.clientY - rect.top) / rect.height) - 0.5;
-
-                targetX = clamp(x * 14, -7, 7);
-                targetY = clamp(y * 10, -5, 5);
-                requestRender();
-            }, { passive: true });
-
-            hero.addEventListener('pointerleave', function () {
-                targetX = 0;
-                targetY = 0;
-                requestRender();
-            }, { passive: true });
-        }
+        // Pointer parallax intentionally disabled: Hero remains visually calm on hover.
 
         window.addEventListener('scroll', updateScrollDepth, { passive: true });
         window.addEventListener('resize', updateScrollDepth, { passive: true });
