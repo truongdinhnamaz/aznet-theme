@@ -24,7 +24,7 @@ foreach ([
     "'centered'     => 1",
     "'compact'      => 3",
 ] as $needle) {
-    if (! str_contains($admin, $needle)) {
+    if (! str_contains($contentAdapter, $needle)) {
         $fail('Footer editor column schema must match the selected template: ' . $needle);
     }
 }
