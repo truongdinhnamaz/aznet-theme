@@ -196,6 +196,12 @@ function handle_homepage_team_member_create(): void {
     $role = isset( $_POST['team_member_role'] )
         ? sanitize_textarea_field( wp_unslash( $_POST['team_member_role'] ) )
         : '';
+    $phone = isset( $_POST['team_member_phone'] )
+        ? sanitize_text_field( wp_unslash( $_POST['team_member_phone'] ) )
+        : '';
+    $zalo = isset( $_POST['team_member_zalo'] )
+        ? sanitize_text_field( wp_unslash( $_POST['team_member_zalo'] ) )
+        : '';
     $image_id = isset( $_POST['homepage_featured_image_id'] )
         ? absint( $_POST['homepage_featured_image_id'] )
         : 0;
