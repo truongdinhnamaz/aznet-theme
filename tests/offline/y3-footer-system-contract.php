@@ -96,6 +96,10 @@ if (($invalid['footer_preset'] ?? null) !== 'standard') {
 if (array_key_exists('foreign_state', $invalid)) {
     y3_fail('foreign setting escaped the Theme allow-list');
 }
+$richRef = \AZnet\Theme\normalize_settings(['footer_professional_column_4_block' => 88]);
+if (($richRef['footer_professional_column_4_block'] ?? null) !== 88) {
+    y3_fail('Footer column WordPress reference must survive normalization');
+}
 
 if (! function_exists('AZnet\\Theme\\footer_preset')) {
     y3_fail('footer_preset() missing');
@@ -134,7 +138,7 @@ foreach ([
 }
 
 $context = \AZnet\Theme\footer_context();
-$expectedContextKeys = ['preset', 'site_title', 'tagline', 'home_url', 'logo_html', 'about_intro', 'services', 'social_channels', 'contact_links', 'menus', 'labels', 'year'];
+$expectedContextKeys = ['preset', 'site_title', 'tagline', 'home_url', 'logo_html', 'about_intro', 'footer_columns_active', 'footer_columns', 'services', 'social_channels', 'contact_links', 'menus', 'labels', 'year'];
 if ($expectedContextKeys !== array_keys($context)) {
     y3_fail('footer_context() shape changed');
 }
@@ -242,24 +246,26 @@ if (false === $footerSectionPos || false === $homepageSectionPos || $homepageSec
     y3_fail('unable to isolate Footer Control Center section');
 }
 $footerSection = substr($renderer, $footerSectionPos, $homepageSectionPos - $footerSectionPos);
-if (! str_contains($footerSection, 'render_footer_profile_form();')) {
-    y3_fail('Footer tab must expose the single shared Footer content editor for every preset/pilot');
+if (! str_contains($footerSection, 'render_footer_column_editors(')) {
+    y3_fail('Footer tab must expose the selected-template Footer column editors');
 }
 $overviewPos = strpos($renderer, "if ( 'overview' === \$section ) {");
 if (false === $overviewPos) {
     y3_fail('unable to isolate Overview Control Center section');
 }
 $overviewSection = substr($renderer, $overviewPos, $footerSectionPos - $overviewPos);
-if (str_contains($overviewSection, 'render_footer_profile_form();')) {
-    y3_fail('Overview must not duplicate the Footer content editor');
+if (str_contains($overviewSection, 'render_footer_column_editors(')) {
+    y3_fail('Overview must not duplicate the Footer column editors');
 }
 foreach ([
     'Sửa nội dung Footer',
     'aznet-theme-footer-content-editor',
-    'aznet-theme-footer-content-editor__grid',
+    'wp_editor(',
+    'aznet_theme_footer_columns[',
+    'data-footer-column-editors',
 ] as $needle) {
     if (! str_contains($controlCenter, $needle)) {
-        y3_fail('Shared Footer content editor missing: ' . $needle);
+        y3_fail('Footer column editor surface missing: ' . $needle);
     }
 }
 foreach (['primary_heading', 'contact_heading', 'social_heading', 'policy_heading'] as $field) {
@@ -280,7 +286,8 @@ foreach ([
     '.aznet-theme-footer-template-card',
     '.aznet-theme-footer-live-preview',
     '.aznet-theme-footer-content-editor',
-    '.aznet-theme-footer-content-editor__grid',
+    '.aznet-theme-footer-content-editor__columns',
+    '.aznet-theme-footer-content-editor__column',
 ] as $selector) {
     if (! str_contains($adminCss, $selector)) {
         y3_fail('Footer template gallery stylesheet missing selector: ' . $selector);
@@ -299,12 +306,40 @@ if (! str_contains($pickerScript, 'footerPresetFallback') || ! str_contains($pic
     y3_fail('Selecting a generic Footer template must disable the legacy preset fallback instead of submitting duplicate values');
 }
 
+$footerContentAdmin = file_get_contents($root . '/inc/admin/footer-content.php');
+if (false === $footerContentAdmin) {
+    y3_fail('unable to read Footer column-content admin adapter');
+}
+foreach ([
+    'footer_column_counts',
+    'footer_column_setting_key',
+    'footer_column_editor_value',
+    'handle_footer_columns_save',
+    "'post_type'    => 'wp_block'",
+    'wp_insert_post(',
+    'wp_update_post(',
+    'wp_kses_post(',
+] as $needle) {
+    if (! str_contains($footerContentAdmin, $needle)) {
+        y3_fail('Footer column-content adapter missing WordPress-native boundary: ' . $needle);
+    }
+}
+if (! str_contains($footerContentAdmin, 'aznet_theme_save_footer_columns') || ! str_contains($footerContentAdmin, 'add_action(')) {
+    y3_fail('Footer column-content save action must be registered by its admin module');
+}
+$settingsSource = file_get_contents($root . '/inc/theme/settings.php');
+if (false === $settingsSource || ! str_contains($settingsSource, "'footer_professional_column_4_block'")) {
+    y3_fail('Theme settings must retain only bounded references to WordPress-owned Footer column blocks');
+}
 $template = file_get_contents($root . '/template-parts/footer/site-footer.php');
 if (false === $template) {
     y3_fail('unable to read Footer template');
 }
 if (! str_contains($template, 'footer_context()')) {
     y3_fail('Footer template must consume footer_context()');
+}
+if (! str_contains($template, 'footer_columns_active') || ! str_contains($template, 'footer_columns') || ! str_contains($template, 'aznet-theme-site-footer__column-content')) {
+    y3_fail('Footer template must render WordPress-owned rich content by configured template columns');
 }
 foreach (['get_bloginfo(', 'home_url(', 'get_theme_mod(', 'wp_nav_menu(', 'wp_date('] as $forbidden) {
     if (str_contains($template, $forbidden)) {
@@ -387,8 +422,8 @@ foreach (['location', 'phone', 'website', 'email', 'facebook', 'youtube', 'linke
     }
 }
 foreach (['footer_profile_location', 'footer_profile_website', 'footer_profile_youtube', 'footer_profile_linkedin'] as $fieldId) {
-    if (! str_contains($controlCenter, $fieldId)) {
-        y3_fail('AZnet Theme overview must render Footer profile input: ' . $fieldId);
+    if (str_contains($controlCenter, $fieldId)) {
+        y3_fail('Shared Footer rich editor must replace individual profile inputs: ' . $fieldId);
     }
 }
 if (! str_contains($template, 'aznet-theme-site-footer__contact-text')) {

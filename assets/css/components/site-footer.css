@@ -744,3 +744,17 @@
         justify-content: center;
     }
 }
+
+
+.aznet-theme-site-footer__column-content{min-width:0}
+.aznet-theme-site-footer__column-content .aznet-theme-site-footer__identity{margin-bottom:var(--aznet-theme-space-4)}
+.aznet-theme-site-footer__rich-content{min-width:0;color:var(--aznet-theme-footer-muted)}
+.aznet-theme-site-footer__rich-content>:first-child{margin-top:0}
+.aznet-theme-site-footer__rich-content>:last-child{margin-bottom:0}
+.aznet-theme-site-footer__rich-content p{margin:0}
+.aznet-theme-site-footer__rich-content p+p{margin-top:var(--aznet-theme-space-3)}
+.aznet-theme-site-footer__rich-content h2,.aznet-theme-site-footer__rich-content h3,.aznet-theme-site-footer__rich-content h4{margin:0 0 var(--aznet-theme-space-3);color:var(--aznet-theme-on-inverse)}
+.aznet-theme-site-footer__rich-content ul,.aznet-theme-site-footer__rich-content ol{margin:0;padding-inline-start:1.2rem}
+.aznet-theme-site-footer__rich-content li+li{margin-top:var(--aznet-theme-space-2)}
+.aznet-theme-site-footer__rich-content a{color:inherit;text-underline-offset:.18em}
+.aznet-theme-site-footer__rich-content a:hover,.aznet-theme-site-footer__rich-content a:focus-visible{color:var(--aznet-theme-on-inverse);text-decoration:underline}

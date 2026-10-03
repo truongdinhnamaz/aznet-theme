@@ -78,6 +78,35 @@ function footer_context(): array {
     $about_intro = '';
     $services    = [];
 
+    $footer_columns_active = false;
+    $footer_columns        = [];
+    $column_counts = [
+        'minimal'      => 2,
+        'classic'      => 3,
+        'professional' => 4,
+        'split'        => 3,
+        'centered'     => 1,
+        'compact'      => 3,
+    ];
+    $active_preset = footer_preset();
+
+    if ( isset( $column_counts[ $active_preset ] ) && function_exists( 'get_post' ) ) {
+        for ( $column = 1; $column <= $column_counts[ $active_preset ]; $column++ ) {
+            $block_id = (int) setting( 'footer_' . $active_preset . '_column_' . $column . '_block', 0 );
+            $html     = '';
+
+            if ( $block_id > 0 ) {
+                $post = get_post( $block_id );
+                if ( $post instanceof \WP_Post && 'wp_block' === $post->post_type ) {
+                    $footer_columns_active = true;
+                    $html = wp_kses_post( wpautop( (string) $post->post_content ) );
+                }
+            }
+
+            $footer_columns[] = $html;
+        }
+    }
+
     if ( 'law-01' === footer_preset() ) {
         if ( function_exists( __NAMESPACE__ . '\\homepage_source_value' ) ) {
             $about_id = (int) homepage_source_value( 'law-01', 'about' );
@@ -249,8 +278,10 @@ function footer_context(): array {
         'tagline'     => $tagline,
         'home_url'    => $home_url,
         'logo_html'   => $logo_html,
-        'about_intro' => $about_intro,
-        'services'        => $services,
+        'about_intro'           => $about_intro,
+        'footer_columns_active' => $footer_columns_active,
+        'footer_columns'        => $footer_columns,
+        'services'              => $services,
         'social_channels' => $social_channels,
         'contact_links'   => $contact_links,
         'menus'           => [
