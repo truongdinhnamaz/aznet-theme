@@ -477,6 +477,19 @@ function homepage_industrial01_effective_surface_map( ?array $settings = null ):
     $hero_lede = trim( (string) ( $settings['homepage_industrial01_hero_lede'] ?? '' ) );
     $hero_title = '' !== $hero_title ? $hero_title : $site_name;
     $hero_lede = '' !== $hero_lede ? $hero_lede : $tagline;
+    if ( '' === $hero_lede ) {
+        $hero_about = homepage_page_reference( (int) homepage_effective_source_value( 'industrial-01', 'about', $settings ) );
+        if ( $hero_about instanceof \WP_Post ) {
+            $hero_source = '' !== trim( (string) $hero_about->post_excerpt )
+                ? (string) $hero_about->post_excerpt
+                : (string) $hero_about->post_content;
+            $hero_source = strip_shortcodes( $hero_source );
+            $hero_source = (string) preg_replace( '/\[(?:\/)?[A-Za-z0-9_-]+(?:\s[^\]]*)?\]/', ' ', $hero_source );
+            $hero_source = trim( wp_strip_all_tags( $hero_source ) );
+            $hero_source = (string) preg_replace( '/\s+/u', ' ', $hero_source );
+            $hero_lede = homepage_surface_text_summary( $hero_source, 32 );
+        }
+    }
 
     $surfaces[] = homepage_surface_entry(
         'hero',
@@ -516,6 +529,9 @@ function homepage_industrial01_effective_surface_map( ?array $settings = null ):
     if ( $solutions instanceof \WP_Post ) {
         $solutions_raw = trim( (string) $solutions->post_content );
         if ( '' !== $solutions_raw ) {
+            $solutions_summary = strip_shortcodes( $solutions_raw );
+            $solutions_summary = (string) preg_replace( '/\[(?:\/)?[A-Za-z0-9_-]+(?:\s[^\]]*)?\]/', ' ', $solutions_summary );
+            $solutions_summary = homepage_surface_text_summary( $solutions_summary, 36 );
             $surfaces[] = homepage_surface_entry(
                 'solutions',
                 __( 'Giải pháp', 'aznet-theme' ),
@@ -526,7 +542,7 @@ function homepage_industrial01_effective_surface_map( ?array $settings = null ):
                 (int) $solutions->ID,
                 [
                     'title'   => get_the_title( $solutions ),
-                    'summary' => homepage_surface_text_summary( strip_shortcodes( $solutions_raw ) ),
+                    'summary' => $solutions_summary,
                     'source'  => get_the_title( $solutions ),
                 ]
             );
