@@ -138,12 +138,15 @@ foreach ([
 }
 
 $context = \AZnet\Theme\footer_context();
-$expectedContextKeys = ['preset', 'site_title', 'tagline', 'home_url', 'logo_html', 'about_intro', 'footer_columns_active', 'footer_columns', 'services', 'social_channels', 'contact_links', 'menus', 'labels', 'year'];
+$expectedContextKeys = ['preset', 'skin', 'site_title', 'tagline', 'home_url', 'logo_html', 'about_intro', 'footer_columns_active', 'footer_columns', 'services', 'social_channels', 'contact_links', 'menus', 'labels', 'year'];
 if ($expectedContextKeys !== array_keys($context)) {
     y3_fail('footer_context() shape changed');
 }
 if ('professional' !== $context['preset']) {
     y3_fail('footer_context() must expose normalized preset');
+}
+if ('default' !== $context['skin']) {
+    y3_fail('footer_context() must expose default visual skin independently of Professional content preset');
 }
 if ('AZnet Y3 Sentinel' !== $context['site_title'] || 'Verified tagline sentinel' !== $context['tagline']) {
     y3_fail('footer_context() must consume WordPress-native site identity');

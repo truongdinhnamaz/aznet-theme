@@ -40,6 +40,10 @@ function setPreset(preset) {
   wpEval(`$s=get_theme_mod('aznet_theme_settings',[]); if(!is_array($s)){$s=[];} $s['footer_preset']='${preset}'; set_theme_mod('aznet_theme_settings',$s);`);
 }
 
+function setHomepagePreset(preset) {
+  wpEval(`$s=get_theme_mod('aznet_theme_settings',[]); if(!is_array($s)){$s=[];} $s['homepage_preset']='${preset}'; set_theme_mod('aznet_theme_settings',$s);`);
+}
+
 function setMenuLocation(location, menuId) {
   if (!Object.hasOwn(emptyRegions, location)) throw new Error(`Unsupported Footer location ${location}`);
   const numericId = Number(menuId);
@@ -171,6 +175,49 @@ async function inspectPreset(browser, preset, viewportName, viewport) {
   }
 }
 
+async function inspectLawSkinWithProfessional(browser) {
+  const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+  const page = await context.newPage();
+  const result = { preset: 'professional', skin: 'law-01', status: 'failed', error: null };
+
+  try {
+    setPreset('professional');
+    setHomepagePreset('law-01');
+    const response = await page.goto(`${fixture.front_url}?y3-skin=law-01`, { waitUntil: 'networkidle' });
+    if (!response || response.status() !== 200) throw new Error(`Expected HTTP 200, got ${response?.status() ?? 'missing'}`);
+
+    const footer = page.locator('footer[data-aznet-theme-site-footer]');
+    if (await footer.count() !== 1) throw new Error('Expected exactly one Theme Footer');
+    const classes = await footer.getAttribute('class') || '';
+    if (!classes.includes('aznet-theme-site-footer--professional')) throw new Error('Professional content preset class missing');
+    if (!classes.includes('aznet-theme-site-footer--skin-law-01')) throw new Error('Law 01 visual skin class missing');
+
+    const shell = await footer.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return {
+        backgroundImage: style.backgroundImage,
+        borderTopWidth: style.borderTopWidth,
+        borderTopStyle: style.borderTopStyle,
+      };
+    });
+    if (!shell.backgroundImage.includes('gradient')) throw new Error('Law 01 visual skin gradient background missing');
+    if (shell.borderTopWidth === '0px' || shell.borderTopStyle === 'none') throw new Error('Law 01 visual skin top border missing');
+
+    const overflowPx = await page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - document.documentElement.clientWidth));
+    if (overflowPx !== 0) throw new Error(`Professional + Law 01 skin horizontal overflow: ${overflowPx}px`);
+
+    await page.screenshot({ path: path.join(stateDir, 'y3-professional-law01-skin.png'), fullPage: true });
+    result.status = 'passed';
+  } catch (error) {
+    result.error = error instanceof Error ? error.message : String(error);
+    failures.push(`professional/law-01-skin: ${result.error}`);
+  } finally {
+    setHomepagePreset('');
+    summary.presets.push(result);
+    await context.close();
+  }
+}
+
 async function inspectEmptyMenu(browser, location, region) {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await context.newPage();
@@ -213,6 +260,8 @@ try {
       await inspectPreset(browser, preset, viewportName, viewport);
     }
   }
+
+  await inspectLawSkinWithProfessional(browser);
 
   setPreset('professional');
   for (const [location, region] of Object.entries(emptyRegions)) {

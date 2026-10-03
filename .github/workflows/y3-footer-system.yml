@@ -18,6 +18,7 @@ on:
       - 'scripts/verify-v1-core.sh'
       - 'tests/offline/y3-footer-system-contract.php'
       - 'tests/offline/y3-footer-column-editors-contract.php'
+      - 'tests/offline/y3-footer-skin-contract.php'
       - 'tests/offline/law01-footer-content-profile-contract.php'
       - 'tests/runtime/y3-footer-system.php'
       - 'tests/browser/y3-footer-system-l4.mjs'
@@ -47,6 +48,7 @@ jobs:
           git diff --check
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/y3-footer-system-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/y3-footer-column-editors-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/y3-footer-skin-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-footer-content-profile-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/r3-header-settings-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/r4-woocommerce-settings-contract.php
