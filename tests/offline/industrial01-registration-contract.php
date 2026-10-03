@@ -109,4 +109,47 @@ foreach ([
 assert(! str_contains($industrialCss, 'display: none'), 'Industrial 01 preset must not hide WooCommerce truth-bearing surfaces to simulate a design.');
 
 
+
+
+$authoringSource = file_get_contents($root . '/inc/theme/homepage-authoring.php');
+assert(is_string($authoringSource), 'Homepage authoring registry must be readable.');
+foreach ([
+    "'about'       => [ 'type' => 'page', 'key' => 'homepage_industrial01_about_page'",
+    "'process'     => [ 'type' => 'page', 'key' => 'homepage_industrial01_process_page'",
+    "'knowledge'   => [ 'type' => 'categories', 'key' => 'homepage_industrial01_knowledge_terms'",
+    "'contact'     => [ 'type' => 'page', 'key' => 'homepage_industrial01_contact_page'",
+] as $industrialSourceDescriptor) {
+    assert(str_contains($authoringSource, $industrialSourceDescriptor), "Industrial 01 source mapping missing: {$industrialSourceDescriptor}");
+}
+
+foreach (['about', 'process', 'knowledge'] as $section) {
+    $path = $root . '/template-parts/homepage/industrial-01/' . $section . '.php';
+    assert(is_file($path), "Industrial 01 standard homepage section missing: {$section}");
+}
+
+$surfaceMapSource = file_get_contents($root . '/inc/theme/homepage-surface-map.php');
+assert(is_string($surfaceMapSource));
+foreach (["'about'", "'process'", "'knowledge'"] as $surfaceKey) {
+    assert(str_contains($surfaceMapSource, $surfaceKey), "Industrial 01 effective surface missing: {$surfaceKey}");
+}
+
+$aboutSource = file_get_contents($root . '/template-parts/homepage/industrial-01/about.php');
+$processSource = file_get_contents($root . '/template-parts/homepage/industrial-01/process.php');
+$knowledgeSource = file_get_contents($root . '/template-parts/homepage/industrial-01/knowledge.php');
+assert(is_string($aboutSource) && str_contains($aboutSource, "homepage_effective_source_value( 'industrial-01', 'about' )"), 'Industrial 01 About must consume a typed WordPress Page reference.');
+assert(is_string($processSource) && str_contains($processSource, "homepage_effective_source_value( 'industrial-01', 'process' )"), 'Industrial 01 Process must consume a typed WordPress Page reference.');
+assert(is_string($knowledgeSource) && str_contains($knowledgeSource, "homepage_effective_source_value( 'industrial-01', 'knowledge' )"), 'Industrial 01 Knowledge must consume typed WordPress categories.');
+assert(str_contains((string) $categories, 'woocommerce_subcategory_thumbnail'), 'Industrial 01 category cards should use WooCommerce public thumbnail presentation when available.');
+assert(str_contains((string) $products, 'aznet-theme-industrial01-product-card__action'), 'Industrial 01 product cards need a neutral detail action without inventing commerce state.');
+
+foreach ([
+    '.aznet-theme-industrial01-about',
+    '.aznet-theme-industrial01-process',
+    '.aznet-theme-industrial01-knowledge',
+    '.aznet-theme-industrial01-category-card__media',
+    '.aznet-theme-industrial01-product-card__action',
+] as $standardSelector) {
+    assert(str_contains($homepageCss, $standardSelector), "Industrial 01 standard presentation selector missing: {$standardSelector}");
+}
+
 echo "PASS: Industrial 01 registration and lexicon isolation contract\n";
