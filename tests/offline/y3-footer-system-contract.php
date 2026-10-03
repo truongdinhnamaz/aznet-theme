@@ -469,7 +469,7 @@ foreach (['.aznet-theme-site-footer--minimal', '.aznet-theme-site-footer--classi
         y3_fail('Footer stylesheet missing preset selector ' . $selector);
     }
 }
-foreach (['repeat(3, minmax(140px, .75fr))', '.aznet-theme-site-footer__social-column'] as $needle) {
+foreach (['minmax(250px, 1fr)', 'minmax(160px, .62fr)', 'minmax(320px, 1.18fr)', '.aznet-theme-site-footer__social-column'] as $needle) {
     if (! str_contains($css, $needle)) {
         y3_fail('Professional Footer demo grid missing: ' . $needle);
     }
