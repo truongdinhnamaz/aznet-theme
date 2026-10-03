@@ -87,6 +87,95 @@ function team_directory_member_is_child( int $post_id ): bool {
         && (int) $post->post_parent === (int) $parent->ID;
 }
 
+
+/** Read one Team member phone number from the scoped WordPress Page meta. */
+function team_member_phone( int $post_id ): string {
+    if ( $post_id <= 0 || ! team_directory_member_is_child( $post_id ) ) {
+        return '';
+    }
+
+    $value = get_post_meta( $post_id, '_aznet_theme_team_phone', true );
+    return is_string( $value ) ? trim( $value ) : '';
+}
+
+/** Read one Team member Zalo number from the scoped WordPress Page meta. */
+function team_member_zalo( int $post_id ): string {
+    if ( $post_id <= 0 || ! team_directory_member_is_child( $post_id ) ) {
+        return '';
+    }
+
+    $value = get_post_meta( $post_id, '_aznet_theme_team_zalo', true );
+    return is_string( $value ) ? trim( $value ) : '';
+}
+
+/** Normalize a phone-like value to digits with an optional leading plus sign. */
+function team_member_normalize_phone( string $value ): string {
+    $value = trim( $value );
+    if ( '' === $value ) {
+        return '';
+    }
+
+    $has_plus = str_starts_with( $value, '+' );
+    $digits = preg_replace( '/\D+/', '', $value );
+    if ( ! is_string( $digits ) || '' === $digits ) {
+        return '';
+    }
+
+    return $has_plus ? '+' . $digits : $digits;
+}
+
+/** Format common Vietnamese local numbers for compact frontend display. */
+function team_member_phone_display( string $value ): string {
+    $normalized = team_member_normalize_phone( $value );
+    if ( 1 === preg_match( '/^0\d{9}$/', $normalized ) ) {
+        return substr( $normalized, 0, 4 ) . '.' . substr( $normalized, 4, 3 ) . '.' . substr( $normalized, 7, 3 );
+    }
+
+    return $normalized;
+}
+
+/** Build a safe tel: href from one phone-like value. */
+function team_member_phone_href( string $value ): string {
+    $normalized = team_member_normalize_phone( $value );
+    return '' !== $normalized ? 'tel:' . $normalized : '';
+}
+
+/** Build a Zalo profile URL from a locally entered phone number. */
+function team_member_zalo_url( string $value ): string {
+    $normalized = ltrim( team_member_normalize_phone( $value ), '+' );
+    if ( '' === $normalized ) {
+        return '';
+    }
+
+    if ( 1 === preg_match( '/^0\d{9}$/', $normalized ) ) {
+        $normalized = '84' . substr( $normalized, 1 );
+    }
+
+    return 'https://zalo.me/' . $normalized;
+}
+
+/** Persist the two explicitly approved Team contact facts on the WordPress Page. */
+function save_team_member_contact( int $post_id, string $phone, string $zalo ): void {
+    if ( $post_id <= 0 || ! team_directory_member_is_child( $post_id ) ) {
+        return;
+    }
+
+    $phone = team_member_normalize_phone( $phone );
+    $zalo = team_member_normalize_phone( $zalo );
+
+    if ( '' !== $phone ) {
+        update_post_meta( $post_id, '_aznet_theme_team_phone', $phone );
+    } else {
+        delete_post_meta( $post_id, '_aznet_theme_team_phone' );
+    }
+
+    if ( '' !== $zalo ) {
+        update_post_meta( $post_id, '_aznet_theme_team_zalo', $zalo );
+    } else {
+        delete_post_meta( $post_id, '_aznet_theme_team_zalo' );
+    }
+}
+
 function team_directory_next_menu_order(): int {
     $parent = team_directory_parent();
     if ( ! $parent instanceof \WP_Post ) { return 0; }
