@@ -406,36 +406,41 @@
     color: #fff;
 }
 
-.aznet-theme-industrial01-process__content {
-    max-width: 68rem;
+.aznet-theme-industrial01-process__summary {
+    max-width: 66ch;
+    margin: -1rem 0 2rem;
     color: #cbd7e0;
+    font-size: 1.05rem;
+    line-height: 1.75;
 }
 
-.aznet-theme-industrial01-process__content > :first-child {
-    margin-top: 0;
+.aznet-theme-industrial01-process__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
 }
 
-.aznet-theme-industrial01-process__content h2,
-.aznet-theme-industrial01-process__content h3 {
+.aznet-theme-industrial01-process__card {
+    min-height: 9rem;
+    padding: 1.3rem;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: var(--aznet-theme-radius-card);
+    background: rgba(255,255,255,.045);
+}
+
+.aznet-theme-industrial01-process__card span {
+    display: block;
+    margin-bottom: 2rem;
+    color: var(--industrial01-signal);
+    font-size: .8rem;
+    font-weight: var(--aznet-theme-font-weight-bold);
+    letter-spacing: .12em;
+}
+
+.aznet-theme-industrial01-process__card strong {
     color: #fff;
-}
-
-.aznet-theme-industrial01-process__content h2 {
-    margin-top: 2.5rem;
-    font-size: clamp(1.65rem, 2.5vw, 2.35rem);
-}
-
-.aznet-theme-industrial01-process__content h3 {
-    margin: 2rem 0 .5rem;
-    padding-left: 1rem;
-    border-left: 3px solid var(--industrial01-signal);
-    font-size: 1.15rem;
-}
-
-.aznet-theme-industrial01-process__content hr {
-    margin-block: 2rem;
-    border: 0;
-    border-top: 1px solid rgba(255,255,255,.12);
+    font-size: 1.03rem;
+    line-height: 1.45;
 }
 
 .aznet-theme-industrial01-knowledge {
@@ -524,7 +529,8 @@
 
 @media (max-width: 64rem) {
     .aznet-theme-industrial01-grid--categories,
-    .aznet-theme-industrial01-grid--products {
+    .aznet-theme-industrial01-grid--products,
+    .aznet-theme-industrial01-process__grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
@@ -567,7 +573,8 @@
 
     .aznet-theme-industrial01-grid--categories,
     .aznet-theme-industrial01-grid--products,
-    .aznet-theme-industrial01-knowledge__grid {
+    .aznet-theme-industrial01-knowledge__grid,
+    .aznet-theme-industrial01-process__grid {
         grid-template-columns: 1fr;
     }
 
