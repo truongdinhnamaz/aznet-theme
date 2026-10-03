@@ -33,6 +33,32 @@ if ( '' === $title ) {
 if ( '' === $lede ) {
     $lede = $tagline;
 }
+if ( '' === $lede ) {
+    $about_page = \AZnet\Theme\homepage_page_reference( (int) \AZnet\Theme\homepage_effective_source_value( 'industrial-01', 'about' ) );
+    if ( $about_page instanceof \WP_Post ) {
+        $about_source = '' !== trim( (string) $about_page->post_excerpt )
+            ? (string) $about_page->post_excerpt
+            : (string) $about_page->post_content;
+        $about_copy = strip_shortcodes( $about_source );
+        $about_copy = (string) preg_replace( '/\[(?:\/)?[A-Za-z0-9_-]+(?:\s[^\]]*)?\]/', ' ', $about_copy );
+        $about_copy = trim( wp_strip_all_tags( $about_copy ) );
+        $about_copy = (string) preg_replace( '/\s+/u', ' ', $about_copy );
+        $leading_phrases = [
+            trim( (string) get_the_title( $about_page ) ),
+            '' !== $site_name ? sprintf( __( 'Giới thiệu về %s', 'aznet-theme' ), $site_name ) : '',
+        ];
+        foreach ( $leading_phrases as $leading_phrase ) {
+            if ( '' !== $leading_phrase ) {
+                $about_copy = (string) preg_replace( '/^' . preg_quote( $leading_phrase, '/' ) . '\s*/iu', '', $about_copy, 1 );
+            }
+        }
+        if ( '' !== $about_copy ) {
+            $sentences = preg_split( '/(?<=[.!?])\s+/u', $about_copy, 2 );
+            $lead_sentence = is_array( $sentences ) && isset( $sentences[0] ) ? trim( (string) $sentences[0] ) : $about_copy;
+            $lede = wp_trim_words( $lead_sentence, 32, '…' );
+        }
+    }
+}
 if ( '' === $primary_label ) {
     $primary_label = \AZnet\Theme\preset_term( 'primary_group', __( 'Danh mục thiết bị', 'aznet-theme' ), 'industrial-01' );
 }

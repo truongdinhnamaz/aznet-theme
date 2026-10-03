@@ -39,7 +39,7 @@ $pilots = [
     'industrial-01' => [
         'homepage_preset' => 'industrial-01',
         'visual_preset' => 'industrial-01',
-        'authoring' => [],
+        'authoring' => ['hero','about','solutions','process','knowledge','contact'],
         'assets' => ['aznet-theme-homepage-industrial-01'],
         'provisioning' => null,
     ],

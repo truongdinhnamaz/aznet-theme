@@ -67,6 +67,9 @@ assert(is_string($categories) && str_contains($categories, 'Integrations\\WooCom
 assert(is_string($products) && str_contains($products, 'Integrations\\WooCommerce\\homepage_products'), 'Industrial products must consume the bounded WooCommerce integration adapter.');
 $heroSource = file_get_contents($root . '/template-parts/homepage/industrial-01/hero.php');
 assert(is_string($heroSource) && str_contains($heroSource, 'Integrations\\WooCommerce\\shop_url'), 'Industrial shop CTA must consume the bounded WooCommerce integration adapter.');
+assert(str_contains($heroSource, "homepage_effective_source_value( 'industrial-01', 'about' )"), 'Industrial Hero should reuse mapped WordPress-owned About copy when explicit Hero lead is empty.');
+assert(str_contains($heroSource, 'strip_shortcodes'), 'Industrial Hero fallback lead must remove legacy builder shortcodes.');
+assert(str_contains($heroSource, 'preg_replace'), 'Industrial Hero fallback lead must remove unregistered legacy shortcode wrappers.');
 foreach (['get_option(', 'get_post_meta(', 'update_option(', 'update_post_meta(', 'wc_get_products(', 'get_terms('] as $privateStoreNeedle) {
     assert(! str_contains($categories . $products, $privateStoreNeedle), "Industrial 01 must not read or mutate private/domain storage directly: {$privateStoreNeedle}");
 }
@@ -108,5 +111,60 @@ foreach ([
 }
 assert(! str_contains($industrialCss, 'display: none'), 'Industrial 01 preset must not hide WooCommerce truth-bearing surfaces to simulate a design.');
 
+
+
+
+$authoringSource = file_get_contents($root . '/inc/theme/homepage-authoring.php');
+assert(is_string($authoringSource), 'Homepage authoring registry must be readable.');
+foreach ([
+    "'about'       => [ 'type' => 'page', 'key' => 'homepage_industrial01_about_page'",
+    "'about_image' => [ 'type' => 'attachment', 'key' => 'homepage_industrial01_about_image'",
+    "'solutions'   => [ 'type' => 'page', 'key' => 'homepage_industrial01_solutions_page'",
+    "'process'     => [ 'type' => 'page', 'key' => 'homepage_industrial01_process_page'",
+    "'knowledge'   => [ 'type' => 'categories', 'key' => 'homepage_industrial01_knowledge_terms'",
+    "'contact'     => [ 'type' => 'page', 'key' => 'homepage_industrial01_contact_page'",
+] as $industrialSourceDescriptor) {
+    assert(str_contains($authoringSource, $industrialSourceDescriptor), "Industrial 01 source mapping missing: {$industrialSourceDescriptor}");
+}
+
+foreach (['about', 'solutions', 'process', 'knowledge'] as $section) {
+    $path = $root . '/template-parts/homepage/industrial-01/' . $section . '.php';
+    assert(is_file($path), "Industrial 01 standard homepage section missing: {$section}");
+}
+
+$surfaceMapSource = file_get_contents($root . '/inc/theme/homepage-surface-map.php');
+assert(is_string($surfaceMapSource));
+foreach (["'about'", "'solutions'", "'process'", "'knowledge'"] as $surfaceKey) {
+    assert(str_contains($surfaceMapSource, $surfaceKey), "Industrial 01 effective surface missing: {$surfaceKey}");
+}
+
+$aboutSource = file_get_contents($root . '/template-parts/homepage/industrial-01/about.php');
+$solutionsSource = file_get_contents($root . '/template-parts/homepage/industrial-01/solutions.php');
+$processSource = file_get_contents($root . '/template-parts/homepage/industrial-01/process.php');
+$knowledgeSource = file_get_contents($root . '/template-parts/homepage/industrial-01/knowledge.php');
+assert(is_string($aboutSource) && str_contains($aboutSource, "homepage_effective_source_value( 'industrial-01', 'about' )"), 'Industrial 01 About must consume a typed WordPress Page reference.');
+assert(str_contains($aboutSource, "homepage_effective_source_value( 'industrial-01', 'about_image' )"), 'Industrial 01 About image must consume a typed WordPress attachment reference.');
+assert(str_contains($aboutSource, 'preg_replace'), 'Industrial About summary must remove unregistered legacy shortcode wrappers.');
+assert(is_string($solutionsSource) && str_contains($solutionsSource, "homepage_effective_source_value( 'industrial-01', 'solutions' )"), 'Industrial 01 Solutions must consume a typed WordPress Page reference.');
+assert(str_contains($solutionsSource, 'preg_match_all'), 'Industrial 01 Solutions must project authored headings instead of inventing solution semantics.');
+assert(is_string($processSource) && str_contains($processSource, "homepage_effective_source_value( 'industrial-01', 'process' )"), 'Industrial 01 Process must consume a typed WordPress Page reference.');
+assert(is_string($knowledgeSource) && str_contains($knowledgeSource, "homepage_effective_source_value( 'industrial-01', 'knowledge' )"), 'Industrial 01 Knowledge must consume typed WordPress categories.');
+assert(str_contains($aboutSource, 'strip_shortcodes'), 'Industrial 01 About must strip legacy builder shortcodes from homepage summary copy.');
+assert(! str_contains($processSource, 'echo wp_kses_post( $content )'), 'Industrial 01 Process must not dump the complete mapped service page into the Homepage.');
+assert(str_contains($processSource, 'preg_match_all'), 'Industrial 01 Process must derive compact presentation cards from authored service headings.');
+assert(str_contains($processSource, 'wp_trim_words'), 'Industrial 01 Process must render a bounded source-derived summary.');
+assert(str_contains((string) $categories, 'woocommerce_subcategory_thumbnail'), 'Industrial 01 category cards should use WooCommerce public thumbnail presentation when available.');
+assert(str_contains((string) $products, 'aznet-theme-industrial01-product-card__action'), 'Industrial 01 product cards need a neutral detail action without inventing commerce state.');
+
+foreach ([
+    '.aznet-theme-industrial01-about',
+    '.aznet-theme-industrial01-solutions',
+    '.aznet-theme-industrial01-process',
+    '.aznet-theme-industrial01-knowledge',
+    '.aznet-theme-industrial01-category-card__media',
+    '.aznet-theme-industrial01-product-card__action',
+] as $standardSelector) {
+    assert(str_contains($homepageCss, $standardSelector), "Industrial 01 standard presentation selector missing: {$standardSelector}");
+}
 
 echo "PASS: Industrial 01 registration and lexicon isolation contract\n";

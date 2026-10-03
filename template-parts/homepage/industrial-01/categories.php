@@ -29,11 +29,24 @@ if ( [] === $terms ) {
             <?php foreach ( $terms as $term ) : ?>
                 <?php $link = get_term_link( $term ); ?>
                 <?php if ( is_wp_error( $link ) ) { continue; } ?>
+                <?php
+                ob_start();
+                if ( function_exists( 'woocommerce_subcategory_thumbnail' ) ) {
+                    woocommerce_subcategory_thumbnail( $term );
+                }
+                $thumbnail = trim( (string) ob_get_clean() );
+                ?>
                 <a class="aznet-theme-industrial01-card aznet-theme-industrial01-category-card" href="<?php echo esc_url( $link ); ?>">
-                    <strong><?php echo esc_html( $term->name ); ?></strong>
-                    <?php if ( ! empty( $term->description ) ) : ?>
-                        <span><?php echo esc_html( wp_trim_words( wp_strip_all_tags( $term->description ), 18 ) ); ?></span>
+                    <?php if ( '' !== $thumbnail && str_contains( $thumbnail, '<img' ) ) : ?>
+                        <span class="aznet-theme-industrial01-category-card__media"><?php echo wp_kses_post( $thumbnail ); ?></span>
                     <?php endif; ?>
+                    <span class="aznet-theme-industrial01-category-card__body">
+                        <strong><?php echo esc_html( $term->name ); ?></strong>
+                        <?php if ( ! empty( $term->description ) ) : ?>
+                            <span><?php echo esc_html( wp_trim_words( wp_strip_all_tags( $term->description ), 18 ) ); ?></span>
+                        <?php endif; ?>
+                        <span class="aznet-theme-industrial01-category-card__link"><?php esc_html_e( 'Xem danh mục', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></span>
+                    </span>
                 </a>
             <?php endforeach; ?>
         </div>
