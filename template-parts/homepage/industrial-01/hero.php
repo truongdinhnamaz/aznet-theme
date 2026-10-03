@@ -53,7 +53,9 @@ if ( '' === $lede ) {
             }
         }
         if ( '' !== $about_copy ) {
-            $lede = wp_trim_words( $about_copy, 28, '…' );
+            $sentences = preg_split( '/(?<=[.!?])\s+/u', $about_copy, 2 );
+            $lead_sentence = is_array( $sentences ) && isset( $sentences[0] ) ? trim( (string) $sentences[0] ) : $about_copy;
+            $lede = wp_trim_words( $lead_sentence, 32, '…' );
         }
     }
 }
