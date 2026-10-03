@@ -106,7 +106,7 @@ if ( $is_team_member ) {
 
         <h1 class="aznet-theme-page__title"><?php the_title(); ?></h1>
 
-        <?php if ( '' !== $excerpt ) : ?>
+        <?php if ( $is_service_detail && '' !== $excerpt ) : ?>
             <p class="aznet-theme-page__lead"><?php echo esc_html( $excerpt ); ?></p>
         <?php endif; ?>
 
