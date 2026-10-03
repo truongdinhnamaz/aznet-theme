@@ -16,9 +16,9 @@ if ( ! $page instanceof \WP_Post ) {
     return;
 }
 
-$summary_source = trim( (string) $page->post_content );
+$summary_source = trim( (string) $page->post_excerpt );
 if ( '' === $summary_source ) {
-    $summary_source = trim( (string) $page->post_excerpt );
+    $summary_source = trim( (string) $page->post_content );
 }
 $summary_source = strip_shortcodes( $summary_source );
 $summary_source = (string) preg_replace( '/\[(?:\/)?[A-Za-z0-9_-]+(?:\s[^\]]*)?\]/', ' ', $summary_source );
