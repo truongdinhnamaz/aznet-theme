@@ -28,11 +28,26 @@ foreach ([
     }
 }
 
-foreach (['register_post_type(', 'update_post_meta(', 'add_post_meta(', 'get_page_by_path(', 'post_name'] as $forbidden) {
+foreach (['register_post_type(', 'add_post_meta(', 'get_page_by_path(', 'post_name'] as $forbidden) {
     if (str_contains($module, $forbidden)) {
         fwrite(STDERR, "FAIL: forbidden Team ownership shortcut: {$forbidden}\n");
         exit(1);
     }
+}
+
+foreach (['_aznet_theme_team_phone', '_aznet_theme_team_zalo'] as $allowedMeta) {
+    if (! str_contains($module, $allowedMeta)) {
+        fwrite(STDERR, "FAIL: D-047 Team contact meta missing {$allowedMeta}\n");
+        exit(1);
+    }
+}
+
+preg_match_all("/_aznet_theme_team_[a-z0-9_]+/", $module, $teamMetaKeys);
+$uniqueTeamMetaKeys = array_values(array_unique($teamMetaKeys[0] ?? []));
+sort($uniqueTeamMetaKeys);
+if ($uniqueTeamMetaKeys !== ['_aznet_theme_team_phone', '_aznet_theme_team_zalo']) {
+    fwrite(STDERR, 'FAIL: D-047 allows exactly phone/Zalo Team meta, got ' . json_encode($uniqueTeamMetaKeys) . "\n");
+    exit(1);
 }
 
 if (! str_contains($bootstrap, "require_once __DIR__ . '/team-directory.php';")) {

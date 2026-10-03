@@ -6,10 +6,12 @@ Historical D-040/D-041 decision checkpoint was exact `main@5d2d34074c1b1b0006151
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.5 | Product scope/ownership and v1.1 objective/non-goals |
-| `AZT-02-architecture.md` | v0.21 | Theme architecture, public integration contracts, Template Extension Contract, preset lexicon boundary and reusable editorial/news media-card presentation standard |
+| `AZT-02-architecture.md` | v0.22 | Theme architecture, public integration contracts, Template Extension Contract, preset lexicon boundary and reusable editorial/news media-card presentation standard |
 | `AZT-03-baseline-provenance.md` | v0.80 | Canonical provenance through Rèm 01 1.3.31 Project Showcase production checkpoint |
-| `AZT-04-roadmap-qa-decisions.md` | v1.05 | Roadmap/QA decisions through D-046 editorial/news media-card presentation standard |
+| `AZT-04-roadmap-qa-decisions.md` | v1.06 | Roadmap/QA decisions through D-046 editorial/news media-card presentation standard |
 | `AZT-EXEC-MAP.md` | v0.87 | Derived execution map through Rèm 01 1.3.31 production checkpoint |
+
+03/10/2026 Team contact decision: AZT-02 v0.22 + AZT-04 D-047 permit exactly two bounded WordPress Page meta facts for Team child Pages, `_aznet_theme_team_phone` and `_aznet_theme_team_zalo`. They are not RootProfile authority, are not copied into `aznet_theme_settings`, and do not authorize a generic personnel store. Backend Zalo input remains phone-only; Theme derives the public Zalo URL at render time.
 
 02/10/2026 presentation standard: AZT-02 v0.21 + AZT-04 D-046 establish the reusable editorial/news card rule for Theme templates: fixed 16:9 media frame, non-distorting `cover` crop, bounded desktop card width for a single story, editorial text flow beside/then below media, stacked mobile fallback, and no change to WordPress/provider ownership. Hero/portrait/product/gallery media remain use-case-specific and are not globally forced to 16:9.
 

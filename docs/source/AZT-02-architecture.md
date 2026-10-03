@@ -4,9 +4,9 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.21 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.22 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 02/10/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 03/10/2026 |
 
 | **Kiến trúc lõi: **Theme chỉ sở hữu presentation/configuration/reference cần thiết. Dữ liệu authoritative và business state ở lại owner. Boundary giữa hai bên là public/versioned provider contract hoặc adapter tối thiểu. |
 | --- |
@@ -354,13 +354,25 @@ Law 01 Team directory uses the explicitly mapped WordPress Team parent Page. Eac
 
 - WordPress owns member title/name, excerpt/role, Featured Image/portrait, body/biography, publication state, permalink, hierarchy and `menu_order`.
 - AZnet Theme owns only the typed Team Page mapping, bounded admin authoring presentation, Homepage/directory presentation and provisioning orchestration.
-- No Team CPT, personnel repeater/meta store, JSON personnel blob, second Theme Mod store or private provider storage is allowed.
+- No Team CPT, personnel repeater/meta store, JSON personnel blob, second Theme Mod store or private provider storage is allowed. D-047 permits exactly two bounded WordPress Page meta facts for the WordPress-native Team member surface: `_aznet_theme_team_phone` and `_aznet_theme_team_zalo`; this exception is not a general personnel/profile store.
 - Team child Pages are editorial website content and MUST NOT be treated as authoritative RootProfile Person identity/profile truth.
 - Team resolution MUST use the exact mapped Team parent Page ID. Title, slug, URL and fuzzy heuristics are forbidden.
 - Homepage Team may render at most four published direct children in `menu_order title` order; the mapped Team directory Page may render all published direct children.
 - Missing portrait is presentation-safe text-only output. Theme MUST NOT substitute generated/reference/AI person imagery.
 - Add-member authoring is draft-first and must create only an ordinary child Page after capability/nonce validation.
 - Existing mapped Team Pages are reused and are not auto-renamed, duplicated or destructively migrated.
+
+## D-047 amendment — Team member phone/Zalo facts
+
+Owner approval on 03/10/2026 extends the WordPress-native Team member model with exactly two bounded contact facts stored on the same child Page.
+
+- Allowed storage keys are `_aznet_theme_team_phone` and `_aznet_theme_team_zalo` only.
+- These values are WordPress-native Page metadata for this Team presentation use case; they are not RootProfile Person/Contact authority and must not be copied into `aznet_theme_settings`.
+- The admin accepts phone-like input only. Zalo requires only a phone number; Theme derives the public Zalo URL at render time.
+- Theme may normalize these two values for safe display/link generation, but must not infer other identity/profile semantics.
+- Theme switch must not delete these Page meta facts.
+- This exception does not authorize a generic personnel meta schema, repeater store, Team CPT, JSON profile blob or direct reads from RootProfile/private plugin storage.
+- Team cards may render phone/Zalo only when the corresponding value exists; empty values fail soft without placeholder contact claims.
 
 ## D-039 amendment — Team Add Member publishes immediately
 

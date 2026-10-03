@@ -83,6 +83,12 @@ function handle_homepage_quick_edit_source(): void {
         $result = wp_update_post( [ 'ID' => $source_id, 'post_title' => $title, 'post_excerpt' => $excerpt ], true );
         if ( is_wp_error( $result ) ) { wp_die( esc_html( $result->get_error_message() ) ); }
 
+        if ( 'law-01' === $preset && 'team' === $slot ) {
+            $phone = isset( $_POST['team_member_phone'] ) ? sanitize_text_field( wp_unslash( $_POST['team_member_phone'] ) ) : '';
+            $zalo = isset( $_POST['team_member_zalo'] ) ? sanitize_text_field( wp_unslash( $_POST['team_member_zalo'] ) ) : '';
+            \AZnet\Theme\save_team_member_contact( $source_id, $phone, $zalo );
+        }
+
         if ( homepage_quick_edit_featured_image_allowed( $preset, $slot, $source_id, $descriptor ) ) {
             if ( $image_id > 0 ) {
                 set_post_thumbnail( $source_id, $image_id );
@@ -190,6 +196,12 @@ function handle_homepage_team_member_create(): void {
     $role = isset( $_POST['team_member_role'] )
         ? sanitize_textarea_field( wp_unslash( $_POST['team_member_role'] ) )
         : '';
+    $phone = isset( $_POST['team_member_phone'] )
+        ? sanitize_text_field( wp_unslash( $_POST['team_member_phone'] ) )
+        : '';
+    $zalo = isset( $_POST['team_member_zalo'] )
+        ? sanitize_text_field( wp_unslash( $_POST['team_member_zalo'] ) )
+        : '';
     $image_id = isset( $_POST['homepage_featured_image_id'] )
         ? absint( $_POST['homepage_featured_image_id'] )
         : 0;
@@ -212,6 +224,8 @@ function handle_homepage_team_member_create(): void {
     if ( $image_id > 0 ) {
         set_post_thumbnail( (int) $id, $image_id );
     }
+
+    \AZnet\Theme\save_team_member_contact( (int) $id, $phone, $zalo );
 
     $url = add_query_arg(
         [ 'page' => 'aznet-theme', 'section' => 'homepage', 'team_member_created' => '1' ],
