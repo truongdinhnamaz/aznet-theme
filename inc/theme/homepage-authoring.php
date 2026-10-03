@@ -42,8 +42,9 @@ function homepage_preset_registry(): array {
             'projects'    => [ 'type' => 'category', 'key' => 'homepage_curtain01_projects_term', 'legacy' => 'homepage_curtain01_projects_term' ],
         ],
         'industrial-01' => [
-            'about'     => [ 'type' => 'page', 'key' => 'homepage_industrial01_about_page', 'legacy' => '' ],
-            'solutions' => [ 'type' => 'page', 'key' => 'homepage_industrial01_solutions_page', 'legacy' => '' ],
+            'about'       => [ 'type' => 'page', 'key' => 'homepage_industrial01_about_page', 'legacy' => '' ],
+            'about_image' => [ 'type' => 'attachment', 'key' => 'homepage_industrial01_about_image', 'legacy' => '' ],
+            'solutions'   => [ 'type' => 'page', 'key' => 'homepage_industrial01_solutions_page', 'legacy' => '' ],
             'process'   => [ 'type' => 'page', 'key' => 'homepage_industrial01_process_page', 'legacy' => '' ],
             'knowledge' => [ 'type' => 'categories', 'key' => 'homepage_industrial01_knowledge_terms', 'legacy' => '' ],
             'contact'   => [ 'type' => 'page', 'key' => 'homepage_industrial01_contact_page', 'legacy' => '' ],
