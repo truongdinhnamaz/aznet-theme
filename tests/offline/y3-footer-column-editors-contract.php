@@ -50,6 +50,7 @@ foreach ([
     'wp_insert_post(',
     'wp_update_post(',
     'wp_kses_post(',
+    "$raw['footer_preset'] = $preset;",
 ] as $needle) {
     if (! str_contains($contentAdapter, $needle)) {
         $fail('Footer column content adapter missing: ' . $needle);
