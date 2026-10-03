@@ -41,6 +41,12 @@ function homepage_preset_registry(): array {
             'process'     => [ 'type' => 'page', 'key' => 'homepage_curtain01_process_page', 'legacy' => 'homepage_curtain01_process_page' ],
             'projects'    => [ 'type' => 'category', 'key' => 'homepage_curtain01_projects_term', 'legacy' => 'homepage_curtain01_projects_term' ],
         ],
+        'industrial-01' => [
+            'about'     => [ 'type' => 'page', 'key' => 'homepage_industrial01_about_page', 'legacy' => '' ],
+            'process'   => [ 'type' => 'page', 'key' => 'homepage_industrial01_process_page', 'legacy' => '' ],
+            'knowledge' => [ 'type' => 'categories', 'key' => 'homepage_industrial01_knowledge_terms', 'legacy' => '' ],
+            'contact'   => [ 'type' => 'page', 'key' => 'homepage_industrial01_contact_page', 'legacy' => '' ],
+        ],
     ];
 }
 
@@ -58,8 +64,9 @@ function homepage_source_key( string $preset, string $slot ): ?string {
 
 function homepage_source_initialization_key( string $preset ): ?string {
     return [
-        'law-01'     => 'homepage_law01_sources_initialized',
-        'curtain-01' => 'homepage_curtain01_sources_initialized',
+        'law-01'        => 'homepage_law01_sources_initialized',
+        'curtain-01'    => 'homepage_curtain01_sources_initialized',
+        'industrial-01' => 'homepage_industrial01_sources_initialized',
     ][ $preset ] ?? null;
 }
 
