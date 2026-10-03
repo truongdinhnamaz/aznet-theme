@@ -119,6 +119,7 @@ $authoringSource = file_get_contents($root . '/inc/theme/homepage-authoring.php'
 assert(is_string($authoringSource), 'Homepage authoring registry must be readable.');
 foreach ([
     "'about'       => [ 'type' => 'page', 'key' => 'homepage_industrial01_about_page'",
+    "'about_image' => [ 'type' => 'attachment', 'key' => 'homepage_industrial01_about_image'",
     "'solutions'   => [ 'type' => 'page', 'key' => 'homepage_industrial01_solutions_page'",
     "'process'     => [ 'type' => 'page', 'key' => 'homepage_industrial01_process_page'",
     "'knowledge'   => [ 'type' => 'categories', 'key' => 'homepage_industrial01_knowledge_terms'",
@@ -143,6 +144,7 @@ $solutionsSource = file_get_contents($root . '/template-parts/homepage/industria
 $processSource = file_get_contents($root . '/template-parts/homepage/industrial-01/process.php');
 $knowledgeSource = file_get_contents($root . '/template-parts/homepage/industrial-01/knowledge.php');
 assert(is_string($aboutSource) && str_contains($aboutSource, "homepage_effective_source_value( 'industrial-01', 'about' )"), 'Industrial 01 About must consume a typed WordPress Page reference.');
+assert(str_contains($aboutSource, "homepage_effective_source_value( 'industrial-01', 'about_image' )"), 'Industrial 01 About image must consume a typed WordPress attachment reference.');
 assert(is_string($solutionsSource) && str_contains($solutionsSource, "homepage_effective_source_value( 'industrial-01', 'solutions' )"), 'Industrial 01 Solutions must consume a typed WordPress Page reference.');
 assert(str_contains($solutionsSource, 'preg_match_all'), 'Industrial 01 Solutions must project authored headings instead of inventing solution semantics.');
 assert(is_string($processSource) && str_contains($processSource, "homepage_effective_source_value( 'industrial-01', 'process' )"), 'Industrial 01 Process must consume a typed WordPress Page reference.');
