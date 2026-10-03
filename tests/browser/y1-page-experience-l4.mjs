@@ -145,12 +145,12 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
         throw new Error(`Services first section exposes rounded top edges: ${servicesHeroRadius.join(', ')}`);
       }
       if (await page.locator('.aznet-theme-services-page__intro').count() !== 0) throw new Error('Empty mapped Services Page must not render an orphan intro card');
-      if (await page.locator('.aznet-theme-service-card').count() !== 3) throw new Error('Expected three renderable service child cards; untitled source gaps must be omitted');
-      const serviceRootTitles = await page.locator('.aznet-theme-service-card__title').allTextContents();
+      if (await page.locator('.aznet-theme-services-page__group').count() !== 3) throw new Error('Expected three renderable primary service groups; untitled source gaps must be omitted');
+      const serviceRootTitles = await page.locator('.aznet-theme-services-page__group-title').allTextContents();
       if (serviceRootTitles.some((title) => !title.trim())) throw new Error('Untitled service source gap leaked into Services root');
-      if (await page.locator('.aznet-theme-service-card__index').allTextContents().then((values) => values.join(',')) !== '01,02,03') throw new Error('Expected canonical Services root card indices');
-      if (await page.locator('.aznet-theme-service-card__icon').count() !== 3) throw new Error('Expected shared service card icons');
-      if (await page.locator('.aznet-theme-service-card__link').count() !== 3) throw new Error('Expected shared service card CTAs');
+      if (await page.locator('.aznet-theme-services-page__group-index').allTextContents().then((values) => values.join(',')) !== '01,02,03') throw new Error('Expected canonical Services root group indices');
+      if (await page.locator('.aznet-theme-services-page__group-icon').count() !== 3) throw new Error('Expected Services root group icons');
+      if (await page.locator('.aznet-theme-services-page__group-link').count() !== 3) throw new Error('Expected Services root group CTAs');
       if (await page.getByText('Y1 Business Service', { exact: true }).count() !== 1) throw new Error('Expected Business service child card');
       if (await page.getByText('Y1 Civil Service', { exact: true }).count() !== 1) throw new Error('Expected Civil service child card');
       const servicesStyles = await page.evaluate(() => Array.from(document.styleSheets).map((sheet) => sheet.href).filter(Boolean));
