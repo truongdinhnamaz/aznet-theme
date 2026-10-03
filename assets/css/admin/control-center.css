@@ -259,7 +259,20 @@
 .aznet-theme-footer-content-editor__heading h2{margin:0 0 6px}
 .aznet-theme-footer-content-editor__heading p{max-width:720px;margin:0;color:#646970}
 .aznet-theme-footer-content-editor__actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.aznet-theme-footer-content-editor__editor{margin-top:20px;max-width:920px}
-.aznet-theme-footer-content-editor__editor .wp-editor-wrap{background:#fff}
-@media(max-width:900px){.aznet-theme-footer-content-editor__heading{display:grid}.aznet-theme-footer-content-editor__actions{justify-content:flex-start}}
-@media(max-width:782px){.aznet-theme-footer-content-editor{padding:16px}.aznet-theme-footer-content-editor__editor{max-width:none}}
+.aznet-theme-footer-content-editor__preset{margin-top:20px}
+.aznet-theme-footer-content-editor__preset[hidden]{display:none}
+.aznet-theme-footer-content-editor__preset-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px}
+.aznet-theme-footer-content-editor__preset-heading strong{font-size:15px}
+.aznet-theme-footer-content-editor__preset-heading span{color:#646970}
+.aznet-theme-footer-content-editor__columns{display:grid;gap:14px;align-items:start}
+.aznet-theme-footer-content-editor__columns--1{grid-template-columns:minmax(0,1fr)}
+.aznet-theme-footer-content-editor__columns--2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.aznet-theme-footer-content-editor__columns--3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.aznet-theme-footer-content-editor__columns--4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.aznet-theme-footer-content-editor__column{min-width:0;padding:12px;border:1px solid #dcdcde;border-radius:7px;background:#f6f7f7}
+.aznet-theme-footer-content-editor__column h3{margin:0 0 10px;font-size:14px}
+.aznet-theme-footer-content-editor__column .wp-editor-wrap{background:#fff}
+.aznet-theme-footer-content-editor__preset>.submit{margin:14px 0 0;padding:0}
+@media(max-width:1200px){.aznet-theme-footer-content-editor__columns--3,.aznet-theme-footer-content-editor__columns--4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.aznet-theme-footer-content-editor__heading{display:grid}.aznet-theme-footer-content-editor__actions{justify-content:flex-start}.aznet-theme-footer-content-editor__columns{grid-template-columns:1fr}}
+@media(max-width:782px){.aznet-theme-footer-content-editor{padding:16px}.aznet-theme-footer-content-editor__preset-heading{align-items:flex-start;flex-direction:column}}
