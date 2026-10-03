@@ -1,3 +1,5 @@
+03/10/2026 v1.3.73 release/deployment checkpoint: `docs/evidence/V1_3_73_TEAM_CONTACT_LAW01_PRODUCTION_20261003.md` records PR #382 merge to `main@b2cefd4c84199b9dcbe1b3a3529957b4ee3915a0`, exact-main V1/X6 SUCCESS, deterministic package SHA-256 `b7d542c89efa703f88bbdc396dc4642d2e915d7f3eddb2af28bcc28abd6aad75`, public GitHub Release `v1.3.73`, owner-backed WPVibe production publication to `lstamduchn.vn`, rollback directory `aznet-theme-wpvibe-backup`, and fresh mobile Accessibility/Best Practices 100/100. Authenticated production wp-admin interaction remains separately UNKNOWN.
+
 Canonical repository baseline is exact `main@be4e382cb53b9d697fe343c15dab2f19afff73b6`, Theme metadata `1.3.54`. D-042 establishes the three peer pilots (Law 01, Rèm 01, Industrial 01), and D-043 establishes the generic Template Extension Contract. PR #301 remains an unmerged Industrial 01 candidate; repository CI evidence on that branch must not be promoted to canonical-main or production PASS. Current published GitHub Release remains `v1.3.23`.
 
 Historical D-040/D-041 decision checkpoint was exact `main@5d2d34074c1b1b0006151b399b6b652927a19d49`, Theme metadata `1.3.32`. PR #272 carries a newer unmerged `1.3.54` Law 01/authoring candidate; branch `work/homepage-backend-unified-20260925` continues from that candidate and is not canonical main. Earlier exact-main V1 `35870034014`, X6 `35870034255` and Curtain 01 Project Showcase `35870033789` remain retained evidence for their tested bytes only. Current published GitHub Release remains `v1.3.23`; publication, canonical implementation and pilot production are distinct boundaries.
@@ -7,7 +9,7 @@ Historical D-040/D-041 decision checkpoint was exact `main@5d2d34074c1b1b0006151
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.5 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.22 | Theme architecture, public integration contracts, Template Extension Contract, preset lexicon boundary and reusable editorial/news media-card presentation standard |
-| `AZT-03-baseline-provenance.md` | v0.80 | Canonical provenance through Rèm 01 1.3.31 Project Showcase production checkpoint |
+| `AZT-03-baseline-provenance.md` | v0.83 | Canonical provenance through AZnet Theme 1.3.73 GitHub publication and Law 01 production deployment |
 | `AZT-04-roadmap-qa-decisions.md` | v1.06 | Roadmap/QA decisions through D-046 editorial/news media-card presentation standard |
 | `AZT-EXEC-MAP.md` | v0.87 | Derived execution map through Rèm 01 1.3.31 production checkpoint |
 
