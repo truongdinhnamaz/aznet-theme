@@ -188,6 +188,7 @@
 
 .aznet-theme-industrial01-button:focus-visible,
 .aznet-theme-industrial01-text-link:focus-visible,
+.aznet-theme-industrial01-solutions__card:focus-visible,
 .aznet-theme-industrial01-category-card:focus-visible,
 .aznet-theme-industrial01-product-card a:focus-visible,
 .aznet-theme-industrial01-knowledge-card a:focus-visible,
@@ -292,6 +293,55 @@
     color: var(--industrial01-accent);
     font-size: .92rem;
     font-weight: var(--aznet-theme-font-weight-semibold);
+}
+
+.aznet-theme-industrial01-solutions {
+    background: #fff;
+}
+
+.aznet-theme-industrial01-solutions__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.aznet-theme-industrial01-solutions__card {
+    display: flex;
+    min-height: 11rem;
+    flex-direction: column;
+    padding: 1.35rem;
+    border: 1px solid var(--industrial01-line);
+    border-radius: var(--aznet-theme-radius-card);
+    background: linear-gradient(180deg, #fff, #f7f9fa);
+    color: var(--industrial01-ink);
+    text-decoration: none;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.aznet-theme-industrial01-solutions__card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(16,24,32,.24);
+    box-shadow: 0 1.2rem 2.5rem rgba(16,24,32,.1);
+}
+
+.aznet-theme-industrial01-solutions__card > span:first-child {
+    margin-bottom: 2.5rem;
+    color: var(--industrial01-accent);
+    font-size: .8rem;
+    font-weight: var(--aznet-theme-font-weight-bold);
+    letter-spacing: .12em;
+}
+
+.aznet-theme-industrial01-solutions__card strong {
+    font-size: 1.08rem;
+    line-height: 1.4;
+}
+
+.aznet-theme-industrial01-solutions__arrow {
+    margin-top: auto;
+    padding-top: 1rem;
+    color: var(--industrial01-accent);
+    font-size: 1.15rem;
 }
 
 .aznet-theme-industrial01-products {
@@ -530,7 +580,8 @@
 @media (max-width: 64rem) {
     .aznet-theme-industrial01-grid--categories,
     .aznet-theme-industrial01-grid--products,
-    .aznet-theme-industrial01-process__grid {
+    .aznet-theme-industrial01-process__grid,
+    .aznet-theme-industrial01-solutions__grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
@@ -574,7 +625,8 @@
     .aznet-theme-industrial01-grid--categories,
     .aznet-theme-industrial01-grid--products,
     .aznet-theme-industrial01-knowledge__grid,
-    .aznet-theme-industrial01-process__grid {
+    .aznet-theme-industrial01-process__grid,
+    .aznet-theme-industrial01-solutions__grid {
         grid-template-columns: 1fr;
     }
 
@@ -588,6 +640,7 @@
     .aznet-theme-industrial01-button,
     .aznet-theme-industrial01-category-card,
     .aznet-theme-industrial01-product-card,
+    .aznet-theme-industrial01-solutions__card,
     .aznet-theme-industrial01-knowledge-card,
     .aznet-theme-industrial01-category-card__media img,
     .aznet-theme-industrial01-product-card__media img {
