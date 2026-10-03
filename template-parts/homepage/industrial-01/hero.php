@@ -33,6 +33,15 @@ if ( '' === $title ) {
 if ( '' === $lede ) {
     $lede = $tagline;
 }
+if ( '' === $lede ) {
+    $about_page = \AZnet\Theme\homepage_page_reference( (int) \AZnet\Theme\homepage_effective_source_value( 'industrial-01', 'about' ) );
+    if ( $about_page instanceof \WP_Post ) {
+        $about_copy = trim( wp_strip_all_tags( strip_shortcodes( (string) $about_page->post_content ) ) );
+        if ( '' !== $about_copy ) {
+            $lede = wp_trim_words( $about_copy, 28, '…' );
+        }
+    }
+}
 if ( '' === $primary_label ) {
     $primary_label = \AZnet\Theme\preset_term( 'primary_group', __( 'Danh mục thiết bị', 'aznet-theme' ), 'industrial-01' );
 }
