@@ -86,6 +86,7 @@ $required = [
     "echo 'PASS: X6 promoted 1.3.69 ownership boundary'",
     "echo 'PASS: X6 promoted 1.3.70 ownership boundary'",
     "echo 'PASS: X6 promoted 1.3.72 ownership boundary'",
+    "echo 'PASS: X6 promoted 1.3.73 ownership boundary'",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.2.0 boundary' >&2",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.0 boundary' >&2",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.1 boundary' >&2",
@@ -118,6 +119,7 @@ $required = [
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.69 boundary' >&2",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.70 boundary' >&2",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.72 boundary' >&2",
+    "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.73 boundary' >&2",
     "echo 'FAIL: unsupported X6 Theme version state' >&2",
 ];
 
