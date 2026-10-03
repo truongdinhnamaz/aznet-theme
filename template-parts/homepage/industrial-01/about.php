@@ -20,7 +20,10 @@ $summary_source = trim( (string) $page->post_content );
 if ( '' === $summary_source ) {
     $summary_source = trim( (string) $page->post_excerpt );
 }
-$summary = trim( wp_strip_all_tags( strip_shortcodes( $summary_source ) ) );
+$summary_source = strip_shortcodes( $summary_source );
+$summary_source = (string) preg_replace( '/\[(?:\/)?[A-Za-z0-9_-]+(?:\s[^\]]*)?\]/', ' ', $summary_source );
+$summary = trim( wp_strip_all_tags( $summary_source ) );
+$summary = (string) preg_replace( '/\s+/u', ' ', $summary );
 $summary = '' !== $summary ? wp_trim_words( $summary, 55, '…' ) : '';
 $image = has_post_thumbnail( $page )
     ? get_the_post_thumbnail( $page, 'large', [ 'class' => 'aznet-theme-industrial01-about__image', 'loading' => 'lazy' ] )
