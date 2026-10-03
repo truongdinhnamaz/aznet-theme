@@ -243,6 +243,15 @@ async function verifyHomepageTeamAuthoring(page, viewportName) {
   if (await firstQuickEdit.locator('input[name="homepage_source_title"]').inputValue() !== expectedPublic[0]) throw new Error('Team quick edit title is not WordPress child Page title');
   if (!(await firstQuickEdit.locator('textarea[name="homepage_source_excerpt"]').inputValue()).includes('Vai trò A')) throw new Error('Team quick edit role is not WordPress child Page excerpt');
   if (await firstQuickEdit.locator('input[name="homepage_featured_image_id"]').count() !== 1) throw new Error('Team quick edit portrait field missing');
+  const phoneField = firstQuickEdit.locator('input[name="team_member_phone"]');
+  const zaloField = firstQuickEdit.locator('input[name="team_member_zalo"]');
+  if (await phoneField.count() !== 1 || await zaloField.count() !== 1) throw new Error('Team phone/Zalo fields missing from quick edit');
+  await phoneField.fill('0912.047.054');
+  await zaloField.fill('0987 472 480');
+  await Promise.all([
+    page.waitForURL(/homepage_quick_edited=1/, { timeout: 20000 }),
+    firstQuickEdit.getByRole('button', { name: 'Lưu sửa nhanh' }).click(),
+  ]);
   const publicPage = await page.context().newPage();
   try {
     await publicPage.goto(baseUrl + '/', { waitUntil: 'networkidle' });
@@ -253,6 +262,12 @@ async function verifyHomepageTeamAuthoring(page, viewportName) {
     if (await publicPage.locator('.aznet-theme-law01-profile__members .aznet-theme-team-card__media img').count() !== 0) {
       throw new Error('R5 text-only Team fixture unexpectedly rendered portrait media');
     }
+    const contactCard = publicPage.locator('.aznet-theme-law01-profile__members .aznet-theme-team-card').filter({ hasText: expectedPublic[0] });
+    const phoneLink = contactCard.locator('a.aznet-theme-team-card__contact--phone');
+    const zaloLink = contactCard.locator('a.aznet-theme-team-card__contact--zalo');
+    if (await phoneLink.count() !== 1 || await phoneLink.getAttribute('href') !== 'tel:0912047054') throw new Error('Team phone action missing or malformed');
+    if ((await phoneLink.innerText()).trim().replace(/\s+/g, ' ') !== '☎ 0912.047.054') throw new Error('Team phone display formatting mismatch');
+    if (await zaloLink.count() !== 1 || await zaloLink.getAttribute('href') !== 'https://zalo.me/84987472480') throw new Error('Team Zalo action missing or malformed');
   } finally {
     await publicPage.close();
   }
