@@ -10,9 +10,7 @@
     const previewLabel = gallery.querySelector('[data-footer-preview-label]');
     const footerPresetFallback = gallery.querySelector('[data-footer-preset-fallback]');
     const cards = Array.from(gallery.querySelectorAll('[data-footer-template]'));
-    const fieldGroups = Array.from(document.querySelectorAll('[data-footer-template-fields]'));
     const editorGroups = Array.from(document.querySelectorAll('[data-footer-column-editors]'));
-    const emptyState = document.querySelector('[data-footer-template-fields-empty]');
     const editorEmptyState = document.querySelector('[data-footer-column-editors-empty]');
 
     const applyPreview = (preset, label) => {
@@ -24,15 +22,9 @@
             }
         }
 
-        fieldGroups.forEach((group) => {
-            group.hidden = group.dataset.footerTemplateFields !== preset;
-        });
         editorGroups.forEach((editorPanel) => {
             editorPanel.hidden = editorPanel.dataset.footerColumnEditors !== preset;
         });
-        if (emptyState) {
-            emptyState.hidden = true;
-        }
         if (editorEmptyState) {
             editorEmptyState.hidden = true;
         }
