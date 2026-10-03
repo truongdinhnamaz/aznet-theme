@@ -24,7 +24,7 @@ return [
     ],
     'homepage'         => [
         'authoring' => [
-            'sections' => [ 'hero', 'about', 'process', 'knowledge', 'contact' ],
+            'sections' => [ 'hero', 'about', 'solutions', 'process', 'knowledge', 'contact' ],
         ],
         'hero' => [
             'enabled'        => true,
