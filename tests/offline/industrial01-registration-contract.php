@@ -67,6 +67,8 @@ assert(is_string($categories) && str_contains($categories, 'Integrations\\WooCom
 assert(is_string($products) && str_contains($products, 'Integrations\\WooCommerce\\homepage_products'), 'Industrial products must consume the bounded WooCommerce integration adapter.');
 $heroSource = file_get_contents($root . '/template-parts/homepage/industrial-01/hero.php');
 assert(is_string($heroSource) && str_contains($heroSource, 'Integrations\\WooCommerce\\shop_url'), 'Industrial shop CTA must consume the bounded WooCommerce integration adapter.');
+assert(str_contains($heroSource, "homepage_effective_source_value( 'industrial-01', 'about' )"), 'Industrial Hero should reuse mapped WordPress-owned About copy when explicit Hero lead is empty.');
+assert(str_contains($heroSource, 'strip_shortcodes'), 'Industrial Hero fallback lead must remove legacy builder shortcodes.');
 foreach (['get_option(', 'get_post_meta(', 'update_option(', 'update_post_meta(', 'wc_get_products(', 'get_terms('] as $privateStoreNeedle) {
     assert(! str_contains($categories . $products, $privateStoreNeedle), "Industrial 01 must not read or mutate private/domain storage directly: {$privateStoreNeedle}");
 }
