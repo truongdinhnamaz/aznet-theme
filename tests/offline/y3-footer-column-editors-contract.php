@@ -70,13 +70,13 @@ foreach (['footer_columns_active', 'footer_columns'] as $needle) {
         $fail('Footer context must expose configured column content: ' . $needle);
     }
 }
-foreach (['footer_columns_active', 'aznet-theme-site-footer__column-content', 'foreach ( $footer_columns as $column_content )'] as $needle) {
+foreach (['footer_columns_active', 'aznet-theme-site-footer__column-content', 'foreach ( $footer_columns as $column_index => $column_content )'] as $needle) {
     if (! str_contains($template, $needle)) {
         $fail('Footer template must render configured column editors as columns: ' . $needle);
     }
 }
 
-foreach (['data-footer-column-editors', 'footerEditorPreset', 'editorPanel.hidden'] as $needle) {
+foreach (['data-footer-column-editors', 'editorGroups', 'editorPanel.hidden'] as $needle) {
     if (! str_contains($script, $needle)) {
         $fail('Footer picker must switch the editor collection with the selected template: ' . $needle);
     }
