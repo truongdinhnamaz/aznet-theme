@@ -52,6 +52,7 @@ $required = [
     '1.3.69)',
     '1.3.70)',
     '1.3.72)',
+    '1.3.74)',
     'tests/offline/x6-version-promotion-contract.php',
     "echo 'PASS: X6 pre-promotion ownership boundary'",
     "echo 'PASS: X6 promoted 1.2.0 ownership boundary'",
