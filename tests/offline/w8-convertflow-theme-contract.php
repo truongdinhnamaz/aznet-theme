@@ -88,6 +88,12 @@ namespace {
     foreach ([
         '[data-choiceguide-sticky-submenu]',
         'position: sticky',
+        'overflow-x: clip',
+        'grid-template-columns: repeat(6, minmax(0, 1fr))',
+        '@media screen and (max-width: 960px)',
+        'grid-template-columns: repeat(3, minmax(0, 1fr))',
+        '@media screen and (max-width: 560px)',
+        'grid-template-columns: repeat(2, minmax(0, 1fr))',
         'body:has(.aznet-theme-site-header--sticky)',
         '[data-choiceguide-section-id]',
         'scroll-margin-top:',
