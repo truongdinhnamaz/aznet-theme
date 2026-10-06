@@ -16,7 +16,10 @@ $product_php = file_get_contents($product_file);
 $required_css = [
     '.single-product #main :is(.related, .upsells) ul.products',
     'display: grid',
-    'grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr))',
+    '.single-product #main :is(.related, .upsells) ul.products.columns-4',
+    'grid-template-columns: repeat(4, minmax(0, 1fr))',
+    '.single-product #main :is(.related, .upsells) ul.products.columns-3',
+    'grid-template-columns: repeat(3, minmax(0, 1fr))',
     '.single-product #main :is(.related, .upsells) ul.products li.product',
     'float: none',
     'width: auto',
@@ -48,6 +51,11 @@ foreach ($forbidden_php as $needle) {
 if (strpos($css, '.single-product #main :is(.related, .upsells) ul.products li.product .button') !== false) {
     fwrite(STDERR, "Theme must not invent a related-product CTA/button treatment\n");
     exit(4);
+}
+
+if (strpos($css, 'repeat(auto-fill, minmax(min(15rem, 100%), 1fr))') !== false) {
+    fwrite(STDERR, "Related layout must respect Woo native columns classes instead of stretching sparse sets with auto-fill\n");
+    exit(5);
 }
 
 echo "PASS: R4 related products presentation-only layout contract\n";
