@@ -190,13 +190,25 @@ body.is-aznet-theme-submenu-replacing-header [data-choiceguide-sticky-submenu] {
     top: 0;
 }
 
+body.is-aznet-theme-submenu-replacing-header [data-choiceguide-section-id] {
+    scroll-margin-top: calc(4rem + var(--aznet-theme-space-3, 1rem));
+}
+
 .admin-bar.is-aznet-theme-submenu-replacing-header [data-choiceguide-sticky-submenu] {
     top: 32px;
+}
+
+.admin-bar.is-aznet-theme-submenu-replacing-header [data-choiceguide-section-id] {
+    scroll-margin-top: calc(32px + 4rem + var(--aznet-theme-space-3, 1rem));
 }
 
 @media screen and (max-width: 782px) {
     .admin-bar.is-aznet-theme-submenu-replacing-header [data-choiceguide-sticky-submenu] {
         top: 46px;
+    }
+
+    .admin-bar.is-aznet-theme-submenu-replacing-header [data-choiceguide-section-id] {
+        scroll-margin-top: calc(46px + 4rem + var(--aznet-theme-space-3, 1rem));
     }
 }
 
