@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.06
+**Version:** v1.07
 **Status:** Working Source  
-**Date:** 03/10/2026
+**Date:** 06/10/2026
 
 ## 1. Purpose
 
@@ -42,7 +42,7 @@ AZT-05 v1.0 governs the v1.x release constitution: **WordPress-clean core Theme 
 | P4-C | Standalone Core independence | PASS / MERGED | D-027 source + implementation merged through PR #63/#64; zero-plugin L1-L4, exact-package and exact-main gates PASS; optional integrations remain additive |
 | P5 | Publication & production deployment | PASS | Tag `v1.1.0` + GitHub Release publication and owner-approved production deployment disposition for `tamduchanoi.aznet.vn` are complete; fresh read-only run `35054176392` PASS at the tested Theme-owned/site-operations scope |
 | X | v1.2 WordPress Experience Completion | PUBLICATION + PRODUCTION DEPLOYMENT PASS | X1-X5 retained; PR #87 technical integration and exact-main V1 + X6 L1-L4/L6 PASS; owner-approved `v1.2.0` publication PASS; owner-approved production deployment run `35135759389` plus fresh independent read-only run `35136876330` PASS; no provider L5 expansion |
-| Y | v1.3 Client Delivery System | v1.3.23 TECHNICAL PASS / PUBLICATION PASS | Current canonical implementation is `main@c3d991199bb5c95dec3bac6e0ae06072c8a249f2`, Theme metadata `1.3.23`. PR #202 completed RED -> GREEN promotion with all 14 final-head workflows SUCCESS. Exact-main V1 `35521890888` and X6 `35521890901` PASS; deterministic `aznet-theme-1.3.23.zip` has 159 production files, 113 packaged PHP files verified and SHA-256 `7129b1506131c6b9e413bcba3087475fce75f52df7b71593c5f2804e90c4f005`. Publication run `35522052972` PASS; annotated `v1.3.23` and Release `392490797` carry the exact verified package. Under D-033, repository release verification/publication does not depend on WPVibe or another production-site connector. |
+| Y | v1.3 Client Delivery System | **1.3.74 TECHNICAL PASS / PUBLICATION PENDING** | Canonical `main@be634e02c9e717e875c13946264b3f6254ef814b` carries Theme metadata `1.3.74` after owner-approved PR #390. RED V1 run `37478989896` failed at the intended missing 1.3.74 X6 promotion boundary; GREEN final-head Release Version Consistency `37479309502`, V1 `37479309520`, D-027 retained `37479309382`, D-027 exact-package `37479309593`, X6 `37479309327` and Y5 `37479309496` all PASS. Deterministic `aznet-theme-1.3.74.zip` has 220 production files, 155 packaged PHP files lint PASS and SHA-256 `4ca4d2133f68c8145b8d2c8524941a4f19d057d9e9d14d7cf5ea5c3cb1f0b497`. The release inherits canonical Theme work already upstreamed from active pilots; pilot-owned WordPress data remains site-owned. GitHub publication/tag and every pilot deployment remain separate gates under D-033/D-044. |
 | U | Historical Control Center stream | SUPERSEDED / REFERENCE ONLY | Historical PR/evidence may inform provenance only; no parallel admin/settings architecture |
 
 Live `main` HEAD is resolved from GitHub at execution time. Stable release anchor `v1.1.0` points to `7dbbb0e8b41c4cb324b04cf6e538e38cb6cf7b78`, tree `740406a02ea77a4cb6fdd8f2ee98b7b88f909560`. Publication source closure PR #72 merged at `main@15f25e4f6d8e64c588866405629b793a85ee0323`; restored post-noop checkpoint `main@e7e5a9c2d2a867f631b029f3f77a675e32fad573` has identical tree `d50c9f04465f7f6990ac3747ee55a848e3187beb` and zero file delta from PR #72. P5 technical run `35051428372` verified final package bytes, publication run `35052694111` published the matching tag/Release, and production read-only run `35054176392` closed deployment at the tested Theme-owned/site-operations scope.
@@ -546,7 +546,7 @@ This remains Theme presentation only. RootProfile authoritative Team remains BLO
 
 ## 14. Exact next
 
-**NEXT — preserve `v1.3.66` technical + publication PASS. Exact source is `main@03978ecab109481788e16763ac32cd6785687b1b`; public package SHA-256 is `9d821d96864172f92226c9437f9aada86c616ee39b598523c5da5929822fc091`. Core release creation is closed. Under D-044, do not hold completion open for pilot rollout. Any later pilot update remains a separate explicit deployment gate with fresh preflight, backup/rollback and post-update verification. Rèm 01 remains pilot-local `BLOCKED_EXTERNAL_ACCESS`; provider L5/external Template Distribution remain non-Core tracks.**
+**NEXT — preserve `1.3.74` technical PASS at `main@be634e02c9e717e875c13946264b3f6254ef814b` and deterministic package SHA-256 `4ca4d2133f68c8145b8d2c8524941a4f19d057d9e9d14d7cf5ea5c3cb1f0b497`. Publication/tag is still pending and must be separately approved. Rèm Quốc Anh remains on `1.3.72`; its later update to the exact 1.3.74 package is a separate production deployment gate requiring fresh preflight, backup/rollback and post-update visual/runtime verification. Do not overwrite pilot-owned WordPress content/media/menu/theme-mod/mapping data.**
 
 
 
