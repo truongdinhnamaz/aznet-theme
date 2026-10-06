@@ -103,6 +103,45 @@ namespace {
         }
     }
 
+    $assetsPhp = (string) file_get_contents($root . '/inc/theme/assets.php');
+    foreach ([
+        'aznet-theme-convertflow-sticky-submenu',
+        '/assets/js/convertflow-sticky-submenu.js',
+        'should_enqueue_woocommerce_product_assets()',
+    ] as $assetMarker) {
+        if (!str_contains($assetsPhp, $assetMarker)) {
+            fail_test('ConvertFlow sticky-submenu replacement asset missing: ' . $assetMarker);
+        }
+    }
+
+    $submenuScriptPath = $root . '/assets/js/convertflow-sticky-submenu.js';
+    if (!is_file($submenuScriptPath)) {
+        fail_test('ConvertFlow sticky-submenu replacement script is missing');
+    }
+    $submenuScript = (string) file_get_contents($submenuScriptPath);
+    foreach ([
+        '[data-choiceguide-sticky-submenu]',
+        '[data-aznet-theme-site-header]',
+        '[data-choiceguide-product-journey]',
+        'is-aznet-theme-submenu-replacing-header',
+        'requestAnimationFrame',
+        'window.scrollY',
+    ] as $scriptMarker) {
+        if (!str_contains($submenuScript, $scriptMarker)) {
+            fail_test('ConvertFlow sticky-submenu replacement runtime missing: ' . $scriptMarker);
+        }
+    }
+
+    foreach ([
+        'body.is-aznet-theme-submenu-replacing-header [data-aznet-theme-site-header]',
+        'body.is-aznet-theme-submenu-replacing-header [data-choiceguide-sticky-submenu]',
+        'transform: translateY(-100%)',
+    ] as $replacementMarker) {
+        if (!str_contains($css, $replacementMarker)) {
+            fail_test('ConvertFlow sticky-submenu replacement presentation missing: ' . $replacementMarker);
+        }
+    }
+
     require $root . '/inc/theme/assets.php';
     \AZnet\Theme\enqueue_assets();
 
