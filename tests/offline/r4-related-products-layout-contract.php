@@ -16,10 +16,8 @@ $product_php = file_get_contents($product_file);
 $required_css = [
     '.single-product #main :is(.related, .upsells) ul.products',
     'display: grid',
-    '.single-product #main :is(.related, .upsells) ul.products.columns-4',
-    'grid-template-columns: repeat(4, minmax(0, 1fr))',
-    '.single-product #main :is(.related, .upsells) ul.products.columns-3',
-    'grid-template-columns: repeat(3, minmax(0, 1fr))',
+    'grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 18rem))',
+    'justify-content: center',
     '.single-product #main :is(.related, .upsells) ul.products li.product',
     'float: none',
     'width: auto',
@@ -48,13 +46,15 @@ foreach ($forbidden_php as $needle) {
     }
 }
 
-if (strpos($css, '.single-product #main :is(.related, .upsells) ul.products li.product .button') !== false) {
-    fwrite(STDERR, "Theme must not invent a related-product CTA/button treatment\n");
+if (strpos($css, '.single-product #main :is(.related, .upsells) ul.products li.product .button') === false ||
+    strpos($css, 'display: none') === false) {
+    fwrite(STDERR, "Related-product native loop CTA must be presentation-hidden because image/title already provide navigation\n");
     exit(4);
 }
 
-if (strpos($css, 'repeat(auto-fill, minmax(min(15rem, 100%), 1fr))') !== false) {
-    fwrite(STDERR, "Related layout must respect Woo native columns classes instead of stretching sparse sets with auto-fill\n");
+if (strpos($css, 'ul.products.columns-4') !== false ||
+    strpos($css, 'repeat(auto-fill, minmax(min(15rem, 100%), 1fr))') !== false) {
+    fwrite(STDERR, "Sparse related rows must not reserve empty Woo columns or stretch tracks\n");
     exit(5);
 }
 
