@@ -99,4 +99,14 @@ if (1 !== substr_count($content, 'the_content();')) {
     $fail('single Post must retain exactly one native the_content() boundary');
 }
 
+$readingStart = strpos($content, '<div class="<?php echo esc_attr( $reading_layout_class ); ?>">');
+$featured = strpos($content, 'aznet-theme-article__featured-media');
+$readingMain = strpos($content, 'aznet-theme-article__reading-main');
+$sidebar = strpos($content, 'aznet-theme-article__sidebar');
+if (false === $readingStart || false === $featured || false === $readingMain || false === $sidebar
+    || ! ($readingStart < $readingMain && $readingMain < $featured && $featured < $sidebar)) {
+    $fail('Law 01 reading grid must start below the header, with featured media inside the reading main so the sidebar can begin beside it');
+}
+
+
 echo "PASS: Law 01 legal-article reading experience contract\n";
