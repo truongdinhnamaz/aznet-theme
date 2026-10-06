@@ -283,7 +283,7 @@
 
 .aznet-theme-article--law01 .aznet-theme-article__header {
     display: grid;
-    max-width: 62rem;
+    max-width: 50rem;
     margin-inline: auto;
     gap: 1rem;
     text-align: center;
