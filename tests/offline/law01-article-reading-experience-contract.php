@@ -53,7 +53,7 @@ foreach ([
     '.aznet-theme-article--law01 .aznet-theme-article__content blockquote',
     '.aznet-theme-article--law01 .aznet-theme-article__content table',
     '--law01-article-burgundy',
-    'max-width: 50rem',
+    'max-width: 36rem',
     'max-width: 26ch;',
     'font-size: clamp(3rem, 4vw, 4rem);',
     'line-height: 1.08;',
@@ -70,8 +70,12 @@ if (! str_contains($assets, 'asset_content_version( \'/assets/css/components/art
     $fail('article.css must use content-aware cache versioning so Theme updates are visible immediately');
 }
 
-if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__featured-media\\s*\\{[^}]*max-width:\\s*50rem;/s', $css)) {
-    $fail('Law 01 featured media must match the 50rem article reading-content width');
+if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__featured-media\\s*\\{[^}]*max-width:\\s*36rem;/s', $css)) {
+    $fail('Law 01 featured media must stay visibly narrower than the 50rem reading-content width');
+}
+
+if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__reading-main\\s*\\{[^}]*max-width:\\s*50rem;/s', $css)) {
+    $fail('Law 01 reading content must retain the 50rem reading width');
 }
 
 $production = $content . "\n" . $css;
