@@ -193,3 +193,359 @@ body.aznet-theme-preset--industrial-01.single-product #main .product_meta {
         padding: 1rem;
     }
 }
+
+
+/* Industrial 01 mapped Solution Page.
+ * WordPress owns the authored Page content; the preset owns only reusable presentation.
+ * Outer sections are viewport-wide while every content row remains on the shared shell.
+ */
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-page {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    color: var(--aznet-theme-text);
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-page--landing .aznet-theme-page__content,
+body.aznet-theme-preset--industrial-01 .aznet-theme-page--landing .aznet-theme-page__content-inner {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding-block-end: 0;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-section {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: clamp(3.75rem, 7vw, 6.5rem) 0;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-shell {
+    width: min(calc(100% - (var(--aznet-theme-gutter) * 2)), var(--aznet-theme-container-shell));
+    margin-inline: auto;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-section .mng-eyebrow,
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-eyebrow {
+    margin: 0 0 .8rem;
+    color: var(--aznet-theme-accent);
+    font-size: var(--aznet-theme-text-label);
+    font-weight: var(--aznet-theme-font-weight-bold);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-section h2 {
+    max-width: 18ch;
+    margin: 0;
+    font-size: clamp(2.1rem, 4vw, 4.2rem);
+    line-height: 1.04;
+    letter-spacing: -.035em;
+    text-wrap: balance;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-section > .aznet-theme-industrial01-solution-shell > p:not(.aznet-theme-industrial01-solution-eyebrow) {
+    max-width: 68ch;
+    color: var(--aznet-theme-muted);
+    font-size: 1.05rem;
+    line-height: 1.75;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-hero {
+    padding-block: clamp(4rem, 7vw, 7rem);
+    background:
+        radial-gradient(circle at 86% 18%, color-mix(in srgb, var(--aznet-theme-accent) 22%, transparent), transparent 28rem),
+        #10283f;
+    color: #fff;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-hero .aznet-theme-industrial01-solution-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(20rem, .95fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 5rem);
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-hero .aznet-theme-industrial01-solution-eyebrow {
+    color: #b8d5ee;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-hero h2 {
+    max-width: 14ch;
+    color: #fff;
+    font-size: clamp(2.8rem, 5vw, 5.25rem);
+    line-height: .98;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-hero .aznet-theme-industrial01-solution-lead {
+    max-width: 60ch;
+    margin: 1.35rem 0 0;
+    color: #c9d5de;
+    font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+    line-height: 1.72;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-hero__media {
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.16);
+    border-radius: var(--aznet-theme-radius-card);
+    background: #fff;
+    box-shadow: 0 2rem 5rem rgba(0,0,0,.26);
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-hero__media img,
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-media img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-page figcaption {
+    display: none;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .85rem;
+    margin-top: 2rem;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-button {
+    display: inline-flex;
+    min-height: 3.2rem;
+    align-items: center;
+    justify-content: center;
+    padding: .8rem 1.35rem;
+    border: 1px solid var(--aznet-theme-accent);
+    border-radius: var(--aznet-theme-radius-control);
+    background: var(--aznet-theme-accent);
+    color: #fff;
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    text-decoration: none;
+    transition: transform var(--aznet-theme-motion-fast) ease, box-shadow var(--aznet-theme-motion-fast) ease;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-button--secondary {
+    border-color: rgba(255,255,255,.75);
+    background: transparent;
+    color: #fff;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 .8rem 1.8rem rgba(0,0,0,.16);
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-grid--three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-card {
+    min-width: 0;
+    min-height: 100%;
+    padding: 1.4rem;
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-surface);
+    box-shadow: 0 .5rem 1.5rem rgba(23,33,43,.045);
+    transition: transform var(--aznet-theme-motion-fast) ease, box-shadow var(--aznet-theme-motion-fast) ease, border-color var(--aznet-theme-motion-fast) ease;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--aznet-theme-accent) 28%, var(--aznet-theme-border));
+    box-shadow: var(--aznet-theme-shadow-card);
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-card__index {
+    display: block;
+    margin: 0 0 2rem;
+    color: var(--aznet-theme-accent);
+    font-size: .82rem;
+    font-weight: var(--aznet-theme-font-weight-bold);
+    letter-spacing: .12em;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-card h3 {
+    margin: 0;
+    font-size: 1.12rem;
+    line-height: 1.4;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-card p {
+    margin: .75rem 0 0;
+    color: var(--aznet-theme-muted);
+    line-height: 1.65;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-card a {
+    color: inherit;
+    text-decoration: none;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-section--soft {
+    background: var(--aznet-theme-color-surface-subtle);
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-section--dark {
+    background:
+        radial-gradient(circle at 85% 12%, color-mix(in srgb, var(--aznet-theme-accent) 18%, transparent), transparent 24rem),
+        #10283f;
+    color: #fff;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-section--dark .aznet-theme-industrial01-solution-eyebrow {
+    color: #b8d5ee;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-section--dark h2,
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-section--dark .aznet-theme-industrial01-solution-card h3 {
+    color: #fff;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-section--dark .aznet-theme-industrial01-solution-card {
+    border-color: rgba(255,255,255,.14);
+    background: rgba(255,255,255,.045);
+    box-shadow: none;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-section--dark .aznet-theme-industrial01-solution-card p {
+    color: #c9d5de;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-split {
+    display: grid;
+    grid-template-columns: minmax(18rem, .9fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: clamp(2.5rem, 6vw, 6rem);
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-media {
+    overflow: hidden;
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-color-surface-subtle);
+    box-shadow: var(--aznet-theme-shadow-float);
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-checklist {
+    display: grid;
+    gap: .85rem;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-checklist li {
+    position: relative;
+    padding-inline-start: 1.6rem;
+    color: var(--aznet-theme-muted);
+    line-height: 1.6;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-checklist li::before {
+    position: absolute;
+    inset: .6em auto auto 0;
+    width: .45rem;
+    aspect-ratio: 1;
+    border-radius: 999px;
+    background: var(--aznet-theme-accent);
+    content: "";
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-cta {
+    padding-block: clamp(3.5rem, 6vw, 5.5rem);
+    background:
+        radial-gradient(circle at 85% 20%, rgba(242,169,0,.13), transparent 25rem),
+        #17212b;
+    color: #fff;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-cta .aznet-theme-industrial01-solution-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) auto;
+    align-items: center;
+    gap: clamp(2rem, 6vw, 6rem);
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-cta h2 {
+    color: #fff;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-cta p {
+    max-width: 62ch;
+    color: #c9d5de;
+    line-height: 1.7;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-contact {
+    display: grid;
+    gap: .35rem;
+    color: #fff;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-contact a {
+    color: #fff;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-button:focus-visible,
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-card a:focus-visible,
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-contact a:focus-visible {
+    outline: 3px solid #f2a900;
+    outline-offset: 4px;
+}
+
+@media (max-width: 64rem) {
+    body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-grid,
+    body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-grid--three {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-cta .aznet-theme-industrial01-solution-shell {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 48rem) {
+    body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-section {
+        padding-block: 3.5rem;
+    }
+
+    body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-shell {
+        width: min(calc(100% - (var(--aznet-theme-gutter-mobile) * 2)), var(--aznet-theme-container-shell));
+    }
+
+    body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-hero .aznet-theme-industrial01-solution-shell,
+    body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-split {
+        grid-template-columns: 1fr;
+    }
+
+    body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-hero h2 {
+        font-size: clamp(2.45rem, 12vw, 4rem);
+    }
+
+    body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-grid,
+    body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-grid--three {
+        grid-template-columns: 1fr;
+    }
+
+    body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-card {
+        padding: 1.2rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-button,
+    body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-card {
+        transition: none;
+    }
+}
