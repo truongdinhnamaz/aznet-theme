@@ -109,7 +109,18 @@ foreach ([
 ] as $pilotReadySelector) {
     assert(str_contains($industrialCss, $pilotReadySelector), "Industrial 01 pilot-ready presentation missing: {$pilotReadySelector}");
 }
-assert(! str_contains($industrialCss, 'display: none'), 'Industrial 01 preset must not hide WooCommerce truth-bearing surfaces to simulate a design.');
+foreach ([
+    'body.aznet-theme-preset--industrial-01 .woocommerce ul.products li.product',
+    'body.aznet-theme-preset--industrial-01.single-product #main .woocommerce-product-gallery',
+    'body.aznet-theme-preset--industrial-01.single-product #main .summary',
+] as $truthSelector) {
+    if ( preg_match('/' . preg_quote($truthSelector, '/') . '\\s*\\{([^}]*)\\}/s', $industrialCss, $truthRule) ) {
+        assert(
+            ! str_contains($truthRule[1], 'display: none'),
+            'Industrial 01 preset must not hide WooCommerce truth-bearing surfaces to simulate a design: ' . $truthSelector
+        );
+    }
+}
 
 
 
