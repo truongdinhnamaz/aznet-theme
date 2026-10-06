@@ -43,7 +43,7 @@ foreach ([
     'overflow-y: auto;',
     'overscroll-behavior: contain;',
     'scrollbar-gutter: stable;',
-    'order: -1',
+    'order: 2;',
     'max-height: none;',
     'overflow-y: visible;',
 ] as $needle) {
