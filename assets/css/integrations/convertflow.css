@@ -55,52 +55,11 @@
     position: sticky;
     top: 0;
     z-index: 998;
-    overflow-x: clip;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
     background: var(--convertflow-theme-color-surface, var(--aznet-theme-surface, #ffffff));
     border-bottom: 1px solid var(--convertflow-theme-color-border, var(--aznet-theme-border, #d9dde4));
-}
-
-[data-choiceguide-sticky-submenu] > :first-child {
-    display: grid !important;
-    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: var(--convertflow-theme-container-max, var(--aznet-theme-container-shell, 80rem));
-    margin-inline: auto !important;
-    align-items: stretch;
-    gap: 0;
-}
-
-[data-choiceguide-sticky-submenu] [data-choiceguide-journey-nav] {
-    min-width: 0 !important;
-    width: auto !important;
-    margin: 0 !important;
-    padding-inline: clamp(0.5rem, 1.2vw, 1.25rem) !important;
-    justify-content: center;
-    text-align: center;
-    white-space: nowrap;
-}
-
-[data-choiceguide-sticky-submenu] [data-choiceguide-journey-nav-role="action"] {
-    justify-self: center;
-    width: max-content !important;
-    max-width: 100%;
-}
-
-@media screen and (max-width: 960px) {
-    [data-choiceguide-sticky-submenu] > :first-child {
-        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    }
-}
-
-@media screen and (max-width: 560px) {
-    [data-choiceguide-sticky-submenu] > :first-child {
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    }
-
-    [data-choiceguide-sticky-submenu] [data-choiceguide-journey-nav] {
-        white-space: normal;
-    }
 }
 
 body:has(.aznet-theme-site-header--sticky) [data-choiceguide-sticky-submenu],
