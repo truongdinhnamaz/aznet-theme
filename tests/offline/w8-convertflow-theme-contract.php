@@ -97,6 +97,8 @@ namespace {
         'body:has(.aznet-theme-site-header--sticky)',
         '[data-choiceguide-section-id]',
         'scroll-margin-top:',
+        '[data-choiceguide-section-role="description"] > p:first-of-type',
+        'display: none',
     ] as $stickyMarker) {
         if (!str_contains($css, $stickyMarker)) {
             fail_test('ConvertFlow public sticky-submenu presentation hook missing: ' . $stickyMarker);
