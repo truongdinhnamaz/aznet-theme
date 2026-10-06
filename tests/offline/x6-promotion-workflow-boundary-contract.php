@@ -56,6 +56,7 @@ $required = [
     '1.3.75)',
     '1.3.76)',
     '1.3.77)',
+    '1.3.78)',
     'tests/offline/x6-version-promotion-contract.php',
     "echo 'PASS: X6 pre-promotion ownership boundary'",
     "echo 'PASS: X6 promoted 1.2.0 ownership boundary'",
@@ -95,6 +96,7 @@ $required = [
     "echo 'PASS: X6 promoted 1.3.75 ownership boundary'",
     "echo 'PASS: X6 promoted 1.3.76 ownership boundary'",
     "echo 'PASS: X6 promoted 1.3.77 ownership boundary'",
+    "echo 'PASS: X6 promoted 1.3.78 ownership boundary'",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.2.0 boundary' >&2",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.0 boundary' >&2",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.1 boundary' >&2",
@@ -132,6 +134,7 @@ $required = [
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.75 boundary' >&2",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.76 boundary' >&2",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.77 boundary' >&2",
+    "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.78 boundary' >&2",
     "echo 'FAIL: unsupported X6 Theme version state' >&2",
 ];
 
