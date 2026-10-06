@@ -74,6 +74,10 @@ if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__feature
     $fail('Law 01 featured media must stay visibly narrower than the 50rem reading-content width');
 }
 
+if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__header\\s*\\{[^}]*max-width:\\s*50rem;/s', $css)) {
+    $fail('Law 01 article header must align to the 50rem reading-content column and not span into the sidebar zone');
+}
+
 if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__reading-main\\s*\\{[^}]*max-width:\\s*50rem;/s', $css)) {
     $fail('Law 01 reading content must retain the 50rem reading width');
 }
