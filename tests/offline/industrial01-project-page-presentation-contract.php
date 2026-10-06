@@ -27,6 +27,10 @@ if (!str_contains($match[1], 'display: none;')) {
     $fail('Industrial 01 Project Page generic header must be hidden.');
 }
 
+if (!str_contains($css, '.aznet-theme-industrial01-solution-hero h1')) {
+    $fail('Industrial 01 authored hero must style an H1 when the generic Page header is suppressed.');
+}
+
 foreach ([
     '.aznet-theme-industrial01-project-page .aznet-theme-industrial01-solution-hero',
     '.aznet-theme-industrial01-project-page .aznet-theme-industrial01-solution-section--soft',
