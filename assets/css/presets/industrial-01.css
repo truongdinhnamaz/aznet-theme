@@ -208,6 +208,27 @@ body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-page {
     color: var(--aznet-theme-text);
 }
 
+body.aznet-theme-preset--industrial-01 .aznet-theme-page--landing:has(.aznet-theme-industrial01-project-page) > .aznet-theme-page__header {
+    display: none;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-project-page .aznet-theme-industrial01-solution-hero {
+    margin-top: 0;
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-project-page .aznet-theme-industrial01-solution-section--soft {
+    border-block: 1px solid var(--aznet-theme-border);
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-project-page .aznet-theme-industrial01-solution-section--dark {
+    border-block: 1px solid rgba(255,255,255,.08);
+}
+
+body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-project-page .aznet-theme-industrial01-solution-hero__media img {
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
 body.aznet-theme-preset--industrial-01 .aznet-theme-page--landing .aznet-theme-page__content,
 body.aznet-theme-preset--industrial-01 .aznet-theme-page--landing .aznet-theme-page__content-inner {
     width: 100%;
