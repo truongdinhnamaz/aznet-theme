@@ -175,3 +175,28 @@ body:has(.aznet-theme-site-header--sticky-compact.is-aznet-theme-header-compact)
     }
 }
 
+/*
+ * When the public Product Journey submenu reaches the sticky threshold, replace
+ * the sticky Theme Header instead of stacking two navigation bars.
+ */
+body.is-aznet-theme-submenu-replacing-header [data-aznet-theme-site-header] {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-100%);
+}
+
+body.is-aznet-theme-submenu-replacing-header [data-choiceguide-sticky-submenu] {
+    top: 0;
+}
+
+.admin-bar.is-aznet-theme-submenu-replacing-header [data-choiceguide-sticky-submenu] {
+    top: 32px;
+}
+
+@media screen and (max-width: 782px) {
+    .admin-bar.is-aznet-theme-submenu-replacing-header [data-choiceguide-sticky-submenu] {
+        top: 46px;
+    }
+}
+
