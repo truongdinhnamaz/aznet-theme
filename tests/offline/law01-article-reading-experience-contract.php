@@ -78,6 +78,19 @@ if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__reading
     $fail('Law 01 reading content must retain the 50rem reading width');
 }
 
+if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__header\\s*\\{[^}]*text-align:\\s*left;/s', $css)) {
+    $fail('Law 01 article header must use conventional left-aligned editorial presentation');
+}
+
+if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__title\\s*\\{[^}]*font-size:\\s*clamp\\(2rem,\\s*3vw,\\s*3rem\\);[^}]*text-align:\\s*left;/s', $css)) {
+    $fail('Law 01 article title must use a conventional left-aligned 2rem-3rem scale');
+}
+
+if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__categories\\s*\\{[^}]*justify-content:\\s*flex-start;/s', $css)
+    || ! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__meta\\s*\\{[^}]*justify-content:\\s*flex-start;/s', $css)) {
+    $fail('Law 01 article category/meta rows must align with the left content edge');
+}
+
 $production = $content . "\n" . $css;
 foreach ([
     'new WP_Query',
