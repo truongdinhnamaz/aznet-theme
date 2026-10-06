@@ -730,6 +730,14 @@ function enqueue_assets(): void {
             [ 'aznet-theme-tokens' ],
             $version
         );
+
+        wp_enqueue_script(
+            'aznet-theme-convertflow-sticky-submenu',
+            get_theme_file_uri( '/assets/js/convertflow-sticky-submenu.js' ),
+            [],
+            $version,
+            true
+        );
     }
 
     if ( should_enqueue_woocommerce_archive_assets() ) {

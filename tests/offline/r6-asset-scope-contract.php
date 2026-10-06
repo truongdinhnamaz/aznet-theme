@@ -178,7 +178,7 @@ namespace {
         'woo-product' => [
             ['woo_product' => true],
             [...$coreStyles, 'aznet-theme-woocommerce-product'],
-            [],
+            ['aznet-theme-convertflow-sticky-submenu'],
         ],
         'woo-archive' => [
             ['woo_archive' => true],

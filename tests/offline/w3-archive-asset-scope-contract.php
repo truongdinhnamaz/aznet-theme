@@ -4,6 +4,7 @@ namespace {
     define('AZNET_THEME_VERSION', 'test');
     $GLOBALS['aznet_test_styles'] = [];
     function wp_enqueue_style($handle, $src = '', $deps = [], $ver = null) { $GLOBALS['aznet_test_styles'][] = $handle; }
+    function wp_enqueue_script($handle, $src = '', $deps = [], $ver = null, $in_footer = false) {}
     function get_theme_file_uri($path) { return 'https://example.test/theme' . $path; }
     function get_stylesheet_uri() { return 'https://example.test/theme/style.css'; }
     function is_page() { return false; }

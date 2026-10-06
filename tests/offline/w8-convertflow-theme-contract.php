@@ -88,12 +88,57 @@ namespace {
     foreach ([
         '[data-choiceguide-sticky-submenu]',
         'position: sticky',
+        'overflow-x: clip',
+        'grid-template-columns: repeat(6, minmax(0, 1fr))',
+        '@media screen and (max-width: 960px)',
+        'grid-template-columns: repeat(3, minmax(0, 1fr))',
+        '@media screen and (max-width: 560px)',
+        'grid-template-columns: repeat(2, minmax(0, 1fr))',
         'body:has(.aznet-theme-site-header--sticky)',
         '[data-choiceguide-section-id]',
         'scroll-margin-top:',
     ] as $stickyMarker) {
         if (!str_contains($css, $stickyMarker)) {
             fail_test('ConvertFlow public sticky-submenu presentation hook missing: ' . $stickyMarker);
+        }
+    }
+
+    $assetsPhp = (string) file_get_contents($root . '/inc/theme/assets.php');
+    foreach ([
+        'aznet-theme-convertflow-sticky-submenu',
+        '/assets/js/convertflow-sticky-submenu.js',
+        'should_enqueue_woocommerce_product_assets()',
+    ] as $assetMarker) {
+        if (!str_contains($assetsPhp, $assetMarker)) {
+            fail_test('ConvertFlow sticky-submenu replacement asset missing: ' . $assetMarker);
+        }
+    }
+
+    $submenuScriptPath = $root . '/assets/js/convertflow-sticky-submenu.js';
+    if (!is_file($submenuScriptPath)) {
+        fail_test('ConvertFlow sticky-submenu replacement script is missing');
+    }
+    $submenuScript = (string) file_get_contents($submenuScriptPath);
+    foreach ([
+        '[data-choiceguide-sticky-submenu]',
+        '[data-aznet-theme-site-header]',
+        '[data-choiceguide-product-journey]',
+        'is-aznet-theme-submenu-replacing-header',
+        'requestAnimationFrame',
+        'window.scrollY',
+    ] as $scriptMarker) {
+        if (!str_contains($submenuScript, $scriptMarker)) {
+            fail_test('ConvertFlow sticky-submenu replacement runtime missing: ' . $scriptMarker);
+        }
+    }
+
+    foreach ([
+        'body.is-aznet-theme-submenu-replacing-header [data-aznet-theme-site-header]',
+        'body.is-aznet-theme-submenu-replacing-header [data-choiceguide-sticky-submenu]',
+        'transform: translateY(-100%)',
+    ] as $replacementMarker) {
+        if (!str_contains($css, $replacementMarker)) {
+            fail_test('ConvertFlow sticky-submenu replacement presentation missing: ' . $replacementMarker);
         }
     }
 

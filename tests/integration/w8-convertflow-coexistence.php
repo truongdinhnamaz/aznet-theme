@@ -18,6 +18,7 @@ namespace {
 
     $GLOBALS['w8_registered_styles'] = [];
     $GLOBALS['w8_enqueued_styles'] = [];
+    $GLOBALS['w8_enqueued_scripts'] = [];
     $GLOBALS['w8_actions'] = [];
     $GLOBALS['w8_woo_surface'] = null;
 
@@ -30,6 +31,9 @@ namespace {
     }
     function wp_enqueue_style($handle, $src = '', $deps = [], $ver = null): void {
         $GLOBALS['w8_enqueued_styles'][$handle] = ['src' => $src, 'deps' => $deps, 'ver' => $ver];
+    }
+    function wp_enqueue_script($handle, $src = '', $deps = [], $ver = null, $in_footer = false): void {
+        $GLOBALS['w8_enqueued_scripts'][$handle] = ['src' => $src, 'deps' => $deps, 'ver' => $ver, 'in_footer' => $in_footer];
     }
     function get_theme_file_uri($path): string { return 'https://example.test/wp-content/themes/aznet-theme' . $path; }
     function get_stylesheet_uri(): string { return 'https://example.test/wp-content/themes/aznet-theme/style.css'; }
@@ -114,12 +118,16 @@ namespace {
 
     $GLOBALS['w8_woo_surface'] = 'product';
     $GLOBALS['w8_enqueued_styles'] = [];
+    $GLOBALS['w8_enqueued_scripts'] = [];
     \AZnet\Theme\enqueue_assets();
     if (!isset($GLOBALS['w8_enqueued_styles']['aznet-theme-convertflow-contract'])) {
         fail_test('Theme public bridge must remain available on Woo product surfaces');
     }
     if (!isset($GLOBALS['w8_enqueued_styles']['aznet-theme-woocommerce-product'])) {
         fail_test('retained Woo product presentation asset must coexist with the ConvertFlow bridge');
+    }
+    if (!isset($GLOBALS['w8_enqueued_scripts']['aznet-theme-convertflow-sticky-submenu'])) {
+        fail_test('Theme sticky-submenu replacement script must be product-scoped and coexist with ConvertFlow');
     }
 
     require $providerRoot . '/choiceguide/src/Frontend/ThemeIntegration/ThemeIntegrationAssets.php';

@@ -3,6 +3,7 @@ namespace {
     define( 'ABSPATH', __DIR__ );
     $GLOBALS['aznet_test_styles'] = [];
     function wp_enqueue_style( $handle, $src = '', $deps = [], $ver = null ) { $GLOBALS['aznet_test_styles'][] = $handle; }
+    function wp_enqueue_script( $handle, $src = '', $deps = [], $ver = null, $in_footer = false ) { $GLOBALS['aznet_test_scripts'][] = $handle; }
     function get_theme_file_uri( $path ) { return 'https://example.test/theme' . $path; }
     function get_stylesheet_uri() { return 'https://example.test/theme/style.css'; }
     function is_page() { return false; }
@@ -27,11 +28,14 @@ namespace {
     foreach ( $cases as $surface => $expected ) {
         $GLOBALS['aznet_test_woo_surface'] = '' === $surface ? null : $surface;
         $GLOBALS['aznet_test_styles'] = [];
+        $GLOBALS['aznet_test_scripts'] = [];
         $actual = \AZnet\Theme\should_enqueue_woocommerce_product_assets();
         if ( $actual !== $expected ) { fwrite( STDERR, "eligibility mismatch: {$surface}\n" ); exit( 1 ); }
         \AZnet\Theme\enqueue_assets();
         $loaded = in_array( 'aznet-theme-woocommerce-product', $GLOBALS['aznet_test_styles'], true );
         if ( $loaded !== $expected ) { fwrite( STDERR, "enqueue mismatch: {$surface}\n" ); exit( 2 ); }
+        $submenu_script = in_array( 'aznet-theme-convertflow-sticky-submenu', $GLOBALS['aznet_test_scripts'], true );
+        if ( $submenu_script !== $expected ) { fwrite( STDERR, "submenu script scope mismatch: {$surface}\n" ); exit( 3 ); }
     }
     echo "PASS: W2 product-only asset scope\n";
 }
