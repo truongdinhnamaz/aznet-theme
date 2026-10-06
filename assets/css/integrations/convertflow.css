@@ -212,3 +212,12 @@ body.is-aznet-theme-submenu-replacing-header [data-choiceguide-section-id] {
     }
 }
 
+/*
+ * Product Journey overview: keep the provider-owned section title and body, but
+ * suppress the optional lead subtitle in Theme presentation.
+ * The selector anchors to the public section-role contract rather than data storage.
+ */
+[data-choiceguide-section-role="description"] > p:first-of-type {
+    display: none;
+}
+
