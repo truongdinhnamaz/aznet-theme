@@ -45,3 +45,92 @@
     --convertflow-theme-motion-base: 200ms;
     --convertflow-theme-focus-ring: 2px solid var(--aznet-theme-focus);
 }
+
+/*
+ * Public ConvertFlow sticky-submenu presentation hook.
+ * ConvertFlow owns Journey semantics and emits the data-* hooks; the Theme only
+ * composes viewport position, overflow and anchor clearance around its Header.
+ */
+[data-choiceguide-sticky-submenu] {
+    position: sticky;
+    top: 0;
+    z-index: 998;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    background: var(--convertflow-theme-color-surface, var(--aznet-theme-surface, #ffffff));
+    border-bottom: 1px solid var(--convertflow-theme-color-border, var(--aznet-theme-border, #d9dde4));
+}
+
+body:has(.aznet-theme-site-header--sticky) [data-choiceguide-sticky-submenu],
+body:has(.aznet-theme-site-header--sticky-compact) [data-choiceguide-sticky-submenu] {
+    top: var(--aznet-theme-header-height, 4.75rem);
+}
+
+body:has(.aznet-theme-site-header--compact.aznet-theme-site-header--sticky) [data-choiceguide-sticky-submenu],
+body:has(.aznet-theme-site-header--sticky-compact.is-aznet-theme-header-compact) [data-choiceguide-sticky-submenu] {
+    top: var(--aznet-theme-header-height-compact, 3.875rem);
+}
+
+.admin-bar [data-choiceguide-sticky-submenu] {
+    top: 32px;
+}
+
+.admin-bar:has(.aznet-theme-site-header--sticky) [data-choiceguide-sticky-submenu],
+.admin-bar:has(.aznet-theme-site-header--sticky-compact) [data-choiceguide-sticky-submenu] {
+    top: calc(32px + var(--aznet-theme-header-height, 4.75rem));
+}
+
+.admin-bar:has(.aznet-theme-site-header--compact.aznet-theme-site-header--sticky) [data-choiceguide-sticky-submenu],
+.admin-bar:has(.aznet-theme-site-header--sticky-compact.is-aznet-theme-header-compact) [data-choiceguide-sticky-submenu] {
+    top: calc(32px + var(--aznet-theme-header-height-compact, 3.875rem));
+}
+
+[data-choiceguide-section-id] {
+    scroll-margin-top: calc(4rem + var(--aznet-theme-space-3, 1rem));
+}
+
+body:has(.aznet-theme-site-header--sticky) [data-choiceguide-section-id],
+body:has(.aznet-theme-site-header--sticky-compact) [data-choiceguide-section-id] {
+    scroll-margin-top: calc(var(--aznet-theme-header-height, 4.75rem) + 4rem + var(--aznet-theme-space-3, 1rem));
+}
+
+body:has(.aznet-theme-site-header--compact.aznet-theme-site-header--sticky) [data-choiceguide-section-id],
+body:has(.aznet-theme-site-header--sticky-compact.is-aznet-theme-header-compact) [data-choiceguide-section-id] {
+    scroll-margin-top: calc(var(--aznet-theme-header-height-compact, 3.875rem) + 4rem + var(--aznet-theme-space-3, 1rem));
+}
+
+.admin-bar [data-choiceguide-section-id] {
+    scroll-margin-top: calc(32px + 4rem + var(--aznet-theme-space-3, 1rem));
+}
+
+.admin-bar:has(.aznet-theme-site-header--sticky) [data-choiceguide-section-id],
+.admin-bar:has(.aznet-theme-site-header--sticky-compact) [data-choiceguide-section-id] {
+    scroll-margin-top: calc(32px + var(--aznet-theme-header-height, 4.75rem) + 4rem + var(--aznet-theme-space-3, 1rem));
+}
+
+@media screen and (max-width: 782px) {
+    .admin-bar [data-choiceguide-sticky-submenu] {
+        top: 46px;
+    }
+
+    .admin-bar:has(.aznet-theme-site-header--sticky) [data-choiceguide-sticky-submenu],
+    .admin-bar:has(.aznet-theme-site-header--sticky-compact) [data-choiceguide-sticky-submenu] {
+        top: calc(46px + var(--aznet-theme-header-height, 4.75rem));
+    }
+
+    .admin-bar:has(.aznet-theme-site-header--compact.aznet-theme-site-header--sticky) [data-choiceguide-sticky-submenu],
+    .admin-bar:has(.aznet-theme-site-header--sticky-compact.is-aznet-theme-header-compact) [data-choiceguide-sticky-submenu] {
+        top: calc(46px + var(--aznet-theme-header-height-compact, 3.875rem));
+    }
+
+    .admin-bar [data-choiceguide-section-id] {
+        scroll-margin-top: calc(46px + 4rem + var(--aznet-theme-space-3, 1rem));
+    }
+
+    .admin-bar:has(.aznet-theme-site-header--sticky) [data-choiceguide-section-id],
+    .admin-bar:has(.aznet-theme-site-header--sticky-compact) [data-choiceguide-section-id] {
+        scroll-margin-top: calc(46px + var(--aznet-theme-header-height, 4.75rem) + 4rem + var(--aznet-theme-space-3, 1rem));
+    }
+}
+

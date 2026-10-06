@@ -85,6 +85,18 @@ namespace {
         fail_test('Theme integration CSS must not copy ConvertFlow storage/domain keys');
     }
 
+    foreach ([
+        '[data-choiceguide-sticky-submenu]',
+        'position: sticky',
+        'body:has(.aznet-theme-site-header--sticky)',
+        '[data-choiceguide-section-id]',
+        'scroll-margin-top:',
+    ] as $stickyMarker) {
+        if (!str_contains($css, $stickyMarker)) {
+            fail_test('ConvertFlow public sticky-submenu presentation hook missing: ' . $stickyMarker);
+        }
+    }
+
     require $root . '/inc/theme/assets.php';
     \AZnet\Theme\enqueue_assets();
 
