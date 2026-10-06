@@ -104,12 +104,23 @@ if (1 !== substr_count($content, 'the_content();')) {
 }
 
 $readingStart = strpos($content, '<div class="<?php echo esc_attr( $reading_layout_class ); ?>">');
-$featured = strpos($content, 'aznet-theme-article__featured-media');
+$header = strpos($content, 'aznet-theme-article__header');
 $readingMain = strpos($content, 'aznet-theme-article__reading-main');
+$featured = strpos($content, 'aznet-theme-article__featured-media');
 $sidebar = strpos($content, 'aznet-theme-article__sidebar');
-if (false === $readingStart || false === $featured || false === $readingMain || false === $sidebar
-    || ! ($readingStart < $readingMain && $readingMain < $featured && $featured < $sidebar)) {
-    $fail('Law 01 reading grid must start below the header, with featured media inside the reading main so the sidebar can begin beside it');
+if (false === $readingStart || false === $header || false === $readingMain || false === $featured || false === $sidebar
+    || ! ($readingStart < $header && $header < $readingMain && $readingMain < $featured && $featured < $sidebar)) {
+    $fail('Law 01 reading grid must contain header then reading main in the left column, with sidebar as the right-column sibling');
+}
+
+foreach ([
+    'grid-column: 1;',
+    'grid-row: 1;',
+    'grid-column: 2;',
+] as $marker) {
+    if (! str_contains($css, $marker)) {
+        $fail('Law 01 article grid placement missing: ' . $marker);
+    }
 }
 
 
