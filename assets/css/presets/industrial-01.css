@@ -304,7 +304,10 @@ body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-media 
 }
 
 body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-page figcaption {
-    display: none;
+    margin: .65rem .25rem 0;
+    color: var(--aznet-theme-muted);
+    font-size: var(--aznet-theme-text-meta);
+    line-height: 1.45;
 }
 
 body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-actions {
