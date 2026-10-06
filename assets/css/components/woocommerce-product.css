@@ -248,7 +248,7 @@
 }
 
 .single-product #main :is(.related, .upsells) {
-    margin-top: var(--aznet-theme-space-section, 3.25rem);
+    margin-top: 0;
 }
 
 .single-product #main :is(.related, .upsells) > h2 {
@@ -263,7 +263,7 @@
 .single-product #main :is(.related, .upsells) ul.products {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 18rem));
-    justify-content: center;
+    justify-content: start;
     align-items: start;
     gap: var(--aznet-theme-space-4, 1.5rem);
     margin: 0;
