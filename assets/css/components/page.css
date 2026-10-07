@@ -1164,3 +1164,11 @@
 .page-id-29 .woocommerce-loop-category__title .count {
     display: none;
 }
+
+
+.page-id-29 .wp-block-button__link {
+    background: var(--aznet-theme-accent);
+    color: var(--aznet-theme-color-on-primary);
+    border: 1px solid var(--aznet-theme-accent);
+    font-weight: var(--aznet-theme-font-weight-semibold);
+}
