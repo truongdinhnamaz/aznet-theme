@@ -126,7 +126,8 @@
     padding-block-end: 0;
 }
 
-.aznet-theme-page--landing .aznet-theme-page__content-inner > :where(.wp-block-group, .wp-block-cover) {
+.aznet-theme-page--landing .aznet-theme-page__content-inner > .wp-block-group,
+.aznet-theme-page--landing .aznet-theme-page__content-inner > .wp-block-cover {
     box-sizing: border-box;
     width: 100vw;
     max-width: none;
@@ -204,7 +205,8 @@
         width: min(calc(100% - (var(--aznet-theme-gutter-mobile) * 2)), var(--aznet-theme-container-wide));
     }
 
-    .aznet-theme-page--landing .aznet-theme-page__content-inner > :where(.wp-block-group, .wp-block-cover) {
+    .aznet-theme-page--landing .aznet-theme-page__content-inner > .wp-block-group,
+    .aznet-theme-page--landing .aznet-theme-page__content-inner > .wp-block-cover {
         padding-inline: var(--aznet-theme-gutter-mobile);
     }
 
