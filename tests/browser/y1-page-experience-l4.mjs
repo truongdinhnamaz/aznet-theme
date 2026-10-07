@@ -9,6 +9,7 @@ const routes = {
   wide: { url: process.env.Y1_WIDE_URL, variant: 'wide', breadcrumbs: false },
   landing: { url: process.env.Y1_LANDING_URL, variant: 'landing', breadcrumbs: false, heroFirst: true },
   landingFallback: { url: process.env.Y1_LANDING_FALLBACK_URL, variant: 'landing', breadcrumbs: false, genericHeader: true },
+  landingLegacy: { url: process.env.Y1_LANDING_LEGACY_URL, variant: 'landing', breadcrumbs: false, heroFirst: true, legacyHero: true },
   contact: { url: process.env.Y1_CONTACT_URL || 'http://127.0.0.1:8080/y1-contact/', variant: 'standard', breadcrumbs: false, contact: true },
   team: { url: process.env.Y1_TEAM_URL, variant: 'standard', breadcrumbs: false, team: true },
 };
@@ -94,7 +95,8 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
     if (await page.locator('h1').count() !== 1) throw new Error('Expected one H1');
     if (config.heroFirst) {
       if (await page.locator('.aznet-theme-page__header').count() !== 0) throw new Error('Hero-first Page must not render the generic Page header');
-      if (await page.locator('.y1-authored-hero').count() !== 1) throw new Error('Expected authored Hero to be the first Page presentation surface');
+      if (!config.legacyHero && await page.locator('.y1-authored-hero').count() !== 1) throw new Error('Expected authored Hero to be the first Page presentation surface');
+      if (config.legacyHero && await page.locator('.y1-legacy-authored-hero').count() !== 1) throw new Error('Expected explicit legacy authored HTML Hero');
       const firstPageChildClass = await page.locator('article.aznet-theme-page').evaluate((element) => element.firstElementChild?.className ?? '');
       if (!String(firstPageChildClass).includes('aznet-theme-page__content-section')) throw new Error('Hero-first Page must begin at the content/hero surface');
     }
