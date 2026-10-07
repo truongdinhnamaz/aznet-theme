@@ -451,6 +451,24 @@
     font-weight: var(--aznet-theme-font-weight-semibold);
 }
 
+.page-id-726 .rqa-quote-dark {
+    color: var(--aznet-theme-on-inverse) !important;
+}
+
+.page-id-726 .rqa-quote-dark :where(.wp-block-heading, .wp-block-paragraph, figcaption, a) {
+    color: var(--aznet-theme-on-inverse) !important;
+}
+
+.page-id-726 .rqa-quote-dark figcaption {
+    opacity: 0.9;
+}
+
+.page-id-726 .rqa-quote-dark .wp-block-button__link {
+    background: var(--aznet-theme-on-inverse);
+    color: var(--aznet-theme-surface-inverse) !important;
+    border-color: var(--aznet-theme-on-inverse);
+}
+
 @media (max-width: 47.999rem) {
     .page-id-726 .wp-block-column > .wp-block-heading {
         min-height: 0;
