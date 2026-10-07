@@ -4,9 +4,9 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.22 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.23 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 03/10/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 07/10/2026 |
 
 | **Kiến trúc lõi: **Theme chỉ sở hữu presentation/configuration/reference cần thiết. Dữ liệu authoritative và business state ở lại owner. Boundary giữa hai bên là public/versioned provider contract hoặc adapter tối thiểu. |
 | --- |
@@ -557,3 +557,16 @@ A Core extension-model PASS requires a fourth-template fixture to register and p
 - Template switching must not delete or rewrite WordPress/plugin-owned content or domain data.
 - Shared-Core changes affecting multiple templates require D-042 peer-pilot regression evidence.
 - Remote distribution, licensing, entitlement and package download remain D-040/external-service concerns; D-043 does not create those service capabilities inside Theme.
+
+
+## 20.6. Hero-first Page composition
+
+For Theme templates/pilots that provide an authored Page Hero as the primary introduction surface, AZnet Theme uses a **hero-first** composition rule:
+
+- A Page with an explicitly declared/recognized authored Hero MUST begin with that Hero surface. The generic `.aznet-theme-page__header` title/excerpt block MUST NOT render ahead of it.
+- The Hero owns the visible primary-page heading presentation. The resulting document MUST retain exactly one meaningful H1 for the Page; Theme must not create a duplicate visible H1 outside the Hero.
+- Generic Page title/excerpt presentation remains the fail-soft fallback for native Pages that do not opt into, declare or validly resolve an authored Hero.
+- Hero-first activation is a presentation decision. It MUST come from Theme-owned presentation configuration/manifest/mapping or another explicit WordPress-native presentation signal; Core MUST NOT infer it from Page slug, title, URL, arbitrary Page ID or industry heuristic.
+- WordPress retains ownership of Page title/excerpt/content/media. The hero-first rule changes composition only; it does not copy Page content into Theme settings or create a parallel content store.
+- Core should suppress duplicate generic markup at render/composition time where practical. CSS-only hiding may remain as a bounded compatibility path for already-shipped template implementations, but it is not the target generic mechanism.
+- A shared-Core hero-first change requires D-042 peer-pilot regression evidence for every affected template plus mobile/desktop heading-order and accessibility verification before release/deployment.
