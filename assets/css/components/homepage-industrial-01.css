@@ -22,7 +22,7 @@
 }
 
 .aznet-theme-industrial01-section {
-    padding-block: clamp(4rem, 7vw, 7rem);
+    padding-block: clamp(3.5rem, 6vw, 6rem);
 }
 
 .aznet-theme-industrial01-kicker {
@@ -70,14 +70,14 @@
     position: relative;
     z-index: 1;
     display: grid;
-    min-height: clamp(34rem, 72vh, 48rem);
+    min-height: clamp(30rem, 62vh, 42rem);
     grid-template-columns: minmax(0, 1.05fr) minmax(20rem, .95fr);
     align-items: center;
-    gap: clamp(2rem, 5vw, 5rem);
+    gap: clamp(1.75rem, 4vw, 4rem);
 }
 
 .aznet-theme-industrial01-hero__content {
-    padding-block: clamp(4.5rem, 8vw, 8rem);
+    padding-block: clamp(3.5rem, 6vw, 6rem);
 }
 
 .aznet-theme-industrial01-hero .aznet-theme-industrial01-kicker {
@@ -98,7 +98,7 @@
 .aznet-theme-industrial01-hero h1 {
     max-width: 14ch;
     color: #fff;
-    font-size: clamp(3rem, 5.6vw, 6rem);
+    font-size: clamp(2.8rem, 5vw, 5.2rem);
     line-height: .96;
 }
 
@@ -115,7 +115,7 @@
 
 .aznet-theme-industrial01-hero__panel {
     position: relative;
-    width: min(100%, 34rem);
+    width: min(100%, 30rem);
     aspect-ratio: 4 / 3;
     overflow: hidden;
     border: 1px solid rgba(255,255,255,.18);
@@ -198,7 +198,7 @@
 }
 
 .aznet-theme-industrial01-heading {
-    margin-bottom: clamp(2rem, 4vw, 3.25rem);
+    margin-bottom: clamp(1.75rem, 3vw, 2.75rem);
 }
 
 .aznet-theme-industrial01-heading--split {
@@ -213,13 +213,13 @@
 .aznet-theme-industrial01-cta h2 {
     max-width: 18ch;
     color: var(--industrial01-ink);
-    font-size: clamp(2.15rem, 3.8vw, 3.8rem);
+    font-size: clamp(2rem, 3.4vw, 3.4rem);
     line-height: 1.04;
 }
 
 .aznet-theme-industrial01-grid {
     display: grid;
-    gap: 1.15rem;
+    gap: 1rem;
 }
 
 .aznet-theme-industrial01-grid--categories,
@@ -271,7 +271,7 @@
 
 .aznet-theme-industrial01-category-card__body {
     display: flex;
-    min-height: 10rem;
+    min-height: 8.5rem;
     flex: 1;
     flex-direction: column;
     gap: .7rem;
@@ -374,7 +374,7 @@
 
 .aznet-theme-industrial01-product-card__body {
     display: flex;
-    min-height: 12.5rem;
+    min-height: 11rem;
     flex-direction: column;
     padding: 1.2rem;
 }
