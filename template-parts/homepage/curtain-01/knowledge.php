@@ -60,7 +60,7 @@ if ( [] !== $terms ) {
                         </a>
                     <?php endif; ?>
                     <div class="aznet-theme-curtain01-knowledge-card__body">
-                        <time datetime="<?php echo esc_attr( get_the_date( 'c', $post ) ); ?>"><?php echo esc_html( get_the_date( 'd/m/Y', $post ) ); ?></time>
+                        <time datetime="<?php echo esc_attr( get_the_date( 'c', $post ) ); ?>"><?php echo esc_html( get_the_date( '', $post ) ); ?></time>
                         <h3><a href="<?php echo esc_url( get_permalink( $post ) ); ?>"><?php echo esc_html( get_the_title( $post ) ); ?></a></h3>
                         <?php if ( '' !== $excerpt ) : ?><p><?php echo esc_html( $excerpt ); ?></p><?php endif; ?>
                         <a class="aznet-theme-curtain01-text-link" href="<?php echo esc_url( get_permalink( $post ) ); ?>"><?php esc_html_e( 'Đọc bài viết', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a>
