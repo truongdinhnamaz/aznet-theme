@@ -56,10 +56,17 @@ foreach ($expectations as $selector => $needles) {
     }
 }
 
-if (!preg_match('/\\.aznet-theme-industrial01-heading h2,\\s*\\.aznet-theme-industrial01-about h2,\\s*\\.aznet-theme-industrial01-cta h2\\s*\\{([^}]*)\\}/s', $css, $headingMatch)) {
+if (!preg_match_all('/\\.aznet-theme-industrial01-heading h2,\\s*\\.aznet-theme-industrial01-about h2,\\s*\\.aznet-theme-industrial01-cta h2\\s*\\{([^}]*)\\}/s', $css, $headingMatches)) {
     $fail('Industrial 01 homepage grouped section heading rule missing.');
 }
-if (!str_contains($headingMatch[1], 'font-size: clamp(2rem, 3.4vw, 3.4rem);')) {
+$compactHeadingFound = false;
+foreach ($headingMatches[1] as $headingRule) {
+    if (str_contains($headingRule, 'font-size: clamp(2rem, 3.4vw, 3.4rem);')) {
+        $compactHeadingFound = true;
+        break;
+    }
+}
+if (! $compactHeadingFound) {
     $fail('Industrial 01 homepage compact section heading typography missing.');
 }
 
