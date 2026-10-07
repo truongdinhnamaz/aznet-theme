@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $variant = \AZnet\Theme\page_variant( (int) get_the_ID() );
 $crumbs  = \AZnet\Theme\page_breadcrumb_items( (int) get_the_ID() );
 $excerpt = \AZnet\Theme\page_excerpt( (int) get_the_ID() );
+$hero_first = \AZnet\Theme\page_hero_first_active( (int) get_the_ID() );
 $is_service_detail = \AZnet\Theme\service_page_is_detail( (int) get_the_ID() );
 $is_law01_service_detail = $is_service_detail
     && function_exists( 'AZnet\\Theme\\header_law01_active' )
@@ -29,6 +30,9 @@ if ( $is_service_detail ) {
     }
 }
 $page_classes = 'aznet-theme-page aznet-theme-page--full-bleed aznet-theme-page--' . $variant;
+if ( $hero_first ) {
+    $page_classes .= ' aznet-theme-page--hero-first';
+}
 if ( $is_service_detail ) {
     $page_classes .= ' aznet-theme-page--service-detail';
 }
@@ -91,6 +95,7 @@ if ( $is_team_member ) {
         );
         ?>
     <?php else : ?>
+    <?php if ( ! $hero_first ) : ?>
     <header class="aznet-theme-page__header">
         <div class="aznet-theme-page__section-inner aznet-theme-page__section-inner--header">
         <?php if ( [] !== $crumbs ) : ?>
@@ -131,6 +136,7 @@ if ( $is_team_member ) {
         <?php endif; ?>
         </div>
     </header>
+    <?php endif; ?>
 
     <section class="aznet-theme-page__content-section">
         <div class="aznet-theme-page__section-inner aznet-theme-page__content aznet-theme-page__content-inner aznet-theme-entry__content">
