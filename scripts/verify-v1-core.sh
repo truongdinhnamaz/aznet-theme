@@ -136,6 +136,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/y2-professional-pag
 
 printf '%s\n' '==> Y3 Footer System contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y3-footer-system-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/professional-footer-mobile-spacing-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-footer-content-profile-contract.php
 
 printf '%s\n' '==> Y4 Professional Services provisioning contract'
