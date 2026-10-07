@@ -1,0 +1,23 @@
+name: RQA Live Contrast Diagnostic
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'tests/browser/rqa-live-contrast-diagnostic.mjs'
+      - '.github/workflows/rqa-live-contrast-diagnostic.yml'
+
+jobs:
+  contrast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser tooling
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+      - name: Diagnose live RQA contrast
+        run: node tests/browser/rqa-live-contrast-diagnostic.mjs
