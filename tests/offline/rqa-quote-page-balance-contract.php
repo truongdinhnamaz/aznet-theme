@@ -143,3 +143,25 @@ foreach ($factors_required as $needle) {
 }
 
 echo "PASS: RQA quote factors use balanced visual cards\n";
+
+
+$process_required = [
+    '.page-id-726 .rqa-quote-process',
+    '.page-id-726 .rqa-quote-process .wp-block-column',
+    'background: var(--aznet-theme-surface);',
+    'border: 1px solid var(--aznet-theme-border);',
+    'box-shadow: var(--aznet-theme-shadow-card);',
+    '.page-id-726 .rqa-quote-process .wp-block-heading',
+    'border-radius: 999px;',
+    'background: var(--aznet-theme-accent);',
+    'color: var(--aznet-theme-color-on-primary) !important;',
+];
+
+foreach ($process_required as $needle) {
+    if (! str_contains($css, $needle)) {
+        fwrite(STDERR, "FAIL: quote process presentation missing {$needle}\n");
+        exit(10);
+    }
+}
+
+echo "PASS: RQA quote process uses balanced step cards\n";
