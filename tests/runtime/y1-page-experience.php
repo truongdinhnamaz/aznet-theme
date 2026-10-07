@@ -57,7 +57,7 @@ $landing_id = y1_create_page(
         'post_title'   => 'Y1 Landing Page',
         'post_excerpt' => 'Landing native Page presentation.',
         'post_name'    => 'y1-landing-page',
-        'post_content' => '<p id="y1-landing-content">Landing Page content owned by WordPress.</p>',
+        'post_content' => '<section class="y1-authored-hero"><h1>Y1 Landing Hero</h1><p id="y1-landing-content">Landing Page content owned by WordPress.</p></section>',
     ]
 );
 update_post_meta( $landing_id, '_wp_page_template', 'page-templates/landing.php' );
