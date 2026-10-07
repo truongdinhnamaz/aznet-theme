@@ -509,3 +509,24 @@
         aspect-ratio: 16 / 10;
     }
 }
+
+
+.page-id-726 .aznet-theme-page__content-inner > .wp-block-group,
+.page-id-726 .aznet-theme-page__content-inner > .wp-block-cover {
+    box-sizing: border-box;
+    width: 100vw;
+    max-width: none;
+    margin-inline: calc(50% - 50vw);
+    padding-inline: max(
+        var(--aznet-theme-gutter),
+        calc((100vw - var(--aznet-theme-container-wide)) / 2)
+    ) !important;
+    border-radius: 0;
+}
+
+@media (max-width: 47.999rem) {
+    .page-id-726 .aznet-theme-page__content-inner > .wp-block-group,
+    .page-id-726 .aznet-theme-page__content-inner > .wp-block-cover {
+        padding-inline: var(--aznet-theme-gutter-mobile) !important;
+    }
+}
