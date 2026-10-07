@@ -393,3 +393,102 @@
         display: none;
     }
 }
+
+
+/* Rèm Quốc Anh quote page: normalize rows, media rhythm and contrast. */
+.page-id-726 .aznet-theme-page__content-inner {
+    --rqa-quote-row-gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.page-id-726 .wp-block-columns {
+    align-items: stretch;
+    gap: var(--rqa-quote-row-gap);
+}
+
+.page-id-726 .wp-block-columns > .wp-block-column {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.page-id-726 .wp-block-column > .wp-block-group.has-background {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.page-id-726 .wp-block-column > .wp-block-heading {
+    min-height: 2.7em;
+    margin-block: 0.75rem 0.5rem;
+}
+
+.page-id-726 .wp-block-column > .wp-block-paragraph:last-child {
+    margin-block-end: 0;
+}
+
+.page-id-726 .wp-block-image {
+    width: 100%;
+    margin-block: 0 1rem;
+    overflow: hidden;
+    border-radius: var(--aznet-theme-radius-card);
+}
+
+.page-id-726 .wp-block-image img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
+.page-id-726 .wp-block-group.has-background {
+    border-radius: var(--aznet-theme-radius-card);
+}
+
+.page-id-726 .wp-block-button__link {
+    min-height: 2.75rem;
+    background: #1f1f1f;
+    color: #ffffff;
+    border: 1px solid #1f1f1f;
+}
+
+.page-id-726 .wp-block-group[style*="background-color:#111111"] {
+    color: #ffffff;
+}
+
+.page-id-726 .wp-block-group[style*="background-color:#111111"] :where(h2, h3, p, a) {
+    color: #ffffff;
+}
+
+.page-id-726 .wp-block-group[style*="background-color:#111111"] .wp-block-button__link {
+    background: #ffffff;
+    color: #1f1f1f;
+    border-color: #ffffff;
+}
+
+.page-id-726 .wp-block-group[style*="background-color:#f6f2eb"],
+.page-id-726 .wp-block-group[style*="background-color:#f7f7f5"] {
+    color: #1f1f1f;
+}
+
+.page-id-726 .wp-block-group[style*="background-color:#7a5828"] {
+    color: #ffffff;
+}
+
+.page-id-726 .wp-block-group[style*="background-color:#7a5828"] :where(h2, h3, p) {
+    color: #ffffff;
+}
+
+.page-id-726 .wp-block-group[style*="background-color:#7a5828"] .wp-block-button__link {
+    background: #ffffff;
+    color: #3f2a10;
+    border-color: #ffffff;
+}
+
+@media (max-width: 47.999rem) {
+    .page-id-726 .wp-block-column > .wp-block-heading {
+        min-height: 0;
+    }
+
+    .page-id-726 .wp-block-image img {
+        aspect-ratio: 16 / 10;
+    }
+}
