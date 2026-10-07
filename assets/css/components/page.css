@@ -590,3 +590,63 @@
     color: var(--aznet-theme-muted) !important;
     line-height: 1.65;
 }
+
+
+.page-id-726 .rqa-quote-process .wp-block-columns {
+    align-items: stretch;
+    gap: clamp(1rem, 1.8vw, 1.5rem);
+    margin-block-start: clamp(1.75rem, 3vw, 2.75rem);
+}
+
+.page-id-726 .rqa-quote-process .wp-block-column {
+    position: relative;
+    min-height: 100%;
+    padding: clamp(1.35rem, 2vw, 1.75rem);
+    background: var(--aznet-theme-surface);
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    box-shadow: var(--aznet-theme-shadow-card);
+}
+
+.page-id-726 .rqa-quote-process .wp-block-heading {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    min-height: 0;
+    margin: 0 0 1rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    background: var(--aznet-theme-accent);
+    color: var(--aznet-theme-color-on-primary) !important;
+    font-size: 0.9rem;
+    line-height: 1;
+}
+
+.page-id-726 .rqa-quote-process .wp-block-paragraph {
+    margin: 0;
+    color: var(--aznet-theme-muted) !important;
+    line-height: 1.65;
+}
+
+.page-id-726 .rqa-quote-process .wp-block-paragraph strong {
+    display: block;
+    margin-block-end: 0.35rem;
+    color: var(--aznet-theme-text);
+    font-size: 1.05rem;
+}
+
+.page-id-726 .rqa-quote-process .wp-block-buttons {
+    margin-block-start: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+@media (min-width: 48rem) {
+    .page-id-726 .rqa-quote-process .wp-block-column:not(:last-child)::after {
+        position: absolute;
+        inset-block-start: 2rem;
+        inset-inline-end: calc(var(--rqa-quote-row-gap) * -0.65);
+        width: calc(var(--rqa-quote-row-gap) * 0.8);
+        height: 2px;
+        background: var(--aznet-theme-border);
+        content: "";
+    }
+}
