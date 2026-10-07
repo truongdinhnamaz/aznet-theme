@@ -118,6 +118,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/page-full-bleed-sec
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/fullwidth-shell-standard-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-solution-page-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-catalogue-shell-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-single-product-shell-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-project-page-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-services-root-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/service-detail-premium-presentation-contract.php
