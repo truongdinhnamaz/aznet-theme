@@ -164,7 +164,7 @@ if (! str_contains((string) $knowledge, 'homepage_latest_posts')) {
     exit(1);
 }
 
-if (! str_contains((string) $knowledge, "get_the_date( 'd/m/Y', $post )")) {
+if (! str_contains((string) $knowledge, "get_the_date( 'd/m/Y', \$post )")) {
     fwrite(STDERR, "FAIL: Curtain 01 Knowledge must present dates in an explicit Vietnamese day/month/year format.\n");
     exit(1);
 }
