@@ -15,12 +15,11 @@ $required = [
     '[data-choiceguide-sticky-submenu]',
     'position: sticky',
     'z-index: 998',
-    'overflow-x: clip',
-    'grid-template-columns: repeat(6, minmax(0, 1fr))',
-    '@media screen and (max-width: 960px)',
-    'grid-template-columns: repeat(3, minmax(0, 1fr))',
-    '@media screen and (max-width: 560px)',
-    'grid-template-columns: repeat(2, minmax(0, 1fr))',
+    'overflow-x: auto',
+    'grid-template-columns: repeat(6, minmax(0, 1fr)) max-content',
+    'grid-auto-flow: column',
+    'white-space: nowrap',
+    'font-size: clamp('
     'body:has(.aznet-theme-site-header--sticky)',
     'body:has(.aznet-theme-site-header--sticky-compact)',
     'is-aznet-theme-header-compact',
@@ -38,7 +37,16 @@ foreach ($required as $needle) {
     }
 }
 
-foreach (['.choiceguide-', '.choiceguide_', 'get_option(', 'get_post_meta(', '$wpdb'] as $forbidden) {
+foreach ([
+    '.choiceguide-',
+    '.choiceguide_',
+    'get_option(',
+    'get_post_meta(',
+    '$wpdb',
+    'grid-template-columns: repeat(3, minmax(0, 1fr))',
+    'grid-template-columns: repeat(2, minmax(0, 1fr))',
+    'white-space: normal',
+] as $forbidden) {
     if (false !== strpos($css, $forbidden)) {
         fwrite(STDERR, "sticky submenu integration crossed provider/private boundary: {$forbidden}\n");
         exit(3);
