@@ -122,6 +122,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-single
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-homepage-rhythm-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-about-page-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-about-page-visual-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-about-page-balance-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-project-page-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-services-root-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/service-detail-premium-presentation-contract.php
