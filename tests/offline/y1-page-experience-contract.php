@@ -15,7 +15,7 @@ assert(str_contains($pageExperience, 'function page_variant'));
 assert(str_contains($pageExperience, 'function page_breadcrumb_items'));
 assert(str_contains($pageExperience, 'function page_excerpt'));
 assert(str_contains($pageExperience, 'function page_hero_first_active'), 'hero-first Page presentation guard missing');
-assert(str_contains($pageExperience, "'landing' === page_variant( \$post_id )"), 'Landing Page template must be the explicit WordPress-native hero-first signal');
+assert(str_contains($pageExperience, "'landing' !== page_variant( \$post_id )"), 'Landing Page template must be the explicit WordPress-native hero-first signal');
 assert(str_contains($pageExperience, 'aznet-theme-page-hero'), 'hero-first activation must require an explicit authored Hero marker');
 assert(str_contains($pageExperience, 'parse_blocks'), 'hero-first activation must validate the WordPress-native authored Hero block');
 assert(str_contains($pageExperience, 'function service_page_is_detail'), 'service detail detector missing');
