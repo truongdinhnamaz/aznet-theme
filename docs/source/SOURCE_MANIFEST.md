@@ -133,3 +133,6 @@ Current release boundary: **v1.3.21 TECHNICAL PASS / GitHub publication v1.3.20 
 
 
 07/10/2026 Hero-first Page decision: AZT-02 v0.23 + AZT-04 D-048 establish the shared pilot/Page composition rule. A Page with an explicit valid authored Hero begins at that Hero; the generic Page title/excerpt header must not precede it. Generic Page header remains the fail-soft fallback when no authored Hero is active. Activation is presentation-configured, never inferred from slug/title/URL/Page ID; WordPress content ownership is unchanged.
+
+
+07/10/2026 Hero-first Page decision: AZT-02 v0.23 + AZT-04 D-048 establish the shared pilot/Page composition rule. A Page with an explicit valid authored Hero begins at that Hero; the generic Page title/excerpt header must not precede it. Generic Page header remains the fail-soft fallback when no authored Hero is active. Activation is presentation-configured, never inferred from slug/title/URL/Page ID; WordPress content ownership is unchanged.
