@@ -28,6 +28,19 @@ function page_variant( ?int $post_id = null ): string {
     };
 }
 
+
+/**
+ * Whether a native Page explicitly opts into hero-first composition.
+ *
+ * The Landing Page template is the bounded WordPress-native presentation signal:
+ * it changes composition only and does not infer intent from title, slug, URL or ID.
+ */
+function page_hero_first_active( ?int $post_id = null ): bool {
+    $post_id = $post_id ?: (int) get_queried_object_id();
+
+    return $post_id > 0 && 'landing' === page_variant( $post_id );
+}
+
 /**
  * Return the native Page excerpt without pre-consuming plugin-owned dynamic content.
  *
