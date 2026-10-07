@@ -14,10 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 $hero_block = homepage_block_reference( (int) homepage_effective_source_value( 'curtain-01', 'hero' ) );
 $hero_html = '';
 $hero_slide_count = 0;
-$contact = homepage_page_reference( (int) homepage_effective_source_value( 'curtain-01', 'contact' ) );
-$shop_url = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\shop_url' )
-    ? \AZnet\Theme\Integrations\WooCommerce\shop_url()
-    : '';
 
 if ( $hero_block instanceof \WP_Post ) {
     $raw = trim( (string) $hero_block->post_content );
@@ -83,16 +79,6 @@ if ( '' !== $hero_html ) :
     <section id="aznet-homepage-curtain-hero" data-aznet-homepage-surface="hero" class="aznet-theme-curtain01-section aznet-theme-curtain01-hero aznet-theme-curtain01-hero--library" data-aznet-curtain-cinematic<?php if ( $hero_slide_count > 1 ) : ?> data-aznet-curtain-slide-count="<?php echo esc_attr( (string) $hero_slide_count ); ?>"<?php endif; ?> aria-label="<?php echo esc_attr__( 'Hero trang chủ', 'aznet-theme' ); ?>">
         <div class="aznet-theme-curtain01-shell aznet-theme-curtain01-hero__library">
             <?php echo wp_kses( $hero_html, $hero_allowed_html ); ?>
-            <?php if ( $contact instanceof \WP_Post || '' !== $shop_url ) : ?>
-                <div class="aznet-theme-curtain01-hero__library-cta aznet-theme-curtain01-actions">
-                    <?php if ( '' !== $shop_url ) : ?>
-                        <a class="aznet-theme-curtain01-button aznet-theme-curtain01-button--light" href="<?php echo esc_url( $shop_url ); ?>"><?php esc_html_e( 'Xem các dòng rèm', 'aznet-theme' ); ?></a>
-                    <?php endif; ?>
-                    <?php if ( $contact instanceof \WP_Post ) : ?>
-                        <a class="aznet-theme-curtain01-text-link" href="<?php echo esc_url( get_permalink( $contact ) ); ?>"><?php esc_html_e( 'Nhận tư vấn', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a>
-                    <?php endif; ?>
-                </div>
-            <?php endif; ?>
         </div>
     </section>
     <?php
@@ -119,6 +105,11 @@ $image = $front_id > 0 && has_post_thumbnail( $front_id )
             'loading' => 'eager',
         ]
     )
+    : '';
+
+$contact = homepage_page_reference( (int) homepage_effective_source_value( 'curtain-01', 'contact' ) );
+$shop_url = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\shop_url' )
+    ? \AZnet\Theme\Integrations\WooCommerce\shop_url()
     : '';
 
 if ( '' === $title && '' === $lede && '' === $image ) {
