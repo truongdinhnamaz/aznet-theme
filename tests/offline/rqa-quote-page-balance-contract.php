@@ -45,3 +45,21 @@ if (! str_contains($curtain_css, $title_rule)) {
 }
 
 echo "PASS: Curtain 01 page title uses available row width\n";
+
+
+$contrast_required = [
+    '.page-id-726 .rqa-quote-dark',
+    'color: var(--aznet-theme-on-inverse) !important;',
+    '.page-id-726 .rqa-quote-dark figcaption',
+    '.page-id-726 .rqa-quote-dark .wp-block-heading',
+    '.page-id-726 .rqa-quote-dark .wp-block-paragraph',
+];
+
+foreach ($contrast_required as $needle) {
+    if (! str_contains($css, $needle)) {
+        fwrite(STDERR, "FAIL: quote page dark-section contrast missing {$needle}\n");
+        exit(5);
+    }
+}
+
+echo "PASS: RQA quote page dark-section contrast contract\n";
