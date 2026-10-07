@@ -58,7 +58,7 @@ function page_hero_first_active( ?int $post_id = null ): bool {
     if ( ! $block_hero ) {
         $first_html = trim( (string) ( $first['innerHTML'] ?? '' ) );
         $legacy_hero = 1 === preg_match(
-            '/^<[^>]+\\bclass=(["\\\'])[^"\\\']*\\baznet-theme-page-hero\\b[^"\\\']*\\1[^>]*>/i',
+            '/^\\s*(?:<(?:article|div|main)\\b[^>]*>\\s*)*<[^>]+\\bclass=(["\\\'])[^"\\\']*\\baznet-theme-page-hero\\b[^"\\\']*\\1[^>]*>/i',
             $first_html
         );
 
