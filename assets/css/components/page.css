@@ -1156,3 +1156,87 @@
     background: var(--aznet-theme-accent);
     content: "";
 }
+
+
+/* Opt-in Latest Posts cards for editorial/knowledge landing pages. */
+.aznet-theme-latest-posts-cards.wp-block-latest-posts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.5rem);
+    margin-block: clamp(1.75rem, 3vw, 2.5rem);
+    padding: 0;
+}
+
+.aznet-theme-latest-posts-cards.wp-block-latest-posts:has(> li:nth-child(3)) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.aznet-theme-latest-posts-cards.wp-block-latest-posts > li {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    overflow: hidden;
+    margin: 0;
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    background: var(--aznet-theme-surface);
+    box-shadow: var(--aznet-theme-shadow-card);
+}
+
+.aznet-theme-latest-posts-cards .wp-block-latest-posts__featured-image {
+    width: 100%;
+    margin: 0;
+}
+
+.aznet-theme-latest-posts-cards .wp-block-latest-posts__featured-image a {
+    display: block;
+    width: 100%;
+}
+
+.aznet-theme-latest-posts-cards .wp-block-latest-posts__featured-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
+.aznet-theme-latest-posts-cards .wp-block-latest-posts__post-title {
+    display: block;
+    padding: 1rem 1.1rem 0;
+    color: var(--aznet-theme-text);
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+    font-weight: var(--aznet-theme-font-weight-semibold);
+    line-height: 1.35;
+    text-decoration: none;
+}
+
+.aznet-theme-latest-posts-cards .wp-block-latest-posts__post-title:hover {
+    color: var(--aznet-theme-accent);
+}
+
+.aznet-theme-latest-posts-cards .wp-block-latest-posts__post-title:focus-visible {
+    outline: 2px solid var(--aznet-theme-focus);
+    outline-offset: 3px;
+}
+
+.aznet-theme-latest-posts-cards .wp-block-latest-posts__post-date {
+    margin-block-start: auto;
+    padding: 0.75rem 1.1rem 1rem;
+    color: var(--aznet-theme-muted);
+    font-size: var(--aznet-theme-text-meta);
+}
+
+@media (max-width: 63.999rem) {
+    .aznet-theme-latest-posts-cards.wp-block-latest-posts,
+    .aznet-theme-latest-posts-cards.wp-block-latest-posts:has(> li:nth-child(3)) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 47.999rem) {
+    .aznet-theme-latest-posts-cards.wp-block-latest-posts,
+    .aznet-theme-latest-posts-cards.wp-block-latest-posts:has(> li:nth-child(3)) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
