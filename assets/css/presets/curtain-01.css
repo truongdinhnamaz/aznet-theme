@@ -62,7 +62,7 @@ body.aznet-theme-preset--curtain-01 .aznet-theme-page__header {
 }
 
 body.aznet-theme-preset--curtain-01 .aznet-theme-page__title {
-    max-width: 18ch;
+    max-width: none;
 }
 
 body.aznet-theme-preset--curtain-01 .aznet-theme-page-kit__card,
