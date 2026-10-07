@@ -1159,7 +1159,7 @@
 
 
 /* Opt-in Latest Posts cards for editorial/knowledge landing pages. */
-.aznet-theme-latest-posts-cards.wp-block-latest-posts {
+.aznet-theme-latest-posts-cards.wp-block-latest-posts.is-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(1rem, 2vw, 1.5rem);
@@ -1167,13 +1167,14 @@
     padding: 0;
 }
 
-.aznet-theme-latest-posts-cards.wp-block-latest-posts:has(> li:nth-child(3)) {
+.aznet-theme-latest-posts-cards.wp-block-latest-posts.is-grid:has(> li:nth-child(3)) {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.aznet-theme-latest-posts-cards.wp-block-latest-posts > li {
+.aznet-theme-latest-posts-cards.wp-block-latest-posts.is-grid > li {
     display: flex;
     min-width: 0;
+    width: auto;
     flex-direction: column;
     overflow: hidden;
     margin: 0;
@@ -1229,14 +1230,14 @@
 
 @media (max-width: 63.999rem) {
     .aznet-theme-latest-posts-cards.wp-block-latest-posts,
-    .aznet-theme-latest-posts-cards.wp-block-latest-posts:has(> li:nth-child(3)) {
+    .aznet-theme-latest-posts-cards.wp-block-latest-posts.is-grid:has(> li:nth-child(3)) {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
 @media (max-width: 47.999rem) {
     .aznet-theme-latest-posts-cards.wp-block-latest-posts,
-    .aznet-theme-latest-posts-cards.wp-block-latest-posts:has(> li:nth-child(3)) {
+    .aznet-theme-latest-posts-cards.wp-block-latest-posts.is-grid:has(> li:nth-child(3)) {
         grid-template-columns: minmax(0, 1fr);
     }
 }
