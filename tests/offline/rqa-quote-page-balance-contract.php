@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-$css = file_get_contents(dirname(__DIR__, 2) . '/assets/css/compatibility/curtain01-rqa-pages.css');
+$css = file_get_contents(dirname(__DIR__, 2) . '/assets/css/presets/curtain-01.css');
 if (false === $css) {
     fwrite(STDERR, "FAIL: unable to read Curtain 01 RQA compatibility CSS\n");
     exit(1);
