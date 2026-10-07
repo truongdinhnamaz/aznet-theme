@@ -8,24 +8,27 @@ const targets = [
 
 const browser = await chromium.launch({ headless: true });
 for (const [name, url] of targets) {
-  const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
-  const page = await context.newPage();
-  await page.goto(url, { waitUntil: 'networkidle', timeout: 120000 });
-  const results = await new AxeBuilder({ page }).withRules(['color-contrast']).analyze();
-  console.log(JSON.stringify({
-    name,
-    url,
-    violations: results.violations.map((v) => ({
-      id: v.id,
-      impact: v.impact,
-      description: v.description,
-      nodes: v.nodes.map((n) => ({
-        target: n.target,
-        html: n.html,
-        failureSummary: n.failureSummary,
+  for (const [viewportName, viewport] of [['desktop', { width: 1440, height: 1000 }], ['mobile', { width: 390, height: 844 }]]) {
+    const context = await browser.newContext({ viewport });
+    const page = await context.newPage();
+    await page.goto(url, { waitUntil: 'networkidle', timeout: 120000 });
+    const results = await new AxeBuilder({ page }).withRules(['color-contrast']).analyze();
+    console.log(JSON.stringify({
+      name,
+      viewport: viewportName,
+      url,
+      violations: results.violations.map((v) => ({
+        id: v.id,
+        impact: v.impact,
+        description: v.description,
+        nodes: v.nodes.map((n) => ({
+          target: n.target,
+          html: n.html,
+          failureSummary: n.failureSummary,
+        })),
       })),
-    })),
-  }, null, 2));
-  await context.close();
+    }, null, 2));
+    await context.close();
+  }
 }
 await browser.close();
