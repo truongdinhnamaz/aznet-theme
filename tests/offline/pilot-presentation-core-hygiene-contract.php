@@ -15,16 +15,16 @@ foreach (['.page-id-', 'rqa-'] as $forbidden) {
     }
 }
 
-$compat_path = $root . '/assets/css/compatibility/curtain01-rqa-pages.css';
+$compat_path = $root . '/assets/css/presets/curtain-01.css';
 if (! is_file($compat_path)) {
-    fwrite(STDERR, "FAIL: Curtain 01 RQA compatibility asset missing\n");
+    fwrite(STDERR, "FAIL: Curtain 01 preset asset missing\n");
     exit(3);
 }
 
 
 $compat_css = file_get_contents($compat_path);
 if (false === $compat_css) {
-    fwrite(STDERR, "FAIL: unable to read Curtain 01 RQA compatibility CSS\n");
+    fwrite(STDERR, "FAIL: unable to read Curtain 01 preset CSS\n");
     exit(4);
 }
 
@@ -49,17 +49,11 @@ if (false === $assets) {
     exit(7);
 }
 
-foreach ([
-    'enqueue_curtain01_rqa_page_compat_asset',
-    "/assets/css/compatibility/curtain01-rqa-pages.css",
-    "visual_preset()",
-    "'curtain-01'",
-    "should_enqueue_page_assets()",
-] as $needle) {
-    if (! str_contains($assets, $needle)) {
-        fwrite(STDERR, "FAIL: Curtain 01 compatibility enqueue boundary missing {$needle}\n");
+foreach (['rqa-', 'curtain01-rqa-pages'] as $forbidden) {
+    if (str_contains($assets, $forbidden)) {
+        fwrite(STDERR, "FAIL: generic assets.php still contains pilot-specific compatibility branch {$forbidden}\n");
         exit(8);
     }
 }
 
-echo "PASS: generic Page Core is free of pilot-specific RQA/Page-ID selectors and legacy compatibility is isolated.\n";
+echo "PASS: generic Page Core/assets are site-neutral and Curtain legacy presentation is isolated in its preset.\n";
