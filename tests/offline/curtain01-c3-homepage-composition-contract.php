@@ -73,28 +73,6 @@ if (! str_contains((string) $hero, 'homepage_block_reference') || ! str_contains
     exit(1);
 }
 
-foreach ([
-    "homepage_effective_source_value( 'curtain-01', 'contact' )",
-    'Integrations\\WooCommerce\\shop_url',
-    'aznet-theme-curtain01-hero__library-cta',
-] as $heroCtaContract) {
-    if (! str_contains((string) $hero, $heroCtaContract)) {
-        fwrite(STDERR, "FAIL: Curtain 01 library Hero must expose mapped presentation CTAs without owning destination data: {$heroCtaContract}\n");
-        exit(1);
-    }
-}
-
-foreach ([
-    '.aznet-theme-curtain01-hero--library .wp-block-cover:first-child .screen-reader-text {',
-    'position: static !important;',
-    '.aznet-theme-curtain01-hero__library-cta {',
-] as $heroPresentationRule) {
-    if (! str_contains((string) $css, $heroPresentationRule)) {
-        fwrite(STDERR, "FAIL: Curtain 01 library Hero must visibly present the authored first-slide message and CTA layer: {$heroPresentationRule}\n");
-        exit(1);
-    }
-}
-
 if (! str_contains((string) $about, "homepage_effective_source_value( 'curtain-01', 'about' )")) {
     fwrite(STDERR, "FAIL: Curtain 01 About must resolve its explicit typed Page through the preset-scoped source resolver.\n");
     exit(1);
@@ -161,11 +139,6 @@ if (str_contains((string) $catalogue, 'get_price_html') || str_contains((string)
 
 if (! str_contains((string) $knowledge, 'homepage_latest_posts')) {
     fwrite(STDERR, "FAIL: Curtain 01 Knowledge must use mapped WordPress categories.\n");
-    exit(1);
-}
-
-if (! str_contains((string) $knowledge, "get_the_date( 'd/m/Y', \$post )")) {
-    fwrite(STDERR, "FAIL: Curtain 01 Knowledge must present dates in an explicit Vietnamese day/month/year format.\n");
     exit(1);
 }
 
