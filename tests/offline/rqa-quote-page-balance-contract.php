@@ -165,3 +165,23 @@ foreach ($process_required as $needle) {
 }
 
 echo "PASS: RQA quote process uses balanced step cards\n";
+
+
+$polish_required = [
+    '.page-id-726 .rqa-quote-trust .wp-block-column',
+    '.page-id-726 .rqa-quote-trust .wp-block-column::before',
+    '.page-id-726 .rqa-quote-proof .wp-block-column',
+    'backdrop-filter: blur(',
+    '.page-id-726 .rqa-quote-faq .wp-block-column',
+    '.page-id-726 .rqa-quote-faq .wp-block-heading:not(:first-child)',
+    'border-block-start: 1px solid var(--aznet-theme-border);',
+];
+
+foreach ($polish_required as $needle) {
+    if (! str_contains($css, $needle)) {
+        fwrite(STDERR, "FAIL: quote secondary-section polish missing {$needle}\n");
+        exit(11);
+    }
+}
+
+echo "PASS: RQA quote trust, proof and FAQ sections are visually polished\n";
