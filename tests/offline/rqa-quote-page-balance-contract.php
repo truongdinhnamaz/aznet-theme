@@ -102,3 +102,22 @@ foreach ($full_bleed_required as $needle) {
 }
 
 echo "PASS: RQA quote page sections are full-bleed with constrained content\n";
+
+
+$header_width_required = [
+    '.page-id-726 .aznet-theme-page__section-inner--header',
+    'width: calc(100% - (var(--aznet-theme-gutter) * 2));',
+    'max-width: none;',
+    '.page-id-726 .aznet-theme-page__title',
+    'white-space: nowrap;',
+    'white-space: normal;',
+];
+
+foreach ($header_width_required as $needle) {
+    if (! str_contains($css, $needle)) {
+        fwrite(STDERR, "FAIL: quote page header full-width title contract missing {$needle}\n");
+        exit(8);
+    }
+}
+
+echo "PASS: RQA quote page header uses full available width before wrapping\n";
