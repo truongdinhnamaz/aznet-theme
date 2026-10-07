@@ -399,11 +399,12 @@ function enqueue_media_assets( ?string $version = null ): void {
 
 /** Determine whether the approved Law 01 category archive presentation can render. */
 function should_enqueue_law01_archive_asset(): bool {
-    if ( ! function_exists( __NAMESPACE__ . '\\law01_category_archive_active' ) ) {
-        return false;
-    }
+    $category_active = function_exists( __NAMESPACE__ . '\\law01_category_archive_active' )
+        && law01_category_archive_active();
+    $posts_page_active = function_exists( __NAMESPACE__ . '\\law01_posts_page_active' )
+        && law01_posts_page_active();
 
-    return law01_category_archive_active();
+    return $category_active || $posts_page_active;
 }
 
 /** Enqueue the Law 01 category archive stylesheet only on its native category surface. */
