@@ -83,3 +83,22 @@ foreach ($full_contrast_required as $needle) {
 }
 
 echo "PASS: RQA quote page full-section contrast contract\n";
+
+
+$full_bleed_required = [
+    '.page-id-726 .aznet-theme-page__content-inner > .wp-block-group',
+    '.page-id-726 .aznet-theme-page__content-inner > .wp-block-cover',
+    'width: 100vw;',
+    'margin-inline: calc(50% - 50vw);',
+    'padding-inline: max(',
+    'calc((100vw - var(--aznet-theme-container-wide)) / 2)',
+];
+
+foreach ($full_bleed_required as $needle) {
+    if (! str_contains($css, $needle)) {
+        fwrite(STDERR, "FAIL: quote page full-bleed section contract missing {$needle}\n");
+        exit(7);
+    }
+}
+
+echo "PASS: RQA quote page sections are full-bleed with constrained content\n";
