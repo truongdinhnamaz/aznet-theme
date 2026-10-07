@@ -530,3 +530,24 @@
         padding-inline: var(--aznet-theme-gutter-mobile) !important;
     }
 }
+
+
+.page-id-726 .aznet-theme-page__section-inner--header {
+    width: calc(100% - (var(--aznet-theme-gutter) * 2));
+    max-width: none;
+}
+
+.page-id-726 .aznet-theme-page__title {
+    max-width: none;
+    white-space: nowrap;
+}
+
+@media (max-width: 47.999rem) {
+    .page-id-726 .aznet-theme-page__section-inner--header {
+        width: calc(100% - (var(--aznet-theme-gutter-mobile) * 2));
+    }
+
+    .page-id-726 .aznet-theme-page__title {
+        white-space: normal;
+    }
+}
