@@ -650,3 +650,157 @@
         content: "";
     }
 }
+
+
+.page-id-726 .rqa-quote-trust .wp-block-columns {
+    align-items: stretch;
+    gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.page-id-726 .rqa-quote-trust .wp-block-column {
+    position: relative;
+    min-height: 100%;
+    padding: clamp(1.5rem, 2.4vw, 2rem);
+    overflow: hidden;
+    background: var(--aznet-theme-surface);
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    box-shadow: var(--aznet-theme-shadow-card);
+    text-align: center;
+}
+
+.page-id-726 .rqa-quote-trust .wp-block-column::before {
+    display: grid;
+    width: 3rem;
+    aspect-ratio: 1;
+    margin: 0 auto 1rem;
+    place-items: center;
+    border: 1px solid var(--aznet-theme-accent);
+    border-radius: 999px;
+    color: var(--aznet-theme-accent);
+    font-weight: var(--aznet-theme-font-weight-semibold);
+}
+
+.page-id-726 .rqa-quote-trust .wp-block-column:nth-child(1)::before {
+    content: "01";
+}
+
+.page-id-726 .rqa-quote-trust .wp-block-column:nth-child(2)::before {
+    content: "02";
+}
+
+.page-id-726 .rqa-quote-trust .wp-block-column:nth-child(3)::before {
+    content: "03";
+}
+
+.page-id-726 .rqa-quote-trust .wp-block-heading {
+    min-height: 0;
+    margin: 0 0 0.65rem;
+    font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+}
+
+.page-id-726 .rqa-quote-trust .wp-block-paragraph {
+    margin: 0;
+    color: var(--aznet-theme-muted) !important;
+    line-height: 1.6;
+}
+
+.page-id-726 .rqa-quote-proof .wp-block-cover__background {
+    opacity: 0.64 !important;
+}
+
+.page-id-726 .rqa-quote-proof .wp-block-cover__inner-container {
+    width: 100%;
+}
+
+.page-id-726 .rqa-quote-proof .wp-block-columns {
+    align-items: stretch;
+    gap: clamp(0.85rem, 1.5vw, 1.25rem);
+    margin-block-start: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.page-id-726 .rqa-quote-proof .wp-block-column {
+    min-height: 100%;
+    padding: clamp(1.25rem, 2vw, 1.75rem);
+    border: 1px solid color-mix(in srgb, var(--aznet-theme-accent) 62%, transparent);
+    border-radius: var(--aznet-theme-radius-card);
+    background: color-mix(in srgb, var(--aznet-theme-surface-inverse) 78%, transparent);
+    box-shadow: var(--aznet-theme-shadow-card);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.page-id-726 .rqa-quote-proof .wp-block-heading {
+    min-height: 0;
+    margin: 0 0 0.65rem;
+    color: var(--aznet-theme-on-inverse) !important;
+    font-size: clamp(1.05rem, 1.55vw, 1.3rem);
+}
+
+.page-id-726 .rqa-quote-proof .wp-block-paragraph {
+    margin: 0;
+    color: var(--aznet-theme-on-inverse) !important;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+.page-id-726 .rqa-quote-faq {
+    background: var(--aznet-theme-color-surface-subtle);
+}
+
+.page-id-726 .rqa-quote-faq .wp-block-columns {
+    align-items: stretch;
+    gap: clamp(1rem, 2vw, 1.5rem);
+    margin-block-start: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+.page-id-726 .rqa-quote-faq .wp-block-column {
+    min-height: 100%;
+    padding: clamp(1.35rem, 2vw, 1.75rem);
+    background: var(--aznet-theme-surface);
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    box-shadow: var(--aznet-theme-shadow-card);
+}
+
+.page-id-726 .rqa-quote-faq .wp-block-heading {
+    position: relative;
+    min-height: 0;
+    margin: 0 0 0.55rem;
+    padding-inline-start: 2.4rem;
+    font-size: clamp(1.05rem, 1.45vw, 1.25rem);
+    line-height: 1.35;
+}
+
+.page-id-726 .rqa-quote-faq .wp-block-heading::before {
+    position: absolute;
+    inset-block-start: -0.1rem;
+    inset-inline-start: 0;
+    display: grid;
+    width: 1.75rem;
+    aspect-ratio: 1;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--aznet-theme-accent);
+    color: var(--aznet-theme-color-on-primary);
+    content: "?";
+    font-size: 0.85rem;
+    font-weight: var(--aznet-theme-font-weight-semibold);
+}
+
+.page-id-726 .rqa-quote-faq .wp-block-heading:not(:first-child) {
+    margin-block-start: 1.35rem;
+    padding-block-start: 1.35rem;
+    border-block-start: 1px solid var(--aznet-theme-border);
+}
+
+.page-id-726 .rqa-quote-faq .wp-block-heading:not(:first-child)::before {
+    inset-block-start: 1.2rem;
+}
+
+.page-id-726 .rqa-quote-faq .wp-block-paragraph {
+    margin: 0;
+    padding-inline-start: 2.4rem;
+    color: var(--aznet-theme-muted) !important;
+    line-height: 1.65;
+}
