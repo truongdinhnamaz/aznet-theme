@@ -57,10 +57,20 @@ $landing_id = y1_create_page(
         'post_title'   => 'Y1 Landing Page',
         'post_excerpt' => 'Landing native Page presentation.',
         'post_name'    => 'y1-landing-page',
-        'post_content' => '<section class="y1-authored-hero"><h1>Y1 Landing Hero</h1><p id="y1-landing-content">Landing Page content owned by WordPress.</p></section>',
+        'post_content' => '<!-- wp:group {"className":"aznet-theme-page-hero y1-authored-hero"} --><div class="wp-block-group aznet-theme-page-hero y1-authored-hero"><!-- wp:heading {"level":1} --><h1 class="wp-block-heading">Y1 Landing Hero</h1><!-- /wp:heading --><p id="y1-landing-content">Landing Page content owned by WordPress.</p></div><!-- /wp:group -->',
     ]
 );
 update_post_meta( $landing_id, '_wp_page_template', 'page-templates/landing.php' );
+
+$landing_fallback_id = y1_create_page(
+    [
+        'post_title'   => 'Y1 Landing Fallback Page',
+        'post_excerpt' => 'Landing template without an authored Hero must keep the generic header.',
+        'post_name'    => 'y1-landing-fallback-page',
+        'post_content' => '<p id="y1-landing-fallback-content">Landing fallback content owned by WordPress.</p>',
+    ]
+);
+update_post_meta( $landing_fallback_id, '_wp_page_template', 'page-templates/landing.php' );
 
 $services_id = $parent_id;
 
@@ -198,6 +208,7 @@ foreach (
         'child_url'            => $child_id,
         'wide_url'             => $wide_id,
         'landing_url'          => $landing_id,
+        'landing_fallback_url' => $landing_fallback_id,
         'commerce_looking_url' => $commerce_looking_id,
         'service_detail_url'    => $service_detail_id,
         'contact_url'           => $contact_id,
@@ -218,6 +229,7 @@ $result = array_merge(
         'child_id'            => $child_id,
         'wide_id'             => $wide_id,
         'landing_id'          => $landing_id,
+        'landing_fallback_id' => $landing_fallback_id,
         'commerce_looking_id' => $commerce_looking_id,
         'services_id'          => $services_id,
         'service_detail_id'    => $service_detail_id,
