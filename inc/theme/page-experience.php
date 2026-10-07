@@ -37,8 +37,48 @@ function page_variant( ?int $post_id = null ): string {
  */
 function page_hero_first_active( ?int $post_id = null ): bool {
     $post_id = $post_id ?: (int) get_queried_object_id();
+    if ( $post_id <= 0 || 'landing' !== page_variant( $post_id ) ) {
+        return false;
+    }
 
-    return $post_id > 0 && 'landing' === page_variant( $post_id );
+    $post = get_post( $post_id );
+    if ( ! $post instanceof \WP_Post || 'page' !== $post->post_type ) {
+        return false;
+    }
+
+    $blocks = parse_blocks( (string) $post->post_content );
+    $first = $blocks[0] ?? null;
+    if ( ! is_array( $first ) ) {
+        return false;
+    }
+
+    $class_name = trim( (string) ( $first['attrs']['className'] ?? '' ) );
+    if ( 1 !== preg_match( '/(?:^|\\s)aznet-theme-page-hero(?:\\s|$)/', $class_name ) ) {
+        return false;
+    }
+
+    $queue = [ $first ];
+    while ( [] !== $queue ) {
+        $block = array_shift( $queue );
+        if ( ! is_array( $block ) ) {
+            continue;
+        }
+
+        if (
+            'core/heading' === (string) ( $block['blockName'] ?? '' )
+            && 1 === (int) ( $block['attrs']['level'] ?? 2 )
+        ) {
+            return true;
+        }
+
+        foreach ( (array) ( $block['innerBlocks'] ?? [] ) as $inner_block ) {
+            if ( is_array( $inner_block ) ) {
+                $queue[] = $inner_block;
+            }
+        }
+    }
+
+    return false;
 }
 
 /**
