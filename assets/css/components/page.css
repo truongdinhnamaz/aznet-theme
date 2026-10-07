@@ -551,3 +551,42 @@
         white-space: normal;
     }
 }
+
+
+.page-id-726 .rqa-quote-factors .wp-block-columns {
+    align-items: stretch;
+    gap: clamp(1rem, 1.8vw, 1.5rem);
+    margin-block-start: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.page-id-726 .rqa-quote-factors .wp-block-column {
+    min-height: 100%;
+    padding: clamp(1.25rem, 2vw, 1.75rem);
+    background: var(--aznet-theme-surface);
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-card);
+    box-shadow: var(--aznet-theme-shadow-card);
+}
+
+.page-id-726 .rqa-quote-factors .wp-block-heading {
+    min-height: 0;
+    margin: 0 0 0.75rem;
+    color: var(--aznet-theme-text) !important;
+    font-size: clamp(1.125rem, 1.6vw, 1.35rem);
+    line-height: 1.25;
+}
+
+.page-id-726 .rqa-quote-factors .wp-block-heading::after {
+    display: block;
+    width: 2.25rem;
+    height: 2px;
+    margin-block-start: 0.75rem;
+    background: var(--aznet-theme-accent);
+    content: "";
+}
+
+.page-id-726 .rqa-quote-factors .wp-block-paragraph {
+    margin: 0;
+    color: var(--aznet-theme-muted) !important;
+    line-height: 1.65;
+}
