@@ -451,6 +451,34 @@
     font-weight: var(--aznet-theme-font-weight-semibold);
 }
 
+.page-id-726 .aznet-theme-page__content-inner {
+    color: var(--aznet-theme-text) !important;
+}
+
+.page-id-726 .aznet-theme-page__content-inner :where(.wp-block-heading, .wp-block-paragraph, figcaption) {
+    color: var(--aznet-theme-text) !important;
+}
+
+.page-id-726 .wp-block-cover .wp-block-heading,
+.page-id-726 .wp-block-cover .wp-block-paragraph {
+    color: var(--aznet-theme-on-inverse) !important;
+}
+
+.page-id-726 .rqa-quote-cta-dark {
+    color: var(--aznet-theme-on-inverse) !important;
+}
+
+.page-id-726 .rqa-quote-cta-dark .wp-block-heading,
+.page-id-726 .rqa-quote-cta-dark .wp-block-paragraph {
+    color: var(--aznet-theme-on-inverse) !important;
+}
+
+.page-id-726 .rqa-quote-cta-dark .wp-block-button__link {
+    background: var(--aznet-theme-on-inverse);
+    color: var(--aznet-theme-surface-inverse) !important;
+    border-color: var(--aznet-theme-on-inverse);
+}
+
 .page-id-726 .rqa-quote-dark {
     color: var(--aznet-theme-on-inverse) !important;
 }
