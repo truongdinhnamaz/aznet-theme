@@ -66,12 +66,11 @@ echo "PASS: RQA quote page dark-section contrast contract\n";
 
 
 $full_contrast_required = [
-    '.page-id-726 .rqa-quote-light',
+    '.page-id-726 .aznet-theme-page__content-inner',
     'color: var(--aznet-theme-text) !important;',
-    '.page-id-726 .rqa-quote-cover-dark',
+    '.page-id-726 .wp-block-cover .wp-block-heading',
+    '.page-id-726 .wp-block-cover .wp-block-paragraph',
     '.page-id-726 .rqa-quote-cta-dark',
-    '.page-id-726 .rqa-quote-cover-dark .wp-block-heading',
-    '.page-id-726 .rqa-quote-cover-dark .wp-block-paragraph',
     '.page-id-726 .rqa-quote-cta-dark .wp-block-heading',
     '.page-id-726 .rqa-quote-cta-dark .wp-block-paragraph',
 ];
