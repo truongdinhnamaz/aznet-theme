@@ -63,3 +63,24 @@ foreach ($contrast_required as $needle) {
 }
 
 echo "PASS: RQA quote page dark-section contrast contract\n";
+
+
+$full_contrast_required = [
+    '.page-id-726 .rqa-quote-light',
+    'color: var(--aznet-theme-text) !important;',
+    '.page-id-726 .rqa-quote-cover-dark',
+    '.page-id-726 .rqa-quote-cta-dark',
+    '.page-id-726 .rqa-quote-cover-dark .wp-block-heading',
+    '.page-id-726 .rqa-quote-cover-dark .wp-block-paragraph',
+    '.page-id-726 .rqa-quote-cta-dark .wp-block-heading',
+    '.page-id-726 .rqa-quote-cta-dark .wp-block-paragraph',
+];
+
+foreach ($full_contrast_required as $needle) {
+    if (! str_contains($css, $needle)) {
+        fwrite(STDERR, "FAIL: full-page quote contrast missing {$needle}\n");
+        exit(6);
+    }
+}
+
+echo "PASS: RQA quote page full-section contrast contract\n";
