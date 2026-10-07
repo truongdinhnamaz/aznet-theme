@@ -42,19 +42,19 @@
 - Consumes: AZT-02 D-042/D-043 core/preset boundary.
 - Produces: a failing contract that forbids pilot/site selectors from generic `page.css` and requires RQA legacy presentation to live outside generic Core.
 
-- [ ] **Step 1: Write the failing hygiene contract**
+- [x] **Step 1: Write the failing hygiene contract**
   Assert `assets/css/components/page.css` contains neither `.page-id-` nor `rqa-`. Assert the dedicated compatibility asset exists and is Curtain 01-scoped.
 
-- [ ] **Step 2: Update existing RQA contracts to target the compatibility asset**
+- [x] **Step 2: Update existing RQA contracts to target the compatibility asset**
   Preserve the current visual requirements while removing the expectation that RQA rules live in generic `page.css`.
 
-- [ ] **Step 3: Wire the contract into `scripts/verify-v1-core.sh`**
+- [x] **Step 3: Wire the contract into `scripts/verify-v1-core.sh`**
   Place it in the Y1/Page verification group before the retained RQA presentation contracts.
 
-- [ ] **Step 4: Run/observe RED**
+- [x] **Step 4: Run/observe RED**
   Expected: FAIL because current `page.css` still contains Page-ID/RQA selectors and the compatibility asset does not yet exist.
 
-- [ ] **Step 5: Commit RED evidence**
+- [x] **Step 5: Commit RED evidence**
   Commit only tests/verification wiring.
 
 ### Task 2: Minimal GREEN — isolate legacy RQA presentation from generic Core
@@ -69,10 +69,10 @@
 - Consumes: Task 1 hygiene contract.
 - Produces: generic `page.css` free of RQA/Page-ID selectors; explicit Curtain 01 compatibility asset loaded only when Curtain 01 is the active visual preset on native Page surfaces.
 
-- [ ] **Step 1: Move the existing RQA quote/contact CSS byte-for-byte into the compatibility asset**
+- [x] **Step 1: Move the existing RQA quote/contact CSS byte-for-byte into the compatibility asset**
   Do not redesign or reinterpret WordPress content.
 
-- [ ] **Step 2: Add a surface-aware enqueue**
+- [x] **Step 2: Add a surface-aware enqueue**
   Load the compatibility asset only when native Page assets render and `visual_preset() === 'curtain-01'`; depend on `aznet-theme-page`. No slug/title/Page-ID PHP detection.
 
 - [ ] **Step 3: Run Task 1 and retained Page/Curtain contracts**
