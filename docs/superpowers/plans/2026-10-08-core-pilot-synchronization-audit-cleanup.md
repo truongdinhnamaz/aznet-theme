@@ -75,10 +75,10 @@
 - [x] **Step 2: Add a surface-aware enqueue**
   Load the compatibility asset only when native Page assets render and `visual_preset() === 'curtain-01'`; depend on `aznet-theme-page`. No slug/title/Page-ID PHP detection.
 
-- [ ] **Step 3: Run Task 1 and retained Page/Curtain contracts**
+- [x] **Step 3: Run Task 1 and retained Page/Curtain contracts**
   Expected: GREEN with no RQA/Page-ID selector remaining in generic `page.css`.
 
-- [ ] **Step 4: Commit minimal GREEN**
+- [x] **Step 4: Commit minimal GREEN**
   Keep migration reversible as one bounded commit.
 
 ### Task 3: Shared Page/preset regression closure
@@ -93,8 +93,8 @@
 
 - [ ] **Step 1: Run V1 Core CI and D-027 retained regression on exact head**
 - [ ] **Step 2: Run Y1 Page Experience and D-027 L4**
-- [ ] **Step 3: Run/confirm `template-three-pilot-regression-contract.php` and `template-fourth-template-proof-contract.php`**
-- [ ] **Step 4: Verify no unexpected Core industry branch/selectors were introduced**
+- [x] **Step 3: Run/confirm `template-three-pilot-regression-contract.php` and `template-fourth-template-proof-contract.php`**
+- [x] **Step 4: Verify no unexpected Core industry branch/selectors were introduced**
 - [ ] **Step 5: Commit only if regression repair is required**
 
 ### Task 4: Pilot drift inventory and rollout decision
@@ -107,11 +107,11 @@
 - Consumes: exact repository candidate plus fresh authenticated read-only pilot inventory.
 - Produces: explicit per-pilot status: Theme version, preset, settings schema, known compatibility state, byte-identity status, runtime/browser status, and safe Next.
 
-- [ ] **Step 1: Record fresh Law 01 / Rèm 01 / Industrial 01 read-only inventory**
-- [ ] **Step 2: Distinguish version alignment from byte identity**
-- [ ] **Step 3: Identify which pilots require update versus only verification**
-- [ ] **Step 4: Preserve backup/rollback and per-site approval gates before production mutation**
-- [ ] **Step 5: Commit evidence**
+- [x] **Step 1: Record fresh Law 01 / Rèm 01 / Industrial 01 read-only inventory**
+- [x] **Step 2: Distinguish version alignment from byte identity**
+- [x] **Step 3: Identify which pilots require update versus only verification**
+- [x] **Step 4: Preserve backup/rollback and per-site approval gates before production mutation**
+- [x] **Step 5: Commit evidence**
 
 ### Task 5: Review and merge readiness
 
@@ -132,3 +132,7 @@
 
 - RED evidence: PR #429 V1 Core `static-contracts` failed on `FAIL: generic page.css still contains pilot-specific selector .page-id-` at RED head `70c09bd9252675eef88a347b8c86737bd017259a`.
 - GREEN implementation candidate: `page.css` pilot block moved to `assets/css/compatibility/curtain01-rqa-pages.css`; scoped enqueue added in `inc/theme/assets.php`. Fresh GREEN verification is pending on this exact branch head.
+
+- Task 2 Ruling: the initially planned separate `curtain01-rqa-pages.css` + pilot-named PHP enqueue left site-specific knowledge in generic `inc/theme/assets.php`. Final GREEN instead places the legacy authored-marker rules inside the existing Curtain 01 preset stylesheet and removes the pilot-specific Core enqueue. Cost if wrong: the Curtain preset CSS carries the legacy compatibility payload on all Curtain routes until a separately approved WordPress-content marker migration retires it.
+- Task 2 final GREEN: exact production-code head `630e33d3f30f97747d002175b14d3d9f08e04585`; temporary verification run `37703678012`, job `113072869447` SUCCESS with reusable V1, RQA retained contracts, D-043 C7 and C8 PASS.
+- Task 4 evidence: `docs/evidence/CORE_PILOT_SYNC_AUDIT_20261008.md`; AZT-03 v0.85 adds only the current-state reconciliation owned by baseline/provenance.
