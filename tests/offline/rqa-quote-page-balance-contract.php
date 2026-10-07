@@ -16,8 +16,8 @@ $required = [
     'aspect-ratio: 4 / 3;',
     'object-fit: cover;',
     '.page-id-726 .wp-block-button__link',
-    'background: #1f1f1f;',
-    'color: #ffffff;',
+    'background: var(--aznet-theme-accent);',
+    'color: var(--aznet-theme-color-on-primary);',
     '.page-id-726 .wp-block-group.has-background',
     'border-radius: var(--aznet-theme-radius-card);',
 ];
