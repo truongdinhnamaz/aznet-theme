@@ -898,6 +898,83 @@ body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-contac
     }
 }
 
+@media (max-width: 48rem) {
+    body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-about-page .aznet-theme-industrial01-solution-hero {
+        padding-block: 2.75rem;
+    }
+
+    body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-about-page .aznet-theme-industrial01-solution-hero h2 {
+        font-size: clamp(2.1rem, 10vw, 2.6rem);
+        line-height: 1.02;
+    }
+
+    body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-about-page .aznet-theme-industrial01-solution-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: .65rem;
+        margin-top: 1.5rem;
+    }
+
+    body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-about-page .aznet-theme-industrial01-solution-button {
+        width: 100%;
+    }
+
+    .aznet-theme-industrial01-about-collage {
+        grid-template-rows: 1.15fr .85fr;
+        height: 18rem;
+    }
+
+    .aznet-theme-industrial01-about-card {
+        flex-direction: row;
+        min-height: 10.25rem;
+    }
+
+    .aznet-theme-industrial01-about-card__media {
+        flex: 0 0 38%;
+        width: 38%;
+        aspect-ratio: auto;
+    }
+
+    .aznet-theme-industrial01-about-card__body {
+        padding: 1rem;
+    }
+
+    .aznet-theme-industrial01-about-card__body .aznet-theme-industrial01-solution-card__index {
+        margin-bottom: .5rem;
+    }
+
+    .aznet-theme-industrial01-about-card__body > p:last-child {
+        padding-top: .6rem;
+    }
+
+    #nhu-cau .wp-block-group:last-child {
+        order: -1;
+    }
+
+    .aznet-theme-industrial01-about-process .aznet-theme-industrial01-solution-card {
+        min-height: 0;
+        padding: 1rem 1rem 1rem 1.2rem;
+        border-left: 3px solid color-mix(in srgb, var(--aznet-theme-accent) 72%, #ffffff);
+    }
+
+    .aznet-theme-industrial01-about-process .aznet-theme-industrial01-solution-card__index {
+        margin-bottom: .65rem;
+    }
+
+    body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-about-page #nguyen-tac .aznet-theme-industrial01-solution-card {
+        min-height: 0;
+        padding: 1rem 1.1rem;
+    }
+
+    body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-about-page #nguyen-tac .aznet-theme-industrial01-solution-card__index {
+        margin-bottom: .7rem;
+    }
+
+    #du-an .aznet-theme-industrial01-solution-split__content {
+        order: -1;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-button,
     body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-card {
