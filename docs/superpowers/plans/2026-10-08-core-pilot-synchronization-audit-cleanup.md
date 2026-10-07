@@ -126,3 +126,9 @@
 - [ ] **Step 3: Freshly rerun required gates**
 - [ ] **Step 4: Open/refresh PR with exact evidence**
 - [ ] **Step 5: Stop at merge/deployment hard gate unless prior owner approval clearly covers that exact action**
+
+
+## Execution ledger
+
+- RED evidence: PR #429 V1 Core `static-contracts` failed on `FAIL: generic page.css still contains pilot-specific selector .page-id-` at RED head `70c09bd9252675eef88a347b8c86737bd017259a`.
+- GREEN implementation candidate: `page.css` pilot block moved to `assets/css/compatibility/curtain01-rqa-pages.css`; scoped enqueue added in `inc/theme/assets.php`. Fresh GREEN verification is pending on this exact branch head.
