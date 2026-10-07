@@ -132,6 +132,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/service-card-consis
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-woocommerce-page-excerpt-regression-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/contact-page-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/rqa-contact-page-presentation-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/rqa-collection-a11y-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/rqa-quote-page-balance-contract.php
 
 printf '%s\n' '==> Y2 Professional Page Kits contract'
