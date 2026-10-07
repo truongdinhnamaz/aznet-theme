@@ -1156,3 +1156,11 @@
     background: var(--aznet-theme-accent);
     content: "";
 }
+
+
+/* Rèm Quốc Anh collection: WooCommerce category counts are supplemental metadata.
+ * Hiding them keeps the visible link label aligned with WooCommerce's accessible name
+ * and removes low-contrast count text without copying or mutating WooCommerce data. */
+.page-id-29 .woocommerce-loop-category__title .count {
+    display: none;
+}
