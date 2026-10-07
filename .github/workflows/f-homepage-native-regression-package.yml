@@ -132,7 +132,9 @@ jobs:
           test -n "$SOURCE_VERSION"
           grep -F "Version: $SOURCE_VERSION" /tmp/aznet-theme-homepage-native/aznet-theme/style.css
           grep -F "define( 'AZNET_THEME_VERSION', '$SOURCE_VERSION' );" /tmp/aznet-theme-homepage-native/aznet-theme/functions.php
-          git hash-object /tmp/aznet-theme-homepage-native/aznet-theme/assets/css/integrations/convertflow.css | grep -Fx 'cb7c458cbac51be336bfb59890e4bfc832c2050f'
+          SOURCE_CONVERTFLOW_BLOB=$(git hash-object assets/css/integrations/convertflow.css)
+          git hash-object /tmp/aznet-theme-homepage-native/aznet-theme/assets/css/integrations/convertflow.css | grep -Fx "$SOURCE_CONVERTFLOW_BLOB"
+          echo "CONVERTFLOW_BLOB=$SOURCE_CONVERTFLOW_BLOB"
           echo "ASSETS_BLOB=$(git hash-object /tmp/aznet-theme-homepage-native/aznet-theme/inc/theme/assets.php)"
           echo "FRONT_PAGE_BLOB=$(git hash-object /tmp/aznet-theme-homepage-native/aznet-theme/front-page.php)"
 
