@@ -4,6 +4,11 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 $team_member = $args['team_member'] ?? null;
 if ( ! $team_member instanceof \WP_Post ) { return; }
 
+$heading_tag = isset( $args['heading_tag'] ) ? (string) $args['heading_tag'] : 'h3';
+if ( ! in_array( $heading_tag, [ 'h2', 'h3', 'h4', 'h5', 'h6' ], true ) ) {
+    $heading_tag = 'h3';
+}
+
 $portrait_id = function_exists( 'AZnet\\Theme\\team_member_portrait_id' )
     ? \AZnet\Theme\team_member_portrait_id( (int) $team_member->ID )
     : 0;
@@ -26,11 +31,11 @@ $url = is_string( $url ) ? $url : '';
         </a>
     <?php endif; ?>
     <div class="aznet-theme-team-card__body aznet-theme-law01-team-card__body">
-        <h3 class="aznet-theme-team-card__name">
+        <<?php echo esc_html( $heading_tag ); ?> class="aznet-theme-team-card__name">
             <?php if ( '' !== $url ) : ?><a href="<?php echo esc_url( $url ); ?>"><?php endif; ?>
             <?php echo esc_html( get_the_title( $team_member ) ); ?>
             <?php if ( '' !== $url ) : ?></a><?php endif; ?>
-        </h3>
+        </<?php echo esc_html( $heading_tag ); ?>>
         <?php if ( '' !== $member_role ) : ?>
             <p class="aznet-theme-team-card__role"><?php echo esc_html( $member_role ); ?></p>
         <?php endif; ?>

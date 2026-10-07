@@ -19,7 +19,7 @@ $members = \AZnet\Theme\team_directory_public_members();
         <?php if ( [] !== $members ) : ?>
             <div class="aznet-theme-team-directory__grid">
                 <?php foreach ( $members as $member ) : ?>
-                    <?php get_template_part( 'template-parts/team/card', null, [ 'team_member' => $member ] ); ?>
+                    <?php get_template_part( 'template-parts/team/card', null, [ 'team_member' => $member, 'heading_tag' => 'h2' ] ); ?>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
