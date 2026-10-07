@@ -28,6 +28,11 @@ body.aznet-theme-woo-card--compact {
     --aznet-theme-woo-card-media-ratio: 1 / 1;
 }
 
+body.woocommerce main#main {
+    width: min(calc(100% - (var(--aznet-theme-gutter) * 2)), var(--aznet-theme-container-shell));
+    margin-inline: auto;
+}
+
 .woocommerce .woocommerce-breadcrumb,
 .woocommerce .woocommerce-breadcrumb a {
     color: var(--aznet-theme-muted, #626873);
@@ -167,5 +172,12 @@ body.aznet-theme-woo-card--compact {
     .woocommerce .woocommerce-ordering {
         float: none;
         width: 100%;
+    }
+}
+
+
+@media (max-width: 47.999rem) {
+    body.woocommerce main#main {
+        width: min(calc(100% - (var(--aznet-theme-gutter-mobile) * 2)), var(--aznet-theme-container-shell));
     }
 }
