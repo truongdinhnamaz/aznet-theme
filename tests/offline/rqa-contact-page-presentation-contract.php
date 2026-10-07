@@ -8,12 +8,12 @@ if (false === $css) {
 }
 
 $required = [
-    '.page-id-45 .rqa-contact-hero',
-    '.page-id-45 .rqa-contact-quick',
-    '.page-id-45 .rqa-contact-main',
-    '.page-id-45 .rqa-contact-form',
-    '.page-id-45 .rqa-contact-trust',
-    '.page-id-45 .rqa-contact-cta',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-contact-hero) .rqa-contact-hero',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-contact-hero) .rqa-contact-quick',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-contact-hero) .rqa-contact-main',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-contact-hero) .rqa-contact-form',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-contact-hero) .rqa-contact-trust',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-contact-hero) .rqa-contact-cta',
     'width: 100vw;',
     'margin-inline: calc(50% - 50vw);',
     'grid-template-columns:',
@@ -34,15 +34,15 @@ echo "PASS: RQA contact page presentation contract\n";
 
 
 $polish_required = [
-    '.page-id-45 .rqa-contact-quick .wp-block-column::before',
-    '.page-id-45 .rqa-contact-quick .wp-block-column:nth-child(1)::before',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-contact-hero) .rqa-contact-quick .wp-block-column::before',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-contact-hero) .rqa-contact-quick .wp-block-column:nth-child(1)::before',
     'margin-block-start: auto;',
-    '.page-id-45 .rqa-contact-main > .wp-block-columns',
-    '.page-id-45 .rqa-contact-form .wpcf7-form-control-wrap',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-contact-hero) .rqa-contact-main > .wp-block-columns',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-contact-hero) .rqa-contact-form .wpcf7-form-control-wrap',
     'display: block;',
-    '.page-id-45 .rqa-contact-form input[type="submit"]',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-contact-hero) .rqa-contact-form input[type="submit"]',
     'width: 100%;',
-    '.page-id-45 .rqa-contact-trust .wp-block-column',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-contact-hero) .rqa-contact-trust .wp-block-column',
     'text-align: center;',
 ];
 
