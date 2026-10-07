@@ -55,14 +55,16 @@
     position: sticky;
     top: 0;
     z-index: 998;
-    overflow-x: clip;
+    overflow-x: auto;
+    scrollbar-width: none;
     background: var(--convertflow-theme-color-surface, var(--aznet-theme-surface, #ffffff));
     border-bottom: 1px solid var(--convertflow-theme-color-border, var(--aznet-theme-border, #d9dde4));
 }
 
 [data-choiceguide-sticky-submenu] > :first-child {
     display: grid !important;
-    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(6, minmax(0, 1fr)) max-content !important;
+    grid-auto-flow: column;
     width: 100% !important;
     min-width: 0 !important;
     max-width: var(--convertflow-theme-container-max, var(--aznet-theme-container-shell, 80rem));
@@ -75,10 +77,11 @@
     min-width: 0 !important;
     width: auto !important;
     margin: 0 !important;
-    padding-inline: clamp(0.5rem, 1.2vw, 1.25rem) !important;
+    padding-inline: clamp(0.25rem, 0.8vw, 0.875rem) !important;
     justify-content: center;
     text-align: center;
     white-space: nowrap;
+    font-size: clamp(0.8125rem, 1vw, 0.9375rem);
 }
 
 [data-choiceguide-sticky-submenu] [data-choiceguide-journey-nav-role="action"] {
@@ -87,19 +90,13 @@
     max-width: 100%;
 }
 
-@media screen and (max-width: 960px) {
+@media screen and (max-width: 720px) {
     [data-choiceguide-sticky-submenu] > :first-child {
-        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    }
-}
-
-@media screen and (max-width: 560px) {
-    [data-choiceguide-sticky-submenu] > :first-child {
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        min-width: max-content !important;
     }
 
     [data-choiceguide-sticky-submenu] [data-choiceguide-journey-nav] {
-        white-space: normal;
+        padding-inline: 0.75rem !important;
     }
 }
 
