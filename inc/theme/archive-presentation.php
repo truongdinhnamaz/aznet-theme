@@ -27,6 +27,21 @@ function law01_category_archive_active(): bool {
 }
 
 /**
+ * Whether the Law 01 editorial presentation is active on the native posts page.
+ *
+ * WordPress keeps ownership of page_for_posts, the main query and pagination.
+ * The Theme only selects the presentation when the Law 01 shell is active.
+ */
+function law01_posts_page_active(): bool {
+    if ( ! function_exists( 'is_home' ) || ! is_home() ) {
+        return false;
+    }
+
+    return function_exists( __NAMESPACE__ . '\\header_law01_active' )
+        && header_law01_active();
+}
+
+/**
  * Return the explicitly mapped public Contact Page URL for the archive consultation CTA.
  */
 function archive_contact_page_url(): string {
