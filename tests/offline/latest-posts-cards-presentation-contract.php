@@ -20,6 +20,8 @@ $required = [
     '.wp-block-latest-posts__featured-image',
     'aspect-ratio',
     '.wp-block-latest-posts__post-title',
+    '.aznet-theme-latest-posts-cards.wp-block-latest-posts.is-grid',
+    'width: auto;',
 ];
 
 foreach ( $required as $needle ) {
