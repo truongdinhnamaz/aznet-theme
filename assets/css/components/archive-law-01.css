@@ -2,7 +2,8 @@
  * WordPress owns category/query/pagination. Theme owns presentation only.
  */
 
-.aznet-theme-main--law01-category {
+.aznet-theme-main--law01-category,
+.aznet-theme-main--law01-posts {
     background:
         linear-gradient(180deg, #fffdf9 0, #fff 22rem, #fff 100%);
 }
