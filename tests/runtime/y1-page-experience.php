@@ -72,6 +72,16 @@ $landing_fallback_id = y1_create_page(
 );
 update_post_meta( $landing_fallback_id, '_wp_page_template', 'page-templates/landing.php' );
 
+$landing_legacy_id = y1_create_page(
+    [
+        'post_title'   => 'Y1 Legacy Hero Page',
+        'post_excerpt' => 'Legacy authored HTML Hero presentation.',
+        'post_name'    => 'y1-legacy-hero-page',
+        'post_content' => '<header class="aznet-theme-page-hero y1-legacy-authored-hero"><p>Legacy authored Hero</p><h1>Y1 Legacy Hero</h1></header><section><h2>Legacy body</h2><p>Legacy body content owned by WordPress.</p></section>',
+    ]
+);
+update_post_meta( $landing_legacy_id, '_wp_page_template', 'page-templates/landing.php' );
+
 $services_id = $parent_id;
 
 $untitled_service_id = y1_create_page(
@@ -209,6 +219,7 @@ foreach (
         'wide_url'             => $wide_id,
         'landing_url'          => $landing_id,
         'landing_fallback_url' => $landing_fallback_id,
+        'landing_legacy_url'   => $landing_legacy_id,
         'commerce_looking_url' => $commerce_looking_id,
         'service_detail_url'    => $service_detail_id,
         'contact_url'           => $contact_id,
@@ -230,6 +241,7 @@ $result = array_merge(
         'wide_id'             => $wide_id,
         'landing_id'          => $landing_id,
         'landing_fallback_id' => $landing_fallback_id,
+        'landing_legacy_id'   => $landing_legacy_id,
         'commerce_looking_id' => $commerce_looking_id,
         'services_id'          => $services_id,
         'service_detail_id'    => $service_detail_id,
