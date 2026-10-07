@@ -8,17 +8,17 @@ if (false === $css) {
 }
 
 $required = [
-    '.page-id-726 .aznet-theme-page__content-inner',
-    '.page-id-726 .wp-block-columns > .wp-block-column',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .aznet-theme-page__content-inner',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .wp-block-columns > .wp-block-column',
     'display: flex;',
     'height: 100%;',
-    '.page-id-726 .wp-block-image img',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .wp-block-image img',
     'aspect-ratio: 4 / 3;',
     'object-fit: cover;',
-    '.page-id-726 .wp-block-button__link',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .wp-block-button__link',
     'background: var(--aznet-theme-accent);',
     'color: var(--aznet-theme-color-on-primary);',
-    '.page-id-726 .wp-block-group.has-background',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .wp-block-group.has-background',
     'border-radius: var(--aznet-theme-radius-card);',
 ];
 
@@ -48,11 +48,11 @@ echo "PASS: Curtain 01 page title uses available row width\n";
 
 
 $contrast_required = [
-    '.page-id-726 .rqa-quote-dark',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .rqa-quote-dark',
     'color: var(--aznet-theme-on-inverse) !important;',
-    '.page-id-726 .rqa-quote-dark figcaption',
-    '.page-id-726 .rqa-quote-dark .wp-block-heading',
-    '.page-id-726 .rqa-quote-dark .wp-block-paragraph',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .rqa-quote-dark figcaption',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .rqa-quote-dark .wp-block-heading',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .rqa-quote-dark .wp-block-paragraph',
 ];
 
 foreach ($contrast_required as $needle) {
@@ -66,13 +66,13 @@ echo "PASS: RQA quote page dark-section contrast contract\n";
 
 
 $full_contrast_required = [
-    '.page-id-726 .aznet-theme-page__content-inner',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .aznet-theme-page__content-inner',
     'color: var(--aznet-theme-text) !important;',
-    '.page-id-726 .wp-block-cover .wp-block-heading',
-    '.page-id-726 .wp-block-cover .wp-block-paragraph',
-    '.page-id-726 .rqa-quote-cta-dark',
-    '.page-id-726 .rqa-quote-cta-dark .wp-block-heading',
-    '.page-id-726 .rqa-quote-cta-dark .wp-block-paragraph',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .wp-block-cover .wp-block-heading',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .wp-block-cover .wp-block-paragraph',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .rqa-quote-cta-dark',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .rqa-quote-cta-dark .wp-block-heading',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .rqa-quote-cta-dark .wp-block-paragraph',
 ];
 
 foreach ($full_contrast_required as $needle) {
@@ -86,8 +86,8 @@ echo "PASS: RQA quote page full-section contrast contract\n";
 
 
 $full_bleed_required = [
-    '.page-id-726 .aznet-theme-page__content-inner > .wp-block-group',
-    '.page-id-726 .aznet-theme-page__content-inner > .wp-block-cover',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .aznet-theme-page__content-inner > .wp-block-group',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .aznet-theme-page__content-inner > .wp-block-cover',
     'width: 100vw;',
     'margin-inline: calc(50% - 50vw);',
     'padding-inline: max(',
@@ -105,10 +105,10 @@ echo "PASS: RQA quote page sections are full-bleed with constrained content\n";
 
 
 $header_width_required = [
-    '.page-id-726 .aznet-theme-page__section-inner--header',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .aznet-theme-page__section-inner--header',
     'width: calc(100% - (var(--aznet-theme-gutter) * 2));',
     'max-width: none;',
-    '.page-id-726 .aznet-theme-page__title',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .aznet-theme-page__title',
     'white-space: nowrap;',
     'white-space: normal;',
 ];
@@ -124,15 +124,15 @@ echo "PASS: RQA quote page header uses full available width before wrapping\n";
 
 
 $factors_required = [
-    '.page-id-726 .rqa-quote-factors',
-    '.page-id-726 .rqa-quote-factors .wp-block-column',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .rqa-quote-factors',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .rqa-quote-factors .wp-block-column',
     'background: var(--aznet-theme-surface);',
     'border: 1px solid var(--aznet-theme-border);',
     'box-shadow: var(--aznet-theme-shadow-card);',
     'border-radius: var(--aznet-theme-radius-card);',
     'padding: clamp(',
     'min-height: 100%;',
-    '.page-id-726 .rqa-quote-factors .wp-block-heading',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .rqa-quote-factors .wp-block-heading',
 ];
 
 foreach ($factors_required as $needle) {
@@ -146,12 +146,12 @@ echo "PASS: RQA quote factors use balanced visual cards\n";
 
 
 $process_required = [
-    '.page-id-726 .rqa-quote-process',
-    '.page-id-726 .rqa-quote-process .wp-block-column',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .rqa-quote-process',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .rqa-quote-process .wp-block-column',
     'background: var(--aznet-theme-surface);',
     'border: 1px solid var(--aznet-theme-border);',
     'box-shadow: var(--aznet-theme-shadow-card);',
-    '.page-id-726 .rqa-quote-process .wp-block-heading',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .rqa-quote-process .wp-block-heading',
     'border-radius: 999px;',
     'background: var(--aznet-theme-accent);',
     'color: var(--aznet-theme-color-on-primary) !important;',
@@ -168,12 +168,12 @@ echo "PASS: RQA quote process uses balanced step cards\n";
 
 
 $polish_required = [
-    '.page-id-726 .rqa-quote-trust .wp-block-column',
-    '.page-id-726 .rqa-quote-trust .wp-block-column::before',
-    '.page-id-726 .rqa-quote-proof .wp-block-column',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .rqa-quote-trust .wp-block-column',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .rqa-quote-trust .wp-block-column::before',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .rqa-quote-proof .wp-block-column',
     'backdrop-filter: blur(',
-    '.page-id-726 .rqa-quote-faq .wp-block-column',
-    '.page-id-726 .rqa-quote-faq .wp-block-heading:not(:first-child)',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .rqa-quote-faq .wp-block-column',
+    'body.aznet-theme-preset--curtain-01:has(.rqa-quote-trust) .rqa-quote-faq .wp-block-heading:not(:first-child)',
     'border-block-start: 1px solid var(--aznet-theme-border);',
 ];
 
