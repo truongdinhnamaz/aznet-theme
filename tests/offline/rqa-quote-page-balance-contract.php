@@ -30,3 +30,18 @@ foreach ($required as $needle) {
 }
 
 echo "PASS: RQA quote page balance contract\n";
+
+
+$curtain_css = file_get_contents(dirname(__DIR__, 2) . '/assets/css/presets/curtain-01.css');
+if (false === $curtain_css) {
+    fwrite(STDERR, "FAIL: unable to read curtain-01.css\n");
+    exit(3);
+}
+
+$title_rule = "body.aznet-theme-preset--curtain-01 .aznet-theme-page__title {\n    max-width: none;\n}";
+if (! str_contains($curtain_css, $title_rule)) {
+    fwrite(STDERR, "FAIL: Curtain 01 page title must use available row width before wrapping\n");
+    exit(4);
+}
+
+echo "PASS: Curtain 01 page title uses available row width\n";
