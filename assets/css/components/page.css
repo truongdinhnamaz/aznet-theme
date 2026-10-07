@@ -126,6 +126,18 @@
     padding-block-end: 0;
 }
 
+.aznet-theme-page--landing .aznet-theme-page__content-inner > .wp-block-group,
+.aznet-theme-page--landing .aznet-theme-page__content-inner > .wp-block-cover {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    padding-inline: max(
+        var(--aznet-theme-gutter),
+        calc((100vw - var(--aznet-theme-container-wide)) / 2)
+    );
+}
+
 .aznet-theme-page__content :where(img, video, svg, iframe) {
     max-width: 100%;
 }
@@ -191,6 +203,12 @@
 
     .aznet-theme-page--landing .aznet-theme-page__content-inner {
         width: 100%;
+        max-width: none;
+    }
+
+    .aznet-theme-page--landing .aznet-theme-page__content-inner > .wp-block-group,
+    .aznet-theme-page--landing .aznet-theme-page__content-inner > .wp-block-cover {
+        padding-inline: var(--aznet-theme-gutter-mobile);
     }
 
     .aznet-theme-page-kit {
