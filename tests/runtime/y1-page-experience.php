@@ -77,7 +77,7 @@ $landing_legacy_id = y1_create_page(
         'post_title'   => 'Y1 Legacy Hero Page',
         'post_excerpt' => 'Legacy authored HTML Hero presentation.',
         'post_name'    => 'y1-legacy-hero-page',
-        'post_content' => '<header class="aznet-theme-page-hero y1-legacy-authored-hero"><p>Legacy authored Hero</p><h1>Y1 Legacy Hero</h1></header><section><h2>Legacy body</h2><p>Legacy body content owned by WordPress.</p></section>',
+        'post_content' => '<article class="y1-legacy-page"><header class="aznet-theme-page-hero y1-legacy-authored-hero"><p>Legacy authored Hero</p><h1>Y1 Legacy Hero</h1></header><section><h2>Legacy body</h2><p>Legacy body content owned by WordPress.</p></section></article>',
     ]
 );
 update_post_meta( $landing_legacy_id, '_wp_page_template', 'page-templates/landing.php' );
