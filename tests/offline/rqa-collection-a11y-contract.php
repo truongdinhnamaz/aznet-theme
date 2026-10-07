@@ -10,6 +10,9 @@ if (false === $css) {
 $required = [
     '.page-id-29 .woocommerce-loop-category__title .count',
     'display: none;',
+    '.page-id-29 .wp-block-button__link',
+    'background: var(--aznet-theme-accent);',
+    'color: var(--aznet-theme-color-on-primary);',
 ];
 
 foreach ($required as $needle) {
