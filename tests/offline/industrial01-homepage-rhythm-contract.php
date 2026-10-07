@@ -34,9 +34,6 @@ $expectations = [
     '.aznet-theme-industrial01-heading' => [
         'margin-bottom: clamp(1.75rem, 3vw, 2.75rem);',
     ],
-    '.aznet-theme-industrial01-heading h2' => [
-        'font-size: clamp(2rem, 3.4vw, 3.4rem);',
-    ],
     '.aznet-theme-industrial01-grid' => [
         'gap: 1rem;',
     ],
@@ -57,6 +54,13 @@ foreach ($expectations as $selector => $needles) {
             $fail('Industrial 01 homepage compact rhythm missing: ' . $selector . ' / ' . $needle);
         }
     }
+}
+
+if (!preg_match('/\\.aznet-theme-industrial01-heading h2,\\s*\\.aznet-theme-industrial01-about h2,\\s*\\.aznet-theme-industrial01-cta h2\\s*\\{([^}]*)\\}/s', $css, $headingMatch)) {
+    $fail('Industrial 01 homepage grouped section heading rule missing.');
+}
+if (!str_contains($headingMatch[1], 'font-size: clamp(2rem, 3.4vw, 3.4rem);')) {
+    $fail('Industrial 01 homepage compact section heading typography missing.');
 }
 
 foreach ([
