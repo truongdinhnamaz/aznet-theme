@@ -1091,3 +1091,68 @@
         gap: 0.9rem;
     }
 }
+
+
+/* Rèm Quốc Anh contact page visual polish. */
+.page-id-45 .rqa-contact-quick .wp-block-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.page-id-45 .rqa-contact-quick .wp-block-column::before {
+    display: grid;
+    width: 2.75rem;
+    aspect-ratio: 1;
+    margin-block-end: 1rem;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--aznet-theme-color-surface-subtle);
+    color: var(--aznet-theme-accent);
+    border: 1px solid var(--aznet-theme-border);
+    font-weight: var(--aznet-theme-font-weight-semibold);
+}
+
+.page-id-45 .rqa-contact-quick .wp-block-column:nth-child(1)::before { content: "01"; }
+.page-id-45 .rqa-contact-quick .wp-block-column:nth-child(2)::before { content: "02"; }
+.page-id-45 .rqa-contact-quick .wp-block-column:nth-child(3)::before { content: "03"; }
+
+.page-id-45 .rqa-contact-quick .wp-block-column > .wp-block-paragraph:last-child {
+    margin-block-start: auto;
+    margin-block-end: 0;
+    padding-block-start: 0.75rem;
+}
+
+.page-id-45 .rqa-contact-main > .wp-block-columns {
+    align-items: stretch;
+}
+
+.page-id-45 .rqa-contact-form .wpcf7-form-control-wrap {
+    display: block;
+}
+
+.page-id-45 .rqa-contact-form .wpcf7-form p {
+    display: grid;
+    gap: 0.9rem;
+}
+
+.page-id-45 .rqa-contact-form .wpcf7-form label {
+    line-height: 1.4;
+}
+
+.page-id-45 .rqa-contact-form input[type="submit"] {
+    width: 100%;
+    margin-block-start: 0.35rem;
+}
+
+.page-id-45 .rqa-contact-trust .wp-block-column {
+    text-align: center;
+}
+
+.page-id-45 .rqa-contact-trust .wp-block-heading::after {
+    display: block;
+    width: 2rem;
+    height: 2px;
+    margin: 0.75rem auto 0;
+    background: var(--aznet-theme-accent);
+    content: "";
+}
