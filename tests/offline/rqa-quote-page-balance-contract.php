@@ -121,3 +121,25 @@ foreach ($header_width_required as $needle) {
 }
 
 echo "PASS: RQA quote page header uses full available width before wrapping\n";
+
+
+$factors_required = [
+    '.page-id-726 .rqa-quote-factors',
+    '.page-id-726 .rqa-quote-factors .wp-block-column',
+    'background: var(--aznet-theme-surface);',
+    'border: 1px solid var(--aznet-theme-border);',
+    'box-shadow: var(--aznet-theme-shadow-card);',
+    'border-radius: var(--aznet-theme-radius-card);',
+    'padding: clamp(',
+    'min-height: 100%;',
+    '.page-id-726 .rqa-quote-factors .wp-block-heading',
+];
+
+foreach ($factors_required as $needle) {
+    if (! str_contains($css, $needle)) {
+        fwrite(STDERR, "FAIL: quote factors presentation missing {$needle}\n");
+        exit(9);
+    }
+}
+
+echo "PASS: RQA quote factors use balanced visual cards\n";
