@@ -453,7 +453,6 @@ function enqueue_page_assets( ?string $version = null ): void {
 }
 
 
-
 /** Determine whether the mapped premium Law 01 Contact Page presentation can render. */
 function should_enqueue_contact_page_assets(): bool {
     if ( ! function_exists( __NAMESPACE__ . '\\contact_page_presentation_active' ) ) {
