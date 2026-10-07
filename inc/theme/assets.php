@@ -453,6 +453,25 @@ function enqueue_page_assets( ?string $version = null ): void {
 }
 
 
+/** Enqueue isolated legacy RQA Page compatibility only for Curtain 01 native Pages. */
+function enqueue_curtain01_rqa_page_compat_asset( ?string $version = null ): void {
+    if ( ! should_enqueue_page_assets() ) {
+        return;
+    }
+
+    if ( ! function_exists( __NAMESPACE__ . '\\visual_preset' ) || 'curtain-01' !== visual_preset() ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'aznet-theme-curtain01-rqa-pages',
+        get_theme_file_uri( '/assets/css/compatibility/curtain01-rqa-pages.css' ),
+        [ 'aznet-theme-page' ],
+        asset_content_version( '/assets/css/compatibility/curtain01-rqa-pages.css', $version )
+    );
+}
+
+
 
 /** Determine whether the mapped premium Law 01 Contact Page presentation can render. */
 function should_enqueue_contact_page_assets(): bool {
@@ -702,6 +721,7 @@ function enqueue_assets(): void {
 
     enqueue_law01_archive_asset( $version );
     enqueue_page_assets( $version );
+    enqueue_curtain01_rqa_page_compat_asset( $version );
     enqueue_contact_page_assets( $version );
     enqueue_services_page_assets( $version );
     enqueue_team_page_assets( $version );
