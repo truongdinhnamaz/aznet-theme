@@ -858,3 +858,24 @@
 .aznet-theme-site-footer__rich-content li+li{margin-top:var(--aznet-theme-space-2)}
 .aznet-theme-site-footer__rich-content a{color:inherit;text-underline-offset:.18em}
 .aznet-theme-site-footer__rich-content a:hover,.aznet-theme-site-footer__rich-content a:focus-visible{color:var(--aznet-theme-on-inverse);text-decoration:underline}
+
+@media (max-width: 48rem) {
+    .aznet-theme-site-footer--professional .aznet-theme-site-footer__column-content + .aznet-theme-site-footer__column-content {
+        padding-top: 1.75rem;
+        border-top: 1px solid var(--aznet-theme-footer-border);
+    }
+
+    .aznet-theme-site-footer--professional .aznet-theme-site-footer__rich-content {
+        line-height: 1.7;
+    }
+
+    .aznet-theme-site-footer--professional .aznet-theme-site-footer__rich-content li + li {
+        margin-top: .8rem;
+    }
+
+    .aznet-theme-site-footer--professional .aznet-theme-site-footer__rich-content strong {
+        display: inline-block;
+        margin-bottom: .35rem;
+    }
+}
+
