@@ -8,7 +8,8 @@ const targets = [
 
 const browser = await chromium.launch({ headless: true });
 for (const [name, url] of targets) {
-  const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+  const page = await context.newPage();
   await page.goto(url, { waitUntil: 'networkidle', timeout: 120000 });
   const results = await new AxeBuilder({ page }).withRules(['color-contrast']).analyze();
   console.log(JSON.stringify({
@@ -25,6 +26,6 @@ for (const [name, url] of targets) {
       })),
     })),
   }, null, 2));
-  await page.close();
+  await context.close();
 }
 await browser.close();
