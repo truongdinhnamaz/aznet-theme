@@ -912,3 +912,19 @@ Accepted rules:
 - WordPress continues to own Page title/excerpt/content/media; no new Theme content store or provider/domain authority is created.
 - Existing template-specific CSS header suppression is retained only as compatibility evidence. The target shared-Core implementation is render/composition-time suppression with retained fallback.
 - Implementation must use RED -> minimal GREEN -> retained regression, then fresh L3/L4 checks. Because this is a shared presentation rule, D-042 peer-pilot regression is required before release. Production pilot publication remains a separate explicit approval gate.
+
+
+### D-048 — Hero-first Page composition — ACCEPTED — 07/10/2026
+
+The product owner approved a shared presentation rule for the D-042 pilot family: a designed Page that has an authored Hero must not show the generic Page title/excerpt block above that Hero.
+
+Accepted rules:
+
+- Hero-first is a Theme presentation concern and applies across Law 01, Rèm 01, Industrial 01 and future templates through the reusable Core/template presentation boundary.
+- Pages with an explicit valid authored Hero begin at the Hero. The generic `.aznet-theme-page__header` is not rendered before it.
+- The Page still requires one meaningful H1. The Hero carries the visible primary heading; duplicate visible H1 output is forbidden.
+- Pages without an authored Hero keep the existing generic Page header as the fail-soft WordPress-native fallback.
+- Activation must be explicit through presentation configuration/manifest/mapping or another bounded WordPress-native presentation signal. Slug/title/URL/Page-ID heuristics are forbidden.
+- WordPress continues to own Page title/excerpt/content/media; no new Theme content store or provider/domain authority is created.
+- Existing template-specific CSS header suppression is retained only as compatibility evidence. The target shared-Core implementation is render/composition-time suppression with retained fallback.
+- Implementation must use RED -> minimal GREEN -> retained regression, then fresh L3/L4 checks. Because this is a shared presentation rule, D-042 peer-pilot regression is required before release. Production pilot publication remains a separate explicit approval gate.
