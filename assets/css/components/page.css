@@ -445,42 +445,10 @@
 
 .page-id-726 .wp-block-button__link {
     min-height: 2.75rem;
-    background: #1f1f1f;
-    color: #ffffff;
-    border: 1px solid #1f1f1f;
-}
-
-.page-id-726 .wp-block-group[style*="background-color:#111111"] {
-    color: #ffffff;
-}
-
-.page-id-726 .wp-block-group[style*="background-color:#111111"] :where(h2, h3, p, a) {
-    color: #ffffff;
-}
-
-.page-id-726 .wp-block-group[style*="background-color:#111111"] .wp-block-button__link {
-    background: #ffffff;
-    color: #1f1f1f;
-    border-color: #ffffff;
-}
-
-.page-id-726 .wp-block-group[style*="background-color:#f6f2eb"],
-.page-id-726 .wp-block-group[style*="background-color:#f7f7f5"] {
-    color: #1f1f1f;
-}
-
-.page-id-726 .wp-block-group[style*="background-color:#7a5828"] {
-    color: #ffffff;
-}
-
-.page-id-726 .wp-block-group[style*="background-color:#7a5828"] :where(h2, h3, p) {
-    color: #ffffff;
-}
-
-.page-id-726 .wp-block-group[style*="background-color:#7a5828"] .wp-block-button__link {
-    background: #ffffff;
-    color: #3f2a10;
-    border-color: #ffffff;
+    background: var(--aznet-theme-accent);
+    color: var(--aznet-theme-color-on-primary);
+    border: 1px solid var(--aznet-theme-accent);
+    font-weight: var(--aznet-theme-font-weight-semibold);
 }
 
 @media (max-width: 47.999rem) {
