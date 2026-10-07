@@ -34,6 +34,12 @@ $expectations = [
     '.aznet-theme-industrial01-heading' => [
         'margin-bottom: clamp(1.75rem, 3vw, 2.75rem);',
     ],
+    '.aznet-theme-industrial01-heading h2' => [
+        'font-size: clamp(2rem, 3.4vw, 3.4rem);',
+    ],
+    '.aznet-theme-industrial01-grid' => [
+        'gap: 1rem;',
+    ],
     '.aznet-theme-industrial01-category-card__body' => [
         'min-height: 8.5rem;',
     ],
