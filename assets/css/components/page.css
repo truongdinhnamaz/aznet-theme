@@ -455,7 +455,10 @@
     color: var(--aznet-theme-on-inverse) !important;
 }
 
-.page-id-726 .rqa-quote-dark :where(.wp-block-heading, .wp-block-paragraph, figcaption, a) {
+.page-id-726 .rqa-quote-dark .wp-block-heading,
+.page-id-726 .rqa-quote-dark .wp-block-paragraph,
+.page-id-726 .rqa-quote-dark figcaption,
+.page-id-726 .rqa-quote-dark a {
     color: var(--aznet-theme-on-inverse) !important;
 }
 
