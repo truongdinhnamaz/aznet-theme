@@ -14,7 +14,7 @@ if (! is_file($cssPath)) {
 
 $css = (string) file_get_contents($cssPath);
 
-$mobilePos = strpos($css, '@media (max-width: 48rem)');
+$mobilePos = strrpos($css, '@media (max-width: 48rem)');
 if ($mobilePos === false) {
     $fail('Industrial 01 mobile breakpoint missing.');
 }
