@@ -49,21 +49,21 @@
     border-inline-start: 1px solid var(--aznet-theme-footer-border);
 }
 
+.aznet-theme-site-footer--professional .aznet-theme-site-footer__identity {
+    max-width: 22rem;
+}
+
 .aznet-theme-site-footer--professional .aznet-theme-site-footer__brand {
-    max-width: 280px;
-    gap: var(--aznet-theme-space-3);
+    display: block;
+    max-width: 220px;
 }
 
 .aznet-theme-site-footer--professional .aznet-theme-site-footer__brand-title {
-    display: block;
-    max-width: 16rem;
-    font-family: var(--aznet-theme-font-family-heading);
-    font-size: clamp(1rem, 1.35vw, 1.2rem);
-    line-height: 1.2;
+    display: none;
 }
 
 .aznet-theme-site-footer--professional .aznet-theme-site-footer__identity p {
-    max-width: 34rem;
+    max-width: 22rem;
     margin-top: var(--aznet-theme-space-4);
     color: var(--aznet-theme-footer-muted);
 }

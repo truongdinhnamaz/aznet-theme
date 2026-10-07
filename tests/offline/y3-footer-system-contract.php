@@ -474,6 +474,18 @@ foreach (['minmax(250px, 1fr)', 'minmax(160px, .62fr)', 'minmax(320px, 1.18fr)',
         y3_fail('Professional Footer demo grid missing: ' . $needle);
     }
 }
+
+foreach ([
+    '.aznet-theme-site-footer--professional .aznet-theme-site-footer__identity {',
+    '.aznet-theme-site-footer--professional .aznet-theme-site-footer__brand {',
+    'display: block;',
+    '.aznet-theme-site-footer--professional .aznet-theme-site-footer__brand-title {',
+    'display: none;',
+] as $needle) {
+    if (! str_contains($css, $needle)) {
+        y3_fail('Professional Footer identity column must stack the logo cleanly without duplicating the site title: ' . $needle);
+    }
+}
 if (! str_contains($css, '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__main {') || ! str_contains($css, 'grid-template-columns: minmax(280px, 1.3fr) repeat(3, minmax(160px, .75fr));')) {
     y3_fail('Law 01 Footer requires a four-column desktop grid for identity, services, links and contact/social.');
 }
