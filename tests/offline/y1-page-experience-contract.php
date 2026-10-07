@@ -18,6 +18,7 @@ assert(str_contains($pageExperience, 'function page_hero_first_active'), 'hero-f
 assert(str_contains($pageExperience, "'landing' !== page_variant( \$post_id )"), 'Landing Page template must be the explicit WordPress-native hero-first signal');
 assert(str_contains($pageExperience, 'aznet-theme-page-hero'), 'hero-first activation must require an explicit authored Hero marker');
 assert(str_contains($pageExperience, 'parse_blocks'), 'hero-first activation must validate the WordPress-native authored Hero block');
+assert(str_contains($pageExperience, 'innerHTML'), 'hero-first activation must support explicit legacy authored HTML Hero markup');
 assert(str_contains($pageExperience, 'function service_page_is_detail'), 'service detail detector missing');
 assert(str_contains($pageExperience, "homepage_source_value( 'law-01', 'services' )"), 'service detector must use the scoped explicit mapped Services Page');
 assert(str_contains($pageExperience, 'function service_page_contact_url'), 'service contact resolver missing');

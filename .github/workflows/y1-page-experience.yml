@@ -125,13 +125,14 @@ jobs:
         run: |
           set -euo pipefail
           wp eval-file "$GITHUB_WORKSPACE/tests/runtime/y1-page-experience.php" --path=/tmp/wp --allow-root > /tmp/y1/fixture.json
-          jq -e '.parent_id > 0 and .child_id > 0 and .wide_id > 0 and .landing_id > 0 and .landing_fallback_id > 0 and .commerce_looking_id > 0 and .attachment_id > 0 and .team_id > 0' /tmp/y1/fixture.json
+          jq -e '.parent_id > 0 and .child_id > 0 and .wide_id > 0 and .landing_id > 0 and .landing_fallback_id > 0 and .landing_legacy_id > 0 and .commerce_looking_id > 0 and .attachment_id > 0 and .team_id > 0' /tmp/y1/fixture.json
           {
             echo "Y1_SERVICES_URL=$(jq -r '.parent_url' /tmp/y1/fixture.json)"
             echo "Y1_CHILD_URL=$(jq -r '.child_url' /tmp/y1/fixture.json)"
             echo "Y1_WIDE_URL=$(jq -r '.wide_url' /tmp/y1/fixture.json)"
             echo "Y1_LANDING_URL=$(jq -r '.landing_url' /tmp/y1/fixture.json)"
             echo "Y1_LANDING_FALLBACK_URL=$(jq -r '.landing_fallback_url' /tmp/y1/fixture.json)"
+            echo "Y1_LANDING_LEGACY_URL=$(jq -r '.landing_legacy_url' /tmp/y1/fixture.json)"
             echo "Y1_CONTACT_URL=$(jq -r '.contact_url' /tmp/y1/fixture.json)"
             echo "Y1_TEAM_URL=$(jq -r '.team_url' /tmp/y1/fixture.json)"
           } >> "$GITHUB_ENV"
@@ -194,6 +195,12 @@ jobs:
           grep -F 'y1-authored-hero' /tmp/y1/landing.html
           request landing-fallback "$(jq -r '.landing_fallback_url' /tmp/y1/fixture.json)" landing no
           grep -F 'aznet-theme-page__header' /tmp/y1/landing-fallback.html
+          request landing-legacy "$(jq -r '.landing_legacy_url' /tmp/y1/fixture.json)" landing no
+          if grep -F 'aznet-theme-page__header' /tmp/y1/landing-legacy.html; then
+            echo 'FAIL: legacy authored Hero rendered the generic Page header' >&2
+            exit 1
+          fi
+          grep -F 'y1-legacy-authored-hero' /tmp/y1/landing-legacy.html
           request commerce-looking "$(jq -r '.commerce_looking_url' /tmp/y1/fixture.json)" standard no
           request contact "$(jq -r '.contact_url' /tmp/y1/fixture.json)" standard no
           grep -F 'aznet-theme-page--contact' /tmp/y1/contact.html
@@ -228,6 +235,7 @@ jobs:
           Y1_WIDE_URL: ${{ env.Y1_WIDE_URL }}
           Y1_LANDING_URL: ${{ env.Y1_LANDING_URL }}
           Y1_LANDING_FALLBACK_URL: ${{ env.Y1_LANDING_FALLBACK_URL }}
+          Y1_LANDING_LEGACY_URL: ${{ env.Y1_LANDING_LEGACY_URL }}
           Y1_CONTACT_URL: ${{ env.Y1_CONTACT_URL }}
           Y1_TEAM_URL: ${{ env.Y1_TEAM_URL }}
           Y1_PAGE_STATE_DIR: /tmp/y1-page-l4

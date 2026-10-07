@@ -53,8 +53,16 @@ function page_hero_first_active( ?int $post_id = null ): bool {
     }
 
     $class_name = trim( (string) ( $first['attrs']['className'] ?? '' ) );
-    if ( 1 !== preg_match( '/(?:^|\\s)aznet-theme-page-hero(?:\\s|$)/', $class_name ) ) {
-        return false;
+    $block_hero = 1 === preg_match( '/(?:^|\\s)aznet-theme-page-hero(?:\\s|$)/', $class_name );
+
+    if ( ! $block_hero ) {
+        $first_html = trim( (string) ( $first['innerHTML'] ?? '' ) );
+        $legacy_hero = 1 === preg_match(
+            '/^\\s*(?:<(?:article|div|main)\\b[^>]*>\\s*)*<[^>]+\\bclass=(["\\\'])[^"\\\']*\\baznet-theme-page-hero\\b[^"\\\']*\\1[^>]*>/i',
+            $first_html
+        );
+
+        return $legacy_hero && 1 === preg_match( '/<h1\\b[^>]*>.*?<\\/h1>/is', $first_html );
     }
 
     $queue = [ $first ];
