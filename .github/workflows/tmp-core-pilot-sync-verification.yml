@@ -1,0 +1,30 @@
+name: Temporary Core Pilot Sync Verification
+
+on:
+  push:
+    branches:
+      - work/core-pilot-sync-audit-20261008-green
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Verify Core/pilot boundary and retained extension regressions
+        run: |
+          set -euo pipefail
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/pilot-presentation-core-hygiene-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/rqa-quote-page-balance-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/rqa-contact-page-presentation-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-three-pilot-regression-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-fourth-template-proof-contract.php
+          bash scripts/verify-v1-core.sh
