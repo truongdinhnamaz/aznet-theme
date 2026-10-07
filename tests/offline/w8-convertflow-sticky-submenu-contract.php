@@ -19,7 +19,7 @@ $required = [
     'grid-template-columns: repeat(6, minmax(0, 1fr)) max-content',
     'grid-auto-flow: column',
     'white-space: nowrap',
-    'font-size: clamp('
+    'font-size: clamp(',
     'body:has(.aznet-theme-site-header--sticky)',
     'body:has(.aznet-theme-site-header--sticky-compact)',
     'is-aznet-theme-header-compact',
