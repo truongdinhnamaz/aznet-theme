@@ -161,6 +161,88 @@ body.aznet-theme-preset--industrial-01.tax-product_cat ul.products li.product {
     }
 }
 
+/* Industrial 01 single product: align native Woo output to the shared site shell. */
+body.aznet-theme-preset--industrial-01.single-product #main {
+    width: min(calc(100% - (var(--aznet-theme-gutter) * 2)), var(--aznet-theme-container-shell));
+    max-width: var(--aznet-theme-container-shell);
+    margin-inline: auto;
+}
+
+body.aznet-theme-preset--industrial-01.single-product #main > .product {
+    display: grid;
+    grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    align-items: start;
+}
+
+body.aznet-theme-preset--industrial-01.single-product #main > .product > .woocommerce-product-gallery,
+body.aznet-theme-preset--industrial-01.single-product #main > .product > .summary {
+    width: auto;
+    margin: 0;
+    float: none;
+}
+
+body.aznet-theme-preset--industrial-01.single-product #main > .product > .woocommerce-tabs,
+body.aznet-theme-preset--industrial-01.single-product #main > .product > .related,
+body.aznet-theme-preset--industrial-01.single-product #main > .product > .up-sells {
+    grid-column: 1 / -1;
+    min-width: 0;
+}
+
+body.aznet-theme-preset--industrial-01.single-product #main .woocommerce-Tabs-panel {
+    min-width: 0;
+    overflow-x: auto;
+}
+
+body.aznet-theme-preset--industrial-01.single-product #main .woocommerce-Tabs-panel img {
+    max-width: 100%;
+    height: auto;
+}
+
+body.aznet-theme-preset--industrial-01.single-product #main .related ul.products,
+body.aznet-theme-preset--industrial-01.single-product #main .up-sells ul.products {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.35rem);
+}
+
+body.aznet-theme-preset--industrial-01.single-product #main .related ul.products::before,
+body.aznet-theme-preset--industrial-01.single-product #main .related ul.products::after,
+body.aznet-theme-preset--industrial-01.single-product #main .up-sells ul.products::before,
+body.aznet-theme-preset--industrial-01.single-product #main .up-sells ul.products::after {
+    content: none;
+}
+
+body.aznet-theme-preset--industrial-01.single-product #main .related ul.products li.product,
+body.aznet-theme-preset--industrial-01.single-product #main .up-sells ul.products li.product {
+    width: auto;
+    margin: 0;
+    float: none;
+}
+
+@media (max-width: 64rem) {
+    body.aznet-theme-preset--industrial-01.single-product #main .related ul.products,
+    body.aznet-theme-preset--industrial-01.single-product #main .up-sells ul.products {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 48rem) {
+    body.aznet-theme-preset--industrial-01.single-product #main {
+        width: min(calc(100% - (var(--aznet-theme-gutter-mobile) * 2)), var(--aznet-theme-container-shell));
+    }
+
+    body.aznet-theme-preset--industrial-01.single-product #main > .product {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    body.aznet-theme-preset--industrial-01.single-product #main .related ul.products,
+    body.aznet-theme-preset--industrial-01.single-product #main .up-sells ul.products {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* Industrial 01 WooCommerce surfaces: preserve native Woo markup and state. */
 body.aznet-theme-preset--industrial-01.woocommerce-page .aznet-theme-main {
     --industrial01-commerce-panel: #ffffff;
