@@ -31,3 +31,26 @@ foreach ($required as $needle) {
 }
 
 echo "PASS: RQA contact page presentation contract\n";
+
+
+$polish_required = [
+    '.page-id-45 .rqa-contact-quick .wp-block-column::before',
+    '.page-id-45 .rqa-contact-quick .wp-block-column:nth-child(1)::before',
+    'margin-block-start: auto;',
+    '.page-id-45 .rqa-contact-main > .wp-block-columns',
+    '.page-id-45 .rqa-contact-form .wpcf7-form-control-wrap',
+    'display: block;',
+    '.page-id-45 .rqa-contact-form input[type="submit"]',
+    'width: 100%;',
+    '.page-id-45 .rqa-contact-trust .wp-block-column',
+    'text-align: center;',
+];
+
+foreach ($polish_required as $needle) {
+    if (! str_contains($css, $needle)) {
+        fwrite(STDERR, "FAIL: RQA contact visual polish missing {$needle}\n");
+        exit(3);
+    }
+}
+
+echo "PASS: RQA contact visual polish contract\n";
