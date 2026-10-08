@@ -1,8 +1,8 @@
 # Core / Pilot Synchronization Cleanup Design
 
-**Date:** 2026-10-08  
-**Status:** Proposed for implementation after owner review  
-**Canonical repository:** `truongdinhnamaz/aznet-theme`  
+**Date:** 2026-10-08
+**Status:** Proposed for implementation after owner review
+**Canonical repository:** `truongdinhnamaz/aznet-theme`
 **Design base:** `main@3226908cae6488e4e957e578cafbedeaba45f5a2`
 
 ## 1. Goal
