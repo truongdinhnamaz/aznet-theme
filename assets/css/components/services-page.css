@@ -254,6 +254,131 @@
 }
 
 
+.aznet-theme-services-page__group-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.35rem);
+}
+
+.aznet-theme-services-page__group {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    min-height: 24rem;
+    flex-direction: column;
+    padding: clamp(1.35rem, 2.5vw, 2rem);
+    overflow: hidden;
+    border: 1px solid var(--law01-services-line);
+    border-radius: .9rem;
+    background: #fff;
+    box-shadow: 0 .7rem 1.8rem rgba(82, 44, 25, .045);
+}
+
+.aznet-theme-services-page__group::before {
+    position: absolute;
+    inset-block: 0 auto;
+    inset-inline: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--law01-services-burgundy), var(--law01-services-gold));
+    content: "";
+}
+
+.aznet-theme-services-page__group-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.aznet-theme-services-page__group-index {
+    color: var(--law01-services-gold);
+    font-size: .8rem;
+    font-weight: var(--aznet-theme-font-weight-bold);
+    letter-spacing: .12em;
+}
+
+.aznet-theme-services-page__group-icon {
+    width: 2.45rem;
+    aspect-ratio: 1;
+    background: var(--law01-services-burgundy);
+    opacity: .88;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 3h10l3 3v15H4V6l3-3Z'/%3E%3Cpath d='M8 10h8M8 14h8M8 18h5M9 3v4h6V3'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 3h10l3 3v15H4V6l3-3Z'/%3E%3Cpath d='M8 10h8M8 14h8M8 18h5M9 3v4h6V3'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.aznet-theme-services-page__group-title {
+    margin: 0;
+    color: var(--law01-services-ink);
+    font-size: clamp(1.35rem, 2vw, 1.75rem);
+    line-height: 1.2;
+}
+
+.aznet-theme-services-page__group-title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.aznet-theme-services-page__group-title a:hover,
+.aznet-theme-services-page__group-title a:focus-visible {
+    color: var(--law01-services-burgundy);
+}
+
+.aznet-theme-services-page__subservices {
+    display: grid;
+    gap: 0;
+    margin: 1.2rem 0 0;
+    padding: 0;
+    border-top: 1px solid rgba(122, 14, 24, .1);
+    list-style: none;
+}
+
+.aznet-theme-services-page__subservices li {
+    margin: 0;
+    border-bottom: 1px solid rgba(122, 14, 24, .08);
+}
+
+.aznet-theme-services-page__subservice-link {
+    display: flex;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .72rem 0;
+    color: #403630;
+    font-weight: 600;
+    line-height: 1.4;
+    text-decoration: none;
+}
+
+.aznet-theme-services-page__subservice-link:hover,
+.aznet-theme-services-page__subservice-link:focus-visible {
+    color: var(--law01-services-burgundy);
+}
+
+.aznet-theme-services-page__subservice-link span:last-child {
+    flex: 0 0 auto;
+    color: var(--law01-services-gold);
+}
+
+.aznet-theme-services-page__group-link {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    gap: .4rem;
+    margin-top: auto;
+    padding-top: 1.25rem;
+    color: var(--law01-services-burgundy);
+    font-weight: var(--aznet-theme-font-weight-bold);
+    text-decoration: none;
+}
+
+.aznet-theme-services-page__group-link:hover,
+.aznet-theme-services-page__group-link:focus-visible {
+    color: var(--law01-services-burgundy-deep);
+}
+
+
 .aznet-theme-services-page__consultation {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
@@ -325,6 +450,14 @@
 
     .aznet-theme-services-page__services {
         padding: 2rem var(--aznet-theme-gutter-mobile);
+    }
+
+    .aznet-theme-services-page__group-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .aznet-theme-services-page__group {
+        min-height: auto;
     }
 
     .aznet-theme-services-page__hero {

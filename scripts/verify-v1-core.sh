@@ -130,6 +130,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-about-
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-about-page-mobile-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-project-page-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-services-root-presentation-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/services-root-nested-groups-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/service-detail-premium-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/service-card-consistency-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-woocommerce-page-excerpt-regression-contract.php

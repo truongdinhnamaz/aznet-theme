@@ -58,9 +58,9 @@ foreach ([
     "if ( '' !== \$authored_content )",
     'the_content()',
     'aznet-theme-services-page__hero',
-    'aznet-theme-services-page__grid',
-    'template-parts/services/card',
-    'aznet-theme-service-card-grid',
+    'aznet-theme-services-page__group-grid',
+    'aznet-theme-services-page__subservices',
+    'aznet-theme-services-page__subservice-link',
     'aznet-theme-services-page__consultation',
 ] as $needle) {
     if (! str_contains($servicesTemplate, $needle)) {

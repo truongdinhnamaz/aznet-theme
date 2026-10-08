@@ -51,14 +51,12 @@ foreach ([
 }
 
 foreach ([
-    "get_template_part(",
-    "'template-parts/services/card'",
-    "'service_page' => \$service_page",
-    "'index'        => \$index + 1",
-    'aznet-theme-service-card-grid',
+    'aznet-theme-services-page__group-grid',
+    'aznet-theme-services-page__subservices',
+    'aznet-theme-services-page__subservice-link',
 ] as $needle) {
     if (! str_contains($services, $needle)) {
-        $fail('Services root must render the shared service-card partial: ' . $needle);
+        $fail('Services root must render the approved grouped service hierarchy: ' . $needle);
     }
 }
 
@@ -144,4 +142,4 @@ foreach ([
     }
 }
 
-echo "PASS: service root and service detail share one canonical service-card presentation\n";
+echo "PASS: Services root uses the approved grouped hierarchy while service-detail siblings retain the canonical service-card presentation\n";
