@@ -15,10 +15,8 @@ if (str_contains($css, '.page-id-')) {
     exit(2);
 }
 
-$scope = 'body.aznet-theme-preset--curtain-01 .aznet-theme-page--landing:has(.rqa-contact-hero)';
 
 $required = [
-    $scope,
     'body.aznet-theme-preset--curtain-01 .rqa-contact-hero',
     'body.aznet-theme-preset--curtain-01 .rqa-contact-quick',
     'body.aznet-theme-preset--curtain-01 .rqa-contact-main',
