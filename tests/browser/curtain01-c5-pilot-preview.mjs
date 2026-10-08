@@ -355,6 +355,75 @@ for (const [name, viewport] of Object.entries(viewports)) {
   await verifyHomepage(name, viewport);
 }
 
+
+async function verifyCurtainPage(route, label, requiredSelectors) {
+  const context = await browser.newContext({ viewport: viewports.desktop });
+  const page = await context.newPage();
+  await page.goto(baseUrl + route, { waitUntil: 'networkidle' });
+
+  const bodyClass = await page.locator('body').getAttribute('class') || '';
+  if (!bodyClass.includes('aznet-theme-preset--curtain-01')) {
+    throw new Error(`${label}: Curtain 01 visual preset body class missing`);
+  }
+
+  for (const selector of requiredSelectors) {
+    if (await page.locator(selector).count() !== 1) {
+      throw new Error(`${label}: expected one ${selector}`);
+    }
+  }
+
+  const styles = await page.locator('link[rel="stylesheet"]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href') || ''));
+  if (!styles.some((href) => href.includes('/assets/css/components/page.css'))) {
+    throw new Error(`${label}: generic Page stylesheet missing`);
+  }
+  if (!styles.some((href) => href.includes('/assets/css/presets/curtain-01.css'))) {
+    throw new Error(`${label}: Curtain 01 preset stylesheet missing`);
+  }
+
+  const section = page.locator(requiredSelectors[0]);
+  const geometry = await section.evaluate((node) => {
+    const rect = node.getBoundingClientRect();
+    const style = getComputedStyle(node);
+    return {
+      left: rect.left,
+      rightGap: document.documentElement.clientWidth - rect.right,
+      width: rect.width,
+      paddingLeft: Number.parseFloat(style.paddingLeft),
+      paddingRight: Number.parseFloat(style.paddingRight),
+    };
+  });
+  if (Math.abs(geometry.left) > 1 || Math.abs(geometry.rightGap) > 1) {
+    throw new Error(`${label}: section surface is not edge-to-edge; ${JSON.stringify(geometry)}`);
+  }
+  if (!(geometry.paddingLeft > 0) || !(geometry.paddingRight > 0)) {
+    throw new Error(`${label}: section inner content lacks shared gutters; ${JSON.stringify(geometry)}`);
+  }
+
+  const overflow = await assertNoOverflow(page, label);
+  const a11y = await assertA11y(page, label);
+  await page.screenshot({ path: path.join(outDir, `${label}.png`), fullPage: true });
+  results[label] = { overflow, a11y, geometry };
+  await context.close();
+}
+
+await verifyCurtainPage('/bao-gia-rem/', 'quote-page', [
+  '.rqa-quote-factors',
+  '.rqa-quote-process',
+  '.rqa-quote-trust',
+  '.rqa-quote-proof',
+  '.rqa-quote-faq',
+  '.rqa-quote-cta-dark',
+]);
+
+await verifyCurtainPage('/lien-he/', 'contact-page', [
+  '.rqa-contact-quick',
+  '.rqa-contact-main',
+  '.rqa-contact-info',
+  '.rqa-contact-form',
+  '.rqa-contact-trust',
+  '.rqa-contact-cta',
+]);
+
 async function verifyHomepageAdmin() {
   const context = await browser.newContext({ viewport: viewports.desktop });
   const page = await context.newPage();
