@@ -54,9 +54,9 @@ foreach ([
     }
 }
 
-foreach (['rqa-', 'flatsome', 'ux_', 'choiceguide_', '_choiceguide_', 'get_post_meta', 'get_option'] as $forbidden) {
+foreach (['flatsome', 'ux_', 'choiceguide_', '_choiceguide_', 'get_post_meta', 'get_option', '.page-id-', 'remquocanh.vn'] as $forbidden) {
     if (str_contains(strtolower((string) $css), strtolower($forbidden))) {
-        fwrite(STDERR, "FAIL: Curtain 01 visual preset contains forbidden domain/provider coupling: {$forbidden}\n");
+        fwrite(STDERR, "FAIL: Curtain 01 visual preset contains forbidden coupling: {$forbidden}\n");
         exit(1);
     }
 }
