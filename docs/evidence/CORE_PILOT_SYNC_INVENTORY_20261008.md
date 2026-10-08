@@ -1,7 +1,7 @@
 # Core / Pilot Synchronization Leakage Inventory — 08/10/2026
 
-**Scope:** S0 exact inventory before migration  
-**Canonical source base:** `main@3226908cae6488e4e957e578cafbedeaba45f5a2`  
+**Scope:** S0 exact inventory before migration
+**Canonical source base:** `main@3226908cae6488e4e957e578cafbedeaba45f5a2`
 **Execution branch:** `work/core-pilot-sync-cleanup-20261008`
 
 ## Source priority
