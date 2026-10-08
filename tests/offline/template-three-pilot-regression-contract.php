@@ -111,7 +111,7 @@ $curtainCss = (string) file_get_contents($root . '/assets/css/presets/curtain-01
 $editorialCss = (string) file_get_contents($root . '/assets/css/presets/editorial.css');
 $industrialCss = (string) file_get_contents($root . '/assets/css/presets/industrial-01.css');
 
-if (! str_contains($designSystem, "'assets/css/presets/' . $preset . '.css'")) {
+if (! str_contains($designSystem, "'assets/css/presets/' . \$preset . '.css'")) {
     fwrite(STDERR, "FAIL: visual preset editor path is not generic/preset-derived.\n");
     exit(1);
 }
