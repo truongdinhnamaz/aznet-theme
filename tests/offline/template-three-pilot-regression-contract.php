@@ -104,6 +104,39 @@ foreach ([
     }
 }
 
+
+$designSystem = (string) file_get_contents($root . '/inc/theme/design-system.php');
+$genericPageCss = (string) file_get_contents($root . '/assets/css/components/page.css');
+$curtainCss = (string) file_get_contents($root . '/assets/css/presets/curtain-01.css');
+$editorialCss = (string) file_get_contents($root . '/assets/css/presets/editorial.css');
+$industrialCss = (string) file_get_contents($root . '/assets/css/presets/industrial-01.css');
+
+if (! str_contains($designSystem, "'assets/css/presets/' . \$preset . '.css'")) {
+    fwrite(STDERR, "FAIL: visual preset editor path is not generic/preset-derived.\n");
+    exit(1);
+}
+
+if (! str_contains($curtainCss, 'rqa-')) {
+    fwrite(STDERR, "FAIL: Curtain 01 lost its scoped authored RQA compatibility presentation.\n");
+    exit(1);
+}
+
+foreach ([
+    'generic Page Core' => $genericPageCss,
+    'Law/editorial preset' => $editorialCss,
+    'Industrial 01 preset' => $industrialCss,
+] as $surface => $source) {
+    if (str_contains($source, 'rqa-')) {
+        fwrite(STDERR, "FAIL: Curtain/RQA presentation leaked into {$surface}.\n");
+        exit(1);
+    }
+}
+
+if (str_contains($curtainCss, '.page-id-') || str_contains($curtainCss, 'remquocanh.vn')) {
+    fwrite(STDERR, "FAIL: Curtain 01 compatibility presentation regained site/Page-ID recognition.\n");
+    exit(1);
+}
+
 $verify = (string) file_get_contents($root . '/scripts/verify-v1-core.sh');
 if (! str_contains($verify, 'tests/offline/template-three-pilot-regression-contract.php')) {
     fwrite(STDERR, "FAIL: C7 three-pilot regression is not retained in the V1 core verification chain.\n");
