@@ -24,5 +24,7 @@ foreach (['template-parts/team/card.php','template-parts/homepage/law-01/team.ph
  if (!str_contains($tpl,'Luật sư|Luật gia')) {fwrite(STDERR,"FAIL: missing Luật gia honorific on {$path}\n");exit(1);}
 }
 if (str_contains($directory,'text-overflow:ellipsis') || str_contains($homepage,'text-overflow:ellipsis')) {fwrite(STDERR,"FAIL: member names must never be truncated\\n");exit(1);}
-foreach ([$directory,$homepage] as $css) {if (!str_contains($css,'container-type: inline-size') || !str_contains($css,'cqi')) {fwrite(STDERR,"FAIL: missing card-width-responsive name sizing\\n");exit(1);}}
+foreach ([$directory,$homepage] as $css) {if (!str_contains($css,'white-space:nowrap') || !str_contains($css,'overflow:visible')) {fwrite(STDERR,"FAIL: missing card-width-responsive name sizing\\n");exit(1);}}
+$js=(string)file_get_contents($root.'/assets/js/team-name-fit.js');
+if (!str_contains($js,'scrollWidth') || !str_contains($js,'ResizeObserver')) {fwrite(STDERR,"FAIL: card names must shrink responsively without truncation\\n");exit(1);}
 echo "PASS: Team list name typography\n";
