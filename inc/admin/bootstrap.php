@@ -10,6 +10,7 @@ require_once __DIR__ . '/homepage-hero.php';
 require_once __DIR__ . '/homepage-design.php';
 require_once __DIR__ . '/homepage-migration.php';
 require_once __DIR__ . '/homepage-authoring.php';
+require_once __DIR__ . '/team-member-editor.php';
 require_once __DIR__ . '/homepage.php';
 require_once __DIR__ . '/provisioning.php';
 require_once __DIR__ . '/settings-actions.php';
