@@ -15,6 +15,13 @@ $portrait_id = function_exists( 'AZnet\\Theme\\team_member_portrait_id' )
 $member_image = $portrait_id > 0
     ? wp_get_attachment_image( $portrait_id, 'medium_large', false, [ 'class' => 'aznet-theme-team-card__image aznet-theme-law01-profile__member-image aznet-theme-law01-team-card__image' ] )
     : '';
+$member_title = get_the_title( $team_member );
+$member_name = is_string( $member_title ) ? $member_title : '';
+$member_honorific = '';
+if ( 1 === preg_match( '/^(Luật sư)\\s+(.+)$/u', $member_name, $parts ) ) {
+    $member_honorific = $parts[1];
+    $member_name = $parts[2];
+}
 $member_role = trim( (string) $team_member->post_excerpt );
 $member_phone = function_exists( 'AZnet\\Theme\\team_member_phone' ) ? \AZnet\Theme\team_member_phone( (int) $team_member->ID ) : '';
 $member_zalo = function_exists( 'AZnet\\Theme\\team_member_zalo' ) ? \AZnet\Theme\team_member_zalo( (int) $team_member->ID ) : '';
@@ -33,7 +40,7 @@ $url = is_string( $url ) ? $url : '';
     <div class="aznet-theme-team-card__body aznet-theme-law01-team-card__body">
         <<?php echo esc_html( $heading_tag ); ?> class="aznet-theme-team-card__name">
             <?php if ( '' !== $url ) : ?><a href="<?php echo esc_url( $url ); ?>"><?php endif; ?>
-            <?php echo esc_html( get_the_title( $team_member ) ); ?>
+            <?php if ( '' !== $member_honorific ) : ?><span class="aznet-theme-team-card__honorific"><?php echo esc_html( $member_honorific ); ?></span> <?php endif; ?><span class="aznet-theme-team-card__person-name"><?php echo esc_html( $member_name ); ?></span>
             <?php if ( '' !== $url ) : ?></a><?php endif; ?>
         </<?php echo esc_html( $heading_tag ); ?>>
         <?php if ( '' !== $member_role ) : ?>
