@@ -26,6 +26,13 @@ $contact_url = function_exists( 'AZnet\\Theme\\service_page_contact_url' )
 $portrait_id = function_exists( 'AZnet\\Theme\\team_member_portrait_id' )
     ? \AZnet\Theme\team_member_portrait_id( (int) get_the_ID() )
     : 0;
+$member_title = get_the_title();
+$member_name = is_string( $member_title ) ? $member_title : '';
+$member_honorific = '';
+if ( 1 === preg_match( '/^(Luật sư)\\s+(.+)$/u', $member_name, $title_parts ) ) {
+    $member_honorific = $title_parts[1];
+    $member_name = $title_parts[2];
+}
 $member_id = (int) get_the_ID();
 $phone = function_exists( 'AZnet\\Theme\\team_member_phone' ) ? \AZnet\Theme\team_member_phone( $member_id ) : '';
 $phone_href = function_exists( 'AZnet\\Theme\\team_member_phone_href' ) ? \AZnet\Theme\team_member_phone_href( $phone ) : '';
@@ -58,7 +65,7 @@ $has_body = '' !== trim( (string) get_post_field( 'post_content', $member_id ) )
 
             <div class="aznet-theme-team-member__intro">
                 <p class="aznet-theme-team-member__eyebrow"><?php esc_html_e( 'Đội ngũ chuyên môn', 'aznet-theme' ); ?></p>
-                <h1 id="aznet-theme-team-member-title" class="aznet-theme-team-member__title"><?php the_title(); ?></h1>
+                <h1 id="aznet-theme-team-member-title" class="aznet-theme-team-member__title"><?php if ( '' !== $member_honorific ) : ?><span class="aznet-theme-team-member__honorific"><?php echo esc_html( $member_honorific ); ?></span> <?php endif; ?><span class="aznet-theme-team-member__person-name"><?php echo esc_html( $member_name ); ?></span></h1>
 
                 <?php if ( '' !== $excerpt ) : ?>
                     <p class="aznet-theme-team-member__lead"><?php echo esc_html( $excerpt ); ?></p>
