@@ -23,4 +23,6 @@ foreach (['template-parts/team/card.php','template-parts/homepage/law-01/team.ph
  $tpl=(string)file_get_contents($root.'/'.$path);
  if (!str_contains($tpl,'Luật sư|Luật gia')) {fwrite(STDERR,"FAIL: missing Luật gia honorific on {$path}\n");exit(1);}
 }
+if (str_contains($directory,'text-overflow:ellipsis') || str_contains($homepage,'text-overflow:ellipsis')) {fwrite(STDERR,"FAIL: member names must never be truncated\\n");exit(1);}
+foreach ([$directory,$homepage] as $css) {if (!str_contains($css,'container-type: inline-size') || !str_contains($css,'cqi')) {fwrite(STDERR,"FAIL: missing card-width-responsive name sizing\\n");exit(1);}}
 echo "PASS: Team list name typography\n";
