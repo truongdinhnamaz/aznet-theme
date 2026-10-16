@@ -733,7 +733,8 @@ function render_homepage_team_authoring(): void {
     echo '<input type="hidden" name="action" value="aznet_theme_create_team_member">';
     wp_nonce_field( 'aznet_theme_create_team_member' );
     echo '<label><span>' . esc_html__( 'Tên nhân sự', 'aznet-theme' ) . '</span><input class="widefat" type="text" name="team_member_name" required></label>';
-    echo '<label><span>' . esc_html__( 'Chức vụ / chuyên môn ngắn', 'aznet-theme' ) . '</span><textarea class="widefat" rows="2" name="team_member_role"></textarea></label>';
+    echo '<label><span>' . esc_html__( 'Chức vụ / chuyên môn ngắn', 'aznet-theme' ) . '</span><textarea class="widefat" rows="2" name="team_member_role" aria-describedby="aznet-theme-team-role-hint"></textarea></label>';
+    echo '<p id="aznet-theme-team-role-hint" class="description">' . esc_html__( 'Gợi ý: viết trong 1–2 dòng để card cân đối. Nội dung dài hơn vẫn được lưu đầy đủ.', 'aznet-theme' ) . '</p>';
     echo '<div class="aznet-theme-homepage-team-contact-fields">';
     echo '<label><span>' . esc_html__( 'Số điện thoại', 'aznet-theme' ) . '</span><input class="widefat" type="tel" inputmode="tel" autocomplete="tel" name="team_member_phone" placeholder="0912.047.054"></label>';
     echo '<label><span>' . esc_html__( 'Zalo', 'aznet-theme' ) . '</span><input class="widefat" type="tel" inputmode="tel" name="team_member_zalo" placeholder="Chỉ nhập số điện thoại"></label>';
