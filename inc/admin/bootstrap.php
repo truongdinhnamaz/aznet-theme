@@ -15,6 +15,7 @@ require_once __DIR__ . '/homepage.php';
 require_once __DIR__ . '/provisioning.php';
 require_once __DIR__ . '/settings-actions.php';
 require_once __DIR__ . '/settings-portability.php';
+require_once __DIR__ . '/project-handoff.php';
 require_once __DIR__ . '/system-health.php';
 require_once __DIR__ . '/editor-policy.php';
 
