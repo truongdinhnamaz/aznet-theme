@@ -28,6 +28,7 @@ printf 'PASS: production PHP lint %s files\n' "${#production_php[@]}"
 
 printf '%s\n' '==> Team member phone/Zalo RED-GREEN contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-member-contact-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-member-detail-phone-contract.php
 
 printf '%s\n' '==> Retained core/static/security/package boundary chain'
 bash scripts/verify-g3-core.sh
