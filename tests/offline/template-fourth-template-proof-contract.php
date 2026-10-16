@@ -100,6 +100,37 @@ foreach ($genericFiles as $file) {
     }
 }
 
+
+$fixtureSource = (string) file_get_contents($fixturePath);
+$designSystemSource = (string) file_get_contents($root . '/inc/theme/design-system.php');
+$assetsSource = (string) file_get_contents($root . '/inc/theme/assets.php');
+
+foreach ([
+    'curtain-01',
+    'rqa-',
+    'remquocanh.vn',
+] as $curtainIdentifier) {
+    if (str_contains($fixtureSource, $curtainIdentifier)) {
+        fwrite(STDERR, "FAIL: fourth-template fixture leaked Curtain 01 identity: {$curtainIdentifier}.\n");
+        exit(1);
+    }
+}
+
+foreach ([
+    'rqa-',
+    'remquocanh.vn',
+] as $pilotIdentifier) {
+    if (str_contains($designSystemSource, $pilotIdentifier) || str_contains($assetsSource, $pilotIdentifier)) {
+        fwrite(STDERR, "FAIL: generic visual/asset Core contains pilot presentation identifier: {$pilotIdentifier}.\n");
+        exit(1);
+    }
+}
+
+if ($visualPreset === 'curtain-01') {
+    fwrite(STDERR, "FAIL: fourth template resolved the Curtain 01 visual preset.\n");
+    exit(1);
+}
+
 $verify = (string) file_get_contents($root . '/scripts/verify-v1-core.sh');
 if (! str_contains($verify, 'tests/offline/template-fourth-template-proof-contract.php')) {
     fwrite(STDERR, "FAIL: C8 fourth-template proof is not retained in reusable V1 verification.\n");
