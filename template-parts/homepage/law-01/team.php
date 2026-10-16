@@ -13,12 +13,19 @@ $members = homepage_direct_published_children( (int) $page->ID, 8 );
 <?php if ( [] !== $members ) : ?>
 <div class="aznet-theme-law01-grid aznet-theme-law01-grid--team">
 <?php foreach ( $members as $member ) : if ( ! $member instanceof \WP_Post ) { continue; }
+    $member_title = get_the_title( $member );
+    $member_name = is_string( $member_title ) ? $member_title : '';
+    $member_honorific = '';
+    if ( 1 === preg_match( '/^(Luật sư)\\s+(.+)$/u', $member_name, $parts ) ) {
+        $member_honorific = $parts[1];
+        $member_name = $parts[2];
+    }
     $member_summary = trim( (string) get_the_excerpt( $member ) );
     $member_image = has_post_thumbnail( $member ) ? get_the_post_thumbnail( $member, 'medium_large', [ 'class' => 'aznet-theme-law01-team-card__image' ] ) : '';
 ?>
 <article class="aznet-theme-law01-team-card">
 <?php if ( '' !== $member_image ) : ?><a class="aznet-theme-law01-team-card__media" href="<?php echo esc_url( get_permalink( $member ) ); ?>"><?php echo wp_kses_post( $member_image ); ?></a><?php endif; ?>
-<div class="aznet-theme-law01-team-card__body"><h3><a href="<?php echo esc_url( get_permalink( $member ) ); ?>"><?php echo esc_html( get_the_title( $member ) ); ?></a></h3>
+<div class="aznet-theme-law01-team-card__body"><h3><a href="<?php echo esc_url( get_permalink( $member ) ); ?>"><?php if ( '' !== $member_honorific ) : ?><span class="aznet-theme-team-card__honorific"><?php echo esc_html( $member_honorific ); ?></span> <?php endif; ?><span class="aznet-theme-team-card__person-name"><?php echo esc_html( $member_name ); ?></span></a></h3>
 <?php if ( '' !== $member_summary ) : ?><p><?php echo esc_html( $member_summary ); ?></p><?php endif; ?></div>
 </article>
 <?php endforeach; ?>
