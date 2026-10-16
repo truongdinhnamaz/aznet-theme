@@ -9,3 +9,6 @@
 .aznet-theme-team-directory__grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(1rem,2vw,1.5rem)}
 @media(max-width:64rem){.aznet-theme-team-directory__grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:40rem){.aznet-theme-team-directory__grid{grid-template-columns:1fr}}
+
+.aznet-theme-team-directory__grid .aznet-theme-team-card__honorific{font-size:.65em;font-weight:600;letter-spacing:0}
+.aznet-theme-team-directory__grid .aznet-theme-team-card__name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
