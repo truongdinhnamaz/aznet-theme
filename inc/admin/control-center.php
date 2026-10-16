@@ -274,6 +274,9 @@ function render_control_center(): void {
         wp_nonce_field( 'aznet_theme_export_settings' ); submit_button( 'Xuất JSON', 'secondary', 'submit', false ); echo '</form>';
         echo '<form method="post" enctype="multipart/form-data" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="aznet_theme_import_settings">';
         wp_nonce_field( 'aznet_theme_import_settings' ); echo '<input type="file" name="aznet_theme_settings_file" accept="application/json,.json" required> '; submit_button( 'Nhập JSON', 'secondary', 'submit', false ); echo '</form></div>';
+        echo '<div class="aznet-theme-panel"><h2>Project Handoff — Hồ sơ bàn giao dự án</h2><p>Tải hồ sơ JSON để tiếp tục phát triển AZnet Theme trong cuộc trò chuyện mới. Đây không phải bản sao lưu website; cần đối chiếu lại GitHub và tài liệu nguồn.</p>';
+        echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="aznet_theme_export_handoff">';
+        wp_nonce_field( 'aznet_theme_export_handoff' ); submit_button( 'Xuất hồ sơ bàn giao JSON', 'secondary', 'submit', false ); echo '</form></div>';
         echo '<div class="aznet-theme-panel aznet-theme-danger"><h2>Đặt lại thiết lập Theme</h2><form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="aznet_theme_reset_settings">';
         wp_nonce_field( 'aznet_theme_reset_settings' );
         echo '<label><input type="checkbox" name="confirm_reset" value="1" required> ' . esc_html__( 'Tôi xác nhận chỉ đặt lại thiết lập trình bày của AZnet Theme.', 'aznet-theme' ) . '</label> ';

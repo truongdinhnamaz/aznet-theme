@@ -15,6 +15,7 @@ require_once __DIR__ . '/homepage.php';
 require_once __DIR__ . '/provisioning.php';
 require_once __DIR__ . '/settings-actions.php';
 require_once __DIR__ . '/settings-portability.php';
+require_once __DIR__ . '/project-handoff.php';
 require_once __DIR__ . '/system-health.php';
 require_once __DIR__ . '/editor-policy.php';
 
@@ -86,6 +87,7 @@ if ( is_admin() ) {
     add_action( 'admin_post_aznet_theme_reset_settings', __NAMESPACE__ . '\\handle_reset_settings' );
     add_action( 'admin_post_aznet_theme_export_settings', __NAMESPACE__ . '\\handle_export_settings' );
     add_action( 'admin_post_aznet_theme_import_settings', __NAMESPACE__ . '\\handle_import_settings' );
+    add_action( 'admin_post_aznet_theme_export_handoff', __NAMESPACE__ . '\\handle_export_handoff' );
     add_action( 'admin_post_aznet_theme_provisioning_plan', __NAMESPACE__ . '\\handle_provisioning_plan' );
     add_action( 'admin_post_aznet_theme_provisioning_apply', __NAMESPACE__ . '\\handle_provisioning_apply' );
     add_action( 'admin_post_aznet_theme_provisioning_restore_indexing', __NAMESPACE__ . '\\handle_provisioning_restore_indexing' );
