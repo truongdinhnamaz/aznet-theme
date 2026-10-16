@@ -280,6 +280,13 @@ function enqueue_active_template_homepage_assets( ?string $version = null ): voi
 /** Enqueue Law 01 only for its active Front Page presentation surface. */
 /** Enqueue the shared Team card presentation for Team surfaces only. */
 function enqueue_team_card_asset( ?string $version = null ): void {
+    wp_enqueue_script(
+        'aznet-theme-team-name-fit',
+        get_theme_file_uri( '/assets/js/team-name-fit.js' ),
+        [],
+        asset_content_version( '/assets/js/team-name-fit.js', $version ),
+        true
+    );
     wp_enqueue_style(
         'aznet-theme-team-card',
         get_theme_file_uri( '/assets/css/components/team-card.css' ),
