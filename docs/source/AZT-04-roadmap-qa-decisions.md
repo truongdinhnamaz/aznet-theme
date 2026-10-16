@@ -928,3 +928,7 @@ Accepted rules:
 - WordPress continues to own Page title/excerpt/content/media; no new Theme content store or provider/domain authority is created.
 - Existing template-specific CSS header suppression is retained only as compatibility evidence. The target shared-Core implementation is render/composition-time suppression with retained fallback.
 - Implementation must use RED -> minimal GREEN -> retained regression, then fresh L3/L4 checks. Because this is a shared presentation rule, D-042 peer-pilot regression is required before release. Production pilot publication remains a separate explicit approval gate.
+
+### D-048 — Project Handoff JSON (Accepted, 2026-10-16)
+
+Decision: add read-only Theme Control Center handoff JSON export, clearly separated from existing portable settings and actual WordPress backup. Must disclose unknown Git/QA checkpoint and require validation against AZT-00–AZT-04, current evidence and canonical GitHub. Theme must not claim WP-runtime-derived PASS, duplicate authoritative content or store domain data. Implementation candidate PR #438 (pending CI/runtime/browser/release gates); evidence is not production PASS until deployed and verified.
