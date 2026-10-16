@@ -268,6 +268,23 @@ async function verifyHomepageTeamAuthoring(page, viewportName) {
     if (await phoneLink.count() !== 1 || await phoneLink.getAttribute('href') !== 'tel:0912047054') throw new Error('Team phone action missing or malformed');
     if (!(await phoneLink.innerText()).includes('0912.047.054')) throw new Error('Team phone display formatting mismatch');
     if (await zaloLink.count() !== 1 || await zaloLink.getAttribute('href') !== 'https://zalo.me/84987472480') throw new Error('Team Zalo action missing or malformed');
+    const detailUrl = await contactCard.locator('.aznet-theme-team-card__name a').getAttribute('href');
+    if (!detailUrl) throw new Error('Published Team member detail link missing');
+    const memberDetail = await page.context().newPage();
+    try {
+      await memberDetail.goto(detailUrl, { waitUntil: 'networkidle' });
+      const detailPhone = memberDetail.locator('.aznet-theme-team-member__phone');
+      if (await detailPhone.count() !== 1 || await detailPhone.getAttribute('href') !== 'tel:0912047054') throw new Error('Team detail phone absent or malformed');
+      if (!(await detailPhone.innerText()).includes('0912.047.054')) throw new Error('Team detail phone formatting mismatch');
+      if ((await memberDetail.locator('h1#aznet-theme-team-member-title').innerText()).trim() !== expectedPublic[0]) throw new Error('Team detail title must preserve WordPress Page title');
+      const fitsViewport = await memberDetail.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
+      if (!fitsViewport) throw new Error('Team member detail has horizontal overflow');
+      await detailPhone.focus();
+      const focused = await detailPhone.evaluate((node) => document.activeElement === node);
+      if (!focused) throw new Error('Team member detail phone cannot receive keyboard focus');
+    } finally {
+      await memberDetail.close();
+    }
   } finally {
     await publicPage.close();
   }

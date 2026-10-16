@@ -26,7 +26,11 @@ $contact_url = function_exists( 'AZnet\\Theme\\service_page_contact_url' )
 $portrait_id = function_exists( 'AZnet\\Theme\\team_member_portrait_id' )
     ? \AZnet\Theme\team_member_portrait_id( (int) get_the_ID() )
     : 0;
-$has_body = '' !== trim( (string) get_post_field( 'post_content', (int) get_the_ID() ) );
+$member_id = (int) get_the_ID();
+$phone = function_exists( 'AZnet\\Theme\\team_member_phone' ) ? \AZnet\Theme\team_member_phone( $member_id ) : '';
+$phone_href = function_exists( 'AZnet\\Theme\\team_member_phone_href' ) ? \AZnet\Theme\team_member_phone_href( $phone ) : '';
+$phone_display = function_exists( 'AZnet\\Theme\\team_member_phone_display' ) ? \AZnet\Theme\team_member_phone_display( $phone ) : '';
+$has_body = '' !== trim( (string) get_post_field( 'post_content', $member_id ) );
 ?>
 <section class="aznet-theme-team-member" aria-labelledby="aznet-theme-team-member-title">
     <div class="aznet-theme-team-member__shell">
@@ -58,6 +62,13 @@ $has_body = '' !== trim( (string) get_post_field( 'post_content', (int) get_the_
 
                 <?php if ( '' !== $excerpt ) : ?>
                     <p class="aznet-theme-team-member__lead"><?php echo esc_html( $excerpt ); ?></p>
+                <?php endif; ?>
+
+                <?php if ( '' !== $phone_href ) : ?>
+                    <a class="aznet-theme-team-member__phone" href="<?php echo esc_url( $phone_href ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Gọi %s', 'aznet-theme' ), $phone_display ) ); ?>">
+                        <span class="aznet-theme-team-member__phone-icon" aria-hidden="true">☎</span>
+                        <span><?php echo esc_html( $phone_display ); ?></span>
+                    </a>
                 <?php endif; ?>
 
                 <div class="aznet-theme-team-member__rule" aria-hidden="true"></div>
