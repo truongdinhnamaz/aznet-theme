@@ -16,7 +16,7 @@ $members = homepage_direct_published_children( (int) $page->ID, 8 );
     $member_title = get_the_title( $member );
     $member_name = is_string( $member_title ) ? $member_title : '';
     $member_honorific = '';
-    if ( 1 === preg_match( '/^(Luật sư)\\s+(.+)$/u', $member_name, $parts ) ) {
+    if ( 1 === preg_match( '/^(Luật sư|Luật gia)\\s+(.+)$/u', $member_name, $parts ) ) {
         $member_honorific = $parts[1];
         $member_name = $parts[2];
     }
