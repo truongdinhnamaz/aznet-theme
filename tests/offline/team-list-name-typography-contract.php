@@ -27,4 +27,5 @@ if (str_contains($directory,'text-overflow:ellipsis') || str_contains($homepage,
 foreach ([$directory,$homepage] as $css) {if (!str_contains($css,'white-space:nowrap') || !str_contains($css,'overflow:visible')) {fwrite(STDERR,"FAIL: missing card-width-responsive name sizing\\n");exit(1);}}
 $js=(string)file_get_contents($root.'/assets/js/team-name-fit.js');
 if (!str_contains($js,'scrollWidth') || !str_contains($js,'ResizeObserver')) {fwrite(STDERR,"FAIL: card names must shrink responsively without truncation\\n");exit(1);}
+foreach ([$directory,$homepage] as $css) { if (!str_contains($css,'-webkit-line-clamp: 2')) { fwrite(STDERR,"FAIL: Team card role must show at most two lines\\n"); exit(1); } }
 echo "PASS: Team list name typography\n";
