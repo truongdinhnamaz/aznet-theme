@@ -18,7 +18,7 @@ $member_image = $portrait_id > 0
 $member_title = get_the_title( $team_member );
 $member_name = is_string( $member_title ) ? $member_title : '';
 $member_honorific = '';
-if ( 1 === preg_match( '/^(Luật sư)\\s+(.+)$/u', $member_name, $parts ) ) {
+if ( 1 === preg_match( '/^(Luật sư|Luật gia)\\s+(.+)$/u', $member_name, $parts ) ) {
     $member_honorific = $parts[1];
     $member_name = $parts[2];
 }
