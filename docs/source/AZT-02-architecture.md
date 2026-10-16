@@ -570,3 +570,7 @@ For Theme templates/pilots that provide an authored Page Hero as the primary int
 - WordPress retains ownership of Page title/excerpt/content/media. The hero-first rule changes composition only; it does not copy Page content into Theme settings or create a parallel content store.
 - Core should suppress duplicate generic markup at render/composition time where practical. CSS-only hiding may remain as a bounded compatibility path for already-shipped template implementations, but it is not the target generic mechanism.
 - A shared-Core hero-first change requires D-042 peer-pilot regression evidence for every affected template plus mobile/desktop heading-order and accessibility verification before release/deployment.
+
+### Project Handoff JSON — export-only boundary (2026-10-16)
+
+Owner-approved: AZnet Theme can export a read-only handoff context artifact from Control Center, separate from existing portable settings import/export. The payload uses normalized Theme presentation settings, current visible runtime version, canonical repo pointer and authoritative AZT source references. Git branch/commit, QA PASS and Exact Next cannot be attested by WP runtime and MUST be marked unknown / revalidation required, never inferred. No copy of WordPress content, plugin domain stores, private APIs, credentials, database/files or mutation/import actions. JSON is neither source of truth nor restorable backup. Future import, remote attestations or architectural expansion require separate contract and approval. Stage/release gate remains evidence based.
