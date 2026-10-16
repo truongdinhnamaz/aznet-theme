@@ -19,4 +19,8 @@ foreach (['template-parts/team/card.php','template-parts/homepage/law-01/team.ph
 foreach ([$directory,$homepage] as $css) {
  if(!str_contains($css,'.aznet-theme-team-card__honorific')){fwrite(STDERR,"FAIL: honorific sizing missing\\n");exit(1);}
 }
+foreach (['template-parts/team/card.php','template-parts/homepage/law-01/team.php'] as $path) {
+ $tpl=(string)file_get_contents($root.'/'.$path);
+ if (!str_contains($tpl,'Luật sư|Luật gia')) {fwrite(STDERR,"FAIL: missing Luật gia honorific on {$path}\n");exit(1);}
+}
 echo "PASS: Team list name typography\n";
