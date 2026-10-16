@@ -27,9 +27,9 @@ $portrait_id = function_exists( 'AZnet\\Theme\\team_member_portrait_id' )
     ? \AZnet\Theme\team_member_portrait_id( (int) get_the_ID() )
     : 0;
 $member_id = (int) get_the_ID();
-$phone = function_exists( 'AZnet\\Theme\\team_member_phone' ) ? \\AZnet\\Theme\\team_member_phone( $member_id ) : '';
-$phone_href = function_exists( 'AZnet\\Theme\\team_member_phone_href' ) ? \\AZnet\\Theme\\team_member_phone_href( $phone ) : '';
-$phone_display = function_exists( 'AZnet\\Theme\\team_member_phone_display' ) ? \\AZnet\\Theme\\team_member_phone_display( $phone ) : '';
+$phone = function_exists( 'AZnet\\Theme\\team_member_phone' ) ? \AZnet\\Theme\\team_member_phone( $member_id ) : '';
+$phone_href = function_exists( 'AZnet\\Theme\\team_member_phone_href' ) ? \AZnet\\Theme\\team_member_phone_href( $phone ) : '';
+$phone_display = function_exists( 'AZnet\\Theme\\team_member_phone_display' ) ? \AZnet\\Theme\\team_member_phone_display( $phone ) : '';
 $has_body = '' !== trim( (string) get_post_field( 'post_content', $member_id ) );
 ?>
 <section class="aznet-theme-team-member" aria-labelledby="aznet-theme-team-member-title">
