@@ -12,3 +12,5 @@
 
 .aznet-theme-team-directory__grid .aznet-theme-team-card__honorific{font-size:.65em;font-weight:600;letter-spacing:0}
 .aznet-theme-team-directory__grid .aznet-theme-team-card__name{white-space:nowrap;overflow:visible;text-overflow:clip}
+
+.aznet-theme-team-directory__grid .aznet-theme-team-card__role{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;line-height:1.5;min-height:3em}
