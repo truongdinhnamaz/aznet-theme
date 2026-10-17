@@ -28,30 +28,32 @@ if ( $has_article_sidebar ) {
 }
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( $article_classes ); ?>>
-    <header class="aznet-theme-entry__header aznet-theme-article__header">
-        <?php if ( has_category() ) : ?>
-            <nav class="aznet-theme-article__categories" aria-label="<?php esc_attr_e( 'Categories', 'aznet-theme' ); ?>">
-                <?php the_category( ' ' ); ?>
-            </nav>
-        <?php endif; ?>
 
-        <h1 class="aznet-theme-entry__title aznet-theme-article__title"><?php the_title(); ?></h1>
-
-        <?php if ( '' !== $dek ) : ?>
-            <p class="aznet-theme-article__dek"><?php echo esc_html( $dek ); ?></p>
-        <?php endif; ?>
-
-        <?php get_template_part( 'template-parts/content/meta' ); ?>
-    </header>
-
-    <?php if ( has_post_thumbnail() ) : ?>
-        <figure class="aznet-theme-article__featured-media">
-            <?php the_post_thumbnail( 'large', [ 'class' => 'aznet-theme-article__featured-image' ] ); ?>
-        </figure>
-    <?php endif; ?>
 
     <div class="<?php echo esc_attr( $reading_layout_class ); ?>">
+        <header class="aznet-theme-entry__header aznet-theme-article__header">
+            <?php if ( has_category() ) : ?>
+                <nav class="aznet-theme-article__categories" aria-label="<?php esc_attr_e( 'Categories', 'aznet-theme' ); ?>">
+                    <?php the_category( ' ' ); ?>
+                </nav>
+            <?php endif; ?>
+
+            <h1 class="aznet-theme-entry__title aznet-theme-article__title"><?php the_title(); ?></h1>
+
+            <?php if ( '' !== $dek ) : ?>
+                <p class="aznet-theme-article__dek"><?php echo esc_html( $dek ); ?></p>
+            <?php endif; ?>
+
+            <?php get_template_part( 'template-parts/content/meta' ); ?>
+        </header>
+
         <div class="aznet-theme-article__reading-main">
+            <?php if ( has_post_thumbnail() ) : ?>
+                <figure class="aznet-theme-article__featured-media">
+                    <?php the_post_thumbnail( 'large', [ 'class' => 'aznet-theme-article__featured-image' ] ); ?>
+                </figure>
+            <?php endif; ?>
+
             <div class="aznet-theme-entry__content aznet-theme-article__content">
                 <?php the_content(); ?>
                 <?php

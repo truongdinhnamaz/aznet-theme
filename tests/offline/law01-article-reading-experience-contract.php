@@ -53,11 +53,7 @@ foreach ([
     '.aznet-theme-article--law01 .aznet-theme-article__content blockquote',
     '.aznet-theme-article--law01 .aznet-theme-article__content table',
     '--law01-article-burgundy',
-    'max-width: 50rem',
-    'max-width: 26ch;',
-    'font-size: clamp(3rem, 4vw, 4rem);',
-    'line-height: 1.08;',
-    'text-align: center;',
+    'max-width: 36rem',
     'line-height: 1.82',
     '@media (max-width: 47.999rem)',
 ] as $marker) {
@@ -70,8 +66,25 @@ if (! str_contains($assets, 'asset_content_version( \'/assets/css/components/art
     $fail('article.css must use content-aware cache versioning so Theme updates are visible immediately');
 }
 
-if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__featured-media\\s*\\{[^}]*max-width:\\s*50rem;/s', $css)) {
-    $fail('Law 01 featured media must match the 50rem article reading-content width');
+if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__featured-media\\s*\\{[^}]*max-width:\\s*36rem;/s', $css)) {
+    $fail('Law 01 featured media must stay visibly narrower than the 50rem reading-content width');
+}
+
+if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__reading-main\\s*\\{[^}]*max-width:\\s*50rem;/s', $css)) {
+    $fail('Law 01 reading content must retain the 50rem reading width');
+}
+
+if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__header\\s*\\{[^}]*text-align:\\s*left;/s', $css)) {
+    $fail('Law 01 article header must use conventional left-aligned editorial presentation');
+}
+
+if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__title\\s*\\{[^}]*font-size:\\s*clamp\\(2rem,\\s*3vw,\\s*3rem\\);[^}]*text-align:\\s*left;/s', $css)) {
+    $fail('Law 01 article title must use a conventional left-aligned 2rem-3rem scale');
+}
+
+if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__categories\\s*\\{[^}]*justify-content:\\s*flex-start;/s', $css)
+    || ! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__meta\\s*\\{[^}]*justify-content:\\s*flex-start;/s', $css)) {
+    $fail('Law 01 article category/meta rows must align with the left content edge');
 }
 
 $production = $content . "\n" . $css;
@@ -94,5 +107,26 @@ foreach ([
 if (1 !== substr_count($content, 'the_content();')) {
     $fail('single Post must retain exactly one native the_content() boundary');
 }
+
+$readingStart = strpos($content, '<div class="<?php echo esc_attr( $reading_layout_class ); ?>">');
+$header = strpos($content, 'aznet-theme-article__header');
+$readingMain = strpos($content, 'aznet-theme-article__reading-main');
+$featured = strpos($content, 'aznet-theme-article__featured-media');
+$sidebar = strpos($content, 'aznet-theme-article__sidebar');
+if (false === $readingStart || false === $header || false === $readingMain || false === $featured || false === $sidebar
+    || ! ($readingStart < $header && $header < $readingMain && $readingMain < $featured && $featured < $sidebar)) {
+    $fail('Law 01 reading grid must contain header then reading main in the left column, with sidebar as the right-column sibling');
+}
+
+foreach ([
+    'grid-column: 1;',
+    'grid-row: 1;',
+    'grid-column: 2;',
+] as $marker) {
+    if (! str_contains($css, $marker)) {
+        $fail('Law 01 article grid placement missing: ' . $marker);
+    }
+}
+
 
 echo "PASS: Law 01 legal-article reading experience contract\n";
