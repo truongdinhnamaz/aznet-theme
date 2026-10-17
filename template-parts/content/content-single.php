@@ -35,22 +35,19 @@ if ( $has_article_sidebar ) {
                     <?php the_category( ' ' ); ?>
                 </nav>
             <?php endif; ?>
-    
             <h1 class="aznet-theme-entry__title aznet-theme-article__title"><?php the_title(); ?></h1>
-    
             <?php if ( '' !== $dek ) : ?>
                 <p class="aznet-theme-article__dek"><?php echo esc_html( $dek ); ?></p>
             <?php endif; ?>
-    
             <?php get_template_part( 'template-parts/content/meta' ); ?>
         </header>
-        <div class="aznet-theme-article__reading-main">
-        <?php if ( has_post_thumbnail() ) : ?>
-            <figure class="aznet-theme-article__featured-media">
-                <?php the_post_thumbnail( 'large', [ 'class' => 'aznet-theme-article__featured-image' ] ); ?>
-            </figure>
-        <?php endif; ?>
 
+        <div class="aznet-theme-article__reading-main">
+            <?php if ( has_post_thumbnail() ) : ?>
+                <figure class="aznet-theme-article__featured-media">
+                    <?php the_post_thumbnail( 'large', [ 'class' => 'aznet-theme-article__featured-image' ] ); ?>
+                </figure>
+            <?php endif; ?>
 
             <div class="aznet-theme-entry__content aznet-theme-article__content">
                 <?php the_content(); ?>
