@@ -1169,7 +1169,7 @@
     }
 }
 
-.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__member .aznet-theme-team-card__honorific,
+.aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__member.aznet-theme-team-card .aznet-theme-team-card__honorific,
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-team-card__body .aznet-theme-team-card__honorific{font-size:.65em;font-weight:600;letter-spacing:0}
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-profile__member h3,
 .aznet-theme-homepage--law-01-burgundy-gold .aznet-theme-law01-team-card__body h3{white-space:nowrap;overflow:visible;text-overflow:clip}
