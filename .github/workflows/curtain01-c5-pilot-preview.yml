@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - 'assets/css/components/page.css'
       - 'front-page.php'
       - 'inc/theme/settings.php'
       - 'inc/theme/design-system.php'
