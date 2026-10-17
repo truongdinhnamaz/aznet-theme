@@ -12,3 +12,5 @@
 .aznet-theme-team-card__contact:focus-visible{outline:2px solid var(--aznet-theme-color-focus);outline-offset:3px}
 .aznet-theme-team-card__contact-badge{display:inline-grid;width:1.25rem;height:1.25rem;place-items:center;border-radius:50%;background:currentColor;color:var(--aznet-theme-color-surface);font-size:.72rem;font-weight:800}
 @media(max-width:30rem){.aznet-theme-team-card__contacts{align-items:stretch;flex-direction:column}.aznet-theme-team-card__contact{width:100%;justify-content:flex-start}}
+
+.aznet-theme-team-card__honorific{font-size:.65em;font-weight:600;letter-spacing:0}
