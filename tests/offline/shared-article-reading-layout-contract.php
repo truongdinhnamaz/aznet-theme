@@ -84,4 +84,14 @@ foreach ([
     }
 }
 
+// The approved Law 01 desktop two-column grid must not override its
+// mobile/tablet one-column rule through later source-order declarations.
+$lawDesktopTwoColumn = ".aznet-theme-article--law01 .aznet-theme-article__reading-layout--with-sidebar {\n    grid-template-columns: minmax(0, 50rem) minmax(15rem, 18rem);\n}";
+$lawMobileOneColumn = "@media (max-width: 64rem) {\n    .aznet-theme-article--law01 .aznet-theme-article__reading-layout--with-sidebar {\n        grid-template-columns: minmax(0, 1fr);\n    }";
+$lawDesktopOffset = strrpos($css, $lawDesktopTwoColumn);
+$lawMobileOffset = strrpos($css, $lawMobileOneColumn);
+if (false === $lawDesktopOffset || false === $lawMobileOffset || $lawMobileOffset <= $lawDesktopOffset) {
+    $fail('Law 01 populated article sidebar must collapse to one column at 64rem and below');
+}
+
 echo "PASS: shared native-Post Law 01 reading composition across presets\n";
