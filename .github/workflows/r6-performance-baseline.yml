@@ -12,6 +12,7 @@ on:
       - 'scripts/verify-v1-core.sh'
       - 'scripts/build-release-package.py'
       - 'tests/browser/r6-performance-baseline.mjs'
+      - 'tests/browser/r6-woo-gallery-cls-regression.mjs'
       - 'tests/offline/r6-asset-scope-contract.php'
       - 'tests/offline/r6-convertflow-asset-gate-contract.php'
       - 'tests/offline/r6-ci-trigger-contract.php'
@@ -36,6 +37,7 @@ on:
       - 'scripts/verify-v1-core.sh'
       - 'scripts/build-release-package.py'
       - 'tests/browser/r6-performance-baseline.mjs'
+      - 'tests/browser/r6-woo-gallery-cls-regression.mjs'
       - 'tests/offline/r6-asset-scope-contract.php'
       - 'tests/offline/r6-convertflow-asset-gate-contract.php'
       - 'tests/offline/r6-ci-trigger-contract.php'
@@ -214,6 +216,12 @@ jobs:
           R6_MODE: woo
           R6_PRODUCT_ID: ${{ env.R6_PRODUCT_ID }}
         run: node tests/browser/r6-performance-baseline.mjs
+
+      - name: RED-GREEN native WooCommerce gallery CLS regression
+        env:
+          R6_BASE_URL: http://127.0.0.1:8080
+          R6_STATE_DIR: /tmp/r6-performance
+        run: node tests/browser/r6-woo-gallery-cls-regression.mjs
 
       - name: Verify runtime boundary and baseline completeness
         run: |
