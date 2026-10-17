@@ -4,6 +4,8 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - 'assets/css/components/page.css'
+      - 'assets/css/presets/curtain-01.css'
       - '.github/workflows/industrial01-pilot-runtime.yml'
       - 'tests/browser/industrial01-pilot-l4.mjs'
       - 'inc/theme/settings.php'

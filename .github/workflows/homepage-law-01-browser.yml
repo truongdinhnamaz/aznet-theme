@@ -5,6 +5,8 @@ on:
     branches:
       - main
     paths:
+      - 'assets/css/components/page.css'
+      - 'assets/css/presets/curtain-01.css'
       - 'front-page.php'
       - 'inc/theme/homepage-*.php'
       - 'inc/theme/header.php'
