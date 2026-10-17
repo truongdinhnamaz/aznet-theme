@@ -245,7 +245,7 @@ jobs:
         continue-on-error: true
         env:
           R6_AB_LOCAL_FIXTURE: '1'
-          R6_AB_TRIALS: control,slide-viewport,slide-container
+          R6_AB_TRIALS: control,slide-container,slide-container-float
           R6_AB_VIEWPORTS: 390x844,1440x900
           R6_AB_OUTPUT_DIR: /tmp/r6-performance/woo-slide-container-ab
         run: node tests/browser/r6-slide-container-ab.mjs
