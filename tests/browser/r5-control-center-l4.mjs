@@ -18,6 +18,7 @@ const viewports = {
   '1024x768': { width: 1024, height: 768 },
   '782x900': { width: 782, height: 900 },
   '390x844': { width: 390, height: 844 },
+  '320x720': { width: 320, height: 720 },
 };
 
 const results = [];
@@ -261,6 +262,34 @@ async function verifyHomepageTeamAuthoring(page, viewportName) {
     }
     if (await publicPage.locator('.aznet-theme-law01-profile__members .aznet-theme-team-card__media img').count() !== 0) {
       throw new Error('R5 text-only Team fixture unexpectedly rendered portrait media');
+    }
+    // Exercise long honorific + full person name in the existing Law 01 card at each viewport.
+    // Fixture copy is a presentation-only probe; it never updates WordPress-owned titles.
+    const singleLineProbe = await publicPage.evaluate(async () => {
+      const original = document.querySelector('.aznet-theme-law01-profile__members .aznet-theme-team-card');
+      if (!original) throw new Error('Team card missing for single-line visual probe');
+      const clone = original.cloneNode(true);
+      const link = clone.querySelector('.aznet-theme-team-card__name a');
+      if (!link) throw new Error('Team card title link missing');
+      link.innerHTML = '<span class="aznet-theme-team-card__honorific">Luật gia</span> <span class="aznet-theme-team-card__person-name">Vũ Thị Kim Dung</span>';
+      original.parentElement.insertBefore(clone, original);
+      await document.fonts.ready;
+      window.dispatchEvent(new Event('resize'));
+      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      const title = clone.querySelector('.aznet-theme-team-card__name');
+      const a = title.querySelector('a');
+      const role = a.querySelector('.aznet-theme-team-card__honorific');
+      const name = a.querySelector('.aznet-theme-team-card__person-name');
+      const rect = title.getBoundingClientRect();
+      const n = name.getBoundingClientRect();
+      const roleStyle = parseFloat(getComputedStyle(role).fontSize);
+      const nameStyle = parseFloat(getComputedStyle(name).fontSize);
+      const result = { titleHeight: rect.height, lineHeight: parseFloat(getComputedStyle(title).lineHeight), noOverflow: title.scrollWidth <= title.clientWidth + 1, sameRow: Math.abs(role.getBoundingClientRect().bottom - n.bottom) < 20, complete: a.textContent.replace(/\\s+/g, ' ').trim() === 'Luật gia Vũ Thị Kim Dung', smallerHonorific: roleStyle < nameStyle };
+      clone.remove();
+      return result;
+    });
+    if (!singleLineProbe.noOverflow || !singleLineProbe.sameRow || !singleLineProbe.complete || !singleLineProbe.smallerHonorific || singleLineProbe.titleHeight > singleLineProbe.lineHeight * 1.3) {
+      throw new Error('Team card single-line visual gate failed: ' + JSON.stringify(singleLineProbe));
     }
     const contactCard = publicPage.locator('.aznet-theme-law01-profile__members .aznet-theme-team-card').filter({ hasText: expectedPublic[0] });
     const phoneLink = contactCard.locator('a.aznet-theme-team-card__contact--phone');
