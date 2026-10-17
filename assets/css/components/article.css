@@ -848,6 +848,10 @@
     grid-row: 1 / span 2;
 }
 @media (max-width: 64rem) {
+    .aznet-theme-article--law01 .aznet-theme-article__reading-layout--with-sidebar {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
     .aznet-theme-article--law01 .aznet-theme-article__header {
         grid-column: 1;
         grid-row: auto;
