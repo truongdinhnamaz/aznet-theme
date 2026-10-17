@@ -6,11 +6,11 @@ import { installR6LayoutTimeline } from './r6-layout-timeline.mjs';
 function fixture() {
   let now = 100, raf = null, observer = null, mutation = null;
   const make = (tag, cls, rect, style = {}) => ({
-    tagName: tag, className: cls, isConnected: true,
+    tagName: tag, nodeType: 1, className: cls, isConnected: true,
     offsetHeight: rect.height, offsetWidth: rect.width,
     getBoundingClientRect: () => ({ ...rect, bottom: rect.y + rect.height, right: rect.x + rect.width }),
     getClientRects: () => [rect],
-    matches: (s) => s.split(',').some(x => x.trim() === '.summary.entry-summary' && cls.includes('summary') || x.trim() === '.woocommerce-product-gallery' && cls.includes('woocommerce-product-gallery')),
+    matches: (s) => s.split(',').some(x => x.trim().includes('.summary.entry-summary') && cls.includes('summary') || x.trim().endsWith('.woocommerce-product-gallery') && cls.includes('woocommerce-product-gallery')),
     closest: () => null,
     __style: {display:'block', visibility:'visible', opacity:'1', position:'static', overflow:'visible', transform:'none', gridTemplateColumns:'none', ...style},
   });
