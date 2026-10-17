@@ -25,7 +25,7 @@ if (!in_array('text', $palette, true)) {
     $fail('legacy palette slug changed without a public compatibility decision');
 }
 
-$selector = '.aznet-theme-curtain01-process__rail > .wp-block-cover.has-background-dim-70 .wp-block-cover__inner-container :is(.wp-block-heading, .wp-block-paragraph, .wp-block-list, li, a:not(.wp-block-button__link), figcaption)';
+$selector = '.aznet-theme-curtain01-process__rail > .wp-block-cover:has(> .wp-block-cover__background.has-background-dim-70) .wp-block-cover__inner-container :is(.wp-block-heading, .wp-block-paragraph, .wp-block-list, li, a:not(.wp-block-button__link), figcaption)';
 $pattern = '~' . preg_quote($selector, '~') . '\\s*\\{([^}]*)\\}~s';
 if (1 !== preg_match($pattern, $css, $match)) {
     $fail('missing scoped native Gutenberg dark Cover text override');
@@ -33,7 +33,7 @@ if (1 !== preg_match($pattern, $css, $match)) {
 if (!str_contains($match[1], 'color: var(--aznet-theme-on-inverse, #fff) !important;')) {
     $fail('Gutenberg palette specificity still overrides the authored inverse text color');
 }
-if (!str_contains($css, '.aznet-theme-curtain01-process__rail > .wp-block-cover.has-background-dim-70')) {
+if (!str_contains($css, '.aznet-theme-curtain01-process__rail > .wp-block-cover:has(> .wp-block-cover__background.has-background-dim-70)')) {
     $fail('must remain within Theme-owned Process presentation surface');
 }
 
