@@ -208,6 +208,34 @@ jobs:
           R6_MODE: clean
         run: node tests/browser/r6-performance-baseline.mjs
 
+      - name: Install WooCommerce 10.9.4 and public product fixtures
+        run: |
+          set -euo pipefail
+          wp plugin install woocommerce --version=10.9.4 --activate --path=/tmp/wp --allow-root
+          test "$(wp plugin get woocommerce --field=version --path=/tmp/wp --allow-root)" = '10.9.4'
+          wp plugin get woocommerce --field=version --path=/tmp/wp --allow-root | tee /tmp/r6-performance/woocommerce-version.txt
+          printf '%s' 'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAT0lEQVR42u3PQQ0AAAgEILV/2ItgCh9u0IBOUp9NPScgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwbwH3PQNQliOz8AAAAABJRU5ErkJggg==' | base64 -d > /tmp/r6-product.png
+          cp /tmp/r6-product.png /tmp/r6-gallery.png
+          MEDIA_ID=$(wp media import /tmp/r6-product.png --title='R6 Product Image' --porcelain --path=/tmp/wp --allow-root)
+          GALLERY_ID=$(wp media import /tmp/r6-gallery.png --title='R6 Gallery Image' --porcelain --path=/tmp/wp --allow-root)
+          R4_MEDIA_ID="$MEDIA_ID" R4_GALLERY_ID="$GALLERY_ID" wp eval-file tests/fixtures/r4-woocommerce-setup.php --path=/tmp/wp --allow-root | tee /tmp/r6-performance/woo-fixture-output.txt
+          SIMPLE_ID=$(sed -n 's/^SIMPLE_ID=//p' /tmp/r6-performance/woo-fixture-output.txt)
+          test -n "$SIMPLE_ID"
+          echo "R6_PRODUCT_ID=$SIMPLE_ID" >> "$GITHUB_ENV"
+          printf '%s\n' "$SIMPLE_ID" > /tmp/r6-performance/simple-product-id.txt
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+          curl -fsS http://127.0.0.1:8080/shop/ >/tmp/r6-performance/shop-smoke.html
+          curl -fsS http://127.0.0.1:8080/product/r4-simple-product/ >/tmp/r6-performance/product-smoke.html
+          grep -F 'R4 Simple Product' /tmp/r6-performance/product-smoke.html
+
+      - name: Capture WooCommerce baseline
+        env:
+          R6_BASE_URL: http://127.0.0.1:8080
+          R6_STATE_DIR: /tmp/r6-performance
+          R6_MODE: woo
+          R6_PRODUCT_ID: ${{ env.R6_PRODUCT_ID }}
+        run: node tests/browser/r6-performance-baseline.mjs
+
       - name: Verify runtime boundary and baseline completeness
         run: |
           set -euo pipefail
