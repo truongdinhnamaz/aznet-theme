@@ -42,6 +42,22 @@ function css_rule(string $css, string $selector): string
     return $match[1];
 }
 
+function css_has_declaration(string $css, string $selector, string $required): bool
+{
+    $pattern = '~'.preg_quote($selector, '~').'\s*\{([^}]*)\}~s';
+    if (! preg_match_all($pattern, $css, $matches)) {
+        return false;
+    }
+
+    foreach ($matches[1] as $declarations) {
+        if (str_contains($declarations, $required)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function luminance(string $hex): float
 {
     $values = [];
@@ -89,7 +105,7 @@ foreach ([
     '.aznet-theme-curtain01-final-cta h2' => 'color: #fff;',
     '.aznet-theme-curtain01-final-cta p' => 'color: #fff;',
 ] as $selector => $required) {
-    if (! str_contains(css_rule($home, $selector), $required)) {
+    if (! css_has_declaration($home, $selector, $required)) {
         fail_boundary("required accessible text treatment missing: {$selector}");
     }
 }
