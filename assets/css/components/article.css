@@ -647,7 +647,7 @@
 
 .aznet-theme-article:not(.aznet-theme-article--law01) .aznet-theme-article__reading-layout {
     display: grid;
-    grid-template-columns: minmax(0, 50rem);
+    grid-template-columns: minmax(0, min(100%, 50rem));
     gap: clamp(1.5rem, 3vw, 2.5rem);
     align-items: start;
     justify-content: center;
@@ -831,7 +831,7 @@
 }
 .aznet-theme-article--law01 .aznet-theme-article__reading-layout {
     display: grid;
-    grid-template-columns: minmax(0, 50rem);
+    grid-template-columns: minmax(0, min(100%, 50rem));
     gap: clamp(1.5rem, 3vw, 2.5rem);
     align-items: start;
     justify-content: center;
@@ -862,5 +862,19 @@
         grid-column: 1;
         grid-row: auto;
         order: 3;
+    }
+}
+
+/* WordPress can have an active article widget that returns no HTML on a
+ * particular Post. Hide its empty presentation slot without examining
+ * provider headings or taking ownership of a table-of-contents algorithm.
+ */
+@supports selector(.aznet-theme-article__reading-layout:has(> .aznet-theme-article__sidebar > *)) {
+    .aznet-theme-article .aznet-theme-article__reading-layout--with-sidebar:not(:has(> .aznet-theme-article__sidebar > *)) {
+        grid-template-columns: minmax(0, min(100%, 50rem));
+    }
+
+    .aznet-theme-article .aznet-theme-article__sidebar:not(:has(> *)) {
+        display: none;
     }
 }
