@@ -141,6 +141,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/contact-page-presen
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/rqa-contact-page-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/rqa-quote-page-balance-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/curtain01-published-css-scope-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/d042-three-pilot-css-trigger-contract.php
 
 printf '%s\n' '==> Y2 Professional Page Kits contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y2-professional-page-kits-contract.php
