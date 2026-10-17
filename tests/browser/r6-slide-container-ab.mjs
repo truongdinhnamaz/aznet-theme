@@ -10,7 +10,9 @@ import { installR6VitalsObserver } from './r6-vitals-diagnostics.mjs';
 import { installR6LayoutTimeline } from './r6-layout-timeline.mjs';
 import { cssForR6Trial, parseR6TrialVariants, parseR6Viewports } from './r6-slide-sizing-css.mjs';
 
-const urls=parsePilotTargets(process.env.R6_PILOT_URLS,process.env.R6_PILOT_ALLOWED_HOST);
+const urls=process.env.R6_AB_LOCAL_FIXTURE==='1'
+  ? ['http://127.0.0.1:8080/product/r4-simple-product/']
+  : parsePilotTargets(process.env.R6_PILOT_URLS,process.env.R6_PILOT_ALLOWED_HOST);
 const trials=parseR6TrialVariants(process.env.R6_AB_TRIALS);
 const viewports=parseR6Viewports(process.env.R6_AB_VIEWPORTS);
 const outDir=process.env.R6_AB_OUTPUT_DIR||'/tmp/r6-performance/slide-container-ab';
