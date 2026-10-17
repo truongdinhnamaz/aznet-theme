@@ -58,14 +58,29 @@
     margin: 0;
 }
 
+/*
+ * Native FlexSlider briefly extends the wrapper before slide widths settle.
+ * Bound each slide to the gallery, not the transient multi-slide wrapper.
+ * WooCommerce still owns gallery initialization and image selection.
+ */
+.single-product #main .woocommerce-product-gallery {
+    container-type: inline-size;
+}
+
 .single-product #main .woocommerce-product-gallery__wrapper {
     margin: 0;
 }
 
 .single-product #main .woocommerce-product-gallery__image {
     overflow: hidden;
+    max-inline-size: 100cqi !important;
     border-radius: var(--aznet-theme-radius-card, 0.875rem);
     background: var(--aznet-theme-surface, #ffffff);
+}
+
+/* Lay out native slides side by side as soon as FlexSlider creates its viewport. */
+.single-product #main .flex-viewport .woocommerce-product-gallery__image {
+    float: left;
 }
 
 .single-product #main .woocommerce-product-gallery__image img {
