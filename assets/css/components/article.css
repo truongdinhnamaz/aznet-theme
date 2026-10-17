@@ -864,3 +864,17 @@
         order: 3;
     }
 }
+
+/* WordPress can have an active article widget that returns no HTML on a
+ * particular Post. Hide its empty presentation slot without examining
+ * provider headings or taking ownership of a table-of-contents algorithm.
+ */
+@supports selector(.aznet-theme-article__reading-layout:has(> .aznet-theme-article__sidebar > *)) {
+    .aznet-theme-article .aznet-theme-article__reading-layout--with-sidebar:not(:has(> .aznet-theme-article__sidebar > *)) {
+        grid-template-columns: minmax(0, 50rem);
+    }
+
+    .aznet-theme-article .aznet-theme-article__sidebar:not(:has(> *)) {
+        display: none;
+    }
+}
