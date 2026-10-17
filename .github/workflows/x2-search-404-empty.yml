@@ -92,7 +92,7 @@ jobs:
               echo 'FAIL: X2 slice must not change provider integration files' >&2
               exit 1
             fi
-            if printf '%s\n' "$changed" | grep -E '^(functions\.php|style\.css)
+            if printf '%s\n' "$changed" | grep -E '^(functions\.php|style\.css)$'; then
               echo 'FAIL: X2 must not change Theme version declarations' >&2
               exit 1
             fi
