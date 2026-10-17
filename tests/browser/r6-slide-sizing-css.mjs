@@ -3,6 +3,7 @@ const CSS_BY_TRIAL = Object.freeze({
   control: '',
   'slide-viewport': '@media (max-width: 767px) { .single-product #main .woocommerce-product-gallery__image { max-width: 100vw !important; } }',
   'slide-container': '.single-product #main .woocommerce-product-gallery { container-type: inline-size; } .single-product #main .woocommerce-product-gallery__image { max-inline-size: 100cqi !important; }',
+  'slide-container-float': '.single-product #main .woocommerce-product-gallery { container-type: inline-size; } .single-product #main .woocommerce-product-gallery__image { max-inline-size: 100cqi !important; } .single-product #main .flex-viewport .woocommerce-product-gallery__image { float: left; }',
 });
 
 export function cssForR6Trial(name) {
