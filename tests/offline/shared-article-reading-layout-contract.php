@@ -65,4 +65,18 @@ foreach (['get_post_meta(', 'get_option(', 'DOMDocument', 'preg_match_all', 'cho
         $fail('ownership violation: ' . $forbidden);
     }
 }
+// Some native widgets intentionally render no markup for a short Post.
+// The presentation must not reserve a blank desktop navigation column.
+$emptySidebarLayoutSelector = '.aznet-theme-article .aznet-theme-article__reading-layout--with-sidebar:not(:has(> .aznet-theme-article__sidebar > *))';
+$emptySidebarSelector = '.aznet-theme-article .aznet-theme-article__sidebar:not(:has(> *))';
+foreach ([
+    [$emptySidebarLayoutSelector, 'grid-template-columns:\\s*minmax\\(0,\\s*50rem\\);'],
+    [$emptySidebarSelector, 'display:\\s*none;'],
+] as [$selector, $declarationPattern]) {
+    $pattern = '/' . preg_quote($selector, '/') . '\\s*\\{[^}]*' . $declarationPattern . '/s';
+    if (!preg_match($pattern, $css)) {
+        $fail('an empty WordPress article widget must collapse its grid area: ' . $selector);
+    }
+}
+
 echo "PASS: shared native-Post Law 01 reading composition across presets\n";
