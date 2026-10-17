@@ -16,6 +16,8 @@ on:
       - 'tests/browser/r6-vitals-diagnostics.test.mjs'
       - 'tests/browser/r6-public-pilot-vitals.mjs'
       - 'tests/browser/r6-public-pilot-vitals.test.mjs'
+      - 'tests/browser/r6-layout-timeline.mjs'
+      - 'tests/browser/r6-layout-timeline.test.mjs'
       - 'tests/offline/r6-asset-scope-contract.php'
       - 'tests/offline/r6-convertflow-asset-gate-contract.php'
       - 'tests/offline/r6-ci-trigger-contract.php'
@@ -44,6 +46,8 @@ on:
       - 'tests/browser/r6-vitals-diagnostics.test.mjs'
       - 'tests/browser/r6-public-pilot-vitals.mjs'
       - 'tests/browser/r6-public-pilot-vitals.test.mjs'
+      - 'tests/browser/r6-layout-timeline.mjs'
+      - 'tests/browser/r6-layout-timeline.test.mjs'
       - 'tests/offline/r6-asset-scope-contract.php'
       - 'tests/offline/r6-convertflow-asset-gate-contract.php'
       - 'tests/offline/r6-ci-trigger-contract.php'
@@ -143,6 +147,8 @@ jobs:
         run: |
           node --test tests/browser/r6-vitals-diagnostics.test.mjs
           node --test tests/browser/r6-public-pilot-vitals.test.mjs
+          node --test tests/browser/r6-layout-timeline.test.mjs
+          node --check tests/browser/r6-layout-timeline.mjs
           node --check tests/browser/r6-performance-baseline.mjs
           node --check tests/browser/r6-public-pilot-vitals.mjs
 
@@ -229,6 +235,16 @@ jobs:
           R6_MODE: woo
           R6_PRODUCT_ID: ${{ env.R6_PRODUCT_ID }}
         run: node tests/browser/r6-performance-baseline.mjs
+
+      - name: Capture Rèm Quốc Anh public layout timeline (one-off QA, read-only)
+        if: github.event_name == 'pull_request' && github.head_ref == 'work/r6-vitals-attribution-qa-20261017' && github.event.pull_request.head.repo.full_name == 'truongdinhnamaz/aznet-theme'
+        continue-on-error: true
+        env:
+          R6_PILOT_ALLOWED_HOST: remquocanh.vn
+          R6_PILOT_URLS: https://remquocanh.vn/rem-vai-2-lop/,https://remquocanh.vn/rem-voan/,https://remquocanh.vn/rem-vai-don-sac/
+          R6_PILOT_LAYOUT_TIMELINE: '1'
+          R6_PILOT_OUTPUT: /tmp/r6-performance/public-layout-timeline.json
+        run: node tests/browser/r6-public-pilot-vitals.mjs
 
       - name: Verify runtime boundary and baseline completeness
         run: |
