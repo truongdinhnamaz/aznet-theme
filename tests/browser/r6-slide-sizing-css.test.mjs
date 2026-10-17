@@ -35,3 +35,12 @@ test('only approved fixed responsive viewports are accepted', () => {
   assert.throws(() => parseR6Viewports('320x640'));
   assert.throws(() => parseR6Viewports(''));
 });
+
+
+test('float-only-after-FlexViewport trial preserves native slider ownership and responsive cap', () => {
+  const css=cssForR6Trial('slide-container-float');
+  assert.match(css,/\.single-product #main \.woocommerce-product-gallery\s*\{\s*container-type:\s*inline-size/);
+  assert.match(css,/\.single-product #main \.flex-viewport \.woocommerce-product-gallery__image\s*\{\s*float:\s*left/);
+  assert.match(css,/max-inline-size:\s*100cqi\s*!important/);
+  assert.doesNotMatch(css,/display:\s*none|position:\s*absolute|height:\s*\d+px/);
+});
