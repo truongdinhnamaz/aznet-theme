@@ -103,6 +103,7 @@ async function inspectCase(browser, routeName, route, viewportName, viewport) {
     firstFocus: null,
     primaryNavKeyboardReachable: null,
     reducedMotion: null,
+    articleSidebarFailsoft: null,
     blockingAxeViolations: null,
     stylesheets: [],
     failedSubresources,
@@ -182,6 +183,64 @@ async function inspectCase(browser, routeName, route, viewportName, viewport) {
     result.stylesheets = await page.locator('link[rel="stylesheet"]').evaluateAll((links) => links.map((link) => link.href));
     const wooStyles = result.stylesheets.filter((href) => /woocommerce-(product|archive|cart|checkout|account)\.css/i.test(href));
     if (wooStyles.length > 0) throw new Error(`Woo component styles loaded on WordPress-clean route: ${wooStyles.join(', ')}`);
+
+
+    // Native widget areas can be registered and populated, yet a widget may
+    // emit no HTML on one Post (e.g. insufficient headings for a provider TOC).
+    // Exercise the CSS geometry with generic and Law 01 presentation classes;
+    // never invoke or emulate the provider's private routing/state.
+    if (routeName === 'post') {
+      result.articleSidebarFailsoft = await page.evaluate(() => {
+        const article = document.querySelector('article.aznet-theme-article');
+        const layout = article?.querySelector('.aznet-theme-article__reading-layout');
+        if (!article || !layout) throw new Error('Native Post layout missing');
+
+        const originalLayoutClass = layout.className;
+        const originallyLaw01 = article.classList.contains('aznet-theme-article--law01');
+        const sidebar = document.createElement('aside');
+        sidebar.className = 'aznet-theme-article__sidebar';
+        sidebar.appendChild(document.createTextNode('   \n    '));
+
+        const sample = () => ({
+          sidebarDisplay: getComputedStyle(sidebar).display,
+          tracks: getComputedStyle(layout).gridTemplateColumns.trim().split(/\s+/).filter(Boolean).length,
+          overflowPx: layout.scrollWidth - layout.clientWidth,
+        });
+
+        const samples = [];
+        try {
+          for (const preset of ['generic', 'law01']) {
+            article.classList.toggle('aznet-theme-article--law01', preset === 'law01');
+            layout.classList.add('aznet-theme-article__reading-layout--with-sidebar');
+            layout.appendChild(sidebar);
+            const noWidgetMarkup = sample();
+
+            const widget = document.createElement('section');
+            widget.className = 'widget';
+            widget.textContent = 'Navigation';
+            sidebar.appendChild(widget);
+            const renderedWidget = sample();
+            widget.remove();
+
+            samples.push({ preset, noWidgetMarkup, renderedWidget });
+          }
+        } finally {
+          sidebar.remove();
+          layout.className = originalLayoutClass;
+          article.classList.toggle('aznet-theme-article--law01', originallyLaw01);
+        }
+        return samples;
+      });
+      const expectedWidgetTracks = viewport.width > 1024 ? 2 : 1;
+      for (const item of result.articleSidebarFailsoft) {
+        if (item.noWidgetMarkup.sidebarDisplay !== 'none' || item.noWidgetMarkup.tracks !== 1 || item.noWidgetMarkup.overflowPx > 1) {
+          throw new Error(`unrendered ${item.preset} sidebar reserved space: ${JSON.stringify(item.noWidgetMarkup)}`);
+        }
+        if (item.renderedWidget.sidebarDisplay === 'none' || item.renderedWidget.tracks !== expectedWidgetTracks || item.renderedWidget.overflowPx > 1) {
+          throw new Error(`rendered ${item.preset} sidebar lost its layout: ${JSON.stringify(item.renderedWidget)}`);
+        }
+      }
+    }
 
     const axeResults = await new AxeBuilder({ page }).analyze();
     fs.writeFileSync(path.join(axeDir, `${key}.json`), JSON.stringify(axeResults, null, 2));
