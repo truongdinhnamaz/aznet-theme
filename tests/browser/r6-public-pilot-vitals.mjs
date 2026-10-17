@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { installR6VitalsObserver, normalizeR6Resource, publicR6ResourceTiming } from './r6-vitals-diagnostics.mjs';
+import { installR6LayoutTimeline } from './r6-layout-timeline.mjs';
 
 export function parsePilotTargets(raw, approvedHost) {
   if (!approvedHost || !/^[a-z0-9.-]+$/i.test(approvedHost)) throw new Error('R6_PILOT_ALLOWED_HOST required');
@@ -25,6 +26,7 @@ export function parsePilotTargets(raw, approvedHost) {
 
 async function capturePilotPages() {
   const targets = parsePilotTargets(process.env.R6_PILOT_URLS, process.env.R6_PILOT_ALLOWED_HOST);
+  const captureLayoutTimeline = process.env.R6_PILOT_LAYOUT_TIMELINE === '1';
   const outputPath = process.env.R6_PILOT_OUTPUT || '/tmp/r6-performance/public-pilot-summary.json';
   const { chromium } = await import('playwright');
   const browser = await chromium.launch({ headless: true });
@@ -36,6 +38,7 @@ async function capturePilotPages() {
       const record = { url: target, viewport: '390x844', status: 0, error: null };
       try {
         await page.addInitScript({ content: '(' + installR6VitalsObserver.toString() + ')();' });
+        if (captureLayoutTimeline) await page.addInitScript({ content: '(' + installR6LayoutTimeline.toString() + ')();' });
         await page.addInitScript(() => {
           globalThis.__r6PilotCls = 0;
           try {
@@ -51,10 +54,11 @@ async function capturePilotPages() {
         const response = await page.goto(target, { waitUntil: 'domcontentloaded', timeout: 45000 });
         record.status = response?.status() || 0;
         await page.waitForLoadState('load', { timeout: 30000 }).catch(() => {});
-        await page.waitForTimeout(3500);
+        await page.waitForTimeout(captureLayoutTimeline ? 9000 : 3500);
         const browserRecord = await page.evaluate(() => ({
           cls: Number((globalThis.__r6PilotCls || 0).toFixed(5)),
           vitalDiagnostics: globalThis.__aznetR6Vitals || null,
+          layoutTimeline: globalThis.__aznetR6LayoutTimeline || null,
           resources: performance.getEntriesByType('resource').map((entry) => ({
             name: entry.name,
             initiatorType: entry.initiatorType,
@@ -70,6 +74,7 @@ async function capturePilotPages() {
         }));
         record.cls = browserRecord.cls;
         record.vitalDiagnostics = browserRecord.vitalDiagnostics;
+        if (captureLayoutTimeline) record.layoutTimeline = browserRecord.layoutTimeline;
         record.resourceTimings = browserRecord.resources.map(normalizeR6Resource)
           .sort((a, b) => a.startTimeMs - b.startTimeMs)
           .slice(0, 300).map(publicR6ResourceTiming);
