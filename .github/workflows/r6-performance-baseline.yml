@@ -209,6 +209,27 @@ jobs:
           R6_MODE: clean
         run: node tests/browser/r6-performance-baseline.mjs
 
+      - name: Compare RQA gallery transient scaling in browser-only CSS trials
+        if: github.event_name == 'pull_request' && github.head_ref == 'work/r6-vitals-attribution-qa-20261017' && github.event.pull_request.head.repo.full_name == 'truongdinhnamaz/aznet-theme'
+        continue-on-error: true
+        env:
+          R6_PILOT_ALLOWED_HOST: remquocanh.vn
+          R6_PILOT_URLS: https://remquocanh.vn/rem-vai-2-lop/
+          R6_PILOT_LAYOUT_TIMELINE: '1'
+        run: |
+          R6_PILOT_CSS_TRIAL=none R6_PILOT_OUTPUT=/tmp/r6-performance/css-trial-none.json node tests/browser/r6-public-pilot-vitals.mjs
+          R6_PILOT_CSS_TRIAL=cap-viewport R6_PILOT_OUTPUT=/tmp/r6-performance/css-trial-cap-viewport.json node tests/browser/r6-public-pilot-vitals.mjs
+          R6_PILOT_CSS_TRIAL=intrinsic R6_PILOT_OUTPUT=/tmp/r6-performance/css-trial-intrinsic.json node tests/browser/r6-public-pilot-vitals.mjs
+
+      - name: Compare public gallery width (one-off browser-only CSS experiment)
+        if: github.event_name == 'pull_request' && github.head_ref == 'work/r6-vitals-attribution-qa-20261017' && github.event.pull_request.head.repo.full_name == 'truongdinhnamaz/aznet-theme'
+        continue-on-error: true
+        env:
+          R6_PILOT_ALLOWED_HOST: remquocanh.vn
+          R6_PILOT_URLS: https://remquocanh.vn/rem-vai-2-lop/,https://remquocanh.vn/rem-voan/,https://remquocanh.vn/rem-vai-don-sac/
+          R6_AB_OUTPUT_DIR: /tmp/r6-performance/gallery-width-ab
+        run: node tests/browser/r6-gallery-width-ab.mjs
+
       - name: Install WooCommerce 10.9.4 and public product fixtures
         run: |
           set -euo pipefail
@@ -236,27 +257,6 @@ jobs:
           R6_MODE: woo
           R6_PRODUCT_ID: ${{ env.R6_PRODUCT_ID }}
         run: node tests/browser/r6-performance-baseline.mjs
-
-      - name: Compare RQA gallery transient scaling in browser-only CSS trials
-        if: github.event_name == 'pull_request' && github.head_ref == 'work/r6-vitals-attribution-qa-20261017' && github.event.pull_request.head.repo.full_name == 'truongdinhnamaz/aznet-theme'
-        continue-on-error: true
-        env:
-          R6_PILOT_ALLOWED_HOST: remquocanh.vn
-          R6_PILOT_URLS: https://remquocanh.vn/rem-vai-2-lop/
-          R6_PILOT_LAYOUT_TIMELINE: '1'
-        run: |
-          R6_PILOT_CSS_TRIAL=none R6_PILOT_OUTPUT=/tmp/r6-performance/css-trial-none.json node tests/browser/r6-public-pilot-vitals.mjs
-          R6_PILOT_CSS_TRIAL=cap-viewport R6_PILOT_OUTPUT=/tmp/r6-performance/css-trial-cap-viewport.json node tests/browser/r6-public-pilot-vitals.mjs
-          R6_PILOT_CSS_TRIAL=intrinsic R6_PILOT_OUTPUT=/tmp/r6-performance/css-trial-intrinsic.json node tests/browser/r6-public-pilot-vitals.mjs
-
-      - name: Compare public gallery width (one-off browser-only CSS experiment)
-        if: github.event_name == 'pull_request' && github.head_ref == 'work/r6-vitals-attribution-qa-20261017' && github.event.pull_request.head.repo.full_name == 'truongdinhnamaz/aznet-theme'
-        continue-on-error: true
-        env:
-          R6_PILOT_ALLOWED_HOST: remquocanh.vn
-          R6_PILOT_URLS: https://remquocanh.vn/rem-vai-2-lop/,https://remquocanh.vn/rem-voan/,https://remquocanh.vn/rem-vai-don-sac/
-          R6_AB_OUTPUT_DIR: /tmp/r6-performance/gallery-width-ab
-        run: node tests/browser/r6-gallery-width-ab.mjs
 
       - name: Verify runtime boundary and baseline completeness
         run: |
