@@ -52,7 +52,7 @@ $requiredContentMarkers = [
     'the_category(',
     '<nav class="aznet-theme-article__categories"',
     'the_tags(',
-    'the_post_navigation(',
+    "get_template_part( 'template-parts/content/related' )",
     "get_template_part( 'template-parts/content/author' )",
 ];
 

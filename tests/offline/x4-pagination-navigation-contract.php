@@ -25,7 +25,7 @@ $funcs    = $read( 'functions.php' );
 $required = [
     'archive.php' => [ 'have_posts()', 'the_post()', 'the_posts_pagination(', "'aria_label'", "esc_attr__( 'Archive pagination', 'aznet-theme' )" ],
     'search.php' => [ 'have_posts()', 'the_post()', 'the_posts_pagination(', "'aria_label'", "esc_attr__( 'Search results pagination', 'aznet-theme' )" ],
-    'template-parts/content/content-single.php' => [ 'the_content()', 'wp_link_pages(', 'aznet-theme-article__page-links', 'aznet-theme-navigation__summary', 'the_post_navigation(', "esc_attr__( 'Post navigation', 'aznet-theme' )" ],
+    'template-parts/content/content-single.php' => [ 'the_content()', 'wp_link_pages(', 'aznet-theme-article__page-links', 'aznet-theme-navigation__summary', "get_template_part( 'template-parts/content/related' )" ],
     'comments.php' => [ 'wp_list_comments(', 'the_comments_pagination(', "esc_attr__( 'Comments pagination', 'aznet-theme' )" ],
     'inc/theme/assets.php' => [ 'function should_enqueue_navigation_assets(): bool', 'function enqueue_navigation_assets( ?string $version = null ): void', "'aznet-theme-navigation'", "'/assets/css/components/navigation.css'", 'enqueue_navigation_assets( $version );' ],
 ];

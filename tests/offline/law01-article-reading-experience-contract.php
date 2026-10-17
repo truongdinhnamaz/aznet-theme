@@ -54,9 +54,12 @@ foreach ([
     '.aznet-theme-article--law01 .aznet-theme-article__content table',
     '--law01-article-burgundy',
     'max-width: 50rem',
-    'max-width: 26ch;',
-    'font-size: clamp(3rem, 4vw, 4rem);',
-    'line-height: 1.08;',
+    'width: 100%;',
+    'max-width: 50rem;',
+    'font-size: 2.5rem;',
+    'line-height: 1.14;',
+    'font-size: clamp(1.4rem, 5.8vw, 1.6rem);',
+    'line-height: 1.2;',
     'text-align: center;',
     'line-height: 1.82',
     '@media (max-width: 47.999rem)',
@@ -72,6 +75,24 @@ if (! str_contains($assets, 'asset_content_version( \'/assets/css/components/art
 
 if (! preg_match('/\\.aznet-theme-article--law01 \\.aznet-theme-article__featured-media\\s*\\{[^}]*max-width:\\s*50rem;/s', $css)) {
     $fail('Law 01 featured media must match the 50rem article reading-content width');
+}
+
+foreach ([
+    '.aznet-theme-article__reading-layout--with-sidebar:not(:has(.aznet-theme-article__sidebar > *))',
+    'grid-template-columns: minmax(0, 50rem);',
+    '.aznet-theme-article__sidebar:not(:has(> *))',
+    'display: none;',
+] as $marker) {
+    if (! str_contains($css, $marker)) {
+        $fail('Law 01 empty article sidebar must collapse and center the reading column: ' . $marker);
+    }
+}
+
+$reading_main_pos = strpos($content, '<div class="aznet-theme-article__reading-main">');
+$featured_pos = strpos($content, '<figure class="aznet-theme-article__featured-media">');
+$content_pos = strpos($content, '<div class="aznet-theme-entry__content aznet-theme-article__content">');
+if (false === $reading_main_pos || false === $featured_pos || false === $content_pos || ! ($reading_main_pos < $featured_pos && $featured_pos < $content_pos)) {
+    $fail('Law 01 featured media must live inside the reading-main column before article content so sidebar width is excluded');
 }
 
 $production = $content . "\n" . $css;
