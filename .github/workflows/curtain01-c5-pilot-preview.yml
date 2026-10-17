@@ -219,11 +219,23 @@ jobs:
           $knowledge_page = curtain01_page( 'Kiến thức', 'kien-thuc', 'Kinh nghiệm chọn và sử dụng rèm.' );
           $contact = curtain01_page( 'Liên hệ', 'lien-he', 'Trao đổi nhu cầu để nhận tư vấn phù hợp.' );
           $quote = curtain01_page( 'Báo giá rèm tại Rèm Quốc Anh', 'bao-gia-rem', 'Gửi thông tin để nhận báo giá theo nhu cầu.' );
+          // Native Gutenberg Cover reproduces the real WordPress color-palette
+          // collision: .has-text-color !important overruns inline white.
+          $process_content = <<<'HTML'
+          <!-- wp:cover {"dimRatio":70,"customOverlayColor":"#111111"} -->
+          <div class="wp-block-cover rqa-policy-hero" style="min-height:400px;background-color:#ffffff"><span aria-hidden="true" class="wp-block-cover__background has-background-dim-70 has-background-dim" style="background-color:#111111"></span><div class="wp-block-cover__inner-container">
+          <p class="has-text-color wp-block-paragraph" style="color:#ffffff">QUY TRÌNH LÀM NGHỀ</p>
+          <h2 class="wp-block-heading has-text-color" style="color:#ffffff">Sự chỉn chu không bắt đầu ở lúc lắp rèm</h2>
+          <p class="has-text-color wp-block-paragraph" style="color:#ffffff">Một bộ rèm hoàn thiện tốt bắt đầu từ khảo sát và tư vấn.</p>
+          </div></div>
+          <!-- /wp:cover -->
+          <!-- wp:list {"ordered":true} --><ol class="wp-block-list"><li>Khảo sát không gian</li><li>Tư vấn giải pháp</li><li>Chọn mẫu và vật liệu</li><li>Đo đạc</li><li>Sản xuất</li><li>Thi công</li><li>Nghiệm thu và bảo hành</li></ol><!-- /wp:list -->
+          HTML;
           $process = curtain01_page(
               'Sự chỉn chu không bắt đầu ở lúc lắp rèm',
               'quy-trinh-rem',
               '',
-              '<!-- wp:list {"ordered":true} --><ol class="wp-block-list"><li>Khảo sát không gian</li><li>Tư vấn giải pháp</li><li>Chọn mẫu và vật liệu</li><li>Đo đạc</li><li>Sản xuất</li><li>Thi công</li><li>Nghiệm thu và bảo hành</li></ol><!-- /wp:list -->'
+              $process_content
           );
 
           $proof_content = '<!-- wp:list --><ul class="wp-block-list"><li>2 thế hệ tiếp nối nghề rèm</li><li>Tư vấn — sản xuất — thi công</li><li>Không gian sống & công trình chuyên nghiệp</li><li>Đồng hành từ khảo sát đến hoàn thiện</li></ul><!-- /wp:list -->';
