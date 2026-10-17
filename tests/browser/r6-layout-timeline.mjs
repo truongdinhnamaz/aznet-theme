@@ -8,6 +8,7 @@ export function installR6LayoutTimeline() {
     product: '.single-product #main .product',
     gallery: '.single-product #main .woocommerce-product-gallery',
     wrapper: '.single-product #main .woocommerce-product-gallery__wrapper',
+    slide: '.single-product #main .woocommerce-product-gallery__image',
     viewport: '.single-product #main .flex-viewport',
     summary: '.single-product #main .summary.entry-summary',
     journey: '.choiceguide-product-journey',
