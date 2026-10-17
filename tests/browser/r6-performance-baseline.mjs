@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
+import { installR6VitalsObserver, normalizeR6Resource, publicR6ResourceTiming } from './r6-vitals-diagnostics.mjs';
 
 const baseUrl = (process.env.R6_BASE_URL || 'http://127.0.0.1:8080').replace(/\/$/, '');
 const stateDir = process.env.R6_STATE_DIR || '/tmp/r6-performance';
@@ -31,17 +32,6 @@ const routeSets = {
     { name: 'account', path: '/my-account/', status: [200] },
   ],
 };
-
-function normalizeResource(entry) {
-  return {
-    url: entry.name,
-    initiatorType: entry.initiatorType,
-    transferSize: Number(entry.transferSize || 0),
-    encodedBodySize: Number(entry.encodedBodySize || 0),
-    decodedBodySize: Number(entry.decodedBodySize || 0),
-    durationMs: Number(Number(entry.duration || 0).toFixed(2)),
-  };
-}
 
 function isThemeAsset(url) {
   return url.includes('/wp-content/themes/aznet-theme/');
@@ -87,6 +77,7 @@ try {
         failedSubresources.push(`${responseStatus} ${request.resourceType()} ${networkResponse.url()}`);
       });
 
+      await page.addInitScript({ content: '(' + installR6VitalsObserver.toString() + ')();' });
       await page.addInitScript(() => {
         globalThis.__aznetR6Cls = 0;
         try {
@@ -135,6 +126,10 @@ try {
             encodedBodySize: entry.encodedBodySize || 0,
             decodedBodySize: entry.decodedBodySize || 0,
             duration: entry.duration || 0,
+            startTime: entry.startTime || 0,
+            fetchStart: entry.fetchStart || 0,
+            responseStart: entry.responseStart || 0,
+            responseEnd: entry.responseEnd || 0,
           }));
           const domAssets = [...document.querySelectorAll('link[rel="stylesheet"][href], script[src]')]
             .map((node) => ({
@@ -144,13 +139,18 @@ try {
             }));
           return {
             cls: Number((globalThis.__aznetR6Cls || 0).toFixed(5)),
+            vitals: globalThis.__aznetR6Vitals || null,
             overflowPx: document.documentElement.scrollWidth - document.documentElement.clientWidth,
             resources,
             domAssets,
           };
         });
 
-        const resources = metrics.resources.map(normalizeResource).sort((a, b) => a.url.localeCompare(b.url));
+        const resources = metrics.resources.map(normalizeR6Resource).sort((a, b) => a.url.localeCompare(b.url));
+        const resourceTimings = [...resources]
+          .sort((a, b) => a.startTimeMs - b.startTimeMs)
+          .slice(0, 300)
+          .map(publicR6ResourceTiming);
         const themeAssets = resources.filter((entry) => isThemeAsset(entry.url));
         const themeCss = themeAssets.filter((entry) => entry.url.includes('.css'));
         const themeJs = themeAssets.filter((entry) => entry.url.includes('.js'));
@@ -178,6 +178,9 @@ try {
           path: route.path,
           status,
           cls: metrics.cls,
+          vitalDiagnostics: metrics.vitals,
+          resourceTimings,
+          resourceTimingsTruncated: resources.length > 300,
           overflowPx: metrics.overflowPx,
           themeAssetCount: themeAssets.length,
           themeCssCount: themeCss.length,
