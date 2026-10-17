@@ -1068,9 +1068,11 @@
     line-height: 1.7;
 }
 
-/* Final CTA */
+/* Final CTA: a warm brand surface, distinct from the Footer inverse surface.
+ * Pairing is governed by the Curtain 01 / Footer contrast regression gate.
+ */
 .aznet-theme-curtain01-final-cta {
-    background: var(--aznet-theme-curtain-surface-dark);
+    background: var(--aznet-theme-color-primary, #8a6a43);
     color: #fff;
 }
 
@@ -1087,7 +1089,7 @@
 
 .aznet-theme-curtain01-final-cta p {
     max-width: 48rem;
-    color: rgba(255, 255, 255, 0.72);
+    color: #fff;
     line-height: 1.75;
 }
 

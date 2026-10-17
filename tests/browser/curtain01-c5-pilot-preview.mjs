@@ -111,6 +111,56 @@ async function verifyHomepage(viewportName, viewport) {
     if (await page.locator(selector).count() !== 1) throw new Error(`${viewportName}: expected one ${selector}`);
   }
 
+  // The Footer can be restyled independently. Verify the actual Curtain 01
+  // closing surface against the Footer's resolved base token at every viewport.
+  const boundary = await page.evaluate(() => {
+    const cta = document.querySelector('.aznet-theme-curtain01-final-cta');
+    const footer = document.querySelector('.aznet-theme-site-footer');
+    const toRgb = (value) => {
+      const color = String(value || '').trim();
+      if (/^#[a-f0-9]{6}$/i.test(color)) {
+        return [1, 3, 5].map((i) => Number.parseInt(color.slice(i, i + 2), 16));
+      }
+      const match = color.match(/^rgba?\(\s*(\d+(?:\.\d+)?)[,\s]+(\d+(?:\.\d+)?)[,\s]+(\d+(?:\.\d+)?)/i);
+      return match ? match.slice(1, 4).map(Number) : null;
+    };
+    const luminance = (value) => {
+      const channels = toRgb(value);
+      if (!channels) return null;
+      const linear = channels.map((c) => {
+        const x = c / 255;
+        return x <= 0.04045 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4;
+      });
+      return linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722;
+    };
+    const contrast = (a, b) => {
+      const la = luminance(a);
+      const lb = luminance(b);
+      return la === null || lb === null ? null : (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+    };
+    if (!cta || !footer) return { error: 'missing CTA/Footer DOM' };
+    const ctaSurface = getComputedStyle(cta).backgroundColor;
+    const footerBase = getComputedStyle(footer).getPropertyValue('--aznet-theme-surface-inverse').trim();
+    const textContrast = [...cta.querySelectorAll('h2, p')]
+      .filter((node) => (node.textContent || '').trim().length > 0)
+      .map((node) => contrast(getComputedStyle(node).color, ctaSurface));
+
+    return {
+      ctaSurface,
+      footerBase,
+      surfaceContrast: contrast(ctaSurface, footerBase),
+      minTextContrast: textContrast.length && textContrast.every((value) => value !== null)
+        ? Math.min(...textContrast)
+        : null,
+    };
+  });
+  if (boundary.error || boundary.surfaceContrast === null || boundary.surfaceContrast < 2.5) {
+    throw new Error(viewportName + ': CTA/Footer surface contrast gate failed: ' + JSON.stringify(boundary));
+  }
+  if (boundary.minTextContrast === null || boundary.minTextContrast < 4.5) {
+    throw new Error(viewportName + ': closing CTA small-text contrast gate failed: ' + JSON.stringify(boundary));
+  }
+
   const nativeSentinel = page.locator('#curtain01-native-body');
   if (await nativeSentinel.count() !== 1) throw new Error(`${viewportName}: native Front Page content boundary sentinel missing`);
 
@@ -347,7 +397,7 @@ async function verifyHomepage(viewportName, viewport) {
   const a11y = await assertA11y(page, viewportName + '-home');
   await page.screenshot({ path: path.join(outDir, `${viewportName}-home.png`), fullPage: true });
 
-  results[viewportName] = { surfaceKeys, categoryShowcaseCards, productCards, knowledgeCards, categoryChips, overflow, a11y };
+  results[viewportName] = { surfaceKeys, categoryShowcaseCards, productCards, knowledgeCards, categoryChips, overflow, a11y, boundary };
   await context.close();
 }
 
