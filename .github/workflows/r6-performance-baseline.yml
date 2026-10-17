@@ -236,15 +236,17 @@ jobs:
           R6_PRODUCT_ID: ${{ env.R6_PRODUCT_ID }}
         run: node tests/browser/r6-performance-baseline.mjs
 
-      - name: Capture Rèm Quốc Anh public layout timeline (one-off QA, read-only)
+      - name: Compare RQA gallery transient scaling in browser-only CSS trials
         if: github.event_name == 'pull_request' && github.head_ref == 'work/r6-vitals-attribution-qa-20261017' && github.event.pull_request.head.repo.full_name == 'truongdinhnamaz/aznet-theme'
         continue-on-error: true
         env:
           R6_PILOT_ALLOWED_HOST: remquocanh.vn
-          R6_PILOT_URLS: https://remquocanh.vn/rem-vai-2-lop/,https://remquocanh.vn/rem-voan/,https://remquocanh.vn/rem-vai-don-sac/
+          R6_PILOT_URLS: https://remquocanh.vn/rem-vai-2-lop/
           R6_PILOT_LAYOUT_TIMELINE: '1'
-          R6_PILOT_OUTPUT: /tmp/r6-performance/public-layout-timeline.json
-        run: node tests/browser/r6-public-pilot-vitals.mjs
+        run: |
+          R6_PILOT_CSS_TRIAL=none R6_PILOT_OUTPUT=/tmp/r6-performance/css-trial-none.json node tests/browser/r6-public-pilot-vitals.mjs
+          R6_PILOT_CSS_TRIAL=cap-viewport R6_PILOT_OUTPUT=/tmp/r6-performance/css-trial-cap-viewport.json node tests/browser/r6-public-pilot-vitals.mjs
+          R6_PILOT_CSS_TRIAL=intrinsic R6_PILOT_OUTPUT=/tmp/r6-performance/css-trial-intrinsic.json node tests/browser/r6-public-pilot-vitals.mjs
 
       - name: Verify runtime boundary and baseline completeness
         run: |
