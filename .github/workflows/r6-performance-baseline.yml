@@ -12,6 +12,12 @@ on:
       - 'scripts/verify-v1-core.sh'
       - 'scripts/build-release-package.py'
       - 'tests/browser/r6-performance-baseline.mjs'
+      - 'tests/browser/r6-vitals-diagnostics.mjs'
+      - 'tests/browser/r6-vitals-diagnostics.test.mjs'
+      - 'tests/browser/r6-public-pilot-vitals.mjs'
+      - 'tests/browser/r6-public-pilot-vitals.test.mjs'
+      - 'tests/browser/r6-layout-timeline.mjs'
+      - 'tests/browser/r6-layout-timeline.test.mjs'
       - 'tests/offline/r6-asset-scope-contract.php'
       - 'tests/offline/r6-convertflow-asset-gate-contract.php'
       - 'tests/offline/r6-ci-trigger-contract.php'
@@ -36,6 +42,12 @@ on:
       - 'scripts/verify-v1-core.sh'
       - 'scripts/build-release-package.py'
       - 'tests/browser/r6-performance-baseline.mjs'
+      - 'tests/browser/r6-vitals-diagnostics.mjs'
+      - 'tests/browser/r6-vitals-diagnostics.test.mjs'
+      - 'tests/browser/r6-public-pilot-vitals.mjs'
+      - 'tests/browser/r6-public-pilot-vitals.test.mjs'
+      - 'tests/browser/r6-layout-timeline.mjs'
+      - 'tests/browser/r6-layout-timeline.test.mjs'
       - 'tests/offline/r6-asset-scope-contract.php'
       - 'tests/offline/r6-convertflow-asset-gate-contract.php'
       - 'tests/offline/r6-ci-trigger-contract.php'
@@ -130,6 +142,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+
+      - name: Verify R6 observational vitals capture (Node unit)
+        run: |
+          node --test tests/browser/r6-vitals-diagnostics.test.mjs
+          node --test tests/browser/r6-public-pilot-vitals.test.mjs
+          node --test tests/browser/r6-layout-timeline.test.mjs
+          node --check tests/browser/r6-layout-timeline.mjs
+          node --check tests/browser/r6-performance-baseline.mjs
+          node --check tests/browser/r6-public-pilot-vitals.mjs
 
       - name: Install WordPress 6.9 and clean fixtures
         run: |

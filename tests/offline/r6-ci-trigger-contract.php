@@ -62,4 +62,25 @@ foreach (['WordPress 6.9', 'tests/browser/g-core-l4.mjs'] as $marker) {
     }
 }
 
+// Regression: temporary browser probes must never remove Woo runtime coverage.
+$r6Path = $root . '/.github/workflows/r6-performance-baseline.yml';
+if (! is_file($r6Path)) {
+    fail_r6_ci('R6 performance workflow missing');
+}
+$r6Workflow = (string) file_get_contents($r6Path);
+$r6Steps = [
+    'Capture clean WordPress baseline',
+    'Install WooCommerce 10.9.4 and public product fixtures',
+    'Capture WooCommerce baseline',
+    'Verify runtime boundary and baseline completeness',
+];
+$previousOffset = -1;
+foreach ($r6Steps as $step) {
+    $offset = strpos($r6Workflow, '      - name: ' . $step);
+    if (false === $offset || $offset <= $previousOffset) {
+        fail_r6_ci('R6 workflow missing/out-of-order Woo regression step: ' . $step);
+    }
+    $previousOffset = $offset;
+}
+
 echo "PASS: R6 reusable PR and exact-main CI trigger contract\n";
