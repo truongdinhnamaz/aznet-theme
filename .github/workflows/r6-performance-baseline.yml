@@ -152,6 +152,11 @@ jobs:
           node --check tests/browser/r6-performance-baseline.mjs
           node --check tests/browser/r6-public-pilot-vitals.mjs
 
+      - name: Verify fixed R6 gallery CSS experiment guards (Node)
+        run: |
+          node --test tests/browser/r6-slide-sizing-css.test.mjs
+          node --check tests/browser/r6-slide-container-ab.mjs
+
       - name: Install WordPress 6.9 and clean fixtures
         run: |
           set -euo pipefail
@@ -235,6 +240,15 @@ jobs:
           R6_MODE: woo
           R6_PRODUCT_ID: ${{ env.R6_PRODUCT_ID }}
         run: node tests/browser/r6-performance-baseline.mjs
+
+      - name: Compare local WooCommerce native slide sizing (QA only)
+        continue-on-error: true
+        env:
+          R6_AB_LOCAL_FIXTURE: '1'
+          R6_AB_TRIALS: control,slide-viewport,slide-container
+          R6_AB_VIEWPORTS: 390x844,1440x900
+          R6_AB_OUTPUT_DIR: /tmp/r6-performance/woo-slide-container-ab
+        run: node tests/browser/r6-slide-container-ab.mjs
 
       - name: Verify runtime boundary and baseline completeness
         run: |
