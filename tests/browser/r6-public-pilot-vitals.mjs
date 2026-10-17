@@ -27,8 +27,6 @@ export function parsePilotTargets(raw, approvedHost) {
 async function capturePilotPages() {
   const targets = parsePilotTargets(process.env.R6_PILOT_URLS, process.env.R6_PILOT_ALLOWED_HOST);
   const captureLayoutTimeline = process.env.R6_PILOT_LAYOUT_TIMELINE === '1';
-  const cssTrial = process.env.R6_PILOT_CSS_TRIAL || 'none';
-  if (!['none', 'cap-viewport', 'intrinsic'].includes(cssTrial)) throw new Error('Unapproved CSS-only trial');
   const outputPath = process.env.R6_PILOT_OUTPUT || '/tmp/r6-performance/public-pilot-summary.json';
   const { chromium } = await import('playwright');
   const browser = await chromium.launch({ headless: true });
@@ -37,21 +35,8 @@ async function capturePilotPages() {
     for (const target of targets) {
       const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
       const page = await context.newPage();
-      const record = { url: target, viewport: '390x844', status: 0, error: null, cssTrial };
+      const record = { url: target, viewport: '390x844', status: 0, error: null };
       try {
-        if (cssTrial !== 'none') {
-          await page.addInitScript((mode) => {
-            // QA-only ephemeral CSS override in the isolated browser; no server write.
-            const text = mode === 'cap-viewport'
-              ? '.single-product #main .woocommerce-product-gallery__image img { max-width: 100vw !important; }'
-              : '.single-product #main .woocommerce-product-gallery__image img { width: auto !important; max-width: 100% !important; }';
-            const style = document.createElement('style');
-            style.textContent = text;
-            const attach = () => (document.head || document.documentElement).appendChild(style);
-            if (document.documentElement) attach();
-            else document.addEventListener('DOMContentLoaded', attach, { once: true });
-          }, cssTrial);
-        }
         await page.addInitScript({ content: '(' + installR6VitalsObserver.toString() + ')();' });
         if (captureLayoutTimeline) await page.addInitScript({ content: '(' + installR6LayoutTimeline.toString() + ')();' });
         await page.addInitScript(() => {
