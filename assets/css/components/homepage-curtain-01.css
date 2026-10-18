@@ -862,6 +862,19 @@
     margin-block: 0;
 }
 
+/* Dark WordPress-authored Process Cover: the legacy Gutenberg palette slug
+ * "text" generates .has-text-color { color: ... !important; }, which otherwise
+ * overrides authored white headings/paragraphs. Scope the inverse foreground
+ * to this high-dim presentation surface, not to WordPress content storage.
+ */
+.aznet-theme-curtain01-process__rail > .wp-block-cover:has(> .wp-block-cover__background.has-background-dim-70) .wp-block-cover__inner-container {
+    color: var(--aznet-theme-on-inverse, #fff);
+}
+
+.aznet-theme-curtain01-process__rail > .wp-block-cover:has(> .wp-block-cover__background.has-background-dim-70) .wp-block-cover__inner-container :is(.wp-block-heading, .wp-block-paragraph, .wp-block-list, li, a:not(.wp-block-button__link), figcaption) {
+    color: var(--aznet-theme-on-inverse, #fff) !important;
+}
+
 .aznet-theme-curtain01-process__rail ol {
     display: grid;
     grid-template-columns: repeat(7, minmax(0, 1fr));

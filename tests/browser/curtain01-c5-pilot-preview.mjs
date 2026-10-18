@@ -161,6 +161,15 @@ async function verifyHomepage(viewportName, viewport) {
     throw new Error(viewportName + ': closing CTA small-text contrast gate failed: ' + JSON.stringify(boundary));
   }
 
+  // A computed-color gate catches WordPress's !important palette collision.
+  const processCoverText = await page.locator(
+    '.aznet-theme-curtain01-process__rail > .wp-block-cover .wp-block-cover__inner-container > .has-text-color'
+  ).evaluateAll((nodes) => nodes.map((node) => getComputedStyle(node).color));
+  const darkCopy = 'rgb(40, 37, 33)';
+  if (processCoverText.length < 3 || processCoverText.some((color) => color === darkCopy)) {
+    throw new Error(viewportName + ': dark text on dark Process Cover: ' + JSON.stringify(processCoverText));
+  }
+
   const nativeSentinel = page.locator('#curtain01-native-body');
   if (await nativeSentinel.count() !== 1) throw new Error(`${viewportName}: native Front Page content boundary sentinel missing`);
 
@@ -397,7 +406,7 @@ async function verifyHomepage(viewportName, viewport) {
   const a11y = await assertA11y(page, viewportName + '-home');
   await page.screenshot({ path: path.join(outDir, `${viewportName}-home.png`), fullPage: true });
 
-  results[viewportName] = { surfaceKeys, categoryShowcaseCards, productCards, knowledgeCards, categoryChips, overflow, a11y, boundary };
+  results[viewportName] = { surfaceKeys, categoryShowcaseCards, productCards, knowledgeCards, categoryChips, overflow, a11y, boundary, processCoverText };
   await context.close();
 }
 
