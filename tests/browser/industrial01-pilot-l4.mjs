@@ -88,7 +88,10 @@ try {
     }
     const solutionsTitle = await solutions.locator('h2#aznet-industrial01-solutions-title').textContent();
     if (solutionsTitle?.trim() !== 'Giải pháp') throw new Error(name + ': WordPress Page title not retained');
+    // Isolate section for visual QA; sticky shell is restored immediately.
+    const isolatedCapture = await page.addStyleTag({ content: '.aznet-theme-site-header { visibility: hidden !important; }' });
     await solutions.screenshot({ path: path.join(outDir, name + '-solutions.png') });
+    await isolatedCapture.evaluate((element) => element.remove());
 
     await assertNoOverflow(page, name + '-home');
     await assertA11y(page, name + '-home');
