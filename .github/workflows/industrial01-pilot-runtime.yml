@@ -183,6 +183,7 @@ jobs:
               'homepage_preset' => 'industrial-01',
               'homepage_industrial01_sources_initialized' => true,
               'homepage_industrial01_solutions_page' => (int) $solutions_page_id,
+              'homepage_industrial01_hero_image' => $source_image_id,
           ] );
           PHP
           wp eval-file /tmp/industrial01-fixture.php --path=/tmp/wp --allow-root
