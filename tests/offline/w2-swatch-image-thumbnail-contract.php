@@ -15,7 +15,8 @@ function add_filter( string $hook, $callback, int $priority = 10, int $accepted_
     return true;
 }
 
-require dirname( __DIR__, 2 ) . '/inc/theme/woocommerce-product.php';
+$root = dirname( __DIR__, 2 );
+require $root . '/inc/integrations/woo-variation-swatches.php';
 
 $fail = static function ( string $message ): never {
     fwrite( STDERR, "FAIL: W2 image swatch derivative: {$message}\n" );
@@ -41,7 +42,7 @@ foreach ( [ 'variation_swatches_image_size', 'full', 'large', 'thumbnail' ] as $
     }
 }
 
-$source = (string) file_get_contents( dirname( __DIR__, 2 ) . '/inc/theme/woocommerce-product.php' );
+$source = (string) file_get_contents( $root . '/inc/integrations/woo-variation-swatches.php' );
 foreach ( [ 'get_option(', 'get_term_meta(', 'get_post_meta(', '$wpdb', 'wp_get_attachment_url(', 'wp_get_attachment_image_src(', 'choiceguide_', 'convertflow_' ] as $forbidden ) {
     if ( str_contains( $source, $forbidden ) ) {
         $fail( 'private storage/attachment lookup forbidden in Theme: ' . $forbidden );
@@ -50,4 +51,15 @@ foreach ( [ 'get_option(', 'get_term_meta(', 'get_post_meta(', '$wpdb', 'wp_get_
 if ( ! str_contains( $source, "function_exists( 'add_filter' )" ) ) {
     $fail( 'provider absent and WordPress-free source audits must fail softly' );
 }
-echo "PASS: W2 image swatch uses 150x150 native thumbnail derivative without taking over provider data\n";
+// The accepted R4 native Woo Product helper remains free of third-party
+// selection and gallery behavior; provider-specific presentation is isolated.
+$native_product = (string) file_get_contents( $root . '/inc/theme/woocommerce-product.php' );
+if ( stripos( $native_product, 'swatch' ) !== false ) {
+    $fail( 'native Woo Product helper must not acquire provider behavior' );
+}
+$bootstrap = (string) file_get_contents( $root . '/inc/theme/bootstrap.php' );
+if ( 1 !== substr_count( $bootstrap, "require_once __DIR__ . '/../integrations/woo-variation-swatches.php';" ) ) {
+    $fail( 'public adapter must be loaded exactly once from Theme bootstrap' );
+}
+
+echo "PASS: W2 public swatch adapter uses native thumbnail without taking over provider data\n";
