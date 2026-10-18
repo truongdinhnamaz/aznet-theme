@@ -69,7 +69,8 @@ try {
     if (await categoryLinks.count() !== 7 || await introCard.count() !== 1) {
       throw new Error(name + ': seven WordPress-owned category links plus one introductory tile are required');
     }
-    if (!(await introCard.innerText()).includes('07 danh mục')) {
+    const categoryCountText = ((await introCard.textContent()) || '').toLocaleLowerCase('vi');
+    if (!categoryCountText.includes('07 danh mục')) {
       throw new Error(name + ': source term count not shown correctly');
     }
     const hrefs = await categoryLinks.evaluateAll((items) => items.map((item) => item.href));
