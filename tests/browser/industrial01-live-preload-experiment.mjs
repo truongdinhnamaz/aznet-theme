@@ -2,8 +2,8 @@
  * Read-only A/B experiment: is preloading the WordPress-owned Hero background
  * helpful under the same emulated 4G/CPU conditions?
  *
- * Both arms intercept and replay the public HTML document identically.
- * Treatment adds one <link rel=preload as=image fetchpriority=high> in <head>.
+ * Both arms load the untouched public document through Chromium.
+ * Treatment adds one early image-preload link in the browser document head.
  * No server or WordPress state is modified. NOT a CrUX/Lighthouse equivalence.
  */
 import fs from 'node:fs';
@@ -53,20 +53,29 @@ for (const [i, variant] of variants.entries()) {
     } catch (error) { window.__lcpError = String(error); }
   });
 
-  let injected = false;
-  await page.route(target, async (route) => {
-    const response = await route.fetch();
-    const original = await response.text();
-    const preload = '<link rel="preload" as="image" fetchpriority="high" href="' + heroImage + '">';
-    const html = variant === 'preload-hero'
-      ? original.replace(/<head(\s[^>]*)?>/i, (head) => { injected = true; return head + preload; })
-      : original;
-    await route.fulfill({
-      status: response.status(),
-      body: html,
-      headers: { 'content-type': 'text/html; charset=UTF-8', 'cache-control': 'no-store' },
-    });
-  });
+  // Chromium network loads the original page. Avoid route.fetch() because the
+  // Playwright Node-side DNS resolver can fail independently of Chromium.
+  await page.addInitScript(({ enabled, href }) => {
+    window.__aznet_preload_injected = false;
+    if (!enabled) return;
+    const addPreload = () => {
+      if (!document.head) return false;
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = href;
+      link.fetchPriority = 'high';
+      document.head.prepend(link);
+      window.__aznet_preload_injected = true;
+      return true;
+    };
+    if (!addPreload()) {
+      const observer = new MutationObserver(() => {
+        if (addPreload()) observer.disconnect();
+      });
+      observer.observe(document, { childList: true, subtree: true });
+    }
+  }, { enabled: variant === 'preload-hero', href: heroImage });
 
   let record;
   try {
@@ -98,12 +107,14 @@ for (const [i, variant] of variants.entries()) {
           bytes: r.transferSize || 0,
         })),
         renderedHero: !!document.querySelector('.aznet-theme-industrial01-hero--with-background'),
+        injectedHeadPreload: !!window.__aznet_preload_injected,
+
       };
     }, heroImage);
     record.status = response?.status() || 0;
     record.variant = variant;
     record.order = i + 1;
-    record.preloadInserted = injected;
+    record.preloadInserted = record.injectedHeadPreload;
   } catch (error) {
     record = { variant, order: i + 1, error: String(error) };
   } finally {
