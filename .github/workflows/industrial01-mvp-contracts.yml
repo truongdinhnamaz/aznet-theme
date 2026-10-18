@@ -19,6 +19,7 @@ on:
       - 'tests/offline/industrial01-homepage-background-contract.php'
       - 'tests/offline/industrial01-solutions-editorial-contract.php'
       - 'tests/offline/industrial01-category-gallery-contract.php'
+      - 'tests/offline/industrial01-product-showcase-contract.php'
       - 'tests/offline/industrial01-homepage-rhythm-contract.php'
       - '.github/workflows/industrial01-mvp-contracts.yml'
   workflow_dispatch:
@@ -59,6 +60,9 @@ jobs:
 
       - name: Verify source-owned Industrial 01 catalogue gallery
         run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-category-gallery-contract.php
+
+      - name: Verify source-owned compact Woo product showcase
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-product-showcase-contract.php
 
       - name: Retain shared preset and Homepage boundaries
         run: |
