@@ -27,7 +27,8 @@ if ( is_array( $model ) ) {
     }
 }
 
-$summary = $page instanceof \WP_Post ? trim( (string) get_the_excerpt( $page ) ) : '';
+// Avoid auto-generated excerpts that pull Contact Form labels into the Homepage CTA.
+$summary = $page instanceof \WP_Post ? trim( (string) $page->post_excerpt ) : '';
 if ( '' === $summary ) {
     $summary = __( 'Gửi nhu cầu, mã sản phẩm hoặc thông số đang quan tâm để trao đổi với đầu mối phụ trách của website.', 'aznet-theme' );
 }

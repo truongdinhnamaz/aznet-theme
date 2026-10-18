@@ -16,6 +16,8 @@ on:
       - 'assets/css/presets/industrial-01.css'
       - 'assets/css/components/homepage-industrial-01.css'
       - 'tests/offline/industrial01-registration-contract.php'
+      - 'tests/offline/industrial01-homepage-background-contract.php'
+      - 'tests/offline/industrial01-homepage-rhythm-contract.php'
       - '.github/workflows/industrial01-mvp-contracts.yml'
   workflow_dispatch:
 
@@ -44,6 +46,11 @@ jobs:
 
       - name: Run Industrial 01 contract
         run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-registration-contract.php
+
+      - name: Verify background Hero, CTA and retained Homepage rhythm
+        run: |
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-homepage-background-contract.php
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-homepage-rhythm-contract.php
 
       - name: Retain shared preset and Homepage boundaries
         run: |
