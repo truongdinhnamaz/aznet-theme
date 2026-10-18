@@ -78,5 +78,8 @@ function woocommerce_loop_product_cta_args( array $args, $product ): array {
     return $args;
 }
 
-add_filter( 'woocommerce_product_add_to_cart_text', __NAMESPACE__ . '\\woocommerce_loop_product_cta_text', 10, 2 );
-add_filter( 'woocommerce_loop_add_to_cart_args', __NAMESPACE__ . '\\woocommerce_loop_product_cta_args', 10, 2 );
+// Offline source audits can include this module before WordPress is loaded.
+if ( function_exists( 'add_filter' ) ) {
+    add_filter( 'woocommerce_product_add_to_cart_text', __NAMESPACE__ . '\\woocommerce_loop_product_cta_text', 10, 2 );
+    add_filter( 'woocommerce_loop_add_to_cart_args', __NAMESPACE__ . '\\woocommerce_loop_product_cta_args', 10, 2 );
+}
