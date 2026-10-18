@@ -166,7 +166,7 @@ $situation_url = $has_situation_anchor ? $page_url . '#tinh-huong' : $page_url;
                 <?php endif; ?>
                 <a class="aznet-theme-industrial01-solutions__all" href="<?php echo esc_url( $page_url ); ?>">
                     <?php esc_html_e( 'Khám phá tất cả giải pháp', 'aznet-theme' ); ?>
-                    <span aria-hidden="true">↗</span>
+                    <span aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
                 </a>
             </div>
         </div>
@@ -193,7 +193,7 @@ $situation_url = $has_situation_anchor ? $page_url . '#tinh-huong' : $page_url;
                     <a class="aznet-theme-industrial01-solutions__card" href="<?php echo esc_url( $situation_url ); ?>">
                         <span class="aznet-theme-industrial01-solutions__card-top" aria-hidden="true">
                             <span class="aznet-theme-industrial01-solutions__card-number"><?php echo esc_html( str_pad( (string) ( $index + 1 ), 2, '0', STR_PAD_LEFT ) ); ?></span>
-                            <span class="aznet-theme-industrial01-solutions__card-arrow">↗</span>
+                            <span class="aznet-theme-industrial01-solutions__card-arrow"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
                         </span>
                         <strong class="aznet-theme-industrial01-solutions__card-title"><?php echo esc_html( $solution['title'] ); ?></strong>
                         <?php if ( '' !== $solution['description'] ) : ?>
