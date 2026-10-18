@@ -109,6 +109,7 @@ jobs:
               'Khí nén' => 'khi-nen',
               'Phụ kiện' => 'phu-kien',
               'Điều khiển' => 'dieu-khien',
+              'Vật tư' => 'vat-tu',
           ] as $name => $slug ) {
               $term = term_exists( $slug, 'product_cat' );
               if ( ! $term ) { $term = wp_insert_term( $name, 'product_cat', [ 'slug' => $slug ] ); }
