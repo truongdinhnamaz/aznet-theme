@@ -67,6 +67,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/w1-woocommerce-asse
 
 printf '%s\n' '==> Woo native Single Product shell regression'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/woo-native-shell-integration-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/woocommerce-loop-product-navigation-cta-contract.php
 
 printf '%s\n' '==> R6 contracts'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/r6-asset-scope-contract.php
