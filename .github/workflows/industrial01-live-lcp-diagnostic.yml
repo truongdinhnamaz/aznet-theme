@@ -1,0 +1,44 @@
+name: Industrial 01 Live Mobile LCP Diagnosis
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tests/browser/industrial01-live-lcp-diagnostic.mjs'
+      - '.github/workflows/industrial01-live-lcp-diagnostic.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  public-mobile-performance-readonly:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact diagnostics candidate
+        uses: actions/checkout@v4
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright for read-only public probe
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Inspect live mobile LCP, blocking image cohorts separately
+        env:
+          AZNET_DIAGNOSTIC_URL: https://minhnguyen.vn/
+          AZNET_DIAGNOSTIC_OUTPUT: /tmp/aznet-industrial01-lcp
+        run: node tests/browser/industrial01-live-lcp-diagnostic.mjs
+
+      - name: Retain JSON waterfall and screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: industrial01-live-lcp-diagnostic
+          path: /tmp/aznet-industrial01-lcp
+          retention-days: 7
+          if-no-files-found: warn
