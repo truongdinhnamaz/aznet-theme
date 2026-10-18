@@ -60,6 +60,47 @@ try {
     if (categories < 4) throw new Error(`${name}: expected at least 4 category cards, got ${categories}`);
     if (products < 6) throw new Error(`${name}: expected at least 6 product cards, got ${products}`);
 
+    // Bounded native WooCommerce catalogue gallery (seven terms; eighth grid
+    // position is an editorial navigation tile, never a fabricated product).
+    const categorySection = homepage.locator('.aznet-theme-industrial01-categories');
+    const gallery = categorySection.locator('.aznet-theme-industrial01-grid--categories');
+    const categoryLinks = gallery.locator('a.aznet-theme-industrial01-category-card');
+    const introCard = gallery.locator('.aznet-theme-industrial01-categories__intro-card');
+    if (await categoryLinks.count() !== 7 || await introCard.count() !== 1) {
+      throw new Error(name + ': seven WordPress-owned category links plus one introductory tile are required');
+    }
+    if (!(await introCard.innerText()).includes('07 danh mục')) {
+      throw new Error(name + ': source term count not shown correctly');
+    }
+    const hrefs = await categoryLinks.evaluateAll((items) => items.map((item) => item.href));
+    if (new Set(hrefs).size !== 7 || hrefs.some((href) => !href.includes('/product-category/'))) {
+      throw new Error(name + ': native WooCommerce category permalink missing or duplicated');
+    }
+    if (await gallery.locator('.aznet-theme-industrial01-category-card__veil').count() !== 7) {
+      throw new Error(name + ': accessible title gradient overlay missing');
+    }
+    const galleryCols = await gallery.evaluate(
+      (node) => getComputedStyle(node).gridTemplateColumns.split(/\s+/).filter(Boolean).length
+    );
+    const expectedGalleryCols = viewport.width > 1024 ? 4 : viewport.width < 368 ? 1 : 2;
+    if (galleryCols !== expectedGalleryCols) {
+      throw new Error(name + ': category gallery columns ' + galleryCols + ', expected ' + expectedGalleryCols);
+    }
+    const galleryMediaCount = await gallery.locator('.aznet-theme-industrial01-category-card__media img').count();
+    if (galleryMediaCount !== 7) {
+      throw new Error(name + ': all WooCommerce-provided category thumbnails must remain present');
+    }
+    const galleryHeading = await categorySection.locator('#aznet-industrial01-categories-title').innerText();
+    if (!galleryHeading.includes('Danh mục thiết bị')) {
+      throw new Error(name + ': Theme preset category heading changed unexpectedly');
+    }
+    const isolatedGalleryCapture = await page.addStyleTag({
+      content: '.aznet-theme-site-header { visibility: hidden !important; }'
+    });
+    await categorySection.screenshot({ path: path.join(outDir, name + '-categories.png') });
+    await isolatedGalleryCapture.evaluate((node) => node.remove());
+
+
     // WordPress runtime: mapped native Page blocks drive Solutions presentation.
     const solutions = homepage.locator('#aznet-homepage-industrial-solutions');
     if (await solutions.count() !== 1) throw new Error(name + ': mapped Solutions section missing');
