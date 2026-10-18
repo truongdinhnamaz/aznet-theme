@@ -106,6 +106,8 @@ namespace {
         $fail(str_contains($html, esc_html($details[$i])), 'Missing source-owned description: ' . $title);
     }
     $fail(!str_contains($html, 'This is not a homepage situational solution.'), 'Unrelated WordPress work-stage cards excluded');
+    $fail(substr_count($html, '<svg ') === 5, 'Five monochrome SVG arrows replace inconsistent platform emoji');
+    $fail(!str_contains($html, '↗'), 'No emoji-style arrow glyphs in Solutions cards');
     $fail(str_contains($html, 'https://example.test/giai-phap/#tinh-huong'), 'Card link targets existing native WordPress anchor');
 
     $GLOBALS['azt_missing_attachment'] = 666;
