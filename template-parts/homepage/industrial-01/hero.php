@@ -75,8 +75,18 @@ if ( '' === $secondary_url ) {
 $hero_image_id = (int) \AZnet\Theme\setting( 'homepage_industrial01_hero_image', 0 );
 $background_id = (int) \AZnet\Theme\setting( 'homepage_industrial01_hero_background', 0 );
 
+// Reuse the WordPress-owned Hero attachment as the background only when
+// a distinct background has not been selected by the site's editor.
+$background_from_hero = $background_id <= 0 && $hero_image_id > 0;
+$effective_background_id = $background_from_hero ? $hero_image_id : $background_id;
+$background_url = '';
+if ( $effective_background_id > 0 && function_exists( 'wp_get_attachment_image_url' ) ) {
+    $background_url = (string) wp_get_attachment_image_url( $effective_background_id, 'full' );
+}
+$background_from_hero = $background_from_hero && '' !== $background_url;
+
 $hero_image = '';
-if ( $hero_image_id > 0 && function_exists( 'wp_get_attachment_image' ) ) {
+if ( $hero_image_id > 0 && ! $background_from_hero && function_exists( 'wp_get_attachment_image' ) ) {
     $hero_image = (string) wp_get_attachment_image(
         $hero_image_id,
         'full',
@@ -91,17 +101,17 @@ if ( $hero_image_id > 0 && function_exists( 'wp_get_attachment_image' ) ) {
     );
 }
 
-$background_url = '';
-if ( $background_id > 0 && function_exists( 'wp_get_attachment_image_url' ) ) {
-    $background_url = (string) wp_get_attachment_image_url( $background_id, 'full' );
-}
-
 $hero_style = '';
+$hero_classes = 'aznet-theme-industrial01-section aznet-theme-industrial01-hero';
 if ( '' !== $background_url ) {
     $hero_style = '--industrial01-hero-background-image:url("' . esc_url_raw( $background_url ) . '");';
+    $hero_classes .= ' aznet-theme-industrial01-hero--with-background';
+}
+if ( $background_from_hero ) {
+    $hero_classes .= ' aznet-theme-industrial01-hero--background-only';
 }
 ?>
-<section class="aznet-theme-industrial01-section aznet-theme-industrial01-hero"<?php echo '' !== $hero_style ? ' style="' . esc_attr( $hero_style ) . '"' : ''; ?>>
+<section class="<?php echo esc_attr( $hero_classes ); ?>"<?php echo '' !== $hero_style ? ' style="' . esc_attr( $hero_style ) . '"' : ''; ?>>
     <div class="aznet-theme-industrial01-shell aznet-theme-industrial01-hero__grid">
         <div class="aznet-theme-industrial01-hero__content">
             <?php if ( '' !== $kicker ) : ?>
@@ -126,12 +136,12 @@ if ( '' !== $background_url ) {
                 <?php endif; ?>
             </div>
         </div>
-        <div class="aznet-theme-industrial01-hero__visual" aria-hidden="true">
-            <?php if ( '' !== trim( $hero_image ) ) : ?>
+        <?php if ( '' !== trim( $hero_image ) ) : ?>
+            <div class="aznet-theme-industrial01-hero__visual" aria-hidden="true">
                 <div class="aznet-theme-industrial01-hero__panel">
                     <?php echo $hero_image; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WordPress attachment image HTML. ?>
                 </div>
-            <?php endif; ?>
-        </div>
+            </div>
+        <?php endif; ?>
     </div>
 </section>
