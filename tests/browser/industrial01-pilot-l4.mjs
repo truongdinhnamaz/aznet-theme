@@ -9,7 +9,9 @@ fs.mkdirSync(outDir, { recursive: true });
 
 const viewports = {
   desktop: { width: 1440, height: 1000 },
+  tablet: { width: 900, height: 1000 },
   mobile: { width: 390, height: 844 },
+  compact: { width: 320, height: 800 },
 };
 
 async function assertNoOverflow(page, label) {
@@ -57,6 +59,39 @@ try {
     const products = await homepage.locator('.aznet-theme-industrial01-product-card').count();
     if (categories < 4) throw new Error(`${name}: expected at least 4 category cards, got ${categories}`);
     if (products < 6) throw new Error(`${name}: expected at least 6 product cards, got ${products}`);
+
+    // WordPress runtime: mapped native Page blocks drive Solutions presentation.
+    const solutions = homepage.locator('#aznet-homepage-industrial-solutions');
+    if (await solutions.count() !== 1) throw new Error(name + ': mapped Solutions section missing');
+    const cards = solutions.locator('.aznet-theme-industrial01-solutions__card');
+    const descriptions = solutions.locator('.aznet-theme-industrial01-solutions__card-description');
+    if (await cards.count() !== 4 || await descriptions.count() !== 4) {
+      throw new Error(name + ': missing source-owned Solutions cards/descriptions');
+    }
+    const solutionCopy = await descriptions.allTextContents();
+    if (!solutionCopy.some((value) => value.includes('sai số, năng suất'))) {
+      throw new Error(name + ': native Page situational description not projected');
+    }
+    const solutionImage = solutions.locator('img.aznet-theme-industrial01-solutions__image');
+    if (await solutionImage.count() !== 1) throw new Error(name + ': WordPress Solutions image missing');
+    const loaded = await solutionImage.evaluate((element) => element.complete && element.naturalWidth > 0);
+    if (!loaded) throw new Error(name + ': native WordPress Solutions image did not load');
+    const links = await cards.evaluateAll((elements) => elements.map((element) => element.getAttribute('href') || ''));
+    if (links.some((href) => !href.endsWith('/giai-phap/#tinh-huong'))) {
+      throw new Error(name + ': Solutions links do not use WordPress Page anchor');
+    }
+    const columns = await solutions.locator('.aznet-theme-industrial01-solutions__grid')
+      .evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(/\s+/).filter(Boolean).length);
+    const desiredColumns = viewport.width <= 390 ? 1 : 2;
+    if (columns !== desiredColumns) {
+      throw new Error(name + ': Solutions grid column count ' + columns + ', expected ' + desiredColumns);
+    }
+    const solutionsTitle = await solutions.locator('h2#aznet-industrial01-solutions-title').textContent();
+    if (solutionsTitle?.trim() !== 'Giải pháp') throw new Error(name + ': WordPress Page title not retained');
+    // Isolate section for visual QA; sticky shell is restored immediately.
+    const isolatedCapture = await page.addStyleTag({ content: '.aznet-theme-site-header { visibility: hidden !important; }' });
+    await solutions.screenshot({ path: path.join(outDir, name + '-solutions.png') });
+    await isolatedCapture.evaluate((element) => element.remove());
 
     await assertNoOverflow(page, name + '-home');
     await assertA11y(page, name + '-home');

@@ -295,53 +295,270 @@
     font-weight: var(--aznet-theme-font-weight-semibold);
 }
 
+/* Editorial Solutions: technical media and native WordPress situation copy. */
 .aznet-theme-industrial01-solutions {
-    background: #fff;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: linear-gradient(140deg, #f7f9fb 0%, #edf3f7 65%, #e7eff4 100%);
 }
-
+.aznet-theme-industrial01-solutions::before {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: min(42%, 32rem);
+    background-image: linear-gradient(rgba(23,74,124,.10) 1px, transparent 1px), linear-gradient(90deg, rgba(23,74,124,.10) 1px, transparent 1px);
+    background-size: 44px 44px;
+    content: "";
+    opacity: .5;
+    pointer-events: none;
+}
+.aznet-theme-industrial01-solutions > .aznet-theme-industrial01-shell {
+    position: relative;
+    z-index: 1;
+}
+.aznet-theme-industrial01-solutions__intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, .95fr);
+    align-items: end;
+    gap: clamp(1.5rem, 5vw, 5rem);
+    margin-bottom: clamp(2rem, 4vw, 3.25rem);
+}
+.aznet-theme-industrial01-solutions__intro h2 {
+    max-width: none;
+    margin: 0;
+    color: #122c3e;
+    font-size: clamp(2.85rem, 5.5vw, 5rem);
+    font-weight: var(--aznet-theme-font-weight-bold);
+    letter-spacing: -.045em;
+    line-height: 1.02;
+}
+.aznet-theme-industrial01-solutions__intro-aside {
+    padding-left: clamp(1.1rem, 2.5vw, 2rem);
+    border-left: 3px solid var(--industrial01-signal);
+}
+.aznet-theme-industrial01-solutions__lead {
+    margin: 0;
+    color: #465d70;
+    font-size: clamp(1rem, 1.15vw, 1.1rem);
+    line-height: 1.75;
+}
+.aznet-theme-industrial01-solutions__all {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.15rem;
+    padding: .35rem 0;
+    border-bottom: 2px solid var(--industrial01-accent);
+    color: var(--industrial01-accent);
+    font-weight: var(--aznet-theme-font-weight-bold);
+    text-decoration: none;
+    transition: gap .2s ease, color .2s ease;
+}
+.aznet-theme-industrial01-solutions__all:hover { gap: 1.4rem; color: #102f43; }
+.aznet-theme-industrial01-solutions__layout {
+    display: grid;
+    grid-template-columns: minmax(0, .93fr) minmax(0, 1.65fr);
+    align-items: stretch;
+    gap: clamp(.8rem, 1.25vw, 1.2rem);
+}
+.aznet-theme-industrial01-solutions--no-media .aznet-theme-industrial01-solutions__layout {
+    grid-template-columns: minmax(0, 1fr);
+}
+.aznet-theme-industrial01-solutions__visual {
+    position: relative;
+    display: flex;
+    min-height: 30rem;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    border: 1px solid rgba(16,47,67,.2);
+    border-radius: .75rem;
+    background: #102f43;
+    box-shadow: 0 1.3rem 3rem rgba(16,47,67,.17);
+}
+.aznet-theme-industrial01-solutions__visual-media,
+.aznet-theme-industrial01-solutions__visual::after {
+    position: absolute;
+    inset: 0;
+}
+.aznet-theme-industrial01-solutions__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform .4s ease;
+}
+.aznet-theme-industrial01-solutions__visual:hover .aznet-theme-industrial01-solutions__image { transform: scale(1.035); }
+.aznet-theme-industrial01-solutions__visual::after {
+    background: linear-gradient(180deg, rgba(7,26,39,.02) 25%, rgba(7,26,39,.5) 60%, rgba(7,26,39,.95) 100%);
+    content: "";
+    pointer-events: none;
+}
+.aznet-theme-industrial01-solutions__visual-caption {
+    position: relative;
+    z-index: 1;
+    padding: clamp(1.4rem, 2.6vw, 2.2rem);
+}
+.aznet-theme-industrial01-solutions__visual-kicker {
+    display: block;
+    margin-bottom: .75rem;
+    color: #f5ca72;
+    font-size: .74rem;
+    font-weight: var(--aznet-theme-font-weight-bold);
+    letter-spacing: .11em;
+    line-height: 1.45;
+    text-transform: uppercase;
+}
+.aznet-theme-industrial01-solutions__visual-heading {
+    max-width: 24ch;
+    margin: 0;
+    color: #fff;
+    font-size: clamp(1.4rem, 2.25vw, 2.1rem);
+    font-weight: var(--aznet-theme-font-weight-bold);
+    letter-spacing: -.02em;
+    line-height: 1.26;
+    text-wrap: balance;
+}
 .aznet-theme-industrial01-solutions__grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: minmax(15rem, auto);
+    gap: clamp(.8rem, 1.25vw, 1.2rem);
 }
-
 .aznet-theme-industrial01-solutions__card {
+    position: relative;
     display: flex;
-    min-height: 11rem;
+    min-width: 0;
+    min-height: 15rem;
     flex-direction: column;
-    padding: 1.35rem;
-    border: 1px solid var(--industrial01-line);
-    border-radius: var(--aznet-theme-radius-card);
-    background: linear-gradient(180deg, #fff, #f7f9fa);
-    color: var(--industrial01-ink);
+    overflow: hidden;
+    padding: clamp(1.15rem, 2vw, 1.7rem);
+    border: 1px solid #d5e1ea;
+    border-radius: .75rem;
+    background: #fff;
+    color: #152f40;
     text-decoration: none;
-    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    box-shadow: 0 .55rem 1.6rem rgba(16,47,67,.045);
+    transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
-
+.aznet-theme-industrial01-solutions__card::before {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: var(--industrial01-signal);
+    content: "";
+    opacity: 0;
+}
+.aznet-theme-industrial01-solutions__card:first-child {
+    border-color: #102f43;
+    background: #102f43;
+    color: #fff;
+}
+.aznet-theme-industrial01-solutions__card:first-child::before,
+.aznet-theme-industrial01-solutions__card:hover::before,
+.aznet-theme-industrial01-solutions__card:focus-visible::before { opacity: 1; }
 .aznet-theme-industrial01-solutions__card:hover {
     transform: translateY(-4px);
-    border-color: rgba(16,24,32,.24);
-    box-shadow: 0 1.2rem 2.5rem rgba(16,24,32,.1);
+    border-color: #94afc4;
+    box-shadow: 0 1rem 2.5rem rgba(16,47,67,.13);
 }
-
-.aznet-theme-industrial01-solutions__card > span:first-child {
-    margin-bottom: 2.5rem;
-    color: var(--industrial01-accent);
+.aznet-theme-industrial01-solutions__card:focus-visible,
+.aznet-theme-industrial01-solutions__all:focus-visible {
+    outline: 3px solid #0b68b2;
+    outline-offset: 4px;
+}
+.aznet-theme-industrial01-solutions__card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .8rem;
+    margin-bottom: clamp(1rem, 2vw, 1.75rem);
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: normal;
+}
+.aznet-theme-industrial01-solutions__card-number {
+    color: #1b6c9a;
     font-size: .8rem;
     font-weight: var(--aznet-theme-font-weight-bold);
     letter-spacing: .12em;
 }
-
-.aznet-theme-industrial01-solutions__card strong {
-    font-size: 1.08rem;
-    line-height: 1.4;
-}
-
-.aznet-theme-industrial01-solutions__arrow {
-    margin-top: auto;
-    padding-top: 1rem;
-    color: var(--industrial01-accent);
+.aznet-theme-industrial01-solutions__card:first-child .aznet-theme-industrial01-solutions__card-number { color: #f5ca72; }
+.aznet-theme-industrial01-solutions__card-arrow {
+    display: grid;
+    width: 2.25rem;
+    aspect-ratio: 1;
+    place-items: center;
+    border: 1px solid #d8e3eb;
+    border-radius: 50%;
+    color: #174a7c;
     font-size: 1.15rem;
+}
+.aznet-theme-industrial01-solutions__card:first-child .aznet-theme-industrial01-solutions__card-arrow {
+    border-color: rgba(255,255,255,.3);
+    color: #fff;
+}
+.aznet-theme-industrial01-solutions__card .aznet-theme-industrial01-solutions__card-title {
+    display: block;
+    max-width: 24ch;
+    color: inherit;
+    font-size: clamp(1.1rem, 1.5vw, 1.4rem);
+    letter-spacing: -.018em;
+    line-height: 1.32;
+    text-wrap: balance;
+}
+.aznet-theme-industrial01-solutions__card-description {
+    margin: .7rem 0 1.3rem;
+    color: #526779;
+    font-size: .95rem;
+    line-height: 1.58;
+}
+.aznet-theme-industrial01-solutions__card:first-child .aznet-theme-industrial01-solutions__card-description { color: #d6e3eb; }
+.aznet-theme-industrial01-solutions__card-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: .75rem;
+    border-top: 1px solid rgba(22,69,101,.13);
+    color: #174a7c;
+    font-size: .87rem;
+    font-weight: var(--aznet-theme-font-weight-semibold);
+}
+.aznet-theme-industrial01-solutions__card:first-child .aznet-theme-industrial01-solutions__card-action {
+    border-top-color: rgba(255,255,255,.2);
+    color: #f5ca72;
+}
+.aznet-theme-industrial01-solutions__card-action span { font-size: 1.15rem; }
+.aznet-theme-industrial01-solutions__all svg,
+.aznet-theme-industrial01-solutions__card-arrow svg { display: block; width: 1.12rem; height: 1.12rem; }
+
+@media (max-width: 64rem) {
+    .aznet-theme-industrial01-solutions__intro,
+    .aznet-theme-industrial01-solutions__layout { grid-template-columns: minmax(0, 1fr); }
+    .aznet-theme-industrial01-solutions__intro-aside { max-width: 46rem; }
+    .aznet-theme-industrial01-solutions__visual { min-height: clamp(18rem, 40vw, 27rem); }
+    .aznet-theme-industrial01-solutions__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 48rem) {
+    .aznet-theme-industrial01-solutions::before { width: 100%; opacity: .2; }
+    .aznet-theme-industrial01-solutions__intro { gap: 1.25rem; margin-bottom: 1.75rem; }
+    .aznet-theme-industrial01-solutions__intro h2 { font-size: clamp(2.7rem, 12vw, 4rem); }
+    .aznet-theme-industrial01-solutions__intro-aside { padding-left: 1rem; }
+    .aznet-theme-industrial01-solutions__visual { min-height: 19rem; }
+    .aznet-theme-industrial01-solutions__visual-caption { padding: 1.35rem; }
+    .aznet-theme-industrial01-solutions__visual-heading { font-size: clamp(1.3rem, 5.5vw, 1.7rem); }
+    .aznet-theme-industrial01-solutions__grid { grid-template-columns: minmax(0, 1fr); grid-auto-rows: auto; gap: .8rem; }
+    .aznet-theme-industrial01-solutions__card { min-height: 13rem; padding: 1.35rem; }
+    .aznet-theme-industrial01-solutions__card-top { margin-bottom: 1.1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .aznet-theme-industrial01-solutions__card,
+    .aznet-theme-industrial01-solutions__image,
+    .aznet-theme-industrial01-solutions__all { transition: none; }
 }
 
 .aznet-theme-industrial01-products {
@@ -687,9 +904,6 @@
 .aznet-theme-industrial01-hero--with-background .aznet-theme-industrial01-button:hover {
     background: #ffd17a;
 }
-.aznet-theme-industrial01-solutions { background: #f3f7fa; }
-.aznet-theme-industrial01-solutions__card { background: #fff; }
-
 @media (max-width: 48rem) {
     .aznet-theme-industrial01-hero--with-background {
         background:

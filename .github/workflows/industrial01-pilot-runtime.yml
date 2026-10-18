@@ -75,6 +75,10 @@ jobs:
       - name: Seed public WordPress and WooCommerce pilot fixture
         run: |
           set -euo pipefail
+          # Synthetic WordPress-owned media fixture (not a Theme asset or site data).
+          printf '%s' 'R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==' | base64 -d > /tmp/industrial01-pilot/solutions-fixture.gif
+          INDUSTRIAL01_SOLUTIONS_MEDIA_ID="$(wp media import /tmp/industrial01-pilot/solutions-fixture.gif --porcelain --path=/tmp/wp --allow-root)"
+          export INDUSTRIAL01_SOLUTIONS_MEDIA_ID
           cat > /tmp/industrial01-fixture.php <<'PHP'
           <?php
           $front = wp_insert_post([
@@ -124,6 +128,46 @@ jobs:
               wp_set_object_terms( $id, [ $categories[ ( $i - 1 ) % count( $categories ) ] ], 'product_cat' );
           }
 
+          // Native Gutenberg Page is the sole source of scenario headings/copy/media.
+          $source_image_id = (int) getenv( 'INDUSTRIAL01_SOLUTIONS_MEDIA_ID' );
+          if ( $source_image_id <= 0 ) { throw new RuntimeException( 'Missing native WordPress media fixture' ); }
+          $situations = [
+              'Đầu tư hoặc mở rộng xưởng' => 'Xác định công đoạn và quy mô đầu ra trước khi chọn máy.',
+              'Bổ sung một công đoạn' => 'Đối chiếu bước sản xuất cần nâng cấp trong dây chuyền.',
+              'Xử lý điểm nghẽn' => 'Làm rõ sai số, năng suất và điều kiện vận hành thực tế.',
+              'Đối chiếu trước báo giá' => 'So sánh nhóm máy và các thông số còn thiếu.',
+          ];
+          $situation_cards = '';
+          foreach ( $situations as $heading => $description ) {
+              $situation_cards .= '<!-- wp:group {"className":"aznet-theme-industrial01-solution-card"} -->'
+                  . '<div class="wp-block-group aznet-theme-industrial01-solution-card">'
+                  . '<!-- wp:heading {"level":3} --><h3>' . esc_html( $heading ) . '</h3><!-- /wp:heading -->'
+                  . '<!-- wp:paragraph --><p>' . esc_html( $description ) . '</p><!-- /wp:paragraph -->'
+                  . '</div><!-- /wp:group -->';
+          }
+          $source_content =
+              '<!-- wp:group {"className":"aznet-theme-industrial01-solution-hero"} -->'
+              . '<div class="wp-block-group aznet-theme-industrial01-solution-hero">'
+              . '<!-- wp:heading {"level":2} --><h2>Bắt đầu từ nhu cầu sản xuất</h2><!-- /wp:heading -->'
+              . '<!-- wp:paragraph {"className":"aznet-theme-industrial01-solution-eyebrow"} --><p>GIẢI PHÁP MÁY</p><!-- /wp:paragraph -->'
+              . '<!-- wp:paragraph {"className":"aznet-theme-industrial01-solution-lead"} --><p>Giải pháp được lựa chọn theo công đoạn và điều kiện sản xuất.</p><!-- /wp:paragraph -->'
+              . '<!-- wp:group {"className":"aznet-theme-industrial01-solution-hero__media"} -->'
+              . '<div class="wp-block-group aznet-theme-industrial01-solution-hero__media">'
+              . '<!-- wp:image {"id":' . $source_image_id . '} --><figure class="wp-block-image"><img src="' . esc_url( wp_get_attachment_url( $source_image_id ) ) . '" alt="Media fixture"/></figure><!-- /wp:image -->'
+              . '</div><!-- /wp:group -->'
+              . '</div><!-- /wp:group -->'
+              . '<!-- wp:group {"anchor":"tinh-huong"} --><div id="tinh-huong" class="wp-block-group">'
+              . $situation_cards
+              . '</div><!-- /wp:group -->';
+          $solutions_page_id = wp_insert_post( [
+              'post_type' => 'page',
+              'post_status' => 'publish',
+              'post_title' => 'Giải pháp',
+              'post_name' => 'giai-phap',
+              'post_content' => $source_content,
+          ], true );
+          if ( is_wp_error( $solutions_page_id ) ) { throw new RuntimeException( $solutions_page_id->get_error_message() ); }
+
           set_theme_mod( 'aznet_theme_settings', [
               'schema_version' => 2,
               'visual_preset' => 'industrial-01',
@@ -136,6 +180,8 @@ jobs:
               'woo_product_card_density' => 'balanced',
               'woo_product_preset' => 'focus',
               'homepage_preset' => 'industrial-01',
+              'homepage_industrial01_sources_initialized' => true,
+              'homepage_industrial01_solutions_page' => (int) $solutions_page_id,
           ] );
           PHP
           wp eval-file /tmp/industrial01-fixture.php --path=/tmp/wp --allow-root
