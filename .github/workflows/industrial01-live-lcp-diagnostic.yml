@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'tests/browser/industrial01-live-lcp-diagnostic.mjs'
+      - 'tests/browser/industrial01-live-preload-experiment.mjs'
       - '.github/workflows/industrial01-live-lcp-diagnostic.yml'
 
 permissions:
@@ -28,11 +29,11 @@ jobs:
           npm install --no-save --no-package-lock playwright@1.55.0
           npx playwright install --with-deps chromium
 
-      - name: Inspect live mobile LCP, blocking image cohorts separately
+      - name: Compare Hero preload vs matched baseline on public mobile
         env:
           AZNET_DIAGNOSTIC_URL: https://minhnguyen.vn/
           AZNET_DIAGNOSTIC_OUTPUT: /tmp/aznet-industrial01-lcp
-        run: node tests/browser/industrial01-live-lcp-diagnostic.mjs
+        run: node tests/browser/industrial01-live-preload-experiment.mjs
 
       - name: Retain JSON waterfall and screenshot
         if: always()
