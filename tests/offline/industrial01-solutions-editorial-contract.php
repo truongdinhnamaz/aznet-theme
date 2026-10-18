@@ -20,7 +20,9 @@ namespace {
     function get_the_title(WP_Post $page): string { return $page->post_title; }
     function wp_strip_all_tags(string $html): string { return strip_tags($html); }
     function apply_filters(string $tag, string $text): string {
-        return $text === 'legacy' ? '<h3>Giải pháp cũ A</h3><h3>Giải pháp cũ B</h3>' : $text;
+        if ($text === 'legacy') return '<h3>Giải pháp cũ A</h3><h3>Giải pháp cũ B</h3>';
+        if ($text === 'valid') return '<h3>Đầu tư hoặc mở rộng xưởng</h3><h3>Bổ sung một công đoạn</h3><h3>Xử lý điểm nghẽn</h3><h3>Đối chiếu trước báo giá</h3>';
+        return $text;
     }
     function parse_blocks(string $raw): array { return $GLOBALS['azt_fixture_blocks'][$raw] ?? []; }
     function wp_get_attachment_image(int $id, string $size, bool $icon = false, array $attr = []): string {
