@@ -533,6 +533,8 @@
     color: #f5ca72;
 }
 .aznet-theme-industrial01-solutions__card-action span { font-size: 1.15rem; }
+.aznet-theme-industrial01-solutions__all svg,
+.aznet-theme-industrial01-solutions__card-arrow svg { display: block; width: 1.12rem; height: 1.12rem; }
 
 @media (max-width: 64rem) {
     .aznet-theme-industrial01-solutions__intro,
