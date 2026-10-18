@@ -64,6 +64,7 @@ add_action( 'widgets_init', __NAMESPACE__ . '\\register_widget_areas' );
 add_action( 'init', __NAMESPACE__ . '\\register_pattern_categories' );
 add_action( 'init', __NAMESPACE__ . '\\register_woocommerce_patterns', 20 );
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_assets' );
+add_filter( 'wp_preload_resources', __NAMESPACE__ . '\\industrial01_hero_preload_resources' );
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_law01_reference_asset', 20 );
 add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\\enqueue_homepage_blueprint_editor_asset' );
 add_filter( 'body_class', __NAMESPACE__ . '\\visual_preset_body_classes' );
