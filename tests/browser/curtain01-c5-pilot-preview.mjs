@@ -504,8 +504,23 @@ if (shopProducts < 6) {
   fs.writeFileSync(path.join(outDir, 'shop-debug.html'), await page.content());
   throw new Error(`shop: expected Woo products, got ${shopProducts}; url=${page.url()}; body=${(await page.locator('body').getAttribute('class') || '').slice(0, 240)}`);
 }
+// Products are not blog excerpts. WooCommerce keeps the target and purchase
+// capability; the Theme only renders a product-detail CTA for fallback links.
+const shopCtas = await page.locator('.woocommerce ul.products li.product a.button').evaluateAll((nodes) => nodes.map((node) => ({
+  text: (node.textContent || '').trim(),
+  href: node.getAttribute('href'),
+  ariaLabel: node.getAttribute('aria-label'),
+})));
+const leftoverBlogCtas = shopCtas.filter((item) => ['Đọc tiếp', 'Read more'].includes(item.text));
+if (leftoverBlogCtas.length) {
+  throw new Error('shop: product loop still exposes blog Read more: ' + JSON.stringify(leftoverBlogCtas));
+}
+const fallbackCtas = shopCtas.filter((item) => item.text === 'Xem chi tiết');
+if (!fallbackCtas.length || fallbackCtas.some((item) => !item.href || !item.ariaLabel?.startsWith('Xem chi tiết sản phẩm: '))) {
+  throw new Error('shop: Woo product detail fallback/accessible name missing: ' + JSON.stringify(shopCtas));
+}
 await assertNoOverflow(page, 'shop');
-results.shop = { products: shopProducts, a11y: await assertA11y(page, 'shop') };
+results.shop = { products: shopProducts, fallbackCtas: fallbackCtas.length, a11y: await assertA11y(page, 'shop') };
 await page.screenshot({ path: path.join(outDir, 'shop.png'), fullPage: true });
 
 const productResponse = await page.goto(baseUrl + '/product/rem-vai-don-sac/', { waitUntil: 'networkidle' });
