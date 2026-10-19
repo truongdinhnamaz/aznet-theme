@@ -282,6 +282,46 @@ async function inspectIndustrialProfessionalFooter(browser) {
             bottomBorder: bottom?.borderTopStyle || '',
           };
         });
+        // The Footer content and copyright must sit on the same actual
+        // Industrial shell as Homepage sections; on wide screens that cap
+        // also sets the Header logo's left axis.
+        const alignment = await page.evaluate(() => {
+          const inner = document.querySelector('.aznet-theme-site-footer__inner');
+          const header = document.querySelector('.aznet-theme-site-header__inner');
+          const brand = inner?.querySelector('.aznet-theme-site-footer__brand');
+          const firstColumn = inner?.querySelector('.aznet-theme-site-footer__column-content--1');
+          const copyright = inner?.querySelector('.aznet-theme-site-footer__copyright');
+          const probe = document.createElement('div');
+          probe.style.cssText = 'position:fixed;top:0;left:0;visibility:hidden;pointer-events:none;width:var(--aznet-theme-container-shell);height:var(--aznet-theme-gutter);box-sizing:content-box';
+          document.body.appendChild(probe);
+          const capPx = probe.getBoundingClientRect().width;
+          const gutterPx = probe.getBoundingClientRect().height;
+          probe.remove();
+          const viewportPx = document.documentElement.clientWidth;
+          const width = Math.min(capPx, viewportPx - 2 * gutterPx);
+          const expectedLeft = (viewportPx - width) / 2;
+          const innerRect = inner?.getBoundingClientRect();
+          return {
+            expectedLeft,
+            expectedWidth: width,
+            innerLeft: innerRect?.left ?? null,
+            innerWidth: innerRect?.width ?? null,
+            headerLeft: header?.getBoundingClientRect().left ?? null,
+            brandLeft: brand?.getBoundingClientRect().left ?? null,
+            columnLeft: firstColumn?.getBoundingClientRect().left ?? null,
+            copyrightLeft: copyright?.getBoundingClientRect().left ?? null,
+            viewportPx,
+          };
+        });
+        const align = (value, expected) => Number.isFinite(value) && Math.abs(value - expected) <= 2;
+        if (!align(alignment.innerLeft, alignment.expectedLeft) ||
+            !align(alignment.innerWidth, alignment.expectedWidth) ||
+            !align(alignment.columnLeft, alignment.expectedLeft) ||
+            !align(alignment.brandLeft, alignment.expectedLeft) ||
+            !align(alignment.copyrightLeft, alignment.expectedLeft) ||
+            (viewport.width >= 1440 && !align(alignment.headerLeft, alignment.expectedLeft))) {
+          throw new Error('Industrial Footer is off the shared Header/Homepage content axis: ' + JSON.stringify(alignment));
+        }
         const expectedColumns = viewport.width <= 768 ? 1 : (viewport.width <= 1120 ? 2 : 4);
         if (cols.columns !== expectedColumns || !cols.background.includes('gradient') ||
             cols.borderColor !== 'rgb(245, 202, 114)' || cols.brandLayout !== 'flex' ||
