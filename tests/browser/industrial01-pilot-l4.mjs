@@ -46,6 +46,15 @@ try {
 
     const homepage = page.locator('.aznet-theme-homepage--industrial-01');
     await homepage.waitFor({ state: 'visible', timeout: 20000 });
+    // Native WordPress preload hint must point to the exact WordPress-owned
+    // attachment used by the CSS Hero background, not a hard-coded URL.
+    const heroStyle = (await homepage.locator('.aznet-theme-industrial01-hero').getAttribute('style')) || '';
+    const imagePreloads = await page.locator('head link[rel="preload"][as="image"][fetchpriority="high"]')
+      .evaluateAll((items) => items.map((item) => item.href));
+    if (!imagePreloads.some((href) => heroStyle.includes(href))) {
+      throw new Error(name + ': scoped WordPress Hero background preload missing or mismatched');
+    }
+
     for (const selector of [
       '.aznet-theme-industrial01-hero',
       '.aznet-theme-industrial01-categories',

@@ -17,6 +17,7 @@ on:
       - 'assets/css/components/homepage-industrial-01.css'
       - 'tests/offline/industrial01-registration-contract.php'
       - 'tests/offline/industrial01-homepage-background-contract.php'
+      - 'tests/offline/industrial01-hero-preload-contract.php'
       - 'tests/offline/industrial01-solutions-editorial-contract.php'
       - 'tests/offline/industrial01-category-gallery-contract.php'
       - 'tests/offline/industrial01-homepage-rhythm-contract.php'
@@ -53,6 +54,9 @@ jobs:
         run: |
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-homepage-background-contract.php
           php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-homepage-rhythm-contract.php
+
+      - name: Verify scoped WordPress Hero background preload
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-hero-preload-contract.php
 
       - name: Verify source-owned Solutions editorial and media fallback
         run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-solutions-editorial-contract.php

@@ -792,3 +792,56 @@ function enqueue_assets(): void {
         );
     }
 }
+
+
+/**
+ * Prioritize only the WordPress-owned CSS background used by the active
+ * Industrial 01 Hero. This is a browser resource hint, not a media store.
+ *
+ * @param array<int, array<string, string>> $resources Existing WP preloads.
+ * @return array<int, array<string, string>>
+ */
+function industrial01_hero_preload_resources( array $resources ): array {
+    if ( ! homepage_composer_active() || 'industrial-01' !== homepage_preset() ) {
+        return $resources;
+    }
+
+    // Do not fetch media when the owner turned the Hero surface off.
+    $hero_rendered = false;
+    foreach ( homepage_effective_surface_map( 'industrial-01' ) as $surface ) {
+        if ( 'hero' === ( $surface['template'] ?? '' ) ) {
+            $hero_rendered = true;
+            break;
+        }
+    }
+    if ( ! $hero_rendered ) {
+        return $resources;
+    }
+
+    $background_id = (int) setting( 'homepage_industrial01_hero_background', 0 );
+    $hero_id       = (int) setting( 'homepage_industrial01_hero_image', 0 );
+    $effective_id  = $background_id > 0 ? $background_id : $hero_id;
+
+    if ( $effective_id <= 0 || ! function_exists( 'wp_get_attachment_image_url' ) ) {
+        return $resources;
+    }
+
+    // Use the exact WordPress Media Library URL rendered by hero.php.
+    $background_url = (string) wp_get_attachment_image_url( $effective_id, 'full' );
+    if ( '' === $background_url ) {
+        return $resources;
+    }
+
+    foreach ( $resources as $resource ) {
+        if ( is_array( $resource ) && $background_url === ( $resource['href'] ?? '' ) ) {
+            return $resources;
+        }
+    }
+
+    $resources[] = [
+        'href'          => $background_url,
+        'as'            => 'image',
+        'fetchpriority' => 'high',
+    ];
+    return $resources;
+}
