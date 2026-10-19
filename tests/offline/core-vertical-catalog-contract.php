@@ -94,6 +94,9 @@ namespace {
     $css_path = $root . '/assets/css/components/catalog-navigation.css';
     $check(str_contains($setup, "'product-catalog'"), 'register WordPress product-catalog menu location');
     $check(str_contains($admin, "field_select( 'header_catalog_mode'"), 'Core Header settings expose the feature');
+    $manifest = (string) file_get_contents($root . '/inc/theme/templates/industrial-01/manifest.php');
+    $check(str_contains($manifest, "'catalog-hero-rail'"), 'Industrial 01 declares catalog Hero capability rather than Core template hardcoding');
+    $check(!str_contains((string) file_get_contents($root . '/inc/theme/header.php'), "'industrial-01' === homepage_preset()"), 'Core menu resolver is template-agnostic');
     $check(str_contains($header, 'catalog-navigation'), 'Header composes catalog disclosure');
     $check(str_contains($mobile, 'catalog_mobile_menu'), 'mobile panel retains catalog accessibility');
     $check(str_contains($hero, 'hero--with-catalog'), 'Industrial 01 Hero has menu-rail composition');

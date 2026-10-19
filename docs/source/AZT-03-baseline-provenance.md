@@ -1,8 +1,8 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.84
+**Version:** v0.85
 **Status:** Working Source
-**Date:** 06/10/2026
+**Date:** 19/10/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
 
 ## 1. Source ownership
@@ -569,3 +569,12 @@ Evidence: `docs/evidence/CORE_HOMEPAGE_DESIGN_PILOT_L4_PARTIAL_20261002.md`.
 - PR #356 added a test-only synthetic fourth template proving participation through presentation projection, generic Template Library consumption, Homepage activation, authoring descriptors, asset registry and provisioning bridge without a fixture-specific Core branch.
 - Exact-head CI before each approved merge completed with zero failures; final C8 head completed 19/19 triggered workflows SUCCESS before merge.
 - This is a repository L1-L2 architecture/contract closure only. Authenticated wp-admin interaction remains UNKNOWN. Rèm 01 remains `BLOCKED_EXTERNAL_ACCESS`. No additional provider L5, production rollout or release claim is inferred.
+
+
+### Core Vertical Catalog / Minh Nguyên pilot read-only checkpoint — 19/10/2026
+
+- Canonical live GitHub main at initial reconciliation was \`63119b9fd37ae4255c7340353e6424689967a618\`; this is a point-in-time source anchor, not an assertion about future current HEAD.
+- Feature branch \`work/core-vertical-catalog-industrial01-pilot-20261019\`, draft PR #464, RED test commit \`66cb62457c2535d71407ce871bc9407db0aae530\`, initial implementation \`60c0339098dc42acca98ca798cb82e88ac1e4a46\`.
+- Initial implementation triggered 46/46 workflow successes; this establishes retained scoped CI evidence, not feature-ON pilot L4 or production release. Later commits extend real WordPress + browser feature ON and menu rollback testing; final PASS must use those later fresh runs.
+- Actual site read-only inventory: \`minhnguyen.vn\`, WordPress 7.1.3, PHP 8.2.34, active AZnet Theme 1.3.79, WooCommerce present. Native \`Main menu\` #55 assigned primary and \`Menu danh mục\` #143 has 19 native menu items referring to Woo taxonomy. Hero attachment #1593, no separate Hero background ID; no production content/option/navigation/menu writes in this checkpoint.
+- Implementation scope: Theme Header setting, native menu location and rendering, template-allowed Industrial 01 hero composition, surface-aware CSS, contract and browser tests. External plugin/source repos remain unchanged. Pilot rollout needs separate fresh deployment and independent verification evidence.

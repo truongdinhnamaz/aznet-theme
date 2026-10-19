@@ -80,14 +80,20 @@ function header_catalog_enabled(): bool {
  * Place the menu beside the Industrial 01 Hero only when it actually renders.
  */
 function header_catalog_home_rail(): bool {
-    return header_catalog_enabled()
-        && 'homepage-rail' === header_catalog_mode()
-        && function_exists( 'is_front_page' )
-        && is_front_page()
-        && function_exists( __NAMESPACE__ . '\\homepage_preset' )
-        && 'industrial-01' === homepage_preset()
-        && function_exists( __NAMESPACE__ . '\\homepage_composer_active' )
-        && homepage_composer_active();
+    if ( ! header_catalog_enabled() || 'homepage-rail' !== header_catalog_mode() ) {
+        return false;
+    }
+    if ( ! function_exists( 'is_front_page' ) || ! is_front_page()
+        || ! function_exists( __NAMESPACE__ . '\\homepage_preset' )
+        || ! function_exists( __NAMESPACE__ . '\\homepage_composer_active' )
+        || ! homepage_composer_active()
+        || ! function_exists( __NAMESPACE__ . '\\template_manifest_for_homepage_preset' ) ) {
+        return false;
+    }
+
+    $manifest = template_manifest_for_homepage_preset( homepage_preset() );
+    return is_array( $manifest )
+        && in_array( 'catalog-hero-rail', (array) ( $manifest['capabilities'] ?? [] ), true );
 }
 
 /**
