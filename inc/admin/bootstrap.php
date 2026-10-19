@@ -5,6 +5,7 @@ namespace AZnet\Theme\Admin;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 require_once __DIR__ . '/danger-zone.php';
+require_once __DIR__ . '/site-guard-consumer.php';
 require_once __DIR__ . '/control-center.php';
 require_once __DIR__ . '/footer-profile.php';
 require_once __DIR__ . '/homepage-hero.php';
