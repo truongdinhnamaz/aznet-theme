@@ -59,9 +59,69 @@ function header_sticky_mode(): string {
 }
 
 /**
+ * Resolve the optional WordPress-owned vertical catalog menu presentation.
+ */
+function header_catalog_mode(): string {
+    $mode = setting( 'header_catalog_mode', 'off' );
+
+    return in_array( $mode, [ 'off', 'dropdown', 'homepage-rail' ], true ) ? (string) $mode : 'off';
+}
+
+/**
+ * The Theme never invents categories when WordPress has no assigned menu.
+ */
+function header_catalog_enabled(): bool {
+    return 'off' !== header_catalog_mode()
+        && function_exists( 'has_nav_menu' )
+        && has_nav_menu( 'product-catalog' );
+}
+
+/**
+ * Place the menu beside the Industrial 01 Hero only when it actually renders.
+ */
+function header_catalog_home_rail(): bool {
+    return header_catalog_enabled()
+        && 'homepage-rail' === header_catalog_mode()
+        && function_exists( 'is_front_page' )
+        && is_front_page()
+        && function_exists( __NAMESPACE__ . '\\homepage_preset' )
+        && 'industrial-01' === homepage_preset()
+        && function_exists( __NAMESPACE__ . '\\homepage_composer_active' )
+        && homepage_composer_active();
+}
+
+/**
+ * Render only the native, editor-authored WordPress menu. Never query
+ * WooCommerce terms, private storage, or infer missing catalog entries.
+ */
+function header_catalog_menu_html( string $menu_id ): string {
+    if ( ! header_catalog_enabled() || ! function_exists( 'wp_nav_menu' ) ) {
+        return '';
+    }
+
+    $html = wp_nav_menu(
+        [
+            'theme_location' => 'product-catalog',
+            'container'      => false,
+            'fallback_cb'    => false,
+            'echo'           => false,
+            'menu_class'     => 'aznet-theme-catalog-navigation__menu',
+            'menu_id'        => $menu_id,
+            'depth'          => 3,
+        ]
+    );
+
+    return is_string( $html ) ? trim( $html ) : '';
+}
+
+/**
  * Whether the Header has useful content for the mobile panel.
  */
 function header_mobile_panel_enabled(): bool {
+    if ( header_catalog_enabled() ) {
+        return true;
+    }
+
     if ( true === setting( 'header_search', true ) ) {
         return true;
     }
@@ -159,6 +219,10 @@ function header_context(): array {
         'logo_html'         => $logo_html,
         'primary_menu'      => $menu_html( 'aznet-theme-primary-menu' ),
         'mobile_menu'       => $menu_html( 'aznet-theme-mobile-menu' ),
+        'catalog_menu'      => header_catalog_home_rail() ? '' : header_catalog_menu_html( 'aznet-theme-header-catalog-menu' ),
+        'catalog_mobile_menu' => header_catalog_menu_html( 'aznet-theme-mobile-catalog-menu' ),
+        'catalog_enabled'   => header_catalog_enabled(),
+        'catalog_home_rail' => header_catalog_home_rail(),
         'account_url'       => $account_url,
         'cart_url'          => $cart_url,
         'search_enabled'    => true === setting( 'header_search', true ),

@@ -13,6 +13,7 @@ $context          = \AZnet\Theme\header_context();
 $effective_preset = \AZnet\Theme\effective_header_preset();
 $sticky_mode      = \AZnet\Theme\header_sticky_mode();
 $law01_header     = ! empty( $context['law01_header'] );
+$catalog_enabled  = ! empty( $context['catalog_enabled'] );
 $header_classes   = [
     'aznet-theme-site-header',
     'aznet-theme-site-header--' . $effective_preset,
@@ -21,6 +22,12 @@ $header_classes   = [
 
 if ( $law01_header ) {
     $header_classes[] = 'aznet-theme-site-header--law01-' . \AZnet\Theme\homepage_law01_variant();
+}
+if ( $catalog_enabled ) {
+    $header_classes[] = 'aznet-theme-site-header--catalog';
+    if ( ! empty( $context['catalog_home_rail'] ) ) {
+        $header_classes[] = 'aznet-theme-site-header--catalog-home-rail';
+    }
 }
 ?>
 <a class="aznet-theme-skip-link screen-reader-text" href="#main"><?php esc_html_e( 'Chuyển đến nội dung', 'aznet-theme' ); ?></a>
@@ -32,12 +39,18 @@ if ( $law01_header ) {
             <div class="aznet-theme-site-header__commerce-search">
                 <?php get_template_part( 'template-parts/header/search', null, $context ); ?>
             </div>
+            <?php if ( ! empty( $context['catalog_menu'] ) ) : ?>
+                <?php get_template_part( 'template-parts/header/catalog-navigation', null, $context ); ?>
+            <?php endif; ?>
             <?php get_template_part( 'template-parts/header/primary-navigation', null, $context ); ?>
             <div class="aznet-theme-site-header__actions">
                 <?php get_template_part( 'template-parts/header/utility-navigation', null, $context ); ?>
                 <?php get_template_part( 'template-parts/header/commerce-actions', null, $context ); ?>
             </div>
         <?php else : ?>
+            <?php if ( ! empty( $context['catalog_menu'] ) ) : ?>
+                <?php get_template_part( 'template-parts/header/catalog-navigation', null, $context ); ?>
+            <?php endif; ?>
             <?php get_template_part( 'template-parts/header/primary-navigation', null, $context ); ?>
             <div class="aznet-theme-site-header__actions">
                 <?php if ( $law01_header ) : ?>

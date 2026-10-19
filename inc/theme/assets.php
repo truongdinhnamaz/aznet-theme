@@ -51,6 +51,24 @@ function enqueue_header_navigation_asset( ?string $version = null ): void {
 }
 
 /**
+ * Load the reusable catalog presentation only on opted-in assigned-menu sites.
+ *
+ * @param string|null $version Asset version.
+ */
+function enqueue_header_catalog_asset( ?string $version = null ): void {
+    if ( ! function_exists( __NAMESPACE__ . '\\header_catalog_enabled' ) || ! header_catalog_enabled() ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'aznet-theme-catalog-navigation',
+        get_theme_file_uri( '/assets/css/components/catalog-navigation.css' ),
+        [ 'aznet-theme-site-header' ],
+        asset_content_version( '/assets/css/components/catalog-navigation.css', $version )
+    );
+}
+
+/**
  * Enqueue Header utility presentation only when the WordPress menu exists.
  *
  * @param string|null $version Asset version.
@@ -684,6 +702,7 @@ function enqueue_assets(): void {
     );
 
     enqueue_header_law01_asset( $version );
+    enqueue_header_catalog_asset( $version );
     enqueue_header_utility_asset( $version );
     enqueue_header_navigation_asset( $version );
     enqueue_sticky_header_asset( $version );
