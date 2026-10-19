@@ -976,6 +976,14 @@ Execution and gates: bounded branch \`work/core-vertical-catalog-industrial01-pi
 
 **BLOCKED/UNKNOWN:** cross-repository L5 until Site Guard v1 and Theme consumer tested together on disposable real WordPress; `lstamduchn.vn` does not have confirmed live Site Guard. Merge/release/production activation needs separate approval, exact package and hosting backup/recovery. **EXACT NEXT:** provider v1 exact-head CI → Theme consumer CI + real L5 fixture → owner review.
 
+### Consolidated owner-approved Theme release v1.3.91 — ACCEPTED 19/10/2026
+
+**Authorization boundary:** After exact PR #480 candidate achieved 24/24 GitHub workflows SUCCESS, the owner expressly approved the **combined Theme GitHub release**; publication must remain gated on matching candidate source tree, exact-main verification, deterministic ZIP SHA-256 and official Git tag. This is **not** authorization to install/switch the Theme on any production WordPress site; site backup and live QA require separate owner approval.
+
+**Bundled Theme-owned changes:** PR #477 (privileged Theme Danger Zone and public/versioned Site Guard read-only consumer), PR #478 (opt-in two-tier Header `header_sticky=nav-only`, legacy modes unchanged), and PR #479 (Theme-only privileged Danger Zone entry). No provider source, WordPress-native site protection, replicated commerce data or domain mutation is bundled. The Site Guard provider remains authoritative; absent/error/version mismatch fails soft. A Theme fixture and CI do **not** establish installed cross-provider L5 PASS.
+
+**Evidence and release method:** PR #480 exact head `c9deaf598803d9b632c7379989d83c051f957b32` passed all 24 CI runs, merged at `5e2c4d03d6b2e6d889c1705b9d3622899c34c324` with identical Git tree. Verified reproducible Y5 candidate ZIP SHA-256: `bd77316792a31abdc1ddf7f7e8966ee1e08b15ab55c3c998792016a3c5eecc7c`. The approved one-shot release workflow must pin this exact SHA, restrict itself to `main` and version 1.3.91, execute clean WordPress 6.9/PHP 8.1 QA, detect conflicting tags, and publish the ZIP/checksum only after release gates PASS. Official v1.3.90 remains immutable rollback reference. Publication is not production deployment.
+
 ### D-050 Support navigation — ACCEPTED — 19/10/2026
 
 **Owner decision:** The AZnet Theme Control Center has a dedicated **Support** tab in its existing Theme navigation. This is an ordinary presentation/diagnostics landing section under the existing `edit_theme_options` gate; it links to the already owned `System Health & Support Snapshot` screen. The **Khu vực nguy hiểm** entry moves from Overview into Support and is still rendered **only** for an independently privileged operator. There is no second WordPress admin top-level menu and no parallel Site Guard administration surface.
