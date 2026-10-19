@@ -86,6 +86,7 @@ try {
         return {
           categoryLeft: band.left, categoryWidth: band.width, categoryHeight: band.height, navLeft: nav.left,
           labelTextOffset: labelText ? labelText.left - band.left : null,
+          catalogTextTransform: getComputedStyle(document.querySelector('.aznet-theme-site-header__catalog-rail-label')).textTransform,
           vacantRailHeight: asideRect.bottom - asideNav.bottom,
         };
       });
@@ -173,7 +174,8 @@ try {
     }
     return band && nav ? {
       categoryLeft: band.left, categoryWidth: band.width, categoryHeight: band.height,
-      navLeft: nav.left, labelTextOffset: textOffset
+      navLeft: nav.left, labelTextOffset: textOffset,
+      catalogTextTransform: getComputedStyle(summary).textTransform,
     } : null;
   });
   await assert(homepageHeaderBaseline && innerMetrics &&
@@ -183,8 +185,10 @@ try {
     Math.abs(innerMetrics.navLeft - homepageHeaderBaseline.navLeft) <= 3 &&
     innerMetrics.labelTextOffset !== null &&
     homepageHeaderBaseline.labelTextOffset !== null &&
-    Math.abs(innerMetrics.labelTextOffset - homepageHeaderBaseline.labelTextOffset) <= 8,
-    'Homepage and inner-page category/nav columns differ ' +
+    Math.abs(innerMetrics.labelTextOffset - homepageHeaderBaseline.labelTextOffset) <= 8 &&
+    innerMetrics.catalogTextTransform === homepageHeaderBaseline.catalogTextTransform &&
+    innerMetrics.catalogTextTransform === 'uppercase',
+    'Homepage and inner-page category/nav heading presentation differs ' +
     JSON.stringify({ homepageHeaderBaseline, innerMetrics }));
   await page.screenshot({ path: path.join(out, 'inner-header-closed.png'), fullPage: false });
   await dropdown.locator('summary').focus();

@@ -181,6 +181,9 @@
         line-height: 1.2;
         justify-content: flex-start;
         gap: .75rem;
+        font-weight: var(--aznet-theme-font-weight-bold);
+        letter-spacing: .035em;
+        text-transform: uppercase;
     }
     .aznet-theme-site-header--catalog .aznet-theme-catalog-navigation--header summary > span:last-child {
         margin-left: auto;

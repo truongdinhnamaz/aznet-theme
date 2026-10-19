@@ -29,3 +29,7 @@ Date: 2026-10-19. Repository: truongdinhnamaz/aznet-theme. Scope: Core presentat
 - Rollback is a revert of this bounded CSS/regression patch or setting header_catalog_mode=off. Native WordPress menu data stays unchanged.
 - Current production still runs official 1.3.89. This PR does not upload a Theme package, edit WordPress options or publish the older WPVibe Draft.
 - Merge/release, versioned package and new production installation remain approval-gated. New production L3/L4 must follow the actual deployment.
+
+## Final visual review — label typography continuity
+
+An independent inspection of the exact PR #474 Standard Header browser screenshots (industrial01-pilot-runtime artifact 12186200881, run 39250422688) confirmed the original three screenshot defects are corrected. One residual cosmetic mismatch was identified: the homepage catalog heading is uppercase, while the inner-page native dropdown label still used sentence case. The bounded follow-up scopes `font-weight`, `letter-spacing` and `text-transform: uppercase` only to the opt-in catalog dropdown summary on desktop. The existing browser comparison now verifies computed `text-transform` matches both surfaces. Native WordPress menu, control accessibility, compact/other preset without catalog and mobile behavior are unchanged. Final-head CI must be rerun before merge; this is still a feature-branch checkpoint, not production PASS.
