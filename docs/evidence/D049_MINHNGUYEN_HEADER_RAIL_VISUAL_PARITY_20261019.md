@@ -28,3 +28,7 @@ On the live pilot, the user-requested Hero copy was updated via two isolated Wor
 - `homepage_industrial01_hero_title = Giải pháp máy chế biến gỗ cho nhà xưởng hiện đại` (previous empty)
 - `homepage_industrial01_hero_lede = Khám phá máy, thiết bị và phụ kiện ngành gỗ theo từng công đoạn sản xuất. Xem thông tin kỹ thuật và nhận tư vấn, báo giá phù hợp với nhu cầu nhà xưởng.` (previous empty)
 - Other Theme presentation settings, CTA, product taxonomy, menu assignment, and WPVibe draft remain unchanged; reset these two text settings to empty for content rollback.
+
+## Pilot Header preset parity
+
+In addition to the retained industrial-commerce fixture, the same real WordPress browser flow switches only `header_preset=standard` for a second pass. This matches Minh Nguyên's observed live configuration and separately verifies 1440/1024/390/320 desktop grid, mobile navigation, keyboard focus, no-JS and inner-page fallback without assuming a Commerce Header is always selected. The earlier 39240340928 Commerce/long-text screenshot browser run was green; Standard pass must be separately GREEN before production sign-off.

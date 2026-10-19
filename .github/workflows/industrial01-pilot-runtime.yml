@@ -302,6 +302,20 @@ jobs:
           INDUSTRIAL01_OUT_DIR: /tmp/industrial01-pilot
         run: node tests/browser/core-vertical-catalog-l4.mjs
 
+      - name: Verify real-pilot Standard Header alongside native Catalog rail
+        env:
+          INDUSTRIAL01_BASE_URL: http://127.0.0.1:8080
+          INDUSTRIAL01_OUT_DIR: /tmp/industrial01-pilot/standard-mode
+        run: |
+          set -euo pipefail
+          wp eval '
+            $settings = get_theme_mod( "aznet_theme_settings", [] );
+            $settings = is_array( $settings ) ? $settings : [];
+            $settings["header_preset"] = "standard";
+            set_theme_mod( "aznet_theme_settings", $settings );
+          ' --path=/tmp/wp --allow-root
+          node tests/browser/core-vertical-catalog-l4.mjs
+
       - name: Verify OFF rollback without deleting WordPress menu
         run: |
           set -euo pipefail
