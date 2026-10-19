@@ -40,7 +40,8 @@ $expect($parent . ' .aznet-theme-site-footer__main', [
     'grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr));',
 ]);
 $expect($parent . ' .aznet-theme-site-footer__inner', [
-    'max-width: 88rem;',
+    'width: min(calc(100% - (2 * var(--aznet-theme-gutter))), var(--aznet-theme-container-shell));',
+    'max-width: var(--aznet-theme-container-shell);',
     'padding-top:',
 ]);
 $expect($parent . ' .aznet-theme-site-footer__brand', ['display: flex;', 'gap:']);
@@ -66,6 +67,17 @@ $expect($parent . ' .aznet-theme-site-footer__rich-content a', ['overflow-wrap: 
 $expect($parent . ' .aznet-theme-site-footer__bottom', ['border-top:', 'margin-top:']);
 $expect($parent . ' a:focus-visible', ['outline:', 'outline-offset:']);
 
+// One container token must align Footer, Header and the Industrial
+// Homepage shells. The previous 88rem Footer cap placed its left edge
+// outside the shared 82rem shell at desktop widths.
+$homepageCss = (string) file_get_contents($root . '/assets/css/components/homepage-industrial-01.css');
+$headerCss = (string) file_get_contents($root . '/assets/css/components/site-header.css');
+$fail(str_contains($homepageCss,
+    'width: min(calc(100% - (2 * var(--aznet-theme-gutter))), var(--aznet-theme-container-shell));'),
+    'Industrial Homepage must retain shared shell token width');
+$fail(str_contains($headerCss, 'width: min(var(--aznet-theme-container-shell), calc(100% - var(--aznet-theme-gutter)));'),
+    'Header must retain the same shared shell cap');
+
 // Both media policies must appear AFTER scoped desktop rules, not be
 // accidentally overridden by the default Professional four-column selector.
 $atTablet = strpos($sheet, '@media (max-width: 70rem)');
@@ -81,6 +93,10 @@ $tailMobile = substr($sheet, $atMobile);
 $fail((bool) preg_match('/@media \(max-width: 48rem\)\s*\{[\s\S]*?' . preg_quote($parent . ' .aznet-theme-site-footer__main', '/') .
     '\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/', $tailMobile),
     'Mobile must stack one Footer column');
+$fail((bool) preg_match('/@media \(max-width: 48rem\)\s*\{[\s\S]*?' . preg_quote($parent . ' .aznet-theme-site-footer__inner', '/') .
+    '\s*\{([^}]*)\}/', $tailMobile, $mobileInner) &&
+    !str_contains((string) ($mobileInner[1] ?? ''), 'width:'),
+    'Mobile Footer must inherit the shared Homepage shell width; no independent gutter override');
 
 // Theme renders WordPress-owned Footer rich-content; no hidden source/social
 // storage mutation, no guesses about client social IDs or URLs.
