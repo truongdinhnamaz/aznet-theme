@@ -33,6 +33,9 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-member-page-ed
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/team-list-name-typography-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/project-handoff-export-contract.php
 
+printf '%s\n' '==> Deterministic package must not re-include generated build output'
+python3 tests/offline/release-build-output-exclusion.py
+
 printf '%s\n' '==> Retained core/static/security/package boundary chain'
 bash scripts/verify-g3-core.sh
 
