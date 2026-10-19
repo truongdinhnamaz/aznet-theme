@@ -224,6 +224,79 @@ jobs:
           INDUSTRIAL01_OUT_DIR: /tmp/industrial01-pilot
         run: node tests/browser/industrial01-pilot-l4.mjs
 
+      - name: Seed opt-in WordPress Catalog Menu and enable Homepage rail
+        run: |
+          set -euo pipefail
+          wp eval '
+            $menu_id = wp_create_nav_menu( "Native Product Catalog Fixture" );
+            if ( is_wp_error( $menu_id ) ) { throw new RuntimeException( $menu_id->get_error_message() ); }
+            $terms = [ "dong-co", "cam-bien", "bien-tan", "khi-nen", "phu-kien", "dieu-khien", "vat-tu" ];
+            $first = 0;
+            foreach ( $terms as $index => $slug ) {
+                $term = get_term_by( "slug", $slug, "product_cat" );
+                if ( ! $term instanceof WP_Term ) { throw new RuntimeException( "Missing native Woo term " . $slug ); }
+                $item = wp_update_nav_menu_item( $menu_id, 0, [
+                    "menu-item-title" => $term->name,
+                    "menu-item-object-id" => $term->term_id,
+                    "menu-item-object" => "product_cat",
+                    "menu-item-type" => "taxonomy",
+                    "menu-item-status" => "publish",
+                ] );
+                if ( is_wp_error( $item ) ) { throw new RuntimeException( $item->get_error_message() ); }
+                if ( 0 === $index ) { $first = (int) $item; }
+            }
+            if ( $first <= 0 ) { throw new RuntimeException( "Missing catalog parent item" ); }
+            for ( $i = 1; $i <= 12; $i++ ) {
+                $term = wp_insert_term( "Máy CNC " . $i, "product_cat", [ "slug" => "may-cnc-catalog-fixture-" . $i ] );
+                if ( is_wp_error( $term ) ) { throw new RuntimeException( $term->get_error_message() ); }
+                $item = wp_update_nav_menu_item( $menu_id, 0, [
+                    "menu-item-title" => "Máy CNC " . $i,
+                    "menu-item-object-id" => (int) $term["term_id"],
+                    "menu-item-object" => "product_cat",
+                    "menu-item-type" => "taxonomy",
+                    "menu-item-parent-id" => $first,
+                    "menu-item-status" => "publish",
+                ] );
+                if ( is_wp_error( $item ) ) { throw new RuntimeException( $item->get_error_message() ); }
+            }
+            $locations = get_theme_mod( "nav_menu_locations", [] );
+            $locations = is_array( $locations ) ? $locations : [];
+            $locations["product-catalog"] = (int) $menu_id;
+            set_theme_mod( "nav_menu_locations", $locations );
+            $settings = get_theme_mod( "aznet_theme_settings", [] );
+            $settings = is_array( $settings ) ? $settings : [];
+            $settings["header_catalog_mode"] = "homepage-rail";
+            set_theme_mod( "aznet_theme_settings", $settings );
+            echo "PASS: Native WordPress menu 7 groups + 12 children, feature ON\n";
+          ' --path=/tmp/wp --allow-root
+
+          curl -fsS http://127.0.0.1:8080/ >/tmp/industrial01-pilot/catalog-on-smoke.html
+          grep -F 'aznet-theme-industrial01-hero--with-catalog' /tmp/industrial01-pilot/catalog-on-smoke.html
+          grep -F 'aznet-theme-hero-catalog-menu' /tmp/industrial01-pilot/catalog-on-smoke.html
+
+      - name: Verify opt-in Catalog rail, mobile disclosure and inner dropdown
+        env:
+          INDUSTRIAL01_BASE_URL: http://127.0.0.1:8080
+          INDUSTRIAL01_OUT_DIR: /tmp/industrial01-pilot
+        run: node tests/browser/core-vertical-catalog-l4.mjs
+
+      - name: Verify OFF rollback without deleting WordPress menu
+        run: |
+          set -euo pipefail
+          wp eval '
+            $s = get_theme_mod("aznet_theme_settings", []);
+            $s["header_catalog_mode"] = "off";
+            set_theme_mod("aznet_theme_settings", $s);
+            $locations = get_theme_mod("nav_menu_locations", []);
+            if (empty($locations["product-catalog"])) { throw new RuntimeException("Menu must survive Theme option OFF"); }
+          ' --path=/tmp/wp --allow-root
+          curl -fsS http://127.0.0.1:8080/ >/tmp/industrial01-pilot/catalog-off-smoke.html
+          if grep -F 'aznet-theme-industrial01-hero--with-catalog' /tmp/industrial01-pilot/catalog-off-smoke.html; then
+            echo 'FAIL: option OFF must restore existing Hero without deleting native WordPress menu' >&2
+            exit 1
+          fi
+          echo 'PASS: catalog OFF hides presentation but native WP menu remains'
+
       - name: Verify runtime boundary
         run: |
           set -euo pipefail
