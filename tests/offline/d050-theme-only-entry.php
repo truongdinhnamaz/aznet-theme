@@ -31,6 +31,6 @@ check_entry( str_contains( $html, 'Khu vực nguy hiểm' ), 'named authorized o
 check_entry( str_contains( $html, 'https://example.test/wp-admin/admin.php?page=aznet-theme&amp;section=danger-zone' ), 'entry targets only Theme admin route' );
 check_entry( ! str_contains( $html, 'page=aznet-site-guard' ) && ! str_contains( $html, 'admin-post.php' ), 'not a competing Site Guard admin interface or mutation control' );
 $control = (string) file_get_contents( dirname( __DIR__, 2 ) . '/inc/admin/control-center.php' );
-check_entry( str_contains( $control, 'render_danger_zone_entry_link();' ), 'normal AZnet Theme Overview composes the discreet entry' );
+check_entry( str_contains( $control, 'render_danger_zone_entry_link();' ), 'AZnet Theme Support composes the discreet privileged entry' );
 check_entry( ! str_contains( $control, "'danger-zone' =>" ), 'Danger Zone remains outside ordinary navigation tabs' );
 echo "PASS: D050 privileged Theme-only discovery, independent Site Guard owner, default hidden\n";
