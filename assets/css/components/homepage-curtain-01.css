@@ -816,9 +816,10 @@
 .aznet-theme-curtain01-product-card__image {
     display: block;
     width: 100%;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 1 / 1;
     height: auto;
     object-fit: cover;
+    object-position: center;
     transition: transform 260ms ease;
 }
 
