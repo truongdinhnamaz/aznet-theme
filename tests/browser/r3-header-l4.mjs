@@ -285,6 +285,39 @@ async function inspectCase(browser, routeName, route, viewportName, viewport) {
       if (transitionDuration !== '0s') throw new Error(`reduced motion did not disable sticky transition: ${transitionDuration}`);
     }
 
+
+    if (stickyMode === 'nav-only') {
+      // Desktop: only the native primary-navigation tier stays at viewport top.
+      // Mobile: only the menu trigger tier stays. Brand and utilities scroll off.
+      const initial = await page.evaluate(() => {
+        const b = document.querySelector('[data-aznet-theme-site-header]')?.getBoundingClientRect();
+        return {height:b?.height, overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth};
+      });
+      await page.evaluate(() => window.scrollTo(0, 650));
+      await page.waitForFunction(() => window.scrollY > 500);
+      const sticky = await page.evaluate(() => {
+        const rect = (selector) => {
+          const el = document.querySelector(selector);
+          if (!el) return null;
+          const r = el.getBoundingClientRect();
+          return {top:r.top,bottom:r.bottom,height:r.height};
+        };
+        return {
+          header:rect('[data-aznet-theme-site-header]'),
+          brand:rect('.aznet-theme-site-header__brand'),
+          nav:rect('.aznet-theme-site-header__nav'),
+          mobile:rect('[data-aznet-theme-nav-trigger]'),
+          overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth,
+        };
+      });
+      const pinned = viewport.width <= 1100 ? sticky.mobile : sticky.nav;
+      if (!pinned || Math.abs(pinned.top) > 3 ||
+          !sticky.brand || sticky.brand.bottom > 3 ||
+          Math.abs(sticky.header.height - initial.height) > 2 || sticky.overflow > 1) {
+        throw new Error('nav-only must pin only the menu tier without layout jump: '+JSON.stringify({initial,sticky}));
+      }
+    }
+
     result.cls = await verifyStickyCompact(page);
 
     const axeResults = await new AxeBuilder({ page }).include('.aznet-theme-site-header').analyze();
