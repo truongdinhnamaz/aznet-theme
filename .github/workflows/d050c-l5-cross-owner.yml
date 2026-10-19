@@ -20,7 +20,7 @@ concurrency:
 jobs:
   real-wordpress-both-products:
     # A private repository token must never be exposed to untrusted forks/branches.
-    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && (github.head_ref == 'work/d050c-unified-danger-zone-20261019' || github.head_ref == 'work/d050c-v1390-safe-merge-20261019') }}
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && (github.head_ref == 'work/d050c-unified-danger-zone-20261019' || github.head_ref == 'work/d050c-v1390-safe-merge-20261019' || github.head_ref == 'work/d050c-current-main-l5-20261019') }}
     name: Real WP ${{ matrix.wp }} / PHP ${{ matrix.php }} — Theme + MU-plugin
     runs-on: ubuntu-24.04
     timeout-minutes: 35
@@ -160,7 +160,7 @@ jobs:
           content_status=$(curl -sS --output /dev/null --write-out '%{http_code}' \
             -H "Authorization: Bearer $SITE_GUARD_READ_TOKEN" \
             -H 'Accept: application/vnd.github+json' \
-            'https://api.github.com/repos/truongdinhnamaz/aznet-site-guard/contents/mu-plugins/aznet-site-guard.php?ref=0f16286532b23f3b7c64853fc5cba0b594be0ea0')
+            'https://api.github.com/repos/truongdinhnamaz/aznet-site-guard/contents/mu-plugins/aznet-site-guard.php?ref=a1c39cd6dc553e4ed7fa1632dd42cb8da8a55f1a')
           if test "$content_status" != 200; then
             echo "::error title=BLOCKED_CROSS_REPO_CONTENTS::Token sees repository but cannot read pinned MU-loader (HTTP $content_status). Give Contents:Read-only on ONLY aznet-site-guard; never enable write."
             exit 1
@@ -171,7 +171,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: truongdinhnamaz/aznet-site-guard
-          ref: 0f16286532b23f3b7c64853fc5cba0b594be0ea0
+          ref: a1c39cd6dc553e4ed7fa1632dd42cb8da8a55f1a
           path: site-guard-candidate
           token: ${{ secrets.AZNET_SITE_GUARD_CI_READ_TOKEN }}
           persist-credentials: false
@@ -180,7 +180,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git -C site-guard-candidate rev-parse HEAD)" = '0f16286532b23f3b7c64853fc5cba0b594be0ea0'
+          test "$(git -C site-guard-candidate rev-parse HEAD)" = 'a1c39cd6dc553e4ed7fa1632dd42cb8da8a55f1a'
           php -l site-guard-candidate/mu-plugins/aznet-site-guard.php
           php -l site-guard-candidate/mu-plugins/aznet-site-guard/class-site-guard.php
           mkdir -p "$D050C_WP_ROOT/wp-content/mu-plugins/aznet-site-guard"
