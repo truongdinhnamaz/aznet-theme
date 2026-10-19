@@ -34,6 +34,14 @@ $mobile_menu = isset( $args['mobile_menu'] ) ? (string) $args['mobile_menu'] : '
                 <?php echo $mobile_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu() output. ?>
             </nav>
         <?php endif; ?>
+        <?php if ( ! empty( $args['catalog_mobile_menu'] ) ) : ?>
+            <details class="aznet-theme-catalog-navigation aznet-theme-catalog-navigation--mobile">
+                <summary><?php esc_html_e( 'Danh mục sản phẩm', 'aznet-theme' ); ?></summary>
+                <nav aria-label="<?php echo esc_attr__( 'Danh mục sản phẩm trên di động', 'aznet-theme' ); ?>">
+                    <?php echo $args['catalog_mobile_menu']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu() output. ?>
+                </nav>
+            </details>
+        <?php endif; ?>
         <div class="aznet-theme-site-header__mobile-actions">
             <?php if ( ! empty( $args['law01_header'] ) ) : ?>
                 <?php get_template_part( 'template-parts/header/search', null, $args ); ?>

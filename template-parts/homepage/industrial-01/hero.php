@@ -110,9 +110,25 @@ if ( '' !== $background_url ) {
 if ( $background_from_hero ) {
     $hero_classes .= ' aznet-theme-industrial01-hero--background-only';
 }
+
+$catalog_menu = '';
+if ( function_exists( 'AZnet\Theme\header_catalog_home_rail' ) && \AZnet\Theme\header_catalog_home_rail() ) {
+    $catalog_menu = \AZnet\Theme\header_catalog_menu_html( 'aznet-theme-hero-catalog-menu' );
+}
+if ( '' !== $catalog_menu ) {
+    $hero_classes .= ' aznet-theme-industrial01-hero--with-catalog';
+}
 ?>
 <section class="<?php echo esc_attr( $hero_classes ); ?>"<?php echo '' !== $hero_style ? ' style="' . esc_attr( $hero_style ) . '"' : ''; ?>>
     <div class="aznet-theme-industrial01-shell aznet-theme-industrial01-hero__grid">
+        <?php if ( '' !== $catalog_menu ) : ?>
+            <aside class="aznet-theme-industrial01-hero__catalog" aria-label="<?php echo esc_attr__( 'Danh mục sản phẩm', 'aznet-theme' ); ?>">
+                <p class="aznet-theme-industrial01-hero__catalog-heading"><?php esc_html_e( 'DANH MỤC SẢN PHẨM', 'aznet-theme' ); ?></p>
+                <nav aria-label="<?php echo esc_attr__( 'Điều hướng danh mục thiết bị', 'aznet-theme' ); ?>">
+                    <?php echo $catalog_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu() output. ?>
+                </nav>
+            </aside>
+        <?php endif; ?>
         <div class="aznet-theme-industrial01-hero__content">
             <?php if ( '' !== $kicker ) : ?>
                 <p class="aznet-theme-industrial01-kicker"><?php echo esc_html( $kicker ); ?></p>

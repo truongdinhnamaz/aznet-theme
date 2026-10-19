@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.09
+**Version:** v1.10
 **Status:** Working Source  
-**Date:** 07/10/2026
+**Date:** 19/10/2026
 
 ## 1. Purpose
 
@@ -932,3 +932,14 @@ Accepted rules:
 ### D-048 — Project Handoff JSON (Accepted, 2026-10-16)
 
 Decision: add read-only Theme Control Center handoff JSON export, clearly separated from existing portable settings and actual WordPress backup. Must disclose unknown Git/QA checkpoint and require validation against AZT-00–AZT-04, current evidence and canonical GitHub. Theme must not claim WP-runtime-derived PASS, duplicate authoritative content or store domain data. Implementation candidate PR #438 (pending CI/runtime/browser/release gates); evidence is not production PASS until deployed and verified.
+
+
+### D-049 — Optional Core Vertical Catalog + Industrial 01 Hero pilot — ACCEPTED — 19/10/2026
+
+Decision: owner approved a **reusable Theme Core** optional vertical product-category menu, inspired by the familiar Flatsome catalog-menu pattern, with \`minhnguyen.vn\` as the first real WordPress pilot. The allowed source is the WordPress-native **Menu**, not WooCommerce private data. Theme owns only the menu presentation; WordPress/WooCommerce remain authoritative for native menus and product-category semantics.
+
+Accepted layout contract: register WordPress \`product-catalog\` location; add Theme Header \`header_catalog_mode=off|dropdown|homepage-rail\` with **OFF default**; use accessible, keyboard-operable disclosure and mobile fail-soft; Header dropdown supports every template. Only a template declaring versioned \`catalog-hero-rail\` capability in its extension manifest may compose the nav beside its Front Page Hero. Industrial 01 initially declares the capability. The Hero must preserve existing image/CTA/WordPress source ownership. No code in RootProfile, ConvertFlow or other product repositories.
+
+Pilot facts independently inspected on 19/10/2026: Minh Nguyên uses AZnet Theme \`1.3.79\` + WooCommerce; WordPress \`Main menu\` term #55 is assigned primary; \`Menu danh mục\` term #143 contains 19 editor-authored Woo \`product_cat\` navigation items, initially unassigned to a Theme menu location; existing Industrial 01 Hero attachment #1593 remains unchanged.
+
+Execution and gates: bounded branch \`work/core-vertical-catalog-industrial01-pilot-20261019\`, candidate draft PR #464. Initial code head \`60c0339098dc42acca98ca798cb82e88ac1e4a46\` had 46/46 triggered CI workflows succeed but feature ON required additional L3/L4; standalone WordPress fixture, keyboard/axe responsive test and OFF rollback gate are added in the follow-up candidate. Preserve all earlier evidence if not invalidated. **Live merge/release/pilot deployment must follow fresh exact candidate QA; neither initial 46/46 success nor owner approval may be represented as production PASS.** Rollback: leave OFF or revert candidate; do not modify WordPress menu content on rollback.

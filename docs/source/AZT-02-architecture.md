@@ -4,9 +4,9 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.23 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.24 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 07/10/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 19/10/2026 |
 
 | **Kiến trúc lõi: **Theme chỉ sở hữu presentation/configuration/reference cần thiết. Dữ liệu authoritative và business state ở lại owner. Boundary giữa hai bên là public/versioned provider contract hoặc adapter tối thiểu. |
 | --- |
@@ -574,3 +574,26 @@ For Theme templates/pilots that provide an authored Page Hero as the primary int
 ### Project Handoff JSON — export-only boundary (2026-10-16)
 
 Owner-approved: AZnet Theme can export a read-only handoff context artifact from Control Center, separate from existing portable settings import/export. The payload uses normalized Theme presentation settings, current visible runtime version, canonical repo pointer and authoritative AZT source references. Git branch/commit, QA PASS and Exact Next cannot be attested by WP runtime and MUST be marked unknown / revalidation required, never inferred. No copy of WordPress content, plugin domain stores, private APIs, credentials, database/files or mutation/import actions. JSON is neither source of truth nor restorable backup. Future import, remote attestations or architectural expansion require separate contract and approval. Stage/release gate remains evidence based.
+
+
+# 21. Optional Core Vertical Catalog navigation — D-049 (Accepted 19/10/2026)
+
+## 21.1. Ownership and native source
+
+- Core Theme owns only the opt-in catalog-menu **presentation**: Header dropdown, keyboard/mouse disclosure, narrow-screen native mobile disclosure, and reusable layout/spacing. WordPress owns menu definitions, menu items, order, nesting, links, and assignment to the native \`product-catalog\` registered location. WooCommerce, when installed, continues to own \`product_cat\` taxonomy/product data and catalog semantics.
+- No direct WooCommerce term/storage enumeration in the Theme presenter; no cloned catalog state; no URL/slug/page-ID inference. Menus are user-authored native WordPress data. A missing menu or unavailable provider must fail soft without inventing entries.
+- Theme setting \`header_catalog_mode\` is strictly normalized to \`off | dropdown | homepage-rail\`; default \`off\` for every existing installation and no forced preset change. Setting OFF does not mutate WordPress menu assignments or Woo product facts.
+- Assets are surface-aware; do not load the catalog stylesheet on an unconfigured or unassigned site. The feature must run without WooCommerce when the assigned WordPress menu uses native links.
+
+## 21.2. Template Extension Contract bridge
+
+- The reusable Core Header works for any template and site via \`product-catalog\`. Homepage-rail is an **optional template capability**, not an industry/site-name switch.
+- A template which implements a catalog-side Hero can declare \`catalog-hero-rail\` within its validated manifest \`capabilities\`. Core checks this capability plus live Front Page Composer and menu assignment before moving the desktop catalog from Header dropdown into the Hero.
+- Industrial 01 is the initial supporting template. Non-supporting templates retain the Header dropdown in \`homepage-rail\` mode; switching templates must not erase the WordPress-owned menu.
+- The declaring template owns its matching Hero composition/presentation. Core does not write a second Hero/content source; existing WordPress Hero image, text and CTA references remain authoritative. Responsive layout hides desktop Hero rail at <=1100px while exposing the same menu through the accessible mobile Header panel.
+
+## 21.3. QA and release boundary
+
+- Feature development requires RED -> minimal GREEN -> regression, opt-in OFF parity, no-menu fail-soft, WordPress-native nested menu fixture, real L3 WordPress/Woo runtime and L4 keyboard/axe/long-menu/desktop/tablet/mobile/no-JS evidence.
+- Before publishing/releasing to a real pilot, verify exact package bytes, admin mode persistence, assigned menu, menu link targets, Hero overlap, mobile focus/escape, JS error markers and rollback by switching OFF. Production site data and unrelated pre-existing WPVibe draft work must not be overwritten.
+- Approval of the implementation does not itself provide evidence of browser PASS, production deployment or release promotion.

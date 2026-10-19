@@ -6,9 +6,9 @@ Historical D-040/D-041 decision checkpoint was exact `main@5d2d34074c1b1b0006151
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.5 | Product scope/ownership and v1.1 objective/non-goals |
-| `AZT-02-architecture.md` | v0.23 | Theme architecture, public integration contracts, Template Extension Contract, preset lexicon boundary, hero-first Page composition and reusable editorial/news media-card presentation standard |
-| `AZT-03-baseline-provenance.md` | v0.80 | Canonical provenance through Rèm 01 1.3.31 Project Showcase production checkpoint |
-| `AZT-04-roadmap-qa-decisions.md` | v1.09 | Roadmap/QA decisions through D-048 hero-first Page composition |
+| `AZT-02-architecture.md` | v0.24 | Theme architecture, public integration contracts, Template Extension Contract, preset lexicon boundary, hero-first Page composition and reusable editorial/news media-card presentation standard |
+| `AZT-03-baseline-provenance.md` | v0.85 | Canonical provenance through Rèm 01 1.3.31 Project Showcase production checkpoint |
+| `AZT-04-roadmap-qa-decisions.md` | v1.10 | Roadmap/QA decisions through D-048 hero-first Page composition |
 | `AZT-EXEC-MAP.md` | v0.87 | Derived execution map through Rèm 01 1.3.31 production checkpoint |
 
 03/10/2026 Team contact decision: AZT-02 v0.22 + AZT-04 D-047 permit exactly two bounded WordPress Page meta facts for Team child Pages, `_aznet_theme_team_phone` and `_aznet_theme_team_zalo`. They are not RootProfile authority, are not copied into `aznet_theme_settings`, and do not authorize a generic personnel store. Backend Zalo input remains phone-only; Theme derives the public Zalo URL at render time.
@@ -136,3 +136,6 @@ Current release boundary: **v1.3.21 TECHNICAL PASS / GitHub publication v1.3.20 
 
 
 07/10/2026 Hero-first Page decision: AZT-02 v0.23 + AZT-04 D-048 establish the shared pilot/Page composition rule. A Page with an explicit valid authored Hero begins at that Hero; the generic Page title/excerpt header must not precede it. Generic Page header remains the fail-soft fallback when no authored Hero is active. Activation is presentation-configured, never inferred from slug/title/URL/Page ID; WordPress content ownership is unchanged.
+
+
+19/10/2026 D-049 new optional Theme Core Vertical Catalog: AZT-02 v0.24 and AZT-04 v1.10 authorize WordPress-native \`product-catalog\` menu location, three strictly bounded Header display modes and a template-manifest-declared \`catalog-hero-rail\` presentation capability (first consumer Industrial 01). AZT-03 v0.85 registers draft PR #464 initial GitHub evidence and \`minhnguyen.vn\` read-only WordPress menu/source inventory. Initial 46/46 CI successes do not close feature-ON L3/L4 or live publication. No Theme ownership of Woo product-category truth or WordPress-native menu data changes.

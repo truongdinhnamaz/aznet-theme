@@ -93,6 +93,7 @@ function settings_defaults(): array {
         'page_breadcrumbs'              => true,
         'header_preset'                 => 'standard',
         'header_sticky'                 => 'sticky',
+        'header_catalog_mode'          => 'off',
         'header_search'                 => true,
         'header_utilities'              => true,
         'footer_preset'                 => 'standard',
@@ -218,6 +219,10 @@ function normalize_settings( array $raw ): array {
         ? (string) $raw['header_sticky']
         : 'sticky';
 
+    $header_catalog_mode = isset( $raw['header_catalog_mode'] ) && in_array( $raw['header_catalog_mode'], [ 'off', 'dropdown', 'homepage-rail' ], true )
+        ? (string) $raw['header_catalog_mode']
+        : 'off';
+
     $footer_preset = isset( $raw['footer_preset'] ) && in_array( $raw['footer_preset'], [ 'standard', 'minimal', 'classic', 'professional', 'split', 'centered', 'compact', 'law-01' ], true )
         ? (string) $raw['footer_preset']
         : 'standard';
@@ -299,6 +304,7 @@ function normalize_settings( array $raw ): array {
         'page_breadcrumbs'              => $normalize_boolean( 'page_breadcrumbs', true ),
         'header_preset'                 => $header_preset,
         'header_sticky'                 => $header_sticky,
+        'header_catalog_mode'          => $header_catalog_mode,
         'header_search'                 => $normalize_boolean( 'header_search', true ),
         'header_utilities'              => $normalize_boolean( 'header_utilities', true ),
         'footer_preset'                 => $footer_preset,

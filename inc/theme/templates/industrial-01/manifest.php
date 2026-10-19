@@ -7,7 +7,7 @@ return [
     'version'          => '1.0.0',
     'category'         => 'Thiết bị công nghiệp',
     'description'      => 'Website B2B bán thiết bị công nghiệp và phụ kiện.',
-    'capabilities'     => [ 'homepage', 'woocommerce' ],
+    'capabilities'     => [ 'homepage', 'woocommerce', 'catalog-hero-rail' ],
     'presentation'     => [
         'visual_preset'   => 'industrial-01',
         'homepage_preset' => 'industrial-01',
