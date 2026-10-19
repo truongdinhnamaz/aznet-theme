@@ -131,6 +131,9 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-release-closure-
 printf '%s\n' '==> X6 promotion-aware workflow ownership contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-promotion-workflow-boundary-contract.php
 
+printf '%s\n' '==> Strict v1.3.91 technical release-candidate contract (nonpublishing)'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v1391-release-candidate-contract.php
+
 printf '%s\n' '==> Y1 Page Experience contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-page-experience-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/page-full-bleed-sections-contract.php
