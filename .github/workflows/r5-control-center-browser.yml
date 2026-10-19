@@ -139,6 +139,15 @@ jobs:
           test "$(wp theme mod get custom_logo --path=/tmp/wp --allow-root)" != ''
           echo 'PASS: R5 in-place update retained Theme settings, logo, menu, content and external sentinel'
 
+      - name: Grant D-050 capability to one designated user, not the Administrator role
+        run: |
+          set -euo pipefail
+          wp user add-cap admin aznet_theme_manage_danger_zone --path=/tmp/wp --allow-root
+          RESTRICTED_PASS=$(openssl rand -hex 16)
+          echo "R5_RESTRICTED_PASS=$RESTRICTED_PASS" >> "$GITHUB_ENV"
+          wp user create restricted restricted@example.test --role=administrator --user_pass="$RESTRICTED_PASS" --path=/tmp/wp --allow-root
+          wp eval 'if ( ! user_can( get_user_by( "login", "admin" ), "aznet_theme_manage_danger_zone" ) || user_can( get_user_by( "login", "restricted" ), "aznet_theme_manage_danger_zone" ) ) { exit(1); }' --path=/tmp/wp --allow-root
+
       - name: Seed Team authoring fixture
         run: |
           set -euo pipefail
