@@ -482,12 +482,18 @@
 .aznet-theme-site-header--nav-only::before {
     content: "";
     position: absolute;
+    z-index: 0;
     inset-inline: 0;
     top: var(--aznet-theme-header-top-row-height);
     bottom: 0;
     pointer-events: none;
     border-top: 1px solid var(--aznet-theme-header-border);
     background: color-mix(in srgb, var(--aznet-theme-surface-inverse) 94%, var(--aznet-theme-on-inverse) 6%);
+}
+
+.aznet-theme-site-header--nav-only .aznet-theme-site-header__inner {
+    position: relative;
+    z-index: 1;
 }
 
 @media (min-width: 1101px) {
