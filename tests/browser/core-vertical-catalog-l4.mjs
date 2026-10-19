@@ -9,6 +9,7 @@ const out = path.join(process.env.INDUSTRIAL01_OUT_DIR || '/tmp/industrial01-pil
 fs.mkdirSync(out, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const cases = [];
+let homepageHeaderBaseline = null;
 
 async function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -72,6 +73,23 @@ try {
         name + ': category header must sit directly above Hero rail ' + JSON.stringify(railGeometry));
       await assert(railGeometry && railGeometry.navOffset >= -2 && railGeometry.contentOffset > 0,
         name + ': primary navigation and Hero text must stay alongside category column ' + JSON.stringify(railGeometry));
+      await assert(await page.locator('.aznet-theme-site-header__brand-title').isVisible(),
+        name + ': WordPress logo and brand name must appear on catalog-enabled desktops');
+      const homepageMetrics = await page.evaluate(() => {
+        const band = document.querySelector('.aznet-theme-site-header__catalog-rail-label')?.getBoundingClientRect();
+        const nav = document.querySelector('.aznet-theme-site-header__nav')?.getBoundingClientRect();
+        const aside = document.querySelector('.aznet-theme-industrial01-hero__catalog');
+        const asideRect = aside?.getBoundingClientRect();
+        const asideNav = aside?.querySelector('nav')?.getBoundingClientRect();
+        if (!band || !nav || !asideRect || !asideNav) return null;
+        return {
+          categoryLeft: band.left, categoryWidth: band.width, navLeft: nav.left,
+          vacantRailHeight: asideRect.bottom - asideNav.bottom,
+        };
+      });
+      await assert(homepageMetrics !== null && homepageMetrics.vacantRailHeight < 24,
+        name + ': seven collapsed WordPress categories may not stretch through the Hero ' + JSON.stringify(homepageMetrics));
+      if (name === 'desktop') homepageHeaderBaseline = homepageMetrics;
       const group = aside.locator('li.menu-item-has-children').first();
       const nested = group.locator(':scope > ul.sub-menu');
       const submenuToggle = group.locator(':scope > button.aznet-theme-catalog-navigation__submenu-toggle');
@@ -137,9 +155,30 @@ try {
   const dropdown = page.locator('.aznet-theme-site-header__catalog');
   await assert(await dropdown.count() === 1 && await dropdown.isVisible(), 'inner-page dropdown missing when mode=homepage-rail');
   await assert(await page.locator('.aznet-theme-industrial01-hero__catalog').count() === 0, 'inner-page must not render Homepage catalog rail');
+  await assert(await page.locator('.aznet-theme-site-header__brand-title').isVisible(),
+    'inner page must display WordPress brand text alongside its native logo');
+  const innerMetrics = await page.evaluate(() => {
+    const band = document.querySelector('.aznet-theme-site-header__catalog summary')?.getBoundingClientRect();
+    const nav = document.querySelector('.aznet-theme-site-header__nav')?.getBoundingClientRect();
+    return band && nav ? { categoryLeft: band.left, categoryWidth: band.width, navLeft: nav.left } : null;
+  });
+  await assert(homepageHeaderBaseline && innerMetrics &&
+    Math.abs(innerMetrics.categoryLeft - homepageHeaderBaseline.categoryLeft) <= 3 &&
+    Math.abs(innerMetrics.categoryWidth - homepageHeaderBaseline.categoryWidth) <= 3 &&
+    Math.abs(innerMetrics.navLeft - homepageHeaderBaseline.navLeft) <= 3,
+    'Homepage and inner-page category/nav columns differ ' +
+    JSON.stringify({ homepageHeaderBaseline, innerMetrics }));
+  await page.screenshot({ path: path.join(out, 'inner-header-closed.png'), fullPage: false });
   await dropdown.locator('summary').focus();
   await page.keyboard.press('Enter');
   await assert(await dropdown.evaluate(el => el.open), 'desktop dropdown keyboard toggle failed');
+  const popoverWidthDelta = await page.evaluate(() => {
+    const button = document.querySelector('.aznet-theme-site-header__catalog summary')?.getBoundingClientRect();
+    const popover = document.querySelector('.aznet-theme-site-header__catalog > nav')?.getBoundingClientRect();
+    return button && popover ? Math.abs(button.width - popover.width) : null;
+  });
+  await assert(popoverWidthDelta !== null && popoverWidthDelta <= 3,
+    'dropdown panel must match native category-band width ' + popoverWidthDelta);
   await assert(await dropdown.locator('a').count() >= 19, 'desktop dropdown did not consume native WordPress menu');
   const innerToggle = dropdown.locator('li.menu-item-has-children > button.aznet-theme-catalog-navigation__submenu-toggle').first();
   await assert(await innerToggle.count() === 1, 'inner-page hierarchical menu must expose a toggle');
@@ -150,6 +189,23 @@ try {
   await page.screenshot({ path: path.join(out, 'inner-dropdown.png'), fullPage: false });
   cases.push({ route: '/shop/', panel: 'header-dropdown', a11y: 'passed' });
   await context.close();
+
+  // The desktop-to-mobile boundary must keep catalog and primary nav usable
+  // without horizontal overflow even when the site has eight primary links.
+  for (const width of [1200, 1101]) {
+    const narrowContext = await browser.newContext({ viewport: { width, height: 900 } });
+    const narrowPage = await narrowContext.newPage();
+    await narrowPage.goto(base + '/shop/', { waitUntil: 'networkidle' });
+    await assert(await narrowPage.locator('.aznet-theme-site-header__catalog summary').isVisible(),
+      width + ': native catalog dropdown missing on narrow desktop');
+    await assert(await narrowPage.locator('.aznet-theme-site-header__brand-title').isVisible(),
+      width + ': WordPress logo title disappears on narrow desktop');
+    await noHorizontalOverflow(narrowPage, 'inner-' + width);
+    await a11y(narrowPage, 'inner-' + width);
+    await narrowPage.screenshot({ path: path.join(out, 'inner-' + width + '.png'), fullPage: false });
+    cases.push({ route: '/shop/', width, panel: 'header-dropdown', a11y: 'passed' });
+    await narrowContext.close();
+  }
 
   const noJs = await browser.newContext({ viewport: { width: 390, height: 844 }, javaScriptEnabled: false });
   const nativePage = await noJs.newPage();
