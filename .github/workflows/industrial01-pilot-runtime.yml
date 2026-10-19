@@ -79,6 +79,13 @@ jobs:
           printf '%s' 'R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==' | base64 -d > /tmp/industrial01-pilot/solutions-fixture.gif
           INDUSTRIAL01_SOLUTIONS_MEDIA_ID="$(wp media import /tmp/industrial01-pilot/solutions-fixture.gif --porcelain --path=/tmp/wp --allow-root)"
           export INDUSTRIAL01_SOLUTIONS_MEDIA_ID
+          # Two non-square native product images exercise center-cropped card frames.
+          printf '%s' 'iVBORw0KGgoAAAANSUhEUgAAAFAAAAB4CAIAAADqjOKhAAAAtElEQVR42u3cMRGAMBBFwYSJlfiiocMHBuhoIgQHGMACLtBAk0nIvv6Knd9fPK87jNQUBgsYGBgYGBgYGBgYGBgYGBgYuPvS14P9KK0Z1mW2MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwcM2i78M/L+VnszAwMDAwMDAwMDAwMDAwMDAwMDAwMHCtXkdhCkaDzlSWAAAAAElFTkSuQmCC' | base64 -d > /tmp/industrial01-pilot/product-portrait.png
+          printf '%s' 'iVBORw0KGgoAAAANSUhEUgAAAHgAAABQCAIAAABd+SbeAAAArUlEQVR42u3cMQ2AMBBAUUpqpb5Y2PCBgW5dKqQOMIAFXFQDCe1A3hdww8vlxgvtuheNb0UAGrRAgwYt0KAFGjRogQatt8WvBuVS/2p07JuNdjoEGjRogQYt0KBBCzRogQYNWqBBCzRo0AINGrRAgxZo0KAFGrRAgwYt0KAFGjRogQYt0DML3hrPKabnpOB0gBZo0KAFGrRAgwYt0KAFGjRoja4D9MYJ9jRAsTUAAAAASUVORK5CYII=' | base64 -d > /tmp/industrial01-pilot/product-landscape.png
+          INDUSTRIAL01_PRODUCT_PORTRAIT_ID="$(wp media import /tmp/industrial01-pilot/product-portrait.png --porcelain --path=/tmp/wp --allow-root)"
+          INDUSTRIAL01_PRODUCT_LANDSCAPE_ID="$(wp media import /tmp/industrial01-pilot/product-landscape.png --porcelain --path=/tmp/wp --allow-root)"
+          export INDUSTRIAL01_PRODUCT_PORTRAIT_ID INDUSTRIAL01_PRODUCT_LANDSCAPE_ID
+          test -n "$INDUSTRIAL01_PRODUCT_PORTRAIT_ID" && test -n "$INDUSTRIAL01_PRODUCT_LANDSCAPE_ID"
           cat > /tmp/industrial01-fixture.php <<'PHP'
           <?php
           $front = wp_insert_post([
@@ -125,6 +132,9 @@ jobs:
               $product->set_catalog_visibility( 'visible' );
               $product->set_regular_price( (string) ( 1000000 + $i * 100000 ) );
               $product->set_short_description( 'Public WooCommerce fixture for Industrial 01 presentation verification.' );
+              $native_image_id = (int) getenv( 1 === $i % 2 ? 'INDUSTRIAL01_PRODUCT_PORTRAIT_ID' : 'INDUSTRIAL01_PRODUCT_LANDSCAPE_ID' );
+              if ( $native_image_id <= 0 ) { throw new RuntimeException( 'Native WordPress product media fixture missing' ); }
+              $product->set_image_id( $native_image_id );
               $id = $product->save();
               wp_set_object_terms( $id, [ $categories[ ( $i - 1 ) % count( $categories ) ] ], 'product_cat' );
           }
