@@ -101,7 +101,7 @@ namespace {
         '.aznet-theme-industrial01-product-card__index',
         '.aznet-theme-industrial01-product-card__arrow',
         '.aznet-theme-industrial01-product-card__media--empty',
-        'object-fit: contain',
+        'object-fit: cover',
         ':focus-visible',
         '@media (max-width: 64rem)',
         '@media (max-width: 48rem)',
