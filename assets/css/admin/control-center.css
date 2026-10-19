@@ -315,3 +315,13 @@
         padding:14px;
     }
 }
+
+/* D-050C: the WordPress admin select defaults to 400px; constrain it to the
+ * actual Site Guard form width on narrow screens without clipping controls. */
+.aznet-theme-site-guard-panel select[name="guard_scope"] {
+    display:block;
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    box-sizing:border-box;
+}
