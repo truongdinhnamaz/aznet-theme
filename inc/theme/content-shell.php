@@ -35,7 +35,8 @@ function should_enqueue_generic_content_assets(): bool {
         return false;
     }
 
-    return is_page()
+    return ( function_exists( 'is_home' ) && is_home() )
+        || is_page()
         || is_singular( 'post' )
         || is_archive()
         || is_search()
