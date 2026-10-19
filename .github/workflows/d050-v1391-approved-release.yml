@@ -136,8 +136,8 @@ jobs:
           cat > /tmp/d050-v1391/release-notes.md <<EOF
           AZnet Theme v1.3.91 — owner-approved combined Header and Theme-owned D-050 release.
 
-          - PR #478: opt-in `header_sticky=nav-only` two-tier Header. Brand/search/account/cart scroll away; only native primary/catalog navigation tier remains sticky.
-          - Legacy `off`, `sticky`, `sticky-compact` and default `sticky` are unchanged.
+          - PR #478: opt-in header_sticky=nav-only two-tier Header. Brand/search/account/cart scroll away; only native primary/catalog navigation tier remains sticky.
+          - Legacy off, sticky, sticky-compact and default sticky are unchanged.
           - PR #477 and #479: privileged Theme Danger Zone entry and public/versioned Site Guard v1 consumer adapter. No external provider source, secrets, native WordPress state or parallel domain store is packaged.
           - Site Guard provider installation and actual cross-provider L5 are separate and not claimed by this Theme-only release. Provider absent/error/version mismatch must fail-soft.
           - Native WordPress menus, Page/Post/media and WooCommerce commerce state remain owner data.
