@@ -4,6 +4,8 @@ namespace AZnet\Theme\Admin;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+require_once __DIR__ . '/danger-zone.php';
+require_once __DIR__ . '/site-guard-consumer.php';
 require_once __DIR__ . '/control-center.php';
 require_once __DIR__ . '/footer-profile.php';
 require_once __DIR__ . '/homepage-hero.php';
@@ -84,6 +86,8 @@ if ( is_admin() ) {
     add_action( 'admin_post_aznet_theme_create_team_member', __NAMESPACE__ . '\\handle_homepage_team_member_create' );
     add_action( 'admin_post_aznet_theme_delete_team_member', __NAMESPACE__ . '\\handle_homepage_team_member_delete' );
     add_action( 'admin_post_aznet_theme_duplicate_homepage_source', __NAMESPACE__ . '\\handle_homepage_duplicate_source' );
+    add_action( 'admin_post_aznet_theme_danger_unlock', __NAMESPACE__ . '\\handle_danger_zone_unlock' );
+    add_action( 'admin_post_aznet_theme_danger_lock', __NAMESPACE__ . '\\handle_danger_zone_lock' );
     add_action( 'admin_post_aznet_theme_reset_settings', __NAMESPACE__ . '\\handle_reset_settings' );
     add_action( 'admin_post_aznet_theme_export_settings', __NAMESPACE__ . '\\handle_export_settings' );
     add_action( 'admin_post_aznet_theme_import_settings', __NAMESPACE__ . '\\handle_import_settings' );

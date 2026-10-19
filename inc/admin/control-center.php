@@ -13,7 +13,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\footer_column_counts' ) ) {
 }
 
 function control_center_section(): string {
-    $allowed = [ 'overview', 'header', 'footer', 'homepage', 'hero-library', 'provisioning', 'commerce', 'system-health' ];
+    $allowed = [ 'overview', 'header', 'footer', 'homepage', 'hero-library', 'provisioning', 'commerce', 'system-health', 'danger-zone' ];
     $value = isset( $_GET['section'] ) ? sanitize_key( wp_unslash( $_GET['section'] ) ) : 'overview';
     if ( 'commerce' === $value && ! woo_available() ) { return 'overview'; }
     return in_array( $value, $allowed, true ) ? $value : 'overview';
@@ -244,6 +244,9 @@ function render_homepage_setup_card(): void {
 function render_control_center(): void {
     if ( ! current_user_can( 'edit_theme_options' ) ) { return; }
     $section = control_center_section();
+    if ( 'danger-zone' === $section && ! danger_zone_is_authorized() ) {
+        wp_die( esc_html__( 'Bạn không có quyền vào khu vực nguy hiểm.', 'aznet-theme' ) );
+    }
     $tabs = [ 'overview' => 'Tổng quan', 'header' => 'Header', 'footer' => 'Footer', 'homepage' => 'Trang chủ', 'provisioning' => 'Thiết lập nhanh', 'system-health' => 'System Health' ];
     if ( woo_available() ) {
         $tabs = [ 'overview' => 'Tổng quan', 'header' => 'Header', 'footer' => 'Footer', 'homepage' => 'Trang chủ', 'provisioning' => 'Thiết lập nhanh', 'commerce' => 'Commerce', 'system-health' => 'System Health' ];
@@ -274,15 +277,10 @@ function render_control_center(): void {
         echo '<div class="aznet-theme-panel"><h2>Portable settings</h2>';
         echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="aznet_theme_export_settings">';
         wp_nonce_field( 'aznet_theme_export_settings' ); submit_button( 'Xuất JSON', 'secondary', 'submit', false ); echo '</form>';
-        echo '<form method="post" enctype="multipart/form-data" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="aznet_theme_import_settings">';
-        wp_nonce_field( 'aznet_theme_import_settings' ); echo '<input type="file" name="aznet_theme_settings_file" accept="application/json,.json" required> '; submit_button( 'Nhập JSON', 'secondary', 'submit', false ); echo '</form></div>';
+        echo '</div>';
         echo '<div class="aznet-theme-panel"><h2>Project Handoff — Hồ sơ bàn giao dự án</h2><p>Tải hồ sơ JSON để tiếp tục phát triển AZnet Theme trong cuộc trò chuyện mới. Đây không phải bản sao lưu website; cần đối chiếu lại GitHub và tài liệu nguồn.</p>';
         echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="aznet_theme_export_handoff">';
         wp_nonce_field( 'aznet_theme_export_handoff' ); submit_button( 'Xuất hồ sơ bàn giao JSON', 'secondary', 'submit', false ); echo '</form></div>';
-        echo '<div class="aznet-theme-panel aznet-theme-danger"><h2>Đặt lại thiết lập Theme</h2><form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="aznet_theme_reset_settings">';
-        wp_nonce_field( 'aznet_theme_reset_settings' );
-        echo '<label><input type="checkbox" name="confirm_reset" value="1" required> ' . esc_html__( 'Tôi xác nhận chỉ đặt lại thiết lập trình bày của AZnet Theme.', 'aznet-theme' ) . '</label> ';
-        submit_button( 'Đặt lại', 'delete', 'submit', false ); echo '</form></div>';
     } elseif ( 'footer' === $section ) {
         render_settings_form( $section );
         render_footer_column_editors( (string) settings()['footer_preset'] );
@@ -292,6 +290,8 @@ function render_control_center(): void {
         render_homepage_hero_library_screen();
     } elseif ( 'provisioning' === $section ) {
         render_provisioning_wizard();
+    } elseif ( 'danger-zone' === $section ) {
+        render_danger_zone_screen();
     } elseif ( 'system-health' === $section ) {
         $report = system_health_report();
         $core = $report['standalone_core'] ?? [];

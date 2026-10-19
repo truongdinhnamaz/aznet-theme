@@ -29,6 +29,7 @@ function handle_export_settings(): void {
 function handle_import_settings(): void {
     require_settings_capability();
     check_admin_referer( 'aznet_theme_import_settings' );
+    danger_zone_require_unlocked( 'import' );
     $file = $_FILES['aznet_theme_settings_file'] ?? null;
     if ( ! is_array( $file ) || UPLOAD_ERR_OK !== (int) ( $file['error'] ?? -1 ) || (int) ( $file['size'] ?? 0 ) > 65536 ) {
         wp_die( esc_html__( 'Tệp thiết lập không hợp lệ hoặc vượt quá 64 KiB.', 'aznet-theme' ) );
@@ -43,6 +44,7 @@ function handle_import_settings(): void {
         wp_die( esc_html__( 'Tệp thiết lập không đúng định dạng AZnet Theme.', 'aznet-theme' ) );
     }
     set_theme_mod( 'aznet_theme_settings', normalize_settings( $payload['settings'] ) );
+    danger_zone_complete_action( 'import' );
     wp_safe_redirect( add_query_arg( [ 'page' => 'aznet-theme', 'imported' => '1' ], admin_url( 'admin.php' ) ) );
     exit;
 }
