@@ -27,7 +27,7 @@ function enqueue_visual_preset_asset( ?string $version = null ): void {
         'aznet-theme-preset-' . $preset,
         get_theme_file_uri( '/assets/css/presets/' . $preset . '.css' ),
         [ 'aznet-theme-tokens' ],
-        $version
+        asset_content_version( '/assets/css/presets/' . $preset . '.css', $version )
     );
 }
 
