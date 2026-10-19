@@ -218,6 +218,109 @@ async function inspectLawSkinWithProfessional(browser) {
   }
 }
 
+
+/**
+ * Industrial 01 visual skin on Professional WordPress-owned rich Footer columns.
+ * The source menu/content remains native; this is a visual-only, four-viewport
+ * browser/a11y assertion with a preserved plain-text vs authored-link boundary.
+ */
+async function inspectIndustrialProfessionalFooter(browser) {
+  const existing = wpEval("echo base64_encode(wp_json_encode(get_theme_mod('aznet_theme_settings', [])));");
+  const columns = [
+    '<p><strong>Địa chỉ:</strong> 62 địa chỉ nguồn WordPress, Hà Nội<br><strong>SĐT:</strong> <a href="tel:02437164123">02437164123</a><br><strong>Email:</strong> <a href="mailto:footer-source@example.test">footer-source@example.test</a><br><strong>Website:</strong> <a href="https://example.test/">example.test</a></p>',
+    '<p><strong>SẢN PHẨM</strong></p><ul><li>Máy chế biến gỗ nguyên văn</li><li><a href="/wp-source-category/">Danh mục có liên kết nguồn</a></li></ul>',
+    '<p><strong>GIẢI PHÁP &amp; DỊCH VỤ</strong></p><ul><li>Giải pháp từ WordPress</li><li>Lắp đặt và chạy thử</li></ul>',
+    '<p><strong>THÔNG TIN</strong></p><ul><li>Về doanh nghiệp</li><li>Liên hệ</li></ul>',
+  ];
+  const encoded = Buffer.from(JSON.stringify(columns), 'utf8').toString('base64');
+  const seed = "$blocks=json_decode(base64_decode('" + encoded + "'),true);"
+    + "$s=get_theme_mod('aznet_theme_settings',[]);if(!is_array($s)){$s=[];}"
+    + "foreach($blocks as $i=>$html){"
+    + "$id=wp_insert_post(['post_type'=>'wp_block','post_status'=>'publish','post_title'=>'Y3 Industrial Footer '.($i+1),'post_content'=>$html],true);"
+    + "if(is_wp_error($id)||!$id){throw new RuntimeException('Native WordPress Footer column missing');}"
+    + "$s['footer_professional_column_'.($i+1).'_block']=(int)$id;"
+    + "}$s['footer_preset']='professional';$s['visual_preset']='industrial-01';"
+    + "set_theme_mod('aznet_theme_settings',$s);";
+  wpEval(seed);
+
+  try {
+    for (const [viewportName, viewport] of Object.entries(viewports)) {
+      const context = await browser.newContext({ viewport });
+      const page = await context.newPage();
+      const result = { preset: 'professional', skin: 'industrial-01', viewport: viewportName, status: 'failed', error: null };
+      try {
+        const response = await page.goto(fixture.front_url + '?y3-industrial-premium=' + viewportName, { waitUntil: 'networkidle' });
+        if (!response || response.status() !== 200) throw new Error('Industrial Footer returned non-200');
+        if (await page.locator('body.aznet-theme-preset--industrial-01').count() !== 1) {
+          throw new Error('Industrial visual preset not applied to native body');
+        }
+        const footer = page.locator('footer.aznet-theme-site-footer--professional');
+        if (await footer.count() !== 1 || await footer.locator('.aznet-theme-site-footer__column-content').count() !== 4) {
+          throw new Error('Native WordPress-owned four Footer columns were not rendered');
+        }
+        const cols = await footer.evaluate((element) => {
+          const computed = (selector) => element.querySelector(selector);
+          const get = (selector) => {
+            const target = computed(selector);
+            return target ? getComputedStyle(target) : null;
+          };
+          const grid = get('.aznet-theme-site-footer__main');
+          const heading = get('.aznet-theme-site-footer__column-content--2 .aznet-theme-site-footer__rich-content > p:first-child > strong');
+          const nav = get('.aznet-theme-site-footer__column-content--2 .aznet-theme-site-footer__rich-content ul');
+          const brand = get('.aznet-theme-site-footer__brand');
+          const logo = get('.aznet-theme-site-footer__logo');
+          const bottom = get('.aznet-theme-site-footer__bottom');
+          const footerStyle = getComputedStyle(element);
+          return {
+            columns: grid ? grid.gridTemplateColumns.trim().split(/\s+/).length : 0,
+            background: footerStyle.backgroundImage,
+            borderColor: footerStyle.borderTopColor,
+            brandLayout: brand?.display || '',
+            logoMaxWidth: logo?.maxWidth || '',
+            headingColor: heading?.color || '',
+            listStyle: nav?.listStyleType || '',
+            bottomBorder: bottom?.borderTopStyle || '',
+          };
+        });
+        const expectedColumns = viewport.width <= 768 ? 1 : (viewport.width <= 1120 ? 2 : 4);
+        if (cols.columns !== expectedColumns || !cols.background.includes('gradient') ||
+            cols.borderColor !== 'rgb(245, 202, 114)' || cols.brandLayout !== 'flex' ||
+            cols.headingColor !== 'rgb(255, 255, 255)' || cols.listStyle !== 'none' ||
+            cols.bottomBorder === 'none') {
+          throw new Error('Industrial Footer premium computed styles missing: ' + JSON.stringify({ expectedColumns, ...cols }));
+        }
+        if (await footer.getByText('Máy chế biến gỗ nguyên văn', { exact: true }).count() !== 1 ||
+            await footer.locator('li:has-text("Máy chế biến gỗ nguyên văn") a').count() !== 0 ||
+            await footer.locator('a[href="/wp-source-category/"]').count() !== 1) {
+          throw new Error('Native Footer content/links were mutated or invented');
+        }
+        const contact = footer.locator('.aznet-theme-site-footer__column-content--1 .aznet-theme-site-footer__rich-content');
+        if (await contact.locator('a[href="tel:02437164123"]').count() !== 1 ||
+            await contact.locator('a[href="mailto:footer-source@example.test"]').count() !== 1) {
+          throw new Error('WordPress-authored contact URLs were not retained');
+        }
+        const overflow = await page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - document.documentElement.clientWidth));
+        if (overflow !== 0) throw new Error('Industrial Footer horizontal overflow: ' + overflow + 'px');
+        const axe = await new AxeBuilder({ page }).include('footer[data-aznet-theme-site-footer]').analyze();
+        fs.writeFileSync(path.join(stateDir, 'axe-industrial-professional-' + viewportName + '.json'), JSON.stringify(axe, null, 2));
+        const blocking = axe.violations.filter((violation) => ['critical', 'serious'].includes(violation.impact));
+        if (blocking.length) throw new Error('Industrial Footer blocking accessibility findings: ' + JSON.stringify(blocking.map((v) => v.id)));
+        await footer.screenshot({ path: path.join(stateDir, 'y3-industrial-professional-' + viewportName + '.png') });
+        result.status = 'passed';
+      } catch (error) {
+        result.error = error instanceof Error ? error.message : String(error);
+        failures.push('industrial-professional/' + viewportName + ': ' + result.error);
+        await page.screenshot({ path: path.join(stateDir, 'y3-industrial-professional-' + viewportName + '-failure.png'), fullPage: true }).catch(() => {});
+      } finally {
+        summary.presets.push(result);
+        await context.close();
+      }
+    }
+  } finally {
+    wpEval("set_theme_mod('aznet_theme_settings',(array)json_decode(base64_decode('" + existing + "'),true));");
+  }
+}
+
 async function inspectEmptyMenu(browser, location, region) {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await context.newPage();
@@ -267,6 +370,8 @@ try {
   for (const [location, region] of Object.entries(emptyRegions)) {
     await inspectEmptyMenu(browser, location, region);
   }
+
+  await inspectIndustrialProfessionalFooter(browser);
 } finally {
   restoreAllMenus();
   setPreset('standard');
