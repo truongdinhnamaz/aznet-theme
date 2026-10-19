@@ -60,6 +60,7 @@ $required = [
     '1.3.85)',
     '1.3.86)',
     '1.3.87)',
+    '1.3.88)',
     'tests/offline/x6-version-promotion-contract.php',
     "echo 'PASS: X6 pre-promotion ownership boundary'",
     "echo 'PASS: X6 promoted 1.2.0 ownership boundary'",
@@ -103,6 +104,7 @@ $required = [
     "echo 'PASS: X6 promoted 1.3.85 ownership boundary'",
     "echo 'PASS: X6 promoted 1.3.86 ownership boundary'",
     "echo 'PASS: X6 promoted 1.3.87 ownership boundary'",
+    "echo 'PASS: X6 promoted 1.3.88 ownership boundary'",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.2.0 boundary' >&2",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.0 boundary' >&2",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.1 boundary' >&2",
@@ -144,8 +146,32 @@ $required = [
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.85 boundary' >&2",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.86 boundary' >&2",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.87 boundary' >&2",
+    "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.88 boundary' >&2",
     "echo 'FAIL: unsupported X6 Theme version state' >&2",
 ];
+
+// D-049 1.3.88 is an explicit metadata-only promotion of the merged Core feature.
+$oneStepCase = '1.3.88)';
+$start = strrpos($workflow, '            ' . $oneStepCase);
+$end = false === $start ? false : strpos($workflow, '            *)', $start);
+if (false === $start || false === $end) {
+    fwrite(STDERR, "FAIL: X6 1.3.88 acceptance branch unavailable\n");
+    exit(1);
+}
+$promotion = substr($workflow, $start, $end - $start);
+foreach ([
+    '-Version: 1.3.87',
+    '+Version: 1.3.88',
+    "-    define( 'AZNET_THEME_VERSION', '1.3.87' );",
+    "+    define( 'AZNET_THEME_VERSION', '1.3.88' );",
+    'grep -Fxc -- "$expected"',
+    'metadata_changes',
+] as $marker) {
+    if (! str_contains($promotion, $marker)) {
+        fwrite(STDERR, "FAIL: X6 1.3.88 strict metadata-only promotion missing: {$marker}\n");
+        exit(1);
+    }
+}
 
 foreach ($required as $marker) {
     if (! str_contains($workflow, $marker)) {
