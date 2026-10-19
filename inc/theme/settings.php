@@ -215,7 +215,7 @@ function normalize_settings( array $raw ): array {
         ? (string) $raw['header_preset']
         : 'standard';
 
-    $header_sticky = isset( $raw['header_sticky'] ) && in_array( $raw['header_sticky'], [ 'off', 'sticky', 'sticky-compact' ], true )
+    $header_sticky = isset( $raw['header_sticky'] ) && in_array( $raw['header_sticky'], [ 'off', 'sticky', 'sticky-compact', 'nav-only' ], true )
         ? (string) $raw['header_sticky']
         : 'sticky';
 
