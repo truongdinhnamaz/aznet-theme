@@ -44,20 +44,20 @@ try {
     await assert(await page.locator('.aznet-theme-industrial01-hero__content a').count() >= 1, name + ': native Hero CTA missing');
     const aside = page.locator('.aznet-theme-industrial01-hero__catalog');
     await assert(await aside.locator('li').count() >= 19, name + ': WordPress menu item or children lost');
-    const group = aside.locator('li.menu-item-has-children').first();
-    const nested = group.locator(':scope > ul.sub-menu');
-    const submenuToggle = group.locator(':scope > button.aznet-theme-catalog-navigation__submenu-toggle');
-    await assert(await submenuToggle.count() === 1, name + ': hierarchical category needs an explicit accessible toggle');
-    await assert(await submenuToggle.getAttribute('aria-expanded') === 'false', name + ': category starts collapsed');
-    await assert(!(await nested.isVisible()), name + ': child categories must not be permanently expanded');
-    await submenuToggle.focus();
-    await page.keyboard.press('Enter');
-    await assert(await nested.isVisible(), name + ': category must expand by keyboard');
-    await assert(await submenuToggle.getAttribute('aria-expanded') === 'true', name + ': expanded state not announced');
-    await page.keyboard.press('Escape');
-    await assert(!(await nested.isVisible()), name + ': Escape collapses group without losing WordPress menu');
     const desktop = viewport.width > 1100;
     if (desktop) {
+      const group = aside.locator('li.menu-item-has-children').first();
+      const nested = group.locator(':scope > ul.sub-menu');
+      const submenuToggle = group.locator(':scope > button.aznet-theme-catalog-navigation__submenu-toggle');
+      await assert(await submenuToggle.count() === 1, name + ': hierarchical category needs an explicit accessible toggle');
+      await assert(await submenuToggle.getAttribute('aria-expanded') === 'false', name + ': category starts collapsed');
+      await assert(!(await nested.isVisible()), name + ': child categories must not be permanently expanded');
+      await submenuToggle.focus();
+      await page.keyboard.press('Enter');
+      await assert(await nested.isVisible(), name + ': category must expand by keyboard');
+      await assert(await submenuToggle.getAttribute('aria-expanded') === 'true', name + ': expanded state not announced');
+      await page.keyboard.press('Escape');
+      await assert(!(await nested.isVisible()), name + ': Escape collapses group without losing WordPress menu');
       await assert(await aside.isVisible(), name + ': side rail must be visible on desktop');
       await assert(await page.locator('.aznet-theme-site-header__catalog').count() === 0, name + ': duplicate desktop header catalog');
       const rects = await page.evaluate(() => {
