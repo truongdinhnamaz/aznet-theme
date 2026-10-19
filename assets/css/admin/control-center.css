@@ -277,3 +277,41 @@
 @media(max-width:1200px){.aznet-theme-footer-content-editor__columns--3,.aznet-theme-footer-content-editor__columns--4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:900px){.aznet-theme-footer-content-editor__heading{display:grid}.aznet-theme-footer-content-editor__actions{justify-content:flex-start}.aznet-theme-footer-content-editor__columns{grid-template-columns:1fr}}
 @media(max-width:782px){.aznet-theme-footer-content-editor{padding:16px}.aznet-theme-footer-content-editor__preset-heading{align-items:flex-start;flex-direction:column}}
+
+
+/* D-050: Theme-local privileged operations, not a site-wide security guard. */
+.aznet-theme-control-center .aznet-theme-danger-zone{
+    border-left:5px solid #b32d2e;
+    max-width:960px;
+}
+.aznet-theme-danger-zone .aznet-theme-panel{
+    min-width:0;
+    padding:20px;
+}
+.aznet-theme-danger-zone .aznet-theme-danger{
+    background:#fff8f8;
+}
+.aznet-theme-danger-zone .notice{
+    margin:20px 0;
+}
+.aznet-theme-danger-zone textarea,
+.aznet-theme-danger-zone input[type="text"],
+.aznet-theme-danger-zone input[type="file"]{
+    width:100%;
+    max-width:100%;
+    box-sizing:border-box;
+}
+.aznet-theme-danger-zone label{
+    display:inline-block;
+    max-width:100%;
+    line-height:1.5;
+}
+.aznet-theme-danger-zone .widefat td,
+.aznet-theme-danger-zone .widefat th{
+    overflow-wrap:anywhere;
+}
+@media(max-width:782px){
+    .aznet-theme-danger-zone .aznet-theme-panel{
+        padding:14px;
+    }
+}
