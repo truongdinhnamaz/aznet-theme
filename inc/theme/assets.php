@@ -66,6 +66,22 @@ function enqueue_header_catalog_asset( ?string $version = null ): void {
         [ 'aznet-theme-site-header' ],
         asset_content_version( '/assets/css/components/catalog-navigation.css', $version )
     );
+
+    wp_enqueue_script(
+        'aznet-theme-catalog-submenu',
+        get_theme_file_uri( '/assets/js/catalog-navigation.js' ),
+        [],
+        asset_content_version( '/assets/js/catalog-navigation.js', $version ),
+        true
+    );
+    wp_localize_script(
+        'aznet-theme-catalog-submenu',
+        'aznetThemeCatalogNav',
+        [
+            'expand'   => __( 'Mở danh mục con', 'aznet-theme' ),
+            'collapse' => __( 'Thu gọn danh mục con', 'aznet-theme' ),
+        ]
+    );
 }
 
 /**

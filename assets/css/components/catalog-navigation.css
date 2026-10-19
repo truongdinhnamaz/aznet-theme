@@ -176,3 +176,47 @@
     .aznet-theme-catalog-navigation,
     .aznet-theme-catalog-navigation * { scroll-behavior: auto; transition: none; }
 }
+
+/* Nested WordPress menu groups: disclosure button is JS-enhanced only.
+ * Without JS, WordPress native child links stay visible and reachable. */
+.aznet-theme-catalog-navigation__menu .menu-item-has-children {
+    position: relative;
+}
+.aznet-theme-catalog-navigation__menu .menu-item-has-children > a {
+    padding-right: 3.1rem;
+}
+.aznet-theme-catalog-navigation__submenu-toggle {
+    position: absolute;
+    top: .28rem;
+    right: .38rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    min-height: 36px;
+    padding: 0;
+    border: 1px solid var(--aznet-theme-border);
+    border-radius: var(--aznet-theme-radius-control);
+    background: var(--aznet-theme-surface);
+    color: var(--aznet-theme-text);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+.aznet-theme-catalog-navigation__submenu-toggle:hover {
+    border-color: var(--aznet-theme-accent);
+    color: var(--aznet-theme-accent);
+}
+.aznet-theme-catalog-navigation__submenu-toggle:focus-visible {
+    outline: 2px solid var(--aznet-theme-focus);
+    outline-offset: 2px;
+}
+.aznet-theme-catalog-navigation__menu .sub-menu[hidden] {
+    display: none !important;
+}
+.aznet-theme-catalog-navigation__menu .menu-item-has-children > .sub-menu:not([hidden]) {
+    display: block;
+    padding-bottom: .35rem;
+    border-top: 1px solid var(--aznet-theme-border);
+    background: color-mix(in srgb, var(--aznet-theme-accent) 4%, var(--aznet-theme-surface));
+}

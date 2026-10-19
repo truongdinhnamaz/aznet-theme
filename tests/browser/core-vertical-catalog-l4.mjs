@@ -44,6 +44,18 @@ try {
     await assert(await page.locator('.aznet-theme-industrial01-hero__content a').count() >= 1, name + ': native Hero CTA missing');
     const aside = page.locator('.aznet-theme-industrial01-hero__catalog');
     await assert(await aside.locator('li').count() >= 19, name + ': WordPress menu item or children lost');
+    const group = aside.locator('li.menu-item-has-children').first();
+    const nested = group.locator(':scope > ul.sub-menu');
+    const submenuToggle = group.locator(':scope > button.aznet-theme-catalog-navigation__submenu-toggle');
+    await assert(await submenuToggle.count() === 1, name + ': hierarchical category needs an explicit accessible toggle');
+    await assert(await submenuToggle.getAttribute('aria-expanded') === 'false', name + ': category starts collapsed');
+    await assert(!(await nested.isVisible()), name + ': child categories must not be permanently expanded');
+    await submenuToggle.focus();
+    await page.keyboard.press('Enter');
+    await assert(await nested.isVisible(), name + ': category must expand by keyboard');
+    await assert(await submenuToggle.getAttribute('aria-expanded') === 'true', name + ': expanded state not announced');
+    await page.keyboard.press('Escape');
+    await assert(!(await nested.isVisible()), name + ': Escape collapses group without losing WordPress menu');
     const desktop = viewport.width > 1100;
     if (desktop) {
       await assert(await aside.isVisible(), name + ': side rail must be visible on desktop');
@@ -71,6 +83,14 @@ try {
       await page.keyboard.press('Enter');
       await assert(await summary.evaluate((el) => el.parentElement.open), name + ': mobile disclosure not keyboard operable');
       await assert(await panel.locator('.aznet-theme-catalog-navigation--mobile li').count() >= 19, name + ': mobile WordPress menu lost children');
+      const mobileGroup = panel.locator('.aznet-theme-catalog-navigation--mobile li.menu-item-has-children').first();
+      const mobileToggle = mobileGroup.locator(':scope > button.aznet-theme-catalog-navigation__submenu-toggle');
+      const mobileChildren = mobileGroup.locator(':scope > ul.sub-menu');
+      await assert(await mobileToggle.count() === 1 && !(await mobileChildren.isVisible()), name + ': mobile nested WordPress terms must start collapsed');
+      await mobileToggle.click();
+      await assert(await mobileChildren.isVisible(), name + ': tap expands native child links');
+      await mobileToggle.click();
+      await assert(!(await mobileChildren.isVisible()), name + ': second tap collapses child links');
       await a11y(page, name + '-open');
       await page.keyboard.press('Escape');
       await assert(await trigger.getAttribute('aria-expanded') === 'false', name + ': Esc should close mobile panel');
@@ -94,6 +114,10 @@ try {
   await page.keyboard.press('Enter');
   await assert(await dropdown.evaluate(el => el.open), 'desktop dropdown keyboard toggle failed');
   await assert(await dropdown.locator('a').count() >= 19, 'desktop dropdown did not consume native WordPress menu');
+  const innerToggle = dropdown.locator('li.menu-item-has-children > button.aznet-theme-catalog-navigation__submenu-toggle').first();
+  await assert(await innerToggle.count() === 1, 'inner-page hierarchical menu must expose a toggle');
+  await innerToggle.click();
+  await assert(await innerToggle.getAttribute('aria-expanded') === 'true', 'inner-page nested catalog did not expand');
   await noHorizontalOverflow(page, 'inner-dropdown');
   await a11y(page, 'inner-dropdown');
   await page.screenshot({ path: path.join(out, 'inner-dropdown.png'), fullPage: false });
@@ -107,6 +131,7 @@ try {
   await assert(await nativeSummary.isVisible(), 'no-JS native catalog menu must remain discoverable in mobile panel');
   await nativeSummary.click();
   await assert(await nativeSummary.evaluate(el => el.parentElement.open), 'native details must work without JS');
+  await assert(await nativePage.locator('.aznet-theme-catalog-navigation--mobile .sub-menu').first().isVisible(), 'without JS, native child menus must remain visible');
   cases.push({ scenario: 'mobile-no-js', fallback: 'passed' });
   await noJs.close();
 
