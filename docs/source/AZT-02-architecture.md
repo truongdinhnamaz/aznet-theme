@@ -243,6 +243,7 @@ Architecture:
 - Logo/Menu/Search dùng native WordPress public APIs/data.
 - Commerce actions chỉ dùng Woo public functions/capabilities.
 - Mobile/sticky behavior là progressive enhancement; navigation phải còn usable khi JS fail.
+- Header `header_sticky` là Theme-owned presentation setting: `off | sticky | sticky-compact | nav-only`. `nav-only` là **opt-in** tách giao diện thành hai tầng: brand/search/account ở tầng trên cuộn đi, hàng Primary WordPress Menu và category band/dropdown ở tầng dưới tiếp tục sticky; mobile giữ native navigation/fail-soft. Chế độ cũ và default `sticky` không thay đổi. Khi có `product-catalog`, hàng danh mục chỉ consume WordPress-native menu, giữ đồng nhất với Hero rail mà không sở hữu lại taxonomy/commerce data. Không cần đo vị trí bằng JavaScript hoặc sao chép menu.
 - Overlay chỉ được dùng trên surface được Theme xác định an toàn bằng public WordPress condition; không dùng slug/title/Page-ID/URL heuristic.
 - Không drag/drop Header Builder hoặc mega-menu application engine.
 
