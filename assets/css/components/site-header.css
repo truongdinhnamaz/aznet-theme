@@ -588,6 +588,20 @@
         gap: clamp(.5rem, .95vw, 1rem);
     }
 
+    /*
+     * Native menus can contain editor-authored long labels. Without a catalog
+     * rail, allow the sticky navigation tier to grow and wrap rather than
+     * clip, overlap or create page-level horizontal overflow.
+     */
+    .aznet-theme-site-header--nav-only:not(.aznet-theme-site-header--catalog) .aznet-theme-site-header__inner {
+        grid-template-rows: var(--aznet-theme-header-top-row-height) minmax(var(--aznet-theme-header-nav-row-height), auto);
+    }
+
+    .aznet-theme-site-header--nav-only:not(.aznet-theme-site-header--catalog) .aznet-theme-site-header__nav .aznet-theme-site-header__menu {
+        flex-wrap: wrap;
+        row-gap: 0;
+    }
+
     .aznet-theme-site-header--nav-only .aznet-theme-site-header__nav .aznet-theme-site-header__menu > li {
         flex: 0 1 auto;
         min-width: 0;
