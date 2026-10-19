@@ -212,6 +212,36 @@ try {
   cases.push({ route: '/shop/', panel: 'header-dropdown', a11y: 'passed' });
   await context.close();
 
+  // The owner's actual inner-page screenshot is a WordPress Page, not the
+  // Woo Shop archive. Exercise the same native catalog shell on /giai-phap/.
+  const solutionsContext = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+  const solutionsPage = await solutionsContext.newPage();
+  await solutionsPage.goto(base + '/giai-phap/', { waitUntil: 'networkidle' });
+  await assert((await solutionsPage.locator('body').innerText()).includes('Bắt đầu từ nhu cầu sản xuất'),
+    'native WordPress Giải pháp Page fixture must render its owner-authored content');
+  await assert(await solutionsPage.locator('.aznet-theme-site-header__brand-title').isVisible(),
+    'Giải pháp Page must retain the same WordPress brand as the Homepage');
+  const solutionsMetrics = await solutionsPage.evaluate(() => {
+    const catalog = document.querySelector('.aznet-theme-site-header__catalog summary')?.getBoundingClientRect();
+    const nav = document.querySelector('.aznet-theme-site-header__nav')?.getBoundingClientRect();
+    return catalog && nav
+      ? { categoryLeft: catalog.left, categoryWidth: catalog.width, navLeft: nav.left,
+          textTransform: getComputedStyle(document.querySelector('.aznet-theme-site-header__catalog summary')).textTransform }
+      : null;
+  });
+  await assert(solutionsMetrics && homepageHeaderBaseline &&
+    Math.abs(solutionsMetrics.categoryLeft - homepageHeaderBaseline.categoryLeft) <= 3 &&
+    Math.abs(solutionsMetrics.categoryWidth - homepageHeaderBaseline.categoryWidth) <= 3 &&
+    Math.abs(solutionsMetrics.navLeft - homepageHeaderBaseline.navLeft) <= 3 &&
+    solutionsMetrics.textTransform === homepageHeaderBaseline.catalogTextTransform,
+    'WordPress Giải pháp Page Header breaks homepage catalog alignment ' +
+    JSON.stringify({ homepageHeaderBaseline, solutionsMetrics }));
+  await noHorizontalOverflow(solutionsPage, 'page-giai-phap');
+  await a11y(solutionsPage, 'page-giai-phap');
+  await solutionsPage.screenshot({ path: path.join(out, 'page-giai-phap.png'), fullPage: false });
+  cases.push({ route: '/giai-phap/', panel: 'header-dropdown', a11y: 'passed' });
+  await solutionsContext.close();
+
   // The desktop-to-mobile boundary must keep catalog and primary nav usable
   // without horizontal overflow even when the site has eight primary links.
   for (const width of [1200, 1101]) {
