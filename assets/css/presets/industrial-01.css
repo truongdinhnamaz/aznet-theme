@@ -138,8 +138,8 @@ body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional::b
 body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__inner {
     position: relative;
     z-index: 1;
-    width: min(calc(100% - (2 * var(--aznet-theme-gutter))), 88rem);
-    max-width: 88rem;
+    width: min(calc(100% - (2 * var(--aznet-theme-gutter))), var(--aznet-theme-container-shell));
+    max-width: var(--aznet-theme-container-shell);
     padding-top: clamp(3rem, 5.8vw, 5rem);
     padding-bottom: clamp(1.5rem, 2.5vw, 2.15rem);
 }
@@ -267,7 +267,6 @@ body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional a:
 }
 @media (max-width: 48rem) {
     body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__inner {
-        width: calc(100% - (2 * var(--aznet-theme-gutter-mobile)));
         padding-top: 3rem;
     }
     body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__main {
