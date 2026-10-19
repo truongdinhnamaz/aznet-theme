@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.11
+**Version:** v1.12
 **Status:** Working Source  
 **Date:** 19/10/2026
 
@@ -959,3 +959,11 @@ Execution and gates: bounded branch \`work/core-vertical-catalog-industrial01-pi
 3. **Release:** no direct production site mutation, merge, release or deployment without corresponding exact-head gates and owner approval. Keep previous completed Homepage repair on `lstamduchn.vn` intact.
 
 **Rollback:** revert Theme-only PR; existing WordPress content/queries remain untouched. External site guard (future) must provide emergency bypass/recovery without depending on active Theme. **Exact Next:** document acceptance → Theme-only RED/GREEN → CI and independent WP admin validation → owner review; separately hand off external guard to its source owner.
+
+### D-050C — Integrated Site Guard v1 — ACCEPTED — 19/10/2026
+
+**Owner decision:** The product owner accepted the public/versioned Site Guard v1 contract proposed in `truongdinhnamaz/aznet-site-guard` PR #4. Site Guard owns a read-only session projection and validates every existing provider-owned admin-post unlock/lock action. AZnet Theme owns only the unified privileged Danger Zone presentation plus its separate Theme-only reset/import gate. Source owner: AZT-02 §23 for Theme consumer, Site Guard accepted contract v1 for producer.
+
+**Execution:** Site Guard RED→GREEN + fresh exact SHA PHP 8.1/8.4 L1/L2/WordPress L3/Chromium L4, then Theme consumer RED→GREEN with `aznet_site_guard/v1/admin_projection` and fail-soft path, then actual installed provider L5 end-to-end certification. No source from Site Guard is copied into Theme repo; a fixture/mock cannot prove L5. Preserve D-050A standalone Theme Danger Zone candidate PR #473 (28/28 CI PASS); D-050C candidate PR #475 is additive and independent. Original conflict PR #468 is historical evidence only.
+
+**BLOCKED/UNKNOWN:** cross-repository L5 until Site Guard v1 and Theme consumer tested together on disposable real WordPress; `lstamduchn.vn` does not have confirmed live Site Guard. Merge/release/production activation needs separate approval, exact package and hosting backup/recovery. **EXACT NEXT:** provider v1 exact-head CI → Theme consumer CI + real L5 fixture → owner review.
