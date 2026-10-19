@@ -58,6 +58,27 @@ async function isLocked(panel) {
 }
 async function auditScreen(page, name) {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  // Capture the specific overflow source for a real RED. Never record text,
+  // hidden input values or HTML attributes that might contain auth material.
+  if (overflow > 1) {
+    const geometry = await page.evaluate(() => {
+      const view = document.documentElement.clientWidth;
+      const candidates = [...document.querySelectorAll('body *')].map(el => {
+        const r = el.getBoundingClientRect();
+        return {
+          tag: el.tagName.toLowerCase(), id: (el.id || '').slice(0, 90),
+          cls: String(el.className?.baseVal ?? el.className ?? '').slice(0, 135),
+          x: Math.round(r.left), right: Math.round(r.right),
+          width: Math.round(r.width), scroll: el.scrollWidth, client: el.clientWidth,
+        };
+      }).filter(x => x.right > view + 2 || x.x < -2 || x.scroll > x.client + 2);
+      return { viewport: view, scrollWidth: document.documentElement.scrollWidth,
+        suspects: candidates.sort((a, b) => (b.right - view) - (a.right - view)).slice(0, 35) };
+    });
+    fs.writeFileSync(path.join(evidence, `${name}-overflow.json`), JSON.stringify(geometry, null, 2));
+    await page.screenshot({ path: path.join(evidence, `${name}-RED-overflow.png`), fullPage: true });
+    console.error('D050C mobile overflow diagnostic: ' + JSON.stringify(geometry));
+  }
   check(overflow <= 1, `${name}: horizontal overflow ${overflow}`);
   const a11y = await new AxeBuilder({ page }).include('.aznet-theme-control-center').analyze();
   fs.writeFileSync(path.join(evidence, `${name}-axe.json`), JSON.stringify(a11y, null, 2));
