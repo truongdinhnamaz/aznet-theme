@@ -179,6 +179,25 @@ jobs:
           ], true );
           if ( is_wp_error( $solutions_page_id ) ) { throw new RuntimeException( $solutions_page_id->get_error_message() ); }
 
+          // Native WordPress Page remains the authority for technical services.
+          $services_intro = 'Một hệ thống máy chế biến gỗ cần được lựa chọn phù hợp và vận hành an toàn. Khách hàng có thể cung cấp thông tin về thiết bị để cùng xác định đúng nhu cầu thực tế của thiết bị.';
+          $services_content = '<p>' . esc_html( $services_intro ) . '</p>'
+              . '<h2>Các nhóm hỗ trợ kỹ thuật</h2>'
+              . '<h3>Tư vấn lựa chọn máy và công đoạn</h3><p>Làm rõ nhu cầu sản xuất.</p>'
+              . '<h3>Lắp đặt, chạy thử và hướng dẫn vận hành</h3><p>Đối chiếu phạm vi từng thiết bị.</p>'
+              . '<h3>Bảo hành</h3><p>Kiểm tra điều kiện hồ sơ sản phẩm.</p>'
+              . '<h3>Sửa chữa và xử lý sự cố</h3><p>Đánh giá hiện tượng thực tế.</p>'
+              . '<h3>Nhóm thứ năm chỉ có ở trang chi tiết</h3>';
+          $services_page_id = wp_insert_post( [
+              'post_type' => 'page',
+              'post_status' => 'publish',
+              'post_title' => 'Dịch vụ kỹ thuật',
+              'post_name' => 'dich-vu-ky-thuat',
+              'post_content' => $services_content,
+              'post_excerpt' => 'Đây là trích đoạn tự động bị cắt giữa ý…',
+          ], true );
+          if ( is_wp_error( $services_page_id ) ) { throw new RuntimeException( $services_page_id->get_error_message() ); }
+
           set_theme_mod( 'aznet_theme_settings', [
               'schema_version' => 2,
               'visual_preset' => 'industrial-01',
@@ -193,6 +212,7 @@ jobs:
               'homepage_preset' => 'industrial-01',
               'homepage_industrial01_sources_initialized' => true,
               'homepage_industrial01_solutions_page' => (int) $solutions_page_id,
+              'homepage_industrial01_process_page' => (int) $services_page_id,
               'homepage_industrial01_hero_image' => $source_image_id,
           ] );
           PHP
