@@ -225,6 +225,7 @@ jobs:
           }
 
           run_scenario standard-clean standard sticky-compact
+          run_scenario navigation-only-clean standard nav-only
           run_scenario compact-clean compact sticky
           run_scenario overlay-clean overlay sticky
           run_scenario commerce-clean commerce sticky
@@ -279,7 +280,7 @@ jobs:
             echo 'FAIL: Theme-caused PHP error marker found during R3 verification' >&2
             exit 1
           fi
-          for scenario in standard-clean compact-clean overlay-clean commerce-clean commerce-woo; do
+          for scenario in standard-clean navigation-only-clean compact-clean overlay-clean commerce-clean commerce-woo; do
             test -f "/tmp/r3-header/${scenario}/summary.json"
           done
           echo 'PASS: R3 runtime error boundary clean'

@@ -335,6 +335,7 @@
 }
 
 .aznet-theme-site-header__menu .sub-menu a {
+    color: var(--aznet-theme-on-inverse);
     justify-content: flex-start;
     width: 100%;
     min-height: 38px;
@@ -457,6 +458,234 @@
     .aznet-theme-site-header__logo {
         max-width: 150px;
         max-height: 40px;
+    }
+}
+
+
+/*
+ * Opt-in two-tier Header: the Header itself sticks behind the viewport by
+ * exactly one top row. Brand/search/account scroll off, while the native
+ * navigation row remains on screen. No JS measurements or duplicate menus.
+ * Legacy sticky/off/sticky-compact modes remain unchanged.
+ */
+.aznet-theme-site-header--nav-only {
+    --aznet-theme-header-top-row-height: 4.625rem;
+    --aznet-theme-header-nav-row-height: 3.375rem;
+    position: sticky;
+    top: calc(-1 * var(--aznet-theme-header-top-row-height));
+}
+
+.admin-bar .aznet-theme-site-header--nav-only {
+    top: calc(32px - var(--aznet-theme-header-top-row-height));
+}
+
+.aznet-theme-site-header--nav-only::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    inset-inline: 0;
+    top: var(--aznet-theme-header-top-row-height);
+    bottom: 0;
+    pointer-events: none;
+    border-top: 1px solid var(--aznet-theme-header-border);
+    background: color-mix(in srgb, var(--aznet-theme-surface-inverse) 94%, var(--aznet-theme-on-inverse) 6%);
+}
+
+.aznet-theme-site-header--nav-only .aznet-theme-site-header__inner {
+    position: relative;
+    z-index: 1;
+}
+
+/* Native WordPress brand without a custom logo uses a direct text span.
+ * Bound both variants so long site titles cannot widen the viewport. */
+.aznet-theme-site-header--nav-only .aznet-theme-site-header__brand {
+    max-width: 100%;
+}
+
+.aznet-theme-site-header--nav-only .aznet-theme-site-header__brand > span,
+.aznet-theme-site-header--nav-only .aznet-theme-site-header__brand-copy {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+@media (min-width: 1101px) {
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__inner {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, auto) auto;
+        grid-template-rows: var(--aznet-theme-header-top-row-height) var(--aznet-theme-header-nav-row-height);
+        align-items: center;
+        column-gap: clamp(.85rem, 1.9vw, 1.75rem);
+        row-gap: 0;
+        min-height: 0;
+        padding-block: 0;
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__brand {
+        grid-column: 1;
+        grid-row: 1;
+        justify-self: start;
+        gap: .6rem;
+        min-width: 0;
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__logo {
+        max-height: 2.65rem;
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__brand-title {
+        display: block;
+        max-width: min(31vw, 28rem);
+        overflow: hidden;
+        color: var(--aznet-theme-on-inverse);
+        font-size: clamp(.96rem, 1.25vw, 1.2rem);
+        font-weight: var(--aznet-theme-font-weight-bold);
+        line-height: 1.3;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__commerce-search {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__actions {
+        grid-column: 3;
+        grid-row: 1;
+        gap: clamp(.4rem, 1.1vw, 1rem);
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__search {
+        height: 2.625rem;
+        border-radius: var(--aznet-theme-radius-control);
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__search input[type="search"] {
+        width: clamp(11.5rem, 15vw, 15rem);
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__utility {
+        white-space: nowrap;
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__nav {
+        display: flex;
+        grid-column: 1 / -1;
+        grid-row: 2;
+        align-items: center;
+        align-self: stretch;
+        min-width: 0;
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__nav .aznet-theme-site-header__menu {
+        justify-content: flex-start;
+        gap: clamp(.5rem, .95vw, 1rem);
+    }
+
+    /*
+     * Native menus can contain editor-authored long labels. Without a catalog
+     * rail, allow the sticky navigation tier to grow and wrap rather than
+     * clip, overlap or create page-level horizontal overflow.
+     */
+    .aznet-theme-site-header--nav-only:not(.aznet-theme-site-header--catalog) .aznet-theme-site-header__inner {
+        grid-template-rows: var(--aznet-theme-header-top-row-height) minmax(var(--aznet-theme-header-nav-row-height), auto);
+    }
+
+    .aznet-theme-site-header--nav-only:not(.aznet-theme-site-header--catalog) .aznet-theme-site-header__nav .aznet-theme-site-header__menu {
+        flex-wrap: wrap;
+        row-gap: 0;
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__nav .aznet-theme-site-header__menu > li {
+        flex: 0 1 auto;
+        min-width: 0;
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__nav .aznet-theme-site-header__menu > li > a {
+        display: block;
+        min-width: 0;
+        max-width: 100%;
+        min-height: 44px;
+        overflow: hidden;
+        line-height: 44px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 1100px) {
+    .aznet-theme-site-header--nav-only {
+        --aznet-theme-header-top-row-height: 4rem;
+        --aznet-theme-header-nav-row-height: 3.125rem;
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__inner {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: var(--aznet-theme-header-top-row-height) var(--aznet-theme-header-nav-row-height);
+        min-height: 0;
+        align-items: center;
+        gap: 0;
+        padding-block: 0;
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__brand {
+        grid-column: 1;
+        grid-row: 1;
+        justify-self: start;
+        min-width: 0;
+        gap: .55rem;
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__brand-title {
+        display: block;
+        max-width: calc(100vw - 7rem);
+        overflow: hidden;
+        font-size: clamp(.92rem, 3.6vw, 1.06rem);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__nav,
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__actions,
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__commerce-search {
+        display: none;
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__mobile {
+        display: flex;
+        grid-column: 1;
+        grid-row: 2;
+        justify-self: stretch;
+        align-items: center;
+        margin-left: 0;
+        min-height: var(--aznet-theme-header-nav-row-height);
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__mobile-trigger {
+        width: 100%;
+        min-height: var(--aznet-theme-header-nav-row-height);
+        justify-content: flex-start;
+        padding-inline: .5rem;
+        border: 0;
+        border-radius: 0;
+        text-align: left;
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__mobile-panel {
+        top: calc(100% + 1px);
+    }
+}
+
+@media (max-width: 782px) {
+    .admin-bar .aznet-theme-site-header--nav-only {
+        top: calc(46px - var(--aznet-theme-header-top-row-height));
     }
 }
 
