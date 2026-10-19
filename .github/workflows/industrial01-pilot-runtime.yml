@@ -263,9 +263,23 @@ jobs:
                 ] );
                 if ( is_wp_error( $item ) ) { throw new RuntimeException( $item->get_error_message() ); }
             }
+            // Real pilot has a WordPress-owned primary menu; exercise the two-column
+            // Header visual contract with an independent native primary fixture.
+            $primary_menu = wp_create_nav_menu( "Native Primary Fixture" );
+            if ( is_wp_error( $primary_menu ) ) { throw new RuntimeException( $primary_menu->get_error_message() ); }
+            foreach ( [ "Trang chủ" => "/", "Giải pháp" => "/solutions/", "Sản phẩm" => "/shop/", "Dự án" => "/projects/", "Dịch vụ" => "/services/", "Kiến thức" => "/knowledge/", "Giới thiệu" => "/about/", "Liên hệ" => "/contact/" ] as $label => $path ) {
+                $item = wp_update_nav_menu_item( $primary_menu, 0, [
+                    "menu-item-title" => $label,
+                    "menu-item-url" => home_url( $path ),
+                    "menu-item-type" => "custom",
+                    "menu-item-status" => "publish",
+                ] );
+                if ( is_wp_error( $item ) ) { throw new RuntimeException( $item->get_error_message() ); }
+            }
             $locations = get_theme_mod( "nav_menu_locations", [] );
             $locations = is_array( $locations ) ? $locations : [];
             $locations["product-catalog"] = (int) $menu_id;
+            $locations["primary"] = (int) $primary_menu;
             set_theme_mod( "nav_menu_locations", $locations );
             $settings = get_theme_mod( "aznet_theme_settings", [] );
             $settings = is_array( $settings ) ? $settings : [];
