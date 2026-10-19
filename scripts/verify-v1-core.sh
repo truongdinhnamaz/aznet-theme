@@ -66,6 +66,7 @@ printf '%s\n' '==> Core optional vertical catalog navigation contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/core-vertical-catalog-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/core-vertical-catalog-submenu-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/d049-rail-header-hero-visual-parity-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/d049-cross-page-header-parity-contract.php
 
 printf '%s\n' '==> Retained R5 Control Center contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/r5-control-center-static-contract.php
