@@ -279,6 +279,72 @@
     .aznet-theme-industrial01-hero--with-catalog .aznet-theme-industrial01-hero__content,
     .aznet-theme-industrial01-hero--with-catalog .aznet-theme-industrial01-hero__visual { grid-column: 1; }
 }
+
+/* Optional sticky-navigation composition keeps the native catalog column
+ * aligned with Industrial 01 Hero. Theme owns tracks; WordPress owns links. */
+@media (min-width: 1101px) {
+    .aznet-theme-site-header--catalog.aznet-theme-site-header--nav-only .aznet-theme-site-header__inner {
+        grid-template-rows: var(--aznet-theme-header-top-row-height) var(--aznet-theme-header-nav-row-height);
+        column-gap: var(--aznet-theme-catalog-rail-gap);
+        row-gap: 0;
+        padding-top: 0;
+    }
+
+    .aznet-theme-site-header--catalog.aznet-theme-site-header--nav-only .aznet-theme-site-header__brand {
+        grid-column: 1;
+        grid-row: 1;
+        gap: .55rem;
+    }
+
+    .aznet-theme-site-header--catalog.aznet-theme-site-header--nav-only .aznet-theme-site-header__brand-title {
+        font-size: clamp(.92rem, 1.15vw, 1.17rem);
+        white-space: nowrap;
+    }
+
+    .aznet-theme-site-header--catalog.aznet-theme-site-header--nav-only .aznet-theme-site-header__nav {
+        grid-column: 2 / 4;
+        grid-row: 2;
+        align-self: stretch;
+        justify-self: stretch;
+    }
+
+    .aznet-theme-site-header--catalog.aznet-theme-site-header--nav-only .aznet-theme-site-header__catalog,
+    .aznet-theme-site-header--catalog.aznet-theme-site-header--nav-only .aznet-theme-site-header__catalog-rail-label {
+        grid-column: 1;
+        grid-row: 2;
+        align-self: stretch;
+    }
+
+    .aznet-theme-site-header--catalog.aznet-theme-site-header--nav-only .aznet-theme-site-header__catalog-rail-label,
+    .aznet-theme-site-header--catalog.aznet-theme-site-header--nav-only .aznet-theme-catalog-navigation--header summary {
+        min-height: var(--aznet-theme-header-nav-row-height);
+    }
+}
+
+@media (max-width: 1100px) {
+    .aznet-theme-site-header--catalog.aznet-theme-site-header--nav-only .aznet-theme-site-header__inner {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: var(--aznet-theme-header-top-row-height) var(--aznet-theme-header-nav-row-height);
+        min-height: 0;
+        padding-top: 0;
+        gap: 0;
+    }
+
+    .aznet-theme-site-header--catalog.aznet-theme-site-header--nav-only .aznet-theme-site-header__brand {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .aznet-theme-site-header--catalog.aznet-theme-site-header--nav-only .aznet-theme-site-header__mobile {
+        display: flex;
+        grid-column: 1;
+        grid-row: 2;
+        align-items: center;
+        margin-left: 0;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .aznet-theme-catalog-navigation,
     .aznet-theme-catalog-navigation * { scroll-behavior: auto; transition: none; }
