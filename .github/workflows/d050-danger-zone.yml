@@ -1,0 +1,41 @@
+name: D-050 Danger Zone Theme-only Contract
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'inc/admin/danger-zone.php'
+      - 'inc/admin/bootstrap.php'
+      - 'inc/admin/control-center.php'
+      - 'inc/admin/settings-actions.php'
+      - 'inc/admin/settings-portability.php'
+      - 'tests/offline/d050-danger-zone-policy.php'
+      - 'tests/offline/d050-danger-zone-entrypoints.php'
+      - '.github/workflows/d050-danger-zone.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  theme-danger-boundary:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Verify PHP syntax for the bounded slice
+        run: |
+          php -l inc/admin/danger-zone.php
+          php -l inc/admin/bootstrap.php
+          php -l inc/admin/control-center.php
+          php -l inc/admin/settings-actions.php
+          php -l inc/admin/settings-portability.php
+          php -l tests/offline/d050-danger-zone-policy.php
+          php -l tests/offline/d050-danger-zone-entrypoints.php
+      - name: Verify default-deny privileged policy and transient isolation
+        run: php tests/offline/d050-danger-zone-policy.php
+      - name: Verify direct POST and ownership boundaries
+        run: php tests/offline/d050-danger-zone-entrypoints.php
