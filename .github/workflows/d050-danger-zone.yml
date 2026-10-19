@@ -13,6 +13,7 @@ on:
       - 'tests/offline/d050-danger-zone-policy.php'
       - 'tests/offline/d050-danger-zone-entrypoints.php'
       - 'tests/offline/d050-theme-only-entry.php'
+      - 'tests/offline/d050-support-tab.php'
       - '.github/workflows/d050-danger-zone.yml'
 
 permissions:
@@ -37,9 +38,12 @@ jobs:
           php -l tests/offline/d050-danger-zone-policy.php
           php -l tests/offline/d050-danger-zone-entrypoints.php
           php -l tests/offline/d050-theme-only-entry.php
+          php -l tests/offline/d050-support-tab.php
       - name: Verify default-deny privileged policy and transient isolation
         run: php tests/offline/d050-danger-zone-policy.php
       - name: Verify direct POST and ownership boundaries
         run: php tests/offline/d050-danger-zone-entrypoints.php
       - name: Verify Theme-only privileged operator entry (RED-GREEN)
         run: php tests/offline/d050-theme-only-entry.php
+      - name: Verify dedicated Support navigation (RED-GREEN)
+        run: php tests/offline/d050-support-tab.php
