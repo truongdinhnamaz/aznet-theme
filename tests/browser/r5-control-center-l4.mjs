@@ -6,12 +6,13 @@ import AxeBuilder from '@axe-core/playwright';
 const baseUrl = (process.env.R5_BASE_URL || 'http://127.0.0.1:8080').replace(/\/$/, '');
 const adminUser = process.env.R5_ADMIN_USER || 'admin';
 const adminPass = process.env.R5_ADMIN_PASS || '';
+const restrictedPass = process.env.R5_RESTRICTED_PASS || '';
 const stateDir = process.env.R5_STATE_DIR || '/tmp/r5-control-center';
 const expectWoo = process.env.R5_EXPECT_WOO === '1';
 const outputDir = path.join(stateDir, expectWoo ? 'woo' : 'clean');
 fs.mkdirSync(outputDir, { recursive: true });
 
-if (!adminPass) throw new Error('R5_ADMIN_PASS is required');
+if (!adminPass || !restrictedPass) throw new Error('R5_ADMIN_PASS and R5_RESTRICTED_PASS are required');
 
 const viewports = {
   '1440x1000': { width: 1440, height: 1000 },
@@ -24,15 +25,17 @@ const viewports = {
 const results = [];
 const failures = [];
 
-async function login(page) {
+async function loginAs(page, user, pass) {
   await page.goto(`${baseUrl}/wp-login.php`, { waitUntil: 'domcontentloaded' });
-  await page.locator('#user_login').fill(adminUser);
-  await page.locator('#user_pass').fill(adminPass);
+  await page.locator('#user_login').fill(user);
+  await page.locator('#user_pass').fill(pass);
   await Promise.all([
     page.waitForURL(/\/wp-admin\//, { timeout: 20000 }),
     page.locator('#wp-submit').click(),
   ]);
 }
+
+async function login(page) { await loginAs(page, adminUser, adminPass); }
 
 async function gotoCenter(page, section = 'overview') {
   const suffix = section === 'overview' ? '' : `&section=${section}`;
@@ -108,6 +111,36 @@ async function saveHeaderBooleans(page) {
   if (!(await utilities.isChecked())) throw new Error('Header utilities true value did not persist');
 }
 
+async function unlockDanger(page, viewportName) {
+  await gotoCenter(page, 'danger-zone');
+  if (await page.locator('.nav-tab', { hasText: 'Khu vực nguy hiểm' }).count()) {
+    throw new Error('Danger Zone must not be shown in ordinary navigation');
+  }
+  if (!(await page.locator('.aznet-theme-danger-zone').innerText()).includes('CHƯA XÁC MINH')) {
+    throw new Error('Site-level protection warning must not falsely claim enforcement');
+  }
+  if (await page.locator('form input[name="action"][value="aznet_theme_reset_settings"]').count()) {
+    throw new Error('reset must not render before explicit unlock');
+  }
+  const confirm = page.locator('input[name="danger_confirm"]');
+  if (await confirm.count() !== 1) throw new Error('Danger Zone must begin locked');
+  await confirm.fill('MỞ KHÓA');
+  await page.locator('textarea[name="danger_reason"]').fill('R5 verified browser-only configuration maintenance');
+  await page.getByRole('button', { name: 'Tôi hiểu rủi ro — Mở khóa tạm thời' }).click();
+  await page.locator('.aznet-theme-danger-zone input[name="action"][value="aznet_theme_reset_settings"]').waitFor({ state: 'attached', timeout: 20000 });
+  await checkLayoutAndA11y(page, viewportName + '-danger-' + (expectWoo ? 'woo' : 'clean'));
+}
+
+async function assertDangerRelocked(page) {
+  await gotoCenter(page, 'danger-zone');
+  if (await page.locator('input[name="danger_confirm"]').count() !== 1) {
+    throw new Error('successful destructive action must relock session');
+  }
+  if (await page.locator('input[name="action"][value="aznet_theme_reset_settings"]').count()) {
+    throw new Error('reset form must be hidden when relocked');
+  }
+}
+
 async function exportImport(page, viewportName) {
   await gotoCenter(page);
   const exportForm = page.locator('form').filter({ has: page.locator('input[name="action"][value="aznet_theme_export_settings"]') });
@@ -137,13 +170,14 @@ async function exportImport(page, viewportName) {
     },
   }));
 
-  await gotoCenter(page);
+  await unlockDanger(page, viewportName);
   const importForm = page.locator('form').filter({ has: page.locator('input[name="action"][value="aznet_theme_import_settings"]') });
   await importForm.locator('input[type="file"]').setInputFiles(importPath);
   await Promise.all([
     page.waitForURL(/imported=1/, { timeout: 20000 }),
-    importForm.getByRole('button', { name: 'Nhập JSON' }).click(),
+    importForm.getByRole('button', { name: 'Nhập cấu hình Theme' }).click(),
   ]);
+  await assertDangerRelocked(page);
   await gotoCenter(page, 'design');
   if (await page.locator('select[name="aznet_theme_settings[visual_preset]"]').inputValue() !== 'commerce') throw new Error('Imported visual preset did not persist');
   await gotoCenter(page, 'header');
@@ -151,10 +185,10 @@ async function exportImport(page, viewportName) {
   if (!(await page.locator('input[type="checkbox"][name="aznet_theme_settings[header_search]"]').isChecked())) throw new Error('Imported boolean setting did not persist');
 }
 
-async function resetSettings(page) {
-  await gotoCenter(page);
+async function resetSettings(page, viewportName) {
+  await unlockDanger(page, viewportName);
   const resetForm = page.locator('form').filter({ has: page.locator('input[name="action"][value="aznet_theme_reset_settings"]') });
-  const resetButton = resetForm.getByRole('button', { name: 'Đặt lại' });
+  const resetButton = resetForm.getByRole('button', { name: 'Đặt lại cấu hình Theme' });
   const confirm = resetForm.locator('input[type="checkbox"][name="confirm_reset"]');
   if (await confirm.isChecked()) throw new Error('Reset confirmation must start unchecked');
   await confirm.check();
@@ -162,6 +196,7 @@ async function resetSettings(page) {
     page.waitForURL(/reset=1/, { timeout: 20000 }),
     resetButton.click(),
   ]);
+  await assertDangerRelocked(page);
   await gotoCenter(page, 'design');
   if (await page.locator('select[name="aznet_theme_settings[visual_preset]"]').inputValue() !== 'default') throw new Error('Reset did not restore default visual preset');
   await gotoCenter(page, 'header');
@@ -411,6 +446,19 @@ try {
   const authState = await authContext.storageState();
   await authContext.close();
 
+  const restrictedContext = await browser.newContext({ viewport: viewports['1440x1000'] });
+  const restrictedPage = await restrictedContext.newPage();
+  await loginAs(restrictedPage, 'restricted', restrictedPass);
+  await gotoCenter(restrictedPage);
+  if (await restrictedPage.locator('input[name="action"][value="aznet_theme_reset_settings"]').count()) {
+    throw new Error('ordinary Administrator must not see reset on overview');
+  }
+  await restrictedPage.goto(baseUrl + '/wp-admin/admin.php?page=aznet-theme&section=danger-zone', { waitUntil: 'domcontentloaded' });
+  if (!(await restrictedPage.locator('body').innerText()).includes('Bạn không có quyền')) {
+    throw new Error('ordinary Administrator can bypass privileged Danger Zone deep link');
+  }
+  await restrictedContext.close();
+
   for (const [viewportName, viewport] of Object.entries(viewports)) {
     const context = await browser.newContext({ viewport, storageState: authState });
     const page = await context.newPage();
@@ -429,7 +477,7 @@ try {
       await saveQuickSetup(page);
       await saveHeaderBooleans(page);
       await exportImport(page, viewportName);
-      await resetSettings(page);
+      await resetSettings(page, viewportName);
       const homepageHero = await verifyHomepageHeroEditingBridge(page, viewportName);
       const homepageTeam = await verifyHomepageTeamAuthoring(page, viewportName);
       const homepageMap = await verifyHomepageMap(page, viewportName);

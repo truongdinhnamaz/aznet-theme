@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.10
+**Version:** v1.11
 **Status:** Working Source  
 **Date:** 19/10/2026
 
@@ -943,3 +943,14 @@ Accepted layout contract: register WordPress \`product-catalog\` location; add T
 Pilot facts independently inspected on 19/10/2026: Minh Nguyên uses AZnet Theme \`1.3.79\` + WooCommerce; WordPress \`Main menu\` term #55 is assigned primary; \`Menu danh mục\` term #143 contains 19 editor-authored Woo \`product_cat\` navigation items, initially unassigned to a Theme menu location; existing Industrial 01 Hero attachment #1593 remains unchanged.
 
 Execution and gates: bounded branch \`work/core-vertical-catalog-industrial01-pilot-20261019\`, candidate draft PR #464. Initial code head \`60c0339098dc42acca98ca798cb82e88ac1e4a46\` had 46/46 triggered CI workflows succeed but feature ON required additional L3/L4; standalone WordPress fixture, keyboard/axe responsive test and OFF rollback gate are added in the follow-up candidate. Preserve all earlier evidence if not invalidated. **Live merge/release/pilot deployment must follow fresh exact candidate QA; neither initial 46/46 success nor owner approval may be represented as production PASS.** Rollback: leave OFF or revert candidate; do not modify WordPress menu content on rollback.
+
+## D-050 — Danger Zone / safe critical changes (Accepted 19/10/2026)
+
+**Owner decision:** Approved the two-layer operating model on 19/10/2026: (A) discreet AZnet Theme Danger Zone for Theme-local destructive configuration operations; (B) independent WordPress/site-owned persistent guard for Theme installation/switch and homepage configuration/trash events. The approval is **not** approval to deploy or take ownership of WordPress's native security/admin lifecycle in AZnet Theme. See issue #467, AZT-01 §10 and AZT-02 §22.
+
+**Milestones/gates**
+1. **D-050A Theme local:** branch `work/d050-danger-zone-theme-owner-20261019`; move existing Reset and Import from Overview behind privileged UI + back-end gate. Single-site administrator requires separately granted `aznet_theme_manage_danger_zone` in addition to `manage_options`; multisite Super Admin. Default locked; scoped 600 s unlock with reason/confirmation/nonce/audit; one successful mutation relocks. L1/L2 RED→GREEN, L3 WordPress and L4 admin a11y/browser required before merge/deploy; exact candidate CI, recovery and rollback evidence. The approved ordinary Theme settings/export paths must keep working.
+2. **D-050B site guard:** **BLOCKED_EXTERNAL_OWNER_WORKSPACE** until a separate site-owned MU-plugin/network/host policy has an approved repository/workspace and accountable owner. Theme may only display “chưa xác minh khóa cấp website”; no simulated lock/claim. Preserve core/plugin/theme security updates and emergency host recovery. Site guard needs distinct access-control, WordPress native runtime/theme switch, REST/POST bypass, trash/front-page, audit and rollback tests.
+3. **Release:** no direct production site mutation, merge, release or deployment without corresponding exact-head gates and owner approval. Keep previous completed Homepage repair on `lstamduchn.vn` intact.
+
+**Rollback:** revert Theme-only PR; existing WordPress content/queries remain untouched. External site guard (future) must provide emergency bypass/recovery without depending on active Theme. **Exact Next:** document acceptance → Theme-only RED/GREEN → CI and independent WP admin validation → owner review; separately hand off external guard to its source owner.

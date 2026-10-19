@@ -4,7 +4,7 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.24 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.25 |
 | --- | --- | --- | --- |
 | **Trạng thái** | Working Source | **Ngày** | 19/10/2026 |
 
@@ -597,3 +597,28 @@ Owner-approved: AZnet Theme can export a read-only handoff context artifact from
 - Feature development requires RED -> minimal GREEN -> regression, opt-in OFF parity, no-menu fail-soft, WordPress-native nested menu fixture, real L3 WordPress/Woo runtime and L4 keyboard/axe/long-menu/desktop/tablet/mobile/no-JS evidence.
 - Before publishing/releasing to a real pilot, verify exact package bytes, admin mode persistence, assigned menu, menu link targets, Hero overlap, mobile focus/escape, JS error markers and rollback by switching OFF. Production site data and unrelated pre-existing WPVibe draft work must not be overwritten.
 - Approval of the implementation does not itself provide evidence of browser PASS, production deployment or release promotion.
+
+## 22. D-050 — Danger Zone control plane và site-owned enforcement (Accepted 19/10/2026)
+
+### 22.1. Theme-only privileged screen
+
+- URL quản trị `wp-admin/admin.php?page=aznet-theme&section=danger-zone` có thể truy cập trực tiếp **nếu được cấp quyền** nhưng không được đưa vào menu/tab thông thường. “Giấu kín” chỉ là giảm thao tác vô ý, không phải xác thực.
+- `manage_options` + `aznet_theme_manage_danger_zone` **được cấp theo cá nhân** trên single-site; multisite yêu cầu `is_super_admin()`. Quyền không tự cấp khi activation. Site owner cấp/revoke qua cơ chế quản trị người dùng tin cậy; nếu thiếu thì fail-closed (chưa ai được mở).
+- Chỉ bảo vệ thao tác thuộc Theme: đặt lại AZnet Theme settings và nhập Theme settings. Cả trang, admin-post direct và các entrypoint nội bộ phải kiểm tra quyền phía server. Đưa reset/import ra khỏi Tổng quan nhưng cho phép đọc/xuất JSON theo capability thông thường.
+- Mặc định **LOCKED** cho thao tác phá huỷ. Mở tạm **10 phút**, theo user ID + WordPress login session token; bắt buộc xác nhận rõ, nêu lý do, nonce; ghi nhật ký Theme-local giới hạn; reset/import thành công **tiêu thụ phiên mở khóa** và khóa lại. Đổi user/session, hết hạn, logout đều không dùng lại được. Không chấp nhận client-only unlock/JS/ẩn nút như cơ chế bảo mật.
+- Theme-local audit chỉ là lịch sử vận hành tối thiểu; không phải nhật ký bảo mật bất biến; tránh ghi token, cookie, hồ sơ cá nhân hoặc dữ liệu domain. Guard không được phá các thao tác cấu hình Theme thông thường.
+- Lỗi khi chưa có quyền/unlock phải từ chối trước khi mutate Theme settings, có trang thông báo rõ, không fatal WordPress.
+
+### 22.2. Enforcement cấp website — tách owner
+
+- Cài/upload/switch/delete WordPress Theme và sửa thiết lập/trash Front Page là native WordPress operations, **không được thực thi khóa từ mã Theme**: đổi Theme là tắt code Theme.
+- Đề xuất guard cấp site dưới dạng site-owned MU-plugin/network policy/host-managed policy được quản trị độc lập, giữ hiệu lực sau theme switch. Khi chưa có artifact/version/contract thật thì trạng thái **BLOCKED_SITE_GUARD**, không claim bảo vệ website chỉ vì UI Theme xuất hiện.
+- Policy mở khóa site: deny by default; owner identity xác thực độc lập; actor/session scoped; một thao tác hoặc tối đa 10 phút; lý do + cảnh báo + log; chặn truy cập trực tiếp/REST/admin-post/CLI trong phạm vi chính sách; đường khôi phục khẩn cấp từ host được mô tả rõ.
+- Không dùng `DISALLOW_FILE_MODS` để khóa Theme nếu hành vi đó vô tình khóa cả plugin/core/theme security updates. Không disable automatic security updates, không làm mất khả năng khôi phục dữ liệu.
+- Không tạo public bridge, filter, option/meta hoặc heuristic để Theme tự đoán trạng thái guard. Chỉ bổ sung read-only status/versioned public integration khi có provider thực tế và được owner phê duyệt contract; nếu không, Theme ghi “chưa xác minh bảo vệ cấp website”.
+
+### 22.3. Acceptance boundary
+
+- L1/L2: deny by default, role/cap mismatch, deep-link/direct POST, nonce, token stale, cross-session, TTL and relock, non-mutating unauthorized attempts, bounded log and recovery.
+- L3/L4: real WordPress admin authenticated flow, keyboard and accessibility, appearance after Theme switching and update regression; external guard tests độc lập và không suy ra từ Theme-only tests.
+- Không thay đổi AZT-05 product independence hoặc WP-native ownership. Production/release vẫn approval-gated.
