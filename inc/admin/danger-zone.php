@@ -166,6 +166,22 @@ function handle_danger_zone_lock(): void {
 }
 
 /**
+ * Show the one Theme-owned management entry point only to explicitly
+ * authorized operators. The Site Guard fallback panel stays invisible here.
+ */
+function render_danger_zone_entry_link(): void {
+    if ( ! danger_zone_is_authorized() ) {
+        return;
+    }
+    echo '<div class="aznet-theme-panel aznet-theme-danger-zone-entry">';
+    echo '<h2>' . esc_html__( 'Khu vực nguy hiểm', 'aznet-theme' ) . '</h2>';
+    echo '<p>' . esc_html__( 'Quản lý mở khóa tạm thời các thao tác nhạy cảm của Theme và trạng thái Site Guard tại một nơi. Chỉ người được cấp quyền riêng mới thấy mục này.', 'aznet-theme' ) . '</p>';
+    echo '<a class="button button-secondary" href="' . esc_url( danger_zone_admin_url() ) . '">';
+    echo esc_html__( 'Mở Khu vực nguy hiểm', 'aznet-theme' ) . '</a>';
+    echo '</div>';
+}
+
+/**
  * Render the Theme-owned controls. The WordPress/site guard deliberately has
  * no false "locked" switch unless a real external owner contract is proven.
  */

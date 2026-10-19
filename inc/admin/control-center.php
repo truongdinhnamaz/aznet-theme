@@ -281,6 +281,7 @@ function render_control_center(): void {
         echo '<div class="aznet-theme-panel"><h2>Project Handoff — Hồ sơ bàn giao dự án</h2><p>Tải hồ sơ JSON để tiếp tục phát triển AZnet Theme trong cuộc trò chuyện mới. Đây không phải bản sao lưu website; cần đối chiếu lại GitHub và tài liệu nguồn.</p>';
         echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="aznet_theme_export_handoff">';
         wp_nonce_field( 'aznet_theme_export_handoff' ); submit_button( 'Xuất hồ sơ bàn giao JSON', 'secondary', 'submit', false ); echo '</form></div>';
+        render_danger_zone_entry_link();
     } elseif ( 'footer' === $section ) {
         render_settings_form( $section );
         render_footer_column_editors( (string) settings()['footer_preset'] );
