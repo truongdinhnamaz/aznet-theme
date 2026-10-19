@@ -69,6 +69,26 @@ try {
     if (categories < 4) throw new Error(`${name}: expected at least 4 category cards, got ${categories}`);
     if (products < 6) throw new Error(`${name}: expected at least 6 product cards, got ${products}`);
 
+    const productImage = homepage.locator('.aznet-theme-industrial01-product-card__media img').first();
+    await productImage.waitFor({ state: 'visible', timeout: 20000 });
+    const productMedia = await productImage.evaluate((img) => {
+      const imageRect = img.getBoundingClientRect();
+      const frame = img.closest('.aznet-theme-industrial01-product-card__media')?.getBoundingClientRect();
+      return {
+        fit: getComputedStyle(img).objectFit,
+        width: imageRect.width,
+        height: imageRect.height,
+        frameWidth: frame?.width || 0,
+        frameHeight: frame?.height || 0
+      };
+    });
+    if (productMedia.fit !== 'cover' ||
+        Math.abs(productMedia.frameWidth - productMedia.frameHeight) > 2 ||
+        productMedia.width < productMedia.frameWidth - 2 ||
+        productMedia.height < productMedia.frameHeight - 2) {
+      throw new Error(name + ': homepage product thumbnail must fill the square frame: ' + JSON.stringify(productMedia));
+    }
+
     // Bounded native WooCommerce catalogue gallery (seven terms; eighth grid
     // position is an editorial navigation tile, never a fabricated product).
     const categorySection = homepage.locator('.aznet-theme-industrial01-categories');
@@ -153,6 +173,15 @@ try {
     if (!shopBody.includes('aznet-theme-preset--industrial-01')) throw new Error(`${name}: Shop lost Industrial 01 preset`);
     const shopProducts = await page.locator('.woocommerce ul.products li.product').count();
     if (shopProducts < 6) throw new Error(`${name}: expected at least 6 Shop products, got ${shopProducts}`);
+    const shopProductImage = page.locator('.woocommerce ul.products li.product a img').first();
+    await shopProductImage.waitFor({ state: 'visible', timeout: 20000 });
+    const shopMedia = await shopProductImage.evaluate((img) => {
+      const box = img.getBoundingClientRect();
+      return { width: box.width, height: box.height, fit: getComputedStyle(img).objectFit };
+    });
+    if (shopMedia.fit !== 'cover' || Math.abs(shopMedia.width - shopMedia.height) > 2) {
+      throw new Error(name + ': Industrial Shop thumbnail not square cover: ' + JSON.stringify(shopMedia));
+    }
     await assertNoOverflow(page, name + '-shop');
     await assertA11y(page, name + '-shop');
     await page.screenshot({ path: path.join(outDir, `${name}-shop.png`), fullPage: true });

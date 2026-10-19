@@ -16,6 +16,30 @@
     padding: var(--aznet-theme-space-3, 1rem);
 }
 
+
+/* Source-owned product-card thumbnails only; native full product galleries remain unmodified. */
+.wp-block-woocommerce-product-collection :is(.wp-block-woocommerce-product-image, .wp-block-post-featured-image) {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+}
+.wp-block-woocommerce-product-collection :is(.wp-block-woocommerce-product-image, .wp-block-post-featured-image) img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    object-position: center;
+}
+.wc-block-grid__product-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    object-position: center;
+}
+
 .wp-block-woocommerce-product-collection .wc-block-components-product-name,
 .wp-block-woocommerce-product-collection .wp-block-post-title {
     color: var(--aznet-theme-text, #17181b);
