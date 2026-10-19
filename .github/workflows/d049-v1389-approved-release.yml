@@ -18,6 +18,9 @@ concurrency:
 
 jobs:
   verify-and-publish:
+    # A future version bump must skip this one-time publication cleanly.
+    # The approved merge commit title is an exact release-operation gate.
+    if: startsWith(github.event.head_commit.message, 'D049 Release v1.3.89:')
     runs-on: ubuntu-24.04
     services:
       mysql:
