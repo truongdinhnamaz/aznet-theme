@@ -98,6 +98,17 @@ $fail((bool) preg_match('/@media \(max-width: 48rem\)\s*\{[\s\S]*?' . preg_quote
     !str_contains((string) ($mobileInner[1] ?? ''), 'width:'),
     'Mobile Footer must inherit the shared Homepage shell width; no independent gutter override');
 
+// Source CSS must use the same content-derived URL versioning as other
+// scoped Theme styles. Otherwise a draft edit leaves ?ver=ThemeVersion
+// unchanged and the browser/CDN can keep the stale Footer presentation.
+$assetSource = (string) file_get_contents($root . '/inc/theme/assets.php');
+$assetStart = strpos($assetSource, 'function enqueue_visual_preset_asset(');
+$assetEnd = strpos($assetSource, 'function enqueue_header_navigation_asset(', (int) $assetStart);
+$fail(false !== $assetStart && false !== $assetEnd, 'Visual preset enqueue boundary must exist');
+$assetMethod = substr($assetSource, (int) $assetStart, $assetEnd - $assetStart);
+$fail(str_contains($assetMethod, "asset_content_version( '/assets/css/presets/' . \$preset . '.css', \$version )"),
+    'Visual preset stylesheet must use content-derived cache versions so a Footer CSS change is visible in WP drafts');
+
 // Theme renders WordPress-owned Footer rich-content; no hidden source/social
 // storage mutation, no guesses about client social IDs or URLs.
 $fail(str_contains($footer, 'footer_context()') && str_contains($footer, '$column_content') &&
