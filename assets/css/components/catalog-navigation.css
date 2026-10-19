@@ -179,6 +179,11 @@
         box-sizing: border-box;
         padding: .5rem 1rem;
         line-height: 1.2;
+        justify-content: flex-start;
+        gap: .75rem;
+    }
+    .aznet-theme-site-header--catalog .aznet-theme-catalog-navigation--header summary > span:last-child {
+        margin-left: auto;
     }
     .aznet-theme-site-header--catalog-home-rail .aznet-theme-site-header__catalog-rail-label {
         display: flex;

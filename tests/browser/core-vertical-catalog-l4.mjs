@@ -82,8 +82,10 @@ try {
         const asideRect = aside?.getBoundingClientRect();
         const asideNav = aside?.querySelector('nav')?.getBoundingClientRect();
         if (!band || !nav || !asideRect || !asideNav) return null;
+        const labelText = document.querySelector('.aznet-theme-site-header__catalog-rail-label span')?.getBoundingClientRect();
         return {
           categoryLeft: band.left, categoryWidth: band.width, categoryHeight: band.height, navLeft: nav.left,
+          labelTextOffset: labelText ? labelText.left - band.left : null,
           vacantRailHeight: asideRect.bottom - asideNav.bottom,
         };
       });
@@ -158,15 +160,30 @@ try {
   await assert(await page.locator('.aznet-theme-site-header__brand-title').isVisible(),
     'inner page must display WordPress brand text alongside its native logo');
   const innerMetrics = await page.evaluate(() => {
-    const band = document.querySelector('.aznet-theme-site-header__catalog summary')?.getBoundingClientRect();
+    const summary = document.querySelector('.aznet-theme-site-header__catalog summary');
+    const band = summary?.getBoundingClientRect();
     const nav = document.querySelector('.aznet-theme-site-header__nav')?.getBoundingClientRect();
-    return band && nav ? { categoryLeft: band.left, categoryWidth: band.width, categoryHeight: band.height, navLeft: nav.left } : null;
+    const textNode = summary && Array.from(summary.childNodes).find(node =>
+      node.nodeType === Node.TEXT_NODE && node.textContent.trim());
+    let textOffset = null;
+    if (textNode && band) {
+      const range = document.createRange();
+      range.selectNodeContents(textNode);
+      textOffset = range.getBoundingClientRect().left - band.left;
+    }
+    return band && nav ? {
+      categoryLeft: band.left, categoryWidth: band.width, categoryHeight: band.height,
+      navLeft: nav.left, labelTextOffset: textOffset
+    } : null;
   });
   await assert(homepageHeaderBaseline && innerMetrics &&
     Math.abs(innerMetrics.categoryLeft - homepageHeaderBaseline.categoryLeft) <= 3 &&
     Math.abs(innerMetrics.categoryWidth - homepageHeaderBaseline.categoryWidth) <= 3 &&
     Math.abs(innerMetrics.categoryHeight - homepageHeaderBaseline.categoryHeight) <= 3 &&
-    Math.abs(innerMetrics.navLeft - homepageHeaderBaseline.navLeft) <= 3,
+    Math.abs(innerMetrics.navLeft - homepageHeaderBaseline.navLeft) <= 3 &&
+    innerMetrics.labelTextOffset !== null &&
+    homepageHeaderBaseline.labelTextOffset !== null &&
+    Math.abs(innerMetrics.labelTextOffset - homepageHeaderBaseline.labelTextOffset) <= 8,
     'Homepage and inner-page category/nav columns differ ' +
     JSON.stringify({ homepageHeaderBaseline, innerMetrics }));
   await page.screenshot({ path: path.join(out, 'inner-header-closed.png'), fullPage: false });
