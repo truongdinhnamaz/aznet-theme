@@ -20,7 +20,7 @@ concurrency:
 jobs:
   real-wordpress-both-products:
     # A private repository token must never be exposed to untrusted forks/branches.
-    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'work/d050c-unified-danger-zone-20261019' }}
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && (github.head_ref == 'work/d050c-unified-danger-zone-20261019' || github.head_ref == 'work/d050c-v1390-safe-merge-20261019') }}
     name: Real WP ${{ matrix.wp }} / PHP ${{ matrix.php }} — Theme + MU-plugin
     runs-on: ubuntu-24.04
     timeout-minutes: 35
