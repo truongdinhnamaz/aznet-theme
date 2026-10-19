@@ -301,8 +301,10 @@
 .single-product #main :is(.related, .upsells) ul.products li.product a img {
     display: block;
     width: 100%;
-    aspect-ratio: 4 / 3;
+    height: auto;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
+    object-position: center;
     margin: 0 0 var(--aznet-theme-space-3, 1rem);
     border-radius: var(--aznet-theme-radius-card, 0.875rem);
 }
