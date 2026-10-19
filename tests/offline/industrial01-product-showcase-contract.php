@@ -87,7 +87,7 @@ namespace {
         }
     }
     $fail( str_contains( $html, '12.000.000 đ' ), 'Show genuine provider price HTML when nonempty' );
-    $fail( ! str_contains( $html, '0 đ' ), 'Do not fabricate zero price when product has no price' );
+    $fail( substr_count( $html, 'aznet-theme-industrial01-product-card__price' ) === 1, 'Only source-supplied price may be displayed' );
     $fail( ! str_contains( $html, 'đánh giá' ), 'Do not invent star ratings or reviews' );
 
     $GLOBALS['products_fixture'] = [];
