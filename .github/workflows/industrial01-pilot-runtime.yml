@@ -284,6 +284,10 @@ jobs:
             $settings = get_theme_mod( "aznet_theme_settings", [] );
             $settings = is_array( $settings ) ? $settings : [];
             $settings["header_catalog_mode"] = "homepage-rail";
+            // Long WordPress-owned Hero headline/lede stress the real B2B pilot layout
+            // without making these fixture strings authoritative Theme content.
+            $settings["homepage_industrial01_hero_title"] = "Giải pháp máy chế biến gỗ cho nhà xưởng hiện đại";
+            $settings["homepage_industrial01_hero_lede"] = "Khám phá máy, thiết bị và phụ kiện ngành gỗ theo từng công đoạn sản xuất. Xem thông tin kỹ thuật và nhận tư vấn, báo giá phù hợp với nhu cầu nhà xưởng.";
             set_theme_mod( "aznet_theme_settings", $settings );
             echo "PASS: Native WordPress menu 7 groups + 12 children, feature ON\n";
           ' --path=/tmp/wp --allow-root

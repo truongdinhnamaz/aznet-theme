@@ -41,6 +41,8 @@ try {
     await assert(await page.locator('.aznet-theme-industrial01-hero--with-catalog').count() === 1, name + ': catalog Hero layout missing');
     await assert(await page.locator('link[href*="catalog-navigation.css"]').count() === 1, name + ': catalog asset not scoped exactly once');
     await assert(await page.locator('.aznet-theme-industrial01-hero h1').count() === 1, name + ': existing Hero h1 lost');
+    await assert((await page.locator('.aznet-theme-industrial01-hero h1').innerText()).includes('Giải pháp máy chế biến gỗ'),
+      name + ': WordPress-authored long Hero title must render without hardcoded Theme data');
     await assert(await page.locator('.aznet-theme-industrial01-hero__content a').count() >= 1, name + ': native Hero CTA missing');
     const aside = page.locator('.aznet-theme-industrial01-hero__catalog');
     await assert(await aside.locator('li').count() >= 19, name + ': WordPress menu item or children lost');

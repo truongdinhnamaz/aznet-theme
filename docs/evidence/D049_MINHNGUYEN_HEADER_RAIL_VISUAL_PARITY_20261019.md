@@ -19,3 +19,12 @@
 
 ## Current state
 - Implementation candidate; do not call the new visual parity production PASS until fresh real non-preview production verification.
+
+## Visual QA refinement after first GREEN screenshot
+
+The first feature-ON WordPress/Playwright run (39239582040) proved exact Header/Hero first-column alignment and all four viewport/a11y/keyboard gates, but its 1440x1000 screenshot displayed excessive empty Hero height with the short generic fixture title. The second bounded correction reduces catalog-only Hero minimum height (desktop and responsive) and seeds a longer WordPress-owned test headline/lede matching the pilot content length to cover wrapping. This does not change generic Hero modes or production values and requires fresh L4 rerun.
+
+On the live pilot, the user-requested Hero copy was updated via two isolated WordPress `option patch` operations, with exact readback:
+- `homepage_industrial01_hero_title = Giải pháp máy chế biến gỗ cho nhà xưởng hiện đại` (previous empty)
+- `homepage_industrial01_hero_lede = Khám phá máy, thiết bị và phụ kiện ngành gỗ theo từng công đoạn sản xuất. Xem thông tin kỹ thuật và nhận tư vấn, báo giá phù hợp với nhu cầu nhà xưởng.` (previous empty)
+- Other Theme presentation settings, CTA, product taxonomy, menu assignment, and WPVibe draft remain unchanged; reset these two text settings to empty for content rollback.

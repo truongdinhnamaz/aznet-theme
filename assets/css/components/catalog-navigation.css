@@ -195,6 +195,7 @@
     .aznet-theme-industrial01-hero--with-catalog .aznet-theme-industrial01-hero__grid,
     .aznet-theme-industrial01-hero--with-catalog.aznet-theme-industrial01-hero--background-only .aznet-theme-industrial01-hero__grid {
         grid-template-columns: var(--aznet-theme-catalog-rail-width) minmax(0, 1fr);
+        min-height: clamp(31rem, 56vh, 36rem);
         gap: var(--aznet-theme-catalog-rail-gap);
         align-items: stretch;
     }
@@ -248,7 +249,15 @@
     .aznet-theme-industrial01-hero--with-catalog .aznet-theme-industrial01-hero__catalog { display: none; }
     .aznet-theme-industrial01-hero--with-catalog .aznet-theme-industrial01-hero__grid {
         display: grid;
+        min-height: clamp(27rem, 52svh, 33rem);
         grid-template-columns: minmax(0, 1fr);
+    }
+    .aznet-theme-industrial01-hero--with-catalog .aznet-theme-industrial01-hero__content {
+        padding-block: clamp(2.75rem, 6vw, 4.1rem);
+    }
+    .aznet-theme-industrial01-hero--with-catalog .aznet-theme-industrial01-hero__content h1 {
+        font-size: clamp(2.1rem, 5vw, 3.4rem);
+        line-height: 1.08;
     }
     .aznet-theme-industrial01-hero--with-catalog .aznet-theme-industrial01-hero__content,
     .aznet-theme-industrial01-hero--with-catalog .aznet-theme-industrial01-hero__visual { grid-column: 1; }
