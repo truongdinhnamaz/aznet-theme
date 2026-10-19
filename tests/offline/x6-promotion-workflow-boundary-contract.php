@@ -61,6 +61,7 @@ $required = [
     '1.3.86)',
     '1.3.87)',
     '1.3.88)',
+    '1.3.89)',
     'tests/offline/x6-version-promotion-contract.php',
     "echo 'PASS: X6 pre-promotion ownership boundary'",
     "echo 'PASS: X6 promoted 1.2.0 ownership boundary'",
@@ -105,6 +106,7 @@ $required = [
     "echo 'PASS: X6 promoted 1.3.86 ownership boundary'",
     "echo 'PASS: X6 promoted 1.3.87 ownership boundary'",
     "echo 'PASS: X6 promoted 1.3.88 ownership boundary'",
+    "echo 'PASS: X6 promoted 1.3.89 ownership boundary'",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.2.0 boundary' >&2",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.0 boundary' >&2",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.1 boundary' >&2",
@@ -147,6 +149,7 @@ $required = [
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.86 boundary' >&2",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.87 boundary' >&2",
     "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.88 boundary' >&2",
+    "echo 'FAIL: X6 promoted metadata diff exceeds approved 1.3.89 boundary' >&2",
     "echo 'FAIL: unsupported X6 Theme version state' >&2",
 ];
 
@@ -172,6 +175,30 @@ foreach ([
         exit(1);
     }
 }
+
+
+ // The explicit owner-approved v1.3.89 metadata-only promotion is bounded
+ // to the source 1.3.88 markers; no other metadata mutation may be accepted.
+ $start89 = strrpos($workflow, '            1.3.89)');
+ $end89 = false === $start89 ? false : strpos($workflow, '            *)', $start89);
+ if (false === $start89 || false === $end89) {
+     fwrite(STDERR, "FAIL: X6 1.3.89 acceptance branch unavailable\n");
+     exit(1);
+ }
+ $promotion89 = substr($workflow, $start89, $end89 - $start89);
+ foreach ([
+     '-Version: 1.3.88',
+     '+Version: 1.3.89',
+     "-    define( 'AZNET_THEME_VERSION', '1.3.88' );",
+     "+    define( 'AZNET_THEME_VERSION', '1.3.89' );",
+     'grep -Fxc -- "$expected"',
+     'metadata_changes',
+ ] as $marker) {
+     if (! str_contains($promotion89, $marker)) {
+         fwrite(STDERR, "FAIL: X6 1.3.89 strict metadata promotion missing: {$marker}\n");
+         exit(1);
+     }
+ }
 
 foreach ($required as $marker) {
     if (! str_contains($workflow, $marker)) {
