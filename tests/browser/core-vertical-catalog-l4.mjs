@@ -83,7 +83,7 @@ try {
         const asideNav = aside?.querySelector('nav')?.getBoundingClientRect();
         if (!band || !nav || !asideRect || !asideNav) return null;
         return {
-          categoryLeft: band.left, categoryWidth: band.width, navLeft: nav.left,
+          categoryLeft: band.left, categoryWidth: band.width, categoryHeight: band.height, navLeft: nav.left,
           vacantRailHeight: asideRect.bottom - asideNav.bottom,
         };
       });
@@ -160,11 +160,12 @@ try {
   const innerMetrics = await page.evaluate(() => {
     const band = document.querySelector('.aznet-theme-site-header__catalog summary')?.getBoundingClientRect();
     const nav = document.querySelector('.aznet-theme-site-header__nav')?.getBoundingClientRect();
-    return band && nav ? { categoryLeft: band.left, categoryWidth: band.width, navLeft: nav.left } : null;
+    return band && nav ? { categoryLeft: band.left, categoryWidth: band.width, categoryHeight: band.height, navLeft: nav.left } : null;
   });
   await assert(homepageHeaderBaseline && innerMetrics &&
     Math.abs(innerMetrics.categoryLeft - homepageHeaderBaseline.categoryLeft) <= 3 &&
     Math.abs(innerMetrics.categoryWidth - homepageHeaderBaseline.categoryWidth) <= 3 &&
+    Math.abs(innerMetrics.categoryHeight - homepageHeaderBaseline.categoryHeight) <= 3 &&
     Math.abs(innerMetrics.navLeft - homepageHeaderBaseline.navLeft) <= 3,
     'Homepage and inner-page category/nav columns differ ' +
     JSON.stringify({ homepageHeaderBaseline, innerMetrics }));
