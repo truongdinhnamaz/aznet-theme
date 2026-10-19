@@ -26,8 +26,8 @@ $check(str_contains($css, '--aznet-theme-catalog-rail-width:'),
     'Header and Hero rail share one sizing token');
 $check(str_contains($css, '.aznet-theme-site-header--catalog-home-rail .aznet-theme-site-header__catalog-rail-label'),
     'Header category label has a scoped presentation');
-$check(str_contains($css, '.aznet-theme-site-header--catalog-home-rail .aznet-theme-site-header__nav'),
-    'main navigation is positioned alongside the category label');
+$check(str_contains($css, '.aznet-theme-site-header--catalog .aznet-theme-site-header__nav'),
+    'main navigation is positioned alongside the category label on home and inner pages');
 $check(!str_contains($css, '.aznet-theme-site-header--catalog-home-rail .aznet-theme-site-header__nav { grid-column: 1 / 4; }'),
     'main navigation may not take over the left category-label column');
 $check(str_contains($css, 'grid-template-columns: var(--aznet-theme-catalog-rail-width) minmax(0, 1fr)'),
