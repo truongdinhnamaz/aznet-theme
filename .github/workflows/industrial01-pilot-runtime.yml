@@ -199,6 +199,8 @@ jobs:
               'homepage_industrial01_solutions_page' => (int) $solutions_page_id,
               'homepage_industrial01_hero_image' => $source_image_id,
           ] );
+          // Mirror the real site's WordPress logo in this disposable fixture.
+          set_theme_mod( 'custom_logo', $source_image_id );
           PHP
           wp eval-file /tmp/industrial01-fixture.php --path=/tmp/wp --allow-root
           wp rewrite flush --hard --path=/tmp/wp --allow-root
