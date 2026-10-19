@@ -4,7 +4,7 @@ Product Charter và Ownership
 
 Định nghĩa AZnet Theme là gì, không là gì, sở hữu phần nào và phải nhường ownership cho hệ thống nào.
 
-| **Mã tài liệu** | AZT-01 | **Phiên bản** | v0.5 |
+| **Mã tài liệu** | AZT-01 | **Phiên bản** | v0.6 |
 | --- | --- | --- | --- |
 | **Trạng thái** | Working Source | **Ngày** | 25/09/2026 |
 
@@ -148,3 +148,13 @@ Ownership is fixed as follows:
 - Commercial entitlement is authorization to obtain a package; it is not Theme-owned business truth and must not be reconstructed from local heuristics.
 
 Remote templates are presentation products, not a parallel CMS/domain store. They may declare layout/presentation metadata and bounded assets, but must not carry authoritative customer content, plugin private storage, Journey semantics, identity/profile truth, commerce state, secrets or license-signing material.
+
+## 10. D-050 — Vùng thao tác nguy hiểm và ranh giới bảo vệ website (Accepted 19/10/2026)
+
+AZnet Theme được phép cung cấp **một màn hình quản trị nâng cao không quảng bá trong menu** dành cho các thao tác nguy hiểm **do chính Theme sở hữu** (ví dụ: đặt lại/nhập cấu hình trình bày). Màn hình chỉ là UI/operation của Theme, không được tuyên bố là cơ chế khóa hoặc cấp quyền cài/đổi giao diện WordPress.
+
+**WordPress/site operations** — cài/tải lên/chuyển/xóa Theme, thay đổi `show_on_front`/`page_on_front`, đưa Front Page đang hoạt động vào thùng rác — thuộc chủ thể vận hành **website** và lớp bảo vệ độc lập với vòng đời Theme. Cơ chế đó phải tiếp tục hiệu lực khi AZnet Theme bị thay thế và có quyền khôi phục khẩn cấp. Không nhúng MU-plugin/host policy vào `aznet-theme`, không điều khiển WordPress native content qua một Theme-owned shadow store. Owner phê duyệt nguyên tắc hai lớp; thực thi guard ngoài Theme cần workspace/owner riêng.
+
+**Cấp quyền:** không đồng nhất mọi Administrator đơn site với quản trị đặc quyền. Theme-only danger operations yêu cầu `manage_options` cộng với quyền cá nhân cấp riêng `aznet_theme_manage_danger_zone` ở single-site, hoặc Super Admin ở multisite. Không tự cấp quyền này cho tất cả Administrator khi kích hoạt/cập nhật Theme.
+
+Khi lớp bảo vệ cấp site chưa được kết nối/xác minh, Theme phải nói rõ **CHƯA CÓ KHÓA CẤP WEBSITE** và không hiển thị trạng thái giả “đã khóa”. Theme switching, core/plugin/theme update, content ownership và khả năng rollback được bảo toàn.
