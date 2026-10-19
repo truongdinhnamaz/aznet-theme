@@ -147,7 +147,25 @@ jobs:
             echo "::error title=BLOCKED_CROSS_REPO_READ::Add fine-grained Contents:Read token for ONLY truongdinhnamaz/aznet-site-guard as secret AZNET_SITE_GUARD_CI_READ_TOKEN in the AZnet Theme Actions settings; then re-run this failed workflow."
             exit 1
           fi
-          echo 'PASS: token configured (never printed or persisted to checkout)'
+          # GitHub can accept a nonempty but unauthorized fine-grained token.
+          # Probe only read endpoints; expose status codes, never credentials.
+          repo_status=$(curl -sS --output /dev/null --write-out '%{http_code}' \
+            -H "Authorization: Bearer $SITE_GUARD_READ_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            'https://api.github.com/repos/truongdinhnamaz/aznet-site-guard')
+          if test "$repo_status" != 200; then
+            echo "::error title=BLOCKED_CROSS_REPO_READ::Token exists but cannot read aznet-site-guard repository metadata (HTTP $repo_status). Verify fine-grained token resource owner, selected private repository and Contents:Read-only; replace the same Actions secret. Do not grant write permission."
+            exit 1
+          fi
+          content_status=$(curl -sS --output /dev/null --write-out '%{http_code}' \
+            -H "Authorization: Bearer $SITE_GUARD_READ_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            'https://api.github.com/repos/truongdinhnamaz/aznet-site-guard/contents/mu-plugins/aznet-site-guard.php?ref=0f16286532b23f3b7c64853fc5cba0b594be0ea0')
+          if test "$content_status" != 200; then
+            echo "::error title=BLOCKED_CROSS_REPO_CONTENTS::Token sees repository but cannot read pinned MU-loader (HTTP $content_status). Give Contents:Read-only on ONLY aznet-site-guard; never enable write."
+            exit 1
+          fi
+          echo 'PASS: token has GitHub API read-only metadata and exact-commit Contents access (never printed or persisted)'
 
       - name: Checkout exact approved Site Guard v1 private PR candidate
         uses: actions/checkout@v4
