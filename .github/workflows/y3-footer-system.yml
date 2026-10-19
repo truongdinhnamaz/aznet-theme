@@ -9,6 +9,7 @@ on:
       - main
     paths:
       - 'inc/theme/footer.php'
+      - 'inc/theme/assets.php'
       - 'inc/theme/bootstrap.php'
       - 'inc/theme/settings.php'
       - 'inc/admin/control-center.php'
