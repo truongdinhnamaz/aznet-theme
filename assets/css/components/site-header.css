@@ -496,6 +496,23 @@
     z-index: 1;
 }
 
+/* Native WordPress brand without a custom logo uses a direct text span.
+ * Bound both variants so long site titles cannot widen the viewport. */
+.aznet-theme-site-header--nav-only .aznet-theme-site-header__brand {
+    max-width: 100%;
+}
+
+.aznet-theme-site-header--nav-only .aznet-theme-site-header__brand > span,
+.aznet-theme-site-header--nav-only .aznet-theme-site-header__brand-copy {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
 @media (min-width: 1101px) {
     .aznet-theme-site-header--nav-only .aznet-theme-site-header__inner {
         display: grid;
@@ -571,7 +588,19 @@
         gap: clamp(.5rem, .95vw, 1rem);
     }
 
-    .aznet-theme-site-header--nav-only .aznet-theme-site-header__nav .aznet-theme-site-header__menu a {
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__nav .aznet-theme-site-header__menu > li {
+        flex: 0 1 auto;
+        min-width: 0;
+    }
+
+    .aznet-theme-site-header--nav-only .aznet-theme-site-header__nav .aznet-theme-site-header__menu > li > a {
+        display: block;
+        min-width: 0;
+        max-width: 100%;
+        min-height: 44px;
+        overflow: hidden;
+        line-height: 44px;
+        text-overflow: ellipsis;
         white-space: nowrap;
     }
 }
