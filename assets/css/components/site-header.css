@@ -335,6 +335,7 @@
 }
 
 .aznet-theme-site-header__menu .sub-menu a {
+    color: var(--aznet-theme-on-inverse);
     justify-content: flex-start;
     width: 100%;
     min-height: 38px;
