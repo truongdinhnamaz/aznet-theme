@@ -72,6 +72,10 @@ foreach ([
 ] as $marker) {
     $fail(str_contains($catalog, $marker), "catalog nav-only alignment missing {$marker}");
 }
+$fail(str_contains($css, "position: absolute;\n    z-index: 0;\n    inset-inline: 0;"),
+    'decorative sticky navigation band must stay behind the Header content');
+$fail(str_contains($css, ".aznet-theme-site-header--nav-only .aznet-theme-site-header__inner {\n    position: relative;\n    z-index: 1;"),
+    'native category heading and dropdown must paint above decoration');
 $fail(str_contains($admin, "'nav-only' =>"), 'Header Control Center does not expose nav-only');
 $fail(str_contains($markup, "'aznet-theme-site-header--' . $sticky_mode"),
     'native Header composer no longer emits normalized mode class');
