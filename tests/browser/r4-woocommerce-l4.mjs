@@ -204,6 +204,7 @@ async function verifyKind(page, kind, viewport) {
     await page.locator('.woocommerce ul.products li.product').first().waitFor({ state: 'visible', timeout: 20000 });
     for (const selector of ['.woocommerce-loop-product__title', '.price', '.star-rating', '.button']) {
       if (await page.locator(`.woocommerce ul.products li.product ${selector}`).count() < 1) throw new Error(`shop: missing native Woo ${selector}`);
+    }
     const cardImage = page.locator('.woocommerce ul.products li.product a img').first();
     await cardImage.waitFor({ state: 'visible', timeout: 20000 });
     const cardMedia = await cardImage.evaluate((image) => {
@@ -213,7 +214,6 @@ async function verifyKind(page, kind, viewport) {
     });
     if (cardMedia.fit !== 'cover' || Math.abs(cardMedia.width - cardMedia.height) > 2 || cardMedia.width < 10) {
       throw new Error('shop: public Woo product thumbnail is not a square cover frame: ' + JSON.stringify(cardMedia));
-    }
     }
   }
 
