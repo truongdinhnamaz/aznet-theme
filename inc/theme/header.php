@@ -53,7 +53,7 @@ function effective_header_preset(): string {
 function header_sticky_mode(): string {
     $mode = setting( 'header_sticky', 'sticky' );
 
-    return in_array( $mode, [ 'off', 'sticky', 'sticky-compact' ], true )
+    return in_array( $mode, [ 'off', 'sticky', 'sticky-compact', 'nav-only' ], true )
         ? (string) $mode
         : 'sticky';
 }
