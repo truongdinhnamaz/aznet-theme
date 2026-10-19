@@ -20,6 +20,11 @@ on:
       - 'tests/offline/industrial01-solutions-editorial-contract.php'
       - 'tests/offline/industrial01-category-gallery-contract.php'
       - 'tests/offline/industrial01-product-showcase-contract.php'
+      - 'tests/offline/product-thumbnail-cover-all-presets-contract.php'
+      - 'assets/css/components/woocommerce-archive.css'
+      - 'assets/css/components/woocommerce-product.css'
+      - 'assets/css/components/woocommerce-blocks.css'
+      - 'assets/css/components/homepage-curtain-01.css'
       - 'tests/offline/industrial01-homepage-rhythm-contract.php'
       - '.github/workflows/industrial01-mvp-contracts.yml'
   workflow_dispatch:
@@ -63,6 +68,9 @@ jobs:
 
       - name: Verify source-owned compact Woo product showcase
         run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-product-showcase-contract.php
+
+      - name: Verify consistent square cover product thumbnails on all Theme presets
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/product-thumbnail-cover-all-presets-contract.php
 
       - name: Retain shared preset and Homepage boundaries
         run: |
