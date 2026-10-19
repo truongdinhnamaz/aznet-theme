@@ -4,7 +4,7 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.25 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.26 |
 | --- | --- | --- | --- |
 | **Trạng thái** | Working Source | **Ngày** | 19/10/2026 |
 
@@ -622,3 +622,12 @@ Owner-approved: AZnet Theme can export a read-only handoff context artifact from
 - L1/L2: deny by default, role/cap mismatch, deep-link/direct POST, nonce, token stale, cross-session, TTL and relock, non-mutating unauthorized attempts, bounded log and recovery.
 - L3/L4: real WordPress admin authenticated flow, keyboard and accessibility, appearance after Theme switching and update regression; external guard tests độc lập và không suy ra từ Theme-only tests.
 - Không thay đổi AZT-05 product independence hoặc WP-native ownership. Production/release vẫn approval-gated.
+
+## 23. D-050C — Integrated Site Guard v1 (Accepted 19/10/2026)
+
+- Site Guard is the owner of WordPress-native safety policy and its **public/versioned** WordPress filter `aznet_site_guard/v1/admin_projection`. The Theme reads a public-safe *current-actor session* projection only, validates its exact major v1 field schema, and fails soft on missing, invalid, throwing, emergency or unsupported providers.
+- AZnet Theme owns the unified privileged Danger Zone **presentation only**, displaying Site Guard-projected operation names/status and nonce-protected HTML forms pointing to the existing **Site Guard-owned** `admin-post.php` unlock/lock actions. Theme never reads Guard private classes, options, transients, meta/tables, determines protection from URL/slug/heuristics, or writes any parallel lock state.
+- `locked` describes only the projection of the current login session, not proof of host-level or immutable security. Emergency bypass is explicitly labeled as unprotected. Site Guard operates after Theme switching and preserves its own hidden fallback operator page.
+- Site Guard operator and AZnet Theme Danger Zone capabilities remain **separately granted**; a Theme capability alone cannot unlock native WP actions. Theme-local reset/import use independent actor/session unlock and remain under Theme ownership.
+- **L5** requires real installed exact-version Site Guard and Theme on disposable WordPress: actor/capability/session, nonce/action/return allowlist, expiry, WordPress 6.9+/PHP 8.1+ and representative WP 7.1.3/PHP 8.5, keyboard/mobile/a11y, provider absent, Theme switching and bounded rollback evidence. Fixtures or a single PHP unit test do NOT prove L5. Site Guard is not yet installed on `lstamduchn.vn`.
+- Decisions affecting Site Guard enforcement or public provider contract must be approved in Site Guard's authoritative source first, and never edited or inferred by the Theme consumer.
