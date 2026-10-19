@@ -8,6 +8,10 @@ on:
       - 'assets/css/presets/curtain-01.css'
       - '.github/workflows/industrial01-pilot-runtime.yml'
       - 'tests/browser/industrial01-pilot-l4.mjs'
+      - 'tests/browser/core-vertical-catalog-l4.mjs'
+      - 'tests/offline/d049-rail-header-hero-visual-parity-contract.php'
+      - 'template-parts/header/site-header.php'
+      - 'assets/css/components/catalog-navigation.css'
       - 'inc/theme/settings.php'
       - 'inc/theme/design-system.php'
       - 'inc/theme/homepage-composer.php'
@@ -259,13 +263,31 @@ jobs:
                 ] );
                 if ( is_wp_error( $item ) ) { throw new RuntimeException( $item->get_error_message() ); }
             }
+            // Real pilot has a WordPress-owned primary menu; exercise the two-column
+            // Header visual contract with an independent native primary fixture.
+            $primary_menu = wp_create_nav_menu( "Native Primary Fixture" );
+            if ( is_wp_error( $primary_menu ) ) { throw new RuntimeException( $primary_menu->get_error_message() ); }
+            foreach ( [ "Trang chủ" => "/", "Giải pháp" => "/solutions/", "Sản phẩm" => "/shop/", "Dự án" => "/projects/", "Dịch vụ" => "/services/", "Kiến thức" => "/knowledge/", "Giới thiệu" => "/about/", "Liên hệ" => "/contact/" ] as $label => $path ) {
+                $item = wp_update_nav_menu_item( $primary_menu, 0, [
+                    "menu-item-title" => $label,
+                    "menu-item-url" => home_url( $path ),
+                    "menu-item-type" => "custom",
+                    "menu-item-status" => "publish",
+                ] );
+                if ( is_wp_error( $item ) ) { throw new RuntimeException( $item->get_error_message() ); }
+            }
             $locations = get_theme_mod( "nav_menu_locations", [] );
             $locations = is_array( $locations ) ? $locations : [];
             $locations["product-catalog"] = (int) $menu_id;
+            $locations["primary"] = (int) $primary_menu;
             set_theme_mod( "nav_menu_locations", $locations );
             $settings = get_theme_mod( "aznet_theme_settings", [] );
             $settings = is_array( $settings ) ? $settings : [];
             $settings["header_catalog_mode"] = "homepage-rail";
+            // Long WordPress-owned Hero headline/lede stress the real B2B pilot layout
+            // without making these fixture strings authoritative Theme content.
+            $settings["homepage_industrial01_hero_title"] = "Giải pháp máy chế biến gỗ cho nhà xưởng hiện đại";
+            $settings["homepage_industrial01_hero_lede"] = "Khám phá máy, thiết bị và phụ kiện ngành gỗ theo từng công đoạn sản xuất. Xem thông tin kỹ thuật và nhận tư vấn, báo giá phù hợp với nhu cầu nhà xưởng.";
             set_theme_mod( "aznet_theme_settings", $settings );
             echo "PASS: Native WordPress menu 7 groups + 12 children, feature ON\n";
           ' --path=/tmp/wp --allow-root
@@ -279,6 +301,20 @@ jobs:
           INDUSTRIAL01_BASE_URL: http://127.0.0.1:8080
           INDUSTRIAL01_OUT_DIR: /tmp/industrial01-pilot
         run: node tests/browser/core-vertical-catalog-l4.mjs
+
+      - name: Verify real-pilot Standard Header alongside native Catalog rail
+        env:
+          INDUSTRIAL01_BASE_URL: http://127.0.0.1:8080
+          INDUSTRIAL01_OUT_DIR: /tmp/industrial01-pilot/standard-mode
+        run: |
+          set -euo pipefail
+          wp eval '
+            $settings = get_theme_mod( "aznet_theme_settings", [] );
+            $settings = is_array( $settings ) ? $settings : [];
+            $settings["header_preset"] = "standard";
+            set_theme_mod( "aznet_theme_settings", $settings );
+          ' --path=/tmp/wp --allow-root
+          node tests/browser/core-vertical-catalog-l4.mjs
 
       - name: Verify OFF rollback without deleting WordPress menu
         run: |

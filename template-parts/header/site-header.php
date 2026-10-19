@@ -35,6 +35,15 @@ if ( $catalog_enabled ) {
     <div class="aznet-theme-site-header__inner">
         <?php get_template_part( 'template-parts/header/brand', null, $context ); ?>
 
+        <?php if ( ! empty( $context['catalog_home_rail'] ) ) : ?>
+            <div class="aznet-theme-site-header__catalog-rail-label">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true" focusable="false">
+                    <path d="M4 7h16M4 12h16M4 17h16"/>
+                </svg>
+                <span><?php esc_html_e( 'Danh mục sản phẩm', 'aznet-theme' ); ?></span>
+            </div>
+        <?php endif; ?>
+
         <?php if ( 'commerce' === $effective_preset ) : ?>
             <div class="aznet-theme-site-header__commerce-search">
                 <?php get_template_part( 'template-parts/header/search', null, $context ); ?>
