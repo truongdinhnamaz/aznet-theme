@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.10
+**Version:** v1.12
 **Status:** Working Source  
 **Date:** 19/10/2026
 
@@ -948,3 +948,22 @@ Execution and gates: bounded branch \`work/core-vertical-catalog-industrial01-pi
 
 
 **D-049 live pilot visual correction — 19/10/2026 (user-approved target, implementation in progress):** Real Minh Nguyên `1.3.88` with WordPress `Menu danh mục` #143 assigned and `homepage-rail` active correctly rendered the menu, but the desktop Header had an empty left navigation column while its full-width main navigation was pushed to the right; the white Hero menu rail floated below without visual alignment. The user supplied a two-row Header + connected catalog-rail schematic and requested correction. Accepted bounded presentation refinement: in `homepage-rail` mode, show an *informational* category heading in the Header's second row (not a second menu or fake toggle), align its column with the single WordPress-powered Hero rail directly below, and place the main menu in the adjacent Header cell. Keep the native mobile catalog disclosure, the existing site media/CTA source, all non-catalog sites, and live WordPress menu ownership untouched. Real pilot Hero copy may be author-edited only via the existing presentation settings, never hard-coded in Core. Implementation and real-site L4 must be independently verified; this note does not claim QA/release/prod PASS.
+
+## D-050 — Danger Zone / safe critical changes (Accepted 19/10/2026)
+
+**Owner decision:** Approved the two-layer operating model on 19/10/2026: (A) discreet AZnet Theme Danger Zone for Theme-local destructive configuration operations; (B) independent WordPress/site-owned persistent guard for Theme installation/switch and homepage configuration/trash events. The approval is **not** approval to deploy or take ownership of WordPress's native security/admin lifecycle in AZnet Theme. See issue #467, AZT-01 §10 and AZT-02 §22.
+
+**Milestones/gates**
+1. **D-050A Theme local:** branch `work/d050-danger-zone-theme-owner-20261019`; move existing Reset and Import from Overview behind privileged UI + back-end gate. Single-site administrator requires separately granted `aznet_theme_manage_danger_zone` in addition to `manage_options`; multisite Super Admin. Default locked; scoped 600 s unlock with reason/confirmation/nonce/audit; one successful mutation relocks. L1/L2 RED→GREEN, L3 WordPress and L4 admin a11y/browser required before merge/deploy; exact candidate CI, recovery and rollback evidence. The approved ordinary Theme settings/export paths must keep working.
+2. **D-050B site guard:** **BLOCKED_EXTERNAL_OWNER_WORKSPACE** until a separate site-owned MU-plugin/network/host policy has an approved repository/workspace and accountable owner. Theme may only display “chưa xác minh khóa cấp website”; no simulated lock/claim. Preserve core/plugin/theme security updates and emergency host recovery. Site guard needs distinct access-control, WordPress native runtime/theme switch, REST/POST bypass, trash/front-page, audit and rollback tests.
+3. **Release:** no direct production site mutation, merge, release or deployment without corresponding exact-head gates and owner approval. Keep previous completed Homepage repair on `lstamduchn.vn` intact.
+
+**Rollback:** revert Theme-only PR; existing WordPress content/queries remain untouched. External site guard (future) must provide emergency bypass/recovery without depending on active Theme. **Exact Next:** document acceptance → Theme-only RED/GREEN → CI and independent WP admin validation → owner review; separately hand off external guard to its source owner.
+
+### D-050C — Integrated Site Guard v1 — ACCEPTED — 19/10/2026
+
+**Owner decision:** The product owner accepted the public/versioned Site Guard v1 contract proposed in `truongdinhnamaz/aznet-site-guard` PR #4. Site Guard owns a read-only session projection and validates every existing provider-owned admin-post unlock/lock action. AZnet Theme owns only the unified privileged Danger Zone presentation plus its separate Theme-only reset/import gate. Source owner: AZT-02 §23 for Theme consumer, Site Guard accepted contract v1 for producer.
+
+**Execution:** Site Guard RED→GREEN + fresh exact SHA PHP 8.1/8.4 L1/L2/WordPress L3/Chromium L4, then Theme consumer RED→GREEN with `aznet_site_guard/v1/admin_projection` and fail-soft path, then actual installed provider L5 end-to-end certification. No source from Site Guard is copied into Theme repo; a fixture/mock cannot prove L5. Preserve D-050A standalone Theme Danger Zone candidate PR #473 (28/28 CI PASS); D-050C candidate PR #475 is additive and independent. Original conflict PR #468 is historical evidence only.
+
+**BLOCKED/UNKNOWN:** cross-repository L5 until Site Guard v1 and Theme consumer tested together on disposable real WordPress; `lstamduchn.vn` does not have confirmed live Site Guard. Merge/release/production activation needs separate approval, exact package and hosting backup/recovery. **EXACT NEXT:** provider v1 exact-head CI → Theme consumer CI + real L5 fixture → owner review.

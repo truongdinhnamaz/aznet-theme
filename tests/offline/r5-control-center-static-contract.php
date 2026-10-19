@@ -11,6 +11,7 @@ $required = [
     'inc/admin/settings-portability.php',
     'inc/admin/system-health.php',
     'assets/css/admin/control-center.css',
+    'inc/admin/danger-zone.php',
 ];
 foreach ( $required as $relative ) {
     if ( ! is_file( $root . '/' . $relative ) ) {
@@ -23,6 +24,7 @@ $setup = file_get_contents( $root . '/inc/theme/setup.php' );
 $bootstrap = file_get_contents( $root . '/inc/theme/bootstrap.php' );
 $control = file_get_contents( $root . '/inc/admin/control-center.php' );
 $health = file_get_contents( $root . '/inc/admin/system-health.php' );
+$danger = file_get_contents( $root . '/inc/admin/danger-zone.php' );
 $browser_workflow = file_get_contents( $root . '/.github/workflows/r5-control-center-browser.yml' );
 $admin = implode( "\n", array_map( static fn( $p ) => file_get_contents( $root . '/' . $p ), array_slice( $required, 0, 5 ) ) );
 
@@ -40,8 +42,9 @@ $must = [
     [ $control, "field_checkbox( 'header_search'" ],
     [ $control, "field_checkbox( 'header_utilities'" ],
     [ $control, 'function render_quick_setup_form' ],
-    [ $control, 'name="confirm_reset"' ],
+    [ $danger, 'name="confirm_reset"' ],
     [ $control, 'type="checkbox"' ],
+    [ $danger, 'danger_zone_is_authorized' ],
     [ $health, 'function support_snapshot' ],
 ];
 foreach ( $must as [ $haystack, $needle ] ) {

@@ -1,0 +1,247 @@
+name: D-050C L5 Real WP Site Guard + AZnet Theme (private source)
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/d050c-l5-cross-owner.yml'
+      - 'tests/integration/d050c-cross-owner-l5.php'
+      - 'tests/integration/d050c-real-provider-browser.mjs'
+      - 'inc/admin/**'
+      - 'docs/source/AZT-02-architecture.md'
+      - 'docs/source/AZT-04-roadmap-qa-decisions.md'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: d050c-l5-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  real-wordpress-both-products:
+    # A private repository token must never be exposed to untrusted forks/branches.
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && (github.head_ref == 'work/d050c-unified-danger-zone-20261019' || github.head_ref == 'work/d050c-v1390-safe-merge-20261019') }}
+    name: Real WP ${{ matrix.wp }} / PHP ${{ matrix.php }} — Theme + MU-plugin
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - wp: '6.9'
+            php: '8.1'
+          - wp: '7.1.3'
+            php: '8.5'
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=12
+    env:
+      D050C_EXPECTED_WP_VERSION: ${{ matrix.wp }}
+      D050C_BASE_URL: http://127.0.0.1:8086
+      D050C_EVIDENCE_DIR: /tmp/d050c-l5-evidence
+    steps:
+      - name: Checkout the exact Theme PR HEAD (no credential persistence)
+        uses: actions/checkout@v4
+        with:
+          path: theme-candidate
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mysqli,zip
+          coverage: none
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Preflight Theme provenance and static L5 test syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C theme-candidate rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+          php -l theme-candidate/tests/integration/d050c-cross-owner-l5.php
+          node --check theme-candidate/tests/integration/d050c-real-provider-browser.mjs
+          php -l theme-candidate/inc/admin/site-guard-consumer.php
+          test ! -e theme-candidate/mu-plugins/aznet-site-guard.php
+          test ! -e theme-candidate/inc/admin/class-site-guard.php
+
+      - name: Install isolated disposable WordPress and AZnet Theme (no provider yet)
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          WP_ROOT=/tmp/d050c-l5-wp
+          echo "D050C_WP_ROOT=$WP_ROOT" >> "$GITHUB_ENV"
+          mkdir -p "$WP_ROOT"
+          wp core download --version="${{ matrix.wp }}" --path="$WP_ROOT" --allow-root
+          wp config create --path="$WP_ROOT" --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          OWNER_PASS=$(openssl rand -hex 16)
+          RESTRICTED_PASS=$(openssl rand -hex 16)
+          THEMEONLY_PASS=$(openssl rand -hex 16)
+          GUARDONLY_PASS=$(openssl rand -hex 16)
+          for secret in "$OWNER_PASS" "$RESTRICTED_PASS" "$THEMEONLY_PASS" "$GUARDONLY_PASS"; do
+            echo "::add-mask::$secret"
+          done
+          {
+            echo "D050C_OWNER_PASS=$OWNER_PASS"
+            echo "D050C_RESTRICTED_PASS=$RESTRICTED_PASS"
+            echo "D050C_THEMEONLY_PASS=$THEMEONLY_PASS"
+            echo "D050C_GUARDONLY_PASS=$GUARDONLY_PASS"
+          } >> "$GITHUB_ENV"
+          wp core install --path="$WP_ROOT" --url=http://127.0.0.1:8086 --title='D050C disposable integration' --admin_user=owner --admin_password="$OWNER_PASS" --admin_email=owner@example.test --skip-email --allow-root
+          wp user create restricted restricted@example.test --role=administrator --user_pass="$RESTRICTED_PASS" --path="$WP_ROOT" --allow-root
+          wp user create themeonly themeonly@example.test --role=administrator --user_pass="$THEMEONLY_PASS" --path="$WP_ROOT" --allow-root
+          wp user create guardonly guardonly@example.test --role=administrator --user_pass="$GUARDONLY_PASS" --path="$WP_ROOT" --allow-root
+          wp user add-cap owner aznet_theme_manage_danger_zone --path="$WP_ROOT" --allow-root
+          wp user add-cap owner aznet_site_guard_operator --path="$WP_ROOT" --allow-root
+          wp user add-cap themeonly aznet_theme_manage_danger_zone --path="$WP_ROOT" --allow-root
+          wp user add-cap guardonly aznet_site_guard_operator --path="$WP_ROOT" --allow-root
+          mkdir -p "$WP_ROOT/wp-content/themes/aznet-theme"
+          rsync -a --exclude='.git' --exclude='node_modules' theme-candidate/ "$WP_ROOT/wp-content/themes/aznet-theme/"
+          wp theme activate aznet-theme --path="$WP_ROOT" --allow-root
+          if ! wp theme list --field=name --path="$WP_ROOT" --allow-root | grep -qx twentytwentyfive; then
+            wp theme install twentytwentyfive --path="$WP_ROOT" --allow-root
+          fi
+          FRONT=$(wp post create --post_type=page --post_status=publish --post_title='D050C disposable Front Page' --post_content='Fixture only' --porcelain --path="$WP_ROOT" --allow-root)
+          wp post create --post_type=page --post_status=publish --post_title='D050C safe replacement' --porcelain --path="$WP_ROOT" --allow-root >/dev/null
+          wp option update show_on_front page --path="$WP_ROOT" --allow-root
+          wp option update page_on_front "$FRONT" --path="$WP_ROOT" --allow-root
+          test "$(wp option get page_on_front --path="$WP_ROOT" --allow-root)" = "$FRONT"
+          echo "D050C_FRONT_PAGE=$FRONT" >> "$GITHUB_ENV"
+
+      - name: RED — real WordPress must reject claim when provider absent
+        shell: bash
+        run: |
+          set -euo pipefail
+          if wp eval-file theme-candidate/tests/integration/d050c-cross-owner-l5.php --path="$D050C_WP_ROOT" --allow-root > /tmp/d050c-expected-red.log 2>&1; then
+            echo "::error title=L5 invalid test::Real integration test passed WITHOUT a provider installed."
+            exit 1
+          fi
+          if ! grep -Fq 'FAIL L5: provider contract missing' /tmp/d050c-expected-red.log; then
+            echo "::error title=L5 unexpected RED::The test failed for a reason other than missing real Site Guard."
+            tail -n 25 /tmp/d050c-expected-red.log
+            exit 1
+          fi
+          echo 'PASS: L5 detection RED specifically because independent provider is absent'
+
+      - name: Require approved private-repository read-only CI secret
+        shell: bash
+        env:
+          SITE_GUARD_READ_TOKEN: ${{ secrets.AZNET_SITE_GUARD_CI_READ_TOKEN }}
+        run: |
+          if test -z "$SITE_GUARD_READ_TOKEN"; then
+            echo "::error title=BLOCKED_CROSS_REPO_READ::Add fine-grained Contents:Read token for ONLY truongdinhnamaz/aznet-site-guard as secret AZNET_SITE_GUARD_CI_READ_TOKEN in the AZnet Theme Actions settings; then re-run this failed workflow."
+            exit 1
+          fi
+          # GitHub can accept a nonempty but unauthorized fine-grained token.
+          # Probe only read endpoints; expose status codes, never credentials.
+          repo_status=$(curl -sS --output /dev/null --write-out '%{http_code}' \
+            -H "Authorization: Bearer $SITE_GUARD_READ_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            'https://api.github.com/repos/truongdinhnamaz/aznet-site-guard')
+          if test "$repo_status" != 200; then
+            echo "::error title=BLOCKED_CROSS_REPO_READ::Token exists but cannot read aznet-site-guard repository metadata (HTTP $repo_status). Verify fine-grained token resource owner, selected private repository and Contents:Read-only; replace the same Actions secret. Do not grant write permission."
+            exit 1
+          fi
+          content_status=$(curl -sS --output /dev/null --write-out '%{http_code}' \
+            -H "Authorization: Bearer $SITE_GUARD_READ_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            'https://api.github.com/repos/truongdinhnamaz/aznet-site-guard/contents/mu-plugins/aznet-site-guard.php?ref=0f16286532b23f3b7c64853fc5cba0b594be0ea0')
+          if test "$content_status" != 200; then
+            echo "::error title=BLOCKED_CROSS_REPO_CONTENTS::Token sees repository but cannot read pinned MU-loader (HTTP $content_status). Give Contents:Read-only on ONLY aznet-site-guard; never enable write."
+            exit 1
+          fi
+          echo 'PASS: token has GitHub API read-only metadata and exact-commit Contents access (never printed or persisted)'
+
+      - name: Checkout exact approved Site Guard v1 private PR candidate
+        uses: actions/checkout@v4
+        with:
+          repository: truongdinhnamaz/aznet-site-guard
+          ref: 0f16286532b23f3b7c64853fc5cba0b594be0ea0
+          path: site-guard-candidate
+          token: ${{ secrets.AZNET_SITE_GUARD_CI_READ_TOKEN }}
+          persist-credentials: false
+
+      - name: Verify provider provenance and activate actual independent MU-plugin
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C site-guard-candidate rev-parse HEAD)" = '0f16286532b23f3b7c64853fc5cba0b594be0ea0'
+          php -l site-guard-candidate/mu-plugins/aznet-site-guard.php
+          php -l site-guard-candidate/mu-plugins/aznet-site-guard/class-site-guard.php
+          mkdir -p "$D050C_WP_ROOT/wp-content/mu-plugins/aznet-site-guard"
+          cp site-guard-candidate/mu-plugins/aznet-site-guard/class-site-guard.php "$D050C_WP_ROOT/wp-content/mu-plugins/aznet-site-guard/"
+          cp site-guard-candidate/mu-plugins/aznet-site-guard.php "$D050C_WP_ROOT/wp-content/mu-plugins/"
+          wp plugin list --status=must-use --path="$D050C_WP_ROOT" --allow-root | grep -F 'aznet-site-guard'
+          {
+            printf 'theme_head=%s\n' "$(git -C theme-candidate rev-parse HEAD)"
+            printf 'provider_head=%s\n' "$(git -C site-guard-candidate rev-parse HEAD)"
+            printf 'wp_version=%s\n' "${{ matrix.wp }}"
+            printf 'php_version=%s\n' "${{ matrix.php }}"
+            sha256sum site-guard-candidate/mu-plugins/aznet-site-guard.php site-guard-candidate/mu-plugins/aznet-site-guard/class-site-guard.php
+          } > /tmp/d050c-l5-provenance.txt
+
+      - name: GREEN — real WordPress source authority, capabilities, public v1 consumer
+        shell: bash
+        run: |
+          set -euo pipefail
+          wp eval-file theme-candidate/tests/integration/d050c-cross-owner-l5.php --path="$D050C_WP_ROOT" --allow-root
+          test "$(wp option get page_on_front --path="$D050C_WP_ROOT" --allow-root)" = "$D050C_FRONT_PAGE"
+
+      - name: Start disposable 6-worker WordPress server
+        shell: bash
+        run: |
+          set -euo pipefail
+          nohup env PHP_CLI_SERVER_WORKERS=6 php -S 127.0.0.1:8086 -t "$D050C_WP_ROOT" >/tmp/d050c-l5-server.log 2>&1 &
+          for attempt in $(seq 1 35); do
+            if curl -fsS http://127.0.0.1:8086/wp-login.php >/tmp/d050c-l5-login.html; then break; fi
+            sleep 1
+          done
+          grep -Fq 'user_login' /tmp/d050c-l5-login.html
+
+      - name: Install Chromium and axe within Theme candidate
+        working-directory: theme-candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: L5 real actor/browser scopes, nonce, session, Theme switch continuity
+        working-directory: theme-candidate
+        shell: bash
+        run: node tests/integration/d050c-real-provider-browser.mjs
+
+      - name: Verify disposable Theme and homepage restored, Guard remains independent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(wp option get stylesheet --path="$D050C_WP_ROOT" --allow-root)" = aznet-theme
+          test "$(wp option get page_on_front --path="$D050C_WP_ROOT" --allow-root)" = "$D050C_FRONT_PAGE"
+          wp plugin list --status=must-use --path="$D050C_WP_ROOT" --allow-root | grep -F 'aznet-site-guard'
+          wp core version --path="$D050C_WP_ROOT" --allow-root
+          echo 'PASS L5: actual two-source WordPress fixture preserved after browser tests'
+
+      - name: Archive non-sensitive L5 provenance / browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: d050c-real-l5-wp${{ matrix.wp }}-php${{ matrix.php }}
+          path: |
+            /tmp/d050c-l5-provenance.txt
+            /tmp/d050c-l5-evidence/
+          if-no-files-found: ignore

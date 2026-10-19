@@ -1,0 +1,25 @@
+name: D-050C Site Guard v1 Theme Consumer (L1/L2)
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  d050c-consumer-offline:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1', '8.4', '8.5']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - name: Static and public v1 contract behavior (L2 only)
+        run: |
+          set -euo pipefail
+          php -l inc/admin/danger-zone.php
+          php -l inc/admin/bootstrap.php
+          if test -f inc/admin/site-guard-consumer.php; then php -l inc/admin/site-guard-consumer.php; fi
+          php tests/offline/d050c-site-guard-consumer.php

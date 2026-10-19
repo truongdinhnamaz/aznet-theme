@@ -26,10 +26,12 @@ function handle_save_settings(): void {
 function handle_reset_settings(): void {
     require_settings_capability();
     check_admin_referer( 'aznet_theme_reset_settings' );
+    danger_zone_require_unlocked( 'reset' );
     if ( '1' !== (string) ( $_POST['confirm_reset'] ?? '' ) ) {
         wp_die( esc_html__( 'Yêu cầu đặt lại chưa được xác nhận.', 'aznet-theme' ) );
     }
     set_theme_mod( 'aznet_theme_settings', settings_defaults() );
+    danger_zone_complete_action( 'reset' );
     wp_safe_redirect( add_query_arg( [ 'page' => 'aznet-theme', 'reset' => '1' ], admin_url( 'admin.php' ) ) );
     exit;
 }
