@@ -35,7 +35,16 @@ if (str_contains($center, 'value="aznet_theme_reset_settings"') || str_contains(
 foreach (['DISALLOW_FILE_MODS', 'switch_theme(', 'delete_theme(', "update_option( 'show_on_front'", "update_option( 'page_on_front'"] as $forbidden) {
     if (str_contains($zone, $forbidden)) fail_d050('Theme must not take over site-level policy: ' . $forbidden);
 }
-if (!str_contains($zone, 'CHƯA XÁC MINH') && !str_contains($zone, 'Chưa xác minh')) {
-    fail_d050('without real site guard, screen must warn site-level policy is unverified');
+// D-050C moved the actual Site Guard absence notice to an optional public
+// projection consumer; retain the original fail-soft requirement at the
+// composed UI boundary instead of pinning text inside danger-zone.php.
+$consumer = @file_get_contents($root . '/inc/admin/site-guard-consumer.php');
+if (!is_string($consumer)
+    || !str_contains($bootstrap, "require_once __DIR__ . '/site-guard-consumer.php';")
+    || !str_contains($zone, 'render_site_guard_admin_controls();')
+    || !str_contains($consumer, 'CHƯA XÁC MINH')
+    || !str_contains($consumer, "apply_filters( 'aznet_site_guard/v1/admin_projection', null )")
+) {
+    fail_d050('without real site guard the composed Theme Danger Zone must warn and fail soft');
 }
 echo "PASS: D-050 privileged UI, direct POST boundaries, no false site-lock or WordPress ownership takeover\n";
