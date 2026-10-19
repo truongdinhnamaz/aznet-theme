@@ -200,6 +200,28 @@ foreach ([
      }
  }
 
+// Owner-approved v1.3.90 remains a strict 1.3.89 -> 1.3.90 metadata-only promotion.
+$start90 = strrpos($workflow, '            1.3.90)');
+$end90 = false === $start90 ? false : strpos($workflow, '            *)', $start90);
+if (false === $start90 || false === $end90) {
+    fwrite(STDERR, "FAIL: X6 1.3.90 acceptance branch unavailable\n");
+    exit(1);
+}
+$promotion90 = substr($workflow, $start90, $end90 - $start90);
+foreach ([
+    '-Version: 1.3.89',
+    '+Version: 1.3.90',
+    "-    define( 'AZNET_THEME_VERSION', '1.3.89' );",
+    "+    define( 'AZNET_THEME_VERSION', '1.3.90' );",
+    'grep -Fxc -- "$expected"',
+    'metadata_changes',
+] as $marker) {
+    if (! str_contains($promotion90, $marker)) {
+        fwrite(STDERR, "FAIL: X6 1.3.90 strict metadata promotion missing: {$marker}\n");
+        exit(1);
+    }
+}
+
 foreach ($required as $marker) {
     if (! str_contains($workflow, $marker)) {
         fwrite(STDERR, "FAIL: X6 promotion-aware workflow missing marker: {$marker}\n");
