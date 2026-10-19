@@ -1,0 +1,47 @@
+name: D049 Production Readonly Browser Acceptance
+
+on:
+  push:
+    branches:
+      - work/d049-production-readonly-l4-20261019
+    paths:
+      - tests/browser/d049-production-readonly-l4.mjs
+      - .github/workflows/d049-production-readonly-l4.yml
+  pull_request:
+    branches: [main]
+    paths:
+      - tests/browser/d049-production-readonly-l4.mjs
+      - .github/workflows/d049-production-readonly-l4.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  production-browser-readonly:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - name: Checkout test-only candidate
+        uses: actions/checkout@v4
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+      - name: Inspect public production only
+        env:
+          AZNET_PRODUCTION_BASE_URL: https://minhnguyen.vn
+          AZNET_PRODUCTION_QA_OUT: /tmp/d049-production-l4
+        run: node tests/browser/d049-production-readonly-l4.mjs
+      - name: Retain screenshots, geometry and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: d049-production-readonly-browser-screenshots
+          path: /tmp/d049-production-l4
+          if-no-files-found: warn
