@@ -9,6 +9,7 @@ on:
       - '.github/workflows/industrial01-pilot-runtime.yml'
       - 'tests/browser/industrial01-pilot-l4.mjs'
       - 'tests/browser/core-vertical-catalog-l4.mjs'
+      - 'tests/browser/r3-nav-only-header-l4.mjs'
       - 'tests/offline/d049-rail-header-hero-visual-parity-contract.php'
       - 'template-parts/header/site-header.php'
       - 'assets/css/components/catalog-navigation.css'
@@ -318,12 +319,29 @@ jobs:
           ' --path=/tmp/wp --allow-root
           node tests/browser/core-vertical-catalog-l4.mjs
 
+      - name: Verify opt-in navigation-only sticky Header in real WordPress
+        env:
+          INDUSTRIAL01_BASE_URL: http://127.0.0.1:8080
+          INDUSTRIAL01_OUT_DIR: /tmp/industrial01-pilot
+        run: |
+          set -euo pipefail
+          wp eval '
+            $settings = get_theme_mod( "aznet_theme_settings", [] );
+            $settings = is_array( $settings ) ? $settings : [];
+            $settings["header_sticky"] = "nav-only";
+            set_theme_mod( "aznet_theme_settings", $settings );
+          ' --path=/tmp/wp --allow-root
+          curl -fsS http://127.0.0.1:8080/ >/tmp/industrial01-pilot/nav-only-smoke.html
+          grep -F 'aznet-theme-site-header--nav-only' /tmp/industrial01-pilot/nav-only-smoke.html
+          node tests/browser/r3-nav-only-header-l4.mjs
+
       - name: Verify OFF rollback without deleting WordPress menu
         run: |
           set -euo pipefail
           wp eval '
             $s = get_theme_mod("aznet_theme_settings", []);
             $s["header_catalog_mode"] = "off";
+            $s["header_sticky"] = "sticky";
             set_theme_mod("aznet_theme_settings", $s);
             $locations = get_theme_mod("nav_menu_locations", []);
             if (empty($locations["product-catalog"])) { throw new RuntimeException("Menu must survive Theme option OFF"); }
