@@ -176,9 +176,9 @@
     }
     .aznet-theme-site-header--catalog .aznet-theme-catalog-navigation--header summary {
         min-height: 3.25rem;
-        height: 3.25rem;
         box-sizing: border-box;
-        padding: .75rem 1rem;
+        padding: .5rem 1rem;
+        line-height: 1.2;
     }
     .aznet-theme-site-header--catalog-home-rail .aznet-theme-site-header__catalog-rail-label {
         display: flex;
