@@ -982,3 +982,195 @@ body.aznet-theme-preset--industrial-01 .aznet-theme-industrial01-solution-contac
         transition: none;
     }
 }
+
+
+/*
+ * Industrial 01 premium Professional Footer.
+ * Rich columns, branding and URLs remain WordPress-owned. The Theme only
+ * controls presentation. Do not replace native text/list items with inferred
+ * routes, nor guess or hard-code any social profiles here.
+ */
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional {
+    --aznet-theme-footer-muted: #c4d4e0;
+    --aznet-theme-footer-border: rgba(214, 231, 241, .18);
+    --aznet-theme-footer-accent: #f5ca72;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-top: 3px solid #f5ca72;
+    background: linear-gradient(145deg, #193a51 0%, #102b40 46%, #0d2335 100%);
+    color: #eaf2f7;
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional::before {
+    position: absolute;
+    inset: 0 0 auto auto;
+    width: min(32rem, 42%);
+    height: min(26rem, 70%);
+    background-image: linear-gradient(rgba(186, 211, 226, .08) 1px, transparent 1px), linear-gradient(90deg, rgba(186, 211, 226, .08) 1px, transparent 1px);
+    background-size: 44px 44px;
+    content: "";
+    opacity: .5;
+    pointer-events: none;
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__inner {
+    position: relative;
+    z-index: 1;
+    width: min(calc(100% - (2 * var(--aznet-theme-gutter))), 88rem);
+    max-width: 88rem;
+    padding-top: clamp(3rem, 5.8vw, 5rem);
+    padding-bottom: clamp(1.5rem, 2.5vw, 2.15rem);
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__main {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr));
+    align-items: start;
+    gap: clamp(1.45rem, 2.8vw, 3.3rem);
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__column-content {
+    min-width: 0;
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__identity {
+    max-width: none;
+    margin-bottom: clamp(1.25rem, 2vw, 1.8rem);
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__brand {
+    display: flex;
+    max-width: 100%;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__logo {
+    display: block;
+    width: auto;
+    max-width: 6rem;
+    max-height: 6rem;
+    height: auto;
+    flex: 0 1 auto;
+    object-fit: contain;
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__brand-title {
+    display: block;
+    min-width: 0;
+    color: #ffffff;
+    font-family: var(--aznet-theme-font-family-heading);
+    font-size: clamp(1.1rem, 1.8vw, 1.55rem);
+    font-weight: var(--aznet-theme-font-weight-bold);
+    letter-spacing: -.025em;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__column-content--1 .aznet-theme-site-footer__rich-content {
+    max-width: 37ch;
+    color: #c4d4e0;
+    font-size: .93rem;
+    line-height: 1.9;
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__column-content--1 .aznet-theme-site-footer__rich-content strong {
+    color: #f2f6f9;
+    font-weight: var(--aznet-theme-font-weight-semibold);
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__rich-content a {
+    color: #ddebf3;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    text-decoration: none;
+    transition: color .2s ease;
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__rich-content a:hover {
+    color: #f5ca72;
+    text-decoration: underline;
+    text-underline-offset: .2em;
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__column-content:not(:first-child) {
+    min-width: 0;
+    padding-inline-start: clamp(.75rem, 1.3vw, 1.35rem);
+    border-inline-start: 1px solid rgba(214, 231, 241, .16);
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__column-content:not(:first-child) .aznet-theme-site-footer__rich-content > p:first-child > strong {
+    display: block;
+    color: #ffffff;
+    font-size: .85rem;
+    font-weight: var(--aznet-theme-font-weight-bold);
+    letter-spacing: .095em;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__column-content:not(:first-child) .aznet-theme-site-footer__rich-content > p:first-child::after {
+    display: block;
+    width: 2.5rem;
+    height: 2px;
+    margin-top: .82rem;
+    background: #f5ca72;
+    content: "";
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__column-content:not(:first-child) .aznet-theme-site-footer__rich-content ul {
+    display: grid;
+    gap: .78rem;
+    margin: 1.15rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__column-content:not(:first-child) .aznet-theme-site-footer__rich-content li {
+    min-width: 0;
+    margin: 0;
+    color: #c4d4e0;
+    font-size: .92rem;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__bottom {
+    margin-top: clamp(2.7rem, 4.6vw, 4.5rem);
+    padding-top: clamp(1.05rem, 1.6vw, 1.4rem);
+    border-top: 1px solid rgba(214, 231, 241, .23);
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__copyright {
+    color: #afc5d3;
+    font-size: .85rem;
+}
+body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional a:focus-visible {
+    outline: 2px solid #f5ca72;
+    outline-offset: 4px;
+}
+@media (max-width: 70rem) {
+    body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__main {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: clamp(2rem, 4vw, 3rem);
+    }
+    body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__column-content:not(:first-child) {
+        padding-inline-start: 0;
+        border-inline-start: 0;
+    }
+}
+@media (max-width: 48rem) {
+    body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__inner {
+        width: calc(100% - (2 * var(--aznet-theme-gutter-mobile)));
+        padding-top: 3rem;
+    }
+    body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__main {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1.8rem;
+    }
+    body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__column-content:not(:first-child) {
+        padding-top: 1.55rem;
+        border-top: 1px solid rgba(214, 231, 241, .18);
+    }
+    body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__brand {
+        gap: .85rem;
+    }
+    body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__logo {
+        max-width: 5.35rem;
+        max-height: 5.35rem;
+    }
+    body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__column-content--1 .aznet-theme-site-footer__rich-content {
+        max-width: none;
+    }
+    body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__bottom {
+        margin-top: 2.25rem;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__rich-content a {
+        transition: none;
+    }
+}
