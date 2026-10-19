@@ -13,7 +13,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\footer_column_counts' ) ) {
 }
 
 function control_center_section(): string {
-    $allowed = [ 'overview', 'header', 'footer', 'homepage', 'hero-library', 'provisioning', 'commerce', 'system-health', 'danger-zone' ];
+    $allowed = [ 'overview', 'header', 'footer', 'homepage', 'hero-library', 'provisioning', 'commerce', 'system-health', 'support', 'danger-zone' ];
     $value = isset( $_GET['section'] ) ? sanitize_key( wp_unslash( $_GET['section'] ) ) : 'overview';
     if ( 'commerce' === $value && ! woo_available() ) { return 'overview'; }
     return in_array( $value, $allowed, true ) ? $value : 'overview';
@@ -247,9 +247,9 @@ function render_control_center(): void {
     if ( 'danger-zone' === $section && ! danger_zone_is_authorized() ) {
         wp_die( esc_html__( 'Bạn không có quyền vào khu vực nguy hiểm.', 'aznet-theme' ) );
     }
-    $tabs = [ 'overview' => 'Tổng quan', 'header' => 'Header', 'footer' => 'Footer', 'homepage' => 'Trang chủ', 'provisioning' => 'Thiết lập nhanh', 'system-health' => 'System Health' ];
+    $tabs = [ 'overview' => 'Tổng quan', 'header' => 'Header', 'footer' => 'Footer', 'homepage' => 'Trang chủ', 'provisioning' => 'Thiết lập nhanh', 'system-health' => 'System Health', 'support' => 'Support' ];
     if ( woo_available() ) {
-        $tabs = [ 'overview' => 'Tổng quan', 'header' => 'Header', 'footer' => 'Footer', 'homepage' => 'Trang chủ', 'provisioning' => 'Thiết lập nhanh', 'commerce' => 'Commerce', 'system-health' => 'System Health' ];
+        $tabs = [ 'overview' => 'Tổng quan', 'header' => 'Header', 'footer' => 'Footer', 'homepage' => 'Trang chủ', 'provisioning' => 'Thiết lập nhanh', 'commerce' => 'Commerce', 'system-health' => 'System Health', 'support' => 'Support' ];
     }
     $center_class = 'wrap aznet-theme-control-center' . ( 'homepage' === $section ? ' aznet-theme-control-center--homepage' : '' );
     echo '<div class="' . esc_attr( $center_class ) . '"' . ( 'homepage' === $section ? ' style="max-width:none;width:auto"' : '' ) . '><h1>AZnet Theme</h1><nav class="nav-tab-wrapper">';
@@ -281,6 +281,13 @@ function render_control_center(): void {
         echo '<div class="aznet-theme-panel"><h2>Project Handoff — Hồ sơ bàn giao dự án</h2><p>Tải hồ sơ JSON để tiếp tục phát triển AZnet Theme trong cuộc trò chuyện mới. Đây không phải bản sao lưu website; cần đối chiếu lại GitHub và tài liệu nguồn.</p>';
         echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="aznet_theme_export_handoff">';
         wp_nonce_field( 'aznet_theme_export_handoff' ); submit_button( 'Xuất hồ sơ bàn giao JSON', 'secondary', 'submit', false ); echo '</form></div>';
+    } elseif ( 'support' === $section ) {
+        echo '<div class="aznet-theme-panel aznet-theme-support">';
+        echo '<h2>' . esc_html__( 'Support', 'aznet-theme' ) . '</h2>';
+        echo '<p>' . esc_html__( 'Kiểm tra tình trạng AZnet Theme và truy cập các công cụ hỗ trợ. Khu vực nguy hiểm chỉ dành cho tài khoản có quyền đặc biệt.', 'aznet-theme' ) . '</p>';
+        $health_url = add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'system-health' ], admin_url( 'admin.php' ) );
+        echo '<p><a class="button button-secondary" href="' . esc_url( $health_url ) . '">' . esc_html__( 'Mở System Health & Support Snapshot', 'aznet-theme' ) . '</a></p>';
+        echo '</div>';
         render_danger_zone_entry_link();
     } elseif ( 'footer' === $section ) {
         render_settings_form( $section );
