@@ -177,11 +177,8 @@ function render_danger_zone_screen(): void {
     echo '<p><strong>' . esc_html__( 'Chỉ dành cho quản trị viên được cấp quyền đặc biệt.', 'aznet-theme' ) . '</strong> ';
     echo esc_html__( 'Mọi thay đổi tại đây có thể làm sai giao diện; cần bản sao lưu và kế hoạch khôi phục trước khi thực hiện.', 'aznet-theme' ) . '</p>';
 
-    echo '<div class="notice notice-warning inline" role="status"><p><strong>';
-    echo esc_html__( 'CHƯA XÁC MINH khóa cấp website.', 'aznet-theme' );
-    echo '</strong> ';
-    echo esc_html__( 'AZnet Theme không thể tự ngăn cài hoặc đổi Theme WordPress, thay trang chủ, hay xóa Trang chủ sau khi Theme bị thay thế. Những thao tác đó cần lớp bảo vệ site-owned độc lập; đây không phải công tắc bảo vệ website.', 'aznet-theme' );
-    echo '</p></div>';
+    render_site_guard_admin_controls();
+
 
     echo '<h3>' . esc_html__( 'Các thao tác thuộc AZnet Theme', 'aznet-theme' ) . '</h3>';
     if ( null === $state ) {
