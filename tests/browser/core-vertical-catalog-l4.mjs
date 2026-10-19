@@ -45,7 +45,31 @@ try {
     const aside = page.locator('.aznet-theme-industrial01-hero__catalog');
     await assert(await aside.locator('li').count() >= 19, name + ': WordPress menu item or children lost');
     const desktop = viewport.width > 1100;
+    const railHeaderLabel = page.locator('.aznet-theme-site-header__catalog-rail-label');
+    await assert(await railHeaderLabel.count() === 1, name + ': Header must compose exactly one opt-in category label');
     if (desktop) {
+      await assert(await railHeaderLabel.isVisible(), name + ': desktop Header category label must be visible');
+      await assert(!(await aside.locator('.aznet-theme-industrial01-hero__catalog-heading').isVisible()), name + ': Hero card must not repeat the visible Header category title');
+      const railGeometry = await page.evaluate(() => {
+        const label = document.querySelector('.aznet-theme-site-header__catalog-rail-label')?.getBoundingClientRect();
+        const aside = document.querySelector('.aznet-theme-industrial01-hero__catalog')?.getBoundingClientRect();
+        const navigation = document.querySelector('.aznet-theme-site-header__nav')?.getBoundingClientRect();
+        const content = document.querySelector('.aznet-theme-industrial01-hero__content')?.getBoundingClientRect();
+        if (!label || !aside || !navigation || !content) return null;
+        return {
+          offsetLeft: Math.abs(label.left - aside.left),
+          offsetRight: Math.abs(label.right - aside.right),
+          categoryGap: aside.top - label.bottom,
+          navOffset: navigation.left - label.right,
+          contentOffset: content.left - aside.right,
+        };
+      });
+      await assert(railGeometry && railGeometry.offsetLeft <= 3 && railGeometry.offsetRight <= 3,
+        name + ': category Header band and Hero rail must share column edges ' + JSON.stringify(railGeometry));
+      await assert(railGeometry && railGeometry.categoryGap >= -2 && railGeometry.categoryGap <= 8,
+        name + ': category header must sit directly above Hero rail ' + JSON.stringify(railGeometry));
+      await assert(railGeometry && railGeometry.navOffset >= -2 && railGeometry.contentOffset > 0,
+        name + ': primary navigation and Hero text must stay alongside category column ' + JSON.stringify(railGeometry));
       const group = aside.locator('li.menu-item-has-children').first();
       const nested = group.locator(':scope > ul.sub-menu');
       const submenuToggle = group.locator(':scope > button.aznet-theme-catalog-navigation__submenu-toggle');
@@ -71,6 +95,7 @@ try {
       await aside.evaluate((el) => { el.scrollTop = el.scrollHeight; });
       await assert(await aside.locator('a[href]').count() >= 19, name + ': long scrolling catalog links missing');
     } else {
+      await assert(!(await railHeaderLabel.isVisible()), name + ': desktop category label must hide on mobile');
       await assert(!(await aside.isVisible()), name + ': desktop sidebar must hide at tablet/mobile width');
       const trigger = page.locator('[data-aznet-theme-nav-trigger]');
       await trigger.click();
