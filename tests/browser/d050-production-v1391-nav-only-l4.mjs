@@ -11,7 +11,22 @@ if (base !== 'https://minhnguyen.vn') throw Error('Only the approved public Minh
 const out = process.env.AZNET_PRODUCTION_QA_OUT || '/tmp/d050-production-v1391-l4';
 fs.mkdirSync(out, {recursive:true});
 const browser = await chromium.launch({headless:true});
-const results = [], failures = [], baselines = new Map();
+const results = [], failures = [], baselines = new Map(), transientDnsRetries = [];
+async function gotoProduction(page, url, name) {
+  // Only a transient DNS resolution error can be retried. Never silently
+  // bypass HTTP, DOM, ownership, visual, or accessibility test failures.
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      return await page.goto(url, {waitUntil:'domcontentloaded',timeout:55000});
+    } catch (error) {
+      if (!String(error.message).includes('net::ERR_NAME_NOT_RESOLVED') || attempt === 3) throw error;
+      transientDnsRetries.push({name, attempt, type:'ERR_NAME_NOT_RESOLVED'});
+      console.warn('TRANSIENT DNS RETRY '+name+' attempt '+attempt+'/3 (no assertion bypass)');
+      await page.waitForTimeout(1000 * attempt);
+    }
+  }
+  throw Error('Unexpected exhaustion of bounded DNS retry');
+}
 function assert(ok, id, data='') {
   if (!ok) throw Error(id + (data ? ' :: ' + JSON.stringify(data) : ''));
 }
@@ -50,7 +65,7 @@ try {
       page.on('pageerror', e => jsErrors.push(e.message));
       try {
         const route = pageType === 'home' ? '/' : '/giai-phap/';
-        const response = await page.goto(base+route,{waitUntil:'domcontentloaded',timeout:55000});
+        const response = await gotoProduction(page,base+route,name);
         await page.locator('header.aznet-theme-site-header').waitFor({state:'attached',timeout:15000});
         await page.waitForTimeout(450);
         assert(response?.status()===200,name+' HTTP '+response?.status());
@@ -160,13 +175,13 @@ try {
   // Native no-JavaScript navigation stays accessible even if enhancement fails.
   const noJs=await browser.newContext({viewport:{width:390,height:844},javaScriptEnabled:false});
   const noJsPage=await noJs.newPage();
-  await noJsPage.goto(base+'/',{waitUntil:'domcontentloaded'});
+  await gotoProduction(noJsPage,base+'/','no-js-home');
   assert(await noJsPage.locator('[data-aznet-theme-nav-panel]').isVisible(),'no-JS menu disclosure not available');
   assert(await noJsPage.locator('.aznet-theme-catalog-navigation--mobile li').count()>=19,'no-JS native catalog lost');
   await noJs.close();
 } finally {
   await browser.close();
-  fs.writeFileSync(path.join(out,'results.json'),JSON.stringify({base,results,failures},null,2));
+  fs.writeFileSync(path.join(out,'results.json'),JSON.stringify({base,results,failures,transientDnsRetries},null,2));
 }
 if(failures.length) throw Error('nav-only Header L4 failed '+failures.length+'/12 cases');
 console.log('PASS: production v1.3.91 nav-only Header L4 12/12 + native no-JS fallback (read-only)');
