@@ -21,8 +21,8 @@ if (!str_contains($center, "if ( 'danger-zone' === \$section && ! danger_zone_is
 if (!str_contains($center, "in_array( \$section, [ 'support', 'system-health' ], true ) && ! danger_zone_is_authorized()")) {
     fail_operator_boundary('developer Support and System Health must be server-denied to unprivileged administrators');
 }
-$navStart = strpos($center, '\$tabs = [ \'overview\'');
-$navEnd = strpos($center, '\$center_class =', (int) $navStart);
+$navStart = strpos($center, '$tabs = [ \'overview\'');
+$navEnd = strpos($center, '$center_class =', (int) $navStart);
 if (false === $navStart || false === $navEnd || $navStart >= $navEnd) {
     fail_operator_boundary('cannot locate Theme navigation assembly');
 }
