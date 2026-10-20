@@ -31,4 +31,16 @@ foreach ([
 ] as $marker) {
     if (!str_contains($block, $marker)) $fail('v1.3.92 promotion boundary missing ' . $marker);
 }
+$regexStart = strpos($block, 'grep -Ev');
+$regexEnd = false === $regexStart ? false : strpos($block, '|| true)', $regexStart);
+if (false === $regexStart || false === $regexEnd) {
+    $fail('X6 v1.3.92 regex allowlist missing');
+}
+$regexNormalized = str_replace(chr(92), '', substr($block, $regexStart, $regexEnd - $regexStart));
+if (!str_contains($regexNormalized, '1.3.91') ||
+    !str_contains($regexNormalized, '1.3.92') ||
+    str_contains($regexNormalized, '1.3.90')) {
+    $fail('X6 regex allowlist still authorizes obsolete 1.3.90-to-1.3.91 metadata');
+}
+
 echo "PASS: X6 v1.3.92 single-step reviewed technical release candidate\n";
