@@ -158,3 +158,11 @@ AZnet Theme được phép cung cấp **một màn hình quản trị nâng cao 
 **Cấp quyền:** không đồng nhất mọi Administrator đơn site với quản trị đặc quyền. Theme-only danger operations yêu cầu `manage_options` cộng với quyền cá nhân cấp riêng `aznet_theme_manage_danger_zone` ở single-site, hoặc Super Admin ở multisite. Không tự cấp quyền này cho tất cả Administrator khi kích hoạt/cập nhật Theme.
 
 Khi lớp bảo vệ cấp site chưa được kết nối/xác minh, Theme phải nói rõ **CHƯA CÓ KHÓA CẤP WEBSITE** và không hiển thị trạng thái giả “đã khóa”. Theme switching, core/plugin/theme update, content ownership và khả năng rollback được bảo toàn.
+
+## 11. D-050 — Phân tách quản trị viên khách hàng và người vận hành Theme (Accepted 20/10/2026)
+
+- **Customer/site Administrator:** là chủ thể sử dụng website do AZnet triển khai. Họ tiếp tục có các quyền WordPress vốn được cấp và được dùng các thiết lập trình bày thông thường (Header, Footer, Trang chủ, các preset tương thích). Vai trò Administrator WordPress **không tự động** đồng nghĩa với quyền vận hành hoặc nhìn thấy công cụ nội bộ của nhà phát triển AZnet Theme.
+- **AZnet Theme operator/developer:** là cá nhân được cấp riêng quyền `aznet_theme_manage_danger_zone` cộng với `manage_options` trên single-site (multisite theo Super Admin boundary đã Accepted). Họ mới được thấy và truy cập Support nội bộ, System Health/Support Snapshot, Project Handoff và Danger Zone. Phải kiểm soát cả server-side URL/POST, không chỉ ẩn menu bằng CSS. Không hard-code username hay cấp capability mặc định cho toàn bộ role Administrator.
+- Việc giới hạn giao diện Theme **không thu hồi** quyền Administrator native của WordPress và **không thay thế** Site Guard độc lập cần thiết để bảo vệ cài/đổi/xóa Theme, nội dung và các hành động site-level. Không đưa chính sách WordPress vào Theme.
+
+Chi tiết vị trí menu, QA và non-regression do AZT-04 mục D-050 Customer/Operator separation quản lý.
