@@ -424,6 +424,7 @@ async function verifySystemHealth(page) {
 async function verifySupport(page, viewportName) {
   await gotoCenter(page);
   if (await page.locator('.aznet-theme-danger-zone-entry').count()) throw new Error('privileged Danger entry must not remain on Overview');
+  if (await page.getByText('Project Handoff', { exact: false }).count()) throw new Error('developer Handoff must not remain on Overview');
   const tab = page.locator('.aznet-theme-control-center .nav-tab', { hasText: 'Support' });
   if (await tab.count() !== 1) throw new Error('Support tab missing from Theme navigation');
   await tab.click();
@@ -433,6 +434,8 @@ async function verifySupport(page, viewportName) {
   if (await page.locator('.aznet-theme-support a[href*="section=system-health"]').count() !== 1) throw new Error('Support must link to existing System Health');
   if (await page.locator('.aznet-theme-danger-zone-entry').count() !== 1) throw new Error('privileged operator must see exactly one Danger Zone entry in Support');
   if (await page.locator('.aznet-theme-danger-zone-entry a[href*="section=danger-zone"]').count() !== 1) throw new Error('Support must retain the exact Theme Danger Zone route');
+  if (await page.locator('.aznet-theme-support').locator('a[href*="section=system-health"]').count() !== 1) throw new Error('operator diagnostics link missing');
+  if (await page.locator('input[name="action"][value="aznet_theme_export_handoff"]').count() !== 1) throw new Error('developer Handoff must remain available only in operator Support');
   return await checkLayoutAndA11y(page, viewportName + '-support-' + (expectWoo ? 'woo' : 'clean'));
 }
 
@@ -468,13 +471,20 @@ try {
   if (await restrictedPage.locator('input[name="action"][value="aznet_theme_reset_settings"]').count()) {
     throw new Error('ordinary Administrator must not see reset on overview');
   }
-  await gotoCenter(restrictedPage, 'support');
-  if (await restrictedPage.locator('.aznet-theme-support').count() !== 1) throw new Error('ordinary Administrator must retain safe Support access');
-  if (await restrictedPage.locator('.aznet-theme-control-center .nav-tab', { hasText: 'Support' }).count() !== 1) throw new Error('ordinary Administrator Support tab missing');
-  if (await restrictedPage.locator('.aznet-theme-danger-zone-entry').count()) throw new Error('ordinary Administrator must not discover privileged Danger Zone entry');
-  await restrictedPage.goto(baseUrl + '/wp-admin/admin.php?page=aznet-theme&section=danger-zone', { waitUntil: 'domcontentloaded' });
-  if (!(await restrictedPage.locator('body').innerText()).includes('Bạn không có quyền')) {
-    throw new Error('ordinary Administrator can bypass privileged Danger Zone deep link');
+  for (const privateTab of ['Support', 'System Health']) {
+    if (await restrictedPage.locator('.aznet-theme-control-center .nav-tab', { hasText: privateTab }).count()) {
+      throw new Error('customer Administrator must not discover developer tab: ' + privateTab);
+    }
+  }
+  const customerOverview = await restrictedPage.locator('.aznet-theme-control-center').innerText();
+  if (customerOverview.includes('Project Handoff') || customerOverview.includes('Khu vực nguy hiểm') || customerOverview.includes('Support Snapshot')) {
+    throw new Error('customer Administrator Overview leaked developer-only tools');
+  }
+  for (const privateSection of ['support', 'system-health', 'danger-zone']) {
+    await restrictedPage.goto(baseUrl + '/wp-admin/admin.php?page=aznet-theme&section=' + privateSection, { waitUntil: 'domcontentloaded' });
+    if (!(await restrictedPage.locator('body').innerText()).includes('Bạn không có quyền')) {
+      throw new Error('customer Administrator bypassed developer deep-link gate: ' + privateSection);
+    }
   }
   await restrictedContext.close();
 
