@@ -30,6 +30,7 @@ function handoff_payload(): array {
 
 function handle_export_handoff(): void {
     require_settings_capability();
+    danger_zone_require_authorized();
     check_admin_referer( 'aznet_theme_export_handoff' );
     $json = wp_json_encode( handoff_payload(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
     if ( ! is_string( $json ) ) {
