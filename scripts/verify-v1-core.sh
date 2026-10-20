@@ -131,11 +131,26 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-release-closure-
 printf '%s\n' '==> X6 promotion-aware workflow ownership contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-promotion-workflow-boundary-contract.php
 
-printf '%s\n' '==> Strict v1.3.91 technical release-candidate contract (nonpublishing)'
-php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v1391-release-candidate-contract.php
+printf '%s\n' '==> Strict current-version technical release-candidate contract (nonpublishing)'
+RELEASE_VERSION=$(sed -n 's/^Version:[[:space:]]*//p' style.css | head -n 1)
+case "$RELEASE_VERSION" in
+  1.3.91)
+    php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v1391-release-candidate-contract.php
+    ;;
+  1.3.92)
+    php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v1392-release-candidate-contract.php
+    ;;
+  *)
+    echo "FAIL: unsupported Theme release contract version $RELEASE_VERSION" >&2
+    exit 1
+    ;;
+esac
 
-printf '%s\n' '==> Owner-approved v1.3.91 publication failsafe contract'
+printf '%s\n' '==> Preserve historical v1.3.91 publication failsafe contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/d050-v1391-publication-contract.php
+
+printf '%s\n' '==> Owner-approved v1.3.92 one-shot publication contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/d050-v1392-publication-contract.php
 
 printf '%s\n' '==> Y1 Page Experience contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-page-experience-contract.php
