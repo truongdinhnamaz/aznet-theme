@@ -10,7 +10,7 @@ foreach (['project-handoff.php','admin_post_aznet_theme_export_handoff','handle_
 foreach (['Project Handoff','aznet_theme_export_handoff','wp_nonce_field'] as $needle) {
  if (!str_contains($ui,$needle)) {fwrite(STDERR,"FAIL: missing handoff UI: {$needle}\n");exit(1);}
 }
-foreach (['require_settings_capability()','check_admin_referer(', 'wp_json_encode(', 'Content-Disposition:', 'handoff_schema_version', 'canonical_repository','revalidate_before_use','export_payload()'] as $needle) {
+foreach (['require_settings_capability()','danger_zone_require_authorized();','check_admin_referer(', 'wp_json_encode(', 'Content-Disposition:', 'handoff_schema_version', 'canonical_repository','revalidate_before_use','export_payload()'] as $needle) {
  if (!str_contains($export,$needle)) {fwrite(STDERR,"FAIL: missing safe export: {$needle}\n");exit(1);}
 }
 foreach (['set_theme_mod(', 'update_option(', 'get_posts(', 'get_post_meta('] as $forbidden) {

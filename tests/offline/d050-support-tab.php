@@ -21,8 +21,10 @@ if (!preg_match('/function control_center_section\(\): string\s*\{\s*\$allowed\s
     || !str_contains($allowed[1], "'support'")) {
     fail_d050_support('Support section missing from Theme route allowlist');
 }
-if (2 !== substr_count($center, "'support' => 'Support'")) {
-    fail_d050_support('Support tab must exist with and without WooCommerce');
+if (1 !== substr_count($center, "\$tabs['support'] = 'Support';")
+    || 1 !== substr_count($center, "\$tabs['system-health'] = 'System Health';")
+    || !str_contains($center, 'if ( danger_zone_is_authorized() ) {')) {
+    fail_d050_support('Support and System Health must appear under the operator gate for both WooCommerce modes');
 }
 $overview = strpos($center, "if ( 'overview' === \$section ) {");
 $support = strpos($center, "} elseif ( 'support' === \$section ) {");

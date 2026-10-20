@@ -71,6 +71,8 @@ jobs:
             --exclude='README.md' --exclude='aznet-preview.png' \
             ./ /tmp/wp-site/wp-content/themes/aznet-theme/
           wp theme activate aznet-theme --path=/tmp/wp-site --allow-root
+          # Only the designated disposable operator may inspect Theme diagnostics.
+          wp user add-cap admin aznet_theme_manage_danger_zone --path=/tmp/wp-site --allow-root
           wp plugin deactivate --all --path=/tmp/wp-site --allow-root || true
           test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-site --allow-root)"
           test "$(wp core version --path=/tmp/wp-site --allow-root)" = '6.9'

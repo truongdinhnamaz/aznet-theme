@@ -8,12 +8,15 @@ on:
       - 'inc/admin/danger-zone.php'
       - 'inc/admin/bootstrap.php'
       - 'inc/admin/control-center.php'
+      - 'inc/admin/project-handoff.php'
       - 'inc/admin/settings-actions.php'
       - 'inc/admin/settings-portability.php'
       - 'tests/offline/d050-danger-zone-policy.php'
       - 'tests/offline/d050-danger-zone-entrypoints.php'
       - 'tests/offline/d050-theme-only-entry.php'
       - 'tests/offline/d050-support-tab.php'
+      - 'tests/offline/d050-customer-operator-boundary.php'
+      - 'tests/offline/project-handoff-export-contract.php'
       - '.github/workflows/d050-danger-zone.yml'
 
 permissions:
@@ -33,12 +36,15 @@ jobs:
           php -l inc/admin/danger-zone.php
           php -l inc/admin/bootstrap.php
           php -l inc/admin/control-center.php
+          php -l inc/admin/project-handoff.php
           php -l inc/admin/settings-actions.php
           php -l inc/admin/settings-portability.php
           php -l tests/offline/d050-danger-zone-policy.php
           php -l tests/offline/d050-danger-zone-entrypoints.php
           php -l tests/offline/d050-theme-only-entry.php
           php -l tests/offline/d050-support-tab.php
+          php -l tests/offline/d050-customer-operator-boundary.php
+          php -l tests/offline/project-handoff-export-contract.php
       - name: Verify default-deny privileged policy and transient isolation
         run: php tests/offline/d050-danger-zone-policy.php
       - name: Verify direct POST and ownership boundaries
@@ -47,3 +53,7 @@ jobs:
         run: php tests/offline/d050-theme-only-entry.php
       - name: Verify dedicated Support navigation (RED-GREEN)
         run: php tests/offline/d050-support-tab.php
+      - name: Verify operator-only tools and customer admin split (RED-GREEN)
+        run: php tests/offline/d050-customer-operator-boundary.php
+      - name: Verify privileged handoff download contract
+        run: php tests/offline/project-handoff-export-contract.php
