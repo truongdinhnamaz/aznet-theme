@@ -16,6 +16,7 @@ on:
       - 'tests/offline/d050-theme-only-entry.php'
       - 'tests/offline/d050-support-tab.php'
       - 'tests/offline/d050-customer-operator-boundary.php'
+      - 'tests/offline/project-handoff-export-contract.php'
       - '.github/workflows/d050-danger-zone.yml'
 
 permissions:
@@ -43,6 +44,7 @@ jobs:
           php -l tests/offline/d050-theme-only-entry.php
           php -l tests/offline/d050-support-tab.php
           php -l tests/offline/d050-customer-operator-boundary.php
+          php -l tests/offline/project-handoff-export-contract.php
       - name: Verify default-deny privileged policy and transient isolation
         run: php tests/offline/d050-danger-zone-policy.php
       - name: Verify direct POST and ownership boundaries
@@ -53,3 +55,5 @@ jobs:
         run: php tests/offline/d050-support-tab.php
       - name: Verify operator-only tools and customer admin split (RED-GREEN)
         run: php tests/offline/d050-customer-operator-boundary.php
+      - name: Verify privileged handoff download contract
+        run: php tests/offline/project-handoff-export-contract.php
