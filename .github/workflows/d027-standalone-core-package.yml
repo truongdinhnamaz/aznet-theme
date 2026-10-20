@@ -185,6 +185,9 @@ jobs:
           wp theme install "$ZIP" --force --path=/tmp/wp-site --allow-root
           wp theme status aznet-theme --path=/tmp/wp-site --allow-root | grep -F 'Status: Active'
           test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-site --allow-root)"
+          # Diagnostic System Health is operator-only; this disposable fixture's named
+          # browser actor represents the AZnet Theme operator, not every Administrator.
+          wp user add-cap admin aznet_theme_manage_danger_zone --path=/tmp/wp-site --allow-root
 
           # The predecessor fixture intentionally retains the historical v1.1 blueprint.
           # After updating to the current candidate, add a WordPress-owned dedicated Hero
