@@ -48,8 +48,9 @@ foreach ($required as $needle) {
         $fail("missing fail-closed release checkpoint: {$needle}");
     }
 }
-if (!preg_match("/EXPECTED_PACKAGE_SHA='[a-f0-9]{64}'/", $workflow)) {
-    $fail('reviewed deterministic candidate ZIP SHA-256 not pinned');
+if (!preg_match("/EXPECTED_PACKAGE_SHA='([a-f0-9]{64})'/", $workflow, $shaMatch)
+    || $shaMatch[1] === str_repeat('0', 64)) {
+    $fail('nonzero reviewed deterministic candidate ZIP SHA-256 not pinned');
 }
 foreach (['wp theme install', 'wp theme update', 'minhnguyen.vn/wp-admin', 'remquocanh.vn/wp-admin', 'lstamduchn.vn/wp-admin', 'gh release create v1.3.91'] as $forbidden) {
     if (str_contains($workflow, $forbidden)) {
