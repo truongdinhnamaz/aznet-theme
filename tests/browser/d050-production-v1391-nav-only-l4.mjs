@@ -11,17 +11,18 @@ if (base !== 'https://minhnguyen.vn') throw Error('Only the approved public Minh
 const out = process.env.AZNET_PRODUCTION_QA_OUT || '/tmp/d050-production-v1391-l4';
 fs.mkdirSync(out, {recursive:true});
 const browser = await chromium.launch({headless:true});
-const results = [], failures = [], baselines = new Map(), transientDnsRetries = [];
+const results = [], failures = [], baselines = new Map(), transientNetworkRetries = [];
 async function gotoProduction(page, url, name) {
-  // Only a transient DNS resolution error can be retried. Never silently
+  // Only observed transient DNS/reset connection errors can be retried. Never silently
   // bypass HTTP, DOM, ownership, visual, or accessibility test failures.
   for (let attempt = 1; attempt <= 3; attempt++) {
     try {
       return await page.goto(url, {waitUntil:'domcontentloaded',timeout:55000});
     } catch (error) {
-      if (!String(error.message).includes('net::ERR_NAME_NOT_RESOLVED') || attempt === 3) throw error;
-      transientDnsRetries.push({name, attempt, type:'ERR_NAME_NOT_RESOLVED'});
-      console.warn('TRANSIENT DNS RETRY '+name+' attempt '+attempt+'/3 (no assertion bypass)');
+      const transient = /net::(ERR_NAME_NOT_RESOLVED|ERR_CONNECTION_RESET)/.exec(String(error.message));
+      if (!transient || attempt === 3) throw error;
+      transientNetworkRetries.push({name, attempt, type:transient[1]});
+      console.warn('TRANSIENT NETWORK RETRY '+name+' '+transient[1]+' attempt '+attempt+'/3 (no assertion bypass)');
       await page.waitForTimeout(1000 * attempt);
     }
   }
@@ -56,6 +57,12 @@ async function metrics(page) {
   });
 }
 try {
+  // Bounded read-only public GET warmup: hard failure if still unreachable.
+  const preflight = await browser.newContext({viewport:{width:1440,height:900}});
+  const preflightPage = await preflight.newPage();
+  const preflightResponse = await gotoProduction(preflightPage,base+'/','public-connectivity-preflight');
+  assert(preflightResponse?.status()===200,'preflight HTTP '+preflightResponse?.status());
+  await preflight.close();
   for (const width of [1440,1200,1101,1024,390,320]) {
     for (const pageType of ['home','inner']) {
       const name = pageType + '-' + width;
@@ -181,7 +188,7 @@ try {
   await noJs.close();
 } finally {
   await browser.close();
-  fs.writeFileSync(path.join(out,'results.json'),JSON.stringify({base,results,failures,transientDnsRetries},null,2));
+  fs.writeFileSync(path.join(out,'results.json'),JSON.stringify({base,results,failures,transientNetworkRetries},null,2));
 }
 if(failures.length) throw Error('nav-only Header L4 failed '+failures.length+'/12 cases');
 console.log('PASS: production v1.3.91 nav-only Header L4 12/12 + native no-JS fallback (read-only)');
