@@ -75,6 +75,35 @@ if (preg_match('/\.aznet-digital01__hero\\s+\\.wp-block-heading\\s*\\{[^}]*max-w
     fwrite(STDERR, "FAIL: Digital 01 Hero heading hard-width cap violates D-036 desktop natural wrapping.\\n");
     exit(1);
 }
+// Site-specific mobile Lighthouse accessibility regression: CTA eyebrow is
+// small foreground text and must meet WCAG AA 4.5:1 against the CTA surface.
+preg_match('/--d01-accent:\s*(#[0-9a-f]{6})/i', $homepageCss, $accentMatch);
+preg_match('/\.aznet-digital01__cta\s+\.aznet-digital01__eyebrow\s*\{\s*color:\s*(#[0-9a-f]{6})/i', $homepageCss, $eyebrowMatch);
+if (empty($accentMatch[1]) || empty($eyebrowMatch[1])) {
+    fwrite(STDERR, "FAIL: Digital 01 CTA eyebrow contrast tokens missing.\n");
+    exit(1);
+}
+$relativeLuminance = static function (string $hex): float {
+    $hex = ltrim($hex, '#');
+    $rgb = [
+        hexdec(substr($hex, 0, 2)) / 255.0,
+        hexdec(substr($hex, 2, 2)) / 255.0,
+        hexdec(substr($hex, 4, 2)) / 255.0,
+    ];
+    $linear = array_map(static fn (float $v): float =>
+        $v <= 0.04045 ? $v / 12.92 : (($v + 0.055) / 1.055) ** 2.4, $rgb);
+    return $linear[0] * 0.2126 + $linear[1] * 0.7152 + $linear[2] * 0.0722;
+};
+$ctaLuminance = $relativeLuminance($accentMatch[1]);
+$eyebrowLuminance = $relativeLuminance($eyebrowMatch[1]);
+$higher = max($ctaLuminance, $eyebrowLuminance);
+$lower = min($ctaLuminance, $eyebrowLuminance);
+$contrast = ($higher + 0.05) / ($lower + 0.05);
+if ($contrast < 4.5) {
+    fwrite(STDERR, sprintf("FAIL: Digital 01 CTA eyebrow contrast %.2f:1 is below WCAG AA 4.5:1.\n", $contrast));
+    exit(1);
+}
+
 foreach (['law-01', 'curtain-01', 'industrial-01'] as $retained) {
     if (! is_array(\AZnet\Theme\template_manifest($retained))) {
         fwrite(STDERR, "FAIL: previously accepted template missing: {$retained}.\n");
