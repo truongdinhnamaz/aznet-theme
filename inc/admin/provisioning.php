@@ -19,6 +19,7 @@ use function AZnet\Theme\provisioning_media_role_provenance;
 use function AZnet\Theme\homepage_preset;
 use function AZnet\Theme\template_manifests;
 use function AZnet\Theme\template_provisioning_blueprint_key;
+use function AZnet\Theme\template_manifest_for_homepage_preset;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
@@ -53,10 +54,17 @@ function provisioning_wizard_blueprint_choices(): array {
 
 /** Resolve a fail-soft provisioning wizard default from the active template recipe. */
 function provisioning_wizard_default_blueprint(): string {
+    $preset = homepage_preset();
     $active = template_provisioning_blueprint_key( homepage_preset() );
     $choices = provisioning_wizard_blueprint_choices();
     if ( null !== $active && array_key_exists( $active, $choices ) ) {
         return $active;
+    }
+    // An active presentation template does not imply that its WordPress-native
+    // provisioning recipe exists. Never suggest another industry's workflow.
+    // Keep the legacy first-blueprint default only for an unconfigured site.
+    if ( 'off' !== $preset ) {
+        return '';
     }
     return '' !== (string) array_key_first( $choices ) ? (string) array_key_first( $choices ) : '';
 }
@@ -275,6 +283,12 @@ function render_provisioning_wizard(): void {
     $step = isset( $_GET['step'] ) ? max( 1, min( 4, (int) $_GET['step'] ) ) : 1;
     $blueprint_choices = provisioning_wizard_blueprint_choices();
     $default_blueprint = provisioning_wizard_default_blueprint();
+    $current_preset = homepage_preset();
+    $current_manifest = template_manifest_for_homepage_preset( $current_preset );
+    $missing_recipe = '' === $default_blueprint && 'off' !== $current_preset;
+    $current_template_label = is_array( $current_manifest )
+        ? trim( (string) ( $current_manifest['name'] ?? $current_preset ) )
+        : $current_preset;
     $blueprint_key = isset( $_GET['blueprint'] ) ? sanitize_key( wp_unslash( $_GET['blueprint'] ) ) : $default_blueprint;
     if ( ! array_key_exists( $blueprint_key, $blueprint_choices ) ) { $blueprint_key = $default_blueprint; }
     $state = provisioning_discovery();
@@ -286,13 +300,22 @@ function render_provisioning_wizard(): void {
         echo '<p><strong>' . esc_html__( 'Chế độ đề xuất:', 'aznet-theme' ) . '</strong> <code>' . esc_html( provisioning_site_mode( $state ) ) . '</code></p>';
         echo '<p class="description">' . esc_html__( 'Bước kiểm tra này chỉ đọc dữ liệu và không thay đổi website.', 'aznet-theme' ) . '</p>';
         echo '<form method="get" action="' . esc_url( admin_url( 'admin.php' ) ) . '"><input type="hidden" name="page" value="aznet-theme"><input type="hidden" name="section" value="provisioning"><input type="hidden" name="step" value="2">';
-        echo '<p><label for="aznet-theme-provision-blueprint"><strong>' . esc_html__( 'Blueprint', 'aznet-theme' ) . '</strong></label><br><select id="aznet-theme-provision-blueprint" name="blueprint">';
+        echo '<p><label for="aznet-theme-provision-blueprint"><strong>' . esc_html__( 'Blueprint', 'aznet-theme' ) . '</strong></label><br><select id="aznet-theme-provision-blueprint" name="blueprint" required' . ( $missing_recipe ? ' aria-describedby="aznet-theme-provision-unavailable"' : '' ) . '>';
+        if ( $missing_recipe && '' === $blueprint_key ) {
+            echo '<option value="" disabled selected>' . esc_html( sprintf( __( '%s — chưa có blueprint Thiết lập nhanh', 'aznet-theme' ), $current_template_label ) ) . '</option>';
+        }
         foreach ( $blueprint_choices as $choice_key => $choice_label ) {
             echo '<option value="' . esc_attr( $choice_key ) . '" ' . selected( $blueprint_key, $choice_key, false ) . '>' . esc_html( $choice_label ) . '</option>';
         }
         echo '</select></p>';
+        if ( $missing_recipe ) {
+            echo '<div id="aznet-theme-provision-unavailable" class="notice notice-warning inline aznet-theme-provision-unavailable"><p><strong>' . esc_html__( 'Chưa có blueprint Thiết lập nhanh', 'aznet-theme' ) . '</strong> — ' . esc_html( sprintf( __( 'Mẫu trình bày %s chưa đăng ký quy trình thiết lập nội dung WordPress. Theme sẽ không tự chọn một blueprint ngành khác.', 'aznet-theme' ), $current_template_label ) ) . '</p><p>' . esc_html__( 'Bạn có thể chọn thủ công một blueprint đã hỗ trợ. Hãy xem kỹ các thay đổi được đề xuất trước khi xác nhận áp dụng.', 'aznet-theme' ) . '</p></div>';
+        }
         submit_button( __( 'Tiếp tục', 'aznet-theme' ), 'primary', 'submit', false );
         echo '</form>';
+    } elseif ( 2 === $step && ! is_array( $blueprint ) ) {
+        echo '<div class="notice notice-warning inline aznet-theme-provision-unavailable"><p>' . esc_html__( 'Chưa có blueprint Thiết lập nhanh hợp lệ để lập kế hoạch. Website chưa bị thay đổi.', 'aznet-theme' ) . '</p></div>';
+        echo '<p><a class="button" href="' . esc_url( provisioning_url( 1 ) ) . '">' . esc_html__( 'Quay lại kiểm tra', 'aznet-theme' ) . '</a></p>';
     } elseif ( 2 === $step && is_array( $blueprint ) ) {
         $mode = provisioning_site_mode( $state );
         $new_site = 'NEW_OR_MOSTLY_EMPTY' === $mode;
