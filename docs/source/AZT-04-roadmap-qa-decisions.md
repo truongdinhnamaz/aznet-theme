@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.13
+**Version:** v1.14
 **Status:** Working Source  
 **Date:** 22/10/2026
 
@@ -1025,3 +1025,15 @@ The owner explicitly approved v2 after reviewing the D-043 hard gate in Digital 
 - No transfer of native WordPress content/query, Woo commerce, RootProfile identity or ConvertFlow Journey semantics. No server-side page migration. PR #487 stays draft; `main`, GitHub Release and `aznet.vn` are untouched. Site-specific Page 2 legacy `[section]` migration, L5 provider-present and owner-approved merge/deploy remain independent gates.
 
 **Exact implementation start:** add fail-first v2 version/optional composition contract tests on PR #487 branch, then minimal Core registry upgrade + Digital 01 manifest version bump and retained regressions. Record fresh CI evidence and one next action without rewriting historical PASS.
+
+
+### D-052 — AZnet Digital 01 expedited site rollout, version-gate continuity — ACCEPTED — 22/10/2026
+
+Owner re-approved the AZnet Editorial Edition visual concept and explicitly requested expedited production adoption after confirming a hosting backup exists. Approval permits a **clean, scoped Theme release candidate and WordPress-native Page 2 content cutover**, with production verification and rollback if necessary; it does **not** authorize loss of unrelated B12 draft work, semantic/private provider storage access, automatic PR merge, or bypassing a failing CI release gate.
+
+- Canonical Digital 01 candidate `d129a1a` L1–L4 and V1 Core PASS; new patch release metadata `1.3.92 -> 1.3.93` requires a dedicated X6 exact-version gate, preserving historic v1.3.91/v1.3.92 cases and rejecting unapproved/extra metadata mutations. Initial strict v1 Core run `39684854348` correctly RED at `unsupported Theme release contract version 1.3.93`; subsequent validation must turn GREEN before live publication.
+- Previous WPVibe draft mixed Digital 01 with unpublished B12 Page 41978 content. B12 was preserved separately as GitHub branch `work/b12-page-41978-preserve-20261022@36fb19f`, without merge; the Theme draft was scrubbed of B12-specific PHP/stylesheet and the temporary `wpvibe_preview` Page 43506 fixture. The scoped candidate retains only Theme Core and Digital 01 presentation changes.
+- WordPress-owned Page 2 remains authoritative for homepage permalink and SEO metadata. A byte-for-byte rollback copy of its previously published raw `post_content` (14,789 characters, 9 `[section]` pairs) has been saved as unpublished WordPress Page 43513, in addition to the host backup confirmed by the owner. Separately authored native Digital 01 content remains unpublished WordPress Page 43506 until cutover. Do not duplicate SEO/domain state in the Theme.
+- Site cutover is contingent on fresh exact-head CI, version-aligned Theme package, unchanged WordPress Page 2 and current `page_on_front=2`, and reversible updates to the Theme-owned visual/Homepage preset plus WordPress-owned Page content. Verify PHP/Woo/RootProfile public pages, homepage metadata, native Query output, mobile responsiveness, and original Page 2 before/after integrity; rollback must restore the previous Theme and source Page body on failure.
+
+**Next at this accepted decision:** satisfy the new X6 v1.3.93 version-governance contract, re-run Core, confirm a clean deployment package, then execute the authorized production pilot with fresh site-specific checks. No runtime/integration PASS may be inferred from repository CI alone.
