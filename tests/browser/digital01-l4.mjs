@@ -47,6 +47,27 @@ async function audit(browser, key, viewport) {
     assert(ids.length === 0, `duplicate IDs: ${ids.join(',')}`);
     const widthOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     assert(widthOverflow <= 1, `horizontal overflow ${widthOverflow}px`);
+    // An outer overflow clip can hide severe offscreen layout while scrollWidth
+    // remains unchanged. Test each actual critical section and visible card.
+    const geometry = await page.evaluate(() => {
+      const vw = document.documentElement.clientWidth;
+      const hero = document.querySelector('.aznet-digital01__hero');
+      const heroBox = hero?.getBoundingClientRect();
+      const bad = [...document.querySelectorAll('.aznet-digital01 .aznet-digital01__section, .aznet-digital01 .aznet-digital01__card, .aznet-digital01 :is(h1,h2,h3)')]
+        .map(el => ({ label: el.className || el.tagName, rect: el.getBoundingClientRect() }))
+        .filter(({rect}) => rect.width > 0 && (rect.left < -1 || rect.right > vw + 1 || rect.right <= 0 || rect.left >= vw))
+        .slice(0, 12)
+        .map(({label,rect}) => ({label: String(label).slice(0,65), left: Math.round(rect.left), right: Math.round(rect.right), viewport:vw}));
+      return {
+        heroLeft: heroBox?.left ?? null,
+        heroRight: heroBox?.right ?? null,
+        viewport: vw,
+        bad,
+      };
+    });
+    assert(geometry.heroLeft !== null && Math.abs(geometry.heroLeft) <= 1 && Math.abs(geometry.heroRight - geometry.viewport) <= 1,
+      `D-035 full-width flush Hero failed: ${JSON.stringify(geometry)}`);
+    assert(geometry.bad.length === 0, `visible sections/cards clipped despite scrollWidth test: ${JSON.stringify(geometry.bad)}`);
     await page.locator('a[href="#aznet-digital01-services"]').focus();
     assert(await page.locator('a[href="#aznet-digital01-services"]').evaluate(e => document.activeElement === e), 'anchor keyboard focus failed');
     assert(await page.locator('#aznet-digital01-services').count() === 1, 'anchor target missing');
