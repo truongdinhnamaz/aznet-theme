@@ -551,6 +551,7 @@ function homepage_authoring_sections( string $preset ): array {
 /** Human label for one Homepage slot. */
 function homepage_authoring_label( string $slot ): string {
     return [
+        'content' => __( 'Nội dung trang chủ', 'aznet-theme' ),
         'hero' => __( 'Hero', 'aznet-theme' ),
         'services' => __( 'Dịch vụ', 'aznet-theme' ),
         'about' => __( 'Giới thiệu', 'aznet-theme' ),
@@ -568,6 +569,18 @@ function homepage_authoring_label( string $slot ): string {
 
 /** Resolve a human-readable source title and native edit URL. */
 function homepage_authoring_source_summary( string $preset, string $slot ): array {
+    $manifest = \AZnet\Theme\template_manifest_for_homepage_preset( $preset );
+    if ( 'content' === $slot && is_array( $manifest ) && 'native' === ( $manifest['homepage']['composition']['mode'] ?? null ) ) {
+        // Resolve through the shared effective model, never via a guessed Page/slug or a second store.
+        foreach ( homepage_effective_surface_map( $preset ) as $surface ) {
+            if ( 'front-page-content' !== ( $surface['key'] ?? '' ) ) { continue; }
+            $post = homepage_page_reference( (int) ( $surface['source_id'] ?? 0 ) );
+            if ( ! $post instanceof \WP_Post ) { break; }
+            $edit = get_edit_post_link( $post->ID, 'raw' );
+            return [ 'title' => get_the_title( $post ), 'edit' => is_string( $edit ) ? $edit : '', 'status' => 'READY' ];
+        }
+        return [ 'title' => __( 'Chưa chọn Trang chủ tĩnh trong WordPress', 'aznet-theme' ), 'edit' => '', 'status' => 'UNMAPPED' ];
+    }
     $descriptor = homepage_source_descriptor( $preset, $slot );
     if ( null === $descriptor ) { return [ 'title' => __( 'Chưa hỗ trợ', 'aznet-theme' ), 'edit' => '', 'status' => 'UNMAPPED' ]; }
     $type = (string) ( $descriptor['type'] ?? '' );
@@ -927,7 +940,12 @@ function render_homepage_authoring_console( string $preset ): void {
     $preset_label = trim( (string) ( $manifest['name'] ?? $preset ) );
     echo '<div class="aznet-theme-panel aznet-theme-homepage-authoring">';
     echo '<h2>' . esc_html( sprintf( __( 'Mẫu đang chỉnh: %s', 'aznet-theme' ), $preset_label ) ) . '</h2>';
+    $native_mode = 'native' === ( $manifest['homepage']['composition']['mode'] ?? null );
+    if ( $native_mode ) {
+        echo '<p class="description">' . esc_html__( 'Mẫu này hiển thị nguyên nội dung Trang chủ tĩnh thuộc WordPress. Sửa nội dung tại chính Page đang được WordPress chọn làm Trang chủ; chính sách Classic Editor hiện hành vẫn áp dụng.', 'aznet-theme' ) . '</p>';
+    } else {
     echo '<p class="description">' . esc_html__( 'Các section được xếp theo thứ tự frontend. Hero mở khu thiết kế riêng; các section còn lại chỉnh nội dung nguồn đã ánh xạ hoặc đổi nguồn khi cần.', 'aznet-theme' ) . '</p>';
+    }
     echo '<div class="aznet-theme-homepage-section-list" style="display:block;width:100%;max-width:none">';
     foreach ( homepage_authoring_sections( $preset ) as $slot ) {
         $summary = homepage_authoring_source_summary( $preset, $slot );
@@ -948,7 +966,13 @@ function render_homepage_authoring_console( string $preset ): void {
         $descriptor = homepage_source_descriptor( $preset, $slot );
         $source_type = is_array( $descriptor ) ? (string) ( $descriptor['type'] ?? '' ) : '';
         $source_value = homepage_source_value( $preset, $slot );
-        if ( 'hero' === $slot && homepage_hero_design_available( $preset ) ) {
+        if ( $native_mode && 'content' === $slot ) {
+            if ( is_string( $summary['edit'] ?? null ) && '' !== $summary['edit'] ) {
+                echo '<a class="button button-primary" href="' . esc_url( $summary['edit'] ) . '">' . esc_html__( 'Chỉnh sửa nội dung trang chủ', 'aznet-theme' ) . '</a>';
+            } else {
+                echo '<p class="description">' . esc_html__( 'Chọn một Page đã xuất bản làm Trang chủ tĩnh trong Cài đặt > Đọc của WordPress.', 'aznet-theme' ) . '</p>';
+            }
+        } elseif ( 'hero' === $slot && homepage_hero_design_available( $preset ) ) {
             $hero_library_url = add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'hero-library' ], admin_url( 'admin.php' ) );
             echo '<a class="button button-primary" href="' . esc_url( $hero_library_url ) . '">' . esc_html__( 'Thiết kế Hero', 'aznet-theme' ) . '</a>';
         } else {
