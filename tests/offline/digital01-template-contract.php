@@ -37,6 +37,11 @@ if (! is_array($manifest)
     fwrite(STDERR, "FAIL: Digital 01 contract or presentation IDs are invalid.\n");
     exit(1);
 }
+if ('native' !== ($manifest['homepage']['composition']['mode'] ?? null)
+    || isset($manifest['assets']['homepage']['composition'])) {
+    fwrite(STDERR, "FAIL: Digital 01 must declare native mode under Homepage, not assets.\\n");
+    exit(1);
+}
 if (['content'] !== ($manifest['homepage']['authoring']['sections'] ?? null)
     || true === ($manifest['homepage']['hero']['enabled'] ?? false)
     || [] !== ($manifest['provisioning'] ?? [])) {
