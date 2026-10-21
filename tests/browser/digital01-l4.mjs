@@ -53,6 +53,8 @@ async function audit(browser, key, viewport) {
       const vw = document.documentElement.clientWidth;
       const hero = document.querySelector('.aznet-digital01__hero');
       const heroBox = hero?.getBoundingClientRect();
+      const headlineBox = hero?.querySelector('h1')?.getBoundingClientRect();
+      const eyebrowBox = hero?.querySelector('.aznet-digital01__eyebrow')?.getBoundingClientRect();
       const bad = [...document.querySelectorAll('.aznet-digital01 .aznet-digital01__section, .aznet-digital01 .aznet-digital01__card, .aznet-digital01 :is(h1,h2,h3)')]
         .map(el => ({ label: el.className || el.tagName, rect: el.getBoundingClientRect() }))
         .filter(({rect}) => rect.width > 0 && (rect.left < -1 || rect.right > vw + 1 || rect.right <= 0 || rect.left >= vw))
@@ -61,6 +63,8 @@ async function audit(browser, key, viewport) {
       return {
         heroLeft: heroBox?.left ?? null,
         heroRight: heroBox?.right ?? null,
+        headlineLeft: headlineBox?.left ?? null,
+        eyebrowLeft: eyebrowBox?.left ?? null,
         viewport: vw,
         bad,
       };
@@ -68,6 +72,9 @@ async function audit(browser, key, viewport) {
     assert(geometry.heroLeft !== null && Math.abs(geometry.heroLeft) <= 1 && Math.abs(geometry.heroRight - geometry.viewport) <= 1,
       `D-035 full-width flush Hero failed: ${JSON.stringify(geometry)}`);
     assert(geometry.bad.length === 0, `visible sections/cards clipped despite scrollWidth test: ${JSON.stringify(geometry.bad)}`);
+    assert(geometry.headlineLeft !== null && geometry.eyebrowLeft !== null
+      && Math.abs(geometry.headlineLeft - geometry.eyebrowLeft) <= 4,
+      `D-036 Hero heading and constrained eyebrow are not aligned: ${JSON.stringify(geometry)}`);
     await page.locator('a[href="#aznet-digital01-services"]').focus();
     assert(await page.locator('a[href="#aznet-digital01-services"]').evaluate(e => document.activeElement === e), 'anchor keyboard focus failed');
     assert(await page.locator('#aznet-digital01-services').count() === 1, 'anchor target missing');
