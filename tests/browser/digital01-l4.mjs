@@ -33,7 +33,7 @@ async function audit(browser, key, viewport) {
     const stylesheetLoaded = await page.evaluate(() => [...document.styleSheets].some(s => String(s.href || '').includes('homepage-digital-01.css')));
     assert(stylesheetLoaded, 'surface-aware Digital 01 stylesheet missing');
     const themeColor = await page.locator('body').evaluate(el => getComputedStyle(el).getPropertyValue('--aznet-theme-color-primary').trim());
-    assert(themeColor === '#365cf5', `Digital 01 semantic tokens missing: ${themeColor}`);
+    assert(themeColor === '#eb5034', `Digital 01 AZnet brand semantic tokens missing: ${themeColor}`);
 
     const ids = await page.evaluate(() => {
       const seen = new Set(), duplicates = [];
