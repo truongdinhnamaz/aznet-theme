@@ -1,0 +1,36 @@
+name: Digital 01 fourth template candidate
+on:
+  pull_request:
+    paths:
+      - 'inc/theme/templates/digital-01/**'
+      - 'patterns/homepage-digital-01.php'
+      - 'assets/css/presets/digital-01.css'
+      - 'assets/css/components/homepage-digital-01.css'
+      - 'inc/theme/homepage-composer.php'
+      - 'tests/offline/digital01-*.php'
+      - '.github/workflows/digital01-fourth-template.yml'
+  workflow_dispatch:
+jobs:
+  static-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: PHP syntax
+        run: |
+          php -l inc/theme/homepage-composer.php
+          php -l inc/theme/templates/digital-01/manifest.php
+          php -l patterns/homepage-digital-01.php
+          php -l tests/offline/digital01-template-contract.php
+          php -l tests/offline/digital01-composer-isolation-contract.php
+      - name: RED to GREEN fourth-template contracts
+        run: |
+          php tests/offline/digital01-template-contract.php
+          php tests/offline/digital01-composer-isolation-contract.php
+      - name: Retained three-pilot contract
+        run: php tests/offline/template-three-pilot-regression-contract.php
+      - name: Retained synthetic extension contract
+        run: php tests/offline/template-fourth-template-proof-contract.php
