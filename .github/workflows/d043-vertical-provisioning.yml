@@ -1,0 +1,200 @@
+name: D-043 Native Vertical Provisioning Quality
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'inc/theme/provisioning-*'
+      - 'inc/admin/provisioning.php'
+      - 'inc/theme/templates/**/manifest.php'
+      - 'inc/theme/templates/**/provisioning.php'
+      - 'tests/offline/d043-*'
+      - 'tests/runtime/d043-*'
+      - 'tests/browser/d043-*'
+      - '.github/workflows/d043-vertical-provisioning.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  d043-offline:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact D-043 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Verify D-043 vertical recipe contract and retained Core
+        run: |
+          set -euo pipefail
+          git diff --check
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/d043-vertical-provisioning-contract.php
+          bash scripts/verify-v1-core.sh
+
+  d043-runtime:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        template: [curtain, industrial]
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Checkout exact D-043 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+      - name: Install WordPress 6.9 and exact Theme
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          rm -rf /tmp/wp-d043 /tmp/d043-evidence
+          mkdir -p /tmp/wp-d043 /tmp/d043-evidence
+          wp core download --version=6.9 --path=/tmp/wp-d043 --force --allow-root
+          wp config create --path=/tmp/wp-d043 --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          ADMIN_PASS=$(openssl rand -hex 16)
+          wp core install --path=/tmp/wp-d043 --url=http://127.0.0.1:8080 --title='AZnet Y4 Fixture' --admin_user=admin --admin_password="$ADMIN_PASS" --admin_email=y4@example.test --skip-email --allow-root
+          mkdir -p /tmp/wp-d043/wp-content/themes/aznet-theme
+          rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='README.md' --exclude='aznet-preview.png' ./ /tmp/wp-d043/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp-d043 --allow-root
+          wp core version --path=/tmp/wp-d043 --allow-root | grep -Fx '6.9'
+          wp theme status aznet-theme --path=/tmp/wp-d043 --allow-root | grep -F 'Status: Active'
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-d043 --allow-root)"
+      - name: Verify D-043 clean, rerun, rollback and existing-active safety
+        env:
+          AZNET_D043_TEMPLATE: ${{ matrix.template }}
+        run: |
+          set -euo pipefail
+          for scenario in clean rerun rollback active; do
+            AZNET_D043_SCENARIO="$scenario" wp eval-file tests/runtime/d043-vertical-provisioning.php --path=/tmp/wp-d043 --allow-root | tee "/tmp/d043-evidence/${scenario}.txt"
+          done
+      - name: Upload Y4 runtime evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: d043-native-vertical-runtime-${{ matrix.template }}
+          path: /tmp/d043-evidence
+          if-no-files-found: error
+
+  d043-browser:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        template: [curtain, industrial]
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Checkout exact D-043 candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install WordPress 6.9 and exact Theme browser fixture
+        env:
+          D043_TEMPLATE: ${{ matrix.template }}
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          rm -rf /tmp/wp-d043-browser /tmp/d043-browser
+          mkdir -p /tmp/wp-d043-browser /tmp/d043-browser
+          wp core download --version=6.9 --path=/tmp/wp-d043-browser --force --allow-root
+          wp config create --path=/tmp/wp-d043-browser --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp-d043-browser --url=http://127.0.0.1:8080 --title='AZnet Y4 Browser' --admin_user=admin --admin_password='d043-provisioning-password' --admin_email=y4-browser@example.test --skip-email --allow-root
+          mkdir -p /tmp/wp-d043-browser/wp-content/themes/aznet-theme
+          rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='README.md' --exclude='aznet-preview.png' ./ /tmp/wp-d043-browser/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp-d043-browser --allow-root
+          AZNET_D043_PRESET="${D043_TEMPLATE}-01" wp eval '$settings = \AZnet\Theme\settings(); $settings["homepage_preset"] = getenv("AZNET_D043_PRESET"); set_theme_mod("aznet_theme_settings", \AZnet\Theme\normalize_settings($settings));' --path=/tmp/wp-d043-browser --allow-root
+          for id in $(wp post list --post_type=post --post_status=publish --format=ids --path=/tmp/wp-d043-browser --allow-root); do
+            wp post update "$id" --post_status=draft --path=/tmp/wp-d043-browser --allow-root >/dev/null
+          done
+          test "$(wp post list --post_type=post --post_status=publish --format=count --path=/tmp/wp-d043-browser --allow-root)" = "0"
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-d043-browser --allow-root)"
+      - name: Start WordPress browser runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp-d043-browser > /tmp/d043-browser/server.log 2>&1 &
+          echo $! > /tmp/d043-browser/server.pid
+          for attempt in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:8080/wp-login.php >/dev/null && exit 0
+            sleep 1
+          done
+          exit 1
+      - name: Install Playwright and axe
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+      - name: Drive confirmed Curtain/Industrial wizard and verify L4
+        env:
+          D043_TEMPLATE: ${{ matrix.template }}
+          D043_BASE_URL: http://127.0.0.1:8080
+          D043_STATE_DIR: /tmp/d043-browser
+          D043_ADMIN_PASSWORD: d043-provisioning-password
+        run: node tests/browser/d043-vertical-provisioning-l4.mjs
+      - name: Verify browser runtime boundary
+        run: |
+          set -euo pipefail
+          if grep -E 'PHP (Fatal error|Parse error)|Uncaught' /tmp/d043-browser/server.log; then exit 1; fi
+          unexpected="$(grep 'PHP Warning:' /tmp/d043-browser/server.log || true)"
+          printf '%s' "$unexpected" > /tmp/d043-browser/unexpected-php-warnings.log
+          test -z "$unexpected"
+      - name: Stop browser runtime
+        if: always()
+        run: kill "$(cat /tmp/d043-browser/server.pid)" || true
+      - name: Upload Y4 browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: d043-native-vertical-browser-${{ matrix.template }}
+          path: /tmp/d043-browser
+          if-no-files-found: error
