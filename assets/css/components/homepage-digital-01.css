@@ -243,6 +243,12 @@ body.aznet-theme-preset--digital-01 .aznet-digital01__service {
 body.aznet-theme-preset--digital-01 .aznet-digital01__service:first-child {
   background:#192e3b;color:#fff;border-color:#192e3b;
 }
+/* The featured service card is navy: its small index and links need light
+   foreground; orange on navy previously measured only 2.74:1. */
+body.aznet-theme-preset--digital-01 .aznet-digital01__service:first-child .aznet-digital01__service-index,
+body.aznet-theme-preset--digital-01 .aznet-digital01__service:first-child a {
+  color:#ff9d85;
+}
 body.aznet-theme-preset--digital-01 .aznet-digital01__service:hover {
   transform:translateY(-4px);border-color:#ffc1b0;
   box-shadow:0 18px 48px rgba(23,42,52,.09);
@@ -401,7 +407,7 @@ body.aznet-theme-preset--digital-01 .aznet-digital01__cta h2 {
   font-size:clamp(2.5rem,4.8vw,5.2rem);line-height:1.16;
   color:#fff;max-width:850px;margin:0 0 25px!important;
 }
-body.aznet-theme-preset--digital-01 .aznet-digital01__cta .aznet-digital01__eyebrow {color:#ffdfd5;}
+body.aznet-theme-preset--digital-01 .aznet-digital01__cta .aznet-digital01__eyebrow {color:#fff;}
 body.aznet-theme-preset--digital-01 .aznet-digital01__cta .aznet-digital01__eyebrow::before {background:#fff;}
 body.aznet-theme-preset--digital-01 .aznet-digital01__cta p {color:#fff;}
 body.aznet-theme-preset--digital-01 .aznet-digital01__cta .wp-block-buttons {margin:28px 0 0!important;gap:13px;}

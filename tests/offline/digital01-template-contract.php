@@ -104,6 +104,22 @@ if ($contrast < 4.5) {
     exit(1);
 }
 
+// Separate real-site Lighthouse risk: featured service card is on navy, while
+// its ordinal and anchor text must be legible without relying on font weight.
+preg_match('/\.aznet-digital01__service:first-child\s*\{\s*background:\s*(#[0-9a-f]{6})/i', $homepageCss, $cardBgMatch);
+preg_match('/\.aznet-digital01__service:first-child\s+\.aznet-digital01__service-index,\s*body\.aznet-theme-preset--digital-01\s+\.aznet-digital01__service:first-child\s+a\s*\{\s*color:\s*(#[0-9a-f]{6})/i', $homepageCss, $cardFgMatch);
+if (empty($cardBgMatch[1]) || empty($cardFgMatch[1])) {
+    fwrite(STDERR, "FAIL: Digital 01 featured service card small-text contrast tokens missing.\n");
+    exit(1);
+}
+$bgLum = $relativeLuminance($cardBgMatch[1]);
+$fgLum = $relativeLuminance($cardFgMatch[1]);
+$cardContrast = (max($bgLum, $fgLum) + 0.05) / (min($bgLum, $fgLum) + 0.05);
+if ($cardContrast < 4.5) {
+    fwrite(STDERR, sprintf("FAIL: Digital 01 featured service card small-text contrast %.2f:1 below WCAG AA.\n", $cardContrast));
+    exit(1);
+}
+
 foreach (['law-01', 'curtain-01', 'industrial-01'] as $retained) {
     if (! is_array(\AZnet\Theme\template_manifest($retained))) {
         fwrite(STDERR, "FAIL: previously accepted template missing: {$retained}.\n");
