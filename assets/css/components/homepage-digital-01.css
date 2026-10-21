@@ -407,7 +407,7 @@ body.aznet-theme-preset--digital-01 .aznet-digital01__cta h2 {
   font-size:clamp(2.5rem,4.8vw,5.2rem);line-height:1.16;
   color:#fff;max-width:850px;margin:0 0 25px!important;
 }
-body.aznet-theme-preset--digital-01 .aznet-digital01__cta .aznet-digital01__eyebrow {color:#fff;}
+body.aznet-theme-preset--digital-01 .aznet-digital01__cta .aznet-digital01__eyebrow {color:#ffffff;}
 body.aznet-theme-preset--digital-01 .aznet-digital01__cta .aznet-digital01__eyebrow::before {background:#fff;}
 body.aznet-theme-preset--digital-01 .aznet-digital01__cta p {color:#fff;}
 body.aznet-theme-preset--digital-01 .aznet-digital01__cta .wp-block-buttons {margin:28px 0 0!important;gap:13px;}
