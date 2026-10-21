@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.12
+**Version:** v1.15
 **Status:** Working Source  
-**Date:** 19/10/2026
+**Date:** 22/10/2026
 
 ## 1. Purpose
 
@@ -1013,3 +1013,40 @@ Execution and gates: bounded branch \`work/core-vertical-catalog-industrial01-pi
 **Release/deploy separation and gates:** First pass v1.3.92 code/installer PR exact-head L0-L4, deterministic ZIP checksum and official new GitHub Release with source SHA; only then install the verified ZIP in each site via an authorized supported theme update mechanism with site-specific preflight/rollback and fresh public+admin/runtime smoke. Rollout to a pilot is **not PASS** until that site's active Theme bytes/version are verified against the new package; public render and saved data regression required. Preserve old Theme backups and approved operator capability; do not grant a blanket WordPress Administrator role the Theme developer cap. A pilot that lacks a named operator account stays with hidden developer-only tools pending separately authorized account provisioning. No account-creation or password actions implied.
 
 **Initial risks/unknown:** Host backup confirmed by owner but not independently inspected; some old WPVibe drafts may need preserving/replacing; connector ability to upload a reviewed GitHub ZIP on production requires verification. External Site Guard MU-plugin not installed on any pilot (WordPress-native theme-switch/install operations remain protected by native capabilities only). Do not claim cross-owner L5. If suitable supported deployment transport does not exist, mark that pilot **BLOCKED**, keep exact release and recovery checkpoint, and avoid an unsafe partial replacement or source-copy workaround.
+
+
+### D-051 — Template Manifest Contract v2 for Digital 01 — ACCEPTED — 22/10/2026
+
+The owner explicitly approved v2 after reviewing the D-043 hard gate in Digital 01 PR #487. This **authorizes contract evolution and bounded implementation on the existing draft feature branch**, not merge/release/live site takeover.
+
+- Core registry supports v1/v2 concurrently; latest=2, retains declared contract version and unchanged v1 behavior for Law 01, Rèm 01 and Industrial 01. v1 manifests containing v2-only `homepage.composition` are rejected instead of silently receiving new behavior.
+- v2 optional `homepage.composition.mode`: `native` for WordPress static Front Page body, `mapped` for supported declarative Theme presentation maps; absent composition defaults to mapped. Invalid type/field/mode or unsupported version fails soft at registration; unknown renderer must never fall through to Law 01.
+- Required gate: RED->minimal GREEN, v1/v2/rejection and three-pilot regression, independent Digital 01 native editor test, fresh exact-head L1-L4 WordPress 6.9 desktop/tablet/mobile/keyboard/Classic Text+Visual/portability. Existing Digital 01 commit `6e9dbeed` L1-L4 PASS is retained for those bytes, not reused as a new-head PASS.
+- No transfer of native WordPress content/query, Woo commerce, RootProfile identity or ConvertFlow Journey semantics. No server-side page migration. PR #487 stays draft; `main`, GitHub Release and `aznet.vn` are untouched. Site-specific Page 2 legacy `[section]` migration, L5 provider-present and owner-approved merge/deploy remain independent gates.
+
+**Exact implementation start:** add fail-first v2 version/optional composition contract tests on PR #487 branch, then minimal Core registry upgrade + Digital 01 manifest version bump and retained regressions. Record fresh CI evidence and one next action without rewriting historical PASS.
+
+
+### D-052 — AZnet Digital 01 expedited site rollout, version-gate continuity — ACCEPTED — 22/10/2026
+
+Owner re-approved the AZnet Editorial Edition visual concept and explicitly requested expedited production adoption after confirming a hosting backup exists. Approval permits a **clean, scoped Theme release candidate and WordPress-native Page 2 content cutover**, with production verification and rollback if necessary; it does **not** authorize loss of unrelated B12 draft work, semantic/private provider storage access, automatic PR merge, or bypassing a failing CI release gate.
+
+- Canonical Digital 01 candidate `d129a1a` L1–L4 and V1 Core PASS; new patch release metadata `1.3.92 -> 1.3.93` requires a dedicated X6 exact-version gate, preserving historic v1.3.91/v1.3.92 cases and rejecting unapproved/extra metadata mutations. Initial strict v1 Core run `39684854348` correctly RED at `unsupported Theme release contract version 1.3.93`; subsequent validation must turn GREEN before live publication.
+- Previous WPVibe draft mixed Digital 01 with unpublished B12 Page 41978 content. B12 was preserved separately as GitHub branch `work/b12-page-41978-preserve-20261022@36fb19f`, without merge; the Theme draft was scrubbed of B12-specific PHP/stylesheet and the temporary `wpvibe_preview` Page 43506 fixture. The scoped candidate retains only Theme Core and Digital 01 presentation changes.
+- WordPress-owned Page 2 remains authoritative for homepage permalink and SEO metadata. A byte-for-byte rollback copy of its previously published raw `post_content` (14,789 characters, 9 `[section]` pairs) has been saved as unpublished WordPress Page 43513, in addition to the host backup confirmed by the owner. Separately authored native Digital 01 content remains unpublished WordPress Page 43506 until cutover. Do not duplicate SEO/domain state in the Theme.
+- Site cutover is contingent on fresh exact-head CI, version-aligned Theme package, unchanged WordPress Page 2 and current `page_on_front=2`, and reversible updates to the Theme-owned visual/Homepage preset plus WordPress-owned Page content. Verify PHP/Woo/RootProfile public pages, homepage metadata, native Query output, mobile responsiveness, and original Page 2 before/after integrity; rollback must restore the previous Theme and source Page body on failure.
+
+**D-052 guarded historical release extension:** D-050 v1.3.92 one-shot workflow retains its own full version-metadata assertion only while the checkout is v1.3.92; later versions still run an independent historical-workflow-only regression which verifies the original reviewed publication boundary, immutable SHA checkpoint and no-site-deploy rule. The historical contract is not deleted or weakened to let a later version publish under the old workflow. CI run 39685479818 correctly RED at the previously unscoped v1.3.92-only metadata assertion on v1.3.93.
+
+**Next at this accepted decision:** satisfy the new X6 v1.3.93 version-governance contract, re-run Core, confirm a clean deployment package, then execute the authorized production pilot with fresh site-specific checks. No runtime/integration PASS may be inferred from repository CI alone.
+
+
+### D-052 — aznet.vn Digital 01 pilot publication checkpoint — 22/10/2026
+
+**PASS:** Authorized site-specific rollout of clean AZnet Theme **1.3.93** with source `work/digital-01-fourth-template-20261021@38658b21b4ca6d5dcd73dbe91d0c38883049fdf4`. Fresh exact-head Digital 01 L1/L2 + WordPress 6.9 L3/L4 + V1 Core + X6 all completed SUCCESS (runs `39685940287`, `39685940695`, `39685940199`, `39685940589`). B12 code retained separately, not published. Previous live Theme backed up by WPVibe v1.3.92. WordPress Page 2 preserves homepage identity/SEO and now has reviewed Digital 01 native content; original content is saved in draft Page 43513 and approved Digital source was draft Page 43506. Public page shows 10 roles, 1 H1, 3 Post cards, 5 FAQ, 7 alt-text images, valid canonical and correct scoped assets.
+
+**Site-specific QA evidence:** WordPress 7.1.3/PHP 8.4.26 public HTML and SEO invariant PASS; Rank Math owner API read confirms canonical/meta. WooCommerce product/category/cart/account public render and RootProfile public profile render without visible PHP fatals. Google mobile Lighthouse **Performance 86, Accessibility 96 (one contrast issue), Best Practices 100, SEO 100**; lab LCP 2.9s, CLS 0. User has not separately re-reviewed the final live rendering beyond approving the preview; don't claim final manual visual sign-off.
+
+**OPEN/UNKNOWN:** Fix the one verified mobile color-contrast issue with source-scoped L1/L4 plus a new versioned release path; verify actual checkout/login transactions only through authorized safe tests; explicitly resolve pre-existing Flatsome shortcode and H1 issues on non-homepage WordPress pages through their authoritative WordPress editorial content workflow, not slug-derived Theme heuristics. No general provider L5 certification, PR merge, new GitHub Release or additional pilot rollout is implied by the site-specific smoke test.
+
+**EXACT NEXT:** identify which specific live Homepage text/background fails mobile contrast using supported browser/Lighthouse element-level evidence, then produce a bounded Theme presentation fix on a new candidate without overwriting the only retained 1.3.92 Theme backup; re-run fresh gates before any next production publish.

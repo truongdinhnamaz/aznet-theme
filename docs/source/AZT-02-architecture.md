@@ -4,9 +4,9 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.26 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.27 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 19/10/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 22/10/2026 |
 
 | **Kiến trúc lõi: **Theme chỉ sở hữu presentation/configuration/reference cần thiết. Dữ liệu authoritative và business state ở lại owner. Boundary giữa hai bên là public/versioned provider contract hoặc adapter tối thiểu. |
 | --- |
@@ -522,6 +522,14 @@ For the Hero surface:
 - WordPress-owned Hero content remains WordPress-owned; the Core shell may deep-link or provide a bounded adapter but must not duplicate that content into a parallel Core content store.
 - Existing template-scoped Theme settings that predate this contract are compatibility adapters only and must be explicitly marked as legacy compatibility rather than treated as the target ownership model.
 - Adding a future template Hero backend must not require editing generic Core branching logic; it should register through the manifest contract and shared primitives.
+
+### 20.2.2. Template Manifest Contract v2 — D-051 (owner accepted 22/10/2026)
+
+- Core accepts **both** `contract_version=1` and `contract_version=2` on the same registry. The normalized payload preserves its declared version. The latest producer contract is v2; v1 is an unchanged compatibility consumer path for existing Law 01, Rèm 01 and Industrial 01 manifests. Unknown/future versions fail closed at registration (without a fatal error).
+- v2 optionally declares `homepage.composition.mode` in its bounded `homepage` presentation section. Allowed exact string values: `native` (the WordPress-owned **static Front Page body** supplies Homepage composition) and `mapped` (only an already supported/declared Theme presentation surface map may render; missing/unavailable mapping falls back to native WordPress content, never another template's renderer). An absent `composition` section in v2 resolves to `mapped` as the backwards-safe default.
+- If `composition` is present in v2 it must be an associative object containing only the exact `mode` key with an allowed value; wrong types, empty/unknown modes or extra fields are rejected. Explicit composition requires the manifest's `homepage` capability. v1 manifests cannot request the v2-only `composition` key, and no v1 payload is silently promoted or reinterpreted as v2.
+- `native` requires an actual valid WordPress static Front Page reference at render time; otherwise the Theme leaves its native WordPress fallback active. No slug/title/URL/Page-ID inference, auto-provisioning, editor or site mutations. WordPress remains authoritative for Page/Post/Media/query; Theme owns only layout and validation. WooCommerce/RootProfile/ConvertFlow ownership is unchanged.
+- Gate: RED -> minimal GREEN v1/v2 registry/consumer tests, unknown-mode/version rejection, three D-042 pilot v1 regressions, Digital 01 v2 L1/L2 and fresh WordPress 6.9 L3/L4 with Classic Editor Text/Visual and theme-switch portability. This decision does **not** approve merging PR #487, promoting releases, or mutating the live `aznet.vn` Page 2. L5 provider-present/site preview, SEO/link mapping and rollback remain separate production hard gates.
 
 ## 20.3. Preset Lexicon Contract
 

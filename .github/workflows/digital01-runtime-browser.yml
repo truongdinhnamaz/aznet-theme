@@ -1,0 +1,165 @@
+name: Digital 01 WordPress runtime and browser
+on:
+  push:
+    branches: [work/digital-01-fourth-template-20261021]
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/digital01-runtime-browser.yml'
+      - 'inc/theme/templates/digital-01/**'
+      - 'inc/theme/homepage-composer.php'
+      - 'inc/theme/homepage-surface-map.php'
+      - 'inc/admin/homepage.php'
+      - 'tests/offline/digital01-native-authoring-contract.php'
+      - 'assets/css/presets/digital-01.css'
+      - 'assets/css/components/homepage-digital-01.css'
+      - 'patterns/homepage-digital-01.php'
+      - 'tests/runtime/digital01-preview-seed.php'
+      - 'tests/browser/digital01-l4.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  digital01-wordpress:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Check out exact candidate
+        uses: actions/checkout@v4
+
+      - name: PHP 8.1 and required extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: PHP syntax and template contracts
+        run: |
+          set -euo pipefail
+          php -l tests/runtime/digital01-preview-seed.php
+          php -l inc/theme/homepage-composer.php
+          php -l inc/theme/homepage-surface-map.php
+          php -l inc/admin/homepage.php
+          php -l patterns/homepage-digital-01.php
+          php tests/offline/template-manifest-v2-mapped-fallback-contract.php
+          php tests/offline/digital01-template-contract.php
+          php tests/offline/digital01-composer-isolation-contract.php
+          php tests/offline/digital01-native-authoring-contract.php
+          php tests/offline/classic-editor-policy-contract.php
+
+      - name: Install isolated WordPress 6.9 and seed Digital 01 native Front Page
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          rm -rf /tmp/wp /tmp/digital01-preview
+          mkdir -p /tmp/wp /tmp/digital01-preview
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='Digital 01 Theme Preview' --admin_user=admin --admin_password='digital01-test-password' --admin_email=digital01@example.test --skip-email --allow-root
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='README.md' --exclude='aznet-preview.png' ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          test "$(wp core version --path=/tmp/wp --allow-root)" = '6.9'
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp --allow-root)"
+          wp eval-file tests/runtime/digital01-preview-seed.php --path=/tmp/wp --allow-root
+          test "$(wp option get show_on_front --path=/tmp/wp --allow-root)" = 'page'
+          test -s /tmp/digital01-front-id.txt
+
+      - name: Start isolated WordPress HTTP runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/digital01-preview/server.log 2>&1 &
+          echo $! > /tmp/digital01-preview/server.pid
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/ > /tmp/digital01-preview/frontpage.html; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:8080/ > /tmp/digital01-preview/frontpage.html
+          grep -F 'aznet-theme-homepage--digital-01' /tmp/digital01-preview/frontpage.html
+          grep -F 'aznet-digital01__hero' /tmp/digital01-preview/frontpage.html
+          grep -F 'homepage-digital-01.css' /tmp/digital01-preview/frontpage.html
+          grep -F 'Digital 01 Technology Article' /tmp/digital01-preview/frontpage.html
+          if grep -Fq 'aznet-theme-homepage--law-01' /tmp/digital01-preview/frontpage.html; then
+            echo 'FAIL: Law 01 fallback leaked into fourth-template Front Page' >&2
+            exit 1
+          fi
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/digital01-preview/server.log; then
+            echo 'FAIL: PHP runtime errors' >&2
+            exit 1
+          fi
+
+      - name: Install Chromium Playwright and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Desktop tablet mobile and Classic Editor regression
+        env:
+          DIGITAL01_BASE_URL: http://127.0.0.1:8080
+          DIGITAL01_STATE_DIR: /tmp/digital01-preview
+        run: |
+          set -euo pipefail
+          node tests/browser/digital01-l4.mjs
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/digital01-preview/server.log; then
+            echo 'FAIL: Theme runtime error during browser verification' >&2
+            exit 1
+          fi
+          test -s /tmp/digital01-preview/summary.json
+
+      - name: Native content portability after theme switch
+        run: |
+          set -euo pipefail
+          ID=$(cat /tmp/digital01-front-id.txt)
+          BEFORE=$(D01_FRONT_ID="$ID" wp eval 'echo hash("sha256", (string) get_post((int) getenv("D01_FRONT_ID"))->post_content);' --path=/tmp/wp --allow-root)
+          test "$BEFORE" != "$(cat /tmp/digital01-content-sha.txt)"
+          D01_FRONT_ID="$ID" wp eval '
+            $raw = (string) get_post((int) getenv("D01_FRONT_ID"))->post_content;
+            if (! str_contains($raw, "Classic Editor round-trip verified.")
+                || ! str_contains($raw, "<!-- wp:query")
+                || ! str_contains($raw, "aznet-digital01")) {
+                fwrite(STDERR, "FAIL: Classic Editor saved Page but lost native content.\\n");
+                exit(1);
+            }
+            echo "PASS: Classic Editor persisted Page and public WordPress Query block\\n";
+          ' --path=/tmp/wp --allow-root
+          mkdir -p /tmp/wp/wp-content/themes/digital01-portability
+          printf '/*\nTheme Name: Digital 01 Portability Fixture\nVersion: 1.0.0\n*/\n' > /tmp/wp/wp-content/themes/digital01-portability/style.css
+          printf '%s\n' '<?php while (have_posts()) { the_post(); the_content(); }' > /tmp/wp/wp-content/themes/digital01-portability/index.php
+          wp theme activate digital01-portability --path=/tmp/wp --allow-root
+          AFTER=$(D01_FRONT_ID="$ID" wp eval 'echo hash("sha256", (string) get_post((int) getenv("D01_FRONT_ID"))->post_content);' --path=/tmp/wp --allow-root)
+          test "$BEFORE" = "$AFTER"
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          echo 'PASS: WordPress native Page bytes survived switching to an independent theme'
+
+      - name: Upload visual and runtime evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: digital01-wordpress-runtime-browser
+          path: |
+            /tmp/digital01-preview/
+            /tmp/digital01-front-id.txt
+            /tmp/digital01-content-sha.txt
+          if-no-files-found: warn

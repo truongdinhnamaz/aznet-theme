@@ -11,7 +11,7 @@
 namespace AZnet\Theme;
 
 if ( ! defined( 'AZNET_THEME_TEMPLATE_MANIFEST_VERSION' ) ) {
-    define( 'AZNET_THEME_TEMPLATE_MANIFEST_VERSION', 1 );
+    define( 'AZNET_THEME_TEMPLATE_MANIFEST_VERSION', 2 );
 }
 
 /**
@@ -41,8 +41,27 @@ function normalize_template_manifest( array $manifest ): ?array {
         }
     }
 
-    if ( AZNET_THEME_TEMPLATE_MANIFEST_VERSION !== (int) ( $manifest['contract_version'] ?? 0 ) ) {
+    $contract_version = $manifest['contract_version'] ?? null;
+    if ( ! is_int( $contract_version ) || ! in_array( $contract_version, [ 1, AZNET_THEME_TEMPLATE_MANIFEST_VERSION ], true ) ) {
         return null;
+    }
+
+    $homepage = (array) ( $manifest['homepage'] ?? [] );
+    if ( array_key_exists( 'composition', $homepage ) && 1 === $contract_version ) {
+        return null;
+    }
+    if ( 2 === $contract_version ) {
+        if ( array_key_exists( 'composition', $homepage ) ) {
+            $composition = $homepage['composition'];
+            if ( ! is_array( $composition ) || array_keys( $composition ) !== [ 'mode' ]
+                || ! is_string( $composition['mode'] )
+                || ! in_array( $composition['mode'], [ 'native', 'mapped' ], true )
+                || ! in_array( 'homepage', (array) ( $manifest['capabilities'] ?? [] ), true ) ) {
+                return null;
+            }
+        } else {
+            $homepage['composition'] = [ 'mode' => 'mapped' ];
+        }
     }
 
     $id = trim( (string) ( $manifest['id'] ?? '' ) );
@@ -111,7 +130,7 @@ function normalize_template_manifest( array $manifest ): ?array {
     }
 
     return [
-        'contract_version' => AZNET_THEME_TEMPLATE_MANIFEST_VERSION,
+        'contract_version' => $contract_version,
         'id'               => $id,
         'name'             => $name,
         'version'          => $version,
@@ -120,7 +139,7 @@ function normalize_template_manifest( array $manifest ): ?array {
         'capabilities'     => $capabilities,
         'presentation'     => $presentation,
         'assets'           => (array) ( $manifest['assets'] ?? [] ),
-        'homepage'         => (array) ( $manifest['homepage'] ?? [] ),
+        'homepage'         => $homepage,
         'provisioning'     => $provisioning,
     ];
 }

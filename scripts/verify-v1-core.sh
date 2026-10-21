@@ -140,6 +140,9 @@ case "$RELEASE_VERSION" in
   1.3.92)
     php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v1392-release-candidate-contract.php
     ;;
+  1.3.93)
+    php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v1393-release-candidate-contract.php
+    ;;
   *)
     echo "FAIL: unsupported Theme release contract version $RELEASE_VERSION" >&2
     exit 1
@@ -149,8 +152,12 @@ esac
 printf '%s\n' '==> Preserve historical v1.3.91 publication failsafe contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/d050-v1391-publication-contract.php
 
-printf '%s\n' '==> Owner-approved v1.3.92 one-shot publication contract'
-php -d zend.assertions=1 -d assert.exception=1 tests/offline/d050-v1392-publication-contract.php
+printf '%s\n' '==> Preserve owner-approved v1.3.92 publication workflow while keeping its exact version gate'
+if [[ "$RELEASE_VERSION" == '1.3.92' ]]; then
+  php -d zend.assertions=1 -d assert.exception=1 tests/offline/d050-v1392-publication-contract.php
+else
+  php -d zend.assertions=1 -d assert.exception=1 tests/offline/d050-v1392-historical-workflow-contract.php
+fi
 
 printf '%s\n' '==> Y1 Page Experience contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-page-experience-contract.php
@@ -220,6 +227,8 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-native-con
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-process-faq-authoring-completeness-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/d040-td1-template-library-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-extension-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-manifest-v2-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-manifest-v2-mapped-fallback-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-presentation-registry-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-library-manifest-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-manifest-activation-contract.php

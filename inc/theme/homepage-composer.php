@@ -22,9 +22,20 @@ function homepage_law01_variant(): string {
     return in_array( $variant, [ 'navy-gold', 'burgundy-gold' ], true ) ? $variant : 'navy-gold';
 }
 
+/**
+ * Native composition consumes only the WordPress Front Page body.
+ * Template manifests request this generic capability without Core template-ID branches.
+ */
+function homepage_manifest_native_composition(): bool {
+    $manifest = template_manifest_for_homepage_preset( homepage_preset() );
+    return is_array( $manifest )
+        && 'native' === ( $manifest['homepage']['composition']['mode'] ?? null );
+}
+
 /** Whether Theme-owned Homepage composition is active for this request. */
 function homepage_composer_active(): bool {
-    if ( ! function_exists( 'is_front_page' ) || ! is_front_page() || null === template_manifest_for_homepage_preset( homepage_preset() ) ) {
+    $manifest = template_manifest_for_homepage_preset( homepage_preset() );
+    if ( ! function_exists( 'is_front_page' ) || ! is_front_page() || ! is_array( $manifest ) ) {
         return false;
     }
 
@@ -33,7 +44,20 @@ function homepage_composer_active(): bool {
     }
 
     $front_id = (int) get_option( 'page_on_front' );
-    return $front_id > 0 && null !== homepage_page_reference( $front_id );
+    if ( $front_id <= 0 || null === homepage_page_reference( $front_id ) ) {
+        return false;
+    }
+
+    // V2 mapped composition must resolve a real Theme surface map.
+    // Do not route a newly registered preset through the legacy Law 01 fallback.
+    // V1 compatibility and V2 native Front Page paths remain unchanged.
+    if ( 2 === ( $manifest['contract_version'] ?? null )
+        && 'mapped' === ( $manifest['homepage']['composition']['mode'] ?? null ) ) {
+        return function_exists( __NAMESPACE__ . '\\homepage_effective_surface_map' )
+            && [] !== homepage_effective_surface_map( homepage_preset() );
+    }
+
+    return true;
 }
 
 /** Reset request-local displayed Post IDs. */
@@ -80,6 +104,13 @@ function render_industrial01_part( string $slug, array $args = [] ): void {
 function render_homepage_before_content(): void {
     if ( ! homepage_composer_active() ) { return; }
 
+    if ( homepage_manifest_native_composition() ) {
+        // Digital 01 uses the WordPress Front Page body as its entire Homepage.
+        // The Theme provides the isolated visual shell; WordPress owns blocks and queries.
+        echo '<div class="aznet-theme-homepage aznet-theme-homepage--' . esc_attr( homepage_preset() ) . '">';
+        return;
+    }
+
     if ( 'curtain-01' === homepage_preset() ) {
         echo '<div class="aznet-theme-homepage aznet-theme-homepage--curtain-01">';
         foreach ( homepage_effective_surface_map( 'curtain-01' ) as $surface ) {
@@ -109,6 +140,11 @@ function render_homepage_before_content(): void {
 /** Render Law 01 sections after the native Front Page body boundary. */
 function render_homepage_after_content(): void {
     if ( ! homepage_composer_active() ) { return; }
+
+    if ( homepage_manifest_native_composition() ) {
+        echo '</div>';
+        return;
+    }
 
     if ( 'curtain-01' === homepage_preset() ) {
         foreach ( homepage_effective_surface_map( 'curtain-01' ) as $surface ) {
