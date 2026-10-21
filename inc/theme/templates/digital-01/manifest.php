@@ -14,6 +14,7 @@ return [
     ],
     'assets' => [
         'homepage' => [
+        'composition' => [ 'mode' => 'native' ],
             [
                 'type' => 'style',
                 'handle' => 'aznet-theme-homepage-digital-01',
