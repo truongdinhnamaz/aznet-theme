@@ -67,6 +67,11 @@ function provisioning_wizard_default_blueprint(): string {
     if ( 'off' !== $preset ) {
         return '';
     }
+    // Preserve the accepted WordPress-clean onboarding default as additional
+    // templates register their optional local recipes in a different order.
+    if ( array_key_exists( 'law01-v1-2', $choices ) ) {
+        return 'law01-v1-2';
+    }
     return '' !== (string) array_key_first( $choices ) ? (string) array_key_first( $choices ) : '';
 }
 
