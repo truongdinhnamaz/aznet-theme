@@ -35,9 +35,10 @@ if ('law01-v1-2' !== \AZnet\Theme\template_provisioning_blueprint_key('law-01'))
     exit(1);
 }
 
-foreach (['curtain-01', 'industrial-01'] as $preset) {
-    if (null !== \AZnet\Theme\template_provisioning_blueprint_key($preset)) {
-        fwrite(STDERR, "FAIL: {$preset} must fail soft without an accepted provisioning blueprint.\n");
+foreach (['curtain-01' => 'curtain01-v1', 'industrial-01' => 'industrial01-v1'] as $preset => $key) {
+    if ($key !== \AZnet\Theme\template_provisioning_blueprint_key($preset)
+        || !is_array(\AZnet\Theme\provisioning_blueprint($key))) {
+        fwrite(STDERR, "FAIL: {$preset} must resolve its approved local WordPress-native recipe.\n");
         exit(1);
     }
 }
