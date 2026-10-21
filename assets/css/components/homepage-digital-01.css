@@ -43,10 +43,17 @@ body.aznet-theme-preset--digital-01 .aznet-digital01 :where(.aznet-digital01__he
     padding-block: clamp(3.5rem, 7vw, 7rem);
 }
 body.aznet-theme-preset--digital-01 .aznet-digital01__hero {
+    /* Full-bleed background, but text and focusable CTAs retain readable gutters. */
+    padding-inline: clamp(1.125rem, 4.5vw, 4rem);
     position: relative;
     isolation: isolate;
     color: #f9fbff;
     background: radial-gradient(circle at 85% 20%, #243c79 0, transparent 44%), linear-gradient(125deg,#0c1730,#111f43 60%,#193467);
+}
+/* WordPress constrained Group defaults center selected children while the H1
+ * is full-width. Keep all direct Hero content on one intentional left edge. */
+body.aznet-theme-preset--digital-01 .aznet-digital01__hero > :is(.wp-block-heading, .aznet-digital01__eyebrow, .wp-block-buttons, p) {
+    margin-inline: 0;
 }
 body.aznet-theme-preset--digital-01 .aznet-digital01__hero .wp-block-heading {
     color: inherit;
