@@ -114,6 +114,38 @@ async function auditEditor(browser) {
     assert(updatedFrontend.includes('Digital 01 Technology Article'), 'Query Loop broken after Classic update');
     entry.classicRoundTrip = true;
 
+    // A Classic Editor preference includes a WYSIWYG Visual tab. Verify it does
+    // not silently destroy WordPress-native Query Loop or Homepage block markers.
+    const visualTab = page.locator('#content-tmce');
+    assert(await visualTab.count() === 1, 'Classic Visual tab unavailable');
+    await visualTab.click();
+    const visualBody = page.frameLocator('#content_ifr').locator('body');
+    await visualBody.waitFor({ state: 'visible', timeout: 20000 });
+    const visualParagraph = page.frameLocator('#content_ifr').locator('p').filter({ hasText: phrase }).first();
+    assert(await visualParagraph.count() === 1, 'editable Hero paragraph unavailable in Classic Visual tab');
+    await visualParagraph.click();
+    await page.keyboard.press('End');
+    await page.keyboard.insertText(' Visual tab round-trip verified.');
+    await page.locator('#content-html').click();
+    await page.locator('#content').waitFor({ state: 'visible', timeout: 12000 });
+    const visualMarkup = await page.locator('#content').inputValue();
+    assert(visualMarkup.includes('Visual tab round-trip verified.'), 'Classic Visual edit was not reflected in Text source');
+    assert(visualMarkup.includes('<!-- wp:query') && visualMarkup.includes('aznet-digital01'),
+      'Classic Visual toggle destroyed native Homepage markup/Query before saving');
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 25000 }),
+      page.locator('#publish').click(),
+    ]);
+    const persistedVisual = await page.locator('#content').inputValue();
+    assert(persistedVisual.includes('Visual tab round-trip verified.') && persistedVisual.includes('<!-- wp:query'),
+      'Classic Visual save did not preserve the edit and native Query Loop');
+    const visualFrontend = await page.request.get(base);
+    assert(visualFrontend.status() === 200, 'Front Page unavailable after Visual tab save');
+    const visualHtml = await visualFrontend.text();
+    assert(visualHtml.includes('Visual tab round-trip verified.'), 'Classic Visual edit missing from public output');
+    assert(visualHtml.includes('Digital 01 Technology Article'), 'WordPress Query Loop not present after Visual save');
+    entry.visualRoundTrip = true;
+
     await page.goto(`${base}/wp-admin/admin.php?page=aznet-theme&section=homepage`, { waitUntil: 'domcontentloaded' });
     await page.locator('.aznet-theme-homepage-authoring').waitFor({ state: 'visible', timeout: 20000 });
     const editorLink = page.getByRole('link', { name: 'Chỉnh sửa nội dung trang chủ' });
@@ -149,4 +181,4 @@ if (summary.failures.length) {
   console.error(summary.failures.join('\n'));
   process.exit(1);
 }
-console.log('PASS: Digital 01 clean WordPress L3/L4 desktop/tablet/mobile/axe, Classic Text save and native source mapping');
+console.log('PASS: Digital 01 clean WordPress L3/L4 desktop/tablet/mobile/axe, Classic Text/Visual save and native source mapping');
