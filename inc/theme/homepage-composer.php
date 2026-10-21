@@ -34,7 +34,8 @@ function homepage_manifest_native_composition(): bool {
 
 /** Whether Theme-owned Homepage composition is active for this request. */
 function homepage_composer_active(): bool {
-    if ( ! function_exists( 'is_front_page' ) || ! is_front_page() || null === template_manifest_for_homepage_preset( homepage_preset() ) ) {
+    $manifest = template_manifest_for_homepage_preset( homepage_preset() );
+    if ( ! function_exists( 'is_front_page' ) || ! is_front_page() || ! is_array( $manifest ) ) {
         return false;
     }
 
@@ -43,7 +44,20 @@ function homepage_composer_active(): bool {
     }
 
     $front_id = (int) get_option( 'page_on_front' );
-    return $front_id > 0 && null !== homepage_page_reference( $front_id );
+    if ( $front_id <= 0 || null === homepage_page_reference( $front_id ) ) {
+        return false;
+    }
+
+    // V2 mapped composition must resolve a real Theme surface map.
+    // Do not route a newly registered preset through the legacy Law 01 fallback.
+    // V1 compatibility and V2 native Front Page paths remain unchanged.
+    if ( 2 === ( $manifest['contract_version'] ?? null )
+        && 'mapped' === ( $manifest['homepage']['composition']['mode'] ?? null ) ) {
+        return function_exists( __NAMESPACE__ . '\\homepage_effective_surface_map' )
+            && [] !== homepage_effective_surface_map( homepage_preset() );
+    }
+
+    return true;
 }
 
 /** Reset request-local displayed Post IDs. */
