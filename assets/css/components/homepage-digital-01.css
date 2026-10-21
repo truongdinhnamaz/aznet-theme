@@ -10,10 +10,13 @@
  * media align classes used by the other three template families.
  */
 body.aznet-theme-preset--digital-01 .aznet-theme-entry__content .aznet-digital01.alignfull {
-    width: 100%;
+    /* Break out of WordPress's centred content column into the viewport.
+       Only this outer Page body group bleeds; nested groups remain untransformed. */
+    width: 100vw;
     max-width: none;
-    margin-inline: 0;
-    transform: none;
+    margin-inline-start: 50%;
+    margin-inline-end: 0;
+    transform: translateX(-50%);
 }
 body.aznet-theme-preset--digital-01 .aznet-digital01 > .wp-block-group.alignfull {
     width: 100%;
