@@ -513,3 +513,9 @@ body.aznet-theme-preset--digital-01 .aznet-digital01__process .aznet-digital01__
 body.aznet-theme-preset--digital-01 .aznet-digital01__articles .wp-block-post-date {
   color:#596873;
 }
+
+/* Neutral reference pattern: trust labels are prose, not skipped-level H3s. */
+body.aznet-theme-preset--digital-01 .aznet-digital01__trust .aznet-digital01__card-title {
+  margin:0 0 12px!important;
+  font-size:1.06rem;font-weight:800;line-height:1.45;color:var(--d01-ink);
+}
