@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.15
+**Version:** v1.16
 **Status:** Working Source  
 **Date:** 22/10/2026
 
@@ -1050,3 +1050,8 @@ Owner re-approved the AZnet Editorial Edition visual concept and explicitly requ
 **OPEN/UNKNOWN:** Fix the one verified mobile color-contrast issue with source-scoped L1/L4 plus a new versioned release path; verify actual checkout/login transactions only through authorized safe tests; explicitly resolve pre-existing Flatsome shortcode and H1 issues on non-homepage WordPress pages through their authoritative WordPress editorial content workflow, not slug-derived Theme heuristics. No general provider L5 certification, PR merge, new GitHub Release or additional pilot rollout is implied by the site-specific smoke test.
 
 **EXACT NEXT:** identify which specific live Homepage text/background fails mobile contrast using supported browser/Lighthouse element-level evidence, then produce a bounded Theme presentation fix on a new candidate without overwriting the only retained 1.3.92 Theme backup; re-run fresh gates before any next production publish.
+
+
+### D-054 — Digital 01 1.3.94 AA Patch — ACCEPTED — 22/10/2026
+
+Owner approved merging PR #487 and publishing a subsequent clean 1.3.94 patch to aznet.vn. Source main at merge commit `6e4dc54c` is v1.3.93; the merged source already includes the verified AA CSS correction to Digital 01, while the public site previously used the earlier v1.3.93 asset. This patch is limited to version promotion from v1.3.93 to v1.3.94, backed by fresh Core and X6 fail-closed gates, retained Digital 01 L1-L4, and a site-specific rollback and verification. No WordPress Page, WooCommerce, RootProfile, ConvertFlow data, or unrelated B12 sources are changed by the patch. The v1.3.92 historical publication contract remains preserved. RED evidence: `2c8430a`, V1 Core run `39690194254` and X6 run `39690194392`, both rejected unsupported Theme version 1.3.94. GREEN gate must preserve all previous version cases and prove only the exact 1.3.93→1.3.94 metadata diff is allowed. Record fresh CI results and production evidence before claiming site or release PASS; keep rollback reference to owner-confirmed hosting backup, previous installed v1.3.93, and original Page 2 saved as WordPress draft #43513.
