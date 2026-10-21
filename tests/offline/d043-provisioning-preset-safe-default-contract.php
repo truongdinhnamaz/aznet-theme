@@ -41,8 +41,8 @@ namespace {
 
     foreach ([
         'law-01' => 'law01-v1-2',
-        'curtain-01' => '',
-        'industrial-01' => '',
+        'curtain-01' => 'curtain01-v1',
+        'industrial-01' => 'industrial01-v1',
         'off' => 'law01-v1-2',
         'unregistered-template' => '',
     ] as $preset => $expected) {
