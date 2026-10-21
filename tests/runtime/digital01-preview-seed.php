@@ -52,6 +52,18 @@ if ('digital-01' !== \AZnet\Theme\visual_preset()
     throw new RuntimeException('Digital 01 composed Homepage not active');
 }
 
+$surfaceMap = \AZnet\Theme\homepage_effective_surface_map('digital-01');
+if (count($surfaceMap) !== 1
+    || ($surfaceMap[0]['key'] ?? null) !== 'front-page-content'
+    || (int) ($surfaceMap[0]['source_id'] ?? 0) !== (int) $frontId) {
+    throw new RuntimeException('Digital native front Page and effective Homepage source model disagree');
+}
+$nativeSummary = \AZnet\Theme\Admin\homepage_authoring_source_summary('digital-01', 'content');
+if (($nativeSummary['status'] ?? null) !== 'READY'
+    || ($nativeSummary['title'] ?? '') !== 'Digital 01 Preview Homepage') {
+    throw new RuntimeException('Native authoring summary not bound to the selected WordPress Front Page');
+}
+
 $stored = get_post((int) $frontId);
 if (!$stored instanceof \WP_Post
     || !str_contains((string) $stored->post_content, 'aznet-digital01')
