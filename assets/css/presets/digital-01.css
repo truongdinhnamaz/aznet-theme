@@ -1,44 +1,33 @@
-/** Digital 01: standalone agency/technology presentation; all site facts stay with WordPress/providers. */
+/** Digital 01: AZnet editorial palette, preset-scoped, domain facts stay with their sources. */
 body.aznet-theme-preset--digital-01 {
-    --aznet-theme-color-primary: #365cf5;
-    --aznet-theme-color-on-primary: #ffffff;
-    --aznet-theme-color-surface: #ffffff;
-    --aznet-theme-color-surface-subtle: #f4f7fd;
-    --aznet-theme-color-text: #13213b;
-    --aznet-theme-color-text-muted: #586784;
-    --aznet-theme-color-border: #dfe5f0;
-    --aznet-theme-color-focus: #245de0;
-    --aznet-theme-surface: var(--aznet-theme-color-surface);
-    --aznet-theme-text: var(--aznet-theme-color-text);
-    --aznet-theme-muted: var(--aznet-theme-color-text-muted);
-    --aznet-theme-border: var(--aznet-theme-color-border);
-    --aznet-theme-accent: var(--aznet-theme-color-primary);
-    --aznet-theme-focus: var(--aznet-theme-color-focus);
-    --aznet-theme-surface-inverse: #0d1831;
-    --aznet-theme-on-inverse: #f9fbff;
-    --aznet-theme-container-shell: 82rem;
-    --aznet-theme-container-wide: 76rem;
-    --aznet-theme-container-content: 48rem;
-    --aznet-theme-radius-control: .75rem;
-    --aznet-theme-radius-card: 1.25rem;
-    --aznet-theme-space-section: clamp(3.5rem, 6vw, 6rem);
-    --aznet-theme-shadow-card: 0 16px 44px rgba(19, 33, 59, .07);
-    background: var(--aznet-theme-surface);
-    color: var(--aznet-theme-text);
-}
-body.aznet-theme-preset--digital-01 :where(h1,h2,h3) { letter-spacing: -.035em; }
-body.aznet-theme-preset--digital-01 .aznet-theme-site-header {
-    background: #0d1831;
-    border-bottom-color: rgba(255,255,255,.12);
+  --aznet-theme-color-primary:#eb5034;
+  --aznet-theme-color-on-primary:#ffffff;
+  --aznet-theme-color-surface:#ffffff;
+  --aznet-theme-color-surface-subtle:#f6f7f5;
+  --aznet-theme-color-text:#15242d;
+  --aznet-theme-color-text-muted:#596873;
+  --aznet-theme-color-border:#dfe6e4;
+  --aznet-theme-color-focus:#ea5b38;
+  --aznet-theme-surface:var(--aznet-theme-color-surface);
+  --aznet-theme-text:var(--aznet-theme-color-text);
+  --aznet-theme-muted:var(--aznet-theme-color-text-muted);
+  --aznet-theme-border:var(--aznet-theme-color-border);
+  --aznet-theme-accent:var(--aznet-theme-color-primary);
+  --aznet-theme-focus:var(--aznet-theme-color-focus);
+  --aznet-theme-surface-inverse:#101f2b;
+  --aznet-theme-on-inverse:#ffffff;
+  --aznet-theme-container-shell:82rem;
+  --aznet-theme-container-wide:77.5rem;
+  --aznet-theme-container-content:48rem;
+  --aznet-theme-radius-control:.65rem;
+  --aznet-theme-radius-card:.85rem;
+  --aznet-theme-space-section:clamp(4.5rem,7vw,7rem);
+  --aznet-theme-shadow-card:0 16px 38px rgba(21,36,45,.07);
+  background:#fff;color:#15242d;
 }
 body.aznet-theme-preset--digital-01 .aznet-theme-site-footer {
-    background: #0d1831;
-    color: #f9fbff;
+  background:#101f2b;color:#e8eff0;
 }
-body.aznet-theme-preset--digital-01 :where(a, button, input, select, textarea):focus-visible {
-    outline: 3px solid var(--aznet-theme-focus);
-    outline-offset: 3px;
-}
-@media (max-width: 48rem) {
-    body.aznet-theme-preset--digital-01 { --aznet-theme-space-section: 3rem; }
+body.aznet-theme-preset--digital-01 :where(a,button,input,select,textarea):focus-visible {
+  outline:3px solid var(--aznet-theme-color-focus);outline-offset:3px;
 }
