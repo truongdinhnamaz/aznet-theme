@@ -16,6 +16,50 @@ jobs:
           node-version: '22'
       - name: Check browser
         run: google-chrome --version || chromium --version
+      - name: Install read-only browser probe dependency
+        run: npm install --no-save --no-package-lock playwright@1.55.0
+      - name: Capture real computed style and CSS resource witnesses
+        run: |
+          node <<'NODE'
+          const { chromium } = require('playwright');
+          (async () => {
+            const browser = await chromium.launch({channel:'chrome',headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+            try {
+              const page = await browser.newPage({viewport:{width:412,height:915},deviceScaleFactor:1,isMobile:true,hasTouch:true});
+              await page.goto('https://aznet.vn/',{waitUntil:'networkidle',timeout:90000});
+              const result = await page.evaluate(() => {
+                const selectors = [
+                  '.aznet-digital01__service:first-child .aznet-digital01__service-index',
+                  '.aznet-digital01__service:first-child .aznet-digital01__text-link a',
+                  ...[2,3,4,5,6].map(i => '.aznet-digital01__service:nth-child('+i+') > p:not(.aznet-digital01__service-index):not(.aznet-digital01__text-link)'),
+                  '.aznet-digital01__process .aznet-digital01__text-link a',
+                  '.aznet-digital01__cta .aznet-digital01__eyebrow',
+                  '.aznet-digital01__hero h1'
+                ];
+                const nodes = selectors.map(selector => {
+                  const el = document.querySelector(selector);
+                  if (!el) return {selector,missing:true};
+                  const st = getComputedStyle(el);
+                  let parent = el;
+                  const backgrounds = [];
+                  for(let i=0;i<8&&parent;i++,parent=parent.parentElement){
+                    const p=getComputedStyle(parent);
+                    backgrounds.push({tag:parent.tagName,classes:parent.className?.toString().slice(0,140),bg:p.backgroundColor,opacity:p.opacity});
+                  }
+                  return {selector,text:el.textContent?.trim().slice(0,150),color:st.color,background:st.backgroundColor,
+                    fontSize:st.fontSize,fontWeight:st.fontWeight,fontFamily:st.fontFamily,visibility:st.visibility,opacity:st.opacity,
+                    backgrounds};
+                });
+                const sheets=[...document.styleSheets].map(s=>({href:s.href,disabled:s.disabled,ownerTag:s.ownerNode?.tagName,media:s.media?.mediaText}));
+                const resources=performance.getEntriesByType('resource').filter(x=>/\.css|\.woff|\.ttf|fonts\./i.test(x.name))
+                  .map(x=>({name:x.name,duration:Math.round(x.duration),startTime:Math.round(x.startTime),transferSize:x.transferSize})).slice(0,75);
+                const body=document.body;
+                return {url:location.href,bodyClass:body.className,fontsStatus:document.fonts.status,nodes,sheets,resources};
+              });
+              console.log('COMPUTED_STYLE_EVIDENCE',JSON.stringify(result,null,2));
+            } finally { await browser.close(); }
+          })().catch(error=>{console.error('PROBE_FAILED',error.stack||error);process.exitCode=1;});
+          NODE
       - name: Audit public AZnet homepage (read-only)
         run: |
           npx --yes lighthouse@12.8.2 https://aznet.vn/ \
