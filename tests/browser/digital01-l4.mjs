@@ -84,6 +84,36 @@ async function auditEditor(browser) {
     assert(content.includes('aznet-digital01') && content.includes('<!-- wp:query'), 'WordPress native Page content missing in accepted Classic Editor');
     assert(await page.locator('.edit-post-layout, .interface-interface-skeleton').count() === 0, 'unexpected Gutenberg editor changed accepted D-024 Classic policy');
     await page.screenshot({ path: path.join(output, 'digital01-editor-classic.png'), fullPage: true });
+
+    // Real Classic Editor authoring round-trip, not just an editor-selector assertion.
+    // Use Text mode to preserve WordPress-native block comments and the public Query block.
+    const textTab = page.locator('#content-html');
+    assert(await textTab.count() === 1, 'Classic Text tab is unavailable');
+    await textTab.click();
+    await page.locator('#content').waitFor({ state: 'visible', timeout: 12000 });
+    const original = await page.locator('#content').inputValue();
+    const phrase = 'Chỉnh sửa nội dung giới thiệu này theo năng lực thực tế của doanh nghiệp.';
+    assert(original.includes(phrase), 'editable owner-neutral Homepage paragraph absent');
+    assert(original.includes('<!-- wp:query'), 'native WordPress Query block absent before Classic save');
+    const edited = original.replace(phrase, phrase + ' Classic Editor round-trip verified.');
+    assert(edited !== original, 'Classic authoring sentinel substitution did not occur');
+    await page.locator('#content').fill(edited);
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 25000 }),
+      page.locator('#publish').click(),
+    ]);
+    await page.locator('#content').waitFor({ state: 'attached', timeout: 20000 });
+    const afterSave = await page.locator('#content').inputValue();
+    assert(afterSave.includes('Classic Editor round-trip verified.'), 'Classic Text changes did not persist');
+    assert(afterSave.includes('<!-- wp:query') && afterSave.includes('aznet-digital01'),
+      'Classic Editor saved Page but lost WordPress-native sections/Query blocks');
+    const storedFrontend = await page.request.get(base);
+    assert(storedFrontend.status() === 200, 'Front Page unavailable following Classic save');
+    const updatedFrontend = await storedFrontend.text();
+    assert(updatedFrontend.includes('Classic Editor round-trip verified.'), 'Edited Classic text not visible publicly');
+    assert(updatedFrontend.includes('Digital 01 Technology Article'), 'Query Loop broken after Classic update');
+    entry.classicRoundTrip = true;
+
     await page.goto(`${base}/wp-admin/admin.php?page=aznet-theme&section=homepage`, { waitUntil: 'domcontentloaded' });
     await page.locator('.aznet-theme-homepage-authoring').waitFor({ state: 'visible', timeout: 20000 });
     const editorLink = page.getByRole('link', { name: 'Chỉnh sửa nội dung trang chủ' });
@@ -119,4 +149,4 @@ if (summary.failures.length) {
   console.error(summary.failures.join('\n'));
   process.exit(1);
 }
-console.log('PASS: Digital 01 clean WordPress L3/L4 desktop/tablet/mobile/axe and retained Classic editor policy');
+console.log('PASS: Digital 01 clean WordPress L3/L4 desktop/tablet/mobile/axe, Classic Text save and native source mapping');
