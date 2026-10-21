@@ -53,7 +53,9 @@ body.aznet-theme-preset--digital-01 .aznet-digital01__hero {
 /* WordPress constrained Group defaults center selected children while the H1
  * is full-width. Keep all direct Hero content on one intentional left edge. */
 body.aznet-theme-preset--digital-01 .aznet-digital01__hero > :is(.wp-block-heading, .aznet-digital01__eyebrow, .wp-block-buttons, p) {
-    margin-inline: 0;
+    /* WordPress .is-layout-constrained centers direct children with
+       margin-left/right:auto !important. Override locally, never globally. */
+    margin-inline: 0 !important;
 }
 body.aznet-theme-preset--digital-01 .aznet-digital01__hero .wp-block-heading {
     color: inherit;
