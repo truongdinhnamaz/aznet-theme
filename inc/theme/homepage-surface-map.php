@@ -689,6 +689,33 @@ function homepage_effective_surface_map( ?string $preset = null ): array {
     if ( array_key_exists( $preset, $cache ) ) {
         return $cache[ $preset ];
     }
+    $manifest = template_manifest_for_homepage_preset( $preset );
+    if ( is_array( $manifest ) && 'native' === ( $manifest['homepage']['composition']['mode'] ?? null ) ) {
+        // Native composition is exactly one WordPress-owned static Front Page source.
+        // No template-specific Page IDs, domain discovery or content storage.
+        $front = 'page' === get_option( 'show_on_front' )
+            ? homepage_page_reference( (int) get_option( 'page_on_front', 0 ) )
+            : null;
+        $cache[ $preset ] = $front instanceof \WP_Post
+            ? [
+                homepage_surface_entry(
+                    'front-page-content',
+                    __( 'Nội dung trang chủ', 'aznet-theme' ),
+                    '',
+                    'native',
+                    'post-' . (string) $front->ID,
+                    'front_page',
+                    (int) $front->ID,
+                    [
+                        'title'   => get_the_title( $front ),
+                        'summary' => homepage_surface_text_summary( (string) get_the_excerpt( $front ) ),
+                        'source'  => __( 'Trang chủ tĩnh thuộc WordPress', 'aznet-theme' ),
+                    ]
+                ),
+            ]
+            : [];
+        return $cache[ $preset ];
+    }
     if ( 'curtain-01' === $preset ) {
         $cache[ $preset ] = homepage_curtain01_effective_surface_map();
         return $cache[ $preset ];
