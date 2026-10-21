@@ -72,6 +72,28 @@ async function audit(browser, key, viewport) {
     assert(geometry.heroLeft !== null && Math.abs(geometry.heroLeft) <= 1 && Math.abs(geometry.heroRight - geometry.viewport) <= 1,
       `D-035 full-width flush Hero failed: ${JSON.stringify(geometry)}`);
     assert(geometry.bad.length === 0, `visible sections/cards clipped despite scrollWidth test: ${JSON.stringify(geometry.bad)}`);
+    // Root/full-bleed does not authorize flush text. Section content must retain
+    // accessible gutters and Hero text/buttons must share a stable left edge.
+    const heroInner = await page.evaluate(() => {
+      const names = {
+        eyebrow: '.aznet-digital01__hero > .aznet-digital01__eyebrow',
+        title: '.aznet-digital01__hero > h1',
+        intro: '.aznet-digital01__hero > p:not(.aznet-digital01__eyebrow)',
+        buttons: '.aznet-digital01__hero > .wp-block-buttons',
+      };
+      return Object.fromEntries(Object.entries(names).map(([key,selector]) => {
+        const el = document.querySelector(selector);
+        if (!el) return [key, null];
+        const rect = el.getBoundingClientRect();
+        return [key, {left:Math.round(rect.left), right:Math.round(rect.right)}];
+      }));
+    });
+    const requiredGutter = viewport.width < 600 ? 16 : 30;
+    const heroLefts = Object.values(heroInner).map(item => item?.left).filter(Number.isFinite);
+    assert(heroLefts.length === 4, `Hero content incomplete: ${JSON.stringify(heroInner)}`);
+    assert(heroLefts.every(x => x >= requiredGutter), `Hero text/CTA touches viewport edge: ${JSON.stringify(heroInner)}`);
+    assert(Math.max(...heroLefts) - Math.min(...heroLefts) <= 3,
+      `Hero heading, introductory copy and CTA are not left-aligned: ${JSON.stringify(heroInner)}`);
     assert(geometry.headlineLeft !== null && geometry.eyebrowLeft !== null
       && Math.abs(geometry.headlineLeft - geometry.eyebrowLeft) <= 4,
       `D-036 Hero heading and constrained eyebrow are not aligned: ${JSON.stringify(geometry)}`);
