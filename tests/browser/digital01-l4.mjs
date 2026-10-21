@@ -106,6 +106,18 @@ async function audit(browser, key, viewport) {
           process: read('.aznet-digital01__process .aznet-digital01__card'),
         };
       });
+      const sectionAlignment = await page.evaluate(() => ['trust','services','process'].map(kind => {
+        const parent = document.querySelector('.aznet-digital01__' + kind);
+        const eyebrow = parent?.querySelector(':scope > .aznet-digital01__eyebrow');
+        const card = parent?.querySelector('.aznet-digital01__card');
+        return {kind, label:eyebrow?.getBoundingClientRect().left ?? null,
+          card:card?.getBoundingClientRect().left ?? null};
+      }));
+      for (const section of sectionAlignment) {
+        assert(section.label !== null && section.card !== null &&
+          Math.abs(section.label - section.card) <= 5,
+          `desktop ${section.kind} label does not align with its card grid: ${JSON.stringify(sectionAlignment)}`);
+      }
       for (const [kind, minWidth] of [['trust', 260], ['services', 260], ['process', 220]]) {
         const widths = cardWidths[kind];
         assert(widths.length >= (kind === 'process' ? 4 : 3), `missing ${kind} cards: ${JSON.stringify(cardWidths)}`);
