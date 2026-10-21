@@ -35,6 +35,11 @@ namespace {
         fwrite(STDERR, "FAIL: fourth template cannot activate under the public Homepage preset.\n");
         exit(1);
     }
+    $composerSource = (string) file_get_contents($root . '/inc/theme/homepage-composer.php');
+    if (str_contains($composerSource, "'digital-01'")) {
+        fwrite(STDERR, "FAIL: Digital 01 hard-coded branch in generic Core violates D-043.\\n");
+        exit(1);
+    }
     $GLOBALS['rendered_template_parts'] = [];
     ob_start();
     \AZnet\Theme\render_homepage_before_content();
