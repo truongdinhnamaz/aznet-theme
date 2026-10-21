@@ -1,5 +1,7 @@
 name: Digital 01 fourth template candidate
 on:
+  push:
+    branches: [work/digital-01-fourth-template-20261021]
   pull_request:
     paths:
       - 'inc/theme/templates/digital-01/**'
