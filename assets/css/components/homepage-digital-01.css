@@ -479,7 +479,7 @@ body.aznet-theme-preset--digital-01 .aznet-digital01__cta .is-style-outline .wp-
  * Keep this fallback limited to direct children, never the custom grid.
  */
 body.aznet-theme-preset--digital-01 .aznet-digital01__hero > :is(
-  .aznet-digital01__eyebrow, h1, .aznet-digital01__intro, .wp-block-buttons
+  .aznet-digital01__eyebrow, h1, p, .wp-block-buttons
 ) {
   width:min(760px,calc(100% - 36px))!important;
   max-width:760px!important;
