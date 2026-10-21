@@ -40,5 +40,5 @@ return [
             'source_type'    => 'wp_block',
         ],
     ],
-    'provisioning'     => [],
+    'provisioning'     => [ 'blueprint' => 'curtain01-v1' ],
 ];
