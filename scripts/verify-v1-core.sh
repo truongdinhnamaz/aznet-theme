@@ -228,6 +228,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-authoring-
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-homepage-assets-manifest-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-provisioning-bridge-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/d043-provisioning-preset-safe-default-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/d043-vertical-provisioning-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-three-pilot-regression-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-fourth-template-proof-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-backend-unified-contract.php
