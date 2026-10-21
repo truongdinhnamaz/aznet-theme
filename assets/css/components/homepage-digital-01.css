@@ -470,3 +470,46 @@ body.aznet-theme-preset--digital-01 .aznet-digital01__cta .is-style-outline .wp-
   body.aznet-theme-preset--digital-01 .aznet-digital01 *::before,
   body.aznet-theme-preset--digital-01 .aznet-digital01 *::after {transition:none!important;scroll-behavior:auto!important;}
 }
+
+
+/*
+ * D-051 layout regression: WordPress users may insert the shipped neutral
+ * Digital 01 pattern with *direct* Hero children, while a site-specific
+ * native Page may use the two-column hero-grid. Both must stay usable.
+ * Keep this fallback limited to direct children, never the custom grid.
+ */
+body.aznet-theme-preset--digital-01 .aznet-digital01__hero > :is(
+  .aznet-digital01__eyebrow, h1, .aznet-digital01__intro, .wp-block-buttons
+) {
+  width:min(760px,calc(100% - 36px))!important;
+  max-width:760px!important;
+  margin-left:max(18px,calc((100% - var(--d01-max)) / 2))!important;
+  margin-right:0!important;
+}
+/* Neutral template pattern compatibility: intrinsic 3-/4-column layout must
+   not inherit the narrow WordPress article measure, and card text must read. */
+body.aznet-theme-preset--digital-01 .aznet-digital01 :is(
+  .aznet-digital01__trust,.aznet-digital01__services,
+  .aznet-digital01__process,.aznet-digital01__products,.aznet-digital01__faq
+) > .wp-block-columns {
+  width:100%!important;max-width:none!important;
+  margin-inline:0!important;transform:none!important;
+}
+body.aznet-theme-preset--digital-01 .aznet-digital01__card {
+  border:1px solid var(--d01-line);border-radius:12px;
+  background:#fff;color:var(--d01-ink);
+  padding:clamp(24px,2vw,34px);min-width:0;
+}
+body.aznet-theme-preset--digital-01 .aznet-digital01__card h3 {
+  color:var(--d01-ink);font-size:1.1rem;margin:0 0 10px!important;
+}
+body.aznet-theme-preset--digital-01 .aznet-digital01__card p {
+  color:var(--d01-muted);line-height:1.7;
+}
+/* AA against the inverse Process background, and date text on white cards. */
+body.aznet-theme-preset--digital-01 .aznet-digital01__process .aznet-digital01__eyebrow {
+  color:#ff9d85;
+}
+body.aznet-theme-preset--digital-01 .aznet-digital01__articles .wp-block-post-date {
+  color:#596873;
+}
