@@ -221,6 +221,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-process-fa
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/d040-td1-template-library-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-extension-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-manifest-v2-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-manifest-v2-mapped-fallback-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-presentation-registry-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-library-manifest-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-composer-manifest-activation-contract.php

@@ -60,6 +60,7 @@ jobs:
           php -l inc/theme/homepage-surface-map.php
           php -l inc/admin/homepage.php
           php -l patterns/homepage-digital-01.php
+          php tests/offline/template-manifest-v2-mapped-fallback-contract.php
           php tests/offline/digital01-template-contract.php
           php tests/offline/digital01-composer-isolation-contract.php
           php tests/offline/digital01-native-authoring-contract.php
