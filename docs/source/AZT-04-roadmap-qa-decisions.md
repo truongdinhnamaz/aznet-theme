@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.17
+**Version:** v1.18
 **Status:** Working Source  
 **Date:** 22/10/2026
 
@@ -1062,3 +1062,13 @@ Owner approved merging PR #487 and publishing a subsequent clean 1.3.94 patch to
 Site release 1.3.94 has PASS for source CI and public homepage/SEO content invariants, not site-wide accessibility. Fresh mobile Lighthouse still reports `color-contrast`, score 96. A Theme-owned light service paragraph uses `#6a7780` on `#fbfbfa`: 4.44:1 below normal text AA 4.5:1. PR #490 added an exact RED test at `29eea4d` (run `39691884315`) and minimal GREEN at `318cdbc` switching that paragraph to `#596873`. The failing Lighthouse DOM node has not been identified, so this CSS defect must not be claimed as the sole source of the site's remaining Lighthouse finding. CI and fresh visual/integration evidence remain required. PR #490 is draft: no approved merge, no version promotion and no site publication. Any further release needs separate product-owner approval. Current v1.3.94 production and previous 1.3.93 Theme backup remain untouched. LCP movement between two isolated lab runs is UNKNOWN in cause.
 
 **NEXT:** Finish exact-head PR #490 CI and retain the recoverable result without crossing release gates.
+
+
+### D-056 — Digital 01 AA small-text follow-up and v1.3.95 source promotion — ACCEPTED — 22/10/2026
+
+- The owner approved continuation following the confirmed D-055 findings. The authorization covers **a separately versioned v1.3.95 Theme-owned Digital 01 accessibility fix and deployment to aznet.vn**, subject to fresh version, package and production gates; it does not authorize WooCommerce, RootProfile, ConvertFlow, WordPress Page 2, SEO meta, theme mods, B12 or unrelated changes. Source PR #490 merged to canonical `main@4c2a9695844f992362ec71e934e31fe17c94db8e` following Digital 01, WordPress/browser and V1 Core SUCCESS. Historic release v1.3.94 remains the current live baseline until this new version passes and is published.
+- The defect is an actual Theme-owned normal-sized text color pair: light-service description `#6a7780` on `#fbfbfa` gave **4.44:1** (AA fail); small scoped change `#596873` meets AA. Evidence RED `29eea4d`, run `39691884315` failed for exactly that contrast; GREEN `318cdbc` and exact-head PR #490 static/browser/Core CI passed (run IDs `39692595771`, `39692595758`, `39692595692`). Site Lighthouse's individual failing DOM element and elevated lab LCP are **still unknown**; never claim 100/100 before a fresh post-publish site audit.
+- Promotion must be a **one-step v1.3.94 to v1.3.95 metadata change** (`style.css`, `functions.php`), with a dedicated X6 fail-closed case and offline contract, retention of previous v1.3.91 through v1.3.94 version gates, fresh V1 Core, X6 WordPress/browser and version consistency; no build stack or new plugin dependency. RED is expected before the new version contract exists. Publish only a clean Theme artifact with matched GitHub bytes, verified preview, recoverable backup and no changes to WordPress-owned site data.
+- Before cutover confirm active Theme 1.3.94, `page_on_front=2`, stable Page 2 hash/content, title, canonical, native Query and menu assignments. After release verify active v1.3.95 and CSS hash, frontend/browser smoke, fresh mobile accessibility/performance evidence, WooCommerce and RootProfile public projections, and record PASS/BLOCKED without inferring provider transaction correctness. If a material runtime regression emerges, revert to previous Theme. Separate follow-up diagnoses remaining Lighthouse findings and LCP; do not stack speculative fixes into this release.
+
+**EXACT NEXT:** implement v1.3.95 version gate in isolated branch, verify fresh release CI, deploy the clean accepted patch to aznet.vn, then measure and checkpoint actual production state.
