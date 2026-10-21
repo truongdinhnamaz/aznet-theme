@@ -30,6 +30,7 @@ jobs:
         run: |
           php tests/offline/digital01-template-contract.php
           php tests/offline/digital01-composer-isolation-contract.php
+          php tests/offline/digital01-native-authoring-contract.php
       - name: Retained three-pilot contract
         run: php tests/offline/template-three-pilot-regression-contract.php
       - name: Retained synthetic extension contract
