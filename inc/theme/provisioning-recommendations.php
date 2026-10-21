@@ -13,8 +13,11 @@ const PROVISIONING_MODE_ACTIVE = 'EXISTING_ACTIVE';
  * Classification changes defaults; it never establishes authoritative semantics.
  */
 function provisioning_site_mode( array $discovery ): string {
+    $known = function_exists( __NAMESPACE__ . '\\provisioning_blueprint_keys' )
+        ? provisioning_blueprint_keys()
+        : [ 'law01-v1', 'law01-v1-1', 'law01-v1-2' ];
     $prior = array_values( array_intersect(
-        [ 'law01-v1', 'law01-v1-1', 'law01-v1-2' ],
+        $known,
         array_map( 'strval', (array) ( $discovery['prior_blueprints'] ?? [] ) )
     ) );
     if ( [] !== $prior ) { return PROVISIONING_MODE_PREVIOUS; }
@@ -84,7 +87,13 @@ function provisioning_recommendation_result( string $state, string $action, int 
 
 function provisioning_owned_role_for_recommendation( string $blueprint, string $object_type, string $role ): int {
     if ( ! function_exists( __NAMESPACE__ . '\\provisioning_find_owned_role' ) ) { return 0; }
-    foreach ( array_values( array_unique( [ $blueprint, 'law01-v1-2', 'law01-v1-1', 'law01-v1' ] ) ) as $candidate_blueprint ) {
+    // Legacy Law revisions are compatible with one another, never with a
+    // distinct template's WordPress Page/Category provenance.
+    $law = [ 'law01-v1-2', 'law01-v1-1', 'law01-v1' ];
+    $candidates = in_array( $blueprint, $law, true )
+        ? array_values( array_unique( array_merge( [ $blueprint ], $law ) ) )
+        : [ $blueprint ];
+    foreach ( $candidates as $candidate_blueprint ) {
         if ( ! in_array( $candidate_blueprint, provisioning_blueprint_keys(), true ) ) { continue; }
         $id = provisioning_find_owned_role( $candidate_blueprint, $object_type, $role );
         if ( $id > 0 ) { return $id; }
@@ -105,12 +114,13 @@ function provisioning_recommendations( string $blueprint_key, array $discovery )
     $pages = (array) ( $discovery['pages'] ?? [] );
     $terms = (array) ( $discovery['categories'] ?? [] );
     $slots = (array) ( $discovery['homepage_slots'] ?? [] );
-    $page_slot = [
+    $law = in_array( $blueprint_key, [ 'law01-v1', 'law01-v1-1', 'law01-v1-2' ], true );
+    $page_slot = $law ? [
         'hero' => 'hero',
         'services' => 'services', 'about' => 'about', 'team' => 'team',
         'process' => 'process', 'faq' => 'faq', 'contact' => 'contact',
-    ];
-    $term_slot = [ 'case_analysis' => 'case_analysis', 'legal_news' => 'legal_news' ];
+    ] : [];
+    $term_slot = $law ? [ 'case_analysis' => 'case_analysis', 'legal_news' => 'legal_news' ] : [];
 
     $out = [ 'mode' => provisioning_site_mode( $discovery ), 'pages' => [], 'categories' => [] ];
 

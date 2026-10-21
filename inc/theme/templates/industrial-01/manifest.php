@@ -52,5 +52,5 @@ return [
             ],
         ],
     ],
-    'provisioning'     => [],
+    'provisioning'     => [ 'blueprint' => 'industrial01-v1' ],
 ];

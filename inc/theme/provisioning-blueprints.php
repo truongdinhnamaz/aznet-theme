@@ -4,14 +4,19 @@ namespace AZnet\Theme;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+require_once __DIR__ . '/provisioning-template-recipes.php';
+
 /** @return array<int,string> */
 function provisioning_blueprint_keys(): array {
-    return [ 'law01-v1', 'law01-v1-1', 'law01-v1-2', 'professional-services-v1' ];
+    $core = [ 'law01-v1', 'law01-v1-1', 'law01-v1-2', 'professional-services-v1' ];
+    return array_merge( $core, array_keys( provisioning_local_template_recipes() ) );
 }
 
 /** @return array<string,mixed>|null */
 function provisioning_blueprint( string $key ): ?array {
     if ( ! in_array( $key, provisioning_blueprint_keys(), true ) ) { return null; }
+    $local = provisioning_local_template_recipes();
+    if ( isset( $local[ $key ] ) ) { return $local[ $key ]; }
     if ( 'professional-services-v1' === $key ) {
         return function_exists( __NAMESPACE__ . '\\professional_services_blueprint' ) ? professional_services_blueprint() : null;
     }

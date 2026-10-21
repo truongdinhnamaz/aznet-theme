@@ -34,14 +34,14 @@ $pilots = [
         'visual_preset' => 'curtain-01',
         'authoring' => ['hero','proof','about','process','projects','knowledge','contact'],
         'assets' => ['aznet-theme-homepage-curtain-01','aznet-theme-homepage-curtain-01-motion'],
-        'provisioning' => null,
+        'provisioning' => 'curtain01-v1',
     ],
     'industrial-01' => [
         'homepage_preset' => 'industrial-01',
         'visual_preset' => 'industrial-01',
         'authoring' => ['hero','about','solutions','process','knowledge','contact'],
         'assets' => ['aznet-theme-homepage-industrial-01'],
-        'provisioning' => null,
+        'provisioning' => 'industrial01-v1',
     ],
 ];
 

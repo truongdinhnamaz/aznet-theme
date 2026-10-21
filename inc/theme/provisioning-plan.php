@@ -4,7 +4,11 @@ namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 /** @return array<int,string> */
-function provisioning_required_page_roles(): array { return [ 'home', 'about', 'services', 'contact' ]; }
+function provisioning_required_page_roles( string $blueprint_key = '' ): array {
+    $blueprint = '' !== $blueprint_key ? provisioning_blueprint( $blueprint_key ) : null;
+    $required = is_array( $blueprint ) ? ( $blueprint['required_page_roles'] ?? null ) : null;
+    return is_array( $required ) && [] !== $required ? $required : [ 'home', 'about', 'services', 'contact' ];
+}
 
 /** @return array<string,mixed> */
 function provisioning_state_payload( array $discovery ): array {
@@ -42,6 +46,9 @@ function provisioning_build_plan( string $blueprint_key, array $selections, arra
         return [ 'schema_version' => 1, 'blueprint' => $blueprint_key, 'state_fingerprint' => provisioning_state_fingerprint( $discovery ), 'operations' => [] ];
     }
     $ops = [];
+    $existing_draft = 'draft' === (string) ( $blueprint['existing_site_page_status'] ?? '' )
+        && ( ! function_exists( __NAMESPACE__ . '\\provisioning_site_mode' )
+            || 'NEW_OR_MOSTLY_EMPTY' !== provisioning_site_mode( $discovery ) );
     $page_sources = [];
     $category_sources = [];
     $allowed_actions = [ 'reuse', 'create', 'skip' ];
@@ -54,7 +61,8 @@ function provisioning_build_plan( string $blueprint_key, array $selections, arra
         if ( 'reuse' === $action ) {
             $ops[] = [ 'id' => 'page:' . $role . ':reuse', 'type' => 'reuse_page', 'role' => $role, 'object_id' => $object_id, 'effect' => sprintf( 'REUSE Page #%d → %s', $object_id, $role ) ];
         } else {
-            $ops[] = [ 'id' => 'page:' . $role . ':create', 'type' => 'create_page', 'role' => $role, 'object_id' => 0, 'parent_role' => $definition['parent_role'], 'effect' => sprintf( 'CREATE Page “%s” → %s', $definition['title'], $role ) ];
+            $label = $existing_draft ? 'CREATE Draft Page' : 'CREATE Page';
+            $ops[] = [ 'id' => 'page:' . $role . ':create', 'type' => 'create_page', 'role' => $role, 'object_id' => 0, 'parent_role' => $definition['parent_role'], 'effect' => sprintf( '%s “%s” → %s', $label, $definition['title'], $role ) ];
         }
         $page_sources[ $role ] = [ 'action' => $action, 'object_id' => $object_id ];
     }
@@ -74,6 +82,8 @@ function provisioning_build_plan( string $blueprint_key, array $selections, arra
 
     $menu = (array) ( $selections['menu'] ?? [] );
     $menu_action = in_array( $menu['action'] ?? '', [ 'reuse', 'create', 'skip' ], true ) ? (string) $menu['action'] : 'skip';
+    // Do not attach an empty/draft-only navigation menu to a live website.
+    if ( $existing_draft && 'create' === $menu_action ) { $menu_action = 'skip'; }
     if ( 'create' === $menu_action ) {
         $ops[] = [ 'id' => 'menu:primary:create', 'type' => 'create_menu', 'role' => 'primary_menu', 'object_id' => 0, 'effect' => 'CREATE Primary Menu “AZnet Primary”' ];
     } elseif ( 'reuse' === $menu_action ) {
@@ -82,7 +92,9 @@ function provisioning_build_plan( string $blueprint_key, array $selections, arra
     }
 
     $front = (array) ( $selections['front_page'] ?? [] );
-    if ( 'set_to_role' === ( $front['action'] ?? '' ) && isset( $page_sources[ (string) ( $front['role'] ?? '' ) ] ) ) {
+    if ( 'set_to_role' === ( $front['action'] ?? '' )
+        && isset( $page_sources[ (string) ( $front['role'] ?? '' ) ] )
+        && ! ( $existing_draft && 'create' === ( $page_sources[ (string) $front['role'] ]['action'] ?? '' ) ) ) {
         $role = (string) $front['role'];
         $ops[] = [ 'id' => 'front-page:set:' . $role, 'type' => 'set_front_page', 'role' => $role, 'object_id' => 0, 'effect' => sprintf( 'SET Front Page → %s', $role ) ];
     }
@@ -271,7 +283,7 @@ function provisioning_validate_plan( array $plan ): array {
             }
         }
     }
-    foreach ( provisioning_required_page_roles() as $required ) {
+    foreach ( provisioning_required_page_roles( (string) ( $plan['blueprint'] ?? '' ) ) as $required ) {
         $matched = false;
         foreach ( (array) ( $plan['operations'] ?? [] ) as $op ) {
             if ( in_array( $op['type'] ?? '', [ 'reuse_page','create_page' ], true ) && ( $op['role'] ?? '' ) === $required ) { $matched = true; break; }
