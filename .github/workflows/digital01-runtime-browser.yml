@@ -1,5 +1,7 @@
 name: Digital 01 WordPress runtime and browser
 on:
+  push:
+    branches: [work/digital-01-fourth-template-20261021]
   pull_request:
     branches: [main]
     paths:
