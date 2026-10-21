@@ -58,6 +58,45 @@ body.aznet-theme-preset--digital-01 .aznet-digital01__cta {
     color: #fff;
 }
 body.aznet-theme-preset--digital-01 .aznet-digital01__cta :where(h2,p) { color: #fff; }
+/* Reusable service/business Homepage roles; Theme owns only presentation. */
+body.aznet-theme-preset--digital-01 .aznet-digital01__trust {
+    padding-top: clamp(2.5rem, 4vw, 4rem);
+    border-bottom: 1px solid var(--aznet-theme-border);
+}
+body.aznet-theme-preset--digital-01 .aznet-digital01__why,
+body.aznet-theme-preset--digital-01 .aznet-digital01__products {
+    background: var(--aznet-theme-color-surface-subtle);
+}
+body.aznet-theme-preset--digital-01 .aznet-digital01__services,
+body.aznet-theme-preset--digital-01 .aznet-digital01__process,
+body.aznet-theme-preset--digital-01 .aznet-digital01__about,
+body.aznet-theme-preset--digital-01 .aznet-digital01__faq {
+    max-width: var(--aznet-theme-container-wide);
+    margin-inline: auto;
+}
+body.aznet-theme-preset--digital-01 .aznet-digital01__about {
+    border-top: 1px solid var(--aznet-theme-border);
+}
+body.aznet-theme-preset--digital-01 .aznet-digital01__process .aznet-digital01__card {
+    box-shadow: none;
+    border-top: 3px solid var(--aznet-theme-color-primary);
+}
+body.aznet-theme-preset--digital-01 .aznet-digital01__faq .aznet-digital01__card {
+    box-shadow: none;
+    border-color: var(--aznet-theme-border);
+}
+body.aznet-theme-preset--digital-01 .aznet-digital01 :where(.aznet-digital01__services, .aznet-digital01__process, .aznet-digital01__products, .aznet-digital01__trust, .aznet-digital01__faq) .wp-block-column {
+    min-width: 0;
+}
+@media (min-width: 48.01rem) and (max-width: 72rem) {
+    body.aznet-theme-preset--digital-01 .aznet-digital01__process .wp-block-columns {
+        flex-wrap: wrap;
+    }
+    body.aznet-theme-preset--digital-01 .aznet-digital01__process .wp-block-column {
+        flex: 1 1 13rem;
+    }
+}
+
 body.aznet-theme-preset--digital-01 .aznet-digital01__articles .wp-block-post-template {
     display: grid;
     grid-template-columns: repeat(3,minmax(0,1fr));
