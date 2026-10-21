@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.12
+**Version:** v1.13
 **Status:** Working Source  
-**Date:** 19/10/2026
+**Date:** 22/10/2026
 
 ## 1. Purpose
 
@@ -1013,3 +1013,15 @@ Execution and gates: bounded branch \`work/core-vertical-catalog-industrial01-pi
 **Release/deploy separation and gates:** First pass v1.3.92 code/installer PR exact-head L0-L4, deterministic ZIP checksum and official new GitHub Release with source SHA; only then install the verified ZIP in each site via an authorized supported theme update mechanism with site-specific preflight/rollback and fresh public+admin/runtime smoke. Rollout to a pilot is **not PASS** until that site's active Theme bytes/version are verified against the new package; public render and saved data regression required. Preserve old Theme backups and approved operator capability; do not grant a blanket WordPress Administrator role the Theme developer cap. A pilot that lacks a named operator account stays with hidden developer-only tools pending separately authorized account provisioning. No account-creation or password actions implied.
 
 **Initial risks/unknown:** Host backup confirmed by owner but not independently inspected; some old WPVibe drafts may need preserving/replacing; connector ability to upload a reviewed GitHub ZIP on production requires verification. External Site Guard MU-plugin not installed on any pilot (WordPress-native theme-switch/install operations remain protected by native capabilities only). Do not claim cross-owner L5. If suitable supported deployment transport does not exist, mark that pilot **BLOCKED**, keep exact release and recovery checkpoint, and avoid an unsafe partial replacement or source-copy workaround.
+
+
+### D-051 — Template Manifest Contract v2 for Digital 01 — ACCEPTED — 22/10/2026
+
+The owner explicitly approved v2 after reviewing the D-043 hard gate in Digital 01 PR #487. This **authorizes contract evolution and bounded implementation on the existing draft feature branch**, not merge/release/live site takeover.
+
+- Core registry supports v1/v2 concurrently; latest=2, retains declared contract version and unchanged v1 behavior for Law 01, Rèm 01 and Industrial 01. v1 manifests containing v2-only `homepage.composition` are rejected instead of silently receiving new behavior.
+- v2 optional `homepage.composition.mode`: `native` for WordPress static Front Page body, `mapped` for supported declarative Theme presentation maps; absent composition defaults to mapped. Invalid type/field/mode or unsupported version fails soft at registration; unknown renderer must never fall through to Law 01.
+- Required gate: RED->minimal GREEN, v1/v2/rejection and three-pilot regression, independent Digital 01 native editor test, fresh exact-head L1-L4 WordPress 6.9 desktop/tablet/mobile/keyboard/Classic Text+Visual/portability. Existing Digital 01 commit `6e9dbeed` L1-L4 PASS is retained for those bytes, not reused as a new-head PASS.
+- No transfer of native WordPress content/query, Woo commerce, RootProfile identity or ConvertFlow Journey semantics. No server-side page migration. PR #487 stays draft; `main`, GitHub Release and `aznet.vn` are untouched. Site-specific Page 2 legacy `[section]` migration, L5 provider-present and owner-approved merge/deploy remain independent gates.
+
+**Exact implementation start:** add fail-first v2 version/optional composition contract tests on PR #487 branch, then minimal Core registry upgrade + Digital 01 manifest version bump and retained regressions. Record fresh CI evidence and one next action without rewriting historical PASS.

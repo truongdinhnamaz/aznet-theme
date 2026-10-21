@@ -27,9 +27,11 @@ jobs:
           php -l inc/theme/templates/digital-01/manifest.php
           php -l patterns/homepage-digital-01.php
           php -l tests/offline/digital01-template-contract.php
+          php -l tests/offline/template-manifest-v2-contract.php
           php -l tests/offline/digital01-composer-isolation-contract.php
       - name: RED to GREEN fourth-template contracts
         run: |
+          php tests/offline/template-manifest-v2-contract.php
           php tests/offline/digital01-template-contract.php
           php tests/offline/digital01-composer-isolation-contract.php
           php tests/offline/digital01-native-authoring-contract.php
