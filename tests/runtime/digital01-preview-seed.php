@@ -3,7 +3,7 @@
  * Disposable WordPress 6.9 fixture for Digital 01 L3/L4.
  * wp eval-file tests/runtime/digital01-preview-seed.php
  */
-declare(strict_types=1);
+// WP-CLI eval-file executes this fixture inside eval(); no declare(strict_types) is valid here.
 
 $manifest = \AZnet\Theme\template_manifest('digital-01');
 if (!is_array($manifest)) {
