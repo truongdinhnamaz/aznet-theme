@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.16
+**Version:** v1.17
 **Status:** Working Source  
 **Date:** 22/10/2026
 
@@ -1055,3 +1055,10 @@ Owner re-approved the AZnet Editorial Edition visual concept and explicitly requ
 ### D-054 — Digital 01 1.3.94 AA Patch — ACCEPTED — 22/10/2026
 
 Owner approved merging PR #487 and publishing a subsequent clean 1.3.94 patch to aznet.vn. Source main at merge commit `6e4dc54c` is v1.3.93; the merged source already includes the verified AA CSS correction to Digital 01, while the public site previously used the earlier v1.3.93 asset. This patch is limited to version promotion from v1.3.93 to v1.3.94, backed by fresh Core and X6 fail-closed gates, retained Digital 01 L1-L4, and a site-specific rollback and verification. No WordPress Page, WooCommerce, RootProfile, ConvertFlow data, or unrelated B12 sources are changed by the patch. The v1.3.92 historical publication contract remains preserved. RED evidence: `2c8430a`, V1 Core run `39690194254` and X6 run `39690194392`, both rejected unsupported Theme version 1.3.94. GREEN gate must preserve all previous version cases and prove only the exact 1.3.93→1.3.94 metadata diff is allowed. Record fresh CI results and production evidence before claiming site or release PASS; keep rollback reference to owner-confirmed hosting backup, previous installed v1.3.93, and original Page 2 saved as WordPress draft #43513.
+
+
+### D-055 - Digital 01 secondary contrast correction - OPEN - 22/10/2026
+
+Site release 1.3.94 has PASS for source CI and public homepage/SEO content invariants, not site-wide accessibility. Fresh mobile Lighthouse still reports `color-contrast`, score 96. A Theme-owned light service paragraph uses `#6a7780` on `#fbfbfa`: 4.44:1 below normal text AA 4.5:1. PR #490 added an exact RED test at `29eea4d` (run `39691884315`) and minimal GREEN at `318cdbc` switching that paragraph to `#596873`. The failing Lighthouse DOM node has not been identified, so this CSS defect must not be claimed as the sole source of the site's remaining Lighthouse finding. CI and fresh visual/integration evidence remain required. PR #490 is draft: no approved merge, no version promotion and no site publication. Any further release needs separate product-owner approval. Current v1.3.94 production and previous 1.3.93 Theme backup remain untouched. LCP movement between two isolated lab runs is UNKNOWN in cause.
+
+**NEXT:** Finish exact-head PR #490 CI and retain the recoverable result without crossing release gates.

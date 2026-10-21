@@ -120,6 +120,21 @@ if ($cardContrast < 4.5) {
     exit(1);
 }
 
+// D-055: Light service-card description is normal-size text and needs AA 4.5:1.
+preg_match('/\.aznet-digital01__service\s*\{\s*background:\s*(#[0-9a-f]{6})/i', $homepageCss, $lightCardBg);
+preg_match('/\.aznet-digital01__service p:not\(\.aznet-digital01__service-index\)\s*\{\s*color:\s*(#[0-9a-f]{6})/i', $homepageCss, $lightCardText);
+if (empty($lightCardBg[1]) || empty($lightCardText[1])) {
+    fwrite(STDERR, "FAIL: Digital 01 light service-card text/background colors missing.\n");
+    exit(1);
+}
+$lightL = $relativeLuminance($lightCardBg[1]);
+$textL = $relativeLuminance($lightCardText[1]);
+$serviceContrast = (max($lightL, $textL) + 0.05) / (min($lightL, $textL) + 0.05);
+if ($serviceContrast < 4.5) {
+    fwrite(STDERR, sprintf("FAIL: Digital 01 light service description %.2f:1 below WCAG AA.\n", $serviceContrast));
+    exit(1);
+}
+
 foreach (['law-01', 'curtain-01', 'industrial-01'] as $retained) {
     if (! is_array(\AZnet\Theme\template_manifest($retained))) {
         fwrite(STDERR, "FAIL: previously accepted template missing: {$retained}.\n");
