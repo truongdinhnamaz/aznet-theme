@@ -144,7 +144,8 @@ body.aznet-theme-preset--digital-01 .aznet-digital01__articles .wp-block-query {
 /* Visually align section headings, labels and cards at the same inner edge. */
 body.aznet-theme-preset--digital-01 .aznet-digital01__section.alignwide > :is(.wp-block-heading, .aznet-digital01__eyebrow, .aznet-digital01__intro),
 body.aznet-theme-preset--digital-01 .aznet-digital01__products > .wp-block-group.alignwide > :is(.wp-block-heading, .aznet-digital01__eyebrow) {
-    margin-inline: 0;
+    /* WP's generated constrained-child auto margins are !important. */
+    margin-inline: 0 !important;
 }
 
 body.aznet-theme-preset--digital-01 .aznet-digital01__process .aznet-digital01__card {
