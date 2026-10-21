@@ -84,6 +84,15 @@ async function auditEditor(browser) {
     assert(content.includes('aznet-digital01') && content.includes('<!-- wp:query'), 'WordPress native Page content missing in accepted Classic Editor');
     assert(await page.locator('.edit-post-layout, .interface-interface-skeleton').count() === 0, 'unexpected Gutenberg editor changed accepted D-024 Classic policy');
     await page.screenshot({ path: path.join(output, 'digital01-editor-classic.png'), fullPage: true });
+    await page.goto(`${base}/wp-admin/admin.php?page=aznet-theme&section=homepage`, { waitUntil: 'domcontentloaded' });
+    await page.locator('.aznet-theme-homepage-authoring').waitFor({ state: 'visible', timeout: 20000 });
+    const editorLink = page.getByRole('link', { name: 'Chỉnh sửa nội dung trang chủ' });
+    assert(await editorLink.count() === 1, 'native Theme authoring control has no direct WordPress Page edit action');
+    const target = String(await editorLink.getAttribute('href') || '');
+    assert(target.includes(`post=${frontId}`), 'native Theme authoring control linked the wrong WordPress Page');
+    assert(!(await page.locator('.aznet-theme-homepage-authoring').innerText()).includes('Chưa hỗ trợ'), 'native authoring still reports unsupported source');
+    await page.screenshot({ path: path.join(output, 'digital01-theme-homepage-authoring.png'), fullPage: true });
+
     entry.mode = 'classic';
     entry.status = 'passed';
   } catch(e) {
