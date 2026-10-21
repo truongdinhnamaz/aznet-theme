@@ -1,0 +1,82 @@
+name: AZnet live Lighthouse node probe (non-production)
+on:
+  push:
+    branches:
+      - work/aznet-lighthouse-node-probe-20261022
+permissions:
+  contents: read
+jobs:
+  mobile-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Prepare Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check browser
+        run: google-chrome --version || chromium --version
+      - name: Audit public AZnet homepage (read-only)
+        run: |
+          npx --yes lighthouse@12.8.2 https://aznet.vn/ \
+            --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" \
+            --only-categories=performance,accessibility \
+            --output=json \
+            --output-path="$RUNNER_TEMP/aznet-live-lighthouse.json" \
+            --quiet
+      - name: Print failing DOM nodes and LCP evidence
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const file = path.join(process.env.RUNNER_TEMP, 'aznet-live-lighthouse.json');
+          const report = JSON.parse(fs.readFileSync(file, 'utf8'));
+          const audits = report.audits || {};
+          const categories = report.categories || {};
+          const get = id => audits[id] || {};
+          const evidence = {
+            source: 'Unauthenticated public https://aznet.vn/ (mobile Lighthouse on GitHub-hosted runner)',
+            requestedUrl: report.requestedUrl,
+            finalUrl: report.finalUrl,
+            fetchTime: report.fetchTime,
+            lighthouseVersion: report.lighthouseVersion,
+            userAgent: report.userAgent,
+            performance: categories.performance?.score,
+            accessibility: categories.accessibility?.score,
+            lcp: get('largest-contentful-paint').displayValue,
+            fcp: get('first-contentful-paint').displayValue,
+            tbt: get('total-blocking-time').displayValue,
+            cls: get('cumulative-layout-shift').displayValue,
+            warnings: report.runWarnings,
+          };
+          console.log('SUMMARY', JSON.stringify(evidence, null, 2));
+          const contrast = get('color-contrast');
+          const failures = (contrast.details?.items || []).map((item, index) => ({
+            index,
+            selector: item.node?.selector,
+            path: item.node?.path,
+            snippet: item.node?.snippet,
+            nodeLabel: item.node?.nodeLabel,
+            failureSummary: item.node?.failureSummary,
+            explanation: item.explanation,
+          }));
+          console.log('COLOR_CONTRAST_AUDIT', JSON.stringify({score:contrast.score, itemCount:failures.length, failures}, null, 2));
+          const keys = Object.keys(audits).filter(key => /lcp|largest-contentful-paint-element|render-blocking|unused-css-rules/i.test(key));
+          for (const key of keys) {
+            const audit = audits[key];
+            const items = (audit.details?.items || []).slice(0, 6);
+            console.log('DIAGNOSTIC', key, JSON.stringify({
+              score: audit.score,
+              displayValue: audit.displayValue,
+              explanation: audit.explanation,
+              items,
+            }, null, 2).slice(0, 8000));
+          }
+          const css = get('unused-css-rules');
+          console.log('UNUSED_CSS_URLS', JSON.stringify((css.details?.items || []).map(item => ({
+            url:item.url, totalBytes:item.totalBytes, wastedBytes:item.wastedBytes
+          })).slice(0,12), null, 2));
+          if (contrast.score !== 1) {
+            console.log('CONCLUSION: Accessibility not PASS; use the node evidence above. No Theme files changed.');
+          }
+          NODE
