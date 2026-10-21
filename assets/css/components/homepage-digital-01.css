@@ -13,7 +13,7 @@ body.aznet-theme-preset--digital-01 .aznet-digital01__hero {
 }
 body.aznet-theme-preset--digital-01 .aznet-digital01__hero .wp-block-heading {
     color: inherit;
-    max-width: 17ch;
+    max-width: 100%;
     font-size: clamp(2.7rem, 5.3vw, 5.7rem);
     line-height: 1.08;
 }
