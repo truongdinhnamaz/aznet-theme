@@ -19,8 +19,26 @@
 <!-- wp:button {"className":"is-style-outline"} --><div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="#aznet-digital01-contact"><?php esc_html_e('Trao đổi nhu cầu','aznet-theme'); ?></a></div><!-- /wp:button --></div><!-- /wp:buttons -->
 </div><!-- /wp:group -->
 
-<!-- wp:group {"align":"wide","anchor":"aznet-digital01-services","className":"aznet-digital01__section","layout":{"type":"constrained"}} -->
-<div id="aznet-digital01-services" class="wp-block-group alignwide aznet-digital01__section">
+<!-- wp:group {"align":"wide","className":"aznet-digital01__trust aznet-digital01__section","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignwide aznet-digital01__trust aznet-digital01__section">
+<!-- wp:paragraph {"className":"aznet-digital01__eyebrow"} --><p class="aznet-digital01__eyebrow"><?php esc_html_e('NGUYÊN TẮC PHỐI HỢP','aznet-theme'); ?></p><!-- /wp:paragraph -->
+<!-- wp:columns -->
+<div class="wp-block-columns">
+<!-- wp:column {"className":"aznet-digital01__card"} --><div class="wp-block-column aznet-digital01__card"><!-- wp:heading {"level":3} --><h3 class="wp-block-heading"><?php esc_html_e('Mục tiêu rõ ràng','aznet-theme'); ?></h3><!-- /wp:heading --><!-- wp:paragraph --><p><?php esc_html_e('Thống nhất nhu cầu và thước đo phù hợp trước khi triển khai.','aznet-theme'); ?></p><!-- /wp:paragraph --></div><!-- /wp:column -->
+<!-- wp:column {"className":"aznet-digital01__card"} --><div class="wp-block-column aznet-digital01__card"><!-- wp:heading {"level":3} --><h3 class="wp-block-heading"><?php esc_html_e('Thông tin có nguồn','aznet-theme'); ?></h3><!-- /wp:heading --><!-- wp:paragraph --><p><?php esc_html_e('Thông tin năng lực, sản phẩm và minh chứng cần được đối chiếu từ nguồn công khai.','aznet-theme'); ?></p><!-- /wp:paragraph --></div><!-- /wp:column -->
+<!-- wp:column {"className":"aznet-digital01__card"} --><div class="wp-block-column aznet-digital01__card"><!-- wp:heading {"level":3} --><h3 class="wp-block-heading"><?php esc_html_e('Cải tiến liên tục','aznet-theme'); ?></h3><!-- /wp:heading --><!-- wp:paragraph --><p><?php esc_html_e('Theo dõi kết quả thực tế và điều chỉnh dựa trên dữ liệu phù hợp.','aznet-theme'); ?></p><!-- /wp:paragraph --></div><!-- /wp:column -->
+</div><!-- /wp:columns -->
+</div><!-- /wp:group -->
+
+<!-- wp:group {"align":"full","className":"aznet-digital01__why aznet-digital01__soft aznet-digital01__section","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull aznet-digital01__why aznet-digital01__soft aznet-digital01__section">
+<!-- wp:paragraph {"className":"aznet-digital01__eyebrow"} --><p class="aznet-digital01__eyebrow"><?php esc_html_e('VAI TRÒ CỦA WEBSITE','aznet-theme'); ?></p><!-- /wp:paragraph -->
+<!-- wp:heading {"level":2} --><h2 class="wp-block-heading"><?php esc_html_e('Không chỉ hiện diện, website cần phục vụ mục tiêu kinh doanh','aznet-theme'); ?></h2><!-- /wp:heading -->
+<!-- wp:paragraph {"className":"aznet-digital01__intro"} --><p class="aznet-digital01__intro"><?php esc_html_e('Một website hữu ích kết nối nội dung, trải nghiệm khách hàng, khả năng tìm kiếm và hoạt động vận hành. Đánh giá vai trò cụ thể của từng thành phần theo nhu cầu thực tế.','aznet-theme'); ?></p><!-- /wp:paragraph -->
+</div><!-- /wp:group -->
+
+<!-- wp:group {"align":"wide","anchor":"aznet-digital01-services","className":"aznet-digital01__services aznet-digital01__section","layout":{"type":"constrained"}} -->
+<div id="aznet-digital01-services" class="wp-block-group alignwide aznet-digital01__services aznet-digital01__section">
 <!-- wp:paragraph {"className":"aznet-digital01__eyebrow"} --><p class="aznet-digital01__eyebrow"><?php esc_html_e('DỊCH VỤ','aznet-theme'); ?></p><!-- /wp:paragraph -->
 <!-- wp:heading {"level":2} --><h2 class="wp-block-heading"><?php esc_html_e('Các nhóm giải pháp cho doanh nghiệp','aznet-theme'); ?></h2><!-- /wp:heading -->
 <!-- wp:paragraph {"className":"aznet-digital01__intro"} --><p class="aznet-digital01__intro"><?php esc_html_e('Các thẻ dưới đây là nội dung mẫu để chỉnh sửa. Chỉ xuất bản những dịch vụ thực tế đang cung cấp.','aznet-theme'); ?></p><!-- /wp:paragraph -->
@@ -31,7 +49,26 @@
 </div><!-- /wp:columns -->
 </div><!-- /wp:group -->
 
-<!-- wp:group {"align":"full","className":"aznet-digital01__soft aznet-digital01__section","layout":{"type":"constrained"}} --><div class="wp-block-group alignfull aznet-digital01__soft aznet-digital01__section">
+<!-- wp:group {"align":"wide","className":"aznet-digital01__process aznet-digital01__section","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignwide aznet-digital01__process aznet-digital01__section">
+<!-- wp:paragraph {"className":"aznet-digital01__eyebrow"} --><p class="aznet-digital01__eyebrow"><?php esc_html_e('QUY TRÌNH','aznet-theme'); ?></p><!-- /wp:paragraph -->
+<!-- wp:heading {"level":2} --><h2 class="wp-block-heading"><?php esc_html_e('Từ tìm hiểu nhu cầu đến vận hành và cải tiến','aznet-theme'); ?></h2><!-- /wp:heading -->
+<!-- wp:columns --><div class="wp-block-columns">
+<!-- wp:column {"className":"aznet-digital01__card"} --><div class="wp-block-column aznet-digital01__card"><!-- wp:heading {"level":3} --><h3 class="wp-block-heading"><?php esc_html_e('01. Hiểu nhu cầu','aznet-theme'); ?></h3><!-- /wp:heading --><!-- wp:paragraph --><p><?php esc_html_e('Làm rõ mục tiêu và nguồn lực hiện có.','aznet-theme'); ?></p><!-- /wp:paragraph --></div><!-- /wp:column -->
+<!-- wp:column {"className":"aznet-digital01__card"} --><div class="wp-block-column aznet-digital01__card"><!-- wp:heading {"level":3} --><h3 class="wp-block-heading"><?php esc_html_e('02. Đề xuất giải pháp','aznet-theme'); ?></h3><!-- /wp:heading --><!-- wp:paragraph --><p><?php esc_html_e('Chọn phạm vi và phương án triển khai có thể kiểm chứng.','aznet-theme'); ?></p><!-- /wp:paragraph --></div><!-- /wp:column -->
+<!-- wp:column {"className":"aznet-digital01__card"} --><div class="wp-block-column aznet-digital01__card"><!-- wp:heading {"level":3} --><h3 class="wp-block-heading"><?php esc_html_e('03. Triển khai','aznet-theme'); ?></h3><!-- /wp:heading --><!-- wp:paragraph --><p><?php esc_html_e('Kiểm tra chất lượng và bàn giao theo phạm vi đã thống nhất.','aznet-theme'); ?></p><!-- /wp:paragraph --></div><!-- /wp:column -->
+<!-- wp:column {"className":"aznet-digital01__card"} --><div class="wp-block-column aznet-digital01__card"><!-- wp:heading {"level":3} --><h3 class="wp-block-heading"><?php esc_html_e('04. Đánh giá','aznet-theme'); ?></h3><!-- /wp:heading --><!-- wp:paragraph --><p><?php esc_html_e('Theo dõi tác động và đề xuất điều chỉnh phù hợp.','aznet-theme'); ?></p><!-- /wp:paragraph --></div><!-- /wp:column -->
+</div><!-- /wp:columns -->
+</div><!-- /wp:group -->
+
+<!-- wp:group {"align":"wide","className":"aznet-digital01__about aznet-digital01__section","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignwide aznet-digital01__about aznet-digital01__section">
+<!-- wp:paragraph {"className":"aznet-digital01__eyebrow"} --><p class="aznet-digital01__eyebrow"><?php esc_html_e('CON NGƯỜI VÀ TRÁCH NHIỆM','aznet-theme'); ?></p><!-- /wp:paragraph -->
+<!-- wp:heading {"level":2} --><h2 class="wp-block-heading"><?php esc_html_e('Ai chịu trách nhiệm cho chất lượng dịch vụ?','aznet-theme'); ?></h2><!-- /wp:heading -->
+<!-- wp:paragraph {"className":"aznet-digital01__intro"} --><p class="aznet-digital01__intro"><?php esc_html_e('Tại đây, biên tập thông tin người phụ trách, năng lực, kinh nghiệm và đường dẫn hồ sơ dựa trên nguồn đã được xác minh. Mẫu không tự tạo danh tính hoặc thành tích.','aznet-theme'); ?></p><!-- /wp:paragraph -->
+</div><!-- /wp:group -->
+
+<!-- wp:group {"align":"full","className":"aznet-digital01__products aznet-digital01__soft aznet-digital01__section","layout":{"type":"constrained"}} --><div class="wp-block-group alignfull aznet-digital01__products aznet-digital01__soft aznet-digital01__section">
 <!-- wp:group {"align":"wide","layout":{"type":"constrained"}} --><div class="wp-block-group alignwide">
 <!-- wp:paragraph {"className":"aznet-digital01__eyebrow"} --><p class="aznet-digital01__eyebrow"><?php esc_html_e('SẢN PHẨM SỐ','aznet-theme'); ?></p><!-- /wp:paragraph -->
 <!-- wp:heading {"level":2} --><h2 class="wp-block-heading"><?php esc_html_e('Khám phá các sản phẩm và công cụ','aznet-theme'); ?></h2><!-- /wp:heading -->
@@ -56,6 +93,16 @@
 <!-- /wp:post-template -->
 <!-- wp:query-no-results --><!-- wp:paragraph --><p><?php esc_html_e('Bài viết công nghệ sẽ hiển thị ở đây khi được xuất bản.','aznet-theme'); ?></p><!-- /wp:paragraph --><!-- /wp:query-no-results -->
 </div><!-- /wp:query -->
+</div><!-- /wp:group -->
+
+<!-- wp:group {"align":"wide","className":"aznet-digital01__faq aznet-digital01__section","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignwide aznet-digital01__faq aznet-digital01__section">
+<!-- wp:paragraph {"className":"aznet-digital01__eyebrow"} --><p class="aznet-digital01__eyebrow"><?php esc_html_e('HỎI ĐÁP','aznet-theme'); ?></p><!-- /wp:paragraph -->
+<!-- wp:heading {"level":2} --><h2 class="wp-block-heading"><?php esc_html_e('Những điều cần làm rõ trước khi triển khai','aznet-theme'); ?></h2><!-- /wp:heading -->
+<!-- wp:columns --><div class="wp-block-columns">
+<!-- wp:column {"className":"aznet-digital01__card"} --><div class="wp-block-column aznet-digital01__card"><!-- wp:heading {"level":3} --><h3 class="wp-block-heading"><?php esc_html_e('Nên bắt đầu từ đâu?','aznet-theme'); ?></h3><!-- /wp:heading --><!-- wp:paragraph --><p><?php esc_html_e('Mô tả mục tiêu, nhóm khách hàng và tình trạng website hiện tại để xác định phạm vi đánh giá.','aznet-theme'); ?></p><!-- /wp:paragraph --></div><!-- /wp:column -->
+<!-- wp:column {"className":"aznet-digital01__card"} --><div class="wp-block-column aznet-digital01__card"><!-- wp:heading {"level":3} --><h3 class="wp-block-heading"><?php esc_html_e('Có cần làm lại website không?','aznet-theme'); ?></h3><!-- /wp:heading --><!-- wp:paragraph --><p><?php esc_html_e('Việc nâng cấp hay xây dựng mới phụ thuộc vào đánh giá kỹ thuật và mục tiêu kinh doanh cụ thể.','aznet-theme'); ?></p><!-- /wp:paragraph --></div><!-- /wp:column -->
+</div><!-- /wp:columns -->
 </div><!-- /wp:group -->
 
 <!-- wp:group {"align":"wide","anchor":"aznet-digital01-contact","className":"aznet-digital01__cta","layout":{"type":"constrained"}} -->
