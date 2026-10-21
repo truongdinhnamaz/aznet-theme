@@ -121,6 +121,30 @@ body.aznet-theme-preset--digital-01 .aznet-digital01__faq {
 body.aznet-theme-preset--digital-01 .aznet-digital01__about {
     border-top: 1px solid var(--aznet-theme-border);
 }
+/* Card collections use the declared wide-section width, not WordPress's
+ * 768px article text measure. Paragraphs retain their readable max-width. */
+body.aznet-theme-preset--digital-01 .aznet-digital01 :is(
+    .aznet-digital01__trust,
+    .aznet-digital01__services,
+    .aznet-digital01__process,
+    .aznet-digital01__products,
+    .aznet-digital01__faq
+) .wp-block-columns {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+}
+body.aznet-theme-preset--digital-01 .aznet-digital01__articles .wp-block-query {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+}
+/* Visually align section headings, labels and cards at the same inner edge. */
+body.aznet-theme-preset--digital-01 .aznet-digital01__section.alignwide > :is(.wp-block-heading, .aznet-digital01__eyebrow, .aznet-digital01__intro),
+body.aznet-theme-preset--digital-01 .aznet-digital01__products > .wp-block-group.alignwide > :is(.wp-block-heading, .aznet-digital01__eyebrow) {
+    margin-inline: 0;
+}
+
 body.aznet-theme-preset--digital-01 .aznet-digital01__process .aznet-digital01__card {
     box-shadow: none;
     border-top: 3px solid var(--aznet-theme-color-primary);
