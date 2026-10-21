@@ -153,7 +153,7 @@ body.aznet-theme-preset--digital-01 .aznet-digital01__console-top::before {
   box-shadow:15px 0 #f0bc7c,30px 0 #a4cbbc;margin-right:32px;flex:none;
 }
 body.aznet-theme-preset--digital-01 .aznet-digital01__console-body {padding:clamp(22px,3vw,37px);}
-body.aznet-theme-preset--digital-01 .aznet-digital01__console-body > h3 {
+body.aznet-theme-preset--digital-01 .aznet-digital01__console-body > .aznet-digital01__console-title {
   color:var(--d01-ink);font-size:clamp(1.28rem,1.55vw,1.7rem);
   line-height:1.32;margin:0 0 25px!important;font-weight:800;
 }
@@ -189,7 +189,7 @@ body.aznet-theme-preset--digital-01 .aznet-digital01__proof {
 }
 body.aznet-theme-preset--digital-01 .aznet-digital01__proof + .aznet-digital01__proof {padding-left:30px;}
 body.aznet-theme-preset--digital-01 .aznet-digital01__proof:last-child {border-right:0;}
-body.aznet-theme-preset--digital-01 .aznet-digital01__proof h3 {
+body.aznet-theme-preset--digital-01 .aznet-digital01__proof .aznet-digital01__proof-title {
   font-size:1.05rem;line-height:1.4;color:var(--d01-ink);margin:0 0 6px!important;
 }
 body.aznet-theme-preset--digital-01 .aznet-digital01__proof p {
