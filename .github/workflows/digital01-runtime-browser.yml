@@ -132,7 +132,17 @@ jobs:
           set -euo pipefail
           ID=$(cat /tmp/digital01-front-id.txt)
           BEFORE=$(D01_FRONT_ID="$ID" wp eval 'echo hash("sha256", (string) get_post((int) getenv("D01_FRONT_ID"))->post_content);' --path=/tmp/wp --allow-root)
-          test "$BEFORE" = "$(cat /tmp/digital01-content-sha.txt)"
+          test "$BEFORE" != "$(cat /tmp/digital01-content-sha.txt)"
+          D01_FRONT_ID="$ID" wp eval '
+            $raw = (string) get_post((int) getenv("D01_FRONT_ID"))->post_content;
+            if (! str_contains($raw, "Classic Editor round-trip verified.")
+                || ! str_contains($raw, "<!-- wp:query")
+                || ! str_contains($raw, "aznet-digital01")) {
+                fwrite(STDERR, "FAIL: Classic Editor saved Page but lost native content.\\n");
+                exit(1);
+            }
+            echo "PASS: Classic Editor persisted Page and public WordPress Query block\\n";
+          ' --path=/tmp/wp --allow-root
           mkdir -p /tmp/wp/wp-content/themes/digital01-portability
           printf '/*\nTheme Name: Digital 01 Portability Fixture\nVersion: 1.0.0\n*/\n' > /tmp/wp/wp-content/themes/digital01-portability/style.css
           printf '%s\n' '<?php while (have_posts()) { the_post(); the_content(); }' > /tmp/wp/wp-content/themes/digital01-portability/index.php
