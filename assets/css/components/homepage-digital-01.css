@@ -5,7 +5,7 @@
  */
 body.aznet-theme-preset--digital-01 {
   --d01-ink:#15242d; --d01-navy:#101f2b; --d01-navy-2:#1c3443;
-  --d01-accent:#eb5034; --d01-accent-soft:#fcece6; --d01-paper:#ffffff;
+  --d01-accent:#c63d25; --d01-accent-soft:#fcece6; --d01-paper:#ffffff;
   --d01-cream:#f6f7f5; --d01-line:#dfe6e4; --d01-muted:#596873;
   --d01-max:1240px;
   color:var(--d01-ink);
