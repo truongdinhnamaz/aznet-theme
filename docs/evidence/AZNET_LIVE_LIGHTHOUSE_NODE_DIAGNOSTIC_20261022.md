@@ -28,3 +28,16 @@
 **Gate status:** Evidence acquisition PASS L4 diagnostic only; accessibility issue confirmed; production fix NOT started, no RED→GREEN Theme fix verified. LCP root cause UNKNOWN beyond observed render-delay split. `1.3.95` stays live. `aznet-theme-wpvibe-backup` retains prior 1.3.94.
 
 **EXACT NEXT:** Use a fresh read-only browser computed-style/cascade capture on the nine violating nodes with CSS resource URLs and build hashes; verify live Theme CSS against canonical commit. If a confirmed Theme-owned defect exists, write a minimal failing regression on an isolated branch then implement and verify GREEN. Merge/deploy/new release remain approval-gated.
+
+## Follow-up computed-style witness and cache hypothesis (same date)
+
+[Read-only GitHub Action run 39695377989](https://github.com/truongdinhnamaz/aznet-theme/actions/runs/39695377989) completed SUCCESS. Playwright Chrome mobile captured actual computed values:
+
+- Featured index `01`: **rgb(198,61,37) = #c63d25** on navy **#192e3b**, even though canonical Theme CSS defines a later featured override **#ff9d85**.
+- Featured first link: **#c63d25** on navy **#192e3b**, despite canonical featured `#ff9d85` override.
+- Light service paragraphs: **rgb(106,119,128) = #6a7780** on **#fbfbfa**, despite canonical/live Theme source **#596873**.
+- CTA eyebrow: **rgb(255,223,213) = #ffdfd5** on **#c63d25**, despite canonical Theme later override **#ffffff**.
+- Process link: browser default **rgb(0,0,238) = #0000ee** on dark **#101f2b** — separate actual presentation gap; no suitable Theme override proven.
+- Browser resource list explicitly includes `/wp-content/cache/min/1/wp-content/themes/aznet-theme/assets/css/components/homepage-digital-01.css?ver=1792621680`, showing WP Rocket's optimized CSS layer is active. The active Theme file read directly via WPVibe confirms corrected `#596873` at line 265. Hence optimized-file staleness is a strong causal hypothesis but byte identity/content of the cached optimized file is not yet fetched; do not claim confirmed cache corruption.
+
+A safe cache refresh was then executed via WPVibe's WordPress command `cache purge --url=https://aznet.vn/` (WP Rocket homepage URL; success), followed by `cache purge` (WP Rocket + Rank Math sitemap + object cache, success). No Theme, WordPress content or SEO data was edited. A fresh post-purge public browser comparison is **required** before claiming resolution. If cached CSS remains old, investigate cache/min regeneration and upstream CDN. The process link `#0000ee` requires a separate Theme-owned RED/Green regardless.
