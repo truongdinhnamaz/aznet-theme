@@ -1,6 +1,6 @@
 # AZT-03 — Current Baseline và Code Provenance
 
-**Version:** v0.86
+**Version:** v0.87
 **Status:** Working Source
 **Date:** 22/10/2026
 **Repository:** `truongdinhnamaz/aznet-theme`
@@ -593,3 +593,12 @@ Evidence: `docs/evidence/CORE_HOMEPAGE_DESIGN_PILOT_L4_PARTIAL_20261002.md`.
 - **Mobile Lighthouse after cutover (single run):** Performance **86**, Accessibility **96** (one contrast finding), Best Practices **100**, SEO **100**. Laboratory LCP **2.9 s**, CLS **0**, TBT **0 ms**; no CrUX field data. Moderate contrast item and homepage post-release visual acceptance remain open refinements, not faked PASS. Separate legacy Flatsome shortcode and duplicate-H1 issues remain on `/gioi-thieu` and `/dich-vu`, plus a duplicate H1 observed on the product page; attribution to this Digital 01 change is **unproven**.
 - **Rollback:** User-confirmed hosting backup (restore drill not witnessed), retained previous Theme folder `aznet-theme-wpvibe-backup` v1.3.92, exact original Page 2 body saved on unpublished Page 43513, Theme presentation settings can be reverted while preserving menu/sidebar/theme mods. Future Theme publish would overwrite WPVibe's single backup folder; preserve this checkpoint when packaging follow-up changes.
 - **Source status:** `main` and GitHub Release/tag were not changed by site publish; PR #487 stays Draft. A later merge/release needs explicit separate review of production provenance and other gates.
+
+
+### aznet.vn Theme 1.3.94 production checkpoint - 22/10/2026
+
+- Canonical main `ef793b2`; approved PR #487 and #489 merged. Exact-head 1.3.94 V1 Core `39690627364`, X6 `39690627341`, version consistency `39690627432` SUCCESS.
+- Live WordPress 7.1.3, PHP 8.4.26, active AZnet Theme 1.3.94. WPVibe retained previous 1.3.93 Theme as `aznet-theme-wpvibe-backup`; owner reported hosting backup. Theme path set 235/235. B12 is separate and not deployed.
+- Native Front Page 2 remains published and unchanged: content length 28,515, integrity FNV32 `da001606`, original Flatsome body retained in draft Page 43513. Ten Digital 01 sections, one H1, five FAQ, three Query Loop cards, seven images with alt. Menus, settings, title, canonical, robots and meta description unchanged. Limited Woo/RootProfile render smoke PASS; full integration L5 UNKNOWN.
+- Fresh mobile Lighthouse: Performance 67, Accessibility 96, Best Practices 100, SEO 100; LCP 7.4s, CLS 0; no CrUX. Old single lab reading 86/96/100/100 and LCP 2.9s is not proof of a regression cause. Color-contrast remains a finding. See PR #489 comment 6328614726 for full evidence.
+- PR #490 is a separate unmerged/undeployed D-055 light service text contrast candidate. Current live version remains 1.3.94; new release approval is required.
