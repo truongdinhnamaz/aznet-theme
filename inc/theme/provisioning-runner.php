@@ -183,6 +183,7 @@ function provisioning_apply_plan( array $plan ): array {
     $blueprint = provisioning_blueprint( (string) $plan['blueprint'] );
     if ( null === $blueprint ) { return [ 'ok' => false, 'run_id' => '', 'created' => [], 'reused' => [], 'errors' => [ 'Blueprint unavailable.' ] ]; }
     $site_mode = function_exists( __NAMESPACE__ . '\\provisioning_site_mode' ) ? provisioning_site_mode( provisioning_discovery() ) : 'EXISTING_ACTIVE';
+    $existing_draft = 'draft' === (string) ( $blueprint['existing_site_page_status'] ?? '' ) && 'NEW_OR_MOSTLY_EMPTY' !== $site_mode;
     $receipt = provisioning_initial_receipt( provisioning_run_id() );
     $page_ids = [];
     $term_ids = [];
@@ -203,11 +204,16 @@ function provisioning_apply_plan( array $plan ): array {
                 } else {
                     $definition = $blueprint['pages'][ $role ] ?? null; if ( ! is_array( $definition ) ) { throw new \RuntimeException( 'Unknown Page role: ' . $role ); }
                     $parent_id = isset( $op['parent_role'] ) && $op['parent_role'] ? (int) ( $page_ids[ (string) $op['parent_role'] ] ?? 0 ) : 0;
-                    $page_status = 'professional-services-v1' === (string) $plan['blueprint'] && 'EXISTING_ACTIVE' === $site_mode ? 'draft' : (string) $definition['status'];
+                    $page_status = $existing_draft || ( 'professional-services-v1' === (string) $plan['blueprint'] && 'EXISTING_ACTIVE' === $site_mode )
+                        ? 'draft' : (string) $definition['status'];
                     $id = wp_insert_post( [ 'post_type' => 'page', 'post_status' => $page_status, 'post_title' => (string) $definition['title'], 'post_excerpt' => (string) $definition['excerpt'], 'post_content' => (string) $definition['content'], 'post_parent' => $parent_id ], true );
                     if ( is_wp_error( $id ) || (int) $id <= 0 ) { throw new \RuntimeException( is_wp_error( $id ) ? $id->get_error_message() : 'Page creation failed.' ); }
-                    $id = (int) $id; if ( ! provisioning_mark_post( $id, (string) $plan['blueprint'], $role, (string) $receipt['run_id'] ) ) { throw new \RuntimeException( 'Page provenance failed for #' . $id ); }
-                    $page_ids[ $role ] = $id; $receipt['created'][] = [ 'type' => 'page', 'id' => $id, 'role' => $role ];
+                    $id = (int) $id;
+                    // Record before marking provenance so a failed mark still rolls
+                    // back the WordPress Page created in this run.
+                    $receipt['created'][] = [ 'type' => 'page', 'id' => $id, 'role' => $role ];
+                    if ( ! provisioning_mark_post( $id, (string) $plan['blueprint'], $role, (string) $receipt['run_id'] ) ) { throw new \RuntimeException( 'Page provenance failed for #' . $id ); }
+                    $page_ids[ $role ] = $id;
                 }
             } elseif ( 'reuse_term' === $type ) {
                 $id = provisioning_resolve_term_reuse( (int) $op['object_id'] ); $term_ids[ $role ] = $id; $receipt['reused'][] = [ 'type' => 'category', 'id' => $id, 'role' => $role ];
@@ -219,8 +225,10 @@ function provisioning_apply_plan( array $plan ): array {
                     $parent_id = isset( $op['parent_role'] ) && $op['parent_role'] ? (int) ( $term_ids[ (string) $op['parent_role'] ] ?? 0 ) : 0;
                     $created = wp_insert_term( (string) $definition['name'], 'category', [ 'parent' => $parent_id ] );
                     if ( is_wp_error( $created ) || ! is_array( $created ) || (int) ( $created['term_id'] ?? 0 ) <= 0 ) { throw new \RuntimeException( is_wp_error( $created ) ? $created->get_error_message() : 'Category creation failed.' ); }
-                    $id = (int) $created['term_id']; if ( ! provisioning_mark_term( $id, (string) $plan['blueprint'], $role, (string) $receipt['run_id'] ) ) { throw new \RuntimeException( 'Category provenance failed for #' . $id ); }
-                    $term_ids[ $role ] = $id; $receipt['created'][] = [ 'type' => 'category', 'id' => $id, 'role' => $role ];
+                    $id = (int) $created['term_id'];
+                    $receipt['created'][] = [ 'type' => 'category', 'id' => $id, 'role' => $role ];
+                    if ( ! provisioning_mark_term( $id, (string) $plan['blueprint'], $role, (string) $receipt['run_id'] ) ) { throw new \RuntimeException( 'Category provenance failed for #' . $id ); }
+                    $term_ids[ $role ] = $id;
                 }
             } elseif ( 'reuse_menu' === $type ) {
                 $menu_id = (int) $op['object_id']; if ( $menu_id <= 0 ) { throw new \RuntimeException( 'Selected menu is unavailable.' ); }
@@ -231,8 +239,9 @@ function provisioning_apply_plan( array $plan ): array {
                 if ( $owned > 0 ) { $menu_id = $owned; $receipt['reused'][] = [ 'type' => 'menu', 'id' => $owned, 'role' => 'primary_menu' ]; }
                 else {
                     $created = wp_create_nav_menu( (string) $blueprint['menu']['label'] ); if ( is_wp_error( $created ) || (int) $created <= 0 ) { throw new \RuntimeException( is_wp_error( $created ) ? $created->get_error_message() : 'Menu creation failed.' ); }
-                    $menu_id = (int) $created; if ( ! provisioning_mark_term( $menu_id, (string) $plan['blueprint'], 'primary_menu', (string) $receipt['run_id'] ) ) { throw new \RuntimeException( 'Menu provenance failed.' ); }
+                    $menu_id = (int) $created;
                     $receipt['created'][] = [ 'type' => 'menu', 'id' => $menu_id, 'role' => 'primary_menu' ];
+                    if ( ! provisioning_mark_term( $menu_id, (string) $plan['blueprint'], 'primary_menu', (string) $receipt['run_id'] ) ) { throw new \RuntimeException( 'Menu provenance failed.' ); }
                     provisioning_populate_created_menu( $menu_id, $page_ids, $blueprint );
                 }
                 $locations = get_theme_mod( 'nav_menu_locations', [] ); $locations = is_array( $locations ) ? $locations : []; $locations['primary'] = $menu_id; set_theme_mod( 'nav_menu_locations', $locations );
