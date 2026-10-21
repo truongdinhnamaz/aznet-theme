@@ -23,12 +23,12 @@ $store =& \AZnet\Theme\template_manifest_store();
 $store = [];
 $result = \AZnet\Theme\load_local_template_manifests();
 if ([] !== $result['rejected'] || ! in_array('digital-01', $result['loaded'], true)) {
-    fwrite(STDERR, "FAIL: Digital 01 cannot be loaded through the v1 manifest contract.\n");
+    fwrite(STDERR, "FAIL: Digital 01 cannot be loaded through the v2 manifest contract.\n");
     exit(1);
 }
 $manifest = \AZnet\Theme\template_manifest('digital-01');
 if (! is_array($manifest)
-    || 1 !== $manifest['contract_version']
+    || 2 !== $manifest['contract_version']
     || 'Digital 01' !== $manifest['name']
     || 'digital-01' !== ($manifest['presentation']['visual_preset'] ?? null)
     || 'digital-01' !== ($manifest['presentation']['homepage_preset'] ?? null)

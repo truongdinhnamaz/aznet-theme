@@ -1,7 +1,7 @@
 <?php
 /** Digital 01 independent agency / technology presentation manifest. */
 return [
-    'contract_version' => 1,
+    'contract_version' => 2,
     'id' => 'digital-01',
     'name' => 'Digital 01',
     'version' => '1.0.0',
