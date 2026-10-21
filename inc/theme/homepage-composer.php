@@ -22,6 +22,16 @@ function homepage_law01_variant(): string {
     return in_array( $variant, [ 'navy-gold', 'burgundy-gold' ], true ) ? $variant : 'navy-gold';
 }
 
+/**
+ * Native composition consumes only the WordPress Front Page body.
+ * Template manifests request this generic capability without Core template-ID branches.
+ */
+function homepage_manifest_native_composition(): bool {
+    $manifest = template_manifest_for_homepage_preset( homepage_preset() );
+    return is_array( $manifest )
+        && 'native' === ( $manifest['homepage']['composition']['mode'] ?? null );
+}
+
 /** Whether Theme-owned Homepage composition is active for this request. */
 function homepage_composer_active(): bool {
     if ( ! function_exists( 'is_front_page' ) || ! is_front_page() || null === template_manifest_for_homepage_preset( homepage_preset() ) ) {
@@ -80,10 +90,10 @@ function render_industrial01_part( string $slug, array $args = [] ): void {
 function render_homepage_before_content(): void {
     if ( ! homepage_composer_active() ) { return; }
 
-    if ( 'digital-01' === homepage_preset() ) {
+    if ( homepage_manifest_native_composition() ) {
         // Digital 01 uses the WordPress Front Page body as its entire Homepage.
         // The Theme provides the isolated visual shell; WordPress owns blocks and queries.
-        echo '<div class="aznet-theme-homepage aznet-theme-homepage--digital-01">';
+        echo '<div class="aznet-theme-homepage aznet-theme-homepage--' . esc_attr( homepage_preset() ) . '">';
         return;
     }
 
@@ -117,7 +127,7 @@ function render_homepage_before_content(): void {
 function render_homepage_after_content(): void {
     if ( ! homepage_composer_active() ) { return; }
 
-    if ( 'digital-01' === homepage_preset() ) {
+    if ( homepage_manifest_native_composition() ) {
         echo '</div>';
         return;
     }
