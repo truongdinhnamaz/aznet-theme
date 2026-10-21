@@ -80,6 +80,13 @@ function render_industrial01_part( string $slug, array $args = [] ): void {
 function render_homepage_before_content(): void {
     if ( ! homepage_composer_active() ) { return; }
 
+    if ( 'digital-01' === homepage_preset() ) {
+        // Digital 01 uses the WordPress Front Page body as its entire Homepage.
+        // The Theme provides the isolated visual shell; WordPress owns blocks and queries.
+        echo '<div class="aznet-theme-homepage aznet-theme-homepage--digital-01">';
+        return;
+    }
+
     if ( 'curtain-01' === homepage_preset() ) {
         echo '<div class="aznet-theme-homepage aznet-theme-homepage--curtain-01">';
         foreach ( homepage_effective_surface_map( 'curtain-01' ) as $surface ) {
@@ -109,6 +116,11 @@ function render_homepage_before_content(): void {
 /** Render Law 01 sections after the native Front Page body boundary. */
 function render_homepage_after_content(): void {
     if ( ! homepage_composer_active() ) { return; }
+
+    if ( 'digital-01' === homepage_preset() ) {
+        echo '</div>';
+        return;
+    }
 
     if ( 'curtain-01' === homepage_preset() ) {
         foreach ( homepage_effective_surface_map( 'curtain-01' ) as $surface ) {
