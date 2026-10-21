@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.14
+**Version:** v1.15
 **Status:** Working Source  
 **Date:** 22/10/2026
 
@@ -1039,3 +1039,14 @@ Owner re-approved the AZnet Editorial Edition visual concept and explicitly requ
 **D-052 guarded historical release extension:** D-050 v1.3.92 one-shot workflow retains its own full version-metadata assertion only while the checkout is v1.3.92; later versions still run an independent historical-workflow-only regression which verifies the original reviewed publication boundary, immutable SHA checkpoint and no-site-deploy rule. The historical contract is not deleted or weakened to let a later version publish under the old workflow. CI run 39685479818 correctly RED at the previously unscoped v1.3.92-only metadata assertion on v1.3.93.
 
 **Next at this accepted decision:** satisfy the new X6 v1.3.93 version-governance contract, re-run Core, confirm a clean deployment package, then execute the authorized production pilot with fresh site-specific checks. No runtime/integration PASS may be inferred from repository CI alone.
+
+
+### D-052 — aznet.vn Digital 01 pilot publication checkpoint — 22/10/2026
+
+**PASS:** Authorized site-specific rollout of clean AZnet Theme **1.3.93** with source `work/digital-01-fourth-template-20261021@38658b21b4ca6d5dcd73dbe91d0c38883049fdf4`. Fresh exact-head Digital 01 L1/L2 + WordPress 6.9 L3/L4 + V1 Core + X6 all completed SUCCESS (runs `39685940287`, `39685940695`, `39685940199`, `39685940589`). B12 code retained separately, not published. Previous live Theme backed up by WPVibe v1.3.92. WordPress Page 2 preserves homepage identity/SEO and now has reviewed Digital 01 native content; original content is saved in draft Page 43513 and approved Digital source was draft Page 43506. Public page shows 10 roles, 1 H1, 3 Post cards, 5 FAQ, 7 alt-text images, valid canonical and correct scoped assets.
+
+**Site-specific QA evidence:** WordPress 7.1.3/PHP 8.4.26 public HTML and SEO invariant PASS; Rank Math owner API read confirms canonical/meta. WooCommerce product/category/cart/account public render and RootProfile public profile render without visible PHP fatals. Google mobile Lighthouse **Performance 86, Accessibility 96 (one contrast issue), Best Practices 100, SEO 100**; lab LCP 2.9s, CLS 0. User has not separately re-reviewed the final live rendering beyond approving the preview; don't claim final manual visual sign-off.
+
+**OPEN/UNKNOWN:** Fix the one verified mobile color-contrast issue with source-scoped L1/L4 plus a new versioned release path; verify actual checkout/login transactions only through authorized safe tests; explicitly resolve pre-existing Flatsome shortcode and H1 issues on non-homepage WordPress pages through their authoritative WordPress editorial content workflow, not slug-derived Theme heuristics. No general provider L5 certification, PR merge, new GitHub Release or additional pilot rollout is implied by the site-specific smoke test.
+
+**EXACT NEXT:** identify which specific live Homepage text/background fails mobile contrast using supported browser/Lighthouse element-level evidence, then produce a bounded Theme presentation fix on a new candidate without overwriting the only retained 1.3.92 Theme backup; re-run fresh gates before any next production publish.
