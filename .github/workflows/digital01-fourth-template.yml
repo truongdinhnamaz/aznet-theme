@@ -33,6 +33,7 @@ jobs:
           php tests/offline/digital01-template-contract.php
           php tests/offline/digital01-composer-isolation-contract.php
           php tests/offline/digital01-native-authoring-contract.php
+          php tests/offline/digital01-nine-section-homepage-contract.php
       - name: Retain owner-approved Classic Editor for all native Pages and Posts
         run: php tests/offline/classic-editor-policy-contract.php
       - name: Retained three-pilot contract
