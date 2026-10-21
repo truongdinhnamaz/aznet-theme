@@ -70,6 +70,11 @@ foreach ([$visualPath, $homepagePath] as $path) {
         exit(1);
     }
 }
+$homepageCss = (string) file_get_contents($homepagePath);
+if (preg_match('/\.aznet-digital01__hero\\s+\\.wp-block-heading\\s*\\{[^}]*max-width:\\s*[0-9]+ch/i', $homepageCss)) {
+    fwrite(STDERR, "FAIL: Digital 01 Hero heading hard-width cap violates D-036 desktop natural wrapping.\\n");
+    exit(1);
+}
 foreach (['law-01', 'curtain-01', 'industrial-01'] as $retained) {
     if (! is_array(\AZnet\Theme\template_manifest($retained))) {
         fwrite(STDERR, "FAIL: previously accepted template missing: {$retained}.\n");
