@@ -46,10 +46,16 @@ set_theme_mod('aznet_theme_settings', \AZnet\Theme\normalize_settings($settings)
 update_option('show_on_front', 'page');
 update_option('page_on_front', (int) $frontId);
 
+// WP-CLI has no HTTP queried object: is_front_page() cannot prove a frontend
+// request here. Validate the stored public Page selection and manifest instead;
+// the HTTP smoke/browser gate separately verifies the active composer.
 if ('digital-01' !== \AZnet\Theme\visual_preset()
     || 'digital-01' !== \AZnet\Theme\homepage_preset()
-    || ! \AZnet\Theme\homepage_composer_active()) {
-    throw new RuntimeException('Digital 01 composed Homepage not active');
+    || null === \AZnet\Theme\template_manifest_for_homepage_preset('digital-01')
+    || 'page' !== get_option('show_on_front')
+    || (int) get_option('page_on_front') !== (int) $frontId
+    || ! \AZnet\Theme\homepage_page_reference((int) $frontId) instanceof \WP_Post) {
+    throw new RuntimeException('Digital 01 WordPress Page/preset source is not active');
 }
 
 $surfaceMap = \AZnet\Theme\homepage_effective_surface_map('digital-01');
