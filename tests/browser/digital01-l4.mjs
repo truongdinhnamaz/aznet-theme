@@ -94,6 +94,25 @@ async function audit(browser, key, viewport) {
     assert(heroLefts.every(x => x >= requiredGutter), `Hero text/CTA touches viewport edge: ${JSON.stringify(heroInner)}`);
     assert(Math.max(...heroLefts) - Math.min(...heroLefts) <= 3,
       `Hero heading, introductory copy and CTA are not left-aligned: ${JSON.stringify(heroInner)}`);
+    if (viewport.width >= 1280) {
+      // Global WP constrained-width block rules can silently squeeze 3-4 card
+      // columns into a 768px text measure even when the section itself is wide.
+      const cardWidths = await page.evaluate(() => {
+        const read = selector => [...document.querySelectorAll(selector)]
+          .map(el => Math.round(el.getBoundingClientRect().width));
+        return {
+          trust: read('.aznet-digital01__trust .aznet-digital01__card'),
+          services: read('.aznet-digital01__services .aznet-digital01__card'),
+          process: read('.aznet-digital01__process .aznet-digital01__card'),
+        };
+      });
+      for (const [kind, minWidth] of [['trust', 260], ['services', 260], ['process', 220]]) {
+        const widths = cardWidths[kind];
+        assert(widths.length >= (kind === 'process' ? 4 : 3), `missing ${kind} cards: ${JSON.stringify(cardWidths)}`);
+        assert(widths.every(x => x >= minWidth),
+          `desktop ${kind} cards cramped by WordPress content-width constraint: ${JSON.stringify(cardWidths)}`);
+      }
+    }
     assert(geometry.headlineLeft !== null && geometry.eyebrowLeft !== null
       && Math.abs(geometry.headlineLeft - geometry.eyebrowLeft) <= 4,
       `D-036 Hero heading and constrained eyebrow are not aligned: ${JSON.stringify(geometry)}`);
