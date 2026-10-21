@@ -12,6 +12,7 @@ use function AZnet\Theme\provisioning_readiness;
 use function AZnet\Theme\provisioning_recommendations;
 use function AZnet\Theme\provisioning_editorial_coverage_recommendations;
 use function AZnet\Theme\provisioning_site_mode;
+use function AZnet\Theme\provisioning_required_page_roles;
 use function AZnet\Theme\provisioning_index_restore_available;
 use function AZnet\Theme\provisioning_restore_search_visibility;
 use function AZnet\Theme\provisioning_find_compatible_owned_role;
@@ -329,11 +330,19 @@ function render_provisioning_wizard(): void {
         foreach ( $blueprint['categories'] as $role => $definition ) { provisioning_render_recommendation_card( 'categories', $role, $definition, (array) ( $recommendations['categories'][ $role ] ?? [] ), $state['categories'] ); }
         echo '</div>';
         echo '<details class="aznet-theme-provision-advanced"><summary>' . esc_html__( 'Tùy chỉnh nâng cao', 'aznet-theme' ) . '</summary>';
-        $required_page_roles = [ 'home','about','services','team','contact' ];
+        $required_page_roles = provisioning_required_page_roles( $blueprint_key );
+        if ( $is_law ) { $required_page_roles[] = 'team'; }
         foreach ( $blueprint['pages'] as $role => $definition ) { provisioning_action_select( 'pages', $role, $state['pages'], $new_site, in_array( $role, $required_page_roles, true ), (array) ( $recommendations['pages'][ $role ] ?? [] ) ); }
         foreach ( $blueprint['categories'] as $role => $definition ) { provisioning_action_select( 'categories', $role, $state['categories'], $new_site, false, (array) ( $recommendations['categories'][ $role ] ?? [] ) ); }
-        $menu_default = (int) $state['primary_menu_id'] > 0 ? 'reuse' : 'create';
-        echo '<fieldset class="aznet-theme-provision-row"><legend><strong>Primary Menu</strong></legend><label class="screen-reader-text" for="aznet-theme-provision-menu-action">' . esc_html__( 'Hành động cho Primary Menu', 'aznet-theme' ) . '</label><select id="aznet-theme-provision-menu-action" name="menu_action"><option value="create" ' . selected( $menu_default, 'create', false ) . '>Create new</option><option value="reuse" ' . selected( $menu_default, 'reuse', false ) . '>Reuse assigned</option><option value="skip">Skip</option></select><label class="screen-reader-text" for="aznet-theme-provision-menu-id">' . esc_html__( 'ID Primary Menu hiện có', 'aznet-theme' ) . '</label><input id="aznet-theme-provision-menu-id" type="number" min="0" name="menu_id" value="' . esc_attr( (string) $state['primary_menu_id'] ) . '"></fieldset></details>';
+        $existing_draft = 'NEW_OR_MOSTLY_EMPTY' !== $mode && 'draft' === (string) ( $blueprint['existing_site_page_status'] ?? '' );
+        $menu_default = (int) $state['primary_menu_id'] > 0 ? 'reuse' : ( $existing_draft ? 'skip' : 'create' );
+        echo '<fieldset class="aznet-theme-provision-row"><legend><strong>Primary Menu</strong></legend><label class="screen-reader-text" for="aznet-theme-provision-menu-action">' . esc_html__( 'Hành động cho Primary Menu', 'aznet-theme' ) . '</label><select id="aznet-theme-provision-menu-action" name="menu_action">';
+        if ( ! $existing_draft ) { echo '<option value="create" ' . selected( $menu_default, 'create', false ) . '>Create new</option>'; }
+        echo '<option value="reuse" ' . selected( $menu_default, 'reuse', false ) . '>Reuse assigned</option><option value="skip" ' . selected( $menu_default, 'skip', false ) . '>Skip</option></select><label class="screen-reader-text" for="aznet-theme-provision-menu-id">' . esc_html__( 'ID Primary Menu hiện có', 'aznet-theme' ) . '</label><input id="aznet-theme-provision-menu-id" type="number" min="0" name="menu_id" value="' . esc_attr( (string) $state['primary_menu_id'] ) . '"></fieldset>';
+        if ( $existing_draft ) {
+            echo '<p class="description">' . esc_html__( 'Website đang hoạt động: các Page mới sẽ được tạo dưới dạng Draft; giữ nguyên Trang chủ và menu hiện tại. Có thể đăng các Page sau khi kiểm tra nội dung WordPress.', 'aznet-theme' ) . '</p>';
+        }
+        echo '</details>';
         if ( $is_law ) {
             echo '<section class="aznet-theme-provision-starter"><h4>' . esc_html__( 'Nội dung mẫu để Trang chủ có dữ liệu', 'aznet-theme' ) . '</h4>';
             foreach ( $editorial as $role => $choice ) {
@@ -359,8 +368,10 @@ function render_provisioning_wizard(): void {
                 echo '<input type="hidden" name="apply_starter_site_defaults" value="0"><input type="hidden" name="publish_starter_posts" value="0"><input type="hidden" name="discourage_indexing" value="0">';
                 echo '<p class="description">' . esc_html__( 'Website đang hoạt động: giữ nguyên Site Title/Tagline; starter Posts mới sẽ giữ Draft. Theme không noindex toàn site và không ghi private SEO meta.', 'aznet-theme' ) . '</p>';
             }
-        } else {
+        } elseif ( 'professional-services-v1' === $blueprint_key ) {
             echo '<p class="description">' . esc_html__( 'Professional Services chỉ tạo hoặc map các Page và Primary Menu đã xác nhận; không tạo dữ liệu chuyên ngành, người, chứng nhận hay thông tin liên hệ giả định.', 'aznet-theme' ) . '</p>';
+        } else {
+            echo '<p class="description">' . esc_html__( 'Blueprint này chỉ đề xuất Page, Category và Menu WordPress-native. Không tạo sản phẩm, giá, tồn kho, đơn hàng hoặc nội dung plugin. Website đang hoạt động giữ các Page mới ở Draft; mọi thao tác cần xem trước kế hoạch và xác nhận riêng.', 'aznet-theme' ) . '</p>';
         }
         submit_button( __( 'Dùng các thiết lập được khuyến nghị', 'aznet-theme' ) ); echo '</form>';
     } elseif ( 3 === $step ) {
