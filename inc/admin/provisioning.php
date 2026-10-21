@@ -336,7 +336,10 @@ function render_provisioning_wizard(): void {
         echo '</div>';
         echo '<details class="aznet-theme-provision-advanced"><summary>' . esc_html__( 'Tùy chỉnh nâng cao', 'aznet-theme' ) . '</summary>';
         $required_page_roles = provisioning_required_page_roles( $blueprint_key );
-        if ( $is_law ) { $required_page_roles[] = 'team'; }
+        // Retain historical Law v1/v1.1/v1.2 Team Page requirements.
+        if ( in_array( $blueprint_key, [ 'law01-v1', 'law01-v1-1', 'law01-v1-2' ], true ) ) {
+            $required_page_roles[] = 'team';
+        }
         foreach ( $blueprint['pages'] as $role => $definition ) { provisioning_action_select( 'pages', $role, $state['pages'], $new_site, in_array( $role, $required_page_roles, true ), (array) ( $recommendations['pages'][ $role ] ?? [] ) ); }
         foreach ( $blueprint['categories'] as $role => $definition ) { provisioning_action_select( 'categories', $role, $state['categories'], $new_site, false, (array) ( $recommendations['categories'][ $role ] ?? [] ) ); }
         $existing_draft = 'NEW_OR_MOSTLY_EMPTY' !== $mode && 'draft' === (string) ( $blueprint['existing_site_page_status'] ?? '' );
