@@ -6,6 +6,9 @@ on:
       - '.github/workflows/digital01-runtime-browser.yml'
       - 'inc/theme/templates/digital-01/**'
       - 'inc/theme/homepage-composer.php'
+      - 'inc/theme/homepage-surface-map.php'
+      - 'inc/admin/homepage.php'
+      - 'tests/offline/digital01-native-authoring-contract.php'
       - 'assets/css/presets/digital-01.css'
       - 'assets/css/components/homepage-digital-01.css'
       - 'patterns/homepage-digital-01.php'
@@ -52,9 +55,12 @@ jobs:
           set -euo pipefail
           php -l tests/runtime/digital01-preview-seed.php
           php -l inc/theme/homepage-composer.php
+          php -l inc/theme/homepage-surface-map.php
+          php -l inc/admin/homepage.php
           php -l patterns/homepage-digital-01.php
           php tests/offline/digital01-template-contract.php
           php tests/offline/digital01-composer-isolation-contract.php
+          php tests/offline/digital01-native-authoring-contract.php
           php tests/offline/classic-editor-policy-contract.php
 
       - name: Install isolated WordPress 6.9 and seed Digital 01 native Front Page
