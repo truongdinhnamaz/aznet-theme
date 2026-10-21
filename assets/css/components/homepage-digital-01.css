@@ -1,4 +1,38 @@
 /** Digital 01 native WordPress-block homepage styles. Scoped to the digital-01 visual preset. */
+
+/*
+ * Nested WordPress groups inherit generic article-media `alignwide/alignfull`
+ * centering via margin-inline-start:50% + translateX(-50%). The root
+ * alignfull group then nests more transformed wide/full groups, and the
+ * section-specific margin:auto leaves translateX(-50%) in place.
+ *
+ * Normalize only Digital 01 composition wrappers. Do NOT alter the generic
+ * media align classes used by the other three template families.
+ */
+body.aznet-theme-preset--digital-01 .aznet-theme-entry__content .aznet-digital01.alignfull {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    transform: none;
+}
+body.aznet-theme-preset--digital-01 .aznet-digital01 > .wp-block-group.alignfull {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    transform: none;
+}
+body.aznet-theme-preset--digital-01 .aznet-digital01 .wp-block-group.alignwide {
+    width: min(var(--aznet-theme-container-wide), calc(100% - (var(--aznet-theme-gutter) * 2)));
+    max-width: none;
+    margin-inline: auto;
+    transform: none;
+}
+@media (max-width: 48rem) {
+    body.aznet-theme-preset--digital-01 .aznet-digital01 .wp-block-group.alignwide {
+        width: min(var(--aznet-theme-container-wide), calc(100% - (var(--aznet-theme-gutter-mobile) * 2)));
+    }
+}
+
 body.aznet-theme-preset--digital-01 .aznet-digital01 {
     overflow: clip;
 }
