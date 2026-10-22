@@ -75,6 +75,7 @@ if(!str_contains((string)get_post($front_id)->post_content,'aznet-digital01--bra
     throw new RuntimeException('WordPress did not persist new branded content');
 }
 $nav = wp_create_nav_menu('AZnet Brand Fixture Native Navigation');
+$services_menu_id = 0;
 if (is_wp_error($nav)) throw new RuntimeException($nav->get_error_message());
 foreach ([
   ['Trang chủ','/'], ['Dịch vụ','/dich-vu/'], ['Dự án','/du-an/'],
@@ -84,6 +85,18 @@ foreach ([
   $added=wp_update_nav_menu_item($nav,0,['menu-item-title'=>$label,
     'menu-item-url'=>home_url($url),'menu-item-type'=>'custom','menu-item-status'=>'publish']);
   if(is_wp_error($added))throw new RuntimeException($added->get_error_message());
+  if ($label === 'Dịch vụ') $services_menu_id=(int)$added;
+}
+if($services_menu_id <= 0) throw new RuntimeException('Native services parent menu item missing');
+foreach ([['Dịch vụ SEO','/dich-vu-seo/'],['Website bán hàng','/thiet-ke-website-ban-hang/']] as [$title,$url]) {
+  $child=wp_update_nav_menu_item($nav,0,[
+    'menu-item-title'=>$title,
+    'menu-item-url'=>home_url($url),
+    'menu-item-type'=>'custom',
+    'menu-item-parent-id'=>$services_menu_id,
+    'menu-item-status'=>'publish'
+  ]);
+  if(is_wp_error($child))throw new RuntimeException($child->get_error_message());
 }
 $locations=get_theme_mod('nav_menu_locations',[]);
 $locations['header-utility']=(int)$nav;
