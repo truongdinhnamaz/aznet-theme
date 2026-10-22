@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.18
+**Version:** v1.19
 **Status:** Working Source  
 **Date:** 22/10/2026
 
@@ -1072,3 +1072,17 @@ Site release 1.3.94 has PASS for source CI and public homepage/SEO content invar
 - Before cutover confirm active Theme 1.3.94, `page_on_front=2`, stable Page 2 hash/content, title, canonical, native Query and menu assignments. After release verify active v1.3.95 and CSS hash, frontend/browser smoke, fresh mobile accessibility/performance evidence, WooCommerce and RootProfile public projections, and record PASS/BLOCKED without inferring provider transaction correctness. If a material runtime regression emerges, revert to previous Theme. Separate follow-up diagnoses remaining Lighthouse findings and LCP; do not stack speculative fixes into this release.
 
 **EXACT NEXT:** implement v1.3.95 version gate in isolated branch, verify fresh release CI, deploy the clean accepted patch to aznet.vn, then measure and checkpoint actual production state.
+
+
+### D-057/D-058 — AZnet About production visual restoration — OWNER CONTINUATION APPROVED; THEME RELEASE BLOCKED — 22/10/2026
+
+- **Owner intent:** Repair only the existing published `https://aznet.vn/gioi-thieu`, WordPress Page **18897**, preserving Page ID/title/permalink/SEO owner and not creating a replacement. Subsequent “duyệt” authorized continued Header/Landing QA and preparation of a new Theme release **subject to full verification and a safe package**, not a destructive cleanup of unrelated work nor approval-gated merge.
+- **Root causes, browser-proven:** WordPress Primary + Utility menu overlap on intermediate desktop widths (1366px observed overflow). Generic `.aznet-theme-entry__content .alignfull` applies `translateX(-50%)` to Landing Page Group elements already in a full-width shell, visibly cutting the Hero/page in half on desktop and mobile. WordPress native `.has-text-color` importance overrides authored inverse white text. These are three Theme-owned presentation defects; do not solve them with a URL/slug/Page-ID heuristic or emulation of Flatsome.
+- **Allowed scoped implementation:** D-057 conditional dual-menu Header rules in `assets/css/presets/digital-01.css` use WordPress native menu DOM; D-058 `assets/css/components/page.css` resets transform for direct Landing full-width Groups and styles `aznet-theme-page-inverse` explicit authored marker for dark sections using existing design tokens. WordPress Page **18897** received only four opt-in native Group classes; no new Page, text, links, media, SEO owner or plugin data changes. Fresh Page body 34,222 chars, one H1, no Flatsome tokens, revision `2026-10-22 11:48:28`; historical source still archived in WordPress draft Page 43537.
+- **Fresh L4 candidate evidence:** Read-only Chromium navigation to the **public** site, with the two candidate CSS files overlaid in-browser, across **15 viewport widths (360–1920px)** and keyboard Menu/Escape, passed run [39724695833](https://github.com/truongdinhnamaz/aznet-theme/actions/runs/39724695833), screenshot+geometry artifact **12402194035**. Desktop and full mobile screenshots reviewed; Header no longer overflows and Landing sections x=0 with inverse white H1. This is candidate-overlay QA, **not a live Theme deployment**.
+- **Regression discipline:** Dedicated D-057 and D-058 PHP/static contracts wired to V1 Core. First source candidate briefly failed Y2 strict no-hard-coded-color-in-page.css; corrected to Theme-token-based `color-mix`. Fresh exact-head CI gates needed; no cross-layer PASS inference.
+- **Hard release gate:** Connected Theme draft has **236 files**, canonical release runtime has **235**. Single extra file is unrelated Brand Light 2026 opt-in CSS. Exact bytes secured on separate branch `work/digital01-brand-light-2026-preserve-20261022@a907c332`, while original draft remains untouched. Do not silently delete or bundle it into AZnet About release; production v1.3.95 backup folder would also be replaced by WPVibe publish. Prepare clean package and rollback before proceeding. Rank Math's existing About canonical pointing to Homepage is an independent SEO-owner issue.
+
+**D-059 technical-only v1.3.96 release candidate:** Version promotion must be **1.3.95 → 1.3.96**, `style.css` + `functions.php` paired metadata, dedicated fail-closed X6 case, version contract, retention of historical 1.3.91–1.3.95 gates, exact-head V1 Core/L3-L4/X6/provenance checks. This is only a **draft release preparation**; site version remains **1.3.95**, with no implied merge/tag/site deploy authority. Do not cross the clean-draft/backup hard gate.
+
+**EXACT NEXT:** Finish candidate CI, preserve all other draft work, obtain explicit authorization only for the required draft cleanup or establish an independent clean release path, then complete bounded v1.3.96 release QA and public post-deploy verification on Page 18897. No unrelated provider/plugin code and no direct Rank Math storage mutations.
