@@ -1,0 +1,33 @@
+name: D-064 Footer production L4
+on:
+  push:
+    branches: [work/d064-aznet-digital01-footer-20261022]
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/d064-footer-production-l4.yml'
+      - 'tests/browser/d064-footer-production-l4.mjs'
+permissions:
+  contents: read
+jobs:
+  production-footer-read-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Verify public Footer actual WordPress menu data and CSS
+        run: node tests/browser/d064-footer-production-l4.mjs
+      - name: Preserve screenshots and computed-style evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: d064-production-footer-l4
+          path: /tmp/d064-production-l4
+          if-no-files-found: warn
