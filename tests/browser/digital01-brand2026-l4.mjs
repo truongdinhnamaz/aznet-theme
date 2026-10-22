@@ -105,13 +105,38 @@ for (const test of cases) {
         const hi = Math.max(lum(panelColor),lum(linkColor));
         const lo = Math.min(lum(panelColor),lum(linkColor));
         return {open:p&&!p.hidden,expanded:document.querySelector('[data-aznet-theme-nav-trigger]')?.getAttribute('aria-expanded'),
-          panelColor,linkColor,contrast:(hi+.05)/(lo+.05)};
+          panelColor,linkColor,contrast:(hi+.05)/(lo+.05),
+          childVisible:(() => {
+            const child=p?.querySelector('.aznet-theme-site-header__utility-menu .sub-menu a');
+            return !!child && getComputedStyle(child).visibility==='visible' && child.getClientRects().length>0;
+          })()};
       });
       data.mobileMenu = mobileMenu;
       if (!mobileMenu.open || mobileMenu.expanded!=='true') problems.push('native mobile menu not interactive');
+      if (!mobileMenu.childVisible) problems.push('native nested WordPress mobile utility menu items not visible');
       if (!mobileMenu.linkColor || mobileMenu.contrast < 4.5)
         problems.push('mobile header link contrast '+mobileMenu.contrast?.toFixed(2)+' < 4.5');
       await page.keyboard.press('Escape');
+    }
+  }
+  if (test.width >= 1100) {
+    const dropParent = page.locator('.aznet-theme-site-header__utility-menu > li.menu-item-has-children').first();
+    if (await dropParent.count() !== 1) {
+      problems.push('native Desktop utility dropdown trigger missing');
+    } else {
+      await dropParent.hover();
+      const dropdown = await page.evaluate(() => {
+        const ul = document.querySelector('.aznet-theme-site-header__utility-menu > li.menu-item-has-children > .sub-menu');
+        if (!ul) return null;
+        const style = getComputedStyle(ul), bounds = ul.getBoundingClientRect();
+        return {visibility:style.visibility, opacity:style.opacity, background:style.backgroundColor,
+          box:bounds.toJSON()};
+      });
+      data.dropdown = dropdown;
+      if (!dropdown || dropdown.visibility !== 'visible' || Number(dropdown.opacity) < .95
+          || dropdown.background !== 'rgb(255, 255, 255)'
+          || !(dropdown.box?.width > 150))
+        problems.push('native Desktop dropdown not visually accessible with white background on hover');
     }
   }
   const result={...test,observed:data,violations,problems};
