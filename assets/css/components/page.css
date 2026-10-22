@@ -132,6 +132,7 @@
     width: 100%;
     max-width: none;
     margin-inline: 0;
+    transform: none;
     padding-inline: max(
         var(--aznet-theme-gutter),
         calc((100vw - var(--aznet-theme-container-wide)) / 2)
@@ -185,6 +186,26 @@
 .aznet-theme-page-kit :where(a, button, summary):focus-visible {
     outline: 2px solid var(--aznet-theme-focus);
     outline-offset: 2px;
+}
+
+
+/* D-058: Landing already owns a viewport-wide page content shell. Generic
+ * authored-media alignfull centering would translate each Group by -50vw.
+ * Keep the authored native alignfull flag; reset only the conflicting
+ * presentation transform on direct Page sections. */
+.aznet-theme-page--landing .aznet-theme-page__content-inner > .aznet-theme-page-inverse > .wp-block-heading.has-text-color,
+.aznet-theme-page--landing .aznet-theme-page__content-inner > .aznet-theme-page-inverse > .wp-block-paragraph.has-text-color {
+    color: var(--aznet-theme-on-inverse) !important;
+}
+
+/* The optional WordPress-authored inverse section marks the eyebrow as a
+ * lighter accent, while ordinary white cards nested inside keep their normal
+ * dark ink. Never infer this capability from URL or content strings. */
+.aznet-theme-page--landing .aznet-theme-page__content-inner > .aznet-theme-page-inverse > .wp-block-paragraph:first-child {
+    color: #ffb49c !important;
+}
+.aznet-theme-page--landing .aznet-theme-page__content-inner > .aznet-theme-page-inverse > .wp-block-paragraph a {
+    color: inherit;
 }
 
 @media (max-width: 47.999rem) {
