@@ -1,6 +1,6 @@
 /**
  * D-063: read-only public AZnet Header geometry and stylesheet provenance.
- * Overlays exact GitHub candidate CSS; never mutates WordPress.
+ * Validates served WP Rocket CSS against current Theme fix; never mutates WordPress.
  */
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -8,7 +8,6 @@ import { join } from 'node:path';
 
 const output='/tmp/d063-aznet-header';
 mkdirSync(output,{recursive:true});
-const candidateCSS='assets/css/components/header-utility.css';
 const failures=[], rows=[];
 const browser=await chromium.launch({headless:true});
 const widths=[1705,1600,1501,1500,1440,1366,1321,1320,1280,1024,980,390];
@@ -41,7 +40,6 @@ try{
           console.log('BASELINE '+JSON.stringify({surface,width,...baseline,diagnostic}));
           await page.screenshot({path:join(output,surface+'-'+width+'-before.png')});
         }
-        await page.addStyleTag({path:candidateCSS});
         await page.evaluate(()=>document.fonts.ready);
         const m=await page.evaluate(()=>{
           const h=document.querySelector('.aznet-theme-site-header'), inner=h?.querySelector('.aznet-theme-site-header__inner');
@@ -65,6 +63,7 @@ try{
         });
         const e=[], R=m.regions;
         if(!m.pageClass.includes('aznet-theme-preset--digital-01'))e.push('Incorrect visual preset');
+        if(!diagnostic.hasRule||diagnostic.codeStatus!==200)e.push('Served preset stylesheet is stale or inaccessible: '+JSON.stringify(diagnostic));
         if(!m.logo)e.push('Logo missing or not loaded');
         if(m.headerOverflow)e.push('Header horizontal overflow');
         if(m.scrollWidth>width+3)e.push('Page horizontal overflow');
@@ -82,8 +81,8 @@ try{
         }
         if(e.length)failures.push({surface,width,errors:e});
         rows.push({surface,width,diagnostic,measurements:m,errors:e});
-        console.log('D063_MEASURE '+JSON.stringify({surface,width,headerOverflow:m.headerOverflow,scrollWidth:m.scrollWidth,nav:visible(R.nav),utility:visible(R.util),mobile:visible(R.trigger),search:visible(R.search),account:visible(R.account),errors:e}));
-        if([1705,1440,1366,1280,390].includes(width))await page.screenshot({path:join(output,surface+'-'+width+'-candidate.png')});
+        console.log('D063_MEASURE '+JSON.stringify({surface,width,cssFresh:diagnostic.hasRule,presetCss:diagnostic.presetCSS,headerOverflow:m.headerOverflow,scrollWidth:m.scrollWidth,nav:visible(R.nav),utility:visible(R.util),mobile:visible(R.trigger),search:visible(R.search),account:visible(R.account),errors:e}));
+        if([1705,1440,1366,1280,390].includes(width))await page.screenshot({path:join(output,surface+'-'+width+'-after-cache-purge.png')});
         if(visible(R.trigger)&&[1500,1280,390].includes(width)){
           const trigger=page.locator('[data-aznet-theme-nav-trigger]');
           const panel=page.locator('[data-aznet-theme-nav-panel]');
@@ -100,4 +99,4 @@ try{
 writeFileSync(join(output,'measurements.json'),JSON.stringify({commit:process.env.GITHUB_SHA,rows,failures},null,2));
 console.log('D063_SUMMARY '+JSON.stringify({tested:rows.length,failures},null,2));
 if(failures.length)process.exit(1);
-console.log('PASS: AZnet public Header no overflow, retained utilities, mobile keyboard interaction');
+console.log('PASS: AZnet live preset CSS freshness, Header no overflow, retained utilities, mobile keyboard interaction');
