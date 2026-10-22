@@ -1,0 +1,24 @@
+name: Digital 01 Brand Light 2026 contract
+on:
+  push:
+    branches:
+      - work/digital01-aznet-brand-home-20261022
+  pull_request:
+    paths:
+      - 'assets/css/components/homepage-digital-01-brand-2026.css'
+      - 'inc/theme/assets.php'
+      - 'tests/offline/digital01-brand2026-presentation-contract.php'
+permissions:
+  contents: read
+jobs:
+  l1-l2:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: PHP syntax and new presentation contract
+        run: |
+          php -l inc/theme/assets.php
+          php tests/offline/digital01-brand2026-presentation-contract.php
+      - name: Retained Digital 01 contract
+        run: php tests/offline/digital01-template-contract.php
