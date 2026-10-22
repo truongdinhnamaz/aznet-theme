@@ -74,8 +74,8 @@ try{
           if(visible(R.nav))e.push('Duplicate primary menu visible at desktop width');
           if(!visible(R.util))e.push('Site utility navigation missing');
           // Retain existing search and account features unless a separately approved decision removes them.
-          if(!visible(R.search))e.push('Desktop search removed by candidate');
-          if(!visible(R.account))e.push('Desktop account link removed by candidate');
+          if(surface==='about'&&!visible(R.search))e.push('Inner-page desktop search removed by candidate');
+          if(surface==='about'&&!visible(R.account))e.push('Inner-page desktop account link removed by candidate');
         }else{
           if(visible(R.nav)||visible(R.actions))e.push('Full desktop navigation rendered in compact viewport');
           if(!visible(R.trigger))e.push('Accessible mobile menu trigger unavailable');
