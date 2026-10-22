@@ -503,19 +503,19 @@ function should_enqueue_about_showcase_asset(): bool {
         return false;
     }
 
-    foreach ( $blocks as $block ) {
-        if ( ! is_array( $block ) || 'core/group' !== ( $block['blockName'] ?? '' ) ) {
-            continue;
-        }
-
-        $class_name = is_array( $block['attrs'] ?? null ) ? (string) ( $block['attrs']['className'] ?? '' ) : '';
-        $classes = preg_split( '/\\s+/', trim( $class_name ), -1, PREG_SPLIT_NO_EMPTY );
-        if ( in_array( 'aznet-theme-about-showcase', is_array( $classes ) ? $classes : [], true ) ) {
-            return true;
-        }
+    // A V2 design marker on a later card cannot change the entire Page.
+    // Only an authored first-level native Hero Group can opt in.
+    $hero = $blocks[0] ?? null;
+    if ( ! is_array( $hero ) || 'core/group' !== ( $hero['blockName'] ?? '' ) ) {
+        return false;
     }
 
-    return false;
+    $class_name = is_array( $hero['attrs'] ?? null ) ? (string) ( $hero['attrs']['className'] ?? '' ) : '';
+    $classes = preg_split( '/\\s+/', trim( $class_name ), -1, PREG_SPLIT_NO_EMPTY );
+    $tokens = is_array( $classes ) ? $classes : [];
+
+    return in_array( 'aznet-theme-page-hero', $tokens, true )
+        && in_array( 'aznet-theme-about-showcase', $tokens, true );
 }
 
 /** Enqueue V2 About storytelling only for an opted-in native Page. */
