@@ -61,7 +61,7 @@ try {
       for(const [name,url] of sources.policies){const li=document.createElement('li'),a=document.createElement('a');a.href=url;a.textContent=name;li.append(a);ul.append(li);}
       nav.append(ul);policies.append(nav);bottom.append(policies);
     },menus);
-    await page.addStyleTag({path:'assets/css/components/site-footer.css'});
+    await page.addStyleTag({path:'assets/css/components/site-footer-digital-01.css'});
     await page.evaluate(()=>document.fonts.ready);
     r=await page.evaluate(()=>{
       const el=document.querySelector('[data-aznet-theme-site-footer]'),inner=el.querySelector('.aznet-theme-site-footer__inner');
