@@ -1,0 +1,28 @@
+# aznet.vn /gioi-thieu — WordPress Page 18897 in-place cutover, 22/10/2026
+
+## Scope / authorization / owner
+
+The user expressly corrected the previous draft-first misunderstanding: update the **existing** published `https://aznet.vn/gioi-thieu` only, not a replacement Page. The subsequent "duyệt" approved the **WordPress Page 18897 in-place** update. Page content and SEO state remain WordPress/Rank Math-owned; AZnet Theme remains a presentation consumer.
+
+## Reproducible source evidence
+
+- Before write, WP-CLI read Page **18897**: `post_status=publish`, slug `gioi-thieu`, title `Giới thiệu`, `post_modified=2026-06-19 22:46:46`, 21,090-character body and nine `[section]` wrappers.
+- Archival **unpublished** WordPress Page **43537** contained the original **exact 21,090 characters**. Candidate **unpublished** WordPress Page **43538** contained the converted Gutenberg content. No additional published Page was created.
+- Strict prewrite check: archived body equals source body; candidate has **one H1**, no `[section]`/`[row]`/`[col]`, first `core/group` has `aznet-theme-page-hero` with nested H1, seven anchor destinations and links, 157 matching Gutenberg open/close markers with valid JSON; all source paragraph and heading contents, original ten href targets, and the two meaningful inline SVG illustrations preserved (SVG comparison normalizes CRLF to LF). No source string or media asset was silently dropped. The source Page's stored marketing claims were retained as **unverified** editorial claims.
+- **Authorized WordPress REST in-place write:** POST `/wp/v2/pages/18897` with only **`content`** and native Theme **`template=page-templates/landing.php`**. The response confirmed original `id=18897`, same slug/link/status/title/featured media **23485**. No original Page reassignment, new publication, menu modification, provider source write, or SEO meta write.
+- Immediate WP-CLI read-after-write: `post_content` **exactly equals** converted candidate (33,980 characters); `post_modified=2026-10-22 11:23:09` Asia/Bangkok; no shortcode; one authored H1; Page template meta `page-templates/landing.php`; normal WordPress revision was created.
+
+## Fresh verification and limits
+
+- **L0 + scoped stored-content L1 PASS:** Page 18897 is still `publish`, original permalink, title and featured media, body exactly matching the reviewed candidate. WordPress front Page **2** unchanged at 28,515 chars, same modified timestamp `2026-10-22 05:27:42`. Live AZnet Theme remained **1.3.95**, WordPress 7.1.3, PHP 8.4.26.
+- **WPVibe render smoke:** Explicit Page URL resolves WordPress article `post-18897`; hero-first Landing composition hides the generic title/excerpt/featured block, **one H1**, seven working anchor **destinations and hrefs** by DOM, two semantic SVGs, no literal Flatsome shortcodes and no visible PHP notices/fatals in main. **Caveat:** this authenticated WPVibe page inspector supplied a `wp-theme-aznet-theme-wpvibe-draft` body class, so it is NOT independent proof of the released Theme's real-world browser geometry.
+- **External mobile PageSpeed audit on public URL:** Accessibility **96/100** (one `color-contrast` issue); Best Practices **100/100**; SEO **92/100**, failing `canonical`. No authenticated/browser screenshot or desktop/mobile overlap geometry PASS is claimed. SEO/contrast findings are not tied to this content cutover without additional evidence.
+- **Rank Math metadata retained, not corrected:** `rank_math_canonical_url=https://aznet.vn/` on the About Page **already existed before this write** and persisted afterward. This is an independently evidenced SEO owner issue (About Page canonicals to Homepage). Dynamic meta description following the content change also requires editorial SEO-owner review. No per-post Rank Math owner mutation ability was registered in the available Abilities inventory; do **not** fix through direct Theme storage access.
+- **Theme Header remains open:** The old Digital 01 Header had two WordPress desktop nav areas; official WordPress logo was already configured. A narrow CSS-only improvement is proposed in **Draft PR #497** (branch `work/d057-digital01-inner-header-overlap-20261022`) and temporarily present in the WPVibe **unpublished Theme draft**. It is **not** deployed to production; no live Header screenshot PASS or versioned release approval. Do not publish that entire pre-existing Theme draft unverified or overwrite the frozen Theme backup.
+- SEO claims `200+` projects, `8 năm` experience, `99%` satisfaction and 30-minute proposal turnaround originate in the existing WordPress editorial source; they were preserved verbatim, not fact-checked or newly invented.
+
+## Recovery / gates / exact next
+
+- Restore Page 18897 body from unpublished exact source Page **43537** and revert the Page template to original `page-blank.php` through WordPress native revision/content operations if needed. Prior Theme **1.3.95** was not touched; Theme backup remains separate.
+- **PASS**: WordPress Page content cutover and scoped DOM structure. **UNKNOWN**: browser desktop/mobile pixel geometry, keyboard navigation and final user visual acceptance; Rank Math canonical/description remediation; Theme Header deployment and full L5.
+- **EXACT NEXT:** Obtain independent desktop/mobile visual/keyboard QA of the **actual public Page 18897** and Draft PR #497 CSS. Then process a versioned Theme Header release at the user's separate approval gate; correct the documented wrong About canonical using the Rank Math owner/editor path, not Theme code. Preserve production Page 18897 ID, URL, business/SEO ownership, and the archive; do not create a second live Page.
