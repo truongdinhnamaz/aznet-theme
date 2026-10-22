@@ -37,8 +37,15 @@ try {
       const main=footer.querySelector('.aznet-theme-site-footer__main');
       const bottom=footer.querySelector('.aznet-theme-site-footer__bottom');
       if(!inner||!main||!bottom)throw Error('Footer structure absent');
-      // Simulate only the minimal PHP nesting fix already verified by PHP L2.
-      inner.append(bottom);
+      // Existing live WordPress menus are authoritative. The fixture only
+      // supplies missing menu data on a pre-release/unassigned installation.
+      // Never append duplicate menu columns to an already populated Footer.
+      if (bottom.parentElement!==inner) inner.append(bottom);
+      const hasLiveMenus = !!main.querySelector('.aznet-theme-site-footer__navigation')
+        && !!main.querySelector('.aznet-theme-site-footer__contact')
+        && !!main.querySelector('.aznet-theme-site-footer__social-column')
+        && !!bottom.querySelector('.aznet-theme-site-footer__policies');
+      if (hasLiveMenus) return;
       const add=(key,cls,heading,ulCls)=>{
         const nav=document.createElement('nav');nav.className=cls;
         nav.setAttribute('aria-label',heading);nav.dataset.d064QaFixture='true';
