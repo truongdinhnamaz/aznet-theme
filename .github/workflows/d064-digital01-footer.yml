@@ -1,0 +1,32 @@
+name: D-064 Digital 01 Footer contract
+on:
+  push:
+    branches: [work/d064-aznet-digital01-footer-20261022]
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/d064-digital01-footer.yml'
+      - 'tests/offline/d064-digital01-footer-contract.php'
+      - 'template-parts/footer/site-footer.php'
+      - 'assets/css/components/site-footer.css'
+      - 'assets/css/components/site-footer-digital-01.css'
+      - 'inc/theme/assets.php'
+permissions:
+  contents: read
+jobs:
+  footer-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: dom
+          coverage: none
+      - name: L1 PHP lint
+        run: |
+          php -l template-parts/footer/site-footer.php
+          php -l tests/offline/d064-digital01-footer-contract.php
+      - name: L2 WordPress-native Footer fixture RED-GREEN
+        run: php tests/offline/d064-digital01-footer-contract.php
