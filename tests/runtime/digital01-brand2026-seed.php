@@ -101,4 +101,26 @@ if (file_exists($logo_file)) {
     if(is_wp_error($logo_id))throw new RuntimeException($logo_id->get_error_message());
     set_theme_mod('custom_logo',(int)$logo_id);
 }
+// WordPress Landing Page preview witness: isolate non-front-page placement
+// as used by site-owned Page 43515 (without changing Page 2 or any external site).
+$landing_content = str_replace(
+    'aznet-digital01 aznet-digital01--brand-2026',
+    'aznet-digital01 aznet-digital01--brand-2026 aznet-theme-page-hero',
+    $all
+);
+$landing_id = wp_insert_post([
+    'post_type' => 'page',
+    'post_status' => 'publish',
+    'post_name' => 'digital01-brand2026-landing-check',
+    'post_title' => 'Fixture Landing Title Only',
+    'post_content' => wp_slash($landing_content),
+], true);
+if (is_wp_error($landing_id) || (int) $landing_id <= 0) {
+    throw new RuntimeException('Failed creating disposable Landing Page witness');
+}
+update_post_meta((int) $landing_id, '_wp_page_template', 'page-templates/landing.php');
+if ('page-templates/landing.php' !== get_page_template_slug((int) $landing_id)) {
+    throw new RuntimeException('Disposable Landing Page template not persisted');
+}
+file_put_contents('/tmp/digital01-brand/landing-id.txt', (string) $landing_id);
 echo "PASS: Disposable native WP Page, menu and optional real logo. Page ID {$front_id}.\n";
