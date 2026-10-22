@@ -68,6 +68,10 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/core-vertical-catal
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/d049-rail-header-hero-visual-parity-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/d049-cross-page-header-parity-contract.php
 
+printf '%s\n' '==> D-057/D-058 Digital 01 visual Header and native Landing CSS contracts'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/d057-digital01-header-overlap-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/d058-landing-fullwidth-inverse-contract.php
+
 printf '%s\n' '==> Retained R5 Control Center contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/r5-control-center-static-contract.php
 
