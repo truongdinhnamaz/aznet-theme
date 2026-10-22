@@ -23,3 +23,35 @@
 1. Inspect all exact-head CI results (especially V1 retained static) and verify responsive screenshots + a11y L4. No cross-layer PASS inference.
 2. WordPress owner must configure actual Footer menu slots or reusable WordPress wp_block columns; the Theme must never fabricate contact, organization identity, social URLs or policies. Suggested use existing Menu 2578 for footer if owner approves and authoritative contact/social sources independently when available.
 3. Preview actual populated Footer; verify linked destinations and mobile nav; preserve rollback to Theme 1.3.96 and existing menu assignments. No merge main, tag, GitHub Release or live publish without fresh owner release approval.
+
+## Owner-approved continuation — WordPress menu preparation (unassigned, 2026-10-22)
+
+Only WordPress-native menus have been authored, not attached to any live menu location. They are non-visible source candidates; current public Footer still remains the 1.3.96 logo/tagline/copyright surface. `wp menu location list` was rechecked after writes: **all four Footer locations still empty**. Header and other location assignments were untouched.
+
+| Future Footer location | Prepared WordPress menu | Native source and content |
+| --- | --- | --- |
+| `footer` | **3497 — AZnet Footer - Dich vu** | Five verified published WP Pages: 43041 Thiết kế website, 42172 SEO website, 22161 Chăm sóc website, 41978 Nâng cấp website, 20392 Đào tạo |
+| `footer-contact` | **3494 — AZnet Footer - Lien he** | Existing public Page 18 Liên hệ và tư vấn; Page 41831 Bảng giá dịch vụ |
+| `footer-social` | **3495 — AZnet Footer - Ket noi** | Facebook AZnet URL displayed in the published WordPress Contact Page, `https://www.facebook.com/aznet.official` (WordPress native menu link; not a claimed RootProfile provider payload) |
+| `footer-policy` | **3496 — AZnet Footer - Chinh sach** | WP published Pages 3 Quyền riêng tư, 24596 Thỏa thuận sử dụng, 28573 Bảo hành website |
+
+The preexisting native menu ID **2578** was deliberately **not changed**, after finding its “Website giá rẻ” label points to the homepage. Do not silently repair or assign this legacy menu. The new curated menu uses verified published WordPress Pages and leaves the original user-authored menu intact.
+
+- Native menu item IDs: contact 43543–43544, social 43545, policy 43546–43548, service 43549–43553.
+- The WordPress write boundary was honored: all navigation data is stored with WordPress menu APIs; Theme code contains no AZnet-specific content or menu IDs.
+- RootProfile organization REST `/rootprofile/v1/organization` remained 404 during earlier check. No company address, official email, phone, or other authoritative contact fields were invented or copied into Theme code.
+- No call to `menu location assign`, no Theme publish, no canonical main merge; the live site has not gained Footer navigation yet.
+
+### Browser L4 presentation fixture
+- L4 run [39756142561](https://github.com/truongdinhnamaz/aznet-theme/actions/runs/39756142561): PASS at widths **1705, 1440, 1280, 1120, 1024, 820, 768, 390, 360** with no Footer horizontal overflow or overlapping grid regions, 4→2→1 responsive grid, 3px keyboard focus outline, native logo and all source links. The fixture uses actual published menu-link candidates injected into the public site shell, plus local candidate Footer CSS and known PHP nesting correction. **It is NOT a live WordPress preview integration PASS**.
+- The browser fixture was then updated from obsolete menu 2578 links to new verified menu 3497 links at test commit `5e2530b`; exact-head CI must complete before a fresh L4 PASS claim.
+
+### Publication hard gates
+1. Final exact-head CI including retained Y3 Footer / R6 checks must finish without unresolved failures.
+2. WordPress draft has canonical PHP/CSS; preview currently shows only old public data, because native Footer locations are unassigned. No user-visible data is copied into Theme code.
+3. WordPress native Footer menu activation changes live production immediately. Do not assign the four menus before owner authorizes going live and validates rollback/host backup.
+4. WPVibe Theme draft publication likewise requires an **explicit publish/go-live instruction** after preview and a recent site-level backup; a generic approval to prepare/configure is not publication authorization.
+5. D-063 WP Rocket `/cache/min/` stale CSS problem may prevent delivery of new style bytes until site-owned minification cache is invalidated. Resolve that separate operation and recheck freshly served CSS before claiming production Footer L4 PASS.
+6. Rollback: restore original four unassigned Footer menu locations if activated, restore Theme 1.3.96 from previous live backup, and avoid rewriting any published pages or plugin storage.
+
+**EXACT NEXT:** complete final CI, retain source/branch checkpoint, then request explicit production authorization + host backup; on authorization, assign approved native menus, publish draft only if all gates remain healthy, invalidate minified CSS through supported WP Rocket admin operation, and verify live Footer geometry and links immediately.
