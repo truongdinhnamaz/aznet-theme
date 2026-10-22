@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.20
+**Version:** v1.21
 **Status:** Working Source  
 **Date:** 22/10/2026
 
@@ -1098,3 +1098,13 @@ Site release 1.3.94 has PASS for source CI and public homepage/SEO content invar
 - **Checkpoint artifact:** [AZNET_D060_ABOUT_SHOWCASE_V2_20261022.md](../evidence/AZNET_D060_ABOUT_SHOWCASE_V2_20261022.md), Draft PR [#499](https://github.com/truongdinhnamaz/aznet-theme/pull/499), stacked on unreleased Draft PR #498.
 
 **EXACT NEXT:** Resolve the single preserved Brand Light PHP draft-provenance gate through explicit owner authorization or independent clean staging; then fresh exact-byte parity, user preview visual acceptance and a fresh full host/database/media backup before any future release version validation, merge or publication. Retain approved Page and previous PASS evidence and do not infer L5 from private-source skips.
+
+### D-062 — AZnet 1.3.96 post-publication canonical sync — OWNER MERGE APPROVED — 22/10/2026
+
+- **Decision:** After successful owner-authorized WPVibe publication of Theme **1.3.96** to `aznet.vn`, the owner replied **“duyệt”** to the explicit NEXT of synchronizing its approved source via [composed PR #501](https://github.com/truongdinhnamaz/aznet-theme/pull/501) into canonical GitHub `main`. Authorization covers this **bounded merge and post-merge verification**, not a new production deployment, GitHub Release/tag, unrelated PRs, content cleanup or external provider changes.
+- **Boundaries:** D-057/D-058 Header/Landing fixes, D-059 paired 1.3.96 metadata, D-060 About V2, D-061 Homepage Products layout remain Theme-owned presentation. WordPress Page 2/18897 and SEO/media source retain ownership; RootProfile, ConvertFlow and WooCommerce semantics remain untouched.
+- **Fresh evidence before merge:** Public production `site_info` active Theme **1.3.96**, backup Theme 1.3.95, PHP assets byte-parity for scoped files, Page IDs and modified times stable; [D-061 L4 six-width public browser verification](https://github.com/truongdinhnamaz/aznet-theme/actions/runs/39742440401) succeeded after publication with documented identical CSS overlay methodology. The owner reported a full hosting backup, not independently restored. Pre-docs PR #501 exact candidate `f3ee4f5` ran 44 CI workflows: 43 success, 0 failures, 1 optional L5 skip. New source-only commit and exact-main verification require fresh separate results.
+- **QA claims:** site-specific publication and authenticated production L3 smoke PASS; bounded L4 for actual public Products DOM PASS; full live pixel-perfect, L5 and release-tag/publication remain UNKNOWN/not performed. Earlier D-059/D-060 “unreleased” statements are historical pre-cutover checkpoints, superseded by this production state without rewriting them.
+- **Evidence and rollback:** [D-062 production/source sync](../evidence/AZNET_D062_V1396_PRODUCTION_SOURCE_SYNC_20261022.md); WordPress Theme-only 1.3.95 backup and owner-reported full host backup retained. No production overwrite required for GitHub sync.
+
+**EXACT NEXT:** When amended PR #501 exact-head checks are GREEN and mergeable, merge into canonical `main` (no force) and run fresh exact-main CI; keep GitHub Release/tag as a separate owner-approval gate.

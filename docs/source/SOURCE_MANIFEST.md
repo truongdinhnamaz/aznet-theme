@@ -7,8 +7,8 @@ Historical D-040/D-041 decision checkpoint was exact `main@5d2d34074c1b1b0006151
 | `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
 | `AZT-01-product-charter.md` | v0.5 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.24 | Theme architecture, public integration contracts, Template Extension Contract, preset lexicon boundary, hero-first Page composition and reusable editorial/news media-card presentation standard |
-| `AZT-03-baseline-provenance.md` | v0.85 | Canonical provenance through Rèm 01 1.3.31 Project Showcase production checkpoint |
-| `AZT-04-roadmap-qa-decisions.md` | v1.10 | Roadmap/QA decisions through D-048 hero-first Page composition |
+| `AZT-03-baseline-provenance.md` | v0.91 | Canonical provenance through Rèm 01 1.3.31 Project Showcase production checkpoint |
+| `AZT-04-roadmap-qa-decisions.md` | v1.21 | Roadmap/QA decisions through D-048 hero-first Page composition |
 | `AZT-EXEC-MAP.md` | v0.87 | Derived execution map through Rèm 01 1.3.31 production checkpoint |
 
 03/10/2026 Team contact decision: AZT-02 v0.22 + AZT-04 D-047 permit exactly two bounded WordPress Page meta facts for Team child Pages, `_aznet_theme_team_phone` and `_aznet_theme_team_zalo`. They are not RootProfile authority, are not copied into `aznet_theme_settings`, and do not authorize a generic personnel store. Backend Zalo input remains phone-only; Theme derives the public Zalo URL at render time.
