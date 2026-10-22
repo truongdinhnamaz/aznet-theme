@@ -130,13 +130,25 @@ namespace {
     $rich['footer_columns'] = ['<p>Native WordPress block one</p>', '<p>Native WordPress block two</p>', '', ''];
     d064_check_footer_structure(d064_markup($rich), 'native wp_block columns');
 
-    $css = file_get_contents($root . '/assets/css/components/site-footer.css');
+    $css = file_get_contents($root . '/assets/css/components/site-footer-digital-01.css');
+    $assets = file_get_contents($root . '/inc/theme/assets.php');
+    $generic = file_get_contents($root . '/assets/css/components/site-footer.css');
     if (! is_string($css) || ! str_contains($css, 'D-064 Digital 01 source-backed Footer')
         || ! str_contains($css, 'body.aznet-theme-preset--digital-01 .aznet-theme-site-footer--professional')
         || ! str_contains($css, '.aznet-theme-site-footer__main')
-        || ! str_contains($css, '@media (max-width: 48rem)')
+        || ! str_contains($css, '@media screen and (max-width: 48rem)')
         || ! str_contains($css, ':focus-visible')) {
         d064_fail('Digital 01 bounded Footer visual/responsive/focus CSS contract absent');
+    }
+    if (! is_string($generic) || str_contains($generic, 'D-064 Digital 01 source-backed Footer')) {
+        d064_fail('Generic Footer asset must stay free of Digital 01 site-specific rules');
+    }
+    if (! is_string($assets)
+        || ! str_contains($assets, "if ( function_exists( __NAMESPACE__ . ")
+        || ! str_contains($assets, "'digital-01' === visual_preset()")
+        || ! str_contains($assets, "'aznet-theme-site-footer-digital-01'")
+        || ! str_contains($assets, "'aznet-theme-site-footer', 'aznet-theme-preset-digital-01'")) {
+        d064_fail('Digital 01 Footer stylesheet must be surface-aware and depend on generic Footer and preset assets');
     }
     echo "PASS D-064: Footer HTML nesting, WordPress identity/menu/rich content, absence fallback, scoped responsive CSS\n";
 }
