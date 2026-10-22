@@ -16,7 +16,7 @@ const errors=[],results=[];
 const site='https://aznet.vn/gioi-thieu';
 const menus={
  contact:[['Liên hệ và tư vấn','https://aznet.vn/lien-he'],['Bảng giá dịch vụ','https://aznet.vn/bang-gia']],
- services:[['Website giá rẻ','https://aznet.vn'],['Website bán hàng','https://aznet.vn/thiet-ke-website-ban-hang-tron-goi'],['Website tin tức','https://aznet.vn/dich-vu-thiet-ke-website-tin-tuc.html'],['Website đào tạo','https://aznet.vn/thiet-ke-website-dao-tao-truc-tuyen.html'],['Website chuẩn SEO','https://aznet.vn/dich-vu-thiet-ke-web-chuan-seo.html']],
+ services:[['Thiết kế website','https://aznet.vn/thiet-ke-website'],['SEO website','https://aznet.vn/dich-vu-seo'],['Chăm sóc website','https://aznet.vn/dich-vu-cham-soc-website'],['Nâng cấp website','https://aznet.vn/nang-cap-website'],['Đào tạo','https://aznet.vn/dao-tao']],
  social:[['Facebook AZnet','https://www.facebook.com/aznet.official']],
  policies:[['Quyền riêng tư','https://aznet.vn/chinh-sach-ve-quyen-rieng-tu'],['Thỏa thuận sử dụng','https://aznet.vn/thoa-thuan-su-dung'],['Bảo hành website','https://aznet.vn/chinh-sach-bao-hanh-website']]
 };
