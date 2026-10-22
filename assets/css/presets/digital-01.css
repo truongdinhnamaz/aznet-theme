@@ -31,3 +31,23 @@ body.aznet-theme-preset--digital-01 .aznet-theme-site-footer {
 body.aznet-theme-preset--digital-01 :where(a,button,input,select,textarea):focus-visible {
   outline:3px solid var(--aznet-theme-color-focus);outline-offset:3px;
 }
+
+/* D-057: Digital 01 standard Header consumes the actual WordPress utility
+ * navigation without drawing another desktop menu over the custom logo.
+ * This does not change menu ownership, ordering, links or nav-only Headers. */
+body.aznet-theme-preset--digital-01 .aznet-theme-site-header:not(.aznet-theme-site-header--nav-only) .aznet-theme-site-header__brand-copy {display:none;}
+@media (min-width:1501px) {
+  body.aznet-theme-preset--digital-01 .aznet-theme-site-header:not(.aznet-theme-site-header--nav-only) .aznet-theme-site-header__inner:has(> .aznet-theme-site-header__actions .aznet-theme-site-header__utility-nav) > .aznet-theme-site-header__nav {display:none;}
+  body.aznet-theme-preset--digital-01 .aznet-theme-site-header:not(.aznet-theme-site-header--nav-only) .aznet-theme-site-header__inner {gap:var(--aznet-theme-space-3);}
+  body.aznet-theme-preset--digital-01 .aznet-theme-site-header:not(.aznet-theme-site-header--nav-only) .aznet-theme-site-header__utility-menu {flex-wrap:wrap;justify-content:flex-end;gap:.2rem;}
+  body.aznet-theme-preset--digital-01 .aznet-theme-site-header:not(.aznet-theme-site-header--nav-only) .aznet-theme-site-header__utility-menu a {padding-inline:.5rem;font-size:.85rem;}
+  body.aznet-theme-preset--digital-01 .aznet-theme-site-header:not(.aznet-theme-site-header--nav-only) .aznet-theme-site-header__search input[type="search"] {width:120px;}
+}
+/* Between desktop and mobile widths, reuse the Theme's existing accessible
+ * mobile disclosure; never force both full desktop menus into a narrow row. */
+@media (min-width:981px) and (max-width:1500px) {
+  body.aznet-theme-preset--digital-01 .aznet-theme-site-header:not(.aznet-theme-site-header--nav-only) .aznet-theme-site-header__inner > .aznet-theme-site-header__nav,
+  body.aznet-theme-preset--digital-01 .aznet-theme-site-header:not(.aznet-theme-site-header--nav-only) .aznet-theme-site-header__inner > .aznet-theme-site-header__actions {display:none;}
+  body.aznet-theme-preset--digital-01 .aznet-theme-site-header:not(.aznet-theme-site-header--nav-only) .aznet-theme-site-header__mobile {display:block;flex:0 0 auto;}
+  body.aznet-theme-preset--digital-01 .aznet-theme-site-header:not(.aznet-theme-site-header--nav-only) .aznet-theme-site-header__brand {flex:1 1 auto;min-width:0;}
+}
