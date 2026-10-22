@@ -20,6 +20,8 @@ try {
     try{
       const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:45000});
       if (response?.status()!==200) throw Error('Public Page URL HTTP '+response?.status());
+      const publicAssetCount=await page.locator('link[rel="stylesheet"][href*="about-showcase-v2.css"]').count();
+      if(publicAssetCount!==0) issues.push({width,issues:['V2 CSS unexpectedly loaded on released production Theme before overlay']});
       await page.addStyleTag({path:'assets/css/presets/digital-01.css'});
       await page.addStyleTag({path:'assets/css/components/page.css'});
       await page.addStyleTag({path:'assets/css/components/about-showcase-v2.css'});
