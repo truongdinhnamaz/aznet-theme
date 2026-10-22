@@ -8,6 +8,8 @@ on:
       - '.github/workflows/d057-live-header-l4.yml'
       - 'tests/browser/d057-live-header-l4.mjs'
       - 'assets/css/presets/digital-01.css'
+      - 'assets/css/components/page.css'
+      - 'tests/offline/d058-landing-fullwidth-inverse-contract.php'
 permissions:
   contents: read
 jobs:
