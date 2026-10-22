@@ -111,6 +111,41 @@ for (const test of cases) {
   if(problems.length)failed=true;
   await context.close();
 }
+// Verify the second, non-home WordPress-owned Landing Page renders the same
+// opt-in presentation without adding a duplicate native Page-title H1.
+const landingId = Number(fs.readFileSync(path.join(evidenceDir,'landing-id.txt'),'utf8').trim());
+if(!Number.isInteger(landingId) || landingId <= 0){
+  console.error('FAIL: Native Landing Page fixture missing'); failed=true;
+} else {
+  for(const view of [{name:'landing-desktop',width:1440,height:950},{name:'landing-mobile',width:390,height:844}]){
+    const context = await browser.newContext({viewport:{width:view.width,height:view.height},deviceScaleFactor:1});
+    const page = await context.newPage();
+    await page.goto(base+'/?page_id='+landingId,{waitUntil:'networkidle',timeout:90000});
+    const data = await page.evaluate(() => ({
+      pageClass: document.body.className,
+      branded: !!document.querySelector('.aznet-digital01--brand-2026'),
+      h1Count: document.querySelectorAll('h1').length,
+      h1Text: document.querySelector('h1')?.textContent?.trim(),
+      extraPageHeader: !!document.querySelector('.aznet-theme-page__header'),
+      CSSActive: performance.getEntriesByType('resource').some(r=>r.name.includes('homepage-digital-01-brand-2026.css')),
+      scrollWidth:document.documentElement.scrollWidth,
+      viewportWidth:window.innerWidth
+    }));
+    const problems = [];
+    if(!data.pageClass.includes('page-template-landing')) problems.push('native Page landing template not selected');
+    if(!data.branded || !data.CSSActive) problems.push('opt-in presentation missing from native Page route');
+    if(data.h1Count!==1 || data.h1Text!=='Xây dựng website tăng trưởng thực sự')
+      problems.push('native Landing Page H1 incorrectly duplicated or missing');
+    if(data.extraPageHeader) problems.push('extra native Page header breaks Hero-first composition');
+    if(data.scrollWidth>data.viewportWidth+2) problems.push('horizontal overflow');
+    const outcome={...view,observed:data,problems};
+    summary.push(outcome);
+    console.log('BRAND_2026_LANDING '+JSON.stringify(outcome));
+    await page.screenshot({path:path.join(evidenceDir,'brand-2026-'+view.name+'.png'),fullPage:true});
+    if(problems.length)failed=true;
+    await context.close();
+  }
+}
 fs.writeFileSync(path.join(evidenceDir,'brand-2026-l4.json'),JSON.stringify(summary,null,2));
 await browser.close();
 if(failed){console.error('FAIL: WordPress + browser branded design fixture; see BRAND_2026_L4 rows');process.exit(1);}
