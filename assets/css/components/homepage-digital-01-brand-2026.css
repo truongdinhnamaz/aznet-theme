@@ -47,6 +47,12 @@ body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-the
   font-size:1.5rem;
   letter-spacing:-.04em;
 }
+/* A WordPress site title remains authoritative and in the brand link's
+   aria-label; with the native logo visible, never duplicate it visually.
+   Without a custom logo, keep the original text-only fallback intact. */
+body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-header__brand:has(img) .aznet-theme-site-header__brand-copy {
+  display:none!important;
+}
 body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-header__brand span::after {
   content:none;
 }
