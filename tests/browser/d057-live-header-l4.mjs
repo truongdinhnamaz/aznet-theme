@@ -67,6 +67,36 @@ try {
           brandActionsOverlap:intersection(R.brand,R.actions),brandMobileOverlap:intersection(R.brand,R.mobile),
           linksOverlap:linkOverlaps,regions:R};
       });
+      // Diagnose the independently observed WordPress Page 18897 Hero display defect.
+      // These measurements are NOT fixed by Header CSS alone.
+      const heroDiag = await page.evaluate(() => {
+        const e=document.querySelector('.aznet-theme-page-hero');
+        const h=e?.querySelector('h1');
+        const r=x=>x?{x:Math.round(x.getBoundingClientRect().x),y:Math.round(x.getBoundingClientRect().y),
+          w:Math.round(x.getBoundingClientRect().width),h:Math.round(x.getBoundingClientRect().height)}:null;
+        const st=x=>{if(!x)return null; const c=getComputedStyle(x);return {
+          display:c.display,width:c.width,maxWidth:c.maxWidth,minWidth:c.minWidth,
+          backgroundColor:c.backgroundColor,color:c.color,
+          paddingLeft:c.paddingLeft,paddingRight:c.paddingRight,
+          marginLeft:c.marginLeft,position:c.position,
+          transform:c.transform,gridTemplateColumns:c.gridTemplateColumns,
+          fontSize:c.fontSize,opacity:c.opacity,
+        }};
+        const ancestry=[];for(let p=e, n=0;p&&n<10;p=p.parentElement,n++)
+          ancestry.push({tag:p.tagName,cls:(p.className?.baseVal??p.className??'').toString().slice(0,170),
+            rect:r(p),style:st(p)});
+        return {rect:r(e),h1:r(h),h1Style:st(h),
+          introStyle:st(e?.querySelector('p')),ancestry,
+          bodyWidth:document.body.getBoundingClientRect().width,
+          viewport:innerWidth,htmlWidth:document.documentElement.getBoundingClientRect().width};
+      });
+      measurements.hero=heroDiag;
+      if ([1600, 1366, 390].includes(width)) console.log('HERO_DIAG '+JSON.stringify({
+        width,scenario:override?'candidate':'production',...heroDiag}));
+      if (override) {
+        if (heroDiag.rect && heroDiag.rect.w < width * .90)
+          errors.push({width,issues:['About Hero only occupies '+heroDiag.rect.w+' of '+width+' px viewport']});
+      }
       const snap = [1600, 1500, 1366, 980, 390].includes(width);
       if (snap) await page.screenshot({path:join(outDir, 'about-'+width+(override?'-candidate':'-production')+'.png')});
       if (override) {
@@ -102,7 +132,7 @@ try {
         theme:measurements.theme,brandActionsOverlap:measurements.brandActionsOverlap,
         brandMobileOverlap:measurements.brandMobileOverlap,utilityOverlaps:measurements.linksOverlap.length,
         headerOverflow:measurements.headerOverflow,horizontalScroll:measurements.horizontalScroll,
-        logoLoaded:measurements.logoLoaded,desktopNav:measurements.regions.desktopNav?.visible,
+        logoLoaded:measurements.logoLoaded,heroWidth:measurements.hero?.rect?.w,heroH1Color:measurements.hero?.h1Style?.color,desktopNav:measurements.regions.desktopNav?.visible,
         mobileTrigger:measurements.regions.trigger?.visible,utilityNav:measurements.regions.utilityNav?.visible}));
     } catch(e) {
       errors.push({width, scenario:override?'candidate':'production', issues:[String(e)]});
