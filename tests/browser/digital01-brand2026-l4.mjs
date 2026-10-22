@@ -72,6 +72,38 @@ for (const test of cases) {
   if(data.scrollWidth>data.viewportWidth+2)problems.push('horizontal overflow '+data.scrollWidth+'> '+data.viewportWidth);
   if(violations.length)problems.push('WCAG tagged violations: '+violations.map(x=>x.id).join(','));
   if(errors.length)problems.push('JavaScript errors '+errors.join(','));
+
+  // The bright branded Header must remain legible after the native mobile menu opens.
+  // Unlike the Hero's scoped content, navigation lives in the Theme-owned site shell.
+  if (test.width <= 900) {
+    const trigger = page.locator('[data-aznet-theme-nav-trigger]');
+    if (await trigger.count() !== 1) {
+      problems.push('native mobile navigation trigger missing');
+    } else {
+      await trigger.click();
+      const mobileMenu = await page.evaluate(() => {
+        const p = document.querySelector('[data-aznet-theme-nav-panel]');
+        const a = p?.querySelector('.aznet-theme-site-header__menu a');
+        const panelColor = p ? getComputedStyle(p).backgroundColor : null;
+        const linkColor = a ? getComputedStyle(a).color : null;
+        const lum = color => {
+          const x = (color?.match(/[0-9]+(?:\\.[0-9]+)?/g)||[]).slice(0,3).map(Number).map(v=>v/255);
+          if(x.length!==3)return 0;
+          const y=x.map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);
+          return .2126*y[0]+.7152*y[1]+.0722*y[2];
+        };
+        const hi = Math.max(lum(panelColor),lum(linkColor));
+        const lo = Math.min(lum(panelColor),lum(linkColor));
+        return {open:p&&!p.hidden,expanded:document.querySelector('[data-aznet-theme-nav-trigger]')?.getAttribute('aria-expanded'),
+          panelColor,linkColor,contrast:(hi+.05)/(lo+.05)};
+      });
+      data.mobileMenu = mobileMenu;
+      if (!mobileMenu.open || mobileMenu.expanded!=='true') problems.push('native mobile menu not interactive');
+      if (!mobileMenu.linkColor || mobileMenu.contrast < 4.5)
+        problems.push('mobile header link contrast '+mobileMenu.contrast?.toFixed(2)+' < 4.5');
+      await page.keyboard.press('Escape');
+    }
+  }
   const result={...test,observed:data,violations,problems};
   summary.push(result);
   await page.screenshot({path:path.join(evidenceDir,'brand-2026-'+test.name+'.png'),fullPage:true});
