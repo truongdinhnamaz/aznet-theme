@@ -74,6 +74,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/d058-landing-fullwi
 
 printf '%s\n' '==> D-060 authored About Showcase v2 surface-aware CSS contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/d060-about-showcase-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/d060-about-showcase-runtime.php
 
 printf '%s\n' '==> Retained R5 Control Center contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/r5-control-center-static-contract.php
