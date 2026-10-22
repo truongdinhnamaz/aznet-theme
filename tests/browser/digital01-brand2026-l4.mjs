@@ -37,6 +37,7 @@ for (const test of cases) {
       variant:!!root,
       bodyClass:document.body.className,
       logo:logo?.getAttribute('src')||null,
+      brandCopyVisible:(() => { const copy = query('.aznet-theme-site-header__brand-copy'); return !!copy && style(copy)?.display !== 'none' && copy.getClientRects().length > 0; })(),
       headerBackground:style(header)?.backgroundColor||null,
       heroBackground:style(hero)?.backgroundImage||null,
       h1:h1?.textContent?.trim()||null,
@@ -64,6 +65,7 @@ for (const test of cases) {
   const problems = [];
   if(!data.variant)problems.push('missing WordPress-owned brand-2026 opt-in class');
   if(!data.logo)problems.push('native WordPress custom logo missing');
+  if (data.logo && data.brandCopyVisible) problems.push('logo is duplicated by visible WordPress site title in Branded Header');
   if(data.headerBackground!=='rgb(255, 255, 255)')problems.push('header not white');
   if(data.h1Color!=='rgb(11, 35, 77)')problems.push('hero title color not navy');
   if(!data.h1?.includes('tăng trưởng thực sự'))problems.push('target Hero heading missing');
