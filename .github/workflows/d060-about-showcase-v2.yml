@@ -14,8 +14,13 @@ jobs:
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
-      - name: Verify surface-aware native About V2 contract
-        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/d060-about-showcase-contract.php
+      - name: PHP 8.1 lowest supported runtime
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Retained full V1 Core lint and offline regression
+        run: bash scripts/verify-v1-core.sh
       - name: Set up Node 22
         uses: actions/setup-node@v4
         with:
