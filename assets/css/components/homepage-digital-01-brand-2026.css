@@ -121,6 +121,102 @@ body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-the
     line-height:1;
   }
 }
+/* Native WordPress-owned dropdown menus are enabled only on opted-in Brand
+   pages by the Header consumer. These are presentation rules, not menu data. */
+@media (min-width:981px) {
+  body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-header__utility-menu > .menu-item-has-children {
+    position:relative;
+  }
+  body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-header__utility-menu > .menu-item-has-children > a::after {
+    content:"⌄";
+    margin-left:6px;
+    font-size:1rem;
+    line-height:1;
+  }
+  body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-header__utility-menu > li > .sub-menu {
+    position:absolute;
+    z-index:50;
+    top:100%;
+    left:0;
+    display:grid;
+    width:max-content;
+    min-width:228px;
+    max-width:min(320px,calc(100vw - 32px));
+    gap:2px;
+    margin:0;
+    padding:8px;
+    list-style:none;
+    border:1px solid #e5ebf3;
+    border-radius:12px;
+    background:#ffffff;
+    color:#0b234d;
+    box-shadow:0 14px 30px rgba(11,35,77,.15);
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+  }
+  body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-header__utility-menu > li:hover > .sub-menu,
+  body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-header__utility-menu > li:focus-within > .sub-menu {
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+  }
+  body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-header__utility-menu > li > .sub-menu > li > a {
+    display:flex;
+    width:100%;
+    min-height:40px;
+    padding:8px 11px;
+    white-space:normal;
+    text-align:left;
+    color:#0b234d!important;
+    background:transparent;
+    border:0;
+    border-radius:7px;
+    box-shadow:none;
+    font-weight:600;
+  }
+  body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-header__utility-menu > li > .sub-menu > li > a:hover,
+  body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-header__utility-menu > li > .sub-menu > li > a:focus-visible {
+    background:#f4f7fc;
+    color:#c62121!important;
+  }
+}
+@media (max-width:980px) {
+  body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-header__mobile-panel {
+    max-height:min(78dvh,700px);
+    overflow-y:auto;
+    overscroll-behavior:contain;
+  }
+  body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-header__mobile-panel .aznet-theme-site-header__utility-menu .sub-menu {
+    position:static;
+    display:grid;
+    width:100%;
+    gap:3px;
+    margin:4px 0 8px;
+    padding:0 0 0 13px;
+    border:0;
+    border-left:2px solid #e5ebf3;
+    border-radius:0;
+    background:transparent;
+    box-shadow:none;
+    list-style:none;
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+  }
+  body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-header__mobile-panel .aznet-theme-site-header__utility-menu .sub-menu a {
+    display:flex;
+    justify-content:flex-start;
+    min-height:38px;
+    padding:6px 10px;
+    border:0;
+    border-radius:7px;
+    color:#0b234d!important;
+    background:#f4f7fc;
+    font-weight:600;
+    white-space:normal;
+  }
+}
 /* When the native mobile menu opens, its panel must use the same light
    surface as the branded Header. Dark links on the legacy navy panel fail AA. */
 body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-header__mobile-panel {
