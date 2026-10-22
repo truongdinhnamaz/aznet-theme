@@ -86,4 +86,11 @@ foreach ([
         $fail(sprintf('%s is %.2f:1 below AA 4.5:1', $name, $contrast($foreground, $background)));
     }
 }
+// A real WordPress utility menu contains nested <ul class="sub-menu"> items.
+// Only its final top-level <li> is the consultation CTA: descendant li:last-child
+// also matches the last entry of every dropdown and makes it a false red CTA.
+if (! str_contains($css, '.aznet-theme-site-header__utility-menu > li:last-child > a')
+    || str_contains($css, '.aznet-theme-site-header__utility-menu li:last-child > a')) {
+    $fail('Header CTA must target only final top-level menu item, not submenu children');
+}
 echo "PASS: Digital 01 2026 reference — opt-in WordPress ownership, responsive components and WCAG AA token pairs\n";
