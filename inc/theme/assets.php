@@ -326,7 +326,7 @@ function digital01_brand2026_page_active(): bool {
     }
 
     $page = get_queried_object();
-    return $page instanceof \\WP_Post
+    return $page instanceof \WP_Post
         && str_contains( (string) $page->post_content, 'aznet-digital01--brand-2026' );
 }
 
