@@ -21,6 +21,7 @@ jobs:
       - name: PHP syntax and new presentation contract
         run: |
           php -l inc/theme/assets.php
+          php -l template-parts/header/utility-navigation.php
           php tests/offline/digital01-brand2026-presentation-contract.php
       - name: Retained Digital 01 contract
         run: php tests/offline/digital01-template-contract.php
