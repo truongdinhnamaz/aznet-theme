@@ -65,6 +65,11 @@ jobs:
           rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='tests' --exclude='scripts' --exclude='README.md' ./ /tmp/wp/wp-content/themes/aznet-theme/
           wp theme activate aznet-theme --path=/tmp/wp --allow-root
           wp eval-file tests/runtime/digital01-preview-seed.php --path=/tmp/wp --allow-root
+          # The owner-supplied WordPress Media asset is imported only into this disposable site.
+          curl -fsSL --retry 3 --max-time 30 https://aznet.vn/wp-content/uploads/2026/08/logo-nen-sang-1.png -o /tmp/digital01-brand/logo.png
+          test -s /tmp/digital01-brand/logo.png
+          php -l tests/runtime/digital01-brand2026-seed.php
+          wp eval-file tests/runtime/digital01-brand2026-seed.php --path=/tmp/wp --allow-root
       - name: Launch WordPress
         run: |
           set -euo pipefail
