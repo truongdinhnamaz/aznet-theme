@@ -1035,7 +1035,7 @@ body.aznet-theme-preset--digital-01 .aznet-theme-site-footer--professional .azne
     }
 }
 
-@media (max-width: 48rem) {
+@media screen and (max-width: 48rem) {
     body.aznet-theme-preset--digital-01 .aznet-theme-site-footer--professional .aznet-theme-site-footer__inner {
         width: calc(100% - (2 * var(--aznet-theme-gutter-mobile)));
         padding-top: 2.75rem;
