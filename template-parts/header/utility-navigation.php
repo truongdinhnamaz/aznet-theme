@@ -13,7 +13,7 @@ if ( ! has_nav_menu( 'header-utility' ) ) { return; }
             'menu_class'     => 'aznet-theme-site-header__utility-menu',
             'fallback_cb'    => false,
             'depth'          => function_exists( 'AZnet\\Theme\\digital01_brand2026_page_active' )
-                && \\AZnet\\Theme\\digital01_brand2026_page_active() ? 2 : 1,
+                && \AZnet\Theme\digital01_brand2026_page_active() ? 2 : 1,
         ]
     );
     ?>
