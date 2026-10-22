@@ -83,7 +83,7 @@ for (const test of cases) {
       await trigger.click();
       const mobileMenu = await page.evaluate(() => {
         const p = document.querySelector('[data-aznet-theme-nav-panel]');
-        const a = p?.querySelector('.aznet-theme-site-header__menu a');
+        const a = p?.querySelector('.aznet-theme-site-header__utility-menu a');
         const panelColor = p ? getComputedStyle(p).backgroundColor : null;
         const linkColor = a ? getComputedStyle(a).color : null;
         const lum = color => {
