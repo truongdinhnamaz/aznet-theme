@@ -8,6 +8,8 @@ on:
       - '.github/workflows/d064-footer-l4.yml'
       - 'tests/browser/d064-footer-l4.mjs'
       - 'assets/css/components/site-footer.css'
+      - 'assets/css/components/site-footer-digital-01.css'
+      - 'inc/theme/assets.php'
       - 'template-parts/footer/site-footer.php'
 permissions:
   contents: read
