@@ -189,9 +189,6 @@ $policy_heading     = (string) ( $labels['policy_heading'] ?? __( 'Chính sách'
                     <?php echo $social_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
                 </nav>
             <?php endif; ?>
-        </div>
-
-
             <?php endif; ?>
         </div>
 
