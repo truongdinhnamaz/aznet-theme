@@ -321,6 +321,14 @@ body.aznet-theme-preset--digital-01 .aznet-digital01__text-link {
 body.aznet-theme-preset--digital-01 .aznet-digital01__text-link:hover {text-decoration:underline;}
 /* Products: editorial showcases of published Woo product destinations, not commerce state. */
 body.aznet-theme-preset--digital-01 .aznet-digital01__products {background:var(--d01-cream);}
+/* D-061: the published native Homepage nests a second section under the
+ * full-bleed Products section. Keep one vertical gutter and the same editorial
+ * container as other sections; WordPress continues to own the block content. */
+body.aznet-theme-preset--digital-01 .aznet-digital01__products > .wp-block-group.aznet-digital01__section {
+  width:min(var(--d01-max),calc(100% - 48px));max-width:none;
+  margin-inline:auto!important;padding-block:0;
+}
+
 body.aznet-theme-preset--digital-01 .aznet-digital01__products-grid {
   display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin:34px 0 0!important;
 }
