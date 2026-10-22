@@ -9,6 +9,8 @@ on:
       - 'tests/offline/d064-digital01-footer-contract.php'
       - 'template-parts/footer/site-footer.php'
       - 'assets/css/components/site-footer.css'
+      - 'assets/css/components/site-footer-digital-01.css'
+      - 'inc/theme/assets.php'
 permissions:
   contents: read
 jobs:
