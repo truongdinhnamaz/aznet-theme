@@ -785,6 +785,18 @@ function enqueue_assets(): void {
         asset_content_version( '/assets/css/components/site-footer.css', $version )
     );
 
+    // D-064: preset-only Footer CSS has its own asset path so WordPress
+    // serves the current presentation without relying on stale shared min CSS.
+    // This has no effect on other sites/presets or WordPress-authored menus.
+    if ( function_exists( __NAMESPACE__ . '\\visual_preset' ) && 'digital-01' === visual_preset() ) {
+        wp_enqueue_style(
+            'aznet-theme-site-footer-digital-01',
+            get_theme_file_uri( '/assets/css/components/site-footer-digital-01.css' ),
+            [ 'aznet-theme-site-footer', 'aznet-theme-preset-digital-01' ],
+            asset_content_version( '/assets/css/components/site-footer-digital-01.css', $version )
+        );
+    }
+
     enqueue_homepage_blueprint_asset( $version );
     enqueue_active_template_homepage_assets( $version );
 
