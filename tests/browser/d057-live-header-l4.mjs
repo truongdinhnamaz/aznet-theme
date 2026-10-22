@@ -140,6 +140,53 @@ try {
   };
   for(const w of [1600,1366,390]) await probe(w,false);
   for(const w of widths) await probe(w,true);
+  // Preview an in-memory WordPress-native content authoring repair. This MUST
+  // not mutate the published Page or Theme and does not establish production PASS.
+  for(const width of [1600,390]) {
+    const ctx=await browser.newContext({viewport:{width,height:880}});
+    const page=await ctx.newPage();
+    try {
+      const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:45000});
+      if(response?.status()!==200)throw Error('Page status '+response?.status());
+      await page.addStyleTag({content:candidateCSS});
+      const fix=await page.evaluate(()=>{
+        const selector='.aznet-theme-page--landing .aznet-theme-page__content-inner > .wp-block-group';
+        const groups=[...document.querySelectorAll(selector)];
+        const before=groups.map(e=>({rect:{x:e.getBoundingClientRect().x,width:e.getBoundingClientRect().width},transform:getComputedStyle(e).transform}));
+        const paintedText=[];
+        for(const group of groups) {
+          group.classList.remove('alignfull');
+          const bg=group.style.backgroundColor.toLowerCase();
+          if(bg==='rgb(16, 31, 43)'||bg==='rgb(25, 46, 59)'||bg==='#101f2b'||bg==='#192e3b') {
+            for(const element of group.querySelectorAll('h1.has-text-color, h2.has-text-color, p.has-text-color')) {
+              element.classList.add('has-surface-color');
+              paintedText.push(element);
+            }
+          }
+        }
+        const h1=document.querySelector('.aznet-theme-page-hero h1');
+        const hero=document.querySelector('.aznet-theme-page-hero');
+        const rect=hero?.getBoundingClientRect();
+        return {groups:groups.length,firstGroupBefore:before[0],
+          heroX:rect?.x,heroWidth:rect?.width,
+          h1Color:h1?getComputedStyle(h1).color:null,
+          h1Inline:h1?.getAttribute('style'), h1Class:h1?.className,
+          fixedTextElements:paintedText.length,
+          allPaintedColors:[...new Set(paintedText.map(e=>getComputedStyle(e).color))],
+          groupPositions:groups.map(e=>Math.round(e.getBoundingClientRect().x)),
+          bodyOverflow:document.documentElement.scrollWidth > innerWidth+3};
+      });
+      console.log('SIMULATED_WORDPRESS_CONTENT_REPAIR '+JSON.stringify({width,...fix}));
+      await page.screenshot({path:join(outDir,'about-'+width+'-simulated-content-repair.png')});
+      if(width===1600||width===390)
+        await page.screenshot({path:join(outDir,'about-'+width+'-simulated-content-repair-full.png'),fullPage:true});
+      if(fix.groups!==9||Math.abs(fix.heroX)>3||Math.abs(fix.heroWidth-width)>3)
+        errors.push({width,issues:['Gutenberg alignfull class removal did not recover full-page Hero geometry']});
+      if(fix.h1Color!=='rgb(255, 255, 255)')
+        errors.push({width,issues:['Native surface color class did not correct H1 contrast: '+fix.h1Color]});
+    }catch(e){errors.push({width,scenario:'simulated-editorial-remediation',issues:[String(e)]});}
+    finally{await ctx.close();}
+  }
 } finally {
   await browser.close();
 }
