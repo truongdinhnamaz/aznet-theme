@@ -15,7 +15,8 @@ const cases = [
 const summary = [];
 let failed = false;
 for (const test of cases) {
-  const page = await browser.newPage({viewport:{width:test.width,height:test.height},deviceScaleFactor:1});
+  const context = await browser.newContext({viewport:{width:test.width,height:test.height},deviceScaleFactor:1});
+  const page = await context.newPage();
   const errors = [];
   page.on('pageerror',err=>errors.push(String(err)));
   await page.goto(base,{waitUntil:'networkidle',timeout:90000});
@@ -54,7 +55,9 @@ for (const test of cases) {
     };
     return row;
   });
-  const axe = await new AxeBuilder({page}).include('.aznet-digital01--brand-2026').withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa']).analyze();
+  const axe = data.variant
+    ? await new AxeBuilder({page}).include('.aznet-digital01--brand-2026').withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa']).analyze()
+    : {violations: []};
   const violations = axe.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary})).slice(0,6)}));
   const problems = [];
   if(!data.variant)problems.push('missing WordPress-owned brand-2026 opt-in class');
@@ -74,7 +77,7 @@ for (const test of cases) {
   await page.screenshot({path:path.join(evidenceDir,'brand-2026-'+test.name+'.png'),fullPage:true});
   console.log('BRAND_2026_L4 '+JSON.stringify(result));
   if(problems.length)failed=true;
-  await page.close();
+  await context.close();
 }
 fs.writeFileSync(path.join(evidenceDir,'brand-2026-l4.json'),JSON.stringify(summary,null,2));
 await browser.close();
