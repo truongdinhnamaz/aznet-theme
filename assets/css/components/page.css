@@ -202,7 +202,7 @@
  * lighter accent, while ordinary white cards nested inside keep their normal
  * dark ink. Never infer this capability from URL or content strings. */
 .aznet-theme-page--landing .aznet-theme-page__content-inner > .aznet-theme-page-inverse > .wp-block-paragraph:first-child {
-    color: #ffb49c !important;
+    color: color-mix(in srgb, var(--aznet-theme-on-inverse) 78%, var(--aznet-theme-accent) 22%) !important;
 }
 .aznet-theme-page--landing .aznet-theme-page__content-inner > .aznet-theme-page-inverse > .wp-block-paragraph a {
     color: inherit;
