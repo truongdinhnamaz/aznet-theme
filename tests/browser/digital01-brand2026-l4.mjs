@@ -52,6 +52,8 @@ for (const test of cases) {
       viewportWidth:window.innerWidth,
       bodyHeight:document.documentElement.scrollHeight,
       brandCSS:resources.some(x=>x.includes('homepage-digital-01-brand-2026.css')),
+      consultationBackground: style(query('.aznet-theme-site-header__utility-menu > li:last-child > a'))?.backgroundColor||null,
+      submenuLastBackground: style(query('.aznet-theme-site-header__utility-menu .sub-menu > li:last-child > a'))?.backgroundColor||null,
     };
     return row;
   });
@@ -68,6 +70,14 @@ for (const test of cases) {
   if(data.cards!==4)problems.push('expected four native service cards');
   if(data.serviceColumns!==test.columns)problems.push('wrong responsive service columns '+data.serviceColumns+' expected '+test.columns);
   if(!data.brandCSS)problems.push('branded stylesheet not loaded');
+  if (test.width >= 1100) {
+    if (data.consultationBackground !== 'rgb(198, 33, 33)')
+      problems.push('last top-level consultation item not styled as red CTA');
+    if (data.submenuLastBackground === null)
+      problems.push('nested WordPress submenu missing from fixture');
+    else if (data.submenuLastBackground === 'rgb(198, 33, 33)')
+      problems.push('nested submenu last item incorrectly styled as red CTA');
+  }
   if(!data.artVisible || !data.artBox?.width)problems.push('hero art not visually laid out');
   if(data.scrollWidth>data.viewportWidth+2)problems.push('horizontal overflow '+data.scrollWidth+'> '+data.viewportWidth);
   if(violations.length)problems.push('WCAG tagged violations: '+violations.map(x=>x.id).join(','));
