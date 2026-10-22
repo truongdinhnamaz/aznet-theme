@@ -68,6 +68,14 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/core-vertical-catal
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/d049-rail-header-hero-visual-parity-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/d049-cross-page-header-parity-contract.php
 
+printf '%s\n' '==> D-057/D-058 Digital 01 visual Header and native Landing CSS contracts'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/d057-digital01-header-overlap-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/d058-landing-fullwidth-inverse-contract.php
+
+printf '%s\n' '==> D-060 authored About Showcase v2 surface-aware CSS contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/d060-about-showcase-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/d060-about-showcase-runtime.php
+
 printf '%s\n' '==> Retained R5 Control Center contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/r5-control-center-static-contract.php
 
@@ -148,6 +156,9 @@ case "$RELEASE_VERSION" in
     ;;
   1.3.95)
     php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v1395-release-candidate-contract.php
+    ;;
+  1.3.96)
+    php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v1396-release-candidate-contract.php
     ;;
   *)
     echo "FAIL: unsupported Theme release contract version $RELEASE_VERSION" >&2

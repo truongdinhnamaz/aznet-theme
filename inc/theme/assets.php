@@ -479,6 +479,61 @@ function should_enqueue_page_assets(): bool {
     return true;
 }
 
+/**
+ * Explicit Gutenberg authoring opt-in for a native Digital 01 Landing Page.
+ * Inspect only public WordPress Page block presentation attrs; never infer
+ * page identity from a slug, title, URL or Page ID.
+ */
+function should_enqueue_about_showcase_asset(): bool {
+    if ( ! should_enqueue_page_assets()
+        || ! function_exists( __NAMESPACE__ . '\\visual_preset' )
+        || 'digital-01' !== visual_preset()
+        || ! function_exists( 'get_queried_object' )
+        || ! function_exists( 'parse_blocks' ) ) {
+        return false;
+    }
+
+    $page = get_queried_object();
+    if ( ! is_object( $page ) || ! isset( $page->post_content ) || ! is_string( $page->post_content ) ) {
+        return false;
+    }
+
+    $blocks = parse_blocks( $page->post_content );
+    if ( ! is_array( $blocks ) ) {
+        return false;
+    }
+
+    // A V2 design marker on a later card cannot change the entire Page.
+    // Only an authored first-level native Hero Group can opt in.
+    $hero = $blocks[0] ?? null;
+    if ( ! is_array( $hero ) || 'core/group' !== ( $hero['blockName'] ?? '' ) ) {
+        return false;
+    }
+
+    $class_name = is_array( $hero['attrs'] ?? null ) ? (string) ( $hero['attrs']['className'] ?? '' ) : '';
+    $classes = preg_split( '/\\s+/', trim( $class_name ), -1, PREG_SPLIT_NO_EMPTY );
+    $tokens = is_array( $classes ) ? $classes : [];
+
+    return in_array( 'aznet-theme-page-hero', $tokens, true )
+        && in_array( 'aznet-theme-about-showcase', $tokens, true );
+}
+
+/** Enqueue V2 About storytelling only for an opted-in native Page. */
+function enqueue_about_showcase_asset( ?string $version = null ): void {
+    if ( ! should_enqueue_about_showcase_asset()
+        || ! function_exists( 'get_theme_file_path' )
+        || ! is_file( get_theme_file_path( '/assets/css/components/about-showcase-v2.css' ) ) ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'aznet-theme-about-showcase',
+        get_theme_file_uri( '/assets/css/components/about-showcase-v2.css' ),
+        [ 'aznet-theme-page' ],
+        asset_content_version( '/assets/css/components/about-showcase-v2.css', $version )
+    );
+}
+
 /** Enqueue Y1 native Page presentation only on non-front, non-Woo Page surfaces. */
 function enqueue_page_assets( ?string $version = null ): void {
     if ( ! should_enqueue_page_assets() ) {
@@ -744,6 +799,7 @@ function enqueue_assets(): void {
 
     enqueue_law01_archive_asset( $version );
     enqueue_page_assets( $version );
+    enqueue_about_showcase_asset( $version );
     enqueue_contact_page_assets( $version );
     enqueue_services_page_assets( $version );
     enqueue_team_page_assets( $version );

@@ -1,0 +1,40 @@
+name: D-060 About Showcase v2 scoped asset
+on:
+  push:
+    branches:
+      - work/d060-about-showcase-v2-20261022
+  pull_request:
+    branches:
+      - work/d059-v1396-aznet-about-verified-release-20261022
+permissions:
+  contents: read
+jobs:
+  d060-native-gutenberg:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: PHP 8.1 lowest supported runtime
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Retained full V1 Core lint and offline regression
+        run: bash scripts/verify-v1-core.sh
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prepare Playwright Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Audit WordPress public Page with candidate CSS (read-only)
+        run: node tests/browser/d060-about-showcase-v2-l4.mjs
+      - name: Upload desktop / mobile visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aznet-d060-about-v2-wordpress-visual
+          path: /tmp/d060-about-v2-browser
+          if-no-files-found: warn
