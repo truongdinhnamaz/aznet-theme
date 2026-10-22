@@ -121,6 +121,19 @@ body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-the
     line-height:1;
   }
 }
+/* When the native mobile menu opens, its panel must use the same light
+   surface as the branded Header. Dark links on the legacy navy panel fail AA. */
+body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-header__mobile-panel {
+  background:#ffffff;
+  color:#0b234d;
+  border-color:#e5ebf3;
+}
+body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-header__mobile-panel .aznet-theme-site-header__utility-menu a {
+  color:#0b234d;
+}
+body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-header__mobile-panel .aznet-theme-site-header__search input[type="search"] {
+  color:#0b234d;
+}
 body.aznet-theme-preset--digital-01 .aznet-digital01--brand-2026 .aznet-digital01__hero {
   background:
     radial-gradient(ellipse 48% 82% at 81% 48%,rgba(255,210,192,.74),rgba(255,236,224,.27) 59%,transparent 82%),
