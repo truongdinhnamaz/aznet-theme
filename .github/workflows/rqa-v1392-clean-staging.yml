@@ -8,6 +8,7 @@ on:
       - assets/css/components/woocommerce-archive.css
       - .github/scripts/rqa_v1392_rc_preflight.py
       - .github/scripts/rqa_v1392_clean_wp_staging.sh
+      - .github/scripts/rqa_v1392_clean_wp_l4.mjs
       - .github/workflows/rqa-v1392-clean-staging.yml
   workflow_dispatch:
 
@@ -79,6 +80,18 @@ jobs:
           chmod +x /tmp/wp-cli.phar
           sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
 
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install isolated browser and accessibility tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
       - name: Activate exact package on WP 6.9 with zero optional plugins, switch Theme, rollback
         env:
           RQA_OFFICIAL_RELEASE_ZIP: ${{ runner.temp }}/rqa-official/aznet-theme-1.3.92.zip
@@ -97,6 +110,7 @@ jobs:
           path: |
             ${{ runner.temp }}/rqa-clean-staging/runtime-summary.json
             ${{ runner.temp }}/rqa-clean-staging/php-server.log
+            ${{ runner.temp }}/rqa-clean-staging/browser
             ${{ runner.temp }}/rqa-rc/manifest.json
           if-no-files-found: warn
           retention-days: 14
