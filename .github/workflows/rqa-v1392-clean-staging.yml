@@ -1,0 +1,101 @@
+name: RQA v1.3.92 disposable WordPress clean staging
+
+on:
+  push:
+    branches:
+      - work/rqa-v1392-woo-grid-rc-preflight-20261023
+    paths:
+      - assets/css/components/woocommerce-archive.css
+      - .github/scripts/rqa_v1392_rc_preflight.py
+      - .github/scripts/rqa_v1392_clean_wp_staging.sh
+      - .github/workflows/rqa-v1392-clean-staging.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wordpress-clean-staging:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout exact v1.3.92-derived preview branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: PHP 8.1 minimum support floor
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Download immutable GitHub v1.3.92 release package
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/rqa-official"
+          gh release download v1.3.92 \
+            --repo truongdinhnamaz/aznet-theme \
+            --pattern aznet-theme-1.3.92.zip \
+            --dir "$RUNNER_TEMP/rqa-official"
+          echo '204458e8518096fcf08f01f42c75d0880471f0b6f26ebfbc283f57b894b9b3ed  '="$RUNNER_TEMP/rqa-official/aznet-theme-1.3.92.zip" | tr '=' ' ' | sha256sum -c -
+
+      - name: Rebuild exact CSS-only preview package, verify SHA-256
+        env:
+          RQA_OFFICIAL_RELEASE_ZIP: ${{ runner.temp }}/rqa-official/aznet-theme-1.3.92.zip
+          RQA_RC_DIR: ${{ runner.temp }}/rqa-rc
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 .github/scripts/rqa_v1392_rc_preflight.py
+          test "$(jq -r .candidate_package_sha256 "$RQA_RC_DIR/manifest.json")" = '958d0c08036957887ef05f948ed8371ced82f7eda820f147ba09fcf514e93a56'
+          bash -n .github/scripts/rqa_v1392_clean_wp_staging.sh
+
+      - name: Install official WordPress CLI binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error \
+            https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          php /tmp/wp-cli.phar --info | head -n 10
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+
+      - name: Activate exact package on WP 6.9 with zero optional plugins, switch Theme, rollback
+        env:
+          RQA_OFFICIAL_RELEASE_ZIP: ${{ runner.temp }}/rqa-official/aznet-theme-1.3.92.zip
+          RQA_RC_DIR: ${{ runner.temp }}/rqa-rc
+          RQA_STAGING_DIR: ${{ runner.temp }}/rqa-clean-staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash .github/scripts/rqa_v1392_clean_wp_staging.sh
+
+      - name: Preserve isolated runtime evidence, never publish Theme
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rqa-v1392-css-clean-wp-staging
+          path: |
+            ${{ runner.temp }}/rqa-clean-staging/runtime-summary.json
+            ${{ runner.temp }}/rqa-clean-staging/php-server.log
+            ${{ runner.temp }}/rqa-rc/manifest.json
+          if-no-files-found: warn
+          retention-days: 14
