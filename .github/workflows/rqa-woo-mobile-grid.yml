@@ -6,6 +6,7 @@ on:
       - 'tests/browser/rqa-woo-mobile-grid-regression.mjs'
       - 'tests/browser/rqa-live-grid-overlay.mjs'
       - 'tests/browser/rqa-cls-owner-trace.mjs'
+      - 'tests/browser/rqa-live-grid-responsive-matrix.mjs'
       - 'assets/css/components/woocommerce-archive.css'
       - '.github/workflows/rqa-woo-mobile-grid.yml'
   pull_request:
@@ -14,6 +15,7 @@ on:
       - 'tests/browser/rqa-woo-mobile-grid-regression.mjs'
       - 'tests/browser/rqa-live-grid-overlay.mjs'
       - 'tests/browser/rqa-cls-owner-trace.mjs'
+      - 'tests/browser/rqa-live-grid-responsive-matrix.mjs'
       - 'assets/css/components/woocommerce-archive.css'
       - '.github/workflows/rqa-woo-mobile-grid.yml'
 permissions:
@@ -39,6 +41,10 @@ jobs:
         env:
           RQA_GRID_QA_DIR: /tmp/rqa-mobile-grid
         run: node tests/browser/rqa-live-grid-overlay.mjs
+      - name: Live RQA responsive matrix on four widths (browser only)
+        env:
+          RQA_GRID_QA_DIR: /tmp/rqa-mobile-grid
+        run: node tests/browser/rqa-live-grid-responsive-matrix.mjs
       - name: Trace real RQA layout shifts and CSS/DOM timing (read-only)
         env:
           RQA_CLS_TRACE_DIR: /tmp/rqa-cls-owner-trace
