@@ -46,13 +46,18 @@ def validate_members(names: list[str]) -> str:
 
 
 def assert_only_one_insertion(baseline: bytes, candidate: bytes) -> bytes:
-    a = baseline.decode("utf-8").splitlines(keepends=True)
-    b = candidate.decode("utf-8").splitlines(keepends=True)
-    edits = [e for e in difflib.SequenceMatcher(a=a, b=b, autojunk=False).get_opcodes() if e[0] != "equal"]
-    if len(edits) != 1 or edits[0][0] != "insert":
-        raise RuntimeError(f"Candidate has edits beyond one insert: {edits!r}")
-    _, _, _, begin, end = edits[0]
-    inserted = "".join(b[begin:end]).encode("utf-8")
+    # Use an exact anchor rather than SequenceMatcher's ambiguous matching:
+    # identical float/width/margin lines also occur in the baseline stylesheet.
+    marker = b".woocommerce ul.products li.product .woocommerce-loop-product__link {"
+    if baseline.count(marker) != 1 or candidate.count(marker) != 1:
+        raise RuntimeError("Canonical insertion anchor is missing or duplicated")
+    left_old, right_old = baseline.split(marker)
+    left_new, right_new = candidate.split(marker)
+    if right_new != right_old or not left_new.startswith(left_old):
+        raise RuntimeError("Candidate CSS contains unauthorized edits")
+    inserted = left_new[len(left_old):]
+    if candidate != left_old + inserted + marker + right_old:
+        raise RuntimeError("Candidate is not an insertion-only CSS delta")
     expected = (
         b'.woocommerce ul.products[class*="columns-"] li.product {\n'
         b"    float: none;\n"
