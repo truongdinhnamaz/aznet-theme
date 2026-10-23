@@ -5,6 +5,7 @@ on:
     paths:
       - 'tests/browser/rqa-woo-mobile-grid-regression.mjs'
       - 'tests/browser/rqa-live-grid-overlay.mjs'
+      - 'tests/browser/rqa-cls-owner-trace.mjs'
       - 'assets/css/components/woocommerce-archive.css'
       - '.github/workflows/rqa-woo-mobile-grid.yml'
   pull_request:
@@ -12,6 +13,7 @@ on:
     paths:
       - 'tests/browser/rqa-woo-mobile-grid-regression.mjs'
       - 'tests/browser/rqa-live-grid-overlay.mjs'
+      - 'tests/browser/rqa-cls-owner-trace.mjs'
       - 'assets/css/components/woocommerce-archive.css'
       - '.github/workflows/rqa-woo-mobile-grid.yml'
 permissions:
@@ -19,7 +21,7 @@ permissions:
 jobs:
   archive-css-cascade:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -37,10 +39,16 @@ jobs:
         env:
           RQA_GRID_QA_DIR: /tmp/rqa-mobile-grid
         run: node tests/browser/rqa-live-grid-overlay.mjs
+      - name: Trace real RQA layout shifts and CSS/DOM timing (read-only)
+        env:
+          RQA_CLS_TRACE_DIR: /tmp/rqa-cls-owner-trace
+        run: node tests/browser/rqa-cls-owner-trace.mjs
       - name: Upload exact-browser cascade snapshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: rqa-woo-mobile-grid
-          path: /tmp/rqa-mobile-grid
+          path: |
+            /tmp/rqa-mobile-grid
+            /tmp/rqa-cls-owner-trace
           if-no-files-found: warn
