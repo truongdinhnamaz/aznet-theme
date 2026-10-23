@@ -24,6 +24,9 @@ try {
    widthRule:cs.width,float:cs.cssFloat,clear:cs.clear,columns:gs.gridTemplateColumns,
    gridDisplay:gs.display,cardText:card.textContent?.trim()?.slice(0,90)};
  });
+ const deployedCustomCss=await page.evaluate(()=>
+  (document.querySelector('style#wp-custom-css')?.textContent||'')
+    .includes('AZnet Theme RQA scoped Woo archive grid hotfix'));
  const before=await snapshot();
  await page.screenshot({path:path.join(out,'rqa-live-before.png'),fullPage:false});
  await page.addStyleTag({content:match[0]});
@@ -33,8 +36,13 @@ try {
  data={http:res?.status()||0,url:page.url(),before,after,selector:match[0],
   beforeRatio:before?Number((before.cardWidth/before.columnWidth).toFixed(4)):null,
   afterRatio:after?Number((after.cardWidth/after.columnWidth).toFixed(4)):null,
-  note:'Browser-local style injection only; production stylesheet not changed.'};
- data.pass=data.http===200&&data.beforeRatio>.4&&data.beforeRatio<.6&&data.afterRatio>=.98&&data.afterRatio<=1.02;
+  deployedCustomCss,
+  note:'Browser-local candidate overlay for comparative check; no server write.'};
+ const prePatch=data.beforeRatio>.4&&data.beforeRatio<.6;
+ const alreadyPatched=deployedCustomCss&&data.beforeRatio>=.98&&data.beforeRatio<=1.02;
+ data.phase=prePatch?'pre-hotfix-RED':alreadyPatched?'hotfix-live':'unexpected';
+ data.pass=data.http===200&&(prePatch||alreadyPatched)&&
+  data.afterRatio>=.98&&data.afterRatio<=1.02;
  fs.writeFileSync(path.join(out,'live-overlay-summary.json'),JSON.stringify(data,null,2)+'\n');
  console.log('RQA_LIVE_GRID_OVERLAY '+JSON.stringify(data));
  if(!data.pass)process.exitCode=1;
