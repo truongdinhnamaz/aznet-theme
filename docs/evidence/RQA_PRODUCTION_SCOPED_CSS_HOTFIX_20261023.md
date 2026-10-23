@@ -38,11 +38,23 @@ Exact CSS body now live:
 - **Not changed:** Theme PHP/JS/CSS files, Theme 1.3.92 version, WordPress plugin code, ConvertFlow FAQ/project/spec content, WooCommerce categories/prices/stock/variations, WordPress menu/data, rootprofile, site-wide PHP logic.
 - **Not claimed:** full Theme package release, PR merge, production source-package parity, provider CLS remediation, complete accessibility review.
 
+## Production browser L4 result (no injection) — PASS
+
+- [GitHub Actions #39974941109](https://github.com/truongdinhnamaz/aznet-theme/actions/runs/39974941109), branch commit `b8e0ad1fb56c8aa0f475f28d801f7d6e046612b2`, full job `120486961246`: **SUCCESS** after post-hotfix verifier update.
+- `tests/browser/rqa-production-css-readback.mjs` read the actual live `<style id="wp-custom-css">`, computed CSS Grid and card bounding boxes **without injecting CSS, modifying WordPress or logging in**.
+- **Rèm cuốn**: 3 products, 390px 354/354px, 768px 213.33/213.33px, 1280px 282/282px — 3/3 PASS.
+- **Rèm vải**: 4 products, identical correct per-track ratios for 390/768/1280 — 3/3 PASS.
+- **Rèm cầu vồng**: 3 products, identical correct per-track ratios for 390/768/1280 — 3/3 PASS.
+- All 9 tests returned HTTP 200, Theme custom CSS signature and rule present, 100% card/track ratio for every displayed product, links remain within canonical site and the narrow keyboard continuation test reached the next in-grid link. **`RQA_PRODUCTION_CSS_STATUS PASS 9/9`**.
+- The earlier live-overlay test was adjusted to accept an already-hotfixed site rather than requiring a 48%-width RED baseline after production publication. It now reports `phase=hotfix-live`, `deployedCustomCss=true`, before/after ratio `1.0` and PASS.
+- Post-deploy `RQA_CLS_CAPTURE PASS` means the diagnostic capture itself executed, **not** that CLS was reduced. ConvertFlow mobile filter still owns the unresolved large first-paint layout shift.
+- Narrow **L3+L4 PASS** for this scoped production CSS hotfix; no claim of global Theme release, end-to-end plugin integration, WCAG conformance, unchanged performance score, or final RQA acceptance.
+
 ## Post-deploy evidence and quality gates
 
 - **L3 WordPress readback PASS:** post `1133` is published, post name `aznet-theme`, Theme mod `custom_css_post_id=1133` and exact style tag visible in three live public archives.
 - **L4 browser-local preview PASS before publication:** [Workflow #39970836010](https://github.com/truongdinhnamaz/aznet-theme/actions/runs/39970836010), before/after rendered width on Rèm cuốn at 360/768/1024/1366. Additional category tests [Workflow #39971553559](https://github.com/truongdinhnamaz/aznet-theme/actions/runs/39971553559) pass Rèm vải and Rèm cầu vồng at 390/768 with links and keyboard continuation.
-- **Post-deploy real-browser L4:** `tests/browser/rqa-production-css-readback.mjs`, paired workflow added to branch `work/rqa-woo-mobile-grid-20261023`. It checks all three live categories at 390/768/1280 without any style injection. Record run ID/results **only after** workflow returns; do not claim PASS based solely on published HTML.
+- **Post-deploy real-browser L4 PASS:** [run #39974941109](https://github.com/truongdinhnamaz/aznet-theme/actions/runs/39974941109) verifies 9/9 cases without CSS injection, plus link and narrow keyboard checks; exact results above.
 
 ## Rollback (bounded and reversible)
 
