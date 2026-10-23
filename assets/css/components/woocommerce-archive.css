@@ -87,6 +87,17 @@ body.woocommerce main#main {
     box-shadow: var(--aznet-theme-shadow-card, none);
 }
 
+/* WooCommerce smallscreen styles use a more-specific columns-* selector.
+ * Ensure Theme-owned grid cards stretch to their grid cell on every viewport.
+ * Product content, price and catalog behavior stay with WooCommerce.
+ */
+.woocommerce ul.products[class*="columns-"] li.product {
+    float: none;
+    clear: none;
+    width: auto;
+    margin: 0;
+}
+
 .woocommerce ul.products li.product .woocommerce-loop-product__link {
     display: block;
     color: inherit;
