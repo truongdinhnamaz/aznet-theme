@@ -16,7 +16,7 @@ mkdir -p "$WP_ROOT" "$RUNTIME" "$ORIGINAL"
 test -f "$CANDIDATE"
 test -f "$RQA_BASE_ZIP"
 python3 -m json.tool "$RQA_RC_DIR/manifest.json" > /dev/null
-test "$(jq -r '.status' "$RQA_RC_DIR/manifest.json")" = "PREFLIGHT_PACKAGING_PASS_NOT_RELEASE"
+test "$(jq -r '.status' "$RQA_RC_DIR/manifest.json")" = "PREVIEW_RC_PACKAGE_PASS_NOT_RELEASE"
 test "$(sha256sum "$CANDIDATE" | cut -d' ' -f1)" = "$(jq -r '.candidate_package_sha256' "$RQA_RC_DIR/manifest.json")"
 
 unzip -q "$CANDIDATE" -d "$RUNTIME"
