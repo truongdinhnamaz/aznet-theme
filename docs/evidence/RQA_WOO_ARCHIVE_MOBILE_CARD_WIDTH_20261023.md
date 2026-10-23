@@ -51,3 +51,14 @@
 - **Rollback candidate:** revert only the added `columns-*` rule on the work branch or restore prior `woocommerce-archive.css` from canonical v1.3.92 release. No production change exists yet to roll back. Keep backup Theme and hosting backup status independently verified at deployment gate.
 - **EXACT NEXT:** obtain approval-gated Theme release/deployment plan for the **scoped CSS candidate only**, not the entire unreleased `main` 1.3.96. Produce an exact candidate package and staging/preview verification prior to touching RQA production, then run fresh production multi-width/keyboard regression after release. ConvertFlow filter CLS and quote/project accessibility issues remain provider-owned blockers and must not be patched by private Theme heuristics.
 
+
+
+### Cross-category proof — independent real-site browser overlays
+
+- [GitHub Actions #39971553559](https://github.com/truongdinhnamaz/aznet-theme/actions/runs/39971553559) **SUCCESS**, exact head `cbd63e9b3494e866a03015997ddaa2e03559d79c`, with responsive matrix, public-browser-only overlay and filter CLS trace.
+- `/rem-vai/`, 4 published products: mobile **390px** one grid track, **4/4 card widths = 100%** of tracks, product links valid; keyboard Tab from first product link reaches another in-grid anchor. Tablet **768px**, three grid tracks, **4/4 card widths = 100%**, links and keyboard check PASS.
+- `/rem-cau-vong/`, 3 published products: mobile **390px**, **3/3 full-track cards**; tablet **768px**, three tracks, **3/3 full-track cards**; product links and keyboard check PASS in both cases.
+- This broadens the *browser-local* scoped Theme presentation evidence to three native WooCommerce product taxonomies. It does **not** prove production deployment, provider filter CLS remediation or complete site-wide keyboard accessibility.
+- Existing mobile widget `choiceguide-filter--enhanced` still causes the ~797px archive grid shift; retain source-owner BLOCKED from [QA PR #505](https://github.com/truongdinhnamaz/aznet-theme/pull/505).
+
+**Single Next:** candidate release provenance + WordPress staging/draft validation under Theme release gate, with preview and rollback before any production publish. Do not deploy broad untagged `main` 1.3.96 to RQA or mask ConvertFlow's first-paint defect in the Theme.
