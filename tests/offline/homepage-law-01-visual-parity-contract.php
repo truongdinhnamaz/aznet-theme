@@ -210,8 +210,8 @@ $must(
 $membersPos = strpos($profile, 'aznet-theme-law01-profile__members');
 $teamCtaPos = strpos($profile, 'aznet-theme-law01-team-more');
 $must(
-    false !== $membersPos && false !== $teamCtaPos && $teamCtaPos > $membersPos,
-    'Law 01 reference Team CTA must follow the portrait row rather than sit in the heading.'
+    false !== $membersPos && false !== $teamCtaPos && $teamCtaPos < $membersPos,
+    'Law 01 reference Team CTA must sit in the Team heading row before the portrait row.'
 );
 
 $must(

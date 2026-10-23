@@ -9,7 +9,7 @@ $surfaceMap = file_get_contents($root . '/inc/theme/homepage-surface-map.php');
 foreach ([
     'team_directory_public_members( 4 )',
     "'template-parts/team/card'",
-    "esc_html_e( 'Xem tất cả'",
+    "esc_html_e( 'Xem thêm về đội ngũ'",
 ] as $needle) {
     if (! str_contains((string) $profile, $needle)) {
         fwrite(STDERR, "FAIL: Homepage Team missing {$needle}\n");
