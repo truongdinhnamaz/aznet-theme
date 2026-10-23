@@ -7,6 +7,7 @@ on:
       - 'tests/browser/rqa-live-grid-overlay.mjs'
       - 'tests/browser/rqa-cls-owner-trace.mjs'
       - 'tests/browser/rqa-live-grid-responsive-matrix.mjs'
+      - 'tests/browser/rqa-other-categories-regression.mjs'
       - 'assets/css/components/woocommerce-archive.css'
       - '.github/workflows/rqa-woo-mobile-grid.yml'
   pull_request:
@@ -16,6 +17,7 @@ on:
       - 'tests/browser/rqa-live-grid-overlay.mjs'
       - 'tests/browser/rqa-cls-owner-trace.mjs'
       - 'tests/browser/rqa-live-grid-responsive-matrix.mjs'
+      - 'tests/browser/rqa-other-categories-regression.mjs'
       - 'assets/css/components/woocommerce-archive.css'
       - '.github/workflows/rqa-woo-mobile-grid.yml'
 permissions:
@@ -45,6 +47,10 @@ jobs:
         env:
           RQA_GRID_QA_DIR: /tmp/rqa-mobile-grid
         run: node tests/browser/rqa-live-grid-responsive-matrix.mjs
+      - name: Check two more live Woo categories and keyboard focus (browser only)
+        env:
+          RQA_GRID_QA_DIR: /tmp/rqa-mobile-grid
+        run: node tests/browser/rqa-other-categories-regression.mjs
       - name: Trace real RQA layout shifts and CSS/DOM timing (read-only)
         env:
           RQA_CLS_TRACE_DIR: /tmp/rqa-cls-owner-trace
