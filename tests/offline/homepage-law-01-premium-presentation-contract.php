@@ -40,8 +40,18 @@ foreach ($required as $needle) {
     assert(str_contains($css, $needle), "Premium Law 01 presentation contract missing: {$needle}");
 }
 
+$variantPath = $root . '/assets/css/components/homepage-law-01-variants.css';
+assert(is_file($variantPath), 'Law 01 variant stylesheet missing.');
+$variantCss = file_get_contents($variantPath);
+foreach ([
+    '.aznet-theme-site-footer {',
+    'background: var(--law01-brand-red-deep, #6d0b13);',
+] as $needle) {
+    assert(str_contains($variantCss, $needle), "Law 01 burgundy footer contract missing: {$needle}");
+}
+
 foreach (['500+', '98%', '1.000+', '1000+', 'Nguyễn Văn A'] as $forbidden) {
-    assert(! str_contains($css, $forbidden), "Fabricated trust content must not be introduced by presentation: {$forbidden}");
+    assert(! str_contains($css . $variantCss, $forbidden), "Fabricated trust content must not be introduced by presentation: {$forbidden}");
 }
 
 echo "PASS: Law 01 premium presentation contract\n";
