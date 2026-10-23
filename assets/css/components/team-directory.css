@@ -1,5 +1,5 @@
 .aznet-theme-page--team-directory{background:var(--aznet-theme-color-surface-subtle)}
-.aznet-theme-team-directory{padding-block:clamp(3rem,6vw,6rem)}
+.aznet-theme-team-directory{padding-block:clamp(1.35rem,2.4vw,2.25rem) clamp(3rem,6vw,6rem)}
 .aznet-theme-team-directory__header{max-width:52rem;margin-bottom:clamp(2rem,4vw,3.5rem)}
 .aznet-theme-team-directory__eyebrow{margin:0 0 .75rem;color:var(--aznet-theme-color-text-muted);font-size:var(--aznet-theme-text-label);font-weight:var(--aznet-theme-font-weight-bold);letter-spacing:.12em;text-transform:uppercase}
 .aznet-theme-team-directory__header h1{margin:0 0 1rem}
