@@ -32,6 +32,13 @@ try{
     const dom=await page.evaluate(()=>{
       const main=document.querySelector('#main');
       const body=document.body;
+      const assets=[...document.querySelectorAll('link[rel=stylesheet],script[src]')]
+        .map(x=>x.getAttribute('href')||x.getAttribute('src')||'');
+      // AZT-04 O-008 / retained R6 contract explicitly allow the stable
+      // Theme-owned presentation bridge, even when ConvertFlow is absent.
+      // The provider projection gate remains BLOCKED_EXTERNAL_CONTRACT.
+      const safeThemeBridge=assets.filter(x=>
+        /\/assets\/css\/integrations\/convertflow\.css(?:\?|$)/i.test(x));
       return {
         title:document.title,
         hasMain:Boolean(main),
@@ -40,9 +47,10 @@ try{
         viewport:window.innerWidth,
         documentWidth:document.documentElement.scrollWidth,
         horizontalOverflow:document.documentElement.scrollWidth>window.innerWidth+2,
-        leakingWooOrConvertflowAssets:[...document.querySelectorAll('link[rel=stylesheet],script[src]')]
-          .map(x=>x.getAttribute('href')||x.getAttribute('src')||'')
-          .filter(x=>/woocommerce-archive\.css|choiceguide|convertflow/i.test(x)),
+        approvedBridgeCount:safeThemeBridge.length,
+        leakingWooOrConvertflowAssets:assets
+          .filter(x=>/woocommerce-archive\.css|choiceguide|convertflow/i.test(x))
+          .filter(x=>!safeThemeBridge.includes(x)),
         focusableLinks:[...document.querySelectorAll('a[href]')]
           .filter(x=>x.getClientRects().length>0).length,
         bodyClass:body.className.slice(0,300)
@@ -69,7 +77,8 @@ try{
     Object.assign(entry,dom,{status:response?.status(),a11y:accessible,focus,jsErrors:errors});
     const blocking=accessible.violations.filter(x=>['critical','serious'].includes(x.impact));
     entry.pass=response?.status()===200&&dom.hasHeader&&dom.hasFooter&&dom.hasMain&&
-      !dom.horizontalOverflow&&dom.leakingWooOrConvertflowAssets.length===0&&
+      !dom.horizontalOverflow&&dom.approvedBridgeCount===1&&
+      dom.leakingWooOrConvertflowAssets.length===0&&
       dom.focusableLinks>=2&&focus.inDocument&&
       blocking.length===0&&!accessible.error&&errors.length===0;
     await page.screenshot({path:path.join(output,target.key+'-'+width+'.png'),fullPage:false});
