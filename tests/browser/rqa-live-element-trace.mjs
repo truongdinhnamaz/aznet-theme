@@ -111,10 +111,60 @@ try {
           url:r.name.replace(/\?.*$/,''),decodedBytes:r.decodedBodySize||0,
           transferredBytes:r.transferSize||0,durationMs:Math.round(r.duration)
         })).sort((a,b)=>b.decodedBytes-a.decodedBytes);
+        const grid=document.querySelector('.woocommerce ul.products');
+        const card=grid?.querySelector('li.product');
+        const gs=grid?getComputedStyle(grid):null;
+        const cs=card?getComputedStyle(card):null;
+        const matched=[];
+        if(card)for(const sheet of document.styleSheets){
+          let rules;
+          try{rules=sheet.cssRules;}catch{continue;}
+          const walk=list=>{
+            for(const rule of list){
+              if(rule.cssRules){
+                if(rule.conditionText && rule.media &&
+                  !matchMedia(rule.conditionText).matches)continue;
+                walk(rule.cssRules);
+              }else if(rule.selectorText && rule.style &&
+                (rule.style.width||rule.style.float||rule.style.clear)){
+                let applies=false;
+                try{applies=card.matches(rule.selectorText);}catch{}
+                if(applies && matched.length<70)
+                  matched.push({
+                    source:sheet.href?.replace(/\?.*$/,'')||'inline',
+                    selector:rule.selectorText.slice(0,220),
+                    width:rule.style.width||null,
+                    float:rule.style.float||null,
+                    clear:rule.style.clear||null
+                  });
+              }
+            }
+          };
+          walk(rules);
+        }
+        const catalogGeometry={
+          windowWidth:window.innerWidth,
+          devicePixelRatio:window.devicePixelRatio,
+          viewportWidth:window.visualViewport?.width||null,
+          columnsToken:getComputedStyle(document.body).getPropertyValue('--aznet-theme-woo-catalog-columns').trim(),
+          grid:grid?{
+            width:Math.round(grid.getBoundingClientRect().width),
+            display:gs.display,templateColumns:gs.gridTemplateColumns
+          }:null,
+          card:card?{
+            width:Math.round(card.getBoundingClientRect().width),
+            cssWidth:cs.width,float:cs.cssFloat,clear:cs.clear,
+            marginRight:cs.marginRight
+          }:null,
+          rules:matched,
+          domContentLoadedMs:Math.round(performance.getEntriesByType('navigation')[0]?.domContentLoadedEventStart||0),
+          firstPaintMs:Math.round(performance.getEntriesByType('paint')[0]?.startTime||0)
+        };
         return {
           title:document.title,
           heading:document.querySelector('main h1')?.textContent?.trim()||null,
           bodyClass:document.body?.className?.slice(0,400),
+          catalogGeometry,
           observer:Boolean(state.observer),observerError:state.error||null,
           shifts:state.entries||[],geometry:(state.geometry||[]).slice(0,200),
           largestResources:resources.slice(0,15),resourceCount:resources.length
@@ -156,6 +206,7 @@ try {
           id:v.id,targets:v.nodes.map(n=>n.target).slice(0,12)
         }))||[],axeError:result.axe?.error||null,
         error:result.error,
+        catalog:result.catalogGeometry?{token:result.catalogGeometry.columnsToken,grid:result.catalogGeometry.grid,card:result.catalogGeometry.card,rules:result.catalogGeometry.rules.slice(-10)}:null,
       });
       await context.close();
     }
