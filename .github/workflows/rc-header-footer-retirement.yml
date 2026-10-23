@@ -1,0 +1,37 @@
+name: R-C Header Footer Retirement
+
+on:
+  pull_request:
+    paths:
+      - 'header.php'
+      - 'footer.php'
+      - 'template-parts/header/**'
+      - 'template-parts/footer/**'
+      - 'assets/css/components/site-header.css'
+      - 'assets/css/components/site-footer.css'
+      - 'inc/theme/assets.php'
+      - 'inc/theme/setup.php'
+      - 'tests/offline/rc-header-footer-retirement-static-contract.php'
+      - 'scripts/verify-rc-header-footer-retirement.sh'
+      - '.github/workflows/rc-header-footer-retirement.yml'
+      - 'docs/evidence/RC_HEADER_FOOTER_RETIREMENT.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Verify R-C Header/Footer retirement boundary
+        run: sh scripts/verify-rc-header-footer-retirement.sh
