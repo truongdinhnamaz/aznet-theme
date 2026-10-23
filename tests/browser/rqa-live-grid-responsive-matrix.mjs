@@ -44,14 +44,16 @@ try{
       path:path.join(directory,'live-card-grid-'+width+'.png'),fullPage:false
     });
     const ratios=after.cards.map((card,i)=>card.width/(after.tracks[i%after.tracks.length]||1));
+    // CSS Grid ignores float/clear for grid items; the defect is width 48%,
+    // so keep float/clear as diagnostics, not a separate acceptance gate.
     const pass=response?.status()===200&&after.cards.length===3&&
       ratios.every(v=>v>=.975&&v<=1.025)&&
-      after.cards.every(c=>c.cssFloat==='none'&&c.clear==='none')&&
       after.cards.every(c=>c.link.startsWith('https://remquocanh.vn/'))&&
       after.tracks.length>=1;
     const row={width,pass,status:response?.status(),columns:after.tracks.length,
       beforeWidth:before.cards[0]?.width,afterWidth:after.cards[0]?.width,
       trackWidth:after.tracks[0],ratios:ratios.map(v=>+v.toFixed(3)),
+      floatClear:after.cards.map(c=>({float:c.cssFloat,clear:c.clear})),
       linksValid:after.cards.every(c=>c.link.startsWith('https://remquocanh.vn/')),
       method:'browser-local CSS injection; no WordPress write'};
     rows.push(row);
