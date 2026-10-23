@@ -1,0 +1,399 @@
+{
+  "document_id": "RQA-PILOT-SNAPSHOT-04",
+  "version": "1.0",
+  "observed_date": "2026-09-22",
+  "timezone": "Asia/Bangkok",
+  "scope": "Selected fields from authenticated read-only responses; not a database backup or import payload",
+  "site": "https://remquocanh.vn/",
+  "repository": "truongdinhnamaz/aznet-theme",
+  "site_info": {
+    "wp_version": "7.1.1",
+    "php_version": "8.1.34",
+    "wpvibe_version": "1.17.3",
+    "active_theme_name": "AZnet Theme",
+    "active_theme_stylesheet": "aznet-theme",
+    "active_theme_version": "1.3.30",
+    "connection_checked_at": "2026-09-22T09:09:27.591Z",
+    "connection_scope": "Authenticated read only; publishing and uploads not tested"
+  },
+  "theme_mapping": {
+    "schema_version": 3,
+    "visual_preset": "curtain-01",
+    "homepage_preset": "curtain-01",
+    "homepage_hero_variant": "split",
+    "homepage_hero_block": 991,
+    "homepage_hero_page": 0,
+    "homepage_about_page": 35,
+    "homepage_knowledge_terms": [
+      57
+    ],
+    "homepage_contact_page": 45,
+    "homepage_services_page": 0,
+    "homepage_team_page": 0,
+    "homepage_process_page": 0,
+    "homepage_faq_page": 0,
+    "primary_menu_id": 17
+  },
+  "front_page_observation": {
+    "id": 2,
+    "title": "Rèm Quốc Anh",
+    "status": "publish",
+    "slug": "sample-page",
+    "link": "https://remquocanh.vn/",
+    "content_raw": "",
+    "content_rendered": "",
+    "template": "",
+    "modified_api_local": "2026-09-22T11:19:16",
+    "note": "Empty post_content does not prove an empty frontend; preset mappings were separately observed."
+  },
+  "hero": {
+    "id": 991,
+    "title": "Hero Rèm 01 — Preview 3 ảnh Crossfade",
+    "status": "publish",
+    "modified_api_local": "2026-09-22T11:57:37",
+    "media": [
+      {
+        "id": 669,
+        "path": "/wp-content/uploads/2026/08/rem-quoc-anh-03.png"
+      },
+      {
+        "id": 670,
+        "path": "/wp-content/uploads/2026/08/rem-quoc-anh-02.png"
+      },
+      {
+        "id": 671,
+        "path": "/wp-content/uploads/2026/08/rem-quoc-anh-01.png"
+      }
+    ],
+    "eyebrow": "HƠN HAI THẬP KỶ GÌN GIỮ NGHỀ RÈM",
+    "h1": "Từ nghề truyền thống đến giải pháp không gian",
+    "description": "Rèm được lựa chọn theo ánh sáng, công năng và thẩm mỹ của từng không gian.",
+    "text_raw_class": "screen-reader-text",
+    "visual_behavior_verified": false
+  },
+  "products": [
+    {
+      "id": 611,
+      "name": "Rèm vải đơn sắc",
+      "slug": "rem-vai-don-sac",
+      "price": "",
+      "featured": false,
+      "categories": [
+        {
+          "id": 16,
+          "name": "Rèm vải"
+        }
+      ]
+    },
+    {
+      "id": 610,
+      "name": "Rèm Vải 2 Lớp",
+      "slug": "rem-vai-2-lop",
+      "price": "",
+      "featured": false,
+      "categories": [
+        {
+          "id": 16,
+          "name": "Rèm vải"
+        }
+      ]
+    },
+    {
+      "id": 608,
+      "name": "Rèm voan",
+      "slug": "rem-voan",
+      "price": "",
+      "featured": false,
+      "categories": [
+        {
+          "id": 16,
+          "name": "Rèm vải"
+        }
+      ]
+    },
+    {
+      "id": 607,
+      "name": "Rèm cuốn chống cháy",
+      "slug": "rem-cuon-chong-chay",
+      "price": "",
+      "featured": false,
+      "categories": [
+        {
+          "id": 33,
+          "name": "Rèm Cuốn"
+        }
+      ]
+    },
+    {
+      "id": 606,
+      "name": "Rèm cuốn xuyên sáng",
+      "slug": "rem-cuon-xuyen-sang",
+      "price": "",
+      "featured": false,
+      "categories": [
+        {
+          "id": 33,
+          "name": "Rèm Cuốn"
+        }
+      ]
+    },
+    {
+      "id": 605,
+      "name": "Rèm cuốn cản sáng",
+      "slug": "rem-cuon-can-sang",
+      "price": "",
+      "featured": false,
+      "categories": [
+        {
+          "id": 33,
+          "name": "Rèm Cuốn"
+        }
+      ]
+    },
+    {
+      "id": 604,
+      "name": "Rèm cầu vồng chống cháy",
+      "slug": "rem-cau-vong-chong-chay",
+      "price": "",
+      "featured": false,
+      "categories": [
+        {
+          "id": 27,
+          "name": "Rèm Cầu Vồng"
+        }
+      ]
+    },
+    {
+      "id": 603,
+      "name": "Rèm cầu vồng xuyên sáng",
+      "slug": "rem-cau-vong-xuyen-sang",
+      "price": "",
+      "featured": false,
+      "categories": [
+        {
+          "id": 27,
+          "name": "Rèm Cầu Vồng"
+        }
+      ]
+    },
+    {
+      "id": 522,
+      "name": "Rèm cầu vồng cản sáng",
+      "slug": "rem-cau-vong-can-sang",
+      "price": "990000",
+      "featured": false,
+      "categories": [
+        {
+          "id": 27,
+          "name": "Rèm Cầu Vồng"
+        }
+      ]
+    },
+    {
+      "id": 70,
+      "name": "Rèm vải hoa văn",
+      "slug": "rem-vai-hoa-van",
+      "price": "0",
+      "featured": false,
+      "categories": [
+        {
+          "id": 34,
+          "name": "Rèm Cuốn Zipscreen"
+        },
+        {
+          "id": 29,
+          "name": "Rèm Roman"
+        }
+      ]
+    }
+  ],
+  "shared_product_observations": {
+    "query_status": "publish",
+    "catalog_visibility": "visible",
+    "stock_status": "instock",
+    "currency_verified": false,
+    "price_unit_verified": false,
+    "actual_inventory_verified": false
+  },
+  "product_categories_returned": [
+    {
+      "id": 27,
+      "name": "Rèm Cầu Vồng",
+      "slug": "rem-cau-vong",
+      "parent": 0,
+      "count": 3,
+      "image_id": 16
+    },
+    {
+      "id": 59,
+      "name": "Rèm chuyên dụng",
+      "slug": "rem-chuyen-dung",
+      "parent": 0,
+      "count": 0,
+      "image_id": 865
+    },
+    {
+      "id": 33,
+      "name": "Rèm Cuốn",
+      "slug": "rem-cuon",
+      "parent": 0,
+      "count": 3,
+      "image_id": 18
+    },
+    {
+      "id": 34,
+      "name": "Rèm Cuốn Zipscreen",
+      "slug": "rem-cuon-zipscreen",
+      "parent": 18,
+      "count": 1,
+      "image_id": null
+    },
+    {
+      "id": 60,
+      "name": "Rèm hội trường",
+      "slug": "rem-hoi-truong",
+      "parent": 59,
+      "count": 0,
+      "image_id": 861
+    },
+    {
+      "id": 58,
+      "name": "Rèm lá dọc",
+      "slug": "rem-la-doc",
+      "parent": 0,
+      "count": 0,
+      "image_id": 684
+    },
+    {
+      "id": 62,
+      "name": "Rèm ngăn lạnh",
+      "slug": "rem-ngan-lanh",
+      "parent": 59,
+      "count": 0,
+      "image_id": 862
+    },
+    {
+      "id": 63,
+      "name": "Rèm nhà tắm",
+      "slug": "rem-nha-tam",
+      "parent": 59,
+      "count": 0,
+      "image_id": 863
+    },
+    {
+      "id": 29,
+      "name": "Rèm Roman",
+      "slug": "rem-roman",
+      "parent": 0,
+      "count": 1,
+      "image_id": 20
+    },
+    {
+      "id": 18,
+      "name": "Rèm sáo",
+      "slug": "rem-sao",
+      "parent": 0,
+      "count": 1,
+      "image_id": 84
+    },
+    {
+      "id": 28,
+      "name": "Rèm Sáo Gỗ",
+      "slug": "rem-sao-go",
+      "parent": 18,
+      "count": 0,
+      "image_id": 19
+    },
+    {
+      "id": 32,
+      "name": "Rèm Sáo Nhôm",
+      "slug": "rem-sao-nhom",
+      "parent": 18,
+      "count": 0,
+      "image_id": null
+    },
+    {
+      "id": 31,
+      "name": "Rèm Tổ Ong",
+      "slug": "rem-to-ong",
+      "parent": 0,
+      "count": 0,
+      "image_id": 73
+    },
+    {
+      "id": 30,
+      "name": "Rèm Triple",
+      "slug": "rem-triple",
+      "parent": 18,
+      "count": 0,
+      "image_id": null
+    },
+    {
+      "id": 64,
+      "name": "Rèm trong kính",
+      "slug": "rem-trong-kinh",
+      "parent": 59,
+      "count": 0,
+      "image_id": 864
+    },
+    {
+      "id": 61,
+      "name": "Rèm y tế",
+      "slug": "rem-y-te",
+      "parent": 59,
+      "count": 0,
+      "image_id": 622
+    }
+  ],
+  "data_conflicts": [
+    {
+      "id": "CONTACT-01",
+      "subject": "Hotline",
+      "values": [
+        "0786 299 698",
+        "0901 699 989"
+      ],
+      "source_date": "2026-08-31",
+      "status": "UNRESOLVED_IN_RETRIEVED_SOURCES",
+      "instruction": "Do not auto-select or overwrite site contact data."
+    },
+    {
+      "id": "TAXONOMY-01",
+      "subject": "Category 16 referenced by products but absent from both list responses",
+      "status": "NEEDS_DIRECT_CHECK",
+      "instruction": "Do not conclude deletion; do not create a replacement category."
+    },
+    {
+      "id": "PRODUCT-01",
+      "subject": "Product 70 category suitability",
+      "status": "NEEDS_EDITORIAL_VALIDATION",
+      "instruction": "Check real product and configuration before changing categories."
+    },
+    {
+      "id": "MEDIA-01",
+      "subject": "Category 58/18/31 asset names suggest a different curtain type",
+      "status": "METADATA_REVIEW_ONLY",
+      "instruction": "Visual and rights checks have not been performed."
+    }
+  ],
+  "source_queries": [
+    "WPVibe.site_info",
+    "GET /wp/v2/pages/2?context=edit",
+    "GET /wp/v2/blocks/991?context=edit",
+    "GET /wc/v3/products?per_page=100&status=publish",
+    "GET /wc/v3/products/categories?per_page=100&hide_empty=false",
+    "wp option get theme_mods_aznet-theme --format=json",
+    "wp term list product_cat --fields=term_id,name,slug,parent,count --format=json"
+  ],
+  "verification_limits": {
+    "browser_visual": false,
+    "accessibility": false,
+    "form_submission": false,
+    "checkout": false,
+    "full_media_review": false,
+    "full_project_export": false,
+    "production_write": false,
+    "project_file_attachment": false,
+    "repository_write": false
+  }
+}
