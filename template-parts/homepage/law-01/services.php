@@ -4,15 +4,20 @@ namespace AZnet\Theme;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 $parent = homepage_page_reference( (int) homepage_source_value( 'law-01', 'services' ) );
 if ( ! $parent instanceof \WP_Post ) { return; }
-$items = homepage_renderable_child_pages( (int) $parent->ID, 6 );
+$items = homepage_renderable_child_pages( (int) $parent->ID, 8 );
 if ( [] === $items ) { return; }
 $intro = trim( (string) get_the_excerpt( $parent ) );
+$services_scrollable = count( $items ) > 6;
+$services_grid_classes = 'aznet-theme-law01-grid aznet-theme-law01-grid--services';
+if ( $services_scrollable ) {
+    $services_grid_classes .= ' aznet-theme-law01-grid--services-scroll';
+}
 ?>
 <section id="aznet-homepage-services" data-aznet-homepage-surface="services" class="aznet-theme-law01-section aznet-theme-law01-services" aria-labelledby="aznet-law01-services-title">
 <div class="aznet-theme-law01-container">
 <div class="aznet-theme-law01-section-heading"><div><p class="aznet-theme-law01-eyebrow"><?php esc_html_e( 'Dịch vụ', 'aznet-theme' ); ?></p><h2 id="aznet-law01-services-title" class="aznet-theme-law01-services__heading"><?php echo esc_html( get_the_title( $parent ) ); ?></h2></div><a class="aznet-theme-law01-text-link" href="<?php echo esc_url( get_permalink( $parent ) ); ?>"><?php esc_html_e( 'Xem tất cả dịch vụ', 'aznet-theme' ); ?> <span aria-hidden="true">→</span></a></div>
 <?php if ( '' !== $intro ) : ?><p class="aznet-theme-law01-lede aznet-theme-law01-services__intro"><?php echo esc_html( $intro ); ?></p><?php endif; ?>
-<div class="aznet-theme-law01-grid aznet-theme-law01-grid--services" data-count="<?php echo esc_attr( (string) count( $items ) ); ?>">
+<div class="<?php echo esc_attr( $services_grid_classes ); ?>" data-count="<?php echo esc_attr( (string) count( $items ) ); ?>"<?php if ( $services_scrollable ) : ?> tabindex="0" role="region" aria-label="<?php esc_attr_e( 'Danh sách dịch vụ, có thể cuộn ngang', 'aznet-theme' ); ?>"<?php endif; ?>>
 <?php foreach ( $items as $index => $item ) : if ( ! $item instanceof \WP_Post ) { continue; } ?>
 <a class="aznet-theme-law01-card" href="<?php echo esc_url( get_permalink( $item ) ); ?>">
 <span class="aznet-theme-law01-card__badge aznet-theme-law01-card__icon" aria-hidden="true">
