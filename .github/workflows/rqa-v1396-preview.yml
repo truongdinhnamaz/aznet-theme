@@ -1,0 +1,127 @@
+name: RQA 1.3.96 exact-main CSS preview and WordPress clean QA
+
+on:
+  push:
+    branches:
+      - work/rqa-v1396-woo-grid-rc-preflight-20261023
+    paths:
+      - assets/css/components/woocommerce-archive.css
+      - .github/scripts/rqa_v1396_*
+      - .github/workflows/rqa-v1396-preview.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-package-runtime-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Checkout exact Theme 1.3.96 candidate
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set PHP 8.1 lower support floor
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Build deterministic canonical main and single-CSS candidate ZIP twice
+        shell: bash
+        env:
+          BASE_SHA: afdeeacd3927eb0b7763045ab732b2f0cbebd1c7
+          RQA_OUTPUT_DIR: ${{ runner.temp }}/rqa-v1396
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor "$BASE_SHA" HEAD
+          git diff --check "$BASE_SHA" HEAD
+          bash scripts/assert-theme-version.sh 1.3.96
+          python3 -m py_compile .github/scripts/rqa_v1396_rc_preflight.py
+          mkdir -p "$RUNNER_TEMP/rqa-main-1396" "$RQA_OUTPUT_DIR"
+          git archive "$BASE_SHA" | tar -xf - -C "$RUNNER_TEMP/rqa-main-1396"
+          python3 scripts/build-release-package.py \
+            --source "$RUNNER_TEMP/rqa-main-1396" \
+            --output "$RQA_OUTPUT_DIR/aznet-theme-1.3.96-main-baseline.zip" --version 1.3.96
+          python3 scripts/build-release-package.py \
+            --source . \
+            --output "$RQA_OUTPUT_DIR/RQA_PREVIEW_ONLY_aznet-theme-v1.3.96-woo-grid.zip" --version 1.3.96
+          python3 scripts/build-release-package.py \
+            --source . \
+            --output "$RQA_OUTPUT_DIR/repeat-preview.zip" --version 1.3.96
+          export RQA_BASE_ZIP="$RQA_OUTPUT_DIR/aznet-theme-1.3.96-main-baseline.zip"
+          export RQA_CANDIDATE_ZIP="$RQA_OUTPUT_DIR/RQA_PREVIEW_ONLY_aznet-theme-v1.3.96-woo-grid.zip"
+          export RQA_REPRO_ZIP="$RQA_OUTPUT_DIR/repeat-preview.zip"
+          python3 .github/scripts/rqa_v1396_rc_preflight.py
+          python3 -m json.tool "$RQA_OUTPUT_DIR/manifest.json" > /dev/null
+          mkdir -p "$RUNNER_TEMP/rqa-lint"
+          unzip -q "$RQA_CANDIDATE_ZIP" -d "$RUNNER_TEMP/rqa-lint"
+          find "$RUNNER_TEMP/rqa-lint/aznet-theme" -type f -name '*.php' -print0 |
+            xargs -0 -r -n 1 php -l > "$RQA_OUTPUT_DIR/php81-lint.txt"
+          echo "php_lint_count=$(grep -c 'No syntax errors' "$RQA_OUTPUT_DIR/php81-lint.txt")"
+          test "$(grep -c 'No syntax errors' "$RQA_OUTPUT_DIR/php81-lint.txt")" -gt 160
+          bash -n .github/scripts/rqa_v1396_clean_wp_staging.sh
+
+      - name: Install official WP-CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location \
+            https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          php /tmp/wp-cli.phar --info > "$RUNNER_TEMP/wp-cli-info.txt"
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+
+      - name: Set up Node 22 for isolated Chromium and axe
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install isolated browser/a11y test tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: WordPress 6.9 / PHP 8.1 clean activation, browser, switch and rollback
+        shell: bash
+        env:
+          RQA_BASE_ZIP: ${{ runner.temp }}/rqa-v1396/aznet-theme-1.3.96-main-baseline.zip
+          RQA_RC_DIR: ${{ runner.temp }}/rqa-v1396
+          RQA_STAGING_DIR: ${{ runner.temp }}/rqa-v1396-clean
+        run: |
+          set -euo pipefail
+          bash .github/scripts/rqa_v1396_clean_wp_staging.sh
+          test "$(jq -r .status "$RQA_RC_DIR/runtime-summary.json")" = "L3_WP_CLEAN_STAGING_PASS"
+          test "$(jq -r .pass "$RQA_STAGING_DIR/browser/summary.json")" = "true"
+
+      - name: Preserve evidence without tagging, release or production deployment
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rqa-v1396-css-preview-package-and-l3-l4
+          path: |
+            ${{ runner.temp }}/rqa-v1396/RQA_PREVIEW_ONLY_aznet-theme-v1.3.96-woo-grid.zip
+            ${{ runner.temp }}/rqa-v1396/manifest.json
+            ${{ runner.temp }}/rqa-v1396/CSS_DELTA.diff
+            ${{ runner.temp }}/rqa-v1396/php81-lint.txt
+            ${{ runner.temp }}/rqa-v1396/runtime-summary.json
+            ${{ runner.temp }}/rqa-v1396-clean/browser
+          if-no-files-found: warn
+          retention-days: 14
