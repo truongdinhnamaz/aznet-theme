@@ -73,6 +73,10 @@ curl --silent --fail --max-time 10 \
   "http://127.0.0.1:8080/?p=$POST_ID" > "$RQA_STAGING_DIR/post.html"
 grep -F 'RQA Clean WP Sentinel' "$RQA_STAGING_DIR/post.html" > /dev/null
 
+echo '==> Chromium clean-WordPress visual, keyboard and axe-core smoke'
+RQA_STAGING_DIR="$RQA_STAGING_DIR" RQA_SENTINEL_POST_ID="$POST_ID" \
+  node .github/scripts/rqa_v1392_clean_wp_l4.mjs
+
 echo '==> Theme switching preserves WordPress source-owned data'
 FALLBACK=$(wp theme list --status=inactive --field=name --path="$WP_ROOT" --allow-root \
   | grep '^twenty' | head -n 1)
