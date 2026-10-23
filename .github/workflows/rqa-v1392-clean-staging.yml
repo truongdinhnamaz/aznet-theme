@@ -74,7 +74,8 @@ jobs:
           set -euo pipefail
           curl --fail --location --silent --show-error \
             https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
-          php /tmp/wp-cli.phar --info | head -n 10
+          php /tmp/wp-cli.phar --info > /tmp/rqa-wpcli-info.txt
+          head -n 10 /tmp/rqa-wpcli-info.txt
           chmod +x /tmp/wp-cli.phar
           sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
 
