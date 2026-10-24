@@ -1,0 +1,47 @@
+name: RQA public L4 element trace (read-only)
+
+on:
+  push:
+    branches: ['work/rqa-l4-element-trace-20261023']
+    paths:
+      - '.github/workflows/rqa-live-element-trace.yml'
+      - 'tests/browser/rqa-live-element-trace.mjs'
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/rqa-live-element-trace.yml'
+      - 'tests/browser/rqa-live-element-trace.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  readonly-rqa-trace:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact QA source
+        uses: actions/checkout@v4
+      - name: Record checkout identity
+        run: git rev-parse HEAD
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Playwright and axe
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+      - name: Read-only L4 trace on two public RQA pages
+        env:
+          RQA_TRACE_DIR: /tmp/rqa-live-l4
+        run: node tests/browser/rqa-live-element-trace.mjs
+      - name: Upload exact diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rqa-live-l4-element-trace
+          path: /tmp/rqa-live-l4
+          if-no-files-found: warn
+          retention-days: 14
