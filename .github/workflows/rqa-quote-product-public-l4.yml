@@ -1,0 +1,46 @@
+name: RQA Public Quote Consumer L4
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tests/browser/rqa-quote-product-public-l4.mjs'
+      - '.github/workflows/rqa-quote-product-public-l4.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-quote-consumer:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out QA-only candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Chromium
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Test live public catalog and quote style context without writes
+        env:
+          RQA_QUOTE_EVIDENCE_DIR: /tmp/rqa-quote-l4
+        run: |
+          set -euo pipefail
+          node tests/browser/rqa-quote-product-public-l4.mjs
+          test -s /tmp/rqa-quote-l4/evidence.json
+      - name: Preserve scoped public-only evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rqa-public-quote-l4
+          path: /tmp/rqa-quote-l4/
+          if-no-files-found: warn
+          retention-days: 14
