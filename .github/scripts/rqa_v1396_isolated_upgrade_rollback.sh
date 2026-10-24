@@ -93,10 +93,12 @@ CSS
 fi
 
 if [ "$1" = "rollback" ]; then
+  echo "RQA_ROLLBACK_PRECHECK snapshot=$(test -s "$OUT/ownership-before.json" && echo yes || echo no) summary=$(test -s "$OUT/summary.json" && echo yes || echo no) version=$(wpc theme get aznet-theme --field=version) css_mod=$(css_mod)"
   test -s "$OUT/ownership-before.json"
   test -s "$OUT/summary.json"
   test "$(wpc theme get aznet-theme --field=version)" = 1.3.96
   CSS_ID="$(cat "$OUT/hotfix-post-id.txt")"
+  echo "RQA_ROLLBACK_CSS_POST id=$CSS_ID status=$(wpc post get "$CSS_ID" --field=post_status)"
   test "$(css_mod)" = -1
 
   echo '==> Restore official Theme v1.3.92 and re-enable its old CSS hotfix'
