@@ -22,6 +22,16 @@
 - GitHub Actions artifact for initial package preflight: `rqa-v1396-css-preview-package-and-l3-l4`, ID `12514702470` (the job's overall status is FAIL at L3 for the stated reason; package-specific PASS is independently recorded in the emitted manifest).
 - Latest isolated L3/L4 workflow was launched [#39984680097](https://github.com/truongdinhnamaz/aznet-theme/actions/runs/39984680097) from corrected source; **do not call its runtime/browser results PASS without inspecting completed run and exact logs**.
 
+## Latest valid exact-run clean WordPress L3/L4 checkpoint — 24/10/2026 revalidation
+
+- [Workflow #39984680097](https://github.com/truongdinhnamaz/aznet-theme/actions/runs/39984680097) **SUCCESS**, exact candidate head `a55128bb2f8dbeec7087fc4a2fbda65a07f7de40`, job `120520667485`.
+- Source-only reproducible 1.3.96 candidate ZIP as above, 241 runtime files, single 353-byte CSS insertion, PHP 8.1 **164/164 lint PASS**. Runtime package SHA-256 unchanged.
+- Disposable **WordPress 6.9 / PHP 8.1**, zero optional plugins: exact preview ZIP installs and activates; native Home/Post render Theme Header/Footer/Main. WordPress Page/Post ownership preserved through switch to a default Theme and back, then rollback to baseline 1.3.96 Theme files.
+- Chromium + axe-core **6/6 PASS**, Home/Post × viewports 390/768/1280 px: HTTP 200; no horizontal overflow, no JS errors, no serious/critical WCAG axe finding, basic keyboard focus continues. The approved Theme-owned `convertflow.css` presentation bridge remains loaded on clean WordPress by AZT-04 O-008; no WooCommerce archive/plugin JS/provider assets incorrectly enqueued. Six incomplete axe checks require separate manual review; no claim of full WCAG certification.
+- GitHub Actions artifact `rqa-v1396-css-preview-package-and-l3-l4` **ID 12515577010**, includes ZIP, manifest, CSS diff, PHP lint, runtime summary, six browser screenshots/axe JSON (time-limited retention). Exact branch had later documentation-only updates; no runtime CSS change.
+- **PASS L1/L2 + L3 clean + narrow L4 clean. UNKNOWN L5, RQA in-place 1.3.92→1.3.96 compatibility, production deployment.** DO NOT infer an approved full Theme release merely from passing this job.
+- New RQA-specific preflight target is active pilot's preset `curtain-01`, WordPress `7.1.3`, WooCommerce `11.2.1`, ConvertFlow Core `0.1.0` + Pro `0.1.0-alpha.120`. Fixture cannot substitute for provider L5. Existing Theme customizer and content should survive switching, with no direct plugin-private reads.
+
 ## Ownership, release and rollback gate
 
 - Production site uses the already-PASS scoped CSS hotfix and stays at Theme 1.3.92 until a separate full-Theme upgrade is approved.
