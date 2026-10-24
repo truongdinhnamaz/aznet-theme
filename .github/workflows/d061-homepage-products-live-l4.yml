@@ -37,9 +37,16 @@ jobs:
           php /tmp/d061-red/tests/offline/d061-homepage-products-container-contract.php > /tmp/d061-red/output.txt 2>&1
           status=$?
           set -e
-          test "$status" -ne 0
-          grep -Fx 'FAIL: Products nested section lacks own bounded-width/padding guard.' /tmp/d061-red/output.txt
-          echo "PASS: D-061 RED reproduced on PR base $BASE_SHA"
+          if [[ "$status" -eq 0 ]]; then
+            # Later PR bases already contain the accepted D-061 correction.
+            # Retain its historical RED evidence; do not demand a new RED
+            # from a base where the D-061 fix has already shipped.
+            grep -Fx 'PASS: Products nested section is a single-spaced, width-bounded presentation island.' /tmp/d061-red/output.txt
+            echo "PASS: D-061 accepted base already GREEN at $BASE_SHA (historical RED retained)"
+          else
+            grep -Fx 'FAIL: Products nested section lacks own bounded-width/padding guard.' /tmp/d061-red/output.txt
+            echo "PASS: D-061 RED reproduced on PR base $BASE_SHA"
+          fi
       - name: PHP lint and D-061 candidate GREEN
         run: |
           set -euo pipefail
