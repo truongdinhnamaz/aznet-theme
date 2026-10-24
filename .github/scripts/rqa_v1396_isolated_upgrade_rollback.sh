@@ -98,17 +98,35 @@ if [ "$1" = "rollback" ]; then
   test -s "$OUT/summary.json"
   test "$(wpc theme get aznet-theme --field=version)" = 1.3.96
   CSS_ID="$(cat "$OUT/hotfix-post-id.txt")"
-  echo "RQA_ROLLBACK_CSS_POST id=$CSS_ID status=$(wpc post get "$CSS_ID" --field=post_status)"
-  test "$(css_mod)" = -1
+  CSS_STATUS="$(wpc post get "$CSS_ID" --field=post_status)"
+  echo "RQA_ROLLBACK_CSS_POST id=$CSS_ID status=$CSS_STATUS"
+  test "$CSS_STATUS" = draft
 
-  echo '==> Restore official Theme v1.3.92 and re-enable its old CSS hotfix'
+  # WordPress may re-associate custom_css_post_id with an existing draft post
+  # during a normal request, even when the post is unpublished. The authority
+  # here is the post publication state + anonymous rendered HTML, not a
+  # brittle requirement that the internal Theme mod remain exactly -1.
+  curl --fail --silent --show-error --max-time 25 \
+    http://127.0.0.1:8080/san-pham/ > "$OUT/shop-before-rollback.html"
+  if grep -F 'AZnet Theme RQA scoped Woo archive grid hotfix' "$OUT/shop-before-rollback.html"; then
+    echo 'FAIL: staged redundant Customizer CSS remained publicly rendered.' >&2
+    exit 1
+  fi
+  # C5 admin UI exercises can intentionally change Theme presentation settings.
+  # Snapshot *after* those actions, immediately before/after Theme binary swap.
+  snapshot "$OUT/ownership-before-rollback.json"
+
+  echo '==> Restore official Theme v1.3.92 while preserving latest WP-owned data'
   safe_restore "$BASE_ZIP"
   test "$(wpc theme get aznet-theme --field=version)" = 1.3.92
+  snapshot "$OUT/ownership-after-theme-restore.json"
+  cmp -s "$OUT/ownership-before-rollback.json" "$OUT/ownership-after-theme-restore.json"
+
+  # Re-enable original CSS hotfix only after the original Theme is restored.
   wpc post update "$CSS_ID" --post_status=publish >/dev/null
   wpc theme mod set custom_css_post_id "$CSS_ID" >/dev/null
   test "$(css_mod)" = "$CSS_ID"
   snapshot "$OUT/ownership-after-rollback.json"
-  cmp -s "$OUT/ownership-before.json" "$OUT/ownership-after-rollback.json"
 
   curl --fail --silent --show-error --max-time 25 \
     http://127.0.0.1:8080/ > "$OUT/home-after-rollback.html"
@@ -118,7 +136,7 @@ if [ "$1" = "rollback" ]; then
 
   printf '%s\n' '{"status":"STAGING_ROLLBACK_PRESERVED_DATA","from":"1.3.96","to":"1.3.92","temporary_css_restored":true,"production_write":false}' \
     > "$OUT/rollback-stage.json"
-  echo 'RQA_1396_ROLLBACK_STAGE_PASS exact Theme restore and ownership snapshot parity'
+  echo 'RQA_1396_ROLLBACK_STAGE_PASS exact Theme restore and post-authoring WP data snapshot parity'
   exit 0
 fi
 
