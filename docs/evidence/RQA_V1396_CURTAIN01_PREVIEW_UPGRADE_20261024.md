@@ -1,7 +1,7 @@
 # RQA — AZnet Theme 1.3.96 Curtain 01 pilot-shaped preview and upgrade gate
 
-**Date of verification:** 2026-10-24. **Canonical repository:** `truongdinhnamaz/aznet-theme`.  
-**Candidate:** `main@afdeeacd3927eb0b7763045ab732b2f0cbebd1c7` (1.3.96) with exactly the 353-byte Theme-owned WooCommerce archive CSS addition already verified through Draft PR #506.  
+**Date of verification:** 2026-10-24. **Canonical repository:** `truongdinhnamaz/aznet-theme`.
+**Candidate:** `main@afdeeacd3927eb0b7763045ab732b2f0cbebd1c7` (1.3.96) with exactly the 353-byte Theme-owned WooCommerce archive CSS addition already verified through Draft PR #506.
 **Preview ZIP SHA-256:** `50a4189be371cda131eda1eb0dd95ff739c43e4e4228015e1b4d4a958703a266`, **preview only, no 1.3.96 public Release/tag**.
 
 ## Valid current state
@@ -32,7 +32,7 @@
 
 ## Owner boundaries and next
 
-**PASS:** Source-verified 1.3.96 ZIP L1/L2, clean WordPress L3/L4, isolated Curtain 01+Woo pilot-shaped L3/L4.  
-**BLOCKED/UNKNOWN:** full in-place upgrade/rollback rehearsal pending; real RQA ConvertFlow/RootProfile integration L5, visual parity against protected live site, official Theme release/merge/production update L6.  
-**Important version integrity:** same `1.3.96` metadata exists with and without the RQA CSS fix. The custom CSS ZIP must not be circulated as a second official `1.3.96` Release; version promotion and package publication require product-owner decision.  
+**PASS:** Source-verified 1.3.96 ZIP L1/L2, clean WordPress L3/L4, isolated Curtain 01+Woo pilot-shaped L3/L4.
+**BLOCKED/UNKNOWN:** full in-place upgrade/rollback rehearsal pending; real RQA ConvertFlow/RootProfile integration L5, visual parity against protected live site, official Theme release/merge/production update L6.
+**Important version integrity:** same `1.3.96` metadata exists with and without the RQA CSS fix. The custom CSS ZIP must not be circulated as a second official `1.3.96` Release; version promotion and package publication require product-owner decision.
 **EXACT NEXT:** diagnose the isolated CSS-post setup gate of the upgrade rehearsal, then verify source-owned content parity and rollback. If GREEN, reconcile release candidate evidence against PR #506; do not deploy or remove live hotfix #1133 without a separate authorized release plan.
