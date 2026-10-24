@@ -1,0 +1,120 @@
+name: RQA 1.3.97 preview-only exact package and clean runtime
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - style.css
+      - functions.php
+      - assets/css/components/woocommerce-archive.css
+      - .github/workflows/rqa-v1397-candidate.yml
+      - tests/offline/rqa-v1397-version-gate.py
+
+permissions:
+  contents: read
+
+jobs:
+  exact-1397-preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: PHP 8.1 minimum floor
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+      - name: Verify source version, deterministic ZIP, exact byte scope and lint
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash scripts/assert-theme-version.sh 1.3.97
+          python3 -m py_compile tests/offline/rqa-v1397-version-gate.py
+          git diff --check afdeeacd3927eb0b7763045ab732b2f0cbebd1c7 HEAD
+          mkdir -p "$RUNNER_TEMP/rqa1397/base" "$RUNNER_TEMP/rqa1397/output"
+          git archive afdeeacd3927eb0b7763045ab732b2f0cbebd1c7 | tar -xf - -C "$RUNNER_TEMP/rqa1397/base"
+          python3 scripts/build-release-package.py --source "$RUNNER_TEMP/rqa1397/base" \
+            --output "$RUNNER_TEMP/rqa1397/output/main-1.3.96.zip" --version 1.3.96
+          python3 scripts/build-release-package.py --source . \
+            --output "$RUNNER_TEMP/rqa1397/output/preview-only-1.3.97.zip" --version 1.3.97
+          python3 scripts/build-release-package.py --source . \
+            --output "$RUNNER_TEMP/rqa1397/output/repeat-1.3.97.zip" --version 1.3.97
+          RQA1397_MAIN_ZIP="$RUNNER_TEMP/rqa1397/output/main-1.3.96.zip" \
+          RQA1397_CANDIDATE_ZIP="$RUNNER_TEMP/rqa1397/output/preview-only-1.3.97.zip" \
+          RQA1397_REPEAT_ZIP="$RUNNER_TEMP/rqa1397/output/repeat-1.3.97.zip" \
+          RQA1397_OUTPUT_DIR="$RUNNER_TEMP/rqa1397/output" \
+            python3 tests/offline/rqa-v1397-version-gate.py
+          mkdir -p "$RUNNER_TEMP/rqa1397/unpacked"
+          unzip -q "$RUNNER_TEMP/rqa1397/output/preview-only-1.3.97.zip" \
+            -d "$RUNNER_TEMP/rqa1397/unpacked"
+          find "$RUNNER_TEMP/rqa1397/unpacked/aznet-theme" -name '*.php' -type f -print0 \
+            | xargs -0 -n 1 php -l > "$RUNNER_TEMP/rqa1397/output/php81-lint.txt"
+          test "$(grep -c 'No syntax errors' "$RUNNER_TEMP/rqa1397/output/php81-lint.txt")" -gt 160
+      - name: WordPress 6.9 exact ZIP activation and native data switch
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          WP="$RUNNER_TEMP/rqa1397/wp"
+          mkdir -p "$WP"
+          wp core download --version=6.9 --path="$WP" --allow-root
+          wp config create --path="$WP" --dbname=wordpress --dbuser=root --dbpass=root \
+            --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path="$WP" --url=http://127.0.0.1:8080 \
+            --title='AZnet 1.3.97 Candidate' --admin_user=admin \
+            --admin_password=preview-ci-password --admin_email=ci@example.test \
+            --skip-email --allow-root
+          wp theme install "$RUNNER_TEMP/rqa1397/output/preview-only-1.3.97.zip" \
+            --activate --force --path="$WP" --allow-root
+          test "$(wp theme get aznet-theme --field=version --path="$WP" --allow-root)" = 1.3.97
+          test -z "$(wp plugin list --status=active --field=name --path="$WP" --allow-root)"
+          PAGE=$(wp post create --post_type=page --post_status=publish \
+            --post_title='1397 native data sentinel' --porcelain --path="$WP" --allow-root)
+          nohup php -S 127.0.0.1:8080 -t "$WP" \
+            > "$RUNNER_TEMP/rqa1397/output/wp-server.log" 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/ > "$RUNNER_TEMP/rqa1397/output/home.html"; then break; fi
+            sleep 1
+          done
+          grep -F 'aznet-theme-site-header' "$RUNNER_TEMP/rqa1397/output/home.html"
+          grep -F 'aznet-theme-site-footer' "$RUNNER_TEMP/rqa1397/output/home.html"
+          FALLBACK=$(wp theme list --status=inactive --field=name --path="$WP" --allow-root \
+            | grep '^twenty' | head -n1)
+          test -n "$FALLBACK"
+          wp theme activate "$FALLBACK" --path="$WP" --allow-root
+          test "$(wp post get "$PAGE" --field=post_title --path="$WP" --allow-root)" = \
+            '1397 native data sentinel'
+          wp theme activate aznet-theme --path="$WP" --allow-root
+          test "$(wp theme get aznet-theme --field=version --path="$WP" --allow-root)" = 1.3.97
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' \
+            "$RUNNER_TEMP/rqa1397/output/wp-server.log"; then exit 1; fi
+          echo 'RQA1397_EXACT_PACKAGE_WP69_PASS'
+      - name: Upload preview-only evidence (no release/deployment)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rqa1397-draft-preview-only
+          path: |
+            ${{ runner.temp }}/rqa1397/output/preview-only-1.3.97.zip
+            ${{ runner.temp }}/rqa1397/output/manifest.json
+            ${{ runner.temp }}/rqa1397/output/php81-lint.txt
+            ${{ runner.temp }}/rqa1397/output/wp-server.log
+          if-no-files-found: warn
+          retention-days: 14
