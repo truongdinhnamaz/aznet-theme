@@ -39,8 +39,8 @@ if (false === $regexStart || false === $regexEnd) {
 $regexNormalized = str_replace(chr(92), '', substr($block, $regexStart, $regexEnd - $regexStart));
 if (!str_contains($regexNormalized, '1.3.96') ||
     !str_contains($regexNormalized, '1.3.97') ||
-    str_contains($regexNormalized, '1.3.94')) {
-    $fail('X6 regex allowlist still authorizes obsolete 1.3.94-to-1.3.96 metadata');
+    str_contains($regexNormalized, '1.3.95')) {
+    $fail('X6 regex allowlist still authorizes obsolete 1.3.95-to-1.3.96 metadata');
 }
 
 echo "PASS: X6 v1.3.97 bounded technical-only draft candidate\n";
