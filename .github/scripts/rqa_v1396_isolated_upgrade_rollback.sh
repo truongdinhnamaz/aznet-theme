@@ -81,10 +81,15 @@ CSS
 
   SHA_NEW="$(sha256sum "$THEME/assets/css/components/woocommerce-archive.css" | cut -d' ' -f1)"
   test "$SHA_NEW" = c6fa157bb4ad7ab4118ba40ea6922c532013d5721239147aa77ba51c8cb301a4
+  # Draft alone is insufficient: WordPress may still render a custom_css
+  # post resolved by stylesheet slug. Archive its exact content above, then
+  # clear body via WordPress-owned CLI until we deliberately restore v1.3.92.
+  test "$(wpc post get "$CSS_ID" --field=post_content)" = "$(cat "$OUT/hotfix.css")"
   wpc theme mod set custom_css_post_id -1 >/dev/null
-  wpc post update "$CSS_ID" --post_status=draft >/dev/null
+  wpc post update "$CSS_ID" --post_status=draft --post_content='' >/dev/null
   test "$(css_mod)" = -1
   test "$(wpc post get "$CSS_ID" --field=post_status)" = draft
+  test -z "$(wpc post get "$CSS_ID" --field=post_content)"
 
   printf '%s\n' '{"status":"STAGING_UPGRADE_PRESERVED_DATA","from":"1.3.92","to":"1.3.96","temporary_css_disabled":true,"production_write":false}' \
     > "$OUT/upgrade-stage.json"
@@ -101,11 +106,11 @@ if [ "$1" = "rollback" ]; then
   CSS_STATUS="$(wpc post get "$CSS_ID" --field=post_status)"
   echo "RQA_ROLLBACK_CSS_POST id=$CSS_ID status=$CSS_STATUS"
   test "$CSS_STATUS" = draft
+  test -z "$(wpc post get "$CSS_ID" --field=post_content)"
 
-  # WordPress may re-associate custom_css_post_id with an existing draft post
-  # during a normal request, even when the post is unpublished. The authority
-  # here is the post publication state + anonymous rendered HTML, not a
-  # brittle requirement that the internal Theme mod remain exactly -1.
+  # A draft custom_css post can still be rendered by WP if its CSS body remains
+  # populated and slug is auto-resolved. Real guarantee: empty native WP body
+  # and the public HTML must not include the old CSS signature.
   curl --fail --silent --show-error --max-time 25 \
     http://127.0.0.1:8080/san-pham/ > "$OUT/shop-before-rollback.html"
   if grep -F 'AZnet Theme RQA scoped Woo archive grid hotfix' "$OUT/shop-before-rollback.html"; then
@@ -123,7 +128,8 @@ if [ "$1" = "rollback" ]; then
   cmp -s "$OUT/ownership-before-rollback.json" "$OUT/ownership-after-theme-restore.json"
 
   # Re-enable original CSS hotfix only after the original Theme is restored.
-  wpc post update "$CSS_ID" --post_status=publish >/dev/null
+  wpc post update "$CSS_ID" --post_content="$(cat "$OUT/hotfix.css")" --post_status=publish >/dev/null
+  test "$(wpc post get "$CSS_ID" --field=post_content)" = "$(cat "$OUT/hotfix.css")"
   wpc theme mod set custom_css_post_id "$CSS_ID" >/dev/null
   test "$(css_mod)" = "$CSS_ID"
   snapshot "$OUT/ownership-after-rollback.json"
