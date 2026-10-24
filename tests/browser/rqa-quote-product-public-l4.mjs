@@ -37,7 +37,7 @@ const browser = await chromium.launch({headless: true});
 try {
   const context = await browser.newContext({viewport: {width: 1440,height: 900}, reducedMotion: 'reduce'});
   for (const p of products) {
-    const record = {id: p.id, slug: p.slug, ok: false, quoteFound: false, nativeCart: null, twitterPriceZero: null, error: null};
+    const record = {id: p.id, slug: p.slug, ok: false, quoteFound: false, nativeCartDom: null, nativeCartVisible: null, twitterPriceZero: null, error: null};
     const page = await context.newPage();
     try {
       const response = await page.goto(site + '/' + p.slug + '/', {waitUntil:'domcontentloaded',timeout: 55000});
@@ -51,8 +51,9 @@ try {
       if (!(await quote.locator('a[href^="https://zalo.me/"]').count())) throw new Error('Quote Zalo channel missing');
       record.quoteFound = true;
       const buyButtons = root.locator('button.single_add_to_cart_button, a.add_to_cart_button');
-      record.nativeCart = await buyButtons.count();
-      if (record.nativeCart !== 0) throw new Error('Native Add-to-cart button visible in quote-only product presentation');
+      record.nativeCartDom = await buyButtons.count();
+      record.nativeCartVisible = await root.locator('button.single_add_to_cart_button:visible, a.add_to_cart_button:visible').count();
+      if (record.nativeCartVisible !== 0) throw new Error('Native Add-to-cart button is visibly interactive in quote-only product');
       const meta = await page.locator('meta[name="twitter:data1"]').first().getAttribute('content').catch(() => '');
       record.twitterPriceZero = String(meta || '').includes('0');
       record.ok = true;
@@ -68,12 +69,13 @@ try {
   await context.close();
 
   for (const c of styleCases) {
-    const caseRecord = { label: c.label, style: c.value, expectedVariation: c.id, ok: false, swatches: [], selectedVariation: null, selectedAttribute: null, error: null };
+    const caseRecord = { label: c.label, style: c.value, expectedVariation: c.id, ok: false, swatches: [], selectedVariation: null, selectedAttribute: null, diagnostics: null, error: null };
     const ctx = await browser.newContext({viewport: {width:c.width,height:c.height},hasTouch:c.touch, reducedMotion:'reduce'});
     const page = await ctx.newPage();
     try {
       const response = await page.goto(site + '/rem-vai-hoa-van/', {waitUntil:'domcontentloaded',timeout:55000});
       if (response?.status() !== 200) throw new Error('Public variable product HTTP not 200');
+      await page.waitForLoadState('load',{timeout:20000});
       const swatches = page.locator('#product-70 .variable-items-wrapper[data-attribute_name="attribute_pa_kieu"] li[data-value]');
       await swatches.first().waitFor({state:'visible',timeout:20000});
       caseRecord.swatches = await swatches.evaluateAll(els=>els.map(el=>el.getAttribute('data-value')));
@@ -96,7 +98,23 @@ try {
       console.log('PASS selected style quote context ' + c.label + ' -> variation ' + c.id);
     } catch (error) {
       caseRecord.error=String(error);
-      console.error('FAIL selected style quote context ' + c.label + ': ' + caseRecord.error);
+      try {
+        caseRecord.diagnostics = await page.evaluate(() => {
+          const selected = document.querySelector('#product-70 .variable-items-wrapper li.selected');
+          const target = document.querySelector('#product-70 .variable-items-wrapper li[data-value="karl"]');
+          const form = document.querySelector('#product-70 form.variations_form');
+          return {
+            readyState:document.readyState, hasJQuery:Boolean(window.jQuery),
+            nativeSelectValue:document.querySelector('#pa_kieu')?.value||'',
+            selectedSwatch:selected?.getAttribute('data-value')||'',
+            selectedVariationId:form?.querySelector('[name="variation_id"]')?.value||'',
+            quoteVariationId:document.querySelector('#dat-hang input[name="choiceguide_quote_view_variation_id"]')?.value||'',
+            targetSwatchExists:Boolean(target), variationFormExists:Boolean(form)
+          };
+        });
+      } catch {}
+      try {await page.screenshot({path:path.join(dir,c.label+'-fail.png'),fullPage:false});} catch {}
+      console.error('FAIL selected style quote context ' + c.label + ': ' + caseRecord.error + ' | diagnostics ' + JSON.stringify(caseRecord.diagnostics));
     } finally {
       evidence.selections.push(caseRecord);
       await ctx.close();
