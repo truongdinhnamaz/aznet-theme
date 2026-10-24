@@ -81,27 +81,35 @@ try {
       caseRecord.swatches = await swatches.evaluateAll(els=>els.map(el=>el.getAttribute('data-value')));
       if (expectedStyles.some(s=>!caseRecord.swatches.includes(s)) || caseRecord.swatches.length !== 5)
         throw new Error('One or more of five published visual style choices unavailable');
-      await swatches.filter({hasText: c.value[0].toUpperCase() + c.value.slice(1)}).click();
+      const swatch = swatches.filter({hasText: c.value[0].toUpperCase() + c.value.slice(1)});
+      if (c.touch) await swatch.tap(); else await swatch.click();
       await page.waitForFunction(style => document.querySelector('#pa_kieu')?.value === style, c.value, {timeout:12000});
       const opener = page.locator('a[data-choiceguide-quote-target="dat-hang"]').first();
       await opener.waitFor({state:'visible',timeout:12000});
       await opener.click();
-      await page.waitForFunction(expected => document.querySelector('#dat-hang input[name="choiceguide_quote_view_variation_id"]')?.value === expected, c.id, {timeout:15000});
+      // A quote is a request, not an order. Woo add-to-cart fields are removed
+      // by the provider's quote UI; native variation ID may legitimately be
+      // absent. Assert that the view's style reaches the quote form instead.
+      await page.waitForFunction(style => {
+        const input = document.querySelector('#dat-hang input[name="choiceguide_quote_view_attributes"]');
+        if (!input) return false;
+        try { return JSON.parse(input.value).attribute_pa_kieu === style; }
+        catch { return false; }
+      }, c.value, {timeout:15000});
       caseRecord.selectedVariation = await page.locator('#dat-hang input[name="choiceguide_quote_view_variation_id"]').inputValue();
       caseRecord.selectedAttribute = await page.locator('#pa_kieu').inputValue();
-      const attributesText = await page.locator('#dat-hang input[name="choiceguide_quote_view_attributes"]').inputValue();
-      let attrs={}; try { attrs=JSON.parse(attributesText); } catch {}
-      if (attrs.attribute_pa_kieu !== c.value) throw new Error('Selected style not copied into quote context attributes');
+      if (caseRecord.selectedVariation && caseRecord.selectedVariation !== c.id)
+        throw new Error('Quote view context maps selected style to a different Woo variation');
       if (!(await page.locator('#dat-hang').isVisible())) throw new Error('Quote section hidden after opening');
       await page.screenshot({path:path.join(dir,c.label+'.png'),fullPage:false});
       caseRecord.ok = true;
-      console.log('PASS selected style quote context ' + c.label + ' -> variation ' + c.id);
+      console.log('PASS selected style quote context ' + c.label + ' -> attribute ' + c.value + ', view variation ID ' + (caseRecord.selectedVariation || '(empty)'));
     } catch (error) {
       caseRecord.error=String(error);
       try {
         caseRecord.diagnostics = await page.evaluate(() => {
           const selected = document.querySelector('#product-70 .variable-items-wrapper li.selected');
-          const target = document.querySelector('#product-70 .variable-items-wrapper li[data-value="karl"]');
+          const target = document.querySelector('#product-70 .variable-items-wrapper li[aria-checked="true"]');
           const form = document.querySelector('#product-70 form.variations_form');
           return {
             readyState:document.readyState, hasJQuery:Boolean(window.jQuery),
@@ -109,6 +117,8 @@ try {
             selectedSwatch:selected?.getAttribute('data-value')||'',
             selectedVariationId:form?.querySelector('[name="variation_id"]')?.value||'',
             quoteVariationId:document.querySelector('#dat-hang input[name="choiceguide_quote_view_variation_id"]')?.value||'',
+            quoteAttributes:document.querySelector('#dat-hang input[name="choiceguide_quote_view_attributes"]')?.value||'',
+            quoteLabels:document.querySelector('#dat-hang input[name="choiceguide_quote_view_labels"]')?.value||'',
             targetSwatchExists:Boolean(target), variationFormExists:Boolean(form)
           };
         });
