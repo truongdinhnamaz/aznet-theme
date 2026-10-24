@@ -58,7 +58,21 @@ async function clientOnlyRemoveHotfix(page) {
   });
 }
 try {
-  for (const width of [390, 768, 1280]) {
+  // Breakpoint-boundary coverage: narrow mobile, either side of 480/768/1024,
+  // and the previously verified 390/768/1280 viewports.
+  // This is public rendering QA, not provider data/identity inference.
+  const viewports = [
+    { width: 320, expectedColumns: 1 },
+    { width: 390, expectedColumns: 1 },
+    { width: 479, expectedColumns: 1 },
+    { width: 480, expectedColumns: 2 },
+    { width: 767, expectedColumns: 2 },
+    { width: 768, expectedColumns: 3 },
+    { width: 1023, expectedColumns: 3 },
+    { width: 1024, expectedColumns: 4 },
+    { width: 1280, expectedColumns: 4 },
+  ];
+  for (const { width, expectedColumns } of viewports) {
     const context = await browser.newContext({ viewport: { width, height: 850 }, locale: 'vi-VN' });
     const page = await context.newPage();
     await navigate(page, SITE + '/san-pham/');
@@ -66,26 +80,31 @@ try {
     need(await page.locator('[data-choiceguide-filter-result-summary][aria-live="polite"]').count() >= 1, 'provider live result summary');
     const baseline = await measure(page);
     need(!baseline.error && baseline.gridDisplay === 'grid' && baseline.cards >= 2, 'real Woo catalog cards at ' + width);
+    need(baseline.columns === expectedColumns,
+      'Theme breakpoint columns at ' + width + ': expected ' + expectedColumns + ', got ' + baseline.columns);
     await clientOnlyRemoveHotfix(page);
     const without = await measure(page);
-    if (width === 390) {
-      need(without.ratio < 0.90, 'RED expects undersized cards without client-only hotfix; ratio=' + without.ratio);
-      console.log('RQA_LIVE_PROVIDER_RED ratio=' + without.ratio);
-      await page.screenshot({path: path.join(OUT, 'shop-390-RED-browser-only.png'), fullPage: true});
+    if (width === 320 || width === 390) {
+      need(without.ratio < 0.90, 'RED expects undersized cards without client-only hotfix at width=' + width + '; ratio=' + without.ratio);
+      console.log('RQA_LIVE_PROVIDER_RED width=' + width + ' ratio=' + without.ratio);
+      await page.screenshot({path: path.join(OUT, 'shop-' + width + '-RED-browser-only.png'), fullPage: true});
     }
     await page.addStyleTag({content: css});
     const green = await measure(page);
-    need(green.ratio >= 0.94 && green.overflow <= 2, 'GREEN candidate cards must fill grid and avoid overflow width=' + width + ' ratio=' + green.ratio + ' overflow=' + green.overflow);
+    need(green.columns === expectedColumns, 'candidate responsive columns unchanged at width=' + width);
+    need(green.ratio >= 0.97 && green.ratio <= 1.03 && green.overflow <= 2,
+      'GREEN candidate cards must fill grid and avoid overflow width=' + width + ' ratio=' + green.ratio + ' overflow=' + green.overflow);
     need(green.cards === baseline.cards && JSON.stringify(green.links) === JSON.stringify(baseline.links), 'provider data/links unchanged');
     need(await page.locator('[data-choiceguide-filter-role="auto"]').count() >= 1, 'provider catalog filter retained');
-    if (width === 390 || width === 768) {
+    if ([320, 390, 480, 768, 1024].includes(width)) {
       await page.screenshot({path: path.join(OUT, 'shop-' + width + '-GREEN-browser-only.png'), fullPage: true});
     }
     observations.push({width, baseline, without, green});
     console.log('RQA_LIVE_PROVIDER_GREEN width=' + width + ' ratio=' + green.ratio + ' cards=' + green.cards);
     await context.close();
   }
-  const context = await browser.newContext({viewport: {width:390,height:850}, locale:'vi-VN'});
+  for (const width of [320, 390]) {
+  const context = await browser.newContext({viewport: {width,height:850}, locale:'vi-VN'});
   const page = await context.newPage();
   await navigate(page, SITE + '/rem-vai-don-sac/');
   const nav = page.locator('[data-choiceguide-sticky-submenu]');
@@ -96,9 +115,10 @@ try {
   await page.addStyleTag({content:css});
   const after = {href: await cta.getAttribute('href'), label:(await cta.innerText()).trim(), links: await nav.locator('[data-choiceguide-journey-nav]').count()};
   need(JSON.stringify(before) === JSON.stringify(after), 'candidate CSS leaves provider-owned CTA/links unchanged');
-  await page.screenshot({path:path.join(OUT, 'product-390-provider-preserved.png'),fullPage:true});
-  observations.push({product: {before,after}});
+  await page.screenshot({path:path.join(OUT, 'product-' + width + '-provider-preserved.png'),fullPage:true});
+  observations.push({product: {width,before,after}});
   await context.close();
+  }
   console.log('RQA_LIVE_PROVIDER_CSS_OVERLAY_PASS');
 } finally {
   await browser.close();
