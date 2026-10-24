@@ -1,9 +1,9 @@
 # RQA — active Theme source provenance read-only check (2026-10-24)
 
-**Canonical repository:** `truongdinhnamaz/aznet-theme`  
-**Active production site:** `https://remquocanh.vn`  
-**Source baseline compared:** published Git tag `v1.3.92`, commit `b7738467b21dba1bcd63f62a11b5a248cd7f1ba9`.  
-**Proposed candidate:** `main@afdeeacd3927eb0b7763045ab732b2f0cbebd1c7` Theme `1.3.96`, with the already-verified single WooCommerce archive CSS patch.  
+**Canonical repository:** `truongdinhnamaz/aznet-theme`
+**Active production site:** `https://remquocanh.vn`
+**Source baseline compared:** published Git tag `v1.3.92`, commit `b7738467b21dba1bcd63f62a11b5a248cd7f1ba9`.
+**Proposed candidate:** `main@afdeeacd3927eb0b7763045ab732b2f0cbebd1c7` Theme `1.3.96`, with the already-verified single WooCommerce archive CSS patch.
 **Method:** read-only WPVibe `wp-content` active-Theme source reads and GitHub exact-tag `fetch_file`, comparing reconstructed numbered-file text without editing the site. WPVibe warns that known secret patterns may be masked and that returned text must **not** be treated as a byte-for-byte archival copy. No redaction marker was observed in these nine returned files.
 
 ## Fresh production state
@@ -44,6 +44,6 @@ These cover the existing files involved in the 1.3.92 → 1.3.96 runtime diff, p
 
 ## Gate and one exact next
 
-**PASS:** L0 latest source validation; scoped live-source TEXT provenance 9/9 checked files; L1/L2 candidate CSS; clean L3/L4 and isolated Curtain01+Woo L3/L4; historic native hotfix production L4.  
-**BLOCKED/UNKNOWN:** oversized live source byte parity, full active archive SHA manifest, separately verified backup recoverability, real RQA provider L5, official new version/Release L6.  
+**PASS:** L0 latest source validation; scoped live-source TEXT provenance 9/9 checked files; L1/L2 candidate CSS; clean L3/L4 and isolated Curtain01+Woo L3/L4; historic native hotfix production L4.
+**BLOCKED/UNKNOWN:** oversized live source byte parity, full active archive SHA manifest, separately verified backup recoverability, real RQA provider L5, official new version/Release L6.
 **NEXT:** Open a **Draft PR only** from the 1.3.96-based candidate branch into canonical `main` with the exact 353-byte runtime CSS delta and auditable CI/evidence. Before any product-owner release approval or RQA production upgrade, obtain an exact active-theme/backup checksum through an authorized hosting or snapshot route; verify staging with actual provider contracts, or document the L5 BLOCKED gate rather than bypass it with fixtures.
