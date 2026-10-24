@@ -311,6 +311,63 @@ function enqueue_active_template_homepage_assets( ?string $version = null ): voi
     enqueue_template_homepage_assets( $preset, $version );
 }
 
+/**
+ * Native WordPress Page opt-in for the optional Digital 01 light-brand design.
+ *
+ * The Theme checks only a public presentation class on the current Page.
+ * It never derives site identity, consumes provider storage or rewrites content.
+ */
+function digital01_brand2026_page_active(): bool {
+    if ( ! function_exists( 'is_singular' ) || ! is_singular( 'page' )
+        || ! function_exists( __NAMESPACE__ . '\\homepage_preset' )
+        || 'digital-01' !== homepage_preset()
+        || ! function_exists( 'get_queried_object' ) ) {
+        return false;
+    }
+
+    $page = get_queried_object();
+    return $page instanceof \WP_Post
+        && str_contains( (string) $page->post_content, 'aznet-digital01--brand-2026' );
+}
+
+/**
+ * Load this optional visual recipe only when WordPress authored the opt-in.
+ * Also load its existing Digital 01 base styles on a Page draft preview, since
+ * the normal Homepage manifest assets load only on the real Front Page.
+ */
+function enqueue_digital01_brand2026_asset( ?string $version = null ): void {
+    if ( ! digital01_brand2026_page_active() ) {
+        return;
+    }
+
+    $path = '/assets/css/components/homepage-digital-01-brand-2026.css';
+    if ( ! function_exists( 'get_theme_file_path' ) || ! is_file( get_theme_file_path( $path ) ) ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'aznet-theme-homepage',
+        get_theme_file_uri( '/assets/css/components/homepage.css' ),
+        [ 'aznet-theme-tokens' ],
+        $version
+    );
+
+    $base_path = '/assets/css/components/homepage-digital-01.css';
+    wp_enqueue_style(
+        'aznet-theme-homepage-digital-01',
+        get_theme_file_uri( $base_path ),
+        [ 'aznet-theme-tokens', 'aznet-theme-homepage' ],
+        asset_content_version( $base_path, $version )
+    );
+
+    wp_enqueue_style(
+        'aznet-theme-homepage-digital-01-brand-2026',
+        get_theme_file_uri( $path ),
+        [ 'aznet-theme-homepage-digital-01', 'aznet-theme-site-header' ],
+        asset_content_version( $path, $version )
+    );
+}
+
 /** Enqueue Law 01 only for its active Front Page presentation surface. */
 /** Enqueue the shared Team card presentation for Team surfaces only. */
 function enqueue_team_card_asset( ?string $version = null ): void {
@@ -799,6 +856,7 @@ function enqueue_assets(): void {
 
     enqueue_homepage_blueprint_asset( $version );
     enqueue_active_template_homepage_assets( $version );
+    enqueue_digital01_brand2026_asset( $version );
 
     if ( should_enqueue_generic_content_assets() ) {
         wp_enqueue_style(
