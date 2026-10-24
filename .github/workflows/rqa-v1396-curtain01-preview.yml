@@ -6,6 +6,8 @@ on:
       - work/rqa-v1396-woo-grid-rc-preflight-20261023
     paths:
       - .github/workflows/rqa-v1396-curtain01-preview.yml
+      - .github/scripts/rqa_v1396_isolated_upgrade_rollback.sh
+      - .github/scripts/rqa_v1396_pilot_data_snapshot.php
       - assets/css/components/woocommerce-archive.css
   workflow_dispatch:
 
@@ -444,6 +446,15 @@ jobs:
 
           wp eval-file "$GITHUB_WORKSPACE/tests/runtime/homepage-curtain01-map-runtime.php" --path=/tmp/wp --allow-root | tee /tmp/curtain01-c5/homepage-map-runtime.json
 
+      - name: Rehearse official v1.3.92 to exact v1.3.96 ZIP upgrade and remove temporary CSS
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          bash -n .github/scripts/rqa_v1396_isolated_upgrade_rollback.sh
+          php -l .github/scripts/rqa_v1396_pilot_data_snapshot.php
+          bash .github/scripts/rqa_v1396_isolated_upgrade_rollback.sh upgrade
+
       - name: Start candidate runtime
         run: |
           set -euo pipefail
@@ -503,6 +514,11 @@ jobs:
           CURTAIN01_OUT_DIR: /tmp/curtain01-c5
         run: node tests/browser/curtain01-c5-pilot-preview.mjs
 
+      - name: Rehearse scoped rollback to v1.3.92 and restore temporary CSS
+        run: |
+          set -euo pipefail
+          bash .github/scripts/rqa_v1396_isolated_upgrade_rollback.sh rollback
+
       - name: Verify runtime log boundary
         run: |
           set -euo pipefail
@@ -524,6 +540,10 @@ jobs:
             /tmp/curtain01-c5/summary.json
             /tmp/curtain01-c5/fixture.json
             /tmp/curtain01-c5/homepage-map-runtime.json
+            /tmp/curtain01-c5/ownership-*.json
+            /tmp/curtain01-c5/upgrade-stage.json
+            /tmp/curtain01-c5/rollback-stage.json
+            /tmp/curtain01-c5/home-after-rollback.html
             /tmp/curtain01-c5/server.log
             /tmp/curtain01-c5/shop-debug.html
           if-no-files-found: error
