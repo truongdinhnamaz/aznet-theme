@@ -1,0 +1,51 @@
+name: RQA 1.3.97 real-provider public CSS overlay
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/scripts/rqa_v1397_live_provider_overlay.mjs"
+      - ".github/workflows/rqa-v1397-live-provider-overlay.yml"
+      - "assets/css/components/woocommerce-archive.css"
+      - "assets/css/integrations/convertflow.css"
+      - "style.css"
+
+permissions:
+  contents: read
+
+# Browser-only CSS projection over public live v1.3.92 provider DOM.
+# No WordPress mutation. Does not certify provider L5 on installed Theme 1.3.97.
+jobs:
+  rqa-live-provider-overlay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright test dependency
+        run: |
+          set -euo pipefail
+          npm init -y >/dev/null
+          npm install --no-audit --no-fund playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Verify real provider public DOM and candidate CSS browser-only
+        env:
+          RQA_OVERLAY_EVIDENCE_DIR: ${{ runner.temp }}/rqa-v1397-live-provider
+        run: |
+          set -euo pipefail
+          node .github/scripts/rqa_v1397_live_provider_overlay.mjs
+      - name: Preserve scoped public-surface evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rqa-v1397-public-provider-css-projection
+          path: ${{ runner.temp }}/rqa-v1397-live-provider/
+          if-no-files-found: warn
+          retention-days: 14
