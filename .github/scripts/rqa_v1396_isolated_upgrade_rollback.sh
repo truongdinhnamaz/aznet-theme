@@ -60,10 +60,15 @@ CSS
     --post_title=aznet-theme --post_name=aznet-theme \
     --post_content="$(cat "$OUT/hotfix.css")" --porcelain)"
   test "$CSS_ID" -gt 0
+  echo "RQA_STAGE_CSS_POST_CREATED id=$CSS_ID status=$(wpc post get "$CSS_ID" --field=post_status)"
   printf '%s\n' "$CSS_ID" > "$OUT/hotfix-post-id.txt"
   wpc theme mod set custom_css_post_id "$CSS_ID" >/dev/null
-  test "$(wpc theme mod get custom_css_post_id)" = "$CSS_ID"
+  STAGED_CSS_MOD="$(wpc theme mod get custom_css_post_id)"
+  echo "RQA_STAGE_CSS_MOD_READBACK value=$STAGED_CSS_MOD"
+  test "$STAGED_CSS_MOD" = "$CSS_ID"
+  echo 'RQA_STAGE_SNAPSHOT_START'
   snapshot "$OUT/ownership-before.json"
+  echo 'RQA_STAGE_SNAPSHOT_DONE'
 
   echo '==> Upgrade Theme files 1.3.92 to exact 1.3.96 candidate'
   safe_restore "$CANDIDATE"
