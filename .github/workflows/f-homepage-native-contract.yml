@@ -9,6 +9,9 @@ on:
       - main
     paths:
       - 'front-page.php'
+      - 'inc/theme/content-shell.php'
+      - 'tests/offline/front-page-posts-mode-regression.php'
+      - 'tests/offline/posts-index-asset-regression.php'
       - 'tests/offline/f1-front-page-native-shell-contract.php'
       - 'tests/offline/f2-front-page-content-boundary-contract.php'
       - 'tests/offline/f3-homepage-ownership-static-contract.php'
@@ -43,5 +46,15 @@ jobs:
       - name: Run F5 native fail-soft contract
         run: php tests/offline/f5-homepage-absent-failsoft-contract.php
 
-      - name: Lint front-page template
-        run: php -l front-page.php
+      - name: Posts-index render regression
+        run: php tests/offline/front-page-posts-mode-regression.php
+
+      - name: Posts-index asset regression
+        run: php tests/offline/posts-index-asset-regression.php
+
+      - name: Lint changed production files and tests
+        run: |
+          php -l front-page.php
+          php -l inc/theme/content-shell.php
+          php -l tests/offline/front-page-posts-mode-regression.php
+          php -l tests/offline/posts-index-asset-regression.php
