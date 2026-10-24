@@ -21,6 +21,7 @@ on:
       - 'tests/offline/industrial01-solutions-editorial-contract.php'
       - 'tests/offline/industrial01-category-gallery-contract.php'
       - 'tests/offline/industrial01-product-showcase-contract.php'
+      - 'tests/offline/industrial01-service-showcase-contract.php'
       - 'tests/offline/product-thumbnail-cover-all-presets-contract.php'
       - 'assets/css/components/woocommerce-archive.css'
       - 'assets/css/components/woocommerce-product.css'
@@ -75,6 +76,9 @@ jobs:
 
       - name: Verify consistent square cover product thumbnails on all Theme presets
         run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/product-thumbnail-cover-all-presets-contract.php
+
+      - name: Verify mapped premium technical services showcase
+        run: php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-service-showcase-contract.php
 
       - name: Retain shared preset and Homepage boundaries
         run: |

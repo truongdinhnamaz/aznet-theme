@@ -164,6 +164,53 @@ try {
     await solutions.screenshot({ path: path.join(outDir, name + '-solutions.png') });
     await isolatedCapture.evaluate((element) => element.remove());
 
+    // Native technical services Page owns the service names, summary and URL;
+    // the Theme owns the visual arrangement only.
+    const technicalServices = homepage.locator('#aznet-homepage-industrial-process');
+    if (await technicalServices.count() !== 1) throw new Error(name + ': mapped WordPress technical services section missing');
+    const serviceTitles = await technicalServices.locator('.aznet-theme-industrial01-process__card-title').allTextContents();
+    const expectedServices = [
+      'Tư vấn lựa chọn máy và công đoạn',
+      'Lắp đặt, chạy thử và hướng dẫn vận hành',
+      'Bảo hành',
+      'Sửa chữa và xử lý sự cố'
+    ];
+    if (serviceTitles.length !== 4 || expectedServices.some((service, index) => service !== serviceTitles[index].trim())) {
+      throw new Error(name + ': native WordPress service headings were altered or invented: ' + JSON.stringify(serviceTitles));
+    }
+    const serviceLead = (await technicalServices.locator('.aznet-theme-industrial01-process__summary').textContent())?.trim() || '';
+    if (!serviceLead.endsWith('đúng nhu cầu thực tế của thiết bị.') || serviceLead.includes('trích đoạn tự động')) {
+      throw new Error(name + ': complete WordPress service introduction was truncated or replaced: ' + serviceLead);
+    }
+    const serviceVisual = await technicalServices.evaluate((section) => {
+      const grid = section.querySelector('.aznet-theme-industrial01-process__grid');
+      const card = grid?.querySelector('.aznet-theme-industrial01-process__card');
+      const heading = section.querySelector('.aznet-theme-industrial01-process__heading h2');
+      return {
+        sectionBackground: getComputedStyle(section).backgroundImage,
+        columns: grid ? getComputedStyle(grid).gridTemplateColumns.split(/\s+/).filter(Boolean).length : 0,
+        cardBackground: card ? getComputedStyle(card).backgroundImage : '',
+        cardTitleColor: card ? getComputedStyle(card.querySelector('h3')).color : '',
+        headingColor: heading ? getComputedStyle(heading).color : '',
+      };
+    });
+    const desiredServiceColumns = viewport.width <= 768 ? 1 : 2;
+    if (serviceVisual.columns !== desiredServiceColumns ||
+        !serviceVisual.sectionBackground.includes('linear-gradient') ||
+        !serviceVisual.cardBackground.includes('linear-gradient') ||
+        serviceVisual.cardTitleColor !== 'rgb(255, 255, 255)') {
+      throw new Error(name + ': technical service premium layout/style is not applied: ' + JSON.stringify(serviceVisual));
+    }
+    if (await technicalServices.locator('.aznet-theme-industrial01-process__card-icon svg[aria-hidden="true"]').count() !== 4) {
+      throw new Error(name + ': service cards missing decorative technical icons');
+    }
+    const fullServiceLink = technicalServices.locator('a.aznet-theme-industrial01-process__all');
+    if (await fullServiceLink.count() !== 1 ||
+        !(await fullServiceLink.getAttribute('href'))?.endsWith('/dich-vu-ky-thuat/')) {
+      throw new Error(name + ': source Page full-services CTA missing or invented');
+    }
+    await technicalServices.screenshot({ path: path.join(outDir, name + '-technical-services.png') });
+
     await assertNoOverflow(page, name + '-home');
     await assertA11y(page, name + '-home');
     await page.screenshot({ path: path.join(outDir, `${name}-home.png`), fullPage: true });
