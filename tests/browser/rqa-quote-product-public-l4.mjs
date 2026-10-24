@@ -27,6 +27,8 @@ const products = [
 ];
 const styleCases = [
   { label: 'desktop-karl', width: 1440, height: 900, touch: false, value: 'karl', id: '75' },
+  { label: 'desktop-kate', width: 1440, height: 900, touch: false, value: 'kate', id: '76' },
+  { label: 'mobile-karl', width: 390, height: 844, touch: true, value: 'karl', id: '75' },
   { label: 'mobile-kate', width: 390, height: 844, touch: true, value: 'kate', id: '76' }
 ];
 const expectedStyles = ['brooke', 'carolina', 'donatella', 'karl', 'kate'];
@@ -135,5 +137,5 @@ try {
   fs.writeFileSync(path.join(dir,'evidence.json'),JSON.stringify(evidence,null,2));
 }
 const failures=[...evidence.catalog,...evidence.selections].filter(p=>!p.ok);
-console.log('RQA consumer presentation L4: '+evidence.catalog.filter(x=>x.ok).length+'/10 products; '+evidence.selections.filter(x=>x.ok).length+'/2 style selections; FAIL '+failures.length);
+console.log('RQA consumer presentation L4: '+evidence.catalog.filter(x=>x.ok).length+'/10 products; '+evidence.selections.filter(x=>x.ok).length+'/4 style selections; FAIL '+failures.length);
 if (failures.length) process.exitCode=1;
