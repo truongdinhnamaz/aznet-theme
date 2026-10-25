@@ -280,6 +280,8 @@ body.aznet-theme-preset--digital-01 .aznet-digital01__process > .wp-block-group 
 }
 body.aznet-theme-preset--digital-01 .aznet-digital01__process h2 {color:#fff;max-width:760px;}
 body.aznet-theme-preset--digital-01 .aznet-digital01__process .aznet-digital01__intro {color:#bbcad3;}
+/* Native Process CTA links need a foreground on the anchor, not only its wrapper. */
+body.aznet-theme-preset--digital-01 .aznet-digital01__process .aznet-digital01__text-link > a {color:#ff9d85;}
 body.aznet-theme-preset--digital-01 .aznet-digital01__process-grid {
   display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));
   gap:0;margin:54px 0 0!important;border-top:1px solid rgba(255,255,255,.23);
