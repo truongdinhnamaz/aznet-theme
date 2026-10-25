@@ -35,7 +35,10 @@ function should_enqueue_generic_content_assets(): bool {
         return false;
     }
 
-    return is_page()
+    // The WordPress posts index is is_home() both on the Front Page and when
+    // a separate Posts Page is configured. It uses the native listing CSS.
+    return ( function_exists( 'is_home' ) && is_home() )
+        || is_page()
         || is_singular( 'post' )
         || is_archive()
         || is_search()
