@@ -109,8 +109,32 @@ try {
           },true);
         });
       });
+      // Bound each listener to this isolated browser page; no site-side script
+      // is changed. Compare capture/bubble propagation into WVS delegated ul.
+      if (c.touch) await page.evaluate(style => {
+        const ul = document.querySelector('#product-70 .variable-items-wrapper[data-attribute_name="attribute_pa_kieu"]');
+        const li = ul?.querySelector('li[data-value="' + style + '"]');
+        const sel = document.querySelector('#pa_kieu');
+        const capture = (scope, stage, e) => window.__rqaTapEvents.push({
+          type:e.type,scope,stage,phase:e.eventPhase,selected:sel?.value||'',
+          swatch:e.target?.closest?.('li[data-value]')?.getAttribute('data-value')||'',
+          defaultPrevented:e.defaultPrevented,
+          cancelBubble:e.cancelBubble
+        });
+        for (const [scope, el] of [['ul',ul],['li',li],['document',document]]) {
+          if (!el) continue;
+          el.addEventListener('click', e=>capture(scope,'capture',e),true);
+          el.addEventListener('click', e=>capture(scope,'bubble',e),false);
+        }
+        sel?.addEventListener('change',e=>capture('native-select','change',e),true);
+      }, c.value);
       const swatch = swatches.filter({hasText: c.value[0].toUpperCase() + c.value.slice(1)});
       if (c.touch) await swatch.tap(); else await swatch.click();
+      if (c.touch) caseRecord.afterTap = await page.evaluate(() => ({
+        select:document.querySelector('#pa_kieu')?.value||'',
+        selectedSwatch:document.querySelector('#product-70 .variable-items-wrapper li.selected')?.getAttribute('data-value')||'',
+        events:(window.__rqaTapEvents||[]).slice(-40)
+      }));
       await page.waitForFunction(style => document.querySelector('#pa_kieu')?.value === style, c.value, {timeout:12000});
       const opener = page.locator('a[data-choiceguide-quote-target="dat-hang"]').first();
       await opener.waitFor({state:'visible',timeout:12000});
