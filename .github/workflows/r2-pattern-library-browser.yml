@@ -437,6 +437,16 @@ jobs:
              test "$(cat /tmp/r2-pattern-library/php-exit-code.txt)" = '139'; then
             echo 'native_php_sigsegv=true' >> /tmp/r2-pattern-library/diagnostic-summary.txt
             core_file=$(find /tmp/r2-pattern-library -maxdepth 1 -type f \( -name 'core' -o -name 'core.*' \) -print -quit)
+            # Hosted Ubuntu uses systemd-coredump in kernel.core_pattern,
+            # so no local core file is expected unless the handler exports one.
+            if test -z "$core_file" && command -v coredumpctl >/dev/null 2>&1; then
+              crashed_pid=$(cat /tmp/r2-pattern-library/server.pid)
+              timeout 45s sudo coredumpctl --no-pager info "$crashed_pid" > /tmp/r2-pattern-library/php-coredumpctl-info.txt 2>&1 || :
+              timeout 90s sudo coredumpctl dump "$crashed_pid" --output="/tmp/r2-pattern-library/core.$crashed_pid" > /tmp/r2-pattern-library/php-coredumpctl-dump.log 2>&1 || :
+              if test -s "/tmp/r2-pattern-library/core.$crashed_pid"; then
+                core_file="/tmp/r2-pattern-library/core.$crashed_pid"
+              fi
+            fi
             if test -n "$core_file"; then
               printf 'native_core_size_bytes=%s\n' "$(stat -c '%s' "$core_file")" >> /tmp/r2-pattern-library/diagnostic-summary.txt
               if ! command -v gdb >/dev/null 2>&1; then
