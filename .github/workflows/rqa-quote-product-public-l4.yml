@@ -6,6 +6,7 @@ on:
     paths:
       - 'tests/browser/rqa-quote-product-public-l4.mjs'
       - 'tests/browser/rqa-swatch-ready-control-l4.mjs'
+      - 'tests/browser/rqa-wvs-defer-hypothesis-l4.mjs'
       - '.github/workflows/rqa-quote-product-public-l4.yml'
   workflow_dispatch:
 
@@ -48,6 +49,15 @@ jobs:
           set -euo pipefail
           node tests/browser/rqa-swatch-ready-control-l4.mjs
           test -s /tmp/rqa-swatch-ready-l4/ready-control.json
+      - name: Browser-only A/B diagnostic - Woo deferred variation script
+        if: always()
+        env:
+          RQA_DEFER_EVIDENCE_DIR: /tmp/rqa-wvs-defer-l4
+        run: |
+          set -euo pipefail
+          node --check tests/browser/rqa-wvs-defer-hypothesis-l4.mjs
+          node tests/browser/rqa-wvs-defer-hypothesis-l4.mjs
+          test -s /tmp/rqa-wvs-defer-l4/script-strategy-hypothesis.json
       - name: Preserve scoped public-only evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -56,5 +66,6 @@ jobs:
           path: |
             /tmp/rqa-quote-l4/
             /tmp/rqa-swatch-ready-l4/
+            /tmp/rqa-wvs-defer-l4/
           if-no-files-found: warn
           retention-days: 14
