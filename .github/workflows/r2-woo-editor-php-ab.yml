@@ -242,6 +242,47 @@ jobs:
           echo 'FAIL: PHP server unavailable before A/B editor interaction' >&2
           exit 1
 
+      - name: Exercise hot PHP Woo activation lifecycle in assigned Theme arm
+        run: |
+          set -euo pipefail
+          # This is disposable CI only. The PHP server must stay the SAME PID
+          # while Woo is absent, reactivated and rendered; do not reinterpret a
+          # failed PID check as a harmless retry or hide a native SIGSEGV.
+          pid=$(cat "$R2_AB_DIR/server.pid")
+          kill -0 "$pid"
+          printf 'phase=before_deactivate pid=%s\n' "$pid" > "$R2_AB_DIR/hot-woo-lifecycle.log"
+          grep -E '^(VmRSS|VmHWM|VmSize):' "/proc/$pid/status" > "$R2_AB_DIR/hot-phase-memory.txt" || :
+
+          wp plugin deactivate woocommerce --path=/tmp/wp --allow-root
+          if wp plugin is-active woocommerce --path=/tmp/wp --allow-root; then
+            echo 'FAIL: Woo must be inactive during hot absent-phase control' >&2
+            exit 1
+          fi
+          for n in 1 2 3; do
+            curl -fsS --max-time 30 "$R2_BASE_URL/r2-pattern-fixture/" \
+              > "$R2_AB_DIR/hot-woo-absent-render.html"
+            printf 'phase=woo_absent sample=%s pid=%s\n' "$n" "$pid" >> "$R2_AB_DIR/hot-woo-lifecycle.log"
+          done
+
+          wp plugin activate woocommerce --path=/tmp/wp --allow-root
+          wp plugin is-active woocommerce --path=/tmp/wp --allow-root
+          test "$(wp plugin get woocommerce --field=version --path=/tmp/wp --allow-root)" = '10.9.4'
+          for n in 1 2 3; do
+            curl -fsS --max-time 30 "$R2_BASE_URL/r2-pattern-fixture/" \
+              > "$R2_AB_DIR/hot-woo-present-render.html"
+            printf 'phase=woo_present sample=%s pid=%s\n' "$n" "$pid" >> "$R2_AB_DIR/hot-woo-lifecycle.log"
+          done
+          if test "$(cat "$R2_AB_DIR/server.pid")" != "$pid" || ! kill -0 "$pid" 2>/dev/null; then
+            echo 'FAIL: PHP server died or PID changed across hot Woo activation' >&2
+            exit 1
+          fi
+          grep -E '^(VmRSS|VmHWM|VmSize):' "/proc/$pid/status" >> "$R2_AB_DIR/hot-phase-memory.txt" || :
+          FIXTURE_ID=$(cat "$R2_AB_DIR/fixture-id.txt")
+          wp post get "$FIXTURE_ID" --field=post_content --path=/tmp/wp --allow-root \
+            > "$R2_AB_DIR/native-after-hot-woo.txt"
+          cmp "$R2_AB_DIR/native-before-theme-switch.txt" "$R2_AB_DIR/native-after-hot-woo.txt"
+          echo 'PASS: hot Woo activation kept PHP PID and native WordPress fixture intact'
+
       - name: Install Chromium Playwright
         run: |
           set -euo pipefail
