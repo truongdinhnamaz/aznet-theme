@@ -26,8 +26,14 @@ const products = [
   { id: 603, slug: 'rem-cau-vong-xuyen-sang' }
 ];
 const styleCases = [
+  { label: 'desktop-brooke', width: 1440, height: 900, touch: false, value: 'brooke', id: '74' },
+  { label: 'desktop-carolina', width: 1440, height: 900, touch: false, value: 'carolina', id: '78' },
+  { label: 'desktop-donatella', width: 1440, height: 900, touch: false, value: 'donatella', id: '77' },
   { label: 'desktop-karl', width: 1440, height: 900, touch: false, value: 'karl', id: '75' },
   { label: 'desktop-kate', width: 1440, height: 900, touch: false, value: 'kate', id: '76' },
+  { label: 'mobile-brooke', width: 390, height: 844, touch: true, value: 'brooke', id: '74' },
+  { label: 'mobile-carolina', width: 390, height: 844, touch: true, value: 'carolina', id: '78' },
+  { label: 'mobile-donatella', width: 390, height: 844, touch: true, value: 'donatella', id: '77' },
   { label: 'mobile-karl', width: 390, height: 844, touch: true, value: 'karl', id: '75' },
   { label: 'mobile-kate', width: 390, height: 844, touch: true, value: 'kate', id: '76' }
 ];
@@ -137,5 +143,5 @@ try {
   fs.writeFileSync(path.join(dir,'evidence.json'),JSON.stringify(evidence,null,2));
 }
 const failures=[...evidence.catalog,...evidence.selections].filter(p=>!p.ok);
-console.log('RQA consumer presentation L4: '+evidence.catalog.filter(x=>x.ok).length+'/10 products; '+evidence.selections.filter(x=>x.ok).length+'/4 style selections; FAIL '+failures.length);
+console.log('RQA consumer presentation L4: '+evidence.catalog.filter(x=>x.ok).length+'/10 products; '+evidence.selections.filter(x=>x.ok).length+'/10 style selections; FAIL '+failures.length);
 if (failures.length) process.exitCode=1;
