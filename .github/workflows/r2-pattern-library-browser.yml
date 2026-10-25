@@ -453,6 +453,9 @@ jobs:
               echo 'No local core file captured; inspect core-pattern.txt for kernel handler' > /tmp/r2-pattern-library/php-native-backtrace.txt
             fi
           fi
+          # Defense in depth: no raw process memory may reach the artifact,
+          # regardless of whether the stack-trace attempt succeeded.
+          find /tmp/r2-pattern-library -maxdepth 1 -type f \( -name 'core' -o -name 'core.*' \) -delete || :
           echo 'PASS: R2 diagnostics captured without changing acceptance assertions'
 
       - name: Upload R2 pattern evidence
@@ -460,5 +463,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: r2-pattern-library-browser-quality
-          path: /tmp/r2-pattern-library
+          path: |
+            /tmp/r2-pattern-library
+            !/tmp/r2-pattern-library/core
+            !/tmp/r2-pattern-library/core.*
           if-no-files-found: error
