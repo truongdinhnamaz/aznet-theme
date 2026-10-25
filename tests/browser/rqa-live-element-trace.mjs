@@ -32,7 +32,18 @@ try {
     });
     const page=await context.newPage();
     const errors=[];
+    const consoleIssues=[];
     page.on('pageerror',e=>{if(errors.length<8)errors.push(String(e.message).slice(0,260));});
+    page.on('console',message=>{
+      if(!['error','warning'].includes(message.type())||consoleIssues.length>=12)return;
+      const location=message.location();
+      consoleIssues.push({
+        type:message.type(),
+        text:message.text().slice(0,350),
+        source:location.url?location.url.replace(/\\?.*$/,'').slice(0,230):null,
+        line:location.lineNumber??null
+      });
+    });
     let result={name:target.name,url:target.url,valid:false,error:null};
     try {
       const cdp=await context.newCDPSession(page);
@@ -160,7 +171,43 @@ try {
           domContentLoadedMs:Math.round(performance.getEntriesByType('navigation')[0]?.domContentLoadedEventStart||0),
           firstPaintMs:Math.round(performance.getEntriesByType('paint')[0]?.startTime||0)
         };
+        // Attribution only: a square intentionally cropped with object-fit
+        // cover is not automatically a stretched/distorted source image.
+        // Capture both declared metadata and actual loaded intrinsic ratio.
+        const imageAspects=[...document.querySelectorAll('main img')].map(img=>{
+          const rect=img.getBoundingClientRect();
+          const style=getComputedStyle(img);
+          if(!img.complete||!img.naturalWidth||!img.naturalHeight||
+            rect.width<12||rect.height<12||style.display==='none'||
+            style.visibility==='hidden')return null;
+          const sourceRatio=img.naturalWidth/img.naturalHeight;
+          const displayRatio=rect.width/rect.height;
+          const difference=Math.abs(displayRatio/sourceRatio-1);
+          const cropMode=['cover','contain','scale-down','none'].includes(style.objectFit);
+          const channel=img.closest('[class*="choiceguide-"]')?'provider-choiceguide':
+            img.closest('.woocommerce-product-gallery')?'woocommerce-gallery':
+            img.closest('.woocommerce ul.products')?'woocommerce-catalog':
+            'wordpress-theme-other';
+          const publicPath=(()=>{
+            try{return new URL(img.currentSrc||img.src,location.href).pathname.slice(0,250);}
+            catch{return '(unresolved)';}
+          })();
+          return {
+            path:publicPath,alt:img.alt.slice(0,110),
+            widthAttr:img.getAttribute('width'),heightAttr:img.getAttribute('height'),
+            naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight,
+            displayWidth:Math.round(rect.width*10)/10,
+            displayHeight:Math.round(rect.height*10)/10,
+            cssWidth:style.width,cssHeight:style.height,
+            objectFit:style.objectFit,objectPosition:style.objectPosition,
+            ratioDifferencePercent:Math.round(difference*1000)/10,
+            intentionalCropOrContain:cropMode,
+            distortionSuspect:difference>0.08&&!cropMode,
+            channel
+          };
+        }).filter(Boolean).sort((a,b)=>b.ratioDifferencePercent-a.ratioDifferencePercent);
         return {
+          imageAspects:imageAspects.slice(0,60),
           title:document.title,
           heading:document.querySelector('main h1')?.textContent?.trim()||null,
           bodyClass:document.body?.className?.slice(0,400),
@@ -188,6 +235,7 @@ try {
       result={
         ...result,status:response?.status()||0,...runtime,
         cls:sessionScore(runtime.shifts),axe,pageErrors:errors,
+        consoleIssues,
         observedAt:new Date().toISOString(),
       };
       result.valid=result.status===200 && result.observer &&
@@ -206,6 +254,13 @@ try {
           id:v.id,targets:v.nodes.map(n=>n.target).slice(0,12)
         }))||[],axeError:result.axe?.error||null,
         error:result.error,
+        consoleIssues:result.consoleIssues||[],
+        images:{
+          analyzed:result.imageAspects?.length??0,
+          suspects:result.imageAspects?.filter(i=>i.distortionSuspect).slice(0,16)||[],
+          cropCandidates:result.imageAspects?.filter(i=>i.intentionalCropOrContain&&i.ratioDifferencePercent>8).slice(0,12)||[],
+          bySurface:(result.imageAspects||[]).reduce((acc,i)=>{acc[i.channel]=(acc[i.channel]||0)+1;return acc;},{})
+        },
         catalog:result.catalogGeometry?{token:result.catalogGeometry.columnsToken,grid:result.catalogGeometry.grid,card:result.catalogGeometry.card,rules:result.catalogGeometry.rules.slice(-10)}:null,
       });
       await context.close();
