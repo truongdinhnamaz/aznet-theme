@@ -11,6 +11,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
+if ( function_exists( 'AZnet\\Theme\\law01_posts_page_active' ) && \AZnet\Theme\law01_posts_page_active() ) {
+    ?>
+    <main id="main" class="aznet-theme-main aznet-theme-main--listing aznet-theme-main--law01-posts">
+        <div class="aznet-theme-content-shell">
+            <?php get_template_part( 'template-parts/archive/law01-posts-page' ); ?>
+        </div>
+    </main>
+    <?php
+    get_footer();
+    return;
+}
+
 $shell_classes = \AZnet\Theme\content_shell_classes( false );
 $posts_page_title = single_post_title( '', false );
 if ( '' === trim( (string) $posts_page_title ) ) {
