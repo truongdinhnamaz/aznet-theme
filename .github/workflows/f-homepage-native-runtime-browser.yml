@@ -6,7 +6,10 @@ on:
       - work/f-homepage-native-delivery
     paths:
       - 'front-page.php'
+      - 'home.php'
+      - 'inc/theme/content-shell.php'
       - 'tests/browser/f-homepage-native-l4.mjs'
+      - 'tests/browser/f-posts-front-index-l4.mjs'
       - '.github/workflows/f-homepage-native-runtime-browser.yml'
       - 'assets/**'
       - 'inc/**'
@@ -17,7 +20,10 @@ on:
       - main
     paths:
       - 'front-page.php'
+      - 'home.php'
+      - 'inc/theme/content-shell.php'
       - 'tests/browser/f-homepage-native-l4.mjs'
+      - 'tests/browser/f-posts-front-index-l4.mjs'
       - '.github/workflows/f-homepage-native-runtime-browser.yml'
       - 'assets/**'
       - 'inc/**'
@@ -160,6 +166,83 @@ jobs:
 
           test -f /tmp/f-home-native/browser-summary.json
           echo 'PASS: F native Homepage L3-L4 verification'
+
+      - name: Verify latest-posts front, static front and separate posts Page L3-L4
+        env:
+          F_HOME_BASE_URL: http://127.0.0.1:8080
+          F_HOME_STATE_DIR: /tmp/f-home-native
+        run: |
+          set -euo pipefail
+          node --check tests/browser/f-posts-front-index-l4.mjs
+          mkdir -p /tmp/f-home-native/posts-index
+          STATIC_PAGE_ID=$(wp option get page_on_front --path=/tmp/wp --allow-root)
+          test -n "$STATIC_PAGE_ID"
+          printf '%s\n' "$STATIC_PAGE_ID" > /tmp/f-home-native/posts-index/static-page-id.txt
+
+          # Discard only WordPress's disposable default Hello World post,
+          # so a fixed 5-Post query and 3-per-page pagination are deterministic.
+          DEFAULT_POST_IDS=$(wp post list --post_type=post --post_status=publish --format=ids --path=/tmp/wp --allow-root)
+          if test -n "$DEFAULT_POST_IDS"; then
+            wp post delete $DEFAULT_POST_IDS --force --path=/tmp/wp --allow-root >/dev/null
+          fi
+          wp eval '
+            for ($i = 1; $i <= 5; $i++) {
+                $id = wp_insert_post([
+                    "post_type" => "post",
+                    "post_status" => "publish",
+                    "post_title" => "Native Article Fixture " . $i,
+                    "post_excerpt" => "This is a bounded card excerpt " . $i,
+                    "post_content" => str_repeat("Long body intended for the singular Post view only. ", 80)
+                        . " FULL_ARTICLE_BODY_SENTINEL " . $i,
+                ], true);
+                if (is_wp_error($id) || ! $id) {
+                    fwrite(STDERR, "FAIL: could not create native Post fixture\n");
+                    exit(1);
+                }
+            }
+            echo "PASS: five WordPress-native Post fixtures\n";
+          ' --path=/tmp/wp --allow-root
+          test "$(wp post list --post_type=post --post_status=publish --format=count --path=/tmp/wp --allow-root)" = "5"
+          wp option update posts_per_page 3 --path=/tmp/wp --allow-root
+
+          POSTS_PAGE_ID=$(wp post create \
+            --post_type=page --post_status=publish --post_title="Native Posts Page" \
+            --post_name="news-index" --porcelain --path=/tmp/wp --allow-root)
+          printf '%s\n' "$POSTS_PAGE_ID" > /tmp/f-home-native/posts-index/posts-page-id.txt
+
+          wp option update show_on_front posts --path=/tmp/wp --allow-root
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+          curl -fsS http://127.0.0.1:8080/ > /tmp/f-home-native/posts-index/posts-front.html
+          grep -F 'aznet-theme-main--posts-page' /tmp/f-home-native/posts-index/posts-front.html
+          if grep -F 'FULL_ARTICLE_BODY_SENTINEL' /tmp/f-home-native/posts-index/posts-front.html; then
+            echo 'FAIL: posts-on-front leaked a full article body' >&2
+            exit 1
+          fi
+          F_POSTS_MODE=posts-front node tests/browser/f-posts-front-index-l4.mjs
+
+          # Reuse the original WordPress-owned static Front Page, then test
+          # WordPress's separate Posts Page route under identical Theme bytes.
+          wp option update show_on_front page --path=/tmp/wp --allow-root
+          wp option update page_on_front "$STATIC_PAGE_ID" --path=/tmp/wp --allow-root
+          wp option update page_for_posts "$POSTS_PAGE_ID" --path=/tmp/wp --allow-root
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+
+          curl -fsS http://127.0.0.1:8080/ > /tmp/f-home-native/posts-index/static-front.html
+          grep -F 'F native homepage sentinel' /tmp/f-home-native/posts-index/static-front.html
+          curl -fsS http://127.0.0.1:8080/news-index/ > /tmp/f-home-native/posts-index/posts-page.html
+          grep -F 'aznet-theme-main--posts-page' /tmp/f-home-native/posts-index/posts-page.html
+
+          F_POSTS_MODE=static node tests/browser/f-posts-front-index-l4.mjs
+          F_POSTS_MODE=posts-page node tests/browser/f-posts-front-index-l4.mjs
+
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/f-home-wp-server.log; then
+            echo 'FAIL: PHP error marker during native posts-index L3-L4' >&2
+            exit 1
+          fi
+          test -f /tmp/f-home-native/posts-index/posts-front/summary.json
+          test -f /tmp/f-home-native/posts-index/posts-page/summary.json
+          test -f /tmp/f-home-native/posts-index/static/summary.json
+          echo 'PASS: native posts-front, static Front Page and separate posts Page L3-L4'
 
       - name: Upload Theme-native Homepage evidence
         if: always()
