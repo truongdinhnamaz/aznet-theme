@@ -36,7 +36,10 @@ jobs:
       - name: Read-only L4 trace on two public RQA pages
         env:
           RQA_TRACE_DIR: /tmp/rqa-live-l4
-        run: node tests/browser/rqa-live-element-trace.mjs
+        run: |
+          set -euo pipefail
+          node --check tests/browser/rqa-live-element-trace.mjs
+          node tests/browser/rqa-live-element-trace.mjs
       - name: Upload exact diagnostic evidence
         if: always()
         uses: actions/upload-artifact@v4
