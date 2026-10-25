@@ -10,7 +10,8 @@ const outputDir = process.env.R2_AB_DIR || '/tmp/r2-woo-editor-ab';
 const fixtureId = process.env.R2_FIXTURE_ID || '';
 const arm = process.env.R2_AB_ARM || '';
 const repeat = process.env.R2_AB_REPEAT || '';
-if (!fixtureId || !['aznet-theme', 'twentytwentyfive'].includes(arm) || !['1', '2'].includes(repeat)) {
+const cyclesRequested = Number(process.env.R2_AB_CYCLES || '1');
+if (!fixtureId || !['aznet-theme', 'twentytwentyfive'].includes(arm) || !['1', '2'].includes(repeat) || ![1, 4].includes(cyclesRequested)) {
   throw new Error('Missing or unsupported R2 A/B fixture, theme arm or repeat');
 }
 fs.mkdirSync(outputDir, { recursive: true });
@@ -18,6 +19,8 @@ fs.mkdirSync(outputDir, { recursive: true });
 const summary = {
   arm,
   repeat,
+  cyclesRequested,
+  cycles: [],
   fixtureId,
   fixtureSha: process.env.R2_FIXTURE_SHA || null,
   browser: 'Chromium',
@@ -46,46 +49,53 @@ try {
     page.locator('#wp-submit').click(),
   ]);
 
-  // Both arms visit the same real WooCommerce admin UI before opening the
-  // native Page editor. Earlier A/B artifacts had ZERO wc-admin requests,
-  // unlike the historical SIGSEGV runs, making that first control weak.
-  // We visit only normal admin screens; no private REST calls or data writes.
-  const wooAdminPage = await page.goto(
-    baseUrl + '/wp-admin/admin.php?page=wc-admin', { waitUntil: 'domcontentloaded' },
-  );
-  summary.wooAdminPageStatus = wooAdminPage?.status() ?? null;
-  if (!wooAdminPage || wooAdminPage.status() !== 200) {
-    throw new Error('WooCommerce admin UI unavailable: HTTP ' + summary.wooAdminPageStatus);
-  }
-  await page.waitForTimeout(3500);
-  summary.wooAdminRequestsBeforeEditor = summary.wooAdminRequests.length;
+  for (let cycle = 1; cycle <= cyclesRequested; cycle++) {
+    summary.activeCycle = cycle;
+    const startRequestCount = summary.wooAdminRequests.length;
+    // Identical real WooCommerce admin UI visit in every cycle; never call
+    // private REST routes or submit data. More cycles expose intermittent
+    // native PHP memory/process failures without changing WordPress content.
+    const wooAdminPage = await page.goto(
+      baseUrl + '/wp-admin/admin.php?page=wc-admin', { waitUntil: 'domcontentloaded' },
+    );
+    summary.wooAdminPageStatus = wooAdminPage?.status() ?? null;
+    if (!wooAdminPage || wooAdminPage.status() !== 200) {
+      throw new Error('Cycle ' + cycle + ' Woo admin UI HTTP ' + summary.wooAdminPageStatus);
+    }
+    await page.waitForTimeout(2500);
+    const requestCountBeforeEditor = summary.wooAdminRequests.length - startRequestCount;
 
-  const editUrl = baseUrl + '/wp-admin/post.php?post=' + fixtureId + '&action=edit';
-  const response = await page.goto(editUrl, { waitUntil: 'domcontentloaded' });
-  if (!response || response.status() !== 200) {
-    throw new Error('WordPress editor did not return HTTP 200: ' + (response?.status() ?? 'missing'));
-  }
-  await page.locator('#post').waitFor({ state: 'visible', timeout: 30000 });
-  await page.locator('#content').waitFor({ state: 'attached', timeout: 30000 });
-  const content = await page.locator('#content').inputValue();
-  summary.editor.mode = 'classic';
-  summary.editor.patternMarkupPresent =
-    content.includes('aznet-theme-pattern--hero-split') &&
-    content.includes('aznet-theme-pattern--content-faq');
-  summary.editor.blockEditorPresent =
-    await page.locator('.edit-post-layout, .interface-interface-skeleton').count();
-  if (!summary.editor.patternMarkupPresent) {
-    throw new Error('Classic Editor lost representative native R2 block content');
-  }
-  if (summary.editor.blockEditorPresent !== 0) {
-    throw new Error('Native Page unexpectedly exposed Block Editor');
-  }
-  // Preserve the original Classic Editor assertions; then validate that this
-  // experiment really exercised the Woo admin request workload instead of
-  // silently claiming an unrelated editor-only PASS.
-  await page.waitForTimeout(1000);
-  if (summary.wooAdminRequests.length < 1) {
-    throw new Error('A/B INCONCLUSIVE: no WooCommerce admin REST requests observed');
+    const editUrl = baseUrl + '/wp-admin/post.php?post=' + fixtureId + '&action=edit';
+    const response = await page.goto(editUrl, { waitUntil: 'domcontentloaded' });
+    if (!response || response.status() !== 200) {
+      throw new Error('Cycle ' + cycle + ' editor HTTP ' + (response?.status() ?? 'missing'));
+    }
+    await page.locator('#post').waitFor({ state: 'visible', timeout: 30000 });
+    await page.locator('#content').waitFor({ state: 'attached', timeout: 30000 });
+    const content = await page.locator('#content').inputValue();
+    summary.editor.mode = 'classic';
+    summary.editor.patternMarkupPresent =
+      content.includes('aznet-theme-pattern--hero-split') &&
+      content.includes('aznet-theme-pattern--content-faq');
+    summary.editor.blockEditorPresent =
+      await page.locator('.edit-post-layout, .interface-interface-skeleton').count();
+    if (!summary.editor.patternMarkupPresent) {
+      throw new Error('Cycle ' + cycle + ' lost native R2 block content');
+    }
+    if (summary.editor.blockEditorPresent !== 0) {
+      throw new Error('Cycle ' + cycle + ' unexpectedly exposed Block Editor');
+    }
+    await page.waitForTimeout(750);
+    const requestCount = summary.wooAdminRequests.length - startRequestCount;
+    if (requestCount < 1) {
+      throw new Error('Cycle ' + cycle + ' A/B INCONCLUSIVE: no Woo admin REST traffic');
+    }
+    summary.cycles.push({
+      cycle,
+      status: 'passed',
+      wooAdminRequestsBeforeEditor: requestCountBeforeEditor,
+      wooAdminRequests: requestCount,
+    });
   }
   await page.screenshot({ path: path.join(outputDir, 'editor-classic.png'), fullPage: true });
   summary.editor.status = 'passed';
