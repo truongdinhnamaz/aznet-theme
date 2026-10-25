@@ -7,6 +7,7 @@ on:
       - 'tests/browser/rqa-quote-product-public-l4.mjs'
       - 'tests/browser/rqa-swatch-ready-control-l4.mjs'
       - 'tests/browser/rqa-wvs-defer-hypothesis-l4.mjs'
+      - 'tests/browser/rqa-quote-nojs-fallback-l4.mjs'
       - '.github/workflows/rqa-quote-product-public-l4.yml'
   workflow_dispatch:
 
@@ -58,6 +59,15 @@ jobs:
           node --check tests/browser/rqa-wvs-defer-hypothesis-l4.mjs
           node tests/browser/rqa-wvs-defer-hypothesis-l4.mjs
           test -s /tmp/rqa-wvs-defer-l4/script-strategy-hypothesis.json
+      - name: No-JavaScript quote contact fail-soft on desktop and mobile
+        if: always()
+        env:
+          RQA_NOJS_EVIDENCE_DIR: /tmp/rqa-quote-nojs-l4
+        run: |
+          set -euo pipefail
+          node --check tests/browser/rqa-quote-nojs-fallback-l4.mjs
+          node tests/browser/rqa-quote-nojs-fallback-l4.mjs
+          test -s /tmp/rqa-quote-nojs-l4/nojs-fallback.json
       - name: Preserve scoped public-only evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -67,5 +77,6 @@ jobs:
             /tmp/rqa-quote-l4/
             /tmp/rqa-swatch-ready-l4/
             /tmp/rqa-wvs-defer-l4/
+            /tmp/rqa-quote-nojs-l4/
           if-no-files-found: warn
           retention-days: 14
