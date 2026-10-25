@@ -128,6 +128,17 @@ try {
         }
         sel?.addEventListener('change',e=>capture('native-select','change',e),true);
       }, c.value);
+      if (c.touch) caseRecord.beforeTap = await page.evaluate(() => {
+        const form=document.querySelector('#product-70 form.variations_form');
+        const ul=form?.querySelector('ul.variable-items-wrapper[data-attribute_name="attribute_pa_kieu"]');
+        const click=ul&&window.jQuery?._data(ul,'events')?.click||[];
+        return {
+          formWvsLoaded:Boolean(form?.classList.contains('wvs-loaded')),
+          selected:document.querySelector('#pa_kieu')?.value||'',
+          clickDelegates:click.map(e=>({selector:e.selector||'',namespace:e.namespace||''})),
+          conversionRuntime:Boolean(window.ChoiceGuideConversionRuntime)
+        };
+      });
       const swatch = swatches.filter({hasText: c.value[0].toUpperCase() + c.value.slice(1)});
       if (c.touch) await swatch.tap(); else await swatch.click();
       if (c.touch) caseRecord.afterTap = await page.evaluate(() => ({
@@ -177,22 +188,36 @@ try {
             quoteLabels:document.querySelector('#dat-hang input[name="choiceguide_quote_view_labels"]')?.value||'',
             targetSwatchExists:Boolean(target), variationFormExists:Boolean(form),
             hitTestAtHoveredCenter: center ? {center,tag:hit?.tagName||'',cls:String(hit?.className||'').slice(0,120),swatch:hit?.closest('.variable-items-wrapper li[data-value]')?.getAttribute('data-value')||''} : null,
-            touchEvents:(window.__rqaTapEvents||[]).slice(-25)
+            touchEvents:(window.__rqaTapEvents||[]).slice(-25),
+            currentWvsState:(()=>{
+              const ul=form?.querySelector('ul.variable-items-wrapper[data-attribute_name="attribute_pa_kieu"]');
+              const click=ul&&window.jQuery?._data(ul,'events')?.click||[];
+              return {formWvsLoaded:Boolean(form?.classList.contains('wvs-loaded')),clickDelegates:click.map(e=>({selector:e.selector||'',namespace:e.namespace||''}))};
+            })()
           };
         }, c.value);
       } catch {}
       try {await page.screenshot({path:path.join(dir,c.label+'-fail.png'),fullPage:false});} catch {}
       if (c.touch) {
+        const retrySwatch = page.locator('#product-70 .variable-items-wrapper li[data-value="' + c.value + '"]');
         try {
-          const retrySwatch = page.locator('#product-70 .variable-items-wrapper li[data-value="' + c.value + '"]');
-          await retrySwatch.click({timeout:4000});
+          await retrySwatch.tap({timeout:4000});
           await page.waitForFunction(style => document.querySelector('#pa_kieu')?.value === style, c.value, {timeout:5000});
-          caseRecord.mouseClickFallback = {selectedStyle: await page.locator('#pa_kieu').inputValue(), worked: true};
-        } catch (fallbackErr) {
-          caseRecord.mouseClickFallback = {worked:false,error:String(fallbackErr)};
+          caseRecord.secondTouch = {worked:true, selectedStyle:await page.locator('#pa_kieu').inputValue()};
+        } catch (touchErr) {
+          caseRecord.secondTouch = {worked:false,error:String(touchErr)};
+        }
+        if (!caseRecord.secondTouch.worked) {
+          try {
+            await retrySwatch.click({timeout:4000});
+            await page.waitForFunction(style => document.querySelector('#pa_kieu')?.value === style, c.value, {timeout:5000});
+            caseRecord.mouseClickFallback = {selectedStyle: await page.locator('#pa_kieu').inputValue(), worked: true};
+          } catch (fallbackErr) {
+            caseRecord.mouseClickFallback = {worked:false,error:String(fallbackErr)};
+          }
         }
       }
-      console.error('FAIL selected style quote context ' + c.label + ': ' + caseRecord.error + ' | diagnostics ' + JSON.stringify(caseRecord.diagnostics) + ' | mouseFallback ' + JSON.stringify(caseRecord.mouseClickFallback));
+      console.error('FAIL selected style quote context ' + c.label + ': ' + caseRecord.error + ' | beforeTap ' + JSON.stringify(caseRecord.beforeTap) + ' | diagnostics ' + JSON.stringify(caseRecord.diagnostics) + ' | secondTouch ' + JSON.stringify(caseRecord.secondTouch) + ' | mouseFallback ' + JSON.stringify(caseRecord.mouseClickFallback));
     } finally {
       evidence.selections.push(caseRecord);
       await ctx.close();
