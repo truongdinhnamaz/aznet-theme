@@ -198,6 +198,16 @@ jobs:
           cat > /tmp/r2-pattern-library/php-supervisor.sh <<'SH'
           #!/usr/bin/env bash
           set +e
+          # Keep native PHP crash evidence out of the WordPress source tree.
+          # The core file is inspected by a failure-only step and removed
+          # BEFORE artifact upload; raw PHP memory is never published.
+          ulimit -c unlimited || :
+          if test -r /proc/sys/kernel/core_pattern; then
+            cat /proc/sys/kernel/core_pattern > /tmp/r2-pattern-library/core-pattern.txt
+          fi
+          printf 'php_core_limit=%s\n' "$(ulimit -c)" > /tmp/r2-pattern-library/core-runtime-info.txt
+          php -r 'printf("php_version=%s\nmemory_limit=%s\n", PHP_VERSION, ini_get("memory_limit"));' >> /tmp/r2-pattern-library/core-runtime-info.txt 2>&1
+          cd /tmp/r2-pattern-library || exit 2
           php -S 127.0.0.1:8080 -t /tmp/wp >> /tmp/r2-pattern-library/server.log 2>&1 &
           child=$!
           printf '%s server_pid=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$child" >> /tmp/r2-pattern-library/php-lifecycle.log
@@ -324,42 +334,6 @@ jobs:
           grep -F 'aznet-theme-pattern--commerce-category-grid' /tmp/r2-pattern-library/smoke-woo.html
           echo 'PASS: Woo-present R2 pattern fixture created through public capabilities'
 
-      - name: Restart disposable PHP server at Woo fixture boundary
-        run: |
-          set -euo pipefail
-          test -s /tmp/r2-pattern-library/server.pid
-          previous_pid=$(cat /tmp/r2-pattern-library/server.pid)
-          if ! kill -0 "$previous_pid" 2>/dev/null; then
-            echo 'FAIL: disposable PHP server died before Woo phase restart' >&2
-            exit 1
-          fi
-          printf '%s planned_woo_phase_restart old_pid=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$previous_pid" >> /tmp/r2-pattern-library/php-lifecycle.log
-          kill "$previous_pid"
-          for attempt in $(seq 1 30); do
-            if ! kill -0 "$previous_pid" 2>/dev/null; then
-              break
-            fi
-            sleep 1
-          done
-          if kill -0 "$previous_pid" 2>/dev/null; then
-            echo 'FAIL: previous PHP server still alive after planned restart' >&2
-            exit 1
-          fi
-          if test -f /tmp/r2-pattern-library/php-exit-code.txt; then
-            mv /tmp/r2-pattern-library/php-exit-code.txt /tmp/r2-pattern-library/php-exit-code-before-woo.txt
-          fi
-          nohup bash /tmp/r2-pattern-library/php-supervisor.sh > /tmp/r2-pattern-library/php-supervisor-woo.log 2>&1 &
-          echo $! > /tmp/r2-pattern-library/php-supervisor-woo.pid
-          for attempt in $(seq 1 30); do
-            if curl -fsS http://127.0.0.1:8080/r2-pattern-fixture/ > /tmp/r2-pattern-library/smoke-woo-restarted.html; then
-              echo 'PASS: isolated PHP server restarted before Woo editor L4 without fixture or assertion changes'
-              exit 0
-            fi
-            sleep 1
-          done
-          echo 'FAIL: PHP server unavailable after planned Woo fixture restart' >&2
-          exit 1
-
       - name: Verify Woo-present Editorial pattern quality
         env:
           R2_BASE_URL: http://127.0.0.1:8080
@@ -455,6 +429,29 @@ jobs:
           fi
           if [ -f /tmp/r2-pattern-library/server.log ]; then
             grep -E '(/wp-admin/post.php|/wp-json/wc-admin/|/wp-login.php|PHP (Fatal error|Warning|Parse error)|Uncaught)' /tmp/r2-pattern-library/server.log > /tmp/r2-pattern-library/woo-admin-request-sequence.log || :
+          fi
+          # A SIGSEGV is not a PHP userland fatal. Capture a bounded native
+          # backtrace when the disposable runtime itself dies, never a raw
+          # core dump (which can include sensitive fixture memory).
+          if test -f /tmp/r2-pattern-library/php-exit-code.txt &&
+             test "$(cat /tmp/r2-pattern-library/php-exit-code.txt)" = '139'; then
+            echo 'native_php_sigsegv=true' >> /tmp/r2-pattern-library/diagnostic-summary.txt
+            core_file=$(find /tmp/r2-pattern-library -maxdepth 1 -type f \( -name 'core' -o -name 'core.*' \) -print -quit)
+            if test -n "$core_file"; then
+              printf 'native_core_size_bytes=%s\n' "$(stat -c '%s' "$core_file")" >> /tmp/r2-pattern-library/diagnostic-summary.txt
+              if ! command -v gdb >/dev/null 2>&1; then
+                sudo apt-get update -qq > /tmp/r2-pattern-library/gdb-install.log 2>&1 &&
+                  sudo apt-get install -y -qq gdb >> /tmp/r2-pattern-library/gdb-install.log 2>&1
+              fi
+              if command -v gdb >/dev/null 2>&1; then
+                gdb -q -batch -ex 'set pagination off' -ex 'thread apply all bt 40' "$(command -v php)" "$core_file" > /tmp/r2-pattern-library/php-native-backtrace.txt 2>&1 || :
+              else
+                echo 'GDB unavailable; no stack trace claim' > /tmp/r2-pattern-library/php-native-backtrace.txt
+              fi
+              rm -f "$core_file"
+            else
+              echo 'No local core file captured; inspect core-pattern.txt for kernel handler' > /tmp/r2-pattern-library/php-native-backtrace.txt
+            fi
           fi
           echo 'PASS: R2 diagnostics captured without changing acceptance assertions'
 
