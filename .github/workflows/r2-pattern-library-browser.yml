@@ -193,8 +193,62 @@ jobs:
       - name: Start WordPress runtime
         run: |
           set -euo pipefail
-          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/r2-pattern-library/server.log 2>&1 &
-          echo $! > /tmp/r2-pattern-library/server.pid
+          # QA-only process supervisor: record PHP exit status even if the
+          # disposable WordPress server disappears during Woo admin requests.
+          cat > /tmp/r2-pattern-library/php-supervisor.sh <<'SH'
+          #!/usr/bin/env bash
+          set +e
+          # Keep native PHP crash evidence out of the WordPress source tree.
+          # The core file is inspected by a failure-only step and removed
+          # BEFORE artifact upload; raw PHP memory is never published.
+          ulimit -c unlimited || :
+          if test -r /proc/sys/kernel/core_pattern; then
+            cat /proc/sys/kernel/core_pattern > /tmp/r2-pattern-library/core-pattern.txt
+          fi
+          printf 'php_core_limit=%s\n' "$(ulimit -c)" > /tmp/r2-pattern-library/core-runtime-info.txt
+          php -r 'printf("php_version=%s\nmemory_limit=%s\n", PHP_VERSION, ini_get("memory_limit"));' >> /tmp/r2-pattern-library/core-runtime-info.txt 2>&1
+          cd /tmp/r2-pattern-library || exit 2
+          php -S 127.0.0.1:8080 -t /tmp/wp >> /tmp/r2-pattern-library/server.log 2>&1 &
+          child=$!
+          printf '%s server_pid=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$child" >> /tmp/r2-pattern-library/php-lifecycle.log
+          echo "$child" > /tmp/r2-pattern-library/server.pid
+          wait "$child"
+          result=$?
+          printf '%s server_exit_code=%s pid=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$result" "$child" >> /tmp/r2-pattern-library/php-lifecycle.log
+          echo "$result" > /tmp/r2-pattern-library/php-exit-code.txt
+          exit "$result"
+          SH
+          cat > /tmp/r2-pattern-library/runtime-monitor.sh <<'SH'
+          #!/usr/bin/env bash
+          set +e
+          samples=0
+          while [ "$samples" -lt 900 ]; do
+            samples=$((samples + 1))
+            stamp=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+            if [ -f /tmp/r2-pattern-library/server.pid ]; then
+              pid=$(cat /tmp/r2-pattern-library/server.pid)
+              if kill -0 "$pid" 2>/dev/null; then
+                printf '%s php_pid=%s ' "$stamp" "$pid"
+                ps -o pid=,ppid=,stat=,rss=,vsz=,etime= -p "$pid" 2>/dev/null || :
+                grep -E '^(State|VmRSS|VmHWM|VmSize|Threads):' "/proc/$pid/status" 2>/dev/null || :
+              else
+                printf '%s php_pid=%s unavailable\n' "$stamp" "$pid"
+              fi
+            fi
+            if [ -r /sys/fs/cgroup/memory.events ]; then
+              printf '%s cgroup_memory_events ' "$stamp"
+              tr '\n' ' ' < /sys/fs/cgroup/memory.events
+              printf '\n'
+            fi
+            sleep 1
+          done
+          SH
+          bash -n /tmp/r2-pattern-library/php-supervisor.sh
+          bash -n /tmp/r2-pattern-library/runtime-monitor.sh
+          nohup bash /tmp/r2-pattern-library/php-supervisor.sh > /tmp/r2-pattern-library/php-supervisor.log 2>&1 &
+          echo $! > /tmp/r2-pattern-library/php-supervisor.pid
+          nohup bash /tmp/r2-pattern-library/runtime-monitor.sh > /tmp/r2-pattern-library/runtime-monitor.log 2>&1 &
+          echo $! > /tmp/r2-pattern-library/runtime-monitor.pid
           for attempt in $(seq 1 30); do
             if curl -fsS http://127.0.0.1:8080/r2-pattern-fixture/ >/tmp/r2-pattern-library/smoke-clean.html; then
               break
@@ -290,7 +344,9 @@ jobs:
           set -euo pipefail
           FIXTURE_ID=$(cat /tmp/r2-pattern-library/fixture-id.txt)
           wp eval "set_theme_mod( 'aznet_theme_settings', [ 'schema_version' => 1, 'visual_preset' => 'editorial' ] );" --path=/tmp/wp --allow-root
+          printf '%s before_woo_editor\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> /tmp/r2-pattern-library/php-lifecycle.log
           R2_FIXTURE_ID="$FIXTURE_ID" node tests/browser/r2-pattern-library-l4.mjs
+          printf '%s after_woo_editor_pass\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> /tmp/r2-pattern-library/php-lifecycle.log
 
       - name: Verify theme-switch content portability
         run: |
@@ -352,10 +408,73 @@ jobs:
           test "$(find inc/patterns/woocommerce -maxdepth 1 -type f -name '*.php' | wc -l | tr -d ' ')" = '2'
           echo 'PASS: R2 retained core-pattern floor and exact Woo-gated count with runtime boundary clean'
 
+      - name: Snapshot R2 PHP and Woo admin diagnostics
+        if: always()
+        run: |
+          set +e
+          mkdir -p /tmp/r2-pattern-library
+          printf 'snapshot_utc=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > /tmp/r2-pattern-library/diagnostic-summary.txt
+          if [ -f /tmp/r2-pattern-library/server.pid ]; then
+            pid=$(cat /tmp/r2-pattern-library/server.pid)
+            printf 'last_server_pid=%s\n' "$pid" >> /tmp/r2-pattern-library/diagnostic-summary.txt
+            if kill -0 "$pid" 2>/dev/null; then
+              echo 'last_server_alive=yes' >> /tmp/r2-pattern-library/diagnostic-summary.txt
+              ps -o pid,ppid,stat,rss,vsz,etime,cmd -p "$pid" >> /tmp/r2-pattern-library/diagnostic-summary.txt 2>&1
+            else
+              echo 'last_server_alive=no' >> /tmp/r2-pattern-library/diagnostic-summary.txt
+            fi
+          fi
+          if [ -r /sys/fs/cgroup/memory.events ]; then
+            cp /sys/fs/cgroup/memory.events /tmp/r2-pattern-library/cgroup-memory-events-final.txt
+          fi
+          if [ -f /tmp/r2-pattern-library/server.log ]; then
+            grep -E '(/wp-admin/post.php|/wp-json/wc-admin/|/wp-login.php|PHP (Fatal error|Warning|Parse error)|Uncaught)' /tmp/r2-pattern-library/server.log > /tmp/r2-pattern-library/woo-admin-request-sequence.log || :
+          fi
+          # A SIGSEGV is not a PHP userland fatal. Capture a bounded native
+          # backtrace when the disposable runtime itself dies, never a raw
+          # core dump (which can include sensitive fixture memory).
+          if test -f /tmp/r2-pattern-library/php-exit-code.txt &&
+             test "$(cat /tmp/r2-pattern-library/php-exit-code.txt)" = '139'; then
+            echo 'native_php_sigsegv=true' >> /tmp/r2-pattern-library/diagnostic-summary.txt
+            core_file=$(find /tmp/r2-pattern-library -maxdepth 1 -type f \( -name 'core' -o -name 'core.*' \) -print -quit)
+            # Hosted Ubuntu uses systemd-coredump in kernel.core_pattern,
+            # so no local core file is expected unless the handler exports one.
+            if test -z "$core_file" && command -v coredumpctl >/dev/null 2>&1; then
+              crashed_pid=$(cat /tmp/r2-pattern-library/server.pid)
+              timeout 45s sudo coredumpctl --no-pager info "$crashed_pid" > /tmp/r2-pattern-library/php-coredumpctl-info.txt 2>&1 || :
+              timeout 90s sudo coredumpctl dump "$crashed_pid" --output="/tmp/r2-pattern-library/core.$crashed_pid" > /tmp/r2-pattern-library/php-coredumpctl-dump.log 2>&1 || :
+              if test -s "/tmp/r2-pattern-library/core.$crashed_pid"; then
+                core_file="/tmp/r2-pattern-library/core.$crashed_pid"
+              fi
+            fi
+            if test -n "$core_file"; then
+              printf 'native_core_size_bytes=%s\n' "$(stat -c '%s' "$core_file")" >> /tmp/r2-pattern-library/diagnostic-summary.txt
+              if ! command -v gdb >/dev/null 2>&1; then
+                sudo apt-get update -qq > /tmp/r2-pattern-library/gdb-install.log 2>&1 &&
+                  sudo apt-get install -y -qq gdb >> /tmp/r2-pattern-library/gdb-install.log 2>&1
+              fi
+              if command -v gdb >/dev/null 2>&1; then
+                gdb -q -batch -ex 'set pagination off' -ex 'thread apply all bt 40' "$(command -v php)" "$core_file" > /tmp/r2-pattern-library/php-native-backtrace.txt 2>&1 || :
+              else
+                echo 'GDB unavailable; no stack trace claim' > /tmp/r2-pattern-library/php-native-backtrace.txt
+              fi
+              rm -f "$core_file"
+            else
+              echo 'No local core file captured; inspect core-pattern.txt for kernel handler' > /tmp/r2-pattern-library/php-native-backtrace.txt
+            fi
+          fi
+          # Defense in depth: no raw process memory may reach the artifact,
+          # regardless of whether the stack-trace attempt succeeded.
+          find /tmp/r2-pattern-library -maxdepth 1 -type f \( -name 'core' -o -name 'core.*' \) -delete || :
+          echo 'PASS: R2 diagnostics captured without changing acceptance assertions'
+
       - name: Upload R2 pattern evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: r2-pattern-library-browser-quality
-          path: /tmp/r2-pattern-library
+          path: |
+            /tmp/r2-pattern-library
+            !/tmp/r2-pattern-library/core
+            !/tmp/r2-pattern-library/core.*
           if-no-files-found: error

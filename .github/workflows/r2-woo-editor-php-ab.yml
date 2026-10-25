@@ -1,0 +1,344 @@
+name: R2 Woo Editor PHP A-B Diagnostic
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/r2-woo-editor-php-ab.yml'
+      - 'tests/browser/r2-woo-editor-php-ab.mjs'
+      - '.github/workflows/r2-pattern-library-browser.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  woo-editor-ab:
+    name: Editor ${{ matrix.arm }} sample ${{ matrix.repeat }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        arm: [aznet-theme, twentytwentyfive]
+        repeat: [1, 2]
+    env:
+      R2_AB_ARM: ${{ matrix.arm }}
+      R2_AB_REPEAT: ${{ matrix.repeat }}
+      R2_AB_CYCLES: '4'
+      R2_AB_DIR: /tmp/r2-woo-editor-ab
+      R2_BASE_URL: http://127.0.0.1:8080
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout exact Theme candidate
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate A-B browser probe syntax
+        run: node --check tests/browser/r2-woo-editor-php-ab.mjs
+
+      - name: Prepare matching WP6.9 Woo10.9.4 native pattern fixture
+        run: |
+          set -euo pipefail
+          mkdir -p "$R2_AB_DIR" /tmp/wp
+          printf 'arm=%s\nrepeat=%s\n' "$R2_AB_ARM" "$R2_AB_REPEAT" > "$R2_AB_DIR/arm.txt"
+          php -v | head -n 1 > "$R2_AB_DIR/php-version.txt"
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create --path=/tmp/wp \
+            --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 \
+            --skip-check --allow-root
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 \
+            --title='R2 Woo Editor A-B' \
+            --admin_user=admin --admin_password='r2-browser-password' \
+            --admin_email=r2@example.test --skip-email --allow-root
+
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='docs' \
+            --exclude='scripts' --exclude='tests' --exclude='README.md' \
+            --exclude='aznet-preview.png' ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+          test "$(wp core version --path=/tmp/wp --allow-root)" = '6.9'
+          for index in 1 2 3; do
+            wp post create --post_type=post --post_status=publish \
+              --post_title="R2 Article Fixture $index" \
+              --post_content="R2 article fixture content $index." \
+              --porcelain --path=/tmp/wp --allow-root >/dev/null
+          done
+          printf '%s' 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Y9Zx9sAAAAASUVORK5CYII=' | base64 -d > /tmp/r2-media.png
+          MEDIA_ID=$(wp media import /tmp/r2-media.png --title='R2 Media' --porcelain --path=/tmp/wp --allow-root)
+          wp plugin install woocommerce --version=10.9.4 --activate --path=/tmp/wp --allow-root
+          test "$(wp plugin get woocommerce --field=version --path=/tmp/wp --allow-root)" = '10.9.4'
+
+          wp eval '
+            $blocks = WP_Block_Type_Registry::get_instance();
+            foreach (["woocommerce/product-categories", "woocommerce/product-collection"] as $name) {
+                if (! $blocks->is_registered($name)) {
+                    fwrite(STDERR, "FAIL: public Woo block missing: " . $name . "\n");
+                    exit(1);
+                }
+            }
+            $product = new WC_Product_Simple();
+            $product->set_name("R2 Product Fixture");
+            $product->set_status("publish");
+            $product->set_regular_price("100");
+            echo $product->save();
+          ' --path=/tmp/wp --allow-root > "$R2_AB_DIR/product-id.txt"
+
+          R2_MEDIA_ID="$MEDIA_ID" wp eval '
+            $slugs = [
+              "aznet-theme/hero-split", "aznet-theme/trust-feature-grid",
+              "aznet-theme/content-article-grid", "aznet-theme/content-faq",
+              "aznet-theme/utility-contact", "aznet-theme/commerce-category-grid",
+              "aznet-theme/commerce-featured-products",
+            ];
+            $registry = WP_Block_Patterns_Registry::get_instance();
+            $parts = [];
+            foreach ($slugs as $slug) {
+                $pattern = $registry->get_registered($slug);
+                if (! is_array($pattern) || empty($pattern["content"])) {
+                    fwrite(STDERR, "FAIL: native R2 pattern missing: " . $slug . "\n");
+                    exit(1);
+                }
+                $parts[] = $pattern["content"];
+            }
+            $id = (int) getenv("R2_MEDIA_ID");
+            $url = wp_get_attachment_url($id);
+            $parts[] = "<!-- wp:image -->\n<figure class=\"wp-block-image\"><img src=\"" .
+                esc_url($url) . "\" alt=\"R2 media fixture\"/></figure>\n<!-- /wp:image -->";
+            $content = implode("\n", $parts);
+            $post_id = wp_insert_post([
+                "post_type" => "page", "post_status" => "publish",
+                "post_title" => "R2 Pattern Fixture",
+                "post_name" => "r2-pattern-fixture",
+                "post_content" => $content,
+            ], true);
+            if (is_wp_error($post_id) || ! $post_id) {
+                fwrite(STDERR, "FAIL: unable to create native R2 fixture\n");
+                exit(1);
+            }
+            echo $post_id;
+          ' --path=/tmp/wp --allow-root > "$R2_AB_DIR/fixture-id.txt"
+          FIXTURE_ID=$(cat "$R2_AB_DIR/fixture-id.txt")
+          wp post get "$FIXTURE_ID" --field=post_content --path=/tmp/wp --allow-root \
+            > "$R2_AB_DIR/native-before-theme-switch.txt"
+
+          # QA-only, public WordPress editor filter: identical Classic Editor
+          # UI for both arms. This synthetic fixture plugin is never packaged.
+          mkdir -p /tmp/wp/wp-content/mu-plugins
+          cat > /tmp/wp/wp-content/mu-plugins/r2-qa-classic-editor.php <<'PHP'
+          <?php
+          /*
+           * Plugin Name: R2 QA Classic Editor Parity
+           */
+          add_filter( 'use_block_editor_for_post', '__return_false', 999 );
+          PHP
+
+          if test "$R2_AB_ARM" = 'twentytwentyfive'; then
+            if ! wp theme is-installed twentytwentyfive --path=/tmp/wp --allow-root; then
+              wp theme install twentytwentyfive --path=/tmp/wp --allow-root
+            fi
+            wp theme activate twentytwentyfive --path=/tmp/wp --allow-root
+          fi
+          test "$(wp theme list --status=active --field=name --path=/tmp/wp --allow-root)" = "$R2_AB_ARM"
+          wp theme get "$R2_AB_ARM" --field=version --path=/tmp/wp --allow-root > "$R2_AB_DIR/theme-version.txt"
+          wp post get "$FIXTURE_ID" --field=post_content --path=/tmp/wp --allow-root \
+            > "$R2_AB_DIR/native-after-theme-switch.txt"
+          cmp "$R2_AB_DIR/native-before-theme-switch.txt" "$R2_AB_DIR/native-after-theme-switch.txt"
+          sha256sum "$R2_AB_DIR/native-after-theme-switch.txt" > "$R2_AB_DIR/native-content.sha256"
+          R2_FIXTURE_ID="$FIXTURE_ID" wp eval '
+            $post = get_post((int) getenv("R2_FIXTURE_ID"));
+            if (! $post || use_block_editor_for_post($post)) {
+                fwrite(STDERR, "FAIL: A/B editor mode differs\n");
+                exit(1);
+            }
+            echo "PASS: both arms share Classic Editor and saved native content\n";
+          ' --path=/tmp/wp --allow-root
+          echo 'PASS: identical R2 native fixture and Woo capabilities prepared'
+
+      - name: Start PHP runtime with native crash telemetry
+        run: |
+          set -euo pipefail
+          cat > "$R2_AB_DIR/supervisor.sh" <<'SH'
+          #!/usr/bin/env bash
+          set +e
+          ulimit -c unlimited || :
+          cd /tmp/r2-woo-editor-ab || exit 2
+          php -S 127.0.0.1:8080 -t /tmp/wp > server.log 2>&1 &
+          pid=$!
+          echo "$pid" > server.pid
+          printf '%s pid=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$pid" >> php-lifecycle.log
+          wait "$pid"
+          rc=$?
+          printf '%s pid=%s exit_code=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$pid" "$rc" >> php-lifecycle.log
+          echo "$rc" > php-exit-code.txt
+          exit "$rc"
+          SH
+          cat > "$R2_AB_DIR/monitor.sh" <<'SH'
+          #!/usr/bin/env bash
+          set +e
+          for sample in $(seq 1 600); do
+            stamp=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+            if test -f /tmp/r2-woo-editor-ab/server.pid; then
+              pid=$(cat /tmp/r2-woo-editor-ab/server.pid)
+              if kill -0 "$pid" 2>/dev/null; then
+                printf '%s pid=%s ' "$stamp" "$pid"
+                ps -o pid=,stat=,rss=,vsz=,etime= -p "$pid" 2>/dev/null || :
+              else
+                printf '%s pid=%s unavailable\n' "$stamp" "$pid"
+              fi
+            fi
+            if test -r /sys/fs/cgroup/memory.events; then
+              printf '%s cgroup_memory_events ' "$stamp"
+              tr '\n' ' ' < /sys/fs/cgroup/memory.events
+              printf '\n'
+            fi
+            sleep 1
+          done
+          SH
+          bash -n "$R2_AB_DIR/supervisor.sh" "$R2_AB_DIR/monitor.sh"
+          if test -r /proc/sys/kernel/core_pattern; then
+            cat /proc/sys/kernel/core_pattern > "$R2_AB_DIR/core-pattern.txt"
+          fi
+          nohup bash "$R2_AB_DIR/supervisor.sh" > "$R2_AB_DIR/supervisor.log" 2>&1 &
+          nohup bash "$R2_AB_DIR/monitor.sh" > "$R2_AB_DIR/monitor.log" 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl -fsS "$R2_BASE_URL/r2-pattern-fixture/" > "$R2_AB_DIR/frontend-smoke.html"; then
+              echo 'PASS: PHP server responds before identical A/B editor interaction'
+              exit 0
+            fi
+            sleep 1
+          done
+          echo 'FAIL: PHP server unavailable before A/B editor interaction' >&2
+          exit 1
+
+      - name: Exercise hot PHP Woo activation lifecycle in assigned Theme arm
+        run: |
+          set -euo pipefail
+          # This is disposable CI only. The PHP server must stay the SAME PID
+          # while Woo is absent, reactivated and rendered; do not reinterpret a
+          # failed PID check as a harmless retry or hide a native SIGSEGV.
+          pid=$(cat "$R2_AB_DIR/server.pid")
+          kill -0 "$pid"
+          printf 'phase=before_deactivate pid=%s\n' "$pid" > "$R2_AB_DIR/hot-woo-lifecycle.log"
+          grep -E '^(VmRSS|VmHWM|VmSize):' "/proc/$pid/status" > "$R2_AB_DIR/hot-phase-memory.txt" || :
+
+          wp plugin deactivate woocommerce --path=/tmp/wp --allow-root
+          if wp plugin is-active woocommerce --path=/tmp/wp --allow-root; then
+            echo 'FAIL: Woo must be inactive during hot absent-phase control' >&2
+            exit 1
+          fi
+          for n in 1 2 3; do
+            curl -fsS --max-time 30 "$R2_BASE_URL/r2-pattern-fixture/" \
+              > "$R2_AB_DIR/hot-woo-absent-render.html"
+            printf 'phase=woo_absent sample=%s pid=%s\n' "$n" "$pid" >> "$R2_AB_DIR/hot-woo-lifecycle.log"
+          done
+
+          wp plugin activate woocommerce --path=/tmp/wp --allow-root
+          wp plugin is-active woocommerce --path=/tmp/wp --allow-root
+          test "$(wp plugin get woocommerce --field=version --path=/tmp/wp --allow-root)" = '10.9.4'
+          for n in 1 2 3; do
+            curl -fsS --max-time 30 "$R2_BASE_URL/r2-pattern-fixture/" \
+              > "$R2_AB_DIR/hot-woo-present-render.html"
+            printf 'phase=woo_present sample=%s pid=%s\n' "$n" "$pid" >> "$R2_AB_DIR/hot-woo-lifecycle.log"
+          done
+          if test "$(cat "$R2_AB_DIR/server.pid")" != "$pid" || ! kill -0 "$pid" 2>/dev/null; then
+            echo 'FAIL: PHP server died or PID changed across hot Woo activation' >&2
+            exit 1
+          fi
+          grep -E '^(VmRSS|VmHWM|VmSize):' "/proc/$pid/status" >> "$R2_AB_DIR/hot-phase-memory.txt" || :
+          FIXTURE_ID=$(cat "$R2_AB_DIR/fixture-id.txt")
+          wp post get "$FIXTURE_ID" --field=post_content --path=/tmp/wp --allow-root \
+            > "$R2_AB_DIR/native-after-hot-woo.txt"
+          cmp "$R2_AB_DIR/native-before-theme-switch.txt" "$R2_AB_DIR/native-after-hot-woo.txt"
+          echo 'PASS: hot Woo activation kept PHP PID and native WordPress fixture intact'
+
+      - name: Install Chromium Playwright
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Verify identical Woo Classic Editor interaction
+        run: |
+          set -euo pipefail
+          FIXTURE_ID=$(cat "$R2_AB_DIR/fixture-id.txt")
+          FIXTURE_SHA=$(sha256sum "$R2_AB_DIR/native-after-theme-switch.txt" | awk '{print $1}')
+          R2_FIXTURE_ID="$FIXTURE_ID" R2_FIXTURE_SHA="$FIXTURE_SHA" \
+            node tests/browser/r2-woo-editor-php-ab.mjs
+
+      - name: Capture bounded PHP crash data without publishing raw memory
+        if: always()
+        run: |
+          set +e
+          mkdir -p "$R2_AB_DIR"
+          printf 'capture_utc=%s\narm=%s\nrepeat=%s\n' \
+            "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$R2_AB_ARM" "$R2_AB_REPEAT" > "$R2_AB_DIR/diagnostics.txt"
+          if test -f "$R2_AB_DIR/server.pid"; then
+            pid=$(cat "$R2_AB_DIR/server.pid")
+            printf 'php_pid=%s\n' "$pid" >> "$R2_AB_DIR/diagnostics.txt"
+            if kill -0 "$pid" 2>/dev/null; then
+              echo 'php_alive=yes' >> "$R2_AB_DIR/diagnostics.txt"
+            else
+              echo 'php_alive=no' >> "$R2_AB_DIR/diagnostics.txt"
+            fi
+          fi
+          if test -r /sys/fs/cgroup/memory.events; then
+            cp /sys/fs/cgroup/memory.events "$R2_AB_DIR/memory-events.txt"
+          fi
+          if test -f "$R2_AB_DIR/server.log"; then
+            grep -E '(/wp-admin/post.php|/wp-json/wc-admin/|/wp-login.php|PHP (Fatal error|Warning|Parse error)|Uncaught)' "$R2_AB_DIR/server.log" \
+              > "$R2_AB_DIR/woo-admin-request-sequence.log" || :
+          fi
+          if test -f "$R2_AB_DIR/php-exit-code.txt" &&
+             test "$(cat "$R2_AB_DIR/php-exit-code.txt")" = '139'; then
+            echo 'native_php_sigsegv=yes' >> "$R2_AB_DIR/diagnostics.txt"
+            if command -v coredumpctl >/dev/null 2>&1; then
+              timeout 40s sudo -n coredumpctl --no-pager info "$pid" \
+                > "$R2_AB_DIR/coredumpctl-info.txt" 2>&1 || :
+            else
+              echo 'coredumpctl unavailable' > "$R2_AB_DIR/coredumpctl-info.txt"
+            fi
+          fi
+          find "$R2_AB_DIR" -maxdepth 1 -type f \( -name 'core' -o -name 'core.*' \) -delete || :
+
+      - name: Upload A-B artifact per arm
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r2-woo-editor-ab-${{ matrix.arm }}-sample-${{ matrix.repeat }}
+          path: |
+            /tmp/r2-woo-editor-ab
+            !/tmp/r2-woo-editor-ab/core
+            !/tmp/r2-woo-editor-ab/core.*
+          if-no-files-found: error
