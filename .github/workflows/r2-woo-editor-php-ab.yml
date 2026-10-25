@@ -26,6 +26,7 @@ jobs:
     env:
       R2_AB_ARM: ${{ matrix.arm }}
       R2_AB_REPEAT: ${{ matrix.repeat }}
+      R2_AB_CYCLES: '4'
       R2_AB_DIR: /tmp/r2-woo-editor-ab
       R2_BASE_URL: http://127.0.0.1:8080
     services:
