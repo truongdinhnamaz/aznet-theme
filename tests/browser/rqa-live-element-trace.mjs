@@ -40,7 +40,7 @@ try {
       consoleIssues.push({
         type:message.type(),
         text:message.text().slice(0,350),
-        source:location.url?location.url.replace(/\\?.*$/,'').slice(0,230):null,
+        source:location.url?location.url.split('?')[0].slice(0,230):null,
         line:location.lineNumber??null
       });
     });
