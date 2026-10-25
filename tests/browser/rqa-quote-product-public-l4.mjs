@@ -135,11 +135,11 @@ try {
     } catch (error) {
       caseRecord.error=String(error);
       try {
-        caseRecord.diagnostics = await page.evaluate(() => {
+        caseRecord.diagnostics = await page.evaluate((style) => {
           const selected = document.querySelector('#product-70 .variable-items-wrapper li.selected');
           const target = document.querySelector('#product-70 .variable-items-wrapper li[aria-checked="true"]');
           const form = document.querySelector('#product-70 form.variations_form');
-          const targetSwatch = Array.from(document.querySelectorAll('#product-70 .variable-items-wrapper li[data-value]')).find(li=>!li.classList.contains('selected') && li.matches(':hover')) || target;
+          const targetSwatch = document.querySelector('#product-70 .variable-items-wrapper li[data-value="' + style + '"]') || target;
           const rect=targetSwatch?.getBoundingClientRect();
           const center=rect ? {x:Math.round(rect.left+rect.width/2),y:Math.round(rect.top+rect.height/2)} : null;
           const hit=center ? document.elementFromPoint(center.x,center.y) : null;
@@ -155,7 +155,7 @@ try {
             hitTestAtHoveredCenter: center ? {center,tag:hit?.tagName||'',cls:String(hit?.className||'').slice(0,120),swatch:hit?.closest('.variable-items-wrapper li[data-value]')?.getAttribute('data-value')||''} : null,
             touchEvents:(window.__rqaTapEvents||[]).slice(-25)
           };
-        });
+        }, c.value);
       } catch {}
       try {await page.screenshot({path:path.join(dir,c.label+'-fail.png'),fullPage:false});} catch {}
       if (c.touch) {
