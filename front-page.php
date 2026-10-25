@@ -13,6 +13,14 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+// WordPress resolves front-page.php before home.php in posts-on-front mode.
+// Reuse the existing native listing (cards, query and pagination) rather than
+// echoing every Post body or duplicating the Theme's posts-index template.
+if ( function_exists( 'is_home' ) && is_home() ) {
+    get_template_part( 'home' );
+    return;
+}
+
 get_header();
 ?>
 <main id="main" class="aznet-theme-main aznet-theme-main--front-page">
