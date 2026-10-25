@@ -30,6 +30,7 @@ const evidence = {
 fs.mkdirSync(dir, {recursive: true});
 const browser = await chromium.launch({headless:true});
 let invalid = false;
+let firstTouchGateFailed = false;
 try {
   for (const testCase of cases) {
     for (const style of styles) {
@@ -129,8 +130,26 @@ try {
     };
   });
   evidence.stats=stats;
+  const control=stats.find(x=>x.mode==='production-unaltered');
+  const expected=styles.length*rounds;
+  const firstTouchAccepted=Boolean(
+    control && control.total===expected &&
+    control.valid===expected && control.firstTouchSelected===expected
+  );
+  evidence.firstTouchAcceptance={
+    mode:'production-unaltered',expected,
+    observedValid:control?.valid??0,
+    selectedOnFirstTap:control?.firstTouchSelected??0,
+    accepted:firstTouchAccepted
+  };
   fs.writeFileSync(path.join(dir,'script-strategy-hypothesis.json'),JSON.stringify(evidence,null,2));
   console.log('BROWSER-ONLY HYPOTHESIS A/B',JSON.stringify(stats));
-  console.log('IMPORTANT: any positive outcome is diagnostic only; real first-touch RED remains open');
+  if (!firstTouchAccepted) {
+    firstTouchGateFailed=true;
+    console.error('RED FIRST-TOUCH CUSTOMER GATE: public unaltered product expected '+expected+'/'+expected+' first taps; observed '+(control?.firstTouchSelected??0)+'/'+expected+'. Browser-memory no-defer arm is not an accepted fix.');
+  } else {
+    console.log('PASS FIRST-TOUCH CUSTOMER GATE: '+expected+'/'+expected+' in unaltered public HTML; other QA and production owner acceptance remain separate');
+  }
+  console.log('IMPORTANT: browser-memory no-defer is diagnostic only, never substitute for native first-touch acceptance');
 }
-if (invalid) process.exitCode=1;
+if (invalid || firstTouchGateFailed) process.exitCode=1;
