@@ -89,6 +89,26 @@ try {
       caseRecord.swatches = await swatches.evaluateAll(els=>els.map(el=>el.getAttribute('data-value')));
       if (expectedStyles.some(s=>!caseRecord.swatches.includes(s)) || caseRecord.swatches.length !== 5)
         throw new Error('One or more of five published visual style choices unavailable');
+      // Public browser-local event telemetry: captures pointer target and
+      // hit-testing without changing server state or submitting any request.
+      if (c.touch) await page.evaluate(() => {
+        window.__rqaTapEvents = [];
+        ['pointerdown','pointerup','touchstart','touchend','click','change'].forEach(type => {
+          document.addEventListener(type, event => {
+            const target = event.target instanceof Element ? event.target : null;
+            const swatch = target?.closest('.variable-items-wrapper li[data-value]');
+            window.__rqaTapEvents.push({
+              type,
+              tag: target?.tagName || '',
+              cls: String(target?.className || '').slice(0,90),
+              swatch: swatch?.getAttribute('data-value') || '',
+              pointerType: event.pointerType || '',
+              trusted: event.isTrusted,
+              selected: document.querySelector('#pa_kieu')?.value || ''
+            });
+          },true);
+        });
+      });
       const swatch = swatches.filter({hasText: c.value[0].toUpperCase() + c.value.slice(1)});
       if (c.touch) await swatch.tap(); else await swatch.click();
       await page.waitForFunction(style => document.querySelector('#pa_kieu')?.value === style, c.value, {timeout:12000});
@@ -119,6 +139,10 @@ try {
           const selected = document.querySelector('#product-70 .variable-items-wrapper li.selected');
           const target = document.querySelector('#product-70 .variable-items-wrapper li[aria-checked="true"]');
           const form = document.querySelector('#product-70 form.variations_form');
+          const targetSwatch = Array.from(document.querySelectorAll('#product-70 .variable-items-wrapper li[data-value]')).find(li=>!li.classList.contains('selected') && li.matches(':hover')) || target;
+          const rect=targetSwatch?.getBoundingClientRect();
+          const center=rect ? {x:Math.round(rect.left+rect.width/2),y:Math.round(rect.top+rect.height/2)} : null;
+          const hit=center ? document.elementFromPoint(center.x,center.y) : null;
           return {
             readyState:document.readyState, hasJQuery:Boolean(window.jQuery),
             nativeSelectValue:document.querySelector('#pa_kieu')?.value||'',
@@ -127,12 +151,24 @@ try {
             quoteVariationId:document.querySelector('#dat-hang input[name="choiceguide_quote_view_variation_id"]')?.value||'',
             quoteAttributes:document.querySelector('#dat-hang input[name="choiceguide_quote_view_attributes"]')?.value||'',
             quoteLabels:document.querySelector('#dat-hang input[name="choiceguide_quote_view_labels"]')?.value||'',
-            targetSwatchExists:Boolean(target), variationFormExists:Boolean(form)
+            targetSwatchExists:Boolean(target), variationFormExists:Boolean(form),
+            hitTestAtHoveredCenter: center ? {center,tag:hit?.tagName||'',cls:String(hit?.className||'').slice(0,120),swatch:hit?.closest('.variable-items-wrapper li[data-value]')?.getAttribute('data-value')||''} : null,
+            touchEvents:(window.__rqaTapEvents||[]).slice(-25)
           };
         });
       } catch {}
       try {await page.screenshot({path:path.join(dir,c.label+'-fail.png'),fullPage:false});} catch {}
-      console.error('FAIL selected style quote context ' + c.label + ': ' + caseRecord.error + ' | diagnostics ' + JSON.stringify(caseRecord.diagnostics));
+      if (c.touch) {
+        try {
+          const retrySwatch = page.locator('#product-70 .variable-items-wrapper li[data-value="' + c.value + '"]');
+          await retrySwatch.click({timeout:4000});
+          await page.waitForFunction(style => document.querySelector('#pa_kieu')?.value === style, c.value, {timeout:5000});
+          caseRecord.mouseClickFallback = {selectedStyle: await page.locator('#pa_kieu').inputValue(), worked: true};
+        } catch (fallbackErr) {
+          caseRecord.mouseClickFallback = {worked:false,error:String(fallbackErr)};
+        }
+      }
+      console.error('FAIL selected style quote context ' + c.label + ': ' + caseRecord.error + ' | diagnostics ' + JSON.stringify(caseRecord.diagnostics) + ' | mouseFallback ' + JSON.stringify(caseRecord.mouseClickFallback));
     } finally {
       evidence.selections.push(caseRecord);
       await ctx.close();
