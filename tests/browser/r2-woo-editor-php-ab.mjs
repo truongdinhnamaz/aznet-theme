@@ -46,6 +46,20 @@ try {
     page.locator('#wp-submit').click(),
   ]);
 
+  // Both arms visit the same real WooCommerce admin UI before opening the
+  // native Page editor. Earlier A/B artifacts had ZERO wc-admin requests,
+  // unlike the historical SIGSEGV runs, making that first control weak.
+  // We visit only normal admin screens; no private REST calls or data writes.
+  const wooAdminPage = await page.goto(
+    baseUrl + '/wp-admin/admin.php?page=wc-admin', { waitUntil: 'domcontentloaded' },
+  );
+  summary.wooAdminPageStatus = wooAdminPage?.status() ?? null;
+  if (!wooAdminPage || wooAdminPage.status() !== 200) {
+    throw new Error('WooCommerce admin UI unavailable: HTTP ' + summary.wooAdminPageStatus);
+  }
+  await page.waitForTimeout(3500);
+  summary.wooAdminRequestsBeforeEditor = summary.wooAdminRequests.length;
+
   const editUrl = baseUrl + '/wp-admin/post.php?post=' + fixtureId + '&action=edit';
   const response = await page.goto(editUrl, { waitUntil: 'domcontentloaded' });
   if (!response || response.status() !== 200) {
@@ -66,9 +80,13 @@ try {
   if (summary.editor.blockEditorPresent !== 0) {
     throw new Error('Native Page unexpectedly exposed Block Editor');
   }
-  // Give WooCommerce admin background requests an identical short observation
-  // window in both arms; this does not submit or mutate any WordPress content.
-  await page.waitForTimeout(750);
+  // Preserve the original Classic Editor assertions; then validate that this
+  // experiment really exercised the Woo admin request workload instead of
+  // silently claiming an unrelated editor-only PASS.
+  await page.waitForTimeout(1000);
+  if (summary.wooAdminRequests.length < 1) {
+    throw new Error('A/B INCONCLUSIVE: no WooCommerce admin REST requests observed');
+  }
   await page.screenshot({ path: path.join(outputDir, 'editor-classic.png'), fullPage: true });
   summary.editor.status = 'passed';
   console.log('PASS: R2 Woo editor A/B ' + arm + ' repeat ' + repeat);
