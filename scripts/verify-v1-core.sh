@@ -81,6 +81,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/d060-about-showcase
 
 printf '%s\n' '==> Retained R5 Control Center contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/r5-control-center-static-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/d050-customer-content-guide-contract.php
 
 printf '%s\n' '==> Woo asset scope regression'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/w1-woocommerce-asset-scope-contract.php
