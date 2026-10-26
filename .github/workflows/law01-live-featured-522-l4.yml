@@ -1,0 +1,53 @@
+name: Law01 public production image geometry - QA only #522
+
+on:
+  push:
+    branches:
+      - test/law01-live-featured-522-l4-20261026
+
+permissions:
+  contents: read
+
+jobs:
+  production-image-read-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - name: Checkout exact QA-only commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Enforce QA-only diff (no Theme production bytes)
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = "refs/heads/test/law01-live-featured-522-l4-20261026"
+          git merge-base --is-ancestor a987ee0db243c3a8dd7fe373a48ea2403836a70c HEAD
+          git diff --name-only a987ee0db243c3a8dd7fe373a48ea2403836a70c HEAD | sort > /tmp/law01-live-qa-diff.txt
+          cat /tmp/law01-live-qa-diff.txt
+          test "$(wc -l < /tmp/law01-live-qa-diff.txt)" -eq 2
+          grep -Fx '.github/workflows/law01-live-featured-522-l4.yml' /tmp/law01-live-qa-diff.txt
+          grep -Fx 'tests/browser/law01-live-featured-522-l4.mjs' /tmp/law01-live-qa-diff.txt
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright Chromium
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Measure live WordPress image (anonymous read-only)
+        run: node tests/browser/law01-live-featured-522-l4.mjs
+
+      - name: Retain public screenshots and computed sizes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: law01-live-featured-522-six-viewports
+          path: /tmp/law01-live-featured-522
+          if-no-files-found: warn
+          retention-days: 30
