@@ -1,0 +1,105 @@
+name: AZnet Public Catalog Live L4 (read-only)
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/aznet-public-catalog-live-l4.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  catalog-real-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Node 22 and Chrome
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify browser
+        run: google-chrome --version || chromium --version
+      - name: Install browser probe only
+        run: npm install --no-save --no-package-lock playwright@1.55.0
+      - name: Inspect real public mobile and desktop catalog without mutation
+        run: |
+          node <<'NODE'
+          const {chromium}=require('playwright');
+          const fs=require('node:fs');
+          const path=require('node:path');
+          const TMP=process.env.RUNNER_TEMP;
+          const MARKER='.aznet-digital01__commercial-catalog-home-20261026';
+          const out={scope:'UNAUTHENTICATED PUBLIC LIVE https://aznet.vn/ — no draft/preview, no CSS overlay, no cart click, no WordPress writes',runHead:process.env.GITHUB_SHA,checkedAt:new Date().toISOString(),viewports:[]};
+          function collect(){
+            const root=document.querySelector(MARKER);
+            if(!root)return {missing:true,bodyClass:document.body.className,url:location.href};
+            const rect=root.getBoundingClientRect(),grids=[...root.querySelectorAll('.aznet-digital01__services-grid')],cards=[...root.querySelectorAll('.aznet-digital01__service')];
+            const service=grids[0],positions=service?[...service.children].map(x=>x.getBoundingClientRect()):[];
+            const firstGridColumns=[...new Set(positions.map(r=>Math.round(r.left)))].length;
+            const images=[...root.querySelectorAll('img')].map(x=>({alt:x.getAttribute('alt'),title:x.getAttribute('title'),complete:x.complete,naturalWidth:x.naturalWidth,currentSrc:x.currentSrc}));
+            const links=[...root.querySelectorAll('a[href]')].map(x=>({label:x.textContent.trim(),href:x.getAttribute('href'),actualHref:x.href}));
+            const woo=root.querySelector('.woocommerce a.add_to_cart_button');
+            const process=document.querySelector('.aznet-digital01__process .aznet-digital01__text-link > a');
+            function palette(el){
+              if(!el)return {missing:true};
+              const c=getComputedStyle(el);
+              let p=el,bg=null;
+              while(p){let bc=getComputedStyle(p).backgroundColor;if(bc && bc!=='transparent' && bc!=='rgba(0, 0, 0, 0)'){bg=bc;break;}p=p.parentElement;}
+              const r=el.getBoundingClientRect();
+              return {text:el.textContent.trim().slice(0,120),foreground:c.color,ownBackground:c.backgroundColor,nearestOpaqueBackground:bg,outlineColor:c.outlineColor,outlineStyle:c.outlineStyle,outlineWidth:c.outlineWidth,href:el.getAttribute('href'),dataProductId:el.getAttribute('data-product_id'),left:r.left,right:r.right,top:r.top};
+            }
+            const cssResources=performance.getEntriesByType('resource').filter(x=>/homepage-digital-01.*\.css|aznet-theme.*\.css/.test(x.name)).map(x=>x.name).slice(0,12);
+            return {url:location.href,bodyClass:document.body.className,innerWidth,documentScrollWidth:document.documentElement.scrollWidth,
+              section:{left:rect.left,right:rect.right,width:rect.width,top:rect.top,height:rect.height,alignWide:root.classList.contains('alignwide')},
+              groupCount:grids.length,cardCount:cards.length,firstGroupColumns:firstGridColumns,firstGridTemplate:service?getComputedStyle(service).gridTemplateColumns:null,
+              offscreenCards:cards.filter(x=>{const b=x.getBoundingClientRect();return b.left < -1 || b.right > innerWidth+1;}).length,
+              headingCount:root.querySelectorAll('h3').length,images,quoteCount:links.filter(x=>/\/dat-dich-vu\?service=/.test(x.href||'')).length,
+              linkCount:links.length,hasVideoAIDiscovery:links.some(x=>(x.href||'').includes('cong-cu-video-ai-')),
+              wooCart:palette(woo),processCTA:palette(process),containsPrice:root.textContent.includes('450,000')||root.textContent.includes('450.000'),
+              hasPreviewToken:links.some(x=>(x.href||'').includes('wpvibe_preview')),
+              cssResources};
+          }
+          (async()=>{
+            const browser=await chromium.launch({channel:'chrome',headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+            let failure=false;
+            try{
+              for(const width of [390,1440]){
+                const page=await browser.newPage({viewport:{width,height:900},deviceScaleFactor:1,locale:'vi-VN'});
+                const pageErrors=[];page.on('pageerror',e=>pageErrors.push(String(e).slice(0,260)));
+                await page.goto('https://aznet.vn/',{waitUntil:'domcontentloaded',timeout:90000});
+                await page.locator(MARKER).waitFor({state:'visible',timeout:30000});
+                await page.evaluate(async()=>{await document.fonts.ready;return true});
+                const imgs=page.locator(MARKER+' img');
+                for(let i=0;i<await imgs.count();i++){
+                  await imgs.nth(i).scrollIntoViewIfNeeded();
+                  await imgs.nth(i).evaluate(async img=>{if(!img.complete) await new Promise(resolve=>{img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true});setTimeout(resolve,8000);});});
+                }
+                await page.locator(MARKER+' a[href]').first().focus();
+                await page.keyboard.press('Tab');
+                const keyboard=await page.evaluate(()=>({tag:document.activeElement?.tagName,href:document.activeElement?.getAttribute('href'),focusVisible:document.activeElement?.matches(':focus-visible'),outline:getComputedStyle(document.activeElement).outline,outlineWidth:getComputedStyle(document.activeElement).outlineWidth}));
+                const details=await page.evaluate(collect);
+                await page.locator(MARKER).screenshot({path:path.join(TMP,'aznet-public-catalog-'+width+'.png'),animations:'disabled',timeout:40000});
+                await page.screenshot({path:path.join(TMP,'aznet-public-viewport-'+width+'.png'),animations:'disabled',timeout:40000});
+                const good=details.cardCount===9&&details.images.length===3&&details.images.every(x=>x.naturalWidth>0&&x.alt)&&details.quoteCount===6&&details.wooCart?.dataProductId==='1468'&&details.section?.alignWide&&details.offscreenCards===0&&details.firstGroupColumns===(width===390?1:3)&&!details.bodyClass.includes('wpvibe-draft')&&!details.hasPreviewToken;
+                if(!good)failure=true;
+                out.viewports.push({width,structuralPass:good,keyboard,pageErrors,details});
+                console.log('LIVE_CATALOG_'+width,JSON.stringify({structuralPass:good,keyboard,pageErrors,details},null,2));
+                await page.close();
+              }
+              fs.writeFileSync(path.join(TMP,'aznet-public-catalog-visual.json'),JSON.stringify(out,null,2));
+              console.log('STRUCTURAL_AUDIT',failure?'FAIL':'PASS','Note: Lighthouse whole-page color contrast and exact live CSS are separate gates. A successful run does not claim entire website AA PASS.');
+              if(failure)process.exitCode=1;
+            } finally {await browser.close();}
+          })().catch(e=>{console.error('PUBLIC_VISUAL_QA_FAILED',e.stack||e);process.exitCode=1;});
+          NODE
+      - name: Upload public viewport, section and computed-state evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aznet-public-live-catalog-390-1440
+          path: |
+            ${{ runner.temp }}/aznet-public-catalog-390.png
+            ${{ runner.temp }}/aznet-public-catalog-1440.png
+            ${{ runner.temp }}/aznet-public-viewport-390.png
+            ${{ runner.temp }}/aznet-public-viewport-1440.png
+            ${{ runner.temp }}/aznet-public-catalog-visual.json
+          if-no-files-found: warn
