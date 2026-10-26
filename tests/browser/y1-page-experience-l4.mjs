@@ -204,6 +204,49 @@ async function inspectCase(browser, routeName, config, viewportName, viewport) {
       if (!stylesheets.some((href) => href.includes('/assets/css/components/service-card.css'))) {
         throw new Error('Shared service-card stylesheet not observed on service detail');
       }
+      // Issue #522: check WordPress native media dimensions and representative
+      // square/landscape sizes in this browser fixture, not on the live site.
+      result.serviceFeaturedSizing = await page.evaluate(async () => {
+        const figure = document.querySelector('.aznet-theme-page--service-detail .aznet-theme-page__featured');
+        const nativeImage = figure?.querySelector('img');
+        if (!(figure instanceof HTMLElement) || !(nativeImage instanceof HTMLImageElement)) {
+          throw new Error('Expected WordPress-native service featured image');
+        }
+        const inspect = (image, label) => {
+          const rect = image.getBoundingClientRect();
+          const parentWidth = figure.getBoundingClientRect().width;
+          const naturalWidth = image.naturalWidth;
+          const naturalHeight = image.naturalHeight;
+          if (naturalWidth < 1 || naturalHeight < 1) {
+            throw new Error(label + ': media has no valid intrinsic dimensions');
+          }
+          if (rect.width > Math.min(naturalWidth, parentWidth) + 1) {
+            throw new Error(label + ': bitmap upscaled from ' + naturalWidth + 'px to ' + rect.width + 'px');
+          }
+          if (Math.abs(rect.height - rect.width * naturalHeight / naturalWidth) > 1) {
+            throw new Error(label + ': intrinsic aspect ratio distorted');
+          }
+          return { label, naturalWidth, naturalHeight, renderedWidth: rect.width, renderedHeight: rect.height, parentWidth };
+        };
+        const measurements = [inspect(nativeImage, 'WordPress fixture')];
+        for (const [label, width, height] of [['square logo', 400, 400], ['landscape photo', 512, 341]]) {
+          const image = document.createElement('img');
+          image.alt = '';
+          image.width = width;
+          image.height = height;
+          image.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="' + width + '" height="' + height + '"></svg>'
+          );
+          try {
+            await image.decode();
+            figure.appendChild(image);
+            measurements.push(inspect(image, label));
+          } finally {
+            image.remove();
+          }
+        }
+        return measurements;
+      });
       result.servicePrimaryFocus = await focusEvidence(page, '.aznet-theme-page__service-primary');
       if (!result.servicePrimaryFocus?.visible || !result.servicePrimaryFocus.focusVisible || result.servicePrimaryFocus.outlineStyle === 'none' || result.servicePrimaryFocus.outlineWidth < 1) {
         throw new Error(`Service primary CTA lacks visible focus evidence: ${JSON.stringify(result.servicePrimaryFocus)}`);
