@@ -35,7 +35,22 @@ try {
         throw Error('BLOCKED_REDIRECT: unexpected origin ' + page.url());
       }
       const hero = page.locator('article.aznet-theme-page--service-detail header.aznet-theme-page__header');
-      await hero.waitFor({ state: 'visible', timeout: 20000 });
+      try {
+        await hero.waitFor({ state: 'visible', timeout: 4500 });
+      } catch (error) {
+        const dom = await page.evaluate(() => ({
+          title: document.title,
+          finalUrl: location.href,
+          bodyText: (document.body?.innerText || '').slice(0, 700),
+          bodyClass: document.body?.className || '',
+          hasMain: !!document.querySelector('#main'),
+          hasArticle: !!document.querySelector('article'),
+          hasWpCustomCss: !!document.querySelector('#wp-custom-css'),
+          htmlBytes: document.documentElement?.outerHTML.length || 0
+        }));
+        await page.screenshot({path: out + '/dom-diagnostic-' + width + '.png'}).catch(() => {});
+        throw Error('BLOCKED_BROWSER_DOM: page HTTP 200 but target service header not found: ' + JSON.stringify(dom));
+      }
       const img = page.locator('article.aznet-theme-page--service-detail .aznet-theme-page__featured img').first();
       await img.waitFor({ state: 'visible', timeout: 20000 });
       await page.waitForFunction(() => {
@@ -95,6 +110,7 @@ try {
       report.failures.push({width, errors: [message]});
       report.checks.push({width, errors: [message]});
       console.error('LAW01_LIVE_IMAGE_ERROR ' + JSON.stringify({width, message}));
+      if (message.includes('BLOCKED_BROWSER_DOM')) break;
     } finally {
       await context.close();
     }
