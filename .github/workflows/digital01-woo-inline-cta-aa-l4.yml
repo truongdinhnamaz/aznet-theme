@@ -1,0 +1,50 @@
+name: Digital 01 Woo Inline CTA Contrast L4
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'assets/css/components/homepage-digital-01.css'
+      - 'tests/browser/digital01-woo-inline-cta-aa-l4.mjs'
+      - '.github/workflows/digital01-woo-inline-cta-aa-l4.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-woo-inline-cta-candidate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright Chromium
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Run public read-only Woo CTA candidate-overlay AA and owner safety
+        env:
+          DIGITAL01_PUBLIC_URL: https://aznet.vn/
+          DIGITAL01_EVIDENCE_DIR: /tmp/digital01-woo-inline-cta-aa
+        run: |
+          set -euo pipefail
+          node --check tests/browser/digital01-woo-inline-cta-aa-l4.mjs
+          node tests/browser/digital01-woo-inline-cta-aa-l4.mjs
+          test -s /tmp/digital01-woo-inline-cta-aa/summary.json
+
+      - name: Upload read-only browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: digital01-woo-inline-cta-aa-l4
+          path: /tmp/digital01-woo-inline-cta-aa
+          if-no-files-found: warn
