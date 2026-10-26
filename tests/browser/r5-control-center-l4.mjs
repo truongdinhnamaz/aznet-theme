@@ -78,6 +78,24 @@ async function verifyNativeLinks(page) {
   }
   if (!hrefs.some((href) => href.includes('/wp-admin/nav-menus.php'))) throw new Error('overview: native Menu link missing');
   if (!hrefs.some((href) => href.includes('/wp-admin/post-new.php?post_type=page'))) throw new Error('overview: native Page/Patterns link missing');
+  const expectedLinks = [
+    [ 'Posts', (href) => href.endsWith('/wp-admin/edit.php') ],
+    [ 'Categories', (href) => href.includes('/wp-admin/edit-tags.php?taxonomy=category') ],
+    [ 'Pages', (href) => href.includes('/wp-admin/edit.php?post_type=page') ],
+    [ 'Media', (href) => href.endsWith('/wp-admin/upload.php') ],
+    [ 'Homepage presentation', (href) => href.includes('page=aznet-theme') && href.includes('section=homepage') ],
+    [ 'Footer presentation', (href) => href.includes('page=aznet-theme') && href.includes('section=footer') ],
+  ];
+  for (const [label, match] of expectedLinks) {
+    if (!hrefs.some(match)) throw new Error('overview: native source entrypoint missing: ' + label);
+  }
+  const guide = page.locator('.aznet-theme-content-editing-guide');
+  if (await guide.count() !== 1) throw new Error('overview: customer-owned editing guide missing');
+  const explanation = await guide.innerText();
+  for (const keyword of [ 'WordPress', 'Ảnh đại diện', 'Chuyên mục', 'Hỏi đáp', 'Footer', 'biểu mẫu' ]) {
+    if (!explanation.includes(keyword)) throw new Error('overview: editing-owner explanation missing ' + keyword);
+  }
+
 }
 
 async function saveQuickSetup(page) {

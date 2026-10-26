@@ -149,6 +149,24 @@ async function inspectViewport(browser, name, viewport) {
     if (await page.locator('.aznet-theme-law01-analysis-card__excerpt').count() < 3) throw new Error('Premium Analysis cards must expose WordPress-owned excerpts.');
     if (await page.locator('.aznet-theme-law01-news-featured').count() !== 1) throw new Error('Premium Legal News must expose exactly one featured story.');
     if (await page.locator('.aznet-theme-law01-news-list--secondary article').count() !== 4) throw new Error('Premium Legal News must expose four secondary stories.');
+
+    const secondaryImages = page.locator('.aznet-theme-law01-news-list--secondary .aznet-theme-law01-news-secondary__media img');
+    if (await secondaryImages.count() !== 4) throw new Error('Four secondary Legal News stories with WordPress featured media must show four thumbnails.');
+    const thumbnailGeometry = await secondaryImages.evaluateAll((images) => images.map((image) => {
+      const frame = image.closest('.aznet-theme-law01-news-secondary__media');
+      const bounds = frame?.getBoundingClientRect();
+      const imgStyles = getComputedStyle(image);
+      return {
+        linked: frame?.tagName?.toLowerCase() === 'a' && Boolean(frame.getAttribute('href')),
+        width: bounds?.width || 0,
+        height: bounds?.height || 0,
+        objectFit: imgStyles.objectFit,
+      };
+    }));
+    if (thumbnailGeometry.some((item) => !item.linked || item.width <= 1 || Math.abs(item.width / item.height - 16 / 9) > 0.06 || item.objectFit !== 'cover')) {
+      throw new Error('Secondary News images must be linked, visible, 16:9 and object-fit cover: ' + JSON.stringify(thumbnailGeometry));
+    }
+
     if (await page.locator('.aznet-theme-law01-process__source .wp-block-list').count() !== 1) throw new Error('Process must render the authored Core List when present.');
     const faqItems = await page.locator('.aznet-theme-law01-faq__items details').count();
     if (faqItems !== 3) throw new Error(`FAQ must render the three authored Core Details in the fixture, got ${faqItems}`);
