@@ -8,7 +8,11 @@ const evidenceDir = process.env.DIGITAL01_STATE_DIR || '/tmp/digital01-brand';
 fs.mkdirSync(evidenceDir, {recursive:true});
 const browser = await chromium.launch({headless:true});
 const cases = [
-  {name:'desktop', width:1440, height:950, columns:4},
+  {name:'desktop-1501', width:1501, height:950, columns:4},
+  {name:'desktop-1500', width:1500, height:950, columns:4},
+  {name:'desktop-1440', width:1440, height:950, columns:4},
+  {name:'desktop-1367', width:1367, height:950, columns:4},
+  {name:'compact-1366', width:1366, height:950, columns:4},
   {name:'tablet', width:820, height:1024, columns:2},
   {name:'mobile', width:390, height:844, columns:1},
 ];
@@ -72,7 +76,7 @@ for (const test of cases) {
   if(data.cards!==4)problems.push('expected four native service cards');
   if(data.serviceColumns!==test.columns)problems.push('wrong responsive service columns '+data.serviceColumns+' expected '+test.columns);
   if(!data.brandCSS)problems.push('branded stylesheet not loaded');
-  if (test.width >= 1100) {
+  if (test.width >= 1367) {
     if (data.consultationBackground !== 'rgb(198, 33, 33)')
       problems.push('last top-level consultation item not styled as red CTA');
     if (data.submenuLastBackground === null)
@@ -87,7 +91,7 @@ for (const test of cases) {
 
   // The bright branded Header must remain legible after the native mobile menu opens.
   // Unlike the Hero's scoped content, navigation lives in the Theme-owned site shell.
-  if (test.width <= 900) {
+  if (test.width <= 1366) {
     const trigger = page.locator('[data-aznet-theme-nav-trigger]');
     if (await trigger.count() !== 1) {
       problems.push('native mobile navigation trigger missing');
@@ -121,10 +125,12 @@ for (const test of cases) {
       await page.keyboard.press('Escape');
     }
   }
-  if (test.width >= 1100) {
+  if (test.width >= 1367) {
     const dropParent = page.locator('.aznet-theme-site-header__utility-menu > li.menu-item-has-children').first();
     if (await dropParent.count() !== 1) {
       problems.push('native Desktop utility dropdown trigger missing');
+    } else if (!await dropParent.isVisible()) {
+      problems.push('native Desktop utility dropdown trigger hidden at '+test.width+'px (check 981-1500px Header actions breakpoint)');
     } else {
       await dropParent.hover();
       const dropdown = await page.evaluate(() => {
