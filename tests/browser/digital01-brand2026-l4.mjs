@@ -36,6 +36,33 @@ for (const test of cases) {
     const offerGrid=query(sel+' .aznet-digital01__offer-grid');
     const offerCards=[...document.querySelectorAll(sel+' .aznet-digital01__offer-card')];
     const servicesSection=query(sel+' .aznet-digital01__services');
+    // The real WordPress Page continues after the Why section. The regression
+    // fixture must cover that complete native Page composition, not just Hero.
+    const continuationSelectors = [
+      '.aznet-digital01__brand-why',
+      '.aznet-digital01__process',
+      '.aznet-digital01__about',
+      '.aznet-digital01__products',
+      '.aznet-digital01__articles',
+      '.aznet-digital01__faq',
+      '.aznet-digital01__cta',
+    ];
+    const continuationNodes = continuationSelectors.map(suffix => query(sel+' '+suffix));
+    const mediaReady = img => img instanceof HTMLImageElement && img.complete && img.naturalWidth > 0;
+    const continuation = {
+      ordered: continuationNodes.every((node,i) => !!node &&
+        (i===0 || !!(continuationNodes[i-1].compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING))),
+      processSteps:document.querySelectorAll(sel+' .aznet-digital01__step').length,
+      founderPortraits:document.querySelectorAll(sel+' .aznet-digital01__portrait img').length,
+      founderImagesReady:[...document.querySelectorAll(sel+' .aznet-digital01__portrait img')].every(mediaReady),
+      productCards:document.querySelectorAll(sel+' .aznet-digital01__product').length,
+      productImagesReady:[...document.querySelectorAll(sel+' .aznet-digital01__product img')].every(mediaReady),
+      articleCards:document.querySelectorAll(sel+' .aznet-digital01__articles .wp-block-post-template .wp-block-post').length,
+      articleImagesReady:[...document.querySelectorAll(sel+' .aznet-digital01__articles .wp-block-post-featured-image img')].every(mediaReady),
+      articleImages:document.querySelectorAll(sel+' .aznet-digital01__articles .wp-block-post-featured-image img').length,
+      faqItems:document.querySelectorAll(sel+' .aznet-digital01__faq details').length,
+      ctaLinks:document.querySelectorAll(sel+' .aznet-digital01__cta a[href]').length,
+    };
     const logo = query('.aznet-theme-site-header__brand img');
     const header = query('.aznet-theme-site-header');
     const art = query(sel+' .aznet-digital01__hero-art');
@@ -74,6 +101,7 @@ for (const test of cases) {
       offerBeforeServices:!!offerSection && !!servicesSection && !!(offerSection.compareDocumentPosition(servicesSection) & Node.DOCUMENT_POSITION_FOLLOWING),
       offerBounds:offerCards.map(x=>x.getBoundingClientRect().toJSON()),
       cards:cards.length,
+      continuation,
       serviceColumns:style(services)?.gridTemplateColumns?.split(' ').filter(Boolean).length||0,
       serviceBox:services?.getBoundingClientRect()?.toJSON()||null,
       artVisible:!!art && style(art)?.display!=='none',
@@ -113,6 +141,16 @@ for (const test of cases) {
    if(test.width>900 && data.offerBounds?.length===3 && (Math.max(...data.offerBounds.map(b=>b.top))-Math.min(...data.offerBounds.map(b=>b.top))>2))
      problems.push('commercial path cards not in an equal-height row');
    if(data.cards!==4)problems.push('expected four native service cards');
+  if(!data.continuation.ordered)problems.push('missing or misordered downstream WordPress sections');
+  if(data.continuation.processSteps!==5)problems.push('expected 5 native process steps');
+  if(data.continuation.founderPortraits!==1 || !data.continuation.founderImagesReady)
+    problems.push('founder portrait missing or not decoded');
+  if(data.continuation.productCards!==2 || !data.continuation.productImagesReady)
+    problems.push('two native product cards with decoded Media required');
+  if(data.continuation.articleCards!==3 || data.continuation.articleImages!==3 || !data.continuation.articleImagesReady)
+    problems.push('native 3-article Query Loop with 3 decoded featured images required');
+  if(data.continuation.faqItems!==5)problems.push('expected 5 native FAQ details blocks');
+  if(data.continuation.ctaLinks!==2)problems.push('expected 2 native final CTA links');
   if(data.serviceColumns!==test.columns)problems.push('wrong responsive service columns '+data.serviceColumns+' expected '+test.columns);
   if(!data.brandCSS)problems.push('branded stylesheet not loaded');
   if(!data.wordpressQueryImage || data.wordpressQueryImage.width <= 0
