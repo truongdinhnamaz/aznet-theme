@@ -108,4 +108,13 @@ if (! str_contains($css, 'grid-template-columns:repeat(3,minmax(0,1fr))')) {
 if (! preg_match('~@media\s*\(max-width:\s*900px\)\s*\{\s*body\.aznet-theme-preset--digital-01\s+\.aznet-digital01--brand-2026\s+\.aznet-digital01__offer-grid\s*\{[^}]*grid-template-columns:\s*1fr~', $css)) {
     $fail('three commercial paths must stack at 900px and below');
 }
+// Brand Light links may not turn native WooCommerce cart buttons into low-AA
+// red text on provider-owned light buttons. Constrain only the optional Theme
+// presentation and reuse its semantic body token, with no !important.
+$wooSelector = 'body.aznet-theme-preset--digital-01 .aznet-digital01--brand-2026 .aznet-digital01__service .woocommerce a.add_to_cart_button';
+if (! preg_match('~' . preg_quote($wooSelector, '~') . '\\s*\\{([^}]*)\\}~', $css, $wooRule)
+    || ! preg_match('/(?:^|;)\\s*color\\s*:\\s*var\\(--d01-brand-text\\)\\s*;/i', $wooRule[1])
+    || str_contains($wooRule[1], '!important')) {
+    $fail('Brand Light must preserve native Woo CTA AA via a card-scoped semantic foreground');
+}
 echo "PASS: Digital 01 2026 reference — opt-in WordPress ownership, responsive components and WCAG AA token pairs\n";
