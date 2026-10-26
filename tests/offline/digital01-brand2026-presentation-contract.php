@@ -127,4 +127,14 @@ if (! preg_match('~' . preg_quote($footerLogoSelector, '~') . '\\s*\\{([^}]*)\\}
     $fail('Brand Light WordPress logo must have a scoped opaque padded backing on dark Footer');
 }
 
+// Real public-site RED: the native WordPress Process link rendered browser blue
+// (#0000ee) on #101f2b, only 1.78:1. The opted-in Theme must paint the
+// actual <a> in all states, without changing its WordPress-owned destination.
+$processSelector = 'body.aznet-theme-preset--digital-01 .aznet-digital01--brand-2026 .aznet-digital01__process .aznet-digital01__text-link > a';
+if (! preg_match('~' . preg_quote($processSelector, '~') . '\\s*\\{([^}]*)\\}~', $css, $processRule)
+    || ! preg_match('/\\bcolor\\s*:\\s*(#[0-9a-f]{6})\\s*!important\\s*;/i', $processRule[1], $processColor)
+    || $contrast($processColor[1], '#101f2b') < 4.5) {
+    $fail('Brand Light inverse Process CTA must have AA anchor color scoped to opt-in presentation');
+}
+
 echo "PASS: Digital 01 2026 reference — opt-in WordPress ownership, responsive components and WCAG AA token pairs\n";
