@@ -5,8 +5,6 @@
  * Run after the retained Gutenberg Core Details L4 matrix in GitHub Actions.
  * This script MUST NOT be used on any real WordPress site.
  */
-declare(strict_types=1);
-
 if (!defined('ABSPATH') || getenv('GITHUB_ACTIONS') !== 'true'
     || !str_contains((string) home_url('/'), '127.0.0.1:8080')) {
     throw new RuntimeException('Refusing to mutate any non-disposable WordPress site.');
