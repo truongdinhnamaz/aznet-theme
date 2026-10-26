@@ -37,6 +37,35 @@ $hero = $group('aznet-digital01__hero', $columns('aznet-digital01__hero-grid',
          $buttons . $group('aznet-digital01__hero-checks', $p('Tối ưu tốc độ') . $p('Chuẩn SEO') . $p('Hỗ trợ dài hạn'))) .
     $col($art)), true);
 
+// WordPress-native authoring; links and labels belong to the Page owner.
+$offer_rows = [
+  ['01 · DỊCH VỤ', 'Dịch vụ AZnet', 'Thiết kế, tối ưu và phát triển website theo nhu cầu doanh nghiệp.',
+    [['Thiết kế website','/thiet-ke-website/'],['SEO website','/dich-vu-seo/']], 'Xem dịch vụ', '/dich-vu/'],
+  ['02 · SẢN PHẨM SỐ', 'Sản phẩm AZnet phát triển', 'Plugin và giải pháp số do AZnet xây dựng cho website WordPress.',
+    [['Website Intelligence','/website-intelligence/'],['Plugin tính giá','/plugin-tinh-gia-xay-dung-cho-wordpress/']], 'Khám phá sản phẩm', '/san-pham/'],
+  ['03 · HỆ SINH THÁI', 'Công cụ hệ sinh thái', 'Công cụ bên ngoài được lựa chọn và tài nguyên AI hỗ trợ website.',
+    [['EWWW Image Optimizer','/ewww-image-optimizer/'],['Công cụ video AI','/cong-cu-video-ai-chon-loc-boi-aznet-viet-nam/']], 'Xem công cụ', '/ewww-image-optimizer/'],
+];
+$offer_cards = '';
+foreach ($offer_rows as [$label,$title,$description,$related,$action,$action_url]) {
+    $links = '';
+    foreach ($related as [$link_title,$link_url]) {
+        $links .= $p('<a href="' . esc_url($link_url) . '">' . esc_html($link_title) . '</a>');
+    }
+    $offer_cards .= $group('aznet-digital01__offer-card',
+        $p(esc_html($label),'aznet-digital01__offer-kind') .
+        $h(3,esc_html($title)) .
+        $p(esc_html($description),'aznet-digital01__offer-description') .
+        $group('aznet-digital01__offer-links', $links) .
+        $p('<a href="' . esc_url($action_url) . '">' . esc_html($action) . ' →</a>', 'aznet-digital01__offer-more'));
+}
+$offers = $group('aznet-digital01__offer-paths aznet-digital01__section',
+    $group('aznet-digital01__offer-inner',
+        $p('DỊCH VỤ · SẢN PHẨM AZNET · CÔNG CỤ HỆ SINH THÁI','aznet-digital01__eyebrow') .
+        $h(2,'Ba hướng giải pháp, một nền tảng phát triển website.') .
+        $p('Chọn dịch vụ chuyên môn, sản phẩm do AZnet phát triển hoặc công cụ được tuyển chọn phù hợp với nhu cầu.','aznet-digital01__intro') .
+        $group('aznet-digital01__offer-grid',$offer_cards)), true);
+
 $service_rows = [
     ['W', 'Thiết kế website WordPress', 'Website hiện đại, linh hoạt và dễ quản trị.', '/dich-vu/'],
     ['🚀', 'Tối ưu hiệu suất Website', 'Tăng tốc độ và trải nghiệm sử dụng.', '/dich-vu/'],
@@ -68,7 +97,7 @@ $why = $group('aznet-digital01__brand-why',
              $h(2,'Giải pháp toàn diện cho <em>doanh nghiệp số</em>') .
              $p('Không chỉ là giao diện mà còn là website có khả năng tạo giá trị.','aznet-digital01__intro')) .
         $col($group('aznet-digital01__brand-feature-grid',$features))),true);
-$all = $group('aznet-digital01 aznet-digital01--brand-2026',$hero.$services.$why,true);
+$all = $group('aznet-digital01 aznet-digital01--brand-2026',$hero.$offers.$services.$why,true);
 $result=wp_update_post(['ID'=>$front_id,'post_content'=>wp_slash($all)],true);
 if(is_wp_error($result))throw new RuntimeException('WordPress fixture Page update: '.$result->get_error_message());
 if(!str_contains((string)get_post($front_id)->post_content,'aznet-digital01--brand-2026')){

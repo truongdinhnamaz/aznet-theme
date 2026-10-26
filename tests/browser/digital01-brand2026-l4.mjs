@@ -32,6 +32,10 @@ for (const test of cases) {
     const h1 = query(sel+' h1');
     const cards = [...document.querySelectorAll(sel+' .aznet-digital01__service')];
     const services = query(sel+' .aznet-digital01__services-grid');
+    const offerSection=query(sel+' .aznet-digital01__offer-paths');
+    const offerGrid=query(sel+' .aznet-digital01__offer-grid');
+    const offerCards=[...document.querySelectorAll(sel+' .aznet-digital01__offer-card')];
+    const servicesSection=query(sel+' .aznet-digital01__services');
     const logo = query('.aznet-theme-site-header__brand img');
     const header = query('.aznet-theme-site-header');
     const art = query(sel+' .aznet-digital01__hero-art');
@@ -46,6 +50,13 @@ for (const test of cases) {
       heroBackground:style(hero)?.backgroundImage||null,
       h1:h1?.textContent?.trim()||null,
       h1Color:style(h1)?.color||null,
+      offerCards:offerCards.length,
+      offerHeadings:offerCards.map(x=>x.querySelector('h3')?.textContent?.trim()),
+      offerColumns:style(offerGrid)?.gridTemplateColumns?.split(' ').filter(Boolean).length||0,
+      offerLinks:offerCards.map(x=>[...x.querySelectorAll('a[href]')].map(a=>a.getAttribute('href'))),
+      offerAfterHero:!!hero && !!offerSection && !!(hero.compareDocumentPosition(offerSection) & Node.DOCUMENT_POSITION_FOLLOWING),
+      offerBeforeServices:!!offerSection && !!servicesSection && !!(offerSection.compareDocumentPosition(servicesSection) & Node.DOCUMENT_POSITION_FOLLOWING),
+      offerBounds:offerCards.map(x=>x.getBoundingClientRect().toJSON()),
       cards:cards.length,
       serviceColumns:style(services)?.gridTemplateColumns?.split(' ').filter(Boolean).length||0,
       serviceBox:services?.getBoundingClientRect()?.toJSON()||null,
@@ -73,7 +84,16 @@ for (const test of cases) {
   if(data.headerBackground!=='rgb(255, 255, 255)')problems.push('header not white');
   if(data.h1Color!=='rgb(11, 35, 77)')problems.push('hero title color not navy');
   if(!data.h1?.includes('tăng trưởng thực sự'))problems.push('target Hero heading missing');
-  if(data.cards!==4)problems.push('expected four native service cards');
+  if(data.offerCards!==3)problems.push('expected three WordPress-owned commercial path cards');
+   if(data.offerColumns!==(test.width<=900?1:3))problems.push('incorrect commercial path columns '+data.offerColumns+' at '+test.width+'px');
+   if(!data.offerAfterHero || !data.offerBeforeServices)problems.push('commercial paths must be after Hero and before Services');
+   if(JSON.stringify(data.offerHeadings)!==JSON.stringify(['Dịch vụ AZnet','Sản phẩm AZnet phát triển','Công cụ hệ sinh thái']))
+     problems.push('commercial path headings or order incorrect');
+   if(data.offerLinks?.length!==3 || data.offerLinks.some(links=>links.length<3 || links.some(href=>!href || href==='#')))
+     problems.push('each commercial path needs three public WordPress links');
+   if(test.width>900 && data.offerBounds?.length===3 && (Math.max(...data.offerBounds.map(b=>b.top))-Math.min(...data.offerBounds.map(b=>b.top))>2))
+     problems.push('commercial path cards not in an equal-height row');
+   if(data.cards!==4)problems.push('expected four native service cards');
   if(data.serviceColumns!==test.columns)problems.push('wrong responsive service columns '+data.serviceColumns+' expected '+test.columns);
   if(!data.brandCSS)problems.push('branded stylesheet not loaded');
   if (test.width >= 1367) {
@@ -171,12 +191,14 @@ if(!Number.isInteger(landingId) || landingId <= 0){
       h1Text: document.querySelector('h1')?.textContent?.trim(),
       extraPageHeader: !!document.querySelector('.aznet-theme-page__header'),
       CSSActive: performance.getEntriesByType('resource').some(r=>r.name.includes('homepage-digital-01-brand-2026.css')),
+      offerCards:document.querySelectorAll('.aznet-digital01--brand-2026 .aznet-digital01__offer-card').length,
       scrollWidth:document.documentElement.scrollWidth,
       viewportWidth:window.innerWidth
     }));
     const problems = [];
     if(!data.pageClass.includes('page-template-landing')) problems.push('native Page landing template not selected');
     if(!data.branded || !data.CSSActive) problems.push('opt-in presentation missing from native Page route');
+    if(data.offerCards!==3) problems.push('three commercial paths missing from native Landing Page');
     if(data.h1Count!==1 || data.h1Text!=='Xây dựng website tăng trưởng thực sự')
       problems.push('native Landing Page H1 incorrectly duplicated or missing');
     if(data.extraPageHeader) problems.push('extra native Page header breaks Hero-first composition');

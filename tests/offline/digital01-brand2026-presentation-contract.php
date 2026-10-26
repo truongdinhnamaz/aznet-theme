@@ -93,4 +93,19 @@ if (! str_contains($css, '.aznet-theme-site-header__utility-menu > li:last-child
     || str_contains($css, '.aznet-theme-site-header__utility-menu li:last-child > a')) {
     $fail('Header CTA must target only final top-level menu item, not submenu children');
 }
+// Only opt-in Brand Light may render the three equal WordPress-authored paths.
+foreach (['.aznet-digital01__offer-paths','.aznet-digital01__offer-inner',
+          '.aznet-digital01__offer-grid','.aznet-digital01__offer-card',
+          '.aznet-digital01__offer-kind','.aznet-digital01__offer-links',
+          '.aznet-digital01__offer-more'] as $selector) {
+    if (! str_contains($css, $selector)) {
+        $fail('missing three-path presentation selector ' . $selector);
+    }
+}
+if (! str_contains($css, 'grid-template-columns:repeat(3,minmax(0,1fr))')) {
+    $fail('three commercial paths must use three equal desktop columns');
+}
+if (! preg_match('~@media\s*\(max-width:\s*900px\)\s*\{\s*body\.aznet-theme-preset--digital-01\s+\.aznet-digital01--brand-2026\s+\.aznet-digital01__offer-grid\s*\{[^}]*grid-template-columns:\s*1fr~', $css)) {
+    $fail('three commercial paths must stack at 900px and below');
+}
 echo "PASS: Digital 01 2026 reference — opt-in WordPress ownership, responsive components and WCAG AA token pairs\n";
