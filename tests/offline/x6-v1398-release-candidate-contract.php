@@ -79,8 +79,7 @@ $historical = [
 foreach ($historical as $filename => [$job, $historical_marker]) {
     $historical_workflow = (string) file_get_contents($root . '/.github/workflows/' . $filename);
     if (!str_contains($historical_workflow, "  historical_scope:\n")
-        || !str_contains($historical_workflow, 'ref: 
- . '{{ github.event.pull_request.head.sha }}')
+        || !str_contains($historical_workflow, 'ref: ' . chr(36) . '{{ github.event.pull_request.head.sha }}')
         || !str_contains($historical_workflow, "  {$job}:\n    needs: historical_scope\n    if: needs.historical_scope.outputs.is_target == 'true'")
         || !str_contains($historical_workflow, "if [[ \"\$version\" == '1.3.97' ]]")
         || !str_contains($historical_workflow, "echo 'is_target=false' >> \"\$GITHUB_OUTPUT\"")
