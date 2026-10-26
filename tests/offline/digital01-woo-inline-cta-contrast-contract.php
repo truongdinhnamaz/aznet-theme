@@ -17,7 +17,7 @@ $fail = static function (string $reason): never {
     exit(1);
 };
 
-$selector = 'body.aznet-theme-preset--digital-01 .aznet-digital01__service .woocommerce a.button';
+$selector = 'body.aznet-theme-preset--digital-01 .aznet-digital01__service .woocommerce a.add_to_cart_button';
 if (!preg_match('/' . preg_quote($selector, '/') . '\s*\{([^}]*)\}/s', $css, $match)) {
     $fail('Woo inline add-to-cart link lacks scoped foreground on its native button');
 }
