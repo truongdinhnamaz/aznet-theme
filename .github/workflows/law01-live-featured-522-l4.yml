@@ -34,11 +34,12 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Install Playwright Chromium
+      - name: Use preinstalled GitHub runner Chrome (no browser download)
         run: |
           set -euo pipefail
           npm install --no-save --no-package-lock playwright@1.55.0
-          npx playwright install --with-deps chromium
+          command -v google-chrome
+          google-chrome --version
 
       - name: Measure live WordPress image (anonymous read-only)
         run: node tests/browser/law01-live-featured-522-l4.mjs

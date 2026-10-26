@@ -18,7 +18,7 @@ if (process.env.GITHUB_REF !== branch) {
 mkdirSync(out, { recursive: true });
 const report = { url, testedCommit: process.env.GITHUB_SHA || '', testedAt: new Date().toISOString(),
   scope: 'anonymous public production READ ONLY; no injected CSS', checks: [], failures: [] };
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ headless: true, channel: 'chrome' });
 try {
   for (const width of widthList) {
     const context = await browser.newContext({
