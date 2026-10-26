@@ -137,4 +137,12 @@ if (! preg_match('~' . preg_quote($processSelector, '~') . '\\s*\\{([^}]*)\\}~',
     $fail('Brand Light inverse Process CTA must have AA anchor color scoped to opt-in presentation');
 }
 
+// The external Brand CSS is source-of-truth, but stale CDN minification can
+// outlive WordPress cache purges. WordPress must print a minimal Page-scoped
+// fail-safe inline rule on the same brand handle, never a global plugin hook.
+if (! str_contains($assets, 'wp_add_inline_style(')
+    || ! str_contains($assets, $processSelector . '{color:#ff9d85!important;')) {
+    $fail('opted-in native inline Process CTA fallback missing for stale CDN CSS');
+}
+
 echo "PASS: Digital 01 2026 reference — opt-in WordPress ownership, responsive components and WCAG AA token pairs\n";
