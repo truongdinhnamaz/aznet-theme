@@ -73,6 +73,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/d057-digital01-head
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/d058-landing-fullwidth-inverse-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/digital01-process-link-contrast-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/digital01-woo-inline-cta-contrast-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/digital01-commercial-media-surface-contract.php
 
 printf '%s\n' '==> D-060 authored About Showcase v2 surface-aware CSS contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/d060-about-showcase-contract.php
