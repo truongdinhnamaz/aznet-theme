@@ -24,6 +24,15 @@ for (const test of cases) {
   const errors = [];
   page.on('pageerror',err=>errors.push(String(err)));
   await page.goto(base,{waitUntil:'networkidle',timeout:90000});
+  // WP Core marks below-the-fold Query featured images loading="lazy".
+  // Explicitly visit each image before checking naturalWidth: networkidle
+  // alone does not load images that never entered the viewport.
+  const nativeArticleImages = page.locator('.aznet-digital01--brand-2026 .aznet-digital01__articles .wp-block-post-featured-image img');
+  for (const image of await nativeArticleImages.all()) {
+    await image.scrollIntoViewIfNeeded();
+    await image.evaluate(async img => { try { await img.decode(); } catch {} });
+  }
+  await page.evaluate(() => window.scrollTo(0, 0));
   const data = await page.evaluate(() => {
     const query = x=>document.querySelector(x);
     const sel = '.aznet-digital01--brand-2026';
@@ -168,6 +177,18 @@ for (const test of cases) {
       problems.push('nested submenu last item incorrectly styled as red CTA');
   }
   if(!data.artVisible || !data.artBox?.width)problems.push('hero art not visually laid out');
+  // Verify native Gutenberg details/summary is operable with keyboard.
+  if (test.width === 390 && data.continuation.faqItems === 5) {
+    const disclosure = page.locator('.aznet-digital01__faq details').first();
+    const summaryTrigger = disclosure.locator('summary');
+    await summaryTrigger.focus();
+    await page.keyboard.press('Enter');
+    if (!await disclosure.evaluate(element => element.open))
+      problems.push('native FAQ cannot be opened via keyboard Enter');
+    await page.keyboard.press('Enter');
+    if (await disclosure.evaluate(element => element.open))
+      problems.push('native FAQ cannot be closed via keyboard Enter');
+  }
   if(data.scrollWidth>data.viewportWidth+2)problems.push('horizontal overflow '+data.scrollWidth+'> '+data.viewportWidth);
   if(violations.length)problems.push('WCAG tagged violations: '+violations.map(x=>x.id).join(','));
   if(errors.length)problems.push('JavaScript errors '+errors.join(','));
