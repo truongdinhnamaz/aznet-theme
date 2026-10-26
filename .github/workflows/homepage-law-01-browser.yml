@@ -1,4 +1,4 @@
-name: Homepage Composer Law 01 Browser Quality
+name: QA ONLY - Law 01 v1.3.98 Target-Stack WP7.1.3 PHP8.5 Parity
 
 on:
   pull_request:
@@ -64,15 +64,28 @@ jobs:
       - name: Checkout exact candidate
         uses: actions/checkout@v4
 
-      - name: Record exact checkout identity
-        run: git rev-parse HEAD
+      - name: Require disposable test-only branch, exact candidate SHA and version
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${{ github.event_name }}" = 'pull_request'
+          test "${{ github.event.pull_request.head.ref }}" = 'test/law01-v1398-wp713-php85-parity-20261026'
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+          test "$(sed -n 's/^Version:[[:space:]]*//p' style.css | head -n 1)" = '1.3.98'
+          test "$(sed -n "s/.*define( 'AZNET_THEME_VERSION', '\([^']*\)' );.*/\1/p" functions.php | head -n 1)" = '1.3.98'
+          echo 'PASS: QA-only exact candidate identity; no client site or deployment'
 
-      - name: Set up PHP 8.1
+      - name: Set up target runtime PHP 8.5.x
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: '8.5'
           extensions: mysqli, gd
           coverage: none
+
+      - name: Require target PHP 8.5 runtime
+        run: |
+          set -euo pipefail
+          php -r 'if (PHP_MAJOR_VERSION !== 8 || PHP_MINOR_VERSION !== 5) { fwrite(STDERR, "FAIL: expected PHP 8.5.x".PHP_EOL); exit(1); } echo "PASS: PHP ".PHP_VERSION.PHP_EOL;'
 
       - name: Verify Homepage Composer offline contracts
         run: |
@@ -105,7 +118,7 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Install WordPress 6.9 and exact Theme candidate
+      - name: Install public-safe WordPress 7.1.3 and exact 1.3.98 ZIP
         run: |
           set -euo pipefail
           curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
@@ -114,17 +127,27 @@ jobs:
 
           rm -rf /tmp/wp /tmp/homepage-law01
           mkdir -p /tmp/wp /tmp/homepage-law01
-          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp core download --version=7.1.3 --path=/tmp/wp --force --allow-root
           wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
           wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='AZnet Law 01' --admin_user=admin --admin_password='law01-browser-password' --admin_email=law01@example.test --skip-email --allow-root
 
-          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
-          rsync -a --delete \
-            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
-            --exclude='README.md' --exclude='aznet-preview.png' \
-            ./ /tmp/wp/wp-content/themes/aznet-theme/
+          # Build the exact audited release candidate; never install unverified git source.
+          python3 scripts/build-release-package.py --source . --output /tmp/homepage-law01/aznet-theme-1.3.98.zip --version 1.3.98
+          printf '%s  %s\n' 'db77d124e1f5702fb4c3ac9c3e20e3d79fc4ff5c4ea15b578908cb9eb0973807' /tmp/homepage-law01/aznet-theme-1.3.98.zip | sha256sum --check
+          mkdir -p /tmp/wp/wp-content/themes
+          unzip -q /tmp/homepage-law01/aznet-theme-1.3.98.zip -d /tmp/wp/wp-content/themes
+          test "$(find /tmp/wp/wp-content/themes/aznet-theme -type f | wc -l)" -eq 241
           wp theme activate aznet-theme --path=/tmp/wp --allow-root
-          wp core version --path=/tmp/wp --allow-root | grep -Fx '6.9'
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp --allow-root)"
+          {
+            echo "Candidate git SHA: $(git rev-parse HEAD)"
+            echo "Candidate production ZIP SHA256: $(sha256sum /tmp/homepage-law01/aznet-theme-1.3.98.zip)"
+            echo "Target PHP version: $(php -r 'echo PHP_VERSION;')"
+            echo "WordPress version: $(wp core version --path=/tmp/wp --allow-root)"
+            echo "Active Theme: $(wp theme list --status=active --field=name --path=/tmp/wp --allow-root)"
+            echo 'Optional provider plugins: ABSENT (Core L3/L4 only; not real L5)'
+          } > /tmp/homepage-law01/staging-parity-provenance.txt
+          wp core version --path=/tmp/wp --allow-root | grep -Fx '7.1.3'
           wp theme status aznet-theme --path=/tmp/wp --allow-root | grep -F 'Status: Active'
 
       - name: Create typed WordPress Law 01 fixture
