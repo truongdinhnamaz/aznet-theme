@@ -410,6 +410,38 @@
 }
 .aznet-theme-homepage--law-01 .aznet-theme-law01-news-list h3 { margin: 0; }
 
+/* Secondary editorial/news media consume WordPress native Featured Image only. */
+.aznet-theme-homepage--law-01 .aznet-theme-law01-news-secondary__lead {
+    display: grid;
+    align-content: start;
+    gap: .5rem;
+    min-width: 0;
+}
+.aznet-theme-homepage--law-01 .aznet-theme-law01-news-secondary__lead .aznet-theme-law01-meta {
+    margin: 0;
+}
+.aznet-theme-homepage--law-01 .aznet-theme-law01-news-secondary__media {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: .25rem;
+    background: #f4eadb;
+}
+.aznet-theme-homepage--law-01 .aznet-theme-law01-news-secondary__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+@media (max-width: 48rem) {
+    .aznet-theme-homepage--law-01 .aznet-theme-law01-news-secondary__media {
+        max-width: 10rem;
+    }
+}
+
+
 .aznet-theme-homepage--law-01 .aznet-theme-law01-process .aznet-theme-law01-panel {
     display: grid;
     grid-template-columns: minmax(0, .75fr) minmax(18rem, 1.25fr);
