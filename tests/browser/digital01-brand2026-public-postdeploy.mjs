@@ -121,6 +121,26 @@ for (const view of viewports) {
         cssBaseActive: !!document.querySelector(
           'link[href*="homepage-digital-01.css?ver=1.3.97"]'
         ),
+        debugStyles: {
+          brandLinkTags: [...document.querySelectorAll('link')].filter(el =>
+            (el.href || '').includes('digital-01') || (el.href || '').includes('cache/')
+          ).map(el => ({ href: el.href, rel: el.rel, media: el.media, disabled: el.disabled })),
+          stylesheets: [...document.styleSheets].map(sheet => sheet.href).filter(Boolean).filter(
+            href => href.includes('digital-01') || href.includes('cache/')
+          ),
+          processLink: (() => {
+            const link = document.querySelector('.aznet-digital01__process .aznet-digital01__text-link a');
+            if (!link) return null;
+            const style = getComputedStyle(link);
+            const parent = getComputedStyle(link.parentElement);
+            return {
+              html: link.outerHTML.slice(0, 400), color: style.color, fontSize: style.fontSize,
+              weight: style.fontWeight, parentColor: parent.color,
+              directChild: link.matches('.aznet-digital01__process .aznet-digital01__text-link > a'),
+              ancestors: [link.parentElement?.className, link.parentElement?.parentElement?.className],
+            };
+          })(),
+        },
         canonical: document.querySelector('link[rel="canonical"]')?.href || '',
         robots: document.querySelector('meta[name="robots"]')?.content || '',
         viewportWidth: window.innerWidth,
