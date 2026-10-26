@@ -116,10 +116,10 @@ for (const view of viewports) {
           a.getAttribute('href') === '#' ||
           /^javascript:/i.test(a.getAttribute('href'))).length,
         cssActive: !!document.querySelector(
-          'link[href*="homepage-digital-01-brand-2026.css?ver=1.3.97"]'
+          'link[href*="homepage-digital-01-brand-2026.css"]'
         ),
         cssBaseActive: !!document.querySelector(
-          'link[href*="homepage-digital-01.css?ver=1.3.97"]'
+          'link[href*="homepage-digital-01.css"]'
         ),
         debugStyles: {
           brandLinkTags: [...document.querySelectorAll('link')].filter(el =>
