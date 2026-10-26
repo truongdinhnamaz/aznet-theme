@@ -97,7 +97,167 @@ $why = $group('aznet-digital01__brand-why',
              $h(2,'Giải pháp toàn diện cho <em>doanh nghiệp số</em>') .
              $p('Không chỉ là giao diện mà còn là website có khả năng tạo giá trị.','aznet-digital01__intro')) .
         $col($group('aznet-digital01__brand-feature-grid',$features))),true);
-$all = $group('aznet-digital01 aznet-digital01--brand-2026',$hero.$offers.$services.$why,true);
+
+// Extend the disposable-only fixture through the entire native WordPress Page.
+// WordPress owns fixture posts/Media; Theme only styles their public markup.
+// These examples are NOT authoritative AZnet identity, catalog or commerce data.
+require_once ABSPATH . 'wp-admin/includes/file.php';
+require_once ABSPATH . 'wp-admin/includes/image.php';
+require_once ABSPATH . 'wp-admin/includes/media.php';
+$qa_media = [];
+foreach ([
+    'portrait' => 'assets/starter/law01/editorial-1.webp',
+    'product_a' => 'assets/starter/law01/editorial-2.webp',
+    'product_b' => 'assets/starter/law01/editorial-3.webp',
+    'article' => 'assets/starter/law01/hero.webp',
+] as $key => $relative) {
+    $source = get_stylesheet_directory() . '/' . $relative;
+    $temp = tempnam(sys_get_temp_dir(), 'aznet-d01-qa-');
+    if (!is_file($source) || false === $temp || !copy($source, $temp)) {
+        throw new RuntimeException('Disposable WordPress Media fixture source missing: ' . $relative);
+    }
+    $media = media_handle_sideload([
+        'name' => 'aznet-d01-qa-' . $key . '.webp',
+        'type' => 'image/webp',
+        'tmp_name' => $temp,
+        'error' => 0,
+        'size' => filesize($temp),
+    ], 0, 'Disposable WordPress-owned Brand Light QA image');
+    if (is_wp_error($media)) {
+        @unlink($temp);
+        throw new RuntimeException('Disposable WordPress Media import: ' . $media->get_error_message());
+    }
+    $url = wp_get_attachment_image_url((int) $media, 'full');
+    if (!is_string($url) || '' === $url) {
+        throw new RuntimeException('Disposable WordPress Media URL missing: ' . $key);
+    }
+    $qa_media[$key] = ['id' => (int) $media, 'url' => $url];
+}
+$post_ids = get_posts([
+    'post_type' => 'post', 'post_status' => 'publish',
+    'numberposts' => 3, 'fields' => 'ids',
+]);
+if (3 !== count($post_ids)) {
+    throw new RuntimeException('Disposable WordPress Query must have 3 posts');
+}
+foreach ($post_ids as $post_id) {
+    if (!set_post_thumbnail((int) $post_id, $qa_media['article']['id'])) {
+        throw new RuntimeException('Disposable WordPress featured image assignment failed');
+    }
+}
+
+$wide = static function (string $cls, string $inside): string {
+    $attrs = ['align' => 'wide', 'className' => $cls, 'layout' => ['type' => 'default']];
+    return '<!-- wp:group ' . wp_json_encode($attrs, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) .
+        ' --><div class="wp-block-group alignwide ' . esc_attr($cls) . '">' .
+        $inside . '</div><!-- /wp:group -->';
+};
+$image = static function (array $media, string $cls, string $alt): string {
+    $attrs = [
+        'id' => $media['id'], 'sizeSlug' => 'full',
+        'linkDestination' => 'none', 'className' => $cls,
+    ];
+    return '<!-- wp:image ' . wp_json_encode($attrs, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) .
+        ' --><figure class="wp-block-image size-full ' . esc_attr($cls) . '">' .
+        '<img src="' . esc_url($media['url']) . '" alt="' . esc_attr($alt) .
+        '" class="wp-image-' . (int) $media['id'] . '"/></figure><!-- /wp:image -->';
+};
+
+$steps = '';
+foreach ([
+    ['01', 'Khảo sát', 'Hiểu mục tiêu và hiện trạng.'],
+    ['02', 'Khách hàng', 'Xác định nhu cầu và hành trình.'],
+    ['03', 'Cấu trúc', 'Sắp xếp nội dung và giải pháp.'],
+    ['04', 'Triển khai', 'Xây dựng và kiểm thử.'],
+    ['05', 'Cải tiến', 'Theo dõi và nâng cấp liên tục.'],
+] as [$number, $heading, $description]) {
+    $steps .= $group('aznet-digital01__step',
+        $p(esc_html($number), 'aznet-digital01__step-number') .
+        $h(3, esc_html($heading)) . $p(esc_html($description)));
+}
+$process = $group('aznet-digital01__process aznet-digital01__section',
+    $group('aznet-digital01__process-inner',
+        $p('QUY TRÌNH TRIỂN KHAI', 'aznet-digital01__eyebrow') .
+        $h(2, 'Từ kế hoạch đến kết quả được kiểm chứng.') .
+        $p('Năm bước minh họa bằng nội dung WordPress thử nghiệm.', 'aznet-digital01__intro') .
+        $group('aznet-digital01__process-grid', $steps) .
+        $p('<a href="/du-an/">Xem dự án ví dụ →</a>', 'aznet-digital01__text-link')), true);
+
+$about = $wide('aznet-digital01__about aznet-digital01__section',
+    $columns('aznet-digital01__about-grid',
+        $col($image($qa_media['portrait'], 'aznet-digital01__portrait', 'Chân dung minh họa trong fixture kiểm thử')) .
+        $col($p('CON NGƯỜI CHỊU TRÁCH NHIỆM', 'aznet-digital01__eyebrow') .
+             $h(2, 'Người phụ trách dự án') .
+             $p('Hồ sơ mẫu minh họa bố cục hai cột, không đại diện danh tính thật.', 'aznet-digital01__intro') .
+             $p('WordPress sở hữu nội dung hồ sơ; Theme chỉ sở hữu trình bày.', 'aznet-digital01__intro') .
+             $p('<a href="/gioi-thieu/">Tìm hiểu thêm →</a>', 'aznet-digital01__text-link'))));
+
+$product_cards = '';
+foreach ([
+    ['product_a', 'Công cụ WordPress mẫu', 'Ứng dụng mẫu'],
+    ['product_b', 'Plugin tiện ích mẫu', 'Plugin mẫu'],
+] as [$media_key, $title, $eyebrow]) {
+    $product_cards .= $group('aznet-digital01__product',
+        $image($qa_media[$media_key], 'aznet-digital01__product-image', $title . ' — ảnh kiểm thử') .
+        $group('aznet-digital01__product-copy',
+            $p(esc_html($eyebrow), 'aznet-digital01__eyebrow') .
+            $h(3, esc_html($title)) .
+            $p('<a href="/san-pham/">Xem danh mục →</a>', 'aznet-digital01__text-link')));
+}
+$products = $group('aznet-digital01__products aznet-digital01__section',
+    $group('aznet-digital01__section',
+        $p('SẢN PHẨM MẪU', 'aznet-digital01__eyebrow') .
+        $h(2, 'Công cụ có giao diện dễ tiếp cận.') .
+        $p('Dữ liệu minh họa; không chứa trạng thái WooCommerce.', 'aznet-digital01__intro') .
+        $group('aznet-digital01__products-grid', $product_cards)), true);
+
+$native_query = '<!-- wp:query {"queryId":0,"query":{"perPage":3,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","inherit":false}} -->'
+    . '<div class="wp-block-query"><!-- wp:post-template -->'
+    . '<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"16/9"} /-->'
+    . '<!-- wp:post-date {"fontSize":"sm"} /-->'
+    . '<!-- wp:post-title {"level":3,"isLink":true} /-->'
+    . '<!-- wp:post-excerpt {"moreText":"Đọc tiếp"} /-->'
+    . '<!-- /wp:post-template --></div><!-- /wp:query -->';
+$articles = $wide('aznet-digital01__articles aznet-digital01__section',
+    $p('BÀI VIẾT WORDPRESS', 'aznet-digital01__eyebrow') .
+    $h(2, 'Kiến thức từ dữ liệu xuất bản mẫu.') .
+    $p('Ba bài viết được truy vấn bởi WordPress Query Loop thực.', 'aznet-digital01__intro') .
+    $native_query .
+    $p('<a href="/kien-thuc/">Xem danh sách bài viết →</a>', 'aznet-digital01__text-link'));
+
+$faq_items = '';
+foreach ([
+    ['Cần chuẩn bị thông tin gì?', 'Xác định mục tiêu và phạm vi dự án.'],
+    ['Có thể cải tiến website hiện hữu?', 'Việc đánh giá phụ thuộc hiện trạng thực tế.'],
+    ['Ai chịu trách nhiệm quản trị?', 'WordPress và đơn vị vận hành sở hữu nội dung.'],
+    ['Giao diện có hỗ trợ điện thoại?', 'Theme trình bày nội dung theo viewport.'],
+    ['Bắt đầu liên hệ bằng cách nào?', 'Sử dụng liên kết tư vấn được công bố.'],
+] as [$question, $answer]) {
+    $faq_items .= '<!-- wp:details {"className":"aznet-digital01__faq-item"} -->'
+        . '<details class="wp-block-details aznet-digital01__faq-item"><summary>' .
+        esc_html($question) . '</summary>' . $p(esc_html($answer)) .
+        '</details><!-- /wp:details -->';
+}
+$faq = $wide('aznet-digital01__faq aznet-digital01__section',
+    $columns('aznet-digital01__faq-grid',
+        $col($p('FAQ MẪU', 'aznet-digital01__eyebrow') .
+             $h(2, 'Các câu hỏi thường gặp.') .
+             $p('Kiểm tra tương tác details/summary gốc WordPress.', 'aznet-digital01__intro')) .
+        $col($group('aznet-digital01__faq-list', $faq_items))));
+
+$cta_buttons = '<!-- wp:buttons --><div class="wp-block-buttons">'
+    . '<!-- wp:button --><div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="/lien-he/">Liên hệ tư vấn</a></div><!-- /wp:button -->'
+    . '<!-- wp:button {"className":"is-style-outline"} --><div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="/san-pham/">Xem sản phẩm</a></div><!-- /wp:button -->'
+    . '</div><!-- /wp:buttons -->';
+$cta = $group('aznet-digital01__cta',
+    $group('aznet-digital01__cta-inner',
+        $p('BẮT ĐẦU KẾ HOẠCH', 'aznet-digital01__eyebrow') .
+        $h(2, 'Website của bạn cần cải thiện điều gì?') .
+        $p('Mẫu WordPress chỉ để kiểm tra bố cục và CTA.') .
+        $cta_buttons), true);
+
+$all = $group('aznet-digital01 aznet-digital01--brand-2026',
+    $hero . $offers . $services . $why . $process . $about . $products . $articles . $faq . $cta, true);
 $result=wp_update_post(['ID'=>$front_id,'post_content'=>wp_slash($all)],true);
 if(is_wp_error($result))throw new RuntimeException('WordPress fixture Page update: '.$result->get_error_message());
 if(!str_contains((string)get_post($front_id)->post_content,'aznet-digital01--brand-2026')){
