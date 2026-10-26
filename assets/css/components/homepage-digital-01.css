@@ -270,6 +270,10 @@ body.aznet-theme-preset--digital-01 .aznet-digital01__service a {
   color:var(--d01-accent);font-size:.84rem;font-weight:800;text-decoration:none;
 }
 body.aznet-theme-preset--digital-01 .aznet-digital01__service a:hover {text-decoration:underline;}
+/* WooCommerce owns the native inline cart action. Scope its button foreground
+   to Digital 01 cards so the brand accent does not wash out on Woo's light
+   button surface (#e9e6ed observed on public AZnet), without touching cart state. */
+body.aznet-theme-preset--digital-01 .aznet-digital01__service .woocommerce a.add_to_cart_button {color:#192e3b;}
 /* Process: five-step horizontal timeline on an inverse surface. */
 body.aznet-theme-preset--digital-01 .aznet-digital01__process {
   width:100%;max-width:none;box-sizing:border-box;
