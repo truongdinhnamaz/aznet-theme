@@ -3,13 +3,16 @@ import path from 'node:path';
 import { chromium } from 'playwright';
 
 /**
- * QA-only current-main composability probe.
+ * QA-only WooCommerce composability probe after the published Front Page
+ * changed from a Woo inline service card to WordPress-authored Brand Light.
  *
- * Real public WooCommerce markup + browser-local CSS overlays from EXACT
- * candidate Theme source, and a synthetic opt-in class. No Woo action click,
- * WordPress write, preview-token reuse, or claim about actual draft Page #43515.
+ * Source-owned native Woo product buttons are read from the public Shop
+ * archive, not inferred from editorial Homepage cards. Only ephemeral browser
+ * classes opt those existing Woo elements into Theme presentation CSS. This
+ * never clicks Add to Cart, mutates the site, or claims actual L5 integration.
  */
 const site = process.env.DIGITAL01_PUBLIC_URL || 'https://aznet.vn/';
+const shopUrl = new URL('/san-pham/', site).href;
 const baseFile = 'assets/css/components/homepage-digital-01.css';
 const brandFile = 'assets/css/components/homepage-digital-01-brand-2026.css';
 const mainCSS = fs.readFileSync(baseFile, 'utf8');
@@ -42,8 +45,9 @@ function ratio(fg, bg) {
 }
 const result = {
   sourceCommit: process.env.GITHUB_SHA || 'local',
-  url: site,
-  disclosure: 'Public HTML with exact candidate CSS + local opt-in only; not actual unpublished Page #43515',
+  homepage: site,
+  url: shopUrl,
+  disclosure: 'Actual published Woo Shop HTML with exact candidate CSS + browser-local opt-in; L4 synthetic composition only, NOT provider L5 or Theme deployment',
   cases: [],
   failures: [],
 };
@@ -55,10 +59,10 @@ for (const width of [390, 768, 1440]) {
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
   try {
-    const response = await page.goto(site, { waitUntil: 'domcontentloaded', timeout: 45000 });
-    if (!response || response.status() !== 200) throw new Error('Public homepage HTTP ' + (response?.status() ?? 'unavailable'));
-    const button = page.locator('.aznet-digital01__service .woocommerce a.add_to_cart_button').first();
-    await button.waitFor({ state: 'visible', timeout: 25000 });
+    const response = await page.goto(shopUrl, { waitUntil: 'domcontentloaded', timeout: 45000 });
+    if (!response || response.status() !== 200) throw new Error('Public Woo Shop HTTP ' + (response?.status() ?? 'unavailable'));
+    const button = page.locator('main ul.products li.product a.add_to_cart_button').first();
+    await button.waitFor({ state: 'visible', timeout: 15000 });
 
     const state = () => button.evaluate(el => {
       const css = getComputedStyle(el);
@@ -82,13 +86,18 @@ for (const width of [390, 768, 1440]) {
 
     const host = await button.evaluate(el => {
       if (!document.body.classList.contains('aznet-theme-preset--digital-01')) return false;
-      const main = el.closest('main');
-      if (!main) return false;
-      // Only mutate this throwaway Chromium DOM; WordPress and Woo remain read-only.
+      const product = el.closest('li.product');
+      const list = product?.closest('ul.products');
+      const main = list?.closest('main');
+      if (!main || !list || !product) return false;
+      // Browser-local opt-in only: main > list > li is a valid ancestor
+      // chain for Brand > Service > Woo. No native product identity changes.
       main.classList.add('aznet-digital01--brand-2026');
+      list.classList.add('aznet-digital01__service');
+      product.classList.add('woocommerce');
       return true;
     });
-    if (!host) throw new Error('The exact public preset/main shell was not found');
+    if (!host) throw new Error('Woo Shop native product structure or Digital 01 body preset missing');
 
     // Match WordPress dependency ordering: native Digital 01 CSS before opt-in
     // Brand Light CSS. Real WooCommerce stylesheet and live HTML are retained.
@@ -142,4 +151,4 @@ for (const width of [390, 768, 1440]) {
 await browser.close();
 fs.writeFileSync(path.join(out, 'brand-woo-aa-summary.json'), JSON.stringify(result, null, 2));
 if (result.failures.length) process.exitCode = 1;
-else console.log('PASS: Brand+Woo candidate 3/3 public read-only CSS composability cases');
+else console.log('PASS: Brand+Woo candidate 3/3 public Shop CSS opt-in simulations; not actual Homepage Woo button or L5');
