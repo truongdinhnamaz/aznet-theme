@@ -360,6 +360,14 @@ function enqueue_digital01_brand2026_asset( ?string $version = null ): void {
         [ 'aznet-theme-homepage-digital-01', 'aznet-theme-site-header' ],
         asset_content_version( $path, $version )
     );
+
+    // Keep the inverse Process CTA accessible if a CDN still serves a stale
+    // minified CSS asset after a Theme update. WordPress prints this scoped
+    // foreground with the current Page, without reading any plugin cache.
+    wp_add_inline_style(
+        'aznet-theme-homepage-digital-01-brand-2026',
+        'body.aznet-theme-preset--digital-01 .aznet-digital01--brand-2026 .aznet-digital01__process .aznet-digital01__text-link > a{color:#ff9d85!important;text-decoration:underline;text-underline-offset:.18em;}'
+    );
 }
 
 /** Enqueue Law 01 only for its active Front Page presentation surface. */
