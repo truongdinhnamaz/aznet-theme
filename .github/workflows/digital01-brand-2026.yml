@@ -1,0 +1,102 @@
+name: Digital 01 Brand Light 2026 contract
+on:
+  push:
+    branches:
+      - work/digital01-brand-light-2026-latest-main-20261026
+  pull_request:
+    paths:
+      - 'assets/css/components/homepage-digital-01-brand-2026.css'
+      - 'inc/theme/assets.php'
+      - 'tests/offline/digital01-brand2026-presentation-contract.php'
+      - 'tests/browser/digital01-brand2026-l4.mjs'
+      - 'tests/runtime/digital01-brand2026-seed.php'
+permissions:
+  contents: read
+jobs:
+  l1-l2:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: PHP syntax and new presentation contract
+        run: |
+          php -l inc/theme/assets.php
+          php -l template-parts/header/utility-navigation.php
+          php tests/offline/digital01-brand2026-presentation-contract.php
+      - name: Retained Digital 01 contract
+        run: php tests/offline/digital01-template-contract.php
+  wordpress-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+      - name: PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install disposable WordPress 6.9
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          mkdir -p /tmp/wp /tmp/digital01-brand
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='Brand Light 2026 L4' --admin_user=admin --admin_password='disposable-test-only' --admin_email=disposable@example.test --skip-email --allow-root
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='tests' --exclude='scripts' --exclude='README.md' ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          wp eval-file tests/runtime/digital01-preview-seed.php --path=/tmp/wp --allow-root
+          # The owner-supplied WordPress Media asset is imported only into this disposable site.
+          curl -fsSL --retry 3 --max-time 30 https://aznet.vn/wp-content/uploads/2026/08/logo-nen-sang-1.png -o /tmp/digital01-brand/logo.png
+          test -s /tmp/digital01-brand/logo.png
+          php -l tests/runtime/digital01-brand2026-seed.php
+          wp eval-file tests/runtime/digital01-brand2026-seed.php --path=/tmp/wp --allow-root
+      - name: Launch WordPress
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/digital01-brand/server.log 2>&1 &
+          for i in $(seq 1 40); do
+            if curl -fsS http://127.0.0.1:8080/ > /tmp/digital01-brand/frontpage.html; then break; fi
+            sleep 1
+          done
+          test -s /tmp/digital01-brand/frontpage.html
+      - name: Browser and accessibility audit
+        env:
+          DIGITAL01_BASE_URL: http://127.0.0.1:8080
+          DIGITAL01_STATE_DIR: /tmp/digital01-brand
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+          node tests/browser/digital01-brand2026-l4.mjs
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/digital01-brand/server.log; then exit 1; fi
+      - name: Retain screenshot and JSON evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: digital01-brand-light-2026-disposable-L4
+          path: |
+            /tmp/digital01-brand/*.png
+            /tmp/digital01-brand/*.json
+            /tmp/digital01-brand/server.log
+          if-no-files-found: warn
