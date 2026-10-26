@@ -141,6 +141,75 @@ jobs:
           fi
           echo 'PASS: WP7.1.3/PHP8.5 package, FAQ, public Homepage and theme-switch content continuity'
 
+      - name: Set up target browser and accessibility tools
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify actual WP7.1.3 PHP8.5 Law01 FAQ browser L4
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm init -y >/dev/null
+          npm install --no-audit --no-fund playwright@1.55.0 @axe-core/playwright
+          npx playwright install --with-deps chromium
+          wp server --host=127.0.0.1 --port=8080 --path=/tmp/wp --allow-root > /tmp/law01-v1398/php-browser.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          curl --fail --silent --show-error --retry 15 --retry-delay 1 --retry-connrefused http://127.0.0.1:8080/ -o /dev/null
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import { chromium } from 'playwright';
+          import AxeBuilder from '@axe-core/playwright';
+
+          const browser = await chromium.launch({ headless: true });
+          const sizes = [[1440, 900], [390, 844], [320, 760]];
+          const evidence = [];
+          try {
+            for (const [width, height] of sizes) {
+              const context = await browser.newContext({ viewport: { width, height } });
+              try {
+                const page = await context.newPage();
+                const response = await page.goto('http://127.0.0.1:8080/', { waitUntil: 'networkidle' });
+                if (!response || response.status() !== 200) throw new Error(width + ': non-200 Homepage');
+                const faq = page.locator('.aznet-theme-law01-faq');
+                await faq.waitFor({ state: 'visible' });
+                const items = faq.locator('.aznet-theme-law01-faq__items details.wp-block-details');
+                const count = await items.count();
+                if (count !== 5) throw new Error(width + ': native WordPress FAQ must show 5 items, got ' + count);
+                const summaries = (await items.locator('summary').allTextContents()).map(s => s.trim());
+                for (let i = 1; i <= 5; i++) {
+                  if (summaries[i-1] !== 'Target FAQ question ' + i) throw new Error(width + ': authored summary ' + i + ' changed');
+                }
+                if (await faq.getByText('Target FAQ question 6').count()) throw new Error(width + ': sixth FAQ leaked via intro');
+                if (await faq.locator('.aznet-theme-law01-lede, #law01-v1398-page-only-hero, h1, script, [onerror]').count()) throw new Error(width + ': unowned excerpt/Page hero/scripting leaked');
+                const horizontalOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+                if (horizontalOverflow > 1) throw new Error(width + ': page horizontal overflow ' + horizontalOverflow);
+                const toggle = items.first().locator('summary');
+                await toggle.focus();
+                if (!await toggle.evaluate(el => document.activeElement === el)) throw new Error(width + ': summary not keyboard-focusable');
+                await page.keyboard.press('Enter');
+                if (!await items.first().evaluate(el => el.hasAttribute('open'))) throw new Error(width + ': native FAQ cannot expand with keyboard');
+                const axe = await new AxeBuilder({ page }).include('.aznet-theme-law01-faq').analyze();
+                const blocking = axe.violations.filter(v => ['critical', 'serious'].includes(v.impact));
+                if (blocking.length) throw new Error(width + ': blocking FAQ accessibility ' + blocking.map(v => v.id).join(','));
+                await page.screenshot({ path: '/tmp/law01-v1398/faq-' + width + '.png', fullPage: true });
+                evidence.push({ width, height, faqItems: count, keyboard: 'PASS', overflow: horizontalOverflow, blockingA11y: 0 });
+              } finally {
+                await context.close();
+              }
+            }
+          } finally {
+            await browser.close();
+          }
+          fs.writeFileSync('/tmp/law01-v1398/browser-l4.json', JSON.stringify(evidence, null, 2));
+          console.log('PASS: WordPress 7.1.3 PHP8.5 target FAQ browser L4 in ' + evidence.length + ' viewports');
+          JS
+          if grep -Eq 'PHP (Fatal error|Parse error|Warning)|Uncaught' /tmp/law01-v1398/php-browser.log; then
+            echo 'PHP error detected during target browser L4' >&2
+            exit 1
+          fi
+
       - name: Upload read-only disposable runtime evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -150,4 +219,7 @@ jobs:
             /tmp/law01-v1398/home.html
             /tmp/law01-v1398/php-server.log
             /tmp/law01-v1398/faq-id
+            /tmp/law01-v1398/faq-*.png
+            /tmp/law01-v1398/browser-l4.json
+            /tmp/law01-v1398/php-browser.log
           if-no-files-found: warn
