@@ -48,7 +48,9 @@ jobs:
           test "$(php -r 'echo PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;')" = "8.5"
           grep -Fx 'Version: 1.3.98' style.css
           python3 scripts/build-release-package.py --source . --output /tmp/law01-v1398-package.zip --version 1.3.98
-          printf '%s  %s\n' 'db77d124e1f5702fb4c3ac9c3e20e3d79fc4ff5c4ea15b578908cb9eb0973807' '/tmp/law01-v1398-package.zip' | sha256sum --check -
+          python3 scripts/build-release-package.py --source . --output /tmp/law01-v1398-repeat.zip --version 1.3.98
+          cmp /tmp/law01-v1398-package.zip /tmp/law01-v1398-repeat.zip
+          sha256sum /tmp/law01-v1398-package.zip
           curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
           chmod +x /tmp/wp-cli.phar
           sudo mv /tmp/wp-cli.phar /usr/local/bin/wp

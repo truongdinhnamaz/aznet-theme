@@ -36,6 +36,7 @@ foreach ([
     'wp_kses_post(',
     'wp-block-details',
     '$classic_details',
+    'has_excerpt( $page )',
 ] as $required) {
     if (!str_contains($faq, $required)) {
         $fail('Classic Editor native Details safety/presentation fallback missing: ' . $required);
