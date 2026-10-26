@@ -1,0 +1,147 @@
+name: AZnet Public AA LCP Refresh (read-only)
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/aznet-public-aa-lcp-refresh.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mobile-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Prepare Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check browser
+        run: google-chrome --version || chromium --version
+      - name: Install read-only browser probe dependency
+        run: npm install --no-save --no-package-lock playwright@1.55.0
+      - name: Capture real computed style and CSS resource witnesses
+        run: |
+          node <<'NODE'
+          const { chromium } = require('playwright');
+          (async () => {
+            const browser = await chromium.launch({channel:'chrome',headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+            try {
+              const page = await browser.newPage({viewport:{width:412,height:915},deviceScaleFactor:1,isMobile:true,hasTouch:true});
+              await page.goto('https://aznet.vn/',{waitUntil:'networkidle',timeout:90000});
+              const result = await page.evaluate(() => {
+                const selectors = [
+                  '.aznet-digital01__service:first-child .aznet-digital01__service-index',
+                  '.aznet-digital01__service:first-child .aznet-digital01__text-link a',
+                  ...[2,3,4,5,6].map(i => '.aznet-digital01__service:nth-child('+i+') > p:not(.aznet-digital01__service-index):not(.aznet-digital01__text-link)'),
+                  '.aznet-digital01__process .aznet-digital01__text-link a',
+                  '.aznet-digital01__cta .aznet-digital01__eyebrow',
+                  '.aznet-digital01__hero h1',
+                  '.aznet-digital01__commercial-catalog-home-20261026',
+                  '.aznet-digital01__commercial-catalog-home-20261026 img',
+                  '.aznet-digital01__commercial-catalog-home-20261026 a',
+                  '.aznet-digital01__commercial-catalog-home-20261026 a.add_to_cart_button',
+                  '.aznet-digital01__commercial-catalog-home-20261026 p.product',
+                  '.aznet-digital01__process .aznet-digital01__text-link > a'
+                ];
+                const nodes = selectors.map(selector => {
+                  const el = document.querySelector(selector);
+                  if (!el) return {selector,missing:true};
+                  const st = getComputedStyle(el);
+                  let parent = el;
+                  const backgrounds = [];
+                  for(let i=0;i<8&&parent;i++,parent=parent.parentElement){
+                    const p=getComputedStyle(parent);
+                    backgrounds.push({tag:parent.tagName,classes:parent.className?.toString().slice(0,140),bg:p.backgroundColor,opacity:p.opacity});
+                  }
+                  return {selector,text:el.textContent?.trim().slice(0,150),color:st.color,background:st.backgroundColor,
+                    fontSize:st.fontSize,fontWeight:st.fontWeight,fontFamily:st.fontFamily,visibility:st.visibility,opacity:st.opacity,
+                    backgrounds};
+                });
+                const sheets=[...document.styleSheets].map(s=>({href:s.href,disabled:s.disabled,ownerTag:s.ownerNode?.tagName,media:s.media?.mediaText}));
+                const resources=performance.getEntriesByType('resource').filter(x=>/\.css|\.woff|\.ttf|fonts\./i.test(x.name))
+                  .map(x=>({name:x.name,duration:Math.round(x.duration),startTime:Math.round(x.startTime),transferSize:x.transferSize})).slice(0,75);
+                const body=document.body;
+                return {url:location.href,bodyClass:body.className,fontsStatus:document.fonts.status,nodes,sheets,resources};
+              });
+              const fs = require('node:fs');
+              const filePath = require('node:path');
+              fs.writeFileSync(filePath.join(process.env.RUNNER_TEMP, 'aznet-public-computed-style.json'), JSON.stringify(result,null,2));
+              console.log('COMPUTED_STYLE_EVIDENCE',JSON.stringify(result,null,2));
+            } finally { await browser.close(); }
+          })().catch(error=>{console.error('PROBE_FAILED',error.stack||error);process.exitCode=1;});
+          NODE
+      - name: Audit public AZnet homepage (read-only)
+        run: |
+          npx --yes lighthouse@12.8.2 https://aznet.vn/ \
+            --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" \
+            --only-categories=performance,accessibility \
+            --output=json \
+            --output-path="$RUNNER_TEMP/aznet-live-lighthouse.json" \
+            --quiet
+      - name: Print failing DOM nodes and LCP evidence
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const file = path.join(process.env.RUNNER_TEMP, 'aznet-live-lighthouse.json');
+          const report = JSON.parse(fs.readFileSync(file, 'utf8'));
+          const audits = report.audits || {};
+          const categories = report.categories || {};
+          const get = id => audits[id] || {};
+          const evidence = {
+            source: 'Unauthenticated public https://aznet.vn/ (mobile Lighthouse on GitHub-hosted runner)',
+            requestedUrl: report.requestedUrl,
+            finalUrl: report.finalUrl,
+            fetchTime: report.fetchTime,
+            lighthouseVersion: report.lighthouseVersion,
+            userAgent: report.userAgent,
+            performance: categories.performance?.score,
+            accessibility: categories.accessibility?.score,
+            lcp: get('largest-contentful-paint').displayValue,
+            fcp: get('first-contentful-paint').displayValue,
+            tbt: get('total-blocking-time').displayValue,
+            cls: get('cumulative-layout-shift').displayValue,
+            warnings: report.runWarnings,
+          };
+          console.log('SUMMARY', JSON.stringify(evidence, null, 2));
+          const contrast = get('color-contrast');
+          const failures = (contrast.details?.items || []).map((item, index) => ({
+            index,
+            selector: item.node?.selector,
+            path: item.node?.path,
+            snippet: item.node?.snippet,
+            nodeLabel: item.node?.nodeLabel,
+            failureSummary: item.node?.failureSummary,
+            explanation: item.explanation,
+          }));
+          console.log('COLOR_CONTRAST_AUDIT', JSON.stringify({score:contrast.score, itemCount:failures.length, failures}, null, 2));
+          const keys = Object.keys(audits).filter(key => /lcp|largest-contentful-paint-element|render-blocking|unused-css-rules/i.test(key));
+          for (const key of keys) {
+            const audit = audits[key];
+            const items = (audit.details?.items || []).slice(0, 6);
+            console.log('DIAGNOSTIC', key, JSON.stringify({
+              score: audit.score,
+              displayValue: audit.displayValue,
+              explanation: audit.explanation,
+              items,
+            }, null, 2).slice(0, 8000));
+          }
+          const css = get('unused-css-rules');
+          console.log('UNUSED_CSS_URLS', JSON.stringify((css.details?.items || []).map(item => ({
+            url:item.url, totalBytes:item.totalBytes, wastedBytes:item.wastedBytes
+          })).slice(0,12), null, 2));
+          if (contrast.score !== 1) {
+            console.log('CONCLUSION: Accessibility not PASS; use the node evidence above. No Theme files changed.');
+          }
+          NODE
+
+      - name: Upload public read-only AA and LCP measurements
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aznet-public-aa-lcp-refresh
+          path: |
+            ${{ runner.temp }}/aznet-public-computed-style.json
+            ${{ runner.temp }}/aznet-live-lighthouse.json
+          if-no-files-found: warn
