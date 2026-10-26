@@ -43,6 +43,20 @@ for (const test of cases) {
     const footerLogoLink = query('.aznet-theme-site-footer__brand:has(.aznet-theme-site-footer__logo)');
     const style = element => element ? getComputedStyle(element) : null;
     const resources = performance.getEntriesByType('resource').map(x=>x.name);
+    // Reproduce WordPress core/query's intrinsic size attrs + authored inline aspect.
+    // No new business/page data: fixture is invisible, measured, then removed.
+    const wordpressQueryImage = (() => {
+      if (!root) return null;
+      const wrapper = document.createElement('div');
+      wrapper.className = 'aznet-digital01__articles';
+      wrapper.style.cssText = 'position:fixed;left:0;top:0;width:300px;visibility:hidden;pointer-events:none';
+      wrapper.innerHTML = '<figure class="wp-block-post-featured-image"><img width="1200" height="630" style="aspect-ratio:16/9;width:100%;object-fit:cover;" alt="" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" /></figure>';
+      root.appendChild(wrapper);
+      const img = wrapper.querySelector('img'), rect = img.getBoundingClientRect();
+      const observed = {width:rect.width,height:rect.height,sourceHeight:img.getAttribute('height'),authorAspect:img.style.aspectRatio};
+      wrapper.remove();
+      return observed;
+    })();
     const row = {
       variant:!!root,
       bodyClass:document.body.className,
@@ -72,6 +86,7 @@ for (const test of cases) {
       brandCSS:resources.some(x=>x.includes('homepage-digital-01-brand-2026.css')),
       footerLogoPresent:!!footerLogo,
       footerLogoBacking:style(footerLogoLink)?.backgroundColor||null,
+      wordpressQueryImage,
       consultationBackground: style(query('.aznet-theme-site-header__utility-menu > li:last-child > a'))?.backgroundColor||null,
       submenuLastBackground: style(query('.aznet-theme-site-header__utility-menu .sub-menu > li:last-child > a'))?.backgroundColor||null,
     };
@@ -100,6 +115,9 @@ for (const test of cases) {
    if(data.cards!==4)problems.push('expected four native service cards');
   if(data.serviceColumns!==test.columns)problems.push('wrong responsive service columns '+data.serviceColumns+' expected '+test.columns);
   if(!data.brandCSS)problems.push('branded stylesheet not loaded');
+  if(!data.wordpressQueryImage || data.wordpressQueryImage.width <= 0
+      || data.wordpressQueryImage.height > data.wordpressQueryImage.width * .70)
+    problems.push('WordPress native Query thumbnail height stuck at source pixels: '+JSON.stringify(data.wordpressQueryImage));
   if(data.logo && !data.footerLogoPresent)problems.push('WordPress custom logo missing from native Footer');
   if(data.footerLogoPresent && data.footerLogoBacking!=='rgb(255, 255, 255)')
     problems.push('Brand Light dark Footer lacks opaque white backing for WordPress-native logo');
