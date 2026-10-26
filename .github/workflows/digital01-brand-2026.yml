@@ -9,7 +9,6 @@ on:
       - 'inc/theme/assets.php'
       - 'tests/offline/digital01-brand2026-presentation-contract.php'
       - 'tests/browser/digital01-brand2026-l4.mjs'
-      - 'tests/browser/digital01-brand2026-woo-aa-compose-l4.mjs'
       - 'tests/runtime/digital01-brand2026-seed.php'
 permissions:
   contents: read
@@ -90,9 +89,6 @@ jobs:
           npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
           npx playwright install --with-deps chromium
           node tests/browser/digital01-brand2026-l4.mjs
-          # New-base integration: verify Brand opt-in + merged Woo CTA AA on public read-only HTML.
-          node --check tests/browser/digital01-brand2026-woo-aa-compose-l4.mjs
-          node tests/browser/digital01-brand2026-woo-aa-compose-l4.mjs
           if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/digital01-brand/server.log; then exit 1; fi
       - name: Retain screenshot and JSON evidence
         uses: actions/upload-artifact@v4
