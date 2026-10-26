@@ -29,8 +29,8 @@ jobs:
           const TMP=process.env.RUNNER_TEMP;
           const MARKER='.aznet-digital01__commercial-catalog-home-20261026';
           const out={scope:'UNAUTHENTICATED PUBLIC LIVE https://aznet.vn/ — no draft/preview, no CSS overlay, no cart click, no WordPress writes',runHead:process.env.GITHUB_SHA,checkedAt:new Date().toISOString(),viewports:[]};
-          function collect(){
-            const root=document.querySelector(MARKER);
+          function collect(marker){
+            const root=document.querySelector(marker);
             if(!root)return {missing:true,bodyClass:document.body.className,url:location.href};
             const rect=root.getBoundingClientRect(),grids=[...root.querySelectorAll('.aznet-digital01__services-grid')],cards=[...root.querySelectorAll('.aznet-digital01__service')];
             const service=grids[0],positions=service?[...service.children].map(x=>x.getBoundingClientRect()):[];
@@ -76,7 +76,7 @@ jobs:
                 await page.locator(MARKER+' a[href]').first().focus();
                 await page.keyboard.press('Tab');
                 const keyboard=await page.evaluate(()=>({tag:document.activeElement?.tagName,href:document.activeElement?.getAttribute('href'),focusVisible:document.activeElement?.matches(':focus-visible'),outline:getComputedStyle(document.activeElement).outline,outlineWidth:getComputedStyle(document.activeElement).outlineWidth}));
-                const details=await page.evaluate(collect);
+                const details=await page.evaluate(collect,MARKER);
                 await page.locator(MARKER).screenshot({path:path.join(TMP,'aznet-public-catalog-'+width+'.png'),animations:'disabled',timeout:40000});
                 await page.screenshot({path:path.join(TMP,'aznet-public-viewport-'+width+'.png'),animations:'disabled',timeout:40000});
                 const good=details.cardCount===9&&details.images.length===3&&details.images.every(x=>x.naturalWidth>0&&x.alt)&&details.quoteCount===6&&details.wooCart?.dataProductId==='1468'&&details.section?.alignWide&&details.offscreenCards===0&&details.firstGroupColumns===(width===390?1:3)&&!details.bodyClass.includes('wpvibe-draft')&&!details.hasPreviewToken;
