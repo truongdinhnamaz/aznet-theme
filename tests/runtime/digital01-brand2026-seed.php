@@ -80,7 +80,8 @@ if (is_wp_error($nav)) throw new RuntimeException($nav->get_error_message());
 foreach ([
   ['Trang chủ','/'], ['Dịch vụ','/dich-vu/'], ['Dự án','/du-an/'],
   ['Bảng giá','/bang-gia/'], ['Kiến thức','/kien-thuc/'],
-  ['Giới thiệu','/gioi-thieu/'], ['Nhận tư vấn','/lien-he/']
+  ['Giới thiệu','/gioi-thieu/'], ['Liên hệ','/lien-he/'],
+  ['Nhận tư vấn','/lien-he/']
 ] as [$label,$url]) {
   $added=wp_update_nav_menu_item($nav,0,['menu-item-title'=>$label,
     'menu-item-url'=>home_url($url),'menu-item-type'=>'custom','menu-item-status'=>'publish']);
