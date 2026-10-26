@@ -1,0 +1,40 @@
+name: AZnet Brand 2026 Public CSS Cache Diagnostic
+
+on:
+  push:
+    branches:
+      - ops/aznet-brand2026-public-postdeploy-20261026
+    paths:
+      - '.github/workflows/aznet-brand2026-public-css-diagnostic.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  readonly-cache:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - name: Read public raw and WP Rocket CSS without mutation
+        run: |
+          set -euo pipefail
+          base='https://aznet.vn/wp-content/themes/aznet-theme/assets/css/components/homepage-digital-01-brand-2026.css'
+          min='https://aznet.vn/wp-content/cache/min/1/wp-content/themes/aznet-theme/assets/css/components/homepage-digital-01-brand-2026.css'
+          curl -fsSL --retry 2 --max-time 45 -D /tmp/aznet-raw-headers -o /tmp/aznet-raw.css "$base?ver=1.3.97-3a8d924cefc8"
+          curl -fsSL --retry 2 --max-time 45 -D /tmp/aznet-min-headers -o /tmp/aznet-min.css "$min?ver=1793015629"
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+          target = 'color:#ff9d85!important'
+          for name in ['raw','min']:
+              b = Path('/tmp/aznet-'+name+'.css').read_bytes()
+              t = b.decode('utf-8',errors='replace').lower()
+              h = Path('/tmp/aznet-'+name+'-headers').read_text(errors='replace')
+              print('AZNET_CSS_DIAGNOSTIC',name,{
+                  'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),
+                  'patch_present':target in t,
+                  'link_selector_present':'.aznet-digital01__text-link' in t,
+                  'status_lines':[x for x in h.splitlines() if x.startswith('HTTP/')],
+                  'cache_headers':[x for x in h.splitlines() if x.lower().startswith(('cache-control:','age:','last-modified:','etag:','cf-cache-status:','x-cache:'))]
+              })
+          PY
