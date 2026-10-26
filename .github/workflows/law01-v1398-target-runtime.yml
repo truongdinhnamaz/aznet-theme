@@ -1,0 +1,151 @@
+name: Law01 v1.3.98 Target WP7.1 PHP8.5 Disposable Runtime
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/law01-v1398-target-runtime.yml'
+      - 'style.css'
+      - 'functions.php'
+      - 'template-parts/homepage/law-01/faq.php'
+      - 'tests/offline/x6-v1398-release-candidate-contract.php'
+
+permissions:
+  contents: read
+
+jobs:
+  law01-target-runtime:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    steps:
+      - name: Checkout exact candidate source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Set up PHP 8.5 target major
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: mysqli, gd, dom, mbstring, xml, zip
+          coverage: none
+
+      - name: Build immutable candidate package and install WordPress 7.1.3
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(php -r 'echo PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;')" = "8.5"
+          grep -Fx 'Version: 1.3.98' style.css
+          python3 scripts/build-release-package.py --source . --output /tmp/law01-v1398-package.zip --version 1.3.98
+          printf '%s  %s\n' 'db77d124e1f5702fb4c3ac9c3e20e3d79fc4ff5c4ea15b578908cb9eb0973807' '/tmp/law01-v1398-package.zip' | sha256sum --check -
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          mkdir -p /tmp/wp /tmp/law01-v1398
+          wp core download --version=7.1.3 --path=/tmp/wp --force --allow-root
+          wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='Disposable Law 01 Runtime' --admin_user=qa_admin --admin_password='disposable-local-only' --admin_email=qa@example.test --skip-email --allow-root
+          wp theme install /tmp/law01-v1398-package.zip --activate --path=/tmp/wp --allow-root
+          test "$(wp core version --path=/tmp/wp --allow-root)" = "7.1.3"
+          test "$(wp theme get aznet-theme --field=version --path=/tmp/wp --allow-root)" = "1.3.98"
+
+      - name: Seed WordPress-owned FAQ and verify Theme presentation without mutation
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/law01-v1398/fixture.php <<'PHP'
+          <?php
+          if (!defined('ABSPATH') || getenv('GITHUB_ACTIONS') !== 'true' || home_url('/') !== 'http://127.0.0.1:8080/') {
+              throw new RuntimeException('Refusing to seed any site except disposable local WordPress.');
+          }
+          $front = wp_insert_post([
+              'post_type' => 'page',
+              'post_status' => 'publish',
+              'post_title' => 'Disposable front page',
+              'post_content' => '<p id="law01-v1398-front-sentinel">Owned by WordPress</p>',
+          ], true);
+          if (is_wp_error($front)) throw new RuntimeException($front->get_error_message());
+          $contents = '<header id="law01-v1398-page-only-hero"><h1>Independent FAQ Page Hero</h1></header>';
+          for ($i = 1; $i <= 6; $i++) {
+              $contents .= '<details><summary>Target FAQ question ' . $i . '</summary><p>Native answer ' . $i . '</p></details>';
+          }
+          $faq = wp_insert_post([
+              'post_type' => 'page',
+              'post_status' => 'publish',
+              'post_title' => 'FAQ target fixture',
+              'post_content' => $contents,
+          ], true);
+          if (is_wp_error($faq)) throw new RuntimeException($faq->get_error_message());
+          update_option('show_on_front', 'page');
+          update_option('page_on_front', (int) $front);
+          set_theme_mod('aznet_theme_settings', [
+              'schema_version' => 3,
+              'visual_preset' => 'default',
+              'homepage_preset' => 'law-01',
+              'homepage_law01_variant' => 'burgundy-gold',
+              'homepage_faq_page' => (int) $faq,
+              'footer_preset' => 'professional',
+          ]);
+          ob_start();
+          get_template_part('template-parts/homepage/law-01/faq');
+          $preview = (string) ob_get_clean();
+          if (substr_count($preview, '<details') !== 5) throw new RuntimeException('Expected first five native FAQ disclosures.');
+          for ($i = 1; $i <= 5; $i++) {
+              if (!str_contains($preview, 'Target FAQ question ' . $i)) throw new RuntimeException('FAQ item missing: ' . $i);
+          }
+          if (str_contains($preview, 'Target FAQ question 6') || str_contains($preview, 'law01-v1398-page-only-hero')) {
+              throw new RuntimeException('Unbounded FAQ or authored Page Hero leaked into Homepage.');
+          }
+          if (substr_count($preview, 'wp-block-details') !== 5) throw new RuntimeException('Scoped details styling missing.');
+          file_put_contents('/tmp/law01-v1398/faq-id', (string) $faq);
+          echo "PASS: native FAQ owner projection in WordPress 7.1.3/PHP8.5\n";
+          PHP
+          wp eval-file /tmp/law01-v1398/fixture.php --path=/tmp/wp --allow-root
+          test "$(wp option get show_on_front --path=/tmp/wp --allow-root)" = 'page'
+
+      - name: Verify real HTTP Front Page and reversible Theme switch
+        shell: bash
+        run: |
+          set -euo pipefail
+          wp server --host=127.0.0.1 --port=8080 --path=/tmp/wp --allow-root > /tmp/law01-v1398/php-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          curl --fail --silent --show-error --retry 15 --retry-delay 1 --retry-connrefused http://127.0.0.1:8080/ -o /tmp/law01-v1398/home.html
+          grep -F 'aznet-theme-law01-faq__items' /tmp/law01-v1398/home.html
+          grep -F 'Target FAQ question 1' /tmp/law01-v1398/home.html
+          ! grep -F 'Target FAQ question 6' /tmp/law01-v1398/home.html
+          ! grep -F 'law01-v1398-page-only-hero' /tmp/law01-v1398/home.html
+          faq_id=$(cat /tmp/law01-v1398/faq-id)
+          before=$(wp post get "$faq_id" --field=post_content --path=/tmp/wp --allow-root)
+          wp theme install twentytwentyfive --activate --path=/tmp/wp --allow-root
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          test "$(wp theme get aznet-theme --field=version --path=/tmp/wp --allow-root)" = '1.3.98'
+          after=$(wp post get "$faq_id" --field=post_content --path=/tmp/wp --allow-root)
+          test "$before" = "$after"
+          if grep -Eq 'PHP (Fatal error|Parse error|Warning)|Uncaught' /tmp/law01-v1398/php-server.log; then
+              echo 'PHP runtime error detected on disposable WordPress 7.1.3/PHP8.5' >&2
+              exit 1
+          fi
+          echo 'PASS: WP7.1.3/PHP8.5 package, FAQ, public Homepage and theme-switch content continuity'
+
+      - name: Upload read-only disposable runtime evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: law01-v1398-wp713-php85-${{ github.event.pull_request.head.sha }}
+          path: |
+            /tmp/law01-v1398/home.html
+            /tmp/law01-v1398/php-server.log
+            /tmp/law01-v1398/faq-id
+          if-no-files-found: warn
