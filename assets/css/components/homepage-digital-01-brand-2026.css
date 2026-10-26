@@ -987,6 +987,16 @@ body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-the
   box-shadow:0 10px 24px rgba(6,25,45,.16);
 }
 
+/* Native Process CTA on the inverse timeline must paint the actual link.
+ * A public browser captured #0000ee over #101f2b (1.78:1) despite the
+ * base wrapper styling; this scoped foreground is #ff9d85 (8.31:1).
+ * WordPress retains ownership of the link text and destination. */
+body.aznet-theme-preset--digital-01 .aznet-digital01--brand-2026 .aznet-digital01__process .aznet-digital01__text-link > a {
+  color:#ff9d85!important;
+  text-decoration:underline;
+  text-underline-offset:.18em;
+}
+
 @media(prefers-reduced-motion:reduce) {
   body.aznet-theme-preset--digital-01 .aznet-digital01--brand-2026 *,
   body.aznet-theme-preset--digital-01 .aznet-digital01--brand-2026 *::before,
