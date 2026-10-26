@@ -1,0 +1,51 @@
+name: AZnet Brand Light 2026 Public Postdeploy L4
+
+on:
+  push:
+    branches:
+      - ops/aznet-brand2026-public-postdeploy-20261026
+    paths:
+      - 'tests/browser/digital01-brand2026-public-postdeploy.mjs'
+      - '.github/workflows/digital01-brand2026-public-postdeploy.yml'
+
+permissions:
+  contents: read
+
+# Public, unauthenticated and read-only: no WordPress admin login,
+# no site mutation, no Theme/Plugin install, no deployment.
+jobs:
+  public-wordpress-l4:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Checkout operational verification branch
+        uses: actions/checkout@v4
+
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Chromium Playwright and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+
+      - name: Run actual public aznet.vn homepage L4 postdeploy audit
+        env:
+          AZNET_BRAND_POSTDEPLOY_DIR: /tmp/aznet-brand-postdeploy
+        run: |
+          set -euo pipefail
+          node --check tests/browser/digital01-brand2026-public-postdeploy.mjs
+          node tests/browser/digital01-brand2026-public-postdeploy.mjs
+          test -s /tmp/aznet-brand-postdeploy/postdeploy-summary.json
+
+      - name: Preserve screenshot and JSON evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aznet-brand2026-public-postdeploy-l4
+          path: /tmp/aznet-brand-postdeploy
+          if-no-files-found: warn
+          retention-days: 30
