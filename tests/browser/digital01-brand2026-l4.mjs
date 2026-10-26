@@ -26,6 +26,16 @@ const loadNativeQueryImages = async page => {
   }
   await page.evaluate(() => window.scrollTo(0, 0));
 };
+// Keyboard disclosure tests intentionally focus below the fold. Reset focus,
+// scroll and sticky-header state before taking archival full-page captures.
+const resetViewportForEvidence = async page => {
+  await page.evaluate(() => {
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    window.scrollTo({top:0,left:0,behavior:'instant'});
+  });
+  await page.waitForFunction(() => window.scrollY === 0, null, {timeout:5000});
+  await page.waitForTimeout(150);
+};
 const summary = [];
 let failed = false;
 for (const test of cases) {
@@ -255,6 +265,7 @@ for (const test of cases) {
   }
   const result={...test,observed:data,violations,problems};
   summary.push(result);
+  await resetViewportForEvidence(page);
   await page.screenshot({path:path.join(evidenceDir,'brand-2026-'+test.name+'.png'),fullPage:true});
   console.log('BRAND_2026_L4 '+JSON.stringify(result));
   if(problems.length)failed=true;
@@ -319,6 +330,7 @@ if(!Number.isInteger(landingId) || landingId <= 0){
     const outcome={...view,observed:data,problems};
     summary.push(outcome);
     console.log('BRAND_2026_LANDING '+JSON.stringify(outcome));
+    await resetViewportForEvidence(page);
     await page.screenshot({path:path.join(evidenceDir,'brand-2026-'+view.name+'.png'),fullPage:true});
     if(problems.length)failed=true;
     await context.close();
