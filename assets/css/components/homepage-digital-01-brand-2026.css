@@ -619,6 +619,11 @@ body.aznet-theme-preset--digital-01 .aznet-digital01--brand-2026 .aznet-digital0
 body.aznet-theme-preset--digital-01 .aznet-digital01--brand-2026 .aznet-digital01__service a:hover {
   text-decoration:underline;
 }
+/* Preserve the native Woo Add-to-Cart AA foreground on Woo's light button
+   when a Brand Light service card also matches the generic red link rule. */
+body.aznet-theme-preset--digital-01 .aznet-digital01--brand-2026 .aznet-digital01__service .woocommerce a.add_to_cart_button {
+  color:var(--d01-brand-text);
+}
 body.aznet-theme-preset--digital-01 .aznet-digital01--brand-2026 .aznet-digital01__brand-why {
   background:transparent;
   padding:40px 24px clamp(66px,8vw,112px);
