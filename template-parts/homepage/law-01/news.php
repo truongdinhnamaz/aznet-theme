@@ -48,7 +48,14 @@ $featured_excerpt = $featured instanceof \WP_Post ? trim( (string) get_the_excer
             <div class="aznet-theme-law01-news-list aznet-theme-law01-news-list--secondary">
                 <?php foreach ( $posts as $post ) : ?>
                     <article>
-                        <p class="aznet-theme-law01-meta"><?php echo esc_html( get_the_date( '', $post ) ); ?></p>
+                        <div class="aznet-theme-law01-news-secondary__lead">
+                            <p class="aznet-theme-law01-meta"><?php echo esc_html( get_the_date( '', $post ) ); ?></p>
+                            <?php if ( has_post_thumbnail( $post ) ) : ?>
+                                <a class="aznet-theme-law01-news-secondary__media" href="<?php echo esc_url( get_permalink( $post ) ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Đọc tin: %s', 'aznet-theme' ), get_the_title( $post ) ) ); ?>">
+                                    <?php echo wp_kses_post( get_the_post_thumbnail( $post, 'medium', [ 'class' => 'aznet-theme-law01-news-secondary__image', 'loading' => 'lazy', 'decoding' => 'async' ] ) ); ?>
+                                </a>
+                            <?php endif; ?>
+                        </div>
                         <h3><a href="<?php echo esc_url( get_permalink( $post ) ); ?>"><?php echo esc_html( get_the_title( $post ) ); ?></a></h3>
                     </article>
                 <?php endforeach; ?>
