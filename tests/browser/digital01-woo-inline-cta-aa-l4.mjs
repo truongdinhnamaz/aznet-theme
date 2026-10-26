@@ -7,7 +7,7 @@ import { chromium } from 'playwright';
 const url = process.env.DIGITAL01_PUBLIC_URL || 'https://aznet.vn/';
 const outDir = process.env.DIGITAL01_EVIDENCE_DIR || '/tmp/digital01-woo-inline-cta-aa';
 const css = fs.readFileSync('assets/css/components/homepage-digital-01.css', 'utf8');
-const selector = 'body.aznet-theme-preset--digital-01 .aznet-digital01__service .woocommerce a.button';
+const selector = 'body.aznet-theme-preset--digital-01 .aznet-digital01__service .woocommerce a.add_to_cart_button';
 const start = css.indexOf(selector + ' {');
 if (start < 0) throw new Error('Candidate scoped Woo button foreground CSS missing');
 const end = css.indexOf('}', start);
