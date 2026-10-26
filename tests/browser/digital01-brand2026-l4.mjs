@@ -39,6 +39,8 @@ for (const test of cases) {
     const logo = query('.aznet-theme-site-header__brand img');
     const header = query('.aznet-theme-site-header');
     const art = query(sel+' .aznet-digital01__hero-art');
+    const footerLogo = query('.aznet-theme-site-footer__brand .aznet-theme-site-footer__logo');
+    const footerLogoLink = query('.aznet-theme-site-footer__brand:has(.aznet-theme-site-footer__logo)');
     const style = element => element ? getComputedStyle(element) : null;
     const resources = performance.getEntriesByType('resource').map(x=>x.name);
     const row = {
@@ -68,6 +70,8 @@ for (const test of cases) {
       viewportWidth:window.innerWidth,
       bodyHeight:document.documentElement.scrollHeight,
       brandCSS:resources.some(x=>x.includes('homepage-digital-01-brand-2026.css')),
+      footerLogoPresent:!!footerLogo,
+      footerLogoBacking:style(footerLogoLink)?.backgroundColor||null,
       consultationBackground: style(query('.aznet-theme-site-header__utility-menu > li:last-child > a'))?.backgroundColor||null,
       submenuLastBackground: style(query('.aznet-theme-site-header__utility-menu .sub-menu > li:last-child > a'))?.backgroundColor||null,
     };
@@ -96,6 +100,9 @@ for (const test of cases) {
    if(data.cards!==4)problems.push('expected four native service cards');
   if(data.serviceColumns!==test.columns)problems.push('wrong responsive service columns '+data.serviceColumns+' expected '+test.columns);
   if(!data.brandCSS)problems.push('branded stylesheet not loaded');
+  if(data.logo && !data.footerLogoPresent)problems.push('WordPress custom logo missing from native Footer');
+  if(data.footerLogoPresent && data.footerLogoBacking!=='rgb(255, 255, 255)')
+    problems.push('Brand Light dark Footer lacks opaque white backing for WordPress-native logo');
   if (test.width >= 1367) {
     if (data.consultationBackground !== 'rgb(198, 33, 33)')
       problems.push('last top-level consultation item not styled as red CTA');

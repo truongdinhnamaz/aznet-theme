@@ -117,4 +117,14 @@ if (! preg_match('~' . preg_quote($wooSelector, '~') . '\\s*\\{([^}]*)\\}~', $cs
     || str_contains($wooRule[1], '!important')) {
     $fail('Brand Light must preserve native Woo CTA AA via a card-scoped semantic foreground');
 }
+// On an opted-in Brand Light Page, preserve the original WordPress media/logo
+// but give a dark-footer raster mark an opaque, padded light background.
+// The :has(img-class) guard preserves the native text-only fallback unchanged.
+$footerLogoSelector = 'body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-footer .aznet-theme-site-footer__brand:has(.aznet-theme-site-footer__logo)';
+if (! preg_match('~' . preg_quote($footerLogoSelector, '~') . '\\s*\\{([^}]*)\\}~', $css, $footerLogoRule)
+    || ! preg_match('/\\bbackground\\s*:\\s*#ffffff\\s*;/i', $footerLogoRule[1])
+    || ! preg_match('/\\bpadding\\s*:\\s*[^;]+;/i', $footerLogoRule[1])) {
+    $fail('Brand Light WordPress logo must have a scoped opaque padded backing on dark Footer');
+}
+
 echo "PASS: Digital 01 2026 reference — opt-in WordPress ownership, responsive components and WCAG AA token pairs\n";

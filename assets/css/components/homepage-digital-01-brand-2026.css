@@ -974,6 +974,19 @@ body.aznet-theme-preset--digital-01 .aznet-digital01--brand-2026 .aznet-digital0
     gap:20px;
   }
 }
+/* The WordPress-owned logo includes dark-blue lettering, which loses visual
+   definition on the shared dark Footer. Give it a light presentation surface
+   only on opted-in Brand Light Pages; do not alter identity, logo or Footer data. */
+body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-footer .aznet-theme-site-footer__brand:has(.aznet-theme-site-footer__logo) {
+  display:inline-flex;
+  box-sizing:border-box;
+  max-width:100%;
+  padding:9px 14px;
+  border-radius:12px;
+  background:#ffffff;
+  box-shadow:0 10px 24px rgba(6,25,45,.16);
+}
+
 @media(prefers-reduced-motion:reduce) {
   body.aznet-theme-preset--digital-01 .aznet-digital01--brand-2026 *,
   body.aznet-theme-preset--digital-01 .aznet-digital01--brand-2026 *::before,
