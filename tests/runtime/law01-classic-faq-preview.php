@@ -51,4 +51,33 @@ $expect(substr_count($preview, 'wp-block-details') === 5, 'must reuse existing s
 $expect(str_contains($preview, 'Classic answer 1'), 'must preserve authored answer');
 $expect(str_contains($preview, 'tiếng Việt'), 'must preserve Unicode text');
 
+
+$authored = wp_update_post([
+    'ID' => $faq_id,
+    'post_excerpt' => 'Authored FAQ introduction only.',
+], true);
+$expect(!is_wp_error($authored) && (int) $authored === $faq_id, 'cannot set authored FAQ excerpt in disposable fixture');
+ob_start();
+get_template_part('template-parts/homepage/law-01/faq');
+$authored_preview = (string) ob_get_clean();
+$expect(str_contains($authored_preview, 'Authored FAQ introduction only.'), 'must retain explicitly authored native WordPress Page excerpt');
+
+$cleared = wp_update_post([
+    'ID' => $faq_id,
+    'post_excerpt' => '',
+], true);
+$expect(!is_wp_error($cleared) && (int) $cleared === $faq_id, 'cannot clear disposable FAQ Page excerpt');
+$stored = get_post($faq_id);
+$expect($stored instanceof WP_Post && '' === (string) $stored->post_excerpt, 'test precondition: authored excerpt is blank');
+
+ob_start();
+get_template_part('template-parts/homepage/law-01/faq');
+$without_excerpt = (string) ob_get_clean();
+$expect(substr_count($without_excerpt, '<details') === 5, 'five FAQ items must survive empty native excerpt');
+$expect(!str_contains($without_excerpt, 'aznet-theme-law01-lede'), 'must not auto-generate Homepage intro from full FAQ Page content');
+$expect(!str_contains($without_excerpt, 'Classic question 6'), 'unbounded sixth FAQ must never leak through automatic excerpt');
+$expect(!str_contains($without_excerpt, 'faq-classic-author-hero'), 'FAQ Page Hero must not leak via auto-generated intro');
+$expect(!str_contains($without_excerpt, '<h1'), 'FAQ Page authored H1 must never leak into Homepage');
+$expect(str_contains($without_excerpt, 'Classic question 5'), 'fifth explicitly authored FAQ still required');
+
 echo "PASS: raw Classic Editor FAQ Page projected as five sanitized native Details without Hero/header or mutation beyond disposable fixture\n";
