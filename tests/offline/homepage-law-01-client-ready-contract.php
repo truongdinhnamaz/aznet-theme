@@ -222,6 +222,25 @@ foreach ([
 ] as $needle) {
     $premiumMust(str_contains($news, $needle), "Premium Legal News presentation missing: {$needle}");
 }
+// Law 01 client News rows render WordPress Featured Images when they exist.
+// Missing attachments remain text-only; no synthetic/fallback image authority.
+$newsBaseCss = (string) file_get_contents( $root . '/assets/css/components/homepage-law-01.css' );
+foreach ( [
+    'has_post_thumbnail( $post )',
+    'aznet-theme-law01-news-secondary__media',
+    'aznet-theme-law01-news-secondary__image',
+    'get_the_post_thumbnail(',
+] as $needle ) {
+    $premiumMust(str_contains($news, $needle), 'Secondary News native Featured Image support missing: ' . $needle);
+}
+foreach ( [
+    '.aznet-theme-homepage--law-01 .aznet-theme-law01-news-secondary__media {',
+    'aspect-ratio: 16 / 9;',
+    '.aznet-theme-homepage--law-01 .aznet-theme-law01-news-secondary__image {',
+    'object-fit: cover;',
+] as $needle ) {
+    $premiumMust(str_contains($newsBaseCss, $needle), 'Secondary News scoped 16:9 responsive image styles missing: ' . $needle);
+}
 foreach ([
     'parse_blocks',
     "'core/list'",

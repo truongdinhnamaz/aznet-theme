@@ -81,6 +81,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/d060-about-showcase
 
 printf '%s\n' '==> Retained R5 Control Center contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/r5-control-center-static-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/d050-customer-content-guide-contract.php
 
 printf '%s\n' '==> Woo asset scope regression'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/w1-woocommerce-asset-scope-contract.php
@@ -198,6 +199,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-about-
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/industrial01-project-page-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-services-root-presentation-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/service-detail-premium-presentation-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/service-detail-featured-no-upscale-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/service-card-consistency-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-woocommerce-page-excerpt-regression-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/contact-page-presentation-contract.php
@@ -248,6 +250,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-control-ce
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-surface-map-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-native-content-surface-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-process-faq-authoring-completeness-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/law01-classic-faq-preview-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/d040-td1-template-library-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-extension-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-manifest-v2-contract.php

@@ -10,6 +10,15 @@
     --aznet-theme-service-card-surface: var(--aznet-theme-surface);
 }
 
+/* Native WordPress featured images must not be upscaled beyond their own pixels.
+ * Keep a small logo or landscape photo within the responsive service header.
+ */
+.aznet-theme-page--service-detail .aznet-theme-page__featured img {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+}
+
 .aznet-theme-page--service-detail .aznet-theme-page__header {
     position: relative;
     width: 100%;
