@@ -24,7 +24,7 @@ jobs:
         run: google-chrome --version || chromium --version
       - name: Install read-only browser dependency
         run: npm install --no-save --no-package-lock playwright@1.55.0
-      - name: Compare live image surface before and after scoped candidate CSS
+      - name: Compare current Brand product Media and browser-local legacy media CSS
         run: |
           node <<'NODE'
           const fs=require('node:fs');
@@ -40,27 +40,40 @@ jobs:
             return css.slice(at,end+1);
           }
           const overlay=pickRule(selector)+'\n'+pickRule(selector+' img');
-          const marker='.aznet-digital01__commercial-catalog-home-20261026';
-          const out={scope:'Public aznet.vn HTML, local Chrome CSS overlay ONLY. Never writes site/theme/cart. Not installed CSS certification.',head:process.env.GITHUB_SHA,widths:[]};
-          const read=(marker)=>{
-            const root=document.querySelector(marker);
-            const groups=[...root.querySelectorAll('.aznet-digital01__services-grid')];
-            const card=groups[groups.length-1].querySelector('.aznet-digital01__service');
-            const figure=card.querySelector('figure.aznet-digital01__commercial-media');
-            const img=figure.querySelector('img');
-            const cart=card.querySelector('.woocommerce a.add_to_cart_button');
-            const box=card.getBoundingClientRect();
-            return {cardBg:getComputedStyle(card).backgroundColor,
-              figureBg:getComputedStyle(figure).backgroundColor,
-              figurePadding:getComputedStyle(figure).paddingTop,
-              imageFit:getComputedStyle(img).objectFit,
-              imageNaturalWidth:img.naturalWidth,
-              imageAlt:img.alt,
-              cartText:cart?.textContent.trim(),cartHref:cart?.getAttribute('href'),
-              cartProductId:cart?.getAttribute('data-product_id'),cartQty:cart?.getAttribute('data-quantity'),
-              priceText:card.querySelector('.product.woocommerce')?.textContent.trim().slice(0,170),
+          // D-063: owner-approved native Front Page is Brand Light #43515.
+          // The old homepage's Woo catalog card no longer exists. Test the
+          // published editorial product Media, then opt a public-safe image
+          // into the legacy presentation primitive ONLY in disposable Chrome.
+          const marker='.aznet-digital01--brand-2026 .aznet-digital01__products-grid';
+          const oldMarker='.aznet-digital01__commercial-catalog-home-20261026';
+          const out={
+            scope:'Public Brand Light native WordPress media + browser-only legacy CSS opt-in. No Woo/business mutation; not actual legacy Homepage or L5.',
+            head:process.env.GITHUB_SHA,
+            previousSurface:oldMarker,
+            previousSurfaceDisposition:'SUPERSEDED by approved WordPress Front Page #43515',
+            widths:[],
+          };
+          const read=(sel)=>{
+            const root=document.querySelector(sel);
+            const cards=[...(root?.querySelectorAll('.aznet-digital01__product')||[])];
+            const card=cards[0],img=card?.querySelector('img'),link=card?.querySelector('a[href]');
+            const box=card?.getBoundingClientRect();
+            const fixture=document.querySelector('[data-legacy-commercial-media-qa]');
+            const figure=fixture?.querySelector('figure.aznet-digital01__commercial-media');
+            const fixtureImg=figure?.querySelector('img');
+            return {
+              cardCount:cards.length, imageNaturalWidth:img?.naturalWidth||0,
+              imageSrc:img?.getAttribute('src')||'', imageAlt:img?.alt||'',
+              link:link?.getAttribute('href')||'', cardBackground:card?getComputedStyle(card).backgroundColor:'',
+              fixtureBackground:figure?getComputedStyle(figure).backgroundColor:null,
+              fixturePadding:figure?getComputedStyle(figure).paddingTop:null,
+              fixtureImageFit:fixtureImg?getComputedStyle(fixtureImg).objectFit:null,
+              fixtureImageNaturalWidth:fixtureImg?.naturalWidth||0,
+              fixtureImageSrc:fixtureImg?.getAttribute('src')||'',
+              fixtureImageAlt:fixtureImg?.alt||'',
               width:innerWidth,scrollWidth:document.documentElement.scrollWidth,
-              cardOffscreen:box.left<0||box.right>innerWidth+1};
+              cardOffscreen:!box||box.left<-1||box.right>innerWidth+1,
+            };
           };
           (async()=>{
             const browser=await chromium.launch({channel:'chrome',headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
@@ -70,29 +83,59 @@ jobs:
                 const page=await browser.newPage({viewport:{width,height:900},deviceScaleFactor:1,locale:'vi-VN'});
                 const errors=[];
                 page.on('pageerror',e=>errors.push(String(e).slice(0,220)));
-                await page.goto('https://aznet.vn/',{waitUntil:'domcontentloaded',timeout:90000});
-                await page.locator(marker).waitFor({state:'visible',timeout:30000});
-                const card=page.locator(marker+' .aznet-digital01__services-grid').last().locator('.aznet-digital01__service').first();
-                await card.locator('img').scrollIntoViewIfNeeded();
-                await card.locator('img').evaluate(async img=>{if(!img.complete)await new Promise(resolve=>{img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true});setTimeout(resolve,7000);});});
-                const before=await page.evaluate(read,marker);
-                await card.screenshot({path:path.join(process.env.RUNNER_TEMP,'aznet-live-media-before-'+width+'.png'),animations:'disabled'});
-                await page.addStyleTag({content:overlay});
-                const after=await page.evaluate(read,marker);
-                await card.screenshot({path:path.join(process.env.RUNNER_TEMP,'aznet-live-media-candidate-'+width+'.png'),animations:'disabled'});
-                const success=after.figureBg==='rgb(255, 255, 255)'&&parseFloat(after.figurePadding)>=8
-                  &&after.imageFit==='contain'&&after.imageNaturalWidth>0&&after.cardBg===before.cardBg
-                  &&after.cartText===before.cartText&&after.cartHref===before.cartHref
-                  &&after.cartProductId==='1468'&&after.cartProductId===before.cartProductId
-                  &&after.cartQty===before.cartQty&&after.priceText===before.priceText
-                  &&after.scrollWidth<=width&&after.cardOffscreen===false;
-                if(!success)fail=true;
-                out.widths.push({width,pass:success,before,after,pageErrors:errors});
-                console.log('LIVE_MEDIA_'+width,JSON.stringify({pass:success,before,after,pageErrors:errors},null,2));
-                await page.close();
+                try {
+                  const response=await page.goto('https://aznet.vn/',{waitUntil:'domcontentloaded',timeout:90000});
+                  if(response?.status()!==200)throw new Error('Public homepage HTTP '+response?.status());
+                  await page.locator(marker).waitFor({state:'visible',timeout:20000});
+                  const card=page.locator(marker+' .aznet-digital01__product').first();
+                  const image=card.locator('img').first();
+                  await image.scrollIntoViewIfNeeded();
+                  await image.evaluate(async img=>{try{await img.decode();}catch{}});
+                  const before=await page.evaluate(read,marker);
+                  await card.screenshot({path:path.join(process.env.RUNNER_TEMP,'aznet-live-media-before-'+width+'.png'),animations:'disabled'});
+                  const fixtureAdded=await card.evaluate(card=>{
+                    const source=card.querySelector('img'),main=card.closest('main');
+                    if(!source||!main)return false;
+                    const shell=document.createElement('div');
+                    shell.className='aznet-digital01__service';
+                    shell.dataset.legacyCommercialMediaQa='1';
+                    shell.style.cssText='width:min(320px,calc(100% - 48px));margin:24px auto;box-sizing:border-box';
+                    const figure=document.createElement('figure');
+                    figure.className='aznet-digital01__commercial-media';
+                    const img=source.cloneNode(true);
+                    img.loading='eager';
+                    figure.append(img);shell.append(figure);main.append(shell);
+                    return true;
+                  });
+                  if(!fixtureAdded)throw new Error('Native WordPress product Media could not seed browser-only fixture');
+                  const fixtureImg=page.locator('[data-legacy-commercial-media-qa] img');
+                  await fixtureImg.scrollIntoViewIfNeeded();
+                  await fixtureImg.evaluate(async img=>{try{await img.decode();}catch{}});
+                  await page.addStyleTag({content:overlay});
+                  const after=await page.evaluate(read,marker);
+                  await page.locator('[data-legacy-commercial-media-qa]').screenshot({
+                    path:path.join(process.env.RUNNER_TEMP,'aznet-live-media-candidate-'+width+'.png'),
+                    animations:'disabled'
+                  });
+                  const pass=before.cardCount===2&&before.imageNaturalWidth>0&&!!before.imageAlt&&!!before.link
+                    &&!before.cardOffscreen&&after.cardCount===before.cardCount
+                    &&after.imageSrc===before.imageSrc&&after.imageAlt===before.imageAlt
+                    &&after.link===before.link&&after.cardBackground===before.cardBackground
+                    &&after.fixtureBackground==='rgb(255, 255, 255)'
+                    &&parseFloat(after.fixturePadding)>=8&&after.fixtureImageFit==='contain'
+                    &&after.fixtureImageNaturalWidth>0
+                    &&after.fixtureImageSrc===before.imageSrc&&after.fixtureImageAlt===before.imageAlt
+                    &&after.scrollWidth<=width&&errors.length===0;
+                  if(!pass)fail=true;
+                  out.widths.push({width,pass,before,after,pageErrors:errors});
+                  console.log('LIVE_NATIVE_MEDIA_'+width,JSON.stringify({pass,before,after,pageErrors:errors}));
+                }catch(e){
+                  fail=true;out.widths.push({width,pass:false,error:String(e)});
+                  console.error('PUBLIC_NATIVE_MEDIA_FAILED_'+width,String(e));
+                }finally{await page.close();}
               }
               fs.writeFileSync(path.join(process.env.RUNNER_TEMP,'aznet-public-media-overlay-qa.json'),JSON.stringify(out,null,2));
-              console.log('RESULT',fail?'FAIL':'PASS','Only local CSS overlay. Whole-site a11y, raster pixel AA and installed Theme release remain separate.');
+              console.log('RESULT',fail?'FAIL':'PASS','Real WordPress Brand product Media + browser-only legacy visual primitive; no provider L5 claim.');
               if(fail)process.exitCode=1;
             }finally{await browser.close();}
           })().catch(e=>{console.error('OVERLAY_QA_FAILED',e.stack||e);process.exitCode=1;});
