@@ -30,7 +30,9 @@ jobs:
         run: |
           set -euo pipefail
           npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
-          npx playwright install --with-deps chromium
+          # The hosted runner already carries Chromium runtime libraries. Avoid
+          # slow Ubuntu font-package mirrors that can stall --with-deps.
+          npx playwright install chromium
 
       - name: Run actual public aznet.vn homepage L4 postdeploy audit
         env:
