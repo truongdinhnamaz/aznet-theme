@@ -69,4 +69,24 @@ if (!str_contains($wf, '            1.3.97)')
     $fail('X6 historical gate or unknown-version failure weakened');
 }
 
+// Historical v1.3.97 suites still execute unchanged on their exact source,
+// while newer Theme versions must correctly report the job not applicable.
+$historical = [
+    'rqa-v1397-candidate.yml' => ['exact-1397-preview', 'assert-theme-version.sh 1.3.97'],
+    'rqa-v1397-curtain01-preview.yml' => ['curtain01-c5', '--version 1.3.97'],
+    'rqa-v1397-live-provider-overlay.yml' => ['rqa-live-provider-overlay', 'rqa_v1397_live_provider_overlay.mjs'],
+];
+foreach ($historical as $filename => [$job, $historical_marker]) {
+    $historical_workflow = (string) file_get_contents($root . '/.github/workflows/' . $filename);
+    if (!str_contains($historical_workflow, "  historical_scope:\n")
+        || !str_contains($historical_workflow, 'ref: 
+ . '{{ github.event.pull_request.head.sha }}')
+        || !str_contains($historical_workflow, "  {$job}:\n    needs: historical_scope\n    if: needs.historical_scope.outputs.is_target == 'true'")
+        || !str_contains($historical_workflow, "if [[ \"\$version\" == '1.3.97' ]]")
+        || !str_contains($historical_workflow, "echo 'is_target=false' >> \"\$GITHUB_OUTPUT\"")
+        || !str_contains($historical_workflow, $historical_marker)) {
+        $fail('historical v1.3.97 job not strictly scoped/preserved: ' . $filename);
+    }
+}
+
 echo "PASS: technical-only 1.3.98 patch metadata promotion boundary\n";
