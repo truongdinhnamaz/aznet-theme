@@ -240,6 +240,24 @@ body.aznet-theme-preset--digital-01 .aznet-digital01__service {
   display:flex;flex-direction:column;align-items:stretch;
   transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
 }
+/* A WordPress-authored commercial image may have dark raster lettering.
+   Keep its media on an opaque neutral tile even inside the featured navy card.
+   Theme presentation only; image/content and WooCommerce state stay with owners. */
+body.aznet-theme-preset--digital-01 .aznet-digital01__service .aznet-digital01__commercial-media {
+  margin:0 0 18px;
+  padding:12px;
+  background:#fff;
+  border-radius:10px;
+  overflow:hidden;
+}
+body.aznet-theme-preset--digital-01 .aznet-digital01__service .aznet-digital01__commercial-media img {
+  display:block;
+  max-width:100%;
+  width:100%;
+  height:auto;
+  aspect-ratio:1/1;
+  object-fit:contain;
+}
 body.aznet-theme-preset--digital-01 .aznet-digital01__service:first-child {
   background:#192e3b;color:#fff;border-color:#192e3b;
 }

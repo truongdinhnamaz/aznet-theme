@@ -1,0 +1,111 @@
+name: Digital 01 Commercial Media Public Overlay L4 (read-only)
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'assets/css/components/homepage-digital-01.css'
+      - 'tests/offline/digital01-commercial-media-surface-contract.php'
+      - '.github/workflows/digital01-commercial-media-public-l4.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  public-overlay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 14
+    steps:
+      - name: Checkout candidate CSS only
+        uses: actions/checkout@v4
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify Chrome
+        run: google-chrome --version || chromium --version
+      - name: Install read-only browser dependency
+        run: npm install --no-save --no-package-lock playwright@1.55.0
+      - name: Compare live image surface before and after scoped candidate CSS
+        run: |
+          node <<'NODE'
+          const fs=require('node:fs');
+          const path=require('node:path');
+          const {chromium}=require('playwright');
+          const css=fs.readFileSync('assets/css/components/homepage-digital-01.css','utf8');
+          const selector='body.aznet-theme-preset--digital-01 .aznet-digital01__service .aznet-digital01__commercial-media';
+          function pickRule(sel){
+            const at=css.indexOf(sel+' {');
+            if(at===-1) throw new Error('candidate CSS rule missing: '+sel);
+            const end=css.indexOf('}',at);
+            if(end<0)throw new Error('incomplete candidate CSS rule: '+sel);
+            return css.slice(at,end+1);
+          }
+          const overlay=pickRule(selector)+'\n'+pickRule(selector+' img');
+          const marker='.aznet-digital01__commercial-catalog-home-20261026';
+          const out={scope:'Public aznet.vn HTML, local Chrome CSS overlay ONLY. Never writes site/theme/cart. Not installed CSS certification.',head:process.env.GITHUB_SHA,widths:[]};
+          const read=(marker)=>{
+            const root=document.querySelector(marker);
+            const groups=[...root.querySelectorAll('.aznet-digital01__services-grid')];
+            const card=groups[groups.length-1].querySelector('.aznet-digital01__service');
+            const figure=card.querySelector('figure.aznet-digital01__commercial-media');
+            const img=figure.querySelector('img');
+            const cart=card.querySelector('.woocommerce a.add_to_cart_button');
+            const box=card.getBoundingClientRect();
+            return {cardBg:getComputedStyle(card).backgroundColor,
+              figureBg:getComputedStyle(figure).backgroundColor,
+              figurePadding:getComputedStyle(figure).paddingTop,
+              imageFit:getComputedStyle(img).objectFit,
+              imageNaturalWidth:img.naturalWidth,
+              imageAlt:img.alt,
+              cartText:cart?.textContent.trim(),cartHref:cart?.getAttribute('href'),
+              cartProductId:cart?.getAttribute('data-product_id'),cartQty:cart?.getAttribute('data-quantity'),
+              priceText:card.querySelector('.product.woocommerce')?.textContent.trim().slice(0,170),
+              width:innerWidth,scrollWidth:document.documentElement.scrollWidth,
+              cardOffscreen:box.left<0||box.right>innerWidth+1};
+          };
+          (async()=>{
+            const browser=await chromium.launch({channel:'chrome',headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+            let fail=false;
+            try{
+              for(const width of [390,1440]){
+                const page=await browser.newPage({viewport:{width,height:900},deviceScaleFactor:1,locale:'vi-VN'});
+                const errors=[];
+                page.on('pageerror',e=>errors.push(String(e).slice(0,220)));
+                await page.goto('https://aznet.vn/',{waitUntil:'domcontentloaded',timeout:90000});
+                await page.locator(marker).waitFor({state:'visible',timeout:30000});
+                const card=page.locator(marker+' .aznet-digital01__services-grid').last().locator('.aznet-digital01__service').first();
+                await card.locator('img').scrollIntoViewIfNeeded();
+                await card.locator('img').evaluate(async img=>{if(!img.complete)await new Promise(resolve=>{img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true});setTimeout(resolve,7000);});});
+                const before=await page.evaluate(read,marker);
+                await card.screenshot({path:path.join(process.env.RUNNER_TEMP,'aznet-live-media-before-'+width+'.png'),animations:'disabled'});
+                await page.addStyleTag({content:overlay});
+                const after=await page.evaluate(read,marker);
+                await card.screenshot({path:path.join(process.env.RUNNER_TEMP,'aznet-live-media-candidate-'+width+'.png'),animations:'disabled'});
+                const success=after.figureBg==='rgb(255, 255, 255)'&&parseFloat(after.figurePadding)>=8
+                  &&after.imageFit==='contain'&&after.imageNaturalWidth>0&&after.cardBg===before.cardBg
+                  &&after.cartText===before.cartText&&after.cartHref===before.cartHref
+                  &&after.cartProductId==='1468'&&after.cartProductId===before.cartProductId
+                  &&after.cartQty===before.cartQty&&after.priceText===before.priceText
+                  &&after.scrollWidth<=width&&after.cardOffscreen===false;
+                if(!success)fail=true;
+                out.widths.push({width,pass:success,before,after,pageErrors:errors});
+                console.log('LIVE_MEDIA_'+width,JSON.stringify({pass:success,before,after,pageErrors:errors},null,2));
+                await page.close();
+              }
+              fs.writeFileSync(path.join(process.env.RUNNER_TEMP,'aznet-public-media-overlay-qa.json'),JSON.stringify(out,null,2));
+              console.log('RESULT',fail?'FAIL':'PASS','Only local CSS overlay. Whole-site a11y, raster pixel AA and installed Theme release remain separate.');
+              if(fail)process.exitCode=1;
+            }finally{await browser.close();}
+          })().catch(e=>{console.error('OVERLAY_QA_FAILED',e.stack||e);process.exitCode=1;});
+          NODE
+      - name: Archive real public before/after overlay evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: digital01-commercial-media-public-overlay-l4
+          path: |
+            ${{ runner.temp }}/aznet-live-media-before-390.png
+            ${{ runner.temp }}/aznet-live-media-before-1440.png
+            ${{ runner.temp }}/aznet-live-media-candidate-390.png
+            ${{ runner.temp }}/aznet-live-media-candidate-1440.png
+            ${{ runner.temp }}/aznet-public-media-overlay-qa.json
+          if-no-files-found: warn
