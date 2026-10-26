@@ -39,7 +39,10 @@ jobs:
                   '.aznet-digital01__hero h1',
                   '.aznet-digital01__commercial-catalog-home-20261026',
                   '.aznet-digital01__commercial-catalog-home-20261026 img',
-                  '.aznet-digital01__commercial-catalog-home-20261026 a'
+                  '.aznet-digital01__commercial-catalog-home-20261026 a',
+                  '.aznet-digital01__commercial-catalog-home-20261026 a.add_to_cart_button',
+                  '.aznet-digital01__commercial-catalog-home-20261026 p.product',
+                  '.aznet-digital01__process .aznet-digital01__text-link > a'
                 ];
                 const nodes = selectors.map(selector => {
                   const el = document.querySelector(selector);
