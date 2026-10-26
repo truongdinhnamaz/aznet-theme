@@ -1,0 +1,44 @@
+name: Digital 01 Process Link Contrast L4
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'assets/css/components/homepage-digital-01.css'
+      - 'tests/browser/digital01-process-link-aa-l4.mjs'
+      - '.github/workflows/digital01-process-link-aa-l4.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-process-link-candidate:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright Chromium
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Public Process link candidate-overlay contrast and ownership
+        env:
+          DIGITAL01_PUBLIC_URL: https://aznet.vn/
+          DIGITAL01_EVIDENCE_DIR: /tmp/digital01-process-link-evidence
+        run: |
+          set -euo pipefail
+          node tests/browser/digital01-process-link-aa-l4.mjs
+          test -s /tmp/digital01-process-link-evidence/summary.json
+      - name: Upload read-only browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: digital01-process-link-l4
+          path: /tmp/digital01-process-link-evidence/
+          if-no-files-found: warn
