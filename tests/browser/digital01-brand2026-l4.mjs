@@ -16,6 +16,16 @@ const cases = [
   {name:'tablet', width:820, height:1024, columns:2},
   {name:'mobile', width:390, height:844, columns:1},
 ];
+// Page templates and the front page must both trigger lazy Media before
+// screenshots and decode assertions; networkidle does not scroll into view.
+const loadNativeQueryImages = async page => {
+  const images = page.locator('.aznet-digital01--brand-2026 .aznet-digital01__articles .wp-block-post-featured-image img');
+  for (const image of await images.all()) {
+    await image.scrollIntoViewIfNeeded();
+    await image.evaluate(async img => { try { await img.decode(); } catch {} });
+  }
+  await page.evaluate(() => window.scrollTo(0, 0));
+};
 const summary = [];
 let failed = false;
 for (const test of cases) {
@@ -24,15 +34,7 @@ for (const test of cases) {
   const errors = [];
   page.on('pageerror',err=>errors.push(String(err)));
   await page.goto(base,{waitUntil:'networkidle',timeout:90000});
-  // WP Core marks below-the-fold Query featured images loading="lazy".
-  // Explicitly visit each image before checking naturalWidth: networkidle
-  // alone does not load images that never entered the viewport.
-  const nativeArticleImages = page.locator('.aznet-digital01--brand-2026 .aznet-digital01__articles .wp-block-post-featured-image img');
-  for (const image of await nativeArticleImages.all()) {
-    await image.scrollIntoViewIfNeeded();
-    await image.evaluate(async img => { try { await img.decode(); } catch {} });
-  }
-  await page.evaluate(() => window.scrollTo(0, 0));
+  await loadNativeQueryImages(page);
   const data = await page.evaluate(() => {
     const query = x=>document.querySelector(x);
     const sel = '.aznet-digital01--brand-2026';
@@ -268,6 +270,7 @@ if(!Number.isInteger(landingId) || landingId <= 0){
     const context = await browser.newContext({viewport:{width:view.width,height:view.height},deviceScaleFactor:1});
     const page = await context.newPage();
     await page.goto(base+'/?page_id='+landingId,{waitUntil:'networkidle',timeout:90000});
+    await loadNativeQueryImages(page);
     const data = await page.evaluate(() => ({
       pageClass: document.body.className,
       branded: !!document.querySelector('.aznet-digital01--brand-2026'),
@@ -276,6 +279,16 @@ if(!Number.isInteger(landingId) || landingId <= 0){
       extraPageHeader: !!document.querySelector('.aznet-theme-page__header'),
       CSSActive: performance.getEntriesByType('resource').some(r=>r.name.includes('homepage-digital-01-brand-2026.css')),
       offerCards:document.querySelectorAll('.aznet-digital01--brand-2026 .aznet-digital01__offer-card').length,
+      processSteps:document.querySelectorAll('.aznet-digital01--brand-2026 .aznet-digital01__step').length,
+      portraitReady:[...document.querySelectorAll('.aznet-digital01--brand-2026 .aznet-digital01__portrait img')].every(img=>img.complete && img.naturalWidth>0),
+      portraitCount:document.querySelectorAll('.aznet-digital01--brand-2026 .aznet-digital01__portrait img').length,
+      products:document.querySelectorAll('.aznet-digital01--brand-2026 .aznet-digital01__product').length,
+      productImagesReady:[...document.querySelectorAll('.aznet-digital01--brand-2026 .aznet-digital01__product img')].every(img=>img.complete && img.naturalWidth>0),
+      queryArticles:document.querySelectorAll('.aznet-digital01--brand-2026 .aznet-digital01__articles .wp-block-post-template .wp-block-post').length,
+      queryImages:document.querySelectorAll('.aznet-digital01--brand-2026 .aznet-digital01__articles .wp-block-post-featured-image img').length,
+      queryImagesReady:[...document.querySelectorAll('.aznet-digital01--brand-2026 .aznet-digital01__articles .wp-block-post-featured-image img')].every(img=>img.complete && img.naturalWidth>0),
+      faqDetails:document.querySelectorAll('.aznet-digital01--brand-2026 .aznet-digital01__faq details').length,
+      finalCtaLinks:document.querySelectorAll('.aznet-digital01--brand-2026 .aznet-digital01__cta a[href]').length,
       scrollWidth:document.documentElement.scrollWidth,
       viewportWidth:window.innerWidth
     }));
@@ -286,6 +299,22 @@ if(!Number.isInteger(landingId) || landingId <= 0){
     if(data.h1Count!==1 || data.h1Text!=='Xây dựng website tăng trưởng thực sự')
       problems.push('native Landing Page H1 incorrectly duplicated or missing');
     if(data.extraPageHeader) problems.push('extra native Page header breaks Hero-first composition');
+    if(data.processSteps!==5 || data.portraitCount!==1 || !data.portraitReady)
+      problems.push('native Landing process/portrait missing or Media not decoded');
+    if(data.products!==2 || !data.productImagesReady)
+      problems.push('native Landing product cards or Media not decoded');
+    if(data.queryArticles!==3 || data.queryImages!==3 || !data.queryImagesReady)
+      problems.push('native Landing Query Loop article images not decoded after lazy scrolling');
+    if(data.faqDetails!==5 || data.finalCtaLinks!==2)
+      problems.push('native Landing FAQ or final CTA missing');
+    if(view.width===390 && data.faqDetails===5){
+      const faq = page.locator('.aznet-digital01--brand-2026 .aznet-digital01__faq details').first();
+      await faq.locator('summary').focus();
+      await page.keyboard.press('Enter');
+      if(!await faq.evaluate(el=>el.open)) problems.push('native Landing FAQ Enter activation failed');
+      await page.keyboard.press('Enter');
+      if(await faq.evaluate(el=>el.open)) problems.push('native Landing FAQ Enter dismissal failed');
+    }
     if(data.scrollWidth>data.viewportWidth+2) problems.push('horizontal overflow');
     const outcome={...view,observed:data,problems};
     summary.push(outcome);
