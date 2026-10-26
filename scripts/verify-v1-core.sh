@@ -143,8 +143,6 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-release-closure-
 printf '%s\n' '==> X6 promotion-aware workflow ownership contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-promotion-workflow-boundary-contract.php
 
-php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v1398-release-candidate-contract.php
-
 printf '%s\n' '==> Strict current-version technical release-candidate contract (nonpublishing)'
 RELEASE_VERSION=$(sed -n 's/^Version:[[:space:]]*//p' style.css | head -n 1)
 case "$RELEASE_VERSION" in
@@ -168,6 +166,9 @@ case "$RELEASE_VERSION" in
     ;;
   1.3.97)
     php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v1397-release-candidate-contract.php
+    ;;
+  1.3.98)
+    php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v1398-release-candidate-contract.php
     ;;
   *)
     echo "FAIL: unsupported Theme release contract version $RELEASE_VERSION" >&2
