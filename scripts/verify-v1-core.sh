@@ -143,6 +143,8 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-release-closure-
 printf '%s\n' '==> X6 promotion-aware workflow ownership contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-promotion-workflow-boundary-contract.php
 
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v1398-release-candidate-contract.php
+
 printf '%s\n' '==> Strict current-version technical release-candidate contract (nonpublishing)'
 RELEASE_VERSION=$(sed -n 's/^Version:[[:space:]]*//p' style.css | head -n 1)
 case "$RELEASE_VERSION" in
