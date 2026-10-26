@@ -241,6 +241,25 @@ function render_homepage_setup_card(): void {
     echo '</div>';
 }
 
+/** Explain existing content-owner entrypoints without taking over their workflows. */
+function render_content_editing_guide(): void {
+    echo '<section class="aznet-theme-panel aznet-theme-content-editing-guide" aria-labelledby="aznet-theme-content-editing-guide-title">';
+    echo '<h2 id="aznet-theme-content-editing-guide-title">' . esc_html__( 'Chỉnh sửa nội dung ở đâu?', 'aznet-theme' ) . '</h2>';
+    echo '<p>' . esc_html__( 'WordPress quản lý Bài viết, Trang, Chuyên mục và Thư viện ảnh. AZnet Theme chỉ quản lý bố cục và nguồn hiển thị.', 'aznet-theme' ) . '</p>';
+    $notes = [
+        [ __( 'Ảnh đại diện', 'aznet-theme' ), __( 'Đặt trong phần sửa Bài viết hoặc Trang. Ảnh chèn vào nội dung không tự trở thành ảnh đại diện.', 'aznet-theme' ) ],
+        [ __( 'Chuyên mục', 'aznet-theme' ), __( 'Một Bài viết có thể thuộc nhiều Chuyên mục và vì vậy xuất hiện trong nhiều danh sách.', 'aznet-theme' ) ],
+        [ __( 'Hỏi đáp', 'aznet-theme' ), __( 'Nếu Trang chủ đang dùng một Trang FAQ được gán làm nguồn, hãy sửa Trang đó. Bài viết trong Chuyên mục Hỏi đáp không tự biến thành FAQ trên Trang chủ.', 'aznet-theme' ) ],
+        [ __( 'Footer', 'aznet-theme' ), __( 'Với Footer soạn nội dung theo cột, tên dịch vụ hoặc chuyên mục chỉ là văn bản nếu chưa chèn liên kết bằng trình soạn thảo Footer.', 'aznet-theme' ) ],
+        [ __( 'Email biểu mẫu', 'aznet-theme' ), __( 'Địa chỉ nhận và cơ chế gửi do plugin biểu mẫu sở hữu, không thuộc AZnet Theme. Không đổi email quản trị WordPress để thay cài đặt biểu mẫu.', 'aznet-theme' ) ],
+    ];
+    echo '<ul>';
+    foreach ( $notes as $note ) {
+        echo '<li><strong>' . esc_html( $note[0] ) . ':</strong> ' . esc_html( $note[1] ) . '</li>';
+    }
+    echo '</ul></section>';
+}
+
 function render_control_center(): void {
     if ( ! current_user_can( 'edit_theme_options' ) ) { return; }
     $section = control_center_section();
@@ -276,11 +295,18 @@ function render_control_center(): void {
             [ 'Menu', 'Quản lý menu bằng WordPress.', admin_url( 'nav-menus.php' ) ],
             [ 'Header', 'Chọn preset và sticky mode.', add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'header' ], admin_url( 'admin.php' ) ) ],
             [ 'Trang', 'Tạo Page mới bằng Classic Editor.', admin_url( 'post-new.php?post_type=page' ) ],
+            [ 'Bài viết', 'Sửa nội dung tin tức và bài hỏi đáp trong WordPress.', admin_url( 'edit.php' ) ],
+            [ 'Chuyên mục', 'Phân loại Bài viết vào đúng nhóm.', admin_url( 'edit-tags.php?taxonomy=category' ) ],
+            [ 'Quản lý Trang', 'Sửa nội dung dịch vụ và Trang FAQ.', admin_url( 'edit.php?post_type=page' ) ],
+            [ 'Thư viện ảnh', 'Quản lý các file Media WordPress.', admin_url( 'upload.php' ) ],
+            [ 'Nguồn Trang chủ', 'Chọn nội dung sẽ hiển thị trên Trang chủ.', add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'homepage' ], admin_url( 'admin.php' ) ) ],
+            [ 'Nội dung Footer', 'Sửa các cột Footer và chèn liên kết.', add_query_arg( [ 'page' => 'aznet-theme', 'section' => 'footer' ], admin_url( 'admin.php' ) ) ],
         ];
         foreach ( $cards as $card ) {
             echo '<a class="aznet-theme-card" href="' . esc_url( $card[2] ) . '"><strong>' . esc_html( $card[0] ) . '</strong><span>' . esc_html( $card[1] ) . '</span></a>';
         }
         echo '</div>';
+        render_content_editing_guide();
         echo '<div class="aznet-theme-panel"><h2>Portable settings</h2>';
         echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="aznet_theme_export_settings">';
         wp_nonce_field( 'aznet_theme_export_settings' ); submit_button( 'Xuất JSON', 'secondary', 'submit', false ); echo '</form>';
