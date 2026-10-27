@@ -2,9 +2,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
 
-// Public, read-only L4: apply ONLY the candidate Theme CSS selector as a
-// browser-local overlay. Never click add-to-cart or mutate WooCommerce state.
+// Public read-only Woo L4 after Brand Light changed the native Front Page.
+// Real Woo buttons now belong to the published Shop archive, not the editorial
+// Homepage. Exercise the Theme's legacy optional inline-CTA selector with
+// browser-local ancestor classes only; never click or update WooCommerce.
 const url = process.env.DIGITAL01_PUBLIC_URL || 'https://aznet.vn/';
+const shopUrl = new URL('/san-pham/', url).href;
 const outDir = process.env.DIGITAL01_EVIDENCE_DIR || '/tmp/digital01-woo-inline-cta-aa';
 const css = fs.readFileSync('assets/css/components/homepage-digital-01.css', 'utf8');
 const selector = 'body.aznet-theme-preset--digital-01 .aznet-digital01__service .woocommerce a.add_to_cart_button';
@@ -16,8 +19,9 @@ const candidateRule = css.slice(start, end + 1);
 
 const output = {
   head: process.env.GITHUB_SHA || '',
-  target: url,
-  scope: 'read-only public DOM; candidate browser-local CSS overlay; NOT installed Theme certification',
+  target: shopUrl,
+  homepage: url,
+  scope: 'published native Woo Shop public DOM; browser-local CSS opt-in and candidate overlay; neither installed Homepage Woo nor actual provider L5 certification',
   viewports: [],
   failures: [],
 };
@@ -53,12 +57,12 @@ try {
     const errors = [];
     page.on('pageerror', (error) => errors.push(error.message));
     try {
-      let response = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
+      let response = await page.goto(shopUrl, { waitUntil: 'domcontentloaded', timeout: 45000 });
       if (response?.status() !== 200) response = await page.reload({ waitUntil: 'domcontentloaded', timeout: 45000 });
-      if (response?.status() !== 200) throw new Error('Public homepage status ' + String(response?.status()));
+      if (response?.status() !== 200) throw new Error('Public Woo Shop status ' + String(response?.status()));
 
-      const button = page.locator('.aznet-digital01__service .woocommerce a.add_to_cart_button').first();
-      await button.waitFor({ state: 'visible', timeout: 25000 });
+      const button = page.locator('main ul.products li.product a.add_to_cart_button').first();
+      await button.waitFor({ state: 'visible', timeout: 15000 });
       const read = async () => button.evaluate((element) => {
         const style = getComputedStyle(element);
         return {
@@ -80,6 +84,18 @@ try {
         throw new Error('Public Woo button missing native identity or Digital 01 preset');
       }
       const beforeRatio = contrast(before.color, before.background);
+      const optIn = await button.evaluate((el) => {
+        const product = el.closest('li.product');
+        const list = product?.closest('ul.products');
+        const main = list?.closest('main');
+        if (!main || !list || !product) return false;
+        // Existing button remains WordPress/Woo-owned; class changes only
+        // affect this disposable Chromium DOM. No cart action or new data.
+        main.classList.add('aznet-digital01__service');
+        list.classList.add('woocommerce');
+        return true;
+      });
+      if (!optIn) throw new Error('Native Woo Shop product structure missing');
       await page.addStyleTag({ content: candidateRule });
       const after = await read();
       const afterRatio = contrast(after.color, after.background);
@@ -130,4 +146,4 @@ try {
   fs.writeFileSync(path.join(outDir, 'summary.json'), JSON.stringify(output, null, 2));
 }
 if (output.failures.length) process.exitCode = 1;
-else console.log('PASS: Digital 01 Woo native CTA AA 3/3 (public CSS overlay, not deployed production)');
+else console.log('PASS: Digital 01 Woo Shop native CTA AA 3/3 (public native buttons + synthetic optional Theme opt-in, not production Homepage Woo)');

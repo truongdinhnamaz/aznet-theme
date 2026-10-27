@@ -71,6 +71,15 @@ foreach ([$visualPath, $homepagePath] as $path) {
     }
 }
 $homepageCss = (string) file_get_contents($homepagePath);
+// WordPress core/query sets source image width/height attributes; Theme must not
+// keep an intrinsic 630px thumbnail height when the 3-card grid becomes narrow.
+$queryImageSelector = 'body.aznet-theme-preset--digital-01 .aznet-digital01__articles .wp-block-post-featured-image img';
+if (! preg_match('~' . preg_quote($queryImageSelector, '~') . '\\s*\\{([^}]*)\\}~', $homepageCss, $queryImageRule)
+    || ! preg_match('/(?:^|;)\\s*height\\s*:\\s*auto\\s*;/i', $queryImageRule[1])) {
+    fwrite(STDERR, "FAIL: Digital 01 WordPress Query thumbnails must size fluidly rather than use source height.\\n");
+    exit(1);
+}
+
 if (preg_match('/\.aznet-digital01__hero\\s+\\.wp-block-heading\\s*\\{[^}]*max-width:\\s*[0-9]+ch/i', $homepageCss)) {
     fwrite(STDERR, "FAIL: Digital 01 Hero heading hard-width cap violates D-036 desktop natural wrapping.\\n");
     exit(1);
