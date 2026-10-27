@@ -9,7 +9,7 @@ if ( ! $page instanceof \WP_Post ) {
 }
 if ( ! $page instanceof \WP_Post ) { return; }
 
-$summary = trim( (string) get_the_excerpt( $page ) );
+$summary = has_excerpt( $page ) ? trim( (string) get_the_excerpt( $page ) ) : '';
 $details = [];
 $queue = parse_blocks( (string) $page->post_content );
 
