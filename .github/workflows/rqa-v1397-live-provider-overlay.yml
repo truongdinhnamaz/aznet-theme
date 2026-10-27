@@ -16,7 +16,30 @@ permissions:
 # Browser-only CSS projection over public live v1.3.92 provider DOM.
 # No WordPress mutation. Does not certify provider L5 on installed Theme 1.3.97.
 jobs:
+  historical_scope:
+    runs-on: ubuntu-24.04
+    outputs:
+      is_target: ${{ steps.detect.outputs.is_target }}
+    steps:
+      - name: Read exact PR candidate version for historical v1.3.97 QA
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - id: detect
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(sed -n 's/^Version:[[:space:]]*//p' style.css | head -n 1)"
+          if [[ "$version" == '1.3.97' ]]; then
+            echo 'is_target=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'is_target=false' >> "$GITHUB_OUTPUT"
+            echo "SKIP: historical RQA 1.3.97 QA is not applicable to $version"
+          fi
+
   rqa-live-provider-overlay:
+    needs: historical_scope
+    if: needs.historical_scope.outputs.is_target == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 18
     steps:
