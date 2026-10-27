@@ -383,8 +383,10 @@ body.aznet-theme-preset--digital-01 .aznet-digital01__articles .wp-block-post:ho
   transform:translateY(-3px);box-shadow:0 14px 35px rgba(21,36,45,.09);
 }
 body.aznet-theme-preset--digital-01 .aznet-digital01__articles .wp-block-post-featured-image {margin:0!important;}
+/* WordPress writes a fixed height= attribute alongside aspect-ratio:16/9.
+ * Let the thumbnail height follow the rendered width, not its source pixels. */
 body.aznet-theme-preset--digital-01 .aznet-digital01__articles .wp-block-post-featured-image img {
-  display:block;width:100%;aspect-ratio:16/10;object-fit:cover;
+  display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;
 }
 body.aznet-theme-preset--digital-01 .aznet-digital01__articles .wp-block-post-date {
   margin:22px 23px 8px!important;color:#697985;font-size:.73rem;

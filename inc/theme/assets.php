@@ -311,6 +311,65 @@ function enqueue_active_template_homepage_assets( ?string $version = null ): voi
     enqueue_template_homepage_assets( $preset, $version );
 }
 
+/**
+ * Explicit WordPress-native Digital 01 Brand Light 2026 Page opt-in.
+ * The Theme owns presentation only; WordPress owns the Page content.
+ */
+function digital01_brand2026_page_active(): bool {
+    if ( ! function_exists( 'is_singular' ) || ! is_singular( 'page' )
+        || ! function_exists( __NAMESPACE__ . '\\homepage_preset' )
+        || 'digital-01' !== homepage_preset()
+        || ! function_exists( 'get_queried_object' ) ) {
+        return false;
+    }
+
+    $page = get_queried_object();
+    return $page instanceof \WP_Post
+        && str_contains( (string) $page->post_content, 'aznet-digital01--brand-2026' );
+}
+
+/** Load optional Brand Light CSS and its existing Digital 01 base only on opted-in Pages. */
+function enqueue_digital01_brand2026_asset( ?string $version = null ): void {
+    if ( ! digital01_brand2026_page_active() ) {
+        return;
+    }
+
+    $path = '/assets/css/components/homepage-digital-01-brand-2026.css';
+    if ( ! function_exists( 'get_theme_file_path' ) || ! is_file( get_theme_file_path( $path ) ) ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'aznet-theme-homepage',
+        get_theme_file_uri( '/assets/css/components/homepage.css' ),
+        [ 'aznet-theme-tokens' ],
+        $version
+    );
+
+    $base_path = '/assets/css/components/homepage-digital-01.css';
+    wp_enqueue_style(
+        'aznet-theme-homepage-digital-01',
+        get_theme_file_uri( $base_path ),
+        [ 'aznet-theme-tokens', 'aznet-theme-homepage' ],
+        asset_content_version( $base_path, $version )
+    );
+
+    wp_enqueue_style(
+        'aznet-theme-homepage-digital-01-brand-2026',
+        get_theme_file_uri( $path ),
+        [ 'aznet-theme-homepage-digital-01', 'aznet-theme-site-header' ],
+        asset_content_version( $path, $version )
+    );
+
+    // Keep the inverse Process CTA accessible if a CDN still serves a stale
+    // minified CSS asset after a Theme update. WordPress prints this scoped
+    // foreground with the current Page, without reading any plugin cache.
+    wp_add_inline_style(
+        'aznet-theme-homepage-digital-01-brand-2026',
+        'body.aznet-theme-preset--digital-01 .aznet-digital01--brand-2026 .aznet-digital01__process .aznet-digital01__text-link > a{color:#ff9d85!important;text-decoration:underline;text-underline-offset:.18em;}'
+    );
+}
+
 /** Enqueue Law 01 only for its active Front Page presentation surface. */
 /** Enqueue the shared Team card presentation for Team surfaces only. */
 function enqueue_team_card_asset( ?string $version = null ): void {
@@ -799,6 +858,7 @@ function enqueue_assets(): void {
 
     enqueue_homepage_blueprint_asset( $version );
     enqueue_active_template_homepage_assets( $version );
+    enqueue_digital01_brand2026_asset( $version );
 
     if ( should_enqueue_generic_content_assets() ) {
         wp_enqueue_style(

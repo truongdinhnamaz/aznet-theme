@@ -1,0 +1,54 @@
+name: Digital 01 Brand Woo Optional L4
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'assets/css/components/homepage-digital-01-brand-2026.css'
+      - 'assets/css/components/homepage-digital-01.css'
+      - 'tests/browser/digital01-brand2026-woo-aa-compose-l4.mjs'
+      - '.github/workflows/digital01-brand2026-woo-optional-l4.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Optional external-provider / public-site presentation compatibility evidence.
+# This is NOT a WordPress-clean Core Theme release-readiness dependency.
+jobs:
+  public-woo-compose-aa:
+    name: Read-only public Woo AA opt-in composition
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout exact Theme candidate
+        uses: actions/checkout@v4
+
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Chromium Playwright
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Verify native Woo Add-to-Cart AA with opt-in Brand Light CSS
+        env:
+          DIGITAL01_PUBLIC_URL: https://aznet.vn/
+          DIGITAL01_STATE_DIR: /tmp/digital01-brand-woo-optional
+        run: |
+          set -euo pipefail
+          node --check tests/browser/digital01-brand2026-woo-aa-compose-l4.mjs
+          node tests/browser/digital01-brand2026-woo-aa-compose-l4.mjs
+          test -s /tmp/digital01-brand-woo-optional/brand-woo-aa-summary.json
+
+      - name: Upload read-only provider compatibility evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: digital01-brand-woo-optional-l4
+          path: /tmp/digital01-brand-woo-optional
+          if-no-files-found: warn

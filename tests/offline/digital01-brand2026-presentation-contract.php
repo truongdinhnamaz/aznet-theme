@@ -1,0 +1,148 @@
+<?php
+/**
+ * Digital 01 optional 2026 light-brand presentation: opt-in, isolated, WCAG-aware.
+ * WordPress owns the HTML, logo and links. Theme owns only presentation.
+ */
+declare(strict_types=1);
+
+$root = dirname(__DIR__, 2);
+$cssPath = $root . '/assets/css/components/homepage-digital-01-brand-2026.css';
+$assetPath = $root . '/inc/theme/assets.php';
+$fail = static function (string $reason): never {
+    fwrite(STDERR, "FAIL: Digital 01 Brand 2026 — {$reason}\n");
+    exit(1);
+};
+
+if (! is_file($cssPath)) {
+    $fail('opt-in stylesheet is missing');
+}
+$css = (string) file_get_contents($cssPath);
+$assets = (string) file_get_contents($assetPath);
+if (! str_contains($css, '.aznet-digital01--brand-2026')
+    || ! str_contains($css, ':has(.aznet-digital01--brand-2026)')) {
+    $fail('all branded styling must be opt-in, including site Header');
+}
+foreach ([
+    '.aznet-digital01__hero-grid',
+    '.aznet-digital01__hero-art',
+    '.aznet-digital01__laptop',
+    '.aznet-digital01__hero-checks',
+    '.aznet-digital01__services-grid',
+    '.aznet-digital01__service-icon',
+    '.aznet-digital01__brand-why',
+    '.aznet-digital01__brand-feature-grid',
+    ':focus-visible',
+    'prefers-reduced-motion',
+    'max-width: 900px',
+    'max-width: 600px',
+] as $required) {
+    if (! str_contains($css, $required)) {
+        $fail('required screenshot/responsive/accessibility surface absent: ' . $required);
+    }
+}
+if (preg_match('~https?://|/wp-content/uploads/|post_meta|rootprofile|choiceguide_~i', $css)) {
+    $fail('Theme CSS must not own site asset URLs or provider/domain state');
+}
+if (! str_contains($assets, 'function digital01_brand2026_page_active()')
+    || ! str_contains($assets, 'function enqueue_digital01_brand2026_asset(')
+    || ! str_contains($assets, 'enqueue_digital01_brand2026_asset( $version )')
+    || ! str_contains($assets, 'aznet-digital01--brand-2026')
+    || ! str_contains($assets, "'aznet-theme-homepage-digital-01-brand-2026'")) {
+    $fail('no verified surface-aware native Page opt-in asset path');
+}
+if (! str_contains($assets, "get_queried_object()")
+    || ! str_contains($assets, "get_theme_file_uri( \$path )")) {
+    $fail('WordPress-native current Page / Theme asset resolver missing');
+}
+
+$hexLuminance = static function (string $hex): float {
+    $rgb = array_map(
+        static function (string $v): float {
+            $x = hexdec($v) / 255;
+            return $x <= .04045 ? $x / 12.92 : (($x + .055) / 1.055) ** 2.4;
+        },
+        str_split(substr($hex, 1), 2)
+    );
+    return .2126 * $rgb[0] + .7152 * $rgb[1] + .0722 * $rgb[2];
+};
+$contrast = static function (string $a, string $b) use ($hexLuminance): float {
+    $first = $hexLuminance($a);
+    $second = $hexLuminance($b);
+    return (max($first, $second) + .05) / (min($first, $second) + .05);
+};
+preg_match('/--d01-brand-action:\s*(#[0-9a-f]{6})/i', $css, $action);
+preg_match('/--d01-brand-text:\s*(#[0-9a-f]{6})/i', $css, $text);
+preg_match('/--d01-brand-muted:\s*(#[0-9a-f]{6})/i', $css, $muted);
+if (empty($action[1]) || empty($text[1]) || empty($muted[1])) {
+    $fail('semantic brand color tokens missing');
+}
+foreach ([
+    'white-on-action' => ['#ffffff', $action[1]],
+    'action-on-white' => [$action[1], '#ffffff'],
+    'primary-body-on-white' => [$text[1], '#ffffff'],
+    'muted-on-white' => [$muted[1], '#ffffff'],
+] as $name => [$foreground, $background]) {
+    if ($contrast($foreground, $background) < 4.5) {
+        $fail(sprintf('%s is %.2f:1 below AA 4.5:1', $name, $contrast($foreground, $background)));
+    }
+}
+// A real WordPress utility menu contains nested <ul class="sub-menu"> items.
+// Only its final top-level <li> is the consultation CTA: descendant li:last-child
+// also matches the last entry of every dropdown and makes it a false red CTA.
+if (! str_contains($css, '.aznet-theme-site-header__utility-menu > li:last-child > a')
+    || str_contains($css, '.aznet-theme-site-header__utility-menu li:last-child > a')) {
+    $fail('Header CTA must target only final top-level menu item, not submenu children');
+}
+// Only opt-in Brand Light may render the three equal WordPress-authored paths.
+foreach (['.aznet-digital01__offer-paths','.aznet-digital01__offer-inner',
+          '.aznet-digital01__offer-grid','.aznet-digital01__offer-card',
+          '.aznet-digital01__offer-kind','.aznet-digital01__offer-links',
+          '.aznet-digital01__offer-more'] as $selector) {
+    if (! str_contains($css, $selector)) {
+        $fail('missing three-path presentation selector ' . $selector);
+    }
+}
+if (! str_contains($css, 'grid-template-columns:repeat(3,minmax(0,1fr))')) {
+    $fail('three commercial paths must use three equal desktop columns');
+}
+if (! preg_match('~@media\s*\(max-width:\s*900px\)\s*\{\s*body\.aznet-theme-preset--digital-01\s+\.aznet-digital01--brand-2026\s+\.aznet-digital01__offer-grid\s*\{[^}]*grid-template-columns:\s*1fr~', $css)) {
+    $fail('three commercial paths must stack at 900px and below');
+}
+// Brand Light links may not turn native WooCommerce cart buttons into low-AA
+// red text on provider-owned light buttons. Constrain only the optional Theme
+// presentation and reuse its semantic body token, with no !important.
+$wooSelector = 'body.aznet-theme-preset--digital-01 .aznet-digital01--brand-2026 .aznet-digital01__service .woocommerce a.add_to_cart_button';
+if (! preg_match('~' . preg_quote($wooSelector, '~') . '\\s*\\{([^}]*)\\}~', $css, $wooRule)
+    || ! preg_match('/(?:^|;)\\s*color\\s*:\\s*var\\(--d01-brand-text\\)\\s*;/i', $wooRule[1])
+    || str_contains($wooRule[1], '!important')) {
+    $fail('Brand Light must preserve native Woo CTA AA via a card-scoped semantic foreground');
+}
+// On an opted-in Brand Light Page, preserve the original WordPress media/logo
+// but give a dark-footer raster mark an opaque, padded light background.
+// The :has(img-class) guard preserves the native text-only fallback unchanged.
+$footerLogoSelector = 'body.aznet-theme-preset--digital-01:has(.aznet-digital01--brand-2026) .aznet-theme-site-footer .aznet-theme-site-footer__brand:has(.aznet-theme-site-footer__logo)';
+if (! preg_match('~' . preg_quote($footerLogoSelector, '~') . '\\s*\\{([^}]*)\\}~', $css, $footerLogoRule)
+    || ! preg_match('/\\bbackground\\s*:\\s*#ffffff\\s*;/i', $footerLogoRule[1])
+    || ! preg_match('/\\bpadding\\s*:\\s*[^;]+;/i', $footerLogoRule[1])) {
+    $fail('Brand Light WordPress logo must have a scoped opaque padded backing on dark Footer');
+}
+
+// Real public-site RED: the native WordPress Process link rendered browser blue
+// (#0000ee) on #101f2b, only 1.78:1. The opted-in Theme must paint the
+// actual <a> in all states, without changing its WordPress-owned destination.
+$processSelector = 'body.aznet-theme-preset--digital-01 .aznet-digital01--brand-2026 .aznet-digital01__process .aznet-digital01__text-link > a';
+if (! preg_match('~' . preg_quote($processSelector, '~') . '\\s*\\{([^}]*)\\}~', $css, $processRule)
+    || ! preg_match('/\\bcolor\\s*:\\s*(#[0-9a-f]{6})\\s*!important\\s*;/i', $processRule[1], $processColor)
+    || $contrast($processColor[1], '#101f2b') < 4.5) {
+    $fail('Brand Light inverse Process CTA must have AA anchor color scoped to opt-in presentation');
+}
+
+// The external Brand CSS is source-of-truth, but stale CDN minification can
+// outlive WordPress cache purges. WordPress must print a minimal Page-scoped
+// fail-safe inline rule on the same brand handle, never a global plugin hook.
+if (! str_contains($assets, 'wp_add_inline_style(')
+    || ! str_contains($assets, $processSelector . '{color:#ff9d85!important;')) {
+    $fail('opted-in native inline Process CTA fallback missing for stale CDN CSS');
+}
+
+echo "PASS: Digital 01 2026 reference — opt-in WordPress ownership, responsive components and WCAG AA token pairs\n";
