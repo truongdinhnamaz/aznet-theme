@@ -25,6 +25,13 @@ body.aznet-theme-preset--digital-01 {
   --aznet-theme-shadow-card:0 16px 38px rgba(21,36,45,.07);
   background:#fff;color:#15242d;
 }
+/* B26: taxonomy links in reading surfaces use an accessible text tone.
+ * Primary #eb5034 on white is 3.67:1; #b83920 is 5.76:1 on white
+ * and 5.36:1 on the Digital 01 subtle surface. Brand accent unchanged. */
+body.aznet-theme-preset--digital-01 .aznet-theme-article__categories a,
+body.aznet-theme-preset--digital-01 .aznet-theme-article__tags a {
+  color: #b83920;
+}
 body.aznet-theme-preset--digital-01 .aznet-theme-site-footer {
   background:#101f2b;color:#e8eff0;
 }
