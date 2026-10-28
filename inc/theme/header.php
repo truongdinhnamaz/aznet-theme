@@ -180,7 +180,7 @@ function header_context(): array {
             false,
             [
                 'class' => 'aznet-theme-site-header__logo',
-                'alt'   => '',
+                'alt'   => $site_title,
             ]
         );
     }
