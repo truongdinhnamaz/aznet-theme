@@ -6,7 +6,11 @@ on:
     paths:
       - 'patterns/homepage-wellness-01.php'
       - 'assets/starter/wellness01/**'
+      - 'assets/css/components/homepage-wellness-01.css'
+      - 'assets/css/components/generic-content.css'
+      - 'inc/theme/assets.php'
       - 'tests/browser/wellness01-*.mjs'
+      - 'tests/fixtures/wellness01-button-colors.html'
       - 'docs/demos/wellness01/preview.html'
       - 'tests/offline/r2-wellness01-pattern-contract.php'
       - '.github/workflows/wellness01-native-runtime-browser.yml'
@@ -103,6 +107,12 @@ jobs:
             $p = $registry->get_registered("aznet-theme/homepage-wellness-01");
             if (! is_array($p) || empty($p["content"])) { fwrite(STDERR, "FAIL: Wellness 01 pattern not registered\n"); exit(1); }
             $content = $p["content"];
+            // Include real native custom-color Buttons so the legacy palette
+            // collision and a white-background false match remain protected.
+            $fixture = file_get_contents(getenv("GITHUB_WORKSPACE") . "/tests/fixtures/wellness01-button-colors.html");
+            $end = strrpos($content, "</div><!-- /wp:group -->");
+            if (false === $end || false === $fixture) { throw new RuntimeException("Missing button regression fixture/root"); }
+            $content = substr_replace($content, $fixture, $end, 0);
             $parsed = parse_blocks($content);
             if (count($parsed) !== 1 || $parsed[0]["blockName"] !== "core/group") { fwrite(STDERR, "FAIL: pattern must insert exactly one native root Group\n"); exit(1); }
             $flat = function(array $blocks) use (&$flat) {
@@ -118,6 +128,10 @@ jobs:
           PUBLISH_ID=$(wp post create /tmp/wellness01-native/pattern.html --post_type=page --post_status=publish --post_title='Wellness 01 Published QA' --post_name=wellness01-published-qa --porcelain --path=/tmp/wp --allow-root)
           DRAFT_ID=$(wp post create /tmp/wellness01-native/pattern.html --post_type=page --post_status=draft --post_title='Wellness 01 Gutenberg QA' --post_name=wellness01-editor-qa --porcelain --path=/tmp/wp --allow-root)
           test -n "$PUBLISH_ID" && test -n "$DRAFT_ID"
+          # Exercise the real native Homepage composition and its surface CSS.
+          wp option update show_on_front page --path=/tmp/wp --allow-root
+          wp option update page_on_front "$PUBLISH_ID" --path=/tmp/wp --allow-root
+          wp eval '$s = get_theme_mod("aznet_theme_settings", []); $s["homepage_preset"] = "wellness-01"; set_theme_mod("aznet_theme_settings", $s);' --path=/tmp/wp --allow-root
           printf '%s\n' "$PUBLISH_ID" > /tmp/wellness01-native/page-id.txt
           printf '%s\n' "$DRAFT_ID" > /tmp/wellness01-native/draft-id.txt
           wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root

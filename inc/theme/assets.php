@@ -865,7 +865,7 @@ function enqueue_assets(): void {
             'aznet-theme-generic-content',
             get_theme_file_uri( '/assets/css/components/generic-content.css' ),
             [ 'aznet-theme-tokens' ],
-            $version
+            asset_content_version( '/assets/css/components/generic-content.css', $version )
         );
     }
 

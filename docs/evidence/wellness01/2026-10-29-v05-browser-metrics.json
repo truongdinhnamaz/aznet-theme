@@ -1,0 +1,854 @@
+{
+  "scope": "Actual WordPress7.1.4 Chrome inactive draft preview, not production or clean WordPress6.9 certification",
+  "date": "2026-10-29",
+  "base": "3960ee5b531163ed072eadff96be261ece8b7c2f",
+  "home": [
+    {
+      "requestedWidth": 390,
+      "buttons": [
+        {
+          "background": "rgb(56, 91, 73)",
+          "contrast": 7.1581680175368065,
+          "foreground": "rgb(247, 248, 250)",
+          "height": 51.72500228881836,
+          "name": "Khám phá chương trình",
+          "right": 243.5124969482422,
+          "width": 213.5124969482422,
+          "x": 30
+        },
+        {
+          "background": "rgb(248, 244, 237)",
+          "contrast": 16.192629908476302,
+          "foreground": "rgb(23, 24, 27)",
+          "height": 51.72500228881836,
+          "name": "Tư vấn chọn lớp",
+          "right": 190.16250610351562,
+          "width": 160.16250610351562,
+          "x": 30
+        },
+        {
+          "background": "rgb(56, 91, 73)",
+          "contrast": 7.1581680175368065,
+          "foreground": "rgb(247, 248, 250)",
+          "height": 51.72500228881836,
+          "name": "Xem đầy đủ bảng giá",
+          "right": 213.0124969482422,
+          "width": 197.0124969482422,
+          "x": 16
+        },
+        {
+          "background": "rgb(56, 91, 73)",
+          "contrast": 7.1581680175368065,
+          "foreground": "rgb(247, 248, 250)",
+          "height": 51.72500228881836,
+          "name": "Tìm hiểu chương trình 5 buổi",
+          "right": 282.3874969482422,
+          "width": 252.3874969482422,
+          "x": 30
+        },
+        {
+          "background": "rgb(56, 91, 73)",
+          "contrast": 7.1581680175368065,
+          "foreground": "rgb(247, 248, 250)",
+          "height": 51.72500228881836,
+          "name": "Gọi tư vấn: 0847 329 689",
+          "right": 252.1999969482422,
+          "width": 222.1999969482422,
+          "x": 30
+        },
+        {
+          "background": "rgb(248, 244, 237)",
+          "contrast": 16.192629908476302,
+          "foreground": "rgb(23, 24, 27)",
+          "height": 51.72500228881836,
+          "name": "Đến trang liên hệ",
+          "right": 198.6374969482422,
+          "width": 168.6374969482422,
+          "x": 30
+        }
+      ],
+      "clientWidth": 375,
+      "documentWidth": 375,
+      "failures": [],
+      "images": [
+        {
+          "alt": "Huấn luyện viên Phạm Thị Vân Anh trong trang phục Yoga",
+          "height": 472.8000183105469,
+          "inline": "aspect-ratio:2/3;object-fit:cover",
+          "loaded": true,
+          "ratio": "2 / 3",
+          "right": 345.20001220703125,
+          "source": "https://vananhyoga.com/wp-content/uploads/2026/10/Van-Anh-Yoga-van-anh-5-685x1024.jpg",
+          "width": 315.20001220703125,
+          "x": 30
+        },
+        {
+          "alt": "Chân dung huấn luyện viên Phạm Thị Vân Anh",
+          "height": 420.26251220703125,
+          "inline": "aspect-ratio:3/4;object-fit:cover",
+          "loaded": true,
+          "ratio": "3 / 4",
+          "right": 345.20001220703125,
+          "source": "https://vananhyoga.com/wp-content/uploads/2026/10/Van-Anh-Yoga-van-anh-4-768x1024.jpg",
+          "width": 315.20001220703125,
+          "x": 30
+        }
+      ],
+      "robots": "noindex, nofollow",
+      "root": {
+        "height": 7727.11279296875,
+        "right": 375.20001220703125,
+        "width": 375.20001220703125,
+        "x": 0
+      },
+      "sections": [
+        {
+          "height": 878.6375122070312,
+          "name": "aznet-theme-wellness01__programs",
+          "right": 359.20001220703125,
+          "transform": "none",
+          "width": 343.20001220703125,
+          "x": 16
+        },
+        {
+          "height": 956.2750244140625,
+          "name": "aznet-theme-wellness01__steps",
+          "right": 359.20001220703125,
+          "transform": "none",
+          "width": 343.20001220703125,
+          "x": 16
+        },
+        {
+          "height": 721.8375244140625,
+          "name": "aznet-theme-wellness01__schedule",
+          "right": 359.20001220703125,
+          "transform": "none",
+          "width": 343.20001220703125,
+          "x": 16
+        },
+        {
+          "height": 460.8999938964844,
+          "name": "aznet-theme-wellness01__faq",
+          "right": 359.20001220703125,
+          "transform": "none",
+          "width": 343.20001220703125,
+          "x": 16
+        },
+        {
+          "height": 272.8999938964844,
+          "name": "aznet-theme-wellness01__journal",
+          "right": 359.20001220703125,
+          "transform": "none",
+          "width": 343.20001220703125,
+          "x": 16
+        }
+      ],
+      "themeStyles": [
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/tokens.css?ver=1.3.98-cf09008e8e10",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/integrations/convertflow.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/style.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/site-header.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/site-footer.css?ver=1.3.98-f0ec8ae84e88",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/homepage.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/homepage-wellness-01.css?ver=1.3.98-c80d086521d8",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/generic-content.css?ver=1.3.98-ea95bcc3d416",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/forms.css?ver=1.3.98-5ec8401fc098",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/media.css?ver=1.3.98-e95668a342bb"
+      ],
+      "viewport": 390
+    },
+    {
+      "requestedWidth": 768,
+      "buttons": [
+        {
+          "background": "rgb(56, 91, 73)",
+          "contrast": 7.1581680175368065,
+          "foreground": "rgb(247, 248, 250)",
+          "height": 51.72500228881836,
+          "name": "Khám phá chương trình",
+          "right": 243.5124969482422,
+          "width": 213.5124969482422,
+          "x": 30
+        },
+        {
+          "background": "rgb(248, 244, 237)",
+          "contrast": 16.192629908476302,
+          "foreground": "rgb(23, 24, 27)",
+          "height": 51.72500228881836,
+          "name": "Tư vấn chọn lớp",
+          "right": 411.6750030517578,
+          "width": 160.16250610351562,
+          "x": 251.5124969482422
+        },
+        {
+          "background": "rgb(56, 91, 73)",
+          "contrast": 7.1581680175368065,
+          "foreground": "rgb(247, 248, 250)",
+          "height": 51.72500228881836,
+          "name": "Xem đầy đủ bảng giá",
+          "right": 221.0124969482422,
+          "width": 197.0124969482422,
+          "x": 24
+        },
+        {
+          "background": "rgb(56, 91, 73)",
+          "contrast": 7.1581680175368065,
+          "foreground": "rgb(247, 248, 250)",
+          "height": 51.72500228881836,
+          "name": "Tìm hiểu chương trình 5 buổi",
+          "right": 282.3874969482422,
+          "width": 252.3874969482422,
+          "x": 30
+        },
+        {
+          "background": "rgb(56, 91, 73)",
+          "contrast": 7.1581680175368065,
+          "foreground": "rgb(247, 248, 250)",
+          "height": 51.72500228881836,
+          "name": "Gọi tư vấn: 0847 329 689",
+          "right": 252.1999969482422,
+          "width": 222.1999969482422,
+          "x": 30
+        },
+        {
+          "background": "rgb(248, 244, 237)",
+          "contrast": 16.192629908476302,
+          "foreground": "rgb(23, 24, 27)",
+          "height": 51.72500228881836,
+          "name": "Đến trang liên hệ",
+          "right": 428.83750915527344,
+          "width": 168.6374969482422,
+          "x": 260.20001220703125
+        }
+      ],
+      "clientWidth": 753,
+      "documentWidth": 753,
+      "failures": [],
+      "images": [
+        {
+          "alt": "Huấn luyện viên Phạm Thị Vân Anh trong trang phục Yoga",
+          "height": 1039.2000732421875,
+          "inline": "aspect-ratio:2/3;object-fit:cover",
+          "loaded": true,
+          "ratio": "2 / 3",
+          "right": 722.7999877929688,
+          "source": "https://vananhyoga.com/wp-content/uploads/2026/10/Van-Anh-Yoga-van-anh-5-768x1147.jpg",
+          "width": 692.7999877929688,
+          "x": 30
+        },
+        {
+          "alt": "Chân dung huấn luyện viên Phạm Thị Vân Anh",
+          "height": 923.7250366210938,
+          "inline": "aspect-ratio:3/4;object-fit:cover",
+          "loaded": true,
+          "ratio": "3 / 4",
+          "right": 722.7999877929688,
+          "source": "https://vananhyoga.com/wp-content/uploads/2026/10/Van-Anh-Yoga-van-anh-4-768x1024.jpg",
+          "width": 692.7999877929688,
+          "x": 30
+        }
+      ],
+      "robots": "noindex, nofollow",
+      "root": {
+        "height": 7305.17529296875,
+        "right": 752.7999877929688,
+        "width": 752.7999877929688,
+        "x": 0
+      },
+      "sections": [
+        {
+          "height": 654.3875122070312,
+          "name": "aznet-theme-wellness01__programs",
+          "right": 728.7999877929688,
+          "transform": "none",
+          "width": 704.7999877929688,
+          "x": 24
+        },
+        {
+          "height": 790.125,
+          "name": "aznet-theme-wellness01__steps",
+          "right": 728.7999877929688,
+          "transform": "none",
+          "width": 704.7999877929688,
+          "x": 24
+        },
+        {
+          "height": 603.2875366210938,
+          "name": "aznet-theme-wellness01__schedule",
+          "right": 728.7999877929688,
+          "transform": "none",
+          "width": 704.7999877929688,
+          "x": 24
+        },
+        {
+          "height": 347.1499938964844,
+          "name": "aznet-theme-wellness01__faq",
+          "right": 728.7999877929688,
+          "transform": "none",
+          "width": 704.7999877929688,
+          "x": 24
+        },
+        {
+          "height": 210.35000610351562,
+          "name": "aznet-theme-wellness01__journal",
+          "right": 728.7999877929688,
+          "transform": "none",
+          "width": 704.7999877929688,
+          "x": 24
+        }
+      ],
+      "themeStyles": [
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/tokens.css?ver=1.3.98-cf09008e8e10",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/integrations/convertflow.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/style.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/site-header.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/site-footer.css?ver=1.3.98-f0ec8ae84e88",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/homepage.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/homepage-wellness-01.css?ver=1.3.98-c80d086521d8",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/generic-content.css?ver=1.3.98-ea95bcc3d416",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/forms.css?ver=1.3.98-5ec8401fc098",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/media.css?ver=1.3.98-e95668a342bb"
+      ],
+      "viewport": 768
+    },
+    {
+      "requestedWidth": 1440,
+      "buttons": [
+        {
+          "background": "rgb(56, 91, 73)",
+          "contrast": 7.1581680175368065,
+          "foreground": "rgb(247, 248, 250)",
+          "height": 51.72500228881836,
+          "name": "Khám phá chương trình",
+          "right": 335.9124984741211,
+          "width": 213.5124969482422,
+          "x": 122.4000015258789
+        },
+        {
+          "background": "rgb(248, 244, 237)",
+          "contrast": 16.192629908476302,
+          "foreground": "rgb(23, 24, 27)",
+          "height": 51.72500228881836,
+          "name": "Tư vấn chọn lớp",
+          "right": 504.07501220703125,
+          "width": 160.16250610351562,
+          "x": 343.9125061035156
+        },
+        {
+          "background": "rgb(56, 91, 73)",
+          "contrast": 7.1581680175368065,
+          "foreground": "rgb(247, 248, 250)",
+          "height": 51.72500228881836,
+          "name": "Xem đầy đủ bảng giá",
+          "right": 319.4124984741211,
+          "width": 197.0124969482422,
+          "x": 122.4000015258789
+        },
+        {
+          "background": "rgb(56, 91, 73)",
+          "contrast": 7.1581680175368065,
+          "foreground": "rgb(247, 248, 250)",
+          "height": 51.72500228881836,
+          "name": "Tìm hiểu chương trình 5 buổi",
+          "right": 282.3874969482422,
+          "width": 252.3874969482422,
+          "x": 30
+        },
+        {
+          "background": "rgb(56, 91, 73)",
+          "contrast": 7.1581680175368065,
+          "foreground": "rgb(247, 248, 250)",
+          "height": 51.72500228881836,
+          "name": "Gọi tư vấn: 0847 329 689",
+          "right": 252.1999969482422,
+          "width": 222.1999969482422,
+          "x": 30
+        },
+        {
+          "background": "rgb(248, 244, 237)",
+          "contrast": 16.192629908476302,
+          "foreground": "rgb(23, 24, 27)",
+          "height": 51.72500228881836,
+          "name": "Đến trang liên hệ",
+          "right": 428.83750915527344,
+          "width": 168.6374969482422,
+          "x": 260.20001220703125
+        }
+      ],
+      "clientWidth": 1425,
+      "documentWidth": 1425,
+      "failures": [],
+      "images": [
+        {
+          "alt": "Huấn luyện viên Phạm Thị Vân Anh trong trang phục Yoga",
+          "height": 836.4000244140625,
+          "inline": "aspect-ratio:2/3;object-fit:cover",
+          "loaded": true,
+          "ratio": "2 / 3",
+          "right": 1302.4000244140625,
+          "source": "https://vananhyoga.com/wp-content/uploads/2026/10/Van-Anh-Yoga-van-anh-5.jpg",
+          "width": 557.6000366210938,
+          "x": 744.7999877929688
+        },
+        {
+          "alt": "Chân dung huấn luyện viên Phạm Thị Vân Anh",
+          "height": 738.6625366210938,
+          "inline": "aspect-ratio:3/4;object-fit:cover",
+          "loaded": true,
+          "ratio": "3 / 4",
+          "right": 1302.4000244140625,
+          "source": "https://vananhyoga.com/wp-content/uploads/2026/10/Van-Anh-Yoga-van-anh-4.jpg",
+          "width": 554,
+          "x": 748.4000244140625
+        }
+      ],
+      "robots": "noindex, nofollow",
+      "root": {
+        "height": 5789.86279296875,
+        "right": 1424.800048828125,
+        "width": 1424.800048828125,
+        "x": 0
+      },
+      "sections": [
+        {
+          "height": 423.82501220703125,
+          "name": "aznet-theme-wellness01__programs",
+          "right": 1302.400001525879,
+          "transform": "none",
+          "width": 1180,
+          "x": 122.4000015258789
+        },
+        {
+          "height": 618.2625122070312,
+          "name": "aznet-theme-wellness01__steps",
+          "right": 1302.400001525879,
+          "transform": "none",
+          "width": 1180,
+          "x": 122.4000015258789
+        },
+        {
+          "height": 378.2250061035156,
+          "name": "aznet-theme-wellness01__schedule",
+          "right": 1302.400001525879,
+          "transform": "none",
+          "width": 1180,
+          "x": 122.4000015258789
+        },
+        {
+          "height": 373.9125061035156,
+          "name": "aznet-theme-wellness01__faq",
+          "right": 1302.400001525879,
+          "transform": "none",
+          "width": 1180,
+          "x": 122.4000015258789
+        },
+        {
+          "height": 209.1125030517578,
+          "name": "aznet-theme-wellness01__journal",
+          "right": 1302.400001525879,
+          "transform": "none",
+          "width": 1180,
+          "x": 122.4000015258789
+        }
+      ],
+      "themeStyles": [
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/tokens.css?ver=1.3.98-cf09008e8e10",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/integrations/convertflow.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/style.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/site-header.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/site-footer.css?ver=1.3.98-f0ec8ae84e88",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/homepage.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/homepage-wellness-01.css?ver=1.3.98-c80d086521d8",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/generic-content.css?ver=1.3.98-ea95bcc3d416",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/forms.css?ver=1.3.98-5ec8401fc098",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/media.css?ver=1.3.98-e95668a342bb"
+      ],
+      "viewport": 1440
+    }
+  ],
+  "secondary": [
+    {
+      "name": "Về Vân Anh",
+      "buttons": [
+        {
+          "background": "rgb(56, 91, 73)",
+          "contrast": 7.1581680175368065,
+          "foreground": "rgb(247, 248, 250)",
+          "height": 51.72500228881836,
+          "name": "Xem chương trình Yoga",
+          "right": 259.0500030517578,
+          "width": 213.0500030517578,
+          "x": 46
+        }
+      ],
+      "clientWidth": 375,
+      "documentWidth": 375,
+      "failures": [],
+      "images": [
+        {
+          "alt": "Chân dung huấn luyện viên Phạm Thị Vân Anh",
+          "height": 452.26251220703125,
+          "inline": "aspect-ratio:3/4;object-fit:cover",
+          "loaded": true,
+          "ratio": "3 / 4",
+          "right": 357.20001220703125,
+          "source": "https://vananhyoga.com/wp-content/uploads/2026/10/Van-Anh-Yoga-van-anh-4-768x1024.jpg",
+          "width": 339.20001220703125,
+          "x": 18
+        }
+      ],
+      "robots": "noindex, nofollow",
+      "root": {
+        "height": 2937.762451171875,
+        "right": 357.20001220703125,
+        "width": 339.20001220703125,
+        "x": 18
+      },
+      "sections": [],
+      "themeStyles": [
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/tokens.css?ver=1.3.98-cf09008e8e10",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/integrations/convertflow.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/style.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/site-header.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/site-footer.css?ver=1.3.98-f0ec8ae84e88",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/generic-content.css?ver=1.3.98-ea95bcc3d416",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/page.css?ver=1.3.98-de0c88ed2717",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/forms.css?ver=1.3.98-5ec8401fc098",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/media.css?ver=1.3.98-e95668a342bb"
+      ],
+      "viewport": 390
+    },
+    {
+      "name": "Chương trình Yoga",
+      "buttons": [
+        {
+          "background": "rgb(56, 91, 73)",
+          "contrast": 7.1581680175368065,
+          "foreground": "rgb(247, 248, 250)",
+          "height": 51.72500228881836,
+          "name": "Trao đổi về chuyên đề",
+          "right": 248.02500915527344,
+          "width": 202.02500915527344,
+          "x": 46
+        },
+        {
+          "background": "rgb(56, 91, 73)",
+          "contrast": 7.1581680175368065,
+          "foreground": "rgb(247, 248, 250)",
+          "height": 51.72500228881836,
+          "name": "Xem học phí và lịch học",
+          "right": 232.4499969482422,
+          "width": 214.4499969482422,
+          "x": 18
+        }
+      ],
+      "clientWidth": 375,
+      "documentWidth": 375,
+      "failures": [],
+      "images": [],
+      "robots": "noindex, nofollow",
+      "root": {
+        "height": 2651.199951171875,
+        "right": 357.20001220703125,
+        "width": 339.20001220703125,
+        "x": 18
+      },
+      "sections": [],
+      "themeStyles": [
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/tokens.css?ver=1.3.98-cf09008e8e10",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/integrations/convertflow.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/style.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/site-header.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/site-footer.css?ver=1.3.98-f0ec8ae84e88",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/generic-content.css?ver=1.3.98-ea95bcc3d416",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/page.css?ver=1.3.98-de0c88ed2717",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/forms.css?ver=1.3.98-5ec8401fc098",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/media.css?ver=1.3.98-e95668a342bb"
+      ],
+      "viewport": 390
+    },
+    {
+      "name": "Học phí & Lịch học",
+      "buttons": [
+        {
+          "background": "rgb(56, 91, 73)",
+          "contrast": 7.1581680175368065,
+          "foreground": "rgb(247, 248, 250)",
+          "height": 51.72500228881836,
+          "name": "Gọi/Zalo tư vấn: 0847 329 689",
+          "right": 280.3625183105469,
+          "width": 262.3625183105469,
+          "x": 18
+        }
+      ],
+      "clientWidth": 375,
+      "documentWidth": 375,
+      "failures": [],
+      "images": [],
+      "robots": "noindex, nofollow",
+      "root": {
+        "height": 4236.52490234375,
+        "right": 357.20001220703125,
+        "width": 339.20001220703125,
+        "x": 18
+      },
+      "sections": [],
+      "themeStyles": [
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/tokens.css?ver=1.3.98-cf09008e8e10",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/integrations/convertflow.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/style.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/site-header.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/site-footer.css?ver=1.3.98-f0ec8ae84e88",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/generic-content.css?ver=1.3.98-ea95bcc3d416",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/page.css?ver=1.3.98-de0c88ed2717",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/forms.css?ver=1.3.98-5ec8401fc098",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/media.css?ver=1.3.98-e95668a342bb"
+      ],
+      "viewport": 390
+    },
+    {
+      "name": "Kiến thức Yoga",
+      "buttons": [],
+      "clientWidth": 375,
+      "documentWidth": 375,
+      "failures": [],
+      "images": [],
+      "robots": "noindex, nofollow",
+      "root": {
+        "height": 1611.4000244140625,
+        "right": 357.20001220703125,
+        "width": 339.20001220703125,
+        "x": 18
+      },
+      "sections": [],
+      "themeStyles": [
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/tokens.css?ver=1.3.98-cf09008e8e10",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/integrations/convertflow.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/style.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/site-header.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/site-footer.css?ver=1.3.98-f0ec8ae84e88",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/generic-content.css?ver=1.3.98-ea95bcc3d416",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/page.css?ver=1.3.98-de0c88ed2717",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/forms.css?ver=1.3.98-5ec8401fc098",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/media.css?ver=1.3.98-e95668a342bb"
+      ],
+      "viewport": 390
+    },
+    {
+      "name": "Liên hệ",
+      "buttons": [
+        {
+          "background": "rgb(56, 91, 73)",
+          "contrast": 7.1581680175368065,
+          "foreground": "rgb(247, 248, 250)",
+          "height": 51.72500228881836,
+          "name": "Nhắn tin Zalo",
+          "right": 187.5500030517578,
+          "width": 141.5500030517578,
+          "x": 46
+        },
+        {
+          "background": "rgb(56, 91, 73)",
+          "contrast": 7.1581680175368065,
+          "foreground": "rgb(247, 248, 250)",
+          "height": 51.72500228881836,
+          "name": "Xem bảng học phí và lịch học",
+          "right": 271.90000915527344,
+          "width": 253.90000915527344,
+          "x": 18
+        }
+      ],
+      "clientWidth": 375,
+      "documentWidth": 375,
+      "failures": [],
+      "images": [],
+      "robots": "noindex, nofollow",
+      "root": {
+        "height": 1435.25,
+        "right": 357.20001220703125,
+        "width": 339.20001220703125,
+        "x": 18
+      },
+      "sections": [],
+      "themeStyles": [
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/tokens.css?ver=1.3.98-cf09008e8e10",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/integrations/convertflow.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/style.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/site-header.css?ver=1.3.98",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/site-footer.css?ver=1.3.98-f0ec8ae84e88",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/generic-content.css?ver=1.3.98-ea95bcc3d416",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/page.css?ver=1.3.98-de0c88ed2717",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/forms.css?ver=1.3.98-5ec8401fc098",
+        "https://vananhyoga.com/wp-content/themes/aznet-theme-wpvibe-draft/assets/css/components/media.css?ver=1.3.98-e95668a342bb"
+      ],
+      "viewport": 390
+    }
+  ],
+  "baseline390": {
+    "phase": "RED",
+    "requestedWidth": 390,
+    "buttons": [
+      {
+        "background": "rgb(56, 91, 73)",
+        "contrast": 2.3338959445000387,
+        "foreground": "rgb(23, 24, 27)",
+        "height": 51.72500228881836,
+        "name": "Khám phá chương trình",
+        "right": 235.91249656677246,
+        "width": 213.5124969482422,
+        "x": 22.399999618530273
+      },
+      {
+        "background": "rgb(248, 244, 237)",
+        "contrast": 16.192629908476302,
+        "foreground": "rgb(23, 24, 27)",
+        "height": 51.72500228881836,
+        "name": "Tư vấn chọn lớp",
+        "right": 182.5625057220459,
+        "width": 160.16250610351562,
+        "x": 22.399999618530273
+      },
+      {
+        "background": "rgb(56, 91, 73)",
+        "contrast": 2.3338959445000387,
+        "foreground": "rgb(23, 24, 27)",
+        "height": 51.72500228881836,
+        "name": "Xem đầy đủ bảng giá",
+        "right": 26.212493896484375,
+        "width": 197.0124969482422,
+        "x": -170.8000030517578
+      },
+      {
+        "background": "rgb(56, 91, 73)",
+        "contrast": 2.3338959445000387,
+        "foreground": "rgb(23, 24, 27)",
+        "height": 51.72500228881836,
+        "name": "Tìm hiểu chương trình 5 buổi",
+        "right": 274.78749656677246,
+        "width": 252.3874969482422,
+        "x": 22.399999618530273
+      },
+      {
+        "background": "rgb(56, 91, 73)",
+        "contrast": 2.3338959445000387,
+        "foreground": "rgb(23, 24, 27)",
+        "height": 51.72500228881836,
+        "name": "Gọi tư vấn: 0847 329 689",
+        "right": 244.59999656677246,
+        "width": 222.1999969482422,
+        "x": 22.399999618530273
+      },
+      {
+        "background": "rgb(248, 244, 237)",
+        "contrast": 16.192629908476302,
+        "foreground": "rgb(23, 24, 27)",
+        "height": 51.72500228881836,
+        "name": "Đến trang liên hệ",
+        "right": 191.03749656677246,
+        "width": 168.6374969482422,
+        "x": 22.399999618530273
+      }
+    ],
+    "clientWidth": 375,
+    "documentWidth": 375,
+    "failures": [
+      "root clipped: -7.60..382.80 outside 0..375",
+      "aznet-theme-wellness01__programs clipped: -170.80..187.60 outside 0..375",
+      "aznet-theme-wellness01__steps clipped: -170.80..187.60 outside 0..375",
+      "aznet-theme-wellness01__schedule clipped: -170.80..187.60 outside 0..375",
+      "aznet-theme-wellness01__faq clipped: -170.80..187.60 outside 0..375",
+      "aznet-theme-wellness01__journal clipped: -170.80..187.60 outside 0..375",
+      "button Khám phá chương trình contrast 2.33:1 < 4.5:1 (rgb(23, 24, 27) on rgb(56, 91, 73))",
+      "button Xem đầy đủ bảng giá clipped: -170.80..26.21 outside 0..375",
+      "button Xem đầy đủ bảng giá contrast 2.33:1 < 4.5:1 (rgb(23, 24, 27) on rgb(56, 91, 73))",
+      "button Tìm hiểu chương trình 5 buổi contrast 2.33:1 < 4.5:1 (rgb(23, 24, 27) on rgb(56, 91, 73))",
+      "button Gọi tư vấn: 0847 329 689 contrast 2.33:1 < 4.5:1 (rgb(23, 24, 27) on rgb(56, 91, 73))"
+    ],
+    "images": [
+      {
+        "alt": "Huấn luyện viên Phạm Thị Vân Anh trong trang phục Yoga",
+        "height": 495.6000061035156,
+        "inline": "aspect-ratio:2/3;object-fit:cover",
+        "loaded": true,
+        "ratio": "2 / 3",
+        "right": 352.79999351501465,
+        "source": "https://vananhyoga.com/wp-content/uploads/2026/10/Van-Anh-Yoga-van-anh-5-685x1024.jpg",
+        "width": 330.3999938964844,
+        "x": 22.399999618530273
+      },
+      {
+        "alt": "Chân dung huấn luyện viên Phạm Thị Vân Anh",
+        "height": 440.5249938964844,
+        "inline": "aspect-ratio:3/4;object-fit:cover",
+        "loaded": true,
+        "ratio": "3 / 4",
+        "right": 352.79999351501465,
+        "source": "https://vananhyoga.com/wp-content/uploads/2026/10/Van-Anh-Yoga-van-anh-4-768x1024.jpg",
+        "width": 330.3999938964844,
+        "x": 22.399999618530273
+      }
+    ],
+    "robots": "noindex, nofollow",
+    "root": {
+      "height": 7588.5751953125,
+      "right": 382.7999939918518,
+      "width": 390.3999938964844,
+      "x": -7.599999904632568
+    },
+    "sections": [
+      {
+        "height": 794.6375122070312,
+        "name": "aznet-theme-wellness01__programs",
+        "right": 187.59999084472656,
+        "transform": "matrix(1, 0, 0, 1, -179.2, 0)",
+        "width": 358.3999938964844,
+        "x": -170.8000030517578
+      },
+      {
+        "height": 956.2750244140625,
+        "name": "aznet-theme-wellness01__steps",
+        "right": 187.59999084472656,
+        "transform": "matrix(1, 0, 0, 1, -179.2, 0)",
+        "width": 358.3999938964844,
+        "x": -170.8000030517578
+      },
+      {
+        "height": 721.8375244140625,
+        "name": "aznet-theme-wellness01__schedule",
+        "right": 187.59999084472656,
+        "transform": "matrix(1, 0, 0, 1, -179.2, 0)",
+        "width": 358.3999938964844,
+        "x": -170.8000030517578
+      },
+      {
+        "height": 434.5,
+        "name": "aznet-theme-wellness01__faq",
+        "right": 187.59999084472656,
+        "transform": "matrix(1, 0, 0, 1, -179.2, 0)",
+        "width": 358.3999938964844,
+        "x": -170.8000030517578
+      },
+      {
+        "height": 272.8999938964844,
+        "name": "aznet-theme-wellness01__journal",
+        "right": 187.59999084472656,
+        "transform": "matrix(1, 0, 0, 1, -179.2, 0)",
+        "width": 358.3999938964844,
+        "x": -170.8000030517578
+      }
+    ],
+    "themeStyles": [
+      "https://vananhyoga.com/wp-content/themes/aznet-theme/assets/css/tokens.css?ver=1.3.98-cf09008e8e10",
+      "https://vananhyoga.com/wp-content/themes/aznet-theme/assets/css/integrations/convertflow.css?ver=1.3.98",
+      "https://vananhyoga.com/wp-content/themes/aznet-theme/style.css?ver=1.3.98",
+      "https://vananhyoga.com/wp-content/themes/aznet-theme/assets/css/components/site-header.css?ver=1.3.98",
+      "https://vananhyoga.com/wp-content/themes/aznet-theme/assets/css/components/site-footer.css?ver=1.3.98-f0ec8ae84e88",
+      "https://vananhyoga.com/wp-content/themes/aznet-theme/assets/css/components/homepage.css?ver=1.3.98",
+      "https://vananhyoga.com/wp-content/themes/aznet-theme/assets/css/components/homepage-wellness-01.css?ver=1.3.98-ff2423048940",
+      "https://vananhyoga.com/wp-content/themes/aznet-theme/assets/css/components/generic-content.css?ver=1.3.98",
+      "https://vananhyoga.com/wp-content/themes/aznet-theme/assets/css/components/forms.css?ver=1.3.98-5ec8401fc098",
+      "https://vananhyoga.com/wp-content/themes/aznet-theme/assets/css/components/media.css?ver=1.3.98-e95668a342bb"
+    ],
+    "viewport": 390
+  }
+}

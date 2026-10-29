@@ -5,6 +5,8 @@
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
+import { inspectWellnessLayout } from './wellness01-layout-probe.mjs';
 
 const base = process.env.WELLNESS_BASE_URL || 'http://127.0.0.1:8080';
 const pageId = process.env.WELLNESS_PAGE_ID;
@@ -15,7 +17,8 @@ fs.mkdirSync(out, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const problems = [];
 const captures = [];
-for (const [label, width, height] of [['desktop', 1440, 900], ['tablet', 1024, 768], ['mobile', 390, 844]]) {
+const genericFingerprint = createHash('sha256').update(fs.readFileSync(new URL('../../assets/css/components/generic-content.css', import.meta.url))).digest('hex').slice(0, 12);
+for (const [label, width, height] of [['desktop', 1440, 900], ['tablet-wide', 1024, 768], ['tablet', 768, 1024], ['mobile', 390, 844]]) {
   const page = await browser.newPage({ viewport: { width, height }, reducedMotion: 'reduce' });
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -39,6 +42,20 @@ for (const [label, width, height] of [['desktop', 1440, 900], ['tablet', 1024, 7
   if (info.docWidth > info.viewportWidth + 4) problems.push(`${label} horizontal overflow: ${info.docWidth} > ${info.viewportWidth}`);
   if (info.unresolvedAnchors.length) problems.push(`${label} missing anchors: ${info.unresolvedAnchors}`);
   if (info.signupForms) problems.push(`${label} unexpected Theme-owned signup form`);
+  // scrollWidth alone cannot detect sections clipped by an overflow:clip root.
+  const layout = await page.evaluate(inspectWellnessLayout);
+  problems.push(...layout.failures.map(failure => `${label} ${failure}`));
+  if (!await page.locator('.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01').count()
+    || !layout.themeStyles.some(url => url.includes('/homepage-wellness-01.css?ver='))) {
+    problems.push(`${label} missing actual Wellness composition or surface stylesheet`);
+  }
+  const fixtureNames = ['Custom white foreground', 'Short white foreground', 'White background stays dark'];
+  if (fixtureNames.some(name => layout.buttons.filter(button => button.name === name).length !== 1)) {
+    problems.push(`${label} missing custom-color regression Buttons inside the Wellness root`);
+  }
+  if (!layout.themeStyles.some(url => url.includes(`/generic-content.css?ver=`) && url.includes(genericFingerprint))) {
+    problems.push(`${label} generic-content CSS URL does not identify current bytes ${genericFingerprint}`);
+  }
   const photos = await page.evaluate(async () => {
     const imgs = [...document.querySelectorAll('.aznet-theme-wellness01 .wp-block-image img')];
     await Promise.all(imgs.map(img => img.decode().catch(() => {})));
@@ -59,7 +76,7 @@ for (const [label, width, height] of [['desktop', 1440, 900], ['tablet', 1024, 7
   if (axe.violations.length) problems.push(`${label} axe violations: ${axe.violations.map(v => v.id + '(' + v.nodes.length + ')').join(', ')}`);
   const screenshot = `${out}/${label}.png`;
   await page.screenshot({ path: screenshot, fullPage: true });
-  captures.push({ label, ...info, axeViolations: axe.violations, screenshot });
+  captures.push({ label, ...info, layout, axeViolations: axe.violations, screenshot });
   await page.close();
 }
 // Reopen an independent draft Page in the actual Gutenberg editor; check its
@@ -124,4 +141,4 @@ await editor.close();
 await browser.close();
 fs.writeFileSync(`${out}/verification.json`, JSON.stringify({ captures, editorState, roundTrip, problems }, null, 2));
 if (problems.length) { console.error('FAIL: Wellness 01 native WordPress QA\n' + problems.join('\n')); process.exit(1); }
-console.log('PASS: Wellness 01 WordPress browser x3 + axe + Gutenberg save/reopen; ' + editorState.count + ' blocks');
+console.log('PASS: Wellness 01 WordPress browser x4 + axe + Gutenberg save/reopen; ' + editorState.count + ' blocks');

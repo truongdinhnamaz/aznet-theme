@@ -1,6 +1,9 @@
 /* Wellness 01 — surface-aware Gutenberg presentation. No booking/content/identity logic. */
+.aznet-theme-homepage--wellness-01 .aznet-theme-entry--front-page {
+  width:100%;max-width:none;
+}
 .aznet-theme-homepage--wellness-01 .aznet-theme-entry__content > .aznet-theme-wellness01.alignfull {
-  width:100vw;max-width:none;margin-inline-start:50%;margin-inline-end:0;transform:translateX(-50%);
+  width:100%;max-width:none;margin-inline:0;transform:none;
 }
 .aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 {
   --w01-ink:#21372f; --w01-muted:#586d61; --w01-sage:#496b54; --w01-border:#dee7de;
@@ -13,7 +16,7 @@
   max-width:none;width:100%;margin-inline:0;transform:none;
 }
 .aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 > .wp-block-group.alignwide {
-  max-width:var(--w01-max);width:min(var(--w01-max),calc(100% - 48px));margin:clamp(56px,7vw,100px) auto;
+  max-width:var(--w01-max);width:min(var(--w01-max),calc(100% - 48px));margin:clamp(56px,7vw,100px) auto;transform:none;
 }
 .aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 :where(h1,h2,h3) {
   color:var(--w01-ink);letter-spacing:-.035em;line-height:1.2;text-wrap:balance;
