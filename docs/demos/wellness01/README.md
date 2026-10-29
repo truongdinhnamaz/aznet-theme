@@ -45,10 +45,20 @@ Theme **không** làm appointment engine, CRM, membership ledger, LMS, hồ sơ 
 
 ## 5. QA / gates / rollback
 
-**Đã kiểm tra cục bộ:** HTML fixture 3 biến thể / 8 section / anchor-id uniqueness; JS syntax; kiểm tra contrast chủ đạo (ink/cream, sage/cream, clay/cream); PHP lint; CLI native pattern RED (file chưa tồn tại) → GREEN; Gutenberg block attribute JSON + nesting 184 markers hợp lệ. Đây **không** phải L3 WordPress runtime, L4 browser/a11y hay L5 provider integration PASS. Headless Chromium trong môi trường hiện tại không hoàn thành screenshot, nên visual QA **UNKNOWN**.
+**Đã kiểm tra cục bộ:** HTML fixture 3 biến thể / 8 section / anchor-id uniqueness; JS syntax; kiểm tra contrast chủ đạo (ink/cream, sage/cream, clay/cream); PHP lint; CLI native pattern RED (file chưa tồn tại) → GREEN; Gutenberg block attribute JSON + nesting 184 markers hợp lệ. Đây **không** phải L3 WordPress runtime, L4 browser/a11y hay L5 provider integration PASS. Local Chromium fixture QA sau sửa lỗi badge tablet: **10 viewport (320–1440 px) × 3 biến thể nội dung PASS**, không tràn ngang/JS exception/anchor sai; lịch mẫu, CTA bất hoạt và mobile menu/keyboard focus được kiểm tra. Screenshot fixture tại 1440/1024/390. Đây chỉ là **bằng chứng browser của bản HTML demo**, không phải WordPress L4/a11y audit đầy đủ. Native Gutenberg pattern đã thêm regression cho trường hợp chú thích HTML bị tạo thành block freeform ngoài root: RED trước fix, GREEN 13/13 local sau fix.
 
 **Exit gate trước merge:** WordPress 6.9+ trên support floor; native pattern insert/editor save/re-open; không có invalid blocks; không có lỗi PHP; responsive 1440/1024/390; keyboard/focus/reduced-motion/contrast; no-global-assets; absent/present booking provider fail-soft; full regression; explicit owner review/approval cho merge và mọi production release/deploy.
 
 **Rollback:** Hủy draft PR/revert đúng các file candidate, không ảnh hưởng source/domain/content trên website nào. Không chạm main hoặc production trước approval.
 
 **Exact next sau local static:** QA ở WordPress thật với pattern được chèn vào Page nháp, chụp desktop/tablet/mobile và sửa lỗi phát hiện từ tầng nông nhất. Sau đó mở owner review; không tự merge.
+
+## 6. Checkpoint 29/10/2026 — GitHub PR #544
+
+- Canonical base tại lúc mở PR: `main@9a1667dd6ab683e81a5af7fc5fc16d78e17ac405`; feature branch `work/wellness01-native-pattern-20261029`. Bản mẫu không thay domain/booking provider hoặc site production.
+- L1/L2 local: PHP lint PASS; native block grammar, unique anchors, pure-Core blocks, no freeform prefix, domain/private-read guard PASS (13 checks; lỗi prefix có RED trước khi sửa).
+- Standalone preview L4 **fixture-only PASS**: 10 widths × 3 variants, no overflow, no pageerror, CTA demo never submits. Initial tablet overflow (orbit badge: 9 px) reproduced RED and fixed GREEN with scoped media query; SHA-256 preview `843ccbbbdccf72bdf243f72026754e9a058aa9bec882ecbd7e012f469abaa3fa`.
+- **GitHub Actions BLOCKED/UNKNOWN:** 12/12 workflows on the candidate report failure *without executed job steps/logs*. Đây không phải code regression PASS/FAIL. Nguyên nhân runner/account/billing chưa xác minh. Không rerun vô căn cứ khi job chưa thực thi được.
+- **WordPress L3, native Gutenberg editor save/reopen, WP L4/axe, provider L5, L6 package/merge đều UNKNOWN.** Không claim production readiness. Có kịch bản WP 6.9 + PHP 8.1 + browser/axe dự thảo bên ngoài canonical branch, nhưng chưa chạy thực trong WP; không coi test script là bằng chứng PASS.
+- Rollback: revert các file chỉ có trong nhánh hoặc đóng draft PR. Main/production vẫn nguyên.
+- **EXACT NEXT:** khôi phục khả năng chạy GitHub Actions runner của repo; trên đúng PR head chạy WordPress-clean L3, Gutenberg draft save/reopen và desktop/tablet/mobile L4/a11y; sau đó mới quyết định review/merge.
