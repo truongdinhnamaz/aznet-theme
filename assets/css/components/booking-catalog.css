@@ -1,0 +1,426 @@
+/* AZnet booking catalogue: opt-in presentation for [products] inside a native Page. */
+.aznet-booking-catalog {
+    --aznet-booking-cta: var(--aznet-theme-accent, #175cd3);
+    position: relative;
+    left: 50%;
+    width: min(calc(100vw - 3rem), var(--aznet-theme-container-wide, 75rem));
+    max-width: none;
+    margin-block: clamp(1.5rem, 4vw, 3rem) clamp(2rem, 5vw, 4rem);
+    transform: translateX(-50%);
+}
+/* Digital 01's visual coral is not an AA text-on-white color.
+ * Its established ink-coral #b83920 passes 4.5:1 with white. */
+body.aznet-theme-preset--digital-01 .aznet-booking-catalog {
+    --aznet-booking-cta: #b83920;
+}
+
+.aznet-booking-catalog > h2,
+.aznet-booking-catalog > h3,
+.aznet-booking-catalog > p {
+    max-width: 76ch;
+    margin-inline: auto;
+}
+.aznet-booking-catalog > h2 {
+    margin-block: 0 .85rem;
+    text-align: center;
+    font-size: clamp(1.65rem, 2.5vw, 2.35rem);
+    line-height: 1.2;
+    letter-spacing: -.025em;
+}
+.aznet-booking-catalog > h2 + p {
+    max-width: 68ch;
+    margin-block: 0 clamp(2rem, 4vw, 3rem);
+    color: var(--aznet-theme-muted, #596873);
+    text-align: center;
+}
+.aznet-booking-catalog > h3 {
+    max-width: none;
+    margin-block: clamp(2.25rem, 4vw, 3.25rem) .65rem;
+    margin-inline: 0;
+    padding-inline-start: .95rem;
+    border-inline-start: 3px solid var(--aznet-booking-cta);
+    font-size: clamp(1.25rem, 1.9vw, 1.6rem);
+    line-height: 1.35;
+    scroll-margin-top: 6rem;
+}
+.aznet-booking-catalog > p {
+    line-height: 1.75;
+}
+.aznet-booking-catalog > h3 + p {
+    max-width: 76ch;
+    margin-inline: 0;
+    color: var(--aznet-theme-muted, #596873);
+}
+.aznet-booking-catalog > .woocommerce + p {
+    max-width: none;
+    margin-block: 1.5rem 2rem;
+    padding: 1rem 1.2rem;
+    border-inline-start: 3px solid var(--aznet-booking-cta);
+    border-radius: .7rem;
+    background: var(--aznet-theme-color-surface-subtle, #f6f7f5);
+}
+.aznet-booking-catalog > .woocommerce {
+    width: 100%;
+    margin-block: clamp(1.25rem, 2.5vw, 2rem) clamp(1.5rem, 3vw, 2.5rem);
+}
+.aznet-booking-catalog .woocommerce ul.products,
+.aznet-booking-catalog .woocommerce ul.products[class*="columns-"] {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.1rem, 2vw, 1.65rem);
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+.aznet-booking-catalog .woocommerce ul.products.columns-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.aznet-booking-catalog .woocommerce ul.products li.product,
+.aznet-booking-catalog .woocommerce ul.products[class*="columns-"] li.product {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    float: none;
+    clear: none;
+    width: auto;
+    min-width: 0;
+    height: 100%;
+    margin: 0;
+    padding: clamp(1rem, 1.65vw, 1.35rem);
+    border: 1px solid var(--aznet-theme-border, #dfe6e4);
+    border-radius: 1rem;
+    background: var(--aznet-theme-surface, #fff);
+    box-shadow: 0 10px 30px rgba(21, 36, 45, .055);
+    transition: box-shadow .18s ease, border-color .18s ease, transform .18s ease;
+}
+.aznet-booking-catalog .woocommerce ul.products li.product:hover {
+    border-color: var(--aznet-booking-cta);
+    box-shadow: 0 14px 34px rgba(15, 23, 42, .10);
+    transform: translateY(-2px);
+}
+.aznet-booking-catalog .woocommerce ul.products li.product .woocommerce-loop-product__link {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+}
+.aznet-booking-catalog .woocommerce ul.products li.product a img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    object-position: center;
+    background-color: var(--aznet-theme-surface, #fff);
+    border-radius: calc(var(--aznet-theme-radius-card, 1rem) * .65);
+    margin-block: 0 1rem;
+}
+/* B46.5: fixed square frame, but media itself keeps its native ratio.
+ * Do not absolute-position or force both width and height on EWWW <picture> images:
+ * a landscape infographic must letterbox vertically instead of losing edge text. */
+.aznet-booking-catalog .woocommerce ul.products li.product .woocommerce-loop-product__link > picture {
+    box-sizing: border-box;
+    display: flex !important;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    overflow: hidden;
+    margin: 0 0 1.05rem;
+    border: 1px solid var(--aznet-theme-border, #dfe6e4);
+    background: var(--aznet-theme-color-surface-subtle, #f6f7f5);
+    border-radius: .7rem;
+}
+.aznet-booking-catalog .woocommerce ul.products li.product .woocommerce-loop-product__link > picture > img {
+    position: static !important;
+    inset: auto !important;
+    display: block;
+    flex: 0 1 auto;
+    width: auto !important;
+    height: auto !important;
+    max-width: calc(100% - 1.2rem) !important;
+    max-height: calc(100% - 1.2rem) !important;
+    aspect-ratio: auto !important;
+    object-fit: contain !important;
+    object-position: center;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0;
+}
+.aznet-booking-catalog .woocommerce ul.products li.product .woocommerce-loop-product__title {
+    min-height: 2.9em;
+    margin: 0 0 .85rem;
+    padding: 0;
+    font-size: clamp(1.075rem, 1.45vw, 1.2rem);
+    font-weight: 750;
+    line-height: 1.43;
+    color: var(--aznet-theme-text, #17181b);
+}
+.aznet-booking-catalog .woocommerce ul.products li.product .price {
+    margin-block: auto 1rem;
+    color: var(--aznet-theme-text, #17181b);
+    font-size: clamp(1.1rem, 1.6vw, 1.27rem);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.4;
+}
+.aznet-booking-catalog .woocommerce ul.products li.product > .button,
+.aznet-booking-catalog .woocommerce ul.products li.product > .aznet-booking-catalog__quote-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 3rem;
+    padding: .72rem .85rem;
+    border: 1px solid var(--aznet-booking-cta);
+    border-radius: .72rem;
+    font-size: .95rem;
+    line-height: 1.35;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    white-space: normal;
+    transition: opacity .18s ease, background-color .18s ease, color .18s ease;
+}
+.aznet-booking-catalog .woocommerce ul.products li.product > .button {
+    margin: .25rem 0 0;
+    background: var(--aznet-booking-cta);
+    color: var(--aznet-theme-on-accent, #fff);
+}
+.aznet-booking-catalog .woocommerce ul.products li.product > .aznet-booking-catalog__quote-link {
+    margin-top: .65rem;
+    background: var(--aznet-theme-surface, #fff);
+    color: var(--aznet-booking-cta);
+}
+/* A request for a quote is the primary action for services without a price. */
+.aznet-booking-catalog .woocommerce ul.products li.product:has(> .aznet-booking-catalog__quote-link) > .button {
+    background: var(--aznet-theme-surface, #fff);
+    color: var(--aznet-booking-cta);
+}
+.aznet-booking-catalog .woocommerce ul.products li.product:has(> .aznet-booking-catalog__quote-link) > .aznet-booking-catalog__quote-link {
+    background: var(--aznet-booking-cta);
+    color: #fff;
+}
+.aznet-booking-catalog .woocommerce ul.products li.product > :is(.button, .aznet-booking-catalog__quote-link):hover {
+    opacity: .9;
+    box-shadow: 0 4px 13px rgba(21, 36, 45, .13);
+}
+/* At desktop widths, the two actions sit on one aligned row. */
+@media (min-width: 901px) {
+    .aznet-booking-catalog .woocommerce ul.products li.product:has(> .aznet-booking-catalog__quote-link) {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: minmax(0, 1fr) auto;
+        column-gap: .65rem;
+    }
+    .aznet-booking-catalog .woocommerce ul.products li.product:has(> .aznet-booking-catalog__quote-link) > .woocommerce-loop-product__link {
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+    .aznet-booking-catalog .woocommerce ul.products li.product:has(> .aznet-booking-catalog__quote-link) > .button {
+        grid-column: 1;
+        grid-row: 2;
+        margin: 0;
+    }
+    .aznet-booking-catalog .woocommerce ul.products li.product:has(> .aznet-booking-catalog__quote-link) > .aznet-booking-catalog__quote-link {
+        grid-column: 2;
+        grid-row: 2;
+        margin: 0;
+    }
+}
+.aznet-booking-catalog .woocommerce ul.products li.product :is(a, button):focus-visible {
+    outline: 3px solid var(--aznet-theme-focus, #175cd3);
+    outline-offset: 3px;
+}
+@media (max-width: 900px) {
+    .aznet-booking-catalog .woocommerce ul.products,
+    .aznet-booking-catalog .woocommerce ul.products[class*="columns-"],
+    .aznet-booking-catalog .woocommerce ul.products.columns-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@media (max-width: 620px) {
+    .aznet-booking-catalog {
+        left: auto;
+        width: 100%;
+        transform: none;
+    }
+    .aznet-booking-catalog .woocommerce ul.products,
+    .aznet-booking-catalog .woocommerce ul.products[class*="columns-"],
+    .aznet-booking-catalog .woocommerce ul.products.columns-2 {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1rem;
+    }
+    .aznet-booking-catalog .woocommerce ul.products li.product,
+    .aznet-booking-catalog .woocommerce ul.products[class*="columns-"] li.product {
+        padding: 1rem;
+    }
+    .aznet-booking-catalog .woocommerce ul.products li.product .woocommerce-loop-product__title {
+        min-height: 0;
+    }
+}
+
+/* B47.2 | Keep brand coral decorative, but use accessible ink-coral
+ * for interactive text and white-on-color controls on this booking Page.
+ * #eb5034 against white is 3.67:1; #b83920 against white is 5.76:1.
+ * The header, other Pages, WooCommerce data and Form behavior are untouched. */
+body.aznet-theme-preset--digital-01 #post-43690 {
+    --aznet-theme-accent: #b83920;
+}
+body.aznet-theme-preset--digital-01 #post-43690 #fluentform_3 :is(button[type="submit"], input[type="submit"]) {
+    background-color: #b83920;
+    border-color: #b83920;
+    color: #fff;
+}
+body.aznet-theme-preset--digital-01 #post-43690 .aznet-theme-page__content > :is(p, ul) a,
+body.aznet-theme-preset--digital-01 #post-43690 .aznet-booking-catalog > p a {
+    color: #b83920;
+}
+
+/* B47 | A concise service-booking introduction, isolated to page 43690.
+ * This is navigation and visual hierarchy only; WooCommerce owns products and prices. */
+#post-43690 .aznet-theme-page__header {
+    padding-block: clamp(2rem, 3.7vw, 3.3rem) clamp(.7rem, 1.5vw, 1.1rem);
+    background: linear-gradient(180deg, #f8fafb 0%, #fff 100%);
+}
+#post-43690 .aznet-theme-page__title {
+    max-width: none;
+    font-size: clamp(2.05rem, 3.25vw, 3.15rem);
+    font-weight: 800;
+    line-height: 1.16;
+    letter-spacing: -.036em;
+}
+#post-43690 .aznet-theme-page__lead {
+    max-width: 72ch;
+    margin-block: .7rem 0;
+    font-size: clamp(1rem, 1.3vw, 1.16rem);
+    line-height: 1.6;
+}
+#post-43690 .aznet-booking-catalog {
+    margin-block: 0 clamp(2rem, 4vw, 3.5rem);
+}
+.aznet-booking-catalog > .aznet-booking-quicklinks {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(.6rem, 1.4vw, .9rem);
+    margin: .7rem 0 clamp(1.55rem, 2.7vw, 2.25rem);
+    padding: 0;
+}
+.aznet-booking-catalog .aznet-booking-quicklinks__link {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: .65rem;
+    min-width: 0;
+    min-height: 3.6rem;
+    padding: .78rem 1rem;
+    border: 1px solid var(--aznet-theme-border, #dfe6e4);
+    border-radius: .8rem;
+    background: var(--aznet-theme-surface, #fff);
+    color: var(--aznet-theme-text, #142634);
+    box-shadow: 0 3px 12px rgba(18, 40, 53, .035);
+    font-size: clamp(.875rem, 1.03vw, 1rem);
+    font-weight: 700;
+    line-height: 1.35;
+    text-decoration: none;
+    transition: border-color .16s ease, background-color .16s ease, transform .16s ease;
+}
+.aznet-booking-catalog .aznet-booking-quicklinks__link:hover {
+    border-color: var(--aznet-booking-cta);
+    background: var(--aznet-theme-color-surface-subtle, #f8fafb);
+    transform: translateY(-1px);
+}
+.aznet-booking-catalog .aznet-booking-quicklinks__number {
+    flex: 0 0 auto;
+    padding: .3rem .4rem;
+    border-radius: .45rem;
+    background: #fff1eb;
+    color: var(--aznet-booking-cta);
+    font-size: .75rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+.aznet-booking-catalog .aznet-booking-quicklinks__link--quote {
+    justify-content: center;
+    border-color: var(--aznet-booking-cta);
+    background: var(--aznet-booking-cta);
+    color: #fff;
+    text-align: center;
+}
+.aznet-booking-catalog .aznet-booking-quicklinks__link--quote:hover {
+    background: #922d1a;
+    border-color: #922d1a;
+    color: #fff;
+}
+.aznet-booking-catalog .aznet-booking-quicklinks__link:focus-visible {
+    outline: 3px solid var(--aznet-theme-focus, #175cd3);
+    outline-offset: 3px;
+}
+#post-43690 .aznet-booking-catalog > h2.aznet-booking-section__title {
+    max-width: none;
+    margin: clamp(1.9rem, 3.5vw, 2.7rem) 0 .65rem;
+    padding-inline-start: .9rem;
+    border-inline-start: 3px solid var(--aznet-booking-cta);
+    font-size: clamp(1.3rem, 1.95vw, 1.65rem);
+    font-weight: 750;
+    line-height: 1.35;
+    text-align: left;
+    letter-spacing: -.018em;
+    scroll-margin-top: 7rem;
+}
+#post-43690 .aznet-booking-catalog > .aznet-booking-quicklinks + h2.aznet-booking-section__title {
+    margin-top: 0;
+}
+#post-43690 .aznet-booking-catalog > h2.aznet-booking-section__title + p {
+    max-width: 76ch;
+    margin: 0;
+    color: var(--aznet-theme-muted, #596873);
+    font-size: 1rem;
+    line-height: 1.65;
+    text-align: left;
+}
+#post-43690 .aznet-booking-catalog > .woocommerce {
+    margin-block: clamp(.9rem, 1.6vw, 1.4rem) clamp(1.85rem, 3vw, 2.6rem);
+}
+@media (max-width: 740px) {
+    #post-43690 .aznet-theme-page__header {
+        padding-block: 1.7rem .9rem;
+    }
+    #post-43690 .aznet-theme-page__title {
+        font-size: clamp(1.85rem, 6vw, 2.5rem);
+    }
+    .aznet-booking-catalog > .aznet-booking-quicklinks {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: .6rem;
+        margin-block: .35rem 1.55rem;
+    }
+    .aznet-booking-catalog .aznet-booking-quicklinks__link {
+        min-height: 3.25rem;
+        padding: .72rem .68rem;
+        font-size: .9rem;
+    }
+    #post-43690 .aznet-booking-catalog > h2.aznet-booking-section__title {
+        margin-top: 2rem;
+        font-size: 1.3rem;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .aznet-booking-catalog .aznet-booking-quicklinks__link {
+        transition: none;
+        transform: none;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .aznet-booking-catalog .woocommerce ul.products li.product,
+    .aznet-booking-catalog .woocommerce ul.products li.product > :is(.button, .aznet-booking-catalog__quote-link) {
+        transition: none;
+        transform: none;
+    }
+}
