@@ -1,0 +1,16 @@
+[
+  {
+    "body": "home wp-singular page-template page-template-page-blank page-template-page-blank-php page page-id-2 logged-in admin-bar wp-embed-responsive wp-theme-aznet-theme aznet-theme-preset--default customize-support",
+    "generic": "https://vananhyoga.com/wp-content/themes/aznet-theme/assets/css/components/generic-content.css?ver=1.3.98",
+    "innerAsset": false,
+    "robots": "max-image-preview:large",
+    "url": "https://vananhyoga.com/"
+  },
+  {
+    "body": "wp-singular page-template-default page page-id-1132 logged-in admin-bar wp-embed-responsive wp-theme-aznet-theme aznet-theme-preset--default customize-support",
+    "content": 720,
+    "header": 1152,
+    "innerAsset": false,
+    "pageCss": "https://vananhyoga.com/wp-content/themes/aznet-theme/assets/css/components/page.css?ver=1.3.98-de0c88ed2717"
+  }
+]
