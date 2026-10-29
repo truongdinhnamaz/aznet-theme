@@ -4,9 +4,9 @@
  * Slug: aznet-theme/homepage-wellness-01
  * Categories: aznet-theme-pages
  * Description: Editable WordPress-native homepage for yoga, pilates, fitness, dance, meditation and other guided wellness studios. No booking or domain state.
+ * Demo content: minh hoa only. Replace copy, images, schedules and identities before publishing.
  */
 ?>
-<!-- Demo content: minh hoa only. Replace copy, images, schedules and identities before publishing. -->
 <!-- wp:group {"align":"full","className":"aznet-theme-wellness01","layout":{"type":"default"}} -->
 <div class="wp-block-group alignfull aznet-theme-wellness01">
 
