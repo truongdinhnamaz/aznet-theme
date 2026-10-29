@@ -26,5 +26,6 @@ foreach($matches as $m){$closing=$m[1]==='/';$raw=trim($m[3]);$self=!$closing &&
 $checks['balanced Gutenberg block markup']=$ok && !$stack && count($matches)>50;
 preg_match_all('/\bid="([^"]+)"/',$s,$ids);preg_match_all('/\bhref="#([^"]+)"/',$s,$hrefs);
 $checks['unique IDs and resolved anchors']= count($ids[1])===count(array_unique($ids[1])) && !array_diff($hrefs[1],$ids[1]);
+$checks['no stray freeform prefix before Gutenberg root'] = preg_match('/\?>\s*<!-- wp:group\b/s', $s) === 1;
 foreach($checks as $label=>$pass){if(!$pass){fwrite(STDERR,"FAIL: $label\n");exit(1);}}
 echo 'PASS: Wellness 01 native offline pattern '.count($checks)." checks\n";
