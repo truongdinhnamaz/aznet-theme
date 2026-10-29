@@ -114,7 +114,8 @@ jobs:
             if (false === $end || false === $fixture) { throw new RuntimeException("Missing button regression fixture/root"); }
             $content = substr_replace($content, $fixture, $end, 0);
             $parsed = parse_blocks($content);
-            if (count($parsed) !== 1 || $parsed[0]["blockName"] !== "core/group") { fwrite(STDERR, "FAIL: pattern must insert exactly one native root Group\n"); exit(1); }
+            $roots = array_values(array_filter($parsed, static fn($b) => null !== $b["blockName"] || trim($b["innerHTML"] ?? "") !== ""));
+            if (count($roots) !== 1 || $roots[0]["blockName"] !== "core/group") { fwrite(STDERR, "FAIL: pattern must insert exactly one meaningful native root Group\n"); exit(1); }
             $flat = function(array $blocks) use (&$flat) {
               foreach ($blocks as $block) {
                 if (isset($block["blockName"]) && null !== $block["blockName"] && 0 !== strpos($block["blockName"], "core/")) { fwrite(STDERR, "FAIL: non-native block\n"); exit(1); }
@@ -126,14 +127,16 @@ jobs:
             echo "PASS: registered native pattern root and Core-only content\n";
           ' --path=/tmp/wp --allow-root
           PUBLISH_ID=$(wp post create /tmp/wellness01-native/pattern.html --post_type=page --post_status=publish --post_title='Wellness 01 Published QA' --post_name=wellness01-published-qa --porcelain --path=/tmp/wp --allow-root)
-          DRAFT_ID=$(wp post create /tmp/wellness01-native/pattern.html --post_type=page --post_status=draft --post_title='Wellness 01 Gutenberg QA' --post_name=wellness01-editor-qa --porcelain --path=/tmp/wp --allow-root)
-          test -n "$PUBLISH_ID" && test -n "$DRAFT_ID"
+          DRAFT_ID=$(wp post create /tmp/wellness01-native/pattern.html --post_type=page --post_status=draft --post_title='Wellness 01 Classic QA' --post_name=wellness01-editor-qa --porcelain --path=/tmp/wp --allow-root)
+          BLOCK_DRAFT_ID=$(wp post create /tmp/wellness01-native/pattern.html --post_type=wp_block --post_status=draft --post_title='Wellness 01 Core Block QA' --porcelain --path=/tmp/wp --allow-root)
+          test -n "$PUBLISH_ID" && test -n "$DRAFT_ID" && test -n "$BLOCK_DRAFT_ID"
           # Exercise the real native Homepage composition and its surface CSS.
           wp option update show_on_front page --path=/tmp/wp --allow-root
           wp option update page_on_front "$PUBLISH_ID" --path=/tmp/wp --allow-root
           wp eval '$s = get_theme_mod("aznet_theme_settings", []); $s["homepage_preset"] = "wellness-01"; set_theme_mod("aznet_theme_settings", $s);' --path=/tmp/wp --allow-root
           printf '%s\n' "$PUBLISH_ID" > /tmp/wellness01-native/page-id.txt
           printf '%s\n' "$DRAFT_ID" > /tmp/wellness01-native/draft-id.txt
+          printf '%s\n' "$BLOCK_DRAFT_ID" > /tmp/wellness01-native/block-draft-id.txt
           wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
           wp rewrite flush --hard --path=/tmp/wp --allow-root
       - name: Start isolated WordPress runtime
@@ -158,7 +161,7 @@ jobs:
           set -euo pipefail
           npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
           npx playwright install --with-deps chromium
-      - name: Native WordPress L4 + Gutenberg editor
+      - name: Native WordPress L4 + Classic and Core block editors
         env:
           WELLNESS_BASE_URL: http://127.0.0.1:8080
           WELLNESS_EVIDENCE_DIR: /tmp/wellness01-native
@@ -166,7 +169,7 @@ jobs:
           WELLNESS_EDITOR_PASS: wellness01-local-ci-password
         run: |
           set -euo pipefail
-          WELLNESS_PAGE_ID=$(cat /tmp/wellness01-native/page-id.txt) WELLNESS_DRAFT_ID=$(cat /tmp/wellness01-native/draft-id.txt) node tests/browser/wellness01-native-l4.mjs
+          WELLNESS_PAGE_ID=$(cat /tmp/wellness01-native/page-id.txt) WELLNESS_DRAFT_ID=$(cat /tmp/wellness01-native/draft-id.txt) WELLNESS_BLOCK_DRAFT_ID=$(cat /tmp/wellness01-native/block-draft-id.txt) node tests/browser/wellness01-native-l4.mjs
       - name: Upload WordPress evidence and server log
         if: always()
         uses: actions/upload-artifact@v4

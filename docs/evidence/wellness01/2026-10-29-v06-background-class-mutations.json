@@ -1,0 +1,23 @@
+[
+  {
+    "mutation": "prefix",
+    "expected_rejected": true,
+    "rejected": true,
+    "host_exit": 0,
+    "output": "FAIL: native background Group serialization"
+  },
+  {
+    "mutation": "suffix",
+    "expected_rejected": true,
+    "rejected": true,
+    "host_exit": 0,
+    "output": "FAIL: native background Group serialization"
+  },
+  {
+    "mutation": "removed",
+    "expected_rejected": true,
+    "rejected": true,
+    "host_exit": 0,
+    "output": "FAIL: native background Group serialization"
+  }
+]

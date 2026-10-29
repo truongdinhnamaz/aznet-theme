@@ -54,6 +54,20 @@ foreach ($matches as $m) {
     }
 }
 $checks['balanced Gutenberg markers/JSON'] = $valid && !$stack && count($matches) > 100;
+$backgroundGroupsValid = true;
+$backgroundGroups = 0;
+preg_match_all('~<!-- wp:group\s+(\{.*?\}) -->\s*<div\b([^>]*)>~s', $source, $groups, PREG_SET_ORDER);
+foreach ($groups as $group) {
+    $attrs = json_decode($group[1], true);
+    if (isset($attrs['style']['color']['background'])) {
+        $backgroundGroups++;
+        preg_match('/\bclass="([^"]*)"/', $group[2], $classes);
+        if (!in_array('has-background', preg_split('/\s+/', trim($classes[1] ?? '')), true)) {
+            $backgroundGroupsValid = false;
+        }
+    }
+}
+$checks['native background Group serialization'] = $backgroundGroupsValid && $backgroundGroups > 0;
 $markers = [];
 preg_match_all('/<!--\s*\/?wp:([a-z][a-z0-9\/-]*)/', $source, $markers);
 $checks['only Core WordPress blocks'] = count(array_filter($markers[1], static fn($name) => str_contains($name, '/'))) === 0;

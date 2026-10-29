@@ -5,21 +5,31 @@
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 import fs from 'node:fs';
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { inspectWellnessLayout } from './wellness01-layout-probe.mjs';
 
 const base = process.env.WELLNESS_BASE_URL || 'http://127.0.0.1:8080';
 const pageId = process.env.WELLNESS_PAGE_ID;
 const draftId = process.env.WELLNESS_DRAFT_ID;
+const blockDraftId = process.env.WELLNESS_BLOCK_DRAFT_ID;
+const editorOnly = process.env.WELLNESS_EDITOR_ONLY === '1';
 const out = process.env.WELLNESS_EVIDENCE_DIR || '/tmp/wellness01-evidence';
-if (!pageId || !draftId) throw new Error('WELLNESS_PAGE_ID and WELLNESS_DRAFT_ID are required');
+if (!pageId || !draftId || !blockDraftId) throw new Error('WELLNESS_PAGE_ID, WELLNESS_DRAFT_ID and WELLNESS_BLOCK_DRAFT_ID are required');
 fs.mkdirSync(out, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const problems = [];
 const captures = [];
+// Fresh markers prove this invocation saved; persisted disposable drafts may
+// already contain markers from a previous run.
+const runToken = randomUUID();
+const classicTextMarker = `Wellness 01 Classic Text roundtrip ${runToken}`;
+const classicVisualMarker = `Wellness 01 Classic Visual roundtrip ${runToken}`;
+const roundTripSentinel = `Wellness 01 Gutenberg roundtrip ${runToken}`;
 const genericFingerprint = createHash('sha256').update(fs.readFileSync(new URL('../../assets/css/components/generic-content.css', import.meta.url))).digest('hex').slice(0, 12);
-for (const [label, width, height] of [['desktop', 1440, 900], ['tablet-wide', 1024, 768], ['tablet', 768, 1024], ['mobile', 390, 844]]) {
-  const page = await browser.newPage({ viewport: { width, height }, reducedMotion: 'reduce' });
+const viewports = [['desktop', 1440, 900], ['tablet-wide', 1024, 768], ['tablet', 768, 1024], ['mobile', 390, 844]];
+for (const [label, width, height] of editorOnly ? [] : viewports) {
+  const context = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' });
+  const page = await context.newPage();
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   const response = await page.goto(`${base}/?page_id=${pageId}`, { waitUntil: 'networkidle' });
@@ -77,11 +87,17 @@ for (const [label, width, height] of [['desktop', 1440, 900], ['tablet-wide', 10
   const screenshot = `${out}/${label}.png`;
   await page.screenshot({ path: screenshot, fullPage: true });
   captures.push({ label, ...info, layout, axeViolations: axe.violations, screenshot });
-  await page.close();
+  await context.close();
 }
-// Reopen an independent draft Page in the actual Gutenberg editor; check its
-// instantiated blocks for parser-invalid content. Draft remains local to CI.
+fs.writeFileSync(`${out}/frontend-verification.json`, JSON.stringify({ captures, problems }, null, 2));
+// D-024/D-029 retain Classic Editor for ordinary Posts/Pages. Test that real
+// lifecycle first; native wp_block preserves WordPress's Gutenberg decision.
 const editor = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const editorLogs = [];
+editor.on('console', message => {
+  if (['error', 'warning'].includes(message.type())) editorLogs.push(message.text());
+});
+editor.on('pageerror', error => editorLogs.push(error.message));
 await editor.goto(`${base}/wp-login.php`, { waitUntil: 'domcontentloaded' });
 await editor.fill('#user_login', process.env.WELLNESS_EDITOR_USER || 'admin');
 await editor.fill('#user_pass', process.env.WELLNESS_EDITOR_PASS || '');
@@ -90,20 +106,94 @@ await Promise.all([
   editor.click('#wp-submit'),
 ]);
 await editor.goto(`${base}/wp-admin/post.php?post=${draftId}&action=edit`, { waitUntil: 'domcontentloaded' });
-await editor.waitForFunction(() => window.wp?.data?.select('core/block-editor')?.getBlocks()?.length > 0, null, { timeout: 45000 });
+await editor.locator('#content').waitFor({ state: 'attached' });
+async function selectClassicMode(mode) {
+  await editor.waitForFunction(() => !!window.switchEditors?.go && (
+    document.querySelector('#wp-content-wrap')?.classList.contains('html-active')
+    || !!window.tinymce?.get('content')?.initialized
+  ), null, { timeout: 45000 });
+  await editor.locator(`#content-${mode}`).click();
+  await editor.locator(`#wp-content-wrap.${mode === 'html' ? 'html' : 'tmce'}-active`).waitFor({ state: 'attached' });
+  if (mode === 'html') await editor.locator('#content').waitFor({ state: 'visible' });
+  else await editor.waitForFunction(() => !!window.tinymce?.get('content')?.initialized && !window.tinymce.get('content').isHidden(), null, { timeout: 45000 });
+}
+await selectClassicMode('html');
+const classicBefore = await editor.locator('#content').inputValue();
+if (classicBefore.includes(classicTextMarker) || classicBefore.includes(classicVisualMarker)) {
+  throw new Error('Fresh Classic save markers unexpectedly exist before editing');
+}
+await editor.locator('#content').fill(`${classicBefore}\n<p>${classicTextMarker}</p>`);
+await Promise.all([
+  editor.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+  editor.locator('#save-post').click(),
+]);
+await selectClassicMode('html');
+const classicTextSaved = await editor.locator('#content').inputValue();
+await selectClassicMode('tmce');
+const visualBody = editor.frameLocator('#content_ifr').locator('body');
+await visualBody.waitFor({ state: 'visible' });
+const visualImageCount = await visualBody.locator('img').count();
+await visualBody.click();
+await visualBody.press('ControlOrMeta+End');
+await visualBody.press('Enter');
+await visualBody.pressSequentially(classicVisualMarker);
+const visualMarkerBeforeSave = (await visualBody.innerText()).includes(classicVisualMarker);
+const visualDirtyBeforeSave = await editor.evaluate(() => window.tinymce.get('content').isDirty());
+await Promise.all([
+  editor.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+  editor.locator('#save-post').click(),
+]);
+await selectClassicMode('html');
+const classicAfter = await editor.locator('#content').inputValue();
+const classicRoundTrip = {
+  visualMarkerBeforeSave, visualDirtyBeforeSave,
+  textSaved: classicTextSaved.includes(classicTextMarker), visualSaved: classicAfter.includes(classicVisualMarker),
+  textRetained: classicAfter.includes(classicTextMarker), visualImages: visualImageCount,
+  savedImages: (classicAfter.match(/<img\b/g) || []).length, hasNativeMarkers: classicAfter.includes('<!-- wp:group'),
+};
+if (!classicRoundTrip.visualMarkerBeforeSave || !classicRoundTrip.textSaved || !classicRoundTrip.visualSaved || !classicRoundTrip.textRetained
+  || classicRoundTrip.visualImages !== 7 || classicRoundTrip.savedImages !== 7 || !classicRoundTrip.hasNativeMarkers) {
+  problems.push(`Classic Text/Visual roundtrip failed: ${JSON.stringify(classicRoundTrip)}`);
+}
+fs.writeFileSync(`${out}/classic-verification.json`, JSON.stringify({ classicRoundTrip, problems }, null, 2));
+await editor.goto(`${base}/wp-admin/post.php?post=${blockDraftId}&action=edit`, { waitUntil: 'domcontentloaded' });
+try {
+  await editor.waitForFunction(() => window.wp?.data?.select('core/block-editor')?.getBlocks()?.length > 0, null, { timeout: 45000 });
+} catch (error) {
+  await editor.screenshot({ path: `${out}/editor-startup-failure.png`, fullPage: false });
+  fs.writeFileSync(`${out}/editor-startup-failure.json`, JSON.stringify({
+    url: editor.url(), title: await editor.title(), body: await editor.locator('body').innerText(), logs: editorLogs,
+  }, null, 2));
+  throw error;
+}
 const editorState = await editor.evaluate(() => {
   const blocks = window.wp.data.select('core/block-editor').getBlocks();
-  let count = 0, invalid = [], names = [];
-  function walk(items) { for (const b of items) { count++; names.push(b.name); if (b.isValid === false) invalid.push(b.name); walk(b.innerBlocks || []); } }
+  let count = 0, invalid = [], invalidDetails = [], names = [];
+  function walk(items) { for (const b of items) {
+    count++; names.push(b.name);
+    if (b.isValid === false) {
+      invalid.push(b.name);
+      invalidDetails.push({ name: b.name, attributes: b.attributes, original: b.originalContent,
+        expected: window.wp.blocks.getSaveContent(b.name, b.attributes, b.innerBlocks || []) });
+    }
+    walk(b.innerBlocks || []);
+  } }
   walk(blocks);
-  return { count, invalid, rootNames: blocks.map(b=>b.name), customBlocks: names.filter(n=>!n.startsWith('core/')) };
+  return { count, invalid, invalidDetails, rootNames: blocks.map(b=>b.name), customBlocks: names.filter(n=>!n.startsWith('core/')) };
 });
 if (editorState.count < 25) problems.push(`editor parsed too few native blocks: ${editorState.count}`);
 if (editorState.invalid.length) problems.push(`editor invalid blocks: ${editorState.invalid.join(', ')}`);
 if (editorState.customBlocks.length) problems.push(`editor non-core blocks: ${editorState.customBlocks.join(', ')}`);
+if (editorState.invalid.length) {
+  fs.writeFileSync(`${out}/verification.json`, JSON.stringify({ captures, classicRoundTrip, editorState, problems }, null, 2));
+  await browser.close();
+  throw new Error(`Native wp_block validation RED: ${editorState.invalid.join(', ')}`);
+}
 // Exercise the WordPress editorial lifecycle on the disposable DRAFT, not the
 // published fixture. Saving and reopening must preserve native block validity.
-const roundTripSentinel = 'Wellness 01 Gutenberg roundtrip marker';
+if (await editor.evaluate(marker => window.wp.data.select('core/editor').getEditedPostContent().includes(marker), roundTripSentinel)) {
+  throw new Error('Fresh Gutenberg save marker unexpectedly exists before editing');
+}
 await editor.evaluate(async marker => {
   const store = window.wp.data;
   const findParagraph = blocks => {
@@ -124,21 +214,25 @@ await editor.reload({ waitUntil: 'domcontentloaded' });
 await editor.waitForFunction(() => window.wp?.data?.select('core/block-editor')?.getBlocks()?.length > 0, null, { timeout: 45000 });
 const roundTrip = await editor.evaluate(marker => {
   const blocks = window.wp.data.select('core/block-editor').getBlocks();
-  let valid = true, found = false;
+  let valid = true, found = false, count = 0, names = [];
   function walk(list) {
     for (const b of list) {
+      count++; names.push(b.name);
       if (b.isValid === false) valid = false;
       if (b.name === 'core/paragraph' && String(b.attributes?.content || '').includes(marker)) found = true;
       walk(b.innerBlocks || []);
     }
   }
   walk(blocks);
-  return { valid, found, topLevel: blocks.length };
+  return { valid, found, count, topLevel: blocks.length, rootNames: blocks.map(b => b.name), customBlocks: names.filter(n => !n.startsWith('core/')) };
 }, roundTripSentinel);
-if (!roundTrip.valid || !roundTrip.found) problems.push(`draft editor save/reopen failed: ${JSON.stringify(roundTrip)}`);
+if (!roundTrip.valid || !roundTrip.found || roundTrip.count !== editorState.count
+  || JSON.stringify(roundTrip.rootNames) !== JSON.stringify(editorState.rootNames) || roundTrip.customBlocks.length) {
+  problems.push(`draft editor save/reopen failed: ${JSON.stringify(roundTrip)}`);
+}
 await editor.screenshot({ path: `${out}/editor.png`, fullPage: false });
 await editor.close();
 await browser.close();
-fs.writeFileSync(`${out}/verification.json`, JSON.stringify({ captures, editorState, roundTrip, problems }, null, 2));
+fs.writeFileSync(`${out}/verification.json`, JSON.stringify({ mode: editorOnly ? 'editor-only' : 'full', runToken, captures, classicRoundTrip, editorState, roundTrip, problems }, null, 2));
 if (problems.length) { console.error('FAIL: Wellness 01 native WordPress QA\n' + problems.join('\n')); process.exit(1); }
-console.log('PASS: Wellness 01 WordPress browser x4 + axe + Gutenberg save/reopen; ' + editorState.count + ' blocks');
+console.log(`PASS: Wellness 01 ${editorOnly ? 'editor-only' : 'WordPress browser x4 + axe'} + Classic Text/Visual + native wp_block Gutenberg save/reopen; ${editorState.count} blocks`);

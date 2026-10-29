@@ -1,0 +1,14 @@
+
+WordPress Playground CLI
+
+PHP 8.1  WordPress 6.9
+Extensions intl, redis, memcached
+Mount /workspace/scratch/0ca62ce69544/qa-native-v06/theme-b7729056 → /wordpress/wp-content/themes/aznet-theme
+Mount /workspace/scratch/0ca62ce69544/qa-native-v06/evidence → /qa-evidence
+Mount /workspace/scratch/0ca62ce69544/qa-native-v06/wp69-runs/run-1793257209782665073/wordpress → /wordpress
+Blueprint /workspace/scratch/0ca62ce69544/qa-native-v06/bootstrap-blueprint.json
+
+Worker count (1) is below the recommended threshold (6). Running fewer than 6 workers may increase the likelihood of deadlock due to workers blocking on file locks.
+
+Ready! WordPress is running on http://127.0.0.1:9427 (1 worker)
+
