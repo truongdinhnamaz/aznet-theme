@@ -593,6 +593,40 @@ function enqueue_about_showcase_asset( ?string $version = null ): void {
     );
 }
 
+/** Enqueue the opt-in WooCommerce service-booking catalogue only when its marker renders. */
+function enqueue_booking_catalog_assets( ?string $version = null ): void {
+    if ( ! function_exists( __NAMESPACE__ . '\\booking_catalog_active' )
+        || ! booking_catalog_active()
+        || ! function_exists( 'WC' ) ) {
+        return;
+    }
+
+    $archive_path = '/assets/css/components/woocommerce-archive.css';
+    $catalog_path = '/assets/css/components/booking-catalog.css';
+
+    wp_enqueue_style(
+        'aznet-theme-woocommerce-archive',
+        get_theme_file_uri( $archive_path ),
+        [ 'aznet-theme-tokens' ],
+        asset_content_version( $archive_path, $version )
+    );
+    wp_enqueue_style(
+        'aznet-theme-booking-catalog',
+        get_theme_file_uri( $catalog_path ),
+        [ 'aznet-theme-woocommerce-archive', 'aznet-theme-page' ],
+        asset_content_version( $catalog_path, $version )
+    );
+
+    $script_path = '/assets/js/booking-catalog.js';
+    wp_enqueue_script(
+        'aznet-theme-booking-catalog',
+        get_theme_file_uri( $script_path ),
+        [],
+        asset_content_version( $script_path, $version ),
+        true
+    );
+}
+
 /** Enqueue Y1 native Page presentation only on non-front, non-Woo Page surfaces. */
 function enqueue_page_assets( ?string $version = null ): void {
     if ( ! should_enqueue_page_assets() ) {
@@ -871,6 +905,7 @@ function enqueue_assets(): void {
 
     enqueue_law01_archive_asset( $version );
     enqueue_page_assets( $version );
+    enqueue_booking_catalog_assets( $version );
     enqueue_about_showcase_asset( $version );
     enqueue_contact_page_assets( $version );
     enqueue_services_page_assets( $version );
