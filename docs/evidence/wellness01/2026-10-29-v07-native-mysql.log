@@ -1,0 +1,9 @@
+2026-10-29T14:57:27.407832Z 0 [System] [MY-010116] [Server] /workspace/scratch/0ca62ce69544/qa-native-v07/runtime/mysql-8.0.46-linux-glibc2.17-x86_64-minimal/bin/mysqld (mysqld 8.0.46) starting as process 1067
+2026-10-29T14:57:27.415558Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2026-10-29T14:57:27.591884Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2026-10-29T14:57:27.851651Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+2026-10-29T14:57:27.851679Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
+2026-10-29T14:57:27.852725Z 0 [Warning] [MY-011810] [Server] Insecure configuration for --pid-file: Location '/tmp' in the path is accessible to all OS users. Consider choosing a different directory.
+2026-10-29T14:57:27.871620Z 0 [System] [MY-010931] [Server] /workspace/scratch/0ca62ce69544/qa-native-v07/runtime/mysql-8.0.46-linux-glibc2.17-x86_64-minimal/bin/mysqld: ready for connections. Version: '8.0.46'  socket: ''  port: 9431  MySQL Community Server - GPL.
+2026-10-29T14:58:26.507363Z 0 [System] [MY-013172] [Server] Received SHUTDOWN from user <via user signal>. Shutting down mysqld (Version: 8.0.46).
+2026-10-29T14:58:27.123466Z 0 [System] [MY-010910] [Server] /workspace/scratch/0ca62ce69544/qa-native-v07/runtime/mysql-8.0.46-linux-glibc2.17-x86_64-minimal/bin/mysqld: Shutdown complete (mysqld 8.0.46)  MySQL Community Server - GPL.

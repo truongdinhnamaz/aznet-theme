@@ -99,14 +99,17 @@ editor.on('console', message => {
   if (['error', 'warning'].includes(message.type())) editorLogs.push(message.text());
 });
 editor.on('pageerror', error => editorLogs.push(error.message));
-await editor.goto(`${base}/wp-login.php`, { waitUntil: 'domcontentloaded' });
+const classicEditUrl = `${base}/wp-admin/post.php?post=${draftId}&action=edit`;
+// Authenticate directly into the editor under test. The unrelated Dashboard
+// can wait on external WordPress News/update requests in a fresh install.
+await editor.goto(`${base}/wp-login.php?redirect_to=${encodeURIComponent(classicEditUrl)}`, { waitUntil: 'domcontentloaded' });
 await editor.fill('#user_login', process.env.WELLNESS_EDITOR_USER || 'admin');
 await editor.fill('#user_pass', process.env.WELLNESS_EDITOR_PASS || '');
 await Promise.all([
-  editor.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+  editor.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 60000 }),
   editor.click('#wp-submit'),
 ]);
-await editor.goto(`${base}/wp-admin/post.php?post=${draftId}&action=edit`, { waitUntil: 'domcontentloaded' });
+if (editor.url() !== classicEditUrl) await editor.goto(classicEditUrl, { waitUntil: 'domcontentloaded' });
 await editor.locator('#content').waitFor({ state: 'attached' });
 let classicSavePhase = 'text';
 const classicSaveRequests = [];

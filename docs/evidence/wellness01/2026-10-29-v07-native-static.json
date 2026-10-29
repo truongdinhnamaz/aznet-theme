@@ -1,0 +1,145 @@
+{
+  "contracts": [
+    {
+      "file": "tests/offline/classic-editor-policy-contract.php",
+      "output": "PASS: Classic editor policy contract",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/curtain01-about-media-setting-contract.php",
+      "output": "PASS: Curtain 01 About media presentation setting contract",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/digital01-commercial-media-surface-contract.php",
+      "output": "PASS: Digital 01 opaque, padded, scoped commercial-media figure and contained image",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/homepage-blueprint-asset-contract.php",
+      "output": "PASS: Homepage blueprint asset-scope contract",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/homepage-team-immediate-publish-contract.php",
+      "output": "PASS: Team Add Member publishes immediately and UI matches the behavior.",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/law01-reference-assets-contract.php",
+      "output": "PASS: reference styles are scoped, ordered, fingerprinted and wired.",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/posts-index-asset-regression.php",
+      "output": "PASS: posts-on-front generic-content asset, Woo isolation, unrelated surface isolation",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/provisioning-media-contract.php",
+      "output": "PASS: Law v1.1 starter media definitions, package assets and runner boundary",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/r2-commerce-utility-patterns-contract.php",
+      "output": "PASS: R2 Commerce and Utility fail-soft patterns contract",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/r2-content-patterns-contract.php",
+      "output": "PASS: R2 Content patterns contract",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/r2-hero-patterns-contract.php",
+      "output": "PASS: R2 Hero patterns contract",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/r2-pattern-static-contract.php",
+      "output": "PASS: R2 native pattern static contract",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/r2-trust-patterns-contract.php",
+      "output": "PASS: R2 Trust and CTA patterns contract",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/r2-wellness01-ai-disclosure-layout-contract.php",
+      "output": "PASS: Wellness AI disclosure constrained inside Core Group",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/r2-wellness01-pattern-contract.php",
+      "output": "PASS: Wellness 01 source/asset contract (22 checks)",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/r3-header-navigation-asset-contract.php",
+      "output": "PASS: R3 Header navigation progressive-enhancement asset contract",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/r6-asset-scope-contract.php",
+      "output": "PASS: R6 exact Theme asset-scope matrix (12 cases)",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/r6-convertflow-asset-gate-contract.php",
+      "output": "PASS: R6 ConvertFlow projection asset gate = BLOCKED_EXTERNAL_CONTRACT; safe bridge retained without private detection",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/template-homepage-assets-manifest-contract.php",
+      "output": "PASS: D-043 C5 manifest-driven Homepage asset registry",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/template-wellness01-library-contract.php",
+      "output": "PASS: Wellness 01 registered in Control Center + native Front Page (30 checks)",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/typography-token-cache-contract.php",
+      "output": "PASS: typography and Footer cache-busting contract",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/w1-woocommerce-asset-scope-contract.php",
+      "output": "PASS: W1 WooCommerce generic asset scope contract",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/w2-product-asset-scope-contract.php",
+      "output": "PASS: W2 product-only asset scope",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/w3-archive-asset-scope-contract.php",
+      "output": "PASS: W3 archive-only asset scope",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/w4-cart-asset-scope-contract.php",
+      "output": "PASS: W4 cart-only asset scope",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/w5-checkout-asset-scope-contract.php",
+      "output": "PASS: W5 checkout-only asset scope",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/w6-account-asset-scope-contract.php",
+      "output": "PASS: W6 account-only asset scope",
+      "pass": true
+    },
+    {
+      "file": "tests/offline/x3-media-gallery-embed-contract.php",
+      "output": "PASS: X3 Media/Gallery/Embed ownership and presentation contract",
+      "pass": true
+    }
+  ],
+  "lint_files": 166
+}
