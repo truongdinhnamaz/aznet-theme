@@ -1,0 +1,65 @@
+/* Wellness 01 — surface-aware Gutenberg presentation. No booking/content/identity logic. */
+.aznet-theme-homepage--wellness-01 .aznet-theme-entry__content > .aznet-theme-wellness01.alignfull {
+  width:100vw;max-width:none;margin-inline-start:50%;margin-inline-end:0;transform:translateX(-50%);
+}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 {
+  --w01-ink:#21372f; --w01-muted:#586d61; --w01-sage:#496b54; --w01-border:#dee7de;
+  --w01-max:1180px; color:var(--w01-ink); background:#fff; overflow:clip;
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 :where(.wp-block-column,.wp-block-group) {min-width:0;}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 > .wp-block-group.alignfull,
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 .wp-block-group.alignfull {
+  max-width:none;width:100%;margin-inline:0;transform:none;
+}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 > .wp-block-group.alignwide {
+  max-width:var(--w01-max);width:min(var(--w01-max),calc(100% - 48px));margin:clamp(56px,7vw,100px) auto;
+}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 :where(h1,h2,h3) {
+  color:var(--w01-ink);letter-spacing:-.035em;line-height:1.2;text-wrap:balance;
+}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 h1 {font-size:clamp(2.25rem,4.35vw,4.5rem);}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 h2 {font-size:clamp(1.8rem,2.65vw,2.85rem);}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 h3 {font-size:clamp(1.1rem,1.5vw,1.4rem);}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 p {line-height:1.75;}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 :where(img) {max-width:100%;height:auto;}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 .wp-block-image {margin:0;overflow:hidden;border-radius:18px;}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 .wp-block-image img {
+  display:block;width:100%;aspect-ratio:4/3;object-fit:cover;object-position:center;
+}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01__hero .wp-block-columns {
+  width:min(var(--w01-max),100%);margin-inline:auto;gap:clamp(24px,4.5vw,70px);
+}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01__hero .wp-block-image img {aspect-ratio:1.2;}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01__programs .wp-block-columns,
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01__steps .wp-block-columns,
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01__people .wp-block-columns {gap:clamp(16px,2vw,28px);}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01__programs .wp-block-column,
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01__steps .wp-block-column {
+  padding:clamp(12px,1.7vw,22px);border:1px solid var(--w01-border);border-radius:20px;
+  background:#fff;box-shadow:0 8px 32px rgba(30,50,36,.05);
+}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01__story .wp-block-columns {
+  width:min(var(--w01-max),100%);margin-inline:auto;gap:clamp(24px,5vw,72px);
+}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01__faq .wp-block-details {
+  border-bottom:1px solid var(--w01-border);padding:16px 2px;
+}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01__faq .wp-block-details summary {
+  font-weight:650;cursor:pointer;
+}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 a {text-underline-offset:.22em;}
+.aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 :where(a,button,summary):focus-visible {
+  outline:3px solid #2e6945;outline-offset:3px;
+}
+@media (max-width: 767px) {
+  .aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 > .wp-block-group.alignwide {
+    width:calc(100% - 32px);margin-block:54px;
+  }
+  .aznet-theme-homepage--wellness-01 .aznet-theme-wellness01__hero .wp-block-columns {
+    gap:30px;
+  }
+  .aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 .wp-block-image {border-radius:14px;}
+  .aznet-theme-homepage--wellness-01 .aznet-theme-wellness01 .wp-block-image img {aspect-ratio:4/3;}
+  .aznet-theme-homepage--wellness-01 .aznet-theme-wellness01__hero .wp-block-image img {aspect-ratio:1.35;}
+}
