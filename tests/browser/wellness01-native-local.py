@@ -205,6 +205,7 @@ echo wp_json_encode(['run_token'=>'__WELLNESS_NATIVE_TOKEN__','wordpress'=>get_b
         (out / "request-state.json").write_text(json.dumps(state, indent=2) + "\n")
         provenance = {"source_sha": args.source_sha, "production_files": manifest["production_files"],
                       "browser_script_sha256": digest(repo / browser_script), "runner_sha256": digest(__file__),
+                      "source_runner_sha256": hashlib.sha256(git_bytes("tests/browser/wellness01-native-local.py")).hexdigest(),
                       "source_browser_script_sha256": source_browser_hash, "test_candidate": bool(args.browser_candidate_sha256),
                       "layout_probe_sha256": digest(repo / probe), "mysql_datadir_fenced": True,
                       "http_run_token_fenced": True, "work_directory": str(work),
@@ -213,8 +214,24 @@ echo wp_json_encode(['run_token'=>'__WELLNESS_NATIVE_TOKEN__','wordpress'=>get_b
                       "php_version": run([str(php), "-v"]), "php_modules": run([str(php), "-m"]),
                       "wp_cli_version": run([*cli, "cli", "version"]), "mysql_version": db_version}
         provenance["mysql_binary_sha256"] = digest(mysql_base / "bin/mysqld")
-        provenance["browser_tools"] = json.loads(run(["node", "--input-type=module", "-e",
-            "import {chromium} from 'playwright'; import {createRequire} from 'node:module'; const r=createRequire(import.meta.url); console.log(JSON.stringify({node:process.version,playwright:r('playwright/package.json').version,axe:r('@axe-core/playwright/package.json').version,chromium:chromium.executablePath()}));"]))
+        provenance["browser_tools"] = json.loads(run(["node", "--input-type=module", "-e", """
+import {chromium} from 'playwright';
+import {createRequire} from 'node:module';
+import fs from 'node:fs';
+import path from 'node:path';
+const require = createRequire(import.meta.url);
+const version = name => {
+  let directory = path.dirname(require.resolve(name));
+  while (!fs.existsSync(path.join(directory, 'package.json'))) {
+    const parent = path.dirname(directory);
+    if (parent === directory) throw new Error('Missing package metadata: ' + name);
+    directory = parent;
+  }
+  return JSON.parse(fs.readFileSync(path.join(directory, 'package.json'), 'utf8')).version;
+};
+console.log(JSON.stringify({node:process.version,playwright:version('playwright'),
+  axe:version('@axe-core/playwright'),chromium:chromium.executablePath()}));
+"""]))
         provenance["browser_tools"]["chromium_version"] = run([provenance["browser_tools"]["chromium"], "--version"])
         (out / "provenance.json").write_text(json.dumps(provenance, indent=2) + "\n")
         env.update({"WELLNESS_BASE_URL": base, "WELLNESS_PAGE_ID": str(runtime["page_id"]),
