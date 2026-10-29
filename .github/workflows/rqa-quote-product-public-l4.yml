@@ -1,0 +1,93 @@
+name: RQA Public Quote Consumer L4
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tests/browser/rqa-quote-product-public-l4.mjs'
+      - 'tests/browser/rqa-swatch-ready-control-l4.mjs'
+      - 'tests/browser/rqa-wvs-defer-hypothesis-l4.mjs'
+      - 'tests/browser/rqa-quote-nojs-fallback-l4.mjs'
+      - 'tests/browser/rqa-wvs-keyboard-quote-l4.mjs'
+      - '.github/workflows/rqa-quote-product-public-l4.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-quote-consumer:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out QA-only candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Chromium
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Test live public catalog and quote style context without writes
+        env:
+          RQA_QUOTE_EVIDENCE_DIR: /tmp/rqa-quote-l4
+        run: |
+          set -euo pipefail
+          node tests/browser/rqa-quote-product-public-l4.mjs
+          test -s /tmp/rqa-quote-l4/evidence.json
+      # The early-tap acceptance test ABOVE intentionally remains RED until
+      # the source-owner fixes the pre-init interaction; this control cannot
+      # make a failed first tap acceptable.
+      - name: Positive control - touch after WVS registered its click handler
+        if: always()
+        env:
+          RQA_READY_EVIDENCE_DIR: /tmp/rqa-swatch-ready-l4
+        run: |
+          set -euo pipefail
+          node tests/browser/rqa-swatch-ready-control-l4.mjs
+          test -s /tmp/rqa-swatch-ready-l4/ready-control.json
+      - name: Customer first-touch 6/6 acceptance and browser-only defer A/B
+        if: always()
+        env:
+          RQA_DEFER_EVIDENCE_DIR: /tmp/rqa-wvs-defer-l4
+        run: |
+          set -euo pipefail
+          node --check tests/browser/rqa-wvs-defer-hypothesis-l4.mjs
+          node tests/browser/rqa-wvs-defer-hypothesis-l4.mjs
+          test -s /tmp/rqa-wvs-defer-l4/script-strategy-hypothesis.json
+      - name: No-JavaScript quote contact fail-soft on desktop and mobile
+        if: always()
+        env:
+          RQA_NOJS_EVIDENCE_DIR: /tmp/rqa-quote-nojs-l4
+        run: |
+          set -euo pipefail
+          node --check tests/browser/rqa-quote-nojs-fallback-l4.mjs
+          node tests/browser/rqa-quote-nojs-fallback-l4.mjs
+          test -s /tmp/rqa-quote-nojs-l4/nojs-fallback.json
+      - name: Keyboard activation and quote style context on public variable product
+        if: always()
+        env:
+          RQA_KEYBOARD_EVIDENCE_DIR: /tmp/rqa-keyboard-l4
+        run: |
+          set -euo pipefail
+          node --check tests/browser/rqa-wvs-keyboard-quote-l4.mjs
+          node tests/browser/rqa-wvs-keyboard-quote-l4.mjs
+          test -s /tmp/rqa-keyboard-l4/keyboard-quote.json
+      - name: Preserve scoped public-only evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rqa-public-quote-l4
+          path: |
+            /tmp/rqa-quote-l4/
+            /tmp/rqa-swatch-ready-l4/
+            /tmp/rqa-wvs-defer-l4/
+            /tmp/rqa-quote-nojs-l4/
+            /tmp/rqa-keyboard-l4/
+          if-no-files-found: warn
+          retention-days: 14
