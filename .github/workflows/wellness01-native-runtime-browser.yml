@@ -1,0 +1,162 @@
+name: Wellness 01 native WordPress & preview browser QA
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'patterns/homepage-wellness-01.php'
+      - 'assets/starter/wellness01/**'
+      - 'tests/browser/wellness01-*.mjs'
+      - 'docs/demos/wellness01/preview.html'
+      - 'tests/offline/r2-wellness01-pattern-contract.php'
+      - '.github/workflows/wellness01-native-runtime-browser.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preview-fixture:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@v4
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser dependencies
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Start isolated preview file server
+        run: |
+          nohup python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/wellness-preview-server.log 2>&1 &
+          sleep 1
+          curl -fsS http://127.0.0.1:8765/docs/demos/wellness01/preview.html > /dev/null
+      - name: Verify standalone preview and image URLs; no WordPress L4 claim
+        env:
+          WELLNESS_PREVIEW_EVIDENCE_DIR: /tmp/wellness01-preview
+        run: node tests/browser/wellness01-preview-l4.mjs
+      - name: Upload reference-browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wellness01-standalone-preview
+          path: /tmp/wellness01-preview
+          if-no-files-found: warn
+
+  native-wordpress:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@v4
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify Wellness pattern/image static contract
+        run: |
+          set -euo pipefail
+          php -l patterns/homepage-wellness-01.php
+          php tests/offline/r2-wellness01-pattern-contract.php
+      - name: Install WordPress 6.9 and isolated Theme
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/wellness01-native /tmp/wp
+          mkdir -p /tmp/wellness01-native /tmp/wp/wp-content/themes/aznet-theme
+          printf '%s\n' '${{ github.sha }}' > /tmp/wellness01-native/source-sha.txt
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='Wellness 01 Native QA' --admin_user=admin --admin_password='wellness01-local-ci-password' --admin_email=wellness-ci@example.test --skip-email --allow-root
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' \
+            --exclude='README.md' --exclude='aznet-preview.png' \
+            ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          wp core version --path=/tmp/wp --allow-root | grep -Fx '6.9'
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp --allow-root)"
+          wp eval '
+            $registry = WP_Block_Patterns_Registry::get_instance();
+            $p = $registry->get_registered("aznet-theme/homepage-wellness-01");
+            if (! is_array($p) || empty($p["content"])) { fwrite(STDERR, "FAIL: Wellness 01 pattern not registered\n"); exit(1); }
+            $content = $p["content"];
+            $parsed = parse_blocks($content);
+            if (count($parsed) !== 1 || $parsed[0]["blockName"] !== "core/group") { fwrite(STDERR, "FAIL: pattern must insert exactly one native root Group\n"); exit(1); }
+            $flat = function(array $blocks) use (&$flat) {
+              foreach ($blocks as $block) {
+                if (isset($block["blockName"]) && null !== $block["blockName"] && 0 !== strpos($block["blockName"], "core/")) { fwrite(STDERR, "FAIL: non-native block\n"); exit(1); }
+                $flat($block["innerBlocks"] ?? []);
+              }
+            };
+            $flat($parsed);
+            file_put_contents("/tmp/wellness01-native/pattern.html", $content);
+            echo "PASS: registered native pattern root and Core-only content\n";
+          ' --path=/tmp/wp --allow-root
+          PUBLISH_ID=$(wp post create /tmp/wellness01-native/pattern.html --post_type=page --post_status=publish --post_title='Wellness 01 Published QA' --post_name=wellness01-published-qa --porcelain --path=/tmp/wp --allow-root)
+          DRAFT_ID=$(wp post create /tmp/wellness01-native/pattern.html --post_type=page --post_status=draft --post_title='Wellness 01 Gutenberg QA' --post_name=wellness01-editor-qa --porcelain --path=/tmp/wp --allow-root)
+          test -n "$PUBLISH_ID" && test -n "$DRAFT_ID"
+          printf '%s\n' "$PUBLISH_ID" > /tmp/wellness01-native/page-id.txt
+          printf '%s\n' "$DRAFT_ID" > /tmp/wellness01-native/draft-id.txt
+          wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+      - name: Start isolated WordPress runtime
+        run: |
+          set -euo pipefail
+          nohup php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/wellness01-native/server.log 2>&1 &
+          echo $! > /tmp/wellness01-native/php-server.pid
+          PAGE_ID=$(cat /tmp/wellness01-native/page-id.txt)
+          for i in $(seq 1 30); do
+            if curl -fsS "http://127.0.0.1:8080/?page_id=${PAGE_ID}" >/tmp/wellness01-native/page.html; then break; fi
+            sleep 1
+          done
+          grep -F 'aznet-theme-wellness01' /tmp/wellness01-native/page.html
+          grep -F 'aznet-theme-site-header' /tmp/wellness01-native/page.html
+          grep -F 'aznet-theme-site-footer' /tmp/wellness01-native/page.html
+          if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/wellness01-native/server.log; then
+            echo 'FAIL: PHP warning/fatal in isolated runtime' >&2
+            exit 1
+          fi
+      - name: Install browser and axe
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+      - name: Native WordPress L4 + Gutenberg editor
+        env:
+          WELLNESS_BASE_URL: http://127.0.0.1:8080
+          WELLNESS_EVIDENCE_DIR: /tmp/wellness01-native
+          WELLNESS_EDITOR_USER: admin
+          WELLNESS_EDITOR_PASS: wellness01-local-ci-password
+        run: |
+          set -euo pipefail
+          WELLNESS_PAGE_ID=$(cat /tmp/wellness01-native/page-id.txt) WELLNESS_DRAFT_ID=$(cat /tmp/wellness01-native/draft-id.txt) node tests/browser/wellness01-native-l4.mjs
+      - name: Upload WordPress evidence and server log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wellness01-native-wordpress-l3-l4
+          path: /tmp/wellness01-native
+          if-no-files-found: warn
