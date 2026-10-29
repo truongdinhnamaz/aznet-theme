@@ -1,6 +1,6 @@
 /**
  * Discardable WordPress 6.9 Wellness 01 pattern browser/editor QA.
- * Theme owns presentation; no booking/provider/WordPress content mutation here.
+ * Saves only disposable native drafts; production and provider state stay untouched.
  */
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
@@ -92,7 +92,8 @@ for (const [label, width, height] of editorOnly ? [] : viewports) {
 fs.writeFileSync(`${out}/frontend-verification.json`, JSON.stringify({ captures, problems }, null, 2));
 // D-024/D-029 retain Classic Editor for ordinary Posts/Pages. Test that real
 // lifecycle first; native wp_block preserves WordPress's Gutenberg decision.
-const editor = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const editorContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+const editor = await editorContext.newPage();
 const editorLogs = [];
 editor.on('console', message => {
   if (['error', 'warning'].includes(message.type())) editorLogs.push(message.text());
@@ -107,7 +108,19 @@ await Promise.all([
 ]);
 await editor.goto(`${base}/wp-admin/post.php?post=${draftId}&action=edit`, { waitUntil: 'domcontentloaded' });
 await editor.locator('#content').waitFor({ state: 'attached' });
+let classicSavePhase = 'text';
+const classicSaveRequests = [];
+editor.on('request', request => {
+  if (request.method() === 'POST' && new URL(request.url()).pathname === '/wp-admin/post.php') {
+    const form = new URLSearchParams(request.postData() || '');
+    // Retain only marker booleans, never nonces, cookies or full form contents.
+    classicSaveRequests.push({ phase: classicSavePhase, action: form.get('action'),
+      textMarker: (form.get('content') || '').includes(classicTextMarker),
+      visualMarker: (form.get('content') || '').includes(classicVisualMarker) });
+  }
+});
 async function selectClassicMode(mode) {
+  await editor.waitForLoadState('networkidle');
   await editor.waitForFunction(() => !!window.switchEditors?.go && (
     document.querySelector('#wp-content-wrap')?.classList.contains('html-active')
     || !!window.tinymce?.get('content')?.initialized
@@ -133,12 +146,15 @@ await selectClassicMode('tmce');
 const visualBody = editor.frameLocator('#content_ifr').locator('body');
 await visualBody.waitFor({ state: 'visible' });
 const visualImageCount = await visualBody.locator('img').count();
-await visualBody.click();
-await visualBody.press('ControlOrMeta+End');
-await visualBody.press('Enter');
-await visualBody.pressSequentially(classicVisualMarker);
+// Focus a known editable paragraph; a body-centre click can hit a native view.
+await visualBody.getByText(classicTextMarker, { exact: true }).click();
+await editor.keyboard.press('ControlOrMeta+End');
+await editor.keyboard.press('Enter');
+await editor.keyboard.type(classicVisualMarker);
 const visualMarkerBeforeSave = (await visualBody.innerText()).includes(classicVisualMarker);
 const visualDirtyBeforeSave = await editor.evaluate(() => window.tinymce.get('content').isDirty());
+const visualSerializedBeforeSave = await editor.evaluate(marker => window.tinymce.get('content').getContent().includes(marker), classicVisualMarker);
+classicSavePhase = 'visual';
 await Promise.all([
   editor.waitForNavigation({ waitUntil: 'domcontentloaded' }),
   editor.locator('#save-post').click(),
@@ -146,16 +162,53 @@ await Promise.all([
 await selectClassicMode('html');
 const classicAfter = await editor.locator('#content').inputValue();
 const classicRoundTrip = {
-  visualMarkerBeforeSave, visualDirtyBeforeSave,
+  visualMarkerBeforeSave, visualDirtyBeforeSave, visualSerializedBeforeSave, saveRequests: classicSaveRequests,
   textSaved: classicTextSaved.includes(classicTextMarker), visualSaved: classicAfter.includes(classicVisualMarker),
   textRetained: classicAfter.includes(classicTextMarker), visualImages: visualImageCount,
   savedImages: (classicAfter.match(/<img\b/g) || []).length, hasNativeMarkers: classicAfter.includes('<!-- wp:group'),
 };
-if (!classicRoundTrip.visualMarkerBeforeSave || !classicRoundTrip.textSaved || !classicRoundTrip.visualSaved || !classicRoundTrip.textRetained
+if (!classicRoundTrip.visualMarkerBeforeSave || !classicRoundTrip.visualSerializedBeforeSave
+  || !classicSaveRequests.some(request => request.phase === 'text' && request.textMarker)
+  || !classicSaveRequests.some(request => request.phase === 'visual' && request.textMarker && request.visualMarker)
+  || !classicRoundTrip.textSaved || !classicRoundTrip.visualSaved || !classicRoundTrip.textRetained
   || classicRoundTrip.visualImages !== 7 || classicRoundTrip.savedImages !== 7 || !classicRoundTrip.hasNativeMarkers) {
   problems.push(`Classic Text/Visual roundtrip failed: ${JSON.stringify(classicRoundTrip)}`);
 }
 fs.writeFileSync(`${out}/classic-verification.json`, JSON.stringify({ classicRoundTrip, problems }, null, 2));
+// Classic may normalize native inline styles while saving. Verify the resulting
+// WordPress draft's real computed Button colors, independently of block validity.
+const classicPreview = await editorContext.newPage();
+await classicPreview.goto(`${base}/?page_id=${draftId}&preview=true`, { waitUntil: 'networkidle' });
+const classicLayout = await classicPreview.evaluate(inspectWellnessLayout);
+const classicFixtureNames = ['Custom white foreground', 'Short white foreground', 'White background stays dark'];
+const classicInverseToken = await classicPreview.evaluate(() => {
+  const token = getComputedStyle(document.querySelector('.aznet-theme-entry__content')).getPropertyValue('--aznet-theme-on-inverse').trim() || '#fff';
+  const context = new OffscreenCanvas(1, 1).getContext('2d');
+  context.fillStyle = token;
+  context.fillRect(0, 0, 1, 1);
+  const [r, g, b, alpha] = context.getImageData(0, 0, 1, 1).data;
+  if (alpha !== 255) throw new Error('Expected an opaque inverse foreground token');
+  return { token, foreground: `rgb(${r}, ${g}, ${b})` };
+});
+const classicPresentation = {
+  scope: 'Classic-saved draft Button contrast only; no frontend layout claim',
+  inverseToken: classicInverseToken,
+  themeStyles: classicLayout.themeStyles,
+  buttons: classicLayout.buttons.filter(button => classicFixtureNames.includes(button.name)),
+};
+for (const name of classicFixtureNames) {
+  const matches = classicPresentation.buttons.filter(button => button.name === name);
+  const shouldBeWhite = name !== 'White background stays dark';
+  if (matches.length !== 1 || matches[0].contrast < 4.5
+    || (matches[0].foreground === classicInverseToken.foreground) !== shouldBeWhite) {
+    problems.push(`Classic-saved Button color regression: ${name}`);
+  }
+}
+if (!classicPresentation.themeStyles.some(url => url.includes(`/generic-content.css?ver=`) && url.includes(genericFingerprint))) {
+  problems.push('Classic-saved preview does not load current generic CSS bytes');
+}
+fs.writeFileSync(`${out}/classic-presentation.json`, JSON.stringify({ classicPresentation, problems }, null, 2));
+await classicPreview.close();
 await editor.goto(`${base}/wp-admin/post.php?post=${blockDraftId}&action=edit`, { waitUntil: 'domcontentloaded' });
 try {
   await editor.waitForFunction(() => window.wp?.data?.select('core/block-editor')?.getBlocks()?.length > 0, null, { timeout: 45000 });
@@ -232,7 +285,8 @@ if (!roundTrip.valid || !roundTrip.found || roundTrip.count !== editorState.coun
 }
 await editor.screenshot({ path: `${out}/editor.png`, fullPage: false });
 await editor.close();
+await editorContext.close();
 await browser.close();
-fs.writeFileSync(`${out}/verification.json`, JSON.stringify({ mode: editorOnly ? 'editor-only' : 'full', runToken, captures, classicRoundTrip, editorState, roundTrip, problems }, null, 2));
+fs.writeFileSync(`${out}/verification.json`, JSON.stringify({ mode: editorOnly ? 'editor-only' : 'full', runToken, captures, classicRoundTrip, classicPresentation, editorState, roundTrip, problems }, null, 2));
 if (problems.length) { console.error('FAIL: Wellness 01 native WordPress QA\n' + problems.join('\n')); process.exit(1); }
 console.log(`PASS: Wellness 01 ${editorOnly ? 'editor-only' : 'WordPress browser x4 + axe'} + Classic Text/Visual + native wp_block Gutenberg save/reopen; ${editorState.count} blocks`);
