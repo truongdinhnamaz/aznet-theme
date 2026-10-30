@@ -9,7 +9,7 @@ import hashlib
 import http.client
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 import subprocess
 import tempfile
@@ -20,6 +20,29 @@ import zipfile
 
 def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def production_inventory(repo, source_sha):
+    """Keep approved auxiliary files and discover added Theme files at the pinned commit."""
+    if not re.fullmatch(r"[0-9a-f]{40}", source_sha):
+        raise ValueError("An exact 40-character source commit is required")
+    baseline = json.loads(subprocess.check_output([
+        "git", "show", source_sha + ":docs/evidence/wellness01/2026-10-29-v06-source-manifest.json"
+    ], cwd=repo))["production_files"]
+    tracked = set(subprocess.check_output([
+        "git", "ls-tree", "-r", "--name-only", source_sha
+    ], cwd=repo, text=True).splitlines())
+    # Reuse the pinned release packager's exclusion policy. An independent
+    # directory allowlist would omit future production folders all over again.
+    policy_source = subprocess.check_output([
+        "git", "show", source_sha + ":scripts/build-release-package.py"
+    ], cwd=repo)
+    policy = {"__name__": "wellness_pinned_package_policy"}
+    exec(compile(policy_source, "pinned-build-release-package.py", "exec"), policy)
+    if not callable(policy.get("excluded")):
+        raise RuntimeError("Pinned package inclusion policy is unavailable")
+    packaged = {path for path in tracked if not policy["excluded"](PurePosixPath(path))}
+    return sorted((set(baseline) | packaged) & tracked)
 
 
 def main():
@@ -61,9 +84,9 @@ def main():
         return subprocess.check_output(["git", "show", args.source_sha + ":" + path], cwd=repo)
 
     try:
-        # Reuse the approved 250-file inventory, deriving each hash from the
-        # explicitly selected commit rather than reusing historical v0.6 hashes.
-        inventory = json.loads(git_bytes("docs/evidence/wellness01/2026-10-29-v06-source-manifest.json"))["production_files"]
+        # Derive current Theme paths as well as hashes from the selected commit;
+        # a historical inventory alone can silently omit newly added assets.
+        inventory = production_inventory(repo, args.source_sha)
         manifest = {"production_files": {path: hashlib.sha256(git_bytes(path)).hexdigest() for path in inventory}}
         browser_script = "tests/browser/wellness01-native-l4.mjs"
         source_browser_hash = hashlib.sha256(git_bytes(browser_script)).hexdigest()

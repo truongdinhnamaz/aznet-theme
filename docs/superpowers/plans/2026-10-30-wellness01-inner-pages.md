@@ -31,3 +31,14 @@
 - [x] Run affected PHP contracts and syntax checks; review the bounded diff independently and prepare the existing draft branch for handoff. Existing v0.7 native editor evidence remains historical; do not claim it ran on changed PHP bytes.
 - [x] Show the corrected preview and record results under `docs/evidence/wellness01/2026-10-30-v08-qa.md`; resulting commit identity is recorded in checkpoint v0.8 and the PR.
 - [ ] Separate owner visual acceptance and release/merge/publication gate.
+
+## v0.9 verification continuation
+
+- [x] Repair the missing commit identity in checkpointv0.8 using Git/PR evidence, preserving its file identity.
+- [x] Correct the historical native inventory omission; reuse the pinned release-package policy and check new-directory/uncommitted-file controls.
+- [x] Execute a fresh seven-case native WP6.9/PHP8.1/MySQL8 Page HTML/assets smoke, including rendered fixture identity and exact CSS delivery; stop owned services.
+- [x] Audit all235 draft text files and250 package paths. Align the identical Wellness admin-preview block; preserve the observed draft-name suffix.
+- [x] Build and verify the250-file source QA ZIP against the native manifest; record separate raw-binary limitations.
+- [ ] Remaining release boundary:11 draft binary GETs return403; owner publication/required-CI disposition is separate. No full draft-byte or current Actions PASS claim.
+
+Evidence: `docs/evidence/wellness01/2026-10-30-v09-qa.md`. Production/UI source remainscab5cf81; only QA infrastructure/evidence changes in Git during this continuation.

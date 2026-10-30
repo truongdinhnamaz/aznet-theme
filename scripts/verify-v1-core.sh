@@ -189,6 +189,7 @@ fi
 printf '%s\n' '==> Y1 Page Experience contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-page-experience-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/wellness01-page-assets-contract.php
+python3 tests/offline/wellness01-native-inventory-contract.py
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/page-full-bleed-sections-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/page-section-inner-width-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/fullwidth-shell-standard-contract.php
