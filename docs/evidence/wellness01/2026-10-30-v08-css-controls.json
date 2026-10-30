@@ -1,0 +1,226 @@
+{
+  "scope": "static selector/cascade controls only; no rendered browser claim",
+  "css_sha256": "ffbcf38ef448424986d84b223995fd224c299b936be41a0ea4f2dd14fa961638",
+  "tools": {
+    "cssselect2": "0.8.0",
+    "tinycss2": "1.4.0"
+  },
+  "records": [
+    {
+      "width": 1440,
+      "declarations": {
+        "standard": {
+          "display": "grid",
+          "grid-template-columns": "repeat(2, minmax(0, 1fr))",
+          "gap": "var(--w01-page-gap)",
+          "padding-block-end": "clamp(3rem, 6vw, 5rem)"
+        },
+        "full-a": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0",
+          "border-radius": "var(--aznet-theme-radius-card)"
+        },
+        "full-b": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0",
+          "border-radius": "var(--aznet-theme-radius-card)"
+        },
+        "solo-after-full": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0",
+          "border-radius": "var(--aznet-theme-radius-card)"
+        },
+        "pair-a": {
+          "grid-column": "span 1",
+          "min-width": "0",
+          "margin-block": "0",
+          "border-radius": "var(--aznet-theme-radius-card)"
+        },
+        "pair-b": {
+          "grid-column": "span 1",
+          "min-width": "0",
+          "margin-block": "0",
+          "border-radius": "var(--aznet-theme-radius-card)"
+        },
+        "landscape": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0"
+        },
+        "column-image": {
+          "margin-block-start": "0",
+          "width": "100%",
+          "max-width": "22.5rem",
+          "margin-inline": "auto",
+          "overflow": "hidden",
+          "border-radius": "var(--aznet-theme-radius-card)"
+        },
+        "column-wide": {},
+        "column-left": {
+          "margin-block-end": "0"
+        },
+        "top": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0",
+          "gap": "clamp(1.25rem, 2.5vw, 2rem)"
+        },
+        "bottom": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0",
+          "gap": "clamp(1.25rem, 2.5vw, 2rem)"
+        },
+        "landing": {}
+      },
+      "failures": []
+    },
+    {
+      "width": 768,
+      "declarations": {
+        "standard": {
+          "display": "grid",
+          "grid-template-columns": "repeat(2, minmax(0, 1fr))",
+          "gap": "var(--w01-page-gap)",
+          "padding-block-end": "clamp(3rem, 6vw, 5rem)"
+        },
+        "full-a": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0",
+          "border-radius": "var(--aznet-theme-radius-card)"
+        },
+        "full-b": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0",
+          "border-radius": "var(--aznet-theme-radius-card)"
+        },
+        "solo-after-full": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0",
+          "border-radius": "var(--aznet-theme-radius-card)"
+        },
+        "pair-a": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0",
+          "border-radius": "var(--aznet-theme-radius-card)"
+        },
+        "pair-b": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0",
+          "border-radius": "var(--aznet-theme-radius-card)"
+        },
+        "landscape": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0"
+        },
+        "column-image": {
+          "margin-block-start": "0",
+          "width": "100%",
+          "max-width": "22.5rem",
+          "margin-inline": "auto",
+          "overflow": "hidden",
+          "border-radius": "var(--aznet-theme-radius-card)"
+        },
+        "column-wide": {},
+        "column-left": {
+          "margin-block-end": "0"
+        },
+        "top": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0",
+          "gap": "clamp(1.25rem, 2.5vw, 2rem)"
+        },
+        "bottom": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0",
+          "gap": "clamp(1.25rem, 2.5vw, 2rem)"
+        },
+        "landing": {}
+      },
+      "failures": []
+    },
+    {
+      "width": 390,
+      "declarations": {
+        "standard": {
+          "display": "grid",
+          "grid-template-columns": "repeat(2, minmax(0, 1fr))",
+          "gap": "var(--w01-page-gap)",
+          "padding-block-end": "clamp(3rem, 6vw, 5rem)"
+        },
+        "full-a": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0",
+          "border-radius": "var(--aznet-theme-radius-card)"
+        },
+        "full-b": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0",
+          "border-radius": "var(--aznet-theme-radius-card)"
+        },
+        "solo-after-full": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0",
+          "border-radius": "var(--aznet-theme-radius-card)"
+        },
+        "pair-a": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0",
+          "border-radius": "var(--aznet-theme-radius-card)"
+        },
+        "pair-b": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0",
+          "border-radius": "var(--aznet-theme-radius-card)"
+        },
+        "landscape": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0"
+        },
+        "column-image": {
+          "margin-block-start": "0",
+          "width": "100%",
+          "max-width": "22.5rem",
+          "margin-inline": "auto",
+          "overflow": "hidden",
+          "border-radius": "var(--aznet-theme-radius-card)"
+        },
+        "column-wide": {},
+        "column-left": {
+          "margin-block-end": "0"
+        },
+        "top": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0",
+          "gap": "clamp(1.25rem, 2.5vw, 2rem)"
+        },
+        "bottom": {
+          "grid-column": "1 / -1",
+          "min-width": "0",
+          "margin-block": "0",
+          "gap": "clamp(1.25rem, 2.5vw, 2rem)"
+        },
+        "landing": {}
+      },
+      "failures": []
+    }
+  ]
+}

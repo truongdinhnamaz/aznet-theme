@@ -1,0 +1,9 @@
+{
+  "php_errors": [],
+  "php_server_log_sha256": "9e8eeef120b0a5726c52f729cfec22eb358bfb059b53ee61f121a4bad8083a49",
+  "php_log_lines": 2199,
+  "mysql_shutdown_complete": true,
+  "workspace_retained": "/tmp/w01-native/wellness-native-r7jxf81q",
+  "processes_terminated_by_runner": true,
+  "script_scope": "Only local disposable fixture processes; no system services or production connections"
+}

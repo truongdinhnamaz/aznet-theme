@@ -1,0 +1,984 @@
+{
+  "mode": "full",
+  "runToken": "25843893-7367-4f05-8d77-2c77b403dc8f",
+  "captures": [
+    {
+      "label": "desktop",
+      "root": true,
+      "h1": 1,
+      "columns": 12,
+      "viewportWidth": 1440,
+      "docWidth": 1440,
+      "unresolvedAnchors": [],
+      "title": "Một hành trình chăm sóc bản thân, theo cách phù hợp với bạn",
+      "signupForms": 0,
+      "layout": {
+        "viewport": 1440,
+        "clientWidth": 1440,
+        "documentWidth": 1440,
+        "themeStyles": [
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/tokens.css?ver=1.3.98-cf09008e8e10",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/integrations/convertflow.css?ver=1.3.98",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/style.css?ver=1.3.98",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/site-header.css?ver=1.3.98",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/site-footer.css?ver=1.3.98-f0ec8ae84e88",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/homepage.css?ver=1.3.98",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/homepage-wellness-01.css?ver=1.3.98-c80d086521d8",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/generic-content.css?ver=1.3.98-ea95bcc3d416",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/forms.css?ver=1.3.98-5ec8401fc098",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/media.css?ver=1.3.98-e95668a342bb"
+        ],
+        "robots": "noindex, nofollow",
+        "root": {
+          "x": 0,
+          "right": 1440,
+          "width": 1440,
+          "height": 6012.3125
+        },
+        "sections": [
+          {
+            "name": "aznet-theme-wellness01__programs",
+            "x": 130,
+            "right": 1310,
+            "width": 1180,
+            "height": 724.109375,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__steps",
+            "x": 130,
+            "right": 1310,
+            "width": 1180,
+            "height": 464.625,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__schedule",
+            "x": 130,
+            "right": 1310,
+            "width": 1180,
+            "height": 347.359375,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__ai-note",
+            "x": 130,
+            "right": 1310,
+            "width": 1180,
+            "height": 49,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__faq",
+            "x": 130,
+            "right": 1310,
+            "width": 1180,
+            "height": 335.296875,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__journal",
+            "x": 130,
+            "right": 1310,
+            "width": 1180,
+            "height": 328.609375,
+            "transform": "none"
+          },
+          {
+            "name": "wp-block-group alignwide is-layout-constrained wp-block-group-is-layout-constrained",
+            "x": 130,
+            "right": 1310,
+            "width": 1180,
+            "height": 111.46875,
+            "transform": "none"
+          }
+        ],
+        "buttons": [
+          {
+            "name": "Khám phá chương trình",
+            "foreground": "rgb(255, 255, 255)",
+            "background": "rgb(23, 92, 211)",
+            "contrast": 5.986453723270191,
+            "x": 360,
+            "right": 594.75,
+            "width": 234.75,
+            "height": 51.734375
+          },
+          {
+            "name": "Trao đổi nhu cầu",
+            "foreground": "rgb(33, 55, 47)",
+            "background": "rgb(246, 243, 235)",
+            "contrast": 11.462631109684729,
+            "x": 360,
+            "right": 538.9375,
+            "width": 178.9375,
+            "height": 51.734375
+          },
+          {
+            "name": "Hỏi về lịch tham gia",
+            "foreground": "rgb(33, 55, 47)",
+            "background": "rgb(255, 255, 255)",
+            "contrast": 12.710409205952303,
+            "x": 360,
+            "right": 566.5,
+            "width": 206.5,
+            "height": 51.734375
+          },
+          {
+            "name": "Custom white foreground",
+            "foreground": "rgb(247, 248, 250)",
+            "background": "rgb(56, 91, 73)",
+            "contrast": 7.1581680175368065,
+            "x": 360,
+            "right": 609.984375,
+            "width": 249.984375,
+            "height": 51.734375
+          },
+          {
+            "name": "Short white foreground",
+            "foreground": "rgb(247, 248, 250)",
+            "background": "rgb(56, 91, 73)",
+            "contrast": 7.1581680175368065,
+            "x": 617.984375,
+            "right": 849.609375,
+            "width": 231.625,
+            "height": 51.734375
+          },
+          {
+            "name": "White background stays dark",
+            "foreground": "rgb(23, 24, 27)",
+            "background": "rgb(255, 255, 255)",
+            "contrast": 17.752805549821005,
+            "x": 360,
+            "right": 641.0625,
+            "width": 281.0625,
+            "height": 51.734375
+          }
+        ],
+        "images": [
+          {
+            "alt": "Ảnh tạo bởi AI minh họa lớp vận động, không phải hình ảnh cơ sở hoặc học viên thực tế",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/group.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "1.2 / 1",
+            "x": 752.40625,
+            "right": 1080.015625,
+            "width": 327.609375,
+            "height": 273
+          },
+          {
+            "alt": "Ảnh AI minh họa lớp Pilates và chuyển động",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/mobility.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 383,
+            "right": 558.328125,
+            "width": 175.328125,
+            "height": 131.484375
+          },
+          {
+            "alt": "Ảnh AI minh họa hướng dẫn vận động cá nhân",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/guide.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 632.328125,
+            "right": 807.65625,
+            "width": 175.328125,
+            "height": 131.484375
+          },
+          {
+            "alt": "Ảnh AI minh họa buổi thiền và hơi thở",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/meditation.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 881.65625,
+            "right": 1056.984375,
+            "width": 175.328125,
+            "height": 131.484375
+          },
+          {
+            "alt": "Ảnh AI minh họa người hướng dẫn chuyển động trong studio",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/guide.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 756,
+            "right": 1080,
+            "width": 324,
+            "height": 243
+          },
+          {
+            "alt": "Ảnh AI minh họa, không phải huấn luyện viên thực tế",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/guide.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 360,
+            "right": 706,
+            "width": 346,
+            "height": 259.5
+          },
+          {
+            "alt": "Ảnh AI minh họa, không phải đội ngũ thực tế",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/group.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 734,
+            "right": 1080,
+            "width": 346,
+            "height": 259.5
+          }
+        ],
+        "failures": []
+      },
+      "axeViolations": [],
+      "screenshot": "/workspace/scratch/0ca62ce69544/qa-native-v06/evidence/candidate-native-final/desktop.png"
+    },
+    {
+      "label": "tablet-wide",
+      "root": true,
+      "h1": 1,
+      "columns": 12,
+      "viewportWidth": 1024,
+      "docWidth": 1024,
+      "unresolvedAnchors": [],
+      "title": "Một hành trình chăm sóc bản thân, theo cách phù hợp với bạn",
+      "signupForms": 0,
+      "layout": {
+        "viewport": 1024,
+        "clientWidth": 1024,
+        "documentWidth": 1024,
+        "themeStyles": [
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/tokens.css?ver=1.3.98-cf09008e8e10",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/integrations/convertflow.css?ver=1.3.98",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/style.css?ver=1.3.98",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/site-header.css?ver=1.3.98",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/site-footer.css?ver=1.3.98-f0ec8ae84e88",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/homepage.css?ver=1.3.98",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/homepage-wellness-01.css?ver=1.3.98-c80d086521d8",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/generic-content.css?ver=1.3.98-ea95bcc3d416",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/forms.css?ver=1.3.98-5ec8401fc098",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/media.css?ver=1.3.98-e95668a342bb"
+        ],
+        "robots": "noindex, nofollow",
+        "root": {
+          "x": 0,
+          "right": 1024,
+          "width": 1024,
+          "height": 5151.71875
+        },
+        "sections": [
+          {
+            "name": "aznet-theme-wellness01__programs",
+            "x": 24,
+            "right": 1000,
+            "width": 976,
+            "height": 660.09375,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__steps",
+            "x": 24,
+            "right": 1000,
+            "width": 976,
+            "height": 383.046875,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__schedule",
+            "x": 24,
+            "right": 1000,
+            "width": 976,
+            "height": 320.5625,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__ai-note",
+            "x": 24,
+            "right": 1000,
+            "width": 976,
+            "height": 49,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__faq",
+            "x": 24,
+            "right": 1000,
+            "width": 976,
+            "height": 308.5,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__journal",
+            "x": 24,
+            "right": 1000,
+            "width": 976,
+            "height": 289.015625,
+            "transform": "none"
+          },
+          {
+            "name": "wp-block-group alignwide is-layout-constrained wp-block-group-is-layout-constrained",
+            "x": 24,
+            "right": 1000,
+            "width": 976,
+            "height": 111.46875,
+            "transform": "none"
+          }
+        ],
+        "buttons": [
+          {
+            "name": "Khám phá chương trình",
+            "foreground": "rgb(255, 255, 255)",
+            "background": "rgb(23, 92, 211)",
+            "contrast": 5.986453723270191,
+            "x": 152,
+            "right": 386.75,
+            "width": 234.75,
+            "height": 51.734375
+          },
+          {
+            "name": "Trao đổi nhu cầu",
+            "foreground": "rgb(33, 55, 47)",
+            "background": "rgb(246, 243, 235)",
+            "contrast": 11.462631109684729,
+            "x": 152,
+            "right": 330.9375,
+            "width": 178.9375,
+            "height": 51.734375
+          },
+          {
+            "name": "Hỏi về lịch tham gia",
+            "foreground": "rgb(33, 55, 47)",
+            "background": "rgb(255, 255, 255)",
+            "contrast": 12.710409205952303,
+            "x": 152,
+            "right": 358.5,
+            "width": 206.5,
+            "height": 51.734375
+          },
+          {
+            "name": "Custom white foreground",
+            "foreground": "rgb(247, 248, 250)",
+            "background": "rgb(56, 91, 73)",
+            "contrast": 7.1581680175368065,
+            "x": 152,
+            "right": 401.984375,
+            "width": 249.984375,
+            "height": 51.734375
+          },
+          {
+            "name": "Short white foreground",
+            "foreground": "rgb(247, 248, 250)",
+            "background": "rgb(56, 91, 73)",
+            "contrast": 7.1581680175368065,
+            "x": 409.984375,
+            "right": 641.609375,
+            "width": 231.625,
+            "height": 51.734375
+          },
+          {
+            "name": "White background stays dark",
+            "foreground": "rgb(23, 24, 27)",
+            "background": "rgb(255, 255, 255)",
+            "contrast": 17.752805549821005,
+            "x": 152,
+            "right": 433.0625,
+            "width": 281.0625,
+            "height": 51.734375
+          }
+        ],
+        "images": [
+          {
+            "alt": "Ảnh tạo bởi AI minh họa lớp vận động, không phải hình ảnh cơ sở hoặc học viên thực tế",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/group.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "1.2 / 1",
+            "x": 535.046875,
+            "right": 872.015625,
+            "width": 336.96875,
+            "height": 280.796875
+          },
+          {
+            "alt": "Ảnh AI minh họa lớp Pilates và chuyển động",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/mobility.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 170.40625,
+            "right": 359.953125,
+            "width": 189.546875,
+            "height": 142.15625
+          },
+          {
+            "alt": "Ảnh AI minh họa hướng dẫn vận động cá nhân",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/guide.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 417.234375,
+            "right": 606.78125,
+            "width": 189.546875,
+            "height": 142.15625
+          },
+          {
+            "alt": "Ảnh AI minh họa buổi thiền và hơi thở",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/meditation.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 664.0625,
+            "right": 853.609375,
+            "width": 189.546875,
+            "height": 142.15625
+          },
+          {
+            "alt": "Ảnh AI minh họa người hướng dẫn chuyển động trong studio",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/guide.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 537.59375,
+            "right": 872,
+            "width": 334.40625,
+            "height": 250.796875
+          },
+          {
+            "alt": "Ảnh AI minh họa, không phải huấn luyện viên thực tế",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/guide.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 152,
+            "right": 501.765625,
+            "width": 349.765625,
+            "height": 262.3125
+          },
+          {
+            "alt": "Ảnh AI minh họa, không phải đội ngũ thực tế",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/group.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 522.234375,
+            "right": 872,
+            "width": 349.765625,
+            "height": 262.3125
+          }
+        ],
+        "failures": []
+      },
+      "axeViolations": [],
+      "screenshot": "/workspace/scratch/0ca62ce69544/qa-native-v06/evidence/candidate-native-final/tablet-wide.png"
+    },
+    {
+      "label": "tablet",
+      "root": true,
+      "h1": 1,
+      "columns": 12,
+      "viewportWidth": 768,
+      "docWidth": 768,
+      "unresolvedAnchors": [],
+      "title": "Một hành trình chăm sóc bản thân, theo cách phù hợp với bạn",
+      "signupForms": 0,
+      "layout": {
+        "viewport": 768,
+        "clientWidth": 768,
+        "documentWidth": 768,
+        "themeStyles": [
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/tokens.css?ver=1.3.98-cf09008e8e10",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/integrations/convertflow.css?ver=1.3.98",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/style.css?ver=1.3.98",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/site-header.css?ver=1.3.98",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/site-footer.css?ver=1.3.98-f0ec8ae84e88",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/homepage.css?ver=1.3.98",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/homepage-wellness-01.css?ver=1.3.98-c80d086521d8",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/generic-content.css?ver=1.3.98-ea95bcc3d416",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/forms.css?ver=1.3.98-5ec8401fc098",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/media.css?ver=1.3.98-e95668a342bb"
+        ],
+        "robots": "noindex, nofollow",
+        "root": {
+          "x": 0,
+          "right": 768,
+          "width": 768,
+          "height": 8521.203125
+        },
+        "sections": [
+          {
+            "name": "aznet-theme-wellness01__programs",
+            "x": 24,
+            "right": 744,
+            "width": 720,
+            "height": 2298.765625,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__steps",
+            "x": 24,
+            "right": 744,
+            "width": 720,
+            "height": 663,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__schedule",
+            "x": 24,
+            "right": 744,
+            "width": 720,
+            "height": 320.5625,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__ai-note",
+            "x": 24,
+            "right": 744,
+            "width": 720,
+            "height": 49,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__faq",
+            "x": 24,
+            "right": 744,
+            "width": 720,
+            "height": 308.5,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__journal",
+            "x": 24,
+            "right": 744,
+            "width": 720,
+            "height": 289.015625,
+            "transform": "none"
+          },
+          {
+            "name": "wp-block-group alignwide is-layout-constrained wp-block-group-is-layout-constrained",
+            "x": 24,
+            "right": 744,
+            "width": 720,
+            "height": 111.46875,
+            "transform": "none"
+          }
+        ],
+        "buttons": [
+          {
+            "name": "Khám phá chương trình",
+            "foreground": "rgb(255, 255, 255)",
+            "background": "rgb(23, 92, 211)",
+            "contrast": 5.986453723270191,
+            "x": 24,
+            "right": 258.75,
+            "width": 234.75,
+            "height": 51.734375
+          },
+          {
+            "name": "Trao đổi nhu cầu",
+            "foreground": "rgb(33, 55, 47)",
+            "background": "rgb(246, 243, 235)",
+            "contrast": 11.462631109684729,
+            "x": 266.75,
+            "right": 445.6875,
+            "width": 178.9375,
+            "height": 51.734375
+          },
+          {
+            "name": "Hỏi về lịch tham gia",
+            "foreground": "rgb(33, 55, 47)",
+            "background": "rgb(255, 255, 255)",
+            "contrast": 12.710409205952303,
+            "x": 24,
+            "right": 230.5,
+            "width": 206.5,
+            "height": 51.734375
+          },
+          {
+            "name": "Custom white foreground",
+            "foreground": "rgb(247, 248, 250)",
+            "background": "rgb(56, 91, 73)",
+            "contrast": 7.1581680175368065,
+            "x": 24,
+            "right": 273.984375,
+            "width": 249.984375,
+            "height": 51.734375
+          },
+          {
+            "name": "Short white foreground",
+            "foreground": "rgb(247, 248, 250)",
+            "background": "rgb(56, 91, 73)",
+            "contrast": 7.1581680175368065,
+            "x": 281.984375,
+            "right": 513.609375,
+            "width": 231.625,
+            "height": 51.734375
+          },
+          {
+            "name": "White background stays dark",
+            "foreground": "rgb(23, 24, 27)",
+            "background": "rgb(255, 255, 255)",
+            "contrast": 17.752805549821005,
+            "x": 24,
+            "right": 305.0625,
+            "width": 281.0625,
+            "height": 51.734375
+          }
+        ],
+        "images": [
+          {
+            "alt": "Ảnh tạo bởi AI minh họa lớp vận động, không phải hình ảnh cơ sở hoặc học viên thực tế",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/group.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "1.2 / 1",
+            "x": 24,
+            "right": 744,
+            "width": 720,
+            "height": 600
+          },
+          {
+            "alt": "Ảnh AI minh họa lớp Pilates và chuyển động",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/mobility.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 38.046875,
+            "right": 729.953125,
+            "width": 691.90625,
+            "height": 518.921875
+          },
+          {
+            "alt": "Ảnh AI minh họa hướng dẫn vận động cá nhân",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/guide.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 38.046875,
+            "right": 729.953125,
+            "width": 691.90625,
+            "height": 518.921875
+          },
+          {
+            "alt": "Ảnh AI minh họa buổi thiền và hơi thở",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/meditation.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 38.046875,
+            "right": 729.953125,
+            "width": 691.90625,
+            "height": 518.921875
+          },
+          {
+            "alt": "Ảnh AI minh họa người hướng dẫn chuyển động trong studio",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/guide.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 24,
+            "right": 744,
+            "width": 720,
+            "height": 540
+          },
+          {
+            "alt": "Ảnh AI minh họa, không phải huấn luyện viên thực tế",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/guide.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 24,
+            "right": 744,
+            "width": 720,
+            "height": 540
+          },
+          {
+            "alt": "Ảnh AI minh họa, không phải đội ngũ thực tế",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/group.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 24,
+            "right": 744,
+            "width": 720,
+            "height": 540
+          }
+        ],
+        "failures": []
+      },
+      "axeViolations": [],
+      "screenshot": "/workspace/scratch/0ca62ce69544/qa-native-v06/evidence/candidate-native-final/tablet.png"
+    },
+    {
+      "label": "mobile",
+      "root": true,
+      "h1": 1,
+      "columns": 12,
+      "viewportWidth": 390,
+      "docWidth": 390,
+      "unresolvedAnchors": [],
+      "title": "Một hành trình chăm sóc bản thân, theo cách phù hợp với bạn",
+      "signupForms": 0,
+      "layout": {
+        "viewport": 390,
+        "clientWidth": 390,
+        "documentWidth": 390,
+        "themeStyles": [
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/tokens.css?ver=1.3.98-cf09008e8e10",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/integrations/convertflow.css?ver=1.3.98",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/style.css?ver=1.3.98",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/site-header.css?ver=1.3.98",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/site-footer.css?ver=1.3.98-f0ec8ae84e88",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/homepage.css?ver=1.3.98",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/homepage-wellness-01.css?ver=1.3.98-c80d086521d8",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/generic-content.css?ver=1.3.98-ea95bcc3d416",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/forms.css?ver=1.3.98-5ec8401fc098",
+          "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/css/components/media.css?ver=1.3.98-e95668a342bb"
+        ],
+        "robots": "noindex, nofollow",
+        "root": {
+          "x": 0,
+          "right": 390,
+          "width": 390,
+          "height": 7539.84375
+        },
+        "sections": [
+          {
+            "name": "aznet-theme-wellness01__programs",
+            "x": 16,
+            "right": 374,
+            "width": 358,
+            "height": 1657.265625,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__steps",
+            "x": 16,
+            "right": 374,
+            "width": 358,
+            "height": 740.71875,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__schedule",
+            "x": 16,
+            "right": 374,
+            "width": 358,
+            "height": 376.5625,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__ai-note",
+            "x": 16,
+            "right": 374,
+            "width": 358,
+            "height": 98,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__faq",
+            "x": 16,
+            "right": 374,
+            "width": 358,
+            "height": 308.5,
+            "transform": "none"
+          },
+          {
+            "name": "aznet-theme-wellness01__journal",
+            "x": 16,
+            "right": 374,
+            "width": 358,
+            "height": 295.5625,
+            "transform": "none"
+          },
+          {
+            "name": "wp-block-group alignwide is-layout-constrained wp-block-group-is-layout-constrained",
+            "x": 16,
+            "right": 374,
+            "width": 358,
+            "height": 171.203125,
+            "transform": "none"
+          }
+        ],
+        "buttons": [
+          {
+            "name": "Khám phá chương trình",
+            "foreground": "rgb(255, 255, 255)",
+            "background": "rgb(23, 92, 211)",
+            "contrast": 5.986453723270191,
+            "x": 24,
+            "right": 258.75,
+            "width": 234.75,
+            "height": 51.734375
+          },
+          {
+            "name": "Trao đổi nhu cầu",
+            "foreground": "rgb(33, 55, 47)",
+            "background": "rgb(246, 243, 235)",
+            "contrast": 11.462631109684729,
+            "x": 24,
+            "right": 202.9375,
+            "width": 178.9375,
+            "height": 51.734375
+          },
+          {
+            "name": "Hỏi về lịch tham gia",
+            "foreground": "rgb(33, 55, 47)",
+            "background": "rgb(255, 255, 255)",
+            "contrast": 12.710409205952303,
+            "x": 16,
+            "right": 222.5,
+            "width": 206.5,
+            "height": 51.734375
+          },
+          {
+            "name": "Custom white foreground",
+            "foreground": "rgb(247, 248, 250)",
+            "background": "rgb(56, 91, 73)",
+            "contrast": 7.1581680175368065,
+            "x": 16,
+            "right": 265.984375,
+            "width": 249.984375,
+            "height": 51.734375
+          },
+          {
+            "name": "Short white foreground",
+            "foreground": "rgb(247, 248, 250)",
+            "background": "rgb(56, 91, 73)",
+            "contrast": 7.1581680175368065,
+            "x": 16,
+            "right": 247.625,
+            "width": 231.625,
+            "height": 51.734375
+          },
+          {
+            "name": "White background stays dark",
+            "foreground": "rgb(23, 24, 27)",
+            "background": "rgb(255, 255, 255)",
+            "contrast": 17.752805549821005,
+            "x": 16,
+            "right": 297.0625,
+            "width": 281.0625,
+            "height": 51.734375
+          }
+        ],
+        "images": [
+          {
+            "alt": "Ảnh tạo bởi AI minh họa lớp vận động, không phải hình ảnh cơ sở hoặc học viên thực tế",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/group.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "1.35 / 1",
+            "x": 24,
+            "right": 366,
+            "width": 342,
+            "height": 253.328125
+          },
+          {
+            "alt": "Ảnh AI minh họa lớp Pilates và chuyển động",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/mobility.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 29,
+            "right": 361,
+            "width": 332,
+            "height": 249
+          },
+          {
+            "alt": "Ảnh AI minh họa hướng dẫn vận động cá nhân",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/guide.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 29,
+            "right": 361,
+            "width": 332,
+            "height": 249
+          },
+          {
+            "alt": "Ảnh AI minh họa buổi thiền và hơi thở",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/meditation.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 29,
+            "right": 361,
+            "width": 332,
+            "height": 249
+          },
+          {
+            "alt": "Ảnh AI minh họa người hướng dẫn chuyển động trong studio",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/guide.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 24,
+            "right": 366,
+            "width": 342,
+            "height": 256.5
+          },
+          {
+            "alt": "Ảnh AI minh họa, không phải huấn luyện viên thực tế",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/guide.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 24,
+            "right": 366,
+            "width": 342,
+            "height": 256.5
+          },
+          {
+            "alt": "Ảnh AI minh họa, không phải đội ngũ thực tế",
+            "source": "http://127.0.0.1:9427/wp-content/themes/aznet-theme/assets/starter/wellness01/group.webp",
+            "loaded": true,
+            "inline": null,
+            "ratio": "4 / 3",
+            "x": 24,
+            "right": 366,
+            "width": 342,
+            "height": 256.5
+          }
+        ],
+        "failures": []
+      },
+      "axeViolations": [],
+      "screenshot": "/workspace/scratch/0ca62ce69544/qa-native-v06/evidence/candidate-native-final/mobile.png"
+    }
+  ],
+  "classicRoundTrip": {
+    "visualMarkerBeforeSave": true,
+    "visualDirtyBeforeSave": true,
+    "textSaved": true,
+    "visualSaved": true,
+    "textRetained": true,
+    "visualImages": 7,
+    "savedImages": 7,
+    "hasNativeMarkers": true
+  },
+  "editorState": {
+    "count": 105,
+    "invalid": [],
+    "invalidDetails": [],
+    "rootNames": [
+      "core/group"
+    ],
+    "customBlocks": []
+  },
+  "roundTrip": {
+    "valid": true,
+    "found": true,
+    "count": 105,
+    "topLevel": 1,
+    "rootNames": [
+      "core/group"
+    ],
+    "customBlocks": []
+  },
+  "problems": []
+}

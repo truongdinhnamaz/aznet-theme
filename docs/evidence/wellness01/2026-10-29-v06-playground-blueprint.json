@@ -1,0 +1,17 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "preferredVersions": {
+    "php": "8.1",
+    "wp": "6.9"
+  },
+  "steps": [
+    {
+      "step": "activateTheme",
+      "themeFolderName": "aznet-theme"
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php\nregister_shutdown_function(static function(){ $error=error_get_last(); if($error)file_put_contents('/qa-evidence/bootstrap-error.json',json_encode($error,JSON_PRETTY_PRINT)); });\nrequire_once '/wordpress/wp-load.php';\n$admin=get_user_by('login','admin');\nif(!$admin)throw new RuntimeException('Missing isolated admin');\nwp_set_current_user($admin->ID);\nwp_set_password('wellness01-local-ci-password',$admin->ID);\nupdate_option('blog_public',0);\n$s=get_theme_mod('aznet_theme_settings',[]);$s['homepage_preset']='wellness-01';set_theme_mod('aznet_theme_settings',$s);\n$p=WP_Block_Patterns_Registry::get_instance()->get_registered('aznet-theme/homepage-wellness-01');\nif(!is_array($p)||empty($p['content']))throw new RuntimeException('Pattern missing from native WP registry');\n$content=$p['content'];\n$fixture=file_get_contents('/wordpress/wp-content/themes/aznet-theme/tests/fixtures/wellness01-button-colors.html');\n$end=strrpos($content,'</div><!-- /wp:group -->');\nif(false===$end)throw new RuntimeException('Root suffix missing');\n$content=substr_replace($content,$fixture,$end,0);\n$parsed=parse_blocks($content);\n$roots=array_values(array_filter($parsed,static fn($b)=>null!==$b['blockName']||trim($b['innerHTML']??'')!==''));\nfile_put_contents('/qa-evidence/native-parse.json',wp_json_encode($parsed,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES));\nif(count($roots)!==1||$roots[0]['blockName']!=='core/group')throw new RuntimeException('Expected one native root Group; got '.count($parsed));\n$pub=wp_insert_post(wp_slash(['post_type'=>'page','post_status'=>'publish','post_title'=>'Wellness 01 Published QA','post_name'=>'wellness01-published-qa','post_content'=>$content]),true);\n$draft=wp_insert_post(wp_slash(['post_type'=>'page','post_status'=>'draft','post_title'=>'Wellness 01 Gutenberg QA','post_name'=>'wellness01-editor-qa','post_content'=>$content]),true);\nif(is_wp_error($pub)||is_wp_error($draft))throw new RuntimeException('Page setup failed');\n$blockDraft=wp_insert_post(wp_slash(['post_type'=>'wp_block','post_status'=>'draft','post_title'=>'Wellness 01 Core Block QA','post_content'=>$content]),true);\nupdate_option('show_on_front','page');update_option('page_on_front',$pub);update_option('permalink_structure','/%postname%/');flush_rewrite_rules();\n$meta=['base_source_sha'=>'b77290562a97c1b1a325fba60aa21a47681cbb54','pattern_sha256'=>hash_file('sha256','/wordpress/wp-content/themes/aznet-theme/patterns/homepage-wellness-01.php'),'wordpress'=>get_bloginfo('version'),'php'=>PHP_VERSION,'database'=>'Playground SQLite infrastructure adapter; not MySQL CI','active_plugins'=>get_option('active_plugins',[]),'stylesheet'=>get_stylesheet(),'page_id'=>$pub,'draft_id'=>$draft,'block_draft_id'=>$blockDraft,'block_root_count'=>count($roots),'bootstrap_stylesheet'=>get_stylesheet(),'bootstrap_mod'=>get_theme_mod('aznet_theme_settings',[]),'bootstrap_mods'=>get_option('theme_mods_aznet-theme',[])];\nfile_put_contents('/qa-evidence/runtime.json',wp_json_encode($meta,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES));\necho wp_json_encode($meta);\n"
+    }
+  ]
+}
