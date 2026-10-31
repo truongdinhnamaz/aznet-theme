@@ -13,11 +13,22 @@ Run in a trusted checkout where the existing browser dependencies and Internet/p
 ```bash
 node --check tests/browser/industrial01-sitewide-audit.mjs
 node tests/browser/industrial01-sitewide-audit.mjs --self-test
+# First reproduce the two Lighthouse findings only on the Komatsu product:
+AZT_AUDIT_BASE_URL=https://anpvietnam.vn/ \
+AZT_AUDIT_ROUTES_FILE=docs/evidence/anp-industrial01-sitewide-routes.json \
+AZT_AUDIT_ONLY_ROUTE=komatsu-product \
+AZT_AUDIT_DIR=/tmp/anp-industrial01-komatsu \
+node tests/browser/industrial01-sitewide-audit.mjs
+
+# After triage, run the complete 14-route, 42-viewport matrix:
 AZT_AUDIT_BASE_URL=https://anpvietnam.vn/ \
 AZT_AUDIT_ROUTES_FILE=docs/evidence/anp-industrial01-sitewide-routes.json \
 AZT_AUDIT_DIR=/tmp/anp-industrial01-sitewide \
 node tests/browser/industrial01-sitewide-audit.mjs
 ```
+
+
+The optional `AZT_AUDIT_ONLY_ROUTE` is an **exact reviewed manifest ID**. Unknown IDs and unsafe values fail closed. Begin with `komatsu-product` (3 read-only views) to obtain the precise `color-contrast` and `label-content-name-mismatch` targets without first auditing 39 unrelated page-views; omit the filter only when performing the complete sitewide gate. Neither mode is a deployment or WooCommerce mutation.
 
 Output: checkpointed `report.json` plus full-page screenshots for each of **390 / 768 / 1440 CSS px**. It checks HTTP/final origin, genuine AZnet Theme + Industrial 01 body classes, main landmark, H1s, horizontal overflow, initially visible broken images, CF7 presence, axe WCAG 2.0/2.1 A/AA violations with actual failing DOM selectors, clipped HTML and failure reason, and computed text/background colors with up to four ancestor styles. It returns nonzero on any non-PASS surface. Theme vs provider ownership is classified **only after** inspecting the violating DOM and authoritative source. Screenshots/HTML may include public client content: inspect privacy before posting artifacts publicly.
 
