@@ -38,7 +38,7 @@ foreach ( $terms as $term ) {
     $category_cards[] = [
         'term'      => $term,
         'url'       => (string) $link,
-        'thumbnail' => '' !== $thumbnail && str_contains( $thumbnail, '<img' ) ? $thumbnail : '',
+        'thumbnail' => '' !== $thumbnail && str_contains( $thumbnail, '<img' ) && ! str_contains( $thumbnail, 'woocommerce-placeholder' ) ? $thumbnail : '',
     ];
 }
 
