@@ -4,6 +4,15 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 
 const widths = [390, 768, 1440];
+// Isolate the first failing public surface instead of crawling the full matrix.
+// The exact ID must already exist in the reviewed site-local route manifest.
+function selectRoutes(routes, onlyId = '') {
+  if (!onlyId) return routes;
+  if (!/^[a-z0-9][a-z0-9-]{0,55}$/.test(onlyId)) throw Error('Invalid requested route ID');
+  const result = routes.filter((r) => r.id === onlyId);
+  if (result.length !== 1) throw Error('Requested route ID absent from reviewed manifest');
+  return result;
+}
 function config(baseUrl, data) {
   const base = new URL(baseUrl);
   if (base.username || base.password || base.search || base.hash || base.pathname !== '/' ||
@@ -31,12 +40,21 @@ if (process.argv.includes('--self-test')) {
   assert.equal(config('https://example.test/', [{ id: 'p', path: '/p/', kind: 'page' }]).routes[0].url, 'https://example.test/p/');
   assert.throws(() => config('http://example.test/', [{ id: 'p', path: '/', kind: 'page' }]));
   assert.throws(() => config('https://example.test/', [{ id: 'p', path: '//evil.test', kind: 'page' }]));
+  const fixture = config('https://example.test/', [
+    { id: 'home', path: '/', kind: 'page' },
+    { id: 'komatsu-product', path: '/product-example', kind: 'product' },
+  ]).routes;
+  assert.deepEqual(selectRoutes(fixture, 'komatsu-product').map((r) => r.id), ['komatsu-product']);
+  assert.equal(selectRoutes(fixture).length, 2);
+  assert.throws(() => selectRoutes(fixture, 'not-in-manifest'));
+  assert.throws(() => selectRoutes(fixture, '../wp-admin'));
   assert.deepEqual(widths, [390, 768, 1440]);
-  console.log('PASS: route origin, public-only paths and viewports');
+  console.log('PASS: public route safety, fail-closed single-route selection and viewports');
 } else {
   const file = process.env.AZT_AUDIT_ROUTES_FILE;
   if (!file) throw Error('Set AZT_AUDIT_ROUTES_FILE to a reviewed explicit JSON route manifest');
   const { base, routes } = config(process.env.AZT_AUDIT_BASE_URL || '', JSON.parse(fs.readFileSync(file, 'utf8')));
+  const selectedRoutes = selectRoutes(routes, process.env.AZT_AUDIT_ONLY_ROUTE || '');
   const dir = path.resolve(process.env.AZT_AUDIT_DIR || '/tmp/azt-industrial01-sitewide');
   fs.mkdirSync(dir, { recursive: true });
   const [{ chromium }, { default: AxeBuilder }] = await Promise.all([import('playwright'), import('@axe-core/playwright')]);
@@ -50,7 +68,7 @@ if (process.argv.includes('--self-test')) {
   const persist = () => fs.writeFileSync(path.join(dir, 'report.json'), JSON.stringify(result, null, 2) + '\n');
   const browser = await chromium.launch({ headless: true });
   try {
-    for (const route of routes) for (const width of widths) {
+    for (const route of selectedRoutes) for (const width of widths) {
       const record = { route: route.id, kind: route.kind, width, outcome: 'started' };
       result.views.push(record);
       const context = await browser.newContext({ viewport: { width, height: width === 390 ? 844 : 1000 }, reducedMotion: 'reduce' });
