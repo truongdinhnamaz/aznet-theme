@@ -31,6 +31,7 @@ $GLOBALS['r3_theme_mods'] = [
 ];
 $GLOBALS['r3_is_front_page'] = false;
 $GLOBALS['r3_woo_enabled']   = false;
+$GLOBALS['r3_woo_pages_assigned'] = true;
 
 if (! function_exists('get_theme_mod')) {
     function get_theme_mod(string $name, mixed $default = false): mixed {
@@ -64,13 +65,22 @@ if (! function_exists('wp_nav_menu')) {
     }
 }
 if (! function_exists('wc_get_page_permalink')) {
-    function wc_get_page_permalink(string $page): string|false {
-        return $GLOBALS['r3_woo_enabled'] ? 'https://example.test/my-account/' : false;
+    function wc_get_page_permalink(string $page, string|bool|null $fallback = null): string|false {
+        if (! $GLOBALS['r3_woo_enabled']) {
+            return false;
+        }
+        if (! $GLOBALS['r3_woo_pages_assigned']) {
+            return null === $fallback ? 'https://example.test/' : $fallback;
+        }
+        return 'cart' === $page ? 'https://example.test/cart/' : 'https://example.test/my-account/';
     }
 }
 if (! function_exists('wc_get_cart_url')) {
     function wc_get_cart_url(): string {
-        return $GLOBALS['r3_woo_enabled'] ? 'https://example.test/cart/' : '';
+        if (! $GLOBALS['r3_woo_enabled']) {
+            return '';
+        }
+        return $GLOBALS['r3_woo_pages_assigned'] ? 'https://example.test/cart/' : 'https://example.test/';
     }
 }
 
@@ -137,6 +147,14 @@ if ($woo_context['account_url'] !== 'https://example.test/my-account/' || $woo_c
     fwrite(STDERR, "FAIL: Header context did not consume public Woo account/cart URLs\n");
     exit(1);
 }
+
+$GLOBALS['r3_woo_pages_assigned'] = false;
+$unassigned_context = AZnet\Theme\header_context();
+if ('' !== $unassigned_context['account_url'] || '' !== $unassigned_context['cart_url']) {
+    fwrite(STDERR, "FAIL: Unassigned Woo account/cart pages must not create header links to homepage fallback\n");
+    exit(1);
+}
+$GLOBALS['r3_woo_pages_assigned'] = true;
 
 $required_parts = [
     'template-parts/header/brand.php',
