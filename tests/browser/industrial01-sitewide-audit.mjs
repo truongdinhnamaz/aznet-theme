@@ -13,6 +13,14 @@ function selectRoutes(routes, onlyId = '') {
   if (result.length !== 1) throw Error('Requested route ID absent from reviewed manifest');
   return result;
 }
+// Normalization permits WordPress trailing-slash canonicalization only.
+// An unrelated 200 redirect, especially to Homepage, must never count as Page PASS.
+function samePublicRoute(requestedUrl, finalUrl) {
+  const requested = new URL(requestedUrl);
+  const actual = new URL(finalUrl);
+  const pathname = (url) => url.pathname.replace(/\/+$/, '') || '/';
+  return requested.origin === actual.origin && pathname(requested) === pathname(actual);
+}
 function config(baseUrl, data) {
   const base = new URL(baseUrl);
   if (base.username || base.password || base.search || base.hash || base.pathname !== '/' ||
@@ -48,6 +56,9 @@ if (process.argv.includes('--self-test')) {
   assert.equal(selectRoutes(fixture).length, 2);
   assert.throws(() => selectRoutes(fixture, 'not-in-manifest'));
   assert.throws(() => selectRoutes(fixture, '../wp-admin'));
+  assert.equal(samePublicRoute('https://example.test/p/', 'https://example.test/p'), true);
+  assert.equal(samePublicRoute('https://example.test/p/', 'https://example.test/'), false);
+  assert.equal(samePublicRoute('https://example.test/p/', 'https://evil.test/p/'), false);
   assert.deepEqual(widths, [390, 768, 1440]);
   console.log('PASS: public route safety, fail-closed single-route selection and viewports');
 } else {
@@ -77,7 +88,7 @@ if (process.argv.includes('--self-test')) {
         const response = await page.goto(route.url, { waitUntil: 'domcontentloaded', timeout: 45000 });
         record.httpStatus = response?.status() ?? null;
         record.finalUrl = page.url();
-        if (record.httpStatus !== 200 || new URL(page.url()).origin !== base.origin) throw Error('Unexpected public HTTP/final origin');
+        if (record.httpStatus !== 200 || !samePublicRoute(route.url, record.finalUrl)) throw Error('HTTP status or final path mismatch for reviewed route');
         record.dom = await page.evaluate(() => {
           const body = document.body, root = document.documentElement;
           return {
@@ -133,9 +144,25 @@ if (process.argv.includes('--self-test')) {
         }
         record.screenshot = route.id + '-' + width + '.png';
         await page.screenshot({ path: path.join(dir, record.screenshot), fullPage: true, animations: 'disabled' });
+        // The screenshot can trigger additional lazy image loads. Inspect all image
+        // elements afterwards, not only initially visible images above the fold.
+        // Unresolved lazy images are UNKNOWN, never treated as verified PASS.
+        record.media = await page.evaluate(() => {
+          const images = [...document.images].filter((img) => img.currentSrc || img.getAttribute('src') || img.getAttribute('srcset'));
+          const broken = images.filter((img) => img.complete && img.naturalWidth === 0);
+          const pending = images.filter((img) => !img.complete);
+          return {
+            total: images.length,
+            brokenCount: broken.length,
+            pendingCount: pending.length,
+            broken: broken.slice(0, 12).map((img) => ({ src: img.currentSrc || img.src, alt: img.alt })),
+            pending: pending.slice(0, 12).map((img) => ({ src: img.currentSrc || img.src, loading: img.loading })),
+          };
+        });
         record.outcome = !record.dom.theme || !record.dom.industrial01 ? 'unknown-shell' :
           record.dom.mainCount === 1 && record.dom.overflowPx <= 1 &&
-          record.dom.visibleBrokenImages.length === 0 && record.axe.length === 0 ? 'pass' : 'review';
+          record.media.brokenCount === 0 && record.media.pendingCount === 0 &&
+          record.axe.length === 0 ? 'pass' : 'review';
       } catch (error) {
         record.outcome = 'blocked';
         record.error = String(error).slice(0, 1100);
