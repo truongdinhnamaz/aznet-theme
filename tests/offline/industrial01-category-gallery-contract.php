@@ -29,6 +29,10 @@ namespace {
         return $term->term_id === 999 ? new WP_Error() : 'https://example.test/product-category/' . $term->term_id . '/';
     }
     function woocommerce_subcategory_thumbnail(WP_Term $term): void {
+        if (109 === $term->term_id) {
+            echo '<img src="/wp-content/plugins/woocommerce/assets/images/woocommerce-placeholder.png" alt="" />';
+            return;
+        }
         echo '<img src="/media/' . $term->term_id . '.jpg" alt="' . esc_attr($term->name) . '" />';
     }
 }
@@ -92,6 +96,15 @@ namespace {
         'Eight source terms are preserved without truncation beyond the contract limit');
     $fail(!str_contains($eight, 'aznet-theme-industrial01-categories__intro-card'),
         'When the grid is full, do not add an empty ninth decorative tile');
+
+    // Woo returns a generic placeholder for a category without a real photo.
+    // The Theme must keep its source link/label but omit the fake category media.
+    $GLOBALS['fixture_categories'] = [new WP_Term(109, 'Pin Lithium')];
+    $noMedia = $render();
+    $fail(str_contains($noMedia, 'Pin Lithium'), 'Source category without media must remain visible');
+    $fail(str_contains($noMedia, 'product-category/109/'), 'Source permalink must remain present');
+    $fail(!str_contains($noMedia, 'woocommerce-placeholder'), 'Generic Woo placeholder must not appear in the gallery');
+    $fail(!str_contains($noMedia, 'aznet-theme-industrial01-category-card__media'), 'Placeholder-only media wrapper must be omitted');
 
     $GLOBALS['fixture_categories'] = [new WP_Term(999, 'Broken link'), new WP_Term(101, 'Nhóm hợp lệ')];
     $filtered = $render();
