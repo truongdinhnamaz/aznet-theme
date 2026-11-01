@@ -68,6 +68,31 @@ async function captureThenAudit(page, screenshotPath, AxeBuilder, inspectAfterCa
   await inspectAfterCapture();
   return new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
 }
+// Anonymous browser errors are evidence for triage, not automatically Theme bugs.
+// Store bounded error samples, strip query/fragment values, and preserve counts.
+function sanitizedSource(value) {
+  try {
+    const url = new URL(String(value || ''));
+    return ['https:', 'http:'].includes(url.protocol) ? url.origin + url.pathname : null;
+  } catch { return null; }
+}
+function sanitizedMessage(value) {
+  return String(value || '').replace(/https?:\/\/[^\s'"<>]+/g, (raw) => sanitizedSource(raw) || '[url]').slice(0, 500);
+}
+function attachBrowserDiagnostics(page, record) {
+  record.browserErrors = [];
+  record.browserErrorCount = 0;
+  const add = (kind, message, source) => {
+    record.browserErrorCount += 1;
+    if (record.browserErrors.length >= 12) return;
+    record.browserErrors.push({ kind, message: sanitizedMessage(message), source: sanitizedSource(source) });
+  };
+  page.on('console', (message) => {
+    if (message.type() !== 'error') return;
+    add('console', message.text(), message.location()?.url);
+  });
+  page.on('pageerror', (error) => add('pageerror', error?.message || String(error), ''));
+}
 function config(baseUrl, data) {
   const base = new URL(baseUrl);
   if (base.username || base.password || base.search || base.hash || base.pathname !== '/' ||
@@ -146,6 +171,25 @@ if (process.argv.includes('--self-test')) {
   assert.deepEqual(auditOrder, ['capture', 'dom', 'axe']);
   assert.deepEqual(capturedAudit.incomplete, []);
   assert.deepEqual(widths, [390, 768, 1440]);
+  const browserCallbacks = new Map(), browserRecord = {};
+  attachBrowserDiagnostics({ on: (name, callback) => browserCallbacks.set(name, callback) }, browserRecord);
+  browserCallbacks.get('console')({ type: () => 'warning', text: () => 'ignore' });
+  assert.equal(browserRecord.browserErrorCount, 0);
+  browserCallbacks.get('console')({
+    type: () => 'error',
+    text: () => 'failed https://example.test/api?secret=123',
+    location: () => ({ url: 'https://example.test/script.js?key=private' }),
+  });
+  browserCallbacks.get('pageerror')(new Error('Uncaught exception'));
+  assert.equal(browserRecord.browserErrorCount, 2);
+  assert.equal(browserRecord.browserErrors[0].source, 'https://example.test/script.js');
+  assert.equal(browserRecord.browserErrors[1].kind, 'pageerror');
+  assert.equal(JSON.stringify(browserRecord).includes('secret=123'), false);
+  assert.equal(JSON.stringify(browserRecord).includes('key=private'), false);
+  for (let i = 0; i < 15; i++) browserCallbacks.get('pageerror')(new Error('additional'));
+  assert.equal(browserRecord.browserErrorCount, 17);
+  assert.equal(browserRecord.browserErrors.length, 12);
+
   console.log('PASS: public route safety, fail-closed single-route selection and viewports');
 } else {
   const file = process.env.AZT_AUDIT_ROUTES_FILE;
@@ -170,6 +214,7 @@ if (process.argv.includes('--self-test')) {
       result.views.push(record);
       const context = await browser.newContext({ viewport: { width, height: width === 390 ? 844 : 1000 }, reducedMotion: 'reduce' });
       const page = await context.newPage();
+      attachBrowserDiagnostics(page, record);
       try {
         const response = await page.goto(route.url, { waitUntil: 'domcontentloaded', timeout: 45000 });
         record.httpStatus = response?.status() ?? null;
@@ -237,7 +282,7 @@ if (process.argv.includes('--self-test')) {
         record.outcome = !record.dom.theme || !record.dom.industrial01 ? 'unknown-shell' :
           record.dom.mainCount === 1 && hasOneNamedH1(record.dom.h1) && record.dom.overflowPx <= 1 &&
           record.media.brokenCount === 0 && record.media.pendingCount === 0 &&
-          axeIsConclusive(record.axe, record.axeIncomplete) ? 'pass' : 'review';
+          record.browserErrorCount === 0 && axeIsConclusive(record.axe, record.axeIncomplete) ? 'pass' : 'review';
       } catch (error) {
         record.outcome = 'blocked';
         record.error = String(error).slice(0, 1100);
