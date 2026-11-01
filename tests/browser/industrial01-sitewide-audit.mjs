@@ -8,6 +8,9 @@ import {
 } from './industrial01-preview-route-guard.mjs';
 
 const widths = [390, 768, 1440];
+// In the actual WordPress render the native Page article lives INSIDE the
+// Industrial 01 composition wrapper, not directly under main#main.
+const nativeFrontPageSelector = 'main#main > .aznet-theme-homepage--industrial-01 > article[data-aznet-homepage-surface="front-page-content"]';
 // Isolate the first failing public surface instead of crawling the full matrix.
 // The exact ID must already exist in the reviewed site-local route manifest.
 function selectRoutes(routes, onlyId = '') {
@@ -210,6 +213,8 @@ if (process.argv.includes('--self-test')) {
   assert.deepEqual(auditOrder, ['capture', 'dom', 'axe']);
   assert.deepEqual(capturedAudit.incomplete, []);
   assert.deepEqual(widths, [390, 768, 1440]);
+  assert.ok(nativeFrontPageSelector.includes('.aznet-theme-homepage--industrial-01 > article['));
+  assert.ok(!nativeFrontPageSelector.startsWith('main#main > article['));
   const serviceCard = { inViewport: true, topBorderVisible: true, goldTopBorder: true, hasSurface: true, ctaIsButton: true };
   const healthyNative = {
     present: true, articleFullWidth: true, shellCentered: true, headingCentered: true,
@@ -283,7 +288,7 @@ if (process.argv.includes('--self-test')) {
         if (record.httpStatus !== 200 || !validRoute) throw Error('HTTP status or final path mismatch for reviewed route');
         record.screenshot = route.id + '-' + width + '.png';
         const axe = await captureThenAudit(page, path.join(dir, record.screenshot), AxeBuilder, async () => {
-          record.dom = await page.evaluate((expectedBodyClass) => {
+          record.dom = await page.evaluate(({ expectedBodyClass, nativeFrontPageSelector }) => {
             const body = document.body, root = document.documentElement;
             return {
               theme: body.classList.contains(expectedBodyClass),
@@ -298,7 +303,7 @@ if (process.argv.includes('--self-test')) {
               }).slice(0, 8).map((img) => ({ src: img.currentSrc || img.src, alt: img.alt })),
               contactForms: document.querySelectorAll('main#main .wpcf7 form').length,
               nativeFrontPage: (() => {
-                const article = document.querySelector('main#main > article[data-aznet-homepage-surface="front-page-content"]');
+                const article = document.querySelector(nativeFrontPageSelector);
                 if (!article) return null;
                 const content = article.querySelector(':scope > .aznet-theme-entry__content');
                 const group = content?.querySelector(':scope > .wp-block-group');
@@ -341,7 +346,7 @@ if (process.argv.includes('--self-test')) {
                 };
               })(),
             };
-          }, expectedBodyClass);
+          }, { expectedBodyClass, nativeFrontPageSelector });
           if (record.dom.overflowPx > 1) {
             record.overflowElements = await page.evaluate(() => [...document.querySelectorAll('body *')]
               .map((el) => ({ el, rect: el.getBoundingClientRect() }))
