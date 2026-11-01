@@ -71,3 +71,15 @@ The exact PR-branch JavaScript source `tests/browser/industrial01-sitewide-audit
 On these **same bytes**, `node --check` **PASS** and `node industrial01-sitewide-audit.mjs --self-test` **PASS**, covering URL/manifest fail-closed behavior, redirect/H1 gates, Contact form requirement, screenshot→DOM→axe order, diagnostic sanitization and bounded console collection. This replaces the older UNKNOWN exact-head self-test statement above; it does **not** establish runtime against ANP, visual parity, actual WCAG L4 or form submission.
 
 **Remaining blocker:** no independent network-enabled browser runner or installed Playwright/Axe toolchain in the available container. Container DNS lookup of `anpvietnam.vn` and `api.github.com` fails; the connected WordPress HTML renderer returns a Flatsome draft shell, not a reliable public rendering. GitHub Actions PR runs fail before job steps. **Exact NEXT:** execute the single reviewed Komatsu route on an independent online Chromium+Playwright/Axe runner and attribute actual violating selectors. Remain Draft; never infer production QA PASS from self-tests.
+
+## Follow-up regression — public preview redirect rejection (2026-11-01)
+
+A focused review of the read-only L4 probe exposed a **false public-route PASS**: `samePublicRoute('https://anpvietnam.vn/lien-he/', 'https://anpvietnam.vn/lien-he/?preview=true')` returned `true` because the predicate only compared origin and pathname. An authenticated preview/cache-buster redirect could therefore satisfy the HTTP/path gate despite not being the reviewed public URL. This is a **test harness bug**, not evidence that ANP actually redirects.
+
+**TDD RED:** isolated Node 22 reproduction of the original exact predicate failed the expected preview-query rejection (original result `true`). **GREEN:** minimal `!actual.search && !actual.hash` guard; eight focused cases PASS (canonical trailing slash stays allowed, preview/query/hash, different origin/protocol/path rejected). Added three `--self-test` assertions for `?preview=true`, `?wpvibe_cb=123`, `#draft`.
+
+**Provenance:** source commit `d2e8eab62d53c2696a6e13c6c6ab92138069530b`, blob `0c1b6e613a8bcb889a824f342fb8d7995b2a4830`. GitHub comparison against prior PR head `eb3aff0`: **one file only**, `tests/browser/industrial01-sitewide-audit.mjs`, +7/-1 lines. GitHub readback confirmed predicate, three new self-tests, and unchanged Contact/console/axe gates. **Focused L2 PASS only**; full current-head self-test and live L4 browser verification remain UNKNOWN/BLOCKED.
+
+**Rollback:** revert commit `d2e8eab` on the isolated PR #550 branch. Neither WordPress nor any provider storage was modified; no merge, tag or production deployment.
+
+**EXACT NEXT:** run the exact PR-head `node --check`, `--self-test` and single `komatsu-product` 390/768/1440 browser sweep on an authorized network-enabled runner. Inspect actual failing axe selectors and distinguish Theme-owned UI from Woo/ConvertFlow before writing production code.
