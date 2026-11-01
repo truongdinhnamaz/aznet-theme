@@ -49,7 +49,7 @@ namespace {
     }
     function woocommerce_subcategory_thumbnail(WP_Term $term): void {
         if (110 === $term->term_id || 111 === $term->term_id) {
-            // WooCommerce 10.9.4 uses IMG/src only; no placeholder CSS class.
+            // WooCommerce 10.9.4 and live ANP's 11.2.1 use IMG/src only; no placeholder CSS class.
             echo '<img src="' . esc_url(wc_placeholder_img_src()) . '" alt="' . esc_attr($term->name) . '" width="300" height="300" />';
             return;
         }
@@ -130,12 +130,12 @@ namespace {
     $fail(!str_contains($noMedia, 'woocommerce-placeholder'), 'Generic Woo placeholder must not appear in the gallery');
     $fail(!str_contains($noMedia, 'aznet-theme-industrial01-category-card__media'), 'Placeholder-only media wrapper must be omitted');
 
-    // Regression for real WooCommerce 10.9.4 category HTML (placeholder.webp).
+    // Regression for WooCommerce 10.9.4 / 11.2.1 category HTML (placeholder.webp).
     $GLOBALS['fixture_categories'] = [new WP_Term(110, 'Pin Lithium ảnh mặc định')];
     $modern = $render();
     $fail(str_contains($modern, 'Pin Lithium ảnh mặc định'), 'Unpictured term remains visible');
     $fail(str_contains($modern, 'product-category/110/'), 'Unpictured term retains native URL');
-    $fail(!str_contains($modern, 'placeholder.webp'), 'Woo 10.9.4 default IMG/src placeholder must be omitted');
+    $fail(!str_contains($modern, 'placeholder.webp'), 'Woo default IMG/src placeholder must be omitted');
     $fail(!str_contains($modern, 'aznet-theme-industrial01-category-card__media'), 'Default placeholder media wrapper omitted');
 
     // The public Woo placeholder URL is filterable, not a hardcoded asset path.
