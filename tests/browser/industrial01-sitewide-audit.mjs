@@ -19,7 +19,10 @@ function samePublicRoute(requestedUrl, finalUrl) {
   const requested = new URL(requestedUrl);
   const actual = new URL(finalUrl);
   const pathname = (url) => url.pathname.replace(/\/+$/, '') || '/';
-  return requested.origin === actual.origin && pathname(requested) === pathname(actual);
+  // A public route must never silently become a preview, cache-buster, or
+  // parameterized variant. Keep redirects limited to trailing-slash shape.
+  return !actual.search && !actual.hash &&
+    requested.origin === actual.origin && pathname(requested) === pathname(actual);
 }
 // A Page cannot pass sitewide semantic QA with no, empty, or duplicate H1.
 function hasOneNamedH1(headings) {
@@ -135,6 +138,9 @@ if (process.argv.includes('--self-test')) {
   assert.throws(() => selectRoutes(fixture, 'not-in-manifest'));
   assert.throws(() => selectRoutes(fixture, '../wp-admin'));
   assert.equal(samePublicRoute('https://example.test/p/', 'https://example.test/p'), true);
+  assert.equal(samePublicRoute('https://example.test/p/', 'https://example.test/p/?preview=true'), false);
+  assert.equal(samePublicRoute('https://example.test/p/', 'https://example.test/p/?wpvibe_cb=123'), false);
+  assert.equal(samePublicRoute('https://example.test/p/', 'https://example.test/p/#draft'), false);
   assert.equal(samePublicRoute('https://example.test/p/', 'https://example.test/'), false);
   assert.equal(samePublicRoute('https://example.test/p/', 'https://evil.test/p/'), false);
   assert.equal(hasOneNamedH1(['Valid product title']), true);
