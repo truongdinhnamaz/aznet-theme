@@ -60,6 +60,12 @@ async function inspectAxeNode(page, node) {
   }
   return evidence;
 }
+// Full-page capture can trigger offscreen/lazy-loaded content. Axe must
+// inspect the post-capture DOM, never the earlier partial state.
+async function captureThenAudit(page, screenshotPath, AxeBuilder) {
+  await page.screenshot({ path: screenshotPath, fullPage: true, animations: 'disabled' });
+  return new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+}
 function config(baseUrl, data) {
   const base = new URL(baseUrl);
   if (base.username || base.password || base.search || base.hash || base.pathname !== '/' ||
@@ -115,6 +121,25 @@ if (process.argv.includes('--self-test')) {
   assert.equal(enriched.styles.color, 'rgb(1, 2, 3)');
   const failedInspection = await inspectAxeNode({ locator: () => { throw Error('bad selector'); } }, sampleAxeNode);
   assert.match(failedInspection.inspectError, /bad selector/);
+  const auditOrder = [];
+  const capturePage = { screenshot: async (options) => {
+    assert.equal(options.fullPage, true);
+    assert.equal(options.animations, 'disabled');
+    auditOrder.push('capture');
+  } };
+  class StubAxeBuilder {
+    withTags(tags) {
+      assert.deepEqual(tags, ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']);
+      return this;
+    }
+    async analyze() {
+      auditOrder.push('axe');
+      return { violations: [], incomplete: [] };
+    }
+  }
+  const capturedAudit = await captureThenAudit(capturePage, '/tmp/self-test-only.png', StubAxeBuilder);
+  assert.deepEqual(auditOrder, ['capture', 'axe']);
+  assert.deepEqual(capturedAudit.incomplete, []);
   assert.deepEqual(widths, [390, 768, 1440]);
   console.log('PASS: public route safety, fail-closed single-route selection and viewports');
 } else {
@@ -169,7 +194,8 @@ if (process.argv.includes('--self-test')) {
               tag: el.tagName, className: String(el.className).slice(0, 160), right: Math.round(rect.right),
             })));
         }
-        const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+        record.screenshot = route.id + '-' + width + '.png';
+        const axe = await captureThenAudit(page, path.join(dir, record.screenshot), AxeBuilder);
         record.axe = [];
         for (const violation of axe.violations) {
           const item = { id: violation.id, impact: violation.impact, help: violation.help, nodeCount: violation.nodes.length, nodes: [] };
@@ -187,9 +213,7 @@ if (process.argv.includes('--self-test')) {
           for (const n of rule.nodes.slice(0, 12)) item.nodes.push(await inspectAxeNode(page, n));
           record.axeIncomplete.push(item);
         }
-        record.screenshot = route.id + '-' + width + '.png';
-        await page.screenshot({ path: path.join(dir, record.screenshot), fullPage: true, animations: 'disabled' });
-        // The screenshot can trigger additional lazy image loads. Inspect all image
+        // The preceding screenshot can trigger lazy image loads. Inspect all image
         // elements afterwards, not only initially visible images above the fold.
         // Unresolved lazy images are UNKNOWN, never treated as verified PASS.
         record.media = await page.evaluate(() => {
