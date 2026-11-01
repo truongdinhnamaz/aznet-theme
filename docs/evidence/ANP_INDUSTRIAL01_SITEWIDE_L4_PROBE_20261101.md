@@ -63,3 +63,11 @@ Focused QA-harness defect: the Contact form count was merely recorded, so the pr
 **Evidence depth:** focused logic RED/GREEN + GitHub source readback PASS; the exact PR-head full `--self-test`, actual browser/visual/a11y L4, independent production inspection, CF7 delivery and release remain **BLOCKED/UNKNOWN**. No live WordPress mutation, no theme/plugin domain changes, no merge/release.
 
 **EXACT NEXT:** execute exact PR #550 head `--self-test` then the three-viewport `komatsu-product` probe in a trusted independent online browser runner; inspect failing selectors and identify their source owner before any UI fix. When routes are reliable, inspect Contact's rendered form and remaining 14-route matrix. No automatic PR merge or production deployment.
+
+## Follow-up exact-head verification — 2026-11-01
+
+The exact PR-branch JavaScript source `tests/browser/industrial01-sitewide-audit.mjs` was copied into an isolated Node 22.16.0 container without modifying the repository or target WordPress site. `git hash-object` of the local 17,258-byte file was **`37f75ba53abba9db7e2fd2cb181043a50ef708c1`**, matching GitHub's fetched blob SHA exactly.
+
+On these **same bytes**, `node --check` **PASS** and `node industrial01-sitewide-audit.mjs --self-test` **PASS**, covering URL/manifest fail-closed behavior, redirect/H1 gates, Contact form requirement, screenshot→DOM→axe order, diagnostic sanitization and bounded console collection. This replaces the older UNKNOWN exact-head self-test statement above; it does **not** establish runtime against ANP, visual parity, actual WCAG L4 or form submission.
+
+**Remaining blocker:** no independent network-enabled browser runner or installed Playwright/Axe toolchain in the available container. Container DNS lookup of `anpvietnam.vn` and `api.github.com` fails; the connected WordPress HTML renderer returns a Flatsome draft shell, not a reliable public rendering. GitHub Actions PR runs fail before job steps. **Exact NEXT:** execute the single reviewed Komatsu route on an independent online Chromium+Playwright/Axe runner and attribute actual violating selectors. Remain Draft; never infer production QA PASS from self-tests.
