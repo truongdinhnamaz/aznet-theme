@@ -26,6 +26,12 @@ function hasOneNamedH1(headings) {
   return Array.isArray(headings) && headings.length === 1 &&
     typeof headings[0] === 'string' && headings[0].trim().length > 0;
 }
+// Contact is an explicitly reviewed route: a form in the page's main content
+// is required for visual PASS, but this does NOT verify sending/delivery.
+function routeHasRequiredForm(route, dom) {
+  return route.id !== 'contact' ||
+    (Number.isInteger(dom?.contactForms) && dom.contactForms > 0);
+}
 // axe-core "incomplete" means manual review is required, not WCAG PASS.
 function axeIsConclusive(violations, incomplete) {
   return Array.isArray(violations) && Array.isArray(incomplete) &&
@@ -135,6 +141,10 @@ if (process.argv.includes('--self-test')) {
   assert.equal(hasOneNamedH1([]), false);
   assert.equal(hasOneNamedH1(['']), false);
   assert.equal(hasOneNamedH1(['First', 'Duplicate']), false);
+  assert.equal(routeHasRequiredForm({ id: 'contact' }, { contactForms: 0 }), false);
+  assert.equal(routeHasRequiredForm({ id: 'contact' }, { contactForms: 1 }), true);
+  assert.equal(routeHasRequiredForm({ id: 'contact' }, {}), false);
+  assert.equal(routeHasRequiredForm({ id: 'home' }, { contactForms: 0 }), true);
   assert.equal(axeIsConclusive([], []), true);
   assert.equal(axeIsConclusive([{ id: 'color-contrast' }], []), false);
   assert.equal(axeIsConclusive([], [{ id: 'color-contrast' }]), false);
@@ -235,7 +245,7 @@ if (process.argv.includes('--self-test')) {
                 return rect.height > 1 && rect.width > 1 && rect.top < innerHeight && rect.bottom > 0 &&
                   img.complete && img.naturalWidth === 0;
               }).slice(0, 8).map((img) => ({ src: img.currentSrc || img.src, alt: img.alt })),
-              contactForms: document.querySelectorAll('.wpcf7 form').length,
+              contactForms: document.querySelectorAll('main#main .wpcf7 form').length,
             };
           });
           if (record.dom.overflowPx > 1) {
@@ -280,7 +290,7 @@ if (process.argv.includes('--self-test')) {
           };
         });
         record.outcome = !record.dom.theme || !record.dom.industrial01 ? 'unknown-shell' :
-          record.dom.mainCount === 1 && hasOneNamedH1(record.dom.h1) && record.dom.overflowPx <= 1 &&
+          record.dom.mainCount === 1 && hasOneNamedH1(record.dom.h1) && routeHasRequiredForm(route, record.dom) && record.dom.overflowPx <= 1 &&
           record.media.brokenCount === 0 && record.media.pendingCount === 0 &&
           record.browserErrorCount === 0 && axeIsConclusive(record.axe, record.axeIncomplete) ? 'pass' : 'review';
       } catch (error) {
