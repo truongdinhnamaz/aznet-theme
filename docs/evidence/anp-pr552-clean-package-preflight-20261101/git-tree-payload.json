@@ -1,0 +1,1496 @@
+{
+  "schema": "azt.pr552.git-tree-packaging-preflight.v1",
+  "repository": "truongdinhnamaz/aznet-theme",
+  "source_commit": "fc6725654ab20767fecd17412416b2ad12a6c2bd",
+  "source_git_tree": "ccfcdfc51f78832383cfb3824ad9273a7492ad7b",
+  "live_deployed_byte_parity": "NOT_VERIFIED",
+  "expected_theme_version": "1.3.98",
+  "release_zip_root": "aznet-theme/",
+  "reproducible_packager_source": "scripts/build-release-package.py",
+  "packager_blob_sha": "744a8f6c94b9722da95af3d4f3246a0c78c9a184",
+  "excluded_directory_segments": [
+    ".git",
+    ".github",
+    "dist",
+    "docs",
+    "node_modules",
+    "scripts",
+    "tests"
+  ],
+  "excluded_root_files": [
+    "README.md",
+    "aznet-preview.png"
+  ],
+  "zip_fixed_timestamp": "2020-01-01T00:00:00",
+  "zip_compression": "DEFLATED level 9",
+  "actual_zip_built": false,
+  "php_lint_executed": false,
+  "wordpress_l3_executed_on_exact_zip": false,
+  "wordpress_l4_executed_on_exact_zip": false,
+  "hosting_and_database_backup_verified": false,
+  "production_deployed": false,
+  "production_files": 242,
+  "production_php_files": 164,
+  "production_uncompressed_bytes": 1938745,
+  "changed_production_paths": [
+    "assets/css/components/catalog-navigation.css",
+    "assets/css/components/homepage-industrial-01.css",
+    "assets/js/catalog-navigation.js",
+    "inc/theme/header.php",
+    "template-parts/homepage/industrial-01/categories.php"
+  ],
+  "entries": [
+    {
+      "path": "404.php",
+      "git_blob_sha": "7417e1fc5665a7867df01ed2a92ddb2d10a0d00d",
+      "size": 1383,
+      "mode": "100644"
+    },
+    {
+      "path": "archive.php",
+      "git_blob_sha": "583b5c1585b23af1fa2cbd38971700a952bc8452",
+      "size": 2883,
+      "mode": "100644"
+    },
+    {
+      "path": "article-media/2026/az-001-vat-website-cover.svg",
+      "git_blob_sha": "50517d4a9ed2265f651675c381c64ca739225699",
+      "size": 3972,
+      "mode": "100644"
+    },
+    {
+      "path": "article-media/2026/az-002-vat-contract-cover.svg",
+      "git_blob_sha": "70b617ef073e64c427ac99d333d882a0596dc2cb",
+      "size": 3362,
+      "mode": "100644"
+    },
+    {
+      "path": "article-media/2026/az-008-rank-math-license-cover.svg",
+      "git_blob_sha": "a8fffeaac52ed77e777f3df2b0f460e008b79f9c",
+      "size": 3317,
+      "mode": "100644"
+    },
+    {
+      "path": "article-media/2026/az-010-backlink-social-cover.svg",
+      "git_blob_sha": "5c211f7b2cddbf67e1a2df1285aee334b9862541",
+      "size": 3338,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/admin/control-center.css",
+      "git_blob_sha": "15f086ee84992475cba719f30d624e1913ecf763",
+      "size": 33537,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/about-showcase-v2.css",
+      "git_blob_sha": "2f5ad5575d1049dfad1b9d058246f868957e9720",
+      "size": 21950,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/archive-law-01.css",
+      "git_blob_sha": "13f68dbe7fe69b937c0daacac0dc210ce9b3fb2d",
+      "size": 14677,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/article.css",
+      "git_blob_sha": "3eb240ee49f3fbf599e76712aea01a5aaf695102",
+      "size": 25399,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/catalog-navigation.css",
+      "git_blob_sha": "dc005e7ebdd7f0ce4e874fa0362708941c3a678b",
+      "size": 15764,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/comments.css",
+      "git_blob_sha": "e4691f18be125ac0804f9a398be12f59c2977cf0",
+      "size": 1891,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/contact-page.css",
+      "git_blob_sha": "2946254d0709322a3fcae0302321e6d73cf8d9bf",
+      "size": 11669,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/contact-surface.css",
+      "git_blob_sha": "f0ddf889e5d0b740eccefd2cb307661ae6d56f6d",
+      "size": 6714,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/forms.css",
+      "git_blob_sha": "ce5a1cbd442559227d9cdbcbecbeb5459a3fec31",
+      "size": 5719,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/generic-content.css",
+      "git_blob_sha": "3ebaa26a79a5cca519f2e82e5fbc15457ae0c24c",
+      "size": 4495,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/header-law-01.css",
+      "git_blob_sha": "8502391f90df930c5dede6bc6decd308e1686952",
+      "size": 11639,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/header-utility.css",
+      "git_blob_sha": "c10f79fd5996d5ebfb6807e12ff571d26d0d283f",
+      "size": 969,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/homepage-curtain-01.css",
+      "git_blob_sha": "153182be7f7681da5cb708ddbabbb91c244fc796",
+      "size": 35431,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/homepage-digital-01-brand-2026.css",
+      "git_blob_sha": "4ef74b2d5c1c7a71480e330676799110330789a6",
+      "size": 37352,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/homepage-digital-01.css",
+      "git_blob_sha": "7569473bc5653cd75996e42ae1a36870f8816c3e",
+      "size": 32497,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/homepage-industrial-01.css",
+      "git_blob_sha": "7c9e4e9142cc315cb1ce16740efbf0e8a3e75459",
+      "size": 52176,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/homepage-law-01-reference.css",
+      "git_blob_sha": "e8b01a92e81a55e9ed232f90660b4a518c7a31e9",
+      "size": 17175,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/homepage-law-01-variants.css",
+      "git_blob_sha": "80274cd995c8a55df563f55620302c602c139677",
+      "size": 62881,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/homepage-law-01.css",
+      "git_blob_sha": "9c132807589ab539c49c3bcb677961d9211d28a4",
+      "size": 20663,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/homepage.css",
+      "git_blob_sha": "b77995728400ffd3633ad7e3a280a7ecf07b97e9",
+      "size": 11545,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/media.css",
+      "git_blob_sha": "d3e330913dd6146a94bd1c0214c8bb04ac2a67e5",
+      "size": 5694,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/navigation.css",
+      "git_blob_sha": "715706bddfab075b3b9628671c4bb8adbe868850",
+      "size": 2689,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/page.css",
+      "git_blob_sha": "99a2b4cb8143c4a4a328aacc6fe896360150d4d4",
+      "size": 17793,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/profile-surface.css",
+      "git_blob_sha": "551cfe06330ba8ab1bc550cb1c303754f8cc504f",
+      "size": 7998,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/recovery.css",
+      "git_blob_sha": "b3606c1d9392f33427e08706e556c9d223939a83",
+      "size": 2479,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/service-card.css",
+      "git_blob_sha": "d90aa5a3634ad6b5d674a293adcad0e4a704b055",
+      "size": 4219,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/service-page.css",
+      "git_blob_sha": "6a1d85fd0b9392561dd34b3a55acfaae45d5c068",
+      "size": 17606,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/services-page.css",
+      "git_blob_sha": "fbd7a43bea95abe867d67815061d4173105bee54",
+      "size": 11121,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/site-footer-digital-01.css",
+      "git_blob_sha": "f05b79653b8e13a2111d22e617e665881114acea",
+      "size": 8682,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/site-footer.css",
+      "git_blob_sha": "dbc7ceba032ad204f8ab1ac2e80b539e128c7abf",
+      "size": 34961,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/site-header.css",
+      "git_blob_sha": "b48f4b84f2bd8c57453f39167f819a56a745baa9",
+      "size": 20512,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/team-card.css",
+      "git_blob_sha": "65bc038b354cc5631b71b6f13d7ff6b20d946a45",
+      "size": 1816,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/team-directory.css",
+      "git_blob_sha": "f2fcf73b537dab8e2fa467c79864212c2a85e67d",
+      "size": 1702,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/team-member.css",
+      "git_blob_sha": "d29d74a9c6ff80af5b293918782577710fd4f19e",
+      "size": 8438,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/woocommerce-account.css",
+      "git_blob_sha": "9f04fd3e5da1167c6df8976e5439b475611fdb91",
+      "size": 5567,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/woocommerce-archive.css",
+      "git_blob_sha": "0af4613718bd815b4d8271cd4405f8238edaed97",
+      "size": 6086,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/woocommerce-blocks.css",
+      "git_blob_sha": "7856ad30562877857b841a865f2ed11c772f37c4",
+      "size": 2434,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/woocommerce-cart.css",
+      "git_blob_sha": "e6073ebe39a09761eefeebb3da6e8a457b844bff",
+      "size": 4117,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/woocommerce-checkout.css",
+      "git_blob_sha": "9c81849bf75618e102a9a116c66e88e69e554463",
+      "size": 4852,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/components/woocommerce-product.css",
+      "git_blob_sha": "5b22050161566eafac4bdb84e9f6996bff0e2570",
+      "size": 11704,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/integrations/convertflow.css",
+      "git_blob_sha": "eb66b81c541048b8a8a791dfdbf1f18bb4629565",
+      "size": 9284,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/presets/commerce.css",
+      "git_blob_sha": "4a861848c4363b01c2f086b448a174516c619ec1",
+      "size": 214,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/presets/curtain-01.css",
+      "git_blob_sha": "95c8d523d0fbc03861b8c003dd52f43b92c034e0",
+      "size": 30614,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/presets/digital-01.css",
+      "git_blob_sha": "94c04aac36a3398e73c9e5d030a802fe5cf4082c",
+      "size": 4179,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/presets/editorial.css",
+      "git_blob_sha": "113b24ce4350aac703eb31a8887a50e65a188920",
+      "size": 149,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/presets/industrial-01.css",
+      "git_blob_sha": "3d0776a4de7294d0434682683ca0661064c75216",
+      "size": 41314,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/css/tokens.css",
+      "git_blob_sha": "e2a7704dd48a42a8d966adcf6558355ed6b7cbd7",
+      "size": 4836,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/fonts/roboto/Roboto-Bold-Vietnamese.woff2",
+      "git_blob_sha": "6f142f1e6e7697f01f39f7514daaa97c8459fe25",
+      "size": 8416,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/fonts/roboto/Roboto-Bold.woff2",
+      "git_blob_sha": "350d1c3a2d8a8212a2fc2dafe5ea99bad4442797",
+      "size": 49976,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/fonts/roboto/Roboto-Medium-Vietnamese.woff2",
+      "git_blob_sha": "aacc7a6fdf0b86d533c1ffdf5e8c576012c741f1",
+      "size": 8540,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/fonts/roboto/Roboto-Medium.woff2",
+      "git_blob_sha": "d10a59261f0413aba05f86ba90b86e93090afa1a",
+      "size": 50224,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/fonts/roboto/Roboto-Regular-Vietnamese.woff2",
+      "git_blob_sha": "1cd52dd843f373e9526518a66314329ceea40e2b",
+      "size": 8368,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/fonts/roboto/Roboto-Regular.woff2",
+      "git_blob_sha": "b7082ef310e9159bc75fcdc0c35de4df22d76878",
+      "size": 49236,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/images/law01-reference/team-portrait-01.svg",
+      "git_blob_sha": "4c5825922a7603fd49234cdbb31166e0d6bd105d",
+      "size": 14154,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/images/law01-reference/team-portrait-02.svg",
+      "git_blob_sha": "68da3dab3131dd1d1fda59abe5fc6edd6f12a880",
+      "size": 13246,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/images/law01-reference/team-portrait-03.svg",
+      "git_blob_sha": "cc4f729ce0329e0e6940b5afd4993ce6fa26fd07",
+      "size": 13426,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/images/law01-reference/team-portrait-04.svg",
+      "git_blob_sha": "21a589213bccbc5e961e53a8ee773c220b02da3b",
+      "size": 13681,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/js/admin/footer-template-picker.js",
+      "git_blob_sha": "2997a80ca5bf1903a551bbb28bb11081e6988ba3",
+      "size": 1840,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/js/admin/homepage-authoring.js",
+      "git_blob_sha": "3f2771c3ccd8eb2f5ca24738eed55368ff259c92",
+      "size": 6878,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/js/admin/template-library.js",
+      "git_blob_sha": "d76819ccf83077e7560c57055a9630a8654719d4",
+      "size": 1401,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/js/catalog-navigation.js",
+      "git_blob_sha": "01c47765f7484b0f7338088c63f22e1852b43314",
+      "size": 2408,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/js/convertflow-sticky-submenu.js",
+      "git_blob_sha": "8aefb198ed95b17b94042726a92380d0593a0bdf",
+      "size": 1638,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/js/header-navigation.js",
+      "git_blob_sha": "6d7bce4057d16cc80719327f041f0456e860163b",
+      "size": 2622,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/js/homepage-curtain-01.js",
+      "git_blob_sha": "9eda9ed08eee6e4b6667976c1600b1a03297fb1e",
+      "size": 9318,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/js/sticky-header.js",
+      "git_blob_sha": "e0e78b87e385046ecd34e8860b5dd73f9e201b77",
+      "size": 652,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/js/team-name-fit.js",
+      "git_blob_sha": "d1999b0a9be963201c5030abec2c29f3ffd8733f",
+      "size": 1412,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/starter/law01/editorial-1.webp",
+      "git_blob_sha": "06a5bf2c6639671c3bc308e130ce92cd566d81b7",
+      "size": 3832,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/starter/law01/editorial-2.webp",
+      "git_blob_sha": "088ddd8baa7b4c4de6549f4b213fab2e415aaca4",
+      "size": 9800,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/starter/law01/editorial-3.webp",
+      "git_blob_sha": "c7968e991cebec200d438c8b370351424ed8ae3f",
+      "size": 5620,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/starter/law01/editorial-4.webp",
+      "git_blob_sha": "11c829b36284b6f742a8990e92ddf0f908c33685",
+      "size": 2578,
+      "mode": "100644"
+    },
+    {
+      "path": "assets/starter/law01/hero.webp",
+      "git_blob_sha": "ccba2621e8249d36f594daf87d65bc2eddb2b221",
+      "size": 12082,
+      "mode": "100644"
+    },
+    {
+      "path": "comments.php",
+      "git_blob_sha": "4763bd1d1827cc3e330c52b4087f139f9c3e4325",
+      "size": 1800,
+      "mode": "100644"
+    },
+    {
+      "path": "footer.php",
+      "git_blob_sha": "d86a7623e4bc2535d35cfce91fc8e9f0742a9ae2",
+      "size": 217,
+      "mode": "100644"
+    },
+    {
+      "path": "front-page.php",
+      "git_blob_sha": "c86b216108d14c7dfad37a907ff66b552dd454a7",
+      "size": 2006,
+      "mode": "100644"
+    },
+    {
+      "path": "functions.php",
+      "git_blob_sha": "004410afcca3239d2f37163001cab95f4773ab1c",
+      "size": 269,
+      "mode": "100644"
+    },
+    {
+      "path": "header.php",
+      "git_blob_sha": "8412104ff72216de18537393695ecba1c3fafe74",
+      "size": 489,
+      "mode": "100644"
+    },
+    {
+      "path": "home.php",
+      "git_blob_sha": "64b613461291c34b308a4f3c4ecb49e17148e15c",
+      "size": 2620,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/admin/bootstrap.php",
+      "git_blob_sha": "5c904aeeb8d68d8cae15f2a7f2a51defcbe66d60",
+      "size": 5937,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/admin/control-center.php",
+      "git_blob_sha": "89cb0e2e801560a44ef2f0eb5b5f3496ade3cb75",
+      "size": 26719,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/admin/danger-zone.php",
+      "git_blob_sha": "f3550aeb5e6ea39f3601da0f7a02fe9900f8d0d0",
+      "size": 13192,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/admin/editor-policy.php",
+      "git_blob_sha": "c94b07e2390de05c0cbd7f68bc2cfc2e636dac6c",
+      "size": 822,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/admin/footer-content.php",
+      "git_blob_sha": "618f4a0546ee8eb36c2f4c1276209c157a83052f",
+      "size": 6278,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/admin/footer-profile.php",
+      "git_blob_sha": "33187c7841a7d2ef4f409ca436f4a4183969687f",
+      "size": 8654,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/admin/homepage-authoring.php",
+      "git_blob_sha": "30b924e3c867a06cae5556bebcf247ee2a75b997",
+      "size": 16129,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/admin/homepage-design.php",
+      "git_blob_sha": "a5f4e15ded544665145e7774dbdc0aff94bd2f08",
+      "size": 15314,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/admin/homepage-hero.php",
+      "git_blob_sha": "2eb73e2b0563947cf1571e42d5ead0c9fd56e24e",
+      "size": 27380,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/admin/homepage-migration.php",
+      "git_blob_sha": "d3f4ad9e1e236d83fe292531d63f32131ca05a41",
+      "size": 3158,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/admin/homepage.php",
+      "git_blob_sha": "15da52c37d2f765d4b51f51936a2abe30faa2888",
+      "size": 80112,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/admin/project-handoff.php",
+      "git_blob_sha": "b219a1e1fcd9b4f8197beb7407f0160c4dc8c97d",
+      "size": 2153,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/admin/provisioning.php",
+      "git_blob_sha": "95be195fce54d0a400cc8ab4d628987cc3857832",
+      "size": 30196,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/admin/settings-actions.php",
+      "git_blob_sha": "4279068cbb9df8c06097c313774f2387baf73f53",
+      "size": 1468,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/admin/settings-portability.php",
+      "git_blob_sha": "3be84097367ab3f2da4b8a32de8bb0ea0cb03d53",
+      "size": 2205,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/admin/site-guard-consumer.php",
+      "git_blob_sha": "e037df032343a4e9a54dcf59bc69cd621b29f410",
+      "size": 7573,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/admin/system-health.php",
+      "git_blob_sha": "46572248f0fa2c060adf07970b08453c292303bb",
+      "size": 1705,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/admin/team-member-editor.php",
+      "git_blob_sha": "7f4970b216358800a4cb622a6ea70c941a99ef45",
+      "size": 3134,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/integrations/rootprofile.php",
+      "git_blob_sha": "7b84307fb14ea6bb124cc77d7d22aad1d36ea455",
+      "size": 5433,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/integrations/woo-variation-swatches.php",
+      "git_blob_sha": "44aae46735d67253132c5f1d2481799b5f977aea",
+      "size": 1398,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/integrations/woocommerce.php",
+      "git_blob_sha": "558c98c3ff1b311c9b5404e3a8962de223d213c6",
+      "size": 3963,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/patterns/woocommerce/category-grid.php",
+      "git_blob_sha": "97ea711e789f62e54df74879fe90d1e90d797e93",
+      "size": 832,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/patterns/woocommerce/featured-products.php",
+      "git_blob_sha": "b380ce41261311fdc13051543c489dcbbe4872e7",
+      "size": 1465,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/archive-presentation.php",
+      "git_blob_sha": "7ef38428be17b771be01cb17afead87488d767fa",
+      "size": 1203,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/assets.php",
+      "git_blob_sha": "b52b47475a2fb5920b9b64b36b774867ac9ce039",
+      "size": 35050,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/bootstrap.php",
+      "git_blob_sha": "159b31bd08dce27c168fce83ae86b60415d9be17",
+      "size": 3294,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/contact-surface.php",
+      "git_blob_sha": "6814aa153a95341074ae3b6d08cfbeaa7a55db21",
+      "size": 5739,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/content-shell.php",
+      "git_blob_sha": "17a9684fa4d8a5cf263a244ea69001a3b1e85d40",
+      "size": 1163,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/design-system.php",
+      "git_blob_sha": "4441e4b233919b8e5a96b08dd23758d5a127fc09",
+      "size": 1182,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/footer.php",
+      "git_blob_sha": "04a0087f51970deffd52dd2e0175f0e7c017bf9d",
+      "size": 12689,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/header.php",
+      "git_blob_sha": "87935d873678998ffff2bb9dabce65a38e65c46e",
+      "size": 8085,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/homepage-authoring.php",
+      "git_blob_sha": "bba76f3e26df24dffc985e6bc574ec36589cd88c",
+      "size": 8792,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/homepage-composer.php",
+      "git_blob_sha": "99e12c9bd5646b4b66d9bc15155e59f4201381ef",
+      "size": 7031,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/homepage-content-map.php",
+      "git_blob_sha": "1e86410f7aa32cb161e1722dd904310fabb2ac39",
+      "size": 5967,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/homepage-surface-map.php",
+      "git_blob_sha": "42d904b7d5c8413b2ccf458c8a0a481652988901",
+      "size": 41791,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/law01-reference.php",
+      "git_blob_sha": "b462d68a2f2da2846017c7d4798f1ec94611e6d1",
+      "size": 1775,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/page-experience.php",
+      "git_blob_sha": "1811c19db31b971ce241b664ea2ba24d87239026",
+      "size": 12071,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/patterns.php",
+      "git_blob_sha": "8f7c71f84d03b8030a575f4a06af7d8c78e49d5b",
+      "size": 2346,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/preset-lexicon.php",
+      "git_blob_sha": "f11f15a649a1330450339bbc16526e89d9df8d0d",
+      "size": 2443,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/professional-page-kits.php",
+      "git_blob_sha": "cecdb3f7b0b1b4ae470301289610c5bb791d5dd2",
+      "size": 1158,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/profile-surface.php",
+      "git_blob_sha": "be1669c0ceb3425617e2e468ccfcc53cccf0e518",
+      "size": 7591,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/provisioning-blueprints.php",
+      "git_blob_sha": "b0f76ae7acc7a32e547884beec83fca257b54f28",
+      "size": 30047,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/provisioning-discovery.php",
+      "git_blob_sha": "e9e8fce31c32ffcebadf79d4edc5e30f60b8641d",
+      "size": 4709,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/provisioning-editorial.php",
+      "git_blob_sha": "43022563266007d8c4344e2f98bfeaa5a5e1078a",
+      "size": 5123,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/provisioning-indexing.php",
+      "git_blob_sha": "36aed35ea99322011337ad855abdcbbcad62a0b5",
+      "size": 2776,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/provisioning-media.php",
+      "git_blob_sha": "46b866d81b58a0deb8ba0167525c03b01543e546",
+      "size": 5076,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/provisioning-plan.php",
+      "git_blob_sha": "83e219578260fc5a3fcfa1dc3d1193c4c75a6c32",
+      "size": 16461,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/provisioning-professional-services.php",
+      "git_blob_sha": "416c80dd7666b25190faa1a0701882099fcb17a4",
+      "size": 4581,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/provisioning-provenance.php",
+      "git_blob_sha": "ad38f761709bc2ae99091e0b434eae55ce70411d",
+      "size": 3819,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/provisioning-readiness.php",
+      "git_blob_sha": "4a9006bd5bf2c73e1802c716a5382b66d53130df",
+      "size": 4840,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/provisioning-recommendations.php",
+      "git_blob_sha": "9e0778a962eaf94f75129c8c6577f3b49827dc64",
+      "size": 8077,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/provisioning-runner.php",
+      "git_blob_sha": "550af954e3a8ec8f93d7db27083914b4de510fc5",
+      "size": 24826,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/rootprofile-current-surface.php",
+      "git_blob_sha": "7792de8400ccb345a338198d7358129344016893",
+      "size": 1780,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/settings.php",
+      "git_blob_sha": "4c0dc803dde2e5e1a4db7c3984ca1fe192faae48",
+      "size": 25000,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/setup.php",
+      "git_blob_sha": "b43135d0fa64532ccc13d5acfcdeb0e3615763d5",
+      "size": 1567,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/team-directory.php",
+      "git_blob_sha": "ffa6667b4ef5f6d880cf5c96fb350be2764614df",
+      "size": 6292,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/template-loader.php",
+      "git_blob_sha": "4e48f69f48af5caf8336b41289dfc6cd843c5012",
+      "size": 963,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/template-registry.php",
+      "git_blob_sha": "b2bf0dc18398b7fcae2f60e8016f91c23b207252",
+      "size": 8468,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/templates/curtain-01/manifest.php",
+      "git_blob_sha": "94464db65b92367f98e5f017e80b5278d9242676",
+      "size": 1626,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/templates/digital-01/manifest.php",
+      "git_blob_sha": "440a92e2a15242c8748ba0f867bfa105fdb7e24d",
+      "size": 1182,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/templates/industrial-01/manifest.php",
+      "git_blob_sha": "5990fcde471a6ddbf0ea0a5f7769884f7157f50f",
+      "size": 3357,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/templates/law-01/manifest.php",
+      "git_blob_sha": "ac13a57cd2044bbc768589bec7f85cc8287133fd",
+      "size": 1897,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/widgets.php",
+      "git_blob_sha": "50af1a6de0959bca5f42f5712757b4b9c04f264d",
+      "size": 1099,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/woocommerce-account.php",
+      "git_blob_sha": "fa13df2b57bbda540b46bdcd6b0e592cc6afa6f9",
+      "size": 408,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/woocommerce-archive.php",
+      "git_blob_sha": "af8f836d4e34ce2c909c407195ccd0f986642235",
+      "size": 2580,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/woocommerce-blocks.php",
+      "git_blob_sha": "9633d239f6363c67954823529d64e7b08a726a63",
+      "size": 792,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/woocommerce-cart.php",
+      "git_blob_sha": "ef99e7844c48bf1428f1041a83e7c825ef9525e7",
+      "size": 394,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/woocommerce-checkout.php",
+      "git_blob_sha": "a1dd77670074a2270c485eda07325f23a43bd0c9",
+      "size": 406,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/woocommerce-presentation.php",
+      "git_blob_sha": "bdbcdc0587d2ee9e3891a8efeedcd4e8d8aba8e6",
+      "size": 1444,
+      "mode": "100644"
+    },
+    {
+      "path": "inc/theme/woocommerce-product.php",
+      "git_blob_sha": "6a8c378d715e72a240a59129a60a90c3ee422c59",
+      "size": 416,
+      "mode": "100644"
+    },
+    {
+      "path": "index.php",
+      "git_blob_sha": "3887aee806e4687ff1c059c4e93c99c1872aebf6",
+      "size": 886,
+      "mode": "100644"
+    },
+    {
+      "path": "ops/tamduc-homepage/mutation-plan.json",
+      "git_blob_sha": "919ed6062930b5fc31f391339d7f42f3c8bf6d4c",
+      "size": 1695,
+      "mode": "100644"
+    },
+    {
+      "path": "page-templates/landing.php",
+      "git_blob_sha": "8ea8da983e8b632f94dedc86fbff3e79cfdb83c9",
+      "size": 574,
+      "mode": "100644"
+    },
+    {
+      "path": "page-templates/wide.php",
+      "git_blob_sha": "02d7052a1a209e8b93367d4699fc6a2721c1343f",
+      "size": 571,
+      "mode": "100644"
+    },
+    {
+      "path": "page.php",
+      "git_blob_sha": "7f3608f814a2ac8605ceff1070544d9e5bc88b75",
+      "size": 555,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/commerce-promotion.php",
+      "git_blob_sha": "0582a9c780160e7bc3906167b0423af49cf0ef2f",
+      "size": 2206,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/content-alternating.php",
+      "git_blob_sha": "dbf84aa5bb1ae97a7bd0888d258312aa8aae639a",
+      "size": 3451,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/content-article-grid.php",
+      "git_blob_sha": "590bd3e67011188ba77066ddd0df867de95f2f75",
+      "size": 1827,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/content-authority-quote.php",
+      "git_blob_sha": "c0185aba8ddc8c43fcbf1ac754df5f5c9f8d9494",
+      "size": 1838,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/content-faq.php",
+      "git_blob_sha": "595a7c8ff3ca2be4bb8cb87e0c5b733b1229b6f8",
+      "size": 2068,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/content-intro.php",
+      "git_blob_sha": "bff0c64da101dbf54611d74968df01d49dda8192",
+      "size": 1399,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/cta-full-width.php",
+      "git_blob_sha": "41d9dfb375871e8adaa1905a0dafb3e52759f780",
+      "size": 1916,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/hero-centered.php",
+      "git_blob_sha": "bca8e3018b8f4c57dbdbcfa8ffd41848a1378c09",
+      "size": 2050,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/hero-commerce.php",
+      "git_blob_sha": "9703092473f2cc0911f8edd2ec39fd26173650bb",
+      "size": 3430,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/hero-inverse.php",
+      "git_blob_sha": "fbc2cf06b34a966ca6b7c949f27ef5e43272c46a",
+      "size": 2174,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/hero-split.php",
+      "git_blob_sha": "e9c7b8cbb5cf9612b3854d4cb73844ad817e9b3f",
+      "size": 3266,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/homepage-digital-01.php",
+      "git_blob_sha": "354e05096784e311e87956d261e85a4cdc0bce22",
+      "size": 16419,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/homepage-hero-content.php",
+      "git_blob_sha": "867f1dd09a088f089b6513077547eb69c2ae5a70",
+      "size": 5918,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/homepage-professional-services.php",
+      "git_blob_sha": "ae4fed9d67d3956a48e01433971717edd688be91",
+      "size": 15723,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/page-about.php",
+      "git_blob_sha": "ee7ee54ebce61096b2e4119f8c3a8588d1b3810b",
+      "size": 5567,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/page-contact.php",
+      "git_blob_sha": "cc279e5ed66c09d3749926dd6272953b5f54e476",
+      "size": 3482,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/page-content-landing.php",
+      "git_blob_sha": "1af21b50371c55862929e81b899af51689a11be4",
+      "size": 4560,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/page-services.php",
+      "git_blob_sha": "4921d4ac2bf282a339e46f8c97e95a23ef7b3d19",
+      "size": 6039,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/page-team-expertise.php",
+      "git_blob_sha": "91ecdca14fe9c825ca3e186f7a88f703c77b574c",
+      "size": 4744,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/trust-feature-grid.php",
+      "git_blob_sha": "47cdd7b6c5ba35e8e6cae7371be4ac03d1451583",
+      "size": 2454,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/trust-logo-strip.php",
+      "git_blob_sha": "590ebaa8d5bbb9f9c273eee16624b56805d5e77d",
+      "size": 2144,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/trust-testimonials.php",
+      "git_blob_sha": "b80965f0ba05a0424f6ab2b8517610341a545e17",
+      "size": 1902,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/utility-contact.php",
+      "git_blob_sha": "b913721f97d1abd798cd87c87058ee5b8c74321e",
+      "size": 2180,
+      "mode": "100644"
+    },
+    {
+      "path": "patterns/utility-footer-cta.php",
+      "git_blob_sha": "2d23336722464efbb21389caabcd8eb53dabeb14",
+      "size": 1860,
+      "mode": "100644"
+    },
+    {
+      "path": "search.php",
+      "git_blob_sha": "1604283a4f2eaf96df8097ccec786ab6c5d634fb",
+      "size": 2747,
+      "mode": "100644"
+    },
+    {
+      "path": "sidebar-shop.php",
+      "git_blob_sha": "22ac3e1704a152735216d64a4dc172f7b641f2e7",
+      "size": 425,
+      "mode": "100644"
+    },
+    {
+      "path": "single.php",
+      "git_blob_sha": "21a74c587e257c66d2ad9893df4e4b9695b1e6c3",
+      "size": 1914,
+      "mode": "100644"
+    },
+    {
+      "path": "style.css",
+      "git_blob_sha": "1f96eb92c749bcbf9753b088e8a970a132020549",
+      "size": 921,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/archive/law01-category.php",
+      "git_blob_sha": "16793c8bee77734dfedce7e78280a19d7ba8446e",
+      "size": 6646,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/archive/law01-item.php",
+      "git_blob_sha": "8d00f70144ec3018a842d3abdc8e3846df35bbbc",
+      "size": 2308,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/contact/page.php",
+      "git_blob_sha": "6700c896ed68a18e9d29c6501e2b4c07130b53fe",
+      "size": 5279,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/contact/surface.php",
+      "git_blob_sha": "3379c54734e44a0323f3063ce8ee6e8944fdfcf8",
+      "size": 13349,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/content/author.php",
+      "git_blob_sha": "4784d61d6509516d1c142c2b42d86e0045cbed32",
+      "size": 1267,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/content/card.php",
+      "git_blob_sha": "102d0e5f2714fcb47e8bd5dcb72d1b3c01040c0c",
+      "size": 916,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/content/content-single.php",
+      "git_blob_sha": "d8f9af93ea5f1cf68e6056fd39ec5eea53c4a6e4",
+      "size": 3862,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/content/meta.php",
+      "git_blob_sha": "c4b5d4e2c5d8160bf56f8108227ed10a88694a72",
+      "size": 1590,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/content/page.php",
+      "git_blob_sha": "c7a57333d8cccbe1823d7f681aed802425bcf2c9",
+      "size": 7054,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/footer/site-footer.php",
+      "git_blob_sha": "9d944a6f79fa910f32649fcd946be29d7e2de796",
+      "size": 14773,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/header/brand.php",
+      "git_blob_sha": "76e0cef89ffbebf30d3085c873b175814308f690",
+      "size": 1547,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/header/catalog-navigation.php",
+      "git_blob_sha": "d473e09681ee4aaf10e34aeabdf1679a7b7d7d04",
+      "size": 842,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/header/commerce-actions.php",
+      "git_blob_sha": "3a597e5a3684f6fbe7f145872991ccbdbf06eb5d",
+      "size": 930,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/header/law01-consultation.php",
+      "git_blob_sha": "656981225285c4f558f848e7b2fe9ccbf0b8569e",
+      "size": 653,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/header/law01-topbar.php",
+      "git_blob_sha": "ca9a70b222797feaf7bb520947d1b1315712440c",
+      "size": 1706,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/header/mobile-panel.php",
+      "git_blob_sha": "65b55e713d2cff83d2295ecd80e350d9825e76e7",
+      "size": 2531,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/header/primary-navigation.php",
+      "git_blob_sha": "9178d38ff7b990021fc0d834c482941987eb26e2",
+      "size": 516,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/header/search.php",
+      "git_blob_sha": "6015995e6585869f4071832649c8e1115275ecf3",
+      "size": 794,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/header/site-header.php",
+      "git_blob_sha": "7056c9feeafb31ef7f03179e0c969a9efc190aa1",
+      "size": 3935,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/header/utility-navigation.php",
+      "git_blob_sha": "9d711a853fe168bf6e9a56906c85e467a4bf9e74",
+      "size": 803,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/curtain-01/about.php",
+      "git_blob_sha": "003d246d40e3cb5b838a93111f70174407dc6876",
+      "size": 2760,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/curtain-01/catalogue.php",
+      "git_blob_sha": "09e2dc1efed4d44c8ac22a4c79e01801ca487cda",
+      "size": 4275,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/curtain-01/category-showcase.php",
+      "git_blob_sha": "50296e0eff0f8c319e63e4e3409b98686047c1c9",
+      "size": 3338,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/curtain-01/final-cta.php",
+      "git_blob_sha": "7fb50fc5435666e3aeccfdd901a59a1f58dabbe7",
+      "size": 2287,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/curtain-01/hero.php",
+      "git_blob_sha": "95b8045c155429a6b062e713fef3ec16064e689b",
+      "size": 6145,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/curtain-01/knowledge.php",
+      "git_blob_sha": "416e861b45b03fe3a07fcdfefd8c2e39d2e2b3c5",
+      "size": 3327,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/curtain-01/process.php",
+      "git_blob_sha": "4f27317b967d3f4a61aab503f481221c9b3d60f6",
+      "size": 1272,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/curtain-01/projects.php",
+      "git_blob_sha": "b1d70840127155e8ffa8781de5be5fb4e00c8ec0",
+      "size": 3399,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/curtain-01/proof-strip.php",
+      "git_blob_sha": "53ceaaf9ea98c4eb4675f3af0d43e8d26bee563f",
+      "size": 845,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/industrial-01/about.php",
+      "git_blob_sha": "e75bec4186646c567bb11430733e865968916863",
+      "size": 3116,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/industrial-01/categories.php",
+      "git_blob_sha": "7da1dc5e0c8b422f1aba5afdfb4dd0fb16b6c677",
+      "size": 6907,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/industrial-01/cta.php",
+      "git_blob_sha": "063be97b9b3fa44e9c40e1ab7e6942d0d81adddc",
+      "size": 2474,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/industrial-01/hero.php",
+      "git_blob_sha": "91f5c406e9231e92d852d07869b006511ab033e1",
+      "size": 7869,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/industrial-01/knowledge.php",
+      "git_blob_sha": "85bb985ad4e9c509ca153c100a094cc70d3170f6",
+      "size": 3353,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/industrial-01/process.php",
+      "git_blob_sha": "a68f288e86f576d6034330b650fed93147ad69b2",
+      "size": 2697,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/industrial-01/products.php",
+      "git_blob_sha": "ddbd83ddd26093f264194ff6a1337a258e40ce28",
+      "size": 5245,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/industrial-01/solutions.php",
+      "git_blob_sha": "e49d320a7331f13ad45b35c248e14a021c54c99b",
+      "size": 10360,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/law-01/about.php",
+      "git_blob_sha": "3cd4cb1c34442059f6e96068dce6c0da5db93c36",
+      "size": 1194,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/law-01/analysis.php",
+      "git_blob_sha": "667e731a03cbf568ef2dfaef083810835d6510e2",
+      "size": 2843,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/law-01/faq.php",
+      "git_blob_sha": "02e0aeec84f8885f74af2cbebc28a8b969373f99",
+      "size": 4927,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/law-01/final-cta.php",
+      "git_blob_sha": "d3cce1545881930893445c7999954aac713536a8",
+      "size": 1796,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/law-01/hero.php",
+      "git_blob_sha": "ab8c21a923dd6407c7ddb30eae744520812a1bac",
+      "size": 8995,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/law-01/latest.php",
+      "git_blob_sha": "81c1517ac1593c08d47f3e11d811e5438ecf242f",
+      "size": 3304,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/law-01/news.php",
+      "git_blob_sha": "fdaad81b246698b583afd8238979c894e79d8a82",
+      "size": 3945,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/law-01/process.php",
+      "git_blob_sha": "52e4371cc88c501d3103c801e5fe759546c571e3",
+      "size": 1941,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/law-01/profile.php",
+      "git_blob_sha": "82f22ca6a11e34dd1895505e95c674305554b390",
+      "size": 6337,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/law-01/services.php",
+      "git_blob_sha": "522d505d9fc0734acd766b7c2ed75a448538cf3d",
+      "size": 3085,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/law-01/team.php",
+      "git_blob_sha": "5817fa549cd967a5740cd943843de71154ff55e2",
+      "size": 2615,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/homepage/law-01/topics.php",
+      "git_blob_sha": "3fe8cfc6eed2cf9bd1ad2ac7fe1f3ed333862e9c",
+      "size": 977,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/profile/surface.php",
+      "git_blob_sha": "19d5ea25088091c59011eb7aa1ef4c0705750b57",
+      "size": 15416,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/services/card.php",
+      "git_blob_sha": "7e151a9221a81d172a56c71df062f433d3ee41a4",
+      "size": 1560,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/services/page.php",
+      "git_blob_sha": "76f1b029aecec017925ab6b18dbb10f80bc9fb42",
+      "size": 4912,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/team/card.php",
+      "git_blob_sha": "02def90b3e5195617b7a1386517f9f40b6e1d073",
+      "size": 4393,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/team/member.php",
+      "git_blob_sha": "4b9edf2f1ddb2da5a69570486d20b472e6163513",
+      "size": 5471,
+      "mode": "100644"
+    },
+    {
+      "path": "template-parts/team/page.php",
+      "git_blob_sha": "0231f0528833c1e00a80e914937db8d8153ef81e",
+      "size": 1271,
+      "mode": "100644"
+    },
+    {
+      "path": "theme.json",
+      "git_blob_sha": "5e00123e13bd621459cca2a2b4766647673ea197",
+      "size": 7085,
+      "mode": "100644"
+    }
+  ]
+}
