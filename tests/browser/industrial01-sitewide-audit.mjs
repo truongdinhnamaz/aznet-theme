@@ -121,7 +121,7 @@ function nativeFrontPageLayoutPass(route, width, measured) {
     measured.gridTracks === expectedTracks && measured.cardCount === 3 &&
     Array.isArray(measured.cards) && measured.cards.length === 3 &&
     measured.cards.every((card) => card.inViewport === true &&
-      card.topBorderVisible === true && card.hasSurface === true &&
+      card.topBorderVisible === true && card.goldTopBorder === true && card.hasSurface === true &&
       card.ctaIsButton === true);
 }
 
@@ -210,7 +210,7 @@ if (process.argv.includes('--self-test')) {
   assert.deepEqual(auditOrder, ['capture', 'dom', 'axe']);
   assert.deepEqual(capturedAudit.incomplete, []);
   assert.deepEqual(widths, [390, 768, 1440]);
-  const serviceCard = { inViewport: true, topBorderVisible: true, hasSurface: true, ctaIsButton: true };
+  const serviceCard = { inViewport: true, topBorderVisible: true, goldTopBorder: true, hasSurface: true, ctaIsButton: true };
   const healthyNative = {
     present: true, articleFullWidth: true, shellCentered: true, headingCentered: true,
     columnsDisplay: 'grid', gridTracks: 3, cardCount: 3,
@@ -226,6 +226,7 @@ if (process.argv.includes('--self-test')) {
   assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 390, { ...healthyNative, cards: [{ ...serviceCard, ctaIsButton: false }, serviceCard, serviceCard] }), false);
   assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 1440, { ...healthyNative, articleFullWidth: false }), false);
   assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 1440, { ...healthyNative, cards: [{ ...serviceCard, topBorderVisible: false }, serviceCard, serviceCard] }), false);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 1440, { ...healthyNative, cards: [{ ...serviceCard, goldTopBorder: false }, serviceCard, serviceCard] }), false);
   const browserCallbacks = new Map(), browserRecord = {};
   attachBrowserDiagnostics({ on: (name, callback) => browserCallbacks.set(name, callback) }, browserRecord);
   browserCallbacks.get('console')({ type: () => 'warning', text: () => 'ignore' });
@@ -330,6 +331,7 @@ if (process.argv.includes('--self-test')) {
                       inViewport: rect.width > 1 && rect.left >= -1 && rect.right <= root.clientWidth + 1,
                       topBorderVisible: Number.parseFloat(style.borderTopWidth) >= 3 &&
                         style.borderTopStyle !== 'none',
+                      goldTopBorder: style.borderTopColor === 'rgb(216, 165, 79)',
                       hasSurface: visibleBackground(style.backgroundColor),
                       ctaIsButton: Boolean(action && action.display === 'inline-flex' &&
                         visibleBackground(action.backgroundColor) &&
