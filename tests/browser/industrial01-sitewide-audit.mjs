@@ -106,6 +106,25 @@ function attachBrowserDiagnostics(page, record) {
   });
   page.on('pageerror', (error) => add('pageerror', error?.message || String(error), ''));
 }
+
+/**
+ * Prevent false-positive homepage PASS when WordPress-native Gutenberg blocks
+ * have correct headings but unusable layout (Issue #546 visual regression).
+ * These are presentation measurements only; Page content stays WordPress-owned.
+ */
+function nativeFrontPageLayoutPass(route, width, measured) {
+  if (route.id !== 'home') return true;
+  const expectedTracks = { 390: 1, 768: 2, 1440: 3 }[width];
+  return Number.isInteger(expectedTracks) && measured?.present === true &&
+    measured.articleFullWidth === true && measured.shellCentered === true &&
+    measured.headingCentered === true && measured.columnsDisplay === 'grid' &&
+    measured.gridTracks === expectedTracks && measured.cardCount === 3 &&
+    Array.isArray(measured.cards) && measured.cards.length === 3 &&
+    measured.cards.every((card) => card.inViewport === true &&
+      card.topBorderVisible === true && card.hasSurface === true &&
+      card.ctaIsButton === true);
+}
+
 function config(baseUrl, data) {
   const base = new URL(baseUrl);
   if (base.username || base.password || base.search || base.hash || base.pathname !== '/' ||
@@ -191,6 +210,22 @@ if (process.argv.includes('--self-test')) {
   assert.deepEqual(auditOrder, ['capture', 'dom', 'axe']);
   assert.deepEqual(capturedAudit.incomplete, []);
   assert.deepEqual(widths, [390, 768, 1440]);
+  const serviceCard = { inViewport: true, topBorderVisible: true, hasSurface: true, ctaIsButton: true };
+  const healthyNative = {
+    present: true, articleFullWidth: true, shellCentered: true, headingCentered: true,
+    columnsDisplay: 'grid', gridTracks: 3, cardCount: 3,
+    cards: [serviceCard, serviceCard, serviceCard],
+  };
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 1440, healthyNative), true);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'komatsu-product' }, 1440, null), true);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 1440, null), false);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 1440, { ...healthyNative, columnsDisplay: 'block' }), false);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 1440, { ...healthyNative, gridTracks: 1 }), false);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 768, { ...healthyNative, gridTracks: 2 }), true);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 390, { ...healthyNative, gridTracks: 1 }), true);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 390, { ...healthyNative, cards: [{ ...serviceCard, ctaIsButton: false }, serviceCard, serviceCard] }), false);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 1440, { ...healthyNative, articleFullWidth: false }), false);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 1440, { ...healthyNative, cards: [{ ...serviceCard, topBorderVisible: false }, serviceCard, serviceCard] }), false);
   const browserCallbacks = new Map(), browserRecord = {};
   attachBrowserDiagnostics({ on: (name, callback) => browserCallbacks.set(name, callback) }, browserRecord);
   browserCallbacks.get('console')({ type: () => 'warning', text: () => 'ignore' });
@@ -261,6 +296,48 @@ if (process.argv.includes('--self-test')) {
                   img.complete && img.naturalWidth === 0;
               }).slice(0, 8).map((img) => ({ src: img.currentSrc || img.src, alt: img.alt })),
               contactForms: document.querySelectorAll('main#main .wpcf7 form').length,
+              nativeFrontPage: (() => {
+                const article = document.querySelector('main#main > article[data-aznet-homepage-surface="front-page-content"]');
+                if (!article) return null;
+                const content = article.querySelector(':scope > .aznet-theme-entry__content');
+                const group = content?.querySelector(':scope > .wp-block-group');
+                const columns = group?.querySelector(':scope > .wp-block-columns');
+                const heading = group?.querySelector(':scope > h2');
+                const cards = columns ? [...columns.children].filter((el) => el.classList.contains('wp-block-column')) : [];
+                const articleRect = article.getBoundingClientRect();
+                const contentRect = content?.getBoundingClientRect();
+                const columnsStyle = columns ? getComputedStyle(columns) : null;
+                const visibleBackground = (color) => Boolean(color && color !== 'transparent' &&
+                  !/^rgba\([^)]*,\s*0(?:\.0+)?\)$/.test(color));
+                return {
+                  present: true,
+                  articleFullWidth: Math.abs(articleRect.left) <= 2 &&
+                    articleRect.right >= root.clientWidth - 2,
+                  shellCentered: Boolean(contentRect && contentRect.width > 0 &&
+                    contentRect.left >= 0 && contentRect.right <= root.clientWidth + 1 &&
+                    Math.abs((contentRect.left + contentRect.right) / 2 - root.clientWidth / 2) <= 12),
+                  headingCentered: Boolean(heading && getComputedStyle(heading).textAlign === 'center'),
+                  columnsDisplay: columnsStyle?.display || null,
+                  gridTracks: columnsStyle?.display === 'grid'
+                    ? columnsStyle.gridTemplateColumns.split(/\s+/).filter(Boolean).length : 0,
+                  cardCount: cards.length,
+                  cards: cards.slice(0, 6).map((card) => {
+                    const rect = card.getBoundingClientRect();
+                    const style = getComputedStyle(card);
+                    const cta = card.querySelector('p a');
+                    const action = cta ? getComputedStyle(cta) : null;
+                    return {
+                      inViewport: rect.width > 1 && rect.left >= -1 && rect.right <= root.clientWidth + 1,
+                      topBorderVisible: Number.parseFloat(style.borderTopWidth) >= 3 &&
+                        style.borderTopStyle !== 'none',
+                      hasSurface: visibleBackground(style.backgroundColor),
+                      ctaIsButton: Boolean(action && action.display === 'inline-flex' &&
+                        visibleBackground(action.backgroundColor) &&
+                        action.textDecorationLine === 'none'),
+                    };
+                  }),
+                };
+              })(),
             };
           }, expectedBodyClass);
           if (record.dom.overflowPx > 1) {
@@ -305,7 +382,8 @@ if (process.argv.includes('--self-test')) {
           };
         });
         record.outcome = !record.dom.theme || !record.dom.industrial01 ? 'unknown-shell' :
-          record.dom.mainCount === 1 && hasOneNamedH1(record.dom.h1) && routeHasRequiredForm(route, record.dom) && record.dom.overflowPx <= 1 &&
+          record.dom.mainCount === 1 && hasOneNamedH1(record.dom.h1) && routeHasRequiredForm(route, record.dom) &&
+           nativeFrontPageLayoutPass(route, width, record.dom.nativeFrontPage) && record.dom.overflowPx <= 1 &&
           record.media.brokenCount === 0 && record.media.pendingCount === 0 &&
           record.browserErrorCount === 0 && axeIsConclusive(record.axe, record.axeIncomplete) ? 'pass' : 'review';
       } catch (error) {
