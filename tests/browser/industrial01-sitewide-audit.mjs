@@ -26,6 +26,11 @@ function hasOneNamedH1(headings) {
   return Array.isArray(headings) && headings.length === 1 &&
     typeof headings[0] === 'string' && headings[0].trim().length > 0;
 }
+// axe-core "incomplete" means manual review is required, not WCAG PASS.
+function axeIsConclusive(violations, incomplete) {
+  return Array.isArray(violations) && Array.isArray(incomplete) &&
+    violations.length === 0 && incomplete.length === 0;
+}
 function config(baseUrl, data) {
   const base = new URL(baseUrl);
   if (base.username || base.password || base.search || base.hash || base.pathname !== '/' ||
@@ -68,6 +73,10 @@ if (process.argv.includes('--self-test')) {
   assert.equal(hasOneNamedH1([]), false);
   assert.equal(hasOneNamedH1(['']), false);
   assert.equal(hasOneNamedH1(['First', 'Duplicate']), false);
+  assert.equal(axeIsConclusive([], []), true);
+  assert.equal(axeIsConclusive([{ id: 'color-contrast' }], []), false);
+  assert.equal(axeIsConclusive([], [{ id: 'color-contrast' }]), false);
+  assert.equal(axeIsConclusive([], undefined), false);
   assert.deepEqual(widths, [390, 768, 1440]);
   console.log('PASS: public route safety, fail-closed single-route selection and viewports');
 } else {
@@ -151,6 +160,17 @@ if (process.argv.includes('--self-test')) {
           }
           record.axe.push(item);
         }
+        // Manual-review results are not proven defects, but must never be
+        // silently counted as axe-clean. Preserve exact targets for triage.
+        record.axeIncomplete = axe.incomplete.map((rule) => ({
+          id: rule.id, impact: rule.impact, help: rule.help,
+          nodeCount: rule.nodes.length,
+          nodes: rule.nodes.slice(0, 12).map((n) => ({
+            target: n.target,
+            html: String(n.html || '').slice(0, 700),
+            reason: String(n.failureSummary || '').slice(0, 900),
+          })),
+        }));
         record.screenshot = route.id + '-' + width + '.png';
         await page.screenshot({ path: path.join(dir, record.screenshot), fullPage: true, animations: 'disabled' });
         // The screenshot can trigger additional lazy image loads. Inspect all image
@@ -171,7 +191,7 @@ if (process.argv.includes('--self-test')) {
         record.outcome = !record.dom.theme || !record.dom.industrial01 ? 'unknown-shell' :
           record.dom.mainCount === 1 && hasOneNamedH1(record.dom.h1) && record.dom.overflowPx <= 1 &&
           record.media.brokenCount === 0 && record.media.pendingCount === 0 &&
-          record.axe.length === 0 ? 'pass' : 'review';
+          axeIsConclusive(record.axe, record.axeIncomplete) ? 'pass' : 'review';
       } catch (error) {
         record.outcome = 'blocked';
         record.error = String(error).slice(0, 1100);
