@@ -83,3 +83,24 @@ A focused review of the read-only L4 probe exposed a **false public-route PASS**
 **Rollback:** revert commit `d2e8eab` on the isolated PR #550 branch. Neither WordPress nor any provider storage was modified; no merge, tag or production deployment.
 
 **EXACT NEXT:** run the exact PR-head `node --check`, `--self-test` and single `komatsu-product` 390/768/1440 browser sweep on an authorized network-enabled runner. Inspect actual failing axe selectors and distinguish Theme-owned UI from Woo/ConvertFlow before writing production code.
+
+## Preview-safe exact-viewport runner preparation — 2026-11-01
+
+**Problem reproduced:** The existing public-only QA harness rejects a `?wpvibe_preview=...` URL and requires `wp-theme-aznet-theme` in the DOM. Passing a live URL would incorrectly test production, not the isolated PR #552 AZnet draft. This is QA tooling scope only; no Theme/domain contract change.
+
+**TDD (Node 22.16, offline):** `tests/offline/industrial01-preview-route-guard.test.mjs` was run first against a deliberately incorrect public-only fixture and failed as expected (`RED exit=1`, missing expected invalid-token exception). The minimal new `tests/browser/industrial01-preview-route-guard.mjs` then passed `node --check` and the full focused test (`GREEN exit=0`), covering token format/whitelist, matching origin+path+single exact preview query, redirect/extra-parameter rejection, preview-vs-live body class, and report token redaction. The existing public predicate remains unchanged. Both added blob identities were compared to independent `git hash-object` in the offline runner.
+
+**Integration:** `industrial01-sitewide-audit.mjs` reads `AZT_AUDIT_PREVIEW_TOKEN` from the environment only when explicitly supplied; it appends that value to each already-reviewed manifest route, requires the exact token on the resulting URL, checks `wp-theme-aznet-theme-wpvibe-draft` instead of the live Theme class, redacts the token from JSON and strips URL queries from report final URLs. Without the env value, the original strict public-only behavior remains. Source parse checked using V8 syntax compilation after removing static ESM imports, but **full Node self-test of the integrated script and live Playwright/Axe are not claimed**.
+
+**Operator invocation (never store a real preview token in GitHub or logs):**
+
+```bash
+# Set AZT_AUDIT_PREVIEW_TOKEN via a private, authorized environment variable.
+AZT_AUDIT_BASE_URL=https://anpvietnam.vn/ \\
+AZT_AUDIT_ROUTES_FILE=docs/evidence/anp-industrial01-sitewide-routes.json \\
+AZT_AUDIT_ONLY_ROUTE=komatsu-product \\
+AZT_AUDIT_DIR=/tmp/azt-industrial01-preview \\
+node tests/browser/industrial01-sitewide-audit.mjs
+```
+
+The external runner must have Playwright, @axe-core/playwright and network access. It must verify actual 390/768/1440 screenshots, DOM, lazy-image state, overflow, axe targets and computed styles before any L4 claim. Do not publish raw tokens or screenshots with private user data. **No main merge, WPVibe draft publication, live mutation or release approval** arises from this QA helper.

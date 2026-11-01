@@ -1,7 +1,11 @@
-// ANP Industrial 01 read-only public browser L4 evidence, with no site mutations.
+// ANP Industrial 01 read-only public or explicit WPVibe draft L4 evidence.
 import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
+import {
+  previewTokenFromEnv, requestedAuditUrl, samePreviewRoute,
+  auditedBodyClass, redactReportSecrets,
+} from './industrial01-preview-route-guard.mjs';
 
 const widths = [390, 768, 1440];
 // Isolate the first failing public surface instead of crawling the full matrix.
@@ -212,17 +216,20 @@ if (process.argv.includes('--self-test')) {
   if (!file) throw Error('Set AZT_AUDIT_ROUTES_FILE to a reviewed explicit JSON route manifest');
   const { base, routes } = config(process.env.AZT_AUDIT_BASE_URL || '', JSON.parse(fs.readFileSync(file, 'utf8')));
   const selectedRoutes = selectRoutes(routes, process.env.AZT_AUDIT_ONLY_ROUTE || '');
+  const previewToken = previewTokenFromEnv(process.env.AZT_AUDIT_PREVIEW_TOKEN || '');
+  const expectedBodyClass = auditedBodyClass(previewToken);
   const dir = path.resolve(process.env.AZT_AUDIT_DIR || '/tmp/azt-industrial01-sitewide');
   fs.mkdirSync(dir, { recursive: true });
   const [{ chromium }, { default: AxeBuilder }] = await Promise.all([import('playwright'), import('@axe-core/playwright')]);
   const result = {
-    scope: 'Read-only public DOM; do not infer Theme/domain source from selectors alone',
+    scope: previewToken ? 'Read-only WPVibe draft preview; do not infer Theme/domain source from selectors alone' : 'Read-only public DOM; do not infer Theme/domain source from selectors alone',
+    previewMode: Boolean(previewToken),
     base: base.href,
     generatedAt: new Date().toISOString(),
     head: process.env.GITHUB_SHA || null,
     views: [],
   };
-  const persist = () => fs.writeFileSync(path.join(dir, 'report.json'), JSON.stringify(result, null, 2) + '\n');
+  const persist = () => fs.writeFileSync(path.join(dir, 'report.json'), redactReportSecrets(result, previewToken));
   const browser = await chromium.launch({ headless: true });
   try {
     for (const route of selectedRoutes) for (const width of widths) {
@@ -232,16 +239,18 @@ if (process.argv.includes('--self-test')) {
       const page = await context.newPage();
       attachBrowserDiagnostics(page, record);
       try {
-        const response = await page.goto(route.url, { waitUntil: 'domcontentloaded', timeout: 45000 });
+        const targetUrl = requestedAuditUrl(route.url, previewToken);
+        const response = await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 45000 });
         record.httpStatus = response?.status() ?? null;
-        record.finalUrl = page.url();
-        if (record.httpStatus !== 200 || !samePublicRoute(route.url, record.finalUrl)) throw Error('HTTP status or final path mismatch for reviewed route');
+        record.finalUrl = sanitizedSource(page.url());
+        const validRoute = previewToken ? samePreviewRoute(targetUrl, page.url(), previewToken) : samePublicRoute(route.url, page.url());
+        if (record.httpStatus !== 200 || !validRoute) throw Error('HTTP status or final path mismatch for reviewed route');
         record.screenshot = route.id + '-' + width + '.png';
         const axe = await captureThenAudit(page, path.join(dir, record.screenshot), AxeBuilder, async () => {
-          record.dom = await page.evaluate(() => {
+          record.dom = await page.evaluate((expectedBodyClass) => {
             const body = document.body, root = document.documentElement;
             return {
-              theme: body.classList.contains('wp-theme-aznet-theme'),
+              theme: body.classList.contains(expectedBodyClass),
               industrial01: body.classList.contains('aznet-theme-preset--industrial-01'),
               mainCount: document.querySelectorAll('main#main').length,
               h1: [...document.querySelectorAll('h1')].map((el) => el.textContent.trim().slice(0, 120)),
@@ -253,7 +262,7 @@ if (process.argv.includes('--self-test')) {
               }).slice(0, 8).map((img) => ({ src: img.currentSrc || img.src, alt: img.alt })),
               contactForms: document.querySelectorAll('main#main .wpcf7 form').length,
             };
-          });
+          }, expectedBodyClass);
           if (record.dom.overflowPx > 1) {
             record.overflowElements = await page.evaluate(() => [...document.querySelectorAll('body *')]
               .map((el) => ({ el, rect: el.getBoundingClientRect() }))
