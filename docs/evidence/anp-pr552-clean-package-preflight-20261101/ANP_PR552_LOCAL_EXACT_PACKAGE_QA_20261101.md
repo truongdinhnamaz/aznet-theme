@@ -50,3 +50,14 @@ A second local archive, `ANP_PR552_FIVE_FILES_OVERLAY_NOT_WP_INSTALL.zip`, conta
 **EXACT NEXT:** execute the pinned `44e90157...` full ZIP on isolated disposable WordPress at the support floor and complete the missing L3/L4/L5/rollback gates; preserve extra Wellness paths and use only an approved bounded deployment mechanism when go-live authorization is explicit. User has directed **no hosting interaction** in this continuation.
 
 All local QA artifacts remained in the conversation workspace; this repository document records checksums/provenance but does not claim the ZIPs were uploaded to GitHub Releases.
+
+
+## Additional isolated five-file overlay / rollback fixture (fresh L1/L2)
+
+An independent **temporary local fixture** restored all 242 original files from the archived, previously successful baseline, then added **7 explicit artificial sentinels** at the three known extra Wellness text paths and four potential Wellness WebP paths. These sentinel bytes are **not** copies of ANP live; this proves preservation logic only.
+
+- Preflight used the overlay's manifest to verify **all five expected-before Git blob SHA values before any file modification**.
+- Applied the five allowlisted new source files to the disposable fixture only; per-file postimage Git blob check PASS.
+- Full SHA-256 tree inventory before/after: **249 files**, exactly five changed paths and **7/7 extra sentinel files unchanged**.
+- Restored the five captured preimage bytes; **249/249 temporary fixture files returned to their exact original SHA-256 inventory**, including 7/7 extra sentinels.
+- **PASS at fixture L1/L2 only.** This is not live hosting backup proof, actual WordPress runtime, a tested production rollback, or permission to deploy an overlay. No ANP site, draft, theme folder, WordPress database, hosting or main repo changed.
