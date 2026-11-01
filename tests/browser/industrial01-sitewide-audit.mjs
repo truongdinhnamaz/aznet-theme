@@ -31,6 +31,35 @@ function axeIsConclusive(violations, incomplete) {
   return Array.isArray(violations) && Array.isArray(incomplete) &&
     violations.length === 0 && incomplete.length === 0;
 }
+// Keep confirmed axe defects and manual-review findings equally actionable:
+// capture the same real DOM selector, source snippet and computed color context.
+async function inspectAxeNode(page, node) {
+  const evidence = {
+    target: node.target,
+    html: String(node.html || '').slice(0, 700),
+    reason: String(node.failureSummary || '').slice(0, 900),
+  };
+  if (Array.isArray(node.target) && node.target.length === 1 && typeof node.target[0] === 'string') {
+    try {
+      evidence.styles = await page.locator(node.target[0]).first().evaluate((el) => {
+        const cs = getComputedStyle(el), ancestors = [];
+        for (let current = el; current && ancestors.length < 4; current = current.parentElement) {
+          const style = getComputedStyle(current);
+          ancestors.push({
+            tag: current.tagName, className: String(current.className).slice(0, 130),
+            background: style.backgroundColor, color: style.color, opacity: style.opacity,
+          });
+        }
+        return {
+          color: cs.color, background: cs.backgroundColor, fontSize: cs.fontSize,
+          text: (el.textContent || '').trim().slice(0, 140),
+          ariaLabel: el.getAttribute('aria-label'), title: el.getAttribute('title'), ancestors,
+        };
+      });
+    } catch (error) { evidence.inspectError = String(error).slice(0, 250); }
+  }
+  return evidence;
+}
 function config(baseUrl, data) {
   const base = new URL(baseUrl);
   if (base.username || base.password || base.search || base.hash || base.pathname !== '/' ||
@@ -77,6 +106,15 @@ if (process.argv.includes('--self-test')) {
   assert.equal(axeIsConclusive([{ id: 'color-contrast' }], []), false);
   assert.equal(axeIsConclusive([], [{ id: 'color-contrast' }]), false);
   assert.equal(axeIsConclusive([], undefined), false);
+  const stubPage = { locator: (selector) => ({
+    first: () => ({ evaluate: async () => ({ color: selector === '#test' ? 'rgb(1, 2, 3)' : '' }) }),
+  }) };
+  const sampleAxeNode = { target: ['#test'], html: '<a id="test">Text</a>', failureSummary: 'review color' };
+  const enriched = await inspectAxeNode(stubPage, sampleAxeNode);
+  assert.deepEqual(enriched.target, ['#test']);
+  assert.equal(enriched.styles.color, 'rgb(1, 2, 3)');
+  const failedInspection = await inspectAxeNode({ locator: () => { throw Error('bad selector'); } }, sampleAxeNode);
+  assert.match(failedInspection.inspectError, /bad selector/);
   assert.deepEqual(widths, [390, 768, 1440]);
   console.log('PASS: public route safety, fail-closed single-route selection and viewports');
 } else {
@@ -136,41 +174,19 @@ if (process.argv.includes('--self-test')) {
         for (const violation of axe.violations) {
           const item = { id: violation.id, impact: violation.impact, help: violation.help, nodeCount: violation.nodes.length, nodes: [] };
           for (const n of violation.nodes.slice(0, 12)) {
-            const evidence = {
-              target: n.target, html: String(n.html || '').slice(0, 700),
-              reason: String(n.failureSummary || '').slice(0, 900),
-            };
-            if (n.target.length === 1 && typeof n.target[0] === 'string') {
-              try {
-                evidence.styles = await page.locator(n.target[0]).first().evaluate((el) => {
-                  const cs = getComputedStyle(el), ancestors = [];
-                  for (let current = el; current && ancestors.length < 4; current = current.parentElement) {
-                    const style = getComputedStyle(current);
-                    ancestors.push({ tag: current.tagName, className: String(current.className).slice(0, 130), background: style.backgroundColor, color: style.color, opacity: style.opacity });
-                  }
-                  return {
-                    color: cs.color, background: cs.backgroundColor, fontSize: cs.fontSize,
-                    text: (el.textContent || '').trim().slice(0, 140), ariaLabel: el.getAttribute('aria-label'),
-                    title: el.getAttribute('title'), ancestors,
-                  };
-                });
-              } catch (error) { evidence.inspectError = String(error).slice(0, 250); }
-            }
+            const evidence = await inspectAxeNode(page, n);
             item.nodes.push(evidence);
           }
           record.axe.push(item);
         }
         // Manual-review results are not proven defects, but must never be
         // silently counted as axe-clean. Preserve exact targets for triage.
-        record.axeIncomplete = axe.incomplete.map((rule) => ({
-          id: rule.id, impact: rule.impact, help: rule.help,
-          nodeCount: rule.nodes.length,
-          nodes: rule.nodes.slice(0, 12).map((n) => ({
-            target: n.target,
-            html: String(n.html || '').slice(0, 700),
-            reason: String(n.failureSummary || '').slice(0, 900),
-          })),
-        }));
+        record.axeIncomplete = [];
+        for (const rule of axe.incomplete) {
+          const item = { id: rule.id, impact: rule.impact, help: rule.help, nodeCount: rule.nodes.length, nodes: [] };
+          for (const n of rule.nodes.slice(0, 12)) item.nodes.push(await inspectAxeNode(page, n));
+          record.axeIncomplete.push(item);
+        }
         record.screenshot = route.id + '-' + width + '.png';
         await page.screenshot({ path: path.join(dir, record.screenshot), fullPage: true, animations: 'disabled' });
         // The screenshot can trigger additional lazy image loads. Inspect all image
