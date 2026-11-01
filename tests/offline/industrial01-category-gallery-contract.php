@@ -16,6 +16,22 @@ namespace {
         }
     }
     class WP_Error {}
+    // Narrow WP_HTML_Tag_Processor mock for a single IMG with src attribute.
+    class WP_HTML_Tag_Processor {
+        private ?string $src = null;
+        public function __construct(private string $html) {}
+        public function next_tag(string $tag): bool {
+            if ('IMG' !== strtoupper($tag) ||
+                !preg_match('/<img\b[^>]*\bsrc=(["\x27])(.*?)\1/i', $this->html, $m)) {
+                return false;
+            }
+            $this->src = html_entity_decode($m[2], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            return true;
+        }
+        public function get_attribute(string $key): ?string {
+            return 'src' === $key ? $this->src : null;
+        }
+    }
     function __(string $text, string $domain = ''): string { return $text; }
     function esc_html_e(string $text, string $domain = ''): void { echo htmlspecialchars($text, ENT_QUOTES, 'UTF-8'); }
     function esc_html(string $text): string { return htmlspecialchars($text, ENT_QUOTES, 'UTF-8'); }
@@ -28,7 +44,19 @@ namespace {
     function get_term_link(WP_Term $term): string|WP_Error {
         return $term->term_id === 999 ? new WP_Error() : 'https://example.test/product-category/' . $term->term_id . '/';
     }
+    function wc_placeholder_img_src(): string {
+        return $GLOBALS['fixture_wc_placeholder'] ?? 'https://example.test/wp-content/plugins/woocommerce/assets/images/placeholder.webp';
+    }
     function woocommerce_subcategory_thumbnail(WP_Term $term): void {
+        if (110 === $term->term_id || 111 === $term->term_id) {
+            // WooCommerce 10.9.4 and live ANP's 11.2.1 use IMG/src only; no placeholder CSS class.
+            echo '<img src="' . esc_url(wc_placeholder_img_src()) . '" alt="' . esc_attr($term->name) . '" width="300" height="300" />';
+            return;
+        }
+        if (109 === $term->term_id) {
+            echo '<img src="/wp-content/plugins/woocommerce/assets/images/woocommerce-placeholder.png" alt="" />';
+            return;
+        }
         echo '<img src="/media/' . $term->term_id . '.jpg" alt="' . esc_attr($term->name) . '" />';
     }
 }
@@ -92,6 +120,38 @@ namespace {
         'Eight source terms are preserved without truncation beyond the contract limit');
     $fail(!str_contains($eight, 'aznet-theme-industrial01-categories__intro-card'),
         'When the grid is full, do not add an empty ninth decorative tile');
+
+    // Woo returns a generic placeholder for a category without a real photo.
+    // The Theme must keep its source link/label but omit the fake category media.
+    $GLOBALS['fixture_categories'] = [new WP_Term(109, 'Pin Lithium')];
+    $noMedia = $render();
+    $fail(str_contains($noMedia, 'Pin Lithium'), 'Source category without media must remain visible');
+    $fail(str_contains($noMedia, 'product-category/109/'), 'Source permalink must remain present');
+    $fail(!str_contains($noMedia, 'woocommerce-placeholder'), 'Generic Woo placeholder must not appear in the gallery');
+    $fail(!str_contains($noMedia, 'aznet-theme-industrial01-category-card__media'), 'Placeholder-only media wrapper must be omitted');
+
+    // Regression for WooCommerce 10.9.4 / 11.2.1 category HTML (placeholder.webp).
+    $GLOBALS['fixture_categories'] = [new WP_Term(110, 'Pin Lithium ảnh mặc định')];
+    $modern = $render();
+    $fail(str_contains($modern, 'Pin Lithium ảnh mặc định'), 'Unpictured term remains visible');
+    $fail(str_contains($modern, 'product-category/110/'), 'Unpictured term retains native URL');
+    $fail(!str_contains($modern, 'placeholder.webp'), 'Woo default IMG/src placeholder must be omitted');
+    $fail(!str_contains($modern, 'aznet-theme-industrial01-category-card__media'), 'Default placeholder media wrapper omitted');
+
+    // The public Woo placeholder URL is filterable, not a hardcoded asset path.
+    $GLOBALS['fixture_wc_placeholder'] = 'https://example.test/custom/placeholder-image.jpg?size=sm&v=2';
+    $GLOBALS['fixture_categories'] = [new WP_Term(111, 'Pin Lithium custom placeholder')];
+    $custom = $render();
+    $fail(str_contains($custom, 'Pin Lithium custom placeholder'), 'Filtered placeholder term remains');
+    $fail(!str_contains($custom, 'custom/placeholder-image.jpg'), 'Filtered placeholder image must be omitted');
+    $fail(!str_contains($custom, 'aznet-theme-industrial01-category-card__media'), 'Filtered placeholder media wrapper omitted');
+    unset($GLOBALS['fixture_wc_placeholder']);
+
+    // Never suppress genuine media merely because the term has 'placeholder' in its label.
+    $GLOBALS['fixture_categories'] = [new WP_Term(112, 'Placeholder mentioned in label')];
+    $real = $render();
+    $fail(str_contains($real, '/media/112.jpg'), 'Real image must survive label wording');
+    $fail(str_contains($real, 'aznet-theme-industrial01-category-card__media'), 'Real image media wrapper retained');
 
     $GLOBALS['fixture_categories'] = [new WP_Term(999, 'Broken link'), new WP_Term(101, 'Nhóm hợp lệ')];
     $filtered = $render();
