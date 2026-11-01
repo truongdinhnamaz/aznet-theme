@@ -62,8 +62,10 @@ async function inspectAxeNode(page, node) {
 }
 // Full-page capture can trigger offscreen/lazy-loaded content. Axe must
 // inspect the post-capture DOM, never the earlier partial state.
-async function captureThenAudit(page, screenshotPath, AxeBuilder) {
+async function captureThenAudit(page, screenshotPath, AxeBuilder, inspectAfterCapture) {
   await page.screenshot({ path: screenshotPath, fullPage: true, animations: 'disabled' });
+  // The DOM, headings and overflow must be measured after lazy-load-triggering capture.
+  await inspectAfterCapture();
   return new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
 }
 function config(baseUrl, data) {
@@ -137,8 +139,11 @@ if (process.argv.includes('--self-test')) {
       return { violations: [], incomplete: [] };
     }
   }
-  const capturedAudit = await captureThenAudit(capturePage, '/tmp/self-test-only.png', StubAxeBuilder);
-  assert.deepEqual(auditOrder, ['capture', 'axe']);
+  const capturedAudit = await captureThenAudit(capturePage, '/tmp/self-test-only.png', StubAxeBuilder, async () => {
+    assert.deepEqual(auditOrder, ['capture']);
+    auditOrder.push('dom');
+  });
+  assert.deepEqual(auditOrder, ['capture', 'dom', 'axe']);
   assert.deepEqual(capturedAudit.incomplete, []);
   assert.deepEqual(widths, [390, 768, 1440]);
   console.log('PASS: public route safety, fail-closed single-route selection and viewports');
@@ -170,32 +175,33 @@ if (process.argv.includes('--self-test')) {
         record.httpStatus = response?.status() ?? null;
         record.finalUrl = page.url();
         if (record.httpStatus !== 200 || !samePublicRoute(route.url, record.finalUrl)) throw Error('HTTP status or final path mismatch for reviewed route');
-        record.dom = await page.evaluate(() => {
-          const body = document.body, root = document.documentElement;
-          return {
-            theme: body.classList.contains('wp-theme-aznet-theme'),
-            industrial01: body.classList.contains('aznet-theme-preset--industrial-01'),
-            mainCount: document.querySelectorAll('main#main').length,
-            h1: [...document.querySelectorAll('h1')].map((el) => el.textContent.trim().slice(0, 120)),
-            overflowPx: Math.max(0, root.scrollWidth - root.clientWidth),
-            visibleBrokenImages: [...document.images].filter((img) => {
-              const rect = img.getBoundingClientRect();
-              return rect.height > 1 && rect.width > 1 && rect.top < innerHeight && rect.bottom > 0 &&
-                img.complete && img.naturalWidth === 0;
-            }).slice(0, 8).map((img) => ({ src: img.currentSrc || img.src, alt: img.alt })),
-            contactForms: document.querySelectorAll('.wpcf7 form').length,
-          };
-        });
-        if (record.dom.overflowPx > 1) {
-          record.overflowElements = await page.evaluate(() => [...document.querySelectorAll('body *')]
-            .map((el) => ({ el, rect: el.getBoundingClientRect() }))
-            .filter(({ rect }) => rect.width > 1 && rect.right > document.documentElement.clientWidth + 1)
-            .slice(0, 10).map(({ el, rect }) => ({
-              tag: el.tagName, className: String(el.className).slice(0, 160), right: Math.round(rect.right),
-            })));
-        }
         record.screenshot = route.id + '-' + width + '.png';
-        const axe = await captureThenAudit(page, path.join(dir, record.screenshot), AxeBuilder);
+        const axe = await captureThenAudit(page, path.join(dir, record.screenshot), AxeBuilder, async () => {
+          record.dom = await page.evaluate(() => {
+            const body = document.body, root = document.documentElement;
+            return {
+              theme: body.classList.contains('wp-theme-aznet-theme'),
+              industrial01: body.classList.contains('aznet-theme-preset--industrial-01'),
+              mainCount: document.querySelectorAll('main#main').length,
+              h1: [...document.querySelectorAll('h1')].map((el) => el.textContent.trim().slice(0, 120)),
+              overflowPx: Math.max(0, root.scrollWidth - root.clientWidth),
+              visibleBrokenImages: [...document.images].filter((img) => {
+                const rect = img.getBoundingClientRect();
+                return rect.height > 1 && rect.width > 1 && rect.top < innerHeight && rect.bottom > 0 &&
+                  img.complete && img.naturalWidth === 0;
+              }).slice(0, 8).map((img) => ({ src: img.currentSrc || img.src, alt: img.alt })),
+              contactForms: document.querySelectorAll('.wpcf7 form').length,
+            };
+          });
+          if (record.dom.overflowPx > 1) {
+            record.overflowElements = await page.evaluate(() => [...document.querySelectorAll('body *')]
+              .map((el) => ({ el, rect: el.getBoundingClientRect() }))
+              .filter(({ rect }) => rect.width > 1 && rect.right > document.documentElement.clientWidth + 1)
+              .slice(0, 10).map(({ el, rect }) => ({
+                tag: el.tagName, className: String(el.className).slice(0, 160), right: Math.round(rect.right),
+              })));
+          }
+        });
         record.axe = [];
         for (const violation of axe.violations) {
           const item = { id: violation.id, impact: violation.impact, help: violation.help, nodeCount: violation.nodes.length, nodes: [] };
