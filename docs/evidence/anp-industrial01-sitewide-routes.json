@@ -35,11 +35,6 @@
     "path": "/sitemap/"
   },
   {
-    "id": "secondary-home",
-    "kind": "page",
-    "path": "/trang-chu-2/"
-  },
-  {
     "id": "shop",
     "kind": "shop",
     "path": "/san-pham/"

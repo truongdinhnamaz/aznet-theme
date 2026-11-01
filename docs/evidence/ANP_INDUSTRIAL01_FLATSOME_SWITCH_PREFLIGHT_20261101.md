@@ -50,3 +50,7 @@ False positives such as legitimate shortcode examples in tutorial text are **REV
 - **REVIEW**: Woo category #15 second H1; published `/trang-chu-2/` mapped Journey; native other page semantics; full site media/visual.
 - **BLOCKED/UNKNOWN**: comprehensive browser/axe 14-route matrix on real WordPress at numeric widths, old Flatsome original live screenshots/raw builder data, full integration/rollback, live publication approval and promoted NWQS registry.
 - **EXACT NEXT**: close first confirmed Theme-owned visitor-visible issue in Draft PR #552 / preview with proof; keep the migration guard in Draft PR #550 and route the two source-owned findings for owner action. When the owned QA and rollback gates PASS, request explicit publish approval; never infer production PASS from a draft.
+
+## 2026-11-01 addendum — secondary Homepage retired
+
+Page ID 12758 `/trang-chu-2/` is currently in the WordPress Trash, the public URL returns `page_not_found`, Page ID 2 remains the assigned homepage, and no current menu item references the retired Page. The owner asked to focus only on active pages: **8 published Pages** now remain. No deletion was performed by the present inspection; the state was observed. Industrial 01 sitewide QA manifest updated to 13 active routes. The previous duplicate-route finding is superseded and must not consume future optimization work unless a new invalidation appears.
