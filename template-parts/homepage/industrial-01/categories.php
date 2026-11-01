@@ -100,7 +100,7 @@ $show_intro = 3 === $category_count % 4;
 
             <?php foreach ( $category_cards as $index => $card ) : ?>
                 <?php $term = $card['term']; ?>
-                <a class="aznet-theme-industrial01-card aznet-theme-industrial01-category-card" href="<?php echo esc_url( $card['url'] ); ?>">
+                <a class="aznet-theme-industrial01-card aznet-theme-industrial01-category-card<?php echo '' === $card['thumbnail'] ? ' aznet-theme-industrial01-category-card--no-media' : ''; ?>" href="<?php echo esc_url( $card['url'] ); ?>">
                     <?php if ( '' !== $card['thumbnail'] ) : ?>
                         <span class="aznet-theme-industrial01-category-card__media" aria-hidden="true"><?php echo wp_kses_post( $card['thumbnail'] ); ?></span>
                     <?php endif; ?>

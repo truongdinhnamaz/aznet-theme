@@ -129,6 +129,7 @@ namespace {
     $fail(str_contains($noMedia, 'product-category/109/'), 'Source permalink must remain present');
     $fail(!str_contains($noMedia, 'woocommerce-placeholder'), 'Generic Woo placeholder must not appear in the gallery');
     $fail(!str_contains($noMedia, 'aznet-theme-industrial01-category-card__media'), 'Placeholder-only media wrapper must be omitted');
+    $fail(str_contains($noMedia, 'aznet-theme-industrial01-category-card--no-media'), 'RED: media-less category needs presentation-only fallback design state');
 
     // Regression for WooCommerce 10.9.4 / 11.2.1 category HTML (placeholder.webp).
     $GLOBALS['fixture_categories'] = [new WP_Term(110, 'Pin Lithium ảnh mặc định')];
@@ -152,6 +153,7 @@ namespace {
     $real = $render();
     $fail(str_contains($real, '/media/112.jpg'), 'Real image must survive label wording');
     $fail(str_contains($real, 'aznet-theme-industrial01-category-card__media'), 'Real image media wrapper retained');
+    $fail(!str_contains($real, 'aznet-theme-industrial01-category-card--no-media'), 'Real Woo media must never receive no-media design state');
 
     $GLOBALS['fixture_categories'] = [new WP_Term(999, 'Broken link'), new WP_Term(101, 'Nhóm hợp lệ')];
     $filtered = $render();
@@ -172,6 +174,7 @@ namespace {
     ] as $needle) {
         $fail(str_contains($css, $needle), 'Missing scoped category visual/a11y CSS: ' . $needle);
     }
+    $fail(str_contains($css, '.aznet-theme-industrial01-categories .aznet-theme-industrial01-category-card--no-media::before'), 'RED: decorative no-media visual fallback must be scoped to gallery');
     $fail(!str_contains($css, 'minhnguyen.vn'), 'Reusable CSS must not hardcode client domain/media');
     $source = (string) file_get_contents($template);
     foreach (['get_term_meta(', 'update_term_meta(', 'wc_get_products(', 'get_option(', 'get_terms(', 'get_post_meta('] as $privateRead) {

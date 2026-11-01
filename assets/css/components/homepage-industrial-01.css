@@ -1039,6 +1039,32 @@
     text-decoration: none;
     transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
 }
+/* Missing-source-media cards receive a purely decorative technical marker.
+   Labels, ordering, links and category semantics remain WooCommerce-owned. */
+.aznet-theme-industrial01-categories .aznet-theme-industrial01-category-card--no-media {
+    border-color: rgba(246, 206, 121, .62);
+    background: radial-gradient(circle at 78% 15%, rgba(58, 139, 178, .72), transparent 60%),
+        linear-gradient(145deg, #194963, #0e3148 64%, #0c2538);
+}
+.aznet-theme-industrial01-categories .aznet-theme-industrial01-category-card--no-media::before {
+    position: absolute;
+    z-index: 0;
+    top: 1.7rem;
+    right: 1.9rem;
+    width: clamp(4.75rem, 34%, 8.5rem);
+    aspect-ratio: 1;
+    border: 2px solid rgba(248, 209, 134, .62);
+    border-radius: .7rem;
+    background:
+        linear-gradient(to right, transparent 49%, rgba(248, 209, 134, .44) 49%, rgba(248, 209, 134, .44) 51%, transparent 51%),
+        linear-gradient(to bottom, transparent 49%, rgba(248, 209, 134, .44) 49%, rgba(248, 209, 134, .44) 51%, transparent 51%);
+    box-shadow: .95rem -.95rem 0 -.32rem rgba(248, 209, 134, .15),
+        -1.1rem 1.1rem 0 -.45rem rgba(170, 212, 237, .2);
+    opacity: .8;
+    transform: rotate(-7deg);
+    pointer-events: none;
+    content: "";
+}
 .aznet-theme-industrial01-categories .aznet-theme-industrial01-category-card__media {
     position: absolute;
     z-index: -2;
@@ -1157,6 +1183,11 @@
     }
 }
 @media (max-width: 48rem) {
+    .aznet-theme-industrial01-categories .aznet-theme-industrial01-category-card--no-media::before {
+        top: 1.2rem;
+        right: 1.1rem;
+        width: clamp(4rem, 34%, 5.5rem);
+    }
     .aznet-theme-industrial01-categories__heading h2 {
         font-size: clamp(2.2rem,9vw,3.4rem);
     }
