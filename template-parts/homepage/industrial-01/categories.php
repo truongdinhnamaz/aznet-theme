@@ -34,11 +34,27 @@ foreach ( $terms as $term ) {
         woocommerce_subcategory_thumbnail( $term );
     }
     $thumbnail = trim( (string) ob_get_clean() );
+    $has_image = '' !== $thumbnail && str_contains( $thumbnail, '<img' );
+    $is_placeholder = $has_image && str_contains( $thumbnail, 'woocommerce-placeholder' );
+
+    // Woo category thumbnails can emit placeholder.webp without any placeholder
+    // class. Compare the rendered IMG src with Woo's public, filterable URL.
+    // Do not inspect Woo term meta or invent a replacement category image.
+    if ( $has_image && ! $is_placeholder && function_exists( 'wc_placeholder_img_src' ) ) {
+        $placeholder_url = str_replace( ' ', '%20', trim( (string) wc_placeholder_img_src() ) );
+        if ( '' !== $placeholder_url ) {
+            $image_tag = new \WP_HTML_Tag_Processor( $thumbnail );
+            if ( $image_tag->next_tag( 'IMG' ) ) {
+                $image_src = $image_tag->get_attribute( 'src' );
+                $is_placeholder = is_string( $image_src ) && $image_src === $placeholder_url;
+            }
+        }
+    }
 
     $category_cards[] = [
         'term'      => $term,
         'url'       => (string) $link,
-        'thumbnail' => '' !== $thumbnail && str_contains( $thumbnail, '<img' ) && ! str_contains( $thumbnail, 'woocommerce-placeholder' ) ? $thumbnail : '',
+        'thumbnail' => $has_image && ! $is_placeholder ? $thumbnail : '',
     ];
 }
 
