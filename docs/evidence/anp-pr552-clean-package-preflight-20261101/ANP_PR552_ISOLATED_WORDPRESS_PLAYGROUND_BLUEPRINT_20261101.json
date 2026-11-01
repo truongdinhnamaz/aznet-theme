@@ -1,0 +1,37 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "landingPage": "/wp-admin/themes.php",
+  "login": true,
+  "preferredVersions": {
+    "wp": "6.9",
+    "php": "8.1"
+  },
+  "steps": [
+    {
+      "step": "defineWpConfigConsts",
+      "consts": {
+        "WP_DEBUG": true,
+        "WP_DEBUG_LOG": true,
+        "WP_DEBUG_DISPLAY": false,
+        "WP_DISABLE_FATAL_ERROR_HANDLER": true
+      }
+    },
+    {
+      "step": "installTheme",
+      "themeData": {
+        "resource": "git:directory",
+        "url": "https://github.com/truongdinhnamaz/aznet-theme",
+        "ref": "fc6725654ab20767fecd17412416b2ad12a6c2bd",
+        "refType": "commit"
+      },
+      "options": {
+        "activate": true,
+        "targetFolderName": "aznet-theme"
+      }
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php\nrequire_once '/wordpress/wp-load.php';\n$root=get_template_directory();\n$skip=['.git','.github','docs','scripts','tests','node_modules','dist'];\n$paths=[];\nforeach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root,FilesystemIterator::SKIP_DOTS)) as $f){\n if(!$f->isFile())continue;\n $rel=str_replace('\\\\','/',substr($f->getPathname(),strlen($root)+1));\n $parts=explode('/',$rel);\n if(array_intersect($parts,$skip))continue;\n if(count($parts)===1 && in_array($rel,['README.md','aznet-preview.png'],true))continue;\n $paths[$rel]=$f->getPathname();\n}\nksort($paths,SORT_STRING);\n$s='';\nforeach($paths as $rel=>$p){$s.=$rel.\"\\t\".hash_file('sha256',$p).\"\\n\";}\n$actual=hash('sha256',$s);\n$expected='08b23a84281259d5c0c5b593eee197051865451e920253a18aa8ea05ff5d337c';\n$equal=(count($paths)===242 && hash_equals($expected,$actual));\n$home=wp_insert_post(['post_title'=>'AZT Isolated QA Home','post_status'=>'publish','post_type'=>'page','post_content'=>'<h2>WordPress native content</h2><p>Isolated QA content, no ANP data.</p>'],true);\n$page=wp_insert_post(['post_title'=>'AZT Isolated QA Contact','post_status'=>'publish','post_type'=>'page','post_content'=>'<h2>Contact</h2><p>Native page, provider absent.</p>'],true);\n$post=wp_insert_post(['post_title'=>'AZT Isolated QA Article','post_status'=>'publish','post_type'=>'post','post_content'=>'<h2>Native post</h2><p>Representative content.</p>'],true);\nif(is_wp_error($home)||is_wp_error($page)||is_wp_error($post))throw new RuntimeException('Fixture creation failed');\nupdate_option('show_on_front','page');\nupdate_option('page_on_front',$home);\nupdate_option('permalink_structure','/%postname%/');\nflush_rewrite_rules();\n$data=[\n 'candidate_commit'=>'fc6725654ab20767fecd17412416b2ad12a6c2bd',\n 'verified_local_zip_sha256'=>'44e90157bdf235d9f75491a8dfe5793a0ad33a3e2ff8d1bb7f7e12ac62e10d0f',\n 'installation_method'=>'git:directory (not exact ZIP installer)',\n 'environment'=>['wp'=>get_bloginfo('version'),'php'=>PHP_VERSION,'theme'=>wp_get_theme()->get('Name'),'stylesheet'=>get_stylesheet(),'plugins'=>get_option('active_plugins')],\n 'production'=>['count'=>count($paths),'manifest_sha256'=>$actual,'expected_manifest_sha256'=>$expected,'matches_exact_zip_payload'=>$equal],\n 'routes'=>['home'=>home_url('/'),'page'=>get_permalink($page),'post'=>get_permalink($post),'search'=>home_url('/?s=azt'),'notfound'=>home_url('/azt-not-real-404/')]\n];\n$upload=wp_upload_dir();\nfile_put_contents($upload['basedir'].'/azt-pr552-qa-report.json',wp_json_encode($data,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES));\nif(!$equal)throw new RuntimeException('Not byte equal to pinned 242 production files: '.$actual.'/'.count($paths));\n"
+    }
+  ]
+}
