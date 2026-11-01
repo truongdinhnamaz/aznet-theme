@@ -20,7 +20,10 @@
             button.setAttribute('aria-controls', submenuId);
             button.setAttribute('aria-expanded', 'false');
             button.setAttribute('aria-label', expandText + ': ' + itemLabel);
-            button.textContent = '+';
+            const icon = document.createElement('span');
+            icon.className = 'aznet-theme-catalog-navigation__submenu-icon';
+            icon.setAttribute('aria-hidden', 'true');
+            button.appendChild(icon);
             submenu.hidden = true;
             item.insertBefore(button, submenu);
 
@@ -28,7 +31,6 @@
                 submenu.hidden = !expanded;
                 button.setAttribute('aria-expanded', String(expanded));
                 button.setAttribute('aria-label', (expanded ? collapseText : expandText) + ': ' + itemLabel);
-                button.textContent = expanded ? '−' : '+';
             };
             button.addEventListener('click', () => {
                 setExpanded(submenu.hidden);
