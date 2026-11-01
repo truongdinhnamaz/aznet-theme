@@ -128,6 +128,25 @@ function nativeFrontPageLayoutPass(route, width, measured) {
       card.ctaIsButton === true);
 }
 
+
+/**
+ * Flatsome -> AZnet compatibility preflight, presentation-only.
+ * Findings are REVIEW, never permission to strip WordPress content.
+ */
+function assessThemeSwitchEvidence(value) {
+  if (!value || !Array.isArray(value.legacyMarkers) ||
+      !Array.isArray(value.oldThemeAssets) ||
+      !Array.isArray(value.orphanQuoteTargets)) {
+    return [{ id: 'AZT-I01-MIG-00', owner: 'qa', status: 'unknown', sample: [] }];
+  }
+  return [
+    { id: 'AZT-I01-MIG-01', owner: 'wordpress-content', sample: value.legacyMarkers },
+    { id: 'AZT-I01-MIG-02', owner: 'asset-source', sample: value.oldThemeAssets },
+    { id: 'AZT-I01-MIG-03', owner: 'convertflow', sample: value.orphanQuoteTargets },
+  ].filter((r) => r.sample.length)
+    .map((r) => ({ ...r, status: 'review', sample: r.sample.slice(0, 6) }));
+}
+
 function config(baseUrl, data) {
   const base = new URL(baseUrl);
   if (base.username || base.password || base.search || base.hash || base.pathname !== '/' ||
@@ -173,6 +192,17 @@ if (process.argv.includes('--self-test')) {
   assert.equal(hasOneNamedH1([]), false);
   assert.equal(hasOneNamedH1(['']), false);
   assert.equal(hasOneNamedH1(['First', 'Duplicate']), false);
+
+  assert.deepEqual(assessThemeSwitchEvidence({ legacyMarkers: [], oldThemeAssets: [], orphanQuoteTargets: [] }), []);
+  assert.equal(assessThemeSwitchEvidence(null)[0].status, 'unknown');
+  const uxFinding = assessThemeSwitchEvidence({ legacyMarkers: ['[ux_banner]'], oldThemeAssets: [], orphanQuoteTargets: [] });
+  assert.equal(uxFinding[0].id, 'AZT-I01-MIG-01');
+  assert.equal(uxFinding[0].owner, 'wordpress-content');
+  const assetFinding = assessThemeSwitchEvidence({ legacyMarkers: [], oldThemeAssets: ['/wp-content/themes/flatsome/assets/main.css'], orphanQuoteTargets: [] });
+  assert.equal(assetFinding[0].id, 'AZT-I01-MIG-02');
+  const quoteFinding = assessThemeSwitchEvidence({ legacyMarkers: [], oldThemeAssets: [], orphanQuoteTargets: ['dat-hang'] });
+  assert.equal(quoteFinding[0].id, 'AZT-I01-MIG-03');
+  assert.equal(quoteFinding[0].owner, 'convertflow');
   assert.equal(routeHasRequiredForm({ id: 'contact' }, { contactForms: 0 }), false);
   assert.equal(routeHasRequiredForm({ id: 'contact' }, { contactForms: 1 }), true);
   assert.equal(routeHasRequiredForm({ id: 'contact' }, {}), false);
@@ -302,6 +332,22 @@ if (process.argv.includes('--self-test')) {
                   img.complete && img.naturalWidth === 0;
               }).slice(0, 8).map((img) => ({ src: img.currentSrc || img.src, alt: img.alt })),
               contactForms: document.querySelectorAll('main#main .wpcf7 form').length,
+              themeSwitchEvidence: (() => {
+                const main = document.querySelector('main#main');
+                const legacyMarkers = [...(main?.innerText || '').matchAll(/\[(?:ux_[a-z0-9_-]+|row|col|section|gap|featured_box|button)(?=[\s\]])[^\]\n]{0,200}\]/gi)]
+                  .slice(0, 6).map((m) => m[0].slice(0, 120));
+                const oldThemeAssets = [...document.querySelectorAll('link[href], script[src]')]
+                  .map((el) => {
+                    try { return new URL(el.href || el.src, location.href).pathname; }
+                    catch { return ''; }
+                  }).filter((p) => /^\/wp-content\/themes\/flatsome(?:-child)?\//i.test(p)).slice(0, 6);
+                const orphanQuoteTargets = [...document.querySelectorAll('main#main a.choiceguide-quote-button[href^="#"]')]
+                  .filter((el) => {
+                    const id = (el.getAttribute('href') || '').slice(1);
+                    return !!id && !document.getElementById(id);
+                  }).slice(0, 6).map((el) => (el.getAttribute('href') || '').slice(1, 80));
+                return { legacyMarkers, oldThemeAssets, orphanQuoteTargets };
+              })(),
               nativeFrontPage: (() => {
                 const article = document.querySelector(nativeFrontPageSelector);
                 if (!article) return null;
@@ -365,6 +411,7 @@ if (process.argv.includes('--self-test')) {
           }
           record.axe.push(item);
         }
+        record.themeSwitchReview = assessThemeSwitchEvidence(record.dom.themeSwitchEvidence);
         // Manual-review results are not proven defects, but must never be
         // silently counted as axe-clean. Preserve exact targets for triage.
         record.axeIncomplete = [];
@@ -392,7 +439,7 @@ if (process.argv.includes('--self-test')) {
           record.dom.mainCount === 1 && hasOneNamedH1(record.dom.h1) && routeHasRequiredForm(route, record.dom) &&
            nativeFrontPageLayoutPass(route, width, record.dom.nativeFrontPage) && record.dom.overflowPx <= 1 &&
           record.media.brokenCount === 0 && record.media.pendingCount === 0 &&
-          record.browserErrorCount === 0 && axeIsConclusive(record.axe, record.axeIncomplete) ? 'pass' : 'review';
+          record.browserErrorCount === 0 && record.themeSwitchReview.length === 0 && axeIsConclusive(record.axe, record.axeIncomplete) ? 'pass' : 'review';
       } catch (error) {
         record.outcome = 'blocked';
         record.error = String(error).slice(0, 1100);
