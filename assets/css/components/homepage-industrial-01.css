@@ -12,10 +12,10 @@
     background: var(--industrial01-surface);
 }
 
-/* Industrial 01: WordPress-owned homepage Page body is rendered as a sibling
-   of the composed sections. Theme presentation must style that native surface
+/* Industrial 01: WordPress-owned homepage Page body is rendered within the composed
+   homepage wrapper. Theme presentation must style that native surface
    without editing blocks or copying WordPress/commerce domain data. */
-body.aznet-theme-preset--industrial-01 .aznet-theme-main--front-page > .aznet-theme-entry--front-page[data-aznet-homepage-surface="front-page-content"] {
+body.aznet-theme-preset--industrial-01 .aznet-theme-main--front-page > .aznet-theme-homepage--industrial-01 > .aznet-theme-entry--front-page[data-aznet-homepage-surface="front-page-content"] {
     width: 100%;
     max-width: none;
     margin: 0;
@@ -23,7 +23,7 @@ body.aznet-theme-preset--industrial-01 .aznet-theme-main--front-page > .aznet-th
     border-block: 1px solid #e0e8ee;
     background: #f2f6f9;
 }
-body.aznet-theme-preset--industrial-01 .aznet-theme-main--front-page > .aznet-theme-entry--front-page[data-aznet-homepage-surface="front-page-content"] > .aznet-theme-entry__content {
+body.aznet-theme-preset--industrial-01 .aznet-theme-main--front-page > .aznet-theme-homepage--industrial-01 > .aznet-theme-entry--front-page[data-aznet-homepage-surface="front-page-content"] > .aznet-theme-entry__content {
     width: min(calc(100% - (var(--aznet-theme-gutter) * 2)), var(--aznet-theme-container-shell));
     max-width: var(--aznet-theme-container-shell);
     margin-inline: auto;
@@ -125,7 +125,7 @@ body.aznet-theme-preset--industrial-01 .aznet-theme-entry--front-page[data-aznet
     }
 }
 @media (max-width: 42rem) {
-    body.aznet-theme-preset--industrial-01 .aznet-theme-main--front-page > .aznet-theme-entry--front-page[data-aznet-homepage-surface="front-page-content"] > .aznet-theme-entry__content {
+    body.aznet-theme-preset--industrial-01 .aznet-theme-main--front-page > .aznet-theme-homepage--industrial-01 > .aznet-theme-entry--front-page[data-aznet-homepage-surface="front-page-content"] > .aznet-theme-entry__content {
         width: min(calc(100% - (var(--aznet-theme-gutter-mobile) * 2)), var(--aznet-theme-container-shell));
     }
     body.aznet-theme-preset--industrial-01 .aznet-theme-entry--front-page[data-aznet-homepage-surface="front-page-content"] .wp-block-group > .wp-block-columns {

@@ -9,9 +9,10 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const css = fs.readFileSync(path.join(root, 'assets/css/components/homepage-industrial-01.css'), 'utf8');
 const scope = 'body.aznet-theme-preset--industrial-01 .aznet-theme-entry--front-page[data-aznet-homepage-surface="front-page-content"]';
 
-assert.ok(css.includes(scope), 'RED: Industrial 01 must target the actual sibling WordPress front-page content surface');
-assert.match(css, /\.aznet-theme-main--front-page\s*>\s*\.aznet-theme-entry--front-page\[data-aznet-homepage-surface="front-page-content"\]\s*\{\s*width:\s*100%/,
-  'Native article must receive full-width section styling without changing native content');
+assert.ok(css.includes(scope), 'RED: Industrial 01 must target the actual nested WordPress front-page content surface');
+assert.match(css, /\.aznet-theme-main--front-page\s*>\s*\.aznet-theme-homepage--industrial-01\s*>\s*\.aznet-theme-entry--front-page\[data-aznet-homepage-surface="front-page-content"\]\s*\{\s*width:\s*100%/,
+  'Native article nested under the homepage wrapper must receive full-width styling');
+assert.doesNotMatch(css, /\.aznet-theme-main--front-page\s*>\s*\.aznet-theme-entry--front-page\[data-aznet-homepage-surface=/, 'Do not rely on the invalid direct-child main > article hierarchy');
 assert.match(css, /\.wp-block-group\s*>\s*\.wp-block-columns\s*\{\s*display:\s*grid/,
   'Native WordPress columns must use an explicitly styled grid in the Theme');
 assert.match(css, /\.wp-block-group\s*>\s*\.wp-block-columns\s*>\s*\.wp-block-column\s*\{\s*display:\s*flex/,
