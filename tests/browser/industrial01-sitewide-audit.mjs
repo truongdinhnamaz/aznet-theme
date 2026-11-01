@@ -21,6 +21,11 @@ function samePublicRoute(requestedUrl, finalUrl) {
   const pathname = (url) => url.pathname.replace(/\/+$/, '') || '/';
   return requested.origin === actual.origin && pathname(requested) === pathname(actual);
 }
+// A Page cannot pass sitewide semantic QA with no, empty, or duplicate H1.
+function hasOneNamedH1(headings) {
+  return Array.isArray(headings) && headings.length === 1 &&
+    typeof headings[0] === 'string' && headings[0].trim().length > 0;
+}
 function config(baseUrl, data) {
   const base = new URL(baseUrl);
   if (base.username || base.password || base.search || base.hash || base.pathname !== '/' ||
@@ -59,6 +64,10 @@ if (process.argv.includes('--self-test')) {
   assert.equal(samePublicRoute('https://example.test/p/', 'https://example.test/p'), true);
   assert.equal(samePublicRoute('https://example.test/p/', 'https://example.test/'), false);
   assert.equal(samePublicRoute('https://example.test/p/', 'https://evil.test/p/'), false);
+  assert.equal(hasOneNamedH1(['Valid product title']), true);
+  assert.equal(hasOneNamedH1([]), false);
+  assert.equal(hasOneNamedH1(['']), false);
+  assert.equal(hasOneNamedH1(['First', 'Duplicate']), false);
   assert.deepEqual(widths, [390, 768, 1440]);
   console.log('PASS: public route safety, fail-closed single-route selection and viewports');
 } else {
@@ -160,7 +169,7 @@ if (process.argv.includes('--self-test')) {
           };
         });
         record.outcome = !record.dom.theme || !record.dom.industrial01 ? 'unknown-shell' :
-          record.dom.mainCount === 1 && record.dom.overflowPx <= 1 &&
+          record.dom.mainCount === 1 && hasOneNamedH1(record.dom.h1) && record.dom.overflowPx <= 1 &&
           record.media.brokenCount === 0 && record.media.pendingCount === 0 &&
           record.axe.length === 0 ? 'pass' : 'review';
       } catch (error) {
