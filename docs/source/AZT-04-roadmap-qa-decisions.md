@@ -1109,7 +1109,7 @@ Site release 1.3.94 has PASS for source CI and public homepage/SEO content invar
 
 **EXACT NEXT:** When amended PR #501 exact-head checks are GREEN and mergeable, merge into canonical `main` (no force) and run fresh exact-main CI; keep GitHub Release/tag as a separate owner-approval gate.
 
-## Proposed — D-051 Core Theme update notifications (Issue #553)
+## Owner-accepted — D-051 Core Theme update notifications (Issue #553)
 
 **Status: UPN0 OWNER-ACCEPTED 2026-11-02 / source merge pending.** This is a distinct Core Theme distribution proposal; it does not reopen D-040 or imply that the Template Distribution Service is available.
 
@@ -1117,8 +1117,8 @@ Site release 1.3.94 has PASS for source CI and public homepage/SEO content invar
 | --- | --- | --- |
 | UPN0 Source decision | Confirm Core Theme update release authority, WordPress-native integration, independent transport and trust boundary | AZT-02 proposal reviewed and owner ACCEPTED before production code |
 | UPN1 RED contracts | No update, newer supported version, invalid response, downgrade, host mismatch, outage and unsupported WordPress/PHP | Tests fail for correct missing behavior before GREEN |
-| UPN2 Minimal GREEN | Native Theme update notification only; no automatic install, plugin dependency or template write-back | L1/L2 contract/static PASS |
-| UPN3 Runtime/admin | WordPress 6.9/PHP 8.1 real wp-admin Update availability, cached timeout and clean site behavior | L3/L4 evidence, actual approved release metadata |
+| UPN2 Minimal GREEN | Read-only wp-admin official-release notice using WordPress-owned admin UI; preserve Update URI but **no installable update response** until UPN4; no plugin dependency or template write-back | L1/L2 exact-code contract/static PASS, absence of broken upgrade action |
+| UPN3 Runtime/admin | WordPress 6.9/PHP 8.1 real wp-admin **read-only notice visibility for newer release**, no notice for same/older release, no false install/upgrade button; cache, network timeout and clean site behavior | L3/L4 evidence with controlled newer-release response; no production deployment inference |
 | UPN4 Upgrade/rollback | Immutable verified package, backup/rollback, settings/site data preservation; theme-switch independence | L5/L6 evidence, no source ownership drift |
 | TPL5 (retained) | Actual remote template distribution and template update/install | BLOCKED_EXTERNAL until D-040 owning service publishes a real public/versioned contract |
 
