@@ -61,8 +61,12 @@ function core_theme_latest_release( $installed_version ) {
 
 /** WordPress updater must not advertise an uninstallable package. */
 function core_theme_update_notice( $update, array $theme_data, string $theme_stylesheet, array $locales ) {
-    unset( $theme_data, $locales );
-    return 'aznet-theme' === $theme_stylesheet ? false : $update;
+    unset( $locales );
+    $canonical_uri = 'https://github.com/truongdinhnamaz/aznet-theme';
+    if ( 'aznet-theme' !== $theme_stylesheet || ( $theme_data['UpdateURI'] ?? null ) !== $canonical_uri ) {
+        return $update;
+    }
+    return false;
 }
 
 /** Read-only notice for an official stable release; no install action. */
