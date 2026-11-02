@@ -18,6 +18,7 @@
 
 function aznet_upn3_assert( $condition, string $message ): void {
     if ( ! $condition ) {
+        echo 'FAIL ' . $message . PHP_EOL;
         throw new RuntimeException( 'UPN3 FAIL: ' . $message );
     }
     echo 'PASS ' . $message . PHP_EOL;
