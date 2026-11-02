@@ -22,8 +22,9 @@ function core_theme_latest_release( $installed_version ) {
         $response = wp_remote_get(
             'https://api.github.com/repos/truongdinhnamaz/aznet-theme/releases/latest',
             [
-                'timeout'     => 3,
-                'redirection' => 0,
+                'timeout'             => 3,
+                'redirection'         => 0,
+                'limit_response_size' => 262144,
                 'headers'     => [ 'Accept' => 'application/vnd.github+json' ],
                 'user-agent'  => 'AZnetTheme-UpdateCheck',
             ]
