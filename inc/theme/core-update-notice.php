@@ -9,15 +9,8 @@
  */
 namespace AZnet\Theme;
 
-function core_theme_update_notice( $update, array $theme_data, string $theme_stylesheet, array $locales ) {
-    unset( $locales );
-
-    $source_uri = 'https://github.com/truongdinhnamaz/aznet-theme';
-    if ( 'aznet-theme' !== $theme_stylesheet || ( $theme_data['UpdateURI'] ?? '' ) !== $source_uri ) {
-        return $update;
-    }
-
-    $installed = $theme_data['Version'] ?? '';
+function core_theme_latest_release( $installed_version ) {
+    $installed = $installed_version;
     if ( ! is_string( $installed ) || ! preg_match( '/^\d+\.\d+\.\d+$/D', $installed ) ) {
         return false;
     }
@@ -62,13 +55,35 @@ function core_theme_update_notice( $update, array $theme_data, string $theme_sty
         return false;
     }
 
-    return [
-        'theme'      => 'aznet-theme',
-        'version'    => $metadata['version'],
-        'url'        => $metadata['url'],
-        'autoupdate' => false,
-        // Deliberately omit package: install/upgrade is a separate QA/release gate.
-    ];
+    return $metadata;
+}
+
+/** WordPress updater must not advertise an uninstallable package. */
+function core_theme_update_notice( $update, array $theme_data, string $theme_stylesheet, array $locales ) {
+    unset( $theme_data, $locales );
+    return 'aznet-theme' === $theme_stylesheet ? false : $update;
+}
+
+/** Read-only notice for an official stable release; no install action. */
+function core_theme_update_admin_notice() {
+    if ( ! current_user_can( 'update_themes' ) || ! function_exists( 'wp_get_theme' ) ) {
+        return;
+    }
+    $theme = wp_get_theme( 'aznet-theme' );
+    if ( ! $theme->exists() ) {
+        return;
+    }
+    $release = core_theme_latest_release( $theme->get( 'Version' ) );
+    if ( ! is_array( $release ) || ! isset( $release['version'], $release['url'] ) ) {
+        return;
+    }
+    echo '<div class="notice notice-info"><p>'
+        . esc_html( sprintf( 'AZnet Theme %s is available.', $release['version'] ) )
+        . ' <a href="' . esc_url( $release['url'] ) . '" target="_blank" rel="noopener noreferrer">'
+        . esc_html__( 'View official release details', 'aznet-theme' )
+        . '</a></p></div>';
 }
 
 add_filter( 'update_themes_github.com', __NAMESPACE__ . '\\core_theme_update_notice', 10, 4 );
+add_action( 'admin_notices', __NAMESPACE__ . '\\core_theme_update_admin_notice' );
+add_action( 'network_admin_notices', __NAMESPACE__ . '\\core_theme_update_admin_notice' );
