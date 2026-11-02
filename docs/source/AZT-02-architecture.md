@@ -4,7 +4,7 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.27 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.28 |
 | --- | --- | --- | --- |
 | **Trạng thái** | Working Source | **Ngày** | 22/10/2026 |
 
@@ -640,3 +640,16 @@ Owner-approved: AZnet Theme can export a read-only handoff context artifact from
 - Site Guard operator and AZnet Theme Danger Zone capabilities remain **separately granted**; a Theme capability alone cannot unlock native WP actions. Theme-local reset/import use independent actor/session unlock and remain under Theme ownership.
 - **L5** requires real installed exact-version Site Guard and Theme on disposable WordPress: actor/capability/session, nonce/action/return allowlist, expiry, WordPress 6.9+/PHP 8.1+ and representative WP 7.1.3/PHP 8.5, keyboard/mobile/a11y, provider absent, Theme switching and bounded rollback evidence. Fixtures or a single PHP unit test do NOT prove L5. Site Guard is not yet installed on `lstamduchn.vn`.
 - Decisions affecting Site Guard enforcement or public provider contract must be approved in Site Guard's authoritative source first, and never edited or inferred by the Theme consumer.
+
+## Proposed: Core Theme Update Channel — Issue #553 (NOT ACCEPTED)
+
+**Status: PROPOSED / source-review only.** This section does not override accepted D-040 Remote Template Distribution or authorize updater production implementation, merge, tag, or deployment.
+
+- WordPress-native Theme update discovery for `aznet-theme` must operate independently of AZnet ecosystem plugins, the optional remote Template Distribution Service and its entitlement/license availability, consistent with AZT-05.
+- The release authority is the accepted, immutable official AZnet Theme package with verified provenance, integrity metadata and compatible WordPress/PHP floor. Neither a development branch nor an unreviewed candidate can be advertised as installable.
+- Preferred integration is the WordPress theme update mechanism (`Update URI` and the corresponding external-update filter, subject to verified WordPress 6.9 semantics), not a parallel theme installer UI. The precise endpoint hostname and trust model require review before public implementation.
+- The update provider must expose bounded versioned release metadata, integrity/provenance reference, compatibility constraints, error states and approved package locator. Network errors, invalid/mismatched payload, rollback/downgrade confusion or unavailable release metadata must fail safe and must not inject an installable update.
+- The client must never send site-owned WordPress content, plugin domain data, secrets or unnecessary identifying fields to discover Theme updates. Cache/check cadence is bounded; live frontend render must not depend on the updater endpoint.
+- Notification is separate from installation. No new auto-install behavior is enabled by default. WordPress/native update permissions, integrity, site backup and rollback gates remain in force.
+- Template update discovery is **not** implied by Theme version changes: preserve selected stable template identity/version and accepted D-040 service-owner semantics. D-040's external TPL5 remains BLOCKED until a real service contract exists. Declarative template packages must not overwrite native Page/Post/Media or provider state without a separate reviewed migration/authorization path.
+- Before implementation: verify native update flow on WordPress 6.9 / PHP 8.1, select and version the release endpoint contract, obtain source owner approval, then add RED→GREEN tests and L3-L6 upgrade/rollback evidence.
