@@ -18,6 +18,7 @@ function get_transient($key) { return $GLOBALS['upn2_cache']; }
 function set_transient($key, $value, $ttl) { $GLOBALS['upn2_cache'] = $value; return true; }
 function wp_remote_get($url, $options) {
     ++$GLOBALS['upn2_calls'];
+    $GLOBALS['upn2_http_options'] = $options;
     if ($url !== 'https://api.github.com/repos/truongdinhnamaz/aznet-theme/releases/latest'
         || $options['redirection'] !== 0 || $options['timeout'] > 3) {
         throw new \RuntimeException('Unapproved endpoint or network options');
@@ -47,9 +48,9 @@ function check_notice($installed='1.3.98', $stylesheet='aznet-theme', $uri='http
 function reset_case($response) {
     $GLOBALS['upn2_cache'] = false; $GLOBALS['upn2_response'] = $response; $GLOBALS['upn2_calls'] = 0;
 }
-function current_user_can($cap) { return true; }
+function current_user_can($cap) { return 'update_themes' === $cap && ($GLOBALS['upn2_can_update'] ?? true); }
 require_once __DIR__ . '/upn2-wp-global-stub.php';
-class Upn2Theme { function exists() { return true; } function get($key) { return '1.3.98'; } }
+class Upn2Theme { function exists() { return ($GLOBALS['upn2_theme_installed'] ?? true); } function get($key) { return '1.3.98'; } }
 function esc_html($value) { return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8'); }
 function esc_url($value) { return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8'); }
 function esc_html__($value, $domain) { return $value; }
@@ -58,6 +59,7 @@ reset_case(release_data('v1.3.99'));
 $r=core_theme_latest_release('1.3.98');
 assert_upn2(is_array($r) && $r['version']==='1.3.99' && !isset($r['package']),'newer stable release yields notice without installer');
 assert_upn2($GLOBALS['upn2_calls']===1,'one network request');
+assert_upn2(isset($GLOBALS['upn2_http_options']['limit_response_size']) && $GLOBALS['upn2_http_options']['limit_response_size'] === 262144,'release metadata response capped at 256 KiB');
 $r=core_theme_latest_release('1.3.98');
 assert_upn2(is_array($r) && $GLOBALS['upn2_calls']===1,'cached metadata');
 reset_case(release_data('v1.3.98'));
@@ -85,4 +87,14 @@ assert_upn2(false===check_notice(), 'WordPress update queue stays empty even for
 ob_start(); core_theme_update_admin_notice(); $notice=ob_get_clean();
 assert_upn2(strpos($notice,'AZnet Theme 1.3.99 is available')!==false, 'read-only admin notice renders new release');
 assert_upn2(strpos($notice,'update.php')===false, 'no broken install link');
+reset_case(release_data('v1.3.99'));
+$GLOBALS['upn2_can_update'] = false;
+ob_start(); core_theme_update_admin_notice(); $hidden=ob_get_clean();
+assert_upn2('' === $hidden && $GLOBALS['upn2_calls'] === 0,'unauthorized admin sees no release notice or network call');
+$GLOBALS['upn2_can_update'] = true;
+reset_case(release_data('v1.3.99'));
+$GLOBALS['upn2_theme_installed'] = false;
+ob_start(); core_theme_update_admin_notice(); $hidden=ob_get_clean();
+assert_upn2('' === $hidden && $GLOBALS['upn2_calls'] === 0,'missing AZnet theme avoids notice and network');
+$GLOBALS['upn2_theme_installed'] = true;
 echo "UPN2 isolated contract PASS; WordPress runtime/integration remains UNKNOWN.\n";
