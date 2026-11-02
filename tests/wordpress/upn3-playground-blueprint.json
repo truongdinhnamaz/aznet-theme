@@ -2,7 +2,7 @@
   "$schema": "https://playground.wordpress.net/blueprint-schema.json",
   "meta": {
     "title": "AZnet Theme UPN3 — Disposable WordPress QA",
-    "description": "Disposable real WordPress 6.9 PHP 8.1 UPN3 test, with assertion and exception diagnostics.",
+    "description": "Disposable WP 6.9 PHP 8.1 UPN3 test; corrected output buffering in HTTP mock.",
     "author": "AZnet Theme"
   },
   "preferredVersions": {
@@ -17,7 +17,7 @@
       "themeData": {
         "resource": "git:directory",
         "url": "https://github.com/truongdinhnamaz/aznet-theme.git",
-        "ref": "0bd7fae347fd39aff11b63fd4db99b2ae8b1a300",
+        "ref": "a1fe089d874936b669d7e4e4e80b956f940cbd54",
         "refType": "commit",
         "path": "/"
       },
