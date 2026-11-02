@@ -10,6 +10,7 @@
 namespace AZnet\Theme;
 
 function core_theme_latest_release( $installed_version ) {
+    $source_uri = 'https://github.com/truongdinhnamaz/aznet-theme';
     $installed = $installed_version;
     if ( ! is_string( $installed ) || ! preg_match( '/^\d+\.\d+\.\d+$/D', $installed ) ) {
         return false;
