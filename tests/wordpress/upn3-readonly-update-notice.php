@@ -83,12 +83,13 @@ $mock_http = static function ( $preempt, $arguments, $url ) use (
 ) {
     if ( $github_endpoint === $url ) {
         ++$github_calls;
-        aznet_upn3_assert(
-            ( $arguments['limit_response_size'] ?? null ) === 262144 &&
-            ( $arguments['timeout'] ?? 10 ) <= 3 &&
-            ( $arguments['redirection'] ?? 1 ) === 0,
-            'GitHub metadata request is bounded'
-        );
+        // Never print inside the HTTP mock: the caller captures admin notice
+        // markup with ob_start() and needs an empty string for same-version.
+        if ( ( $arguments['limit_response_size'] ?? null ) !== 262144
+            || ( $arguments['timeout'] ?? 10 ) > 3
+            || ( $arguments['redirection'] ?? 1 ) !== 0 ) {
+            throw new RuntimeException( 'UPN3 FAIL: GitHub metadata request is unbounded' );
+        }
         if ( 'outage' === $mode ) {
             return new WP_Error( 'upn3_mock_timeout', 'Controlled test outage' );
         }
