@@ -45,3 +45,13 @@ Record WordPress/PHP version, actual Theme source commit, exit status, wp-admin 
 ## Exact next
 
 Obtain a disposable real WordPress 6.9/PHP 8.1 execution environment, run this pinned verifier, inspect actual wp-admin behavior, then review source PR #554 and implementation PR #556 merge gates separately. No merge, release, or deployment is authorized yet.
+
+## Disposable browser execution path — prepared, NOT EXECUTED
+
+A WordPress Playground Blueprint is now in `tests/wordpress/upn3-playground-blueprint.json` (JSON syntax and schema fields statically checked, but not browser-executed). It pins WordPress `6.9`, PHP `8.1`, the exact candidate repository commit `dca901fe81d479d80c1a8fd946dbccf888413fad`, `git:directory` Theme install/activate in folder `aznet-theme`, and runs the gated PHP verifier with explicit disposable flag and pinned module blob `a3f118fb987aad11e7072475dfd80e1ac16c4d37`. This is a test-only browser WASM/SQLite runtime, not a substitute for hosted MySQL/PHP runtime or production browser QA.
+
+Reproducible one-click load URL (Blueprint file pinned by the commit that introduced it):
+
+`https://playground.wordpress.net/?blueprint-url=https%3A%2F%2Fraw.githubusercontent.com%2Ftruongdinhnamaz%2Faznet-theme%2F8afbb1095d8d8ec374532b6b7862c597ff035e64%2Ftests%2Fwordpress%2Fupn3-playground-blueprint.json`
+
+**Status:** blueprint prepared; no WordPress boot, PHP test execution, browser screenshot or actual Playground logs verified in this turn. On successful execution, retain printed assertions/error logs, observed WP/PHP exact versions and wp-admin screenshot before upgrading gate status. A browser/runner is required to prove execution.
