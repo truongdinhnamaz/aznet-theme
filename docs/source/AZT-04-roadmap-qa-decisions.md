@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.21
+**Version:** v1.22
 **Status:** Working Source  
 **Date:** 22/10/2026
 
@@ -1108,3 +1108,20 @@ Site release 1.3.94 has PASS for source CI and public homepage/SEO content invar
 - **Evidence and rollback:** [D-062 production/source sync](../evidence/AZNET_D062_V1396_PRODUCTION_SOURCE_SYNC_20261022.md); WordPress Theme-only 1.3.95 backup and owner-reported full host backup retained. No production overwrite required for GitHub sync.
 
 **EXACT NEXT:** When amended PR #501 exact-head checks are GREEN and mergeable, merge into canonical `main` (no force) and run fresh exact-main CI; keep GitHub Release/tag as a separate owner-approval gate.
+
+## Owner-accepted — D-051 Core Theme update notifications (Issue #553)
+
+**Status: UPN0 OWNER-ACCEPTED 2026-11-02; source/code merge and release remain separate approval gates.** This is a distinct Core Theme distribution proposal; it does not reopen D-040 or imply that the Template Distribution Service is available.
+
+| Gate | Scope | Required evidence |
+| --- | --- | --- |
+| UPN0 Source decision | Confirm Core Theme update release authority, WordPress-native integration, independent transport and trust boundary | AZT-02 proposal reviewed and owner ACCEPTED before production code |
+| UPN1 RED contracts | No update, newer supported version, invalid response, downgrade, host mismatch, outage and unsupported WordPress/PHP | Tests fail for correct missing behavior before GREEN |
+| UPN2 Minimal GREEN | Read-only wp-admin official-release notice using WordPress-owned admin UI; preserve Update URI but **no installable update response** until UPN4; no plugin dependency or template write-back | L1/L2 exact-code contract/static PASS, absence of broken upgrade action |
+| UPN3 Runtime/admin | WordPress 6.9/PHP 8.1 real wp-admin **read-only notice visibility for newer release**, no notice for same/older release, no false install/upgrade button; cache, network timeout and clean site behavior | L3/L4 evidence with controlled newer-release response; no production deployment inference |
+| UPN4 Upgrade/rollback | Immutable verified package, backup/rollback, settings/site data preservation; theme-switch independence | L5/L6 evidence, no source ownership drift |
+| TPL5 (retained) | Actual remote template distribution and template update/install | BLOCKED_EXTERNAL until D-040 owning service publishes a real public/versioned contract |
+
+**Governance:** source proposal does not authorize main merge, release, updater activation or site deployment. External release endpoint location/operator capability and package verification are explicit architecture gates. No new plugin/repository/domain owner may be silently created in AZnet Theme.
+
+**Gate progression:** After UPN0 acceptance, verify UPN1 RED and UPN2 notification-only implementation, then UPN3 real WordPress runtime/admin; UPN4 install/rollback, source/code merge, release and deployment keep their independent acceptance gates. Current implementation status belongs in GitHub PR/evidence, not this normative source.
