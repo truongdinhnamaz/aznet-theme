@@ -48,7 +48,7 @@ function reset_case($response) {
     $GLOBALS['upn2_cache'] = false; $GLOBALS['upn2_response'] = $response; $GLOBALS['upn2_calls'] = 0;
 }
 function current_user_can($cap) { return true; }
-function wp_get_theme($slug) { return new Upn2Theme(); }
+require_once __DIR__ . '/upn2-wp-global-stub.php';
 class Upn2Theme { function exists() { return true; } function get($key) { return '1.3.98'; } }
 function esc_html($value) { return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8'); }
 function esc_url($value) { return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8'); }
