@@ -2,7 +2,7 @@
   "$schema": "https://playground.wordpress.net/blueprint-schema.json",
   "meta": {
     "title": "AZnet Theme UPN3 — Disposable WordPress QA",
-    "description": "Test-only WordPress 6.9 / PHP 8.1 instance. Pinned candidate. No production deployment.",
+    "description": "Diagnostic disposable WP 6.9 PHP 8.1 run, exact version-pinned Theme. PHP errors printed.",
     "author": "AZnet Theme"
   },
   "preferredVersions": {
@@ -17,7 +17,7 @@
       "themeData": {
         "resource": "git:directory",
         "url": "https://github.com/truongdinhnamaz/aznet-theme.git",
-        "ref": "dca901fe81d479d80c1a8fd946dbccf888413fad",
+        "ref": "536dc224af7cd1087fa7db0daba2f3efc3656b77",
         "refType": "commit",
         "path": "/"
       },
@@ -28,7 +28,7 @@
     },
     {
       "step": "runPHP",
-      "code": "<?php\nrequire_once '/wordpress/wp-load.php';\nif ( ! function_exists( 'putenv' ) ) {\n    throw new RuntimeException( 'UPN3 requires putenv for explicit disposable-only test gate.' );\n}\nputenv( 'AZT_UPN3_DISPOSABLE=YES_DISPOSABLE' );\nputenv( 'AZT_UPN3_EXPECT_BLOB=a3f118fb987aad11e7072475dfd80e1ac16c4d37' );\nrequire WP_CONTENT_DIR . '/themes/aznet-theme/tests/wordpress/upn3-readonly-update-notice.php';\n"
+      "code": "<?php\nrequire_once '/wordpress/wp-load.php';\nerror_reporting( E_ALL );\nini_set( 'display_errors', '1' );\nregister_shutdown_function( function () {\n    $last = error_get_last();\n    if ( $last && in_array( $last['type'], [ E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR ], true ) ) {\n        echo 'UPN3_SHUTDOWN_FATAL: ' . $last['message'] . ' at ' . $last['file'] . ':' . $last['line'] . \"\\n\";\n    }\n} );\nputenv( 'AZT_UPN3_DISPOSABLE=YES_DISPOSABLE' );\nputenv( 'AZT_UPN3_EXPECT_BLOB=a3f118fb987aad11e7072475dfd80e1ac16c4d37' );\ntry {\n    require WP_CONTENT_DIR . '/themes/aznet-theme/tests/wordpress/upn3-readonly-update-notice.php';\n} catch ( Throwable $e ) {\n    echo 'UPN3_CAUGHT_FAILURE: ' . get_class( $e ) . ': ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine() . \"\\n\";\n    throw $e;\n}\n"
     }
   ]
 }
