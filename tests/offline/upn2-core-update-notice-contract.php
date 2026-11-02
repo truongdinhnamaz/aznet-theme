@@ -77,7 +77,9 @@ assert_upn2(false===core_theme_latest_release('1.3.98'),'HTTP outage fails soft'
 reset_case(release_data('v1.3.99'));
 assert_upn2(false===check_notice('1.3.98','other-theme'),'unrelated theme ignored');
 assert_upn2($GLOBALS['upn2_calls']===0,'unrelated theme avoids request');
-assert_upn2(false===check_notice('1.3.98','aznet-theme','https://other.example/theme'),'different UpdateURI ignored');
+assert_upn2(false===check_notice('1.3.98','aznet-theme','https://other.example/theme'),'different UpdateURI does not create a notice');
+assert_upn2('preserve'===core_theme_update_notice('preserve',['UpdateURI'=>'https://github.com/other/theme','Version'=>'1.3.98'],'aznet-theme',[]),'foreign GitHub UpdateURI result preserved');
+assert_upn2('preserve'===core_theme_update_notice('preserve',['UpdateURI'=>'https://github.com/truongdinhnamaz/aznet-theme','Version'=>'1.3.98'],'other-theme',[]),'unrelated theme update result preserved');
 reset_case(release_data('v1.3.99'));
 assert_upn2(false===check_notice(), 'WordPress update queue stays empty even for newer release');
 ob_start(); core_theme_update_admin_notice(); $notice=ob_get_clean();
