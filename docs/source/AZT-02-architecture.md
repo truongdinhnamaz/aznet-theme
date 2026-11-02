@@ -643,7 +643,7 @@ Owner-approved: AZnet Theme can export a read-only handoff context artifact from
 
 ## Proposed: Core Theme Update Channel — Issue #553 (NOT ACCEPTED)
 
-**Status: PROPOSED / source-review only.** This section does not override accepted D-040 Remote Template Distribution or authorize updater production implementation, merge, tag, or deployment.
+**Status: OWNER-ACCEPTED 2026-11-02 / source PR pending separate merge gate.** Owner explicitly approved UPN0 in project chat on 2026-11-02. This does not override D-040 or authorize merge, tag, release or deployment. Production behavior remains subject to independent UPN1-UPN4 QA gates.
 
 - WordPress-native Theme update discovery for `aznet-theme` must operate independently of AZnet ecosystem plugins, the optional remote Template Distribution Service and its entitlement/license availability, consistent with AZT-05.
 - The release authority is the accepted, immutable official AZnet Theme package with verified provenance, integrity metadata and compatible WordPress/PHP floor. Neither a development branch nor an unreviewed candidate can be advertised as installable.
