@@ -1111,7 +1111,7 @@ Site release 1.3.94 has PASS for source CI and public homepage/SEO content invar
 
 ## Owner-accepted — D-051 Core Theme update notifications (Issue #553)
 
-**Status: UPN0 OWNER-ACCEPTED 2026-11-02 / source merge pending.** This is a distinct Core Theme distribution proposal; it does not reopen D-040 or imply that the Template Distribution Service is available.
+**Status: UPN0 OWNER-ACCEPTED 2026-11-02; source/code merge and release remain separate approval gates.** This is a distinct Core Theme distribution proposal; it does not reopen D-040 or imply that the Template Distribution Service is available.
 
 | Gate | Scope | Required evidence |
 | --- | --- | --- |
@@ -1124,4 +1124,4 @@ Site release 1.3.94 has PASS for source CI and public homepage/SEO content invar
 
 **Governance:** source proposal does not authorize main merge, release, updater activation or site deployment. External release endpoint location/operator capability and package verification are explicit architecture gates. No new plugin/repository/domain owner may be silently created in AZnet Theme.
 
-**Exact next:** preserve owner acceptance of UPN0; verify UPN1 exact source and build a bounded, reversible UPN2 candidate; retain separate source merge, release and deployment gates.
+**Gate progression:** After UPN0 acceptance, verify UPN1 RED and UPN2 notification-only implementation, then UPN3 real WordPress runtime/admin; UPN4 install/rollback, source/code merge, release and deployment keep their independent acceptance gates. Current implementation status belongs in GitHub PR/evidence, not this normative source.
