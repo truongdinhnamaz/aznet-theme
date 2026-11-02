@@ -10,6 +10,7 @@ const HOUR_IN_SECONDS = 3600;
 $GLOBALS['upn2_cache'] = false;
 $GLOBALS['upn2_response'] = null;
 $GLOBALS['upn2_calls'] = 0;
+function add_action($name, $callback) { $GLOBALS['upn2_actions'][$name] = $callback; }
 function add_filter($name, $callback, $priority, $args) {
     $GLOBALS['upn2_registered'] = [$name, $callback, $priority, $args];
 }
@@ -46,10 +47,16 @@ function check_notice($installed='1.3.98', $stylesheet='aznet-theme', $uri='http
 function reset_case($response) {
     $GLOBALS['upn2_cache'] = false; $GLOBALS['upn2_response'] = $response; $GLOBALS['upn2_calls'] = 0;
 }
+function current_user_can($cap) { return true; }
+function wp_get_theme($slug) { return new Upn2Theme(); }
+class Upn2Theme { function exists() { return true; } function get($key) { return '1.3.98'; } }
+function esc_html($value) { return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8'); }
+function esc_url($value) { return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8'); }
+function esc_html__($value, $domain) { return $value; }
 assert_upn2($GLOBALS['upn2_registered'][0] === 'update_themes_github.com', 'WordPress host hook');
 reset_case(release_data('v1.3.99'));
 $r=check_notice();
-assert_upn2(is_array($r) && $r['version']==='1.3.99' && !isset($r['package']) && $r['autoupdate']===false,'newer stable release yields notice without installer');
+assert_upn2(is_array($r) && $r['version']==='1.3.99' && !isset($r['package']),'newer stable release yields notice without installer');
 assert_upn2($GLOBALS['upn2_calls']===1,'one network request');
 $r=check_notice();
 assert_upn2(is_array($r) && $GLOBALS['upn2_calls']===1,'cached metadata');
@@ -71,4 +78,9 @@ reset_case(release_data('v1.3.99'));
 assert_upn2(false===check_notice('1.3.98','other-theme'),'unrelated theme ignored');
 assert_upn2($GLOBALS['upn2_calls']===0,'unrelated theme avoids request');
 assert_upn2(false===check_notice('1.3.98','aznet-theme','https://other.example/theme'),'different UpdateURI ignored');
+reset_case(release_data('v1.3.99'));
+assert_upn2(false===check_notice(), 'WordPress update queue stays empty even for newer release');
+ob_start(); core_theme_update_admin_notice(); $notice=ob_get_clean();
+assert_upn2(strpos($notice,'AZnet Theme 1.3.99 is available')!==false, 'read-only admin notice renders new release');
+assert_upn2(strpos($notice,'update.php')===false, 'no broken install link');
 echo "UPN2 isolated contract PASS; WordPress runtime/integration remains UNKNOWN.\n";
