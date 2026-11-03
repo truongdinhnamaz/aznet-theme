@@ -1,0 +1,83 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "meta": {
+    "title": "AZnet 1.3.99 upgrade + rollback QA",
+    "description": "Disposable WP 6.9/PHP 8.1. Official previous ZIP, Git candidate, Theme switch, rollback; no production write.",
+    "author": "AZnet Theme"
+  },
+  "preferredVersions": {
+    "wp": "6.9",
+    "php": "8.1"
+  },
+  "login": true,
+  "landingPage": "/wp-content/uploads/azt-upgrade-rollback-report.html",
+  "steps": [
+    {
+      "step": "installTheme",
+      "themeData": {
+        "resource": "url",
+        "url": "https://github.com/truongdinhnamaz/aznet-theme/releases/download/v1.3.98/aznet-theme-1.3.98.zip"
+      },
+      "ifAlreadyInstalled": "overwrite",
+      "options": {
+        "activate": true,
+        "targetFolderName": "aznet-theme"
+      }
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php\nrequire_once '/wordpress/wp-load.php';\n$theme=wp_get_theme('aznet-theme');\nif (!$theme->exists() || $theme->get('Version') !== '1.3.98' || get_stylesheet() !== 'aznet-theme') { throw new RuntimeException('BASELINE_1398_NOT_ACTIVE'); }\n$id=wp_insert_post(['post_title'=>'AZT QA owner-data sentinel','post_content'=>'AZT native content must survive theme upgrade and rollback','post_status'=>'publish','post_type'=>'page'],true);\nif (is_wp_error($id) || !$id) { throw new RuntimeException('NATIVE_PAGE_CREATION_FAILED'); }\nupdate_post_meta($id,'azt_qa_owner_meta','retain-me');\nupdate_option('azt_qa_native_option','retain-native-option',false);\nset_theme_mod('azt_qa_rollback_mod','retain-theme-mod');\nupdate_option('azt_qa_state',['post_id'=>(int)$id,'phase'=>'old','count'=>1],false);\necho \"AZT_BASELINE_PASS v1.3.98 native data captured\";"
+    },
+    {
+      "step": "installTheme",
+      "themeData": {
+        "resource": "git:directory",
+        "url": "https://github.com/truongdinhnamaz/aznet-theme.git",
+        "ref": "31f845942aae7d3d180edb3f0bed31379e2e8ded",
+        "refType": "commit",
+        "path": "/"
+      },
+      "ifAlreadyInstalled": "overwrite",
+      "options": {
+        "activate": true,
+        "targetFolderName": "aznet-theme"
+      }
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php\nrequire_once '/wordpress/wp-load.php';\n$s=get_option('azt_qa_state');\n$posts=is_array($s)&&isset($s['post_id'])?get_post((int)$s['post_id']):false;\nif (!$posts || $posts->post_content !== 'AZT native content must survive theme upgrade and rollback' ||\n  get_post_meta($posts->ID,'azt_qa_owner_meta',true)!=='retain-me' ||\n  get_option('azt_qa_native_option')!=='retain-native-option') { throw new RuntimeException('NATIVE_OWNER_DATA_CHANGED'); }\n\n$theme=wp_get_theme('aznet-theme');\nif (!$theme->exists() || $theme->get('Version')!=='1.3.99' || get_stylesheet()!=='aznet-theme' ||\n  get_theme_mod('azt_qa_rollback_mod')!=='retain-theme-mod') { throw new RuntimeException('CANDIDATE_1399_THEME_OR_MOD_INVALID'); }\n$module=get_theme_root('aznet-theme').'/aznet-theme/inc/theme/core-update-notice.php';\n$b=file_get_contents($module);\n$hash=sha1('blob '.strlen($b).\"\\0\".$b);\nif ($hash!=='a3f118fb987aad11e7072475dfd80e1ac16c4d37') { throw new RuntimeException('CANDIDATE_UPDATER_BLOB_MISMATCH'); }\n$s['phase']='new';$s['count']=2;update_option('azt_qa_state',$s,false);\necho \"AZT_UPGRADE_PASS v1.3.99 owner data / Theme mods / updater blob intact\";"
+    },
+    {
+      "step": "activateTheme",
+      "themeFolderName": "twentytwentyfive"
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php\nrequire_once '/wordpress/wp-load.php';\n$s=get_option('azt_qa_state');\n$posts=is_array($s)&&isset($s['post_id'])?get_post((int)$s['post_id']):false;\nif (!$posts || $posts->post_content !== 'AZT native content must survive theme upgrade and rollback' ||\n  get_post_meta($posts->ID,'azt_qa_owner_meta',true)!=='retain-me' ||\n  get_option('azt_qa_native_option')!=='retain-native-option') { throw new RuntimeException('NATIVE_OWNER_DATA_CHANGED'); }\n\nif (get_stylesheet()!=='twentytwentyfive') { throw new RuntimeException('THEME_SWITCH_NOT_ACTIVE'); }\n$s['phase']='away';$s['count']=3;update_option('azt_qa_state',$s,false);\necho \"AZT_SWITCH_AWAY_PASS WordPress-owned data retained\";"
+    },
+    {
+      "step": "activateTheme",
+      "themeFolderName": "aznet-theme"
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php\nrequire_once '/wordpress/wp-load.php';\n$s=get_option('azt_qa_state');\n$posts=is_array($s)&&isset($s['post_id'])?get_post((int)$s['post_id']):false;\nif (!$posts || $posts->post_content !== 'AZT native content must survive theme upgrade and rollback' ||\n  get_post_meta($posts->ID,'azt_qa_owner_meta',true)!=='retain-me' ||\n  get_option('azt_qa_native_option')!=='retain-native-option') { throw new RuntimeException('NATIVE_OWNER_DATA_CHANGED'); }\n\nif (get_stylesheet()!=='aznet-theme' || wp_get_theme('aznet-theme')->get('Version')!=='1.3.99' ||\n get_theme_mod('azt_qa_rollback_mod')!=='retain-theme-mod') { throw new RuntimeException('THEME_SWITCH_BACK_FAILED'); }\n$s['phase']='back';$s['count']=4;update_option('azt_qa_state',$s,false);\necho \"AZT_SWITCH_BACK_PASS Theme-mods and native data retained\";"
+    },
+    {
+      "step": "installTheme",
+      "themeData": {
+        "resource": "url",
+        "url": "https://github.com/truongdinhnamaz/aznet-theme/releases/download/v1.3.98/aznet-theme-1.3.98.zip"
+      },
+      "ifAlreadyInstalled": "overwrite",
+      "options": {
+        "activate": true,
+        "targetFolderName": "aznet-theme"
+      }
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php\nrequire_once '/wordpress/wp-load.php';\n$s=get_option('azt_qa_state');\n$posts=is_array($s)&&isset($s['post_id'])?get_post((int)$s['post_id']):false;\nif (!$posts || $posts->post_content !== 'AZT native content must survive theme upgrade and rollback' ||\n  get_post_meta($posts->ID,'azt_qa_owner_meta',true)!=='retain-me' ||\n  get_option('azt_qa_native_option')!=='retain-native-option') { throw new RuntimeException('NATIVE_OWNER_DATA_CHANGED'); }\n\nif (get_stylesheet()!=='aznet-theme' || wp_get_theme('aznet-theme')->get('Version')!=='1.3.98' ||\n get_theme_mod('azt_qa_rollback_mod')!=='retain-theme-mod' || $s['phase']!=='back' || $s['count']!==4) { throw new RuntimeException('ROLLBACK_1398_VERSION_OR_MOD_INVALID'); }\n$report=\"STATUS=PASS\\nWORDPRESS=\".get_bloginfo('version').\"\\nPHP=\".PHP_VERSION.\"\\nSOURCE_NEW=31f845942aae7d3d180edb3f0bed31379e2e8ded\\nROLLBACK_VERSION=1.3.98\\n\"\n . \"AZT_BASELINE_PASS\\nAZT_UPGRADE_PASS\\nAZT_SWITCH_AWAY_PASS\\nAZT_SWITCH_BACK_PASS\\nAZT_ROLLBACK_PASS\\n\"\n . \"SCOPE=Git-based candidate directory overwrite + published 1.3.98 ZIP; candidate 1.3.99 official installer ZIP NOT tested\\n\";\n$d=wp_upload_dir();\nif (!empty($d['basedir'])) file_put_contents(trailingslashit($d['basedir']).'azt-upgrade-rollback-report.html',\n '<!doctype html><html><head><meta charset=\"utf-8\"><title>AZT rollback QA PASS</title></head><body><h1>AZnet Theme rollback QA PASS</h1><pre>'.esc_html($report).'</pre></body></html>');\necho \"AZT_ROLLBACK_PASS v1.3.98 all WordPress owner data and Theme mods intact\";"
+    }
+  ]
+}
