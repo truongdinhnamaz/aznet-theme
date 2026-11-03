@@ -40,9 +40,7 @@ jobs:
           ];
           const candidateCSS={
             baseline:'',
-            fixAlign: 'body.aznet-theme-preset--industrial-01 .aznet-theme-entry--front-page .aznet-theme-entry__content .alignwide {max-width:100%; width:100%; margin-inline: auto; transform:none;} body.aznet-theme-preset--industrial-01 .aznet-theme-entry--front-page {width:min(calc(100% - 2rem), var(--aznet-theme-container-wide)); margin-inline:auto;}',
-            fixColumns: 'body.aznet-theme-preset--industrial-01 .aznet-theme-entry--front-page .wp-block-columns {display:flex;flex-wrap:wrap !important;gap:1.5rem;} @media (max-width: 781px){body.aznet-theme-preset--industrial-01 .aznet-theme-entry--front-page .wp-block-columns>.wp-block-column {flex-basis:100%!important;min-width:0;}}',
-            fixBoth: 'body.aznet-theme-preset--industrial-01 .aznet-theme-entry--front-page{width:min(calc(100% - 2rem), var(--aznet-theme-container-wide));margin-inline:auto;} body.aznet-theme-preset--industrial-01 .aznet-theme-entry--front-page .aznet-theme-entry__content .alignwide{width:100%;max-width:100%;margin-inline:auto;transform:none;} body.aznet-theme-preset--industrial-01 .aznet-theme-entry--front-page .wp-block-columns{display:flex;flex-wrap:wrap !important;} @media(max-width:781px){body.aznet-theme-preset--industrial-01 .aznet-theme-entry--front-page .wp-block-columns>.wp-block-column{flex-basis:100% !important;min-width:0;}}'
+            fixNested: 'body.aznet-theme-preset--industrial-01 .aznet-theme-entry__content .alignwide .alignwide { width: 100%; max-width: 100%; margin-inline: 0; transform: none; }',
           };
           try {
             for(const w of [390,768]){
