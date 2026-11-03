@@ -27,6 +27,14 @@ $fail( str_contains( $base, 'overflow-x: clip;' ),
 $fail( str_contains( $front, 'the_content();' ),
     'Native WordPress Page content stays owned and rendered by WordPress' );
 
+// At desktop widths, the 768px native Article must remain centred in the
+// full-bleed 1440px shell. Industrial01 otherwise overrides generic margins.
+$articleSelector = '.aznet-theme-main--front-page .aznet-theme-entry.aznet-theme-entry--front-page';
+$articlePattern = '/' . preg_quote( $articleSelector, '/' ) . '\\s*\\{([^}]*)\\}/';
+$fail( preg_match( $articlePattern, $css, $articleMatches ) === 1
+    && str_contains( (string) ( $articleMatches[1] ?? '' ), 'margin-inline: auto;' ),
+    'Native front-page Article must be centred before applying wide-block alignment' );
+
 $selector = '.aznet-theme-main--front-page .aznet-theme-entry__content .alignwide .alignwide';
 $pattern = '/' . preg_quote( $selector, '/' ) . '\\s*\\{([^}]*)\\}/';
 $fail( preg_match( $pattern, $css, $matches ) === 1,
