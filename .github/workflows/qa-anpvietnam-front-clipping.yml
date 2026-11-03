@@ -1,0 +1,92 @@
+name: ANP live Gutenberg clip diagnosis (read-only)
+on:
+  push:
+    branches: [qa/anpvietnam-v1399-responsive-20261103]
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Record CSS geometry before and after controlled in-browser overrides
+        shell: bash
+        run: |
+          mkdir -p qa-clip
+          node --input-type=module <<'JS'
+          import { chromium } from 'playwright';
+          import fs from 'node:fs';
+          const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+          const all=[];
+          const selectors=[
+            'main.aznet-theme-main--front-page',
+            'article.aznet-theme-entry--front-page',
+            '.aznet-theme-entry--front-page .aznet-theme-entry__content',
+            '.anp-home-service-guide',
+            '.anp-home-service-guide .wp-block-columns',
+            '.anp-home-service-guide .wp-block-column',
+            '.anp-home-service-guide h2',
+            '.anp-home-service-guide h3',
+            '.anp-home-service-guide p',
+            '.anp-home-service-guide a'
+          ];
+          const candidateCSS={
+            baseline:'',
+            fixAlign: 'body.aznet-theme-preset--industrial-01 .aznet-theme-entry--front-page .aznet-theme-entry__content .alignwide {max-width:100%; width:100%; margin-inline: auto; transform:none;} body.aznet-theme-preset--industrial-01 .aznet-theme-entry--front-page {width:min(calc(100% - 2rem), var(--aznet-theme-container-wide)); margin-inline:auto;}',
+            fixColumns: 'body.aznet-theme-preset--industrial-01 .aznet-theme-entry--front-page .wp-block-columns {display:flex;flex-wrap:wrap !important;gap:1.5rem;} @media (max-width: 781px){body.aznet-theme-preset--industrial-01 .aznet-theme-entry--front-page .wp-block-columns>.wp-block-column {flex-basis:100%!important;min-width:0;}}',
+            fixBoth: 'body.aznet-theme-preset--industrial-01 .aznet-theme-entry--front-page{width:min(calc(100% - 2rem), var(--aznet-theme-container-wide));margin-inline:auto;} body.aznet-theme-preset--industrial-01 .aznet-theme-entry--front-page .aznet-theme-entry__content .alignwide{width:100%;max-width:100%;margin-inline:auto;transform:none;} body.aznet-theme-preset--industrial-01 .aznet-theme-entry--front-page .wp-block-columns{display:flex;flex-wrap:wrap !important;} @media(max-width:781px){body.aznet-theme-preset--industrial-01 .aznet-theme-entry--front-page .wp-block-columns>.wp-block-column{flex-basis:100% !important;min-width:0;}}'
+          };
+          try {
+            for(const w of [390,768]){
+              const ctx=await browser.newContext({viewport:{width:w,height:900},deviceScaleFactor:1});
+              for (const [mode,css] of Object.entries(candidateCSS)){
+                const page=await ctx.newPage();
+                const resp=await page.goto('https://anpvietnam.vn/',{waitUntil:'domcontentloaded',timeout:35000});
+                await page.waitForTimeout(650);
+                if(css)await page.addStyleTag({content:css});
+                const data=await page.evaluate((sels)=>{
+                  const viewport=window.innerWidth;
+                  const specs=[];
+                  for(const sel of sels){
+                    for(const el of [...document.querySelectorAll(sel)].slice(0,11)){
+                      const r=el.getBoundingClientRect(),cs=getComputedStyle(el);
+                      const name=(el.textContent||'').replace(/\s+/g,' ').trim().slice(0,65);
+                      specs.push({sel,tag:el.tagName,name,
+                        l:Math.round(r.left),r:Math.round(r.right),w:Math.round(r.width),
+                        display:cs.display,wrap:cs.flexWrap,basis:cs.flexBasis,
+                        transform:cs.transform,overflow:cs.overflow,marginLeft:cs.marginLeft,
+                        clipped:r.left<-4||r.right>viewport+4});
+                    }
+                  }
+                  return {viewport,scrollWidth:document.documentElement.scrollWidth,
+                    bodyClass:document.body.className,items:specs};
+                },selectors);
+                const result={width:w,mode,http:resp.status(),...data};
+                const clipped=data.items.filter(x=>x.clipped&&/wp-block-column|wp-block-columns|anp-home-service-guide|h3|p/.test(x.sel));
+                console.log('CLIP_RESULT '+JSON.stringify({width:w,mode,http:resp.status(),viewport:data.viewport,scrollWidth:data.scrollWidth,offenders:clipped.length,
+                  samples:clipped.slice(0,10),main:data.items.filter(x=>/aznet-theme-entry|anp-home-service-guide/.test(x.sel)).slice(0,8)}));
+                await page.locator('.anp-home-service-guide').screenshot({path:'qa-clip/anp-service-'+w+'-'+mode+'.png',timeout:20000}).catch(e=>console.log('CROP_ERROR '+e.message));
+                all.push(result);
+                await page.close();
+              }
+              await ctx.close();
+            }
+          } finally {await browser.close();}
+          fs.writeFileSync('qa-clip/diagnostics.json',JSON.stringify(all,null,2));
+          JS
+      - name: Save diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: anpvietnam-gutenberg-clipping-diagnosis
+          path: qa-clip/
+          retention-days: 7
+          if-no-files-found: warn
