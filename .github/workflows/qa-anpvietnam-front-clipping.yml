@@ -40,7 +40,7 @@ jobs:
           ];
           const candidateCSS={
             baseline:'',
-            fixNested: '.aznet-theme-main--front-page .aznet-theme-entry__content .alignwide .alignwide { width: 100%; max-width: 100%; margin-inline: 0; transform: none; }',
+            fixNested: '.aznet-theme-main--front-page .aznet-theme-entry.aznet-theme-entry--front-page { margin-inline: auto; } .aznet-theme-main--front-page .aznet-theme-entry__content .alignwide .alignwide { width: 100%; max-width: 100%; margin-inline: 0; transform: none; }',
           };
           try {
             for(const w of [390,768,1440]){
