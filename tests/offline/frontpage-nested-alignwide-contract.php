@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 $root = dirname( __DIR__, 2 );
 $css = (string) file_get_contents( $root . '/assets/css/components/media.css' );
+$layout = (string) file_get_contents( $root . '/assets/css/components/generic-content.css' );
 $front = (string) file_get_contents( $root . '/front-page.php' );
 $base = (string) file_get_contents( $root . '/style.css' );
 $fail = static function ( bool $condition, string $message ): void {
@@ -31,7 +32,7 @@ $fail( str_contains( $front, 'the_content();' ),
 // full-bleed 1440px shell. Industrial01 otherwise overrides generic margins.
 $articleSelector = '.aznet-theme-main--front-page .aznet-theme-entry.aznet-theme-entry--front-page';
 $articlePattern = '/' . preg_quote( $articleSelector, '/' ) . '\\s*\\{([^}]*)\\}/';
-$fail( preg_match( $articlePattern, $css, $articleMatches ) === 1
+$fail( preg_match( $articlePattern, $layout, $articleMatches ) === 1
     && str_contains( (string) ( $articleMatches[1] ?? '' ), 'margin-inline: auto;' ),
     'Native front-page Article must be centred before applying wide-block alignment' );
 
