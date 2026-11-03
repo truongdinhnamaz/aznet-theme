@@ -1,0 +1,20 @@
+name: Temporary Industrial01 Media A11y RED GREEN
+on:
+  push:
+    branches:
+      - work/industrial01-image-link-a11y-20261103
+permissions:
+  contents: read
+jobs:
+  isolated-product-a11y:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - run: php -l template-parts/homepage/industrial-01/products.php
+      - run: php -l tests/offline/industrial01-product-showcase-contract.php
+      - run: php tests/offline/industrial01-product-showcase-contract.php
