@@ -139,7 +139,7 @@ jobs:
             ||!r.layout.parts.find(x=>x.selector==='main'&&x.visible)
             ||(r.quote&&(!r.quote.targetVisible||!r.quote.phone||!r.quote.zalo||r.quote.clickError)));
           console.log('TOTAL='+results.length+' BLOCKING='+failures.length);
-          if(failures.length){console.error('FAIL_DETAILS='+JSON.stringify(failures.map(r=>({page:r.page,viewport:r.viewport,status:r.httpStatus,overflow:r.layout?.overflowPx,error:r.navigationError,quote:r.quote})))));process.exitCode=1}
+          if(failures.length){console.error('FAIL_DETAILS='+JSON.stringify(failures.map(r=>({page:r.page,viewport:r.viewport,status:r.httpStatus,overflow:r.layout?.overflowPx,error:r.navigationError,quote:r.quote}))));process.exitCode=1}
           JS
       - name: Upload QA screenshots and JSON evidence
         if: always()
