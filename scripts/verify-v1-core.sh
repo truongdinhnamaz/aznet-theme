@@ -125,6 +125,9 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/x1-x2-retained-work
 printf '%s\n' '==> X3 Media / Gallery / Embed contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x3-media-gallery-embed-contract.php
 
+printf '%s\n' '==> Native Front Page nested Gutenberg wide alignment contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/frontpage-nested-alignwide-contract.php
+
 printf '%s\n' '==> X4 Pagination & Navigation Completion contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x4-pagination-navigation-contract.php
 
