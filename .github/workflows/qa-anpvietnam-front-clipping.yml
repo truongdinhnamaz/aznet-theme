@@ -43,7 +43,7 @@ jobs:
             fixNested: '.aznet-theme-main--front-page .aznet-theme-entry__content .alignwide .alignwide { width: 100%; max-width: 100%; margin-inline: 0; transform: none; }',
           };
           try {
-            for(const w of [390,768]){
+            for(const w of [390,768,1440]){
               const ctx=await browser.newContext({viewport:{width:w,height:900},deviceScaleFactor:1});
               for (const [mode,css] of Object.entries(candidateCSS)){
                 const page=await ctx.newPage();
