@@ -50,6 +50,20 @@ jobs:
                 const resp=await page.goto('https://anpvietnam.vn/',{waitUntil:'domcontentloaded',timeout:35000});
                 await page.waitForTimeout(650);
                 if(css)await page.addStyleTag({content:css});
+                if(w===390 && mode==='fixNested'){
+                  const mediaStatus=[];
+                  for(const sel of ['.aznet-theme-industrial01-product-card__media img','.aznet-theme-industrial01-knowledge-card__media img']){
+                    const imgs=page.locator(sel);
+                    for(let k=0;k<await imgs.count();k++){
+                      const item=imgs.nth(k);
+                      await item.scrollIntoViewIfNeeded({timeout:10000});
+                      await page.waitForTimeout(250);
+                      const st=await item.evaluate(img=>({src:img.currentSrc||img.src,complete:img.complete,naturalWidth:img.naturalWidth,loading:img.loading}));
+                      mediaStatus.push({kind:sel.includes('product')?'product':'knowledge',index:k+1,...st});
+                    }
+                  }
+                  console.log('MEDIA_RESULT '+JSON.stringify(mediaStatus));
+                }
                 const data=await page.evaluate((sels)=>{
                   const viewport=window.innerWidth;
                   const specs=[];
