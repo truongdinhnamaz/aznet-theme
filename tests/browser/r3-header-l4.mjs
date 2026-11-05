@@ -241,6 +241,13 @@ async function verifyMobileKeyboard(page) {
 
     await page.locator('[data-aznet-theme-nav-trigger]').click();
     await page.setViewportSize({ width: 1440, height: 900 });
+    // Chromium dispatches ResizeObserver/resize events asynchronously.
+    // Wait for the actual settled UI state instead of reading immediately
+    // after the viewport command; persistent scroll-lock still fails.
+    await page.waitForFunction(() => {
+      const element = document.querySelector('[data-aznet-theme-nav-panel]');
+      return element && element.hidden && document.body.style.overflow !== 'hidden';
+    }, null, { timeout: 3000 });
     const resizeState = await panel.evaluate((element) => ({
       hidden: element.hidden,
       overflow: document.body.style.overflow,
