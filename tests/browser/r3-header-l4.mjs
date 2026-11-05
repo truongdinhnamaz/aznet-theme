@@ -190,7 +190,7 @@ async function verifyMobileKeyboard(page) {
   if (longMenuCase) {
     await page.locator('[data-aznet-theme-nav-trigger]').click();
     await page.mouse.click(2, page.viewportSize().height - 4);
-    if ((await trigger.getAttribute('aria-expanded')) !== 'false') {
+    if ((await page.locator('[data-aznet-theme-nav-trigger]').getAttribute('aria-expanded')) !== 'false') {
       throw new Error('clicking outside mobile panel did not dismiss it');
     }
     if ((await page.evaluate(() => document.body.style.overflow)) === 'hidden') {
