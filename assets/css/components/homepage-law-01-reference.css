@@ -279,13 +279,6 @@
     outline: 2px solid var(--law01-client-burgundy);
     outline-offset: 4px;
 }
-.aznet-theme-site-footer--law01-burgundy-gold {
-    background: linear-gradient(110deg, #790b10, #66080b);
-}
-.aznet-theme-site-footer--law01-burgundy-gold .aznet-theme-site-footer__brand-title {
-    font-size: 1.25rem;
-    text-transform: uppercase;
-}
 @media (max-width: 1180px) {
     .aznet-theme-site-header--law01-burgundy-gold .aznet-theme-site-header__actions > .aznet-theme-site-header__search {
         display: none;
