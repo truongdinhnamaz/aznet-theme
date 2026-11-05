@@ -91,6 +91,19 @@
     transform: translateX(-50%);
 }
 
+/*
+ * A wide Gutenberg block nested in an already centred wide parent must not
+ * run the viewport-centering translateX a second time. On full-bleed front
+ * pages that pushed nested Columns off the left edge while overflow-x: clip
+ * masked the loss. Preserve the outer wide alignment and native Page content.
+ */
+.aznet-theme-main--front-page .aznet-theme-entry__content .alignwide .alignwide {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
+    transform: none;
+}
+
 .aznet-theme-entry__content .alignfull {
     width: min(var(--aznet-theme-container-shell), calc(100dvw - (var(--aznet-theme-gutter) * 2)));
     max-width: none;
