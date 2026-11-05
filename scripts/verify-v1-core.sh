@@ -228,6 +228,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/y2-professional-pag
 
 printf '%s\n' '==> Shared Footer contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/footer-shared-visual-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/footer-core-universal-contract.php
 
 printf '%s\n' '==> Y3 Footer System contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y3-footer-system-contract.php
