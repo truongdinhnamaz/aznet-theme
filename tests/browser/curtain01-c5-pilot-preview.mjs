@@ -111,8 +111,8 @@ async function verifyHomepage(viewportName, viewport) {
     if (await page.locator(selector).count() !== 1) throw new Error(`${viewportName}: expected one ${selector}`);
   }
 
-  // The Footer can be restyled independently. Verify the actual Curtain 01
-  // closing surface against the Footer's resolved base token at every viewport.
+  // The Footer is visually shared across all templates. Measure the actual
+  // Curtain CTA against the rendered Footer background at each viewport.
   const boundary = await page.evaluate(() => {
     const cta = document.querySelector('.aznet-theme-curtain01-final-cta');
     const footer = document.querySelector('.aznet-theme-site-footer');
@@ -140,7 +140,7 @@ async function verifyHomepage(viewportName, viewport) {
     };
     if (!cta || !footer) return { error: 'missing CTA/Footer DOM' };
     const ctaSurface = getComputedStyle(cta).backgroundColor;
-    const footerBase = getComputedStyle(footer).getPropertyValue('--aznet-theme-surface-inverse').trim();
+    const footerBase = getComputedStyle(footer).backgroundColor;
     const textContrast = [...cta.querySelectorAll('h2, p')]
       .filter((node) => (node.textContent || '').trim().length > 0)
       .map((node) => contrast(getComputedStyle(node).color, ctaSurface));
