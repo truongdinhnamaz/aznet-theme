@@ -137,6 +137,10 @@ jobs:
           printf '%s\n' "$PUBLISH_ID" > /tmp/wellness01-native/page-id.txt
           printf '%s\n' "$DRAFT_ID" > /tmp/wellness01-native/draft-id.txt
           printf '%s\n' "$BLOCK_DRAFT_ID" > /tmp/wellness01-native/block-draft-id.txt
+          # New disposable WordPress inner Page for 390/768/1440 QA.
+          INNER_ID=$(wp post create tests/fixtures/wellness01-inner-page.html --post_type=page --post_status=publish --post_title='Wellness 01 Inner QA' --post_name=wellness01-inner-qa --porcelain --path=/tmp/wp --allow-root)
+          test -n "$INNER_ID"
+          printf '%s\n' "$INNER_ID" > /tmp/wellness01-native/inner-page-id.txt
           wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
           wp rewrite flush --hard --path=/tmp/wp --allow-root
       - name: Start isolated WordPress runtime
@@ -170,6 +174,13 @@ jobs:
         run: |
           set -euo pipefail
           WELLNESS_PAGE_ID=$(cat /tmp/wellness01-native/page-id.txt) WELLNESS_DRAFT_ID=$(cat /tmp/wellness01-native/draft-id.txt) WELLNESS_BLOCK_DRAFT_ID=$(cat /tmp/wellness01-native/block-draft-id.txt) node tests/browser/wellness01-native-l4.mjs
+      - name: Verify native Wellness inner Page 390/768/1440 and shared Footer
+        env:
+          WELLNESS_BASE_URL: http://127.0.0.1:8080
+          WELLNESS_EVIDENCE_DIR: /tmp/wellness01-native
+        run: |
+          set -euo pipefail
+          WELLNESS_INNER_PAGE_ID=$(cat /tmp/wellness01-native/inner-page-id.txt) node tests/browser/wellness01-forwardport-inner-l4.mjs
       - name: Upload WordPress evidence and server log
         if: always()
         uses: actions/upload-artifact@v4
