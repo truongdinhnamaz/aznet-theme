@@ -223,6 +223,9 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/d042-three-pilot-cs
 printf '%s\n' '==> Y2 Professional Page Kits contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y2-professional-page-kits-contract.php
 
+printf '%s\n' '==> Shared Footer contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/footer-shared-visual-contract.php
+
 printf '%s\n' '==> Y3 Footer System contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y3-footer-system-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/professional-footer-mobile-spacing-contract.php

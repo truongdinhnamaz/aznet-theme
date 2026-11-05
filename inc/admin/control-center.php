@@ -51,20 +51,20 @@ function render_hidden_settings( array $visible_keys ): void {
 
 function render_footer_template_gallery( string $current ): void {
     $templates = [
-        'minimal'      => [ __( 'Minimal', 'aznet-theme' ), __( 'Gọn, ưu tiên thương hiệu và các liên kết thiết yếu.', 'aznet-theme' ) ],
-        'classic'      => [ __( 'Classic', 'aznet-theme' ), __( 'Bố cục ba cột quen thuộc cho website doanh nghiệp.', 'aznet-theme' ) ],
+        'minimal'      => [ __( 'Minimal', 'aznet-theme' ), __( '2 cột nội dung đã lưu — không đổi style Footer.', 'aznet-theme' ) ],
+        'classic'      => [ __( 'Classic', 'aznet-theme' ), __( '3 cột nội dung đã lưu — không đổi style Footer.', 'aznet-theme' ) ],
         'professional' => [ __( 'Professional', 'aznet-theme' ), __( 'Bốn cột rõ ràng cho website dịch vụ và doanh nghiệp.', 'aznet-theme' ) ],
-        'split'        => [ __( 'Split', 'aznet-theme' ), __( 'Khối thương hiệu nổi bật bên trái, nội dung ở bên phải.', 'aznet-theme' ) ],
-        'centered'     => [ __( 'Centered', 'aznet-theme' ), __( 'Bố cục cân giữa, phù hợp website thương hiệu gọn.', 'aznet-theme' ) ],
-        'compact'      => [ __( 'Compact', 'aznet-theme' ), __( 'Footer thấp, tiết kiệm không gian hiển thị.', 'aznet-theme' ) ],
+        'split'        => [ __( 'Split', 'aznet-theme' ), __( '3 cột nội dung đã lưu — không đổi style Footer.', 'aznet-theme' ) ],
+        'centered'     => [ __( 'Centered', 'aznet-theme' ), __( '1 cột nội dung đã lưu — không đổi style Footer.', 'aznet-theme' ) ],
+        'compact'      => [ __( 'Compact', 'aznet-theme' ), __( '3 cột nội dung đã lưu — không đổi style Footer.', 'aznet-theme' ) ],
     ];
 
     echo '<div class="aznet-theme-footer-template-gallery" data-footer-template-gallery>';
-    echo '<div class="aznet-theme-footer-template-gallery__heading"><h2>' . esc_html__( 'Chọn mẫu Footer', 'aznet-theme' ) . '</h2><p>' . esc_html__( 'Đổi mẫu chỉ thay cách trình bày. Toàn bộ nội dung Footer dùng chung và được giữ nguyên.', 'aznet-theme' ) . '</p></div>';
+    echo '<div class="aznet-theme-footer-template-gallery__heading"><h2>' . esc_html__( 'Chọn hồ sơ nội dung Footer', 'aznet-theme' ) . '</h2><p>' . esc_html__( 'Footer dùng chung một thiết kế trên mọi mẫu website. Mỗi hồ sơ giữ các cột nội dung WordPress riêng; đổi hồ sơ không xóa dữ liệu đã lưu.', 'aznet-theme' ) . '</p></div>';
     if ( ! isset( $templates[ $current ] ) ) {
         echo '<input type="hidden" name="aznet_theme_settings[footer_preset]" value="' . esc_attr( $current ) . '" data-footer-preset-fallback>';
     }
-    echo '<fieldset class="aznet-theme-footer-template-gallery__grid"><legend class="screen-reader-text">' . esc_html__( 'Mẫu Footer', 'aznet-theme' ) . '</legend>';
+    echo '<fieldset class="aznet-theme-footer-template-gallery__grid"><legend class="screen-reader-text">' . esc_html__( 'Hồ sơ nội dung Footer', 'aznet-theme' ) . '</legend>';
     foreach ( $templates as $preset => $template ) {
         $checked = checked( $current, $preset, false );
         echo '<label class="aznet-theme-footer-template-card aznet-theme-footer-template-card--' . esc_attr( $preset ) . '" data-footer-template="' . esc_attr( $preset ) . '">';
@@ -77,12 +77,12 @@ function render_footer_template_gallery( string $current ): void {
 
     $preview_preset = isset( $templates[ $current ] ) ? $current : 'classic';
     echo '<div class="aznet-theme-footer-live-preview aznet-theme-footer-live-preview--' . esc_attr( $preview_preset ) . '" data-footer-live-preview data-preset="' . esc_attr( $preview_preset ) . '">';
-    echo '<div class="aznet-theme-footer-live-preview__toolbar"><strong>' . esc_html__( 'Xem trước bố cục', 'aznet-theme' ) . '</strong><span data-footer-preview-label>' . esc_html( $templates[ $preview_preset ][0] ) . '</span></div>';
+    echo '<div class="aznet-theme-footer-live-preview__toolbar"><strong>' . esc_html__( 'Sơ đồ số cột nội dung', 'aznet-theme' ) . '</strong><span data-footer-preview-label>' . esc_html( $templates[ $preview_preset ][0] ) . '</span></div>';
     echo '<div class="aznet-theme-footer-live-preview__canvas" aria-hidden="true"><span class="aznet-theme-footer-live-preview__brand"></span><span></span><span></span><span></span></div>';
     echo '</div>';
 
     if ( ! isset( $templates[ $current ] ) && 'standard' !== $current ) {
-        echo '<p class="description">' . esc_html__( 'Website đang dùng một preset Footer tương thích cũ/chuyên biệt. Chọn một mẫu ở trên để chuyển sang thư viện mẫu chung.', 'aznet-theme' ) . '</p>';
+        echo '<p class="description">' . esc_html__( 'Website đang dùng hồ sơ nội dung Footer cũ. Chọn hồ sơ phía trên chỉ để quản lý nội dung; style vẫn dùng chuẩn chung.', 'aznet-theme' ) . '</p>';
     }
     echo '</div>';
 }
@@ -153,7 +153,7 @@ function render_footer_column_editors( string $current ): void {
 
     echo '<div class="aznet-theme-panel aznet-theme-footer-content-editor">';
     echo '<div class="aznet-theme-footer-content-editor__heading"><div><h2>' . esc_html__( 'Sửa nội dung Footer', 'aznet-theme' ) . '</h2>';
-    echo '<p>' . esc_html__( 'Mỗi cột của mẫu Footer có một trình soạn thảo riêng. Khi đổi mẫu ở phía trên, bộ trình soạn thảo cũng đổi đúng theo số cột của mẫu đó.', 'aznet-theme' ) . '</p></div>';
+    echo '<p>' . esc_html__( 'Mỗi hồ sơ giữ các cột nội dung WordPress riêng. Khi chuyển hồ sơ, giao diện Footer không đổi và nội dung hồ sơ khác không bị xóa.', 'aznet-theme' ) . '</p></div>';
     echo '<div class="aznet-theme-footer-content-editor__actions">';
     echo '<a class="button" href="' . esc_url( admin_url( 'customize.php?autofocus[control]=custom_logo' ) ) . '">' . esc_html__( 'Sửa Logo', 'aznet-theme' ) . '</a>';
     echo '<a class="button" href="' . esc_url( admin_url( 'options-general.php' ) ) . '">' . esc_html__( 'Sửa tên & mô tả', 'aznet-theme' ) . '</a>';
@@ -214,7 +214,7 @@ function render_footer_column_editors( string $current ): void {
     }
 
     if ( ! isset( $column_counts[ $current ] ) ) {
-        echo '<p class="description" data-footer-column-editors-empty>' . esc_html__( 'Hãy chọn một mẫu Footer ở phía trên để mở đúng bộ trình soạn thảo theo cột.', 'aznet-theme' ) . '</p>';
+        echo '<p class="description" data-footer-column-editors-empty>' . esc_html__( 'Hãy chọn một hồ sơ nội dung ở phía trên để mở bộ trình soạn thảo tương ứng.', 'aznet-theme' ) . '</p>';
     }
 
     echo '</div>';

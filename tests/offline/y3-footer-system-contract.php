@@ -383,10 +383,9 @@ foreach (['Địa chỉ', 'SĐT', 'Email', 'Website', 'Fanpage'] as $contactLabe
 if (! str_contains($template, 'aznet-theme-site-footer__contact-label')) {
     y3_fail('Law 01 Footer contact rows must separate labels from values.');
 }
-if (! str_contains($template, "! in_array( \$preset, [ 'professional', 'law-01' ], true )")) {
-    y3_fail('Law 01 Footer must not duplicate the social menu again in the bottom bar.');
+if (1 !== substr_count($template, '<?php echo $social_menu;')) {
+    y3_fail('Shared Footer must render the native social menu exactly once');
 }
-
 foreach (['facebook', 'youtube', 'linkedin', 'tiktok', 'instagram'] as $channel) {
     if (! str_contains($helper, "'{$channel}'")) {
         y3_fail('Law 01 Footer helper must allow managed social channel: ' . $channel);
@@ -402,7 +401,7 @@ foreach (['facebook', 'youtube', 'linkedin', 'tiktok', 'instagram'] as $channel)
         y3_fail('Footer profile admin must expose managed social channel: ' . $channel);
     }
 }
-foreach (['aznet-theme-site-footer__social-column', "'professional' === \$preset", 'Kết nối với chúng tôi'] as $needle) {
+foreach (['aznet-theme-site-footer__social-column', 'Kết nối với chúng tôi'] as $needle) {
     if (! str_contains($template, $needle)) {
         y3_fail('Professional Footer demo composition missing: ' . $needle);
     }
@@ -420,12 +419,9 @@ $css = file_get_contents($root . '/assets/css/components/site-footer.css');
 if (false === $css) {
     y3_fail('unable to read Footer stylesheet');
 }
-foreach (['facebook', 'youtube', 'linkedin', 'tiktok', 'instagram'] as $channel) {
-    if (! str_contains($css, '.aznet-theme-site-footer__channel-link--' . $channel)) {
-        y3_fail('Law 01 Footer stylesheet must provide icon presentation for social channel: ' . $channel);
-    }
+foreach (['aznet-theme-site-footer__contact-label', 'aznet-theme-site-footer__contact-value', 'aznet-theme-site-footer__rich-content'] as $selector) {
+    if (! str_contains($css, $selector)) y3_fail('Shared Footer source-backed presentation missing: ' . $selector);
 }
-
 foreach (['location', 'phone', 'website', 'email', 'facebook', 'youtube', 'linkedin', 'tiktok', 'instagram'] as $field) {
     if (! str_contains($footerProfile, "'{$field}'")) {
         y3_fail('Footer overview profile must expose managed field: ' . $field);
@@ -443,7 +439,7 @@ if (str_contains($template, 'aznet-theme-site-footer__contact-icon')) {
     y3_fail('Law 01 Footer contact details must not use icon-only controls; icons are reserved for social links.');
 }
 foreach ([
-    '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__contact-links {',
+    '.aznet-theme-site-footer__contact-links',
     'display: grid;',
     'overflow-wrap: anywhere;',
 ] as $needle) {
@@ -458,63 +454,17 @@ if (str_contains($helper, "wp_parse_url( $home_url") || str_contains($helper, "'
     y3_fail('Law 01 Footer website must come only from populated Footer profile data, never be synthesized from home_url.');
 }
 
-$professionalContactPos = strpos($template, "if ( 'professional' === \$preset && '' !== \$contact_menu )");
-$professionalNavigationPos = strpos($template, "if ( '' !== \$primary_menu )");
-if (false === $professionalContactPos || false === $professionalNavigationPos || $professionalContactPos > $professionalNavigationPos) {
-    y3_fail('Professional Footer must render Contact before primary navigation to match approved demo composition');
+if (! str_contains($template, 'class="aznet-theme-site-footer"') ||
+    ! str_contains($template, 'data-aznet-theme-footer-content-preset')) {
+    y3_fail('Single visual Footer class and content profile marker required');
 }
-
-foreach (['.aznet-theme-site-footer--minimal', '.aznet-theme-site-footer--classic', '.aznet-theme-site-footer--professional', '.aznet-theme-site-footer--split', '.aznet-theme-site-footer--centered', '.aznet-theme-site-footer--compact', '.aznet-theme-site-footer--law-01'] as $selector) {
-    if (! str_contains($css, $selector)) {
-        y3_fail('Footer stylesheet missing preset selector ' . $selector);
-    }
+if (preg_match('/\\.aznet-theme-site-footer--(?:minimal|classic|professional|split|centered|compact|law-01|skin-law-01)\\b/', $css)) {
+    y3_fail('Preset-specific Footer CSS is not allowed');
 }
-foreach (['minmax(250px, 1fr)', 'minmax(160px, .62fr)', 'minmax(320px, 1.18fr)', '.aznet-theme-site-footer__social-column'] as $needle) {
-    if (! str_contains($css, $needle)) {
-        y3_fail('Professional Footer demo grid missing: ' . $needle);
-    }
-}
-
-foreach ([
-    '.aznet-theme-site-footer--professional .aznet-theme-site-footer__identity {',
-    '.aznet-theme-site-footer--professional .aznet-theme-site-footer__brand {',
-    'display: block;',
-    '.aznet-theme-site-footer--professional .aznet-theme-site-footer__brand-title {',
-    'display: none;',
-] as $needle) {
-    if (! str_contains($css, $needle)) {
-        y3_fail('Professional Footer identity column must stack the logo cleanly without duplicating the site title: ' . $needle);
-    }
-}
-if (! str_contains($css, '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__main {') || ! str_contains($css, 'grid-template-columns: minmax(280px, 1.3fr) repeat(3, minmax(160px, .75fr));')) {
-    y3_fail('Law 01 Footer requires a four-column desktop grid for identity, services, links and contact/social.');
-}
-foreach ([
-    '--aznet-theme-law01-burgundy-deep',
-    '--aznet-theme-law01-gold',
-    '--aznet-theme-law01-ivory',
-    '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__brand-title',
-    '.aznet-theme-site-footer--law-01 .aznet-theme-site-footer__heading::after',
-] as $needle) {
-    if (! str_contains($css, $needle)) {
-        y3_fail('Law 01 Footer visual system missing approved detail: ' . $needle);
-    }
-}
-if (! str_contains($css, '@media (max-width: 48rem)')) {
-    y3_fail('Footer stylesheet must stack all presets at <= 48rem');
-}
-if (! str_contains($css, ':focus-visible')) {
-    y3_fail('Footer stylesheet must retain visible keyboard focus');
-}
-foreach ([
-    '--aznet-theme-footer-accent',
-    'linear-gradient(',
-    '.aznet-theme-site-footer--professional .aznet-theme-site-footer__brand-title',
-    'letter-spacing:',
-] as $needle) {
-    if (! str_contains($css, $needle)) {
-        y3_fail('Footer professional visual system missing approved detail: ' . $needle);
-    }
+foreach (['.aznet-theme-site-footer__main {', 'grid-template-columns: repeat(auto-fit,',
+          '.aznet-theme-site-footer__bottom {', 'background: #111722;',
+          '--aznet-theme-footer-ink: #f7f8fa;', ':focus-visible', '@media (max-width: 48rem)'] as $rule) {
+    if (! str_contains($css, $rule)) y3_fail('Shared Footer style missing: ' . $rule);
 }
 $law01Css = file_get_contents($root . '/assets/css/components/homepage-law-01-variants.css');
 if (false === $law01Css) {
@@ -523,10 +473,7 @@ if (false === $law01Css) {
 if (str_contains($law01Css, '.aznet-theme-site-footer--law01-')) {
     y3_fail('Homepage variant stylesheet must not restyle the independent Theme Footer');
 }
-if (preg_match('/#[0-9a-f]{3,8}\b|rgba?\s*\(/i', $css)) {
-    y3_fail('Footer presentation must use existing Theme tokens instead of hard-coded brand colors');
-}
-
+// Fixed brand-neutral colors are intentional; no industry-specific Footer CSS.
 $style = file_get_contents($root . '/style.css');
 $functions = file_get_contents($root . '/functions.php');
 if (false === $style || false === $functions) {

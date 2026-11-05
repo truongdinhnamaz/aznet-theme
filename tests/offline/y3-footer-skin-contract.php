@@ -1,47 +1,11 @@
 <?php
+/** Historical skin compatibility must not produce different Footer styling. */
 declare(strict_types=1);
-
-$root = dirname(__DIR__, 2);
-$footer = (string) file_get_contents($root . '/inc/theme/footer.php');
-$template = (string) file_get_contents($root . '/template-parts/footer/site-footer.php');
-$css = (string) file_get_contents($root . '/assets/css/components/site-footer.css');
-
-$fail = static function (string $message): never {
-    fwrite(STDERR, "FAIL: {$message}\n");
-    exit(1);
-};
-
-foreach ([
-    "'skin'        =>",
-    "homepage_preset",
-    "'law-01' ===",
-] as $needle) {
-    if (! str_contains($footer, $needle)) {
-        $fail('Footer context must expose presentation skin independently of content preset: ' . $needle);
-    }
-}
-
-foreach ([
-    "aznet-theme-site-footer--skin-",
-    "\$context['skin']",
-] as $needle) {
-    if (! str_contains($template, $needle)) {
-        $fail('Footer template must render presentation skin class: ' . $needle);
-    }
-}
-
-foreach ([
-    '.aznet-theme-site-footer--skin-law-01',
-    '--aznet-theme-footer-accent: var(--aznet-theme-law01-gold)',
-    'var(--aznet-theme-law01-burgundy-deep)',
-    'minmax(250px, 1fr)',
-    'minmax(160px, .62fr)',
-    'minmax(320px, 1.18fr)',
-    'padding-inline-start: clamp(var(--aznet-theme-space-6), 2.35vw, var(--aznet-theme-space-7))',
-] as $needle) {
-    if (! str_contains($css, $needle)) {
-        $fail('Law presentation skin must preserve burgundy/gold Footer shell: ' . $needle);
-    }
-}
-
-echo "PASS: Footer content preset and visual skin remain independently composable\n";
+$root=dirname(__DIR__,2);$helper=(string)file_get_contents($root.'/inc/theme/footer.php');$tpl=(string)file_get_contents($root.'/template-parts/footer/site-footer.php');$css=(string)file_get_contents($root.'/assets/css/components/site-footer.css');
+$fail=static function(string $x):never{fwrite(STDERR,"FAIL shared Footer skin: {$x}\n");exit(1);};
+if(!str_contains($helper,'function footer_skin(): string {')||!str_contains($helper,"return 'default';"))$fail('No shared skin fallback');
+if(!str_contains($helper,"'skin'        => footer_skin()"))$fail('Retained context field missing');
+if(!str_contains($tpl,'data-aznet-theme-footer-content-preset'))$fail('Content profile marker missing');
+foreach(['aznet-theme-site-footer--skin-','aznet-theme-site-footer--professional','aznet-theme-site-footer--law-01'] as $old){if(str_contains($tpl,$old)||str_contains($css,'.'.$old))$fail('Legacy visual class: '.$old);}
+if(!str_contains($css,'--aznet-theme-footer-ink: #f7f8fa;')||!str_contains($css,'background: #111722;'))$fail('Shared neutral palette missing');
+echo "PASS: Footer source compatibility with one shared skin\n";

@@ -50,7 +50,7 @@ foreach (['handle_footer_columns_save', 'footer_column_editor_value', 'footer_co
 if (! str_contains($rich, 'footer_profile_from_menus')) {
     $fail('Footer rich editor must seed from existing WordPress-menu contact/social data before first save');
 }
-foreach (['aznet-theme-site-footer__services', 'grid-template-columns: minmax(280px, 1.3fr) repeat(3, minmax(160px, .75fr))', 'aznet-theme-site-footer__contact-label', 'aznet-theme-site-footer__contact-value'] as $needle) {
+foreach (['.aznet-theme-site-footer__main {', 'grid-template-columns: repeat(auto-fit,', 'aznet-theme-site-footer__contact-label', 'aznet-theme-site-footer__contact-value'] as $needle) {
     if (! str_contains($css, $needle)) {
         $fail("Footer CSS missing {$needle}");
     }

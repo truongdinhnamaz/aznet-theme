@@ -14,7 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $context      = \AZnet\Theme\footer_context();
 $preset       = (string) ( $context['preset'] ?? 'standard' );
-$skin         = (string) ( $context['skin'] ?? 'default' );
 $site_title   = (string) ( $context['site_title'] ?? '' );
 $tagline      = (string) ( $context['tagline'] ?? '' );
 $home_url     = (string) ( $context['home_url'] ?? '' );
@@ -33,25 +32,17 @@ $social_menu  = (string) ( $menus['footer-social'] ?? '' );
 $policy_menu  = (string) ( $menus['footer-policy'] ?? '' );
 $year         = (string) ( $context['year'] ?? '' );
 
-$footer_classes = [
-    'aznet-theme-site-footer',
-    'aznet-theme-site-footer--' . $preset,
-];
-
-if ( 'default' !== $skin && '' !== $skin ) {
-    $footer_classes[] = 'aznet-theme-site-footer--skin-' . sanitize_html_class( $skin );
-}
-
 $contact_heading    = (string) ( $labels['contact_heading'] ?? __( 'Thông tin liên hệ', 'aznet-theme' ) );
 $navigation_heading = (string) ( $labels['primary_heading'] ?? __( 'Liên kết nhanh', 'aznet-theme' ) );
 $social_heading     = (string) ( $labels['social_heading'] ?? __( 'Kết nối với chúng tôi', 'aznet-theme' ) );
 $policy_heading     = (string) ( $labels['policy_heading'] ?? __( 'Chính sách', 'aznet-theme' ) );
 ?>
-<footer class="<?php echo esc_attr( implode( ' ', $footer_classes ) ); ?>" data-aznet-theme-site-footer role="contentinfo">
+<footer class="aznet-theme-site-footer" data-aznet-theme-site-footer data-aznet-theme-footer-content-preset="<?php echo esc_attr( $preset ); ?>" role="contentinfo">
     <div class="aznet-theme-site-footer__inner">
         <div class="aznet-theme-site-footer__main">
             <?php if ( $footer_columns_active ) : ?>
                 <?php foreach ( $footer_columns as $column_index => $column_content ) : ?>
+                    <?php if ( 0 !== $column_index && '' === trim( (string) $column_content ) ) { continue; } ?>
                     <section class="aznet-theme-site-footer__column-content aznet-theme-site-footer__column-content--<?php echo esc_attr( (string) ( $column_index + 1 ) ); ?>">
                         <?php if ( 0 === $column_index ) : ?>
                             <div class="aznet-theme-site-footer__identity" data-aznet-theme-footer-identity-source="wordpress">
@@ -101,13 +92,6 @@ $policy_heading     = (string) ( $labels['policy_heading'] ?? __( 'Chính sách'
                 </nav>
             <?php endif; ?>
 
-            <?php if ( 'professional' === $preset && '' !== $contact_menu ) : ?>
-                <nav class="aznet-theme-site-footer__contact" aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
-                    <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $contact_heading ); ?></h2>
-                    <?php echo $contact_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
-                </nav>
-            <?php endif; ?>
-
             <?php if ( '' !== $primary_menu ) : ?>
                 <nav class="aznet-theme-site-footer__navigation" aria-label="<?php echo esc_attr__( 'Điều hướng Footer', 'aznet-theme' ); ?>">
                     <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $navigation_heading ); ?></h2>
@@ -154,6 +138,7 @@ $policy_heading     = (string) ( $labels['policy_heading'] ?? __( 'Chính sách'
                             </li>
                         <?php endforeach; ?>
 
+                        <?php if ( '' === $social_menu ) : ?>
                         <?php foreach ( $social_channels as $channel ) : ?>
                             <?php
                             $channel_key = sanitize_html_class( (string) ( $channel['key'] ?? '' ) );
@@ -174,16 +159,17 @@ $policy_heading     = (string) ( $labels['policy_heading'] ?? __( 'Chính sách'
                             </li>
                             <?php break; ?>
                         <?php endforeach; ?>
+                        <?php endif; ?>
                     </ul>
                 </div>
-            <?php elseif ( 'professional' !== $preset && '' !== $contact_menu ) : ?>
+            <?php elseif ( '' !== $contact_menu ) : ?>
                 <nav class="aznet-theme-site-footer__contact" aria-label="<?php echo esc_attr__( 'Liên hệ', 'aznet-theme' ); ?>">
                     <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $contact_heading ); ?></h2>
                     <?php echo $contact_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
                 </nav>
             <?php endif; ?>
 
-            <?php if ( 'professional' === $preset && '' !== $social_menu ) : ?>
+            <?php if ( '' !== $social_menu ) : ?>
                 <nav class="aznet-theme-site-footer__social-column aznet-theme-site-footer__social" aria-label="<?php echo esc_attr( $social_heading ); ?>">
                     <h2 class="aznet-theme-site-footer__heading"><?php echo esc_html( $social_heading ); ?></h2>
                     <?php echo $social_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
@@ -196,18 +182,11 @@ $policy_heading     = (string) ( $labels['policy_heading'] ?? __( 'Chính sách'
             <p class="aznet-theme-site-footer__copyright">
                 <?php echo esc_html( sprintf( '© %s %s', $year, $site_title ) ); ?>
             </p>
-            <?php if ( '' !== $social_menu || '' !== $policy_menu ) : ?>
+            <?php if ( '' !== $policy_menu ) : ?>
                 <div class="aznet-theme-site-footer__bottom-nav">
-                    <?php if ( ! $footer_columns_active && '' !== $social_menu && ! in_array( $preset, [ 'professional', 'law-01' ], true ) ) : ?>
-                        <nav class="aznet-theme-site-footer__social" aria-label="<?php echo esc_attr__( 'Mạng xã hội', 'aznet-theme' ); ?>">
-                            <?php echo $social_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
-                        </nav>
-                    <?php endif; ?>
-                    <?php if ( '' !== $policy_menu ) : ?>
-                        <nav class="aznet-theme-site-footer__policies" aria-label="<?php echo esc_attr( $policy_heading ); ?>">
-                            <?php echo $policy_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
-                        </nav>
-                    <?php endif; ?>
+                    <nav class="aznet-theme-site-footer__policies" aria-label="<?php echo esc_attr( $policy_heading ); ?>">
+                        <?php echo $policy_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu output from Theme context. ?>
+                    </nav>
                 </div>
             <?php endif; ?>
         </div>
