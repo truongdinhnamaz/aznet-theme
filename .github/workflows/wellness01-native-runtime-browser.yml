@@ -150,9 +150,12 @@ jobs:
           echo $! > /tmp/wellness01-native/php-server.pid
           PAGE_ID=$(cat /tmp/wellness01-native/page-id.txt)
           for i in $(seq 1 30); do
-            if curl -fsS "http://127.0.0.1:8080/?page_id=${PAGE_ID}" >/tmp/wellness01-native/page.html; then break; fi
+            if curl -fsS 'http://127.0.0.1:8080/' >/tmp/wellness01-native/page.html; then break; fi
             sleep 1
           done
+          test -s /tmp/wellness01-native/page.html
+          # WordPress redirects the selected static Front Page's ?page_id=ID to /.
+          # Check the canonical document, not an empty 301 body.
           grep -F 'aznet-theme-wellness01' /tmp/wellness01-native/page.html
           grep -F 'aznet-theme-site-header' /tmp/wellness01-native/page.html
           grep -F 'aznet-theme-site-footer' /tmp/wellness01-native/page.html
