@@ -1,0 +1,73 @@
+{
+  "runtime": {
+    "token": "2928bec921444c6f87e5ee6607cc9824",
+    "wordpress": "6.9",
+    "php": "8.1.34",
+    "sapi": "cli-server",
+    "mysql": "8.0.46",
+    "plugins": [],
+    "dropin": false,
+    "preset": "wellness-01"
+  },
+  "records": [
+    {
+      "name": "standard",
+      "stylesheet": true,
+      "variant": "standard",
+      "h1": 1,
+      "html_sha256": "1d355e679df5bb7f5bef7cef97b22da80c53ac0527557566ea1a43223916317d",
+      "pass": true
+    },
+    {
+      "name": "wide",
+      "stylesheet": true,
+      "variant": "wide",
+      "h1": 1,
+      "html_sha256": "2584e382a89a7e8624ac7f7c925743e08e4e280af373621fa22e2795bbae46d4",
+      "pass": true
+    },
+    {
+      "name": "landing",
+      "stylesheet": true,
+      "variant": "landing",
+      "h1": 1,
+      "html_sha256": "6f519551e16264434ee20d3e6410d835ae82a8f52acc9feab2c8b6320885536a",
+      "pass": true
+    },
+    {
+      "name": "front",
+      "stylesheet": false,
+      "variant": null,
+      "h1": 0,
+      "html_sha256": "028fc4001dab6b98cc511395178bc64acf762784c01f1f6d47efa7fbf38d7016",
+      "pass": true
+    },
+    {
+      "name": "post",
+      "stylesheet": false,
+      "variant": null,
+      "h1": 1,
+      "html_sha256": "c0f1bf6669346ff9bcfe430d3a607cf69e9a4d38c292a334fd2243ee563a2081",
+      "pass": true
+    },
+    {
+      "name": "missing-css",
+      "stylesheet": false,
+      "variant": "standard",
+      "h1": 1,
+      "html_sha256": "981b921d9aafe597656bd3177db8d39313b835093e036ab1d91f54781a07893b",
+      "pass": true
+    },
+    {
+      "name": "preset-off",
+      "stylesheet": false,
+      "variant": "standard",
+      "h1": 1,
+      "html_sha256": "981b921d9aafe597656bd3177db8d39313b835093e036ab1d91f54781a07893b",
+      "pass": true
+    }
+  ],
+  "css_sha256": "ffbcf38ef448424986d84b223995fd224c299b936be41a0ea4f2dd14fa961638",
+  "content_unchanged": true,
+  "php_errors": []
+}

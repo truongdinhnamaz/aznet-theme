@@ -1,0 +1,38 @@
+{
+  "args": [
+    "./configure",
+    "--prefix=/workspace/scratch/0ca62ce69544/qa-native-v07/runtime/php81",
+    "--disable-all",
+    "--enable-cli",
+    "--disable-cgi",
+    "--without-pear",
+    "--enable-filter",
+    "--enable-ctype",
+    "--enable-session",
+    "--enable-tokenizer",
+    "--enable-fileinfo",
+    "--enable-phar",
+    "--enable-mbstring",
+    "--disable-mbregex",
+    "--enable-pdo",
+    "--with-pdo-mysql=mysqlnd",
+    "--with-mysqli=mysqlnd",
+    "--with-openssl",
+    "--with-curl",
+    "--with-zlib",
+    "--with-iconv",
+    "--with-libxml",
+    "--enable-dom",
+    "--enable-simplexml",
+    "--enable-xml",
+    "--enable-xmlreader",
+    "--enable-xmlwriter"
+  ],
+  "overrides": {
+    "LD_LIBRARY_PATH": "/workspace/scratch/0ca62ce69544/qa-native-v07/dependencies/lib/x86_64-linux-gnu:/workspace/scratch/0ca62ce69544/qa-native-v07/dependencies/usr/lib/x86_64-linux-gnu",
+    "PKG_CONFIG": "/workspace/scratch/0ca62ce69544/qa-native-v07/dependencies/usr/bin/pkgconf",
+    "LIBXML_CFLAGS": "-I/workspace/scratch/0ca62ce69544/qa-native-v07/dependencies/usr/include/libxml2",
+    "LIBXML_LIBS": "-L/usr/lib/x86_64-linux-gnu -l:libxml2.so.2",
+    "CPPFLAGS": "-I/workspace/scratch/0ca62ce69544/qa-native-v07/dependencies/usr/include"
+  }
+}

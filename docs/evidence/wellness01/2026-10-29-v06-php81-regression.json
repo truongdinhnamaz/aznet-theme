@@ -1,0 +1,170 @@
+[
+  {
+    "file": "tests/offline/classic-editor-policy-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: Classic editor policy contract"
+  },
+  {
+    "file": "tests/offline/curtain01-about-media-setting-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: Curtain 01 About media presentation setting contract"
+  },
+  {
+    "file": "tests/offline/digital01-commercial-media-surface-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: Digital 01 opaque, padded, scoped commercial-media figure and contained image"
+  },
+  {
+    "file": "tests/offline/homepage-blueprint-asset-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: Homepage blueprint asset-scope contract"
+  },
+  {
+    "file": "tests/offline/homepage-team-immediate-publish-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: Team Add Member publishes immediately and UI matches the behavior."
+  },
+  {
+    "file": "tests/offline/law01-reference-assets-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: reference styles are scoped, ordered, fingerprinted and wired."
+  },
+  {
+    "file": "tests/offline/posts-index-asset-regression.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: posts-on-front generic-content asset, Woo isolation, unrelated surface isolation"
+  },
+  {
+    "file": "tests/offline/provisioning-media-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: Law v1.1 starter media definitions, package assets and runner boundary"
+  },
+  {
+    "file": "tests/offline/r2-commerce-utility-patterns-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: R2 Commerce and Utility fail-soft patterns contract"
+  },
+  {
+    "file": "tests/offline/r2-content-patterns-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: R2 Content patterns contract"
+  },
+  {
+    "file": "tests/offline/r2-hero-patterns-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: R2 Hero patterns contract"
+  },
+  {
+    "file": "tests/offline/r2-pattern-static-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: R2 native pattern static contract"
+  },
+  {
+    "file": "tests/offline/r2-trust-patterns-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: R2 Trust and CTA patterns contract"
+  },
+  {
+    "file": "tests/offline/r2-wellness01-ai-disclosure-layout-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: Wellness AI disclosure constrained inside Core Group"
+  },
+  {
+    "file": "tests/offline/r2-wellness01-pattern-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: Wellness 01 source/asset contract (22 checks)"
+  },
+  {
+    "file": "tests/offline/r3-header-navigation-asset-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: R3 Header navigation progressive-enhancement asset contract"
+  },
+  {
+    "file": "tests/offline/r6-asset-scope-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: R6 exact Theme asset-scope matrix (12 cases)"
+  },
+  {
+    "file": "tests/offline/r6-convertflow-asset-gate-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: R6 ConvertFlow projection asset gate = BLOCKED_EXTERNAL_CONTRACT; safe bridge retained without private detection"
+  },
+  {
+    "file": "tests/offline/template-homepage-assets-manifest-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: D-043 C5 manifest-driven Homepage asset registry"
+  },
+  {
+    "file": "tests/offline/template-wellness01-library-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: Wellness 01 registered in Control Center + native Front Page (30 checks)"
+  },
+  {
+    "file": "tests/offline/typography-token-cache-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: typography and Footer cache-busting contract"
+  },
+  {
+    "file": "tests/offline/w1-woocommerce-asset-scope-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: W1 WooCommerce generic asset scope contract"
+  },
+  {
+    "file": "tests/offline/w2-product-asset-scope-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: W2 product-only asset scope"
+  },
+  {
+    "file": "tests/offline/w3-archive-asset-scope-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: W3 archive-only asset scope"
+  },
+  {
+    "file": "tests/offline/w4-cart-asset-scope-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: W4 cart-only asset scope"
+  },
+  {
+    "file": "tests/offline/w5-checkout-asset-scope-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: W5 checkout-only asset scope"
+  },
+  {
+    "file": "tests/offline/w6-account-asset-scope-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: W6 account-only asset scope"
+  },
+  {
+    "file": "tests/offline/x3-media-gallery-embed-contract.php",
+    "host_exit": 0,
+    "pass": true,
+    "output": "PASS: X3 Media/Gallery/Embed ownership and presentation contract"
+  }
+]

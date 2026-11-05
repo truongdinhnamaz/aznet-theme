@@ -1,0 +1,24 @@
+{
+    "base_source_sha": "b77290562a97c1b1a325fba60aa21a47681cbb54",
+    "pattern_sha256": "79ecd7ef0393c6379c5239be033dff2b9c1fc7f701a5410af52f62bde47dbcc1",
+    "wordpress": "6.9",
+    "php": "8.1.34",
+    "database": "Playground SQLite infrastructure adapter; not MySQL CI",
+    "active_plugins": [],
+    "stylesheet": "aznet-theme",
+    "page_id": 4,
+    "draft_id": 5,
+    "block_draft_id": 6,
+    "block_root_count": 1,
+    "bootstrap_stylesheet": "aznet-theme",
+    "bootstrap_mod": {
+        "homepage_preset": "wellness-01"
+    },
+    "bootstrap_mods": {
+        "0": false,
+        "nav_menu_locations": [],
+        "aznet_theme_settings": {
+            "homepage_preset": "wellness-01"
+        }
+    }
+}

@@ -1,0 +1,16 @@
+{
+  "run_token": "eaefe148ffc3444282acb223dd2fab0c",
+  "wordpress": "6.9",
+  "php": "8.1.34",
+  "sapi": "cli-server",
+  "mysql": "8.0.46",
+  "mysqli": true,
+  "client": "mysqlnd 8.1.34",
+  "db_dropin": false,
+  "active_plugins": [],
+  "preset": "wellness-01",
+  "stylesheet": "aznet-theme",
+  "front": "4",
+  "show": "page",
+  "blog_public": "0"
+}

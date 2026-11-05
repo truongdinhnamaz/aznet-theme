@@ -605,6 +605,18 @@ function enqueue_page_assets( ?string $version = null ): void {
         [ 'aznet-theme-tokens', 'aznet-theme-generic-content' ],
         asset_content_version( '/assets/css/components/page.css', $version )
     );
+
+    // Existing explicit presentation choice; no Page identity/content inference.
+    if ( function_exists( __NAMESPACE__ . '\\homepage_preset' )
+        && 'wellness-01' === homepage_preset()
+        && is_file( get_theme_file_path( '/assets/css/components/page-wellness-01.css' ) ) ) {
+        wp_enqueue_style(
+            'aznet-theme-page-wellness-01',
+            get_theme_file_uri( '/assets/css/components/page-wellness-01.css' ),
+            [ 'aznet-theme-page', 'aznet-theme-media' ],
+            asset_content_version( '/assets/css/components/page-wellness-01.css', $version )
+        );
+    }
 }
 
 
@@ -865,7 +877,7 @@ function enqueue_assets(): void {
             'aznet-theme-generic-content',
             get_theme_file_uri( '/assets/css/components/generic-content.css' ),
             [ 'aznet-theme-tokens' ],
-            $version
+            asset_content_version( '/assets/css/components/generic-content.css', $version )
         );
     }
 

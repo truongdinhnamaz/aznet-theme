@@ -325,3 +325,9 @@
     min-width:0;
     box-sizing:border-box;
 }
+
+/* Wellness 01: neutral/sage identity in the manifest-driven Template Library. */
+.aznet-theme-template-library__preview--wellness-01{background:#f5f2e9}
+.aznet-theme-template-library__preview--wellness-01 span:first-child{background:#688873}
+.aznet-theme-template-library__preview--wellness-01 span:nth-child(2){background:#d0b591}
+.aznet-theme-template-library__preview--wellness-01 span:nth-child(3){background:#dce7db}

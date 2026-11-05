@@ -1,0 +1,1257 @@
+[
+  {
+    "path": ".wpvibe-draft",
+    "size": "67",
+    "unit": "B"
+  },
+  {
+    "path": "404.php",
+    "size": "1.4",
+    "unit": "KB"
+  },
+  {
+    "path": "archive.php",
+    "size": "2.8",
+    "unit": "KB"
+  },
+  {
+    "path": "article-media/2026/az-001-vat-website-cover.svg",
+    "size": "3.9",
+    "unit": "KB"
+  },
+  {
+    "path": "article-media/2026/az-002-vat-contract-cover.svg",
+    "size": "3.3",
+    "unit": "KB"
+  },
+  {
+    "path": "article-media/2026/az-008-rank-math-license-cover.svg",
+    "size": "3.2",
+    "unit": "KB"
+  },
+  {
+    "path": "article-media/2026/az-010-backlink-social-cover.svg",
+    "size": "3.3",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/admin/control-center.css",
+    "size": "33.1",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/about-showcase-v2.css",
+    "size": "21.4",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/archive-law-01.css",
+    "size": "14.3",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/article.css",
+    "size": "24.8",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/catalog-navigation.css",
+    "size": "14.6",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/comments.css",
+    "size": "1.8",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/contact-page.css",
+    "size": "11.4",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/contact-surface.css",
+    "size": "6.6",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/forms.css",
+    "size": "5.6",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/generic-content.css",
+    "size": "5.6",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/header-law-01.css",
+    "size": "11.4",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/header-utility.css",
+    "size": "969",
+    "unit": "B"
+  },
+  {
+    "path": "assets/css/components/homepage-curtain-01.css",
+    "size": "34.6",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/homepage-digital-01-brand-2026.css",
+    "size": "36.5",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/homepage-digital-01.css",
+    "size": "31.7",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/homepage-industrial-01.css",
+    "size": "43.9",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/homepage-law-01-reference.css",
+    "size": "16.8",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/homepage-law-01-variants.css",
+    "size": "61.4",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/homepage-law-01.css",
+    "size": "20.2",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/homepage-wellness-01.css",
+    "size": "4.2",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/homepage.css",
+    "size": "11.3",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/media.css",
+    "size": "5.6",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/navigation.css",
+    "size": "2.6",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/page-wellness-01.css",
+    "size": "5.0",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/page.css",
+    "size": "17.4",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/profile-surface.css",
+    "size": "7.8",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/recovery.css",
+    "size": "2.4",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/service-card.css",
+    "size": "4.1",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/service-page.css",
+    "size": "17.2",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/services-page.css",
+    "size": "10.9",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/site-footer-digital-01.css",
+    "size": "8.5",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/site-footer.css",
+    "size": "34.1",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/site-header.css",
+    "size": "20.0",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/team-card.css",
+    "size": "1.8",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/team-directory.css",
+    "size": "1.7",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/team-member.css",
+    "size": "8.2",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/woocommerce-account.css",
+    "size": "5.4",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/woocommerce-archive.css",
+    "size": "5.9",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/woocommerce-blocks.css",
+    "size": "2.4",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/woocommerce-cart.css",
+    "size": "4.0",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/woocommerce-checkout.css",
+    "size": "4.7",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/components/woocommerce-product.css",
+    "size": "11.4",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/integrations/convertflow.css",
+    "size": "9.1",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/presets/commerce.css",
+    "size": "214",
+    "unit": "B"
+  },
+  {
+    "path": "assets/css/presets/curtain-01.css",
+    "size": "29.9",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/presets/digital-01.css",
+    "size": "4.1",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/presets/editorial.css",
+    "size": "149",
+    "unit": "B"
+  },
+  {
+    "path": "assets/css/presets/industrial-01.css",
+    "size": "40.3",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/css/tokens.css",
+    "size": "4.7",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/fonts/roboto/Roboto-Bold-Vietnamese.woff2",
+    "size": "8.2",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/fonts/roboto/Roboto-Bold.woff2",
+    "size": "48.8",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/fonts/roboto/Roboto-Medium-Vietnamese.woff2",
+    "size": "8.3",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/fonts/roboto/Roboto-Medium.woff2",
+    "size": "49.0",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/fonts/roboto/Roboto-Regular-Vietnamese.woff2",
+    "size": "8.2",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/fonts/roboto/Roboto-Regular.woff2",
+    "size": "48.1",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/images/law01-reference/team-portrait-01.svg",
+    "size": "13.8",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/images/law01-reference/team-portrait-02.svg",
+    "size": "12.9",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/images/law01-reference/team-portrait-03.svg",
+    "size": "13.1",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/images/law01-reference/team-portrait-04.svg",
+    "size": "13.4",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/js/admin/footer-template-picker.js",
+    "size": "1.8",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/js/admin/homepage-authoring.js",
+    "size": "6.7",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/js/admin/template-library.js",
+    "size": "1.4",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/js/catalog-navigation.js",
+    "size": "2.2",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/js/convertflow-sticky-submenu.js",
+    "size": "1.6",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/js/header-navigation.js",
+    "size": "2.6",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/js/homepage-curtain-01.js",
+    "size": "9.1",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/js/sticky-header.js",
+    "size": "652",
+    "unit": "B"
+  },
+  {
+    "path": "assets/js/team-name-fit.js",
+    "size": "1.4",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/starter/law01/editorial-1.webp",
+    "size": "3.7",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/starter/law01/editorial-2.webp",
+    "size": "9.6",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/starter/law01/editorial-3.webp",
+    "size": "5.5",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/starter/law01/editorial-4.webp",
+    "size": "2.5",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/starter/law01/hero.webp",
+    "size": "11.8",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/starter/wellness01/group.webp",
+    "size": "79.7",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/starter/wellness01/guide.webp",
+    "size": "84.8",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/starter/wellness01/meditation.webp",
+    "size": "114.7",
+    "unit": "KB"
+  },
+  {
+    "path": "assets/starter/wellness01/mobility.webp",
+    "size": "102.0",
+    "unit": "KB"
+  },
+  {
+    "path": "comments.php",
+    "size": "1.8",
+    "unit": "KB"
+  },
+  {
+    "path": "footer.php",
+    "size": "217",
+    "unit": "B"
+  },
+  {
+    "path": "front-page.php",
+    "size": "2.0",
+    "unit": "KB"
+  },
+  {
+    "path": "functions.php",
+    "size": "269",
+    "unit": "B"
+  },
+  {
+    "path": "header.php",
+    "size": "489",
+    "unit": "B"
+  },
+  {
+    "path": "home.php",
+    "size": "2.6",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/admin/bootstrap.php",
+    "size": "5.8",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/admin/control-center.php",
+    "size": "26.1",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/admin/danger-zone.php",
+    "size": "12.9",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/admin/editor-policy.php",
+    "size": "822",
+    "unit": "B"
+  },
+  {
+    "path": "inc/admin/footer-content.php",
+    "size": "6.1",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/admin/footer-profile.php",
+    "size": "8.5",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/admin/homepage-authoring.php",
+    "size": "15.8",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/admin/homepage-design.php",
+    "size": "15.0",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/admin/homepage-hero.php",
+    "size": "26.7",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/admin/homepage-migration.php",
+    "size": "3.1",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/admin/homepage.php",
+    "size": "78.2",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/admin/project-handoff.php",
+    "size": "2.1",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/admin/provisioning.php",
+    "size": "29.5",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/admin/settings-actions.php",
+    "size": "1.4",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/admin/settings-portability.php",
+    "size": "2.2",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/admin/site-guard-consumer.php",
+    "size": "7.4",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/admin/system-health.php",
+    "size": "1.7",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/admin/team-member-editor.php",
+    "size": "3.1",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/integrations/rootprofile.php",
+    "size": "5.3",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/integrations/woo-variation-swatches.php",
+    "size": "1.4",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/integrations/woocommerce.php",
+    "size": "3.9",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/patterns/woocommerce/category-grid.php",
+    "size": "832",
+    "unit": "B"
+  },
+  {
+    "path": "inc/patterns/woocommerce/featured-products.php",
+    "size": "1.4",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/archive-presentation.php",
+    "size": "1.2",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/assets.php",
+    "size": "34.9",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/bootstrap.php",
+    "size": "3.2",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/contact-surface.php",
+    "size": "5.6",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/content-shell.php",
+    "size": "1.1",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/design-system.php",
+    "size": "1.2",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/footer.php",
+    "size": "12.4",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/header.php",
+    "size": "7.4",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/homepage-authoring.php",
+    "size": "8.6",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/homepage-composer.php",
+    "size": "6.9",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/homepage-content-map.php",
+    "size": "5.8",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/homepage-surface-map.php",
+    "size": "40.8",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/law01-reference.php",
+    "size": "1.7",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/page-experience.php",
+    "size": "11.8",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/patterns.php",
+    "size": "2.3",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/preset-lexicon.php",
+    "size": "2.4",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/professional-page-kits.php",
+    "size": "1.1",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/profile-surface.php",
+    "size": "7.4",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/provisioning-blueprints.php",
+    "size": "29.3",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/provisioning-discovery.php",
+    "size": "4.6",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/provisioning-editorial.php",
+    "size": "5.0",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/provisioning-indexing.php",
+    "size": "2.7",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/provisioning-media.php",
+    "size": "5.0",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/provisioning-plan.php",
+    "size": "16.1",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/provisioning-professional-services.php",
+    "size": "4.5",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/provisioning-provenance.php",
+    "size": "3.7",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/provisioning-readiness.php",
+    "size": "4.7",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/provisioning-recommendations.php",
+    "size": "7.9",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/provisioning-runner.php",
+    "size": "24.2",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/rootprofile-current-surface.php",
+    "size": "1.7",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/settings.php",
+    "size": "24.4",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/setup.php",
+    "size": "1.5",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/team-directory.php",
+    "size": "6.1",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/template-loader.php",
+    "size": "963",
+    "unit": "B"
+  },
+  {
+    "path": "inc/theme/template-registry.php",
+    "size": "8.3",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/templates/curtain-01/manifest.php",
+    "size": "1.6",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/templates/digital-01/manifest.php",
+    "size": "1.2",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/templates/industrial-01/manifest.php",
+    "size": "3.3",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/templates/law-01/manifest.php",
+    "size": "1.9",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/templates/wellness-01/manifest.php",
+    "size": "1.2",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/widgets.php",
+    "size": "1.1",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/woocommerce-account.php",
+    "size": "408",
+    "unit": "B"
+  },
+  {
+    "path": "inc/theme/woocommerce-archive.php",
+    "size": "2.5",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/woocommerce-blocks.php",
+    "size": "792",
+    "unit": "B"
+  },
+  {
+    "path": "inc/theme/woocommerce-cart.php",
+    "size": "394",
+    "unit": "B"
+  },
+  {
+    "path": "inc/theme/woocommerce-checkout.php",
+    "size": "406",
+    "unit": "B"
+  },
+  {
+    "path": "inc/theme/woocommerce-presentation.php",
+    "size": "1.4",
+    "unit": "KB"
+  },
+  {
+    "path": "inc/theme/woocommerce-product.php",
+    "size": "416",
+    "unit": "B"
+  },
+  {
+    "path": "index.php",
+    "size": "886",
+    "unit": "B"
+  },
+  {
+    "path": "ops/tamduc-homepage/mutation-plan.json",
+    "size": "1.7",
+    "unit": "KB"
+  },
+  {
+    "path": "page-templates/landing.php",
+    "size": "574",
+    "unit": "B"
+  },
+  {
+    "path": "page-templates/wide.php",
+    "size": "571",
+    "unit": "B"
+  },
+  {
+    "path": "page.php",
+    "size": "555",
+    "unit": "B"
+  },
+  {
+    "path": "patterns/commerce-promotion.php",
+    "size": "2.2",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/content-alternating.php",
+    "size": "3.4",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/content-article-grid.php",
+    "size": "1.8",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/content-authority-quote.php",
+    "size": "1.8",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/content-faq.php",
+    "size": "2.0",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/content-intro.php",
+    "size": "1.4",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/cta-full-width.php",
+    "size": "1.9",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/hero-centered.php",
+    "size": "2.0",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/hero-commerce.php",
+    "size": "3.3",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/hero-inverse.php",
+    "size": "2.1",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/hero-split.php",
+    "size": "3.2",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/homepage-digital-01.php",
+    "size": "16.0",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/homepage-hero-content.php",
+    "size": "5.8",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/homepage-professional-services.php",
+    "size": "15.4",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/homepage-wellness-01.php",
+    "size": "19.7",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/page-about.php",
+    "size": "5.4",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/page-contact.php",
+    "size": "3.4",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/page-content-landing.php",
+    "size": "4.5",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/page-services.php",
+    "size": "5.9",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/page-team-expertise.php",
+    "size": "4.6",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/trust-feature-grid.php",
+    "size": "2.4",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/trust-logo-strip.php",
+    "size": "2.1",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/trust-testimonials.php",
+    "size": "1.9",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/utility-contact.php",
+    "size": "2.1",
+    "unit": "KB"
+  },
+  {
+    "path": "patterns/utility-footer-cta.php",
+    "size": "1.8",
+    "unit": "KB"
+  },
+  {
+    "path": "search.php",
+    "size": "2.7",
+    "unit": "KB"
+  },
+  {
+    "path": "sidebar-shop.php",
+    "size": "425",
+    "unit": "B"
+  },
+  {
+    "path": "single.php",
+    "size": "1.9",
+    "unit": "KB"
+  },
+  {
+    "path": "style.css",
+    "size": "936",
+    "unit": "B"
+  },
+  {
+    "path": "template-parts/archive/law01-category.php",
+    "size": "6.5",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/archive/law01-item.php",
+    "size": "2.3",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/contact/page.php",
+    "size": "5.2",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/contact/surface.php",
+    "size": "13.0",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/content/author.php",
+    "size": "1.2",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/content/card.php",
+    "size": "916",
+    "unit": "B"
+  },
+  {
+    "path": "template-parts/content/content-single.php",
+    "size": "3.8",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/content/meta.php",
+    "size": "1.6",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/content/page.php",
+    "size": "6.9",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/footer/site-footer.php",
+    "size": "14.4",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/header/brand.php",
+    "size": "1.5",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/header/catalog-navigation.php",
+    "size": "842",
+    "unit": "B"
+  },
+  {
+    "path": "template-parts/header/commerce-actions.php",
+    "size": "930",
+    "unit": "B"
+  },
+  {
+    "path": "template-parts/header/law01-consultation.php",
+    "size": "653",
+    "unit": "B"
+  },
+  {
+    "path": "template-parts/header/law01-topbar.php",
+    "size": "1.7",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/header/mobile-panel.php",
+    "size": "2.5",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/header/primary-navigation.php",
+    "size": "516",
+    "unit": "B"
+  },
+  {
+    "path": "template-parts/header/search.php",
+    "size": "794",
+    "unit": "B"
+  },
+  {
+    "path": "template-parts/header/site-header.php",
+    "size": "3.8",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/header/utility-navigation.php",
+    "size": "803",
+    "unit": "B"
+  },
+  {
+    "path": "template-parts/homepage/curtain-01/about.php",
+    "size": "2.7",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/curtain-01/catalogue.php",
+    "size": "4.2",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/curtain-01/category-showcase.php",
+    "size": "3.3",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/curtain-01/final-cta.php",
+    "size": "2.2",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/curtain-01/hero.php",
+    "size": "6.0",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/curtain-01/knowledge.php",
+    "size": "3.2",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/curtain-01/process.php",
+    "size": "1.2",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/curtain-01/projects.php",
+    "size": "3.3",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/curtain-01/proof-strip.php",
+    "size": "845",
+    "unit": "B"
+  },
+  {
+    "path": "template-parts/homepage/industrial-01/about.php",
+    "size": "3.0",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/industrial-01/categories.php",
+    "size": "5.8",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/industrial-01/cta.php",
+    "size": "2.4",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/industrial-01/hero.php",
+    "size": "7.7",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/industrial-01/knowledge.php",
+    "size": "3.3",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/industrial-01/process.php",
+    "size": "2.6",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/industrial-01/products.php",
+    "size": "5.1",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/industrial-01/solutions.php",
+    "size": "10.1",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/law-01/about.php",
+    "size": "1.2",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/law-01/analysis.php",
+    "size": "2.8",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/law-01/faq.php",
+    "size": "4.8",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/law-01/final-cta.php",
+    "size": "1.8",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/law-01/hero.php",
+    "size": "8.8",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/law-01/latest.php",
+    "size": "3.2",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/law-01/news.php",
+    "size": "3.9",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/law-01/process.php",
+    "size": "1.9",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/law-01/profile.php",
+    "size": "6.2",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/law-01/services.php",
+    "size": "3.0",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/law-01/team.php",
+    "size": "2.6",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/homepage/law-01/topics.php",
+    "size": "977",
+    "unit": "B"
+  },
+  {
+    "path": "template-parts/profile/surface.php",
+    "size": "15.1",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/services/card.php",
+    "size": "1.5",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/services/page.php",
+    "size": "4.8",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/team/card.php",
+    "size": "4.3",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/team/member.php",
+    "size": "5.3",
+    "unit": "KB"
+  },
+  {
+    "path": "template-parts/team/page.php",
+    "size": "1.2",
+    "unit": "KB"
+  },
+  {
+    "path": "theme.json",
+    "size": "6.9",
+    "unit": "KB"
+  }
+]

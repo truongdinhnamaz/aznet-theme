@@ -1,0 +1,14 @@
+{
+  "kind": "reviewable QA candidate, not a published release",
+  "production_source_commit": "cab5cf812d2f8c82df4d94424ac3845cc505ac4b",
+  "native_manifest_match": true,
+  "source_files": 251,
+  "package_files": 250,
+  "version": "1.3.98",
+  "path": "/workspace/scratch/0ca62ce69544/qa-native-v09-pages/aznet-theme-wellness01-cab5cf81-qa.zip",
+  "bytes": 1053318,
+  "sha256": "d4e263208d1fcfaa873241da3d3421e8a795d73415c9332916f043126e999d96",
+  "command_output": "PASS: deterministic package /workspace/scratch/0ca62ce69544/qa-native-v09-pages/aznet-theme-wellness01-cab5cf81-qa.zip files=250 sha256=d4e263208d1fcfaa873241da3d3421e8a795d73415c9332916f043126e999d96",
+  "zip_entries_verified": 250,
+  "zip_root": "aznet-theme"
+}

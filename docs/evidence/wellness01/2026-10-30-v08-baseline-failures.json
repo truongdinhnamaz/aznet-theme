@@ -1,0 +1,166 @@
+{
+  "baseline": "f782fb5a8c18107c852ab439fcbb5729f1bb1884",
+  "all_failures_unchanged": true,
+  "records": [
+    {
+      "file": "tests/offline/curtain01-history-about-contract.php",
+      "candidate_exit": 1,
+      "baseline_exit": 1,
+      "same_result": true,
+      "baseline_stdout": "",
+      "baseline_stderr": "FAIL: About must remain WordPress-source-owned via typed Page title/excerpt/featured image. Missing: homepage_about_page\n"
+    },
+    {
+      "file": "tests/offline/d050-v1392-publication-contract.php",
+      "candidate_exit": 1,
+      "baseline_exit": 1,
+      "same_result": true,
+      "baseline_stdout": "",
+      "baseline_stderr": "FAIL D-050 v1.3.92 release: Theme v1.3.92 metadata does not match\n"
+    },
+    {
+      "file": "tests/offline/g8-release-version-contract.php",
+      "candidate_exit": 1,
+      "baseline_exit": 1,
+      "same_result": true,
+      "baseline_stdout": "",
+      "baseline_stderr": "FAIL: expected final v1.1 release version 1.1.0, got 1.3.98\n"
+    },
+    {
+      "file": "tests/offline/homepage-admin-one-column-contract.php",
+      "candidate_exit": 1,
+      "baseline_exit": 1,
+      "same_result": true,
+      "baseline_stdout": "",
+      "baseline_stderr": "FAIL: Homepage section grid is not single-column.\n"
+    },
+    {
+      "file": "tests/offline/homepage-admin-row-order-contract.php",
+      "candidate_exit": 1,
+      "baseline_exit": 1,
+      "same_result": true,
+      "baseline_stdout": "",
+      "baseline_stderr": "FAIL: Homepage sections are not forced into a vertical row stack.\n"
+    },
+    {
+      "file": "tests/offline/homepage-hero-library-separation-contract.php",
+      "candidate_exit": 1,
+      "baseline_exit": 1,
+      "same_result": true,
+      "baseline_stdout": "",
+      "baseline_stderr": "FAIL: missing Hero Library separation contract: Quay l\u1ea1i Trang ch\u1ee7\n"
+    },
+    {
+      "file": "tests/offline/homepage-preset-admin-isolation-contract.php",
+      "candidate_exit": 255,
+      "baseline_exit": 255,
+      "same_result": true,
+      "baseline_stdout": "\nParse error: syntax error, unexpected string content \"\", expecting \"-\" or identifier or variable or number in /workspace/scratch/0ca62ce69544/qa-inner-v08-baseline/tests/offline/homepage-preset-admin-isolation-contract.php on line 18\n",
+      "baseline_stderr": ""
+    },
+    {
+      "file": "tests/offline/v1-3-74-version-contract.php",
+      "candidate_exit": 1,
+      "baseline_exit": 1,
+      "same_result": true,
+      "baseline_stdout": "",
+      "baseline_stderr": "expected Theme header Version: 1.3.74\n"
+    },
+    {
+      "file": "tests/offline/v1-3-75-version-contract.php",
+      "candidate_exit": 1,
+      "baseline_exit": 1,
+      "same_result": true,
+      "baseline_stdout": "",
+      "baseline_stderr": "expected Theme header Version: 1.3.75\n"
+    },
+    {
+      "file": "tests/offline/v1-3-76-version-contract.php",
+      "candidate_exit": 1,
+      "baseline_exit": 1,
+      "same_result": true,
+      "baseline_stdout": "",
+      "baseline_stderr": "expected Theme header Version: 1.3.76\n"
+    },
+    {
+      "file": "tests/offline/v1-3-77-version-contract.php",
+      "candidate_exit": 1,
+      "baseline_exit": 1,
+      "same_result": true,
+      "baseline_stdout": "",
+      "baseline_stderr": "expected Theme header Version: 1.3.77\n"
+    },
+    {
+      "file": "tests/offline/v1-3-78-version-contract.php",
+      "candidate_exit": 1,
+      "baseline_exit": 1,
+      "same_result": true,
+      "baseline_stdout": "",
+      "baseline_stderr": "expected Theme header Version: 1.3.78\n"
+    },
+    {
+      "file": "tests/offline/x6-v1391-release-candidate-contract.php",
+      "candidate_exit": 1,
+      "baseline_exit": 1,
+      "same_result": true,
+      "baseline_stdout": "",
+      "baseline_stderr": "FAIL: v1.3.91 technical candidate missing Theme version header\n"
+    },
+    {
+      "file": "tests/offline/x6-v1392-release-candidate-contract.php",
+      "candidate_exit": 1,
+      "baseline_exit": 1,
+      "same_result": true,
+      "baseline_stdout": "",
+      "baseline_stderr": "FAIL X6 v1.3.92 candidate: style/PHP version metadata mismatch\n"
+    },
+    {
+      "file": "tests/offline/x6-v1393-release-candidate-contract.php",
+      "candidate_exit": 1,
+      "baseline_exit": 1,
+      "same_result": true,
+      "baseline_stdout": "",
+      "baseline_stderr": "FAIL X6 v1.3.93 candidate: style/PHP version metadata mismatch\n"
+    },
+    {
+      "file": "tests/offline/x6-v1394-release-candidate-contract.php",
+      "candidate_exit": 1,
+      "baseline_exit": 1,
+      "same_result": true,
+      "baseline_stdout": "",
+      "baseline_stderr": "FAIL X6 v1.3.94 candidate: style/PHP version metadata mismatch\n"
+    },
+    {
+      "file": "tests/offline/x6-v1395-release-candidate-contract.php",
+      "candidate_exit": 1,
+      "baseline_exit": 1,
+      "same_result": true,
+      "baseline_stdout": "",
+      "baseline_stderr": "FAIL X6 v1.3.95 candidate: style/PHP version metadata mismatch\n"
+    },
+    {
+      "file": "tests/offline/x6-v1396-release-candidate-contract.php",
+      "candidate_exit": 1,
+      "baseline_exit": 1,
+      "same_result": true,
+      "baseline_stdout": "",
+      "baseline_stderr": "FAIL X6 v1.3.96 candidate: style/PHP version metadata mismatch\n"
+    },
+    {
+      "file": "tests/offline/x6-v1397-release-candidate-contract.php",
+      "candidate_exit": 1,
+      "baseline_exit": 1,
+      "same_result": true,
+      "baseline_stdout": "",
+      "baseline_stderr": "FAIL X6 v1.3.97 candidate: style/PHP version metadata mismatch\n"
+    },
+    {
+      "file": "tests/offline/x6-version-promotion-contract.php",
+      "candidate_exit": 255,
+      "baseline_exit": 255,
+      "same_result": true,
+      "baseline_stdout": "\nFatal error: Uncaught RuntimeException: style.css Theme Version must be exactly 1.2.0 in X6 promotion. in /workspace/scratch/0ca62ce69544/qa-inner-v08-baseline/tests/offline/x6-version-promotion-contract.php:17\nStack trace:\n#0 {main}\n  thrown in /workspace/scratch/0ca62ce69544/qa-inner-v08-baseline/tests/offline/x6-version-promotion-contract.php on line 17\n",
+      "baseline_stderr": ""
+    }
+  ]
+}

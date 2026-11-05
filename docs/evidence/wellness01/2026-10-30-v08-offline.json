@@ -1,0 +1,1873 @@
+{
+  "php": "PHP 8.1.34 (cli) (built: Oct 29 2026 10:51:02) (NTS)",
+  "assertions_enabled": true,
+  "elapsed_seconds": 3.01,
+  "total": 288,
+  "passed": 268,
+  "failures": [
+    {
+      "file": "tests/offline/curtain01-history-about-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL: About must remain WordPress-source-owned via typed Page title/excerpt/featured image. Missing: homepage_about_page\n"
+    },
+    {
+      "file": "tests/offline/d050-v1392-publication-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL D-050 v1.3.92 release: Theme v1.3.92 metadata does not match\n"
+    },
+    {
+      "file": "tests/offline/g8-release-version-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL: expected final v1.1 release version 1.1.0, got 1.3.98\n"
+    },
+    {
+      "file": "tests/offline/homepage-admin-one-column-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL: Homepage section grid is not single-column.\n"
+    },
+    {
+      "file": "tests/offline/homepage-admin-row-order-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL: Homepage sections are not forced into a vertical row stack.\n"
+    },
+    {
+      "file": "tests/offline/homepage-hero-library-separation-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL: missing Hero Library separation contract: Quay l\u1ea1i Trang ch\u1ee7\n"
+    },
+    {
+      "file": "tests/offline/homepage-preset-admin-isolation-contract.php",
+      "exit": 255,
+      "stdout": "\nParse error: syntax error, unexpected string content \"\", expecting \"-\" or identifier or variable or number in /workspace/scratch/0ca62ce69544/aznet-theme/tests/offline/homepage-preset-admin-isolation-contract.php on line 18\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/v1-3-74-version-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "expected Theme header Version: 1.3.74\n"
+    },
+    {
+      "file": "tests/offline/v1-3-75-version-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "expected Theme header Version: 1.3.75\n"
+    },
+    {
+      "file": "tests/offline/v1-3-76-version-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "expected Theme header Version: 1.3.76\n"
+    },
+    {
+      "file": "tests/offline/v1-3-77-version-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "expected Theme header Version: 1.3.77\n"
+    },
+    {
+      "file": "tests/offline/v1-3-78-version-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "expected Theme header Version: 1.3.78\n"
+    },
+    {
+      "file": "tests/offline/x6-v1391-release-candidate-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL: v1.3.91 technical candidate missing Theme version header\n"
+    },
+    {
+      "file": "tests/offline/x6-v1392-release-candidate-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL X6 v1.3.92 candidate: style/PHP version metadata mismatch\n"
+    },
+    {
+      "file": "tests/offline/x6-v1393-release-candidate-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL X6 v1.3.93 candidate: style/PHP version metadata mismatch\n"
+    },
+    {
+      "file": "tests/offline/x6-v1394-release-candidate-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL X6 v1.3.94 candidate: style/PHP version metadata mismatch\n"
+    },
+    {
+      "file": "tests/offline/x6-v1395-release-candidate-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL X6 v1.3.95 candidate: style/PHP version metadata mismatch\n"
+    },
+    {
+      "file": "tests/offline/x6-v1396-release-candidate-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL X6 v1.3.96 candidate: style/PHP version metadata mismatch\n"
+    },
+    {
+      "file": "tests/offline/x6-v1397-release-candidate-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL X6 v1.3.97 candidate: style/PHP version metadata mismatch\n"
+    },
+    {
+      "file": "tests/offline/x6-version-promotion-contract.php",
+      "exit": 255,
+      "stdout": "\nFatal error: Uncaught RuntimeException: style.css Theme Version must be exactly 1.2.0 in X6 promotion. in /workspace/scratch/0ca62ce69544/aznet-theme/tests/offline/x6-version-promotion-contract.php:17\nStack trace:\n#0 {main}\n  thrown in /workspace/scratch/0ca62ce69544/aznet-theme/tests/offline/x6-version-promotion-contract.php on line 17\n",
+      "stderr": ""
+    }
+  ],
+  "lints": [
+    {
+      "file": "inc/theme/assets.php",
+      "exit": 0,
+      "stdout": "No syntax errors detected in /workspace/scratch/0ca62ce69544/aznet-theme/inc/theme/assets.php\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/wellness01-page-assets-contract.php",
+      "exit": 0,
+      "stdout": "No syntax errors detected in /workspace/scratch/0ca62ce69544/aznet-theme/tests/offline/wellness01-page-assets-contract.php\n",
+      "stderr": ""
+    }
+  ],
+  "records": [
+    {
+      "file": "tests/offline/article-navigation-widget-area-contract.php",
+      "exit": 0,
+      "stdout": "PASS: native Article Sidebar widget area contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/article-sidebar-presentation-contract.php",
+      "exit": 0,
+      "stdout": "PASS: generic Article Sidebar presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/article-sidebar-scrollbar-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Article Sidebar scrollbar presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/classic-editor-policy-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Classic editor policy contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/contact-page-presentation-contract.php",
+      "exit": 0,
+      "stdout": "PASS: mapped Law 01 Contact Page presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/core-vertical-catalog-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Core vertical catalog menu + Industrial 01 Hero contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/core-vertical-catalog-submenu-contract.php",
+      "exit": 0,
+      "stdout": "PASS: accessible nested WordPress catalog groups\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/curtain01-about-copy-settings-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Curtain 01 About presentation copy settings contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/curtain01-about-media-setting-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Curtain 01 About media presentation setting contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/curtain01-about-presentation-authoring-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Curtain 01 About presentation authoring contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/curtain01-c2-preset-foundation-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Curtain 01 C2 preset foundation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/curtain01-c3-homepage-composition-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Curtain 01 C3 Homepage composition contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/curtain01-c4-visual-coexistence-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Curtain 01 C4 visual coexistence contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/curtain01-category-showcase-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Curtain 01 category showcase consumes public WooCommerce categories and provides bounded carousel navigation\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/curtain01-cinematic-hero-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Curtain 01 cinematic Hero supports three-slide crossfade, scoped motion and reduced-motion safety\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/curtain01-desktop-heading-flow-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Curtain 01 desktop headings use available row width before wrapping\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/curtain01-final-footer-contrast-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Curtain 01 CTA/Footer palette boundary 3.14:1 and CTA text contrast 4.97:1\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/curtain01-history-about-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL: About must remain WordPress-source-owned via typed Page title/excerpt/featured image. Missing: homepage_about_page\n"
+    },
+    {
+      "file": "tests/offline/curtain01-process-cover-contrast-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Curtain 01 authored Process Cover contrast 6.66:1 (minimum 4.5:1)\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/curtain01-process-rail-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Curtain 01 process rail contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/curtain01-project-showcase-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Curtain 01 project showcase contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/curtain01-proof-strip-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Curtain 01 quick-proof strip contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/curtain01-published-css-scope-contract.php",
+      "exit": 0,
+      "stdout": "PASS: published Curtain 01 CSS is preset-scoped; generic Page, Law and Industrial presentation stays isolated\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d027-provisioning-independence-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-027 standalone provisioning independence contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d027-standalone-core-health-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-027 standalone Core health contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d040-td1-template-library-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-040 TD1 Template Library admin presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d042-three-pilot-css-trigger-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-042 Curtain, Law and Industrial L4 workflows trigger on shared Page/Curtain CSS changes\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d049-cross-page-header-parity-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-049 cross-page catalog Header and compact Hero menu contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d049-rail-header-hero-visual-parity-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-049 header/Hero category-rail visual parity contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d050-customer-content-guide-contract.php",
+      "exit": 0,
+      "stdout": "PASS: WordPress-native customer editing guide without Theme content takeover\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d050-customer-operator-boundary.php",
+      "exit": 0,
+      "stdout": "PASS: D-050 developer tools hidden and denied to client admins, customer presentation retained\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d050-danger-zone-entrypoints.php",
+      "exit": 0,
+      "stdout": "PASS: D-050 privileged UI, direct POST boundaries, no false site-lock or WordPress ownership takeover\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d050-danger-zone-policy.php",
+      "exit": 0,
+      "stdout": "PASS: D-050 capability, default lock, actor/session isolation, TTL, relock, bounded audit\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d050-support-tab.php",
+      "exit": 0,
+      "stdout": "PASS: Theme Support tab + privileged-only Danger entry, no contract or site-policy takeover\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d050-theme-only-entry.php",
+      "exit": 0,
+      "stdout": "PASS: D050 privileged Theme-only discovery, independent Site Guard owner, default hidden\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d050-v1391-publication-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-050 one-shot v1.3.91 publication scope, SHA and no-deploy guard\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d050-v1392-historical-workflow-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-050 historical v1.3.92 release workflow, approved checksum, no site deployment\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d050-v1392-publication-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL D-050 v1.3.92 release: Theme v1.3.92 metadata does not match\n"
+    },
+    {
+      "file": "tests/offline/d050c-site-guard-consumer.php",
+      "exit": 0,
+      "stdout": "PASS: Theme D050C optional public consumer + nonce + fail-soft states (L2)\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d057-digital01-header-overlap-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-057 Digital 01 standard Header desktop/tablet contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d058-landing-fullwidth-inverse-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-058 Landing native group full-width and inverse opt-in CSS\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d060-about-showcase-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-060 About V2 authored opt-in, isolated asset and responsive presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d060-about-showcase-runtime.php",
+      "exit": 0,
+      "stdout": "PASS: D-060 native first-Hero V2 gated consumer runtime\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d061-homepage-products-container-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Products nested section is a single-spaced, width-bounded presentation island.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/d064-digital01-footer-contract.php",
+      "exit": 0,
+      "stdout": "PASS D-064: Footer HTML nesting, WordPress identity/menu/rich content, absence fallback, scoped responsive CSS\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/digital01-brand2026-presentation-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Digital 01 2026 reference \u2014 opt-in WordPress ownership, responsive components and WCAG AA token pairs\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/digital01-commercial-media-surface-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Digital 01 opaque, padded, scoped commercial-media figure and contained image\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/digital01-composer-isolation-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Digital 01 native WordPress front-page compositor does not render Law 01\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/digital01-native-authoring-contract.php",
+      "exit": 0,
+      "stdout": "PASS: native template effective surface, WordPress authoring source and Core neutrality\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/digital01-nine-section-homepage-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Digital 01 full Homepage ten-role presentation, native content authority and scoped CSS\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/digital01-process-link-contrast-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Digital 01 Process anchor contrast 8.31:1, explicitly scoped\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/digital01-template-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Digital 01 manifest, WordPress-native pattern, scoped assets, retained templates\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/digital01-woo-inline-cta-contrast-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Digital 01 Woo inline button text #192e3b on #e9e6ed = 11.37:1 (AA), scoped to preset card\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/e5-current-surface-consumer-contract.php",
+      "exit": 0,
+      "stdout": "PASS: E5 current-surface consumer contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/e5-current-surface-dispatcher-contract.php",
+      "exit": 0,
+      "stdout": "PASS: E5 dormant current-surface dispatcher\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/e5-current-surface-model-contract.php",
+      "exit": 0,
+      "stdout": "PASS: E5 current-surface payload-to-model adapters\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/e5-no-takeover-static-contract.php",
+      "exit": 0,
+      "stdout": "PASS: E5-B ownership / no-takeover static contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/editorial-listing-search-contract.php",
+      "exit": 0,
+      "stdout": "PASS: editorial listing/search presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/editorial-single-post-contract.php",
+      "exit": 0,
+      "stdout": "PASS: editorial single-post presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/f1-front-page-native-shell-contract.php",
+      "exit": 0,
+      "stdout": "PASS: F1 native front-page shell contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/f2-front-page-content-boundary-contract.php",
+      "exit": 0,
+      "stdout": "PASS: F2 WordPress body integration boundary contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/f3-homepage-ownership-static-contract.php",
+      "exit": 0,
+      "stdout": "PASS: F3 Homepage ownership static contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/f5-homepage-absent-failsoft-contract.php",
+      "exit": 0,
+      "stdout": "PASS: F5 Homepage absent/native fail-soft contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/front-page-posts-mode-regression.php",
+      "exit": 0,
+      "stdout": "PASS: native posts-on-front home.php delegation, cards, pagination, empty state; static content unchanged\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/fullwidth-shell-standard-contract.php",
+      "exit": 0,
+      "stdout": "PASS: AZnet outer presentation is full-bleed and first Curtain 01 Hero is flush below Header while inner content stays constrained\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/g3-core-release-static-contract.php",
+      "exit": 0,
+      "stdout": "PASS: G3 core release static contract\nVERSION=1.3.98\nPRODUCTION_PHP_FILES=166\nPACKAGE_EXCLUDES=.git,.github,docs,scripts,tests,README.md,aznet-preview.png\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/g8-release-version-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL: expected final v1.1 release version 1.1.0, got 1.3.98\n"
+    },
+    {
+      "file": "tests/offline/homepage-admin-fullwidth-hardfix-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Homepage admin is full-width and single-column with legacy/current guards.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-admin-one-column-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL: Homepage section grid is not single-column.\n"
+    },
+    {
+      "file": "tests/offline/homepage-admin-row-order-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL: Homepage sections are not forced into a vertical row stack.\n"
+    },
+    {
+      "file": "tests/offline/homepage-admin-single-column-list-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Homepage sections are one full-width row each.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-authoring-manifest-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-043 C4 manifest-driven Homepage authoring descriptors\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-backend-unified-contract.php",
+      "exit": 0,
+      "stdout": "PASS: unified Template Library + Homepage Map backend contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-blueprint-asset-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Homepage blueprint asset-scope contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-blueprint-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Homepage blueprint ownership/structure contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-blueprint-control-center-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Homepage Classic Editor Control Center guidance contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-composer-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Homepage Composer boundary contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-composer-manifest-activation-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-043 C3 Homepage Composer activation\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-composer-settings-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Homepage Composer settings contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-content-map-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Homepage Content Map contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-control-center-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Homepage Control Center contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-curtain01-map-parity-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Curtain 01 shared Homepage Map contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-design-hero-core-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Core Homepage Design owns the Hero backend shell; templates own Hero-specific adapters.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-hero-frontend-layout-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Hero frontend uses full Law 01 shell, bounded media height and scoped CTA presentation.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-hero-header-gap-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Hero Library starts flush below the header.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-hero-library-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-030 Homepage Hero Library contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-hero-library-separation-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL: missing Hero Library separation contract: Quay l\u1ea1i Trang ch\u1ee7\n"
+    },
+    {
+      "file": "tests/offline/homepage-hero-source-parity-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Hero save and Law 01 frontend share the same effective scoped source resolver.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-industrial01-map-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-043 C3 Industrial 01 shared Homepage surface map\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-law-01-client-ready-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 client-ready redesign contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-law-01-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-law-01-hero-backward-compat-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 Hero backward compatibility contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-law-01-premium-presentation-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 premium presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-law-01-profile-latest-visual-parity-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 About/Profile + Latest visual parity contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-law-01-tamduc-direction-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 approved visual direction contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-law-01-visual-parity-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 Hero/Trust/Services visual parity contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-native-content-surface-contract.php",
+      "exit": 0,
+      "stdout": "PASS: native Front Page content is represented in unified Homepage Map\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-preset-admin-isolation-contract.php",
+      "exit": 255,
+      "stdout": "\nParse error: syntax error, unexpected string content \"\", expecting \"-\" or identifier or variable or number in /workspace/scratch/0ca62ce69544/aznet-theme/tests/offline/homepage-preset-admin-isolation-contract.php on line 18\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-process-faq-authoring-completeness-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Process/FAQ backend reaches rendered WordPress content\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-surface-map-contract.php",
+      "exit": 0,
+      "stdout": "\nWarning: Undefined variable $section in /workspace/scratch/0ca62ce69544/aznet-theme/tests/offline/homepage-surface-map-contract.php on line 41\nPASS: Homepage Map uses one shared effective-surface model\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-team-authoring-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Homepage Team bounded authoring contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-team-directory-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Homepage Team uses only real WordPress child Pages\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-team-immediate-publish-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Team Add Member publishes immediately and UI matches the behavior.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-team-management-contract.php",
+      "exit": 0,
+      "stdout": "\nWarning: Undefined variable $parent in /workspace/scratch/0ca62ce69544/aznet-theme/tests/offline/homepage-team-management-contract.php on line 43\n\nWarning: Attempt to read property \"ID\" on null in /workspace/scratch/0ca62ce69544/aznet-theme/tests/offline/homepage-team-management-contract.php on line 43\nPASS: Homepage Team management contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/homepage-team-parent-image-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Team parent hides/preserves Featured Image while member Pages retain image authoring.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/industrial01-about-page-balance-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Industrial 01 About two-column media and equal-height card rows stay balanced\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/industrial01-about-page-mobile-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Industrial 01 About mobile layout is compact, touch-friendly and content-first\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/industrial01-about-page-presentation-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Industrial 01 About Page suppresses duplicate generic header and retains authored hero presentation\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/industrial01-about-page-visual-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Industrial 01 About page has image-led collage, cards, needs and process presentation\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/industrial01-catalogue-shell-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Industrial 01 Woo catalogue uses shared constrained shell and responsive grid\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/industrial01-category-gallery-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Industrial 01 category gallery, native Woo terms/media/links, intro, fail-soft and responsive CSS\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/industrial01-footer-premium-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Industrial 01 Footer premium, 4/2/1 responsive, source-owned rich content and accessible branding\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/industrial01-hero-preload-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Industrial 01 source-owned Hero preload is scoped, prioritized, reversible and fail-soft\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/industrial01-homepage-background-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Industrial 01 Hero background/CTA rendering, absent media fallback and scoped CSS\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/industrial01-homepage-rhythm-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Industrial 01 homepage uses compact B2B rhythm while retaining all core surfaces\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/industrial01-product-showcase-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Industrial 01 source-safe, image-preserving, accessible and responsive Woo product showcase\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/industrial01-project-page-presentation-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Industrial 01 Project Page authored hero replaces duplicate generic Page header\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/industrial01-registration-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Industrial 01 registration and lexicon isolation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/industrial01-single-product-shell-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Industrial 01 single product uses shared shell, two-column hero and responsive lower surfaces\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/industrial01-solution-page-presentation-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Industrial 01 Solution Page uses full-width outer sections with constrained inner shell\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/industrial01-solutions-editorial-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Industrial 01 source-owned solutions editorial, media fallback and responsive presentation\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/latest-posts-cards-presentation-contract.php",
+      "exit": 0,
+      "stdout": "PASS: opt-in Latest Posts cards presentation is reusable and page-id independent.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/law01-article-h2-wrap-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 article H2 natural wrapping contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/law01-article-reading-experience-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 legal-article reading experience contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/law01-category-archive-choice1-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 category archive Choice 1 presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/law01-classic-faq-preview-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Classic Editor FAQ preview renders sanitized native details with existing block priority\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/law01-demo-missing-parts-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 source-safe reference facts contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/law01-effective-source-parity-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 Profile preserves proven sources and uses bounded scoped fallback for Process/FAQ.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/law01-footer-content-profile-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 Footer remains compatible while generic Footer presets use per-column WordPress-native content\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/law01-process-faq-source-compat-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 Process/FAQ sections use scoped-first source resolution with legacy fallback.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/law01-profile-facts-compat-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Profile keeps legacy surface and resolves Process/FAQ facts from scoped-or-legacy mappings.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/law01-profile-regression-restore-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Profile primary About/Team/Services surface preserves the effective scoped mapping path.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/law01-reference-assets-contract.php",
+      "exit": 0,
+      "stdout": "PASS: reference styles are scoped, ordered, fingerprinted and wired.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/law01-reference-contact-strip-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 reference Hero contact-strip presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/law01-reference-generated-art-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 reference art remains a presentation asset only and public Team uses WordPress-native members\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/law01-reference-interaction-contract.php",
+      "exit": 0,
+      "stdout": "PASS: real template renders an accessible read-more permalink.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/law01-reference-team-illustration-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 Team has no generated/reference person fallback.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/law01-reference-topbar-contract.php",
+      "exit": 0,
+      "stdout": "PASS: topbar uses only escaped native sources, unique IDs and empty/scope guards.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/law01-services-root-presentation-contract.php",
+      "exit": 0,
+      "stdout": "PASS: mapped Law 01 Services Page presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/p1-pilot-identity-inspection-contract.php",
+      "exit": 0,
+      "stdout": "PASS: P1 pilot identity inspection workflow/harness contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/p4-authenticated-pilot-contract.php",
+      "exit": 0,
+      "stdout": "PASS: P4 authenticated pilot workflow/harness contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/p4-public-pilot-contract.php",
+      "exit": 0,
+      "stdout": "PASS: P4 public pilot contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/page-full-bleed-sections-contract.php",
+      "exit": 0,
+      "stdout": "PASS: native Pages use a viewport-width main shell with full-bleed outer sections and flush first/last edges\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/page-section-inner-width-contract.php",
+      "exit": 0,
+      "stdout": "PASS: landing sections stay edge-to-edge while only their inner content is constrained.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/posts-index-asset-regression.php",
+      "exit": 0,
+      "stdout": "PASS: posts-on-front generic-content asset, Woo isolation, unrelated surface isolation\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/posts-page-listing-contract.php",
+      "exit": 0,
+      "stdout": "PASS: posts page uses the reusable listing surface and avoids full-content dumping.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/product-thumbnail-cover-all-presets-contract.php",
+      "exit": 0,
+      "stdout": "PASS: product thumbnails square/cover across Woo classic, related, Blocks and Industrial/Curtain homepage, gallery excluded\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/professional-footer-mobile-spacing-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Professional Footer mobile columns and rows have readable separation\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/project-handoff-export-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Handoff export-only contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/provisioning-activation-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Provisioning activation invitation is mutation-free\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/provisioning-admin-a11y-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Provisioning wizard exposes accessible recommendation-first confirmation UX\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/provisioning-blueprint-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 provisioning blueprint contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/provisioning-complete-starter-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 Complete Starter Site blueprint + plan + apply boundary contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/provisioning-discovery-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Provisioning discovery is typed and read-only\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/provisioning-idempotency-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Provisioning idempotency/current-mapping/user-edit contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/provisioning-indexing-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law v1.1 WordPress-native index safety, persistent receipt and starter diagnostics\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/provisioning-media-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law v1.1 starter media definitions, package assets and runner boundary\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/provisioning-plan-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Provisioning explicit change-plan contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/provisioning-readiness-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Provisioning Setup Ready vs Launch Ready contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/provisioning-recommendations-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Provisioning recommendations are proposal-only and exact-label bounded\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/provisioning-runner-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Provisioning runner rollback/public-API contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/provisioning-starter-editorial-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law v1.1 starter editorial pack and coverage rules\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/provisioning-v1-1-plan-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law v1.1 immutable plan operations and index-safe publication defaults\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r1-settings-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R1 Theme settings contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r1-token-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R1 semantic token contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r1-visual-preset-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R1 visual preset presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r1-visual-preset-mechanism-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R1 visual preset mechanism evidence contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r2-commerce-utility-patterns-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R2 Commerce and Utility fail-soft patterns contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r2-content-patterns-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R2 Content patterns contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r2-hero-patterns-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R2 Hero patterns contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r2-pattern-static-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R2 native pattern static contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r2-trust-patterns-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R2 Trust and CTA patterns contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r2-wellness01-ai-disclosure-layout-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Wellness AI disclosure constrained inside Core Group\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r2-wellness01-pattern-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Wellness 01 source/asset contract (22 checks)\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r3-header-css-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R3 Header preset CSS contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r3-header-navigation-asset-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R3 Header navigation progressive-enhancement asset contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r3-header-preset-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R3 Header preset/context composition contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r3-header-settings-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R3 Header settings contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r3-law01-mobile-panel-presentation-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 mobile navigation keeps a compact high-contrast light panel.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r3-law01-site-header-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 Header is site-wide, request-independent and surface-aware.\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r3-nav-only-sticky-header-contract.php",
+      "exit": 0,
+      "stdout": "\nWarning: Undefined variable $sticky_mode in /workspace/scratch/0ca62ce69544/aznet-theme/tests/offline/r3-nav-only-sticky-header-contract.php on line 80\nPASS: R3 nav-only opt-in Header, legacy modes and ownership-safe CSS contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r3-sticky-header-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R3 sticky-compact Header enhancement contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r4-commerce-surfaces-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R4 Cart Checkout My Account presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r4-container-consistency-contract.php",
+      "exit": 0,
+      "stdout": "PASS: cross-surface container consistency contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r4-product-card-catalog-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R4 Product Card System and catalog preset contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r4-product-controls-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R4 native product gallery and purchase controls contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r4-related-products-layout-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R4 related products presentation-only layout contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r4-single-product-presets-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R4 Single Product Classic/Focus/Story contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r4-woo-breadcrumb-contrast-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R4 Woo breadcrumb contrast regression\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r4-woocommerce-blocks-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R4 Woo Blocks public capability and exact asset scope contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r4-woocommerce-settings-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R4 WooCommerce presentation settings contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r5-control-center-static-contract.php",
+      "exit": 0,
+      "stdout": "\nWarning: Undefined variable $section in /workspace/scratch/0ca62ce69544/aznet-theme/tests/offline/r5-control-center-static-contract.php on line 59\nPASS: R5 Control Center static contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r6-asset-scope-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R6 exact Theme asset-scope matrix (12 cases)\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r6-ci-trigger-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R6 reusable PR and exact-main CI trigger contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r6-convertflow-asset-gate-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R6 ConvertFlow projection asset gate = BLOCKED_EXTERNAL_CONTRACT; safe bridge retained without private detection\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/r6-release-workflow-contract.php",
+      "exit": 0,
+      "stdout": "PASS: R6 deterministic reusable v1.x release-candidate workflow contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/rqa-contact-page-presentation-contract.php",
+      "exit": 0,
+      "stdout": "PASS: RQA contact page presentation contract\nPASS: RQA contact visual polish contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/rqa-quote-page-balance-contract.php",
+      "exit": 0,
+      "stdout": "PASS: RQA quote page balance contract\nPASS: Curtain 01 page title uses available row width\nPASS: RQA quote page dark-section contrast contract\nPASS: RQA quote page full-section contrast contract\nPASS: RQA quote page sections are full-bleed with constrained content\nPASS: RQA quote page header uses full available width before wrapping\nPASS: RQA quote factors use balanced visual cards\nPASS: RQA quote process uses balanced step cards\nPASS: RQA quote trust, proof and FAQ sections are visually polished\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/rqa-v1397-rollback-contract.php",
+      "exit": 0,
+      "stdout": "RQA_1397_REHEARSAL_CONTRACT_PASS\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/service-card-consistency-contract.php",
+      "exit": 0,
+      "stdout": "PASS: service root and service detail share one canonical service-card presentation\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/service-detail-featured-no-upscale-contract.php",
+      "exit": 0,
+      "stdout": "PASS: service image intrinsic sizing without WordPress media mutation\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/service-detail-premium-presentation-contract.php",
+      "exit": 0,
+      "stdout": "PASS: service detail premium presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/shared-article-reading-layout-contract.php",
+      "exit": 0,
+      "stdout": "PASS: shared native-Post Law 01 reading composition across presets\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/tamduc-homepage-final-contract.php",
+      "exit": 0,
+      "stdout": "PASS: T\u00e2m \u0110\u1ee9c final Homepage L4 static contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/tamduc-homepage-inventory-contract.php",
+      "exit": 0,
+      "stdout": "PASS: T\u00e2m \u0110\u1ee9c homepage inventory static contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/tamduc-homepage-mutation-plan-contract.php",
+      "exit": 0,
+      "stdout": "PASS: T\u00e2m \u0110\u1ee9c sourced mutation plan contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/tamduc-identity-contact-final-contract.php",
+      "exit": 0,
+      "stdout": "PASS: T\u00e2m \u0110\u1ee9c identity/contact final L4 static contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/team-directory-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Team directory ownership/read-model contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/team-list-name-typography-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Team list name typography\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/team-member-contact-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Team member phone/Zalo WordPress-native contact contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/team-member-detail-phone-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Team member detail phone presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/team-member-detail-presentation-contract.php",
+      "exit": 0,
+      "stdout": "PASS: mapped Team member detail presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/team-member-page-editor-contract.php",
+      "exit": 0,
+      "stdout": "PASS: WordPress Team Page editor contact fields\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/team-member-single-line-heading-contract.php",
+      "exit": 0,
+      "stdout": "PASS: scoped team member title presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/team-page-presentation-contract.php",
+      "exit": 0,
+      "stdout": "PASS: mapped Team directory Page presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/team-provisioning-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Law 01 provisions Team parent only\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/template-extension-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Core C0 Template Extension Contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/template-fourth-template-proof-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-043 C8 synthetic fourth-template extension proof\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/template-homepage-assets-manifest-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-043 C5 manifest-driven Homepage asset registry\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/template-library-manifest-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-043 C2 Template Library manifest projection\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/template-manifest-v2-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-051 Template Manifest v2 plus unchanged v1 compatibility\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/template-manifest-v2-mapped-fallback-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-051 v2 mapped missing-renderer fail-soft plus native/v1 regression\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/template-presentation-registry-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Core C1 Template Presentation Registry\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/template-provisioning-bridge-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-043 C6 manifest provisioning bridge\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/template-three-pilot-regression-contract.php",
+      "exit": 0,
+      "stdout": "PASS: D-043 C7 three-pilot manifest-path regression\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/template-wellness01-library-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Wellness 01 registered in Control Center + native Front Page (30 checks)\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/typography-hardcode-audit-contract.php",
+      "exit": 0,
+      "stdout": "PASS: typography hardcode audit contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/typography-role-mapping-contract.php",
+      "exit": 0,
+      "stdout": "PASS: semantic typography role mapping contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/typography-system-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Roboto default typography architecture + Vietnamese glyph coverage contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/typography-token-cache-contract.php",
+      "exit": 0,
+      "stdout": "PASS: typography and Footer cache-busting contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/v1-3-74-version-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "expected Theme header Version: 1.3.74\n"
+    },
+    {
+      "file": "tests/offline/v1-3-75-version-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "expected Theme header Version: 1.3.75\n"
+    },
+    {
+      "file": "tests/offline/v1-3-76-version-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "expected Theme header Version: 1.3.76\n"
+    },
+    {
+      "file": "tests/offline/v1-3-77-version-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "expected Theme header Version: 1.3.77\n"
+    },
+    {
+      "file": "tests/offline/v1-3-78-version-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "expected Theme header Version: 1.3.78\n"
+    },
+    {
+      "file": "tests/offline/w1-woocommerce-absent-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W1 WooCommerce absent capability contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w1-woocommerce-asset-scope-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W1 WooCommerce generic asset scope contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w1-woocommerce-ownership-static-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W1 WooCommerce ownership / no-override static contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w1-woocommerce-surface-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W1 WooCommerce normalized surface contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w2-product-asset-scope-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W2 product-only asset scope\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w2-product-css-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W2 product CSS contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w2-product-ownership-static-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W2 product ownership / no-override contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w2-swatch-image-thumbnail-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W2 public swatch adapter uses native thumbnail without taking over provider data\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w3-archive-asset-scope-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W3 archive-only asset scope\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w3-archive-css-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W3 archive CSS contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w3-archive-ownership-static-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W3 archive ownership / no-query / no-override contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w4-cart-asset-scope-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W4 cart-only asset scope\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w4-cart-css-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W4 Cart CSS contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w4-cart-ownership-static-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W4 Cart ownership / no-commerce-behavior / no-override contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w5-checkout-asset-scope-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W5 checkout-only asset scope\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w5-checkout-css-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W5 checkout CSS contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w5-checkout-ownership-static-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W5 Checkout ownership / no-payment-order-behavior / no-override contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w6-account-asset-scope-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W6 account-only asset scope\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w6-account-css-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W6 account CSS contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w6-account-ownership-static-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W6 My Account ownership / no-auth-data-endpoint / no-override contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w8-convertflow-sticky-submenu-contract.php",
+      "exit": 0,
+      "stdout": "PASS: ConvertFlow sticky submenu public-hook presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w8-convertflow-submenu-replaces-header-contract.php",
+      "exit": 0,
+      "stdout": "PASS: sticky submenu replaces main header when active\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/w8-convertflow-theme-contract.php",
+      "exit": 0,
+      "stdout": "PASS: W8 ConvertFlow public theme-contract bridge\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/wellness01-page-assets-contract.php",
+      "exit": 0,
+      "stdout": "PASS: seven real Page-loader scope/cache contexts; no settings write\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/woo-native-shell-integration-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Woo native Single Product shell integration regression\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/woocommerce-loop-product-navigation-cta-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Woo product navigation CTA uses Xem chi ti\u1ebft, preserves Woo purchase actions and a11y label\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/x1-comments-surface-contract.php",
+      "exit": 0,
+      "stdout": "PASS: X1 native comments presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/x1-x2-retained-workflow-ownership-contract.php",
+      "exit": 0,
+      "stdout": "PASS: X1/X2 retained workflows separate slice-only version ownership from retained regression\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/x2-search-404-empty-contract.php",
+      "exit": 0,
+      "stdout": "PASS: X2 Search/404/empty ownership and presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/x3-media-gallery-embed-contract.php",
+      "exit": 0,
+      "stdout": "PASS: X3 Media/Gallery/Embed ownership and presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/x4-pagination-navigation-contract.php",
+      "exit": 0,
+      "stdout": "PASS: X4 pagination/navigation ownership and presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/x4-retained-workflow-ownership-contract.php",
+      "exit": 0,
+      "stdout": "PASS: X4 retained regression separates slice ownership from functional invariants\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/x5-native-form-controls-contract.php",
+      "exit": 0,
+      "stdout": "PASS: X5 native form controls ownership and presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/x5-retained-workflow-ownership-contract.php",
+      "exit": 0,
+      "stdout": "PASS: X5 retained regression separates slice ownership from functional invariants\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/x6-promotion-workflow-boundary-contract.php",
+      "exit": 0,
+      "stdout": "PASS: X6 workflow separates pre-promotion and promoted ownership boundaries\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/x6-release-closure-contract.php",
+      "exit": 0,
+      "stdout": "PASS: X6 cross-surface release-closure infrastructure contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/x6-v1391-release-candidate-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL: v1.3.91 technical candidate missing Theme version header\n"
+    },
+    {
+      "file": "tests/offline/x6-v1392-release-candidate-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL X6 v1.3.92 candidate: style/PHP version metadata mismatch\n"
+    },
+    {
+      "file": "tests/offline/x6-v1393-release-candidate-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL X6 v1.3.93 candidate: style/PHP version metadata mismatch\n"
+    },
+    {
+      "file": "tests/offline/x6-v1394-release-candidate-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL X6 v1.3.94 candidate: style/PHP version metadata mismatch\n"
+    },
+    {
+      "file": "tests/offline/x6-v1395-release-candidate-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL X6 v1.3.95 candidate: style/PHP version metadata mismatch\n"
+    },
+    {
+      "file": "tests/offline/x6-v1396-release-candidate-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL X6 v1.3.96 candidate: style/PHP version metadata mismatch\n"
+    },
+    {
+      "file": "tests/offline/x6-v1397-release-candidate-contract.php",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "FAIL X6 v1.3.97 candidate: style/PHP version metadata mismatch\n"
+    },
+    {
+      "file": "tests/offline/x6-v1398-release-candidate-contract.php",
+      "exit": 0,
+      "stdout": "PASS: technical-only 1.3.98 patch metadata promotion boundary\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/x6-version-promotion-contract.php",
+      "exit": 255,
+      "stdout": "\nFatal error: Uncaught RuntimeException: style.css Theme Version must be exactly 1.2.0 in X6 promotion. in /workspace/scratch/0ca62ce69544/aznet-theme/tests/offline/x6-version-promotion-contract.php:17\nStack trace:\n#0 {main}\n  thrown in /workspace/scratch/0ca62ce69544/aznet-theme/tests/offline/x6-version-promotion-contract.php on line 17\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/y1-page-experience-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Y1 Page Experience ownership/settings/renderer contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/y1-woocommerce-page-excerpt-regression-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Woo Page excerpt consumption regression contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/y2-professional-page-kits-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Y2 Professional Page Kits ownership/registry/content contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/y3-footer-column-editors-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Footer content editors follow the selected template column structure\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/y3-footer-skin-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Footer content preset and visual skin remain independently composable\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/y3-footer-system-contract.php",
+      "exit": 0,
+      "stdout": "\nWarning: Undefined variable $home_url in /workspace/scratch/0ca62ce69544/aznet-theme/tests/offline/y3-footer-system-contract.php on line 457\nPASS: Y3 Footer System 2.0 ownership/settings/presentation contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/y4-professional-services-provisioning-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Y4 Professional Services provisioning ownership contract\n",
+      "stderr": ""
+    },
+    {
+      "file": "tests/offline/y5-client-delivery-release-contract.php",
+      "exit": 0,
+      "stdout": "PASS: Y5 integrated client-delivery promoted release contract\n",
+      "stderr": ""
+    }
+  ]
+}

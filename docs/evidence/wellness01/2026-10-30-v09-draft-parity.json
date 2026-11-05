@@ -1,0 +1,1991 @@
+{
+  "source_commit": "cab5cf812d2f8c82df4d94424ac3845cc505ac4b",
+  "text_scope": "line-numbered connector text normalized CRLF/EOF; not raw file-byte certification",
+  "package_file_count": 250,
+  "text_files": 235,
+  "text_equal": 234,
+  "controlled_preview_metadata_files": 1,
+  "raw_binary_verified": 4,
+  "raw_binary_unverified": 11,
+  "missing_runtime_paths": [],
+  "source_only_packager_excluded": [
+    "aznet-preview.png"
+  ],
+  "draft_only_preview_marker": [
+    ".wpvibe-draft"
+  ],
+  "binary_reader_limitation": "Connector read_file returned line-numbered lossy text for WOFF2; not used as byte evidence",
+  "text_records": [
+    {
+      "path": "404.php",
+      "remote_lines": 39,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "9f1d81eab3318d8ca86849ee458148c9e67535d38a2203a361021d4e54ba611d",
+      "reconstructed_normalized_sha256": "9f1d81eab3318d8ca86849ee458148c9e67535d38a2203a361021d4e54ba611d"
+    },
+    {
+      "path": "archive.php",
+      "remote_lines": 72,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "29ce28291987b20b91919a8729321b1261f4a5a1a5fcbb7ff4ef7e38e2cc6e79",
+      "reconstructed_normalized_sha256": "29ce28291987b20b91919a8729321b1261f4a5a1a5fcbb7ff4ef7e38e2cc6e79"
+    },
+    {
+      "path": "article-media/2026/az-001-vat-website-cover.svg",
+      "remote_lines": 17,
+      "requests": 1,
+      "normalized_equal": true,
+      "source_sha256": "ffcc93abd52ad295cfe838696a36dd19efa0844918adce5dbe5a70d1f3abd224",
+      "reconstructed_normalized_sha256": "bde70294c2b506ca0c73e2a0b2c20d055be86804a4714b3379c3f3692adaaa7c"
+    },
+    {
+      "path": "article-media/2026/az-002-vat-contract-cover.svg",
+      "remote_lines": 1,
+      "requests": 1,
+      "normalized_equal": true,
+      "source_sha256": "9b173d172ceec0ab395c8e9b404ea748bb985cd1934d9a83899017116b761212",
+      "reconstructed_normalized_sha256": "a143a49a4a18509aabd641718f44418da861dba90edb3b70f13f23f84d56e185"
+    },
+    {
+      "path": "article-media/2026/az-008-rank-math-license-cover.svg",
+      "remote_lines": 1,
+      "requests": 1,
+      "normalized_equal": true,
+      "source_sha256": "e9e26fcf68d5ad9f89570024cd8263896617cb0f353dce57dafb0e10cc1c4582",
+      "reconstructed_normalized_sha256": "7afdfb14480bc9edfc72681e2299198fcbc2396c14783bda527a867b9cb99e66"
+    },
+    {
+      "path": "article-media/2026/az-010-backlink-social-cover.svg",
+      "remote_lines": 1,
+      "requests": 1,
+      "normalized_equal": true,
+      "source_sha256": "05a1edbd1891d46e753d8f8a91ad632cd1b0646f5fc8d56512df67eac3fb0a8e",
+      "reconstructed_normalized_sha256": "acd1736f0bfb85cabf1035e7f1b2e1b5dee4313c97a6fc2334bbbcefcdca9404"
+    },
+    {
+      "path": "assets/css/admin/control-center.css",
+      "remote_lines": 334,
+      "requests": 1,
+      "normalized_equal": true,
+      "source_sha256": "f5c10337dd7b1a8099fe6867b7ef1f012aa40c35b852a1f038bec65b35d78d5c",
+      "reconstructed_normalized_sha256": "f5c10337dd7b1a8099fe6867b7ef1f012aa40c35b852a1f038bec65b35d78d5c",
+      "resolved": "Wellness preview block/comment relocated to canonical source position; declarations unchanged"
+    },
+    {
+      "path": "assets/css/components/about-showcase-v2.css",
+      "remote_lines": 449,
+      "requests": 1,
+      "normalized_equal": true,
+      "source_sha256": "edf955bb69c8e0dd44ff1eebc29415dbb6b0d11f817ec83be60ff07773962775",
+      "reconstructed_normalized_sha256": "4d4879a63ddb28a6c4674271b7984e10c29f3ff1e38cfa442591985d79d75ce9"
+    },
+    {
+      "path": "assets/css/components/archive-law-01.css",
+      "remote_lines": 554,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "6dbd7756266a25af114f9324ac5e62f3527df81c52d087ecdbbdd0da506381ac",
+      "reconstructed_normalized_sha256": "6dbd7756266a25af114f9324ac5e62f3527df81c52d087ecdbbdd0da506381ac"
+    },
+    {
+      "path": "assets/css/components/article.css",
+      "remote_lines": 885,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "f99537982a9844487529013464c8965558fbf461262fe47793e780488d689174",
+      "reconstructed_normalized_sha256": "f99537982a9844487529013464c8965558fbf461262fe47793e780488d689174"
+    },
+    {
+      "path": "assets/css/components/catalog-navigation.css",
+      "remote_lines": 396,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "f248cc34786ac70c301de54453edf3f5924dc3a4ff9a50f82fbec147665c8a92",
+      "reconstructed_normalized_sha256": "f248cc34786ac70c301de54453edf3f5924dc3a4ff9a50f82fbec147665c8a92"
+    },
+    {
+      "path": "assets/css/components/comments.css",
+      "remote_lines": 81,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "25974dc44fee5b489a4d06cf6ba63832493503056831d9eab88572270a7a6ff0",
+      "reconstructed_normalized_sha256": "25974dc44fee5b489a4d06cf6ba63832493503056831d9eab88572270a7a6ff0"
+    },
+    {
+      "path": "assets/css/components/contact-page.css",
+      "remote_lines": 435,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "67777d63388bcff15b4771677c26b7919f2f2c11537fd798336e5c84befa20d8",
+      "reconstructed_normalized_sha256": "67777d63388bcff15b4771677c26b7919f2f2c11537fd798336e5c84befa20d8"
+    },
+    {
+      "path": "assets/css/components/contact-surface.css",
+      "remote_lines": 243,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "bb276e34f31670a3449850eedc881febab119b878996450f5e6d36c9f8b6c803",
+      "reconstructed_normalized_sha256": "bb276e34f31670a3449850eedc881febab119b878996450f5e6d36c9f8b6c803"
+    },
+    {
+      "path": "assets/css/components/forms.css",
+      "remote_lines": 155,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "5ec8401fc09838cd2895515756411ecb8ac6e4f63113b08818b3fbffa97fb5bc",
+      "reconstructed_normalized_sha256": "5ec8401fc09838cd2895515756411ecb8ac6e4f63113b08818b3fbffa97fb5bc"
+    },
+    {
+      "path": "assets/css/components/generic-content.css",
+      "remote_lines": 185,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "011152809cf74969321e601756e9fc8ff73c66ca38d1a23c6d30ab3781e4542f",
+      "reconstructed_normalized_sha256": "011152809cf74969321e601756e9fc8ff73c66ca38d1a23c6d30ab3781e4542f"
+    },
+    {
+      "path": "assets/css/components/header-law-01.css",
+      "remote_lines": 353,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "8fa47d4a806f7976927146252fadc27b3033b6a4a783cf96a786210a5922dd29",
+      "reconstructed_normalized_sha256": "8fa47d4a806f7976927146252fadc27b3033b6a4a783cf96a786210a5922dd29"
+    },
+    {
+      "path": "assets/css/components/header-utility.css",
+      "remote_lines": 39,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "dcab04d59d7f63f2e60f21b3b09fd7d1155f779cf5b644375eb04ba5ca6d8f37",
+      "reconstructed_normalized_sha256": "dcab04d59d7f63f2e60f21b3b09fd7d1155f779cf5b644375eb04ba5ca6d8f37"
+    },
+    {
+      "path": "assets/css/components/homepage-curtain-01.css",
+      "remote_lines": 1334,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "c6c9ae5a1d14c332983e38b8fa998abe8bc54142a445866d164e1e6fc17980f5",
+      "reconstructed_normalized_sha256": "c6c9ae5a1d14c332983e38b8fa998abe8bc54142a445866d164e1e6fc17980f5"
+    },
+    {
+      "path": "assets/css/components/homepage-digital-01-brand-2026.css",
+      "remote_lines": 1009,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "3a8d924cefc8a8a881f55673c8071a7d2d931ac63064006a74156f95eaa490fc",
+      "reconstructed_normalized_sha256": "3a8d924cefc8a8a881f55673c8071a7d2d931ac63064006a74156f95eaa490fc"
+    },
+    {
+      "path": "assets/css/components/homepage-digital-01.css",
+      "remote_lines": 562,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "af385c066eb65eeed5b83ae17fd975b4a415d2cac0ab06ba6e584a5714f45eab",
+      "reconstructed_normalized_sha256": "af385c066eb65eeed5b83ae17fd975b4a415d2cac0ab06ba6e584a5714f45eab"
+    },
+    {
+      "path": "assets/css/components/homepage-industrial-01.css",
+      "remote_lines": 1451,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "e6d9d61debe03c2fe2d3504ea1deb3af06969110aed2c40e4136428647ebc61b",
+      "reconstructed_normalized_sha256": "e6d9d61debe03c2fe2d3504ea1deb3af06969110aed2c40e4136428647ebc61b"
+    },
+    {
+      "path": "assets/css/components/homepage-law-01-reference.css",
+      "remote_lines": 411,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "549eae2a152b62cf01ed84a0b49fb3b119b22322ec7e0c06eb139749527003df",
+      "reconstructed_normalized_sha256": "549eae2a152b62cf01ed84a0b49fb3b119b22322ec7e0c06eb139749527003df"
+    },
+    {
+      "path": "assets/css/components/homepage-law-01-variants.css",
+      "remote_lines": 1179,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "30a45cdf87bf9d5ea4d474e3e1047c6384a3f80d04065fd7aa90b325222c12cd",
+      "reconstructed_normalized_sha256": "30a45cdf87bf9d5ea4d474e3e1047c6384a3f80d04065fd7aa90b325222c12cd"
+    },
+    {
+      "path": "assets/css/components/homepage-law-01.css",
+      "remote_lines": 568,
+      "requests": 1,
+      "normalized_equal": true,
+      "source_sha256": "2531328f4050fb26a656cbed61226b0503365373e40e0ee6d88f6ace5fab229f",
+      "reconstructed_normalized_sha256": "0cb24ac98c33c856d7be2af07ea5e6afd2854d7985328526965c584216c619b2"
+    },
+    {
+      "path": "assets/css/components/homepage-wellness-01.css",
+      "remote_lines": 69,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "c80d086521d8c1bd25519011d1d1cd6a78292a17cd0927a222bfbe5120cc584d",
+      "reconstructed_normalized_sha256": "c80d086521d8c1bd25519011d1d1cd6a78292a17cd0927a222bfbe5120cc584d"
+    },
+    {
+      "path": "assets/css/components/homepage.css",
+      "remote_lines": 328,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "5d55c4a0a2669318a92afb0f592652ae490afe598b92791006a07175f1f4c0cc",
+      "reconstructed_normalized_sha256": "5d55c4a0a2669318a92afb0f592652ae490afe598b92791006a07175f1f4c0cc"
+    },
+    {
+      "path": "assets/css/components/media.css",
+      "remote_lines": 189,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "e95668a342bb2e8c376c37a16b15f201b8db31a2be81597daff4b92cb3b3d65b",
+      "reconstructed_normalized_sha256": "e95668a342bb2e8c376c37a16b15f201b8db31a2be81597daff4b92cb3b3d65b"
+    },
+    {
+      "path": "assets/css/components/navigation.css",
+      "remote_lines": 79,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "961906208fe1ee024102a156ef1ab2657ee6a8b02d7b7bf1684c19d4234c60db",
+      "reconstructed_normalized_sha256": "961906208fe1ee024102a156ef1ab2657ee6a8b02d7b7bf1684c19d4234c60db"
+    },
+    {
+      "path": "assets/css/components/page-wellness-01.css",
+      "remote_lines": 131,
+      "normalized_equal": true,
+      "source_sha256": "ffbcf38ef448424986d84b223995fd224c299b936be41a0ea4f2dd14fa961638",
+      "normalized_remote_sha256": "ffbcf38ef448424986d84b223995fd224c299b936be41a0ea4f2dd14fa961638"
+    },
+    {
+      "path": "assets/css/components/page.css",
+      "remote_lines": 520,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "de0c88ed271745164c439c3999edc12a61467c47d4100477f2b0c6776bf24fac",
+      "reconstructed_normalized_sha256": "de0c88ed271745164c439c3999edc12a61467c47d4100477f2b0c6776bf24fac"
+    },
+    {
+      "path": "assets/css/components/profile-surface.css",
+      "remote_lines": 279,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "8e8b00d8f10bd4ac9b0af83fbf0cbdd94b5510bd70c5b1477bc406927ad670ca",
+      "reconstructed_normalized_sha256": "8e8b00d8f10bd4ac9b0af83fbf0cbdd94b5510bd70c5b1477bc406927ad670ca"
+    },
+    {
+      "path": "assets/css/components/recovery.css",
+      "remote_lines": 94,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "b35b86ca41bb4a845812e9ebc39701668cff08929179d1d3c4a6dd174ca6ae75",
+      "reconstructed_normalized_sha256": "b35b86ca41bb4a845812e9ebc39701668cff08929179d1d3c4a6dd174ca6ae75"
+    },
+    {
+      "path": "assets/css/components/service-card.css",
+      "remote_lines": 135,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "5aa7c599b2974e70036547e5db385eb8425be9ccdb84a3161fc1baf58a9b2dab",
+      "reconstructed_normalized_sha256": "5aa7c599b2974e70036547e5db385eb8425be9ccdb84a3161fc1baf58a9b2dab"
+    },
+    {
+      "path": "assets/css/components/service-page.css",
+      "remote_lines": 480,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "ab1da977c43e11fdbcdec35706ae96d15c8101a0fc3887ad56e56ab1b58064b4",
+      "reconstructed_normalized_sha256": "ab1da977c43e11fdbcdec35706ae96d15c8101a0fc3887ad56e56ab1b58064b4"
+    },
+    {
+      "path": "assets/css/components/services-page.css",
+      "remote_lines": 390,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "f8a3bc92d23e81e8bf20ce2a2b69fb80cb5e16e11e6e56320935331de950df71",
+      "reconstructed_normalized_sha256": "f8a3bc92d23e81e8bf20ce2a2b69fb80cb5e16e11e6e56320935331de950df71"
+    },
+    {
+      "path": "assets/css/components/site-footer-digital-01.css",
+      "remote_lines": 191,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "6b36da4380a290ffcab1141d5f331a754096f28058c0629c08aad42bb0438278",
+      "reconstructed_normalized_sha256": "6b36da4380a290ffcab1141d5f331a754096f28058c0629c08aad42bb0438278"
+    },
+    {
+      "path": "assets/css/components/site-footer.css",
+      "remote_lines": 882,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "f0ec8ae84e8851c55634dbc8c158d90971273bba9520a55799a71551d827cc28",
+      "reconstructed_normalized_sha256": "20053ddca7e2650870139b50d06728a22e3b17e622612059eda1a6de48ffe6ae"
+    },
+    {
+      "path": "assets/css/components/site-header.css",
+      "remote_lines": 698,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "d4d95ad3756ae7439c29c7338c15f87b39d21a0f1b30ddcba76d32a05a880987",
+      "reconstructed_normalized_sha256": "d4d95ad3756ae7439c29c7338c15f87b39d21a0f1b30ddcba76d32a05a880987"
+    },
+    {
+      "path": "assets/css/components/team-card.css",
+      "remote_lines": 17,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "78ddde21ec874f71e831941777ea9efe066623f95ced0e5c37051a0dd1765e18",
+      "reconstructed_normalized_sha256": "78ddde21ec874f71e831941777ea9efe066623f95ced0e5c37051a0dd1765e18"
+    },
+    {
+      "path": "assets/css/components/team-directory.css",
+      "remote_lines": 17,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "96d98d68084be5e6d22dffa5b2c03c8c05c6cc84668b52fedc4185146ff54c08",
+      "reconstructed_normalized_sha256": "96d98d68084be5e6d22dffa5b2c03c8c05c6cc84668b52fedc4185146ff54c08"
+    },
+    {
+      "path": "assets/css/components/team-member.css",
+      "remote_lines": 318,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "2087f3067a029da07a21037c1de1ff76b204780ebeaa19717a898487c6d30a72",
+      "reconstructed_normalized_sha256": "2087f3067a029da07a21037c1de1ff76b204780ebeaa19717a898487c6d30a72"
+    },
+    {
+      "path": "assets/css/components/woocommerce-account.css",
+      "remote_lines": 177,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "54e5b03de1326b10f545bce6ea71514a61668609922584bf39193b0d9fb98d2c",
+      "reconstructed_normalized_sha256": "54e5b03de1326b10f545bce6ea71514a61668609922584bf39193b0d9fb98d2c"
+    },
+    {
+      "path": "assets/css/components/woocommerce-archive.css",
+      "remote_lines": 197,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "c6fa157bb4ad7ab4118ba40ea6922c532013d5721239147aa77ba51c8cb301a4",
+      "reconstructed_normalized_sha256": "c6fa157bb4ad7ab4118ba40ea6922c532013d5721239147aa77ba51c8cb301a4"
+    },
+    {
+      "path": "assets/css/components/woocommerce-blocks.css",
+      "remote_lines": 74,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "52d28e94981636c91f8983556a0daa1fa7f7ac1739ce8bd939dd2a38a29341e7",
+      "reconstructed_normalized_sha256": "52d28e94981636c91f8983556a0daa1fa7f7ac1739ce8bd939dd2a38a29341e7"
+    },
+    {
+      "path": "assets/css/components/woocommerce-cart.css",
+      "remote_lines": 144,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "55e772cbd0597040f6cd637ad058ace95e7929d635091f8b37f435dcc9c9fd35",
+      "reconstructed_normalized_sha256": "55e772cbd0597040f6cd637ad058ace95e7929d635091f8b37f435dcc9c9fd35"
+    },
+    {
+      "path": "assets/css/components/woocommerce-checkout.css",
+      "remote_lines": 161,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "580fb2aef1da14b599b8c9b818489a688b85c4c4137a1f5b26444d486575bab0",
+      "reconstructed_normalized_sha256": "580fb2aef1da14b599b8c9b818489a688b85c4c4137a1f5b26444d486575bab0"
+    },
+    {
+      "path": "assets/css/components/woocommerce-product.css",
+      "remote_lines": 391,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "eee3bbb72b29457fe71a877467664e1536ca7735a39b45909d6c3fdf43f867d0",
+      "reconstructed_normalized_sha256": "eee3bbb72b29457fe71a877467664e1536ca7735a39b45909d6c3fdf43f867d0"
+    },
+    {
+      "path": "assets/css/integrations/convertflow.css",
+      "remote_lines": 221,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "50d3d1528df2c9b1c0356c5d0ed7acbf82f8e9f8749716f7ea8cddb01b1a39b1",
+      "reconstructed_normalized_sha256": "47c3f0cf6c40c5234c0c56822cd85fe88159a1dfb364c348d6728898bf86d96a"
+    },
+    {
+      "path": "assets/css/presets/commerce.css",
+      "remote_lines": 7,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "06c3cd8a66bd09cdb41c0d8c698203fc9b04269b4328541376e3acb2519862a3",
+      "reconstructed_normalized_sha256": "06c3cd8a66bd09cdb41c0d8c698203fc9b04269b4328541376e3acb2519862a3"
+    },
+    {
+      "path": "assets/css/presets/curtain-01.css",
+      "remote_lines": 860,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "d26d603122550e2a6781f2a7374f26cf6f0a4793af5798dae7fd3125b3de4390",
+      "reconstructed_normalized_sha256": "d26d603122550e2a6781f2a7374f26cf6f0a4793af5798dae7fd3125b3de4390"
+    },
+    {
+      "path": "assets/css/presets/digital-01.css",
+      "remote_lines": 61,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "3ea60d9647d7c3cb42ccb847263511dd640cafa24eeb41e8bad1b20498f4d250",
+      "reconstructed_normalized_sha256": "3ea60d9647d7c3cb42ccb847263511dd640cafa24eeb41e8bad1b20498f4d250"
+    },
+    {
+      "path": "assets/css/presets/editorial.css",
+      "remote_lines": 6,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "ef746aa2c3576db2cfc9818267dbad02ff70a72f1f50f99c7ad20cf9a6fe568e",
+      "reconstructed_normalized_sha256": "ef746aa2c3576db2cfc9818267dbad02ff70a72f1f50f99c7ad20cf9a6fe568e"
+    },
+    {
+      "path": "assets/css/presets/industrial-01.css",
+      "remote_lines": 1176,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "19727d959af5c0fe87fcc62175dd277be25b0e75ba9ce9878cc21faade0c2d6b",
+      "reconstructed_normalized_sha256": "19727d959af5c0fe87fcc62175dd277be25b0e75ba9ce9878cc21faade0c2d6b"
+    },
+    {
+      "path": "assets/css/tokens.css",
+      "remote_lines": 128,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "cf09008e8e1042f190ffa90f504a66f21d9c2d323951b50c812a96b94045f6a5",
+      "reconstructed_normalized_sha256": "cf09008e8e1042f190ffa90f504a66f21d9c2d323951b50c812a96b94045f6a5"
+    },
+    {
+      "path": "assets/images/law01-reference/team-portrait-01.svg",
+      "remote_lines": 1,
+      "requests": 1,
+      "normalized_equal": true,
+      "source_sha256": "96c4008c07944998896a4b8cc4439954aa7cb003fa58eae66a990207219d1fde",
+      "reconstructed_normalized_sha256": "fec111555d7071eb59fcb464d27b0086a1410e1fa71c6db81a53b07d1428b423"
+    },
+    {
+      "path": "assets/images/law01-reference/team-portrait-02.svg",
+      "remote_lines": 1,
+      "requests": 1,
+      "normalized_equal": true,
+      "source_sha256": "484a0314eff1712576b11aca5820314d92bcebe6415bc0ad288413b136eef642",
+      "reconstructed_normalized_sha256": "5efba015edba866053ca4cbef102d08f2998e8945927d8c493c19b7669ecefac"
+    },
+    {
+      "path": "assets/images/law01-reference/team-portrait-03.svg",
+      "remote_lines": 1,
+      "requests": 1,
+      "normalized_equal": true,
+      "source_sha256": "c61b8e5e05fcf60d4d181d273c114f8fe22f07ebda7987de899ae70542090d03",
+      "reconstructed_normalized_sha256": "bbdc174fb163d02a53393d3224894bc4f7e95c0f5b7d718339b0e71f2e7db6da"
+    },
+    {
+      "path": "assets/images/law01-reference/team-portrait-04.svg",
+      "remote_lines": 1,
+      "requests": 1,
+      "normalized_equal": true,
+      "source_sha256": "9c8f63cf6d6db0265e3bc955627fa692f6d244be822582d280ac54ee70011149",
+      "reconstructed_normalized_sha256": "3aa18d8315240a3f14a29a30d3ca079b06ed052f10749614c8e9fe165f8783b7"
+    },
+    {
+      "path": "assets/js/admin/footer-template-picker.js",
+      "remote_lines": 53,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "8ca823b29643a1261aff2ffab5e41c81c3e20a5d7a30dcafe6069366f99d3745",
+      "reconstructed_normalized_sha256": "8ca823b29643a1261aff2ffab5e41c81c3e20a5d7a30dcafe6069366f99d3745"
+    },
+    {
+      "path": "assets/js/admin/homepage-authoring.js",
+      "remote_lines": 169,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "8d831a0a24694059d263cd5c6101e6f208cc0f604976e6c71681bc2f8f51e681",
+      "reconstructed_normalized_sha256": "8d831a0a24694059d263cd5c6101e6f208cc0f604976e6c71681bc2f8f51e681"
+    },
+    {
+      "path": "assets/js/admin/template-library.js",
+      "remote_lines": 38,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "6fadfe2ca35a49185ed799e2a05620db8857bbc303e59d82464659225bc4492a",
+      "reconstructed_normalized_sha256": "6fadfe2ca35a49185ed799e2a05620db8857bbc303e59d82464659225bc4492a"
+    },
+    {
+      "path": "assets/js/catalog-navigation.js",
+      "remote_lines": 47,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "931c8e0ef8249f88ff402d6c33c47d524bbf5fcacbb43122e591c4901fe1226d",
+      "reconstructed_normalized_sha256": "931c8e0ef8249f88ff402d6c33c47d524bbf5fcacbb43122e591c4901fe1226d"
+    },
+    {
+      "path": "assets/js/convertflow-sticky-submenu.js",
+      "remote_lines": 57,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "99fc603d5de4189feeffdcd0e7823b60dde5f26515e8b220bd2421e1d06836a2",
+      "reconstructed_normalized_sha256": "99fc603d5de4189feeffdcd0e7823b60dde5f26515e8b220bd2421e1d06836a2"
+    },
+    {
+      "path": "assets/js/header-navigation.js",
+      "remote_lines": 91,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "c4c164d57f844f1ebf7cc70e2c6cae6b0af5c051723873ac607d67affad0e16b",
+      "reconstructed_normalized_sha256": "c4c164d57f844f1ebf7cc70e2c6cae6b0af5c051723873ac607d67affad0e16b"
+    },
+    {
+      "path": "assets/js/homepage-curtain-01.js",
+      "remote_lines": 270,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "21df8b82895198a15b900a37c0b02ef59cdfe3c67e23e9ef3ddc438384721fa0",
+      "reconstructed_normalized_sha256": "21df8b82895198a15b900a37c0b02ef59cdfe3c67e23e9ef3ddc438384721fa0"
+    },
+    {
+      "path": "assets/js/sticky-header.js",
+      "remote_lines": 28,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "288bf0d50cc4df154b8a28e40203174f502f10bed582860ab7c6ace5b4a3ccef",
+      "reconstructed_normalized_sha256": "288bf0d50cc4df154b8a28e40203174f502f10bed582860ab7c6ace5b4a3ccef"
+    },
+    {
+      "path": "assets/js/team-name-fit.js",
+      "remote_lines": 31,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "a3c02cbebf451d5b3ae79249dd1abc3e817302ced85dd8778e9c61cbc3588969",
+      "reconstructed_normalized_sha256": "a3c02cbebf451d5b3ae79249dd1abc3e817302ced85dd8778e9c61cbc3588969"
+    },
+    {
+      "path": "comments.php",
+      "remote_lines": 65,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "e33b5fab33355d78def474a8f1a13484c3773f938238c546684d6ca066353207",
+      "reconstructed_normalized_sha256": "e33b5fab33355d78def474a8f1a13484c3773f938238c546684d6ca066353207"
+    },
+    {
+      "path": "footer.php",
+      "remote_lines": 18,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "264b278c6694cc47fb934177cc996ccf4474271e5493a44dd2b4f686de27b13f",
+      "reconstructed_normalized_sha256": "264b278c6694cc47fb934177cc996ccf4474271e5493a44dd2b4f686de27b13f"
+    },
+    {
+      "path": "front-page.php",
+      "remote_lines": 50,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "54380c3454beba8089dd6cf9733190527dc90419a1087ca0b13d61bccdf3c7f8",
+      "reconstructed_normalized_sha256": "54380c3454beba8089dd6cf9733190527dc90419a1087ca0b13d61bccdf3c7f8"
+    },
+    {
+      "path": "functions.php",
+      "remote_lines": 17,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "02743d51c29b0d2d8c190e195730f836322be7785f7fd096df3c0e507fac18e2",
+      "reconstructed_normalized_sha256": "02743d51c29b0d2d8c190e195730f836322be7785f7fd096df3c0e507fac18e2"
+    },
+    {
+      "path": "header.php",
+      "remote_lines": 22,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "efa4314f4387da6953422f9e6e91641f47ed6410e78205195d4a11413f9dc2ed",
+      "reconstructed_normalized_sha256": "efa4314f4387da6953422f9e6e91641f47ed6410e78205195d4a11413f9dc2ed"
+    },
+    {
+      "path": "home.php",
+      "remote_lines": 63,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "22ba5bcb0e4a5fc3ae9120f580a4e7e175ae6cf394f438126069ae8513ab2434",
+      "reconstructed_normalized_sha256": "22ba5bcb0e4a5fc3ae9120f580a4e7e175ae6cf394f438126069ae8513ab2434"
+    },
+    {
+      "path": "inc/admin/bootstrap.php",
+      "remote_lines": 100,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "907e3a2543656c025f4a2fd75b7fd58cc613491bd8c43dc5bab274ac557e12dc",
+      "reconstructed_normalized_sha256": "907e3a2543656c025f4a2fd75b7fd58cc613491bd8c43dc5bab274ac557e12dc"
+    },
+    {
+      "path": "inc/admin/control-center.php",
+      "remote_lines": 378,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "1d24a2598e55a948acfbc0118193f85d49614eafa83a33a75690860160f90d86",
+      "reconstructed_normalized_sha256": "1d24a2598e55a948acfbc0118193f85d49614eafa83a33a75690860160f90d86"
+    },
+    {
+      "path": "inc/admin/danger-zone.php",
+      "remote_lines": 260,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "b93a4f66cf05f78f72b271f8bdf93840903904279d0e4a275db240b770bf9926",
+      "reconstructed_normalized_sha256": "b93a4f66cf05f78f72b271f8bdf93840903904279d0e4a275db240b770bf9926"
+    },
+    {
+      "path": "inc/admin/editor-policy.php",
+      "remote_lines": 32,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "ed27d6c06edbad601e329ed9ec6c6ea899b494caf33bf451c5e1509f56c17d04",
+      "reconstructed_normalized_sha256": "ed27d6c06edbad601e329ed9ec6c6ea899b494caf33bf451c5e1509f56c17d04"
+    },
+    {
+      "path": "inc/admin/footer-content.php",
+      "remote_lines": 185,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "a64be6648c1c1cf7ec47395554b567b34404015e118d60b3e08c0989fb0941c3",
+      "reconstructed_normalized_sha256": "a64be6648c1c1cf7ec47395554b567b34404015e118d60b3e08c0989fb0941c3"
+    },
+    {
+      "path": "inc/admin/footer-profile.php",
+      "remote_lines": 262,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "5d3a9a7b4df1a9b4e34804b64e1c4b399ccbe7b3df63f238aefa25b4576d5943",
+      "reconstructed_normalized_sha256": "5d3a9a7b4df1a9b4e34804b64e1c4b399ccbe7b3df63f238aefa25b4576d5943"
+    },
+    {
+      "path": "inc/admin/homepage-authoring.php",
+      "remote_lines": 341,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "b33ab2fab2acfab6c3445054e4b409b2fb30b6f5585dd627e5cac400a356c7b4",
+      "reconstructed_normalized_sha256": "b33ab2fab2acfab6c3445054e4b409b2fb30b6f5585dd627e5cac400a356c7b4"
+    },
+    {
+      "path": "inc/admin/homepage-design.php",
+      "remote_lines": 287,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "c1c35fc04f2c44ec6567dde94c54b8e4912409e3dccf7d7a25fa797deb25a076",
+      "reconstructed_normalized_sha256": "c1c35fc04f2c44ec6567dde94c54b8e4912409e3dccf7d7a25fa797deb25a076"
+    },
+    {
+      "path": "inc/admin/homepage-hero.php",
+      "remote_lines": 422,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "ab2afed0267e325246e7bbafb3b64acb9643e3096de28eefd3cdd0280b83549e",
+      "reconstructed_normalized_sha256": "ab2afed0267e325246e7bbafb3b64acb9643e3096de28eefd3cdd0280b83549e"
+    },
+    {
+      "path": "inc/admin/homepage-migration.php",
+      "remote_lines": 83,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "bb59fa175ec36d14d0654993e64cb3b5bcddccf141b8a32d558b9097042c0848",
+      "reconstructed_normalized_sha256": "bb59fa175ec36d14d0654993e64cb3b5bcddccf141b8a32d558b9097042c0848"
+    },
+    {
+      "path": "inc/admin/homepage.php",
+      "remote_lines": 1127,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "a3e9e8756800a47d0f3200321ba6b6b80c12fbb46ac1a15172bca4221d15f8ce",
+      "reconstructed_normalized_sha256": "a3e9e8756800a47d0f3200321ba6b6b80c12fbb46ac1a15172bca4221d15f8ce"
+    },
+    {
+      "path": "inc/admin/project-handoff.php",
+      "remote_lines": 46,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "a581852079b97b1b16fbb3dbf0127388089160b718d2a3608a006ffd294194c0",
+      "reconstructed_normalized_sha256": "a581852079b97b1b16fbb3dbf0127388089160b718d2a3608a006ffd294194c0"
+    },
+    {
+      "path": "inc/admin/provisioning.php",
+      "remote_lines": 384,
+      "requests": 1,
+      "normalized_equal": true,
+      "source_sha256": "3db2137a81728b9fc2947f663c40a0998dde5d4e0891461b3e702fdf323c8a5b",
+      "reconstructed_normalized_sha256": "dbc4f18665690648bf0ee4ffe5116dffe4e1826159ca685e838ea0513066238d"
+    },
+    {
+      "path": "inc/admin/settings-actions.php",
+      "remote_lines": 38,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "2211bdb8ae8d9e96fff95de509ed5d7870774782f22bbfe0cead5633385d5fea",
+      "reconstructed_normalized_sha256": "2211bdb8ae8d9e96fff95de509ed5d7870774782f22bbfe0cead5633385d5fea"
+    },
+    {
+      "path": "inc/admin/settings-portability.php",
+      "remote_lines": 51,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "7609026a40e99e2918f58f46bc8a37659868df127dca5a8302c7e9977a7b8b70",
+      "reconstructed_normalized_sha256": "7609026a40e99e2918f58f46bc8a37659868df127dca5a8302c7e9977a7b8b70"
+    },
+    {
+      "path": "inc/admin/site-guard-consumer.php",
+      "remote_lines": 132,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "b4fe19166e4ecb7bd47d956c679b5fb952a16f138e62a001df0895309b629a4a",
+      "reconstructed_normalized_sha256": "b4fe19166e4ecb7bd47d956c679b5fb952a16f138e62a001df0895309b629a4a"
+    },
+    {
+      "path": "inc/admin/system-health.php",
+      "remote_lines": 48,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "b6f942b8e99dadad910910a616f22d22134c2fc39cac2d2f4fa5977cd1998fa6",
+      "reconstructed_normalized_sha256": "b6f942b8e99dadad910910a616f22d22134c2fc39cac2d2f4fa5977cd1998fa6"
+    },
+    {
+      "path": "inc/admin/team-member-editor.php",
+      "remote_lines": 55,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "94d9125dbb2c03513fb39dc3addbbe13067ae6c95b334282968dc9cf98479b1f",
+      "reconstructed_normalized_sha256": "94d9125dbb2c03513fb39dc3addbbe13067ae6c95b334282968dc9cf98479b1f"
+    },
+    {
+      "path": "inc/integrations/rootprofile.php",
+      "remote_lines": 207,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "f46c74aa2b4763a5e04ea174fc06d914ca3cf1ee03a7fd32ac7bb26eed0f5619",
+      "reconstructed_normalized_sha256": "f46c74aa2b4763a5e04ea174fc06d914ca3cf1ee03a7fd32ac7bb26eed0f5619"
+    },
+    {
+      "path": "inc/integrations/woo-variation-swatches.php",
+      "remote_lines": 43,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "b6ba792dc6e9fdd2dfe6ba5ab87320c22a9523174fa36a868e98be5d8d5ad80d",
+      "reconstructed_normalized_sha256": "b6ba792dc6e9fdd2dfe6ba5ab87320c22a9523174fa36a868e98be5d8d5ad80d"
+    },
+    {
+      "path": "inc/integrations/woocommerce.php",
+      "remote_lines": 162,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "8de58ce7021893716b1db71d57be68afafc242588ce55483fc73665341bb9cf6",
+      "reconstructed_normalized_sha256": "8de58ce7021893716b1db71d57be68afafc242588ce55483fc73665341bb9cf6"
+    },
+    {
+      "path": "inc/patterns/woocommerce/category-grid.php",
+      "remote_lines": 18,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "ab5c6058e91ef865df82db24a5993c9e4b0b54cff774ffb1fe3d00e8a00772a7",
+      "reconstructed_normalized_sha256": "ab5c6058e91ef865df82db24a5993c9e4b0b54cff774ffb1fe3d00e8a00772a7"
+    },
+    {
+      "path": "inc/patterns/woocommerce/featured-products.php",
+      "remote_lines": 25,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "7531355b8e3c2ff399665b4f87bf7e5d8edca7bc02f7e0dbc11c0c8a3e552da4",
+      "reconstructed_normalized_sha256": "7531355b8e3c2ff399665b4f87bf7e5d8edca7bc02f7e0dbc11c0c8a3e552da4"
+    },
+    {
+      "path": "inc/theme/archive-presentation.php",
+      "remote_lines": 47,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "3b80861542e2518175ac8cdfbcfdf5862a936287153603ea757045435e1dce03",
+      "reconstructed_normalized_sha256": "3b80861542e2518175ac8cdfbcfdf5862a936287153603ea757045435e1dce03"
+    },
+    {
+      "path": "inc/theme/assets.php",
+      "remote_lines": 1023,
+      "normalized_equal": true,
+      "source_sha256": "95313b9f6bf1e711b2747e9350b242b52d72d3db25553e79f1561ca184f2b383",
+      "normalized_remote_sha256": "95313b9f6bf1e711b2747e9350b242b52d72d3db25553e79f1561ca184f2b383"
+    },
+    {
+      "path": "inc/theme/bootstrap.php",
+      "remote_lines": 72,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "1ead7449a262737e2c42f68352e80053638beb909463926f46b40bbdbfb1df5d",
+      "reconstructed_normalized_sha256": "1ead7449a262737e2c42f68352e80053638beb909463926f46b40bbdbfb1df5d"
+    },
+    {
+      "path": "inc/theme/contact-surface.php",
+      "remote_lines": 164,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "b4cb7b71eff6f4e7b6727099f466096ed61251da7420e14fc6e79994159904fe",
+      "reconstructed_normalized_sha256": "b4cb7b71eff6f4e7b6727099f466096ed61251da7420e14fc6e79994159904fe"
+    },
+    {
+      "path": "inc/theme/content-shell.php",
+      "remote_lines": 47,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "a3f8e72a7b05e4423a33db5bc92c1e502afb1d94bdb03fe6eb108cace50d77a9",
+      "reconstructed_normalized_sha256": "a3f8e72a7b05e4423a33db5bc92c1e502afb1d94bdb03fe6eb108cace50d77a9"
+    },
+    {
+      "path": "inc/theme/design-system.php",
+      "remote_lines": 54,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "b40d0adcaa413d0907937c0cb0ec15ec82e13e65acaee24c7cb58a8910aa0a62",
+      "reconstructed_normalized_sha256": "b40d0adcaa413d0907937c0cb0ec15ec82e13e65acaee24c7cb58a8910aa0a62"
+    },
+    {
+      "path": "inc/theme/footer.php",
+      "remote_lines": 312,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "daf9b6e6b2ad87c95c44310155e74179b102cbace1fd08417c0a8f3572809064",
+      "reconstructed_normalized_sha256": "daf9b6e6b2ad87c95c44310155e74179b102cbace1fd08417c0a8f3572809064"
+    },
+    {
+      "path": "inc/theme/header.php",
+      "remote_lines": 242,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "3a983b9bb497da613606a979ffa0a4e75b3d933a95963a0e911d93e9ebe91a8c",
+      "reconstructed_normalized_sha256": "3a983b9bb497da613606a979ffa0a4e75b3d933a95963a0e911d93e9ebe91a8c"
+    },
+    {
+      "path": "inc/theme/homepage-authoring.php",
+      "remote_lines": 171,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "fa4a5c1b8ba311564a0c15236fcf1aed0c55c6a38332ae0dc56db149768ea0a2",
+      "reconstructed_normalized_sha256": "fa4a5c1b8ba311564a0c15236fcf1aed0c55c6a38332ae0dc56db149768ea0a2"
+    },
+    {
+      "path": "inc/theme/homepage-composer.php",
+      "remote_lines": 173,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "2913dc8da1c8786eb5a659574c13bc357e5a0be101c875b32599574053762bf9",
+      "reconstructed_normalized_sha256": "2913dc8da1c8786eb5a659574c13bc357e5a0be101c875b32599574053762bf9"
+    },
+    {
+      "path": "inc/theme/homepage-content-map.php",
+      "remote_lines": 217,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "d2e184737af69abd23d9367e10bf530bf271d70479496aa80115660902867470",
+      "reconstructed_normalized_sha256": "d2e184737af69abd23d9367e10bf530bf271d70479496aa80115660902867470"
+    },
+    {
+      "path": "inc/theme/homepage-surface-map.php",
+      "remote_lines": 1026,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "df36e79d4d8b247cae74c4c9b2811c21974922072b72c7ab95e25cb8ccf458b4",
+      "reconstructed_normalized_sha256": "df36e79d4d8b247cae74c4c9b2811c21974922072b72c7ab95e25cb8ccf458b4"
+    },
+    {
+      "path": "inc/theme/law01-reference.php",
+      "remote_lines": 53,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "5d26c08bd4fdb030e70d1488fc1a8b266e80dc6e5916e96101b8a1ccf590afe2",
+      "reconstructed_normalized_sha256": "5d26c08bd4fdb030e70d1488fc1a8b266e80dc6e5916e96101b8a1ccf590afe2"
+    },
+    {
+      "path": "inc/theme/page-experience.php",
+      "remote_lines": 383,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "fe112356f6e416d4fa846b61af632788f9ee093d180b61d2ebf7a69b874b3bea",
+      "reconstructed_normalized_sha256": "fe112356f6e416d4fa846b61af632788f9ee093d180b61d2ebf7a69b874b3bea"
+    },
+    {
+      "path": "inc/theme/patterns.php",
+      "remote_lines": 75,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "84ef73c89377d71e2d036baeccd3d73ed9e489ff42bc69c868748270935e815a",
+      "reconstructed_normalized_sha256": "84ef73c89377d71e2d036baeccd3d73ed9e489ff42bc69c868748270935e815a"
+    },
+    {
+      "path": "inc/theme/preset-lexicon.php",
+      "remote_lines": 63,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "6a75cf3aa0aa98473bd297286861a3339e8bebabb2551c8cde47260a4ba3020e",
+      "reconstructed_normalized_sha256": "6a75cf3aa0aa98473bd297286861a3339e8bebabb2551c8cde47260a4ba3020e"
+    },
+    {
+      "path": "inc/theme/professional-page-kits.php",
+      "remote_lines": 43,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "73ef940055f4def7841d3e7f2bf3cdcdefc7c0a63cfda6e17946c4fd2941e987",
+      "reconstructed_normalized_sha256": "73ef940055f4def7841d3e7f2bf3cdcdefc7c0a63cfda6e17946c4fd2941e987"
+    },
+    {
+      "path": "inc/theme/profile-surface.php",
+      "remote_lines": 235,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "88ebf50cc1c2ccb6e412d02fce7763747f53ed12f2394108fec05eec2688b70f",
+      "reconstructed_normalized_sha256": "88ebf50cc1c2ccb6e412d02fce7763747f53ed12f2394108fec05eec2688b70f"
+    },
+    {
+      "path": "inc/theme/provisioning-blueprints.php",
+      "remote_lines": 232,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "6088dfaf7d5ab15c4729ee631dd3f69f72caea12867d51ca3f65907b76e4c0d9",
+      "reconstructed_normalized_sha256": "6088dfaf7d5ab15c4729ee631dd3f69f72caea12867d51ca3f65907b76e4c0d9"
+    },
+    {
+      "path": "inc/theme/provisioning-discovery.php",
+      "remote_lines": 118,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "9a2904c33988ed2305a7e9aa0cd590086b58e1601ad06c1c53b2f76fd79bd466",
+      "reconstructed_normalized_sha256": "9a2904c33988ed2305a7e9aa0cd590086b58e1601ad06c1c53b2f76fd79bd466"
+    },
+    {
+      "path": "inc/theme/provisioning-editorial.php",
+      "remote_lines": 92,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "95c1aea4413f175a318492597b4877e3e8adf14f871120b7b2b38525655d82cf",
+      "reconstructed_normalized_sha256": "95c1aea4413f175a318492597b4877e3e8adf14f871120b7b2b38525655d82cf"
+    },
+    {
+      "path": "inc/theme/provisioning-indexing.php",
+      "remote_lines": 56,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "f0584168bcc60a351a3c4066e96d6670cff23b48dbcd00fc261a6d840766c331",
+      "reconstructed_normalized_sha256": "f0584168bcc60a351a3c4066e96d6670cff23b48dbcd00fc261a6d840766c331"
+    },
+    {
+      "path": "inc/theme/provisioning-media.php",
+      "remote_lines": 99,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "636e228ad2801676ac9b1616afe4ca09bb939351fd833626fa0d8d7ea09ca292",
+      "reconstructed_normalized_sha256": "636e228ad2801676ac9b1616afe4ca09bb939351fd833626fa0d8d7ea09ca292"
+    },
+    {
+      "path": "inc/theme/provisioning-plan.php",
+      "remote_lines": 283,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "d6297e7f65d33bc7e4cf23871fc64024320581b737a27322999e0357af463f24",
+      "reconstructed_normalized_sha256": "d6297e7f65d33bc7e4cf23871fc64024320581b737a27322999e0357af463f24"
+    },
+    {
+      "path": "inc/theme/provisioning-professional-services.php",
+      "remote_lines": 104,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "5094b261879ab18127043030a5cc71d7661156db909a279d80e3889b07802bb7",
+      "reconstructed_normalized_sha256": "5094b261879ab18127043030a5cc71d7661156db909a279d80e3889b07802bb7"
+    },
+    {
+      "path": "inc/theme/provisioning-provenance.php",
+      "remote_lines": 70,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "532f06b7f78eff1eddfe22e645f5ca655d3f3d582016c750573cb754b635cde1",
+      "reconstructed_normalized_sha256": "532f06b7f78eff1eddfe22e645f5ca655d3f3d582016c750573cb754b635cde1"
+    },
+    {
+      "path": "inc/theme/provisioning-readiness.php",
+      "remote_lines": 81,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "e6486146718e3624cd71ae0f5c868e7315621bec7f330cb950184ac78432680f",
+      "reconstructed_normalized_sha256": "e6486146718e3624cd71ae0f5c868e7315621bec7f330cb950184ac78432680f"
+    },
+    {
+      "path": "inc/theme/provisioning-recommendations.php",
+      "remote_lines": 166,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "66c718a4b9449c52ece5663601f850307a55e822e8f48f49f9a7573f28752635",
+      "reconstructed_normalized_sha256": "66c718a4b9449c52ece5663601f850307a55e822e8f48f49f9a7573f28752635"
+    },
+    {
+      "path": "inc/theme/provisioning-runner.php",
+      "remote_lines": 338,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "5e649a7c0a10c5ed1fda4a81dda75548d2292f3b6fa0db0804fd01b8f4266f4b",
+      "reconstructed_normalized_sha256": "5e649a7c0a10c5ed1fda4a81dda75548d2292f3b6fa0db0804fd01b8f4266f4b"
+    },
+    {
+      "path": "inc/theme/rootprofile-current-surface.php",
+      "remote_lines": 60,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "852a96cdac9adb84175e51d602246d3e3e1fc66bebd28eb8edfa174949fac057",
+      "reconstructed_normalized_sha256": "852a96cdac9adb84175e51d602246d3e3e1fc66bebd28eb8edfa174949fac057"
+    },
+    {
+      "path": "inc/theme/settings.php",
+      "remote_lines": 435,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "d47a825ba018e9af2956feebd6c16fe60bd7b96a75741c87cfbb9ce87c1b6003",
+      "reconstructed_normalized_sha256": "d47a825ba018e9af2956feebd6c16fe60bd7b96a75741c87cfbb9ce87c1b6003"
+    },
+    {
+      "path": "inc/theme/setup.php",
+      "remote_lines": 53,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "1f3de07475855cd54db0e3f687d408622a2534021b77a950e09285925cc4ce1a",
+      "reconstructed_normalized_sha256": "1f3de07475855cd54db0e3f687d408622a2534021b77a950e09285925cc4ce1a"
+    },
+    {
+      "path": "inc/theme/team-directory.php",
+      "remote_lines": 201,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "22d1755a5ee70a40fbd5583e4e0d67fd653a102dd34f1ab4771639e119f904d7",
+      "reconstructed_normalized_sha256": "22d1755a5ee70a40fbd5583e4e0d67fd653a102dd34f1ab4771639e119f904d7"
+    },
+    {
+      "path": "inc/theme/template-loader.php",
+      "remote_lines": 43,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "c3bf4a327edbacfbdc7911b738c82ad1f0f5a4418c555103881d126672e776df",
+      "reconstructed_normalized_sha256": "c3bf4a327edbacfbdc7911b738c82ad1f0f5a4418c555103881d126672e776df"
+    },
+    {
+      "path": "inc/theme/template-registry.php",
+      "remote_lines": 278,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "eb32245f2a8b6008982bee28a1f004aafee54104508a4566e95c864a5101a1ba",
+      "reconstructed_normalized_sha256": "eb32245f2a8b6008982bee28a1f004aafee54104508a4566e95c864a5101a1ba"
+    },
+    {
+      "path": "inc/theme/templates/curtain-01/manifest.php",
+      "remote_lines": 45,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "4569cc77fa5fc7291a045b19cec059776cef2f868f1da4c5a1c145e90345ed40",
+      "reconstructed_normalized_sha256": "4569cc77fa5fc7291a045b19cec059776cef2f868f1da4c5a1c145e90345ed40"
+    },
+    {
+      "path": "inc/theme/templates/digital-01/manifest.php",
+      "remote_lines": 36,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "cc526a9c82c3a32df724562eed0c9633827ac3d808d9a66d05344176696fc8d9",
+      "reconstructed_normalized_sha256": "cc526a9c82c3a32df724562eed0c9633827ac3d808d9a66d05344176696fc8d9"
+    },
+    {
+      "path": "inc/theme/templates/industrial-01/manifest.php",
+      "remote_lines": 57,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "d323973505d9c2b2f95251c0aecd36e5b9a5a7afe4d8ce2ab8a75e88fb62495b",
+      "reconstructed_normalized_sha256": "d323973505d9c2b2f95251c0aecd36e5b9a5a7afe4d8ce2ab8a75e88fb62495b"
+    },
+    {
+      "path": "inc/theme/templates/law-01/manifest.php",
+      "remote_lines": 51,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "e96021489cede34c65030a8776465b5878848339eca16eff7e65fca419c582cc",
+      "reconstructed_normalized_sha256": "e96021489cede34c65030a8776465b5878848339eca16eff7e65fca419c582cc"
+    },
+    {
+      "path": "inc/theme/templates/wellness-01/manifest.php",
+      "remote_lines": 35,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "42d269a3993cc744ae2ed5551a735d89661efcd14b5a3f13180125bc3eea658d",
+      "reconstructed_normalized_sha256": "42d269a3993cc744ae2ed5551a735d89661efcd14b5a3f13180125bc3eea658d"
+    },
+    {
+      "path": "inc/theme/widgets.php",
+      "remote_lines": 32,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "cb23a4008789696df61af083ea1fe8ad2d7f19982f308e59171d3dcc8b8987cc",
+      "reconstructed_normalized_sha256": "cb23a4008789696df61af083ea1fe8ad2d7f19982f308e59171d3dcc8b8987cc"
+    },
+    {
+      "path": "inc/theme/woocommerce-account.php",
+      "remote_lines": 22,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "f3e171ec452dff82e8e06882bc69570af25afb6ada82a5528b5b0dfbca58f773",
+      "reconstructed_normalized_sha256": "f3e171ec452dff82e8e06882bc69570af25afb6ada82a5528b5b0dfbca58f773"
+    },
+    {
+      "path": "inc/theme/woocommerce-archive.php",
+      "remote_lines": 86,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "5fd6da2ce7fca1b0baf3b42a4d168287aadf47fe4410bf643204e486159127ca",
+      "reconstructed_normalized_sha256": "5fd6da2ce7fca1b0baf3b42a4d168287aadf47fe4410bf643204e486159127ca"
+    },
+    {
+      "path": "inc/theme/woocommerce-blocks.php",
+      "remote_lines": 36,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "e9bd4710f8699f4d25bf938fa050e582c9160d01b48f6e7e31786b9d143636c0",
+      "reconstructed_normalized_sha256": "e9bd4710f8699f4d25bf938fa050e582c9160d01b48f6e7e31786b9d143636c0"
+    },
+    {
+      "path": "inc/theme/woocommerce-cart.php",
+      "remote_lines": 22,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "81688dbdc8cd365c8359ce979f1b17ee0ed105ad9bca551ada1b97ad203d405d",
+      "reconstructed_normalized_sha256": "81688dbdc8cd365c8359ce979f1b17ee0ed105ad9bca551ada1b97ad203d405d"
+    },
+    {
+      "path": "inc/theme/woocommerce-checkout.php",
+      "remote_lines": 22,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "78c9e43a6f418f9e6d886f79d0e075df28b06363694d96634933e577c2186b0e",
+      "reconstructed_normalized_sha256": "78c9e43a6f418f9e6d886f79d0e075df28b06363694d96634933e577c2186b0e"
+    },
+    {
+      "path": "inc/theme/woocommerce-presentation.php",
+      "remote_lines": 61,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "5ea340ea3a33cda93875b156f831362c9878c6d05d79d01af3ad13d695dd9c16",
+      "reconstructed_normalized_sha256": "5ea340ea3a33cda93875b156f831362c9878c6d05d79d01af3ad13d695dd9c16"
+    },
+    {
+      "path": "inc/theme/woocommerce-product.php",
+      "remote_lines": 22,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "20e0d82e127dc250694595b9d7b07a7e922bb6fdd4801b3c5277d791288af7dd",
+      "reconstructed_normalized_sha256": "20e0d82e127dc250694595b9d7b07a7e922bb6fdd4801b3c5277d791288af7dd"
+    },
+    {
+      "path": "index.php",
+      "remote_lines": 34,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "5f5ee9f8d8f8a76990f07e163eec9eaf9b8900e5728bd5ec7e456883f35bf777",
+      "reconstructed_normalized_sha256": "5f5ee9f8d8f8a76990f07e163eec9eaf9b8900e5728bd5ec7e456883f35bf777"
+    },
+    {
+      "path": "ops/tamduc-homepage/mutation-plan.json",
+      "remote_lines": 56,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "f7c93eabebb1424c34fb9a359dd7a8af7162adb07573119b608cd2b2371478a5",
+      "reconstructed_normalized_sha256": "f7c93eabebb1424c34fb9a359dd7a8af7162adb07573119b608cd2b2371478a5"
+    },
+    {
+      "path": "page-templates/landing.php",
+      "remote_lines": 27,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "da4579cb4ab40934bd5d9e92de191d73d4eaa1d419c07f9d7ba1389b6ddb1b97",
+      "reconstructed_normalized_sha256": "da4579cb4ab40934bd5d9e92de191d73d4eaa1d419c07f9d7ba1389b6ddb1b97"
+    },
+    {
+      "path": "page-templates/wide.php",
+      "remote_lines": 27,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "d48e840fdcb7962561813fabb89ae1d2f772c2e8fad99d274527c45d03c3e424",
+      "reconstructed_normalized_sha256": "d48e840fdcb7962561813fabb89ae1d2f772c2e8fad99d274527c45d03c3e424"
+    },
+    {
+      "path": "page.php",
+      "remote_lines": 26,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "89b4b6ed0952bc79ce8b585435db5c8391f6613c981919ef2fe3acfddd8aa9be",
+      "reconstructed_normalized_sha256": "89b4b6ed0952bc79ce8b585435db5c8391f6613c981919ef2fe3acfddd8aa9be"
+    },
+    {
+      "path": "patterns/commerce-promotion.php",
+      "remote_lines": 13,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "95f8be2bd8b424ac466b577843a8081cc5472b157c11ba8cc15ae0d563ba4e36",
+      "reconstructed_normalized_sha256": "95f8be2bd8b424ac466b577843a8081cc5472b157c11ba8cc15ae0d563ba4e36"
+    },
+    {
+      "path": "patterns/content-alternating.php",
+      "remote_lines": 20,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "3ccb3726ce2e82133444cb06c64f3bfb5f7ef44733b7b376f6b1b7e5362c163b",
+      "reconstructed_normalized_sha256": "3ccb3726ce2e82133444cb06c64f3bfb5f7ef44733b7b376f6b1b7e5362c163b"
+    },
+    {
+      "path": "patterns/content-article-grid.php",
+      "remote_lines": 28,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "f6421b7fbe9f5a5b9ec5720bcdf153cf60be05832157873237da5af26e8bff98",
+      "reconstructed_normalized_sha256": "f6421b7fbe9f5a5b9ec5720bcdf153cf60be05832157873237da5af26e8bff98"
+    },
+    {
+      "path": "patterns/content-authority-quote.php",
+      "remote_lines": 21,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "dfe978ba6dde8d135eabf9a33c4d94cf6e7d981a8e6580a7133b53a335d67495",
+      "reconstructed_normalized_sha256": "dfe978ba6dde8d135eabf9a33c4d94cf6e7d981a8e6580a7133b53a335d67495"
+    },
+    {
+      "path": "patterns/content-faq.php",
+      "remote_lines": 24,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "bad48ca2d058e681549d90e21058fdadb3d25c7980adfc348ea31b69c4b3946f",
+      "reconstructed_normalized_sha256": "bad48ca2d058e681549d90e21058fdadb3d25c7980adfc348ea31b69c4b3946f"
+    },
+    {
+      "path": "patterns/content-intro.php",
+      "remote_lines": 21,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "6a796d73d66c78c5357289f60f51b40e1b94e6e07887f21c899f6336f44e0679",
+      "reconstructed_normalized_sha256": "6a796d73d66c78c5357289f60f51b40e1b94e6e07887f21c899f6336f44e0679"
+    },
+    {
+      "path": "patterns/cta-full-width.php",
+      "remote_lines": 23,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "b3dd05855435de75fad3fe57c27806b51a862453c3cd429cab92fea3df1eb7e1",
+      "reconstructed_normalized_sha256": "b3dd05855435de75fad3fe57c27806b51a862453c3cd429cab92fea3df1eb7e1"
+    },
+    {
+      "path": "patterns/hero-centered.php",
+      "remote_lines": 27,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "cd9353cdf14320e6027e84e2ed8db7d26e19c47bfa34b25018436fe68ca053e2",
+      "reconstructed_normalized_sha256": "cd9353cdf14320e6027e84e2ed8db7d26e19c47bfa34b25018436fe68ca053e2"
+    },
+    {
+      "path": "patterns/hero-commerce.php",
+      "remote_lines": 39,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "110326ad0a78188fa00e2e74aa8de52aa84338035a38a9804e454e8addc3a656",
+      "reconstructed_normalized_sha256": "110326ad0a78188fa00e2e74aa8de52aa84338035a38a9804e454e8addc3a656"
+    },
+    {
+      "path": "patterns/hero-inverse.php",
+      "remote_lines": 26,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "b1402113673036bcc343ee169237091ffa91443e078ddcab6bf383172c1cf419",
+      "reconstructed_normalized_sha256": "b1402113673036bcc343ee169237091ffa91443e078ddcab6bf383172c1cf419"
+    },
+    {
+      "path": "patterns/hero-split.php",
+      "remote_lines": 39,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "fbfd840d7126f463da6b8fdab9da41f1eea0d94890dd7b5c9cd829781d50f47e",
+      "reconstructed_normalized_sha256": "fbfd840d7126f463da6b8fdab9da41f1eea0d94890dd7b5c9cd829781d50f47e"
+    },
+    {
+      "path": "patterns/homepage-digital-01.php",
+      "remote_lines": 115,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "9b940e9c23dba82f5f68755e90d41f6a9128da7fb41212e31d2892bc1ec98cef",
+      "reconstructed_normalized_sha256": "9b940e9c23dba82f5f68755e90d41f6a9128da7fb41212e31d2892bc1ec98cef"
+    },
+    {
+      "path": "patterns/homepage-hero-content.php",
+      "remote_lines": 70,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "dac3760cc17c583f995e97b5a61a60be7e519f28e6eba8fc773fa7d470e50952",
+      "reconstructed_normalized_sha256": "dac3760cc17c583f995e97b5a61a60be7e519f28e6eba8fc773fa7d470e50952"
+    },
+    {
+      "path": "patterns/homepage-professional-services.php",
+      "remote_lines": 130,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "3fc53aaedfd29f474358916223fa297fddb9904d0e70fcf6a98120f59fccf6d9",
+      "reconstructed_normalized_sha256": "3fc53aaedfd29f474358916223fa297fddb9904d0e70fcf6a98120f59fccf6d9"
+    },
+    {
+      "path": "patterns/homepage-wellness-01.php",
+      "remote_lines": 97,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "79ecd7ef0393c6379c5239be033dff2b9c1fc7f701a5410af52f62bde47dbcc1",
+      "reconstructed_normalized_sha256": "79ecd7ef0393c6379c5239be033dff2b9c1fc7f701a5410af52f62bde47dbcc1"
+    },
+    {
+      "path": "patterns/page-about.php",
+      "remote_lines": 18,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "820321d21ee33e7a3350bfb70be147fc74a4cd1d0b61e43c23f104fc6c32d512",
+      "reconstructed_normalized_sha256": "820321d21ee33e7a3350bfb70be147fc74a4cd1d0b61e43c23f104fc6c32d512"
+    },
+    {
+      "path": "patterns/page-contact.php",
+      "remote_lines": 15,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "edec63fe5e3b1d5ea243c7840882259d899969bd1075d20cd054ed1934b5baa4",
+      "reconstructed_normalized_sha256": "edec63fe5e3b1d5ea243c7840882259d899969bd1075d20cd054ed1934b5baa4"
+    },
+    {
+      "path": "patterns/page-content-landing.php",
+      "remote_lines": 17,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "dcc092445344e4ca48dc250543701f4b6ed7e6a6c526ef5a52967a2f4732ff44",
+      "reconstructed_normalized_sha256": "dcc092445344e4ca48dc250543701f4b6ed7e6a6c526ef5a52967a2f4732ff44"
+    },
+    {
+      "path": "patterns/page-services.php",
+      "remote_lines": 17,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "b6b97f7c932672128304000ceb3c76d7cf2af2ead19c67ada79a1d8834d45c4e",
+      "reconstructed_normalized_sha256": "b6b97f7c932672128304000ceb3c76d7cf2af2ead19c67ada79a1d8834d45c4e"
+    },
+    {
+      "path": "patterns/page-team-expertise.php",
+      "remote_lines": 16,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "6d7b15f388ecd6fa48e75937285dc9c4a5088bff1c5f0bb6d63b37d112e5ee82",
+      "reconstructed_normalized_sha256": "6d7b15f388ecd6fa48e75937285dc9c4a5088bff1c5f0bb6d63b37d112e5ee82"
+    },
+    {
+      "path": "patterns/trust-feature-grid.php",
+      "remote_lines": 20,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "1d1989a21e0e94c2c26869696a7563ac952c96becc20edce5ff00cdce996aa49",
+      "reconstructed_normalized_sha256": "1d1989a21e0e94c2c26869696a7563ac952c96becc20edce5ff00cdce996aa49"
+    },
+    {
+      "path": "patterns/trust-logo-strip.php",
+      "remote_lines": 21,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "a764ea67f1295296dba3e9cb5b21df828e6735581e418f44d58304485eb9dea9",
+      "reconstructed_normalized_sha256": "a764ea67f1295296dba3e9cb5b21df828e6735581e418f44d58304485eb9dea9"
+    },
+    {
+      "path": "patterns/trust-testimonials.php",
+      "remote_lines": 19,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "2e8b8219277e9eee35297b0d981c921b0cf26eb554821be3044625f5efecb819",
+      "reconstructed_normalized_sha256": "2e8b8219277e9eee35297b0d981c921b0cf26eb554821be3044625f5efecb819"
+    },
+    {
+      "path": "patterns/utility-contact.php",
+      "remote_lines": 17,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "6cd804817923fcc2fc17cb712fd2ab864d14d2d99df1e3c1a672f11778976831",
+      "reconstructed_normalized_sha256": "6cd804817923fcc2fc17cb712fd2ab864d14d2d99df1e3c1a672f11778976831"
+    },
+    {
+      "path": "patterns/utility-footer-cta.php",
+      "remote_lines": 15,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "78c02c7c2afdd989567517244f28a6b035ae6674c64b91f68c1fe8e685f13889",
+      "reconstructed_normalized_sha256": "78c02c7c2afdd989567517244f28a6b035ae6674c64b91f68c1fe8e685f13889"
+    },
+    {
+      "path": "search.php",
+      "remote_lines": 70,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "9d5ad37ad75d1d0b8613ff4981218e17924b82551c2e5f9b7af9c956b5b8cb0c",
+      "reconstructed_normalized_sha256": "9d5ad37ad75d1d0b8613ff4981218e17924b82551c2e5f9b7af9c956b5b8cb0c"
+    },
+    {
+      "path": "sidebar-shop.php",
+      "remote_lines": 17,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "51a0389bc8f6f46b5d2187ea0d2ce405a259629d6b045e51ae7e1c4e495076b7",
+      "reconstructed_normalized_sha256": "51a0389bc8f6f46b5d2187ea0d2ce405a259629d6b045e51ae7e1c4e495076b7"
+    },
+    {
+      "path": "single.php",
+      "remote_lines": 52,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "babe5e3e6aeed60ff933b480bdd7e4561a0d7f47c230695320b207e4bd8192a5",
+      "reconstructed_normalized_sha256": "babe5e3e6aeed60ff933b480bdd7e4561a0d7f47c230695320b207e4bd8192a5"
+    },
+    {
+      "path": "style.css",
+      "remote_lines": 45,
+      "requests": 2,
+      "normalized_equal": false,
+      "source_sha256": "871076624ef535521e36980e667524dcac5c706488e0dde7b0dcfe17930d8e80",
+      "reconstructed_normalized_sha256": "eab2686601de1e193aed88af4b25f4c2b0f67ab979dca5d25270f3355c09a7d4",
+      "expected_preview_metadata": true,
+      "difference": "Only Theme Name suffix (WPVibe Draft); preserved, runtime CSS unchanged"
+    },
+    {
+      "path": "template-parts/archive/law01-category.php",
+      "remote_lines": 144,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "7485c65688395e42a981db2f0fb851a405912961166b865ce15f5e514de4c172",
+      "reconstructed_normalized_sha256": "7485c65688395e42a981db2f0fb851a405912961166b865ce15f5e514de4c172"
+    },
+    {
+      "path": "template-parts/archive/law01-item.php",
+      "remote_lines": 58,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "613fcf5be0c725680357a778c81dd98b2a01a06f937e1f60a0bc3d875599e400",
+      "reconstructed_normalized_sha256": "613fcf5be0c725680357a778c81dd98b2a01a06f937e1f60a0bc3d875599e400"
+    },
+    {
+      "path": "template-parts/contact/page.php",
+      "remote_lines": 97,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "8208fbc1053367161aed52064905fcf32d1bd05315e2284fb0bb00276a70928f",
+      "reconstructed_normalized_sha256": "8208fbc1053367161aed52064905fcf32d1bd05315e2284fb0bb00276a70928f"
+    },
+    {
+      "path": "template-parts/contact/surface.php",
+      "remote_lines": 251,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "c98e3d84f9c8afb82b379c97e33abc4ffb21bdf2c05bc28ecbbfbc44dc440206",
+      "reconstructed_normalized_sha256": "c98e3d84f9c8afb82b379c97e33abc4ffb21bdf2c05bc28ecbbfbc44dc440206"
+    },
+    {
+      "path": "template-parts/content/author.php",
+      "remote_lines": 36,
+      "requests": 1,
+      "normalized_equal": true,
+      "source_sha256": "52e1c812f53010aa6f02d232613396db4cf1dec246efcdff7ecf69e9f679af8a",
+      "reconstructed_normalized_sha256": "f1b735fb9d0edb5d7f322b1f7450106703a81443cefd0627c46e0c99b1445ed9"
+    },
+    {
+      "path": "template-parts/content/card.php",
+      "remote_lines": 33,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "2a0e4d642fb4c282c84bf7ab81a82d15a00f8e851e5ffaf2e1f13db08b2d409b",
+      "reconstructed_normalized_sha256": "2a0e4d642fb4c282c84bf7ab81a82d15a00f8e851e5ffaf2e1f13db08b2d409b"
+    },
+    {
+      "path": "template-parts/content/content-single.php",
+      "remote_lines": 90,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "a262a319251fcbeb00a520fe0f0bbea52c7d33ea4548ed2a51c33e5e6520abbc",
+      "reconstructed_normalized_sha256": "a262a319251fcbeb00a520fe0f0bbea52c7d33ea4548ed2a51c33e5e6520abbc"
+    },
+    {
+      "path": "template-parts/content/meta.php",
+      "remote_lines": 38,
+      "requests": 1,
+      "normalized_equal": true,
+      "source_sha256": "6b69ca021a1b9093572fda9ad742e4337f1d5de1401898f5332bfda5d1058c61",
+      "reconstructed_normalized_sha256": "7d4ec98f7b9a171ad2f4b1448b9570324c3c42a9fcfe99131c1e367a6f21c69d"
+    },
+    {
+      "path": "template-parts/content/page.php",
+      "remote_lines": 176,
+      "requests": 1,
+      "normalized_equal": true,
+      "source_sha256": "2fa9f112311def4234fc9006eaf24c47789798a45d1745e05d0660dc841cad92",
+      "reconstructed_normalized_sha256": "9f12fd3751b377c15e590e907eca7d65a7f16a3143d7b980af513ed98647037e"
+    },
+    {
+      "path": "template-parts/footer/site-footer.php",
+      "remote_lines": 216,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "f5fcaa1737338739fcf08a578e1463688fd83b22a8e73a92def5dce778d49517",
+      "reconstructed_normalized_sha256": "f5fcaa1737338739fcf08a578e1463688fd83b22a8e73a92def5dce778d49517"
+    },
+    {
+      "path": "template-parts/header/brand.php",
+      "remote_lines": 34,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "7a5673147e96c99988cbf5963d70595f808cf11b44c77a050839bd412d31df1f",
+      "reconstructed_normalized_sha256": "7a5673147e96c99988cbf5963d70595f808cf11b44c77a050839bd412d31df1f"
+    },
+    {
+      "path": "template-parts/header/catalog-navigation.php",
+      "remote_lines": 23,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "b099742c244352b9b4946bcaafbc0ec8e4d62b4d38323c2fc647d9c67172f704",
+      "reconstructed_normalized_sha256": "b099742c244352b9b4946bcaafbc0ec8e4d62b4d38323c2fc647d9c67172f704"
+    },
+    {
+      "path": "template-parts/header/commerce-actions.php",
+      "remote_lines": 31,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "b81a261263c2cf4a58ece24a5d5110018c4a22131a235e8886692d8c8f7d69d8",
+      "reconstructed_normalized_sha256": "b81a261263c2cf4a58ece24a5d5110018c4a22131a235e8886692d8c8f7d69d8"
+    },
+    {
+      "path": "template-parts/header/law01-consultation.php",
+      "remote_lines": 30,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "8432fcd8066219b00bd6c9ad9e4181e8d75495adc5a1f4747815675fb3c29f85",
+      "reconstructed_normalized_sha256": "8432fcd8066219b00bd6c9ad9e4181e8d75495adc5a1f4747815675fb3c29f85"
+    },
+    {
+      "path": "template-parts/header/law01-topbar.php",
+      "remote_lines": 26,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "1350f7b7e0031da1bbedd86ce08e083116a18ac03d9733e0b03f264b5ffe1a34",
+      "reconstructed_normalized_sha256": "1350f7b7e0031da1bbedd86ce08e083116a18ac03d9733e0b03f264b5ffe1a34"
+    },
+    {
+      "path": "template-parts/header/mobile-panel.php",
+      "remote_lines": 57,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "d7a0ea34f6a93f4dc27f80f939299852a06b9a3cffbd6b7860f23097b3ec8918",
+      "reconstructed_normalized_sha256": "d7a0ea34f6a93f4dc27f80f939299852a06b9a3cffbd6b7860f23097b3ec8918"
+    },
+    {
+      "path": "template-parts/header/primary-navigation.php",
+      "remote_lines": 21,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "c3e32101f023a03411009feb9e0140ffe13ec2561a8dff3fdd7f2c2696748403",
+      "reconstructed_normalized_sha256": "c3e32101f023a03411009feb9e0140ffe13ec2561a8dff3fdd7f2c2696748403"
+    },
+    {
+      "path": "template-parts/header/search.php",
+      "remote_lines": 26,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "04cdc90042ae22945c062073d1e352fc4300a6688dba66c70199c48e48772ea0",
+      "reconstructed_normalized_sha256": "04cdc90042ae22945c062073d1e352fc4300a6688dba66c70199c48e48772ea0"
+    },
+    {
+      "path": "template-parts/header/site-header.php",
+      "remote_lines": 81,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "cb779173ed7fa4b9fa809d69abd675d1cfe24c296182a73eaa18f709e5d8d7c3",
+      "reconstructed_normalized_sha256": "cb779173ed7fa4b9fa809d69abd675d1cfe24c296182a73eaa18f709e5d8d7c3"
+    },
+    {
+      "path": "template-parts/header/utility-navigation.php",
+      "remote_lines": 21,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "7940f5a10ab51fd0d7b65f290df2c6fd247154b2c8ef43c9a70466f08d60d76b",
+      "reconstructed_normalized_sha256": "7940f5a10ab51fd0d7b65f290df2c6fd247154b2c8ef43c9a70466f08d60d76b"
+    },
+    {
+      "path": "template-parts/homepage/curtain-01/about.php",
+      "remote_lines": 69,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "b130f0744a5528d503b2e62752b9841806851f605c91a773a8a42bbabc75d173",
+      "reconstructed_normalized_sha256": "b130f0744a5528d503b2e62752b9841806851f605c91a773a8a42bbabc75d173"
+    },
+    {
+      "path": "template-parts/homepage/curtain-01/catalogue.php",
+      "remote_lines": 90,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "dd0e108cb6c3e320741746a22e82afb77d848199051260a811e27dbf9f703f29",
+      "reconstructed_normalized_sha256": "dd0e108cb6c3e320741746a22e82afb77d848199051260a811e27dbf9f703f29"
+    },
+    {
+      "path": "template-parts/homepage/curtain-01/category-showcase.php",
+      "remote_lines": 61,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "246316e6a32565de6c13acfc9a4989c2db3fd8ba076654b204203ffe8ecc0b91",
+      "reconstructed_normalized_sha256": "246316e6a32565de6c13acfc9a4989c2db3fd8ba076654b204203ffe8ecc0b91"
+    },
+    {
+      "path": "template-parts/homepage/curtain-01/final-cta.php",
+      "remote_lines": 54,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "84eb948d363e5727ba7c93c29d1c0ea67e510421ee7f23927ebe3fb2527255cc",
+      "reconstructed_normalized_sha256": "84eb948d363e5727ba7c93c29d1c0ea67e510421ee7f23927ebe3fb2527255cc"
+    },
+    {
+      "path": "template-parts/homepage/curtain-01/hero.php",
+      "remote_lines": 144,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "189cd9fb3e2bd80729fb04b4373330997d41a20289719d7a7e28b0f51efa0e2a",
+      "reconstructed_normalized_sha256": "189cd9fb3e2bd80729fb04b4373330997d41a20289719d7a7e28b0f51efa0e2a"
+    },
+    {
+      "path": "template-parts/homepage/curtain-01/knowledge.php",
+      "remote_lines": 73,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "7cc1e1bda355e940cd9a4775d3b174fbdd8407563070f14a5fb7cd98ba92bfb7",
+      "reconstructed_normalized_sha256": "7cc1e1bda355e940cd9a4775d3b174fbdd8407563070f14a5fb7cd98ba92bfb7"
+    },
+    {
+      "path": "template-parts/homepage/curtain-01/process.php",
+      "remote_lines": 43,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "a9ce200c58c4abd8dc27fe7dcced47b0d85a3fc091bee08e460824d0660bf8d5",
+      "reconstructed_normalized_sha256": "a9ce200c58c4abd8dc27fe7dcced47b0d85a3fc091bee08e460824d0660bf8d5"
+    },
+    {
+      "path": "template-parts/homepage/curtain-01/projects.php",
+      "remote_lines": 76,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "8a3884c3b154b025cfb3e06efb369500226d8a1ddf97b63bf02fff8d700e3e2b",
+      "reconstructed_normalized_sha256": "8a3884c3b154b025cfb3e06efb369500226d8a1ddf97b63bf02fff8d700e3e2b"
+    },
+    {
+      "path": "template-parts/homepage/curtain-01/proof-strip.php",
+      "remote_lines": 34,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "93910b06fb717b28b2e5a365770d0996c0f8dffdfc0b0adcf2aef9ccf6623d1d",
+      "reconstructed_normalized_sha256": "93910b06fb717b28b2e5a365770d0996c0f8dffdfc0b0adcf2aef9ccf6623d1d"
+    },
+    {
+      "path": "template-parts/homepage/industrial-01/about.php",
+      "remote_lines": 63,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "5e1a821549351991230b740b241e20073641e19f2546de4a1af18290e9e69093",
+      "reconstructed_normalized_sha256": "5e1a821549351991230b740b241e20073641e19f2546de4a1af18290e9e69093"
+    },
+    {
+      "path": "template-parts/homepage/industrial-01/categories.php",
+      "remote_lines": 110,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "f90d261243e917874d561bf78561088d793769cb5e345aa8b713481d93c40cf1",
+      "reconstructed_normalized_sha256": "f90d261243e917874d561bf78561088d793769cb5e345aa8b713481d93c40cf1"
+    },
+    {
+      "path": "template-parts/homepage/industrial-01/cta.php",
+      "remote_lines": 53,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "3c93c9c1d33bfd6dce3cce819bcb7e2eaec16ce804443ee59be909ee22325d33",
+      "reconstructed_normalized_sha256": "3c93c9c1d33bfd6dce3cce819bcb7e2eaec16ce804443ee59be909ee22325d33"
+    },
+    {
+      "path": "template-parts/homepage/industrial-01/hero.php",
+      "remote_lines": 164,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "9f33e8f9f4d0837079c9d7404737c4407084814c39fa1b450d941d975660d3fd",
+      "reconstructed_normalized_sha256": "9f33e8f9f4d0837079c9d7404737c4407084814c39fa1b450d941d975660d3fd"
+    },
+    {
+      "path": "template-parts/homepage/industrial-01/knowledge.php",
+      "remote_lines": 65,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "267e666378e17c3ad1915fc2a1e2b5db47c99c04ecdf5fd2dda0dddca1d40215",
+      "reconstructed_normalized_sha256": "267e666378e17c3ad1915fc2a1e2b5db47c99c04ecdf5fd2dda0dddca1d40215"
+    },
+    {
+      "path": "template-parts/homepage/industrial-01/process.php",
+      "remote_lines": 61,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "de7e2e7c601ac6924539b35a2e151cc0bb25223720680fe5900c883400c1dc8a",
+      "reconstructed_normalized_sha256": "de7e2e7c601ac6924539b35a2e151cc0bb25223720680fe5900c883400c1dc8a"
+    },
+    {
+      "path": "template-parts/homepage/industrial-01/products.php",
+      "remote_lines": 82,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "3957e5a16600c0035ffe61d9e1b60ea55423b0d877b633cd86211b1a4cada738",
+      "reconstructed_normalized_sha256": "3957e5a16600c0035ffe61d9e1b60ea55423b0d877b633cd86211b1a4cada738"
+    },
+    {
+      "path": "template-parts/homepage/industrial-01/solutions.php",
+      "remote_lines": 209,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "917195cdc45c0644083ead52d8cc183b7c8c2d80a2405de7ab2e3fb9dc91f95a",
+      "reconstructed_normalized_sha256": "917195cdc45c0644083ead52d8cc183b7c8c2d80a2405de7ab2e3fb9dc91f95a"
+    },
+    {
+      "path": "template-parts/homepage/law-01/about.php",
+      "remote_lines": 14,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "e312da06ef6e3f80ce3db110784989fd51e2c4376bc9987c3ff54f846d01bdb7",
+      "reconstructed_normalized_sha256": "e312da06ef6e3f80ce3db110784989fd51e2c4376bc9987c3ff54f846d01bdb7"
+    },
+    {
+      "path": "template-parts/homepage/law-01/analysis.php",
+      "remote_lines": 49,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "01a3dd3f16f333f7913b61bbfbb4eadf576200bb451bd0c953fe8fb7f4d1dd01",
+      "reconstructed_normalized_sha256": "01a3dd3f16f333f7913b61bbfbb4eadf576200bb451bd0c953fe8fb7f4d1dd01"
+    },
+    {
+      "path": "template-parts/homepage/law-01/faq.php",
+      "remote_lines": 105,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "b8b19a070f60f5ad15149d4adbd1d95d0f11cc6da33254720c67029e26f74c58",
+      "reconstructed_normalized_sha256": "b8b19a070f60f5ad15149d4adbd1d95d0f11cc6da33254720c67029e26f74c58"
+    },
+    {
+      "path": "template-parts/homepage/law-01/final-cta.php",
+      "remote_lines": 21,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "5c1f844d20bb3bfad8488e7e211c2a2c4f72d8dfb9534d9b7822790cd20953c3",
+      "reconstructed_normalized_sha256": "5c1f844d20bb3bfad8488e7e211c2a2c4f72d8dfb9534d9b7822790cd20953c3"
+    },
+    {
+      "path": "template-parts/homepage/law-01/hero.php",
+      "remote_lines": 144,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "b691ee6060526fe2c0c0e5b14c4a97820e0a1fbfa8a6434c5974236fa61438ab",
+      "reconstructed_normalized_sha256": "b691ee6060526fe2c0c0e5b14c4a97820e0a1fbfa8a6434c5974236fa61438ab"
+    },
+    {
+      "path": "template-parts/homepage/law-01/latest.php",
+      "remote_lines": 25,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "9d24f8ad00024d8587ddc360358aeffec5e6cb66653cbaf5cbce0504890b23cd",
+      "reconstructed_normalized_sha256": "9d24f8ad00024d8587ddc360358aeffec5e6cb66653cbaf5cbce0504890b23cd"
+    },
+    {
+      "path": "template-parts/homepage/law-01/news.php",
+      "remote_lines": 66,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "4fb44d46d08303296811c276e0deda67e8b4b11a400da2288ddc8a07a3380dfe",
+      "reconstructed_normalized_sha256": "4fb44d46d08303296811c276e0deda67e8b4b11a400da2288ddc8a07a3380dfe"
+    },
+    {
+      "path": "template-parts/homepage/law-01/process.php",
+      "remote_lines": 43,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "d216c3d2414cc9218cf9091864693b74608343f04404bc4f49d0ace440f2b583",
+      "reconstructed_normalized_sha256": "d216c3d2414cc9218cf9091864693b74608343f04404bc4f49d0ace440f2b583"
+    },
+    {
+      "path": "template-parts/homepage/law-01/profile.php",
+      "remote_lines": 116,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "1f7cf4ca43fa706a396fffeff67dd581b41e9ec514822520f9fa6a85a88374d8",
+      "reconstructed_normalized_sha256": "1f7cf4ca43fa706a396fffeff67dd581b41e9ec514822520f9fa6a85a88374d8"
+    },
+    {
+      "path": "template-parts/homepage/law-01/services.php",
+      "remote_lines": 41,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "e9d0958e0c08f8d3512dff7274d2978bf8eeab3dbb778cf0123d29a1d9cfd2ce",
+      "reconstructed_normalized_sha256": "e9d0958e0c08f8d3512dff7274d2978bf8eeab3dbb778cf0123d29a1d9cfd2ce"
+    },
+    {
+      "path": "template-parts/homepage/law-01/team.php",
+      "remote_lines": 36,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "bb39e0c73f6749eb43c8648ecd2889355f25d29229e58365355814f9e19108a7",
+      "reconstructed_normalized_sha256": "bb39e0c73f6749eb43c8648ecd2889355f25d29229e58365355814f9e19108a7"
+    },
+    {
+      "path": "template-parts/homepage/law-01/topics.php",
+      "remote_lines": 12,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "46396d477d6cf9c5fa312bbe7bf2b425b5c822dd82056b7c704f0e98d9597362",
+      "reconstructed_normalized_sha256": "46396d477d6cf9c5fa312bbe7bf2b425b5c822dd82056b7c704f0e98d9597362"
+    },
+    {
+      "path": "template-parts/profile/surface.php",
+      "remote_lines": 309,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "187a21f868dcb44e2c0ac6ee572ceb3ffc3f5f20ef666b983f1ef1a340408efe",
+      "reconstructed_normalized_sha256": "187a21f868dcb44e2c0ac6ee572ceb3ffc3f5f20ef666b983f1ef1a340408efe"
+    },
+    {
+      "path": "template-parts/services/card.php",
+      "remote_lines": 48,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "2bbc120df13e939abafb9c1370ff67cf87417623e84edc42a9570535b3110de1",
+      "reconstructed_normalized_sha256": "2bbc120df13e939abafb9c1370ff67cf87417623e84edc42a9570535b3110de1"
+    },
+    {
+      "path": "template-parts/services/page.php",
+      "remote_lines": 97,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "10a99aa763feabbf0e9ca238936dcab240c45b168d40028e9eb20583042815e7",
+      "reconstructed_normalized_sha256": "10a99aa763feabbf0e9ca238936dcab240c45b168d40028e9eb20583042815e7"
+    },
+    {
+      "path": "template-parts/team/card.php",
+      "remote_lines": 65,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "ab7ca0319e9457c673c0f6878909e81ccc5f1594ab8d11680fd41191974107ca",
+      "reconstructed_normalized_sha256": "ab7ca0319e9457c673c0f6878909e81ccc5f1594ab8d11680fd41191974107ca"
+    },
+    {
+      "path": "template-parts/team/member.php",
+      "remote_lines": 107,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "566093df29518613e80f73d7f41f81e6e8aef894f49ba3182ae5182664a057d6",
+      "reconstructed_normalized_sha256": "566093df29518613e80f73d7f41f81e6e8aef894f49ba3182ae5182664a057d6"
+    },
+    {
+      "path": "template-parts/team/page.php",
+      "remote_lines": 28,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "977f8f153ddccbe49fb6b8d32287e4776c2d9a1b1d5e5100ebddce367106b6b1",
+      "reconstructed_normalized_sha256": "977f8f153ddccbe49fb6b8d32287e4776c2d9a1b1d5e5100ebddce367106b6b1"
+    },
+    {
+      "path": "theme.json",
+      "remote_lines": 231,
+      "requests": 2,
+      "normalized_equal": true,
+      "source_sha256": "925fd17e2e998518dfa0815edcd938a8cb7f630099b9962bd1f882b0ce01faaf",
+      "reconstructed_normalized_sha256": "925fd17e2e998518dfa0815edcd938a8cb7f630099b9962bd1f882b0ce01faaf"
+    }
+  ],
+  "binary_records": [
+    {
+      "path": "assets/fonts/roboto/Roboto-Bold-Vietnamese.woff2",
+      "source_sha256": "bec340ec8c7ec4940533eeceadddb00ac2da872c57c67b0c55e772c7c32dad4e",
+      "status": 200,
+      "bytes": 8416,
+      "sha256": "bec340ec8c7ec4940533eeceadddb00ac2da872c57c67b0c55e772c7c32dad4e",
+      "equal_to_source": true
+    },
+    {
+      "path": "assets/fonts/roboto/Roboto-Bold.woff2",
+      "source_sha256": "8b84b2abc336ee61f48a28a697b6ace2333ea5f1868aa15d5aeb2c7beac6d716",
+      "status": 200,
+      "bytes": 49976,
+      "sha256": "8b84b2abc336ee61f48a28a697b6ace2333ea5f1868aa15d5aeb2c7beac6d716",
+      "equal_to_source": true
+    },
+    {
+      "path": "assets/fonts/roboto/Roboto-Medium-Vietnamese.woff2",
+      "source_sha256": "15c77aed355b2ca99b34986268c33c67107613a2987c71dd9e12e79bbd6f9e63",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/fonts/roboto/Roboto-Medium.woff2",
+      "source_sha256": "1cd5c4b37938d932110ec043ce1cc766d18cacf7a4e7cffa6a539855d5bdc08d",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/fonts/roboto/Roboto-Regular-Vietnamese.woff2",
+      "source_sha256": "76afb0e482ab569c50a1ca35dfd052daa3d0f6d54d1b30865f6fea4c35c2b350",
+      "status": 200,
+      "bytes": 8368,
+      "sha256": "76afb0e482ab569c50a1ca35dfd052daa3d0f6d54d1b30865f6fea4c35c2b350",
+      "equal_to_source": true
+    },
+    {
+      "path": "assets/fonts/roboto/Roboto-Regular.woff2",
+      "source_sha256": "b5c9c23bd12593523a46d79dd0aee80e3226bbde4c9ac05fc30a95e2c1510de0",
+      "status": 200,
+      "bytes": 49236,
+      "sha256": "b5c9c23bd12593523a46d79dd0aee80e3226bbde4c9ac05fc30a95e2c1510de0",
+      "equal_to_source": true
+    },
+    {
+      "path": "assets/starter/law01/editorial-1.webp",
+      "source_sha256": "f219c8c40f2e3520cb57ff95b212c28ce87b78d74bb2b0125d313ca72f49cf65",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/starter/law01/editorial-2.webp",
+      "source_sha256": "69c34cf16e673e59802410e87c67c815f04f1f579648eb3797bcc98e8972a302",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/starter/law01/editorial-3.webp",
+      "source_sha256": "374b856983a66aa61aa4bea51338cc67130a09a40d05bb10acf1d90e750a1571",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/starter/law01/editorial-4.webp",
+      "source_sha256": "46ad3a493e1aa11a88e3525766e15815e5094a006914817c62923f80cdacc49e",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/starter/law01/hero.webp",
+      "source_sha256": "523717333a8362f0b6d6c11bffc7f623a9043f0ca179dc1339240c1e77858613",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/starter/wellness01/group.webp",
+      "source_sha256": "0fcb687195a2e9ba94895f80350371186fb8741e73ae1afa718e515bafd063fa",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/starter/wellness01/guide.webp",
+      "source_sha256": "2dfa4b3025fe01bde1d03bf6bdcebe382ad6f1bcc0ba201c9d00ec0fc9ba4f8f",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/starter/wellness01/meditation.webp",
+      "source_sha256": "6a07ea83ae2eb780278c22033a7e104e1c0dcfbdfde51e452e21daede449f2bc",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "path": "assets/starter/wellness01/mobility.webp",
+      "source_sha256": "2ed62df3fe02382d87c00b62b40455376a2ebe24dd07c2620988d12491a19bf4",
+      "error": "HTTP Error 403: Forbidden"
+    }
+  ],
+  "directory_evidence": "251 returned entries across both connector pages; sizes rounded by connector"
+}
