@@ -56,6 +56,11 @@ if (! str_contains($admin, 'Chọn hồ sơ nội dung Footer')
     || str_contains($admin, 'Đổi mẫu chỉ thay cách trình bày.')) {
     $fail('Admin must describe content profiles, not Footer style variants');
 }
+$lawShell = $read('assets/css/components/homepage-law-01.css');
+$sharedShellRule = 'width: min(calc(100% - (2 * var(--aznet-theme-gutter))), var(--aznet-theme-container-shell));';
+if (! str_contains($css, $sharedShellRule) || ! str_contains($lawShell, $sharedShellRule)) {
+    $fail('Footer desktop/tablet content axis must match the shared Homepage shell');
+}
 if (! str_contains($css, 'grid-template-columns: repeat(2, minmax(0, 1fr));')) {
     $fail('Tablet Footer must use a balanced shared two-column grid');
 }

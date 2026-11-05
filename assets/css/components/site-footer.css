@@ -27,7 +27,7 @@
 }
 
 .aznet-theme-site-footer__inner {
-    width: min(var(--aznet-theme-container-shell, 75rem), calc(100% - var(--aznet-theme-gutter, 2.5rem)));
+    width: min(calc(100% - (2 * var(--aznet-theme-gutter))), var(--aznet-theme-container-shell));
     margin-inline: auto;
     padding-block: clamp(2.75rem, 5vw, 4.25rem) var(--aznet-theme-space-4, 1.5rem);
 }
