@@ -110,7 +110,9 @@
         }
     };
 
-    setupSubmenus();
+    if (drawer) {
+        setupSubmenus();
+    }
     panel.hidden = true;
     if (backdrop instanceof HTMLElement) {
         backdrop.hidden = true;
