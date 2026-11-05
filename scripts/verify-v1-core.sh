@@ -200,6 +200,10 @@ fi
 
 printf '%s\n' '==> Y1 Page Experience contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-page-experience-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/wellness01-page-assets-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/r2-wellness01-pattern-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/r2-wellness01-ai-disclosure-layout-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-wellness01-library-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/page-full-bleed-sections-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/page-section-inner-width-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/fullwidth-shell-standard-contract.php
