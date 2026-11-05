@@ -886,8 +886,10 @@
         margin-top: 1.25rem;
     }
 
-    .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__search input[type="search"],
-    .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__search button {
+    /* Restrict text inversion to the light panel. At 981–1100px the desktop
+     * Header search remains on a dark surface and must keep inverse text. */
+    .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-panel .aznet-theme-site-header__search input[type="search"],
+    .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-panel .aznet-theme-site-header__search button {
         color: var(--aznet-theme-text);
     }
 
