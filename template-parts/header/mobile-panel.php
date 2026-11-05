@@ -22,13 +22,29 @@ $mobile_menu = isset( $args['mobile_menu'] ) ? (string) $args['mobile_menu'] : '
         data-aznet-theme-nav-trigger
         aria-expanded="false"
         aria-controls="aznet-theme-mobile-panel"
-    ><?php esc_html_e( 'Menu', 'aznet-theme' ); ?></button>
+    >
+        <svg class="aznet-theme-site-header__mobile-menu-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M4 6.5h16M4 12h16M4 17.5h16" />
+        </svg>
+        <span><?php esc_html_e( 'Menu', 'aznet-theme' ); ?></span>
+    </button>
+    <div class="aznet-theme-site-header__mobile-backdrop" data-aznet-theme-nav-backdrop hidden aria-hidden="true"></div>
     <div
         id="aznet-theme-mobile-panel"
         class="aznet-theme-site-header__mobile-panel"
         data-aznet-theme-nav-panel
+        data-aznet-theme-expand-label="<?php echo esc_attr__( 'Mở mục con:', 'aznet-theme' ); ?>"
+        data-aznet-theme-collapse-label="<?php echo esc_attr__( 'Thu gọn mục con:', 'aznet-theme' ); ?>"
         tabindex="-1"
     >
+        <div class="aznet-theme-site-header__mobile-panel-header">
+            <strong id="aznet-theme-mobile-panel-title"><?php esc_html_e( 'Điều hướng', 'aznet-theme' ); ?></strong>
+            <button type="button" class="aznet-theme-site-header__mobile-close" data-aznet-theme-nav-close aria-label="<?php echo esc_attr__( 'Đóng menu', 'aznet-theme' ); ?>">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true" focusable="false">
+                    <path d="M5 5l14 14M19 5L5 19" />
+                </svg>
+            </button>
+        </div>
         <?php if ( '' !== $mobile_menu ) : ?>
             <nav aria-label="<?php echo esc_attr__( 'Điều hướng di động', 'aznet-theme' ); ?>">
                 <?php echo $mobile_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu() output. ?>
