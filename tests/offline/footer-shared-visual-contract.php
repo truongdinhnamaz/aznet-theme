@@ -50,6 +50,15 @@ if (str_contains($assets, "'aznet-theme-site-footer-digital-01'")
     || str_contains($assets, 'site-footer-digital-01.css')) {
     $fail('Digital-only Footer stylesheet still enqueued');
 }
+$admin = $read('inc/admin/control-center.php');
+if (! str_contains($admin, 'Chọn hồ sơ nội dung Footer')
+    || ! str_contains($admin, 'Footer dùng chung một thiết kế trên mọi mẫu website.')
+    || str_contains($admin, 'Đổi mẫu chỉ thay cách trình bày.')) {
+    $fail('Admin must describe content profiles, not Footer style variants');
+}
+if (! str_contains($css, 'grid-template-columns: repeat(2, minmax(0, 1fr));')) {
+    $fail('Tablet Footer must use a balanced shared two-column grid');
+}
 if (! str_contains($assets, "'aznet-theme-site-footer'")
     || ! str_contains($assets, "asset_content_version( '/assets/css/components/site-footer.css'")) {
     $fail('Single shared Footer asset must be content-versioned');

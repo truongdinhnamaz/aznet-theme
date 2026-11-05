@@ -275,7 +275,7 @@ async function inspectIndustrialProfessionalFooter(browser) {
             bottomBorder: bottom?.borderTopStyle || '',
           };
         });
-        const expectedColumns = viewport.width <= 768 ? 1 : (viewport.width >= 1440 ? 4 : null);
+        const expectedColumns = viewport.width <= 768 ? 1 : (viewport.width <= 1120 ? 2 : 4);
         if ((expectedColumns !== null && cols.columns !== expectedColumns) ||
             (viewport.width > 768 && cols.columns < 2) ||
             cols.background !== 'rgb(17, 23, 34)' ||

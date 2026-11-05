@@ -284,7 +284,16 @@
 
 @media (max-width: 64rem) {
     .aznet-theme-site-footer__main {
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .aznet-theme-site-footer__main:has(> :only-child) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .aznet-theme-site-footer__main > :nth-child(odd) {
+        padding-inline-start: 0;
+        border-inline-start: 0;
     }
 }
 
