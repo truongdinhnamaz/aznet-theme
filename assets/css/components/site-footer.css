@@ -6,7 +6,7 @@
  * Footer geometry, hierarchy, responsiveness or interaction.
  */
 .aznet-theme-site-footer {
-    --aznet-theme-footer-ink: var(--aznet-theme-on-inverse, #f7f8fa);
+    --aznet-theme-footer-ink: #f7f8fa;
     --aznet-theme-footer-muted: color-mix(in srgb, var(--aznet-theme-footer-ink) 78%, transparent);
     --aznet-theme-footer-border: color-mix(in srgb, var(--aznet-theme-footer-ink) 19%, transparent);
     --aznet-theme-footer-accent: var(--aznet-theme-footer-ink);
@@ -14,7 +14,7 @@
     min-width: 0;
     box-sizing: border-box;
     border-top: 1px solid var(--aznet-theme-footer-border);
-    background: var(--aznet-theme-surface-inverse, #111722);
+    background: #111722;
     color: var(--aznet-theme-footer-ink);
     font-family: var(--aznet-theme-font-family-base);
     overflow-wrap: anywhere;
