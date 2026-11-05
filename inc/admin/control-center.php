@@ -53,7 +53,7 @@ function render_footer_template_gallery( string $current ): void {
     $templates = [
         'minimal'      => [ __( 'Minimal', 'aznet-theme' ), __( '2 cột nội dung đã lưu — không đổi style Footer.', 'aznet-theme' ) ],
         'classic'      => [ __( 'Classic', 'aznet-theme' ), __( '3 cột nội dung đã lưu — không đổi style Footer.', 'aznet-theme' ) ],
-        'professional' => [ __( 'Professional', 'aznet-theme' ), __( 'Bốn cột rõ ràng cho website dịch vụ và doanh nghiệp.', 'aznet-theme' ) ],
+        'professional' => [ __( 'Professional', 'aznet-theme' ), __( '4 cột nội dung đã lưu — không đổi style Footer.', 'aznet-theme' ) ],
         'split'        => [ __( 'Split', 'aznet-theme' ), __( '3 cột nội dung đã lưu — không đổi style Footer.', 'aznet-theme' ) ],
         'centered'     => [ __( 'Centered', 'aznet-theme' ), __( '1 cột nội dung đã lưu — không đổi style Footer.', 'aznet-theme' ) ],
         'compact'      => [ __( 'Compact', 'aznet-theme' ), __( '3 cột nội dung đã lưu — không đổi style Footer.', 'aznet-theme' ) ],
@@ -77,7 +77,7 @@ function render_footer_template_gallery( string $current ): void {
 
     $preview_preset = isset( $templates[ $current ] ) ? $current : 'classic';
     echo '<div class="aznet-theme-footer-live-preview aznet-theme-footer-live-preview--' . esc_attr( $preview_preset ) . '" data-footer-live-preview data-preset="' . esc_attr( $preview_preset ) . '">';
-    echo '<div class="aznet-theme-footer-live-preview__toolbar"><strong>' . esc_html__( 'Sơ đồ số cột nội dung', 'aznet-theme' ) . '</strong><span data-footer-preview-label>' . esc_html( $templates[ $preview_preset ][0] ) . '</span></div>';
+    echo '<div class="aznet-theme-footer-live-preview__toolbar"><strong>' . esc_html__( 'Một bố cục Footer dùng chung', 'aznet-theme' ) . '</strong><span data-footer-preview-label>' . esc_html( $templates[ $preview_preset ][0] ) . '</span></div>';
     echo '<div class="aznet-theme-footer-live-preview__canvas" aria-hidden="true"><span class="aznet-theme-footer-live-preview__brand"></span><span></span><span></span><span></span></div>';
     echo '</div>';
 
