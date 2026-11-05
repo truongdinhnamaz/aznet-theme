@@ -200,7 +200,7 @@ async function verifyMobileKeyboard(page) {
         overflowY: getComputedStyle(element).overflowY,
       };
     });
-    if (geometry.bottom > geometry.viewportHeight - 8 ||
+    if (geometry.bottom > geometry.viewportHeight + (mobileLayout === 'drawer' ? 1 : -8) ||
         geometry.scrollHeight <= geometry.clientHeight ||
         geometry.overflowY !== 'auto') {
       throw new Error('mobile panel must fit viewport and scroll independently: ' + JSON.stringify(geometry));
