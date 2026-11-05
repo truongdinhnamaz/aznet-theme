@@ -61,7 +61,7 @@ if (false === $regexStart || false === $regexEnd) {
 $allowedPattern = str_replace(chr(92), '', substr($block, $regexStart, $regexEnd - $regexStart));
 if (!str_contains($allowedPattern, '1.3.100')
     || !str_contains($allowedPattern, '1.3.101')
-    || str_contains($allowedPattern, '1.3.98')) {
+    || str_contains($allowedPattern, '1.3.99')) {
     $fail('X6 version allowlist may only promote 1.3.100 to 1.3.101');
 }
 echo "PASS: exact one-patch 1.3.101 metadata promotion and historical guard retained\n";
