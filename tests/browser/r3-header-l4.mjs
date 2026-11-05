@@ -114,6 +114,27 @@ async function verifyMobileKeyboard(page) {
     throw new Error(`mobile trigger was not keyboard reachable with visible focus: ${JSON.stringify(trigger)}`);
   }
 
+  // Test-only long WordPress-style navigation; never changes site/menu data.
+  // Header behavior must be identical across every R3 presentation preset.
+  const longMenuCase = page.viewportSize()?.width === 390;
+  if (longMenuCase) {
+    const seeded = await page.evaluate(() => {
+      const list = document.querySelector('[data-aznet-theme-nav-panel] .aznet-theme-site-header__menu');
+      if (!list) return false;
+      for (let index = 0; index < 32; index += 1) {
+        const item = document.createElement('li');
+        item.className = 'menu-item';
+        const link = document.createElement('a');
+        link.href = '#r3-mobile-test';
+        link.textContent = 'Danh mục kiểm thử dài ' + (index + 1);
+        item.append(link);
+        list.append(item);
+      }
+      return true;
+    });
+    if (!seeded) throw new Error('R3 long-menu fixture could not find native mobile menu');
+  }
+
   await page.keyboard.press('Enter');
   const panel = page.locator('[data-aznet-theme-nav-panel]');
   await panel.waitFor({ state: 'visible' });
@@ -134,6 +155,28 @@ async function verifyMobileKeyboard(page) {
     throw new Error(`mobile focus containment failed: ${JSON.stringify(wrapped)}`);
   }
 
+  if (longMenuCase) {
+    const geometry = await panel.evaluate((element) => {
+      const box = element.getBoundingClientRect();
+      return {
+        bottom: box.bottom,
+        viewportHeight: window.innerHeight,
+        clientHeight: element.clientHeight,
+        scrollHeight: element.scrollHeight,
+        overflowY: getComputedStyle(element).overflowY,
+      };
+    });
+    if (geometry.bottom > geometry.viewportHeight - 8 ||
+        geometry.scrollHeight <= geometry.clientHeight ||
+        geometry.overflowY !== 'auto') {
+      throw new Error('mobile panel must fit viewport and scroll independently: ' + JSON.stringify(geometry));
+    }
+    await panel.evaluate((element) => { element.scrollTop = element.scrollHeight; });
+    if (!(await panel.evaluate((element) => element.scrollTop > 40))) {
+      throw new Error('long mobile panel cannot scroll to the final native links');
+    }
+  }
+
   await page.keyboard.press('Escape');
   await panel.waitFor({ state: 'hidden' });
   const returned = await activeElementSnapshot(page);
@@ -144,6 +187,27 @@ async function verifyMobileKeyboard(page) {
   if (collapsed !== 'false') throw new Error(`mobile trigger aria-expanded expected false, got ${collapsed}`);
   const restoredOverflow = await page.evaluate(() => document.body.style.overflow);
   if (restoredOverflow === 'hidden') throw new Error('mobile close state did not restore body scroll');
+  if (longMenuCase) {
+    await page.locator('[data-aznet-theme-nav-trigger]').click();
+    await page.mouse.click(2, page.viewportSize().height - 4);
+    if ((await trigger.getAttribute('aria-expanded')) !== 'false') {
+      throw new Error('clicking outside mobile panel did not dismiss it');
+    }
+    if ((await page.evaluate(() => document.body.style.overflow)) === 'hidden') {
+      throw new Error('outside dismissal failed to restore scrolling');
+    }
+
+    await page.locator('[data-aznet-theme-nav-trigger]').click();
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const resizeState = await panel.evaluate((element) => ({
+      hidden: element.hidden,
+      overflow: document.body.style.overflow,
+    }));
+    if (!resizeState.hidden || resizeState.overflow === 'hidden') {
+      throw new Error('leaving mobile breakpoint did not reset panel state: ' + JSON.stringify(resizeState));
+    }
+    await page.setViewportSize({ width: 390, height: 844 });
+  }
 }
 
 async function verifyStickyCompact(page) {
