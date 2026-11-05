@@ -17,7 +17,7 @@ $fail = static function (string $message): never {
     exit(1);
 };
 
-if (!preg_match('/^Version:\s*1\.3\.100\s*$/m', $style)
+if (!preg_match('/^Version:\s*1\.3\.101\s*$/m', $style)
     || !str_contains($boot, "define( 'AZNET_THEME_VERSION', '1.3.101' );")) {
     $fail('Theme version must be 1.3.101 in style.css and functions.php');
 }
