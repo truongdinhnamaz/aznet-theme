@@ -8,6 +8,7 @@ const outputRoot = process.env.R3_STATE_DIR || '/tmp/r3-header';
 const scenario = process.env.R3_SCENARIO || 'standard-clean';
 const requestedPreset = process.env.R3_PRESET || 'standard';
 const stickyMode = process.env.R3_STICKY || 'sticky';
+const mobileLayout = process.env.R3_MOBILE_LAYOUT || 'popover';
 const wooEnabled = process.env.R3_WOO_ENABLED === '1';
 const outputDir = path.join(outputRoot, scenario);
 const screenshotDir = path.join(outputDir, 'screenshots');
@@ -141,6 +142,39 @@ async function verifyMobileKeyboard(page) {
   const expanded = await page.locator('[data-aznet-theme-nav-trigger]').getAttribute('aria-expanded');
   if (expanded !== 'true') throw new Error(`mobile trigger aria-expanded expected true, got ${expanded}`);
 
+  if (mobileLayout === 'drawer') {
+    const backdrop = page.locator('[data-aznet-theme-nav-backdrop]');
+    if (!(await backdrop.isVisible())) throw new Error('mobile drawer backdrop is not visible');
+    const modal = await panel.evaluate((element) => ({
+      role: element.getAttribute('role'),
+      ariaModal: element.getAttribute('aria-modal'),
+      rect: element.getBoundingClientRect().toJSON(),
+      viewportWidth: innerWidth,
+      viewportHeight: innerHeight,
+    }));
+    if (modal.role !== 'dialog' || modal.ariaModal !== 'true' ||
+        modal.rect.right > modal.viewportWidth + 1 ||
+        modal.rect.top < -1 ||
+        modal.rect.bottom > modal.viewportHeight + 1 ||
+        modal.rect.width > modal.viewportWidth) {
+      throw new Error('professional drawer not viewport-safe or accessible: ' + JSON.stringify(modal));
+    }
+    const toggle = panel.locator('.aznet-theme-site-header__submenu-toggle').first();
+    const child = panel.locator('a.r3-child-link').first();
+    if (!(await toggle.isVisible()) || (await child.isVisible()) ||
+        (await toggle.getAttribute('aria-expanded')) !== 'false') {
+      throw new Error('mobile nested navigation did not start collapsed');
+    }
+    await toggle.click();
+    if ((await toggle.getAttribute('aria-expanded')) !== 'true' || !(await child.isVisible())) {
+      throw new Error('mobile submenu did not expand while preserving the native link');
+    }
+    await toggle.click();
+    if ((await toggle.getAttribute('aria-expanded')) !== 'false' || (await child.isVisible())) {
+      throw new Error('mobile submenu did not collapse');
+    }
+  }
+
   const bodyOverflow = await page.evaluate(() => document.body.style.overflow);
   if (bodyOverflow !== 'hidden') throw new Error(`mobile open state did not lock body scroll: ${bodyOverflow}`);
 
@@ -187,6 +221,14 @@ async function verifyMobileKeyboard(page) {
   if (collapsed !== 'false') throw new Error(`mobile trigger aria-expanded expected false, got ${collapsed}`);
   const restoredOverflow = await page.evaluate(() => document.body.style.overflow);
   if (restoredOverflow === 'hidden') throw new Error('mobile close state did not restore body scroll');
+  if (mobileLayout === 'drawer') {
+    await page.locator('[data-aznet-theme-nav-trigger]').click();
+    await page.locator('[data-aznet-theme-nav-close]').click();
+    if (!(await panel.isHidden()) ||
+        (await page.locator('[data-aznet-theme-nav-backdrop]').isVisible())) {
+      throw new Error('dedicated drawer close button did not dismiss dialog/backdrop');
+    }
+  }
   if (longMenuCase) {
     await page.locator('[data-aznet-theme-nav-trigger]').click();
     await page.mouse.click(2, page.viewportSize().height - 4);
@@ -260,6 +302,7 @@ async function inspectCase(browser, routeName, route, viewportName, viewport) {
     route: routeName,
     viewport: viewportName,
     expectedPreset: route.expectedPreset,
+    mobileLayout,
     overflowPx: null,
     duplicateIds: [],
     bannerCount: null,
@@ -281,6 +324,9 @@ async function inspectCase(browser, routeName, route, viewportName, viewport) {
     const headerClass = String((await header.getAttribute('class')) || '');
     if (!headerClass.split(/\s+/).includes(`aznet-theme-site-header--${route.expectedPreset}`)) {
       throw new Error(`effective preset mismatch: expected ${route.expectedPreset}, class=${headerClass}`);
+    }
+    if (mobileLayout === 'drawer' && !headerClass.includes('aznet-theme-site-header--mobile-drawer')) {
+      throw new Error('configured professional mobile drawer class is missing');
     }
     if (requestedPreset === 'overlay' && routeName === 'inner' && headerClass.includes('aznet-theme-site-header--overlay')) {
       throw new Error('overlay leaked onto a non-front-page route');
