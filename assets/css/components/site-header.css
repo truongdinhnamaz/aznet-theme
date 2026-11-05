@@ -767,14 +767,14 @@
 }
 .aznet-theme-site-header__mobile-panel .aznet-theme-site-header__menu .current-menu-item > a,
 .aznet-theme-site-header__mobile-panel .aznet-theme-site-header__menu a[aria-current="page"] {
-    color: var(--aznet-theme-on-inverse);
+    /* Keep site/preset-owned foreground colors intact on dark and light headers. */
     font-weight: var(--aznet-theme-font-weight-bold);
 }
 
 /* Desktop navigation affordance: visible current state in the shared shell. */
 @media (min-width: 981px) {
     .aznet-theme-site-header__nav > .aznet-theme-site-header__menu > li > a[aria-current="page"] {
-        color: var(--aznet-theme-on-inverse);
+        /* Do not force inverse text on light Header presets such as Law01. */
         text-decoration: underline;
         text-decoration-color: var(--aznet-theme-focus);
         text-underline-offset: .45rem;
