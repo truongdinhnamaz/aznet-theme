@@ -205,14 +205,13 @@ foreach ([
         exit(1);
     }
 }
-foreach ([
-    'mobile-drawer',
-    'mobile_layout',
-] as $required) {
-    if (! str_contains($composer, $required) && ! str_contains($head, $required)) {
-        fwrite(STDERR, "FAIL: Header composition missing {$required}\n");
-        exit(1);
-    }
+// The composer combines a fixed prefix and the normalized drawer/popover
+// suffix: asserting one literal final class would misread valid PHP composition.
+if (! str_contains($composer, "'aznet-theme-site-header--mobile-'")
+    || ! str_contains($composer, "'mobile_layout'")
+    || ! str_contains($composer, "'drawer'") ) {
+    fwrite(STDERR, "FAIL: Header composer must derive its mobile class from normalized layout\n");
+    exit(1);
 }
 foreach ([
     'data-aznet-theme-nav-close',
