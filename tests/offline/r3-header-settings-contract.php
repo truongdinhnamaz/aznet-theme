@@ -18,6 +18,7 @@ $defaults = AZnet\Theme\settings_defaults();
 $expected_defaults = [
     'header_preset'    => 'standard',
     'header_sticky'    => 'sticky',
+    'header_mobile_layout' => 'popover',
     'header_search'    => true,
     'header_utilities' => true,
 ];
@@ -37,6 +38,7 @@ $valid = AZnet\Theme\normalize_settings([
     'visual_preset'    => 'editorial',
     'header_preset'    => 'commerce',
     'header_sticky'    => 'sticky-compact',
+    'header_mobile_layout' => 'drawer',
     'header_search'    => false,
     'header_utilities' => 0,
 ]);
@@ -47,6 +49,7 @@ $valid_expected = [
     'page_breadcrumbs'  => true,
     'header_preset'     => 'commerce',
     'header_sticky'     => 'sticky-compact',
+    'header_mobile_layout' => 'drawer',
     'header_search'     => false,
     'header_utilities'  => false,
 ];
@@ -62,6 +65,7 @@ $invalid = AZnet\Theme\normalize_settings([
     'visual_preset'    => 'unknown',
     'header_preset'    => 'builder',
     'header_sticky'    => 'always-fixed',
+    'header_mobile_layout' => 'builder',
     'header_search'    => 'false',
     'header_utilities' => '1',
     'foreign_state'    => 'must-drop',
@@ -77,6 +81,10 @@ if (($invalid['header_preset'] ?? null) !== 'standard') {
 }
 if (($invalid['header_sticky'] ?? null) !== 'sticky') {
     fwrite(STDERR, "FAIL: invalid header_sticky did not fall back to sticky\n");
+    exit(1);
+}
+if (($invalid['header_mobile_layout'] ?? null) !== 'popover') {
+    fwrite(STDERR, "FAIL: invalid mobile layout must retain legacy popover\n");
     exit(1);
 }
 if (($invalid['header_search'] ?? null) !== true) {

@@ -196,4 +196,46 @@ foreach ([
     }
 }
 
+foreach ([
+    'function header_mobile_layout(): string',
+    "'mobile_layout'",
+] as $required) {
+    if (! str_contains($head, $required)) {
+        fwrite(STDERR, "FAIL: mobile layout context missing {$required}\n");
+        exit(1);
+    }
+}
+// The composer combines a fixed prefix and the normalized drawer/popover
+// suffix: asserting one literal final class would misread valid PHP composition.
+if (! str_contains($composer, "'aznet-theme-site-header--mobile-'")
+    || ! str_contains($composer, "'mobile_layout'")
+    || ! str_contains($composer, "'drawer'") ) {
+    fwrite(STDERR, "FAIL: Header composer must derive its mobile class from normalized layout\n");
+    exit(1);
+}
+foreach ([
+    'data-aznet-theme-nav-close',
+    'data-aznet-theme-nav-backdrop',
+    'data-aznet-theme-expand-label',
+    'data-aznet-theme-collapse-label',
+] as $required) {
+    if (! str_contains($panel, $required)) {
+        fwrite(STDERR, "FAIL: drawer markup missing {$required}\n");
+        exit(1);
+    }
+}
+foreach ([
+    'is-aznet-theme-nav-enhanced',
+    'aria-modal',
+    'aznet-theme-site-header__submenu-toggle',
+    "setAttribute('aria-expanded'",
+    'data-aznet-theme-nav-close',
+    'data-aznet-theme-nav-backdrop',
+] as $required) {
+    if (! str_contains($js, $required)) {
+        fwrite(STDERR, "FAIL: drawer progressive enhancement missing {$required}\n");
+        exit(1);
+    }
+}
+
 echo "PASS: R3 Header navigation progressive-enhancement asset contract\n";

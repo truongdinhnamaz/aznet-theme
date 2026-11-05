@@ -102,4 +102,20 @@ foreach ([
     }
 }
 
+// Opt-in professional drawer cannot degrade existing no-JS mobile navigation.
+foreach ([
+    '.aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced',
+    '.aznet-theme-site-header__mobile-backdrop',
+    '.aznet-theme-site-header__mobile-panel-header',
+    '.aznet-theme-site-header__submenu-toggle',
+    '.aznet-theme-site-header__menu .sub-menu[hidden]',
+    'overscroll-behavior',
+    '100dvh',
+] as $required) {
+    if (! str_contains($css, $required)) {
+        fwrite(STDERR, "FAIL: professional Header drawer CSS missing {$required}\n");
+        exit(1);
+    }
+}
+
 echo "PASS: R3 Header preset CSS contract\n";
