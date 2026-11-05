@@ -182,4 +182,18 @@ if (! AZnet\Theme\header_mobile_panel_enabled()) {
     exit(1);
 }
 
+// The enhanced panel must dismiss when the user interacts outside it or
+// when the breakpoint hides the trigger, without leaving body scrolling locked.
+foreach ([
+    "document.addEventListener('pointerdown'",
+    "window.addEventListener('resize'",
+    'panel.contains(',
+    'trigger.getClientRects()',
+] as $required) {
+    if (! str_contains($js, $required)) {
+        fwrite(STDERR, "FAIL: mobile Header panel lifecycle missing {$required}\\n");
+        exit(1);
+    }
+}
+
 echo "PASS: R3 Header navigation progressive-enhancement asset contract\n";

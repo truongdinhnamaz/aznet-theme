@@ -84,6 +84,26 @@
         }
     });
 
+    // Pointer dismissal mirrors the mobile navigation experience without a
+    // framework, changing WordPress menus or trapping a visitor behind an open
+    // panel. Restore keyboard focus only when it was inside the disclosure.
+    document.addEventListener('pointerdown', (event) => {
+        if (panel.hidden || !(event.target instanceof Node)) {
+            return;
+        }
+        if (!panel.contains(event.target) && !trigger.contains(event.target)) {
+            close(panel.contains(document.activeElement));
+        }
+    });
+
+    // A breakpoint switch must not leave the desktop page scroll-locked while
+    // the mobile trigger is no longer rendered.
+    window.addEventListener('resize', () => {
+        if (!panel.hidden && trigger.getClientRects().length === 0) {
+            close(false);
+        }
+    });
+
     window.addEventListener('pagehide', () => {
         close(false);
     });

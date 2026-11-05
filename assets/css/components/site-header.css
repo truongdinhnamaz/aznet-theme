@@ -250,6 +250,13 @@
     top: calc(100% + 12px);
     right: 0;
     width: min(360px, calc(100vw - 32px));
+    /* Keep WordPress-authored long menus reachable without scrolling the page
+     * behind the disclosure. Reserve room for the mobile/nav-only header and
+     * WordPress admin bar; all Header presets share this constraint. */
+    max-height: 70vh;
+    max-height: min(70dvh, calc(100dvh - 10rem));
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
     padding: 18px;
     border: 1px solid var(--aznet-theme-header-border);
     border-radius: var(--aznet-theme-radius-card);

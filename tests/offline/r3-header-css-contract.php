@@ -86,4 +86,20 @@ if (! str_contains($css, '@media (prefers-reduced-motion: reduce)')) {
     exit(1);
 }
 
+// Generic panel safety: all Header presets must keep long mobile menus reachable.
+if (! preg_match('/\\.aznet-theme-site-header__mobile-panel\\s*\\{([^}]*)\\}/s', $css, $panel_match)) {
+    fwrite(STDERR, "FAIL: missing generic mobile Header panel CSS\\n");
+    exit(1);
+}
+foreach ([
+    'max-height:',
+    'overflow-y: auto;',
+    'overscroll-behavior-y: contain;',
+] as $required) {
+    if (! str_contains($panel_match[1], $required)) {
+        fwrite(STDERR, "FAIL: mobile Header panel must be viewport-bounded and independently scrollable: {$required}\\n");
+        exit(1);
+    }
+}
+
 echo "PASS: R3 Header preset CSS contract\n";
