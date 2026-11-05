@@ -32,9 +32,6 @@ body.aznet-theme-preset--digital-01 .aznet-theme-article__categories a,
 body.aznet-theme-preset--digital-01 .aznet-theme-article__tags a {
   color: #b83920;
 }
-body.aznet-theme-preset--digital-01 .aznet-theme-site-footer {
-  background:#101f2b;color:#e8eff0;
-}
 body.aznet-theme-preset--digital-01 :where(a,button,input,select,textarea):focus-visible {
   outline:3px solid var(--aznet-theme-color-focus);outline-offset:3px;
 }

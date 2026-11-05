@@ -46,10 +46,8 @@ body.aznet-theme-preset--curtain-01 :where(h1, h2, h3) {
     letter-spacing: -0.02em;
 }
 
-body.aznet-theme-preset--curtain-01 .aznet-theme-site-header,
-body.aznet-theme-preset--curtain-01 .aznet-theme-site-footer {
+body.aznet-theme-preset--curtain-01 .aznet-theme-site-header {
     --aznet-theme-header-border: color-mix(in srgb, var(--aznet-theme-on-inverse) 10%, transparent);
-    --aznet-theme-footer-border: color-mix(in srgb, var(--aznet-theme-on-inverse) 12%, transparent);
 }
 
 body.aznet-theme-preset--curtain-01 .aznet-theme-page__header {
