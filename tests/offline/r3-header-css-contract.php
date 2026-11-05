@@ -102,6 +102,35 @@ foreach ([
     }
 }
 
+// A Flatsome-style drawer is Theme-owned presentation, not a second WordPress menu.
+// It enters from the left on a token-driven light surface and respects reduced motion.
+if (! preg_match('/\.aznet-theme-site-header--mobile-drawer\.is-aznet-theme-nav-enhanced\s+\.aznet-theme-site-header__mobile-panel\s*\{([^}]*)\}/s', $css, $drawer_match)) {
+    fwrite(STDERR, "FAIL: missing drawer panel presentation block\n");
+    exit(1);
+}
+foreach ([
+    'left: 0;',
+    'right: auto;',
+    'background: var(--aznet-theme-surface);',
+    'color: var(--aznet-theme-text);',
+] as $required) {
+    if (! str_contains($drawer_match[1], $required)) {
+        fwrite(STDERR, "FAIL: left-side light mobile drawer missing {$required}\n");
+        exit(1);
+    }
+}
+if (! preg_match('/\.aznet-theme-site-header--mobile-drawer\.is-aznet-theme-nav-enhanced\s+\.aznet-theme-site-header__mobile-panel:not\(\[hidden\]\)\s*\{[^}]*animation\s*:\s*aznet-theme-mobile-drawer-enter/s', $css)) {
+    fwrite(STDERR, "FAIL: drawer open animation must be scoped to its visible panel\n");
+    exit(1);
+}
+if (! str_contains($css, '@keyframes aznet-theme-mobile-drawer-enter')
+    || ! str_contains($css, '@keyframes aznet-theme-mobile-backdrop-enter')
+    || ! str_contains($css, '.aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-panel:not([hidden])')
+    || ! str_contains($css, '@media (prefers-reduced-motion: reduce)')) {
+    fwrite(STDERR, "FAIL: mobile drawer slide/fade and reduced-motion contract missing\n");
+    exit(1);
+}
+
 // Opt-in professional drawer cannot degrade existing no-JS mobile navigation.
 foreach ([
     '.aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced',

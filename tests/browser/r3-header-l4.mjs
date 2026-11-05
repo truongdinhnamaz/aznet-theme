@@ -231,7 +231,14 @@ async function verifyMobileKeyboard(page) {
   }
   if (longMenuCase) {
     await page.locator('[data-aznet-theme-nav-trigger]').click();
-    await page.mouse.click(2, page.viewportSize().height - 4);
+    // Click the backdrop, not the drawer: the existing drawer was right-sided,
+    // while the token-driven off-canvas design opens from the left.
+    const outsideX = mobileLayout === 'drawer'
+      ? await panel.evaluate((element) => (
+          element.getBoundingClientRect().left < 1 ? window.innerWidth - 2 : 2
+        ))
+      : 2;
+    await page.mouse.click(outsideX, page.viewportSize().height - 4);
     if ((await page.locator('[data-aznet-theme-nav-trigger]').getAttribute('aria-expanded')) !== 'false') {
       throw new Error('clicking outside mobile panel did not dismiss it');
     }
