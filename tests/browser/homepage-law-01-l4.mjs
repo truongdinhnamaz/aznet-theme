@@ -396,7 +396,7 @@ async function inspectViewport(browser, name, viewport) {
     result.articleImages = await page.locator('.aznet-theme-law01-article-card__media img').count();
     if (result.articleImages !== 3) throw new Error(`visual QA fixture must provide 3 Latest Posts featured images, got ${result.articleImages}`);
 
-    if (await page.locator('.aznet-theme-site-footer--professional').count() !== 1) throw new Error('visual QA fixture must exercise the professional Footer preset');
+    if (await page.locator('footer.aznet-theme-site-footer[data-aznet-theme-footer-content-preset="professional"]').count() !== 1) throw new Error('visual QA fixture must exercise the professional Footer preset');
     for (const selector of ['.aznet-theme-site-footer__navigation', '.aznet-theme-site-footer__contact', '.aznet-theme-site-footer__social-column']) {
       if (await page.locator(selector).count() !== 1) throw new Error(`visual QA fixture missing populated Footer column ${selector}`);
     }
