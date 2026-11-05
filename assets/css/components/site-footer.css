@@ -61,9 +61,9 @@
     max-width: 100%;
     min-width: 0;
     color: var(--aznet-theme-footer-ink);
-    font-size: var(--aznet-theme-text-h4, 1.25rem);
+    font-size: var(--aznet-theme-text-h4);
     font-weight: var(--aznet-theme-font-weight-semibold, 600);
-    line-height: var(--aznet-theme-line-height-h4, 1.35);
+    line-height: var(--aznet-theme-line-height-h4);
 }
 
 .aznet-theme-site-footer__logo {
@@ -92,8 +92,8 @@
     max-width: 36ch;
     margin: var(--aznet-theme-space-3, 1rem) 0 0;
     color: var(--aznet-theme-footer-muted);
-    font-size: var(--aznet-theme-text-small, .9375rem);
-    line-height: var(--aznet-theme-line-height-small, 1.6);
+    font-size: var(--aznet-theme-text-small);
+    line-height: var(--aznet-theme-line-height-small);
 }
 
 .aznet-theme-site-footer__heading,
@@ -101,9 +101,9 @@
     margin: 0 0 var(--aznet-theme-space-3, 1rem);
     color: var(--aznet-theme-footer-ink);
     font-family: var(--aznet-theme-font-family-heading);
-    font-size: var(--aznet-theme-text-body, 1rem);
+    font-size: var(--aznet-theme-text-body);
     font-weight: var(--aznet-theme-font-weight-semibold, 600);
-    line-height: var(--aznet-theme-line-height-h4, 1.35);
+    line-height: var(--aznet-theme-line-height-h4);
     letter-spacing: .01em;
     text-transform: none;
 }
@@ -169,8 +169,8 @@
     .aznet-theme-site-footer__contact-links
 ) a {
     color: var(--aznet-theme-footer-muted);
-    font-size: var(--aznet-theme-text-small, .9375rem);
-    line-height: var(--aznet-theme-line-height-small, 1.6);
+    font-size: var(--aznet-theme-text-small);
+    line-height: var(--aznet-theme-line-height-small);
 }
 
 .aznet-theme-site-footer__menu .sub-menu {
@@ -185,7 +185,7 @@
 .aznet-theme-site-footer__contact-link {
     display: block;
     color: var(--aznet-theme-footer-muted);
-    line-height: var(--aznet-theme-line-height-small, 1.6);
+    line-height: var(--aznet-theme-line-height-small);
 }
 
 .aznet-theme-site-footer__contact-label {
@@ -201,7 +201,7 @@
 .aznet-theme-site-footer__rich-content {
     min-width: 0;
     color: var(--aznet-theme-footer-muted);
-    font-size: var(--aznet-theme-text-small, .9375rem);
+    font-size: var(--aznet-theme-text-small);
     line-height: 1.7;
 }
 
@@ -254,8 +254,8 @@
 .aznet-theme-site-footer__copyright {
     margin: 0;
     color: var(--aznet-theme-footer-muted);
-    font-size: var(--aznet-theme-text-meta, .875rem);
-    line-height: var(--aznet-theme-line-height-meta, 1.45);
+    font-size: var(--aznet-theme-text-meta);
+    line-height: var(--aznet-theme-line-height-meta);
 }
 
 .aznet-theme-site-footer__bottom-nav,
@@ -278,8 +278,8 @@
 
 .aznet-theme-site-footer__policy-menu a {
     color: var(--aznet-theme-footer-muted);
-    font-size: var(--aznet-theme-text-meta, .875rem);
-    line-height: var(--aznet-theme-line-height-meta, 1.45);
+    font-size: var(--aznet-theme-text-meta);
+    line-height: var(--aznet-theme-line-height-meta);
 }
 
 @media (max-width: 64rem) {

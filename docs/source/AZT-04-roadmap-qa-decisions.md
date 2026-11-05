@@ -1136,4 +1136,3 @@ Site release 1.3.94 has PASS for source CI and public homepage/SEO content invar
 - **Rollback/release:** Abandon candidate branch/PR để giữ main + WordPress site-owned data. Main merge, tag/release và deployment là các gate độc lập theo AZT-05.
 
 **EXACT NEXT:** Xác minh offline + WordPress + Playwright trên exact head PR #562, ghi bằng chứng và lỗi chưa đóng; chỉ xem xét merge/release sau các gate tương ứng.
-
