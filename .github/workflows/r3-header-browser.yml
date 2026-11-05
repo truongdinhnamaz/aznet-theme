@@ -220,8 +220,9 @@ jobs:
             scenario="$1"
             preset="$2"
             sticky="$3"
-            wp eval "set_theme_mod( 'aznet_theme_settings', [ 'schema_version' => 1, 'visual_preset' => 'default', 'header_preset' => '${preset}', 'header_sticky' => '${sticky}', 'header_search' => true, 'header_utilities' => true ] );" --path=/tmp/wp --allow-root
-            R3_SCENARIO="$scenario" R3_PRESET="$preset" R3_STICKY="$sticky" R3_WOO_ENABLED='0' node tests/browser/r3-header-l4.mjs
+            mobile_layout="${4:-popover}"
+            wp eval "set_theme_mod( 'aznet_theme_settings', [ 'schema_version' => 1, 'visual_preset' => 'default', 'header_preset' => '${preset}', 'header_sticky' => '${sticky}', 'header_mobile_layout' => '${mobile_layout}', 'header_search' => true, 'header_utilities' => true ] );" --path=/tmp/wp --allow-root
+            R3_SCENARIO="$scenario" R3_PRESET="$preset" R3_STICKY="$sticky" R3_MOBILE_LAYOUT="$mobile_layout" R3_WOO_ENABLED='0' node tests/browser/r3-header-l4.mjs
           }
 
           run_scenario standard-clean standard sticky-compact
@@ -229,6 +230,8 @@ jobs:
           run_scenario compact-clean compact sticky
           run_scenario overlay-clean overlay sticky
           run_scenario commerce-clean commerce sticky
+          run_scenario professional-drawer standard sticky drawer
+          run_scenario professional-nav-drawer standard nav-only drawer
 
       - name: Install WooCommerce 10.9.4 and verify public Commerce actions
         env:

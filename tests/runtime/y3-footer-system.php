@@ -179,13 +179,10 @@ foreach ( [ 'standard', 'professional', 'compact', 'law-01' ] as $preset ) {
     if ( 1 !== substr_count( $html, 'role="contentinfo"' ) && 1 !== substr_count( $html, 'role="contentinfo"' ) ) {
         y3_runtime_fail( 'expected exactly one contentinfo landmark for preset ' . $preset );
     }
-    if ( ! str_contains( $footer, 'aznet-theme-site-footer--' . $preset ) ) {
-        y3_runtime_fail( 'normalized Footer preset class missing: ' . $preset );
+    if ( ! str_contains( $footer, 'data-aznet-theme-footer-content-preset="' . $preset . '"' ) ) {
+        y3_runtime_fail( 'Footer content profile marker missing: ' . $preset );
     }
     foreach ( $menu_definitions as $location => $definition ) {
-        if ( 'law-01' === $preset && 'footer-social' === $location ) {
-            continue;
-        }
         if ( ! str_contains( $footer, (string) $definition[1] ) ) {
             y3_runtime_fail( 'assigned sentinel link missing for preset ' . $preset . ': ' . $location );
         }

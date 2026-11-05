@@ -99,9 +99,9 @@ assert(is_file($industrialCssPath), 'Industrial 01 visual preset stylesheet must
 $industrialCss = file_get_contents($industrialCssPath);
 assert(is_string($industrialCss) && str_contains($industrialCss, 'body.aznet-theme-preset--industrial-01'));
 assert(! str_contains($industrialCss, 'minhnguyen'), 'Client identity must not be hard-coded into the reusable Industrial 01 preset.');
+assert(! str_contains($industrialCss, 'aznet-theme-site-footer'), 'Industrial must not restyle the shared Footer.');
 foreach ([
     'body.aznet-theme-preset--industrial-01 .aznet-theme-site-header',
-    'body.aznet-theme-preset--industrial-01 .aznet-theme-site-footer',
     'body.aznet-theme-preset--industrial-01 .woocommerce ul.products li.product',
     'body.aznet-theme-preset--industrial-01.single-product #main .woocommerce-product-gallery',
     'body.aznet-theme-preset--industrial-01.single-product #main .summary',

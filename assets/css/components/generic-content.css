@@ -25,6 +25,14 @@
     margin-inline: auto;
     color: var(--aznet-theme-text);
 }
+/*
+ * Native Gutenberg content in a full-bleed Front Page remains centered as
+ * a bounded Article. The homepage composer owns its surrounding full-width
+ * sections, never the width/position of the WordPress-owned Page content.
+ */
+.aznet-theme-main--front-page .aznet-theme-entry.aznet-theme-entry--front-page {
+    margin-inline: auto;
+}
 .aznet-theme-content-shell--with-navigation .aznet-theme-entry { margin-inline: 0; }
 .aznet-theme-entry__header { margin-block-end: var(--aznet-theme-space-4); }
 .aznet-theme-entry__title { margin: 0; color: var(--aznet-theme-text); }

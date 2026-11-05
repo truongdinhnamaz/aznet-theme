@@ -23,17 +23,13 @@ function footer_preset(): string {
 }
 
 /**
- * Resolve the visual skin independently from the Footer content/composition preset.
+ * Legacy compatibility key: visual skin is now always shared.
  *
- * A Law 01 site keeps its legal burgundy/gold shell even when its Footer content
- * uses a generic column preset such as Professional.
+ * Existing WordPress-owned Footer content profiles remain intact; the active
+ * homepage/content preset no longer changes Footer colors or geometry.
  */
 function footer_skin(): string {
-    $homepage_preset = (string) setting( 'homepage_preset', '' );
-
-    return ( 'law-01' === footer_preset() || 'law-01' === $homepage_preset )
-        ? 'law-01'
-        : 'default';
+    return 'default';
 }
 
 /**

@@ -59,6 +59,16 @@ function header_sticky_mode(): string {
 }
 
 /**
+ * Return the opt-in professional mobile drawer presentation without changing
+ * the default popover used by existing sites.
+ */
+function header_mobile_layout(): string {
+    $layout = setting( 'header_mobile_layout', 'popover' );
+
+    return in_array( $layout, [ 'popover', 'drawer' ], true ) ? (string) $layout : 'popover';
+}
+
+/**
  * Resolve the optional WordPress-owned vertical catalog menu presentation.
  */
 function header_catalog_mode(): string {
@@ -242,6 +252,7 @@ function header_context(): array {
         'requested_preset'  => header_preset(),
         'effective_preset'  => effective_header_preset(),
         'sticky_mode'       => header_sticky_mode(),
+        'mobile_layout'     => header_mobile_layout(),
         'law01_header'      => header_law01_active(),
     ];
 }

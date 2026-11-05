@@ -333,8 +333,26 @@ async function inspectViewport(browser, name, viewport) {
       if (parityMetrics.headerInner && (Math.abs(parityMetrics.heroGrid.x - parityMetrics.headerInner.x) > 2 || Math.abs(parityMetrics.heroGrid.width - parityMetrics.headerInner.width) > 2)) {
         throw new Error('desktop Header and Law 01 content must align to the same reference shell');
       }
-      if (parityMetrics.footerInner && (Math.abs(parityMetrics.heroGrid.x - parityMetrics.footerInner.x) > 2 || Math.abs(parityMetrics.heroGrid.width - parityMetrics.footerInner.width) > 2)) {
-        throw new Error('desktop Footer and Law 01 content must align to the same reference shell');
+      // Law 01's approved 96rem Homepage/Header is intentionally wider than
+      // the shared Theme Footer. Assert the Footer's own stable container.
+      if (parityMetrics.footerInner) {
+        const footerShell = await page.evaluate(() => {
+          const probe = document.createElement('div');
+          probe.style.cssText = 'position:fixed;left:0;top:0;visibility:hidden;pointer-events:none;width:var(--aznet-theme-footer-shell-max);height:var(--aznet-theme-gutter);box-sizing:content-box;';
+          document.querySelector('.aznet-theme-site-footer').appendChild(probe);
+          const cap = probe.getBoundingClientRect().width;
+          const gutter = probe.getBoundingClientRect().height;
+          probe.remove();
+          const viewportWidth = document.documentElement.clientWidth;
+          const width = Math.min(cap, viewportWidth - (2 * gutter));
+          return { x: (viewportWidth - width) / 2, width };
+        });
+        if (!Number.isFinite(footerShell.x) || !Number.isFinite(footerShell.width) ||
+            Math.abs(parityMetrics.footerInner.x - footerShell.x) > 2 ||
+            Math.abs(parityMetrics.footerInner.width - footerShell.width) > 2) {
+          throw new Error('Footer shell deviates from the independent Theme container/gutter contract: ' +
+            JSON.stringify({ actual: parityMetrics.footerInner, expected: footerShell }));
+        }
       }
       const contentRatio = parityMetrics.content.width / parityMetrics.heroGrid.width;
       if (contentRatio < 0.52 || contentRatio > 0.56) throw new Error(`desktop Hero content column must stay near approved 54% shell target, got ${contentRatio.toFixed(3)}`);
@@ -396,7 +414,7 @@ async function inspectViewport(browser, name, viewport) {
     result.articleImages = await page.locator('.aznet-theme-law01-article-card__media img').count();
     if (result.articleImages !== 3) throw new Error(`visual QA fixture must provide 3 Latest Posts featured images, got ${result.articleImages}`);
 
-    if (await page.locator('.aznet-theme-site-footer--professional').count() !== 1) throw new Error('visual QA fixture must exercise the professional Footer preset');
+    if (await page.locator('footer.aznet-theme-site-footer[data-aznet-theme-footer-content-preset="professional"]').count() !== 1) throw new Error('visual QA fixture must exercise the professional Footer preset');
     for (const selector of ['.aznet-theme-site-footer__navigation', '.aznet-theme-site-footer__contact', '.aznet-theme-site-footer__social-column']) {
       if (await page.locator(selector).count() !== 1) throw new Error(`visual QA fixture missing populated Footer column ${selector}`);
     }

@@ -250,6 +250,13 @@
     top: calc(100% + 12px);
     right: 0;
     width: min(360px, calc(100vw - 32px));
+    /* Keep WordPress-authored long menus reachable without scrolling the page
+     * behind the disclosure. Reserve room for the mobile/nav-only header and
+     * WordPress admin bar; all Header presets share this constraint. */
+    max-height: 70vh;
+    max-height: min(70dvh, calc(100dvh - 10rem));
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
     padding: 18px;
     border: 1px solid var(--aznet-theme-header-border);
     border-radius: var(--aznet-theme-radius-card);
@@ -692,6 +699,199 @@
 @media (prefers-reduced-motion: reduce) {
     .aznet-theme-site-header__menu .sub-menu,
     .aznet-theme-site-header--sticky-compact .aznet-theme-site-header__inner {
+        transition: none;
+    }
+}
+
+/*
+ * R3 Professional Header: shared, opt-in off-canvas mobile presentation.
+ * The script adds is-aznet-theme-nav-enhanced only after the disclosure is
+ * initialized. Without JavaScript, the existing native panel remains visible.
+ */
+.aznet-theme-site-header__mobile-trigger {
+    gap: .55rem;
+    justify-content: center;
+}
+.aznet-theme-site-header__mobile-menu-icon {
+    display: block;
+    flex: 0 0 auto;
+}
+.aznet-theme-site-header__mobile-panel-header {
+    display: none;
+}
+.aznet-theme-site-header__mobile-backdrop[hidden],
+.aznet-theme-site-header__mobile-panel[hidden],
+.aznet-theme-site-header__mobile-panel .aznet-theme-site-header__menu .sub-menu[hidden] {
+    display: none !important;
+}
+
+/* The parent stays a genuine WordPress link; its adjacent button only
+ * discloses children. No duplicate submenu URL or menu data is created. */
+.aznet-theme-site-header__mobile-panel .aznet-theme-site-header__menu li.is-aznet-theme-submenu-enhanced {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+}
+.aznet-theme-site-header__mobile-panel .aznet-theme-site-header__menu li.is-aznet-theme-submenu-enhanced > a {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+.aznet-theme-site-header__submenu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--aznet-theme-radius-control);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+}
+.aznet-theme-site-header__submenu-toggle::after {
+    content: "";
+    width: .52rem;
+    height: .52rem;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform var(--aznet-theme-motion-base) ease;
+}
+.aznet-theme-site-header__submenu-toggle[aria-expanded="true"]::after {
+    transform: rotate(225deg);
+}
+.aznet-theme-site-header__mobile-panel .aznet-theme-site-header__menu li.is-aznet-theme-submenu-enhanced > .sub-menu {
+    grid-column: 1 / -1;
+    min-width: 0;
+}
+.aznet-theme-site-header__mobile-panel .aznet-theme-site-header__menu .current-menu-item > a,
+.aznet-theme-site-header__mobile-panel .aznet-theme-site-header__menu a[aria-current="page"] {
+    /* Keep site/preset-owned foreground colors intact on dark and light headers. */
+    font-weight: var(--aznet-theme-font-weight-bold);
+}
+
+/* Desktop navigation affordance: visible current state in the shared shell. */
+@media (min-width: 981px) {
+    .aznet-theme-site-header__nav > .aznet-theme-site-header__menu > li > a[aria-current="page"] {
+        /* Do not force inverse text on light Header presets such as Law01. */
+        text-decoration: underline;
+        text-decoration-color: var(--aznet-theme-focus);
+        text-underline-offset: .45rem;
+        text-decoration-thickness: 2px;
+    }
+}
+
+@media (max-width: 1100px) {
+    /* backdrop-filter creates a containing block for position:fixed.
+     * Disable it in this opted-in mode so the viewport owns drawer geometry,
+     * including overlay and client-specific visual presets. */
+    .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced {
+        backdrop-filter: none;
+    }
+
+    .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-backdrop:not([hidden]) {
+        display: block;
+        position: fixed;
+        z-index: 1000;
+        inset: 0;
+        background: rgba(9, 18, 28, .56);
+    }
+
+    .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-panel {
+        position: fixed;
+        z-index: 1001;
+        inset: 0 0 0 auto;
+        top: 0;
+        right: 0;
+        width: min(26rem, calc(100vw - 2rem));
+        height: 100vh;
+        height: 100dvh;
+        max-height: none;
+        min-height: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        overscroll-behavior: contain;
+        padding: 0 1.25rem calc(1.25rem + env(safe-area-inset-bottom, 0px));
+        border: 0;
+        border-left: 1px solid var(--aznet-theme-header-border);
+        border-radius: 0;
+        background: var(--aznet-theme-surface-inverse);
+        box-shadow: var(--aznet-theme-shadow-float);
+    }
+
+    .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-panel-header {
+        display: flex;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        min-height: 4.25rem;
+        margin-bottom: .4rem;
+        border-bottom: 1px solid var(--aznet-theme-header-border);
+        background: var(--aznet-theme-surface-inverse);
+        color: var(--aznet-theme-on-inverse);
+        font-size: 1.125rem;
+        line-height: 1.3;
+    }
+
+    .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-close {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        min-height: 44px;
+        border: 1px solid var(--aznet-theme-header-border);
+        border-radius: var(--aznet-theme-radius-control);
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+    }
+
+    .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-panel .aznet-theme-site-header__menu {
+        gap: .2rem;
+    }
+
+    .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-panel .aznet-theme-site-header__menu > li > a {
+        min-height: 48px;
+        padding: .65rem .5rem;
+        border-radius: var(--aznet-theme-radius-control);
+    }
+
+    .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-panel .aznet-theme-site-header__menu a:hover,
+    .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-panel .aznet-theme-site-header__menu a:focus-visible,
+    .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__submenu-toggle:hover {
+        background: color-mix(in srgb, var(--aznet-theme-on-inverse) 9%, transparent);
+        color: var(--aznet-theme-on-inverse);
+    }
+
+    .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-panel .sub-menu {
+        margin-block: .25rem .55rem;
+        padding-inline: .8rem 0;
+        border-left: 1px solid var(--aznet-theme-header-border);
+    }
+
+    .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-actions {
+        margin-top: 1.25rem;
+    }
+
+    .admin-bar .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-panel {
+        top: 32px;
+        height: calc(100dvh - 32px);
+    }
+}
+
+@media (max-width: 782px) {
+    .admin-bar .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-panel {
+        top: 46px;
+        height: calc(100dvh - 46px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .aznet-theme-site-header__submenu-toggle::after {
         transition: none;
     }
 }

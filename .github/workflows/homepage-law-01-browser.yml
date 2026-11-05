@@ -391,7 +391,7 @@ jobs:
           grep -F 'aznet-theme-law01-hero__media' /tmp/homepage-law01/homepage.html
           grep -F 'aznet-theme-law01-team-card__media' /tmp/homepage-law01/homepage.html
           grep -F 'aznet-theme-law01-article-card__media' /tmp/homepage-law01/homepage.html
-          grep -F 'aznet-theme-site-footer--professional' /tmp/homepage-law01/homepage.html
+          grep -F 'data-aznet-theme-footer-content-preset="professional"' /tmp/homepage-law01/homepage.html
           grep -F 'aznet-theme-site-footer__social-column' /tmp/homepage-law01/homepage.html
           grep -F 'aznet-theme-law01-topics' /tmp/homepage-law01/homepage.html
           grep -F 'aznet-theme-law01-analysis' /tmp/homepage-law01/homepage.html

@@ -77,10 +77,10 @@ function contrast_ratio(string $a, string $b): float
     return (max($first, $second) + 0.05) / (min($first, $second) + 0.05);
 }
 
-$footerBase = hex_token($preset, '--aznet-theme-surface-inverse');
+$footerBase = '#111722';
 $ctaBase = hex_token($preset, '--aznet-theme-color-primary');
-if (! str_contains($footer, 'var(--aznet-theme-surface-inverse)')) {
-    fail_boundary('Footer no longer consumes the known semantic inverse surface');
+if (! str_contains($footer, 'background: ' . $footerBase . ';')) {
+    fail_boundary('Footer must use the same neutral surface across all visual presets');
 }
 
 $ctaRule = css_rule($home, '.aznet-theme-curtain01-final-cta');

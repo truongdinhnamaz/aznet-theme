@@ -125,6 +125,9 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/x1-x2-retained-work
 printf '%s\n' '==> X3 Media / Gallery / Embed contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x3-media-gallery-embed-contract.php
 
+printf '%s\n' '==> Native Front Page nested Gutenberg wide alignment contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/frontpage-nested-alignwide-contract.php
+
 printf '%s\n' '==> X4 Pagination & Navigation Completion contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x4-pagination-navigation-contract.php
 
@@ -170,6 +173,12 @@ case "$RELEASE_VERSION" in
   1.3.98)
     php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v1398-release-candidate-contract.php
     ;;
+  1.3.99)
+    php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v1399-release-candidate-contract.php
+    ;;
+  1.3.100)
+    php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v13100-release-candidate-contract.php
+    ;;
   *)
     echo "FAIL: unsupported Theme release contract version $RELEASE_VERSION" >&2
     exit 1
@@ -213,6 +222,9 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/d042-three-pilot-cs
 
 printf '%s\n' '==> Y2 Professional Page Kits contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y2-professional-page-kits-contract.php
+
+printf '%s\n' '==> Shared Footer contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/footer-shared-visual-contract.php
 
 printf '%s\n' '==> Y3 Footer System contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y3-footer-system-contract.php

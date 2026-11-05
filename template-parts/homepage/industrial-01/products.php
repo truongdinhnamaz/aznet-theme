@@ -53,7 +53,7 @@ $shop_url = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\shop_url'
                        href="<?php echo esc_url( $product_url ); ?>"
                        aria-label="<?php echo esc_attr( $product->get_name() ); ?>">
                         <?php if ( $has_image ) : ?>
-                            <?php echo get_the_post_thumbnail( $product_id, 'woocommerce_thumbnail', [ 'loading' => 'lazy' ] ); ?>
+                            <?php echo get_the_post_thumbnail( $product_id, 'woocommerce_thumbnail', [ 'loading' => 'lazy', 'alt' => '' ] ); ?>
                         <?php else : ?>
                             <span class="aznet-theme-industrial01-product-card__empty-symbol" aria-hidden="true">
                                 <svg viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="8" y="12" width="48" height="40" rx="2"/><path d="M8 42l13-12 11 9 9-8 15 13M23 22h.01"/></svg>
