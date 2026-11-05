@@ -1,0 +1,130 @@
+/* Wellness 01 native inner Pages. Loaded only by the explicit Theme preset.
+ * WordPress retains all content, media, links and Page Template choices.
+ * Landing Pages retain their authored full-bleed composition.
+ */
+:is(.aznet-theme-page--standard, .aznet-theme-page--wide) {
+    --w01-page-max: 70rem;
+    --w01-page-gap: 1.5rem;
+}
+
+.aznet-theme-page--wide {
+    --w01-page-max: var(--aznet-theme-container-wide);
+}
+
+:is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__section-inner {
+    width: min(calc(100% - (var(--aznet-theme-gutter) * 2)), var(--w01-page-max));
+    max-width: var(--w01-page-max);
+}
+
+:is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__header {
+    padding-block: clamp(2rem, 4vw, 3.25rem) 2rem;
+}
+
+:is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__title {
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -.025em;
+}
+
+:is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__content {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--w01-page-gap);
+    padding-block-end: clamp(3rem, 6vw, 5rem);
+}
+
+:is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__content > * {
+    grid-column: 1 / -1;
+    min-width: 0;
+    margin-block: 0;
+}
+
+:is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__content > :is(p, ul, ol) {
+    max-width: 72ch;
+}
+
+:is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__content :is(h2, h3) {
+    line-height: 1.25;
+    text-wrap: balance;
+}
+
+:is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__content h2 {
+    font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+}
+
+:is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__content h3 {
+    font-size: clamp(1.125rem, 1.8vw, 1.35rem);
+}
+
+:is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__content > h2:not(:nth-child(2)) {
+    margin-block-start: 1rem;
+}
+
+:is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__content > .wp-block-group.has-background {
+    border-radius: var(--aznet-theme-radius-card);
+}
+
+:is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__content :is(.wp-block-group, .wp-block-column) > :first-child {
+    margin-block-start: 0;
+}
+
+:is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__content :is(.wp-block-group, .wp-block-column) > :last-child {
+    margin-block-end: 0;
+}
+
+:is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__content .wp-block-columns {
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+/* Native image columns retain their authored ratio and a balanced portrait size. */
+:is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__content > .wp-block-columns:has(> .wp-block-column > .wp-block-image):not(.are-vertically-aligned-top):not(.are-vertically-aligned-bottom) {
+    /* Core's default .wp-block-columns uses normal !important. */
+    align-items: center !important;
+    column-gap: clamp(2rem, 5vw, 4rem);
+}
+
+:is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__content > .wp-block-columns > .wp-block-column > .wp-block-image:not(.alignleft):not(.alignright):not(.alignwide):not(.alignfull) {
+    width: 100%;
+    max-width: 22.5rem;
+    margin-inline: auto;
+    overflow: hidden;
+    border-radius: var(--aznet-theme-radius-card);
+}
+
+:is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__content > .wp-block-columns > .wp-block-column > .wp-block-image:not(.alignleft):not(.alignright):not(.alignwide):not(.alignfull) img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* A native wide block fills this already-wide inner frame, without a second breakout. */
+:is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__content > .alignwide {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
+    transform: none;
+}
+
+/* Consecutive authored background Groups share desktop space as paired cards.
+ * Separated sections stay full-width. No pricing/business identity is inferred.
+ */
+@media (min-width: 64rem) {
+    :is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__content > .wp-block-group.has-background:not(.alignfull):has(+ .wp-block-group.has-background:not(.alignfull)),
+    :is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__content > .wp-block-group.has-background:not(.alignfull) + .wp-block-group.has-background:not(.alignfull) {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 47.999rem) {
+    :is(.aznet-theme-page--standard, .aznet-theme-page--wide) {
+        --w01-page-gap: 1.25rem;
+    }
+
+    :is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__section-inner {
+        width: calc(100% - (var(--aznet-theme-gutter-mobile) * 2));
+    }
+
+    :is(.aznet-theme-page--standard, .aznet-theme-page--wide) .aznet-theme-page__header {
+        padding-block-end: 1.5rem;
+    }
+}

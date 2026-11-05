@@ -1,0 +1,31 @@
+name: Wellness 01 native pattern verification
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'patterns/homepage-wellness-01.php'
+      - 'tests/offline/r2-wellness01-pattern-contract.php'
+      - '.github/workflows/wellness01-native-pattern.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-pattern:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Wellness 01 pattern contract
+        run: |
+          set -euo pipefail
+          php -l patterns/homepage-wellness-01.php
+          php tests/offline/r2-wellness01-pattern-contract.php
+      - name: Retained native pattern contracts
+        run: |
+          set -euo pipefail
+          for file in tests/offline/r2-*.php; do
+            php -d zend.assertions=1 -d assert.exception=1 "$file"
+          done
