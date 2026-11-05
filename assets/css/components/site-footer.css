@@ -7,6 +7,7 @@
  */
 .aznet-theme-site-footer {
     --aznet-theme-footer-ink: #f7f8fa;
+    --aznet-theme-footer-shell-max: 75rem;
     --aznet-theme-footer-muted: color-mix(in srgb, var(--aznet-theme-footer-ink) 78%, transparent);
     --aznet-theme-footer-border: color-mix(in srgb, var(--aznet-theme-footer-ink) 19%, transparent);
     --aznet-theme-footer-accent: var(--aznet-theme-footer-ink);
@@ -27,7 +28,7 @@
 }
 
 .aznet-theme-site-footer__inner {
-    width: min(calc(100% - (2 * var(--aznet-theme-gutter))), var(--aznet-theme-container-shell));
+    width: min(calc(100% - (2 * var(--aznet-theme-gutter))), var(--aznet-theme-footer-shell-max));
     margin-inline: auto;
     padding-block: clamp(2.75rem, 5vw, 4.25rem) var(--aznet-theme-space-4, 1.5rem);
 }

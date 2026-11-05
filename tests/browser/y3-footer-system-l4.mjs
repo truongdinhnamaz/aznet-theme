@@ -327,7 +327,8 @@ async function inspectIndustrialProfessionalFooter(browser) {
           const heading = el.querySelector('.aznet-theme-site-footer__rich-content strong');
           const h = heading ? getComputedStyle(heading) : null;
           return { background: st.backgroundColor, color: st.color, fontFamily: st.fontFamily,
-            headingColor: h?.color || null };
+            headingColor: h?.color || null,
+            innerWidth: el.querySelector('.aznet-theme-site-footer__inner')?.getBoundingClientRect().width || null };
         });
         snapshots.push({visual, snapshot});
       } finally { await context.close(); }

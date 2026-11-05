@@ -338,8 +338,8 @@ async function inspectViewport(browser, name, viewport) {
       if (parityMetrics.footerInner) {
         const footerShell = await page.evaluate(() => {
           const probe = document.createElement('div');
-          probe.style.cssText = 'position:fixed;left:0;top:0;visibility:hidden;pointer-events:none;width:var(--aznet-theme-container-shell);height:var(--aznet-theme-gutter);box-sizing:content-box;';
-          document.body.appendChild(probe);
+          probe.style.cssText = 'position:fixed;left:0;top:0;visibility:hidden;pointer-events:none;width:var(--aznet-theme-footer-shell-max);height:var(--aznet-theme-gutter);box-sizing:content-box;';
+          document.querySelector('.aznet-theme-site-footer').appendChild(probe);
           const cap = probe.getBoundingClientRect().width;
           const gutter = probe.getBoundingClientRect().height;
           probe.remove();
