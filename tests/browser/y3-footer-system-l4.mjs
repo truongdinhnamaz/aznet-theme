@@ -265,7 +265,7 @@ async function inspectIndustrialProfessionalFooter(browser) {
           const bottom = get('.aznet-theme-site-footer__bottom');
           const footerStyle = getComputedStyle(element);
           return {
-            columns: grid ? grid.gridTemplateColumns.trim().split(/\s+/).length : 0,
+            columns: grid ? grid.gridTemplateColumns.trim().split(/\s+/).filter((track) => Number.parseFloat(track) > 1).length : 0,
             background: footerStyle.backgroundColor,
             textColor: footerStyle.color,
             brandLayout: brand?.display || '',

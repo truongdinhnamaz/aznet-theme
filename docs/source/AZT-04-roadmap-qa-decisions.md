@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.22
+**Version:** v1.23
 **Status:** Working Source  
-**Date:** 22/10/2026
+**Date:** 05/11/2026
 
 ## 1. Purpose
 
@@ -1125,3 +1125,15 @@ Site release 1.3.94 has PASS for source CI and public homepage/SEO content invar
 **Governance:** source proposal does not authorize main merge, release, updater activation or site deployment. External release endpoint location/operator capability and package verification are explicit architecture gates. No new plugin/repository/domain owner may be silently created in AZnet Theme.
 
 **Gate progression:** After UPN0 acceptance, verify UPN1 RED and UPN2 notification-only implementation, then UPN3 real WordPress runtime/admin; UPN4 install/rollback, source/code merge, release and deployment keep their independent acceptance gates. Current implementation status belongs in GitHub PR/evidence, not this normative source.
+
+### D-063 — Một Footer chung cho mọi template — OWNER ACCEPTED — 05/11/2026
+
+- **Decision:** Chủ sở hữu phê duyệt **một Footer presentation system duy nhất** cho toàn AZnet Theme. Law 01, Curtain 01, Industrial 01, Digital 01 và các template tương lai không được dựng Footer skin, typography, layout, responsive hay navigation style riêng. Mỗi website chỉ thay đổi dữ liệu và nội dung hợp lệ.
+- **Ownership:** Theme sở hữu template-parts/footer/site-footer.php, inc/theme/footer.php, CSS trình bày chung ở assets/css/components/site-footer.css và consumer/asset guards tối thiểu. WordPress tiếp tục sở hữu logo, site title/tagline, Footer menus, URL, và các cột nội dung wp_block; RootProfile, ConvertFlow, WooCommerce giữ toàn bộ domain semantics. Không suy luận identity, social, contact hoặc policies từ slug, title, Page ID hay URL.
+- **Compatibility:** Các khóa footer_preset và tham chiếu block theo cột được giữ làm **hồ sơ nội dung** tương thích; không dùng các khóa này để đổi style. Không tự migrate/delete/reset nội dung đã lưu, không tạo parallel domain store. File Footer CSS chuyên biệt cũ chỉ được retire sau khi destination, fallback, regression và rollback PASS.
+- **Acceptance:** Một bộ màu nền/chữ trung tính dễ đọc, typography, container/grid, section headings, link/list/contact, focus, 1440/1024/390/320 responsive và thanh copyright/policy chung. Thiếu dữ liệu phải fail-soft, không render cột/menu/URL bịa; không trùng social; giữ link thực và tel/mailto; đúng một contentinfo landmark; không overflow hay axe critical/serious. Chạy WordPress 6.9+ PHP 8.1+, test candidate exact SHA; CSS overlay trên production hoặc fixture không thay integration PASS.
+- **Checkpoint:** [PR #562](https://github.com/truongdinhnamaz/aznet-theme/pull/562) là DRAFT/unmerged. Fresh CI evidence phải gắn đúng candidate SHA; quyết định này không công bố runtime L3, browser L4, integration L5, merge main, release hay pilot production PASS. Không tự nâng Theme version hoặc deploy.
+- **Rollback/release:** Abandon candidate branch/PR để giữ main + WordPress site-owned data. Main merge, tag/release và deployment là các gate độc lập theo AZT-05.
+
+**EXACT NEXT:** Xác minh offline + WordPress + Playwright trên exact head PR #562, ghi bằng chứng và lỗi chưa đóng; chỉ xem xét merge/release sau các gate tương ứng.
+
