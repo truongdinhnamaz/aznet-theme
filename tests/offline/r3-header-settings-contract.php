@@ -18,7 +18,7 @@ $defaults = AZnet\Theme\settings_defaults();
 $expected_defaults = [
     'header_preset'    => 'standard',
     'header_sticky'    => 'sticky',
-    'header_mobile_layout' => 'popover',
+    'header_mobile_layout' => 'drawer',
     'header_search'    => true,
     'header_utilities' => true,
 ];
@@ -83,8 +83,8 @@ if (($invalid['header_sticky'] ?? null) !== 'sticky') {
     fwrite(STDERR, "FAIL: invalid header_sticky did not fall back to sticky\n");
     exit(1);
 }
-if (($invalid['header_mobile_layout'] ?? null) !== 'popover') {
-    fwrite(STDERR, "FAIL: invalid mobile layout must retain legacy popover\n");
+if (($invalid['header_mobile_layout'] ?? null) !== 'drawer') {
+    fwrite(STDERR, "FAIL: invalid mobile layout must fail soft to shipped Drawer\n");
     exit(1);
 }
 if (($invalid['header_search'] ?? null) !== true) {

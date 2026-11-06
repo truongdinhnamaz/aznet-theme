@@ -1,6 +1,6 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.25
+**Version:** v1.26
 **Status:** Working Source  
 **Date:** 06/11/2026
 
@@ -359,6 +359,7 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-047** | **WordPress-native Team child Pages may store exactly two bounded contact facts in Page meta: `_aznet_theme_team_phone` and `_aznet_theme_team_zalo`. These fields are not RootProfile Person/Contact authority, are not stored in `aznet_theme_settings`, and do not authorize a generic personnel metadata schema. Admin Zalo input is phone-only; Theme derives the presentation URL. Empty values fail soft.** | **Accepted — owner approved 03/10/2026** |
 
 | **D-065** | **A pilot website is a validation fixture, never the default owner of a Theme release. Every new v1.x version must preserve a portable Core on clean WordPress, isolate optional template-specific presentation via typed opt-in manifests, and show impacted cross-template regression/fallback, exact package and rollback evidence before any universal release claim. Simultaneous installation on all sites is not required.** | **Accepted — owner directive 06/11/2026** |
+| **D-066** | **A newly released, generally applicable Theme presentation must appear by default on new installs and sites lacking an explicit setting; saved valid owner choices, including legacy popover, must be preserved. Release gates must verify fresh install, saved-missing-key upgrade, explicit legacy override and exact ZIP behavior. No activation-time site-data mutation or silent auto-installer.** | **Accepted — owner directive 06/11/2026** |
 
 ## 10A. v1.3 Client Delivery System
 
@@ -1165,3 +1166,20 @@ Site release 1.3.94 has PASS for source CI and public homepage/SEO content invar
 **Enforcement and checkpoint:** `tests/offline/d065-release-portability-contract.php` runs via `scripts/verify-v1-core.sh` on PR/exact-main and X6 paths. It fails if the canonical D-065 rule, C7/C8, Universal Footer or WordPress-clean verification chains are dropped. The automated guard proves **retention of mandatory checks**, not the full qualitative/visual portability of an untested change; reviewers still must record the impact matrix, exceptions and exact QA evidence.
 
 **Rollback:** This QA-only adoption changes no production Theme files, published package or site. Revert the bounded source/QA PR if it invalidates a confirmed prior gate. No re-release of already published `v1.3.103` is implied by adopting this standard.
+
+### D-066 — Versioned Presentation Default Adoption Gate — OWNER ACCEPTED — 06/11/2026
+
+**Standard ID:** AZT-QA-ADOPT-01 | **Version:** v1.0 | **Scope owner:** AZT-04 (Theme QA, release adoption and upgrade continuity) | **Status:** OWNER ACCEPTED. Product-code enforcement requires an independently verified/merged PR and a separately approved new version. This refines D-019 / D-044 / D-065 and AZT-05 without creating a new domain owner, provider contract, updater or settings store.
+
+**Root cause and corrected delivery rule:** Previous releases shipped an accessible reusable light-left Mobile Drawer but continued to default to `popover`; a site without `header_mobile_layout` installed a newer ZIP yet still saw the old menu, leading to site-by-site manual patches. A release's generally applicable, safe presentation improvement must have a **default-visible adoption path** on a supported, previously unconfigured WordPress site, not merely an opt-in code path. Every release PR records whether its visible changes are default-on or explicitly opt-in (with reason). A feature requiring unsafe provider/operational assumptions cannot silently become default-on.
+
+**Site settings preservation:** Effective defaults are computed at runtime from the **single** existing `aznet_theme_settings` Theme Mod. No migrations that write options, menus, content or plugin state on activation/update. For Mobile Header: a **Fresh WordPress** site (no stored settings) uses `drawer`; **Saved settings without layout** (including a v1.x migrated or partially saved site) inherit `drawer`, retaining other fields; **Explicit popover** or explicit `drawer` remain authoritative after upgrade. Invalid/unknown values fail soft to the current shipped default. Because historical normalized saves may have persisted `popover` without a separate explicit-choice marker, Theme cannot reliably infer old user intent; it must **not** overwrite that stored value. Therefore some sites with a saved legacy `popover` remain on it until the site owner changes the setting.
+
+**Release verification requirements:**
+1. **L0/L1:** Source PR identifies Core/default vs optional/preset/site-local changes and verifies that the control-center selector accurately labels the shipped default and retained legacy option, with no hardcoded site/domain/menu values.
+2. **L2:** RED→GREEN regression for fresh installation, old serialized settings without the key, explicit valid overrides, invalid fallback, unrelated-settings continuity and read-only resolution. No duplicate schema or new store.
+3. **L3/L4:** WordPress 6.9+ R3 browser matrix runs actual Front/Page with nested WordPress menu, mobile interaction, keyboard/focus/contrast/a11y and desktop fallback for unconfigured default and saved-missing-key scenarios; explicit legacy popover remains tested independently alongside other Header presets/WooCommerce.
+4. **L6 / Exact installed ZIP:** The X6 package lifecycle verifies that the **installed candidate ZIP** renders the default Drawer and retains it after Theme switching/restoration, without mutating native WordPress content or stored Theme Mod. Future generally applicable UI changes must similarly prove a default-installed acceptance path when promised as default-on.
+5. **Handoff:** Release notes explicitly say what becomes active automatically vs what requires an existing site setting, including compatibility exceptions. A GitHub Release is not an automatic WordPress update or proof that every existing site has been upgraded; deployment/recovery remains separately gated.
+
+**Boundary / rollback:** No private provider APIs or parallel domain data. Historic `v1.3.104` remains immutable. Reverting this scoped source/QA change restores the old `popover` effective default on sites without a stored mobile choice; explicit settings always survive source rollback. Do not claim a new release or website deployment PASS until its corresponding gates run.
