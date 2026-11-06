@@ -116,9 +116,25 @@ try {
     if (galleryCols !== expectedGalleryCols) {
       throw new Error(name + ': category gallery columns ' + galleryCols + ', expected ' + expectedGalleryCols);
     }
-    const galleryMediaCount = await gallery.locator('.aznet-theme-industrial01-category-card__media img').count();
-    if (galleryMediaCount !== 7) {
-      throw new Error(name + ': all WooCommerce-provided category thumbnails must remain present');
+    // Fixture: one real WooCommerce category image plus six categories with
+    // no source image. Placeholder thumbnails must not masquerade as media,
+    // while every native category permalink and label remains visible.
+    const realCategoryImages = gallery.locator('.aznet-theme-industrial01-category-card__media img');
+    const galleryMediaCount = await realCategoryImages.count();
+    const textOnlyCards = await categoryLinks.evaluateAll((items) =>
+      items.filter((item) => !item.querySelector('.aznet-theme-industrial01-category-card__media')).length
+    );
+    if (galleryMediaCount !== 1 || textOnlyCards !== 6) {
+      throw new Error(name + ': retain exactly one real category image and six accessible text-only cards: ' +
+        JSON.stringify({ galleryMediaCount, textOnlyCards }));
+    }
+    const realCategoryMedia = await realCategoryImages.first().evaluate((image) => ({
+      src: image.currentSrc || image.src,
+      loaded: image.complete && image.naturalWidth > 0,
+    }));
+    if (!realCategoryMedia.loaded || /woocommerce-placeholder|placeholder\.webp/i.test(realCategoryMedia.src)) {
+      throw new Error(name + ': real category media is not loaded or a WooCommerce placeholder leaked: ' +
+        JSON.stringify(realCategoryMedia));
     }
     const galleryHeading = await categorySection.locator('#aznet-industrial01-categories-title').innerText();
     if (!galleryHeading.includes('Danh mục thiết bị')) {
