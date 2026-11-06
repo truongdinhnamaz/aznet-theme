@@ -83,7 +83,48 @@ jobs:
                   return {left:box.left, right:box.right, width:box.width};
                 });
                 inputRects.push({ selector, ...r });
-                check(r.left >= -1 && r.right <= width + 1, 'Form control overflows viewport: ' + selector + ', right ' + r.right);
+                if (!(r.left >= -1 && r.right <= width + 1)) {
+                  // Browser-only root cause diagnostics (no persistent site writes).
+                  record.ancestry = await el.evaluate(node => {
+                    const ancestors = [];
+                    let n = node;
+                    for (let i = 0; n && i < 13; i++, n = n.parentElement) {
+                      const rect = n.getBoundingClientRect();
+                      const css = getComputedStyle(n);
+                      ancestors.push({
+                        tag: n.tagName, className: String(n.className || '').slice(0, 145),
+                        left: rect.left, right: rect.right, width: rect.width,
+                        computed: {
+                          width: css.width, minWidth: css.minWidth, maxWidth: css.maxWidth,
+                          marginLeft: css.marginLeft, marginRight: css.marginRight,
+                          transform: css.transform, position: css.position,
+                          display: css.display, overflowX: css.overflowX, paddingLeft: css.paddingLeft
+                        }
+                      });
+                    }
+                    return { ancestors, scrollX: window.scrollX, docWidth: document.documentElement.scrollWidth,
+                      bodyWidth: document.body.scrollWidth, innerWidth: window.innerWidth };
+                  });
+                  const probes = [
+                    { id: 'nested-native-alignwide-only', css:
+                      '.aznet-theme-page__content-inner .wp-block-columns.alignwide {width:100%!important;max-width:100%!important;margin-inline:0!important;transform:none!important;}' },
+                    { id: 'native-group-and-columns', css:
+                      '.aznet-theme-page__content-inner > .wp-block-group.alignwide, .aznet-theme-page__content-inner .wp-block-columns.alignwide {width:100%!important;max-width:100%!important;margin-inline:0!important;transform:none!important;}' }
+                  ];
+                  record.styleProbes = [];
+                  for (const probe of probes) {
+                    const style = await page.addStyleTag({ content: probe.css });
+                    const after = await el.evaluate(node => {
+                      const b = node.getBoundingClientRect();
+                      return { left: b.left, right: b.right, width: b.width,
+                        docWidth: document.documentElement.scrollWidth };
+                    });
+                    record.styleProbes.push({ id: probe.id, ...after });
+                    await style.evaluate(node => node.remove());
+                  }
+                }
+                check(r.left >= -1 && r.right <= width + 1,
+                  'Form control outside viewport: ' + selector + ', left ' + r.left + ', right ' + r.right);
               }
               record.inputRects = inputRects;
               const submit = form.locator('input[type="submit"],button[type="submit"]').first();
