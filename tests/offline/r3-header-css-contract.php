@@ -123,6 +123,15 @@ if (! preg_match('/\.aznet-theme-site-header--mobile-drawer\.is-aznet-theme-nav-
     fwrite(STDERR, "FAIL: drawer open animation must be scoped to its visible panel\n");
     exit(1);
 }
+// Nested WordPress menu links must use legible text on the light off-canvas
+// surface, including their idle (non-hover/focus) state.
+$drawer_submenu_selector = '.aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-panel .aznet-theme-site-header__menu .sub-menu a';
+if (! preg_match('/' . preg_quote($drawer_submenu_selector, '/') . '\\s*\\{([^}]*)\\}/s', $css, $drawer_submenu_match)
+    || ! str_contains($drawer_submenu_match[1], 'color: var(--aznet-theme-text);')) {
+    fwrite(STDERR, "FAIL: left light drawer must color native nested submenu links with a readable text token\n");
+    exit(1);
+}
+
 if (! str_contains($css, '@keyframes aznet-theme-mobile-drawer-enter')
     || ! str_contains($css, '@keyframes aznet-theme-mobile-backdrop-enter')
     || ! str_contains($css, '.aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-panel:not([hidden])')

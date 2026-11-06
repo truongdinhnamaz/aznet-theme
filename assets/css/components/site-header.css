@@ -882,6 +882,12 @@
         border-left: 1px solid var(--aznet-theme-header-border);
     }
 
+    /* Native nested links retain inverse text from the generic dropdown.
+     * Match the drawer's light surface even when not hovered or focused. */
+    .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-panel .aznet-theme-site-header__menu .sub-menu a {
+        color: var(--aznet-theme-text);
+    }
+
     .aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-actions {
         margin-top: 1.25rem;
     }
