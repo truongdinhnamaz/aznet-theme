@@ -1,0 +1,58 @@
+name: QA ANP Published Post Access (read-only diagnostic)
+on:
+  push:
+    branches:
+      - qa/anp-post-access-20261106
+    paths:
+      - '.github/workflows/qa-anp-post-access.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  published-post-access:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Sample WordPress public Post paths, canonical and query fallback
+        run: |
+          set -euo pipefail
+          mkdir -p anp-post-access-evidence
+          printf 'label\thttp\tseconds\tremote_ip_family\tlocation\n' > anp-post-access-evidence/results.tsv
+          failures=0
+          probe () {
+            local label="$1"
+            local url="$2"
+            local tmp rc
+            tmp=$(mktemp)
+            rc=0
+            curl --silent --show-error --location --compressed --connect-timeout 6 --max-time 18               --user-agent 'AZnet-Theme-ReadOnly-Post-Access-QA/1.0'               --output /dev/null --write-out '%{http_code}\t%{time_total}\t%{remote_ip}\t%{url_effective}'               "$url" > "$tmp" || rc=$?
+            local data status time ip final
+            data=$(cat "$tmp")
+            rm -f "$tmp"
+            status=$(printf '%s' "$data" | cut -f1)
+            time=$(printf '%s' "$data" | cut -f2)
+            ip=$(printf '%s' "$data" | cut -f3)
+            final=$(printf '%s' "$data" | cut -f4)
+            if [[ -z "$status" ]]; then status=000; fi
+            local family='unknown'
+            if [[ "$ip" == *:* ]]; then family='IPv6'; elif [[ "$ip" == *.* ]]; then family='IPv4'; fi
+            printf '%s\t%s\t%s\t%s\t%s\n' "$label" "$status" "$time" "$family" "$final" | tee -a anp-post-access-evidence/results.tsv
+            if [[ "$status" != "200" || "$rc" -ne 0 ]]; then failures=$((failures+1)); fi
+          }
+          probe homepage 'https://anpvietnam.vn/'
+          probe posts_archive 'https://anpvietnam.vn/tin-tuc'
+          probe canonical_post_12963 'https://anpvietnam.vn/pin-lithium-hay-ac-quy-axit-chi.html'
+          probe query_by_id_12963 'https://anpvietnam.vn/?p=12963'
+          probe canonical_post_13030 'https://anpvietnam.vn/lop-dac-nhat-cu-hay-lop-thai-lan-moi-dau-la-lua-chon-phu-hop.html'
+          probe wordpress_post_rest 'https://anpvietnam.vn/wp-json/wp/v2/posts/12963?_fields=id%2Clink%2Cstatus'
+          echo "failed_or_timeout=$failures"
+          test "$failures" -eq 0
+      - name: Preserve bounded diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-anp-post-access-public-http
+          path: anp-post-access-evidence/results.tsv
+          if-no-files-found: warn
