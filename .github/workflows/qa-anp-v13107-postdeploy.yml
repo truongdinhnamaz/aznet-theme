@@ -1,0 +1,351 @@
+name: QA ANP v1.3.107 Live Postdeploy Acceptance (read-only)
+on:
+  push:
+    branches:
+      - qa/anp-v13107-postdeploy-20261106
+    paths:
+      - '.github/workflows/qa-anp-v13107-postdeploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  anp-postdeploy-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Checkout test-only branch
+        uses: actions/checkout@v4
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Verify live ANP v1.3.107 Contact, Drawer and WooCommerce at 320, 390, 768 and 1440
+        env:
+          TEST_ORIGIN: https://anpvietnam.vn
+        run: |
+          cat > .anp-contact-qa.mjs <<'JS'
+          import fs from 'node:fs';
+          import { chromium } from 'playwright';
+
+          const origin = process.env.TEST_ORIGIN;
+          const dir = 'anp-contact-evidence';
+          fs.mkdirSync(dir, { recursive: true });
+          const browser = await chromium.launch({ headless: true });
+          const results = [];
+          const failures = [];
+          const check = (ok, text) => { if (!ok) throw Error(text); };
+
+          for (const width of [320, 390, 768, 1440]) {
+            const height = width === 1440 ? 900 : 844;
+            const context = await browser.newContext({
+              viewport: { width, height },
+              isMobile: width <= 768,
+              hasTouch: width <= 768,
+              deviceScaleFactor: 1,
+              reducedMotion: 'reduce'
+            });
+            const page = await context.newPage();
+            const record = { width, height, assertions: [], pageErrors: [], failedResources: [] };
+            page.on('pageerror', e => record.pageErrors.push(e.message));
+            page.on('response', r => { if (r.status() >= 400) record.failedResources.push(r.status() + ' ' + r.url()); });
+            try {
+              const response = await page.goto(origin + '/lien-he', { waitUntil: 'domcontentloaded', timeout: 50000 });
+              check(response && response.status() === 200, 'Contact page HTTP status != 200');
+              record.actualCssWidth = await page.evaluate(() => window.innerWidth);
+              check(record.actualCssWidth === width, 'Wrong CSS viewport: ' + record.actualCssWidth);
+              check(await page.locator('[data-aznet-theme-site-header]').isVisible(), 'Active AZnet header not found');
+              const title = await page.locator('h1').first().innerText();
+              check(title.includes('Liên hệ'), 'Contact H1 missing');
+
+              const form = page.locator('form.wpcf7-form').first();
+              await form.waitFor({ state: 'visible', timeout: 20000 });
+              check((await form.getAttribute('aria-label') || '').length > 0, 'Contact form missing accessible name');
+              const theme = await page.request.get(origin + '/wp-content/themes/aznet-theme/style.css', {timeout:20000});
+              check(theme.status() === 200 && (await theme.text()).includes('Version: 1.3.107'),
+                'active WordPress Theme stylesheet is not v1.3.107');
+              const cssResponse = await page.request.get(origin + '/wp-content/themes/aznet-theme/assets/css/components/page.css', {timeout:20000});
+              check(cssResponse.status() === 200, 'Theme Page CSS asset inaccessible');
+              const cssText = await cssResponse.text();
+              check(cssText.includes('.aznet-theme-page__content-inner .wp-block-group.alignwide > .wp-block-columns.alignwide')
+                && cssText.includes('form input:not([type="submit"])'),
+                'v1.3.107 native Columns and form max-width CSS missing in live asset');
+              check(await page.locator('.aznet-theme-page__content-inner .wp-block-group.alignwide > .wp-block-columns.alignwide').count() === 1,
+                'native Gutenberg Contact nested Columns absent');
+              record.assertions.push('live Theme v1.3.107 CSS and native Gutenberg Columns');
+              const selectors = [
+                '[name="your-name"]',
+                '[name="your-email"]',
+                '[name="your-phone"]',
+                '[name="your-subject"]',
+                '[name="your-message"]'
+              ];
+              const inputRects = [];
+              for (const selector of selectors) {
+                const el = form.locator(selector);
+                check(await el.count() === 1, 'Missing contact form control: ' + selector);
+                check(await el.isVisible(), 'Invisible contact form control: ' + selector);
+                const r = await el.evaluate(node => {
+                  const box = node.getBoundingClientRect();
+                  return {left:box.left, right:box.right, width:box.width};
+                });
+                inputRects.push({ selector, ...r });
+                check(r.left >= -1 && r.right <= width + 1,
+                  'Form control outside viewport: ' + selector + ', left ' + r.left + ', right ' + r.right);
+              }
+              record.inputRects = inputRects;
+              const submit = form.locator('input[type="submit"],button[type="submit"]').first();
+              check(await submit.isVisible(), 'Submit button absent/invisible');
+              const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+              record.horizontalOverflowPx = scrollWidth;
+              check(scrollWidth <= 1, 'Horizontal page overflow: ' + scrollWidth + 'px');
+              check(record.pageErrors.length === 0, 'Contact uncaught JS error');
+              record.assertions.push('real CSS viewport, Header, Contact H1, CF7 accessible form, five visible controls, submit button, zero overflow');
+              await form.scrollIntoViewIfNeeded();
+              await page.screenshot({ path: dir + '/anp-contact-' + width + '.png', fullPage: false });
+              record.status = 'PASS';
+            } catch (error) {
+              record.status = 'FAIL';
+              record.error = String(error && error.message || error);
+              failures.push({ width, error: record.error });
+              try { await page.screenshot({ path: dir + '/anp-contact-' + width + '-failed.png' }); } catch {}
+            } finally {
+              results.push(record);
+              await context.close();
+            }
+          }
+          await browser.close();
+          fs.writeFileSync(dir + '/report.json', JSON.stringify({
+            target: origin + '/lien-he',
+            installed_theme: 'AZnet Theme v1.3.107 (verified separately by WordPress)',
+            write_operations: 0,
+            note: 'Production CSS measured without injection or form submission',
+            results, failures
+          }, null, 2));
+          console.log(JSON.stringify({ results, failures }, null, 2));
+          if (failures.length) process.exit(1);
+          JS
+          cat > .anp-mobile-smoke.mjs <<'JS'
+          import fs from 'node:fs';
+          import { chromium } from 'playwright';
+
+          const origin = process.env.TEST_ORIGIN;
+          const evidence = 'anp-mobile-evidence';
+          fs.mkdirSync(evidence, { recursive: true });
+          const browser = await chromium.launch({ headless: true });
+          const results = [];
+          const failures = [];
+
+          function check(value, message) {
+            if (!value) throw new Error(message);
+          }
+
+          async function waitClosed(page) {
+            await page.waitForFunction(() => {
+              const trigger = document.querySelector('[data-aznet-theme-nav-trigger]');
+              const panel = document.querySelector('[data-aznet-theme-nav-panel]');
+              return trigger?.getAttribute('aria-expanded') === 'false' && panel?.hidden === true;
+            }, null, { timeout: 4000 });
+          }
+
+          for (const width of [390, 320, 768]) {
+            const height = 844;
+            const context = await browser.newContext({
+              viewport: { width, height },
+              isMobile: true,
+              hasTouch: true,
+              deviceScaleFactor: 1,
+              reducedMotion: 'reduce'
+            });
+            const page = await context.newPage();
+            const consoleErrors = [];
+            const pageErrors = [];
+            const failedResources = [];
+            page.on('console', msg => { if (msg.type() === 'error') consoleErrors.push(msg.text()); });
+            page.on('pageerror', err => pageErrors.push(err.message));
+            page.on('response', res => {
+              if (res.status() >= 400 && res.request().resourceType() !== 'document') {
+                failedResources.push(res.status() + ' ' + res.url());
+              }
+            });
+            const record = { width, height, origin, assertions: [], consoleErrors, pageErrors, failedResources };
+            try {
+              const response = await page.goto(origin + '/', { waitUntil: 'domcontentloaded', timeout: 50000 });
+              check(response && response.status() === 200, 'homepage HTTP status is not 200');
+              await page.locator('[data-aznet-theme-site-header]').waitFor({ state: 'visible', timeout: 20000 });
+              const actualWidth = await page.evaluate(() => window.innerWidth);
+              record.actualCssWidth = actualWidth;
+              check(actualWidth === width, 'actual CSS viewport is ' + actualWidth + ', expected ' + width);
+              record.assertions.push('viewport ' + width);
+
+              const trigger = page.locator('[data-aznet-theme-nav-trigger]');
+              const panel = page.locator('[data-aznet-theme-nav-panel]');
+              const backdrop = page.locator('[data-aznet-theme-nav-backdrop]');
+              const close = page.locator('[data-aznet-theme-nav-close]');
+              check(await trigger.isVisible(), 'real Theme mobile navigation trigger is not visible');
+              check(await trigger.getAttribute('aria-expanded') === 'false', 'trigger not initially collapsed');
+              record.assertions.push('mobile trigger visible and collapsed');
+
+              // Pin the live installed version, not just the repository's branch.
+              const cssResponse = await page.request.get(origin + '/wp-content/themes/aznet-theme/style.css', { timeout: 20000 });
+              check(cssResponse.status() === 200, 'active Theme stylesheet inaccessible');
+              const cssText = await cssResponse.text();
+              check(cssText.includes('Version: 1.3.107'), 'live WordPress Theme stylesheet is not v1.3.107');
+              check(await page.locator('[data-aznet-theme-site-header].aznet-theme-site-header--mobile-drawer').count() === 1,
+                'live page does not have the active AZnet Theme Drawer header');
+
+              const cards = page.locator('.aznet-theme-industrial01-category-card');
+              check(await cards.count() === 8, 'Industrial01 native category card count changed');
+              const pinCard = cards.filter({ hasText: 'Pin Lithium' });
+              check(await pinCard.count() === 1, 'Pin Lithium category card missing or duplicated');
+              check((await pinCard.getAttribute('href') || '').endsWith('/pin-lithium'),
+                'Pin Lithium native WooCommerce permalink missing');
+              check(await pinCard.locator('img,.aznet-theme-industrial01-category-card__media').count() === 0,
+                'WooCommerce placeholder media returned in Pin Lithium card');
+              const otherMedia = await cards.locator('.aznet-theme-industrial01-category-card__media img').count();
+              check(otherMedia === 7, 'real category image count changed: ' + otherMedia);
+              check((await cards.evaluateAll(items => items.map(i => i.outerHTML).join(''))).indexOf('woocommerce-placeholder') < 0,
+                'WooCommerce placeholder URL leaked into category gallery');
+              record.assertions.push('actual installed v1.3.107 and 8 Woo category cards; 7 real media, Pin Lithium text-only');
+              await page.screenshot({ path: evidence + '/anp-' + width + '-closed.png', fullPage: false });
+
+              await trigger.click();
+              await panel.waitFor({ state: 'visible' });
+              check(await trigger.getAttribute('aria-expanded') === 'true', 'trigger did not expand');
+              check(await backdrop.isVisible(), 'drawer backdrop not visible');
+              const geo = await panel.evaluate(el => {
+                const r = el.getBoundingClientRect();
+                return {
+                  left:r.left, right:r.right, width:r.width,
+                  role:el.getAttribute('role'), ariaModal:el.getAttribute('aria-modal'),
+                  viewportWidth:window.innerWidth,
+                  overflow:document.body.style.overflow
+                };
+              });
+              record.drawerGeometry = geo;
+              check(geo.left >= -1 && geo.left <= 4 && geo.right <= width + 1, 'drawer is not left-aligned or viewport safe');
+              check(geo.role === 'dialog' && geo.ariaModal === 'true', 'drawer dialog semantics missing');
+              check(geo.overflow === 'hidden', 'opening drawer did not lock body scroll');
+              record.assertions.push('open, left drawer, dialog a11y, scroll lock');
+              await page.screenshot({ path:evidence + '/anp-' + width + '-open.png', fullPage:false });
+
+              const toggles = panel.locator('.aznet-theme-site-header__submenu-toggle');
+              check(await toggles.count() > 0, 'native submenu toggles are absent');
+              const first = toggles.first();
+              check(await first.getAttribute('aria-expanded') === 'false', 'submenu should start collapsed');
+              await first.click();
+              check(await first.getAttribute('aria-expanded') === 'true', 'submenu failed to expand');
+              record.assertions.push('submenu expand');
+              await page.screenshot({ path:evidence + '/anp-' + width + '-submenu.png', fullPage:false });
+              await first.click();
+              check(await first.getAttribute('aria-expanded') === 'false', 'submenu failed to collapse');
+              record.assertions.push('submenu collapse');
+
+              await close.click();
+              await waitClosed(page);
+              check(!(await backdrop.isVisible()), 'backdrop still visible after close button');
+              check(await page.evaluate(() => document.body.style.overflow) !== 'hidden', 'body scroll still locked after close');
+              record.assertions.push('close button and scroll restore');
+
+              await trigger.click();
+              await panel.waitFor({ state:'visible' });
+              await page.mouse.click(width - 2, Math.floor(height / 2));
+              await waitClosed(page);
+              check(await page.evaluate(() => document.body.style.overflow) !== 'hidden', 'backdrop click failed to unlock body');
+              record.assertions.push('backdrop closes drawer');
+
+              await trigger.click();
+              await panel.waitFor({ state:'visible' });
+              await page.keyboard.press('Escape');
+              await waitClosed(page);
+              record.assertions.push('Escape closes drawer');
+
+              const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+              record.horizontalOverflowPx = overflow;
+              check(overflow <= 1, 'mobile page horizontal overflow ' + overflow + 'px');
+              record.assertions.push('no horizontal overflow');
+              record.status = 'PASS';
+            } catch(err) {
+              record.status = 'FAIL';
+              record.error = String(err && err.message || err);
+              failures.push({width, message:record.error});
+              try { await page.screenshot({path:evidence + '/anp-' + width + '-failed.png'}); } catch {}
+            } finally {
+              results.push(record);
+              await context.close();
+            }
+          }
+
+          // Desktop control: exact real 1440px viewport and same no-placeholder contract.
+          {
+            const width = 1440, height = 900;
+            const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 1, reducedMotion: 'reduce' });
+            const page = await context.newPage();
+            const record = { width, height, origin, assertions: [], pageErrors: [] };
+            page.on('pageerror', err => record.pageErrors.push(err.message));
+            try {
+              const response = await page.goto(origin + '/', { waitUntil: 'domcontentloaded', timeout: 50000 });
+              check(response && response.status() === 200, 'desktop homepage not HTTP 200');
+              record.actualCssWidth = await page.evaluate(() => window.innerWidth);
+              check(record.actualCssWidth === width, 'desktop window.innerWidth is not 1440');
+              check(await page.locator('[data-aznet-theme-site-header]').isVisible(), 'desktop Header absent');
+              check(await page.locator('.aznet-theme-site-header__nav').first().isVisible(), 'desktop primary nav not visible');
+              const cards = page.locator('.aznet-theme-industrial01-category-card');
+              const pin = cards.filter({ hasText: 'Pin Lithium' });
+              check(await cards.count() === 8 && await pin.count() === 1, 'desktop categories broken');
+              check(await pin.locator('img,.aznet-theme-industrial01-category-card__media').count() === 0,
+                'placeholder image leaked in desktop Pin Lithium category');
+              record.horizontalOverflowPx = await page.evaluate(() =>
+                document.documentElement.scrollWidth - document.documentElement.clientWidth);
+              check(record.horizontalOverflowPx <= 1, 'desktop horizontal page overflow');
+              await page.screenshot({ path: evidence + '/anp-1440-desktop.png', fullPage: false });
+              record.wooRoutes = [];
+              for (const route of ['/san-pham', '/pin-lithium']) {
+                const response = await page.request.get(origin + route, { timeout: 25000 });
+                record.wooRoutes.push({ route, status: response.status() });
+                check(response.status() === 200, 'WooCommerce route HTTP failure: ' + route);
+              }
+              record.assertions.push('actual 1440px desktop nav, categories, placeholder protection, no overflow');
+              record.status = 'PASS';
+            } catch (err) {
+              record.status = 'FAIL';
+              record.error = String(err && err.message || err);
+              failures.push({ width, message: record.error });
+              try { await page.screenshot({ path: evidence + '/anp-1440-failed.png' }); } catch {}
+            } finally {
+              results.push(record);
+              await context.close();
+            }
+          }
+
+          await browser.close();
+          fs.writeFileSync(evidence + '/report.json', JSON.stringify({
+            test:'ANP production, actual viewport, read-only, AZnet Theme v1.3.107',
+            results, failures
+          }, null, 2));
+          console.log(JSON.stringify({results,failures}, null, 2));
+          if (failures.length) process.exit(1);
+          JS
+          set +e
+          node .anp-contact-qa.mjs
+          CONTACT_EXIT=$?
+          node .anp-mobile-smoke.mjs
+          DRAWER_EXIT=$?
+          set -e
+          echo "contact_exit=$CONTACT_EXIT drawer_exit=$DRAWER_EXIT"
+          test "$CONTACT_EXIT" -eq 0
+          test "$DRAWER_EXIT" -eq 0
+      - name: Upload postdeploy evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-anp-13107-live-contact-drawer-woo
+          path: |
+            anp-contact-evidence/
+            anp-mobile-evidence/
+          if-no-files-found: warn
