@@ -317,6 +317,7 @@ jobs:
             sleep 1
           done
           grep -F 'aznet-theme-site-header' /tmp/x6/package-post-before.html
+          grep -F 'aznet-theme-site-header--mobile-drawer' /tmp/x6/package-post-before.html
           grep -F 'X6 package lifecycle sentinel content.' /tmp/x6/package-post-before.html
           grep -F 'aznet-theme-site-footer' /tmp/x6/package-post-before.html
 
@@ -332,6 +333,7 @@ jobs:
           test "$CURRENT_THEME_MOD" = "$(cat /tmp/x6/package-theme-mod.json)"
           curl -sS "http://127.0.0.1:8081/?p=${SENTINEL_ID}" > /tmp/x6/package-post-after.html
           grep -F 'aznet-theme-site-header' /tmp/x6/package-post-after.html
+          grep -F 'aznet-theme-site-header--mobile-drawer' /tmp/x6/package-post-after.html
           grep -F 'X6 package lifecycle sentinel content.' /tmp/x6/package-post-after.html
           grep -F 'aznet-theme-site-footer' /tmp/x6/package-post-after.html
           if grep -E 'PHP (Fatal error|Warning|Parse error)|Uncaught' /tmp/x6/package-server.log; then

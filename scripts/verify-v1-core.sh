@@ -42,6 +42,9 @@ bash scripts/verify-g3-core.sh
 printf '%s\n' '==> D-065 reusable Theme release portability retention gate'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/d065-release-portability-contract.php
 
+printf '%s\n' '==> D-066 shipped presentation default and upgrade adoption gate'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/d066-default-release-adoption-contract.php
+
 run_contract_group() {
   local pattern="$1"
   local found=0

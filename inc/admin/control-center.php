@@ -106,7 +106,7 @@ function render_settings_form( string $section ): void {
     if ( 'header' === $section ) {
         field_select( 'header_preset', __( 'Kiểu Header', 'aznet-theme' ), [ 'standard' => 'Standard', 'compact' => 'Compact', 'commerce' => 'Commerce', 'overlay' => 'Overlay' ], (string) $s['header_preset'] );
         field_select( 'header_sticky', __( 'Sticky', 'aznet-theme' ), [ 'off' => 'Off', 'sticky' => 'Sticky', 'sticky-compact' => 'Sticky Compact', 'nav-only' => 'Chỉ cố định hàng điều hướng' ], (string) $s['header_sticky'] );
-        field_select( 'header_mobile_layout', __( 'Điều hướng trên điện thoại', 'aznet-theme' ), [ 'popover' => __( 'Bảng xổ xuống (tương thích cũ)', 'aznet-theme' ), 'drawer' => __( 'Professional — ngăn trượt', 'aznet-theme' ) ], (string) $s['header_mobile_layout'] );
+        field_select( 'header_mobile_layout', __( 'Điều hướng trên điện thoại', 'aznet-theme' ), [ 'drawer' => __( 'Ngăn trượt từ trái (mặc định Theme)', 'aznet-theme' ), 'popover' => __( 'Bảng xổ xuống (tương thích cũ, chọn riêng)', 'aznet-theme' ) ], (string) $s['header_mobile_layout'] );
         echo '<p class="description">' . esc_html__( 'Ngăn trượt dùng chung menu WordPress; đổi kiểu chỉ ảnh hưởng trình bày, không đổi dữ liệu menu.', 'aznet-theme' ) . '</p>';
         field_select( 'header_catalog_mode', __( 'Danh mục sản phẩm (Vertical Menu)', 'aznet-theme' ), [ 'off' => 'Tắt', 'dropdown' => 'Menu xổ xuống trong Header', 'homepage-rail' => 'Menu dọc cạnh Hero (Industrial 01)' ], (string) $s['header_catalog_mode'] );
         echo '<p class="description">' . esc_html__( 'Nguồn là menu WordPress. Gán menu tại Giao diện → Menu → Quản lý vị trí → Product Catalog Menu. Chưa gán menu thì tính năng tự ẩn.', 'aznet-theme' ) . '</p>';

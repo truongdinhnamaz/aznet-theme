@@ -93,7 +93,7 @@ function settings_defaults(): array {
         'page_breadcrumbs'              => true,
         'header_preset'                 => 'standard',
         'header_sticky'                 => 'sticky',
-        'header_mobile_layout'          => 'popover',
+        'header_mobile_layout'          => 'drawer',
         'header_catalog_mode'          => 'off',
         'header_search'                 => true,
         'header_utilities'              => true,
@@ -220,9 +220,11 @@ function normalize_settings( array $raw ): array {
         ? (string) $raw['header_sticky']
         : 'sticky';
 
+    // New versions ship their current presentation by default. Existing sites
+    // retaining a valid explicit popover/drawer choice are not rewritten.
     $header_mobile_layout = isset( $raw['header_mobile_layout'] ) && in_array( $raw['header_mobile_layout'], [ 'popover', 'drawer' ], true )
         ? (string) $raw['header_mobile_layout']
-        : 'popover';
+        : 'drawer';
     $header_catalog_mode = isset( $raw['header_catalog_mode'] ) && in_array( $raw['header_catalog_mode'], [ 'off', 'dropdown', 'homepage-rail' ], true )
         ? (string) $raw['header_catalog_mode']
         : 'off';

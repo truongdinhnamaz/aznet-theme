@@ -59,13 +59,13 @@ function header_sticky_mode(): string {
 }
 
 /**
- * Return the opt-in professional mobile drawer presentation without changing
- * the default popover used by existing sites.
+ * Return the effective mobile Header presentation. The shipped default is
+ * the light Drawer; an explicit saved legacy popover remains authoritative.
  */
 function header_mobile_layout(): string {
-    $layout = setting( 'header_mobile_layout', 'popover' );
+    $layout = setting( 'header_mobile_layout', 'drawer' );
 
-    return in_array( $layout, [ 'popover', 'drawer' ], true ) ? (string) $layout : 'popover';
+    return in_array( $layout, [ 'popover', 'drawer' ], true ) ? (string) $layout : 'drawer';
 }
 
 /**
