@@ -25,7 +25,7 @@ jobs:
         run: |
           npm install --no-save --no-package-lock playwright@1.55.0
           npx playwright install --with-deps chromium
-      - name: Check live Contact Form 7 responsive UI without submitting
+      - name: Validate live Contact baseline and PR579 browser-only CSS fix without submitting
         env:
           TEST_ORIGIN: https://anpvietnam.vn
         run: |
@@ -66,6 +66,19 @@ jobs:
               const form = page.locator('form.wpcf7-form').first();
               await form.waitFor({ state: 'visible', timeout: 20000 });
               check((await form.getAttribute('aria-label') || '').length > 0, 'Contact form missing accessible name');
+              const firstBefore = await form.locator('[name="your-name"]').evaluate(el => {
+                const r = el.getBoundingClientRect();
+                return { left: r.left, right: r.right, width: r.width };
+              });
+              record.baselineFirstControl = firstBefore;
+              if (width < 1440) {
+                check(firstBefore.left < 0,
+                  'Unpatched production baseline unexpectedly differs; do not reuse stale fix evidence');
+                // Apply precisely the 19 added CSS lines from PR #579 in the browser
+                // context only. This does NOT write to WordPress or the server.
+                await page.addStyleTag({ content: "/* Gutenberg owns native block data. When an alignwide Columns block is nested\n * in an already centered alignwide Group, a second media translateX shifts\n * the entire contact/form column outside the mobile viewport. */\n.aznet-theme-page__content-inner .wp-block-group.alignwide > .wp-block-columns.alignwide {\n    transform: none;\n}\n\n/* Keep public Page-embedded form controls within their native column even\n * when an authoring tool supplies intrinsic input size/textarea cols values.\n * The Theme does not take over the form provider's data or submission. */\n.aznet-theme-page__content-inner :where(\n    form input:not([type=\"submit\"]):not([type=\"hidden\"]):not([type=\"checkbox\"]):not([type=\"radio\"]),\n    form textarea,\n    form select\n) {\n    box-sizing: border-box;\n    max-width: 100%;\n}\n" });
+                record.browserOnlyCssProbe = 'PR #579 candidate CSS, temporary browser style only';
+              }
               const selectors = [
                 '[name="your-name"]',
                 '[name="your-email"]',
@@ -154,6 +167,7 @@ jobs:
             target: origin + '/lien-he',
             installed_theme: 'AZnet Theme v1.3.106 (verified separately by WordPress)',
             write_operations: 0,
+            note: 'CSS from PR579 applied only in transient browser runtime at mobile/tablet widths',
             results, failures
           }, null, 2));
           console.log(JSON.stringify({ results, failures }, null, 2));
