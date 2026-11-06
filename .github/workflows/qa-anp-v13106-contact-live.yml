@@ -1,0 +1,125 @@
+name: QA ANP v1.3.106 Contact Responsive (test-only)
+on:
+  push:
+    branches:
+      - qa/anp-v13106-mobile-live-20261106
+    paths:
+      - '.github/workflows/qa-anp-v13106-contact-live.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  anp-contact-live:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout test-only QA branch
+        uses: actions/checkout@v4
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Check live Contact Form 7 responsive UI without submitting
+        env:
+          TEST_ORIGIN: https://anpvietnam.vn
+        run: |
+          cat > .anp-contact-qa.mjs <<'JS'
+          import fs from 'node:fs';
+          import { chromium } from 'playwright';
+
+          const origin = process.env.TEST_ORIGIN;
+          const dir = 'anp-contact-evidence';
+          fs.mkdirSync(dir, { recursive: true });
+          const browser = await chromium.launch({ headless: true });
+          const results = [];
+          const failures = [];
+          const check = (ok, text) => { if (!ok) throw Error(text); };
+
+          for (const width of [320, 390, 768, 1440]) {
+            const height = width === 1440 ? 900 : 844;
+            const context = await browser.newContext({
+              viewport: { width, height },
+              isMobile: width <= 768,
+              hasTouch: width <= 768,
+              deviceScaleFactor: 1,
+              reducedMotion: 'reduce'
+            });
+            const page = await context.newPage();
+            const record = { width, height, assertions: [], pageErrors: [], failedResources: [] };
+            page.on('pageerror', e => record.pageErrors.push(e.message));
+            page.on('response', r => { if (r.status() >= 400) record.failedResources.push(r.status() + ' ' + r.url()); });
+            try {
+              const response = await page.goto(origin + '/lien-he', { waitUntil: 'domcontentloaded', timeout: 50000 });
+              check(response && response.status() === 200, 'Contact page HTTP status != 200');
+              record.actualCssWidth = await page.evaluate(() => window.innerWidth);
+              check(record.actualCssWidth === width, 'Wrong CSS viewport: ' + record.actualCssWidth);
+              check(await page.locator('[data-aznet-theme-site-header]').isVisible(), 'Active AZnet header not found');
+              const title = await page.locator('h1').first().innerText();
+              check(title.includes('Liên hệ'), 'Contact H1 missing');
+
+              const form = page.locator('form.wpcf7-form').first();
+              await form.waitFor({ state: 'visible', timeout: 20000 });
+              check((await form.getAttribute('aria-label') || '').length > 0, 'Contact form missing accessible name');
+              const selectors = [
+                '[name="your-name"]',
+                '[name="your-email"]',
+                '[name="your-phone"]',
+                '[name="your-subject"]',
+                '[name="your-message"]'
+              ];
+              const inputRects = [];
+              for (const selector of selectors) {
+                const el = form.locator(selector);
+                check(await el.count() === 1, 'Missing contact form control: ' + selector);
+                check(await el.isVisible(), 'Invisible contact form control: ' + selector);
+                const r = await el.evaluate(node => {
+                  const box = node.getBoundingClientRect();
+                  return {left:box.left, right:box.right, width:box.width};
+                });
+                inputRects.push({ selector, ...r });
+                check(r.left >= -1 && r.right <= width + 1, 'Form control overflows viewport: ' + selector + ', right ' + r.right);
+              }
+              record.inputRects = inputRects;
+              const submit = form.locator('input[type="submit"],button[type="submit"]').first();
+              check(await submit.isVisible(), 'Submit button absent/invisible');
+              const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+              record.horizontalOverflowPx = scrollWidth;
+              check(scrollWidth <= 1, 'Horizontal page overflow: ' + scrollWidth + 'px');
+              record.assertions.push('real CSS viewport, Header, Contact H1, CF7 accessible form, five visible controls, submit button, zero overflow');
+              await form.scrollIntoViewIfNeeded();
+              await page.screenshot({ path: dir + '/anp-contact-' + width + '.png', fullPage: false });
+              record.status = 'PASS';
+            } catch (error) {
+              record.status = 'FAIL';
+              record.error = String(error && error.message || error);
+              failures.push({ width, error: record.error });
+              try { await page.screenshot({ path: dir + '/anp-contact-' + width + '-failed.png' }); } catch {}
+            } finally {
+              results.push(record);
+              await context.close();
+            }
+          }
+          await browser.close();
+          fs.writeFileSync(dir + '/report.json', JSON.stringify({
+            target: origin + '/lien-he',
+            installed_theme: 'AZnet Theme v1.3.106 (verified separately by WordPress)',
+            write_operations: 0,
+            results, failures
+          }, null, 2));
+          console.log(JSON.stringify({ results, failures }, null, 2));
+          if (failures.length) process.exit(1);
+          JS
+          node .anp-contact-qa.mjs
+      - name: Upload contact QA screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-anp-13106-contact-responsive
+          path: anp-contact-evidence
+          if-no-files-found: warn
