@@ -147,6 +147,25 @@
     height: auto;
 }
 
+/* Gutenberg owns native block data. When an alignwide Columns block is nested
+ * in an already centered alignwide Group, a second media translateX shifts
+ * the entire contact/form column outside the mobile viewport. */
+.aznet-theme-page__content-inner .wp-block-group.alignwide > .wp-block-columns.alignwide {
+    transform: none;
+}
+
+/* Keep public Page-embedded form controls within their native column even
+ * when an authoring tool supplies intrinsic input size/textarea cols values.
+ * The Theme does not take over the form provider's data or submission. */
+.aznet-theme-page__content-inner :where(
+    form input:not([type="submit"]):not([type="hidden"]):not([type="checkbox"]):not([type="radio"]),
+    form textarea,
+    form select
+) {
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
 .aznet-theme-page-kit {
     display: grid;
     gap: var(--aznet-theme-space-6);

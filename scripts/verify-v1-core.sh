@@ -133,6 +133,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/x3-media-gallery-em
 
 printf '%s\n' '==> Native Front Page nested Gutenberg wide alignment contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/frontpage-nested-alignwide-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/page-native-alignwide-form-layout-contract.php
 
 printf '%s\n' '==> X4 Pagination & Navigation Completion contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x4-pagination-navigation-contract.php
