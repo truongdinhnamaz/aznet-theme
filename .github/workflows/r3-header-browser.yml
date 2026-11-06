@@ -232,6 +232,9 @@ jobs:
           run_scenario commerce-clean commerce sticky
           run_scenario professional-drawer standard sticky drawer
           run_scenario professional-nav-drawer standard nav-only drawer
+          run_scenario compact-drawer compact sticky drawer
+          run_scenario overlay-drawer overlay sticky drawer
+          run_scenario commerce-drawer commerce sticky drawer
 
       - name: Install WooCommerce 10.9.4 and verify public Commerce actions
         env:
@@ -276,6 +279,11 @@ jobs:
           wp eval "set_theme_mod( 'aznet_theme_settings', [ 'schema_version' => 1, 'visual_preset' => 'commerce', 'header_preset' => 'commerce', 'header_sticky' => 'sticky', 'header_search' => true, 'header_utilities' => true ] );" --path=/tmp/wp --allow-root
           R3_SCENARIO='commerce-woo' R3_PRESET='commerce' R3_STICKY='sticky' R3_WOO_ENABLED='1' node tests/browser/r3-header-l4.mjs
 
+          # Preserve the Woo-present Commerce baseline and prove Drawer opt-in
+          # on an independent commerce configuration with native menu links.
+          wp eval "set_theme_mod( 'aznet_theme_settings', [ 'schema_version' => 1, 'visual_preset' => 'commerce', 'header_preset' => 'commerce', 'header_sticky' => 'sticky', 'header_mobile_layout' => 'drawer', 'header_search' => true, 'header_utilities' => true ] );" --path=/tmp/wp --allow-root
+          R3_SCENARIO='commerce-woo-drawer' R3_PRESET='commerce' R3_STICKY='sticky' R3_MOBILE_LAYOUT='drawer' R3_WOO_ENABLED='1' node tests/browser/r3-header-l4.mjs
+
       - name: Verify R3 runtime error boundary
         run: |
           set -euo pipefail
@@ -283,7 +291,7 @@ jobs:
             echo 'FAIL: Theme-caused PHP error marker found during R3 verification' >&2
             exit 1
           fi
-          for scenario in standard-clean navigation-only-clean compact-clean overlay-clean commerce-clean commerce-woo; do
+          for scenario in standard-clean navigation-only-clean compact-clean overlay-clean commerce-clean professional-drawer professional-nav-drawer compact-drawer overlay-drawer commerce-drawer commerce-woo commerce-woo-drawer; do
             test -f "/tmp/r3-header/${scenario}/summary.json"
           done
           echo 'PASS: R3 runtime error boundary clean'

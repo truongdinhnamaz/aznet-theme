@@ -169,6 +169,26 @@ async function verifyMobileKeyboard(page) {
     if ((await toggle.getAttribute('aria-expanded')) !== 'true' || !(await child.isVisible())) {
       throw new Error('mobile submenu did not expand while preserving the native link');
     }
+    // A non-origin WordPress site can have nested menus even when the pilot
+    // does not. Check the idle child-link color against the light panel.
+    const childContrast = await child.evaluate((element) => {
+      const rgb = (value) => (value.match(/\d+(?:\.\d+)?/g) || []).slice(0, 3).map(Number);
+      const lum = (value) => {
+        const c = rgb(value).map((n) => {
+          const v = n / 255;
+          return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+        });
+        return c[0] * 0.2126 + c[1] * 0.7152 + c[2] * 0.0722;
+      };
+      const color = getComputedStyle(element).color;
+      const surface = getComputedStyle(element.closest('[data-aznet-theme-nav-panel]')).backgroundColor;
+      const fg = lum(color);
+      const bg = lum(surface);
+      return { color, surface, ratio: (Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05) };
+    });
+    if (childContrast.ratio < 4.5) {
+      throw new Error('drawer nested submenu text contrast below WCAG AA 4.5:1: ' + JSON.stringify(childContrast));
+    }
     await toggle.click();
     if ((await toggle.getAttribute('aria-expanded')) !== 'false' || (await child.isVisible())) {
       throw new Error('mobile submenu did not collapse');
