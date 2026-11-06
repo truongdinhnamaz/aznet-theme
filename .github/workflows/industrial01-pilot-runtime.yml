@@ -129,6 +129,19 @@ jobs:
               $categories[] = (int) ( is_array( $term ) ? $term['term_id'] : $term );
           }
 
+          // Test-only Woo source fixture: the first native category has a
+          // genuine imported image. Six other categories deliberately have
+          // no image, so Woo returns its generic placeholder HTML.
+          // Theme must preserve source links without rendering placeholders.
+          $category_image_id = (int) getenv( 'INDUSTRIAL01_PRODUCT_PORTRAIT_ID' );
+          if ( $category_image_id <= 0 || empty( $categories[0] ) ) {
+              throw new RuntimeException( 'Native category image fixture unavailable' );
+          }
+          update_term_meta( $categories[0], 'thumbnail_id', $category_image_id );
+          if ( (int) get_term_meta( $categories[0], 'thumbnail_id', true ) !== $category_image_id ) {
+              throw new RuntimeException( 'Native Woo category thumbnail source not saved in test fixture' );
+          }
+
           for ( $i = 1; $i <= 8; $i++ ) {
               $product = new WC_Product_Simple();
               $product->set_name( 1 === $i ? 'Industrial Motor 01' : sprintf( 'Industrial Device %02d', $i ) );
