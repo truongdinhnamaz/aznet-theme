@@ -1,0 +1,173 @@
+name: QA ANP v1.3.105 Real Mobile Drawer (test-only)
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/qa-anp-v13105-mobile-live.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  anp-real-mobile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout test-only workflow
+        uses: actions/checkout@v4
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Verify ANP production Mobile Drawer at 390 and 320 CSS pixels
+        env:
+          TEST_ORIGIN: https://anpvietnam.vn
+        run: |
+          cat > .anp-mobile-smoke.mjs <<'JS'
+          import fs from 'node:fs';
+          import { chromium } from 'playwright';
+
+          const origin = process.env.TEST_ORIGIN;
+          const evidence = 'anp-mobile-evidence';
+          fs.mkdirSync(evidence, { recursive: true });
+          const browser = await chromium.launch({ headless: true });
+          const results = [];
+          const failures = [];
+
+          function check(value, message) {
+            if (!value) throw new Error(message);
+          }
+
+          async function waitClosed(page) {
+            await page.waitForFunction(() => {
+              const trigger = document.querySelector('[data-aznet-theme-nav-trigger]');
+              const panel = document.querySelector('[data-aznet-theme-nav-panel]');
+              return trigger?.getAttribute('aria-expanded') === 'false' && panel?.hidden === true;
+            }, null, { timeout: 4000 });
+          }
+
+          for (const width of [390, 320]) {
+            const height = 844;
+            const context = await browser.newContext({
+              viewport: { width, height },
+              isMobile: true,
+              hasTouch: true,
+              deviceScaleFactor: 1,
+              reducedMotion: 'reduce'
+            });
+            const page = await context.newPage();
+            const consoleErrors = [];
+            const pageErrors = [];
+            const failedResources = [];
+            page.on('console', msg => { if (msg.type() === 'error') consoleErrors.push(msg.text()); });
+            page.on('pageerror', err => pageErrors.push(err.message));
+            page.on('response', res => {
+              if (res.status() >= 400 && res.request().resourceType() !== 'document') {
+                failedResources.push(res.status() + ' ' + res.url());
+              }
+            });
+            const record = { width, height, origin, assertions: [], consoleErrors, pageErrors, failedResources };
+            try {
+              const response = await page.goto(origin + '/', { waitUntil: 'domcontentloaded', timeout: 50000 });
+              check(response && response.status() === 200, 'homepage HTTP status is not 200');
+              await page.locator('[data-aznet-theme-site-header]').waitFor({ state: 'visible', timeout: 20000 });
+              const actualWidth = await page.evaluate(() => window.innerWidth);
+              record.actualCssWidth = actualWidth;
+              check(actualWidth === width, 'actual CSS viewport is ' + actualWidth + ', expected ' + width);
+              record.assertions.push('viewport ' + width);
+
+              const trigger = page.locator('[data-aznet-theme-nav-trigger]');
+              const panel = page.locator('[data-aznet-theme-nav-panel]');
+              const backdrop = page.locator('[data-aznet-theme-nav-backdrop]');
+              const close = page.locator('[data-aznet-theme-nav-close]');
+              check(await trigger.isVisible(), 'real Theme mobile navigation trigger is not visible');
+              check(await trigger.getAttribute('aria-expanded') === 'false', 'trigger not initially collapsed');
+              record.assertions.push('mobile trigger visible and collapsed');
+              await page.screenshot({ path: evidence + '/anp-' + width + '-closed.png', fullPage: false });
+
+              await trigger.click();
+              await panel.waitFor({ state: 'visible' });
+              check(await trigger.getAttribute('aria-expanded') === 'true', 'trigger did not expand');
+              check(await backdrop.isVisible(), 'drawer backdrop not visible');
+              const geo = await panel.evaluate(el => {
+                const r = el.getBoundingClientRect();
+                return {
+                  left:r.left, right:r.right, width:r.width,
+                  role:el.getAttribute('role'), ariaModal:el.getAttribute('aria-modal'),
+                  viewportWidth:window.innerWidth,
+                  overflow:document.body.style.overflow
+                };
+              });
+              record.drawerGeometry = geo;
+              check(geo.left >= -1 && geo.left <= 4 && geo.right <= width + 1, 'drawer is not left-aligned or viewport safe');
+              check(geo.role === 'dialog' && geo.ariaModal === 'true', 'drawer dialog semantics missing');
+              check(geo.overflow === 'hidden', 'opening drawer did not lock body scroll');
+              record.assertions.push('open, left drawer, dialog a11y, scroll lock');
+              await page.screenshot({ path:evidence + '/anp-' + width + '-open.png', fullPage:false });
+
+              const toggles = panel.locator('.aznet-theme-site-header__submenu-toggle');
+              check(await toggles.count() > 0, 'native submenu toggles are absent');
+              const first = toggles.first();
+              check(await first.getAttribute('aria-expanded') === 'false', 'submenu should start collapsed');
+              await first.click();
+              check(await first.getAttribute('aria-expanded') === 'true', 'submenu failed to expand');
+              record.assertions.push('submenu expand');
+              await page.screenshot({ path:evidence + '/anp-' + width + '-submenu.png', fullPage:false });
+              await first.click();
+              check(await first.getAttribute('aria-expanded') === 'false', 'submenu failed to collapse');
+              record.assertions.push('submenu collapse');
+
+              await close.click();
+              await waitClosed(page);
+              check(!(await backdrop.isVisible()), 'backdrop still visible after close button');
+              check(await page.evaluate(() => document.body.style.overflow) !== 'hidden', 'body scroll still locked after close');
+              record.assertions.push('close button and scroll restore');
+
+              await trigger.click();
+              await panel.waitFor({ state:'visible' });
+              await page.mouse.click(width - 2, Math.floor(height / 2));
+              await waitClosed(page);
+              check(await page.evaluate(() => document.body.style.overflow) !== 'hidden', 'backdrop click failed to unlock body');
+              record.assertions.push('backdrop closes drawer');
+
+              await trigger.click();
+              await panel.waitFor({ state:'visible' });
+              await page.keyboard.press('Escape');
+              await waitClosed(page);
+              record.assertions.push('Escape closes drawer');
+
+              const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+              record.horizontalOverflowPx = overflow;
+              check(overflow <= 1, 'mobile page horizontal overflow ' + overflow + 'px');
+              record.assertions.push('no horizontal overflow');
+              record.status = 'PASS';
+            } catch(err) {
+              record.status = 'FAIL';
+              record.error = String(err && err.message || err);
+              failures.push({width, message:record.error});
+              try { await page.screenshot({path:evidence + '/anp-' + width + '-failed.png'}); } catch {}
+            } finally {
+              results.push(record);
+              await context.close();
+            }
+          }
+          await browser.close();
+          fs.writeFileSync(evidence + '/report.json', JSON.stringify({
+            test:'ANP production, real viewport, read-only, AZnet Theme v1.3.105',
+            results, failures
+          }, null, 2));
+          console.log(JSON.stringify({results,failures}, null, 2));
+          if (failures.length) process.exit(1);
+          JS
+          node .anp-mobile-smoke.mjs
+      - name: Upload mobile QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-anp-13105-real-mobile
+          path: anp-mobile-evidence
+          if-no-files-found: warn
