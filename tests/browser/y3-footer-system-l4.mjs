@@ -88,8 +88,10 @@ async function inspectPreset(browser, preset, viewportName, viewport) {
     const footer = page.locator('footer[data-aznet-theme-site-footer]');
     if (await footer.count() !== 1) throw new Error('Expected exactly one Theme Footer');
     if (await page.locator('footer[role="contentinfo"]').count() !== 1) throw new Error('Expected exactly one contentinfo Footer');
-    if (!await footer.evaluate((element, expected) => element.classList.contains(`aznet-theme-site-footer--${expected}`), preset)) {
-      throw new Error(`Expected Footer preset class ${preset}`);
+    if (!await footer.evaluate((element, expected) =>
+      element.className === 'aznet-theme-site-footer' &&
+      element.getAttribute('data-aznet-theme-footer-content-preset') === expected, preset)) {
+      throw new Error(`Footer must have one visual class and the selected content profile ${preset}`);
     }
 
     const stylesheets = await page.evaluate(() => Array.from(document.styleSheets).map((sheet) => sheet.href).filter(Boolean));
@@ -98,22 +100,19 @@ async function inspectPreset(browser, preset, viewportName, viewport) {
     }
 
     for (const [location, region] of Object.entries(emptyRegions)) {
-      if (preset === 'law-01' && location === 'footer-social') {
-        if (await footer.getByText(region.sentinel, { exact: true }).count() !== 0) {
-          throw new Error('Law 01 must not render unmanaged social-menu sentinel content');
-        }
+      if (preset === 'law-01' && location === 'footer-contact') {
         const contactBlock = footer.locator('.aznet-theme-site-footer__contact-social');
         const contactControls = contactBlock.locator('.aznet-theme-site-footer__contact-link');
-        if (await contactControls.count() !== 5) {
+        if (await contactControls.count() !== 4) {
           throw new Error(`Law 01 contact column must render five populated rows, got ${await contactControls.count()}`);
         }
         const rowLabels = (await contactBlock.locator('.aznet-theme-site-footer__contact-label').allTextContents())
           .map((value) => value.trim().replace(/:$/, ''));
-        const expectedRowLabels = ['Địa chỉ', 'SĐT', 'Email', 'Website', 'Fanpage'];
+        const expectedRowLabels = ['Địa chỉ', 'SĐT', 'Email', 'Website'];
         if (JSON.stringify(rowLabels) !== JSON.stringify(expectedRowLabels)) {
           throw new Error(`Law 01 contact row order mismatch: ${JSON.stringify(rowLabels)}`);
         }
-        for (const value of ['Y3 Contact Sentinel', '02437164123', 'contact-overflow-regression@example-legal-services-domain.test', 'example.test', 'Facebook']) {
+        for (const value of ['Y3 Contact Sentinel', '02437164123', 'contact-overflow-regression@example-legal-services-domain.test', 'example.test']) {
           const text = contactBlock.locator('.aznet-theme-site-footer__contact-text').filter({ hasText: value });
           if (await text.count() !== 1 || !await text.isVisible()) {
             throw new Error(`Law 01 populated contact value must be visibly rendered: ${value}`);
@@ -126,10 +125,8 @@ async function inspectPreset(browser, preset, viewportName, viewport) {
         if (await website.count() !== 1 || !await website.isVisible()) {
           throw new Error('Law 01 website contact must render only when website profile data exists');
         }
-        const fanpage = contactBlock.locator('.aznet-theme-site-footer__contact-link--fanpage');
-        if (await fanpage.count() !== 1 || await fanpage.getAttribute('target') !== '_blank') {
-          throw new Error('Law 01 Fanpage row must render the managed Facebook URL as a safe external link');
-        }
+        if (await contactBlock.locator('.aznet-theme-site-footer__contact-link--fanpage').count() !== 0)
+          throw new Error('Facebook data duplicated in contact when shared Social menu exists');
         continue;
       }
       if (await footer.locator(region.selector).count() !== 1) throw new Error(`Expected populated Footer region ${region.selector}`);
@@ -175,49 +172,45 @@ async function inspectPreset(browser, preset, viewportName, viewport) {
   }
 }
 
+/** Homepage preset can change content sources, never Footer presentation. */
 async function inspectLawSkinWithProfessional(browser) {
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
   const page = await context.newPage();
-  const result = { preset: 'professional', skin: 'law-01', status: 'failed', error: null };
-
+  const result = { preset: 'professional', comparison: 'Law Homepage vs shared Footer', status: 'failed', error: null };
+  const snapshot = async () => {
+    const footer = page.locator('footer[data-aznet-theme-site-footer]');
+    if (await footer.count() !== 1) throw new Error('Footer landmark must occur once');
+    return footer.evaluate((el) => {
+      const st = getComputedStyle(el);
+      const grid = getComputedStyle(el.querySelector('.aznet-theme-site-footer__main'));
+      return { cls: el.className, background: st.backgroundColor, color: st.color,
+        fontFamily: st.fontFamily, grid: grid.gridTemplateColumns, gap: grid.columnGap };
+    });
+  };
   try {
     setPreset('professional');
+    setHomepagePreset('');
+    let r = await page.goto(fixture.front_url + '?y3-skin=baseline', { waitUntil: 'networkidle' });
+    if (!r || r.status() !== 200) throw new Error('Baseline response not 200');
+    const before = await snapshot();
     setHomepagePreset('law-01');
-    const response = await page.goto(`${fixture.front_url}?y3-skin=law-01`, { waitUntil: 'networkidle' });
-    if (!response || response.status() !== 200) throw new Error(`Expected HTTP 200, got ${response?.status() ?? 'missing'}`);
-
-    const footer = page.locator('footer[data-aznet-theme-site-footer]');
-    if (await footer.count() !== 1) throw new Error('Expected exactly one Theme Footer');
-    const classes = await footer.getAttribute('class') || '';
-    if (!classes.includes('aznet-theme-site-footer--professional')) throw new Error('Professional content preset class missing');
-    if (!classes.includes('aznet-theme-site-footer--skin-law-01')) throw new Error('Law 01 visual skin class missing');
-
-    const shell = await footer.evaluate((element) => {
-      const style = getComputedStyle(element);
-      return {
-        backgroundImage: style.backgroundImage,
-        borderTopWidth: style.borderTopWidth,
-        borderTopStyle: style.borderTopStyle,
-      };
-    });
-    if (!shell.backgroundImage.includes('gradient')) throw new Error('Law 01 visual skin gradient background missing');
-    if (shell.borderTopWidth === '0px' || shell.borderTopStyle === 'none') throw new Error('Law 01 visual skin top border missing');
-
-    const overflowPx = await page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - document.documentElement.clientWidth));
-    if (overflowPx !== 0) throw new Error(`Professional + Law 01 skin horizontal overflow: ${overflowPx}px`);
-
-    await page.screenshot({ path: path.join(stateDir, 'y3-professional-law01-skin.png'), fullPage: true });
+    r = await page.goto(fixture.front_url + '?y3-skin=law01', { waitUntil: 'networkidle' });
+    if (!r || r.status() !== 200) throw new Error('Law response not 200');
+    const after = await snapshot();
+    if (JSON.stringify(before) !== JSON.stringify(after)) throw new Error('Homepage altered shared Footer design: ' + JSON.stringify({before, after}));
+    const overflow = await page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - document.documentElement.clientWidth));
+    if (overflow) throw new Error('Footer overflow: ' + overflow);
+    await page.screenshot({ path: path.join(stateDir, 'y3-professional-law-shared.png'), fullPage: true });
     result.status = 'passed';
   } catch (error) {
-    result.error = error instanceof Error ? error.message : String(error);
-    failures.push(`professional/law-01-skin: ${result.error}`);
+    result.error = String(error?.message || error);
+    failures.push('shared-law: ' + result.error);
   } finally {
     setHomepagePreset('');
     summary.presets.push(result);
     await context.close();
   }
 }
-
 
 /**
  * Industrial 01 visual skin on Professional WordPress-owned rich Footer columns.
@@ -254,7 +247,7 @@ async function inspectIndustrialProfessionalFooter(browser) {
         if (await page.locator('body.aznet-theme-preset--industrial-01').count() !== 1) {
           throw new Error('Industrial visual preset not applied to native body');
         }
-        const footer = page.locator('footer.aznet-theme-site-footer--professional');
+        const footer = page.locator('footer.aznet-theme-site-footer[data-aznet-theme-footer-content-preset="professional"]');
         if (await footer.count() !== 1 || await footer.locator('.aznet-theme-site-footer__column-content').count() !== 4) {
           throw new Error('Native WordPress-owned four Footer columns were not rendered');
         }
@@ -272,9 +265,9 @@ async function inspectIndustrialProfessionalFooter(browser) {
           const bottom = get('.aznet-theme-site-footer__bottom');
           const footerStyle = getComputedStyle(element);
           return {
-            columns: grid ? grid.gridTemplateColumns.trim().split(/\s+/).length : 0,
-            background: footerStyle.backgroundImage,
-            borderColor: footerStyle.borderTopColor,
+            columns: grid ? grid.gridTemplateColumns.trim().split(/\s+/).filter((track) => Number.parseFloat(track) > 1).length : 0,
+            background: footerStyle.backgroundColor,
+            textColor: footerStyle.color,
             brandLayout: brand?.display || '',
             logoMaxWidth: logo?.maxWidth || '',
             headingColor: heading?.color || '',
@@ -282,52 +275,14 @@ async function inspectIndustrialProfessionalFooter(browser) {
             bottomBorder: bottom?.borderTopStyle || '',
           };
         });
-        // The Footer content and copyright must sit on the same actual
-        // Industrial shell as Homepage sections; on wide screens that cap
-        // also sets the Header logo's left axis.
-        const alignment = await page.evaluate(() => {
-          const inner = document.querySelector('.aznet-theme-site-footer__inner');
-          const header = document.querySelector('.aznet-theme-site-header__inner');
-          const brand = inner?.querySelector('.aznet-theme-site-footer__brand');
-          const firstColumn = inner?.querySelector('.aznet-theme-site-footer__column-content--1');
-          const copyright = inner?.querySelector('.aznet-theme-site-footer__copyright');
-          const probe = document.createElement('div');
-          probe.style.cssText = 'position:fixed;top:0;left:0;visibility:hidden;pointer-events:none;width:var(--aznet-theme-container-shell);height:var(--aznet-theme-gutter);box-sizing:content-box';
-          document.body.appendChild(probe);
-          const capPx = probe.getBoundingClientRect().width;
-          const gutterPx = probe.getBoundingClientRect().height;
-          probe.remove();
-          const viewportPx = document.documentElement.clientWidth;
-          const width = Math.min(capPx, viewportPx - 2 * gutterPx);
-          const expectedLeft = (viewportPx - width) / 2;
-          const innerRect = inner?.getBoundingClientRect();
-          return {
-            expectedLeft,
-            expectedWidth: width,
-            innerLeft: innerRect?.left ?? null,
-            innerWidth: innerRect?.width ?? null,
-            headerLeft: header?.getBoundingClientRect().left ?? null,
-            brandLeft: brand?.getBoundingClientRect().left ?? null,
-            columnLeft: firstColumn?.getBoundingClientRect().left ?? null,
-            copyrightLeft: copyright?.getBoundingClientRect().left ?? null,
-            viewportPx,
-          };
-        });
-        const align = (value, expected) => Number.isFinite(value) && Math.abs(value - expected) <= 2;
-        if (!align(alignment.innerLeft, alignment.expectedLeft) ||
-            !align(alignment.innerWidth, alignment.expectedWidth) ||
-            !align(alignment.columnLeft, alignment.expectedLeft) ||
-            !align(alignment.brandLeft, alignment.expectedLeft) ||
-            !align(alignment.copyrightLeft, alignment.expectedLeft) ||
-            (viewport.width >= 1440 && !align(alignment.headerLeft, alignment.expectedLeft))) {
-          throw new Error('Industrial Footer is off the shared Header/Homepage content axis: ' + JSON.stringify(alignment));
-        }
         const expectedColumns = viewport.width <= 768 ? 1 : (viewport.width <= 1120 ? 2 : 4);
-        if (cols.columns !== expectedColumns || !cols.background.includes('gradient') ||
-            cols.borderColor !== 'rgb(245, 202, 114)' || cols.brandLayout !== 'flex' ||
-            cols.headingColor !== 'rgb(255, 255, 255)' || cols.listStyle !== 'none' ||
+        if ((expectedColumns !== null && cols.columns !== expectedColumns) ||
+            (viewport.width > 768 && cols.columns < 2) ||
+            cols.background !== 'rgb(17, 23, 34)' ||
+            cols.textColor !== 'rgb(247, 248, 250)' ||
+            cols.brandLayout !== 'inline-flex' ||
             cols.bottomBorder === 'none') {
-          throw new Error('Industrial Footer premium computed styles missing: ' + JSON.stringify({ expectedColumns, ...cols }));
+          throw new Error('Industrial must consume shared Footer computed style: ' + JSON.stringify({expectedColumns, ...cols}));
         }
         if (await footer.getByText('Máy chế biến gỗ nguyên văn', { exact: true }).count() !== 1 ||
             await footer.locator('li:has-text("Máy chế biến gỗ nguyên văn") a').count() !== 0 ||
@@ -356,6 +311,30 @@ async function inspectIndustrialProfessionalFooter(browser) {
         await context.close();
       }
     }
+    // Same authored blocks under three industries must keep the same visual
+    // background, text, and rich heading hierarchy — no preset-specific Footer.
+    const variants = ['industrial-01', 'digital-01', 'curtain-01'];
+    const snapshots = [];
+    for (const visual of variants) {
+      wpEval("$s=get_theme_mod('aznet_theme_settings',[]);$s['visual_preset']='" + visual + "';set_theme_mod('aznet_theme_settings',$s);");
+      const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+      const page = await context.newPage();
+      try {
+        const response = await page.goto(fixture.front_url + '?y3-visual=' + visual, { waitUntil: 'networkidle' });
+        if (!response || response.status() !== 200) throw new Error('Visual preset not 200: ' + visual);
+        const snapshot = await page.locator('footer[data-aznet-theme-site-footer]').evaluate((el) => {
+          const st = getComputedStyle(el);
+          const heading = el.querySelector('.aznet-theme-site-footer__rich-content strong');
+          const h = heading ? getComputedStyle(heading) : null;
+          return { background: st.backgroundColor, color: st.color, fontFamily: st.fontFamily,
+            headingColor: h?.color || null,
+            innerWidth: el.querySelector('.aznet-theme-site-footer__inner')?.getBoundingClientRect().width || null };
+        });
+        snapshots.push({visual, snapshot});
+      } finally { await context.close(); }
+    }
+    if (snapshots.some((x) => JSON.stringify(x.snapshot) !== JSON.stringify(snapshots[0].snapshot)))
+      throw new Error('Visual presets changed Footer styling: ' + JSON.stringify(snapshots));
   } finally {
     wpEval("set_theme_mod('aznet_theme_settings',(array)json_decode(base64_decode('" + existing + "'),true));");
   }

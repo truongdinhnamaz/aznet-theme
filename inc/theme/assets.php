@@ -605,6 +605,18 @@ function enqueue_page_assets( ?string $version = null ): void {
         [ 'aznet-theme-tokens', 'aznet-theme-generic-content' ],
         asset_content_version( '/assets/css/components/page.css', $version )
     );
+
+    // Existing explicit presentation choice; no Page identity/content inference.
+    if ( function_exists( __NAMESPACE__ . '\\homepage_preset' )
+        && 'wellness-01' === homepage_preset()
+        && is_file( get_theme_file_path( '/assets/css/components/page-wellness-01.css' ) ) ) {
+        wp_enqueue_style(
+            'aznet-theme-page-wellness-01',
+            get_theme_file_uri( '/assets/css/components/page-wellness-01.css' ),
+            [ 'aznet-theme-page', 'aznet-theme-media' ],
+            asset_content_version( '/assets/css/components/page-wellness-01.css', $version )
+        );
+    }
 }
 
 
@@ -844,17 +856,6 @@ function enqueue_assets(): void {
         asset_content_version( '/assets/css/components/site-footer.css', $version )
     );
 
-    // D-064: preset-only Footer CSS has its own asset path so WordPress
-    // serves the current presentation without relying on stale shared min CSS.
-    // This has no effect on other sites/presets or WordPress-authored menus.
-    if ( function_exists( __NAMESPACE__ . '\\visual_preset' ) && 'digital-01' === visual_preset() ) {
-        wp_enqueue_style(
-            'aznet-theme-site-footer-digital-01',
-            get_theme_file_uri( '/assets/css/components/site-footer-digital-01.css' ),
-            [ 'aznet-theme-site-footer', 'aznet-theme-preset-digital-01' ],
-            asset_content_version( '/assets/css/components/site-footer-digital-01.css', $version )
-        );
-    }
 
     enqueue_homepage_blueprint_asset( $version );
     enqueue_active_template_homepage_assets( $version );
@@ -865,7 +866,7 @@ function enqueue_assets(): void {
             'aznet-theme-generic-content',
             get_theme_file_uri( '/assets/css/components/generic-content.css' ),
             [ 'aznet-theme-tokens' ],
-            $version
+            asset_content_version( '/assets/css/components/generic-content.css', $version )
         );
     }
 

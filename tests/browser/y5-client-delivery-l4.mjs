@@ -63,13 +63,15 @@ async function assertDocument(page, label, expectedStatus) {
   if (h1Count > 1) throw new Error(`${label.name}: expected at most one H1, got ${h1Count}`);
   if (await page.locator('[data-aznet-theme-site-header]').count() !== 1) throw new Error(`${label.name}: expected one Theme Header`);
   if (await page.locator('[data-aznet-theme-site-footer]').count() !== 1) throw new Error(`${label.name}: expected one Theme Footer`);
-  const footerClass = await page.locator('[data-aznet-theme-site-footer]').getAttribute('class');
-  if (!footerClass || !footerClass.includes(`aznet-theme-site-footer--${expectedFooter}`)) {
-    throw new Error(`${label.name}: Footer preset mismatch ${footerClass}`);
+  const footer = page.locator('[data-aznet-theme-site-footer]');
+  const footerClass = await footer.getAttribute('class');
+  const footerContentPreset = await footer.getAttribute('data-aznet-theme-footer-content-preset');
+  if (footerClass !== 'aznet-theme-site-footer' || footerContentPreset !== expectedFooter) {
+    throw new Error(`${label.name}: shared Footer class/content mismatch: ${footerClass} / ${footerContentPreset}`);
   }
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   if (overflow > 1) throw new Error(`${label.name}: horizontal overflow ${overflow}px`);
-  return { status: response.status(), h1Count, overflow, footerClass };
+  return { status: response.status(), h1Count, overflow, footerClass, footerContentPreset };
 }
 
 const allRoutes = {

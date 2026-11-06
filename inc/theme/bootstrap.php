@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+require_once __DIR__ . '/core-update-notice.php';
 require_once __DIR__ . '/template-registry.php';
 require_once __DIR__ . '/template-loader.php';
 load_local_template_manifests();

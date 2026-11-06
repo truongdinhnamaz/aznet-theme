@@ -25,6 +25,14 @@
     margin-inline: auto;
     color: var(--aznet-theme-text);
 }
+/*
+ * Native Gutenberg content in a full-bleed Front Page remains centered as
+ * a bounded Article. The homepage composer owns its surrounding full-width
+ * sections, never the width/position of the WordPress-owned Page content.
+ */
+.aznet-theme-main--front-page .aznet-theme-entry.aznet-theme-entry--front-page {
+    margin-inline: auto;
+}
 .aznet-theme-content-shell--with-navigation .aznet-theme-entry { margin-inline: 0; }
 .aznet-theme-entry__header { margin-block-end: var(--aznet-theme-space-4); }
 .aznet-theme-entry__title { margin: 0; color: var(--aznet-theme-text); }
@@ -158,4 +166,27 @@
     background: var(--aznet-theme-surface);
     border: 1px solid var(--aznet-theme-border);
     border-radius: var(--aznet-theme-radius-card);
+}
+
+/* The legacy palette slug "text" gives .has-text-color an !important rule.
+ * Preserve explicitly white native Button text, without changing the public
+ * palette, authored backgrounds, or secondary/custom non-white foregrounds.
+ * Match compact Core and space-normalized Classic declarations at property
+ * boundaries, never background-color. Classic adds spaces after ':' and ';'.
+ */
+.aznet-theme-entry__content .wp-block-button__link:is(
+    [style="color:#fff" i], [style^="color:#fff;" i],
+    [style*=";color:#fff;" i], [style$=";color:#fff" i],
+    [style="color:#ffffff" i], [style^="color:#ffffff;" i],
+    [style*=";color:#ffffff;" i], [style$=";color:#ffffff" i],
+    [style="color: #fff" i], [style^="color: #fff;" i],
+    [style*=";color: #fff;" i], [style$=";color: #fff" i],
+    [style="color: #ffffff" i], [style^="color: #ffffff;" i],
+    [style*=";color: #ffffff;" i], [style$=";color: #ffffff" i],
+    [style*="; color:#fff;" i], [style$="; color:#fff" i],
+    [style*="; color:#ffffff;" i], [style$="; color:#ffffff" i],
+    [style*="; color: #fff;" i], [style$="; color: #fff" i],
+    [style*="; color: #ffffff;" i], [style$="; color: #ffffff" i]
+) {
+    color: var(--aznet-theme-on-inverse, #fff) !important;
 }

@@ -39,6 +39,12 @@ python3 tests/offline/release-build-output-exclusion.py
 printf '%s\n' '==> Retained core/static/security/package boundary chain'
 bash scripts/verify-g3-core.sh
 
+printf '%s\n' '==> D-065 reusable Theme release portability retention gate'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/d065-release-portability-contract.php
+
+printf '%s\n' '==> D-066 shipped presentation default and upgrade adoption gate'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/d066-default-release-adoption-contract.php
+
 run_contract_group() {
   local pattern="$1"
   local found=0
@@ -125,6 +131,9 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/x1-x2-retained-work
 printf '%s\n' '==> X3 Media / Gallery / Embed contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x3-media-gallery-embed-contract.php
 
+printf '%s\n' '==> Native Front Page nested Gutenberg wide alignment contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/frontpage-nested-alignwide-contract.php
+
 printf '%s\n' '==> X4 Pagination & Navigation Completion contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/x4-pagination-navigation-contract.php
 
@@ -170,6 +179,27 @@ case "$RELEASE_VERSION" in
   1.3.98)
     php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v1398-release-candidate-contract.php
     ;;
+  1.3.99)
+    php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v1399-release-candidate-contract.php
+    ;;
+  1.3.100)
+    php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v13100-release-candidate-contract.php
+    ;;
+  1.3.101)
+    php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v13101-release-candidate-contract.php
+    ;;
+  1.3.102)
+    php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v13102-release-candidate-contract.php
+    ;;
+  1.3.103)
+    php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v13103-release-candidate-contract.php
+    ;;
+  1.3.104)
+    php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v13104-release-candidate-contract.php
+    ;;
+  1.3.105)
+    php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v13105-release-candidate-contract.php
+    ;;
   *)
     echo "FAIL: unsupported Theme release contract version $RELEASE_VERSION" >&2
     exit 1
@@ -188,6 +218,10 @@ fi
 
 printf '%s\n' '==> Y1 Page Experience contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y1-page-experience-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/wellness01-page-assets-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/r2-wellness01-pattern-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/r2-wellness01-ai-disclosure-layout-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-wellness01-library-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/page-full-bleed-sections-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/page-section-inner-width-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/fullwidth-shell-standard-contract.php
@@ -213,6 +247,10 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/d042-three-pilot-cs
 
 printf '%s\n' '==> Y2 Professional Page Kits contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y2-professional-page-kits-contract.php
+
+printf '%s\n' '==> Shared Footer contract'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/footer-shared-visual-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/footer-core-universal-contract.php
 
 printf '%s\n' '==> Y3 Footer System contract'
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/y3-footer-system-contract.php

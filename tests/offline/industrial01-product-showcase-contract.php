@@ -30,7 +30,8 @@ namespace {
     function wp_kses_post( string $text ): string { return $text; }
     function has_post_thumbnail( int $id ): bool { return 108 !== $id; }
     function get_the_post_thumbnail( int $id, string $size, array $attributes = [] ): string {
-        return '<img src="/native-media/' . $id . '.jpg" alt="Image ' . $id . '" loading="lazy">';
+        $alt = array_key_exists( 'alt', $attributes ) ? (string) $attributes['alt'] : 'Image ' . $id;
+        return '<img src="/native-media/' . $id . '.jpg" alt="' . htmlspecialchars( $alt, ENT_QUOTES, 'UTF-8' ) . '" loading="lazy">';
     }
 }
 
@@ -79,6 +80,13 @@ namespace {
         'Every product has an accessible link with presentation-only arrow' );
     $fail( str_contains( $html, 'aznet-theme-industrial01-product-card__media--empty' ),
         'Product without a picture must render a stable labelled clickable media fallback' );
+    // A linked product image is redundant with its explicitly named media link
+    // and separate visible card title. Native attachment alt may be different
+    // from the product title; exposing both trips WCAG label-in-name.
+    $fail( substr_count( $html, 'alt=""' ) === 7,
+        'All seven linked product images must be decorative when the media link has the product aria-label' );
+    $fail( ! str_contains( $html, 'alt="Image 101"' ),
+        'Native attachment alt must not override the accessible product-link name' );
     for ( $i = 101; $i <= 108; $i++ ) {
         $fail( str_contains( $html, 'Máy chế biến gỗ nguồn Woo số ' . $i ), 'Full native product title must survive: ' . $i );
         $fail( substr_count( $html, 'https://example.test/product/' . $i . '/' ) >= 2, 'Keep source permalink: ' . $i );

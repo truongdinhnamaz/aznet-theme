@@ -18,6 +18,7 @@ $header_classes   = [
     'aznet-theme-site-header',
     'aznet-theme-site-header--' . $effective_preset,
     'aznet-theme-site-header--' . $sticky_mode,
+    'aznet-theme-site-header--mobile-' . ( 'drawer' === ( $context['mobile_layout'] ?? 'popover' ) ? 'drawer' : 'popover' ),
 ];
 
 if ( $law01_header ) {

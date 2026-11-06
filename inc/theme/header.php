@@ -59,6 +59,16 @@ function header_sticky_mode(): string {
 }
 
 /**
+ * Return the effective mobile Header presentation. The shipped default is
+ * the light Drawer; an explicit saved legacy popover remains authoritative.
+ */
+function header_mobile_layout(): string {
+    $layout = setting( 'header_mobile_layout', 'drawer' );
+
+    return in_array( $layout, [ 'popover', 'drawer' ], true ) ? (string) $layout : 'drawer';
+}
+
+/**
  * Resolve the optional WordPress-owned vertical catalog menu presentation.
  */
 function header_catalog_mode(): string {
@@ -145,16 +155,18 @@ function header_mobile_panel_enabled(): bool {
     }
 
     if ( function_exists( 'wc_get_page_permalink' ) ) {
-        $account_url = wc_get_page_permalink( 'myaccount' );
+        // A missing Woo page defaults to the Homepage unless fallback is false.
+        $account_url = wc_get_page_permalink( 'myaccount', false );
         if ( is_string( $account_url ) && '' !== trim( $account_url ) ) {
             return true;
         }
-    }
 
-    if ( function_exists( 'wc_get_cart_url' ) ) {
-        $cart_url = wc_get_cart_url();
-        if ( is_string( $cart_url ) && '' !== trim( $cart_url ) ) {
-            return true;
+        $cart_page_url = wc_get_page_permalink( 'cart', false );
+        if ( is_string( $cart_page_url ) && '' !== trim( $cart_page_url ) && function_exists( 'wc_get_cart_url' ) ) {
+            $cart_url = wc_get_cart_url();
+            if ( is_string( $cart_url ) && '' !== trim( $cart_url ) ) {
+                return true;
+            }
         }
     }
 
@@ -207,14 +219,18 @@ function header_context(): array {
 
     $account_url = '';
     if ( function_exists( 'wc_get_page_permalink' ) ) {
-        $candidate   = wc_get_page_permalink( 'myaccount' );
+        // Explicit false avoids WooCommerce's homepage fallback when unassigned.
+        $candidate   = wc_get_page_permalink( 'myaccount', false );
         $account_url = is_string( $candidate ) ? trim( $candidate ) : '';
     }
 
     $cart_url = '';
-    if ( function_exists( 'wc_get_cart_url' ) ) {
-        $candidate = wc_get_cart_url();
-        $cart_url  = is_string( $candidate ) ? trim( $candidate ) : '';
+    if ( function_exists( 'wc_get_page_permalink' ) && function_exists( 'wc_get_cart_url' ) ) {
+        $cart_page_url = wc_get_page_permalink( 'cart', false );
+        if ( is_string( $cart_page_url ) && '' !== trim( $cart_page_url ) ) {
+            $candidate = wc_get_cart_url();
+            $cart_url  = is_string( $candidate ) ? trim( $candidate ) : '';
+        }
     }
 
     return [
@@ -236,6 +252,7 @@ function header_context(): array {
         'requested_preset'  => header_preset(),
         'effective_preset'  => effective_header_preset(),
         'sticky_mode'       => header_sticky_mode(),
+        'mobile_layout'     => header_mobile_layout(),
         'law01_header'      => header_law01_active(),
     ];
 }

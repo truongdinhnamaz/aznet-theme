@@ -86,4 +86,74 @@ if (! str_contains($css, '@media (prefers-reduced-motion: reduce)')) {
     exit(1);
 }
 
+// Generic panel safety: all Header presets must keep long mobile menus reachable.
+if (! preg_match('/\\.aznet-theme-site-header__mobile-panel\\s*\\{([^}]*)\\}/s', $css, $panel_match)) {
+    fwrite(STDERR, "FAIL: missing generic mobile Header panel CSS\\n");
+    exit(1);
+}
+foreach ([
+    'max-height:',
+    'overflow-y: auto;',
+    'overscroll-behavior-y: contain;',
+] as $required) {
+    if (! str_contains($panel_match[1], $required)) {
+        fwrite(STDERR, "FAIL: mobile Header panel must be viewport-bounded and independently scrollable: {$required}\\n");
+        exit(1);
+    }
+}
+
+// A Flatsome-style drawer is Theme-owned presentation, not a second WordPress menu.
+// It enters from the left on a token-driven light surface and respects reduced motion.
+if (! preg_match('/\.aznet-theme-site-header--mobile-drawer\.is-aznet-theme-nav-enhanced\s+\.aznet-theme-site-header__mobile-panel\s*\{([^}]*)\}/s', $css, $drawer_match)) {
+    fwrite(STDERR, "FAIL: missing drawer panel presentation block\n");
+    exit(1);
+}
+foreach ([
+    'left: 0;',
+    'right: auto;',
+    'background: var(--aznet-theme-surface);',
+    'color: var(--aznet-theme-text);',
+] as $required) {
+    if (! str_contains($drawer_match[1], $required)) {
+        fwrite(STDERR, "FAIL: left-side light mobile drawer missing {$required}\n");
+        exit(1);
+    }
+}
+if (! preg_match('/\.aznet-theme-site-header--mobile-drawer\.is-aznet-theme-nav-enhanced\s+\.aznet-theme-site-header__mobile-panel:not\(\[hidden\]\)\s*\{[^}]*animation\s*:\s*aznet-theme-mobile-drawer-enter/s', $css)) {
+    fwrite(STDERR, "FAIL: drawer open animation must be scoped to its visible panel\n");
+    exit(1);
+}
+// Nested WordPress menu links must use legible text on the light off-canvas
+// surface, including their idle (non-hover/focus) state.
+$drawer_submenu_selector = '.aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-panel .aznet-theme-site-header__menu .sub-menu a';
+if (! preg_match('/' . preg_quote($drawer_submenu_selector, '/') . '\\s*\\{([^}]*)\\}/s', $css, $drawer_submenu_match)
+    || ! str_contains($drawer_submenu_match[1], 'color: var(--aznet-theme-text);')) {
+    fwrite(STDERR, "FAIL: left light drawer must color native nested submenu links with a readable text token\n");
+    exit(1);
+}
+
+if (! str_contains($css, '@keyframes aznet-theme-mobile-drawer-enter')
+    || ! str_contains($css, '@keyframes aznet-theme-mobile-backdrop-enter')
+    || ! str_contains($css, '.aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced .aznet-theme-site-header__mobile-panel:not([hidden])')
+    || ! str_contains($css, '@media (prefers-reduced-motion: reduce)')) {
+    fwrite(STDERR, "FAIL: mobile drawer slide/fade and reduced-motion contract missing\n");
+    exit(1);
+}
+
+// Opt-in professional drawer cannot degrade existing no-JS mobile navigation.
+foreach ([
+    '.aznet-theme-site-header--mobile-drawer.is-aznet-theme-nav-enhanced',
+    '.aznet-theme-site-header__mobile-backdrop',
+    '.aznet-theme-site-header__mobile-panel-header',
+    '.aznet-theme-site-header__submenu-toggle',
+    '.aznet-theme-site-header__menu .sub-menu[hidden]',
+    'overscroll-behavior',
+    '100dvh',
+] as $required) {
+    if (! str_contains($css, $required)) {
+        fwrite(STDERR, "FAIL: professional Header drawer CSS missing {$required}\n");
+        exit(1);
+    }
+}
+
 echo "PASS: R3 Header preset CSS contract\n";
