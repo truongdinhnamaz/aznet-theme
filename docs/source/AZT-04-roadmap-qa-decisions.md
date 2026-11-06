@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.24
+**Version:** v1.25
 **Status:** Working Source  
-**Date:** 05/11/2026
+**Date:** 06/11/2026
 
 ## 1. Purpose
 
@@ -357,6 +357,8 @@ Provider-specific runtime correctness beyond Theme-side fail-soft is required on
 | **D-045** | **Version provenance reconciliation: fresh production evidence shows deployed pilot identity `1.3.65` while canonical GitHub still declares `1.3.57`. Do not reuse `1.3.65` for new canonical bytes without byte identity proof. Promote the next canonical candidate to `1.3.66`, preserving pilot `1.3.65` as deployment provenance and requiring fresh package/runtime/browser verification before any release claim.** | **Accepted — owner direction 02/10/2026** |
 | **D-046** | **Editorial/news cards across AZnet Theme templates use a reusable presentation standard: 16:9 fixed media frame with non-distorting cover crop; desktop card width is bounded rather than automatically full-container for a single story; text may flow beside and then below the media; narrow viewports collapse to stacked full-card media. The standard applies to editorial/news card surfaces only, while Hero, portrait, product, gallery and other semantic media may define their own ratios. WordPress/provider owners retain all Post/Category/Media data authority.** | **Accepted — owner approved 02/10/2026** |
 | **D-047** | **WordPress-native Team child Pages may store exactly two bounded contact facts in Page meta: `_aznet_theme_team_phone` and `_aznet_theme_team_zalo`. These fields are not RootProfile Person/Contact authority, are not stored in `aznet_theme_settings`, and do not authorize a generic personnel metadata schema. Admin Zalo input is phone-only; Theme derives the presentation URL. Empty values fail soft.** | **Accepted — owner approved 03/10/2026** |
+
+| **D-065** | **A pilot website is a validation fixture, never the default owner of a Theme release. Every new v1.x version must preserve a portable Core on clean WordPress, isolate optional template-specific presentation via typed opt-in manifests, and show impacted cross-template regression/fallback, exact package and rollback evidence before any universal release claim. Simultaneous installation on all sites is not required.** | **Accepted — owner directive 06/11/2026** |
 
 ## 10A. v1.3 Client Delivery System
 
@@ -1139,3 +1141,27 @@ Site release 1.3.94 has PASS for source CI and public homepage/SEO content invar
 - **Rollback/release:** Nếu có lỗi mới được tái hiện, rollback bằng revert bounded PR #566 theo provenance; không reset dữ liệu WordPress. Merge `main` đã hoàn thành; phiên bản/tag/GitHub Release và cập nhật từng website vẫn là các gate phê duyệt độc lập theo AZT-05. Không tạo mới Footer riêng trong các template sau này.
 
 **EXACT NEXT:** Giữ checkpoint `main@c3322e3d` và các kết quả V1/X6 còn hiệu lực. Khi phát triển template mới, chỉ thiết kế các phần **phía trên Footer** và chạy lại Footer Core contract trong PR của template; không tạo CSS/markup Footer riêng. Chỉ bắt đầu đóng gói phiên bản mới hoặc rollout production khi có phê duyệt release/deploy riêng; không lặp lại phần đã PASS nếu chưa có bằng chứng invalidation.
+
+### D-065 — Universal Theme Release Portability Gate — OWNER ACCEPTED — 06/11/2026
+
+**Standard ID:** AZT-QA-PORT-01 | **Version:** v1.0 | **Scope owner:** AZT-04 (Theme release QA / decisions) | **Status:** OWNER ACCEPTED. The rule becomes enforceable in canonical GitHub only after its source/QA PR is approved and merged. This is a QA refinement of AZT-05 Articles 2/6/7/9, D-027, D-042, D-043 and D-044; it does **not** amend product identity, ownership, provider contracts or the v1.x Constitution.
+
+**Rule:** Every released AZnet Theme version must be a **reusable product package** rather than a one-website patch renamed as a product version. A pilot provides reproducible findings, not default Theme identity, brand/copy, Page/Menu/Media/price/contact data or authoritative routing.
+
+**Core vs. template vs. site-local classification is mandatory before work:**
+- **Shared Core:** Design tokens, Header/Footer, layout primitives, generic templates, a11y/responsive interaction, versioned public presentation contracts and fail-soft consumer adapters. Only general mechanisms may change here; use semantic tokens/settings and WordPress-native sources, never a pilot domain, slug, title, Page ID, phone, private provider storage or hard-coded content as a universal rule.
+- **Reusable template/preset:** Vertical or brand-specific *presentation* is allowed only in an explicit, bounded manifest/preset/asset scope, optional or intentionally selected, with clean Core fallback and no collateral changes to other templates. A template is not a business/domain owner.
+- **Site-local:** Brand identity, authored WordPress content, menu definitions, media, public contact facts and commercial/domain state stay with WordPress/their domain owner. Site-specific adjustment without a reusable Theme mechanism is not allowed to masquerade as a general Theme release.
+
+**Release acceptance / portability proof for every version (incremental, impact-aware):**
+1. **L0/ownership:** PR states originating pilot/use case, what is genuinely reusable, target layer, affected templates/routes/presets, opt-in/default behavior and any site-local exceptions. A unique pilot's visual success cannot alone establish release readiness.
+2. **L1/L2:** Existing retained **C7 three-pilot** manifest regression (Law 01 / Rèm 01 / Industrial 01), **C8 synthetic fourth-template** extension proof and Universal Footer/Core tests remain in the reusable V1 check chain. Cross-template changes test affected modes, native fallback and absence/unsupported-provider paths; a new template is manifest-driven, not a new Core industry switch.
+3. **L3/L4:** **WordPress-clean** (supported WordPress 6.9+ / PHP 8.1+) remains release-critical. For changed shared presentation, prove representative mobile/tablet/desktop (e.g. 390/768/1440), keyboard/focus/contrast, long/short and missing native content when relevant, and at least one *independent* non-origin template/fixture path. Scope additional tests to the actual change, retaining prior PASS where not invalidated.
+4. **L6:** Candidate and exact-main package/version/SHA and Theme-switch/upgrade/rollback evidence remain mandatory per existing gates. Proof must be on the exact versioned artifact, not a pilot-only hotfix or CSS overlay. Do not confuse CI fixture rollback with a particular site's recoverability.
+5. **Decision:** Shared or selected-template regression => **BLOCKED** for a general release until fixed or safely isolated. A feature that cannot be generalized stays site-local or an explicitly bounded opt-in template, not silently bundled into shared Core. Provider-present L5 certification remains optional/version-specific under AZT-05.
+
+**Pilot deployment is not a Core release gate.** As D-044 already establishes, repository-native multi-configuration evidence can close a reusable Theme release without simultaneously updating every production site. Each actual site upgrade has independent access, data-preservation, rollback and live QA gates. A release may be broadly *applicable* without guaranteeing identical visuals for all site content, plugins or hosting. Do not claim auto-updates or all-site production PASS from one pilot.
+
+**Enforcement and checkpoint:** `tests/offline/d065-release-portability-contract.php` runs via `scripts/verify-v1-core.sh` on PR/exact-main and X6 paths. It fails if the canonical D-065 rule, C7/C8, Universal Footer or WordPress-clean verification chains are dropped. The automated guard proves **retention of mandatory checks**, not the full qualitative/visual portability of an untested change; reviewers still must record the impact matrix, exceptions and exact QA evidence.
+
+**Rollback:** This QA-only adoption changes no production Theme files, published package or site. Revert the bounded source/QA PR if it invalidates a confirmed prior gate. No re-release of already published `v1.3.103` is implied by adopting this standard.

@@ -39,6 +39,9 @@ python3 tests/offline/release-build-output-exclusion.py
 printf '%s\n' '==> Retained core/static/security/package boundary chain'
 bash scripts/verify-g3-core.sh
 
+printf '%s\n' '==> D-065 reusable Theme release portability retention gate'
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/d065-release-portability-contract.php
+
 run_contract_group() {
   local pattern="$1"
   local found=0
