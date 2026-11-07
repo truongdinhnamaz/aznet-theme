@@ -1,0 +1,44 @@
+name: RQA Public Native Menu Acceptance L4
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/rqa-mobile-menu-live-l4.yml'
+      - 'tests/browser/rqa-mobile-menu-live-l4.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-native-menu:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact Theme QA candidate
+        uses: actions/checkout@v4
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Chromium QA runtime
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Verify live RQA native menu accessibility without writes
+        env:
+          RQA_MENU_EVIDENCE_DIR: /tmp/rqa-menu-l4
+        run: |
+          set -euo pipefail
+          node tests/browser/rqa-mobile-menu-live-l4.mjs
+          test -s /tmp/rqa-menu-l4/summary.json
+      - name: Upload public-only QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rqa-public-menu-l4
+          path: /tmp/rqa-menu-l4/
+          if-no-files-found: warn
+          retention-days: 14
