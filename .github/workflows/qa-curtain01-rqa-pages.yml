@@ -4,7 +4,8 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - 'assets/css/presets/curtain-01.css'
+      - 'assets/css/components/page-curtain-01-authored.css'
+      - 'inc/theme/assets.php'
       - 'tests/offline/curtain01-rqa-landing-css-contract.php'
       - 'tests/visual/qa-curtain01-rqa-landing.cjs'
       - '.github/workflows/qa-curtain01-rqa-pages.yml'
