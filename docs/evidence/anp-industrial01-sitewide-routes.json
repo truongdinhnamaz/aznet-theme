@@ -1,0 +1,67 @@
+[
+  {
+    "id": "home",
+    "kind": "page",
+    "path": "/"
+  },
+  {
+    "id": "about",
+    "kind": "page",
+    "path": "/gioi-thieu/"
+  },
+  {
+    "id": "contact",
+    "kind": "page",
+    "path": "/lien-he/"
+  },
+  {
+    "id": "toyota",
+    "kind": "page",
+    "path": "/xe-nang-toyota-nhat-bai/"
+  },
+  {
+    "id": "mitsubishi",
+    "kind": "page",
+    "path": "/xe-nang-mitsubishi-nhat-bai/"
+  },
+  {
+    "id": "privacy",
+    "kind": "page",
+    "path": "/chinh-sach-bao-mat/"
+  },
+  {
+    "id": "sitemap",
+    "kind": "page",
+    "path": "/sitemap/"
+  },
+  {
+    "id": "shop",
+    "kind": "shop",
+    "path": "/san-pham/"
+  },
+  {
+    "id": "komatsu-product",
+    "kind": "product",
+    "path": "/ac-quy-xe-nang-dien-komatsu-3-tan-chinh-hang-gs"
+  },
+  {
+    "id": "forklift-category",
+    "kind": "category",
+    "path": "/xe-nang-cu-nhat-ban/"
+  },
+  {
+    "id": "blog-article",
+    "kind": "article",
+    "path": "/tai-sao-can-mua-xe-nang-o-nhung-co-so-co-uy-tin.html"
+  },
+  {
+    "id": "services-archive",
+    "kind": "archive",
+    "path": "/dich-vu/"
+  },
+  {
+    "id": "knowledge-archive",
+    "kind": "archive",
+    "path": "/kien-thuc-xe-nang/"
+  }
+]
