@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/qa-rqa-live-native-pages.yml'
       - 'tests/visual/qa-rqa-live-pages.cjs'
+      - 'tests/visual/qa-rqa-page-inventory.cjs'
 
 permissions:
   contents: read
@@ -25,6 +26,8 @@ jobs:
         run: |
           npm install --no-save --no-package-lock playwright@1.56.1
           npx playwright install --with-deps chromium
+      - name: Inventory public published Pages and CSS marker coverage
+        run: node tests/visual/qa-rqa-page-inventory.cjs
       - name: Capture 390 and 1440 public screenshots, DOM and stylesheet diagnostics
         run: node tests/visual/qa-rqa-live-pages.cjs
       - name: Retain QA evidence (not a release/deployment)
