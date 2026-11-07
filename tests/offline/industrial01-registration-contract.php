@@ -163,7 +163,7 @@ assert(is_string($knowledgeSource) && str_contains($knowledgeSource, "homepage_e
 assert(str_contains($aboutSource, 'strip_shortcodes'), 'Industrial 01 About must strip legacy builder shortcodes from homepage summary copy.');
 assert(! str_contains($processSource, 'echo wp_kses_post( $content )'), 'Industrial 01 Process must not dump the complete mapped service page into the Homepage.');
 assert(str_contains($processSource, 'preg_match_all'), 'Industrial 01 Process must derive compact presentation cards from authored service headings.');
-assert(str_contains($processSource, 'wp_trim_words'), 'Industrial 01 Process must render a bounded source-derived summary.');
+assert(str_contains($processSource, '$opening =') && str_contains($processSource, '$intro_match'), 'Industrial 01 Process must render the complete first WordPress-authored paragraph, without a mid-sentence auto-truncated excerpt.');
 assert(str_contains((string) $categories, 'woocommerce_subcategory_thumbnail'), 'Industrial 01 category cards should use WooCommerce public thumbnail presentation when available.');
 assert(str_contains((string) $products, 'aznet-theme-industrial01-product-card__action'), 'Industrial 01 product cards need a neutral detail action without inventing commerce state.');
 
