@@ -1,0 +1,37 @@
+name: RQA public native Pages L4 diagnostic (QA only)
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/qa-rqa-live-native-pages.yml'
+      - 'tests/visual/qa-rqa-live-pages.cjs'
+
+permissions:
+  contents: read
+
+jobs:
+  rqa-public-pages:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout isolated diagnostic PR
+        uses: actions/checkout@v4
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install one-off browser tooling (no production dependency)
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Capture 390 and 1440 public screenshots, DOM and stylesheet diagnostics
+        run: node tests/visual/qa-rqa-live-pages.cjs
+      - name: Retain QA evidence (not a release/deployment)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rqa-native-pages-public-l4
+          path: rqa-page-diagnostics/
+          if-no-files-found: warn
+          retention-days: 7
