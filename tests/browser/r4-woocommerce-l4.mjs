@@ -228,6 +228,27 @@ async function verifyKind(page, kind, viewport) {
     if ((await productTitle.textContent())?.trim() !== 'R4 Variable Product') throw new Error('product: native Woo product H1 does not match fixture title');
     if (await page.locator('main#main h1').count() !== 1) throw new Error('product: expected exactly one H1 in main');
 
+    // Native Woo renders breadcrumb before .product as a direct child of #main.
+    // The Theme must align both to the same responsive shell; Woo owns links and semantics.
+    const breadcrumbLayout = await page.evaluate(() => {
+      const breadcrumb = document.querySelector('main#main > .woocommerce-breadcrumb');
+      const product = document.querySelector('main#main .product');
+      if (!(breadcrumb instanceof HTMLElement) || !(product instanceof HTMLElement)) return null;
+      const trail = breadcrumb.getBoundingClientRect();
+      const content = product.getBoundingClientRect();
+      return {
+        trailLeft: trail.left, contentLeft: content.left,
+        trailWidth: trail.width, contentWidth: content.width,
+      };
+    });
+    if (
+      !breadcrumbLayout ||
+      Math.abs(breadcrumbLayout.trailLeft - breadcrumbLayout.contentLeft) > 2 ||
+      Math.abs(breadcrumbLayout.trailWidth - breadcrumbLayout.contentWidth) > 2
+    ) {
+      throw new Error(`product: breadcrumb/content shell misalignment at ${viewport.width}px ${JSON.stringify(breadcrumbLayout)}`);
+    }
+
     for (const selector of ['.summary .price', 'form.variations_form', '.variations select', '.single_add_to_cart_button']) {
       await page.locator(selector).first().waitFor({ state: 'visible', timeout: 20000 });
     }
