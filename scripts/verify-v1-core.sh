@@ -210,6 +210,9 @@ case "$RELEASE_VERSION" in
   1.3.108)
     php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v13108-release-candidate-contract.php
     ;;
+  1.3.109)
+    php -d zend.assertions=1 -d assert.exception=1 tests/offline/x6-v13109-release-candidate-contract.php
+    ;;
   *)
     echo "FAIL: unsupported Theme release contract version $RELEASE_VERSION" >&2
     exit 1
