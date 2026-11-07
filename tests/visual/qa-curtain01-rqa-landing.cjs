@@ -8,7 +8,7 @@ const { chromium } = require('playwright');
   const directory = 'rqa-page-compat-evidence';
   fs.mkdirSync(directory, { recursive: true });
   const browser = await chromium.launch({ headless: true });
-  const css = fs.readFileSync('assets/css/presets/curtain-01.css', 'utf8');
+  const css = fs.readFileSync('assets/css/components/page-curtain-01-authored.css', 'utf8');
   const records = [];
   let failures = 0;
   for (const item of [
