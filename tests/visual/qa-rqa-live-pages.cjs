@@ -15,6 +15,8 @@ const { chromium } = require('playwright');
     ['gioi-thieu', '/gioi-thieu/'],
     ['cong-trinh', '/cong-trinh/'],
     ['lien-he', '/lien-he/'],
+    ['chinh-sach-bao-hanh-bao-tri', '/chinh-sach-bao-hanh-bao-tri/'],
+    ['kien-thuc', '/kien-thuc/'],
   ];
 
   for (const [name, route] of targets) {
@@ -81,6 +83,9 @@ const { chromium } = require('playwright');
             aboutHero: rect('.rqa-about-hero'),
             projectsHero: rect('.rqa-projects-hero'),
             contactHero: rect('.rqa-contact-hero'),
+            policyHero: rect('.rqa-policy-hero'),
+            knowledgeHero: rect('.rqa-knowledge-native-hero'),
+            authoredHeroStructure: (document.querySelector('.rqa-policy-hero, .rqa-knowledge-native-hero')?.outerHTML || '').slice(0, 2400),
             firstSection: rect('.aznet-theme-page__content-inner > *'),
             customCssChars: customText.length,
             customCssAboutMatches: (customText.match(/rqa-about/g) || []).length,
