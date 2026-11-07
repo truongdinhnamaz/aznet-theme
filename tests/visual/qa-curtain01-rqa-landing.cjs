@@ -15,7 +15,7 @@ const { chromium } = require('playwright');
     { key: 'about', path: '/gioi-thieu/', hero: '.rqa-about-hero', layout: '.rqa-about-story__grid' },
     { key: 'projects', path: '/cong-trinh/', hero: '.rqa-projects-hero', layout: '.rqa-projects-process__list' },
   ]) {
-    for (const width of [390, 1440]) {
+    for (const width of [320, 390, 768, 1440]) {
       const context = await browser.newContext({
         viewport: { width, height: 900 }, deviceScaleFactor: 1, reducedMotion: 'reduce'
       });
@@ -95,6 +95,6 @@ const { chromium } = require('playwright');
     console.error('FAIL: RQA Page CSS overlay checks ' + failures + ' / ' + records.length);
     process.exitCode = 1;
   } else {
-    console.log('PASS: RQA Page CSS overlay 4/4 and bounded responsive presentation');
+    console.log('PASS: RQA Page CSS overlay 8/8 and bounded responsive presentation');
   }
 })().catch(error => { console.error(error); process.exitCode = 1; });
