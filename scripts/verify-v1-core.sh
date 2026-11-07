@@ -315,6 +315,7 @@ php -d zend.assertions=1 -d assert.exception=1 tests/offline/template-fourth-tem
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-backend-unified-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-curtain01-map-parity-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/curtain01-about-presentation-authoring-contract.php
+php -d zend.assertions=1 -d assert.exception=1 tests/offline/curtain01-rqa-landing-css-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-library-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-design-hero-core-contract.php
 php -d zend.assertions=1 -d assert.exception=1 tests/offline/homepage-hero-source-parity-contract.php
