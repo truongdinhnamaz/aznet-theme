@@ -6,7 +6,7 @@
 declare(strict_types=1);
 
 $root = dirname(__DIR__, 2);
-$css = file_get_contents($root . '/assets/css/presets/curtain-01.css');
+$css = file_get_contents($root . '/assets/css/components/page-curtain-01-authored.css');
 if (! is_string($css) || '' === $css) {
     fwrite(STDERR, "FAIL: Curtain 01 CSS unreadable\n");
     exit(1);
@@ -57,4 +57,15 @@ foreach (['!important', '@import', 'page-id-', 'post-35', 'post-41',
 }
 $fail(! str_contains($candidate, 'br { display: none; }'),
     'do not hide source-owned HTML broadly instead of correcting editorial markup');
-echo "PASS: RQA-PAGE-01 scoped Curtain 01 About/Projects presentation contract\n";
+$assets = file_get_contents($root . '/inc/theme/assets.php');
+$fail(is_string($assets) && str_contains($assets, "'curtain-01' === visual_preset()"),
+    'only the explicit Curtain 01 visual preset may load this Page-only CSS');
+$fail(str_contains($assets, "'aznet-theme-page-curtain-01-authored'"),
+    'Page-only visual asset enqueue missing');
+$fail(str_contains($assets, "function enqueue_page_assets("),
+    'native public Page asset dispatcher missing');
+$fail(str_contains($assets, "if ( ! should_enqueue_page_assets() )"),
+    'must fail soft outside native Page and on Woo surfaces');
+$fail(str_contains($assets, "asset_content_version( '/assets/css/components/page-curtain-01-authored.css',"),
+    'Page-only asset must have byte-aware cache version');
+echo "PASS: RQA-PAGE-01 scoped Page-only Curtain 01 About/Projects presentation contract\n";
