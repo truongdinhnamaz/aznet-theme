@@ -606,6 +606,20 @@ function enqueue_page_assets( ?string $version = null ): void {
         asset_content_version( '/assets/css/components/page.css', $version )
     );
 
+    // RQA-PAGE-01: shared Curtain 01 authored Page presentation. The
+    // stylesheet is intentionally Page-only, never a global/preset/Woo asset.
+    // Explicit visual preset + public Page surface, no slug or Page ID inference.
+    if ( function_exists( __NAMESPACE__ . '\\visual_preset' )
+        && 'curtain-01' === visual_preset()
+        && is_file( get_theme_file_path( '/assets/css/components/page-curtain-01-authored.css' ) ) ) {
+        wp_enqueue_style(
+            'aznet-theme-page-curtain-01-authored',
+            get_theme_file_uri( '/assets/css/components/page-curtain-01-authored.css' ),
+            [ 'aznet-theme-page', 'aznet-theme-preset-curtain-01' ],
+            asset_content_version( '/assets/css/components/page-curtain-01-authored.css', $version )
+        );
+    }
+
     // Existing explicit presentation choice; no Page identity/content inference.
     if ( function_exists( __NAMESPACE__ . '\\homepage_preset' )
         && 'wellness-01' === homepage_preset()
