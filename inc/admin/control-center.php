@@ -263,7 +263,7 @@ function render_content_editing_guide(): void {
 }
 
 function render_control_center(): void {
-    if ( ! current_user_can( 'edit_theme_options' ) ) { return; }
+    if ( ! danger_zone_is_authorized() ) { wp_die( esc_html__( 'Bạn không có quyền chỉnh sửa giao diện AZnet Theme.', 'aznet-theme' ), '', [ 'response' => 403 ] ); }
     $section = control_center_section();
     if ( 'danger-zone' === $section && ! danger_zone_is_authorized() ) {
         wp_die( esc_html__( 'Bạn không có quyền vào khu vực nguy hiểm.', 'aznet-theme' ) );

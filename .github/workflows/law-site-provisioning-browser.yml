@@ -85,6 +85,11 @@ jobs:
           done
           test "$(wp post list --post_type=post --post_status=publish --format=count --path=/tmp/wp-site --allow-root)" = "0"
           test "$(wp post list --post_type=page --post_status=any --format=count --path=/tmp/wp-site --allow-root)" -le "2"
+      - name: Grant D-050 test operator capability
+        run: |
+          set -euo pipefail
+          wp user add-cap admin aznet_theme_manage_danger_zone --path=/tmp/wp-site --allow-root
+          wp eval 'if ( ! user_can( get_user_by( "login", "admin" ), "aznet_theme_manage_danger_zone" ) ) { exit(1); }' --path=/tmp/wp-site --allow-root
       - name: Start WordPress runtime
         run: |
           nohup php -S 127.0.0.1:8080 -t /tmp/wp-site > /tmp/law-provisioning/server.log 2>&1 & echo $! > /tmp/law-provisioning/server.pid

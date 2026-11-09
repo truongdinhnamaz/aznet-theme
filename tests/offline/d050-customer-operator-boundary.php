@@ -1,7 +1,7 @@
 <?php
 /**
  * D-050 customer/developer separation: internal Theme operations require a
- * per-user operator capability; ordinary Administrator retains public site UX.
+ * per-user operator capability; ordinary Administrator retains native content UX.
  */
 declare(strict_types=1);
 
@@ -32,9 +32,24 @@ if (!str_contains($nav, 'if ( danger_zone_is_authorized() ) {')
     || !str_contains($nav, "\$tabs['system-health'] = 'System Health';")) {
     fail_operator_boundary('private developer tabs must be appended only under explicit per-user authorization');
 }
-foreach (["'overview' => 'Tổng quan'", "'header' => 'Header'", "'footer' => 'Footer'", "'homepage' => 'Trang chủ'", "'provisioning' => 'Thiết lập nhanh'", "'commerce' => 'Commerce'"] as $publicTab) {
-    if (!str_contains($nav, $publicTab)) {
-        fail_operator_boundary('customer site presentation tab disappeared: ' . $publicTab);
+if (!str_contains($center, "if ( ! danger_zone_is_authorized() )")) {
+    fail_operator_boundary('Control Center must refuse ordinary Administrators');
+}
+if (!str_contains($bootstrap, 'DANGER_ZONE_CAPABILITY,')
+    || !str_contains($bootstrap, 'register_presentation_operator_guards();')) {
+    fail_operator_boundary('Control Center menu and admin-post guard must require operator capability');
+}
+foreach ([
+    'save_settings', 'save_footer_profile', 'apply_homepage_hero',
+    'save_homepage_hero_form', 'upgrade_homepage_hero_form',
+    'migrate_legacy_homepage_hero', 'migrate_homepage_preset',
+    'quick_edit_homepage_source', 'save_curtain_about_presentation',
+    'create_team_member', 'delete_team_member', 'duplicate_homepage_source',
+    'provisioning_plan', 'provisioning_apply', 'provisioning_restore_indexing',
+    'save_footer_columns',
+] as $action) {
+    if (!str_contains($bootstrap, "'{$action}'")) {
+        fail_operator_boundary('missing pre-handler presentation guard: ' . $action);
     }
 }
 $overview = strpos($center, "if ( 'overview' === \$section ) {");
@@ -57,7 +72,7 @@ if (!str_contains($supportSource, 'Project Handoff')
 if (!str_contains($handoff, "require_settings_capability();\n    danger_zone_require_authorized();\n    check_admin_referer(")) {
     fail_operator_boundary('handoff POST must check the developer capability server-side before nonce/export');
 }
-if (!str_contains($bootstrap, "'edit_theme_options',") || str_contains($center, 'truongdinhnam')) {
-    fail_operator_boundary('must preserve customer Theme presentation access and never hardcode operator login');
+if (str_contains($bootstrap, "'edit_theme_options',\n        'aznet-theme'") || str_contains($center, 'truongdinhnam')) {
+    fail_operator_boundary('must require operator access and never hardcode operator login');
 }
-echo "PASS: D-050 developer tools hidden and denied to client admins, customer presentation retained\n";
+echo "PASS: D-050 Theme presentation requires operator; native WordPress content unaffected\n";

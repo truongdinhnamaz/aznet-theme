@@ -21,11 +21,35 @@ require_once __DIR__ . '/project-handoff.php';
 require_once __DIR__ . '/system-health.php';
 require_once __DIR__ . '/editor-policy.php';
 
+/** D-050: Theme-owned admin actions require the individually authorized operator. */
+function require_presentation_operator(): void {
+    if ( ! danger_zone_is_authorized() ) {
+        wp_die( esc_html__( 'Bạn không có quyền chỉnh sửa giao diện AZnet Theme.', 'aznet-theme' ), '', [ 'response' => 403 ] );
+    }
+}
+
+/** Keep the guard on each registered admin-post route, before its handler. */
+function register_presentation_operator_guards(): void {
+    $actions = [
+        'save_settings', 'save_footer_profile', 'apply_homepage_hero',
+        'save_homepage_hero_form', 'upgrade_homepage_hero_form',
+        'migrate_legacy_homepage_hero', 'migrate_homepage_preset',
+        'quick_edit_homepage_source', 'save_curtain_about_presentation',
+        'create_team_member', 'delete_team_member',
+        'duplicate_homepage_source', 'provisioning_plan',
+        'provisioning_apply', 'provisioning_restore_indexing',
+        'save_footer_columns',
+    ];
+    foreach ( $actions as $action ) {
+        add_action( 'admin_post_aznet_theme_' . $action, __NAMESPACE__ . '\\require_presentation_operator', 0 );
+    }
+}
+
 function register_control_center(): void {
     $hook = add_menu_page(
         __( 'AZnet Theme', 'aznet-theme' ),
         __( 'AZnet Theme', 'aznet-theme' ),
-        'edit_theme_options',
+        DANGER_ZONE_CAPABILITY,
         'aznet-theme',
         __NAMESPACE__ . '\\render_control_center',
         'dashicons-admin-appearance',
@@ -73,6 +97,7 @@ function register_control_center(): void {
 }
 
 if ( is_admin() ) {
+    register_presentation_operator_guards();
     add_action( 'admin_menu', __NAMESPACE__ . '\\register_control_center' );
     add_action( 'admin_post_aznet_theme_save_settings', __NAMESPACE__ . '\\handle_save_settings' );
     add_action( 'admin_post_aznet_theme_save_footer_profile', __NAMESPACE__ . '\\handle_footer_profile_save' );

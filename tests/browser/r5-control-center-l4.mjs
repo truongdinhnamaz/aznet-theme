@@ -485,24 +485,31 @@ try {
   const restrictedContext = await browser.newContext({ viewport: viewports['1440x1000'] });
   const restrictedPage = await restrictedContext.newPage();
   await loginAs(restrictedPage, 'restricted', restrictedPass);
-  await gotoCenter(restrictedPage);
-  if (await restrictedPage.locator('input[name="action"][value="aznet_theme_reset_settings"]').count()) {
-    throw new Error('ordinary Administrator must not see reset on overview');
-  }
-  for (const privateTab of ['Support', 'System Health']) {
-    if (await restrictedPage.locator('.aznet-theme-control-center .nav-tab', { hasText: privateTab }).count()) {
-      throw new Error('customer Administrator must not discover developer tab: ' + privateTab);
+  // D-050: ordinary Administrator may edit WordPress content, not Theme presentation.
+  for (const section of ['overview', 'header', 'footer', 'homepage', 'support', 'system-health', 'danger-zone']) {
+    const response = await restrictedPage.goto(baseUrl + '/wp-admin/admin.php?page=aznet-theme&section=' + section, { waitUntil: 'domcontentloaded' });
+    if (!response || response.status() !== 403) {
+      throw new Error('ordinary Administrator unexpectedly reached Control Center: ' + section + ' (' + (response?.status() ?? 'none') + ')');
+    }
+    if (await restrictedPage.locator('.aznet-theme-control-center').count()) {
+      throw new Error('ordinary Administrator received Theme controls: ' + section);
+    }
+    if (await restrictedPage.locator('#toplevel_page_aznet-theme').count()) {
+      throw new Error('ordinary Administrator discovered Theme developer menu: ' + section);
     }
   }
-  const customerOverview = await restrictedPage.locator('.aznet-theme-control-center').innerText();
-  if (customerOverview.includes('Project Handoff') || customerOverview.includes('Khu vực nguy hiểm') || customerOverview.includes('Support Snapshot')) {
-    throw new Error('customer Administrator Overview leaked developer-only tools');
-  }
-  for (const privateSection of ['support', 'system-health', 'danger-zone']) {
-    await restrictedPage.goto(baseUrl + '/wp-admin/admin.php?page=aznet-theme&section=' + privateSection, { waitUntil: 'domcontentloaded' });
-    if (!(await restrictedPage.locator('body').innerText()).includes('Bạn không có quyền')) {
-      throw new Error('customer Administrator bypassed developer deep-link gate: ' + privateSection);
+  // Direct admin-post submissions must be denied before nonce or handler processing.
+  for (const action of ['save_settings', 'save_footer_columns', 'provisioning_apply']) {
+    const response = await restrictedPage.request.post(baseUrl + '/wp-admin/admin-post.php', {
+      form: { action: 'aznet_theme_' + action },
+    });
+    if (response.status() !== 403 || !(await response.text()).includes('Bạn không có quyền')) {
+      throw new Error('ordinary Administrator bypassed Theme POST guard: ' + action + ' (' + response.status() + ')');
     }
+  }
+  const contentResponse = await restrictedPage.goto(baseUrl + '/wp-admin/edit.php', { waitUntil: 'domcontentloaded' });
+  if (!contentResponse || contentResponse.status() !== 200 || !await restrictedPage.locator('#wpbody-content').count()) {
+    throw new Error('ordinary Administrator lost native WordPress Post editing access');
   }
   await restrictedContext.close();
 
