@@ -4,9 +4,9 @@ Product Charter và Ownership
 
 Định nghĩa AZnet Theme là gì, không là gì, sở hữu phần nào và phải nhường ownership cho hệ thống nào.
 
-| **Mã tài liệu** | AZT-01 | **Phiên bản** | v0.6 |
+| **Mã tài liệu** | AZT-01 | **Phiên bản** | v0.7 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 25/09/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 09/11/2026 |
 
 | **Định vị: AZnet Theme là house/reference WordPress theme ưu tiên cho website greenfield do AZnet triển khai. Theme phải hoạt động như một sản phẩm độc lập trên WordPress sạch; RootProfile, ConvertFlow, WooCommerce và provider khác là capability tích hợp tùy chọn, không định nghĩa readiness của core Theme.** |
 | --- |
@@ -161,8 +161,20 @@ Khi lớp bảo vệ cấp site chưa được kết nối/xác minh, Theme ph�
 
 ## 11. D-050 — Phân tách quản trị viên khách hàng và người vận hành Theme (Accepted 20/10/2026)
 
-- **Customer/site Administrator:** là chủ thể sử dụng website do AZnet triển khai. Họ tiếp tục có các quyền WordPress vốn được cấp và được dùng các thiết lập trình bày thông thường (Header, Footer, Trang chủ, các preset tương thích). Vai trò Administrator WordPress **không tự động** đồng nghĩa với quyền vận hành hoặc nhìn thấy công cụ nội bộ của nhà phát triển AZnet Theme.
+- **Customer/site Administrator:** là chủ thể sử dụng website do AZnet triển khai. Họ tiếp tục có các quyền WordPress vốn được cấp, nhưng theo chính sách chủ sở hữu ngày 09/11/2026, không được thay đổi các thiết lập trình bày của Theme nếu chưa được cấp quyền vận hành riêng; việc thu hồi/giới hạn các quyền chỉnh sửa giao diện WordPress-native cần một Site Guard độc lập, không được giả lập bằng cách ẩn menu. Vai trò Administrator WordPress **không tự động** đồng nghĩa với quyền vận hành hoặc nhìn thấy công cụ nội bộ của nhà phát triển AZnet Theme.
 - **AZnet Theme operator/developer:** là cá nhân được cấp riêng quyền `aznet_theme_manage_danger_zone` cộng với `manage_options` trên single-site (multisite theo Super Admin boundary đã Accepted). Họ mới được thấy và truy cập Support nội bộ, System Health/Support Snapshot, Project Handoff và Danger Zone. Phải kiểm soát cả server-side URL/POST, không chỉ ẩn menu bằng CSS. Không hard-code username hay cấp capability mặc định cho toàn bộ role Administrator.
 - Việc giới hạn giao diện Theme **không thu hồi** quyền Administrator native của WordPress và **không thay thế** Site Guard độc lập cần thiết để bảo vệ cài/đổi/xóa Theme, nội dung và các hành động site-level. Không đưa chính sách WordPress vào Theme.
 
 Chi tiết vị trí menu, QA và non-regression do AZT-04 mục D-050 Customer/Operator separation quản lý.
+
+## 12. D-050 amendment — Chính sách độc quyền sửa giao diện (Accepted 09/11/2026)
+
+**Mục tiêu:** Trên các website AZnet áp dụng chính sách này, chỉ tài khoản người vận hành được chủ sở hữu chỉ định, hiện là tài khoản WordPress `truongdinhnam`, được thay đổi Theme, bố cục và cấu hình giao diện. Mọi tài khoản khác, kể cả WordPress Administrator, không có quyền chỉnh sửa các surface trình bày được bảo vệ. Đây là **yêu cầu chính sách**, không phải tuyên bố rằng khóa đã được triển khai hoặc kiểm chứng trên website nào.
+
+- **Theme-owned controls:** Header/Footer, Homepage presentation, design presets/tokens/settings, Control Center và các thao tác chỉnh sửa trình bày do Theme sở hữu phải yêu cầu capability cá nhân riêng và được kiểm soát tại điểm thực thi server-side (URL, POST/AJAX, REST và các đường cập nhật liên quan), không chỉ ẩn menu hoặc CSS. Chỉ tài khoản operator được chủ sở hữu ủy quyền mới nhận quyền; không tự cấp cho vai trò Administrator.
+- **WordPress site-level controls:** Appearance/Customizer/Site Editor/Theme Editor, cài đặt, tải lên, kích hoạt, chuyển, cập nhật hoặc xóa Theme và các API/đường thực thi tương ứng phải được bảo vệ bằng **Site Guard hoặc chính sách vận hành cấp website độc lập với Theme**. AZnet Theme không tự thu hồi WordPress native capabilities, không nhúng MU-plugin/host policy và không thể cam kết khóa vẫn hiệu lực sau khi bị đổi Theme nếu thiếu lớp bảo vệ độc lập.
+- **Identity và recovery:** `truongdinhnam` là danh tính operator được chủ sở hữu chỉ định, **không phải username được hard-code trong production code**. Quyền phải gắn với tài khoản đã xác thực/capability được cấp đích danh và có cơ chế thu hồi, mất tài khoản/khôi phục khẩn cấp và audit; multisite phải giữ Super Admin recovery boundary theo chính sách riêng.
+- **Quyền còn lại:** Người dùng khác vẫn được thực hiện các chức năng nội dung, sản phẩm, đơn hàng hoặc nghiệp vụ trong phạm vi được WordPress và domain owner cấp phép. Không chuyển quyền quản lý Post/Page/Menu/Media, WooCommerce, RootProfile hoặc ConvertFlow sang Theme.
+- **Nghiệm thu bắt buộc:** Kiểm tra tài khoản operator và ít nhất một tài khoản Administrator khác qua UI, direct URL, POST/AJAX, REST và đường thay đổi Theme; xác nhận hành động trái quyền bị từ chối, nội dung/nghiệp vụ hợp lệ không bị ảnh hưởng, theme-switch và emergency rollback hoạt động. Không công bố “ĐÃ KHÓA” cho tới khi site-level guard đã triển khai và vượt L3–L5 trên site đích.
+
+**Quan hệ D-050:** Quy định này thay thế phần cho phép customer Administrator dùng các thiết lập trình bày thông thường tại mục 11, nhưng giữ nguyên ranh giới Theme-vs-Site Guard, không hard-code username, không giả lập bảo vệ WordPress ở tầng Theme và không tự động ủy quyền merge/deploy hoặc sửa repo của hệ thống khác.
