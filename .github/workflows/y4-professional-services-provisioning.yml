@@ -150,6 +150,10 @@ jobs:
           mkdir -p /tmp/wp-y4-browser/wp-content/themes/aznet-theme
           rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='README.md' --exclude='aznet-preview.png' ./ /tmp/wp-y4-browser/wp-content/themes/aznet-theme/
           wp theme activate aznet-theme --path=/tmp/wp-y4-browser --allow-root
+          # D-050: grant the capability only to this disposable browser operator,
+          # never to the WordPress Administrator role or to a production account.
+          wp user add-cap admin aznet_theme_manage_danger_zone --path=/tmp/wp-y4-browser --allow-root
+          wp eval 'if ( ! user_can( get_user_by( "login", "admin" ), "aznet_theme_manage_danger_zone" ) ) { exit(1); }' --path=/tmp/wp-y4-browser --allow-root
           for id in $(wp post list --post_type=post --post_status=publish --format=ids --path=/tmp/wp-y4-browser --allow-root); do
             wp post update "$id" --post_status=draft --path=/tmp/wp-y4-browser --allow-root >/dev/null
           done
