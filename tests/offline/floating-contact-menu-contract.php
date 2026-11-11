@@ -19,6 +19,10 @@ $assert(!str_contains($php, '0987584394'), 'no site data hardcoded in Theme');
 foreach (['position: fixed', ':focus-visible', '@media (max-width: 767px)', 'prefers-reduced-motion', 'safe-area-inset-bottom', 'min-width: 48px'] as $cssMarker) {
     $assert(str_contains($style, $cssMarker), 'CSS marker: ' . $cssMarker);
 }
+// Mobile dock must visually separate fixed buttons from scrolling text.
+foreach (['background: #f8f3ec', 'border-top: 1px solid', 'width: 100%', 'padding-bottom: calc(72px'] as $mobileMarker) {
+    $assert(str_contains($style, $mobileMarker), 'mobile clearance: ' . $mobileMarker);
+}
 define('ABSPATH', '/');
 $GLOBALS['test_enabled'] = false;
 $GLOBALS['test_locations'] = ['footer-contact'=>15];
