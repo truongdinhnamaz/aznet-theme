@@ -121,7 +121,10 @@ function render_homepage_before_content(): void {
     }
 
     if ( 'industrial-01' === homepage_preset() ) {
-        echo '<div class="aznet-theme-homepage aznet-theme-homepage--industrial-01">';
+        $variant_class = 'technical-b2b' === setting( 'homepage_industrial01_variant', 'standard' )
+            ? ' aznet-theme-homepage--industrial-01-technical-b2b'
+            : '';
+        echo '<div class="aznet-theme-homepage aznet-theme-homepage--industrial-01' . esc_attr( $variant_class ) . '">';
         foreach ( homepage_effective_surface_map( 'industrial-01' ) as $surface ) {
             if ( 'before' !== ( $surface['boundary'] ?? '' ) ) { continue; }
             render_industrial01_part( (string) ( $surface['template'] ?? '' ) );
