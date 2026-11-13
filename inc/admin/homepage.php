@@ -1027,7 +1027,12 @@ function render_homepage_settings(): void {
         'order'          => 'ASC',
     ] );
 
-    $preset_visible = [ 'homepage_preset', 'homepage_law01_variant', 'homepage_industrial01_variant' ];
+    $preset_visible = [ 'homepage_preset', 'homepage_law01_variant' ];
+    // The variant field is only visible on Industrial 01. For every other
+    // template, render_hidden_settings() must retain the saved selection.
+    if ( 'industrial-01' === (string) $s['homepage_preset'] ) {
+        $preset_visible[] = 'homepage_industrial01_variant';
+    }
     echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="aznet-theme-panel">';
     echo '<input type="hidden" name="action" value="aznet_theme_save_settings">';
     wp_nonce_field( 'aznet_theme_save_settings' );

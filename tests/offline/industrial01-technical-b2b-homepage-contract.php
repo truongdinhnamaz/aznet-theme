@@ -50,6 +50,11 @@ namespace {
     $styles = $load( 'assets/css/components/homepage-industrial-01.css' );
 
     $check( 1 === preg_match( "/field_select\\s*\\(\\s*'homepage_industrial01_variant'\\s*,/", $admin ), 'Editor offers a native Theme variant choice' );
+    $check(
+        str_contains( $admin, "\$preset_visible[] = 'homepage_industrial01_variant';" )
+        && ! str_contains( $admin, "'homepage_law01_variant', 'homepage_industrial01_variant' ]" ),
+        'Saving a different Homepage preset must not erase its stored Industrial variant'
+    );
     $check( str_contains( $composer, 'aznet-theme-homepage--industrial-01-technical-b2b' ), 'Variant renders within the existing Theme Homepage Composer' );
     $check( str_contains( $surface, '$technical_solutions_surface' ), 'Technical layout uses the mapped WordPress solutions surface after process' );
     $check( str_contains( $surface, 'count( $categories ) > 1' ), 'Single public Woo category does not crowd technical product discovery' );
