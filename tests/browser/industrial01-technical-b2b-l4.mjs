@@ -39,6 +39,9 @@ try {
       const links = cards.map(card => card.querySelector('h3 a')?.href || '');
       const display = grid ? getComputedStyle(grid) : null;
       const heroImage = hero?.querySelector('.aznet-theme-industrial01-hero__image');
+      // Industrial 01 intentionally renders a WordPress-owned Hero image as a CSS
+      // background when no distinct background attachment was selected.
+      const heroBackground = hero?.getAttribute('style') || '';
       const productImage = cards[0]?.querySelector('.aznet-theme-industrial01-product-card__media img');
       const mediaBox = cards[0]?.querySelector('.aznet-theme-industrial01-product-card__media');
       const mediaRect = mediaBox?.getBoundingClientRect();
@@ -47,6 +50,8 @@ try {
         columns: display?.gridTemplateColumns.split(/\s+/).filter(Boolean).length || 0,
         productsBeforeSolutions: Boolean(products && solutions && (products.compareDocumentPosition(solutions) & Node.DOCUMENT_POSITION_FOLLOWING)),
         heroImagePresent: Boolean(heroImage && heroImage.complete && heroImage.naturalWidth > 0),
+        heroBackgroundPresent: heroBackground.includes('--industrial01-hero-background-image') &&
+          heroBackground.includes('/wp-content/uploads/'),
         productImageFit: productImage ? getComputedStyle(productImage).objectFit : null,
         mediaRatio: mediaRect ? mediaRect.width / mediaRect.height : null,
         homepageCss: [...document.querySelectorAll('link[rel="stylesheet"]')].some(link => link.href.includes('homepage-industrial-01.css')),
@@ -60,7 +65,9 @@ try {
     if (source.columns !== view.columns) throw new Error(view.name + ': expected ' + view.columns + ' columns; got ' + source.columns);
     if (!source.productsBeforeSolutions) throw new Error(view.name + ': native Solutions Page must follow Woo product discovery');
     if (!source.homepageCss) throw new Error(view.name + ': scoped Industrial 01 CSS not enqueued');
-    if (!source.heroImagePresent || source.productImageFit !== 'cover') throw new Error(view.name + ': source WordPress media unavailable');
+    if ((!source.heroImagePresent && !source.heroBackgroundPresent) || source.productImageFit !== 'cover') {
+      throw new Error(view.name + ': source WordPress media unavailable or wrongly rendered: ' + JSON.stringify(source));
+    }
     if (!source.mediaRatio || Math.abs(source.mediaRatio - (4/3)) > 0.08) {
       throw new Error(view.name + ': product visual must have 4:3 framing');
     }
