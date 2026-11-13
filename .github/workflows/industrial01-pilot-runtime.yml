@@ -11,6 +11,7 @@ on:
       - 'tests/browser/core-vertical-catalog-l4.mjs'
       - 'tests/browser/r3-nav-only-header-l4.mjs'
       - 'tests/offline/d049-rail-header-hero-visual-parity-contract.php'
+      - 'tests/offline/industrial01-technical-b2b-homepage-contract.php'
       - 'template-parts/header/site-header.php'
       - 'assets/css/components/catalog-navigation.css'
       - 'inc/theme/settings.php'
@@ -54,6 +55,9 @@ jobs:
           php-version: '8.1'
           extensions: mysqli
           coverage: none
+
+      - name: Validate technical B2B Homepage contract
+        run: php -d display_errors=1 tests/offline/industrial01-technical-b2b-homepage-contract.php
 
       - name: Set up Node 22
         uses: actions/setup-node@v4
