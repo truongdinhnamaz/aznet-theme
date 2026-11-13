@@ -80,6 +80,9 @@ jobs:
           mkdir -p /tmp/wp/wp-content/themes/aznet-theme
           rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='README.md' --exclude='aznet-preview.png' ./ /tmp/wp/wp-content/themes/aznet-theme/
           wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          # D-050: only this disposable test actor receives Theme operator capability.
+          # Keep Administrator role and production authorization guards unchanged.
+          wp user add-cap admin aznet_theme_manage_danger_zone --path=/tmp/wp --allow-root
           test "$(wp core version --path=/tmp/wp --allow-root)" = '6.9'
           test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp --allow-root)"
           wp eval-file tests/runtime/digital01-preview-seed.php --path=/tmp/wp --allow-root
