@@ -1595,8 +1595,7 @@
 }
 
 @media (max-width: 48rem) {
-    .aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero__grid,
-    .aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-grid--products {
+    .aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero__grid {
         grid-template-columns: minmax(0, 1fr);
     }
     .aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero__content {
@@ -1607,6 +1606,13 @@
     }
     .aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero__visual {
         padding-top: 0;
+    }
+}
+
+/* Keep product cards in two readable columns at 768px; stack only on phones. */
+@media (max-width: 42.5rem) {
+    .aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-grid--products {
+        grid-template-columns: minmax(0, 1fr);
     }
 }
 
