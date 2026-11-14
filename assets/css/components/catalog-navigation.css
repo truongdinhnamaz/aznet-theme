@@ -393,3 +393,32 @@
     border-top: 1px solid var(--aznet-theme-border);
     background: color-mix(in srgb, var(--aznet-theme-accent) 4%, var(--aznet-theme-surface));
 }
+
+/* Decorative +/- affordance; accessible name comes from aria-label only. */
+.aznet-theme-catalog-navigation__submenu-icon {
+    position: relative;
+    display: block;
+    width: 14px;
+    height: 14px;
+    pointer-events: none;
+}
+.aznet-theme-catalog-navigation__submenu-icon::before,
+.aznet-theme-catalog-navigation__submenu-icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: currentColor;
+    transform: translate(-50%, -50%);
+}
+.aznet-theme-catalog-navigation__submenu-icon::before {
+    width: 12px;
+    height: 2px;
+}
+.aznet-theme-catalog-navigation__submenu-icon::after {
+    width: 2px;
+    height: 12px;
+}
+.aznet-theme-catalog-navigation__submenu-toggle[aria-expanded="true"] .aznet-theme-catalog-navigation__submenu-icon::after {
+    display: none;
+}
