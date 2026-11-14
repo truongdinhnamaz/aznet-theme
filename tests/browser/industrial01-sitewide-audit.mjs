@@ -1,0 +1,458 @@
+// ANP Industrial 01 read-only public or explicit WPVibe draft L4 evidence.
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {
+  previewTokenFromEnv, requestedAuditUrl, samePreviewRoute,
+  auditedBodyClass, redactReportSecrets,
+} from './industrial01-preview-route-guard.mjs';
+
+const widths = [390, 768, 1440];
+// In the actual WordPress render the native Page article lives INSIDE the
+// Industrial 01 composition wrapper, not directly under main#main.
+const nativeFrontPageSelector = 'main#main > .aznet-theme-homepage--industrial-01 > article[data-aznet-homepage-surface="front-page-content"]';
+// Isolate the first failing public surface instead of crawling the full matrix.
+// The exact ID must already exist in the reviewed site-local route manifest.
+function selectRoutes(routes, onlyId = '') {
+  if (!onlyId) return routes;
+  if (!/^[a-z0-9][a-z0-9-]{0,55}$/.test(onlyId)) throw Error('Invalid requested route ID');
+  const result = routes.filter((r) => r.id === onlyId);
+  if (result.length !== 1) throw Error('Requested route ID absent from reviewed manifest');
+  return result;
+}
+// Normalization permits WordPress trailing-slash canonicalization only.
+// An unrelated 200 redirect, especially to Homepage, must never count as Page PASS.
+function samePublicRoute(requestedUrl, finalUrl) {
+  const requested = new URL(requestedUrl);
+  const actual = new URL(finalUrl);
+  const pathname = (url) => url.pathname.replace(/\/+$/, '') || '/';
+  // A public route must never silently become a preview, cache-buster, or
+  // parameterized variant. Keep redirects limited to trailing-slash shape.
+  return !actual.search && !actual.hash &&
+    requested.origin === actual.origin && pathname(requested) === pathname(actual);
+}
+// A Page cannot pass sitewide semantic QA with no, empty, or duplicate H1.
+function hasOneNamedH1(headings) {
+  return Array.isArray(headings) && headings.length === 1 &&
+    typeof headings[0] === 'string' && headings[0].trim().length > 0;
+}
+// Contact is an explicitly reviewed route: a form in the page's main content
+// is required for visual PASS, but this does NOT verify sending/delivery.
+function routeHasRequiredForm(route, dom) {
+  return route.id !== 'contact' ||
+    (Number.isInteger(dom?.contactForms) && dom.contactForms > 0);
+}
+// axe-core "incomplete" means manual review is required, not WCAG PASS.
+function axeIsConclusive(violations, incomplete) {
+  return Array.isArray(violations) && Array.isArray(incomplete) &&
+    violations.length === 0 && incomplete.length === 0;
+}
+// Keep confirmed axe defects and manual-review findings equally actionable:
+// capture the same real DOM selector, source snippet and computed color context.
+async function inspectAxeNode(page, node) {
+  const evidence = {
+    target: node.target,
+    html: String(node.html || '').slice(0, 700),
+    reason: String(node.failureSummary || '').slice(0, 900),
+  };
+  if (Array.isArray(node.target) && node.target.length === 1 && typeof node.target[0] === 'string') {
+    try {
+      evidence.styles = await page.locator(node.target[0]).first().evaluate((el) => {
+        const cs = getComputedStyle(el), ancestors = [];
+        for (let current = el; current && ancestors.length < 4; current = current.parentElement) {
+          const style = getComputedStyle(current);
+          ancestors.push({
+            tag: current.tagName, className: String(current.className).slice(0, 130),
+            background: style.backgroundColor, color: style.color, opacity: style.opacity,
+          });
+        }
+        return {
+          color: cs.color, background: cs.backgroundColor, fontSize: cs.fontSize,
+          text: (el.textContent || '').trim().slice(0, 140),
+          ariaLabel: el.getAttribute('aria-label'), title: el.getAttribute('title'), ancestors,
+        };
+      });
+    } catch (error) { evidence.inspectError = String(error).slice(0, 250); }
+  }
+  return evidence;
+}
+// Full-page capture can trigger offscreen/lazy-loaded content. Axe must
+// inspect the post-capture DOM, never the earlier partial state.
+async function captureThenAudit(page, screenshotPath, AxeBuilder, inspectAfterCapture) {
+  await page.screenshot({ path: screenshotPath, fullPage: true, animations: 'disabled' });
+  // The DOM, headings and overflow must be measured after lazy-load-triggering capture.
+  await inspectAfterCapture();
+  return new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+}
+// Anonymous browser errors are evidence for triage, not automatically Theme bugs.
+// Store bounded error samples, strip query/fragment values, and preserve counts.
+function sanitizedSource(value) {
+  try {
+    const url = new URL(String(value || ''));
+    return ['https:', 'http:'].includes(url.protocol) ? url.origin + url.pathname : null;
+  } catch { return null; }
+}
+function sanitizedMessage(value) {
+  return String(value || '').replace(/https?:\/\/[^\s'"<>]+/g, (raw) => sanitizedSource(raw) || '[url]').slice(0, 500);
+}
+function attachBrowserDiagnostics(page, record) {
+  record.browserErrors = [];
+  record.browserErrorCount = 0;
+  const add = (kind, message, source) => {
+    record.browserErrorCount += 1;
+    if (record.browserErrors.length >= 12) return;
+    record.browserErrors.push({ kind, message: sanitizedMessage(message), source: sanitizedSource(source) });
+  };
+  page.on('console', (message) => {
+    if (message.type() !== 'error') return;
+    add('console', message.text(), message.location()?.url);
+  });
+  page.on('pageerror', (error) => add('pageerror', error?.message || String(error), ''));
+}
+
+/**
+ * Prevent false-positive homepage PASS when WordPress-native Gutenberg blocks
+ * have correct headings but unusable layout (Issue #546 visual regression).
+ * These are presentation measurements only; Page content stays WordPress-owned.
+ */
+function nativeFrontPageLayoutPass(route, width, measured) {
+  if (route.id !== 'home') return true;
+  const expectedTracks = { 390: 1, 768: 2, 1440: 3 }[width];
+  return Number.isInteger(expectedTracks) && measured?.present === true &&
+    measured.articleFullWidth === true && measured.shellCentered === true &&
+    measured.headingCentered === true && measured.columnsDisplay === 'grid' &&
+    measured.gridTracks === expectedTracks && measured.cardCount === 3 &&
+    Array.isArray(measured.cards) && measured.cards.length === 3 &&
+    measured.cards.every((card) => card.inViewport === true &&
+      card.topBorderVisible === true && card.goldTopBorder === true && card.hasSurface === true &&
+      card.ctaIsButton === true);
+}
+
+
+/**
+ * Flatsome -> AZnet compatibility preflight, presentation-only.
+ * Findings are REVIEW, never permission to strip WordPress content.
+ */
+function assessThemeSwitchEvidence(value) {
+  if (!value || !Array.isArray(value.legacyMarkers) ||
+      !Array.isArray(value.oldThemeAssets) ||
+      !Array.isArray(value.orphanQuoteTargets)) {
+    return [{ id: 'AZT-I01-MIG-00', owner: 'qa', status: 'unknown', sample: [] }];
+  }
+  return [
+    { id: 'AZT-I01-MIG-01', owner: 'wordpress-content', sample: value.legacyMarkers },
+    { id: 'AZT-I01-MIG-02', owner: 'asset-source', sample: value.oldThemeAssets },
+    { id: 'AZT-I01-MIG-03', owner: 'convertflow', sample: value.orphanQuoteTargets },
+  ].filter((r) => r.sample.length)
+    .map((r) => ({ ...r, status: 'review', sample: r.sample.slice(0, 6) }));
+}
+
+function config(baseUrl, data) {
+  const base = new URL(baseUrl);
+  if (base.username || base.password || base.search || base.hash || base.pathname !== '/' ||
+      !(['https:', 'http:'].includes(base.protocol)) ||
+      (base.protocol === 'http:' && !['localhost', '127.0.0.1'].includes(base.hostname))) {
+    throw Error('Require an HTTPS site origin; localhost HTTP allowed only');
+  }
+  if (!Array.isArray(data) || data.length < 1 || data.length > 30) throw Error('Require 1-30 explicit routes');
+  const ids = new Set();
+  const routes = data.map((r) => {
+    if (!r || !/^[a-z0-9][a-z0-9-]{0,55}$/.test(r.id) || ids.has(r.id)) throw Error('Invalid or duplicate route ID');
+    ids.add(r.id);
+    if (typeof r.path !== 'string' || !r.path.startsWith('/') || r.path.startsWith('//') ||
+        /[?#\\]/.test(r.path)) throw Error('Only public same-site absolute paths allowed');
+    const url = new URL(r.path, base);
+    if (url.origin !== base.origin || /^\/(?:wp-admin|wp-login|wp-json)(?:\/|$)/.test(url.pathname) ||
+        !['page', 'shop', 'product', 'category', 'article', 'archive', 'other'].includes(r.kind)) {
+      throw Error('Unsupported route origin, admin path or kind');
+    }
+    return { id: r.id, kind: r.kind, path: r.path, url: url.href };
+  });
+  return { base, routes };
+}
+if (process.argv.includes('--self-test')) {
+  assert.equal(config('https://example.test/', [{ id: 'p', path: '/p/', kind: 'page' }]).routes[0].url, 'https://example.test/p/');
+  assert.throws(() => config('http://example.test/', [{ id: 'p', path: '/', kind: 'page' }]));
+  assert.throws(() => config('https://example.test/', [{ id: 'p', path: '//evil.test', kind: 'page' }]));
+  const fixture = config('https://example.test/', [
+    { id: 'home', path: '/', kind: 'page' },
+    { id: 'komatsu-product', path: '/product-example', kind: 'product' },
+  ]).routes;
+  assert.deepEqual(selectRoutes(fixture, 'komatsu-product').map((r) => r.id), ['komatsu-product']);
+  assert.equal(selectRoutes(fixture).length, 2);
+  assert.throws(() => selectRoutes(fixture, 'not-in-manifest'));
+  assert.throws(() => selectRoutes(fixture, '../wp-admin'));
+  assert.equal(samePublicRoute('https://example.test/p/', 'https://example.test/p'), true);
+  assert.equal(samePublicRoute('https://example.test/p/', 'https://example.test/p/?preview=true'), false);
+  assert.equal(samePublicRoute('https://example.test/p/', 'https://example.test/p/?wpvibe_cb=123'), false);
+  assert.equal(samePublicRoute('https://example.test/p/', 'https://example.test/p/#draft'), false);
+  assert.equal(samePublicRoute('https://example.test/p/', 'https://example.test/'), false);
+  assert.equal(samePublicRoute('https://example.test/p/', 'https://evil.test/p/'), false);
+  assert.equal(hasOneNamedH1(['Valid product title']), true);
+  assert.equal(hasOneNamedH1([]), false);
+  assert.equal(hasOneNamedH1(['']), false);
+  assert.equal(hasOneNamedH1(['First', 'Duplicate']), false);
+
+  assert.deepEqual(assessThemeSwitchEvidence({ legacyMarkers: [], oldThemeAssets: [], orphanQuoteTargets: [] }), []);
+  assert.equal(assessThemeSwitchEvidence(null)[0].status, 'unknown');
+  const uxFinding = assessThemeSwitchEvidence({ legacyMarkers: ['[ux_banner]'], oldThemeAssets: [], orphanQuoteTargets: [] });
+  assert.equal(uxFinding[0].id, 'AZT-I01-MIG-01');
+  assert.equal(uxFinding[0].owner, 'wordpress-content');
+  const assetFinding = assessThemeSwitchEvidence({ legacyMarkers: [], oldThemeAssets: ['/wp-content/themes/flatsome/assets/main.css'], orphanQuoteTargets: [] });
+  assert.equal(assetFinding[0].id, 'AZT-I01-MIG-02');
+  const quoteFinding = assessThemeSwitchEvidence({ legacyMarkers: [], oldThemeAssets: [], orphanQuoteTargets: ['dat-hang'] });
+  assert.equal(quoteFinding[0].id, 'AZT-I01-MIG-03');
+  assert.equal(quoteFinding[0].owner, 'convertflow');
+  assert.equal(routeHasRequiredForm({ id: 'contact' }, { contactForms: 0 }), false);
+  assert.equal(routeHasRequiredForm({ id: 'contact' }, { contactForms: 1 }), true);
+  assert.equal(routeHasRequiredForm({ id: 'contact' }, {}), false);
+  assert.equal(routeHasRequiredForm({ id: 'home' }, { contactForms: 0 }), true);
+  assert.equal(axeIsConclusive([], []), true);
+  assert.equal(axeIsConclusive([{ id: 'color-contrast' }], []), false);
+  assert.equal(axeIsConclusive([], [{ id: 'color-contrast' }]), false);
+  assert.equal(axeIsConclusive([], undefined), false);
+  const stubPage = { locator: (selector) => ({
+    first: () => ({ evaluate: async () => ({ color: selector === '#test' ? 'rgb(1, 2, 3)' : '' }) }),
+  }) };
+  const sampleAxeNode = { target: ['#test'], html: '<a id="test">Text</a>', failureSummary: 'review color' };
+  const enriched = await inspectAxeNode(stubPage, sampleAxeNode);
+  assert.deepEqual(enriched.target, ['#test']);
+  assert.equal(enriched.styles.color, 'rgb(1, 2, 3)');
+  const failedInspection = await inspectAxeNode({ locator: () => { throw Error('bad selector'); } }, sampleAxeNode);
+  assert.match(failedInspection.inspectError, /bad selector/);
+  const auditOrder = [];
+  const capturePage = { screenshot: async (options) => {
+    assert.equal(options.fullPage, true);
+    assert.equal(options.animations, 'disabled');
+    auditOrder.push('capture');
+  } };
+  class StubAxeBuilder {
+    withTags(tags) {
+      assert.deepEqual(tags, ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']);
+      return this;
+    }
+    async analyze() {
+      auditOrder.push('axe');
+      return { violations: [], incomplete: [] };
+    }
+  }
+  const capturedAudit = await captureThenAudit(capturePage, '/tmp/self-test-only.png', StubAxeBuilder, async () => {
+    assert.deepEqual(auditOrder, ['capture']);
+    auditOrder.push('dom');
+  });
+  assert.deepEqual(auditOrder, ['capture', 'dom', 'axe']);
+  assert.deepEqual(capturedAudit.incomplete, []);
+  assert.deepEqual(widths, [390, 768, 1440]);
+  assert.ok(nativeFrontPageSelector.includes('.aznet-theme-homepage--industrial-01 > article['));
+  assert.ok(!nativeFrontPageSelector.startsWith('main#main > article['));
+  const serviceCard = { inViewport: true, topBorderVisible: true, goldTopBorder: true, hasSurface: true, ctaIsButton: true };
+  const healthyNative = {
+    present: true, articleFullWidth: true, shellCentered: true, headingCentered: true,
+    columnsDisplay: 'grid', gridTracks: 3, cardCount: 3,
+    cards: [serviceCard, serviceCard, serviceCard],
+  };
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 1440, healthyNative), true);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'komatsu-product' }, 1440, null), true);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 1440, null), false);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 1440, { ...healthyNative, columnsDisplay: 'block' }), false);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 1440, { ...healthyNative, gridTracks: 1 }), false);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 768, { ...healthyNative, gridTracks: 2 }), true);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 390, { ...healthyNative, gridTracks: 1 }), true);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 390, { ...healthyNative, cards: [{ ...serviceCard, ctaIsButton: false }, serviceCard, serviceCard] }), false);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 1440, { ...healthyNative, articleFullWidth: false }), false);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 1440, { ...healthyNative, cards: [{ ...serviceCard, topBorderVisible: false }, serviceCard, serviceCard] }), false);
+  assert.equal(nativeFrontPageLayoutPass({ id: 'home' }, 1440, { ...healthyNative, cards: [{ ...serviceCard, goldTopBorder: false }, serviceCard, serviceCard] }), false);
+  const browserCallbacks = new Map(), browserRecord = {};
+  attachBrowserDiagnostics({ on: (name, callback) => browserCallbacks.set(name, callback) }, browserRecord);
+  browserCallbacks.get('console')({ type: () => 'warning', text: () => 'ignore' });
+  assert.equal(browserRecord.browserErrorCount, 0);
+  browserCallbacks.get('console')({
+    type: () => 'error',
+    text: () => 'failed https://example.test/api?secret=123',
+    location: () => ({ url: 'https://example.test/script.js?key=private' }),
+  });
+  browserCallbacks.get('pageerror')(new Error('Uncaught exception'));
+  assert.equal(browserRecord.browserErrorCount, 2);
+  assert.equal(browserRecord.browserErrors[0].source, 'https://example.test/script.js');
+  assert.equal(browserRecord.browserErrors[1].kind, 'pageerror');
+  assert.equal(JSON.stringify(browserRecord).includes('secret=123'), false);
+  assert.equal(JSON.stringify(browserRecord).includes('key=private'), false);
+  for (let i = 0; i < 15; i++) browserCallbacks.get('pageerror')(new Error('additional'));
+  assert.equal(browserRecord.browserErrorCount, 17);
+  assert.equal(browserRecord.browserErrors.length, 12);
+
+  console.log('PASS: public route safety, fail-closed single-route selection and viewports');
+} else {
+  const file = process.env.AZT_AUDIT_ROUTES_FILE;
+  if (!file) throw Error('Set AZT_AUDIT_ROUTES_FILE to a reviewed explicit JSON route manifest');
+  const { base, routes } = config(process.env.AZT_AUDIT_BASE_URL || '', JSON.parse(fs.readFileSync(file, 'utf8')));
+  const selectedRoutes = selectRoutes(routes, process.env.AZT_AUDIT_ONLY_ROUTE || '');
+  const previewToken = previewTokenFromEnv(process.env.AZT_AUDIT_PREVIEW_TOKEN || '');
+  const expectedBodyClass = auditedBodyClass(previewToken);
+  const dir = path.resolve(process.env.AZT_AUDIT_DIR || '/tmp/azt-industrial01-sitewide');
+  fs.mkdirSync(dir, { recursive: true });
+  const [{ chromium }, { default: AxeBuilder }] = await Promise.all([import('playwright'), import('@axe-core/playwright')]);
+  const result = {
+    scope: previewToken ? 'Read-only WPVibe draft preview; do not infer Theme/domain source from selectors alone' : 'Read-only public DOM; do not infer Theme/domain source from selectors alone',
+    previewMode: Boolean(previewToken),
+    base: base.href,
+    generatedAt: new Date().toISOString(),
+    head: process.env.GITHUB_SHA || null,
+    views: [],
+  };
+  const persist = () => fs.writeFileSync(path.join(dir, 'report.json'), redactReportSecrets(result, previewToken));
+  const browser = await chromium.launch({ headless: true });
+  try {
+    for (const route of selectedRoutes) for (const width of widths) {
+      const record = { route: route.id, kind: route.kind, width, outcome: 'started' };
+      result.views.push(record);
+      const context = await browser.newContext({ viewport: { width, height: width === 390 ? 844 : 1000 }, reducedMotion: 'reduce' });
+      const page = await context.newPage();
+      attachBrowserDiagnostics(page, record);
+      try {
+        const targetUrl = requestedAuditUrl(route.url, previewToken);
+        const response = await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 45000 });
+        record.httpStatus = response?.status() ?? null;
+        record.finalUrl = sanitizedSource(page.url());
+        const validRoute = previewToken ? samePreviewRoute(targetUrl, page.url(), previewToken) : samePublicRoute(route.url, page.url());
+        if (record.httpStatus !== 200 || !validRoute) throw Error('HTTP status or final path mismatch for reviewed route');
+        record.screenshot = route.id + '-' + width + '.png';
+        const axe = await captureThenAudit(page, path.join(dir, record.screenshot), AxeBuilder, async () => {
+          record.dom = await page.evaluate(({ expectedBodyClass, nativeFrontPageSelector }) => {
+            const body = document.body, root = document.documentElement;
+            return {
+              theme: body.classList.contains(expectedBodyClass),
+              industrial01: body.classList.contains('aznet-theme-preset--industrial-01'),
+              mainCount: document.querySelectorAll('main#main').length,
+              h1: [...document.querySelectorAll('h1')].map((el) => el.textContent.trim().slice(0, 120)),
+              overflowPx: Math.max(0, root.scrollWidth - root.clientWidth),
+              visibleBrokenImages: [...document.images].filter((img) => {
+                const rect = img.getBoundingClientRect();
+                return rect.height > 1 && rect.width > 1 && rect.top < innerHeight && rect.bottom > 0 &&
+                  img.complete && img.naturalWidth === 0;
+              }).slice(0, 8).map((img) => ({ src: img.currentSrc || img.src, alt: img.alt })),
+              contactForms: document.querySelectorAll('main#main .wpcf7 form').length,
+              themeSwitchEvidence: (() => {
+                const main = document.querySelector('main#main');
+                const legacyMarkers = [...(main?.innerText || '').matchAll(/\[(?:ux_[a-z0-9_-]+|row|col|section|gap|featured_box|button)(?=[\s\]])[^\]\n]{0,200}\]/gi)]
+                  .slice(0, 6).map((m) => m[0].slice(0, 120));
+                const oldThemeAssets = [...document.querySelectorAll('link[href], script[src]')]
+                  .map((el) => {
+                    try { return new URL(el.href || el.src, location.href).pathname; }
+                    catch { return ''; }
+                  }).filter((p) => /^\/wp-content\/themes\/flatsome(?:-child)?\//i.test(p)).slice(0, 6);
+                const orphanQuoteTargets = [...document.querySelectorAll('main#main a.choiceguide-quote-button[href^="#"]')]
+                  .filter((el) => {
+                    const id = (el.getAttribute('href') || '').slice(1);
+                    return !!id && !document.getElementById(id);
+                  }).slice(0, 6).map((el) => (el.getAttribute('href') || '').slice(1, 80));
+                return { legacyMarkers, oldThemeAssets, orphanQuoteTargets };
+              })(),
+              nativeFrontPage: (() => {
+                const article = document.querySelector(nativeFrontPageSelector);
+                if (!article) return null;
+                const content = article.querySelector(':scope > .aznet-theme-entry__content');
+                const group = content?.querySelector(':scope > .wp-block-group');
+                const columns = group?.querySelector(':scope > .wp-block-columns');
+                const heading = group?.querySelector(':scope > h2');
+                const cards = columns ? [...columns.children].filter((el) => el.classList.contains('wp-block-column')) : [];
+                const articleRect = article.getBoundingClientRect();
+                const contentRect = content?.getBoundingClientRect();
+                const columnsStyle = columns ? getComputedStyle(columns) : null;
+                const visibleBackground = (color) => Boolean(color && color !== 'transparent' &&
+                  !/^rgba\([^)]*,\s*0(?:\.0+)?\)$/.test(color));
+                return {
+                  present: true,
+                  articleFullWidth: Math.abs(articleRect.left) <= 2 &&
+                    articleRect.right >= root.clientWidth - 2,
+                  shellCentered: Boolean(contentRect && contentRect.width > 0 &&
+                    contentRect.left >= 0 && contentRect.right <= root.clientWidth + 1 &&
+                    Math.abs((contentRect.left + contentRect.right) / 2 - root.clientWidth / 2) <= 12),
+                  headingCentered: Boolean(heading && getComputedStyle(heading).textAlign === 'center'),
+                  columnsDisplay: columnsStyle?.display || null,
+                  gridTracks: columnsStyle?.display === 'grid'
+                    ? columnsStyle.gridTemplateColumns.split(/\s+/).filter(Boolean).length : 0,
+                  cardCount: cards.length,
+                  cards: cards.slice(0, 6).map((card) => {
+                    const rect = card.getBoundingClientRect();
+                    const style = getComputedStyle(card);
+                    const cta = card.querySelector('p a');
+                    const action = cta ? getComputedStyle(cta) : null;
+                    return {
+                      inViewport: rect.width > 1 && rect.left >= -1 && rect.right <= root.clientWidth + 1,
+                      topBorderVisible: Number.parseFloat(style.borderTopWidth) >= 3 &&
+                        style.borderTopStyle !== 'none',
+                      goldTopBorder: style.borderTopColor === 'rgb(216, 165, 79)',
+                      hasSurface: visibleBackground(style.backgroundColor),
+                      ctaIsButton: Boolean(action && action.display === 'inline-flex' &&
+                        visibleBackground(action.backgroundColor) &&
+                        action.textDecorationLine === 'none'),
+                    };
+                  }),
+                };
+              })(),
+            };
+          }, { expectedBodyClass, nativeFrontPageSelector });
+          if (record.dom.overflowPx > 1) {
+            record.overflowElements = await page.evaluate(() => [...document.querySelectorAll('body *')]
+              .map((el) => ({ el, rect: el.getBoundingClientRect() }))
+              .filter(({ rect }) => rect.width > 1 && rect.right > document.documentElement.clientWidth + 1)
+              .slice(0, 10).map(({ el, rect }) => ({
+                tag: el.tagName, className: String(el.className).slice(0, 160), right: Math.round(rect.right),
+              })));
+          }
+        });
+        record.axe = [];
+        for (const violation of axe.violations) {
+          const item = { id: violation.id, impact: violation.impact, help: violation.help, nodeCount: violation.nodes.length, nodes: [] };
+          for (const n of violation.nodes.slice(0, 12)) {
+            const evidence = await inspectAxeNode(page, n);
+            item.nodes.push(evidence);
+          }
+          record.axe.push(item);
+        }
+        record.themeSwitchReview = assessThemeSwitchEvidence(record.dom.themeSwitchEvidence);
+        // Manual-review results are not proven defects, but must never be
+        // silently counted as axe-clean. Preserve exact targets for triage.
+        record.axeIncomplete = [];
+        for (const rule of axe.incomplete) {
+          const item = { id: rule.id, impact: rule.impact, help: rule.help, nodeCount: rule.nodes.length, nodes: [] };
+          for (const n of rule.nodes.slice(0, 12)) item.nodes.push(await inspectAxeNode(page, n));
+          record.axeIncomplete.push(item);
+        }
+        // The preceding screenshot can trigger lazy image loads. Inspect all image
+        // elements afterwards, not only initially visible images above the fold.
+        // Unresolved lazy images are UNKNOWN, never treated as verified PASS.
+        record.media = await page.evaluate(() => {
+          const images = [...document.images].filter((img) => img.currentSrc || img.getAttribute('src') || img.getAttribute('srcset'));
+          const broken = images.filter((img) => img.complete && img.naturalWidth === 0);
+          const pending = images.filter((img) => !img.complete);
+          return {
+            total: images.length,
+            brokenCount: broken.length,
+            pendingCount: pending.length,
+            broken: broken.slice(0, 12).map((img) => ({ src: img.currentSrc || img.src, alt: img.alt })),
+            pending: pending.slice(0, 12).map((img) => ({ src: img.currentSrc || img.src, loading: img.loading })),
+          };
+        });
+        record.outcome = !record.dom.theme || !record.dom.industrial01 ? 'unknown-shell' :
+          record.dom.mainCount === 1 && hasOneNamedH1(record.dom.h1) && routeHasRequiredForm(route, record.dom) &&
+           nativeFrontPageLayoutPass(route, width, record.dom.nativeFrontPage) && record.dom.overflowPx <= 1 &&
+          record.media.brokenCount === 0 && record.media.pendingCount === 0 &&
+          record.browserErrorCount === 0 && record.themeSwitchReview.length === 0 && axeIsConclusive(record.axe, record.axeIncomplete) ? 'pass' : 'review';
+      } catch (error) {
+        record.outcome = 'blocked';
+        record.error = String(error).slice(0, 1100);
+      } finally {
+        persist();
+        await context.close();
+      }
+    }
+  } finally {
+    await browser.close();
+  }
+  persist();
+  const passed = result.views.filter((v) => v.outcome === 'pass').length;
+  console.log('Sitewide view checks: ' + passed + '/' + result.views.length + ' PASS; evidence ' + dir);
+  if (passed !== result.views.length) process.exitCode = 1;
+}
