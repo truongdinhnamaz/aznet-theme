@@ -8,9 +8,14 @@ on:
       - 'assets/css/presets/curtain-01.css'
       - '.github/workflows/industrial01-pilot-runtime.yml'
       - 'tests/browser/industrial01-pilot-l4.mjs'
+      - 'tests/browser/industrial01-technical-b2b-l4.mjs'
+      - 'tests/browser/industrial01-authoring-sources-l4.mjs'
+      - 'tests/wordpress/industrial01-authoring-source-fixture.php'
+      - 'inc/admin/homepage.php'
       - 'tests/browser/core-vertical-catalog-l4.mjs'
       - 'tests/browser/r3-nav-only-header-l4.mjs'
       - 'tests/offline/d049-rail-header-hero-visual-parity-contract.php'
+      - 'tests/offline/industrial01-technical-b2b-homepage-contract.php'
       - 'template-parts/header/site-header.php'
       - 'assets/css/components/catalog-navigation.css'
       - 'inc/theme/settings.php'
@@ -54,6 +59,9 @@ jobs:
           php-version: '8.1'
           extensions: mysqli
           coverage: none
+
+      - name: Validate technical B2B Homepage contract
+        run: php -d display_errors=1 tests/offline/industrial01-technical-b2b-homepage-contract.php
 
       - name: Set up Node 22
         uses: actions/setup-node@v4
@@ -243,6 +251,82 @@ jobs:
           INDUSTRIAL01_BASE_URL: http://127.0.0.1:8080
           INDUSTRIAL01_OUT_DIR: /tmp/industrial01-pilot
         run: node tests/browser/industrial01-pilot-l4.mjs
+
+      - name: Verify opt-in technical B2B on WordPress and rollback to standard
+        env:
+          INDUSTRIAL01_BASE_URL: http://127.0.0.1:8080
+          INDUSTRIAL01_OUT_DIR: /tmp/industrial01-pilot
+        run: |
+          set -euo pipefail
+          wp eval '
+            $settings = get_theme_mod("aznet_theme_settings", []);
+            if (!is_array($settings) || (int) ($settings["homepage_industrial01_solutions_page"] ?? 0) <= 0) {
+              throw new RuntimeException("Native WordPress solutions source missing");
+            }
+            $settings["homepage_industrial01_variant"] = "technical-b2b";
+            set_theme_mod("aznet_theme_settings", $settings);
+            if (\AZnet\Theme\setting("homepage_industrial01_variant") !== "technical-b2b") {
+              throw new RuntimeException("Technical variant did not normalize");
+            }
+          ' --path=/tmp/wp --allow-root
+          curl -fsS http://127.0.0.1:8080/ > /tmp/industrial01-pilot/technical-b2b-smoke.html
+          grep -Fq 'aznet-theme-homepage--industrial-01-technical-b2b' /tmp/industrial01-pilot/technical-b2b-smoke.html
+          node tests/browser/industrial01-technical-b2b-l4.mjs
+          wp eval '
+            $settings = get_theme_mod("aznet_theme_settings", []);
+            $settings["homepage_industrial01_variant"] = "standard";
+            set_theme_mod("aznet_theme_settings", $settings);
+          ' --path=/tmp/wp --allow-root
+          curl -fsS http://127.0.0.1:8080/ > /tmp/industrial01-pilot/technical-b2b-rollback.html
+          if grep -Fq 'aznet-theme-homepage--industrial-01-technical-b2b' /tmp/industrial01-pilot/technical-b2b-rollback.html; then
+            echo 'FAIL: Theme presentation rollback must restore default variant' >&2
+            exit 1
+          fi
+          grep -Fq 'aznet-theme-homepage--industrial-01' /tmp/industrial01-pilot/technical-b2b-rollback.html
+          echo 'PASS: Technical B2B on -> visual/browser QA -> standard off; WordPress sources retained'
+
+      - name: Verify explicit WordPress contact wins over technical B2B catalogue fallback
+        run: |
+          set -euo pipefail
+          wp eval '
+            $contact = wp_insert_post([
+              "post_type" => "page",
+              "post_status" => "publish",
+              "post_title" => "Liên hệ đối chiếu",
+              "post_name" => "contact-source-b2b",
+              "post_content" => "<p>WordPress-owned contact fixture</p>",
+            ], true);
+            if (is_wp_error($contact)) { throw new RuntimeException($contact->get_error_message()); }
+            $settings = get_theme_mod("aznet_theme_settings", []);
+            if (!is_array($settings)) { throw new RuntimeException("Missing Theme fixture settings"); }
+            $settings["homepage_industrial01_variant"] = "technical-b2b";
+            $settings["homepage_industrial01_contact_page"] = (int) $contact;
+            set_theme_mod("aznet_theme_settings", $settings);
+          ' --path=/tmp/wp --allow-root
+          curl -fsS http://127.0.0.1:8080/ > /tmp/industrial01-pilot/technical-b2b-contact-mapped.html
+          grep -Fq 'Gửi yêu cầu tư vấn' /tmp/industrial01-pilot/technical-b2b-contact-mapped.html
+          grep -Fq 'contact-source-b2b/' /tmp/industrial01-pilot/technical-b2b-contact-mapped.html
+          grep -Fq 'href="#aznet-industrial01-quote"' /tmp/industrial01-pilot/technical-b2b-contact-mapped.html
+          wp eval '
+            $settings = get_theme_mod("aznet_theme_settings", []);
+            $settings["homepage_industrial01_contact_page"] = 0;
+            $settings["homepage_industrial01_variant"] = "standard";
+            set_theme_mod("aznet_theme_settings", $settings);
+          ' --path=/tmp/wp --allow-root
+          echo 'PASS: Explicit WordPress contact wins; technical layout safely restored'
+
+      - name: Verify Industrial 01 WordPress-native source mapping via authorized Control Center
+        env:
+          INDUSTRIAL01_BASE_URL: http://127.0.0.1:8080
+          INDUSTRIAL01_OUT_DIR: /tmp/industrial01-pilot
+        run: |
+          set -euo pipefail
+          # D-050 is per actor. Do not grant capability to the Administrator role.
+          wp user add-cap admin aznet_theme_manage_danger_zone --path=/tmp/wp --allow-root
+          wp eval-file tests/wordpress/industrial01-authoring-source-fixture.php --path=/tmp/wp --allow-root
+          node tests/browser/industrial01-authoring-sources-l4.mjs
+          INDUSTRIAL01_SOURCE_ACTION=restore wp eval-file tests/wordpress/industrial01-authoring-source-fixture.php --path=/tmp/wp --allow-root
+          echo 'PASS: WordPress source controls, retention and Theme data boundary verified'
 
       - name: Seed opt-in WordPress Catalog Menu and enable Homepage rail
         run: |

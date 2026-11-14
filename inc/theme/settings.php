@@ -142,6 +142,7 @@ function settings_defaults(): array {
         'woo_product_card_density'      => 'balanced',
         'woo_product_preset'            => 'classic',
         'homepage_preset'               => 'off',
+        'homepage_industrial01_variant'  => 'standard',
         'homepage_industrial01_hero_kicker' => '',
         'homepage_industrial01_hero_title' => '',
         'homepage_industrial01_hero_lede' => '',
@@ -248,6 +249,10 @@ function normalize_settings( array $raw ): array {
     $homepage_preset = isset( $raw['homepage_preset'] ) && in_array( $raw['homepage_preset'], homepage_preset_ids(), true )
         ? (string) $raw['homepage_preset']
         : 'off';
+
+    $homepage_industrial01_variant = isset( $raw['homepage_industrial01_variant'] ) && in_array( $raw['homepage_industrial01_variant'], [ 'standard', 'technical-b2b' ], true )
+        ? (string) $raw['homepage_industrial01_variant']
+        : 'standard';
 
     $homepage_law01_variant = isset( $raw['homepage_law01_variant'] ) && in_array( $raw['homepage_law01_variant'], [ 'navy-gold', 'burgundy-gold' ], true )
         ? (string) $raw['homepage_law01_variant']
@@ -359,6 +364,7 @@ function normalize_settings( array $raw ): array {
         'woo_product_card_density'      => $woo_product_card_density,
         'woo_product_preset'            => $woo_product_preset,
         'homepage_preset'               => $homepage_preset,
+        'homepage_industrial01_variant'  => $homepage_industrial01_variant,
         'homepage_industrial01_hero_kicker' => $normalize_text( $raw['homepage_industrial01_hero_kicker'] ?? '' ),
         'homepage_industrial01_hero_title' => $normalize_text( $raw['homepage_industrial01_hero_title'] ?? '' ),
         'homepage_industrial01_hero_lede' => $normalize_text( $raw['homepage_industrial01_hero_lede'] ?? '' ),

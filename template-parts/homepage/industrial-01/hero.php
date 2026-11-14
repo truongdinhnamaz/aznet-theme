@@ -23,9 +23,12 @@ $primary_label = trim( (string) \AZnet\Theme\setting( 'homepage_industrial01_her
 $primary_url   = trim( (string) \AZnet\Theme\setting( 'homepage_industrial01_hero_primary_url', '' ) );
 $secondary_label = trim( (string) \AZnet\Theme\setting( 'homepage_industrial01_hero_secondary_label', '' ) );
 $secondary_url   = trim( (string) \AZnet\Theme\setting( 'homepage_industrial01_hero_secondary_url', '' ) );
+$secondary_explicit_url = $secondary_url;
 
 if ( '' === $kicker ) {
-    $kicker = \AZnet\Theme\preset_term( 'catalog', __( 'Thiết bị & phụ kiện', 'aznet-theme' ), 'industrial-01' );
+    $kicker = 'technical-b2b' === \AZnet\Theme\setting( 'homepage_industrial01_variant', 'standard' )
+        ? __( 'Danh mục sản phẩm', 'aznet-theme' )
+        : \AZnet\Theme\preset_term( 'catalog', __( 'Thiết bị & phụ kiện', 'aznet-theme' ), 'industrial-01' );
 }
 if ( '' === $title ) {
     $title = $site_name;
@@ -70,6 +73,31 @@ if ( '' === $secondary_label ) {
 }
 if ( '' === $secondary_url ) {
     $secondary_url = '#aznet-industrial01-quote';
+}
+
+// A default quote link is truthful only when WordPress maps a contact Page
+// or an optional public-safe contact provider exposes a phone. Editors retain
+// control over explicit secondary URLs; Theme never guesses contact slugs.
+if ( 'technical-b2b' === \AZnet\Theme\setting( 'homepage_industrial01_variant', 'standard' ) && '' === $secondary_explicit_url ) {
+    $contact_page = \AZnet\Theme\homepage_page_reference(
+        (int) \AZnet\Theme\homepage_effective_source_value( 'industrial-01', 'contact' )
+    );
+    $contact_has_phone = false;
+    $contact_model = function_exists( 'AZnet\Theme\contact_surface_model' )
+        ? \AZnet\Theme\contact_surface_model()
+        : null;
+    if ( is_array( $contact_model ) ) {
+        foreach ( (array) ( $contact_model['contact']['points'] ?? [] ) as $point ) {
+            if ( is_array( $point ) && 'phone' === ( $point['kind'] ?? '' ) && '' !== trim( (string) ( $point['value'] ?? '' ) ) ) {
+                $contact_has_phone = true;
+                break;
+            }
+        }
+    }
+    if ( ! ( $contact_page instanceof \WP_Post ) && ! $contact_has_phone ) {
+        $secondary_label = '';
+        $secondary_url = '';
+    }
 }
 
 $hero_image_id = (int) \AZnet\Theme\setting( 'homepage_industrial01_hero_image', 0 );
