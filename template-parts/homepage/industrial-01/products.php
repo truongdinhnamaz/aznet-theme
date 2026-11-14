@@ -20,6 +20,11 @@ if ( ! is_array( $products ) || [] === $products ) {
 $shop_url = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\shop_url' )
     ? \AZnet\Theme\Integrations\WooCommerce\shop_url()
     : '';
+
+// The compact product card can render in a source-only consumer harness; a
+// missing Theme settings reader must retain the established standard label.
+$is_technical_b2b = function_exists( 'AZnet\\Theme\\setting' )
+    && 'technical-b2b' === \AZnet\Theme\setting( 'homepage_industrial01_variant', 'standard' );
 ?>
 <section class="aznet-theme-industrial01-section aznet-theme-industrial01-products" aria-labelledby="aznet-industrial01-products-title">
     <div class="aznet-theme-industrial01-shell">
@@ -27,7 +32,7 @@ $shop_url = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\shop_url'
             <div>
                 <p class="aznet-theme-industrial01-kicker"><?php esc_html_e( 'Sản phẩm', 'aznet-theme' ); ?></p>
                 <h2 id="aznet-industrial01-products-title"><?php echo esc_html(
-                    'technical-b2b' === \AZnet\Theme\setting( 'homepage_industrial01_variant', 'standard' )
+                    $is_technical_b2b
                         ? __( 'Sản phẩm đang cung cấp', 'aznet-theme' )
                         : \AZnet\Theme\preset_term( 'catalog', __( 'Thiết bị & phụ kiện', 'aznet-theme' ), 'industrial-01' )
                 ); ?></h2>

@@ -79,6 +79,10 @@ namespace {
     );
     $check( str_contains( $products_template, "'Sản phẩm đang cung cấp'" ), 'Technical B2B avoids equipment-only label' );
     $check(
+        str_contains( $products_template, "function_exists( 'AZnet\\\\Theme\\\\setting' )" ),
+        'Product-card presentation retains standalone source-only fallback without Theme settings bootstrap'
+    );
+    $check(
         str_contains( $styles, 'hero--with-background' ) && str_contains( $styles, 'rgba(7,25,41,.2)' ),
         'Technical Hero allows approved WordPress background media to remain visible'
     );
