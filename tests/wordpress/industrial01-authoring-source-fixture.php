@@ -85,6 +85,8 @@ $post = wp_insert_post( [
 ], true );
 if ( is_wp_error( $post ) || (int) $post <= 0 ) { throw new RuntimeException( 'Knowledge post fixture missing' ); }
 $ids['post'] = (int) $post;
+$ids['contact_url'] = (string) get_permalink( $ids['contact'] );
+if ( '' === $ids['contact_url'] ) { throw new RuntimeException( 'WordPress contact Page permalink missing' ); }
 $ids['hashes'] = $hashes;
 file_put_contents( $fixture_file, wp_json_encode( $ids, JSON_UNESCAPED_UNICODE ) );
 echo "PASS: disposable WordPress owner pages/categories/posts seeded for Industrial 01 authoring\n";

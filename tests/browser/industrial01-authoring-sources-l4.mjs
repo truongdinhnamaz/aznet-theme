@@ -97,7 +97,11 @@ try {
     assert(audit.about==='Giới thiệu nguồn B2B',width+': mapped WordPress About absent');
     assert(audit.process==='Quy trình xác nhận yêu cầu',width+': mapped WordPress Process absent');
     assert(audit.knowledge.includes('Kiến thức kiểm tra vật liệu'),width+': mapped WordPress Knowledge post absent');
-    assert(audit.contactHref.includes('/contact-source-b2b/'),width+': mapped WordPress Contact link absent');
+    // WordPress owns permalink structure; never infer a Page URL from a slug.
+    assert(
+      audit.contactHref !== '' && new URL(audit.contactHref, base).href === fixture.contact_url,
+      width+': mapped WordPress Contact URL differs from its authoritative permalink: '+JSON.stringify({actual:audit.contactHref,expected:fixture.contact_url,other:audit})
+    );
     assert(audit.productCards>=1,width+': native WooCommerce products unexpectedly missing');
     assert(audit.overflow<=1,width+': horizontal overflow '+audit.overflow+'px');
     const axe = await new AxeBuilder({page:front}).analyze();
