@@ -46,10 +46,12 @@ try {
     await select.selectOption(slot === 'knowledge' ? [String(id)] : String(id));
   }
   await Promise.all([
-    page.waitForURL(url => url.pathname.endsWith('/wp-admin/admin.php') && url.searchParams.get('page') === 'aznet-theme', {timeout:25000}),
+    page.waitForURL(url => url.pathname.endsWith('/wp-admin/admin.php') && url.searchParams.get('updated') === '1', {timeout:25000}),
     sourceForm.locator('input[type=submit]').click(),
   ]);
-
+  // Theme intentionally redirects Save Settings to the Control Center overview.
+  // Re-enter Homepage before checking persisted source references.
+  await page.goto(base + '/wp-admin/admin.php?page=aznet-theme&section=homepage', {waitUntil:'domcontentloaded'});
   const reloaded = page.locator(formSelector);
   for (const [slot,key,id] of sourceKeys) {
     const target = reloaded.locator('select[name="aznet_theme_settings['+key+']'+(slot === 'knowledge' ? '[]' : '')+'"]');
@@ -63,9 +65,10 @@ try {
   assert(await variantForm.count() === 1, 'Native Industrial variant selector missing');
   await variantForm.locator('select[name="aznet_theme_settings[homepage_industrial01_variant]"]').selectOption('technical-b2b');
   await Promise.all([
-    page.waitForURL(url => url.pathname.endsWith('/wp-admin/admin.php') && url.searchParams.get('page') === 'aznet-theme', {timeout:25000}),
+    page.waitForURL(url => url.pathname.endsWith('/wp-admin/admin.php') && url.searchParams.get('updated') === '1', {timeout:25000}),
     variantForm.locator('input[type=submit]').click(),
   ]);
+  await page.goto(base + '/wp-admin/admin.php?page=aznet-theme&section=homepage', {waitUntil:'domcontentloaded'});
   for (const [,key,id] of sourceKeys) {
     const sel = page.locator(formSelector).locator('select[name="aznet_theme_settings['+key+']'+(key.endsWith('_terms') ? '[]' : '')+'"]');
     const selected = await sel.locator('option:checked').evaluateAll(nodes=>nodes.map(n=>n.value));
