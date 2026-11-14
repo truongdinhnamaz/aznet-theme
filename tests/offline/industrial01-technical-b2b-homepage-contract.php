@@ -48,6 +48,9 @@ namespace {
     $composer = $load( 'inc/theme/homepage-composer.php' );
     $surface = $load( 'inc/theme/homepage-surface-map.php' );
     $styles = $load( 'assets/css/components/homepage-industrial-01.css' );
+    $hero = $load( 'template-parts/homepage/industrial-01/hero.php' );
+    $cta = $load( 'template-parts/homepage/industrial-01/cta.php' );
+    $products_template = $load( 'template-parts/homepage/industrial-01/products.php' );
 
     $check( 1 === preg_match( "/field_select\\s*\\(\\s*'homepage_industrial01_variant'\\s*,/", $admin ), 'Editor offers a native Theme variant choice' );
     $check(
@@ -62,7 +65,25 @@ namespace {
     $check( str_contains( $styles, 'grid-template-columns: repeat(3, minmax(0, 1fr))' ), 'Three-column product catalogue layout exists' );
     $check( str_contains( $styles, '@media (max-width: 48rem)' ), 'Mobile reflow styles exist' );
 
-    foreach ( [ $admin, $composer, $surface, $styles ] as $file ) {
+    $check(
+        str_contains( $cta, '$fallback_to_shop' )
+        && str_contains( $cta, 'Integrations\WooCommerce\shop_url' )
+        && str_contains( $cta, "'Xem sản phẩm'" ),
+        'Technical B2B quote CTA uses public Woo fallback when contact source is absent'
+    );
+    $check(
+        str_contains( $hero, '$secondary_explicit_url' )
+        && str_contains( $hero, 'contact_surface_model' )
+        && str_contains( $hero, "\$secondary_label = '';" ),
+        'Default quote link is suppressed without a mapped WordPress contact source'
+    );
+    $check( str_contains( $products_template, "'Sản phẩm đang cung cấp'" ), 'Technical B2B avoids equipment-only label' );
+    $check(
+        str_contains( $styles, 'hero--with-background' ) && str_contains( $styles, 'rgba(7,25,41,.2)' ),
+        'Technical Hero allows approved WordPress background media to remain visible'
+    );
+
+    foreach ( [ $admin, $composer, $surface, $styles, $hero, $cta, $products_template ] as $file ) {
         $check( ! str_contains( $file, 'thepphuongbac.vn' ) && ! str_contains( $file, '0965435000' ),
             'Theme must not embed site URLs or authoritative contact facts' );
     }

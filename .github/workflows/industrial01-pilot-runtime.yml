@@ -282,6 +282,36 @@ jobs:
           grep -Fq 'aznet-theme-homepage--industrial-01' /tmp/industrial01-pilot/technical-b2b-rollback.html
           echo 'PASS: Technical B2B on -> visual/browser QA -> standard off; WordPress sources retained'
 
+      - name: Verify explicit WordPress contact wins over technical B2B catalogue fallback
+        run: |
+          set -euo pipefail
+          wp eval '
+            $contact = wp_insert_post([
+              "post_type" => "page",
+              "post_status" => "publish",
+              "post_title" => "Liên hệ đối chiếu",
+              "post_name" => "contact-source-b2b",
+              "post_content" => "<p>WordPress-owned contact fixture</p>",
+            ], true);
+            if (is_wp_error($contact)) { throw new RuntimeException($contact->get_error_message()); }
+            $settings = get_theme_mod("aznet_theme_settings", []);
+            if (!is_array($settings)) { throw new RuntimeException("Missing Theme fixture settings"); }
+            $settings["homepage_industrial01_variant"] = "technical-b2b";
+            $settings["homepage_industrial01_contact_page"] = (int) $contact;
+            set_theme_mod("aznet_theme_settings", $settings);
+          ' --path=/tmp/wp --allow-root
+          curl -fsS http://127.0.0.1:8080/ > /tmp/industrial01-pilot/technical-b2b-contact-mapped.html
+          grep -Fq 'Gửi yêu cầu tư vấn' /tmp/industrial01-pilot/technical-b2b-contact-mapped.html
+          grep -Fq 'contact-source-b2b/' /tmp/industrial01-pilot/technical-b2b-contact-mapped.html
+          grep -Fq 'href="#aznet-industrial01-quote"' /tmp/industrial01-pilot/technical-b2b-contact-mapped.html
+          wp eval '
+            $settings = get_theme_mod("aznet_theme_settings", []);
+            $settings["homepage_industrial01_contact_page"] = 0;
+            $settings["homepage_industrial01_variant"] = "standard";
+            set_theme_mod("aznet_theme_settings", $settings);
+          ' --path=/tmp/wp --allow-root
+          echo 'PASS: Explicit WordPress contact wins; technical layout safely restored'
+
       - name: Seed opt-in WordPress Catalog Menu and enable Homepage rail
         run: |
           set -euo pipefail

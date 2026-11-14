@@ -42,11 +42,20 @@ try {
       // Industrial 01 intentionally renders a WordPress-owned Hero image as a CSS
       // background when no distinct background attachment was selected.
       const heroBackground = hero?.getAttribute('style') || '';
+      const quote = root.querySelector('#aznet-industrial01-quote');
+      const quoteLink = quote?.querySelector('.aznet-theme-industrial01-cta__actions .aznet-theme-industrial01-button');
+      const heroQuote = hero?.querySelector('.aznet-theme-industrial01-actions .aznet-theme-industrial01-text-link');
+      const productHeading = root.querySelector('#aznet-industrial01-products-title')?.textContent.trim();
       const productImage = cards[0]?.querySelector('.aznet-theme-industrial01-product-card__media img');
       const mediaBox = cards[0]?.querySelector('.aznet-theme-industrial01-product-card__media');
       const mediaRect = mediaBox?.getBoundingClientRect();
       return {
         h1s, cards: cards.length, links,
+        quoteHeading: quote?.querySelector('h2')?.textContent.trim() || '',
+        quoteHref: quoteLink?.href || '',
+        quoteLabel: quoteLink?.textContent.trim() || '',
+        unwantedHeroQuote: Boolean(heroQuote),
+        productHeading,
         columns: display?.gridTemplateColumns.split(/\s+/).filter(Boolean).length || 0,
         productsBeforeSolutions: Boolean(products && solutions && (products.compareDocumentPosition(solutions) & Node.DOCUMENT_POSITION_FOLLOWING)),
         heroImagePresent: Boolean(heroImage && heroImage.complete && heroImage.naturalWidth > 0),
@@ -59,6 +68,13 @@ try {
       };
     });
     if (source.h1s.length !== 1 || !source.h1s[0]) throw new Error(view.name + ': expected one meaningful H1');
+    if (source.quoteHeading !== 'Khám phá sản phẩm' || source.quoteLabel !== 'Xem sản phẩm' ||
+        source.quoteHref !== baseUrl + '/shop/' || source.unwantedHeroQuote) {
+      throw new Error(view.name + ': missing public Woo fallback or deceptive quote CTA: ' + JSON.stringify(source));
+    }
+    if (source.productHeading !== 'Sản phẩm đang cung cấp') {
+      throw new Error(view.name + ': Technical B2B reused equipment-only catalogue label');
+    }
     if (source.cards !== 8 || source.links.some(link => !link.startsWith(baseUrl + '/product/'))) {
       throw new Error(view.name + ': WooCommerce authoritative product cards or links changed: ' + JSON.stringify(source));
     }

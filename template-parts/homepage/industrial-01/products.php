@@ -26,7 +26,11 @@ $shop_url = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\shop_url'
         <div class="aznet-theme-industrial01-products__heading">
             <div>
                 <p class="aznet-theme-industrial01-kicker"><?php esc_html_e( 'Sản phẩm', 'aznet-theme' ); ?></p>
-                <h2 id="aznet-industrial01-products-title"><?php echo esc_html( \AZnet\Theme\preset_term( 'catalog', __( 'Thiết bị & phụ kiện', 'aznet-theme' ), 'industrial-01' ) ); ?></h2>
+                <h2 id="aznet-industrial01-products-title"><?php echo esc_html(
+                    'technical-b2b' === \AZnet\Theme\setting( 'homepage_industrial01_variant', 'standard' )
+                        ? __( 'Sản phẩm đang cung cấp', 'aznet-theme' )
+                        : \AZnet\Theme\preset_term( 'catalog', __( 'Thiết bị & phụ kiện', 'aznet-theme' ), 'industrial-01' )
+                ); ?></h2>
             </div>
             <?php if ( is_string( $shop_url ) && '' !== $shop_url ) : ?>
                 <a class="aznet-theme-industrial01-products__all" href="<?php echo esc_url( $shop_url ); ?>">

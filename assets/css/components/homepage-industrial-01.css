@@ -1484,6 +1484,17 @@
         #0b2134;
 }
 
+/* The selected WordPress Hero media must not be hidden under an opaque tint.
+   The left copy keeps contrast while the approved image reads on the right. */
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero--with-background {
+    background:
+        linear-gradient(90deg, rgba(7,25,41,.98) 0%, rgba(7,25,41,.94) 32%, rgba(7,25,41,.44) 71%, rgba(7,25,41,.2) 100%),
+        var(--industrial01-hero-background-image, none),
+        #0b2134;
+    background-position: center, right center;
+    background-size: cover;
+}
+
 .aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero__grid {
     min-height: clamp(31rem, 56vh, 43rem);
     grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
@@ -1597,6 +1608,14 @@
 @media (max-width: 48rem) {
     .aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero__grid {
         grid-template-columns: minmax(0, 1fr);
+    }
+    .aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero--with-background {
+        background:
+            linear-gradient(90deg, rgba(7,25,41,.93), rgba(7,25,41,.77)),
+            var(--industrial01-hero-background-image, none),
+            #0b2134;
+        background-position: center;
+        background-size: cover;
     }
     .aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero__content {
         padding-block: clamp(3rem, 12vw, 4.5rem);
