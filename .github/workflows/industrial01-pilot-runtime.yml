@@ -9,6 +9,9 @@ on:
       - '.github/workflows/industrial01-pilot-runtime.yml'
       - 'tests/browser/industrial01-pilot-l4.mjs'
       - 'tests/browser/industrial01-technical-b2b-l4.mjs'
+      - 'tests/browser/industrial01-authoring-sources-l4.mjs'
+      - 'tests/wordpress/industrial01-authoring-source-fixture.php'
+      - 'inc/admin/homepage.php'
       - 'tests/browser/core-vertical-catalog-l4.mjs'
       - 'tests/browser/r3-nav-only-header-l4.mjs'
       - 'tests/offline/d049-rail-header-hero-visual-parity-contract.php'
@@ -311,6 +314,19 @@ jobs:
             set_theme_mod("aznet_theme_settings", $settings);
           ' --path=/tmp/wp --allow-root
           echo 'PASS: Explicit WordPress contact wins; technical layout safely restored'
+
+      - name: Verify Industrial 01 WordPress-native source mapping via authorized Control Center
+        env:
+          INDUSTRIAL01_BASE_URL: http://127.0.0.1:8080
+          INDUSTRIAL01_OUT_DIR: /tmp/industrial01-pilot
+        run: |
+          set -euo pipefail
+          # D-050 is per actor. Do not grant capability to the Administrator role.
+          wp user add-cap admin aznet_theme_manage_danger_zone --path=/tmp/wp --allow-root
+          wp eval-file tests/wordpress/industrial01-authoring-source-fixture.php --path=/tmp/wp --allow-root
+          node tests/browser/industrial01-authoring-sources-l4.mjs
+          INDUSTRIAL01_SOURCE_ACTION=restore wp eval-file tests/wordpress/industrial01-authoring-source-fixture.php --path=/tmp/wp --allow-root
+          echo 'PASS: WordPress source controls, retention and Theme data boundary verified'
 
       - name: Seed opt-in WordPress Catalog Menu and enable Homepage rail
         run: |

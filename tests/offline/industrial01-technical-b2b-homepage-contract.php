@@ -58,6 +58,9 @@ namespace {
         && ! str_contains( $admin, "'homepage_law01_variant', 'homepage_industrial01_variant' ]" ),
         'Saving a different Homepage preset must not erase its stored Industrial variant'
     );
+    $check( str_contains( $admin, "'industrial-01' === \$active_preset ? [ 'about', 'solutions', 'process', 'knowledge', 'contact' ]" ), 'Industrial 01 source mapping UI must include all five WordPress-native slots' );
+    $check( str_contains( $admin, "render_hidden_settings( \$source_visible );" ), 'Source selection must preserve other Theme settings on save' );
+    $check( str_contains( $admin, "'industrial-01' === \$active_preset ? ' open' : ''" ), 'Industrial 01 source controls are discoverable by default' );
     $check( str_contains( $composer, 'aznet-theme-homepage--industrial-01-technical-b2b' ), 'Variant renders within the existing Theme Homepage Composer' );
     $check( str_contains( $surface, '$technical_solutions_surface' ), 'Technical layout uses the mapped WordPress solutions surface after process' );
     $check( str_contains( $surface, 'count( $categories ) > 1' ), 'Single public Woo category does not crowd technical product discovery' );
