@@ -6,7 +6,7 @@ Quy định source ownership, thứ tự ưu tiên tài liệu và cơ chế tha
 
 | **Mã tài liệu** | AZT-00 | **Phiên bản** | v0.5 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 07/09/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 14/11/2026 |
 
 | **Quy tắc gốc: **Source owns data. Theme owns presentation. Integration contracts connect them. Mọi tài liệu và quyết định của AZnet Theme phải bảo toàn ranh giới này. |
 | --- |
@@ -111,7 +111,7 @@ Canonical paths được đăng ký trong `docs/source/README.md`.
 
 # 10. Kế thừa nguyên tắc làm việc từ nguồn Gốc
 
-AZnet Theme kế thừa **nguyên tắc vận hành dùng chung** theo [SOURCE_REGISTRY.yaml](https://github.com/truongdinhnamaz/truong-dinh-nam/blob/main/SOURCE_REGISTRY.yaml) của repository \`truongdinhnamaz/truong-dinh-nam\`, đặc biệt:
+AZnet Theme kế thừa **nguyên tắc vận hành dùng chung** theo [SOURCE_REGISTRY.yaml](https://github.com/truongdinhnamaz/truong-dinh-nam/blob/main/SOURCE_REGISTRY.yaml) của repository `truongdinhnamaz/truong-dinh-nam`, đặc biệt:
 
 - **TDN-THINK-02 — tự hoàn thiện trước khi bàn giao:** trước câu trả lời, khuyến nghị, source change, PR hoặc tuyên bố PASS, trợ lý tự đối chiếu mục tiêu và exit gate; kiểm tra chứng cứ, phản chứng và giả định; phản biện phương án/rủi ro/chi phí; sửa phần có thể tự sửa; chỉ bàn giao kết quả đã rà soát cùng giới hạn cần thiết. Cổng này tương xứng rủi ro, không tạo vòng kiểm vô tận và không thay thế bằng chứng QA L0–L6.
 - **TDN-COORD-00A — đã chốt thì chủ động cập nhật đúng nguồn:** khi quyết định/tiêu chuẩn/nguyên tắc bền vững đã đủ căn cứ, tự kiểm tra trùng lặp, source owner, xung đột và quyền ghi. Nếu mới, cập nhật canonical owner trong cùng phiên khi đủ điều kiện; đọc lại, xác minh commit/PR và báo kết quả. Không cần thêm lệnh “cập nhật nguồn”; nếu đã có thì chỉ kế thừa, nếu thiếu quyền/công cụ/gate thì báo BLOCKED, không nhận đã ghi.
