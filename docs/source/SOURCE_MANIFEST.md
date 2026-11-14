@@ -4,7 +4,7 @@ Historical D-040/D-041 decision checkpoint was exact `main@5d2d34074c1b1b0006151
 | Source | Semantic version | Role |
 | --- | --- | --- |
 | `AZT-05-product-constitution.md` | v1.0 | Highest internal product/release constitution |
-| `AZT-00-governance.md` | v0.4 | Source priority, GitHub canonical-medium rule, change control |
+| `AZT-00-governance.md` | v0.5 | Source priority, GitHub canonical-medium rule, change control; TDN operating-principles inheritance |
 | `AZT-01-product-charter.md` | v0.5 | Product scope/ownership and v1.1 objective/non-goals |
 | `AZT-02-architecture.md` | v0.24 | Theme architecture, public integration contracts, Template Extension Contract, preset lexicon boundary, hero-first Page composition and reusable editorial/news media-card presentation standard |
 | `AZT-03-baseline-provenance.md` | v0.91 | Canonical provenance through Rèm 01 1.3.31 Project Showcase production checkpoint |
