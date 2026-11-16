@@ -4,7 +4,7 @@
 
 AZnet Theme là WordPress house/reference theme của AZnet, tập trung vào presentation và tích hợp qua public contracts. Theme không sở hữu business/domain state của RootProfile, ConvertFlow hoặc WooCommerce.
 
-Phiên bản hiện tại: `1.0.0`
+Phiên bản ứng viên QA (chưa release): `1.3.111-rc.1`
 
 ## Kiến trúc
 
