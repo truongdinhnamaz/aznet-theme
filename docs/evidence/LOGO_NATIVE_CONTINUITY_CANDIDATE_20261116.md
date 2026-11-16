@@ -25,3 +25,12 @@ Acceptance gate before release: WordPress 6.9+/PHP 8.1+ runtime, theme switch fr
 - Runtime L3 / browser L4 / integration L5 / release L6: UNKNOWN / not claimed. No actual WordPress site has been changed by this candidate.
 - IMPORTANT: for a site already running AZnet Theme with empty `custom_logo`, installing the candidate does not automatically choose a brand image. It displays a scoped configuration prompt instead; the site owner must select its verified official logo. Do not present this as global automatic restoration.
 - Candidate rollback: restore prior Theme ZIP (after site-specific backup) or revert this isolated branch; preserve WordPress content and settings.
+
+## Draft WordPress smoke check (WPVibe), 2026-11-16
+
+- Target site: remquocanh.vn, active AZnet Theme 1.3.110 (matches candidate base), WordPress 7.1.4 / PHP 8.4.27.
+- Created an isolated WPVibe draft from the active Theme; injected `inc/theme/logo-continuity.php` and its one-line bootstrap include only in draft, not live.
+- Draft preview: Header rendered official existing `custom_logo` attachment ID 26 (`logo-rem-quoc-anh-chuan-ngang-1.png`), with `alt="Rèm Quốc Anh"`.
+- Draft Footer also rendered the same image under WordPress-sourced identity. **PASS: L3/L4 scoped DOM smoke for unchanged existing-logo path only** (not a full L3/L4 matrix; no screenshots).
+- Draft deleted, and the live Header read back still rendered the same logo. No production Theme activation, code installation, release or website setting edits.
+- Still unverified: actual switch-time data preservation, missing-logo admin notice in wp-admin, absence/error paths on WordPress 6.9 and PHP 8.1, comprehensive browser/mobile/a11y, package installation and rollback on staging.
