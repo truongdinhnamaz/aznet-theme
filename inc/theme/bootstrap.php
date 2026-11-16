@@ -38,6 +38,7 @@ require_once __DIR__ . '/provisioning-runner.php';
 require_once __DIR__ . '/provisioning-readiness.php';
 require_once __DIR__ . '/design-system.php';
 require_once __DIR__ . '/setup.php';
+require_once __DIR__ . '/logo-continuity.php';
 require_once __DIR__ . '/widgets.php';
 require_once __DIR__ . '/patterns.php';
 require_once __DIR__ . '/header.php';
