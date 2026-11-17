@@ -65,3 +65,57 @@ jobs:
         run: |
           set -euo pipefail
           wp eval 'require getenv("GITHUB_WORKSPACE") . "/tests/runtime/d040-local-template-packages.php";' --path=/tmp/wp-d040 --allow-root
+      - name: Start disposable WordPress for operator-only ZIP browser test
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/d040-local-template-l4
+          cat > /tmp/d040-local-router.php <<'PHP'
+          <?php
+          $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+          if ('/' !== $path && is_file('/tmp/wp-d040' . $path)) { return false; }
+          require '/tmp/wp-d040/index.php';
+          PHP
+          nohup env PHP_CLI_SERVER_WORKERS=4 php -S 127.0.0.1:8080 -t /tmp/wp-d040 /tmp/d040-local-router.php > /tmp/d040-local-template-l4/server.log 2>&1 &
+          echo $! > /tmp/d040-local-template-l4/server.pid
+          for attempt in $(seq 1 40); do
+            if curl -fsS http://127.0.0.1:8080/wp-login.php > /dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:8080/wp-login.php > /dev/null
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium and accessibility browser tools
+        run: |
+          set -euo pipefail
+          npm init -y > /dev/null
+          npm install --no-audit --no-fund playwright @axe-core/playwright
+          npx playwright install --with-deps chromium
+      - name: Verify real WP-admin template ZIP upload and rollback
+        env:
+          D040_L4_BASE_URL: http://127.0.0.1:8080
+          D040_L4_OUT_DIR: /tmp/d040-local-template-l4
+        run: |
+          set -euo pipefail
+          node tests/browser/d040-local-template-zip-l4.mjs
+          test -s /tmp/d040-local-template-l4/summary.json
+          if grep -E 'PHP (Fatal error|Parse error)|Uncaught' /tmp/d040-local-template-l4/server.log; then
+            echo 'FAIL: D040 web runtime PHP error' >&2
+            exit 1
+          fi
+      - name: Upload D040 admin/browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: d040-local-template-browser-${{ github.sha }}
+          path: |
+            /tmp/d040-local-template-l4/*.png
+            /tmp/d040-local-template-l4/summary.json
+            /tmp/d040-local-template-l4/server.log
+          if-no-files-found: warn
+      - name: Stop disposable WordPress runtime
+        if: always()
+        run: |
+          if [ -f /tmp/d040-local-template-l4/server.pid ]; then
+            kill "$(cat /tmp/d040-local-template-l4/server.pid)" || true
+          fi
