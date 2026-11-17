@@ -56,6 +56,7 @@ require_once __DIR__ . '/assets.php';
 require_once __DIR__ . '/law01-reference.php';
 require_once __DIR__ . '/../integrations/rootprofile.php';
 require_once __DIR__ . '/contact-surface.php';
+require_once __DIR__ . '/floating-contact.php';
 require_once __DIR__ . '/profile-surface.php';
 require_once __DIR__ . '/rootprofile-current-surface.php';
 require_once __DIR__ . '/../admin/bootstrap.php';
@@ -70,3 +71,8 @@ add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_law01_reference_ass
 add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\\enqueue_homepage_blueprint_editor_asset' );
 add_filter( 'body_class', __NAMESPACE__ . '\\visual_preset_body_classes' );
 add_filter( 'body_class', __NAMESPACE__ . '\\woocommerce_presentation_body_classes' );
+
+// Optional WordPress-menu contact presentation; off unless each site opts in.
+add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_floating_contact_assets', 30 );
+add_filter( 'body_class', __NAMESPACE__ . '\\floating_contact_body_classes' );
+add_action( 'wp_footer', __NAMESPACE__ . '\\render_floating_contact', 15 );

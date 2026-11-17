@@ -1,0 +1,108 @@
+/* Floating contact belongs to the Theme; URLs remain in the WordPress contact menu. */
+.aznet-theme-floating-contact {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    z-index: 90;
+    max-width: 100vw;
+    pointer-events: none;
+}
+.aznet-theme-floating-contact__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.aznet-theme-floating-contact__item { margin: 0; padding: 0; pointer-events: auto; }
+.aznet-theme-floating-contact__link {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    width: 200px;
+    min-width: 48px;
+    min-height: 48px;
+    overflow: hidden;
+    border-radius: 0 26px 26px 0;
+    background: #385b49;
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 3px 14px rgb(0 0 0 / 15%);
+    transform: translateX(calc(48px - 100%));
+    transition: transform .22s ease, background-color .22s ease;
+}
+.aznet-theme-floating-contact__item--zalo .aznet-theme-floating-contact__link { background: #276a70; }
+.aznet-theme-floating-contact__link:hover,
+.aznet-theme-floating-contact__link:focus,
+.aznet-theme-floating-contact__link:focus-visible {
+    color: #fff;
+    background: #244b36;
+    transform: translateX(0);
+}
+.aznet-theme-floating-contact__link:focus-visible { outline: 3px solid #efc971; outline-offset: 3px; }
+.aznet-theme-floating-contact__label {
+    box-sizing: border-box;
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0 10px 0 14px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font: 600 13px/1.25 Roboto, Arial, sans-serif;
+}
+.aznet-theme-floating-contact__icon {
+    box-sizing: border-box;
+    flex: 0 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+}
+.aznet-theme-floating-contact__icon svg { width: 22px; height: 22px; display: block; }
+@media (max-width: 767px) {
+    /* Opaque, reserved-height dock: no unreadable text showing through the controls. */
+    body.aznet-theme-has-floating-contact {
+        padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    }
+    .aznet-theme-floating-contact {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: none;
+        padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+        background: #f8f3ec;
+        border-top: 1px solid #e1d9cf;
+        box-shadow: 0 -5px 18px rgb(0 0 0 / 8%);
+        transform: none;
+        pointer-events: auto;
+    }
+    .aznet-theme-floating-contact__list { flex-direction: row; gap: 8px; }
+    .aznet-theme-floating-contact__link,
+    .aznet-theme-floating-contact__link:hover,
+    .aznet-theme-floating-contact__link:focus,
+    .aznet-theme-floating-contact__link:focus-visible {
+        width: 48px;
+        min-height: 48px;
+        transform: none;
+        border-radius: 50%;
+    }
+    .aznet-theme-floating-contact__label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .aznet-theme-floating-contact__link { transition: none; }
+}
