@@ -81,6 +81,9 @@ jobs:
             --exclude='README.md' --exclude='aznet-preview.png' \
             ./ /tmp/wp/wp-content/themes/aznet-theme/
           wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          # D-050: authorize only the disposable test operator, never the Administrator role.
+          wp user add-cap admin aznet_theme_manage_danger_zone --path=/tmp/wp --allow-root
+          wp eval 'if ( ! user_can( get_user_by( "login", "admin" ), "aznet_theme_manage_danger_zone" ) ) { exit(1); }' --path=/tmp/wp --allow-root
 
           wp plugin install woocommerce --version=11.1.1 --activate --path=/tmp/wp --allow-root
 
@@ -146,7 +149,7 @@ jobs:
               return (int) $id;
           }
 
-          function curtain01_post( string $title, string $slug, int $category, string $date ): int {
+          function curtain01_post( string $title, string $slug, int $category, string $date, int $image_width = 1200, int $image_height = 750 ): int {
               $id = wp_insert_post(
                   [
                       'post_type' => 'post',
@@ -162,7 +165,7 @@ jobs:
               );
               if ( is_wp_error( $id ) ) { throw new RuntimeException( $id->get_error_message() ); }
               wp_set_post_categories( (int) $id, [ $category ] );
-              $image = curtain01_image( (int) $id, $slug, 1200, 750 );
+              $image = curtain01_image( (int) $id, $slug, $image_width, $image_height );
               set_post_thumbnail( (int) $id, $image );
               return (int) $id;
           }
@@ -253,6 +256,23 @@ jobs:
           $projects_term = wp_insert_term( 'Công trình rèm', 'category', [ 'slug' => 'cong-trinh-rem' ] );
           if ( is_wp_error( $projects_term ) ) { throw new RuntimeException( $projects_term->get_error_message() ); }
           $projects_term_id = (int) $projects_term['term_id'];
+          // Three WordPress-owned featured-image shapes reproduce mixed real card sources.
+          $project_portrait = curtain01_post(
+              'Công trình khách sạn dùng ảnh dọc',
+              'cong-trinh-anh-doc',
+              $projects_term_id,
+              '2026-09-03 09:00:00',
+              576,
+              1024
+          );
+          $project_square = curtain01_post(
+              'Công trình văn phòng dùng ảnh vuông',
+              'cong-trinh-anh-vuong',
+              $projects_term_id,
+              '2026-09-02 09:00:00',
+              900,
+              900
+          );
           $project_post = curtain01_post(
               'Hoàn thiện rèm cuốn tại công trình y tế',
               'hoan-thien-rem-cuon-cong-trinh-y-te',

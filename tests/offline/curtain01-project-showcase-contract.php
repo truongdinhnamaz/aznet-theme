@@ -102,4 +102,45 @@ foreach ([
     }
 }
 
+// Images with portrait, landscape, or square intrinsic dimensions must not
+// control card height. The third desktop item retains its split grid layout.
+$css_rule = static function (string $selector) use ($css): string {
+    $start = strpos($css, $selector . ' {');
+    if (false === $start) {
+        return '';
+    }
+    $end = strpos($css, '}', $start);
+    return false === $end ? '' : substr($css, $start, $end - $start);
+};
+
+$media_rule = $css_rule('.aznet-theme-curtain01-project-card__media');
+$image_rule = $css_rule('.aznet-theme-curtain01-project-card__image');
+$third_rule = $css_rule('.aznet-theme-curtain01-project-card:nth-child(3) .aznet-theme-curtain01-project-card__media');
+if (
+    ! str_contains($media_rule, 'position: relative;')
+    || ! str_contains($media_rule, 'height: clamp(')
+    || str_contains($media_rule, 'min-height: clamp(')
+    || ! str_contains($image_rule, 'position: absolute;')
+    || ! str_contains($image_rule, 'inset: 0;')
+    || ! str_contains($image_rule, 'object-fit: cover;')
+    || str_contains($image_rule, 'min-height: inherit;')
+    || ! str_contains($third_rule, 'height: auto;')
+    || ! str_contains($third_rule, 'min-height: 22rem;')
+) {
+    fwrite(STDERR, "FAIL: project images must be clipped inside a bounded independent frame.\n");
+    exit(1);
+}
+
+$mobile_offset = strpos($css, '@media (max-width: 640px)');
+$mobile_css = false === $mobile_offset ? '' : substr($css, $mobile_offset);
+if (
+    ! preg_match(
+        '~\.aznet-theme-curtain01-project-card__media,\s*\.aznet-theme-curtain01-project-card:nth-child\(3\) \.aznet-theme-curtain01-project-card__media\s*\{(?=[^}]*height:\s*auto;)(?=[^}]*min-height:\s*0;)(?=[^}]*aspect-ratio:\s*16\s*/\s*10;)[^}]*\}~',
+        $mobile_css
+    )
+) {
+    fwrite(STDERR, "FAIL: mobile project image frames need a bounded responsive ratio.\n");
+    exit(1);
+}
+
 echo "PASS: Curtain 01 project showcase contract\n";

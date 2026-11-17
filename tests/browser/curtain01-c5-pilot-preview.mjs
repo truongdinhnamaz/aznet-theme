@@ -388,6 +388,62 @@ async function verifyHomepage(viewportName, viewport) {
     const productCards = await page.locator('.aznet-theme-curtain01-product-card').count();
   if (productCards !== 6) throw new Error(`${viewportName}: expected 6 Homepage product cards, got ${productCards}`);
 
+  // Curtain 01 Project Showcase must hold stable frames for unlike WP featured images.
+  const projectCards = page.locator('.aznet-theme-curtain01-project-card');
+  if (await projectCards.count() !== 3) {
+    throw new Error(`${viewportName}: expected 3 project cards from WordPress, got ${await projectCards.count()}`);
+  }
+  for (const img of await projectCards.locator('.aznet-theme-curtain01-project-card__image').all()) {
+    await img.scrollIntoViewIfNeeded();
+    await img.evaluate(async (node) => { if (!node.complete || !node.naturalWidth) await node.decode(); });
+  }
+  const projectFrames = await projectCards.evaluateAll((cards) => cards.map((card) => {
+    const media = card.querySelector('.aznet-theme-curtain01-project-card__media');
+    const image = card.querySelector('.aznet-theme-curtain01-project-card__image');
+    if (!media || !image) return { error: 'missing media/image' };
+    const frame = media.getBoundingClientRect();
+    // Layout boxes exclude the deliberate 2.5% hover transform (which clips inside the frame).
+    const painted = image.getBoundingClientRect();
+    return {
+      width: frame.width,
+      height: frame.height,
+      ratio: frame.width / frame.height,
+      sourceRatio: image.naturalWidth / image.naturalHeight,
+      loaded: image.complete && image.naturalWidth > 0,
+      imageWidth: image.offsetWidth,
+      imageHeight: image.offsetHeight,
+      visualScale: Number((painted.width / frame.width).toFixed(4)),
+      position: getComputedStyle(image).position,
+      fit: getComputedStyle(image).objectFit,
+      overflow: getComputedStyle(media).overflow,
+    };
+  }));
+  const shapes = ['portrait', 'square', 'landscape'];
+  for (const [index, frame] of projectFrames.entries()) {
+    const sourceRatio = frame.sourceRatio;
+    const shapeCorrect = index === 0 ? sourceRatio < 0.8 : index === 1
+      ? Math.abs(sourceRatio - 1) < 0.05 : sourceRatio > 1.3;
+    if (
+      frame.error || !frame.loaded || !shapeCorrect ||
+      frame.position !== 'absolute' || frame.fit !== 'cover' ||
+      frame.overflow !== 'hidden' ||
+      Math.abs(frame.imageWidth - frame.width) > 2 ||
+      Math.abs(frame.imageHeight - frame.height) > 2
+    ) {
+      throw new Error(`${viewportName}: ${shapes[index]} featured-image frame is not bounded: ${JSON.stringify(frame)}`);
+    }
+    if (viewport.width <= 640 && Math.abs(frame.ratio - 1.6) > 0.03) {
+      throw new Error(`${viewportName}: mobile project frame must be 16:10: ${JSON.stringify(frame)}`);
+    }
+  }
+  if (viewport.width > 640 && Math.abs(projectFrames[0].height - projectFrames[1].height) > 2) {
+    throw new Error(`${viewportName}: desktop/tablet lead and secondary card image heights differ: ${JSON.stringify(projectFrames)}`);
+  }
+  await page.mouse.move(0, 0);
+  await page.locator('#aznet-homepage-curtain-projects').screenshot({
+    path: path.join(outDir, `${viewportName}-projects.png`),
+  });
+
   const knowledgeCards = await page.locator('.aznet-theme-curtain01-knowledge-card').count();
   if (knowledgeCards !== 3) throw new Error(`${viewportName}: expected 3 knowledge cards, got ${knowledgeCards}`);
 
@@ -406,7 +462,7 @@ async function verifyHomepage(viewportName, viewport) {
   const a11y = await assertA11y(page, viewportName + '-home');
   await page.screenshot({ path: path.join(outDir, `${viewportName}-home.png`), fullPage: true });
 
-  results[viewportName] = { surfaceKeys, categoryShowcaseCards, productCards, knowledgeCards, categoryChips, overflow, a11y, boundary, processCoverText };
+  results[viewportName] = { surfaceKeys, categoryShowcaseCards, productCards, projectFrames, knowledgeCards, categoryChips, overflow, a11y, boundary, processCoverText };
   await context.close();
 }
 
