@@ -1,6 +1,10 @@
 name: C5 Curtain 01 Pilot-shaped Preview
 
 on:
+  push:
+    branches: [qa/c5-browser-php-worker-telemetry-20261117]
+    paths:
+      - '.github/workflows/curtain01-c5-pilot-preview.yml'
   pull_request:
     branches:
       - main
@@ -501,8 +505,33 @@ jobs:
             exit "$rc"
           }
           trap 'c5_fail' ERR
-          nohup env PHP_CLI_SERVER_WORKERS=8 php -S 127.0.0.1:8080 -t /tmp/wp /tmp/wp-router.php > /tmp/curtain01-c5/server.log 2>&1 &
+          # QA-only wrapper preserves the original 8 PHP workers and records exit code on death.
+          nohup bash -c '
+            PHP_CLI_SERVER_WORKERS=8 php -S 127.0.0.1:8080 -t /tmp/wp /tmp/wp-router.php > /tmp/curtain01-c5/server.log 2>&1
+            code=$?
+            echo "$code" > /tmp/curtain01-c5/server-exit-code.txt
+            echo "C5_PHP_SERVER_EXIT code=$code at=$(date -u +%FT%TZ)" >> /tmp/curtain01-c5/worker-exit.log
+          ' > /tmp/curtain01-c5/server-wrapper.log 2>&1 &
           echo $! > /tmp/curtain01-c5/server.pid
+          if [ -r /sys/fs/cgroup/memory.events ]; then
+            cat /sys/fs/cgroup/memory.events > /tmp/curtain01-c5/oom-events-before.txt
+          fi
+          # Observe actual worker PID/RSS and cgroup OOM counters while the full C5 browser workload runs.
+          nohup bash -c '
+            while true; do
+              echo "C5_WORKER_SAMPLE at=$(date -u +%FT%TZ)" >> /tmp/curtain01-c5/worker-samples.log
+              ps -eo pid,ppid,stat,etime,rss,args | grep -E "PID|[p]hp -S 127[.]0[.]0[.]1:8080" >> /tmp/curtain01-c5/worker-samples.log || true
+              for file in /sys/fs/cgroup/memory.current /sys/fs/cgroup/memory.max /sys/fs/cgroup/memory.events; do
+                if [ -r "$file" ]; then echo "$file" >> /tmp/curtain01-c5/worker-samples.log; cat "$file" >> /tmp/curtain01-c5/worker-samples.log; fi
+              done
+              if [ -r /tmp/curtain01-c5/server-exit-code.txt ]; then
+                echo "C5_WORKER_EXIT_RECORDED $(cat /tmp/curtain01-c5/server-exit-code.txt)" >> /tmp/curtain01-c5/worker-samples.log
+                break
+              fi
+              sleep 1
+            done
+          ' > /tmp/curtain01-c5/sampler.log 2>&1 &
+          echo $! > /tmp/curtain01-c5/sampler.pid
 
           # One successful readiness GET supplies the exact body checked below.
           # An unconditional second GET previously failed with curl 52 after a healthy first GET.
@@ -562,6 +591,33 @@ jobs:
           CURTAIN01_OUT_DIR: /tmp/curtain01-c5
         run: node tests/browser/curtain01-c5-pilot-preview.mjs
 
+      - name: Snapshot failed browser product-route HTTP and PHP worker status
+        if: always()
+        run: |
+          set +e
+          OUT=/tmp/curtain01-c5
+          echo "C5_POST_BROWSER at=$(date -u +%FT%TZ)" > "$OUT/post-browser-product-meta.txt"
+          ps -eo pid,ppid,stat,etime,rss,args | grep -E "PID|[p]hp -S 127[.]0[.]0[.]1:8080" > "$OUT/worker-final.txt"
+          for file in /sys/fs/cgroup/memory.current /sys/fs/cgroup/memory.max /sys/fs/cgroup/memory.events; do
+            if [ -r "$file" ]; then
+              echo "$file" >> "$OUT/post-browser-product-meta.txt"
+              cat "$file" >> "$OUT/post-browser-product-meta.txt"
+            fi
+          done
+          if [ -r /sys/fs/cgroup/memory.events ]; then
+            cat /sys/fs/cgroup/memory.events > "$OUT/oom-events-after.txt"
+          fi
+          if [ -f "$OUT/server-exit-code.txt" ]; then
+            echo "C5_PHP_SERVER_EXIT=$(cat "$OUT/server-exit-code.txt")" >> "$OUT/post-browser-product-meta.txt"
+          else
+            echo "C5_PHP_SERVER_EXIT=not_recorded_server_still_running_or_wrapper_unavailable" >> "$OUT/post-browser-product-meta.txt"
+          fi
+          result=$(curl -sS --connect-timeout 3 --max-time 12 -o "$OUT/post-browser-product.html" -w '%{http_code} %{time_total} %{size_download}' 'http://127.0.0.1:8080/product/rem-vai-don-sac/' 2>"$OUT/post-browser-product-curl.txt")
+          code=$?
+          echo "C5_POST_BROWSER_PRODUCT curl_exit=$code http_time_size=$result" >> "$OUT/post-browser-product-meta.txt"
+          tail -n 60 "$OUT/server.log" >> "$OUT/post-browser-product-meta.txt" 2>&1
+          cat "$OUT/post-browser-product-meta.txt"
+
       - name: Verify runtime log boundary
         run: |
           set -euo pipefail
@@ -585,6 +641,16 @@ jobs:
             /tmp/curtain01-c5/homepage-map-runtime.json
             /tmp/curtain01-c5/server.log
             /tmp/curtain01-c5/runtime-diagnostics.txt
+            /tmp/curtain01-c5/server-wrapper.log
+            /tmp/curtain01-c5/server-exit-code.txt
+            /tmp/curtain01-c5/worker-exit.log
+            /tmp/curtain01-c5/worker-samples.log
+            /tmp/curtain01-c5/sampler.log
+            /tmp/curtain01-c5/oom-events-before.txt
+            /tmp/curtain01-c5/oom-events-after.txt
+            /tmp/curtain01-c5/worker-final.txt
+            /tmp/curtain01-c5/post-browser-product-meta.txt
+            /tmp/curtain01-c5/post-browser-product-curl.txt
             /tmp/curtain01-c5/curl-stderr.txt
             /tmp/curtain01-c5/shop-debug.html
           if-no-files-found: error
@@ -592,6 +658,11 @@ jobs:
       - name: Stop runtime
         if: always()
         run: |
+          if [ -f /tmp/curtain01-c5/sampler.pid ]; then
+            kill "$(cat /tmp/curtain01-c5/sampler.pid)" || true
+          fi
+          # Stop disposable PHP server workers, then the diagnostic wrapper.
+          ps -eo pid,args | awk '$2=="php" && $3=="-S" && $4=="127.0.0.1:8080" {print $1}' | xargs -r kill || true
           if [ -f /tmp/curtain01-c5/server.pid ]; then
             kill "$(cat /tmp/curtain01-c5/server.pid)" || true
           fi
