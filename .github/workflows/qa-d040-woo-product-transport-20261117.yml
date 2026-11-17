@@ -1,0 +1,132 @@
+name: QA D040 Woo Product HTTP Transport (Disposable)
+on:
+  push:
+    branches: [qa/d040-woo-product-transport-20261117]
+    paths:
+      - .github/workflows/qa-d040-woo-product-transport-20261117.yml
+permissions:
+  contents: read
+jobs:
+  product-transport:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pin production source and record identity
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/azt-woo-diag
+          git rev-parse HEAD | tee /tmp/azt-woo-diag/head.txt
+          git rev-parse HEAD^{tree} | tee /tmp/azt-woo-diag/tree.txt
+          test "$(git hash-object inc/theme/assets.php)" = 2d56e183866e08f6a3ef466b881f0ada6c14b2ee
+          test "$(git hash-object inc/theme/bootstrap.php)" = 303303a6e0bcf43c469f65bf8cde5b5f988b1b84
+          test "$(git hash-object inc/integrations/woocommerce.php)" = 558c98c3ff1b311c9b5404e3a8962de223d213c6
+          test "$(git hash-object tests/fixtures/r4-woocommerce-setup.php)" = 91f70961d8b50379a5951253e18967d9462bdfe0
+          echo "PASS: pinned exact PR594 production blobs" | tee /tmp/azt-woo-diag/source-check.txt
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+      - name: Install isolated WP 6.9 and AZnet Theme
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          mkdir -p /tmp/wp/wp-content/themes/aznet-theme
+          wp core download --version=6.9 --path=/tmp/wp --force --allow-root
+          wp config create --path=/tmp/wp --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp --url=http://127.0.0.1:8080 --title='Disposable Woo Transport' --admin_user=admin --admin_password='disposable-fixture-only' --admin_email=qa@example.test --skip-email --allow-root
+          rsync -a --delete --exclude='.git' --exclude='.github' --exclude='docs' --exclude='scripts' --exclude='tests' --exclude='README.md' --exclude='aznet-preview.png' ./ /tmp/wp/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          wp rewrite structure '/%postname%/' --path=/tmp/wp --allow-root
+          test "$(wp core version --path=/tmp/wp --allow-root)" = 6.9
+      - name: Start single-worker PHP with persisted child exit code
+        run: |
+          set -euo pipefail
+          OUT=/tmp/azt-woo-diag
+          php -v > "$OUT/php-version.txt"
+          php -r 'echo "memory_limit=",ini_get("memory_limit"),PHP_EOL;' > "$OUT/php-limit.txt"
+          free -m > "$OUT/free-before.txt"
+          nohup bash -c 'set +e; php -S 127.0.0.1:8080 -t /tmp/wp > /tmp/azt-woo-diag/server.log 2>&1; code=$?; echo "$code" > /tmp/azt-woo-diag/server-exit.txt' > "$OUT/wrapper.log" 2>&1 &
+          echo $! > "$OUT/wrapper.pid"
+          ready=0
+          for attempt in $(seq 1 20); do
+            if curl -fsS --connect-timeout 2 --max-time 5 http://127.0.0.1:8080/ -o "$OUT/home.html"; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" -eq 1
+      - name: Install exact R6 Woo 10.9.4 and public product fixture
+        run: |
+          set -euo pipefail
+          OUT=/tmp/azt-woo-diag
+          wp plugin install woocommerce --version=10.9.4 --activate --path=/tmp/wp --allow-root
+          test "$(wp plugin get woocommerce --field=version --path=/tmp/wp --allow-root)" = 10.9.4
+          printf '%s' 'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAT0lEQVR42u3PQQ0AAAgEILV/2ItgCh9u0IBOUp9NPScgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwbwH3PQNQliOz8AAAAABJRU5ErkJggg==' | base64 -d > "$OUT/product.png"
+          cp "$OUT/product.png" "$OUT/gallery.png"
+          MEDIA_ID=$(wp media import "$OUT/product.png" --title=QA-Product --porcelain --path=/tmp/wp --allow-root)
+          GALLERY_ID=$(wp media import "$OUT/gallery.png" --title=QA-Gallery --porcelain --path=/tmp/wp --allow-root)
+          R4_MEDIA_ID="$MEDIA_ID" R4_GALLERY_ID="$GALLERY_ID" wp eval-file tests/fixtures/r4-woocommerce-setup.php --path=/tmp/wp --allow-root | tee "$OUT/fixture.txt"
+          grep -Eq '^SIMPLE_ID=[0-9]+$' "$OUT/fixture.txt"
+          wp rewrite flush --hard --path=/tmp/wp --allow-root
+      - name: Probe shop then product three times with process and cgroup telemetry
+        run: |
+          set -euo pipefail
+          OUT=/tmp/azt-woo-diag
+          failures=0
+          snapshot() {
+            echo "SNAPSHOT: $1 $(date -u +%FT%TZ)" >> "$OUT/process.txt"
+            ps -eo pid,ppid,stat,rss,etime,args | grep -E 'PID|[p]hp -S 127[.]0[.]0[.]1:8080' >> "$OUT/process.txt" || true
+            free -m >> "$OUT/process.txt"
+            for f in /sys/fs/cgroup/memory.current /sys/fs/cgroup/memory.max /sys/fs/cgroup/memory.events; do
+              if [ -r "$f" ]; then echo "$f" >> "$OUT/process.txt"; cat "$f" >> "$OUT/process.txt"; fi
+            done
+            if [ -f "$OUT/server-exit.txt" ]; then echo "SERVER_EXIT=$(cat "$OUT/server-exit.txt")" >> "$OUT/process.txt"; fi
+          }
+          probe() {
+            label="$1"; url="$2"
+            snapshot "before-$label"
+            if info=$(curl -sS --connect-timeout 3 --max-time 20 -o "$OUT/$label.html" -w '%{http_code} %{time_total} %{size_download}' "$url" 2>"$OUT/$label.err"); then rc=0; else rc=$?; fi
+            bytes=$(wc -c < "$OUT/$label.html" 2>/dev/null || echo 0)
+            echo "$label curl_rc=$rc info=$info bytes=$bytes" | tee -a "$OUT/requests.txt"
+            snapshot "after-$label"
+            status=$(printf '%s\n' "$info" | awk '{print $1}')
+            if [ "$rc" -ne 0 ] || [ "$status" != 200 ] || [ "$bytes" -le 0 ]; then failures=$((failures+1)); fi
+          }
+          probe shop01 http://127.0.0.1:8080/shop/
+          probe product01 http://127.0.0.1:8080/product/r4-simple-product/
+          probe product02 http://127.0.0.1:8080/product/r4-simple-product/
+          probe product03 http://127.0.0.1:8080/product/r4-simple-product/
+          snapshot final
+          echo "failures=$failures" | tee "$OUT/summary.txt"
+          test "$failures" -eq 0
+          echo 'PASS: HTTP 200 for shop and three sequential product requests' | tee -a "$OUT/summary.txt"
+      - name: Capture worker termination and kernel memory markers
+        if: always()
+        run: |
+          set +e
+          OUT=/tmp/azt-woo-diag
+          ps -eo pid,ppid,stat,rss,etime,args | grep -E 'PID|[p]hp -S 127[.]0[.]0[.]1:8080' > "$OUT/ps-final.txt"
+          dmesg -T | grep -Ei 'oom|out of memory|killed process|segfault' | tail -n 30 > "$OUT/kernel.txt" 2>"$OUT/kernel-read.err"
+          if [ -f "$OUT/wrapper.pid" ]; then kill "$(cat "$OUT/wrapper.pid")" 2>/dev/null; fi
+          grep -Eai 'PHP (Fatal error|Parse error|Warning)|Uncaught' "$OUT/server.log" > "$OUT/php-errors.txt"
+          test -f "$OUT/requests.txt" || echo 'no product probe requests' > "$OUT/requests.txt"
+      - name: Save bounded diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: d040-woo-product-http-transport
+          path: /tmp/azt-woo-diag/
+          retention-days: 14
+          if-no-files-found: warn
