@@ -1,0 +1,67 @@
+name: D-040 Local Template ZIP Consumer
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'inc/theme/local-template-packages.php'
+      - 'inc/theme/bootstrap.php'
+      - 'inc/theme/assets.php'
+      - 'inc/admin/template-packages.php'
+      - 'inc/admin/bootstrap.php'
+      - 'inc/admin/homepage.php'
+      - 'tests/offline/d040-local-template-package-contract.php'
+      - 'tests/runtime/d040-local-template-packages.php'
+      - '.github/workflows/d040-local-template-package.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  d040-local-zip:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Exact candidate
+        run: git rev-parse HEAD
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli, zip
+          coverage: none
+      - name: RED/GREEN local schema and ZIP mutation contract
+        run: |
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/d040-local-template-package-contract.php
+          for file in inc/theme/local-template-packages.php inc/admin/template-packages.php inc/theme/bootstrap.php inc/theme/assets.php inc/admin/bootstrap.php inc/admin/homepage.php; do php -l "$file"; done
+      - name: Install disposable WordPress 6.9
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          mkdir -p /tmp/wp-d040/wp-content/themes/aznet-theme
+          wp core download --version=6.9 --path=/tmp/wp-d040 --force --allow-root
+          wp config create --path=/tmp/wp-d040 --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp-d040 --url=http://127.0.0.1:8080 --title='D040 Local ZIP' --admin_user=admin --admin_password='local-test-only-password' --admin_email=fixture@example.test --skip-email --allow-root
+          rsync -a --delete --exclude='.git' --exclude='.github' --exclude='tests' --exclude='docs' --exclude='scripts' --exclude='README.md' ./ /tmp/wp-d040/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp-d040 --allow-root
+          wp core version --path=/tmp/wp-d040 --allow-root | grep -Fx '6.9'
+      - name: Check WordPress real local ZIP install and rollback
+        run: |
+          set -euo pipefail
+          wp eval-file "$GITHUB_WORKSPACE/tests/runtime/d040-local-template-packages.php" --path=/tmp/wp-d040 --allow-root

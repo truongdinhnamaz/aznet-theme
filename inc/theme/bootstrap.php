@@ -13,8 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/core-update-notice.php';
 require_once __DIR__ . '/template-registry.php';
+require_once __DIR__ . '/local-template-packages.php';
 require_once __DIR__ . '/template-loader.php';
 load_local_template_manifests();
+load_installed_template_manifests();
 require_once __DIR__ . '/settings.php';
 require_once __DIR__ . '/preset-lexicon.php';
 require_once __DIR__ . '/page-experience.php';
