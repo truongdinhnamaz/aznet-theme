@@ -61,10 +61,28 @@ jobs:
           rsync -a --delete --exclude='.git' --exclude='.github' --exclude='tests' --exclude='docs' --exclude='scripts' --exclude='README.md' ./ /tmp/wp-d040/wp-content/themes/aznet-theme/
           wp theme activate aznet-theme --path=/tmp/wp-d040 --allow-root
           wp core version --path=/tmp/wp-d040 --allow-root | grep -Fx '6.9'
+      - name: Prepare exact PR593 Curtain 01 CSS candidate (no site writes)
+        run: |
+          set -euo pipefail
+          dir=/tmp/d040-curtain01-candidate
+          mkdir -p "$dir"
+          curl -fsSL 'https://raw.githubusercontent.com/truongdinhnamaz/aznet-theme/954274e7c1266e3536e371e69c4485e7f95e1a15/assets/css/components/homepage-curtain-01.css' -o "$dir/homepage-curtain-01.css"
+          test "$(git hash-object "$dir/homepage-curtain-01.css")" = '32e828a1c3c06ea9720c5eedba310143e229e690'
       - name: Check WordPress real local ZIP install and rollback
+        env:
+          D040_CURTAIN01_CSS: /tmp/d040-curtain01-candidate/homepage-curtain-01.css
+          D040_CURTAIN01_ARTIFACT_DIR: /tmp/d040-curtain01-candidate
         run: |
           set -euo pipefail
           wp eval 'require getenv("GITHUB_WORKSPACE") . "/tests/runtime/d040-local-template-packages.php";' --path=/tmp/wp-d040 --allow-root
+      - name: Retain Rèm 01 v1.0.1 candidate ZIP/checksum (not a release)
+        uses: actions/upload-artifact@v4
+        with:
+          name: curtain01-v1.0.1-PR593-CANDIDATE-${{ github.sha }}
+          path: |
+            /tmp/d040-curtain01-candidate/curtain-01-v1.0.1-PR593-CANDIDATE.zip
+            /tmp/d040-curtain01-candidate/SHA256SUMS.txt
+          if-no-files-found: error
       - name: Start disposable WordPress for operator-only ZIP browser test
         run: |
           set -euo pipefail

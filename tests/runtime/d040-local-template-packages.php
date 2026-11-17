@@ -28,8 +28,15 @@ $assert( ! is_wp_error( $fixture_post ), 'WordPress fixture post' );
 $original = get_post( $fixture_post );
 $original_theme_version = AZNET_THEME_VERSION;
 $source = get_theme_file_path( '/assets/css/components/homepage-curtain-01.css' );
-$css = file_get_contents( $source );
-$assert( is_string( $css ) && '' !== $css, 'original CSS source missing' );
+$pinned_css = getenv( 'D040_CURTAIN01_CSS' );
+$with_pr593 = is_string( $pinned_css ) && '' !== $pinned_css;
+$assert( ! $with_pr593 || is_file( $pinned_css ), 'pinned PR593 stylesheet missing' );
+$css = file_get_contents( $with_pr593 ? $pinned_css : $source );
+$assert( is_string( $css ) && '' !== $css, 'Curtain 01 CSS source missing' );
+if ( $with_pr593 ) {
+    $assert( hash( 'sha256', $css ) !== hash_file( 'sha256', $source ), 'PR593 must differ from bundled Core CSS' );
+    $assert( str_contains( $css, 'height: clamp(17rem, 28vw, 24rem);' ), 'PR593 bounded Project Showcase media missing' );
+}
 $manifest = require get_theme_file_path( '/inc/theme/templates/curtain-01/manifest.php' );
 $manifest['version'] = '1.0.1';
 $manifest['assets']['homepage'] = [ $manifest['assets']['homepage'][0] ];
@@ -49,18 +56,39 @@ $make_zip = static function ( array $extra = [] ) use ( $manifest, $package, $cs
     $zip->addFromString( 'manifest.json', wp_json_encode( $manifest ) );
     $zip->addFromString( 'package.json', wp_json_encode( $package ) );
     $zip->addFromString( $path, $css );
+    // Fixed DOS epoch makes the three-file candidate ZIP byte-reproducible.
+    foreach ( [ 'manifest.json', 'package.json', $path ] as $entry ) {
+        if ( ! $zip->setMtimeName( $entry, 315532800 ) ) {
+            throw new RuntimeException( 'Failed to fix ZIP entry timestamp' );
+        }
+    }
     foreach ( $extra as $file => $body ) { $zip->addFromString( $file, $body ); }
     $zip->close();
     return $name;
 };
 
 $zip_file = $make_zip();
+$zip_replica = $make_zip();
+$assert( hash_file( 'sha256', $zip_file ) === hash_file( 'sha256', $zip_replica ), 'candidate ZIP exact-byte rebuild' );
 $result = \AZnet\Theme\local_template_package_install( $zip_file, hash_file( 'sha256', $zip_file ) );
 $assert( true === ( $result['ok'] ?? false ), 'valid CSS package install: ' . wp_json_encode( $result ) );
 $active = \AZnet\Theme\local_template_package_read_active( 'curtain-01' );
 $assert( is_array( $active ) && '1.0.1' === ( $active['record']['version'] ?? null ), 'active version immutable metadata' );
 $asset = \AZnet\Theme\local_template_package_asset( 'curtain-01', '/' . $path );
 $assert( is_array( $asset ) && str_contains( $asset['url'], '/aznet-theme-templates/releases/curtain-01/1.0.1-' ), 'WordPress upload URL served for CSS-only override' );
+$assert( hash_file( 'sha256', $active['dir'] . '/' . $path ) === hash( 'sha256', $css ), 'installed asset must retain exact PR593 CSS bytes' );
+if ( $with_pr593 ) {
+    $evidence_dir = getenv( 'D040_CURTAIN01_ARTIFACT_DIR' );
+    $assert( is_string( $evidence_dir ) && is_dir( $evidence_dir ), 'candidate evidence directory missing' );
+    $candidate = $evidence_dir . '/curtain-01-v1.0.1-PR593-CANDIDATE.zip';
+    $assert( copy( $zip_file, $candidate ), 'candidate ZIP artifact copy' );
+    $zip_sha = (string) hash_file( 'sha256', $candidate );
+    $css_sha = hash( 'sha256', $css );
+    $checksums = $zip_sha . '  ' . basename( $candidate ) . "\n"
+        . $css_sha . '  homepage-curtain-01.css (PR593 pinned)' . "\n";
+    $assert( false !== file_put_contents( $evidence_dir . '/SHA256SUMS.txt', $checksums ), 'candidate checksums' );
+    echo "PASS D040 Rèm 01 v1.0.1 PR593 CSS candidate: SHA256 ZIP={$zip_sha} CSS={$css_sha}; Core unchanged\n";
+}
 $assert( '1.3.110' === AZNET_THEME_VERSION && $original_theme_version === AZNET_THEME_VERSION, 'Theme Core version unchanged' );
 $assert( get_post( $fixture_post )->post_content === $original->post_content, 'WordPress content remains unchanged' );
 
@@ -113,5 +141,5 @@ $assert( is_array( $native_asset ) && str_contains( $native_asset['url'], '/azne
 $assert( \AZnet\Theme\local_template_package_rollback( $native_id ), 'new template local rollback' );
 $assert( get_post( $fixture_post )->post_content === $original->post_content, 'new native template must never mutate WordPress content' );
 
-foreach ( [ $zip_file, $rejected, $native_zip ] as $file ) { unlink( $file ); }
+foreach ( [ $zip_file, $zip_replica, $rejected, $native_zip ] as $file ) { unlink( $file ); }
 echo "PASS D040 L3: WordPress 6.9 CSS-only install, registry/library, integrity, rollback, operator and domain preservation\n";
