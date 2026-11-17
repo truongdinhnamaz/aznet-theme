@@ -1,0 +1,139 @@
+name: D-040 Local Template ZIP Consumer
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'inc/theme/local-template-packages.php'
+      - 'inc/theme/bootstrap.php'
+      - 'inc/theme/assets.php'
+      - 'inc/admin/template-packages.php'
+      - 'inc/admin/bootstrap.php'
+      - 'inc/admin/homepage.php'
+      - 'tests/offline/d040-local-template-package-contract.php'
+      - 'tests/runtime/d040-local-template-packages.php'
+      - '.github/workflows/d040-local-template-package.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  d040-local-zip:
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Exact candidate
+        run: git rev-parse HEAD
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli, zip
+          coverage: none
+      - name: RED/GREEN local schema and ZIP mutation contract
+        run: |
+          php -d zend.assertions=1 -d assert.exception=1 tests/offline/d040-local-template-package-contract.php
+          for file in inc/theme/local-template-packages.php inc/admin/template-packages.php inc/theme/bootstrap.php inc/theme/assets.php inc/admin/bootstrap.php inc/admin/homepage.php; do php -l "$file"; done
+      - name: Install disposable WordPress 6.9
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          mkdir -p /tmp/wp-d040/wp-content/themes/aznet-theme
+          wp core download --version=6.9 --path=/tmp/wp-d040 --force --allow-root
+          wp config create --path=/tmp/wp-d040 --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp-d040 --url=http://127.0.0.1:8080 --title='D040 Local ZIP' --admin_user=admin --admin_password='local-test-only-password' --admin_email=fixture@example.test --skip-email --allow-root
+          rsync -a --delete --exclude='.git' --exclude='.github' --exclude='tests' --exclude='docs' --exclude='scripts' --exclude='README.md' ./ /tmp/wp-d040/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp-d040 --allow-root
+          wp core version --path=/tmp/wp-d040 --allow-root | grep -Fx '6.9'
+      - name: Prepare exact PR593 Curtain 01 CSS candidate (no site writes)
+        run: |
+          set -euo pipefail
+          dir=/tmp/d040-curtain01-candidate
+          mkdir -p "$dir"
+          curl -fsSL 'https://raw.githubusercontent.com/truongdinhnamaz/aznet-theme/954274e7c1266e3536e371e69c4485e7f95e1a15/assets/css/components/homepage-curtain-01.css' -o "$dir/homepage-curtain-01.css"
+          test "$(git hash-object "$dir/homepage-curtain-01.css")" = '32e828a1c3c06ea9720c5eedba310143e229e690'
+      - name: Check WordPress real local ZIP install and rollback
+        env:
+          D040_CURTAIN01_CSS: /tmp/d040-curtain01-candidate/homepage-curtain-01.css
+          D040_CURTAIN01_ARTIFACT_DIR: /tmp/d040-curtain01-candidate
+        run: |
+          set -euo pipefail
+          wp eval 'require getenv("GITHUB_WORKSPACE") . "/tests/runtime/d040-local-template-packages.php";' --path=/tmp/wp-d040 --allow-root
+      - name: Retain Rèm 01 v1.0.1 candidate ZIP/checksum (not a release)
+        uses: actions/upload-artifact@v4
+        with:
+          name: curtain01-v1.0.1-PR593-CANDIDATE-${{ github.sha }}
+          path: |
+            /tmp/d040-curtain01-candidate/curtain-01-v1.0.1-PR593-CANDIDATE.zip
+            /tmp/d040-curtain01-candidate/SHA256SUMS.txt
+          if-no-files-found: error
+      - name: Start disposable WordPress for operator-only ZIP browser test
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/d040-local-template-l4
+          cat > /tmp/d040-local-router.php <<'PHP'
+          <?php
+          $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+          if ('/' !== $path && is_file('/tmp/wp-d040' . $path)) { return false; }
+          require '/tmp/wp-d040/index.php';
+          PHP
+          nohup env PHP_CLI_SERVER_WORKERS=4 php -S 127.0.0.1:8080 -t /tmp/wp-d040 /tmp/d040-local-router.php > /tmp/d040-local-template-l4/server.log 2>&1 &
+          echo $! > /tmp/d040-local-template-l4/server.pid
+          for attempt in $(seq 1 40); do
+            if curl -fsS http://127.0.0.1:8080/wp-login.php > /dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:8080/wp-login.php > /dev/null
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium and accessibility browser tools
+        run: |
+          set -euo pipefail
+          npm init -y > /dev/null
+          npm install --no-audit --no-fund playwright @axe-core/playwright
+          npx playwright install --with-deps chromium
+      - name: Verify real WP-admin template ZIP upload and rollback
+        env:
+          D040_L4_BASE_URL: http://127.0.0.1:8080
+          D040_L4_OUT_DIR: /tmp/d040-local-template-l4
+        run: |
+          set -euo pipefail
+          node tests/browser/d040-local-template-zip-l4.mjs
+          test -s /tmp/d040-local-template-l4/summary.json
+          if grep -E 'PHP (Fatal error|Parse error)|Uncaught' /tmp/d040-local-template-l4/server.log; then
+            echo 'FAIL: D040 web runtime PHP error' >&2
+            exit 1
+          fi
+      - name: Upload D040 admin/browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: d040-local-template-browser-${{ github.sha }}
+          path: |
+            /tmp/d040-local-template-l4/*.png
+            /tmp/d040-local-template-l4/summary.json
+            /tmp/d040-local-template-l4/server.log
+          if-no-files-found: warn
+      - name: Stop disposable WordPress runtime
+        if: always()
+        run: |
+          if [ -f /tmp/d040-local-template-l4/server.pid ]; then
+            kill "$(cat /tmp/d040-local-template-l4/server.pid)" || true
+          fi

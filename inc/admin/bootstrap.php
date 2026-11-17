@@ -14,6 +14,7 @@ require_once __DIR__ . '/homepage-migration.php';
 require_once __DIR__ . '/homepage-authoring.php';
 require_once __DIR__ . '/team-member-editor.php';
 require_once __DIR__ . '/homepage.php';
+require_once __DIR__ . '/template-packages.php';
 require_once __DIR__ . '/provisioning.php';
 require_once __DIR__ . '/settings-actions.php';
 require_once __DIR__ . '/settings-portability.php';
@@ -38,7 +39,7 @@ function register_presentation_operator_guards(): void {
         'create_team_member', 'delete_team_member',
         'duplicate_homepage_source', 'provisioning_plan',
         'provisioning_apply', 'provisioning_restore_indexing',
-        'save_footer_columns',
+        'save_footer_columns', 'local_template_upload', 'local_template_rollback',
     ];
     foreach ( $actions as $action ) {
         add_action( 'admin_post_aznet_theme_' . $action, __NAMESPACE__ . '\\require_presentation_operator', 0 );
@@ -99,6 +100,8 @@ function register_control_center(): void {
 if ( is_admin() ) {
     register_presentation_operator_guards();
     add_action( 'admin_menu', __NAMESPACE__ . '\\register_control_center' );
+    add_action( 'admin_post_aznet_theme_local_template_upload', __NAMESPACE__ . '\\handle_local_template_package_upload' );
+    add_action( 'admin_post_aznet_theme_local_template_rollback', __NAMESPACE__ . '\\handle_local_template_package_rollback' );
     add_action( 'admin_post_aznet_theme_save_settings', __NAMESPACE__ . '\\handle_save_settings' );
     add_action( 'admin_post_aznet_theme_save_footer_profile', __NAMESPACE__ . '\\handle_footer_profile_save' );
     add_action( 'admin_post_aznet_theme_apply_homepage_hero', __NAMESPACE__ . '\\handle_homepage_hero_apply' );

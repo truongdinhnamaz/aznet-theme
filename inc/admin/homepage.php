@@ -1044,6 +1044,9 @@ function render_homepage_settings(): void {
     }
     submit_button( __( 'Lưu mẫu trang chủ', 'aznet-theme' ) );
     echo '</form>';
+    if ( function_exists( __NAMESPACE__ . '\\render_local_template_package_manager' ) ) {
+        render_local_template_package_manager();
+    }
 
     $active_preset = (string) ( $s['homepage_preset'] ?? 'off' );
     render_homepage_design_entrypoint( $active_preset );
