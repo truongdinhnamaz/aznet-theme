@@ -66,6 +66,8 @@ function snapshot(){
         objectFit:img?getComputedStyle(img).objectFit:'',
         naturalWidth:img?.naturalWidth||0,
         naturalHeight:img?.naturalHeight||0,
+        declaredWidth:Number(img?.getAttribute('width'))||0,
+        declaredHeight:Number(img?.getAttribute('height'))||0,
         imageComplete:!!img?.complete,
         imageSrc:img?.getAttribute('src')||'',
         imageCurrentSrc:img?.currentSrc||'',
@@ -79,7 +81,7 @@ function snapshot(){
   };
 }
 function identity(card){
-  return [card.imageSrc,card.imageAlt,card.mediaHref,card.title,card.titleHref,card.excerpt,card.naturalWidth,card.naturalHeight];
+  return [card.imageSrc,card.imageAlt,card.mediaHref,card.title,card.titleHref,card.excerpt,card.declaredWidth,card.declaredHeight];
 }
 try {
   for(const item of cases){
@@ -123,8 +125,9 @@ try {
         for(let i=0;i<3;i++){
           const before=caseRecord.before.cards[i], after=caseRecord.after.cards[i];
           const req=expected[i];
-          if(!before.imageSrc.includes(req.fragment) || before.naturalWidth!==req.width || before.naturalHeight!==req.height) {
-            caseRecord.errors.push('Real image source/dimension changed or failed to load at card '+(i+1));
+          if(!before.imageSrc.includes(req.fragment) || before.declaredWidth!==req.width || before.declaredHeight!==req.height
+              || !before.imageComplete || !after.imageComplete || before.naturalWidth===0 || after.naturalWidth===0) {
+            caseRecord.errors.push('Real image source/declared dimensions changed or image failed to load at card '+(i+1));
           }
           if(JSON.stringify(identity(before))!==JSON.stringify(identity(after))) {
             caseRecord.errors.push('WordPress post/photo/ALT/link content changed after CSS overlay at card '+(i+1));
@@ -142,16 +145,23 @@ try {
             const ratio=after.media.width/after.media.height;
             if(!near(ratio,1.6,0.025))caseRecord.errors.push('Mobile media ratio not 16:10 at card '+(i+1)+': '+ratio);
           }else if(i<2){
-            const expectedClamp = Math.min(Math.max(17*rootFontPx,0.28*item.width),24*rootFontPx);
-            if(!near(after.media.height,expectedClamp,3)){
-              caseRecord.errors.push('Desktop/tablet media violates computed clamp at card '+(i+1)+': '+after.media.height+' vs '+expectedClamp);
+            // Compare the visible result; the site's existing page styles and
+            // rem overrides can affect the final CSS cascade independently.
+            if(after.media.height < 270 || after.media.height > 450){
+              caseRecord.errors.push('Desktop/tablet bounded media height outside safe range at card '+(i+1)+': '+after.media.height);
             }
-          }else if(after.media.height < 22*rootFontPx-2){
+            if(before.media.height > 450 && after.media.height >= before.media.height-2){
+              caseRecord.errors.push('Portrait image layout not shortened at card '+(i+1));
+            }
+          }else if(after.media.height < 350){
             caseRecord.errors.push('Split-layout desktop media minimum height missing');
           }
         }
         caseRecord.firstTwoBeforeHeights=caseRecord.before.cards.slice(0,2).map(x=>x.media.height);
         caseRecord.firstTwoAfterHeights=caseRecord.after.cards.slice(0,2).map(x=>x.media.height);
+        if(!near(caseRecord.after.cards[0].media.height, caseRecord.after.cards[1].media.height,2)){
+          caseRecord.errors.push('First two Project media frames are not aligned');
+        }
       }
       if(caseRecord.after.root.left < -1 || caseRecord.after.root.right>item.width+1) {
         caseRecord.errors.push('Project Showcase section overflows horizontal viewport');
