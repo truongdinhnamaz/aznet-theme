@@ -273,18 +273,22 @@ function enqueue_template_homepage_assets( string $preset, ?string $version = nu
         return;
     }
 
+    $manifest = template_manifest_for_homepage_preset( $preset );
+    $template_id = is_array( $manifest ) ? (string) ( $manifest['id'] ?? '' ) : '';
     foreach ( template_homepage_asset_descriptors( $preset ) as $asset ) {
         $path = (string) $asset['path'];
-        if ( function_exists( 'get_theme_file_path' ) && ! is_file( get_theme_file_path( $path ) ) ) {
+        $external = 'style' === $asset['type'] && function_exists( __NAMESPACE__ . '\\local_template_package_asset' )
+            ? local_template_package_asset( $template_id, $path ) : null;
+        if ( null === $external && function_exists( 'get_theme_file_path' ) && ! is_file( get_theme_file_path( $path ) ) ) {
             continue;
         }
 
         if ( 'style' === $asset['type'] ) {
             wp_enqueue_style(
                 (string) $asset['handle'],
-                get_theme_file_uri( $path ),
+                is_array( $external ) ? (string) $external['url'] : get_theme_file_uri( $path ),
                 (array) $asset['dependencies'],
-                asset_content_version( $path, $version )
+                is_array( $external ) ? (string) $external['version'] : asset_content_version( $path, $version )
             );
             continue;
         }

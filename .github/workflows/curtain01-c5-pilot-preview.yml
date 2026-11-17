@@ -62,6 +62,9 @@ jobs:
           extensions: mysqli, gd
           coverage: none
 
+      - name: Verify C5 harness contract (retained RED -> GREEN)
+        run: php tests/offline/curtain01-c5-harness-contract.php
+
       - name: Install WordPress 7.1.1, Theme and WooCommerce 11.1.1
         run: |
           set -euo pipefail
@@ -81,6 +84,9 @@ jobs:
             --exclude='README.md' --exclude='aznet-preview.png' \
             ./ /tmp/wp/wp-content/themes/aznet-theme/
           wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          # Reuse the PR #593 PASS fixture: grant only the disposable user, not the Administrator role.
+          wp user add-cap admin aznet_theme_manage_danger_zone --path=/tmp/wp --allow-root
+          wp eval 'if ( ! user_can( get_user_by( "login", "admin" ), "aznet_theme_manage_danger_zone" ) ) { exit(1); }' --path=/tmp/wp --allow-root
 
           wp plugin install woocommerce --version=11.1.1 --activate --path=/tmp/wp --allow-root
 
@@ -470,15 +476,55 @@ jobs:
           require '/tmp/wp/index.php';
           PHP
 
+          # Track the exact HTTP request and PHP worker state on errors. No secrets or site data.
+          C5_DIAG_FILE=/tmp/curtain01-c5/runtime-diagnostics.txt
+          : > "$C5_DIAG_FILE"
+          c5_process_snapshot() {
+            echo "C5_DIAG_PROCESS at=$(date -u +%FT%TZ) server_pid=$(cat /tmp/curtain01-c5/server.pid 2>/dev/null || echo missing)" >> "$C5_DIAG_FILE"
+            if [ -s /tmp/curtain01-c5/server.pid ]; then
+              if kill -0 "$(cat /tmp/curtain01-c5/server.pid)" 2>/dev/null; then
+                echo "C5_DIAG_PROCESS parent_alive=yes" >> "$C5_DIAG_FILE"
+              else
+                echo "C5_DIAG_PROCESS parent_alive=no" >> "$C5_DIAG_FILE"
+              fi
+            fi
+            ps -eo pid,ppid,stat,etime,rss,args | grep -E 'PID|[p]hp -S 127[.]0[.]0[.]1:8080' >> "$C5_DIAG_FILE" || true
+            ss -ltnp 2>&1 | grep -E 'State|:8080' >> "$C5_DIAG_FILE" || true
+            tail -n 80 /tmp/curtain01-c5/server.log >> "$C5_DIAG_FILE" 2>&1 || true
+          }
+          c5_fail() {
+            local rc=$?
+            trap - ERR
+            echo "C5_DIAG_FAIL exit=$rc at=$(date -u +%FT%TZ)" >> "$C5_DIAG_FILE"
+            c5_process_snapshot
+            cat "$C5_DIAG_FILE" >&2
+            exit "$rc"
+          }
+          trap 'c5_fail' ERR
           nohup env PHP_CLI_SERVER_WORKERS=8 php -S 127.0.0.1:8080 -t /tmp/wp /tmp/wp-router.php > /tmp/curtain01-c5/server.log 2>&1 &
           echo $! > /tmp/curtain01-c5/server.pid
 
-          for attempt in $(seq 1 40); do
-            if curl -fsS http://127.0.0.1:8080/ > /tmp/curtain01-c5/home.html; then break; fi
+          # One successful readiness GET supplies the exact body checked below.
+          # An unconditional second GET previously failed with curl 52 after a healthy first GET.
+          ready=0
+          for attempt in $(seq 1 12); do
+            if http_code=$(curl -sS --connect-timeout 3 --max-time 15 --output /tmp/curtain01-c5/home.html --write-out '%{http_code}' http://127.0.0.1:8080/ 2>/tmp/curtain01-c5/curl-stderr.txt); then
+              curl_rc=0
+            else
+              curl_rc=$?
+            fi
+            bytes=$(wc -c < /tmp/curtain01-c5/home.html 2>/dev/null || echo 0)
+            echo "C5_DIAG_HTTP attempt=$attempt curl_rc=$curl_rc http_code=$http_code bytes=$bytes" >> "$C5_DIAG_FILE"
+            if [ "$curl_rc" -eq 0 ] && [ "$http_code" = "200" ] && [ -s /tmp/curtain01-c5/home.html ]; then
+              ready=1
+              break
+            fi
             sleep 1
           done
-
-          curl -fsS http://127.0.0.1:8080/ > /tmp/curtain01-c5/home.html
+          if [ "$ready" -ne 1 ]; then
+            echo "C5 health check exhausted without HTTP 200" >&2
+            false
+          fi
           grep -F 'aznet-theme-homepage--curtain-01' /tmp/curtain01-c5/home.html
           grep -F 'aznet-theme-curtain01-catalogue' /tmp/curtain01-c5/home.html
           grep -F 'aznet-theme-curtain01-knowledge' /tmp/curtain01-c5/home.html
@@ -538,6 +584,8 @@ jobs:
             /tmp/curtain01-c5/fixture.json
             /tmp/curtain01-c5/homepage-map-runtime.json
             /tmp/curtain01-c5/server.log
+            /tmp/curtain01-c5/runtime-diagnostics.txt
+            /tmp/curtain01-c5/curl-stderr.txt
             /tmp/curtain01-c5/shop-debug.html
           if-no-files-found: error
 
