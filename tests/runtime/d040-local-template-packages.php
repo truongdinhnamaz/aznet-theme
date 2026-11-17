@@ -13,6 +13,10 @@ $assert( $operator instanceof WP_User, 'operator missing' );
 wp_set_current_user( $operator->ID );
 $assert( ! \AZnet\Theme\Admin\danger_zone_is_authorized(), 'Administrator must not be auto-authorized' );
 $operator->add_cap( 'aznet_theme_manage_danger_zone', true );
+// WP_User's request-local current-user object is separate from the object
+// returned by get_user_by(). Reload it after updating the fixture capability.
+wp_set_current_user( 0 );
+wp_set_current_user( $operator->ID );
 $assert( \AZnet\Theme\Admin\danger_zone_is_authorized(), 'individually authorized operator needed' );
 
 $fixture_post = wp_insert_post( [
@@ -69,5 +73,45 @@ $assert( \AZnet\Theme\local_template_package_rollback( 'curtain-01' ), 'rollback
 $assert( null === \AZnet\Theme\local_template_package_asset( 'curtain-01', '/' . $path ), 'bundled stylesheet is restored' );
 $assert( get_post( $fixture_post )->post_content === $original->post_content, 'rollback preserves WordPress content' );
 
-foreach ( [ $zip_file, $rejected ] as $file ) { unlink( $file ); }
-echo "PASS D040 L3: WordPress 6.9 CSS package install, integrity, rollback, operator, domain preservation\n";
+// An independently uploaded v2-native CSS-only template must enter the
+// existing Template Library without adding any PHP renderer or Core branches.
+$native_id = 'sample-native-01';
+$native_path = 'assets/css/sample-native-01.css';
+$native_css = '.aznet-theme-homepage--sample-native-01{max-width:72rem}';
+$native_manifest = [
+    'contract_version' => 2, 'id' => $native_id, 'name' => 'Sample Native 01',
+    'version' => '1.0.0', 'category' => 'Sample', 'description' => 'Presentation only',
+    'capabilities' => [ 'homepage' ],
+    'presentation' => [ 'homepage_preset' => $native_id ],
+    'assets' => [ 'homepage' => [ [ 'type' => 'style',
+        'handle' => 'aznet-theme-homepage-sample-native-01', 'path' => '/' . $native_path,
+        'dependencies' => [ 'aznet-theme-tokens' ] ] ] ],
+    'homepage' => [ 'composition' => [ 'mode' => 'native' ], 'authoring' => [ 'sections' => [ 'content' ] ] ],
+    'provisioning' => [],
+];
+$native_package = [
+    'package_contract_version' => 1,
+    'requires' => [ 'theme' => '1.3.110', 'wordpress' => '6.9', 'php' => '8.1' ],
+    'files' => [ $native_path => hash( 'sha256', $native_css ) ],
+];
+$native_zip = tempnam( sys_get_temp_dir(), 'tpl3-native-' );
+$writer = new ZipArchive();
+$assert( true === $writer->open( $native_zip, ZipArchive::CREATE | ZipArchive::OVERWRITE ), 'new native ZIP creation' );
+$writer->addFromString( 'manifest.json', wp_json_encode( $native_manifest ) );
+$writer->addFromString( 'package.json', wp_json_encode( $native_package ) );
+$writer->addFromString( $native_path, $native_css );
+$writer->close();
+$new_result = \AZnet\Theme\local_template_package_install( $native_zip, hash_file( 'sha256', $native_zip ) );
+$assert( true === ( $new_result['ok'] ?? false ), 'new native-only ZIP install: ' . wp_json_encode( $new_result ) );
+$registered = \AZnet\Theme\load_installed_template_manifests();
+$assert( in_array( $native_id, $registered, true ), 'new template should register from installed JSON manifest' );
+$assert( in_array( $native_id, \AZnet\Theme\homepage_preset_ids(), true ), 'new template should be selectable as Homepage preset' );
+$library = \AZnet\Theme\Admin\homepage_template_library_items();
+$assert( in_array( $native_id, array_column( $library, 'template_id' ), true ), 'new native template missing from Template Library' );
+$native_asset = \AZnet\Theme\local_template_package_asset( $native_id, '/' . $native_path );
+$assert( is_array( $native_asset ) && str_contains( $native_asset['url'], '/aznet-theme-templates/' ), 'new native CSS asset missing' );
+$assert( \AZnet\Theme\local_template_package_rollback( $native_id ), 'new template local rollback' );
+$assert( get_post( $fixture_post )->post_content === $original->post_content, 'new native template must never mutate WordPress content' );
+
+foreach ( [ $zip_file, $rejected, $native_zip ] as $file ) { unlink( $file ); }
+echo "PASS D040 L3: WordPress 6.9 CSS-only install, registry/library, integrity, rollback, operator and domain preservation\n";
