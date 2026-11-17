@@ -4,9 +4,9 @@ Kiến trúc Theme và Integration Contracts
 
 Kiến trúc lớp, dependency policy, provider boundary và chiến lược tích hợp giữa AZnet Theme với WordPress, ConvertFlow, RootProfile và WooCommerce.
 
-| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.28 |
+| **Mã tài liệu** | AZT-02 | **Phiên bản** | v0.29 |
 | --- | --- | --- | --- |
-| **Trạng thái** | Working Source | **Ngày** | 22/10/2026 |
+| **Trạng thái** | Working Source | **Ngày** | 17/11/2026 |
 
 | **Kiến trúc lõi: **Theme chỉ sở hữu presentation/configuration/reference cần thiết. Dữ liệu authoritative và business state ở lại owner. Boundary giữa hai bên là public/versioned provider contract hoặc adapter tối thiểu. |
 | --- |
@@ -436,6 +436,17 @@ D-027 remains intact: the supported WordPress-clean core/provisioning path does 
 
 Theme-local fixtures can prove L1/L2 consumer and presentation contracts only. L5 integration requires evidence against the actual Distribution Service owned outside `aznet-theme`. Theme must not create the external service inside this repository merely to self-unblock integration.
 
+
+## 18.6. LOCAL-ZIP-v1 — internal-only presentation package (OWNER-ACCEPTED 17/11/2026)
+
+The owner accepts **only an internal-use, local-only presentation ZIP envelope**, implemented as a bounded Theme consumer/installer. This is **not** the optional external D-040 Template Distribution Service, its public/versioned provider API, or third-party distribution certification. The `package_contract_version=1` marker versions only the local envelope and does not alter the accepted D-043 Template Manifest Contract v1/v2.
+
+- **Contents and scope:** require `manifest.json`, `package.json` and at most eight declared, allow-listed CSS presentation assets. Reject executable PHP/JavaScript, SVG, remote CSS imports/URLs, unknown files and domain/private-plugin data. For bundled templates permit only an exact scoped CSS override; Core PHP renderers and manifest-owned capabilities remain Core. A new template must respect D-043 v2 WordPress-native composition and its existing registry/normalization contract.
+- **Fail-closed validation:** operator supplies a ZIP SHA-256 independently obtained from a trusted channel. Verify full-archive and declared per-CSS hashes, manifest/identity/version/schema, allowed file/path/type/count/size, Theme/WordPress/PHP compatibility and non-downgrade policy **before activation**. SHA-256 confirms integrity against the supplied hash, **not publisher identity, entitlement or a vendor signature**. Missing/invalid installed assets must fail soft to supported bundled/native presentation.
+- **Permission boundary:** manual wp-admin install/update/rollback requires individually granted Theme presentation-operator capability, nonce and explicit confirmation. Being a WordPress Administrator alone grants no extra Theme operator authority. This does not govern WordPress-native theme-switch/install/update permissions.
+- **Activation and preservation:** stage outside the active template; promote to an immutable versioned release under WordPress uploads; activate using one Theme-owned pointer and retain a previous known-good pointer or bundled CSS as rollback. Theme switching must not erase WordPress Page/Post/Media, commerce state, plugin domain data or local package records. Do not create a parallel domain store. Frontend presentation must operate independently of the Distribution Service.
+- **Excluded external owner:** remote catalog, payment/pricing, license/entitlement, authorized remote download, signing/authenticity and service account state remain outside `aznet-theme`. **TPL5 remains BLOCKED_EXTERNAL** until the real service owner provides an accepted public/versioned contract. Local ZIP fixtures cannot claim remote L5 certification.
+- **Separate release gates:** this acceptance approves the **architecture boundary only**, not any PR merge, version/tag/release, production installation, auto-update or deployment. AZT-04/AZT-05 continue to require final-candidate regression, WordPress-clean/optional-provider safety, browser/a11y, exact package/SHA/unzip/rollback, disposition of regressions, post-merge exact-main verification and independently approved site changes.
 
 # 19. Unified Homepage Backend / effective-surface model — D-041
 
