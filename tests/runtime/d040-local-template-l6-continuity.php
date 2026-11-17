@@ -6,7 +6,7 @@
  * Theme switch or in-place Core replacement cannot be masked by a PHP
  * request-local cache. This fixture never runs on a public WordPress site.
  */
-declare(strict_types=1);
+// WP-CLI eval-file is embedded in eval(): no top-level strict_types directive.
 
 if ( ! defined( 'ABSPATH' ) ) { exit( 1 ); }
 
