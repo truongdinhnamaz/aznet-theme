@@ -1,8 +1,8 @@
 # AZT-04 — Roadmap, QA và Decision Log
 
-**Version:** v1.26
+**Version:** v1.27
 **Status:** Working Source  
-**Date:** 06/11/2026
+**Date:** 17/11/2026
 
 ## 1. Purpose
 
@@ -829,6 +829,16 @@ Decision:
 
 The historical D-040 planning labels `TD0-TD6` collided with the later WordPress-native Team Directory execution labels on the reconciled PR #272 lineage. The authoritative D-040 semantics are unchanged; the derived execution map uses `TPL0-TPL6` for Remote Template Library work to remove the label collision.
 
+
+### LOCAL-ZIP-v1 — internal-only envelope OWNER-ACCEPTED IN PRINCIPLE — 17/11/2026
+
+**Owner decision:** Approve the bounded **internal-only local ZIP envelope** in AZT-02 §18.6, within existing D-040/D-043 Theme presentation ownership. This is not approval of external remote distribution, a public/versioned provider API, service license/entitlement/signature behavior, or a new domain owner. Existing D-040 and D-043 Accepted decisions and AZT-05 product/release constitution are unchanged.
+
+**Approved scope (normative details in AZT-02 §18.6):** strict `manifest.json` + `package.json` + up to eight declared CSS assets; independently supplied ZIP SHA-256 and per-file hashes; allowed type/path/size and Theme/WordPress/PHP compatibility checks; individually authorized and nonce-guarded WordPress operator; immutable staging/activation, previous-pointer or bundled-CSS rollback; no PHP/JS, business data, WordPress content takeover or remote service dependency. The supplied hash proves integrity relative to the supplied value, not publisher authenticity. PR #594 contains implementation evidence, **not** an already accepted public contract.
+
+**Hard gates retained:** Exact-head L1–L4 evidence does not by itself close L6. Owner-appropriate disposition of known CI failures, exact candidate/package/hash/rebuild/rollback and WordPress-clean/peer regression gates, independent PR merge approval, post-merge exact-main verification, Theme official release/tag and per-site production install/deploy approval are all separate. **TPL5 remains BLOCKED_EXTERNAL** until the external service owner supplies the real public/versioned contract; a local ZIP/fixture cannot substitute its L5 certification.
+
+**Provenance / rollback:** Explicit owner approval in AZnet Theme project conversation dated 17/11/2026 after PR #594 owner review [comment #6948701303](https://github.com/truongdinhnamaz/aznet-theme/pull/594#issuecomment-6948701303) and C5 evidence [comment #6949349200](https://github.com/truongdinhnamaz/aznet-theme/pull/594#issuecomment-6949349200). Record this source decision on a separate review branch and PR; **canonical main remains authoritative until the source PR is independently approved and merged**. Revert this source-only commit if superseded; no WordPress or package data mutation is part of documentation rollback.
 
 ## D-041 — Unified Homepage Backend / shared effective-surface model
 
