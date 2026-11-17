@@ -40,7 +40,8 @@ execFileSync('php', ['-r', makeFixturePhp], {
 const exactSha = crypto.createHash('sha256').update(fs.readFileSync(fixtureZip)).digest('hex');
 const browser = await chromium.launch({ headless: true });
 const errors = [];
-const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+const page = await context.newPage();
 page.on('pageerror', error => errors.push(String(error)));
 function assert(condition, message) {
   if (!condition) throw new Error('D040 L4: ' + message);
