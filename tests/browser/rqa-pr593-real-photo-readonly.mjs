@@ -113,6 +113,10 @@ try {
       await page.waitForTimeout(170);
       caseRecord.after=await page.evaluate(snapshot);
       await root.screenshot({path:path.join(outDir,item.name+'-after.png'),timeout:18000});
+      // The site sets its own root font size; rem is not guaranteed to be 16px.
+      // Compare against the CSS clamp in computed pixels, not a hard-coded 384px.
+      const rootFontPx = await page.evaluate(() => parseFloat(getComputedStyle(document.documentElement).fontSize));
+      caseRecord.rootFontPx = rootFontPx;
       if(caseRecord.before.cards.length!==3 || caseRecord.after.cards.length!==3){
         caseRecord.errors.push('Expected exactly three real WordPress Project cards');
       }else{
@@ -138,10 +142,11 @@ try {
             const ratio=after.media.width/after.media.height;
             if(!near(ratio,1.6,0.025))caseRecord.errors.push('Mobile media ratio not 16:10 at card '+(i+1)+': '+ratio);
           }else if(i<2){
-            if(after.media.height<270||after.media.height>385){
-              caseRecord.errors.push('Desktop/tablet first-row media not bounded at card '+(i+1));
+            const expectedClamp = Math.min(Math.max(17*rootFontPx,0.28*item.width),24*rootFontPx);
+            if(!near(after.media.height,expectedClamp,3)){
+              caseRecord.errors.push('Desktop/tablet media violates computed clamp at card '+(i+1)+': '+after.media.height+' vs '+expectedClamp);
             }
-          }else if(after.media.height<351){
+          }else if(after.media.height < 22*rootFontPx-2){
             caseRecord.errors.push('Split-layout desktop media minimum height missing');
           }
         }
