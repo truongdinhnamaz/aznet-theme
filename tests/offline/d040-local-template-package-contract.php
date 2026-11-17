@@ -68,6 +68,15 @@ check_tpl(true === \AZnet\Theme\local_template_package_validate($new, package_fi
 $new['homepage']['composition']['mode'] = 'mapped';
 check_tpl(true !== \AZnet\Theme\local_template_package_validate($new, package_fixture($new, ['assets/css/sample.css' => str_repeat('b', 64)])), 'unimplemented arbitrary mapping must not become installable');
 
+// Regression for the admin Template ZIP upload surface and 320px viewport.
+$admin = file_get_contents($root . '/inc/admin/template-packages.php');
+$bootstrap = file_get_contents($root . '/inc/admin/bootstrap.php');
+check_tpl(is_string($admin) && str_contains($admin, 'enctype="multipart/form-data"'), 'multipart package upload missing');
+check_tpl(str_contains($admin, 'is_uploaded_file('), 'upload endpoint must reject arbitrary server paths');
+check_tpl(str_contains($admin, 'box-sizing:border-box;width:100%;max-width:37rem;min-width:0'), 'hash input must not overflow narrow admin screens');
+check_tpl(str_contains($admin, 'max-width:100%;min-width:0;box-sizing:border-box'), 'ZIP input must be bounded on mobile');
+check_tpl(is_string($bootstrap) && str_contains($bootstrap, "'local_template_upload', 'local_template_rollback'"), 'new admin-post actions missing operator guard');
+
 if (class_exists('ZipArchive')) {
     $zip = new ZipArchive();
     $filename = $GLOBALS['tpl_test_root'] . '/curtain.zip';

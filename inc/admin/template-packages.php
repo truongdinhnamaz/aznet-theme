@@ -63,8 +63,8 @@ function render_local_template_package_manager(): void {
     echo '<form method="post" enctype="multipart/form-data" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
     echo '<input type="hidden" name="action" value="aznet_theme_local_template_upload">';
     wp_nonce_field( 'aznet_theme_local_template_upload' );
-    echo '<p><label for="aznet-local-template-zip">' . esc_html__( 'Tệp ZIP mẫu', 'aznet-theme' ) . '</label> <input type="file" id="aznet-local-template-zip" name="template_package_zip" accept=".zip,application/zip" required></p>';
-    echo '<p><label for="aznet-local-template-sha">' . esc_html__( 'SHA-256 của ZIP (lấy từ kênh phát hành tin cậy)', 'aznet-theme' ) . '</label> <input type="text" id="aznet-local-template-sha" name="template_package_sha256" pattern="[a-fA-F0-9]{64}" maxlength="64" minlength="64" required style="width:min(100%,37rem)"></p>';
+    echo '<p><label for="aznet-local-template-zip">' . esc_html__( 'Tệp ZIP mẫu', 'aznet-theme' ) . '</label> <input type="file" id="aznet-local-template-zip" name="template_package_zip" accept=".zip,application/zip" required style="display:block;max-width:100%;min-width:0;box-sizing:border-box"></p>';
+    echo '<p><label for="aznet-local-template-sha">' . esc_html__( 'SHA-256 của ZIP (lấy từ kênh phát hành tin cậy)', 'aznet-theme' ) . '</label> <input type="text" id="aznet-local-template-sha" name="template_package_sha256" pattern="[a-fA-F0-9]{64}" maxlength="64" minlength="64" required style="display:block;box-sizing:border-box;width:100%;max-width:37rem;min-width:0"></p>';
     echo '<p><label><input type="checkbox" name="template_install_confirm" value="1" required> ' . esc_html__( 'Tôi đã xác minh nguồn ZIP/hash, đồng ý cập nhật trình bày mẫu đang sử dụng và giữ bản trước để rollback.', 'aznet-theme' ) . '</label></p>';
     submit_button( __( 'Kiểm tra và cài / cập nhật gói mẫu', 'aznet-theme' ), 'secondary', 'submit', false );
     echo '</form>';

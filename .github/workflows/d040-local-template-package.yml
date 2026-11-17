@@ -64,4 +64,4 @@ jobs:
       - name: Check WordPress real local ZIP install and rollback
         run: |
           set -euo pipefail
-          wp eval-file "$GITHUB_WORKSPACE/tests/runtime/d040-local-template-packages.php" --path=/tmp/wp-d040 --allow-root
+          wp eval 'require getenv("GITHUB_WORKSPACE") . "/tests/runtime/d040-local-template-packages.php";' --path=/tmp/wp-d040 --allow-root
