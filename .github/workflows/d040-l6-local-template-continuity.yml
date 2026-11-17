@@ -1,0 +1,142 @@
+name: D-040 L6 Local ZIP Theme-switch and Core-replacement Continuity (QA)
+
+on:
+  push:
+    branches: [qa/d040-l6-package-continuity-20261117]
+    paths:
+      - '.github/workflows/d040-l6-local-template-continuity.yml'
+      - 'tests/runtime/d040-local-template-l6-continuity.php'
+
+permissions:
+  contents: read
+
+jobs:
+  d040-l6-continuity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      D040_L6_STATE: /tmp/d040-l6/state.json
+    steps:
+      - name: Checkout exact QA source candidate
+        uses: actions/checkout@v4
+      - name: Pin original PR594 production blobs and accepted AZT source
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/d040-l6
+          git rev-parse HEAD | tee /tmp/d040-l6/checkout-sha.txt
+          test "$(git hash-object inc/theme/local-template-packages.php)" = ec0772c6e2d81a3ab662110432a292822d3c31e5
+          test "$(git hash-object inc/theme/assets.php)" = 2d56e183866e08f6a3ef466b881f0ada6c14b2ee
+          test "$(git hash-object inc/theme/bootstrap.php)" = 303303a6e0bcf43c469f65bf8cde5b5f988b1b84
+          test "$(git hash-object inc/admin/template-packages.php)" = 0d261b33db3044f9a517ad25d2f93e7e3ef4089a
+          test "$(git hash-object docs/source/AZT-02-architecture.md)" = 918bd5e085e2e06e8a2c9ae74a12b12f5a292f63
+          test "$(git hash-object docs/source/AZT-04-roadmap-qa-decisions.md)" = 9e285863a0d333db7dc25e3c7d603b9a6c71f6bb
+          echo "PASS D040-L6 L0: exact source owners and existing production bytes" | tee /tmp/d040-l6/source-check.txt
+      - name: PHP support floor and executable fixture syntax
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli,zip
+          coverage: none
+      - name: L1 fixture validity
+        run: |
+          set -euo pipefail
+          php -l tests/runtime/d040-local-template-l6-continuity.php
+          php -r 'exit(class_exists("ZipArchive") ? 0 : 1);'
+      - name: Disposable WordPress 6.9 with no optional provider
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          mkdir -p /tmp/wp-d040-l6/wp-content/themes/aznet-theme
+          wp core download --version=6.9 --path=/tmp/wp-d040-l6 --force --allow-root
+          wp config create --path=/tmp/wp-d040-l6 --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check --allow-root
+          wp core install --path=/tmp/wp-d040-l6 --url=http://127.0.0.1:8080 --title='D040 ZIP L6 Disposable QA' --admin_user=admin --admin_password='disposable-l6-password' --admin_email=l6@example.test --skip-email --allow-root
+          rsync -a --delete --exclude='.git' --exclude='.github' --exclude='tests' --exclude='docs' --exclude='scripts' --exclude='README.md' ./ /tmp/wp-d040-l6/wp-content/themes/aznet-theme/
+          wp theme activate aznet-theme --path=/tmp/wp-d040-l6 --allow-root
+          test "$(wp core version --path=/tmp/wp-d040-l6 --allow-root)" = 6.9
+          test -z "$(wp plugin list --status=active --field=name --path=/tmp/wp-d040-l6 --allow-root)"
+          wp theme list --field=name --path=/tmp/wp-d040-l6 --allow-root | grep '^twenty'
+      - name: Seed real ZIP installation, active CSS and WordPress native sentinel
+        env:
+          D040_L6_PHASE: seed
+        run: |
+          set -euo pipefail
+          wp eval-file tests/runtime/d040-local-template-l6-continuity.php --path=/tmp/wp-d040-l6 --allow-root
+      - name: Switch to bundled WordPress Theme; assert local option and installed files retained
+        env:
+          D040_L6_PHASE: away
+        run: |
+          set -euo pipefail
+          DEFAULT_THEME=$(wp theme list --status=inactive --field=name --path=/tmp/wp-d040-l6 --allow-root | awk '/^twenty/ { print; exit }')
+          test -n "$DEFAULT_THEME"
+          echo "$DEFAULT_THEME" > /tmp/d040-l6/away-theme.txt
+          wp theme activate "$DEFAULT_THEME" --path=/tmp/wp-d040-l6 --allow-root
+          wp eval-file tests/runtime/d040-local-template-l6-continuity.php --path=/tmp/wp-d040-l6 --allow-root
+      - name: Reactivate identical AZnet Theme Core; assert CSS and content continuity
+        env:
+          D040_L6_PHASE: restored
+        run: |
+          set -euo pipefail
+          wp theme activate aznet-theme --path=/tmp/wp-d040-l6 --allow-root
+          wp eval-file tests/runtime/d040-local-template-l6-continuity.php --path=/tmp/wp-d040-l6 --allow-root
+      - name: Build separate version-metadata upgrade fixture (no production code changes)
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/d040-l6/upgrade-source
+          rsync -a --delete --exclude='.git' --exclude='.github' --exclude='tests' --exclude='docs' --exclude='scripts' --exclude='README.md' ./ /tmp/d040-l6/upgrade-source/
+          python3 - <<'PY'
+          from pathlib import Path
+          source = Path('/tmp/d040-l6/upgrade-source')
+          changes = [
+              ('style.css', 'Version: 1.3.110', 'Version: 1.3.111'),
+              ('functions.php', "define( 'AZNET_THEME_VERSION', '1.3.110' );", "define( 'AZNET_THEME_VERSION', '1.3.111' );"),
+          ]
+          for filename, old, new in changes:
+              p = source / filename
+              value = p.read_text(encoding='utf-8')
+              assert value.count(old) == 1, f'Unexpected version metadata in {filename}'
+              p.write_text(value.replace(old, new), encoding='utf-8')
+          print('PASS: test-only 1.3.111 metadata fixture, no production source modification')
+          PY
+          cmp inc/theme/local-template-packages.php /tmp/d040-l6/upgrade-source/inc/theme/local-template-packages.php
+          cmp inc/theme/assets.php /tmp/d040-l6/upgrade-source/inc/theme/assets.php
+          cmp inc/theme/bootstrap.php /tmp/d040-l6/upgrade-source/inc/theme/bootstrap.php
+          python3 scripts/build-release-package.py --source /tmp/d040-l6/upgrade-source --output /tmp/d040-l6/theme-1.3.111-FIXTURE.zip --version 1.3.111
+          unzip -t /tmp/d040-l6/theme-1.3.111-FIXTURE.zip | tail -n 2
+      - name: Replace installed Theme Core package through WP-CLI; verify active ZIP continuity, then rollback
+        env:
+          D040_L6_PHASE: upgrade
+        run: |
+          set -euo pipefail
+          wp theme install /tmp/d040-l6/theme-1.3.111-FIXTURE.zip --force --path=/tmp/wp-d040-l6 --allow-root
+          test "$(wp theme list --status=active --field=name --path=/tmp/wp-d040-l6 --allow-root)" = aznet-theme
+          wp eval-file tests/runtime/d040-local-template-l6-continuity.php --path=/tmp/wp-d040-l6 --allow-root
+          sha256sum /tmp/d040-l6/theme-1.3.111-FIXTURE.zip /tmp/d040-l6/local-presentation-fixture.zip | tee /tmp/d040-l6/checksums.txt
+          echo "PASS D040-L6: Theme switch/reactivation and version-metadata Core replacement retained local ZIP and WordPress content" | tee /tmp/d040-l6/summary.txt
+      - name: Preserve focused L6 evidence (not a release)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: d040-l6-local-zip-continuity
+          path: |
+            /tmp/d040-l6/checkout-sha.txt
+            /tmp/d040-l6/source-check.txt
+            /tmp/d040-l6/state.json
+            /tmp/d040-l6/away-theme.txt
+            /tmp/d040-l6/checksums.txt
+            /tmp/d040-l6/summary.txt
+          retention-days: 14
+          if-no-files-found: warn
