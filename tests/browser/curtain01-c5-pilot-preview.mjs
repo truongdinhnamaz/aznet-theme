@@ -402,15 +402,17 @@ async function verifyHomepage(viewportName, viewport) {
     const image = card.querySelector('.aznet-theme-curtain01-project-card__image');
     if (!media || !image) return { error: 'missing media/image' };
     const frame = media.getBoundingClientRect();
-    const pixels = image.getBoundingClientRect();
+    // Layout boxes exclude the deliberate 2.5% hover transform (which clips inside the frame).
+    const painted = image.getBoundingClientRect();
     return {
       width: frame.width,
       height: frame.height,
       ratio: frame.width / frame.height,
       sourceRatio: image.naturalWidth / image.naturalHeight,
       loaded: image.complete && image.naturalWidth > 0,
-      imageWidth: pixels.width,
-      imageHeight: pixels.height,
+      imageWidth: image.offsetWidth,
+      imageHeight: image.offsetHeight,
+      visualScale: Number((painted.width / frame.width).toFixed(4)),
       position: getComputedStyle(image).position,
       fit: getComputedStyle(image).objectFit,
       overflow: getComputedStyle(media).overflow,
@@ -437,6 +439,7 @@ async function verifyHomepage(viewportName, viewport) {
   if (viewport.width > 640 && Math.abs(projectFrames[0].height - projectFrames[1].height) > 2) {
     throw new Error(`${viewportName}: desktop/tablet lead and secondary card image heights differ: ${JSON.stringify(projectFrames)}`);
   }
+  await page.mouse.move(0, 0);
   await page.locator('#aznet-homepage-curtain-projects').screenshot({
     path: path.join(outDir, `${viewportName}-projects.png`),
   });
