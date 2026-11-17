@@ -1448,3 +1448,195 @@
         transform: none;
     }
 }
+
+
+/*
+ * Industrial 01 / Technical B2B: opt-in presentation variant.
+ * Uses existing public WooCommerce products, mapped WordPress Pages/Media and
+ * the Theme's shared Header/Footer. No site identity, products or prices stored.
+ * Standard Industrial 01 keeps its original selectors and geometry.
+ */
+.aznet-theme-homepage--industrial-01-technical-b2b {
+    --industrial01-ink: #12293d;
+    --industrial01-ink-soft: #243e52;
+    --industrial01-muted: #566b7b;
+    --industrial01-line: #dce6ed;
+    --industrial01-surface-soft: #f2f7fb;
+    --industrial01-surface-dark: #0b2134;
+    --industrial01-accent: #236db2;
+    --industrial01-signal: #67b9ee;
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-shell {
+    width: min(calc(100% - (2 * var(--aznet-theme-gutter))), 76rem);
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-section {
+    padding-block: clamp(3.75rem, 6vw, 6.5rem);
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero {
+    padding-block: 0;
+    background:
+        radial-gradient(circle at 80% 36%, rgba(66,143,198,.21), transparent 37%),
+        linear-gradient(115deg, rgba(7,25,41,.98), rgba(15,49,74,.96)),
+        var(--industrial01-hero-background-image, none),
+        #0b2134;
+}
+
+/* The selected WordPress Hero media must not be hidden under an opaque tint.
+   The left copy keeps contrast while the approved image reads on the right. */
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero--with-background {
+    background:
+        linear-gradient(90deg, rgba(7,25,41,.98) 0%, rgba(7,25,41,.94) 32%, rgba(7,25,41,.44) 71%, rgba(7,25,41,.2) 100%),
+        var(--industrial01-hero-background-image, none),
+        #0b2134;
+    background-position: center, right center;
+    background-size: cover;
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero__grid {
+    min-height: clamp(31rem, 56vh, 43rem);
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+    gap: clamp(2rem, 4.5vw, 5rem);
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero__grid > .aznet-theme-industrial01-hero__content:only-child {
+    grid-column: 1 / -1;
+    max-width: 52rem;
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero h1 {
+    max-width: 19ch;
+    font-size: clamp(2.75rem, 5vw, 4.95rem);
+    line-height: 1.03;
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero .aznet-theme-industrial01-lede {
+    max-width: 57ch;
+    color: #e0eaf0;
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero__panel {
+    width: min(100%, 32rem);
+    border: 1px solid rgba(181,218,241,.3);
+    border-radius: 1rem;
+    background: #13324b;
+    box-shadow: 0 1.6rem 4.3rem rgba(0,0,0,.29);
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-button {
+    border-radius: .45rem;
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-products {
+    background: #fff;
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-grid--products {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1rem, 1.6vw, 1.45rem);
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-product-card {
+    border-color: #dae5ee;
+    border-radius: .75rem;
+    box-shadow: 0 .45rem 1.65rem rgba(17,52,78,.045);
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-product-card__media {
+    aspect-ratio: 4 / 3;
+    background: #edf2f6;
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-product-card__body {
+    min-height: 10.5rem;
+    padding: 1.4rem;
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-about {
+    background: #eef4f8;
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-about__media {
+    border-radius: .75rem;
+    box-shadow: 0 1.2rem 3.3rem rgba(8,35,58,.15);
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-about__image {
+    aspect-ratio: 5 / 4;
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-process {
+    background: linear-gradient(125deg, #0b2033, #102f47);
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-process__card {
+    min-height: 11rem;
+    padding: 1.65rem;
+    border-color: rgba(169,213,243,.2);
+    border-radius: .65rem;
+    background: rgba(255,255,255,.045);
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-solutions {
+    background: #fff;
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-solutions__card:first-child {
+    background: #15354c;
+    border-color: #15354c;
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-knowledge {
+    background: #f2f7fb;
+}
+
+.aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-cta {
+    background: linear-gradient(105deg, #185993, #236db2);
+}
+
+@media (max-width: 64rem) {
+    .aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero__grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, .82fr);
+    }
+    .aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-grid--products {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 48rem) {
+    .aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero__grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero--with-background {
+        background:
+            linear-gradient(90deg, rgba(7,25,41,.93), rgba(7,25,41,.77)),
+            var(--industrial01-hero-background-image, none),
+            #0b2134;
+        background-position: center;
+        background-size: cover;
+    }
+    .aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero__content {
+        padding-block: clamp(3rem, 12vw, 4.5rem);
+    }
+    .aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero h1 {
+        font-size: clamp(2.4rem, 9.8vw, 3.8rem);
+    }
+    .aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-hero__visual {
+        padding-top: 0;
+    }
+}
+
+/* Keep product cards in two readable columns at 768px; stack only on phones. */
+@media (max-width: 42.5rem) {
+    .aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-grid--products {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .aznet-theme-homepage--industrial-01-technical-b2b .aznet-theme-industrial01-product-card {
+        transition: none;
+    }
+}

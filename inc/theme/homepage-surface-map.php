@@ -470,6 +470,8 @@ function homepage_curtain01_effective_surface_map( ?array $settings = null ): ar
 function homepage_industrial01_effective_surface_map( ?array $settings = null ): array {
     $settings = null === $settings ? settings() : $settings;
     $surfaces = [];
+    $technical_b2b = 'technical-b2b' === (string) ( $settings['homepage_industrial01_variant'] ?? 'standard' );
+    $technical_solutions_surface = null;
 
     $site_name = trim( (string) get_bloginfo( 'name' ) );
     $tagline = trim( (string) get_bloginfo( 'description' ) );
@@ -509,7 +511,7 @@ function homepage_industrial01_effective_surface_map( ?array $settings = null ):
     $categories = function_exists( 'AZnet\\Theme\\Integrations\\WooCommerce\\homepage_product_category_showcase_terms' )
         ? \AZnet\Theme\Integrations\WooCommerce\homepage_product_category_showcase_terms( 8 )
         : [];
-    if ( [] !== $categories ) {
+    if ( [] !== $categories && ( ! $technical_b2b || count( $categories ) > 1 ) ) {
         $surfaces[] = homepage_surface_entry(
             'categories',
             __( 'Danh mục', 'aznet-theme' ),
@@ -532,11 +534,11 @@ function homepage_industrial01_effective_surface_map( ?array $settings = null ):
             $solutions_summary = strip_shortcodes( $solutions_raw );
             $solutions_summary = (string) preg_replace( '/\[(?:\/)?[A-Za-z0-9_-]+(?:\s[^\]]*)?\]/', ' ', $solutions_summary );
             $solutions_summary = homepage_surface_text_summary( $solutions_summary, 36 );
-            $surfaces[] = homepage_surface_entry(
+            $solutions_surface = homepage_surface_entry(
                 'solutions',
                 __( 'Giải pháp', 'aznet-theme' ),
                 'solutions',
-                'before',
+                $technical_b2b ? 'after' : 'before',
                 'aznet-homepage-industrial-solutions',
                 'page',
                 (int) $solutions->ID,
@@ -546,6 +548,12 @@ function homepage_industrial01_effective_surface_map( ?array $settings = null ):
                     'source'  => get_the_title( $solutions ),
                 ]
             );
+            if ( $technical_b2b ) {
+                // Presentation reordering only: this remains the WordPress-owned Page.
+                $technical_solutions_surface = $solutions_surface;
+            } else {
+                $surfaces[] = $solutions_surface;
+            }
         }
     }
 
@@ -630,6 +638,10 @@ function homepage_industrial01_effective_surface_map( ?array $settings = null ):
                 ]
             );
         }
+    }
+
+    if ( null !== $technical_solutions_surface ) {
+        $surfaces[] = $technical_solutions_surface;
     }
 
     $knowledge_ids = (array) homepage_effective_source_value( 'industrial-01', 'knowledge', $settings );

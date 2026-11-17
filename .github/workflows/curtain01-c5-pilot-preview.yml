@@ -81,6 +81,9 @@ jobs:
             --exclude='README.md' --exclude='aznet-preview.png' \
             ./ /tmp/wp/wp-content/themes/aznet-theme/
           wp theme activate aznet-theme --path=/tmp/wp --allow-root
+          # D-050: only this disposable test actor receives Theme operator capability.
+          # Keep Administrator role and production authorization guards unchanged.
+          wp user add-cap admin aznet_theme_manage_danger_zone --path=/tmp/wp --allow-root
 
           wp plugin install woocommerce --version=11.1.1 --activate --path=/tmp/wp --allow-root
 

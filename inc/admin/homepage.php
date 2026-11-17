@@ -555,6 +555,7 @@ function homepage_authoring_label( string $slot ): string {
         'hero' => __( 'Hero', 'aznet-theme' ),
         'services' => __( 'Dịch vụ', 'aznet-theme' ),
         'about' => __( 'Giới thiệu', 'aznet-theme' ),
+        'solutions' => __( 'Giải pháp / ứng dụng', 'aznet-theme' ),
         'team' => __( 'Đội ngũ', 'aznet-theme' ),
         'knowledge' => __( 'Bài viết / kiến thức', 'aznet-theme' ),
         'case_analysis' => __( 'Phân tích vụ việc', 'aznet-theme' ),
@@ -1028,6 +1029,11 @@ function render_homepage_settings(): void {
     ] );
 
     $preset_visible = [ 'homepage_preset', 'homepage_law01_variant' ];
+    // The variant field is only visible on Industrial 01. For every other
+    // template, render_hidden_settings() must retain the saved selection.
+    if ( 'industrial-01' === (string) $s['homepage_preset'] ) {
+        $preset_visible[] = 'homepage_industrial01_variant';
+    }
     echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="aznet-theme-panel">';
     echo '<input type="hidden" name="action" value="aznet_theme_save_settings">';
     wp_nonce_field( 'aznet_theme_save_settings' );
@@ -1040,7 +1046,20 @@ function render_homepage_settings(): void {
     } elseif ( 'curtain-01' === (string) $s['homepage_preset'] ) {
         echo '<p class="description">' . esc_html__( 'Rèm 01: website rèm và giải pháp kiểm soát ánh sáng. Đây là mẫu độc lập; áp dụng mẫu không sửa nội dung WordPress và không thay đổi cấu hình Luật 01.', 'aznet-theme' ) . '</p>';
     } elseif ( 'industrial-01' === (string) $s['homepage_preset'] ) {
-        echo '<p class="description">' . esc_html__( 'Industrial 01: website B2B bán thiết bị công nghiệp và phụ kiện. Mẫu dùng dữ liệu WordPress/WooCommerce hiện có và không tạo kho dữ liệu sản phẩm riêng.', 'aznet-theme' ) . '</p>';
+        field_select(
+            'homepage_industrial01_variant',
+            __( 'Bố cục Industrial 01', 'aznet-theme' ),
+            [
+                'standard'      => __( 'Tiêu chuẩn (giữ giao diện hiện tại)', 'aznet-theme' ),
+                'technical-b2b' => __( 'B2B kỹ thuật (sản phẩm, năng lực, quy trình, báo giá)', 'aznet-theme' ),
+            ],
+            (string) $s['homepage_industrial01_variant']
+        );
+        if ( 'technical-b2b' === (string) $s['homepage_industrial01_variant'] ) {
+            echo '<p class="description">' . esc_html__( 'Industrial 01 B2B kỹ thuật: trình bày sản phẩm, năng lực và liên hệ từ WordPress/WooCommerce. Phù hợp nhiều ngành công nghiệp; không lưu dữ liệu sản phẩm hoặc liên hệ riêng trong Theme.', 'aznet-theme' ) . '</p>';
+        } else {
+            echo '<p class="description">' . esc_html__( 'Industrial 01: website B2B bán thiết bị công nghiệp và phụ kiện. Mẫu dùng dữ liệu WordPress/WooCommerce hiện có và không tạo kho dữ liệu sản phẩm riêng.', 'aznet-theme' ) . '</p>';
+        }
     }
     submit_button( __( 'Lưu mẫu trang chủ', 'aznet-theme' ) );
     echo '</form>';
@@ -1057,13 +1076,20 @@ function render_homepage_settings(): void {
 
     $source_slots = 'law-01' === $active_preset
         ? [ 'services', 'about', 'team', 'knowledge', 'case_analysis', 'legal_news', 'process', 'faq', 'contact' ]
-        : ( 'curtain-01' === $active_preset ? [ 'hero', 'proof', 'about', 'knowledge', 'process', 'projects', 'contact' ] : [] );
+        : (
+            'curtain-01' === $active_preset
+                ? [ 'hero', 'proof', 'about', 'knowledge', 'process', 'projects', 'contact' ]
+                : ( 'industrial-01' === $active_preset ? [ 'about', 'solutions', 'process', 'knowledge', 'contact' ] : [] )
+        );
     $source_visible = [];
     foreach ( $source_slots as $slot ) {
         $source_key = homepage_effective_source_key( $active_preset, $slot );
         if ( is_string( $source_key ) && '' !== $source_key ) { $source_visible[] = $source_key; }
     }
-    echo '<details class="aznet-theme-homepage-diagnostics" id="aznet-theme-homepage-sources"><summary>' . esc_html__( 'Nguồn & cài đặt nâng cao', 'aznet-theme' ) . '</summary>';
+    // Industrial 01 source mapping is required for complete B2B composition.
+    // Expose existing typed WordPress references, not new domain fields/stores.
+    $source_details_open = 'industrial-01' === $active_preset ? ' open' : '';
+    echo '<details class="aznet-theme-homepage-diagnostics" id="aznet-theme-homepage-sources"' . $source_details_open . '><summary>' . esc_html__( 'Nguồn & cài đặt nâng cao', 'aznet-theme' ) . '</summary>';
     if ( in_array( (string) $s['homepage_preset'], [ 'law-01', 'curtain-01' ], true ) ) {
         $scope = (string) $s['homepage_preset'];
         $marker_key = \AZnet\Theme\homepage_source_initialization_key( $scope );
@@ -1090,6 +1116,9 @@ function render_homepage_settings(): void {
     wp_nonce_field( 'aznet_theme_save_settings' );
     render_hidden_settings( $source_visible );
     echo '<h2>' . esc_html__( 'Nguồn nội dung', 'aznet-theme' ) . '</h2>';
+    if ( 'industrial-01' === $active_preset ) {
+        echo '<p class="description">' . esc_html__( 'Chọn các trang và chuyên mục WordPress đã xuất bản để hiển thị Giới thiệu, Giải pháp, Quy trình, Kiến thức và Liên hệ trên trang chủ Industrial 01. Dữ liệu gốc không bị sao chép hoặc sửa khi lưu ánh xạ.', 'aznet-theme' ) . '</p>';
+    }
 
     foreach ( $source_slots as $slot ) {
         $descriptor = homepage_source_descriptor( $active_preset, $slot );
