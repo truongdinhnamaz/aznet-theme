@@ -467,6 +467,15 @@ jobs:
 
           wp eval-file "$GITHUB_WORKSPACE/tests/runtime/homepage-curtain01-map-runtime.php" --path=/tmp/wp --allow-root | tee /tmp/curtain01-c5/homepage-map-runtime.json
 
+      - name: Install scoped process tracer for disposable QA
+        run: |
+          set -euo pipefail
+          if ! command -v strace >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo env DEBIAN_FRONTEND=noninteractive apt-get install -y -qq strace
+          fi
+          strace -V | head -n 1
+
       - name: Start candidate runtime
         run: |
           set -euo pipefail
@@ -505,9 +514,13 @@ jobs:
             exit "$rc"
           }
           trap 'c5_fail' ERR
+          # Record the effective PHP and kernel process memory limits separately from source.
+          php -r 'echo "memory_limit=",ini_get("memory_limit"),PHP_EOL;' > /tmp/curtain01-c5/php-memory-limit.txt
+          (ulimit -a) > /tmp/curtain01-c5/process-limits.txt
+          free -m > /tmp/curtain01-c5/host-memory-before.txt
           # QA-only wrapper preserves the original 8 PHP workers and records exit code on death.
           nohup bash -c '
-            PHP_CLI_SERVER_WORKERS=8 php -S 127.0.0.1:8080 -t /tmp/wp /tmp/wp-router.php > /tmp/curtain01-c5/server.log 2>&1
+            PHP_CLI_SERVER_WORKERS=8 strace -ff -qq -tt -e trace=process -e signal=all -o /tmp/curtain01-c5/php-process-trace php -S 127.0.0.1:8080 -t /tmp/wp /tmp/wp-router.php > /tmp/curtain01-c5/server.log 2>&1
             code=$?
             echo "$code" > /tmp/curtain01-c5/server-exit-code.txt
             echo "C5_PHP_SERVER_EXIT code=$code at=$(date -u +%FT%TZ)" >> /tmp/curtain01-c5/worker-exit.log
@@ -528,7 +541,7 @@ jobs:
                 echo "C5_WORKER_EXIT_RECORDED $(cat /tmp/curtain01-c5/server-exit-code.txt)" >> /tmp/curtain01-c5/worker-samples.log
                 break
               fi
-              sleep 1
+              sleep 0.5
             done
           ' > /tmp/curtain01-c5/sampler.log 2>&1 &
           echo $! > /tmp/curtain01-c5/sampler.pid
@@ -642,6 +655,10 @@ jobs:
             /tmp/curtain01-c5/server.log
             /tmp/curtain01-c5/runtime-diagnostics.txt
             /tmp/curtain01-c5/server-wrapper.log
+            /tmp/curtain01-c5/php-process-trace.*
+            /tmp/curtain01-c5/php-memory-limit.txt
+            /tmp/curtain01-c5/process-limits.txt
+            /tmp/curtain01-c5/host-memory-before.txt
             /tmp/curtain01-c5/server-exit-code.txt
             /tmp/curtain01-c5/worker-exit.log
             /tmp/curtain01-c5/worker-samples.log
